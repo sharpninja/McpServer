@@ -262,7 +262,7 @@ acceptanceCriteria:
         $psi.Environment['SESSION_SOURCE_TYPE'] = 'Codex'
         $psi.Environment['SESSION_ID'] = 'Codex-20260722T000000Z-runtime-header'
         $psi.Environment['SESSION_AGENT_SESSION_ID'] = 'codex-root-session-001'
-        $psi.Environment['SESSION_AGENT_SESSION_TRANSCRIPT_FILE'] = 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+        $psi.Environment['SESSION_AGENT_SESSION_TRANSCRIPT_FILE'] = 'F:\GitHub\QBrainAi\.mcpServer\codex\session.jsonl'
         $psi.Environment['SESSION_AGENT_EXECUTABLE_PATH'] = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
         $psi.Environment['SESSION_AGENT_EXECUTABLE_VERSION'] = '1.81.0'
 
@@ -274,7 +274,7 @@ acceptanceCriteria:
 
         $session = $stdout.Result | ConvertFrom-Json
         $session.agentSessionId | Should -Be 'codex-root-session-001'
-        $session.agentSessionTranscriptFile | Should -Be 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+        $session.agentSessionTranscriptFile | Should -Be 'F:\GitHub\QBrainAi\.mcpServer\codex\session.jsonl'
         $session.agentExecutablePath | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
         $session.agentExecutableVersion | Should -Be '1.81.0'
 
@@ -287,7 +287,7 @@ acceptanceCriteria:
                         sourceType = 'Codex'
                         sessionId = 'Codex-20260722T000000Z-runtime-header'
                         agentSessionId = 'codex-root-session-001'
-                        agentSessionTranscriptFile = 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+                        agentSessionTranscriptFile = 'F:\GitHub\QBrainAi\.mcpServer\codex\session.jsonl'
                         agentExecutablePath = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
                         agentExecutableVersion = '1.81.0'
                         turns = @()
@@ -302,7 +302,7 @@ acceptanceCriteria:
 
             $merge = & $node $builder merge $existingPath $incomingPath | ConvertFrom-Json
             $merge.agentSessionId | Should -Be 'codex-root-session-001'
-            $merge.agentSessionTranscriptFile | Should -Be 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+            $merge.agentSessionTranscriptFile | Should -Be 'F:\GitHub\QBrainAi\.mcpServer\codex\session.jsonl'
             $merge.agentExecutablePath | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
             $merge.agentExecutableVersion | Should -Be '1.81.0'
         } finally {
@@ -1567,7 +1567,7 @@ param(
         $replContent | Should -Match 'ConvertTo-McpPluginJson'
     }
 
-    It 'TEST-MCP-PLUGIN-PSONLY-001 starts mcpserver-repl in the PowerShell workspace when the .NET current directory differs' {
+    It 'TEST-MCP-PLUGIN-PSONLY-001 starts qbrain-ai-repl in the PowerShell workspace when the .NET current directory differs' {
         . (Join-Path $script:LibRoot 'repl-invoke.ps1')
 
         $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
@@ -2017,7 +2017,7 @@ throw "Unexpected method $Method"
         Import-McpYamlSerializer
 
         $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
-        $activeWorkspace = Join-Path $root 'McpServer'
+        $activeWorkspace = Join-Path $root 'QBrainAi'
         $staleWorkspace = Join-Path $root 'MouseKeyProxy'
         $activeCache = Join-Path $activeWorkspace '.mcpServer\codex'
         $staleCache = Join-Path $staleWorkspace '.mcpServer\codex'
@@ -2280,7 +2280,7 @@ param(
             status = 'verified'
             lastUpdated = '2026-07-11T19:14:59Z'
             agent = 'Codex'
-            markerFilePath = 'F:\GitHub\McpServer\AGENTS-README-FIRST.yaml'
+            markerFilePath = 'F:\GitHub\QBrainAi\AGENTS-README-FIRST.yaml'
             markerLastWriteUtc = '2026-07-11T17:50:01.7108064Z'
         })
 
@@ -3162,10 +3162,10 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
 port: 7147
 baseUrl: http://localhost:7147
 apiKey: test-key
-workspacePath: F:\GitHub\McpServer
+workspacePath: F:\GitHub\QBrainAi
 endpoints:
   health: /health
-  sessionLog: /mcpserver/sessionlog
+  sessionLog: /qbrainai/sessionlog
 agent_plugins:
   policy: allow
   contract_digest: abc123
@@ -3174,7 +3174,7 @@ agent_plugins:
         try {
             Find-MarkerFile -StartDir $child | Should -Be $marker
             Get-MarkerField -MarkerFile $marker -FieldName 'apiKey' | Should -Be 'test-key'
-            Get-MarkerEndpoint -MarkerFile $marker -EndpointName 'sessionLog' | Should -Be '/mcpserver/sessionlog'
+            Get-MarkerEndpoint -MarkerFile $marker -EndpointName 'sessionLog' | Should -Be '/qbrainai/sessionlog'
             Get-MarkerAgentPluginField -MarkerFile $marker -FieldName 'policy' | Should -Be 'allow'
         } finally {
             Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
@@ -5077,7 +5077,7 @@ Describe 'TEST-MCP-195 session-log incremental persist and failsafe drain' {
                 param([string]$Method, [string]$ParamsYaml = '')
                 $script:drainWriteErrorCalls++
                 if ($script:drainWriteErrorCalls -eq 1) {
-                    Write-Error "mcpserver-repl invocation failed for method ${Method}: timed out"
+                    Write-Error "qbrain-ai-repl invocation failed for method ${Method}: timed out"
                 }
                 return New-McpPluginReplResult -Success $true -Output 'type: result' -ExitCode 0
             }

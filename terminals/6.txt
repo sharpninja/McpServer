@@ -1,28 +1,28 @@
 ---
 pid: 17328
-cwd: "F:\GitHub\McpServer"
-command: "dotnet test \"F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.IntegrationTests\\McpServer.Support.Mcp.IntegrationTests.csproj\" -c Debug --filter \"FullyQualifiedName~AgentHelpEndpointTests\" 2>&1"
+cwd: "F:\GitHub\QBrainAi"
+command: "dotnet test \"F:\\GitHub\\QBrainAi\\tests\\QBrainAi.Support.Mcp.IntegrationTests\\QBrainAi.Support.Mcp.IntegrationTests.csproj\" -c Debug --filter \"FullyQualifiedName~AgentHelpEndpointTests\" 2>&1"
 started_at: 2026-07-08T17:36:22.106Z
 running_for_ms: 85005    
 ---
   Determining projects to restore...
   All projects are up-to-date for restore.
-  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
-  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
-  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
-  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
-  McpServer.QBAgent.Skills -> F:\GitHub\McpServer\src\McpServer.QBAgent.Skills\bin\Debug\net10.0\McpServer.QBAgent.Skills.dll
-  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
-  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
-  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
-  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
-  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
-  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
-  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
-  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
-  McpServer.Repl.Host -> F:\GitHub\McpServer\src\McpServer.Repl.Host\bin\Debug\net10.0\McpServer.Repl.Host.dll
-  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
-  McpServer.QBAgent.Tools -> F:\GitHub\McpServer\src\McpServer.QBAgent.Tools\bin\Debug\net10.0\McpServer.QBAgent.Tools.dll
-  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
-  McpServer.QBAgent -> F:\GitHub\McpServer\src\McpServer.QBAgent\bin\Debug\net10.0\McpServer.QBAgent.dll
-F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\AgentHelpEndpointTests.cs(183,17): error CA2024: Do not use 'reader.EndOfStream' in an async method (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2024) [F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj]
+  QBrainAi.TransactionSecurity -> F:\GitHub\QBrainAi\src\QBrainAi.TransactionSecurity\bin\Debug\net10.0\QBrainAi.TransactionSecurity.dll
+  QBrainAi.Client -> F:\GitHub\QBrainAi\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+  QBrainAi.Cqrs -> F:\GitHub\QBrainAi\src\QBrainAi.Cqrs\bin\Debug\net10.0\QBrainAi.Cqrs.dll
+  QBrainAi.ServiceDefaults -> F:\GitHub\QBrainAi\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+  QBrainAi.QBAgent.Skills -> F:\GitHub\QBrainAi\src\QBrainAi.QBAgent.Skills\bin\Debug\net10.0\QBrainAi.QBAgent.Skills.dll
+  QBrainAi.Common.AgentCli -> F:\GitHub\QBrainAi\src\QBrainAi.Common.AgentCli\bin\Debug\net10.0\QBrainAi.Common.AgentCli.dll
+  QBrainAi.Repl.Core -> F:\GitHub\QBrainAi\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+  QBrainAi.McpAgent -> F:\GitHub\QBrainAi\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+  QBrainAi.Storage -> F:\GitHub\QBrainAi\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+  QBrainAi.Storage.PostgreSqlMigrations -> F:\GitHub\QBrainAi\src\QBrainAi.Storage.PostgreSqlMigrations\bin\Debug\net10.0\QBrainAi.Storage.PostgreSqlMigrations.dll
+  QBrainAi.Services -> F:\GitHub\QBrainAi\src\QBrainAi.Services\bin\Debug\net10.0\QBrainAi.Services.dll
+  QBrainAi.Storage.SqlServerMigrations -> F:\GitHub\QBrainAi\src\QBrainAi.Storage.SqlServerMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqlServerMigrations.dll
+  QBrainAi.Storage.SqliteMigrations -> F:\GitHub\QBrainAi\src\QBrainAi.Storage.SqliteMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqliteMigrations.dll
+  QBrainAi.Repl.Host -> F:\GitHub\QBrainAi\src\QBrainAi.Repl.Host\bin\Debug\net10.0\QBrainAi.Repl.Host.dll
+  QBrainAi.GraphRag -> F:\GitHub\QBrainAi\src\QBrainAi.GraphRag\bin\Debug\net10.0\QBrainAi.GraphRag.dll
+  QBrainAi.QBAgent.Tools -> F:\GitHub\QBrainAi\src\QBrainAi.QBAgent.Tools\bin\Debug\net10.0\QBrainAi.QBAgent.Tools.dll
+  QBrainAi.Support.Mcp -> F:\GitHub\QBrainAi\src\QBrainAi.Support.Mcp\bin\Debug\net10.0\QBrainAi.Support.Mcp.dll
+  QBrainAi.QBAgent -> F:\GitHub\QBrainAi\src\QBrainAi.QBAgent\bin\Debug\net10.0\QBrainAi.QBAgent.dll
+F:\GitHub\QBrainAi\tests\QBrainAi.Support.Mcp.IntegrationTests\AgentHelpEndpointTests.cs(183,17): error CA2024: Do not use 'reader.EndOfStream' in an async method (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2024) [F:\GitHub\QBrainAi\tests\QBrainAi.Support.Mcp.IntegrationTests\QBrainAi.Support.Mcp.IntegrationTests.csproj]

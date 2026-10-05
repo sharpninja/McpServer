@@ -66,7 +66,7 @@
         {
           "id": "EST-001",
           "role": "establish",
-          "user_text": "After comparing container overhead versus host install friction, we decided local McpServer should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.",
+          "user_text": "After comparing container overhead versus host install friction, we decided local QBrainAi should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.",
           "write_memories": true,
           "expected_memories": [
             {
@@ -82,7 +82,7 @@
           "id": "QRY-001",
           "role": "query",
           "required": true,
-          "user_text": "What local database setup did we decide on for McpServer?",
+          "user_text": "What local database setup did we decide on for QBrainAi?",
           "scoring": "contains",
           "gold_answer_rubric": "Must state native Postgres (not Docker) for local.",
           "gold_tokens": ["native Postgres"],
@@ -147,7 +147,7 @@
         {
           "id": "EST-002",
           "role": "establish",
-          "user_text": "Second bench decision: local McpServer database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.",
+          "user_text": "Second bench decision: local QBrainAi database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.",
           "write_memories": true,
           "expected_memories": [
             {

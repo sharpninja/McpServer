@@ -18,7 +18,7 @@
 
 Open TODOs and logged requirements have drifted from HEAD.
 
-Observed from live MCP on 2026-08-20 (workspace `F:\GitHub\McpServer`):
+Observed from live MCP on 2026-08-20 (workspace `F:\GitHub\QBrainAi`):
 
 - 38 TODOs `done: false`.
 - 293 FR: 27 completed, 7 in_progress (all `FR-HANDOFF-001..007`), 3 planned, 2 deferred, 254 pending.
@@ -88,7 +88,7 @@ P3 `medium`: PLAN-BYRDPROCESS-001, PLAN-DELETECOMPLIANCE-003, TR-AUDIT-001 (afte
 
 P4 `low`: BUG-TRIAGE-163 unless S1 proves it is this repo.
 
-Section cleanup: stop parking product work in generic `Backlog` when a real section exists (`QuadBrain`, `Session Logging`, `MCP Server`, `Iteration Global File Tools`, `Plugin Core`, `Testing`, `Review Automation`, `Workspace Validation`).
+Section cleanup: stop parking product work in generic `Backlog` when a real section exists (`QuadBrain`, `Session Logging`, `QBrain.AI`, `Iteration Global File Tools`, `Plugin Core`, `Testing`, `Review Automation`, `Workspace Validation`).
 
 `PLAN-TODOAUDIT-001` itself: section `Backlog` or `Process`, priority `high` until H-done.
 

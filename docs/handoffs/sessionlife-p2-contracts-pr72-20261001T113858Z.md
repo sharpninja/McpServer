@@ -8,7 +8,7 @@ Copy everything below the line into the next agent.
 
 ## Operator constraints (locked)
 
-- **PR #72** only: branch `cursor/sessionlife-p2-contracts-5cb2`; worktree `F:\GitHub\McpServer\.worktrees\sessionlife-p2-contracts-5cb2` on **PAYTON-LEGION2**.
+- **PR #72** only: branch `cursor/sessionlife-p2-contracts-5cb2`; worktree `F:\GitHub\QBrainAi\.worktrees\sessionlife-p2-contracts-5cb2` on **PAYTON-LEGION2**.
 - **Do NOT merge** PR #72.
 - **Do NOT bulk-close** the 35 SessionLife TODOs (keep `not-accepted` / `done=false`).
 - PowerShell only (no Python). Log as **GrokCode**.

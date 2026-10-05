@@ -8,7 +8,7 @@ and other MCP clients to the standalone MCP server.
 | Transport | Default | Configuration |
 |-----------|---------|---------------|
 | HTTP REST | `http://localhost:7147` | `Mcp:Port` in appsettings.json |
-| STDIO | `dotnet run --project src/McpServer.Support.Mcp -- --transport stdio` | Command-line |
+| STDIO | `dotnet run --project src/QBrainAi.Support.Mcp -- --transport stdio` | Command-line |
 
 ## VS Code / Cursor (MCP Streamable HTTP)
 
@@ -17,7 +17,7 @@ For VS Code Copilot, Cursor, and other MCP-compatible editors, configure the Str
 ```json
 {
   "servers": {
-    "mcp-server": {
+    "qbrain-ai": {
       "type": "http",
       "url": "http://localhost:7147/mcp-transport"
     }
@@ -49,7 +49,7 @@ For MCP-compatible clients (e.g., Cursor), configure the STDIO transport:
   "mcpServers": {
     "fwh-mcp": {
       "command": "dotnet",
-      "args": ["run", "--project", "E:\\github\\McpServer\\src\\McpServer.Support.Mcp", "--", "--transport", "stdio"]
+      "args": ["run", "--project", "E:\\github\\McpServer\\src\\QBrainAi.Support.Mcp", "--", "--transport", "stdio"]
     }
   }
 }
@@ -70,7 +70,7 @@ Key tool categories:
 - **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`, `sessionlog_open`, `sessionlog_begin_turn`, `sessionlog_complete_turn`, `sessionlog_fail_turn`
 - **Session Logs (replace/remove)**: `sessionlog_replace_turn`, `sessionlog_replace_section`, `sessionlog_clear_section`, `sessionlog_delete_item`, `sessionlog_delete_turn`, `sessionlog_delete_session` (PUT=replace, DELETE=remove; see [session-log-workflow-api.md](context/session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete))
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
-- **Agent Help**: `agent_help_create_session`, `agent_help_submit_turn`, `agent_help_get_status` (see marker `## Agent Help (MCP Server issues)`)
+- **Agent Help**: `agent_help_create_session`, `agent_help_submit_turn`, `agent_help_get_status` (see marker `## Agent Help (QBrain.AI issues)`)
 - **Use cases**: `usecase_list`, `usecase_get`, `usecase_create`, `usecase_update`, `usecase_delete`, `usecase_link`, `usecase_diagram`, `usecase_coverage`, approval/product tools (see Swagger and plugin `usecase` skill)
 - **Products**: `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`
 - **Requirements (effective)**: `requirements_effective` (`productScope=product|local`)
@@ -78,7 +78,7 @@ Key tool categories:
 
 ## Typed client: Handoff
 
-`McpServerClient.Handoff` (`HandoffClient`) covers `/mcpserver/handoff`:
+`QBrainAiClient.Handoff` (`HandoffClient`) covers `/qbrainai/handoff`:
 
 ```csharp
 var run = await client.Handoff.IngestHandoffAsync(new HandoffIngestionRequest
@@ -97,13 +97,13 @@ DraftOnly never mutates TODO state. Custom `promptTemplateId` values are rejecte
 
 ## Typed client: Products
 
-`McpServerClient.Products` (`ProductClient`) covers `/mcpserver/products`:
+`QBrainAiClient.Products` (`ProductClient`) covers `/qbrainai/products`:
 
 ```csharp
 var product = await client.Products.CreateAsync(new CreateProductRequest
 {
     Key = "PROD-MCPSERVER",
-    Name = "McpServer",
+    Name = "QBrainAi",
 });
 await client.Products.AddMemberAsync(product.Key, memberWorkspaceId);
 var effective = await client.Requirements.GetEffectiveRequirementsAsync(layerKey: null, productScope: "product");
@@ -113,7 +113,7 @@ var effective = await client.Requirements.GetEffectiveRequirementsAsync(layerKey
 
 ## Typed client: Memory
 
-`McpServerClient.Memory` (`MemoryClient`) covers `/mcpserver/memory`:
+`QBrainAiClient.Memory` (`MemoryClient`) covers `/qbrainai/memory`:
 
 ```csharp
 var remembered = await client.Memory.RememberAsync(new MemoryRememberRequest
@@ -145,7 +145,7 @@ Prefer plugin or REPL `workflow.memory.*` when those surfaces are required. Comp
 
 ## Typed client: Use Cases
 
-`McpServerClient.UseCases` (`UseCaseClient`) covers `/mcpserver/usecases`:
+`QBrainAiClient.UseCases` (`UseCaseClient`) covers `/qbrainai/usecases`:
 
 ```csharp
 var uc = await client.UseCases.CreateAsync(new CreateUseCaseRequest
@@ -168,7 +168,7 @@ Mermaid UML export uses project schema `%% mcp-usecase-diagram-schema:1` (see `d
 All workspaces share a single port. To target a specific workspace, send the `X-Workspace-Path` header:
 
 ```bash
-curl http://localhost:7147/mcpserver/todo \
+curl http://localhost:7147/qbrainai/todo \
   -H "X-Api-Key: <token>" \
   -H "X-Workspace-Path: E:\\github\\MyProject"
 ```
@@ -178,7 +178,7 @@ Resolution chain: `X-Workspace-Path` header → API key reverse lookup → defau
 ### Typed Client Library
 
 ```csharp
-var client = McpServerClientFactory.Create(new McpServerClientOptions
+var client = QBrainAiClientFactory.Create(new QBrainAiClientOptions
 {
     BaseUrl = new Uri("http://localhost:7147"),
     ApiKey = "token-from-marker",
@@ -196,7 +196,7 @@ var launch = await client.Desktop.LaunchAsync(new DesktopLaunchRequest
 });
 ```
 
-Agent Help for MCP Server issue diagnosis:
+Agent Help for QBrain.AI issue diagnosis:
 
 ```csharp
 var help = await client.AgentHelp.CreateSessionAsync(new AgentHelpSessionCreateRequest
@@ -206,16 +206,16 @@ var help = await client.AgentHelp.CreateSessionAsync(new AgentHelpSessionCreateR
 });
 var turn = await client.AgentHelp.SubmitTurnAsync(help.SessionId, new AgentHelpTurnRequest
 {
-    UserMessage = "POST /mcpserver/todo returns 401 after server restart.",
+    UserMessage = "POST /qbrainai/todo returns 401 after server restart.",
 });
 var status = await client.AgentHelp.GetStatusAsync(help.SessionId);
 ```
 
-REST surface: `/mcpserver/agent-help/session`, `/mcpserver/agent-help/session/{id}`, `/mcpserver/agent-help/session/{id}/turn`, `/mcpserver/agent-help/session/{id}/transcript`, plus SSE/WebSocket streaming endpoints.
+REST surface: `/qbrainai/agent-help/session`, `/qbrainai/agent-help/session/{id}`, `/qbrainai/agent-help/session/{id}/turn`, `/qbrainai/agent-help/session/{id}/transcript`, plus SSE/WebSocket streaming endpoints.
 
 Remote desktop launch also requires the server-side `Mcp:DesktopLaunch:Enabled` feature gate,
 the `Mcp:DesktopLaunch:AllowedExecutables` allowlist, and the privileged
-`X-Desktop-Launch-Token` header supplied by `McpServerClientOptions.DesktopLaunchToken`.
+`X-Desktop-Launch-Token` header supplied by `QBrainAiClientOptions.DesktopLaunchToken`.
 
 Switch workspace at runtime:
 
@@ -238,12 +238,12 @@ var updated = await client.Configuration.PatchValuesAsync(new Dictionary<string,
 
 ## Hosted .NET Agent Framework Library
 
-Use `src\McpServer.McpAgent` when you want a .NET 10 host application to consume MCP Server session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
+Use `src\QBrainAi.McpAgent` when you want a .NET 10 host application to consume QBrain.AI session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
 
 Typical registration:
 
 ```csharp
-services.AddMcpServerMcpAgent(options =>
+services.AddQBrainAiMcpAgent(options =>
 {
     options.BaseUrl = new Uri("http://localhost:7147");
     options.ApiKey = "token-from-marker";
@@ -266,9 +266,9 @@ Built-in hosted services include:
 
 Reference implementations:
 
-- Library source: `src\McpServer.McpAgent`
-- Interactive preview host: `src\McpServer.McpAgent.SampleHost`
-- Automated acceptance coverage: `tests\McpServer.McpAgent.Tests\HostedAgentWorkflowIntegrationTests.cs`
+- Library source: `src\QBrainAi.McpAgent`
+- Interactive preview host: `src\QBrainAi.McpAgent.SampleHost`
+- Automated acceptance coverage: `tests\QBrainAi.McpAgent.Tests\HostedAgentWorkflowIntegrationTests.cs`
 
 ## Health Check
 

@@ -35,7 +35,7 @@ public sealed class ConfigValidatorTests
     public void ParseInstances_ValidYaml_ParsesRepoRootAndPort()
     {
         var instances = ConfigValidator.ParseInstances(ValidYaml)!;
-        Assert.Equal(@"Q:\__mcp_unit_test__\McpServer", instances["default"].RepoRoot);
+        Assert.Equal(@"Q:\__mcp_unit_test__\QBrainAi", instances["default"].RepoRoot);
         Assert.Equal(7147, instances["default"].Port);
     }
 

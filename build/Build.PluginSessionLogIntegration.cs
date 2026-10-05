@@ -13,7 +13,7 @@ partial class Build
         .DependsOn(Compile)
         .Executes(() =>
         {
-            var project = TestsDirectory / "McpServer.PluginIntegration.Tests" / "McpServer.PluginIntegration.Tests.csproj";
+            var project = TestsDirectory / "QBrainAi.PluginIntegration.Tests" / "QBrainAi.PluginIntegration.Tests.csproj";
             if (!File.Exists(project))
             {
                 throw new FileNotFoundException("Plugin integration test project is missing.", project.ToString());
@@ -46,17 +46,17 @@ partial class Build
     /// <summary>
     /// TEST-MCP-PLUGININT-001 AC5: fail closed when aiUnit strategy metadata is missing.
     /// </summary>
-    /// <param name="repositoryRoot">McpServer repository root.</param>
+    /// <param name="repositoryRoot">QBrainAi repository root.</param>
     internal static void PreflightPluginSessionLogAiUnitStrategy(string repositoryRoot)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(repositoryRoot);
-        var csproj = Path.Combine(repositoryRoot, "tests", "McpServer.PluginIntegration.Tests", "McpServer.PluginIntegration.Tests.csproj");
+        var csproj = Path.Combine(repositoryRoot, "tests", "QBrainAi.PluginIntegration.Tests", "QBrainAi.PluginIntegration.Tests.csproj");
         if (!File.Exists(csproj) || !File.ReadAllText(csproj).Contains("SharpNinja.aiUnit", StringComparison.Ordinal))
         {
             throw new InvalidOperationException("PluginSessionLogIntegration aiUnit preflight failed: SharpNinja.aiUnit is not referenced.");
         }
 
-        var settingsPath = Path.Combine(repositoryRoot, "tests", "McpServer.PluginIntegration.Tests", "appsettings.aiunit.json");
+        var settingsPath = Path.Combine(repositoryRoot, "tests", "QBrainAi.PluginIntegration.Tests", "appsettings.aiunit.json");
         if (!File.Exists(settingsPath))
         {
             throw new FileNotFoundException("PluginSessionLogIntegration aiUnit preflight failed: appsettings.aiunit.json is missing.", settingsPath);

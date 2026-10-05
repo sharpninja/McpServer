@@ -4,18 +4,18 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    /// <summary>Publish McpServer.Support.Mcp for deployment.</summary>
+    /// <summary>Publish QBrainAi.Support.Mcp for deployment.</summary>
     public Target Publish => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
-            var project = SourceDirectory / "McpServer.Support.Mcp" / "McpServer.Support.Mcp.csproj";
+            var project = SourceDirectory / "QBrainAi.Support.Mcp" / "QBrainAi.Support.Mcp.csproj";
 
             DotNetPublish(_ => _
                 .SetProject(project)
                 .SetConfiguration(Configuration)
-                .SetOutput(ArtifactsDirectory / "mcp-server"));
+                .SetOutput(ArtifactsDirectory / "qbrain-ai"));
 
-            CopyBrainSlotRuntimeConfig(RootDirectory, ArtifactsDirectory / "mcp-server");
+            CopyBrainSlotRuntimeConfig(RootDirectory, ArtifactsDirectory / "qbrain-ai");
         });
 }

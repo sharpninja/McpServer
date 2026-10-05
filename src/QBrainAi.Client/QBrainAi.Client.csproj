@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <RootNamespace>QBrainAi.Client</RootNamespace>
+
+    <!-- NuGet package metadata -->
+    <PackageId>QBrainAI.Client</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>Typed REST client for QBrainAi — covers all QBrain.AI API endpoints including TODO management, context search, session logging, repository operations, GitHub integration, workspace management, tool registry, and sync.</Description>
+    <PackageProjectUrl>https://github.com/sharpninja/McpServer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sharpninja/McpServer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>mcp;model-context-protocol;rest-client;ai-agent</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>QBrainAi.Storage</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>QBrainAi.Support.Mcp.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="ENDPOINTS.md" Pack="true" PackagePath="docs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+</Project>

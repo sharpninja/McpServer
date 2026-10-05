@@ -1,48 +1,48 @@
 ---
 pid: 45020
-cwd: "F:\GitHub\McpServer"
-command: "dotnet build \"F:\\GitHub\\McpServer\\src\\McpServer.Services\\McpServer.Services.csproj\" -c Debug --no-restore 2>&1; dotnet build \"F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.csproj\" -c Debug 2>&1"
+cwd: "F:\GitHub\QBrainAi"
+command: "dotnet build \"F:\\GitHub\\QBrainAi\\src\\QBrainAi.Services\\QBrainAi.Services.csproj\" -c Debug --no-restore 2>&1; dotnet build \"F:\\GitHub\\QBrainAi\\tests\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.csproj\" -c Debug 2>&1"
 started_at: 2026-07-08T17:31:00.805Z
 running_for_ms: 80013    
 ---
-  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
-  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
-  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
-  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
-  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
-  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
-  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
-F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
-F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+  QBrainAi.Common.AgentCli -> F:\GitHub\QBrainAi\src\QBrainAi.Common.AgentCli\bin\Debug\net10.0\QBrainAi.Common.AgentCli.dll
+  QBrainAi.Cqrs -> F:\GitHub\QBrainAi\src\QBrainAi.Cqrs\bin\Debug\net10.0\QBrainAi.Cqrs.dll
+  QBrainAi.ServiceDefaults -> F:\GitHub\QBrainAi\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+  QBrainAi.Client -> F:\GitHub\QBrainAi\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+  QBrainAi.Repl.Core -> F:\GitHub\QBrainAi\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+  QBrainAi.Storage -> F:\GitHub\QBrainAi\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+  QBrainAi.McpAgent -> F:\GitHub\QBrainAi\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+F:\GitHub\QBrainAi\src\QBrainAi.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\QBrainAi\src\QBrainAi.Services\QBrainAi.Services.csproj]
+F:\GitHub\QBrainAi\src\QBrainAi.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\QBrainAi\src\QBrainAi.Services\QBrainAi.Services.csproj]
 
 Build FAILED.
 
-F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
-F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+F:\GitHub\QBrainAi\src\QBrainAi.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\QBrainAi\src\QBrainAi.Services\QBrainAi.Services.csproj]
+F:\GitHub\QBrainAi\src\QBrainAi.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\QBrainAi\src\QBrainAi.Services\QBrainAi.Services.csproj]
     0 Warning(s)
     2 Error(s)
 
 Time Elapsed 00:00:06.81
   Determining projects to restore...
   All projects are up-to-date for restore.
-  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
-  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
-  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
-  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
-  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
-  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
-  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
-  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
-  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
-  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
-F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
-F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
-  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  QBrainAi.Common.AgentCli -> F:\GitHub\QBrainAi\src\QBrainAi.Common.AgentCli\bin\Debug\net10.0\QBrainAi.Common.AgentCli.dll
+  QBrainAi.Cqrs -> F:\GitHub\QBrainAi\src\QBrainAi.Cqrs\bin\Debug\net10.0\QBrainAi.Cqrs.dll
+  QBrainAi.ServiceDefaults -> F:\GitHub\QBrainAi\src\QBrainAi.ServiceDefaults\bin\Debug\net10.0\QBrainAi.ServiceDefaults.dll
+  QBrainAi.Client -> F:\GitHub\QBrainAi\src\QBrainAi.Client\bin\Debug\net10.0\QBrainAi.Client.dll
+  QBrainAi.Repl.Core -> F:\GitHub\QBrainAi\src\QBrainAi.Repl.Core\bin\Debug\net10.0\QBrainAi.Repl.Core.dll
+  QBrainAi.TransactionSecurity -> F:\GitHub\QBrainAi\src\QBrainAi.TransactionSecurity\bin\Debug\net10.0\QBrainAi.TransactionSecurity.dll
+  QBrainAi.Storage -> F:\GitHub\QBrainAi\src\QBrainAi.Storage\bin\Debug\net10.0\QBrainAi.Storage.dll
+  QBrainAi.McpAgent -> F:\GitHub\QBrainAi\src\QBrainAi.McpAgent\bin\Debug\net10.0\QBrainAi.McpAgent.dll
+  QBrainAi.Storage.SqliteMigrations -> F:\GitHub\QBrainAi\src\QBrainAi.Storage.SqliteMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqliteMigrations.dll
+  QBrainAi.Storage.SqlServerMigrations -> F:\GitHub\QBrainAi\src\QBrainAi.Storage.SqlServerMigrations\bin\Debug\net10.0\QBrainAi.Storage.SqlServerMigrations.dll
+F:\GitHub\QBrainAi\src\QBrainAi.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\QBrainAi\src\QBrainAi.Services\QBrainAi.Services.csproj]
+F:\GitHub\QBrainAi\src\QBrainAi.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\QBrainAi\src\QBrainAi.Services\QBrainAi.Services.csproj]
+  QBrainAi.Storage.PostgreSqlMigrations -> F:\GitHub\QBrainAi\src\QBrainAi.Storage.PostgreSqlMigrations\bin\Debug\net10.0\QBrainAi.Storage.PostgreSqlMigrations.dll
 
 Build FAILED.
 
-F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
-F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+F:\GitHub\QBrainAi\src\QBrainAi.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\QBrainAi\src\QBrainAi.Services\QBrainAi.Services.csproj]
+F:\GitHub\QBrainAi\src\QBrainAi.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\QBrainAi\src\QBrainAi.Services\QBrainAi.Services.csproj]
     0 Warning(s)
     2 Error(s)
 

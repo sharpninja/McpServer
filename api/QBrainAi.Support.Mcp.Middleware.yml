@@ -1,0 +1,37 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Middleware
+  commentId: N:QBrainAi.Support.Mcp.Middleware
+  id: QBrainAi.Support.Mcp.Middleware
+  children:
+  - QBrainAi.Support.Mcp.Middleware.ApiKeyAuthFilter
+  - QBrainAi.Support.Mcp.Middleware.InteractionLoggingMiddleware
+  - QBrainAi.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.Middleware
+  nameWithType: QBrainAi.Support.Mcp.Middleware
+  fullName: QBrainAi.Support.Mcp.Middleware
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.Middleware.ApiKeyAuthFilter
+  commentId: T:QBrainAi.Support.Mcp.Middleware.ApiKeyAuthFilter
+  href: QBrainAi.Support.Mcp.Middleware.ApiKeyAuthFilter.html
+  name: ApiKeyAuthFilter
+  nameWithType: ApiKeyAuthFilter
+  fullName: QBrainAi.Support.Mcp.Middleware.ApiKeyAuthFilter
+- uid: QBrainAi.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+  commentId: T:QBrainAi.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+  href: QBrainAi.Support.Mcp.Middleware.SkipApiKeyAuthAttribute.html
+  name: SkipApiKeyAuthAttribute
+  nameWithType: SkipApiKeyAuthAttribute
+  fullName: QBrainAi.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+- uid: QBrainAi.Support.Mcp.Middleware.InteractionLoggingMiddleware
+  commentId: T:QBrainAi.Support.Mcp.Middleware.InteractionLoggingMiddleware
+  href: QBrainAi.Support.Mcp.Middleware.InteractionLoggingMiddleware.html
+  name: InteractionLoggingMiddleware
+  nameWithType: InteractionLoggingMiddleware
+  fullName: QBrainAi.Support.Mcp.Middleware.InteractionLoggingMiddleware

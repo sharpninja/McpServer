@@ -1,6 +1,6 @@
-# MCP Server
+# QBrain.AI
 
-Standalone repository for `McpServer.Support.Mcp`, the MCP context server used for todo management, session logs, context search, repository operations, and GitHub issue sync.
+Standalone repository for `QBrainAi.Support.Mcp`, the MCP context server used for todo management, session logs, context search, repository operations, and GitHub issue sync.
 
 ## What This Server Provides
 
@@ -10,14 +10,14 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 - Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
 - Database-backed TODO storage following `Mcp:Database:Provider`; `docs/Project/TODO.yaml` is a read-only projection (TR-MCP-CFG-007)
 - Permanent local audit ledgers with versioned compressed payloads and SQL Server runtime-role protection
-- Use case domain: `/mcpserver/usecases` (CRUD, structure, FR Realizes links, coverage, diagram-graph, approval/product) and first-party UI at `/usecases/`
+- Use case domain: `/qbrainai/usecases` (CRUD, structure, FR Realizes links, coverage, diagram-graph, approval/product) and first-party UI at `/usecases/`
 - Three-tier workspace resolution: header → API key reverse lookup → default
 - Optional interaction logging and Parseable sink support
 
 ## Repository Layout
 
-- `src/McpServer.Support.Mcp` - server application
-- `tests/McpServer.Support.Mcp.Tests` - unit/integration tests
+- `src/QBrainAi.Support.Mcp` - server application
+- `tests/QBrainAi.Support.Mcp.Tests` - unit/integration tests
 - `MCP-SERVER.md` - detailed operational and configuration guide
 - `AZURE-PIPELINES.md` - Azure DevOps CI/CD variables and retention notes
 - `scripts` - run, validate, test, migration, extension, and packaging scripts
@@ -36,14 +36,14 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 
 ```powershell
 ./build.ps1 Compile --configuration Staging
-# or: dotnet restore McpServer.sln && dotnet build McpServer.sln -c Staging
+# or: dotnet restore QBrainAi.sln && dotnet build QBrainAi.sln -c Staging
 ```
 
 1. Run the default instance:
 
 ```powershell
 ./build.ps1 StartServer --instance default
-# or: dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --instance default
+# or: dotnet run --project src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj -c Staging -- --instance default
 ```
 
 1. Open Swagger:
@@ -57,13 +57,13 @@ http://localhost:7147/swagger
 ### HTTP mode
 
 ```powershell
-dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --instance default
+dotnet run --project src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj -c Staging -- --instance default
 ```
 
 ### STDIO MCP mode
 
 ```powershell
-dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --transport stdio --instance default
+dotnet run --project src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj -c Staging -- --transport stdio --instance default
 ```
 
 ## Configuration
@@ -160,7 +160,7 @@ PLAN-TXNKEYSERVER-001 closed on the Linux box MCP after `develop` `8f30caf` was 
 
 The following operational/admin scripts are lower-level helpers for local development, diagnostics, or migration tasks. Do not use them as the normal Windows service redeploy path:
 
-- `scripts/Run-McpServer.ps1` - direct local run helper
+- `scripts/Run-QBrainAi.ps1` - direct local run helper
 - `scripts/Manage-McpService.ps1` - install/start/stop/remove Windows service
 - `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
 
@@ -168,7 +168,7 @@ The following operational/admin scripts are lower-level helpers for local develo
 
 Shipped on `develop` (`facbb3a6` in `8f30caf`) and live on the Linux box MCP.
 
-`TurnTransactionKeyserverScope` (`src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs`):
+`TurnTransactionKeyserverScope` (`src/QBrainAi.TransactionSecurity/TurnTransactionKeyserverScope.cs`):
 
 - `RequiresKeyserver` is true only for publisher party prefix `brain-slot:` or operation prefix `brain-slot.` / `quadbrain.`
 - `ShouldBypassCoordinator` is true when the coordinator is null or `RequiresKeyserver` is false
@@ -183,11 +183,11 @@ Box requirements restore: FR-MCP-173, TR-MCP-TXNKEY-001, TEST-MCP-221 plus mappi
 
 ## GraphRAG
 
-GraphRAG is workspace-scoped and disabled by default. When enabled, it can enhance `/mcpserver/context/search` and is also exposed directly through:
+GraphRAG is workspace-scoped and disabled by default. When enabled, it can enhance `/qbrainai/context/search` and is also exposed directly through:
 
-- `GET /mcpserver/graphrag/status`
-- `POST /mcpserver/graphrag/index`
-- `POST /mcpserver/graphrag/query`
+- `GET /qbrainai/graphrag/status`
+- `POST /qbrainai/graphrag/index`
+- `POST /qbrainai/graphrag/query`
 
 Key behavior:
 
@@ -247,25 +247,25 @@ Track these operational indicators during rollout:
 
 Main endpoints:
 
-- `/mcpserver/todo`
-- `/mcpserver/handoff` - ingest, get run, and approve (`/ingest`, `/runs/{runId}`, `/runs/{runId}/approve`). See `docs/Handoff-Ingestion.md`.
-- `/mcpserver/sessionlog`
-- `/mcpserver/context`
-- `/mcpserver/repo`
-- `/mcpserver/gh`
-- `/mcpserver/sync`
-- `/mcpserver/usecases` - use case aggregates, structure, FR links, coverage, diagram-graph (UML canvas schema v1), sequence/UML diagram export, approval/product
+- `/qbrainai/todo`
+- `/qbrainai/handoff` - ingest, get run, and approve (`/ingest`, `/runs/{runId}`, `/runs/{runId}/approve`). See `docs/Handoff-Ingestion.md`.
+- `/qbrainai/sessionlog`
+- `/qbrainai/context`
+- `/qbrainai/repo`
+- `/qbrainai/gh`
+- `/qbrainai/sync`
+- `/qbrainai/usecases` - use case aggregates, structure, FR links, coverage, diagram-graph (UML canvas schema v1), sequence/UML diagram export, approval/product
 - `/usecases/` - first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
-- `/mcpserver/memory` - remember/recall/explore/consolidate/promote/versions/revert plus compat CRUD (`GET/POST/PUT/DELETE /mcpserver/memory`, `POST .../remember|recall|explore|consolidate|promote`, `GET .../{id}/versions`, `POST .../{id}/revert`)
+- `/qbrainai/memory` - remember/recall/explore/consolidate/promote/versions/revert plus compat CRUD (`GET/POST/PUT/DELETE /qbrainai/memory`, `POST .../remember|recall|explore|consolidate|promote`, `GET .../{id}/versions`, `POST .../{id}/revert`)
 - `/memory/` - first-party Memory UI static assets from `wwwroot/memory` (REST-only; included in publish output / Linux service package; deploy via Nuke `UpdateService`)
 - STDIO/MCP tools: `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`, plus compat `memory_list|get|add|update|remove` (`docs/stdio-tool-contract.json`)
-- REPL: `workflow.memory.*` (same verb names). Typed client: `McpServerClient.Memory`
+- REPL: `workflow.memory.*` (same verb names). Typed client: `QBrainAiClient.Memory`
 - REQUIRED MEMORIES: all eight official plugins inject Effective raw `Content` (or legacy `Text`) at host request boundaries (`skills/memory` + `memory-descriptor.json` + always-on host injection). Empty set is `REQUIRED MEMORIES` / `- None`. Title/summary/confidence/tags are never injected. See `docs/context/memory.md`.
 - Memory plugin efficacy pack: `docs/benchmarks/memory-prompt-pack-v1.yaml` (smoke/regression; tokens primary). Real efficiency bench: `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml`. Eight-plugin stub v2: `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`. Default CI plugin remains grok; `-Plugin all` is unblocked after H7a `agree:true`. See `docs/benchmarks/README.md`.
 - Hebbian explore edges stay off unless `Mcp:Memory:Hebbian:Enabled` or the request override is true.
-- `/mcpserver/agent-help` - Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
-- `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` - provider transcript import
-- `/health` - liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.
+- `/qbrainai/agent-help` - Agent Help sessions for QBrain.AI issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
+- `/qbrainai/sessionlog/ingest/path` and `/qbrainai/sessionlog/ingest/upload` - provider transcript import
+- `/health` - liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/qbrainai/*` work then returns `backend_unavailable`.
 - `/mcp-transport` - MCP Streamable HTTP JSON-RPC. No API key required.
 - `/swagger`
 
@@ -282,7 +282,7 @@ paths that escape the upload root. Exceeded limits return 413; malformed or unsa
 
 ## Products
 
-Host-local products (`PROD-*` keys such as `PROD-MCPSERVER`) map workspaces together so members can union FR/TR/TEST/layers into `GET /mcpserver/requirements/effective` (default `productScope=product`). Rows stay in the origin workspace and are tagged with `originWorkspaceId`. Context source `product-requirements` synthesizes those texts; sibling source files are never included. REST lives at `/mcpserver/products`. MCP tools are `product_*` plus `requirements_effective`. Typed client is `McpServerClient.Products`. Acceptance criteria travel with the effective union. `ProductClient.RemoveMemberAsync` deserializes the DELETE body (self-leave is 404 on a later GET).
+Host-local products (`PROD-*` keys such as `PROD-MCPSERVER`) map workspaces together so members can union FR/TR/TEST/layers into `GET /qbrainai/requirements/effective` (default `productScope=product`). Rows stay in the origin workspace and are tagged with `originWorkspaceId`. Context source `product-requirements` synthesizes those texts; sibling source files are never included. REST lives at `/qbrainai/products`. MCP tools are `product_*` plus `requirements_effective`. Typed client is `QBrainAiClient.Products`. Acceptance criteria travel with the effective union. `ProductClient.RemoveMemberAsync` deserializes the DELETE body (self-leave is 404 on a later GET).
 
 ## Permanent local audit storage
 
@@ -350,22 +350,22 @@ Extension sources and packaging scripts live in:
 
 ## Client Library
 
-A typed REST client is available as a NuGet package for consuming the MCP Server API:
+A typed REST client is available as a NuGet package for consuming the QBrain.AI API:
 
 ```powershell
-dotnet add package SharpNinja.McpServer.Client
+dotnet add package QBrainAI.Client
 ```
 
 ```csharp
 // With DI
-builder.Services.AddMcpServerClient(options =>
+builder.Services.AddQBrainAiClient(options =>
 {
     options.BaseUrl = new Uri("http://localhost:7147");
     options.ApiKey = "your-api-key"; // optional
 });
 
 // Without DI
-var client = McpServerClientFactory.Create(new McpServerClientOptions
+var client = QBrainAiClientFactory.Create(new QBrainAiClientOptions
 {
     BaseUrl = new Uri("http://localhost:7147"),
 });
@@ -373,7 +373,7 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 
 Covers all API endpoints: Todo, Handoff, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
-Source: `src/McpServer.Client/` - see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
+Source: `src/QBrainAi.Client/` - see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/QBrainAi.Client/README.md) for full usage.
 
 ## Health, storage, and errors
 
@@ -387,9 +387,9 @@ Plugin `workflow.sessionlog.appendDialog` persists an existing turn through `Ses
 
 Session-log `SubmitAsync` SaveChanges and `FindExistingSessionAsync` graph loads use `Mcp:SessionLog:SubmitCommandBudgetSeconds` (default and recommended deploy value **30**). Valid range is 1 through 300. The graph load uses `AsSplitQuery()` so sibling turn collections are not cartesian-joined. Raise the budget when a full-graph mutation is known to run longer than 30 seconds. Triage intake and session-log replace/section saves stay on the 5 second `StorageCommandBudget.Default`. Budget expiry and SQL deadlock 1205 during the graph load are HTTP 503 `backend_unavailable` and retryable. A failed load does not report the session as missing and does not persist the mutation.
 
-Requirements recovery is `POST /mcpserver/requirements/recovery` with `mode` `dry-run` or `apply`, and `GET /mcpserver/requirements/recovery/{idempotencyKey}`. REPL methods are `workflow.requirements.planRecovery`, `applyRecovery`, and `getRecovery`. Apply uses a serializable transaction. Dry-run does not store a run. The error contract is 400, 409, 404, and 503. See `docs/plans/PLAN-REQRECOVERY-ENABLER-20260928.md` for the operator deploy checklist.
+Requirements recovery is `POST /qbrainai/requirements/recovery` with `mode` `dry-run` or `apply`, and `GET /qbrainai/requirements/recovery/{idempotencyKey}`. REPL methods are `workflow.requirements.planRecovery`, `applyRecovery`, and `getRecovery`. Apply uses a serializable transaction. Dry-run does not store a run. The error contract is 400, 409, 404, and 503. See `docs/plans/PLAN-REQRECOVERY-ENABLER-20260928.md` for the operator deploy checklist.
 
-Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, and plugin shim failures share the machine-readable envelope `{ code, message, retryable, details }` (FR-MCP-TRIAGEERR-001). REST also carries those four fields as ProblemDetails extensions. `backend_unavailable` is retryable true. Persistence, validation, not-found, and conflict are retryable false unless the classifier maps SQLITE_BUSY or deadlock. Innermost EF or provider text lives in `details.inner`.
+Mutating `/qbrainai/*` failures, MCP tool errors, REPL `type: error` payloads, and plugin shim failures share the machine-readable envelope `{ code, message, retryable, details }` (FR-MCP-TRIAGEERR-001). REST also carries those four fields as ProblemDetails extensions. `backend_unavailable` is retryable true. Persistence, validation, not-found, and conflict are retryable false unless the classifier maps SQLITE_BUSY or deadlock. Innermost EF or provider text lives in `details.inner`.
 
 ## Additional Documentation
 

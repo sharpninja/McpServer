@@ -2,7 +2,7 @@
 # FR-MCP-PLUGINCORE-002: CI checksum guard. Verifies every file listed in a
 # plugin repo's CORE-MANIFEST.yaml still matches its synced sha256. A mismatch
 # means someone edited a synced core file locally - the fix belongs in
-# McpServer/plugins/core followed by a re-sync.
+# QBrainAi/plugins/core followed by a re-sync.
 #
 # Usage: check-core-integrity.sh <plugin-repo-root>
 set -euo pipefail
@@ -40,7 +40,7 @@ while IFS= read -r line; do
             fi
             actual="$(hash_file "$target")"
             if [ "$actual" != "$expected" ]; then
-                echo "MODIFIED: $rel (local edit detected - edit McpServer/plugins/core and re-sync)" >&2
+                echo "MODIFIED: $rel (local edit detected - edit QBrainAi/plugins/core and re-sync)" >&2
                 failures=$((failures + 1))
             fi
             ;;

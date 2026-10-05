@@ -1,7 +1,7 @@
 # Handback: Overlay implementer resume after QuadBrain/QBAgent interruption
 
 Prepared by GrokCode (Grok Build TUI, grok-4.6) on 2026-09-10 UTC.
-Workspace for overlay work: `F:\GitHub\McpServer`.
+Workspace for overlay work: `F:\GitHub\QBrainAi`.
 This file is a continuity handback to the overlay/completion-program implementer that was interrupted. It is not a Handoff ingest source.
 
 ## 0. How to use this file
@@ -10,7 +10,7 @@ Read it. Resume overlay work from Section 8.
 
 Do **not** ingest this file through `workflow.handoff.ingest`, `handoff_ingest`, DraftOnly, RequireReview, or CreateWhenConfident. Ingest would mutate TODO state. The HANDOFF skill is for TODO extraction from a bounded sample such as `docs/handoffs/example.md`, not for this continuity record.
 
-Do **not** copy live API keys, marker HMAC values, or ProgramData secrets into receipts, commits, or further handoffs. Re-read `F:\GitHub\McpServer\AGENTS-README-FIRST.yaml` after every service restart. Keys rotated during QuadBrain `Update-McpService -SkipVersionBump` publishes.
+Do **not** copy live API keys, marker HMAC values, or ProgramData secrets into receipts, commits, or further handoffs. Re-read `F:\GitHub\QBrainAi\AGENTS-README-FIRST.yaml` after every service restart. Keys rotated during QuadBrain `Update-McpService -SkipVersionBump` publishes.
 
 ## 1. Who you are
 
@@ -18,8 +18,8 @@ You are the overlay implementer for `PLAN-PLUGINHANDOFF-001`.
 
 - Code: Grok `grok-5.6` xhigh, identity `GrokCode`, plugin `mcpserver-grok-plugin`.
 - Hostile gates: separate Codex CLI process, `gpt-5.6-sol` extra-high (`xhigh`), launched only from PowerShell.Mcp `execute_command`. Not the Grok hostile-validator default. Not Astra, except the in-product G5 HostileReviewWorkerOptions policy.
-- Grok TUI session: `C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a08640-ef93-7340-92b9-45f2cf9234ad`
-- MCP session: `GrokCode-20260909T130459Z-plugin-session` (workspace `F:\GitHub\McpServer`)
+- Grok TUI session: `C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CQBrainAi\01a08640-ef93-7340-92b9-45f2cf9234ad`
+- MCP session: `GrokCode-20260909T130459Z-plugin-session` (workspace `F:\GitHub\QBrainAi`)
 - Open overlay turn at interruption: `req-20260910T094800Z-041-lift-hygiene-hold-close` (in_progress). Recover it; do not open a duplicate session for the same work.
 - Goal scratch: `C:\Users\kingd\AppData\Local\Temp\grok-goal-aea91f6548f9\implementer`
 - Last overlay assistant line before interruption: Codex blocked store-close on hygiene gaps. Overlay was fixing triage status sourcing, batched reads, and parity tests on the existing console, then planned a rereview. Hygiene and the umbrella stay open until that AGREE.
@@ -36,7 +36,7 @@ Overlay previously wrote a one-way brief to QuadBrain at `C:\Users\kingd\AppData
 
 Operator Payton previously said `AGREE` with the meaning: finish the work, lift the hygiene keep-open hold, then store-close hygiene and the umbrella after Codex extra-high AGREE.
 
-That administrative lift still stands. Codex extra-high at `2026-09-10T17:31:00Z` returned **DISAGREE. Do not store-close either TODO.** Overlay remediations for that DISAGREE are on disk but were not rebuilt or rereviewed because QuadBrain compile errors blocked `McpServer.Support.Mcp.Tests`.
+That administrative lift still stands. Codex extra-high at `2026-09-10T17:31:00Z` returned **DISAGREE. Do not store-close either TODO.** Overlay remediations for that DISAGREE are on disk but were not rebuilt or rereviewed because QuadBrain compile errors blocked `QBrainAi.Support.Mcp.Tests`.
 
 You are authorized to resume overlay close work. You are not authorized to:
 
@@ -45,20 +45,20 @@ You are authorized to resume overlay close work. You are not authorized to:
 - Mark `PLAN-LLMSTRATEGY-001` done. Richer-than-CompleteAsync strategy remains remaining.
 - Ingest this handback as a TODO.
 - Revert QuadBrain CLI persistence, Grok isolation, Codex resume argv, QBAgent timeout, or live ProgramData BrainSlots unless the operator asks.
-- Run staging/production `UpdateService`. Development `C11` is overlay-owned. QuadBrain already ran `gsudo pwsh -File F:\GitHub\McpServer\scripts\Update-McpService.ps1 -SkipVersionBump` several times. Do not run another publish unless the operator asks or a proven overlay C11 gap requires a development UpdateService with explicit approval.
+- Run staging/production `UpdateService`. Development `C11` is overlay-owned. QuadBrain already ran `gsudo pwsh -File F:\GitHub\QBrainAi\scripts\Update-McpService.ps1 -SkipVersionBump` several times. Do not run another publish unless the operator asks or a proven overlay C11 gap requires a development UpdateService with explicit approval.
 
 ## 3. Mandatory instruction recovery
 
 Read these in full. This handback does not replace them.
 
-- `F:\GitHub\McpServer\AGENTS.md`
-- `F:\GitHub\McpServer\AGENTS-README-FIRST.yaml` (re-read now; pid and key changed)
-- `F:\GitHub\McpServer\.github\copilot-instructions.md`
-- `F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`
-- Overlay goal plan: `C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a08640-ef93-7340-92b9-45f2cf9234ad\goal\plan.md`
-- Completion draft: `F:\GitHub\McpServer\docs\plans\PLAN-PLUGINHANDOFF-001-completion-20260906.md` (SHA-256 `5241F3B97B0BEE1453880FECFA622EFEEEAF425361C4F82D0E07CFE1629229CC`)
-- Catalog: `F:\GitHub\McpServer\docs\plans\PLAN-PLUGINHANDOFF-001.md` (SHA-256 `7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E`)
-- Prior pause handoff: `F:\GitHub\McpServer\docs\handoffs\grok-completion-program-20260909.md`
+- `F:\GitHub\QBrainAi\AGENTS.md`
+- `F:\GitHub\QBrainAi\AGENTS-README-FIRST.yaml` (re-read now; pid and key changed)
+- `F:\GitHub\QBrainAi\.github\copilot-instructions.md`
+- `F:\GitHub\QBrainAi\docs\Development-Process-draft-v4.md`
+- Overlay goal plan: `C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CQBrainAi\01a08640-ef93-7340-92b9-45f2cf9234ad\goal\plan.md`
+- Completion draft: `F:\GitHub\QBrainAi\docs\plans\PLAN-PLUGINHANDOFF-001-completion-20260906.md` (SHA-256 `5241F3B97B0BEE1453880FECFA622EFEEEAF425361C4F82D0E07CFE1629229CC`)
+- Catalog: `F:\GitHub\QBrainAi\docs\plans\PLAN-PLUGINHANDOFF-001.md` (SHA-256 `7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E`)
+- Prior pause handoff: `F:\GitHub\QBrainAi\docs\handoffs\grok-completion-program-20260909.md`
 - After any compaction: complete `add-profile` before the next user request.
 
 YAML mutations still require deserialize, mutate, serialize through `plugins/core/lib-ps/yaml-object-mutation.ps1`. Never edit YAML as text.
@@ -88,10 +88,10 @@ PASS items from that verdict (still true unless you re-verify otherwise):
 BLOCKING items from that verdict, and current disk vs that review:
 
 1. **Triage domain and batched reads.** Review said `WorkspaceValidationService` copied triage statuses into a private HashSet and used whole-table `ToListAsync`. Current disk (unverified by a new G5 TRX):
-   - `src/McpServer.Services/Services/TriageService.cs`: public `IsFailedStatus` / `IsNonTerminalStatus` from live triage constants.
-   - `src/McpServer.Services/Services/WorkspaceValidationService.cs`: `QueryBatchSize = 256`, `LoadBatchesAsync`, triage via those helpers. Dirty as untracked `??`.
+   - `src/QBrainAi.Services/Services/TriageService.cs`: public `IsFailedStatus` / `IsNonTerminalStatus` from live triage constants.
+   - `src/QBrainAi.Services/Services/WorkspaceValidationService.cs`: `QueryBatchSize = 256`, `LoadBatchesAsync`, triage via those helpers. Dirty as untracked `??`.
 2. **G5 parity.** Review said counts/rule-codes only and a test-only `ServiceBackedWorkspaceValidationWorkflow`. Current disk:
-   - `tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs` `AssertParity` compares threshold plus `(RuleCode, RecordId, Severity)`.
+   - `tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs` `AssertParity` compares threshold plus `(RuleCode, RecordId, Severity)`.
    - REPL path is `WorkspaceValidationWorkflow` + `ServiceForwardingValidationHandler`.
    - Source-assert `ValidationService_UsesLiveTriageDomainAndBatchedQueries`.
    - `ServiceBackedWorkspaceValidationWorkflow` is gone from that file.
@@ -110,7 +110,7 @@ QuadBrain work was operator-directed: bind persistent Grok/Codex CLI strategies 
 
 ### Live Windows service (verified 2026-09-10 after last SkipVersionBump)
 
-- Service name `McpServer`, LocalSystem, `C:\ProgramData\McpServer\McpServer.Support.Mcp.exe --urls http://+:7147`
+- Service name `QBrainAi`, LocalSystem, `C:\ProgramData\QBrainAi\QBrainAi.Support.Mcp.exe --urls http://+:7147`
 - pid **90560**
 - `serverStartedAtUtc` `2026-09-10T19:28:46.1772029+00:00`
 - Health: Healthy, version `1.0.0+08eaf2a506a0aa2db89766e6a547d9ae1c85f681`, nonce echo verified
@@ -123,12 +123,12 @@ Live ProgramData (not source `appsettings`):
 - `Mcp:BrainSlots:ExecutionEnabled` true
 - `Mcp:TurnTransactions` Enabled and RequiredForMutations true (needed for QuadBrain; currently breaks some `sessionlog_begin_turn` via keyserver/subscriber)
 - Four slots: ArbiterOfTruth and Creativity = grok-4.6 `cli://grok-cli`; CuriosityEngine and Logic = gpt-5.6-sol `cli://codex-cli`
-- TimeoutSeconds 180; CliRunAs `kingd`; configured CliWorkingDirectory historically `F:\GitHub\McpServer` but Grok QuadBrain cwd is isolated (below)
+- TimeoutSeconds 180; CliRunAs `kingd`; configured CliWorkingDirectory historically `F:\GitHub\QBrainAi` but Grok QuadBrain cwd is isolated (below)
 - Source repo `appsettings` keeps BrainSlots ExecutionEnabled **false**. Do not flip source to match live unless the operator asks.
 
 CLI persistence is in-process `CliBrainSlotSessionStore`. It clears on service restart.
 
-Prompt/temp dir: `C:\ProgramData\McpServer\Temp\quadbrain-cli` with BuiltinUsers Modify; TEMP/TMP pointed there. Grok work cwd: `C:\ProgramData\McpServer\Temp\quadbrain-cli\grok-work`. Env strips `GROK_PLUGIN_ROOT` and sets `GROK_AGENT_DASHBOARD=0`.
+Prompt/temp dir: `C:\ProgramData\QBrainAi\Temp\quadbrain-cli` with BuiltinUsers Modify; TEMP/TMP pointed there. Grok work cwd: `C:\ProgramData\QBrainAi\Temp\quadbrain-cli\grok-work`. Env strips `GROK_PLUGIN_ROOT` and sets `GROK_AGENT_DASHBOARD=0`.
 
 Grok persistent QuadBrain argv (not Agent Help one-shot): `--prompt-file`, `--session-id`/`--resume`, `--effort`/`--reasoning-effort` xhigh, `--always-approve`, `--output-format plain`, `--no-plan --no-subagents --verbatim --max-turns 1`. Agent Help one-shot still uses `--permission-mode plan`.
 
@@ -144,18 +144,18 @@ Live proofs on pid 90560 (do not treat as overlay G5/C11 proof):
 
 Current disk (re-read; this is what QuadBrain left):
 
-`src/McpServer.Support.Mcp/Services/BrainSlotChatClientFactory.cs`
+`src/QBrainAi.Support.Mcp/Services/BrainSlotChatClientFactory.cs`
 
 - Field: `ILogger<BrainSlotChatClientFactory> _cliLogger`
 - Public ctor arg 5: `ILogger<BrainSlotChatClientFactory>? cliLogger`
 - Fallback: `NullLogger<BrainSlotChatClientFactory>.Instance`
 - `Create` constructs `new CliBrainSlotChatClient(..., _cliLogger)` (`ILogger<T>` implements `ILogger`)
 
-`src/McpServer.Support.Mcp/Services/CliBrainSlotChatClient.cs`
+`src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs`
 
 - `internal sealed class CliBrainSlotChatClient(..., ILogger logger)`
 
-`tests/McpServer.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs`
+`tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs`
 
 - Factory create uses `NullLogger<BrainSlotChatClientFactory>.Instance`
 - Direct `CliBrainSlotChatClient` constructions still use non-generic `NullLogger.Instance` (valid: ctor takes `ILogger`)
@@ -168,24 +168,24 @@ QuadBrain unit receipts from this session (not a substitute for your G5 rebuild)
 
 Treat these as QuadBrain-owned unless a proven overlay compile/test failure requires a minimal surgical fix, and then do not change CLI resume/cwd/tool-loop behavior:
 
-- `src/McpServer.Support.Mcp/Services/CliBrainSlotChatClient.cs` (untracked)
-- `src/McpServer.Support.Mcp/Services/CliBrainSlotEndpoint.cs` (untracked)
-- `src/McpServer.Support.Mcp/Services/CliBrainSlotSessionStore.cs` (untracked)
-- `src/McpServer.Support.Mcp/Services/BrainSlotChatClientFactory.cs`
-- `src/McpServer.Support.Mcp/Services/BrainSlotContracts.cs`
-- `src/McpServer.Support.Mcp/Services/BrainSlotCredentialResolver.cs`
-- `src/McpServer.Support.Mcp/Services/BrainSlotRegistryService.cs`
-- `src/McpServer.Support.Mcp/Services/BrainSlotValidation.cs`
-- `src/McpServer.Support.Mcp/Services/QuadBrainOpenAiChatService.cs`
-- `src/McpServer.Support.Mcp/Services/QuadBrainOrchestrationService.cs`
-- `src/McpServer.Services/Services/CodexCliAgentExecutionStrategy.cs`
-- `src/McpServer.Services/Services/GrokCliAgentExecutionStrategy.cs`
-- `src/McpServer.QBAgent/QBAgentChatClientFactory.cs`
-- `tests/McpServer.QBAgent.Tests/QBAgentChatClientFactoryTests.cs`
-- `tests/McpServer.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs` (untracked)
-- `tests/McpServer.Support.Mcp.Tests/Services/QuadBrainLiveOrchestrationTests.cs`
-- `tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs`
-- `tests/McpServer.Support.Mcp.IntegrationTests/Controllers/QuadBrainLiveEndpointIntegrationTests.cs`
+- `src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs` (untracked)
+- `src/QBrainAi.Support.Mcp/Services/CliBrainSlotEndpoint.cs` (untracked)
+- `src/QBrainAi.Support.Mcp/Services/CliBrainSlotSessionStore.cs` (untracked)
+- `src/QBrainAi.Support.Mcp/Services/BrainSlotChatClientFactory.cs`
+- `src/QBrainAi.Support.Mcp/Services/BrainSlotContracts.cs`
+- `src/QBrainAi.Support.Mcp/Services/BrainSlotCredentialResolver.cs`
+- `src/QBrainAi.Support.Mcp/Services/BrainSlotRegistryService.cs`
+- `src/QBrainAi.Support.Mcp/Services/BrainSlotValidation.cs`
+- `src/QBrainAi.Support.Mcp/Services/QuadBrainOpenAiChatService.cs`
+- `src/QBrainAi.Support.Mcp/Services/QuadBrainOrchestrationService.cs`
+- `src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs`
+- `src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs`
+- `src/QBrainAi.QBAgent/QBAgentChatClientFactory.cs`
+- `tests/QBrainAi.QBAgent.Tests/QBAgentChatClientFactoryTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs` (untracked)
+- `tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainLiveOrchestrationTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs`
+- `tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainLiveEndpointIntegrationTests.cs`
 - `config/brain-slots/quad-brain-slot-assignments.yaml`
 - `docs/QUADBRAIN.md`
 
@@ -200,9 +200,9 @@ Porcelain at handback write: **3908** paths (`git status --porcelain=v1 --untrac
 
 Overlay-owned hygiene close files (finish these; do not revert):
 
-- `src/McpServer.Services/Services/TriageService.cs` (modified)
-- `src/McpServer.Services/Services/WorkspaceValidationService.cs` (untracked)
-- `tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs` (untracked)
+- `src/QBrainAi.Services/Services/TriageService.cs` (modified)
+- `src/QBrainAi.Services/Services/WorkspaceValidationService.cs` (untracked)
+- `tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs` (untracked)
 - Related overlay tests still untracked: `DocsSyncG8OverlayTests.cs`, `HandoffD3D5OverlayTests.cs`, `HostileReviewG4OverlayTests.cs`, `WikiDumpG6OverlayTests.cs`, `WikiDumpG7OverlayTests.cs`
 
 The tree also contains overlay G1 sixteenth sources, ProcessRunner job containment, wiki dump/import, hostile-review, plugin integration, docs/wiki projections, and a large receipts tree. Those were overlay work before this interruption. Do not treat porcelain count as QuadBrain ownership.
@@ -211,7 +211,7 @@ Non-goals from overlay plan remain: FILETOOLS, Octopus, TR-AUDIT, avalonia-remot
 
 ## 7. Live MCP TODO snapshot (re-query before mutating)
 
-Verified via `mcpserver__todo_get` on `F:\GitHub\McpServer` at handback time:
+Verified via `mcpserver__todo_get` on `F:\GitHub\QBrainAi` at handback time:
 
 | Id | Done | Note |
 |---|---|---|
@@ -227,17 +227,17 @@ Verified via `mcpserver__todo_get` on `F:\GitHub\McpServer` at handback time:
 | PLAN-WARNREMEDIATION-001 | false | W18 still false |
 | PLAN-LLMSTRATEGY-001 | false | Do not store-close. QuadBrain CLI hop shipped; richer strategy remaining. |
 
-Native `mcpserver__todo_update` cannot set doneSummary. Overlay used GET-then-PUT `/mcpserver/todo/{id}` for child close. Keep that if you close hygiene later.
+Native `mcpserver__todo_update` cannot set doneSummary. Overlay used GET-then-PUT `/qbrainai/todo/{id}` for child close. Keep that if you close hygiene later.
 
 ## 8. Immediate resume steps (ordered)
 
-1. Re-read `F:\GitHub\McpServer\AGENTS-README-FIRST.yaml`. Verify marker HMAC and `/health?nonce=`. Stop MCP usage on mismatch.
+1. Re-read `F:\GitHub\QBrainAi\AGENTS-README-FIRST.yaml`. Verify marker HMAC and `/health?nonce=`. Stop MCP usage on mismatch.
 2. Recover overlay session `GrokCode-20260909T130459Z-plugin-session` and turn `req-20260910T094800Z-041-lift-hygiene-hold-close`. Query history first. Do not duplicate the session.
 3. Reuse PowerShell.Mcp console **Baltic `#69712`** (still alive at handback: started 2026-09-10 11:59:09). Do not pass `reason` to `start_console`. If Busy, `wait_for_completion`. Do not open a new console for each command.
-4. From `F:\GitHub\McpServer` on Baltic, rebuild G5 (QuadBrain CS0051/CS1503 should be gone):
+4. From `F:\GitHub\QBrainAi` on Baltic, rebuild G5 (QuadBrain CS0051/CS1503 should be gone):
 
 ```
-dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj -c Debug --filter FullyQualifiedName~WorkspaceHygieneG5OverlayTests --nologo
+dotnet test tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj -c Debug --filter FullyQualifiedName~WorkspaceHygieneG5OverlayTests --nologo
 ```
 
 Required: Failed 0, Skipped 0, and a new TRX. The old `g5-closeout-overlay.trx` (SHA `E66629F2...`) is pre-remediation and does not prove the DISAGREE fixes.
@@ -265,7 +265,7 @@ QuadBrain ran official `Update-McpService.ps1 -SkipVersionBump` more than once. 
 - Overlay C11 evidence taken against an older process is invalid until re-probed.
 - Do not copy live keys into `docs/receipts`, this file, or git.
 
-If `/mcpserver/*` returns 401: re-read the marker, re-verify nonce, resume through the Grok plugin. Do not hand-roll REST for session/TODO/requirements except the documented GET-then-PUT doneSummary path overlay already used.
+If `/qbrainai/*` returns 401: re-read the marker, re-verify nonce, resume through the Grok plugin. Do not hand-roll REST for session/TODO/requirements except the documented GET-then-PUT doneSummary path overlay already used.
 
 ## 11. Receipts and paths
 
@@ -275,8 +275,8 @@ If `/mcpserver/*` returns 401: re-read the marker, re-verify nonce, resume throu
 - G8 AGREE SHA-256: `B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6` path `g8-verdict.md` thread `01a08a51-2f37-7723-bc35-c31160e794b8`
 - G1 sixteenth workspace TRX SHA-256: `66C76C2C11F363789328647BA4EA6B0B12D3FB588D041296E1F1AA8479C1F6D8` (22/22)
 - W18 workspace TRX SHA-256: `BDFE39902ABE2D67F43754B1B0B696AA1446DF614A05F4F42FA47BC4BE1AF952`
-- Overlay compaction: `C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a08640-ef93-7340-92b9-45f2cf9234ad\compaction\INDEX.md` (segment 008 is the interruption snapshot)
-- This handback: `F:\GitHub\McpServer\docs\handoffs\handback-overlay-from-quadbrain-qbagent-20260910.md`
+- Overlay compaction: `C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CQBrainAi\01a08640-ef93-7340-92b9-45f2cf9234ad\compaction\INDEX.md` (segment 008 is the interruption snapshot)
+- This handback: `F:\GitHub\QBrainAi\docs\handoffs\handback-overlay-from-quadbrain-qbagent-20260910.md`
 
 ## 12. Constraints checklist (do not drop)
 

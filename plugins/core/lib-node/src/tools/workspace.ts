@@ -8,7 +8,7 @@ export const workspaceTools: Tool[] = [
   {
     name: 'workspace_ensure',
     description:
-      'Ensure the current workspace is trusted and initialized in McpServer. Registers and initializes it only when missing or untrusted.',
+      'Ensure the current workspace is trusted and initialized in QBrainAi. Registers and initializes it only when missing or untrusted.',
     inputSchema: {
       type: 'object',
       properties: {

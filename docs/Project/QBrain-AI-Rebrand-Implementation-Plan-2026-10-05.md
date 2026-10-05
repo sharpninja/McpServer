@@ -2,11 +2,11 @@
 
 - Date: 2026-10-05
 - Author context: cloud plan for operator Payton
-- Status: Draft pending approval
-- Process: this file is the Byrd Development Process v4 Planning artifact (`docs/Development-Process-draft-v4.md`). It is not an implementation slice. Phase 1 is not approved.
-- Requirements in this draft: branding and product identity are functional requirements `FR-MCP-QBRAIN-001` through `FR-MCP-QBRAIN-005`. Namespace, repository, package, path, and string renames, and the migration mechanics, are technical requirements `TR-MCP-QBRAIN-001` through `TR-MCP-QBRAIN-008`. These IDs are assigned here and are not yet copied into `docs/Project/Functional-Requirements.md`, `docs/Project/Technical-Requirements.md`, the traceability matrix, or the requirements store.
+- Status: Phase 1 opened by the operator on 2026-10-05 after merge of plan PR #76. The operator told the cloud agent to begin Phase 1 on this repository. Hostile-validation OverallVerdict AGREE from gpt-6-astra at effort xhigh is not recorded for Phase 0 or Phase 1. This status line does not mark either phase done.
+- Process: this file is the Byrd Development Process v4 Planning artifact (`docs/Development-Process-draft-v4.md`). Phase 1 execution is a later pull request. This file remains the name map.
+- Requirements in this draft: branding and product identity are functional requirements `FR-MCP-QBRAIN-001` through `FR-MCP-QBRAIN-005`. Namespace, repository, package, path, and string renames, and the migration mechanics, are technical requirements `TR-MCP-QBRAIN-001` through `TR-MCP-QBRAIN-008`. Phase 1 copies these ids into `docs/Project/Functional-Requirements.md`, `docs/Project/Technical-Requirements.md`, `docs/Project/Testing-Requirements.md`, `docs/Project/TR-per-FR-Mapping.md`, and `docs/Project/Requirements-Matrix.md`. The MCP requirements database was not reachable in this cloud session (`AGENTS-README-FIRST.yaml` is absent and the mcpserver tool namespace failed discovery), so the markdown projections are the stored copy.
 - Source checkout for the name map: `sharpninja/McpServer` at the `main` commit this plan was written from. Sibling repositories were not cloned in this run.
-- This pull request: revise this plan only. It does not rename namespaces, packages, assemblies, routes, or GitHub repositories, and it does not approve or start Phase 1.
+- The plan pull request revised this file only. Phase 1 is a separate pull request opened after the operator said to begin work. Phase 1 does not rename the GitHub repository.
 
 ## 1. Goal and non-goals
 
@@ -184,7 +184,7 @@ Move published package ids from `SharpNinja.McpServer.<Component>` to `QBrainAI.
 
 #### TR-MCP-QBRAIN-004 Repository rename sequence
 
-Cloud pull requests land on the current GitHub names. Payton renames repositories only in Phase 3, in this order: `McpServerTools` to `QBrainAiTools`, `McpServerManager` to `QBrainAiManager`, each `mcpserver-*-plugin` to `qbrain-ai-*-plugin`, and `McpServer` to `QBrainAi` last. After each rename, update `RepositoryUrl` and live clone URLs. Tool-bucket rows accept `McpServerTools` and `QBrainAiTools` through 1.x. The data migration that writes `QBrainAiTools` runs after that repository exists and is reversible until 2.0. Do not rewrite historical receipt URLs.
+Cloud pull requests land on the current GitHub names. Payton renames repositories only in Phase 3, in this order: `McpServerTools` to `McpServerTools`, `McpServerManager` to `QBrainAiManager`, each `mcpserver-*-plugin` to `qbrain-ai-*-plugin`, and `McpServer` to `QBrainAi` last. After each rename, update `RepositoryUrl` and live clone URLs. Tool-bucket rows accept `McpServerTools` and `McpServerTools` through 1.x. The data migration that writes `McpServerTools` runs after that repository exists and is reversible until 2.0. Do not rewrite historical receipt URLs.
 
 **Status:** Draft pending approval
 
@@ -304,7 +304,7 @@ The map is a lookup, not a second requirements list. Display and title rows are 
 | NuGet ID | `SharpNinja.McpServer.<Component>` | `QBrainAI.<Component>` |
 | Product GitHub repo | `sharpninja/McpServer` | `sharpninja/QBrainAi` |
 | Manager repo | `sharpninja/McpServerManager` | `sharpninja/QBrainAiManager` |
-| Tools bucket repo | `sharpninja/McpServerTools` | `sharpninja/QBrainAiTools` |
+| Tools bucket repo | `sharpninja/McpServerTools` | `sharpninja/McpServerTools` |
 | Plugin repo | `sharpninja/mcpserver-<role>-plugin` | `sharpninja/qbrain-ai-<role>-plugin` |
 | Docker image and container | `mcp-server` (`mcp-server:latest`) | `qbrain-ai` (`qbrain-ai:latest`) |
 | Docker network | `mcp-network` | `qbrain-ai-network` |
@@ -590,12 +590,12 @@ Acceptance, per repo:
 
 Not approved. This phase implements TR-MCP-QBRAIN-004. It is operator-started. Cloud agents do not rename GitHub repositories. Payton renames, in order:
 
-1. `McpServerTools` → `QBrainAiTools`
+1. `McpServerTools` → `McpServerTools`
 2. `McpServerManager` → `QBrainAiManager`
 3. Each plugin repo to the `qbrain-ai-*-plugin` name
 4. `McpServer` → `QBrainAi` last, so in-flight PR links to the primary repo stay valid until the consumers point at the new tool and plugin names
 
-After each rename, a cloud PR on the new name updates `RepositoryUrl`, README clone URLs, tool-bucket seed and matcher so `QBrainAiTools` is canonical, and a data migration that rewrites stored `ToolBuckets.Repo` from `McpServerTools` to `QBrainAiTools` while still matching the old value if a row was not migrated. New databases seed `QBrainAiTools` only after this migration ships.
+After each rename, a cloud PR on the new name updates `RepositoryUrl`, README clone URLs, tool-bucket seed and matcher so `McpServerTools` is canonical, and a data migration that rewrites stored `ToolBuckets.Repo` from `McpServerTools` to `McpServerTools` while still matching the old value if a row was not migrated. New databases seed `McpServerTools` only after this migration ships.
 
 GitHub redirects old repo URLs. Phase 3 does not rewrite `docs/receipts/` to chase those redirects.
 
@@ -605,7 +605,7 @@ Acceptance:
 
 - `gh repo view` (or the GitHub UI) shows the new name and the old name as a redirect.
 - A raw URL under the old repo name for a known file returns a redirect, and the same file at the new name returns 200.
-- A fresh database seed writes `QBrainAiTools`. An existing database row `McpServerTools` still resolves until the migration runs, and resolves as `QBrainAiTools` after it runs.
+- A fresh database seed writes `McpServerTools`. An existing database row `McpServerTools` still resolves until the migration runs, and resolves as `McpServerTools` after it runs.
 - Clone instructions in live README files use the new repo name.
 - `PAYTON-LEGION2` is unchanged.
 
@@ -710,7 +710,7 @@ Required aliases:
 - Environment: each renamed `MCP_*` product variable is read when the `QBRAINAI_*` variable is unset. If both are set, `QBRAINAI_*` wins.
 - NuGet: old package IDs ship as type-forward facades that depend on the new packages. Public types move once. Facade assemblies use `TypeForwardedTo`.
 - dotnet tool: old command `mcpserver-repl` remains installable from the deprecated package ID; new command is `qbrain-ai-repl`.
-- Tool bucket repo string: readers accept `McpServerTools` and `QBrainAiTools` through 1.x.
+- Tool bucket repo string: readers accept `McpServerTools` and `McpServerTools` through 1.x.
 - Plugin manifest file names: old and new names both resolve through 1.x.
 
 Not aliased, because they are persisted state and stay put through 1.x: `mcp.db`, `.mcpServer`, `McpDbContext`, EF table names, `MCP_UNTRUSTED`, requirement IDs, `/mcp-transport`.

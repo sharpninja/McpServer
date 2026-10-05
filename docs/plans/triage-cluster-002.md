@@ -130,7 +130,7 @@ Agents stop losing superseded turns to 500s, failsafe drain stops burning 503s, 
 
 2. **Closeout-first** for G1, G2, G11, and the cluster-covered sub-claims of 113 and 120. Independent hostile against original AC on current `develop`. AGREE: `done: true` with receipt. DISAGREE: implement only the FAIL list in a worktree.
 
-3. **Worktrees live under the repo root:** `F:\GitHub\McpServer\.worktrees/<slice-id>/`. Add `.worktrees/` to `.gitignore` in S0. Create with `git worktree add .worktrees/<slice-id> -b triage/<slice-id>`. Subagents use that cwd (or `isolation: worktree` pointed at that path). No sibling-directory worktrees.
+3. **Worktrees live under the repo root:** `F:\GitHub\QBrainAi\.worktrees/<slice-id>/`. Add `.worktrees/` to `.gitignore` in S0. Create with `git worktree add .worktrees/<slice-id> -b triage/<slice-id>`. Subagents use that cwd (or `isolation: worktree` pointed at that path). No sibling-directory worktrees.
 
 4. **Merge only after hostile AGREE** for that slice. Orchestrator on `develop` merges `--no-ff` from `triage/<slice-id>` only when the receipt OverallVerdict is AGREE, FAIL list empty, and slice tests Failed 0 / Skipped 0. Then flip MCP TODOs `done: true` with `doneSummary` citing the receipt. Never merge a DISAGREE branch.
 
@@ -152,7 +152,7 @@ Agents stop losing superseded turns to 500s, failsafe drain stops burning 503s, 
 
 For each implementation slice after H0:
 
-1. Orchestrator: `git worktree add F:\GitHub\McpServer\.worktrees\<slice> -b triage/<slice> develop` (or from latest merged develop).
+1. Orchestrator: `git worktree add F:\GitHub\QBrainAi\.worktrees\<slice> -b triage/<slice> develop` (or from latest merged develop).
 2. Spawn general-purpose subagent with cwd that worktree. Brief includes: group IDs, AC, named tests, files they may touch, files they must not touch, Byrd red-then-green, no `done: true`.
 3. Subagent writes tests, shows red, implements, runs named suite Failed 0 Skipped 0.
 4. Orchestrator hostile-validates H-red then H-green on that worktree (not on develop until merge).

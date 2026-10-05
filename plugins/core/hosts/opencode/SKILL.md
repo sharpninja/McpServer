@@ -7,7 +7,7 @@ host: opencode
 
 # MCP Memory (opencode)
 
-Use the OpenCode plugin memory surface (shared `@sharpninja/mcpserver-plugin-core` memoryTools shim). Do not invent memories. Prefer MCP tools over local files.
+Use the OpenCode plugin memory surface (shared `@qbrainai/qbrain-ai-plugin-core` memoryTools shim). Do not invent memories. Prefer MCP tools over local files.
 
 ## Injection
 

@@ -1,0 +1,461 @@
+using QBrainAi.Support.Mcp.Controllers;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Storage.Database;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
+using Xunit;
+
+namespace QBrainAi.Support.Mcp.Tests.Controllers;
+
+/// <summary>
+/// TEST-MCP-TRIAGE-001 and TEST-MCP-TRIAGE-002: controller-level coverage for the public
+/// triage REST surface.
+/// </summary>
+public sealed class TriageControllerTests
+{
+    /// <summary>
+    /// TEST-MCP-TRIAGE-001: every triage REST request logs the exact resolved database
+    /// connection string used by the triage service.
+    /// </summary>
+    [Fact]
+    public async Task AllTriageRequests_LogExactResolvedDatabaseConnectionString()
+    {
+        var service = Substitute.For<ITriageService>();
+        var group = new TriageGroupDetail
+        {
+            GroupId = "triage-group-001",
+            Status = "collecting",
+            ReportCount = 1,
+            QuietDeadlineUtc = DateTimeOffset.UtcNow,
+        };
+        var report = new TriageReportDetail
+        {
+            ReportId = "triage-report-001",
+            GroupId = group.GroupId,
+            Status = "grouped",
+            Title = "Plugin wrapper failure",
+            Summary = "Plugin wrapper failure",
+            WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi",
+        };
+        var run = new TriageResearchRunDetail
+        {
+            RunId = "triage-run-001",
+            GroupId = group.GroupId,
+            Status = "processing",
+            StartedUtc = DateTimeOffset.UtcNow,
+        };
+        var edit = new TriageGroupEditResult { Group = group, MovedReportCount = 1 };
+        var createdTodos = new TriageCreatedTodoQueryResult
+        {
+            Items =
+            [
+                new TriageCreatedTodoDetail
+                {
+                    TodoId = "BUG-TRIAGE-001",
+                    CreatedAtUtc = DateTimeOffset.UtcNow,
+                    WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi",
+                    GroupId = group.GroupId,
+                    RunId = run.RunId,
+                    GroupStatus = "completed",
+                    RunStatus = "completed",
+                },
+            ],
+            TotalCount = 1,
+        };
+
+        service.SubmitReportAsync(Arg.Any<TriageReportRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageReportSubmitResult
+            {
+                Success = true,
+                ReportId = report.ReportId,
+                GroupId = group.GroupId,
+                Status = "collecting",
+                QuietDeadlineUtc = group.QuietDeadlineUtc,
+            });
+        service.GetReportAsync(report.ReportId, Arg.Any<CancellationToken>()).Returns(report);
+        service.QueryGroupsAsync("failed", "Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>())
+            .Returns(new TriageGroupQueryResult { Items = [group], TotalCount = 1 });
+        service.GetDashboardAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>())
+            .Returns(new TriageDashboardResult { TriageQueue = [group], TotalGroupCount = 1 });
+        service.GetGroupAsync(group.GroupId, Arg.Any<CancellationToken>()).Returns(group);
+        service.QueryRunsAsync("processing", group.GroupId, "Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>())
+            .Returns(new TriageRunQueryResult { Items = [run], TotalCount = 1 });
+        service.GetRunAsync(run.RunId, Arg.Any<CancellationToken>()).Returns(run);
+        service.QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>()).Returns(createdTodos);
+        service.FlushGroupAsync(group.GroupId, Arg.Any<CancellationToken>()).Returns(group);
+        service.RetryGroupAsync(group.GroupId, true, Arg.Any<CancellationToken>()).Returns(group);
+        service.CreateGroupFromSelectionAsync(Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(edit);
+        service.ConsolidateIntoGroupAsync(group.GroupId, Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(edit);
+        service.MergeGroupsAsync(group.GroupId, Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(edit);
+
+        const string connectionString =
+            "Server=PAYTON-LEGION2;Database=QBrainAi;User Id=triage;Password=Exact Value With Spaces;Encrypt=True;TrustServerCertificate=True";
+        var logger = new CapturingLogger<TriageController>();
+        var controller = new TriageController(service, CreateRuntimeOptions(connectionString), logger);
+        var selection = new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"], ReportIds = [report.ReportId] };
+
+        await controller.SubmitReportAsync(new TriageReportRequest { Title = "Bug", Summary = "Summary" }, CancellationToken.None);
+        await controller.GetReportAsync(report.ReportId, CancellationToken.None);
+        await controller.QueryGroupsAsync("failed", "Q:\\__mcp_unit_test__\\QBrainAi", CancellationToken.None);
+        await controller.GetDashboardAsync("Q:\\__mcp_unit_test__\\QBrainAi", CancellationToken.None);
+        await controller.GetGroupAsync(group.GroupId, CancellationToken.None);
+        await controller.QueryRunsAsync("processing", group.GroupId, "Q:\\__mcp_unit_test__\\QBrainAi", CancellationToken.None);
+        await controller.GetRunAsync(run.RunId, CancellationToken.None);
+        await controller.QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\QBrainAi", CancellationToken.None);
+        await controller.FlushGroupAsync(group.GroupId, CancellationToken.None);
+        await controller.RetryGroupAsync(group.GroupId, force: true, CancellationToken.None);
+        await controller.CreateGroupFromSelectionAsync(selection, CancellationToken.None);
+        await controller.ConsolidateIntoGroupAsync(group.GroupId, selection, CancellationToken.None);
+        await controller.MergeGroupsAsync(group.GroupId, selection, CancellationToken.None);
+
+        Assert.Equal(13, logger.Messages.Count);
+        Assert.All(logger.Messages, message =>
+        {
+            Assert.Contains("sqlserver", message, StringComparison.Ordinal);
+            Assert.Contains(connectionString, message, StringComparison.Ordinal);
+        });
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-001: POST /qbrainai/triage/reports returns accepted queue state for
+    /// valid intake and delegates the shared report contract to the service.
+    /// </summary>
+    [Fact]
+    public async Task SubmitReportAsync_WhenServiceAccepts_ReturnsAcceptedQueueState()
+    {
+        var service = Substitute.For<ITriageService>();
+        var quietDeadline = new DateTimeOffset(2026, 6, 25, 12, 15, 0, TimeSpan.Zero);
+        service.SubmitReportAsync(Arg.Any<TriageReportRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageReportSubmitResult
+            {
+                Success = true,
+                ReportId = "triage-report-001",
+                GroupId = "triage-group-001",
+                Status = "collecting",
+                QuietDeadlineUtc = quietDeadline,
+                WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi",
+            });
+
+        var controller = new TriageController(service);
+        var request = new TriageReportRequest
+        {
+            Title = "mcpserver plugin wrapper masks failures",
+            Summary = "The plugin returns success after workflow.triage fails.",
+            Component = "mcpserver-codex-plugin",
+            DedupeKey = "plugin-wrapper-failure",
+        };
+
+        var action = await controller.SubmitReportAsync(request, CancellationToken.None);
+
+        var accepted = Assert.IsType<AcceptedResult>(action.Result);
+        var result = Assert.IsType<TriageReportSubmitResult>(accepted.Value);
+        Assert.True(result.Success);
+        Assert.Equal("triage-report-001", result.ReportId);
+        Assert.Equal("triage-group-001", result.GroupId);
+        Assert.Equal("collecting", result.Status);
+        Assert.Equal(quietDeadline, result.QuietDeadlineUtc);
+        await service.Received(1).SubmitReportAsync(
+            Arg.Is<TriageReportRequest>(value =>
+                value != null &&
+                value.Title == request.Title &&
+                value.Summary == request.Summary &&
+                value.Component == request.Component &&
+                value.DedupeKey == request.DedupeKey),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-001: invalid report intake returns a Bad Request error envelope.
+    /// </summary>
+    [Fact]
+    public async Task SubmitReportAsync_WhenServiceRejects_ReturnsBadRequestEnvelope()
+    {
+        var service = Substitute.For<ITriageService>();
+        service.SubmitReportAsync(Arg.Any<TriageReportRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageReportSubmitResult { Success = false, Error = "title is required." });
+
+        var controller = new TriageController(service);
+        var action = await controller.SubmitReportAsync(
+            new TriageReportRequest { Title = "", Summary = "missing title" },
+            CancellationToken.None);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(action.Result);
+        var result = Assert.IsType<TriageReportSubmitResult>(badRequest.Value);
+        Assert.False(result.Success);
+        Assert.Equal("title is required.", result.Error);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-002: flush and retry endpoints route group operations through the
+    /// shared triage service and return current group state.
+    /// </summary>
+    [Theory]
+    [InlineData("flush")]
+    [InlineData("retry")]
+    public async Task GroupMutationAsync_WhenGroupExists_ReturnsOkGroupState(string operation)
+    {
+        var service = Substitute.For<ITriageService>();
+        var group = new TriageGroupDetail
+        {
+            GroupId = "triage-group-001",
+            Status = "collecting",
+            ReportCount = 2,
+            WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi",
+            Title = "Wrapper bug",
+            Summary = "Plugin wrapper bug",
+            QuietDeadlineUtc = DateTimeOffset.UtcNow,
+        };
+        service.FlushGroupAsync("triage-group-001", Arg.Any<CancellationToken>()).Returns(group);
+        service.RetryGroupAsync("triage-group-001", false, Arg.Any<CancellationToken>()).Returns(group);
+
+        var controller = new TriageController(service);
+        var action = operation == "flush"
+            ? await controller.FlushGroupAsync("triage-group-001", CancellationToken.None)
+            : await controller.RetryGroupAsync("triage-group-001", force: false, CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(group, ok.Value);
+    }
+
+    /// <summary>TEST-MCP-TRIAGE-005: retry endpoint forwards the optional force flag.</summary>
+    [Fact]
+    public async Task RetryGroupAsync_WhenForceTrue_ForwardsForceFlag()
+    {
+        var service = Substitute.For<ITriageService>();
+        var group = new TriageGroupDetail
+        {
+            GroupId = "triage-group-001",
+            Status = "collecting",
+            ReportCount = 2,
+            WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi",
+            QuietDeadlineUtc = DateTimeOffset.UtcNow,
+        };
+        service.RetryGroupAsync("triage-group-001", true, Arg.Any<CancellationToken>()).Returns(group);
+        var controller = new TriageController(service);
+
+        var action = await controller.RetryGroupAsync("triage-group-001", force: true, CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(group, ok.Value);
+        await service.Received(1).RetryGroupAsync("triage-group-001", true, Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>TEST-TRIAGE-003: group edit endpoints route selection commands through the service.</summary>
+    [Theory]
+    [InlineData("new")]
+    [InlineData("consolidate")]
+    [InlineData("merge")]
+    public async Task GroupEditAsync_WhenSelectionIsValid_ReturnsOkEditResult(string operation)
+    {
+        var service = Substitute.For<ITriageService>();
+        var request = new TriageGroupSelectionRequest
+        {
+            GroupIds = ["triage-group-source"],
+            ReportIds = ["triage-report-001"],
+        };
+        var result = new TriageGroupEditResult
+        {
+            Group = new TriageGroupDetail
+            {
+                GroupId = operation == "new" ? "triage-group-new" : "triage-group-target",
+                Status = "collecting",
+                ReportCount = 2,
+                QuietDeadlineUtc = DateTimeOffset.UtcNow,
+            },
+            MovedReportCount = 2,
+        };
+        service.CreateGroupFromSelectionAsync(request, Arg.Any<CancellationToken>()).Returns(result);
+        service.ConsolidateIntoGroupAsync("triage-group-target", request, Arg.Any<CancellationToken>()).Returns(result);
+        service.MergeGroupsAsync("triage-group-target", request, Arg.Any<CancellationToken>()).Returns(result);
+
+        var controller = new TriageController(service);
+        var action = operation switch
+        {
+            "new" => await controller.CreateGroupFromSelectionAsync(request, CancellationToken.None),
+            "consolidate" => await controller.ConsolidateIntoGroupAsync("triage-group-target", request, CancellationToken.None),
+            _ => await controller.MergeGroupsAsync("triage-group-target", request, CancellationToken.None),
+        };
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(result, ok.Value);
+    }
+
+    /// <summary>TEST-TRIAGE-003: group edit endpoints return Bad Request for invalid selections.</summary>
+    [Fact]
+    public async Task CreateGroupFromSelectionAsync_WhenSelectionInvalid_ReturnsBadRequest()
+    {
+        var service = Substitute.For<ITriageService>();
+        service.CreateGroupFromSelectionAsync(Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<TriageGroupEditResult>(new ArgumentException("At least one group or report id is required.")));
+
+        var action = await new TriageController(service).CreateGroupFromSelectionAsync(
+            new TriageGroupSelectionRequest(),
+            CancellationToken.None);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(action.Result);
+        Assert.Contains("At least one group or report id is required.", badRequest.Value!.ToString(), StringComparison.Ordinal);
+    }
+
+    /// <summary>TEST-TRIAGE-001: GET /qbrainai/triage/dashboard returns queue and run history state.</summary>
+    [Fact]
+    public async Task GetDashboardAsync_ReturnsDashboardState()
+    {
+        var service = Substitute.For<ITriageService>();
+        var dashboard = new TriageDashboardResult
+        {
+            TriageQueue =
+            [
+                new TriageGroupDetail
+                {
+                    GroupId = "triage-group-new",
+                    Status = "new",
+                    ReportCount = 1,
+                    QuietDeadlineUtc = DateTimeOffset.UtcNow,
+                },
+            ],
+            RunHistory =
+            [
+                new TriageResearchRunDetail
+                {
+                    RunId = "triage-run-001",
+                    GroupId = "triage-group-new",
+                    Status = "completed",
+                    StartedUtc = DateTimeOffset.UtcNow,
+                },
+            ],
+            TotalGroupCount = 1,
+            TotalRunCount = 1,
+        };
+        service.GetDashboardAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>()).Returns(dashboard);
+
+        var action = await new TriageController(service).GetDashboardAsync("Q:\\__mcp_unit_test__\\QBrainAi", CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(dashboard, ok.Value);
+        await service.Received(1).GetDashboardAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>TEST-TRIAGE-001: run-history query endpoint returns current AI triage run statuses.</summary>
+    [Fact]
+    public async Task QueryRunsAsync_ReturnsRunHistory()
+    {
+        var service = Substitute.For<ITriageService>();
+        var query = new TriageRunQueryResult
+        {
+            Items =
+            [
+                new TriageResearchRunDetail
+                {
+                    RunId = "triage-run-001",
+                    GroupId = "triage-group-001",
+                    Status = "failed",
+                    Error = "schema validation failed",
+                    StartedUtc = DateTimeOffset.UtcNow,
+                },
+            ],
+            TotalCount = 1,
+        };
+        service.QueryRunsAsync("failed", "triage-group-001", "Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>())
+            .Returns(query);
+
+        var action = await new TriageController(service).QueryRunsAsync(
+            "failed",
+            "triage-group-001",
+            "Q:\\__mcp_unit_test__\\QBrainAi",
+            CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(query, ok.Value);
+    }
+
+    /// <summary>TEST-TRIAGE-002: triage TODO endpoint returns created TODO ids with timestamps.</summary>
+    [Fact]
+    public async Task QueryCreatedTodosAsync_ReturnsCreatedTodoIndex()
+    {
+        var service = Substitute.For<ITriageService>();
+        var query = new TriageCreatedTodoQueryResult
+        {
+            Items =
+            [
+                new TriageCreatedTodoDetail
+                {
+                    TodoId = "BUG-TRIAGE-001",
+                    CreatedAtUtc = new DateTimeOffset(2026, 6, 25, 5, 3, 0, TimeSpan.Zero),
+                    WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi",
+                    GroupId = "triage-group-001",
+                    RunId = "triage-run-001",
+                    GroupStatus = "completed",
+                    RunStatus = "completed",
+                },
+            ],
+            TotalCount = 1,
+        };
+        service.QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>()).Returns(query);
+
+        var action = await new TriageController(service).QueryCreatedTodosAsync(
+            "Q:\\__mcp_unit_test__\\QBrainAi",
+            CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(query, ok.Value);
+        await service.Received(1).QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>TEST-TRIAGE-001: run detail endpoint returns not-found envelopes for missing runs.</summary>
+    [Fact]
+    public async Task GetRunAsync_WhenMissing_ReturnsNotFound()
+    {
+        var service = Substitute.For<ITriageService>();
+        service.GetRunAsync("triage-run-missing", Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<TriageResearchRunDetail>(new KeyNotFoundException("missing run")));
+
+        var action = await new TriageController(service).GetRunAsync("triage-run-missing", CancellationToken.None);
+
+        var notFound = Assert.IsType<NotFoundObjectResult>(action.Result);
+        Assert.Contains("missing run", notFound.Value!.ToString(), StringComparison.Ordinal);
+    }
+
+    private static McpDatabaseRuntimeOptions CreateRuntimeOptions(string connectionString)
+        => new(
+            new McpDatabaseProviderOptions(
+                McpDatabaseProviderKind.SqlServer,
+                "sqlserver",
+                connectionString,
+                "QBrainAi.SqlServer"),
+            new McpDatabaseEncryptionOptions(false, null, null, null, null, null, null));
+
+    private sealed class CapturingLogger<T> : ILogger<T>
+    {
+        public List<string> Messages { get; } = [];
+
+        public IDisposable? BeginScope<TState>(TState state)
+            where TState : notnull
+            => NullDisposable.Instance;
+
+        public bool IsEnabled(LogLevel logLevel) => true;
+
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception? exception,
+            Func<TState, Exception?, string> formatter)
+        {
+            if (logLevel == LogLevel.Information)
+                Messages.Add(formatter(state, exception));
+        }
+    }
+
+    private sealed class NullDisposable : IDisposable
+    {
+        public static readonly NullDisposable Instance = new();
+
+        public void Dispose()
+        {
+        }
+    }
+}

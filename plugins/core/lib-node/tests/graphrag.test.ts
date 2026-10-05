@@ -36,7 +36,7 @@ function setMarkerEnv(): { apiKey?: string; workspacePath?: string; baseUrl?: st
     baseUrl: process.env.MCPSERVER_BASE_URL,
   };
   process.env.MCPSERVER_API_KEY = 'test-api-key';
-  process.env.MCPSERVER_WORKSPACE_PATH = 'F:\\GitHub\\McpServer';
+  process.env.MCPSERVER_WORKSPACE_PATH = 'F:\\GitHub\\QBrainAi';
   process.env.MCPSERVER_BASE_URL = 'http://127.0.0.1:8765';
   return old;
 }
@@ -60,11 +60,11 @@ describe('handleGraphragTool HTTP fallback', () => {
       expect(fake.calls).toHaveLength(0);
       expect(result.result).toEqual({ enabled: true, indexed: false });
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://127.0.0.1:8765/mcpserver/graphrag/status',
+        'http://127.0.0.1:8765/qbrainai/graphrag/status',
         {
           headers: {
             'X-Api-Key': 'test-api-key',
-            'X-Workspace-Path': 'F:\\GitHub\\McpServer',
+            'X-Workspace-Path': 'F:\\GitHub\\QBrainAi',
           },
         },
       );
@@ -128,22 +128,22 @@ describe('handleGraphragTool HTTP fallback', () => {
       ok: true,
       status: 201,
       headers: { get: () => 'application/json' },
-      text: async () => '{"id":"ent-1","name":"McpServer"}',
+      text: async () => '{"id":"ent-1","name":"QBrainAi"}',
     })) as unknown as typeof fetch;
 
     try {
       const result = await handleGraphragTool(
         'graphrag_entity_create',
-        { name: 'McpServer', entityType: 'component', description: 'server' },
+        { name: 'QBrainAi', entityType: 'component', description: 'server' },
         asBridge(fake),
       );
 
-      expect(result.result).toEqual({ id: 'ent-1', name: 'McpServer' });
+      expect(result.result).toEqual({ id: 'ent-1', name: 'QBrainAi' });
       expect(fs.readdirSync(failsafeDir).filter((file) => file.endsWith('.yaml'))).toHaveLength(0);
       const call = (globalThis.fetch as jest.Mock).mock.calls[0];
-      expect(String(call[0])).toBe('http://127.0.0.1:8765/mcpserver/graphrag/entities');
+      expect(String(call[0])).toBe('http://127.0.0.1:8765/qbrainai/graphrag/entities');
       expect(JSON.parse(call[1].body)).toEqual({
-        name: 'McpServer',
+        name: 'QBrainAi',
         entityType: 'component',
         description: 'server',
       });

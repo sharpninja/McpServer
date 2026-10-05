@@ -53,7 +53,7 @@ markerWrittenAtUtc: ${written}
 serverStartedAtUtc: ${serverStarted}
 endpoints:
   health: /health
-  sessionLog: /mcpserver/sessionlog
+  sessionLog: /qbrainai/sessionlog
 signature:
   value: PLACEHOLDER
 `;

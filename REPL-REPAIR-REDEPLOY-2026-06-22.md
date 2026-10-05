@@ -2,7 +2,7 @@
 title: REPL + Repair Endpoint Redeploy - All Units Green
 date: 2026-06-22
 status: SUCCESS - unblocks waiting sessions
-version: McpServer + sharpninja.mcpserver.repl 6.1.3-local.20260622.4
+version: QBrainAi + sharpninja.mcpserver.repl 6.1.3-local.20260622.4
 ---
 
 # REPL Redeploy + Repair Endpoint Complete (2026-06-22)
@@ -16,20 +16,20 @@ version: McpServer + sharpninja.mcpserver.repl 6.1.3-local.20260622.4
 This resolves the post-redeploy regressions around polluted requirements catalog (BUG-1 primary).
 
 ## Unit Test Results (all projects)
-- McpServer.Support.Mcp.Tests: 1302 passed, 0 failed, 0 skipped
-- McpServer.Client.Tests: 211 passed, 0 failed, 0 skipped
-- McpServer.Repl.Core.Tests: 742 passed, 0 failed, 0 skipped
-- McpServer.Cqrs.Tests: 33 passed
-- McpServer.McpAgent.Tests: 62 passed
-- McpServer.Launcher.Tests: 20 passed
+- QBrainAi.Support.Mcp.Tests: 1302 passed, 0 failed, 0 skipped
+- QBrainAi.Client.Tests: 211 passed, 0 failed, 0 skipped
+- QBrainAi.Repl.Core.Tests: 742 passed, 0 failed, 0 skipped
+- QBrainAi.Cqrs.Tests: 33 passed
+- QBrainAi.McpAgent.Tests: 62 passed
+- QBrainAi.Launcher.Tests: 20 passed
 - Build.Tests: 72 passed
-- McpServer.QBAgent.Tests: 48 passed
+- QBrainAi.QBAgent.Tests: 48 passed
 - Others (Cqrs etc.): green
 
 **Byrd gate satisfied: entire executed unit scope 100% green (no skips).**
 
 ## Repair Endpoint
-- REST: `POST /mcpserver/requirements/fr/repair` → `{ "purged": <int> }`
+- REST: `POST /qbrainai/requirements/fr/repair` → `{ "purged": <int> }`
 - Client: `RequirementsClient.RepairFrPlaceholdersAsync()`
 - REPL: `workflow.requirements.repairPlaceholders` (no params)
 - Purge removes only backfilled placeholders with non-canonical IDs.
@@ -42,9 +42,9 @@ pwsh.exe -NoProfile -ExecutionPolicy Bypass -Command "./build.ps1 InstallReplToo
 ```
 
 Result:
-- Packed: local-packages/SharpNinja.McpServer.Repl.6.1.3-local.20260622.4.nupkg
+- Packed: local-packages/QBrainAI.Repl.6.1.3-local.20260622.4.nupkg
 - Global tool updated: 6.1.3-local.20260622.3 → 6.1.3-local.20260622.4
-- Verified: `mcpserver-repl --version` → 6.1.3-local.20260622.4+82cc3e2d2d5d5bb98e80c940940ac5881662a7a3
+- Verified: `qbrain-ai-repl --version` → 6.1.3-local.20260622.4+82cc3e2d2d5d5bb98e80c940940ac5881662a7a3
 
 ## What to Tell Waiting Sessions / Agents
 - Pull latest marker if needed, but REPL is the key update.

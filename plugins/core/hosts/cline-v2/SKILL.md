@@ -7,7 +7,7 @@ host: cline-v2
 
 # MCP Memory (cline-v2)
 
-Use the Cline v2 plugin memory surface (shared `@sharpninja/mcpserver-plugin-core` memoryTools shim). Do not invent memories. Prefer MCP tools over local files.
+Use the Cline v2 plugin memory surface (shared `@qbrainai/qbrain-ai-plugin-core` memoryTools shim). Do not invent memories. Prefer MCP tools over local files.
 
 ## Injection
 

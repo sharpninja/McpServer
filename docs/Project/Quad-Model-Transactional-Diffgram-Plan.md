@@ -1,4 +1,4 @@
-# MCP Server Quad-Model Transactional Diffgram Plan
+# QBrain.AI Quad-Model Transactional Diffgram Plan
 
 **Superseded for keyserver scope.** PLAN-TXNKEYSERVER-001 on `develop` (`8f30caf`) and the live Linux box MCP limit keyserver signing to QuadBrain/brain-slot transactions (FR-MCP-173). First-party adapters bypass the coordinator. Keep this imported contract for history. Current operator docs: `docs/USER-GUIDE.md` section 7f.
 
@@ -14,13 +14,13 @@ The imported document is implemented in this repository with this fixed order:
 
 1. Build the keyserver first.
 2. Build the subscriber second.
-3. Integrate MCP Server turn transactions third.
+3. Integrate QBrain.AI turn transactions third.
 4. Add individually gated external brain-slot invocation for the four quad roles.
 5. Execute the authorized full Quad-Brain orchestration, AoT reconciliation, and safety-gated weight update slices through FR-MCP-134 and FR-MCP-135 while keeping unrelated autonomous Curiosity branches and implicit fallback behavior disabled.
 
 ## Imported Executive Summary
 
-This document describes a quad-model AI system hosted inside the MCP Server, combined with a strong transactional model, three-party cryptographic trust, and comprehensive security controls.
+This document describes a quad-model AI system hosted inside the QBrain.AI, combined with a strong transactional model, three-party cryptographic trust, and comprehensive security controls.
 
 The system features:
 
@@ -125,7 +125,7 @@ Imported section: 3.3 Three-Party Diffgram Exchange.
 
 ```mermaid
 sequenceDiagram
-    participant P as Publisher (MCP Server)
+    participant P as Publisher (QBrain.AI)
     participant T as 3PKS
     participant S as Subscriber
 
@@ -145,7 +145,7 @@ sequenceDiagram
 
 Repo annotations:
 
-- `SD-DIFFGRAM-001-MSG-PUBLISHER-KEYS`: MCP Server supplies party IDs, public key IDs, and diffgram hashes to keyserver.
+- `SD-DIFFGRAM-001-MSG-PUBLISHER-KEYS`: QBrain.AI supplies party IDs, public key IDs, and diffgram hashes to keyserver.
 - `SD-DIFFGRAM-001-MSG-SIGN`: keyserver signs canonical transaction manifests.
 - `SD-DIFFGRAM-001-MSG-VERIFY-HASH`: subscriber verifies encrypted and plaintext hashes.
 - `SD-DIFFGRAM-001-BR-INVALID`: invalid hash/signature/decrypt path aborts and audits.
@@ -208,7 +208,7 @@ Imported section: 3.6 High-Level System Architecture.
 
 ```mermaid
 flowchart TB
-    subgraph MCP Server
+    subgraph QBrain.AI
         CR[Creativity]
         LG[Logic]
         CM[Curiosity Engine]
@@ -232,10 +232,10 @@ flowchart TB
 
 Repo annotations:
 
-- `ARCH-QUAD-001-COMP-MCP`: existing `src/McpServer.Support.Mcp`, including compatibility keyserver/subscriber controllers and turn transaction coordinator wiring over the shared transaction-security core.
-- `ARCH-QUAD-001-COMP-CLIENT`: existing `src/McpServer.Client`, including public transaction DTO/client contracts.
-- `ARCH-QUAD-001-COMP-KEYSERVER`: separate `src/McpServer.KeyServer` host exposes keyserver trust endpoints over the shared transaction-security core.
-- `ARCH-QUAD-001-COMP-SUBSCRIBER`: separate `src/McpServer.Subscriber` host exposes subscriber commit/status/abort endpoints and verifies manifests through an HTTP-backed keyserver client.
+- `ARCH-QUAD-001-COMP-MCP`: existing `src/QBrainAi.Support.Mcp`, including compatibility keyserver/subscriber controllers and turn transaction coordinator wiring over the shared transaction-security core.
+- `ARCH-QUAD-001-COMP-CLIENT`: existing `src/QBrainAi.Client`, including public transaction DTO/client contracts.
+- `ARCH-QUAD-001-COMP-KEYSERVER`: separate `src/QBrainAi.KeyServer` host exposes keyserver trust endpoints over the shared transaction-security core.
+- `ARCH-QUAD-001-COMP-SUBSCRIBER`: separate `src/QBrainAi.Subscriber` host exposes subscriber commit/status/abort endpoints and verifies manifests through an HTTP-backed keyserver client.
 - `ARCH-QUAD-001-COMP-PUBSUB`: represented in this slice by subscriber commit/coordinator contracts, direct and HTTP external subscriber pub-sub adapters, external process/topic broker envelopes, required-subscriber fan-out, durable local broker-backed commit/abort outbox replay, replay worker/endpoints, and retention purge.
 - `ARCH-QUAD-001-COMP-QUAD`: implemented in `QuadBrainOrchestrationService`, brain-slot REST/client/STDIO surfaces, Node plugin tool descriptors, and `AddBrainSlotWeights` provider migrations.
 
@@ -253,11 +253,11 @@ The implementation follows the imported hardened option:
 
 ## Repo Implementation Map
 
-- `mcpserver`: existing MCP Server host plus `Mcp:TurnTransactions`, compatibility keyserver/subscriber controllers under `src/McpServer.Support.Mcp`, and the shared transaction coordinator from `src/McpServer.TransactionSecurity`.
+- `mcpserver`: existing QBrain.AI host plus `Mcp:TurnTransactions`, compatibility keyserver/subscriber controllers under `src/QBrainAi.Support.Mcp`, and the shared transaction coordinator from `src/QBrainAi.TransactionSecurity`.
 - Current `mcpserver` mutation-gating extensions include server-side TODO update gating through `TransactionGatedTodoMutationService`, stdio transaction registration through `McpStdioHost`, database-backed TODO compensation through `ITodoCompensationService` on `EfTodoService`, service-boundary GraphRAG/GitHub/voice/agent-pool fail-closed gates, federation control-plane fail-closed gates, generic REPL context/TODO/federation/keyserver/subscriber protected namespace policy, context rebuild/website-ingest fail-closed gates, and session-log applied repair fail-closed gates.
-- Separate keyserver host: `src/McpServer.KeyServer`.
-- Separate subscriber host: `src/McpServer.Subscriber`.
-- Shared transaction-security core: `src/McpServer.TransactionSecurity`.
-- Shared client contracts: existing `src/McpServer.Client`.
-- Focused first-slice tests: MCP support/client test projects plus `tests/McpServer.TransactionSecurity.IntegrationTests`.
+- Separate keyserver host: `src/QBrainAi.KeyServer`.
+- Separate subscriber host: `src/QBrainAi.Subscriber`.
+- Shared transaction-security core: `src/QBrainAi.TransactionSecurity`.
+- Shared client contracts: existing `src/QBrainAi.Client`.
+- Focused first-slice tests: MCP support/client test projects plus `tests/QBrainAi.TransactionSecurity.IntegrationTests`.
 - Deferred branches: remaining direct agent execution, desktop launch, tunnel, workspace configuration, auth configuration, server configuration, full remote/runtime-side compensation, complete concurrent-update isolation during delayed rollback, quarantine workflows, automated model fine-tuning, and full key rotation lifecycle automation beyond file-backed startup provisioning.

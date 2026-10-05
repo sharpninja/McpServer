@@ -1,14 +1,14 @@
 ---
 pid: 43712
-cwd: "F:\GitHub\McpServer"
-command: "dotnet build F:\\GitHub\\McpServer\\McpServer.sln -c Debug 2>&1 | Select-Object -Last 10"
+cwd: "F:\GitHub\QBrainAi"
+command: "dotnet build F:\\GitHub\\QBrainAi\\QBrainAi.sln -c Debug 2>&1 | Select-Object -Last 10"
 started_at: 2026-07-08T17:42:54.953Z
 running_for_ms: 44991    
 ---
-  McpServer.QBAgent.Tests -> F:\GitHub\McpServer\tests\McpServer.QBAgent.Tests\bin\Debug\net10.0\McpServer.QBAgent.Tests.dll
-  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
-  McpServer.Support.Mcp.IntegrationTests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll
-  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+  QBrainAi.QBAgent.Tests -> F:\GitHub\QBrainAi\tests\QBrainAi.QBAgent.Tests\bin\Debug\net10.0\QBrainAi.QBAgent.Tests.dll
+  QBrainAi.Support.Mcp -> F:\GitHub\QBrainAi\src\QBrainAi.Support.Mcp\bin\Debug\net10.0\QBrainAi.Support.Mcp.dll
+  QBrainAi.Support.Mcp.IntegrationTests -> F:\GitHub\QBrainAi\tests\QBrainAi.Support.Mcp.IntegrationTests\bin\Debug\net10.0\QBrainAi.Support.Mcp.IntegrationTests.dll
+  QBrainAi.Support.Mcp.Tests -> F:\GitHub\QBrainAi\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll
 
 Build succeeded.
     0 Warning(s)

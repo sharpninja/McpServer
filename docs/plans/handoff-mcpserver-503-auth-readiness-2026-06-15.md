@@ -1,4 +1,4 @@
-# Handoff: Fix blanket HTTP 503 on `/mcpserver/*` (401 for bad creds + readiness health check)
+# Handoff: Fix blanket HTTP 503 on `/qbrainai/*` (401 for bad creds + readiness health check)
 
 - **Date:** 2026-06-15
 - **From:** ClaudeCode (session `ClaudeCode-20260615T172241Z-diag-mcpserver-503`)
@@ -13,24 +13,24 @@
 
 ## 1. Root cause (confirmed by live reproduction, no restart)
 
-Every `/mcpserver/*` data route is in `WorkspaceResolutionMiddleware.WorkspaceIndependentPrefixes` (todo, tools, requirements, repo, federation, sessionlog, context, gh, ...). For those routes:
+Every `/qbrainai/*` data route is in `WorkspaceResolutionMiddleware.WorkspaceIndependentPrefixes` (todo, tools, requirements, repo, federation, sessionlog, context, gh, ...). For those routes:
 
-1. `WorkspaceResolutionMiddleware` (`src/McpServer.Support.Mcp/Middleware/WorkspaceResolutionMiddleware.cs`) does an API-key reverse lookup `tokenService.ResolveWorkspaceByToken(apiKey)`. An **unknown / stale / missing** key returns `null`, so the workspace is **not resolved**; because the route is workspace-independent it proceeds with `WorkspaceContext.WorkspacePath = null` (lines 119, 149-155).
-2. `WorkspaceAuthMiddleware` (`src/McpServer.Support.Mcp/Middleware/WorkspaceAuthMiddleware.cs`, lines 140-175) then sets `workspacePath = WorkspacePath ?? configuration["Mcp:RepoRoot"]`. `Mcp:RepoRoot` is `"."`, normalized against the server **working directory**, which is **not** the registered primary workspace path. So `GetToken(thatPath)` is `null` and it returns **503** "workspace API token has not been initialized. Retry after startup completes." (lines 161-175).
+1. `WorkspaceResolutionMiddleware` (`src/QBrainAi.Support.Mcp/Middleware/WorkspaceResolutionMiddleware.cs`) does an API-key reverse lookup `tokenService.ResolveWorkspaceByToken(apiKey)`. An **unknown / stale / missing** key returns `null`, so the workspace is **not resolved**; because the route is workspace-independent it proceeds with `WorkspaceContext.WorkspacePath = null` (lines 119, 149-155).
+2. `WorkspaceAuthMiddleware` (`src/QBrainAi.Support.Mcp/Middleware/WorkspaceAuthMiddleware.cs`, lines 140-175) then sets `workspacePath = WorkspacePath ?? configuration["Mcp:RepoRoot"]`. `Mcp:RepoRoot` is `"."`, normalized against the server **working directory**, which is **not** the registered primary workspace path. So `GetToken(thatPath)` is `null` and it returns **503** "workspace API token has not been initialized. Retry after startup completes." (lines 161-175).
 
-Because the in-memory tokens **rotate on every restart** (`WorkspaceTokenService`, in-memory only), a client holding a cached key after a restart hits this on **every** `/mcpserver/*` call. An authentication failure is being reported as a startup/readiness condition.
+Because the in-memory tokens **rotate on every restart** (`WorkspaceTokenService`, in-memory only), a client holding a cached key after a restart hits this on **every** `/qbrainai/*` call. An authentication failure is being reported as a startup/readiness condition.
 
-**Live proof (PID 47520, build 2fd9eff, same process the reporter hit):** `GOOD key -> 200`; `BAD key / NO key -> 503` on `/mcpserver/todo`, `/mcpserver/tools`, `/mcpserver/federation/status`. The 503 body is present (152 bytes, `application/json`) but has **no `Retry-After`** header. The reporter's "empty body" was a client artifact; "recovered without restart" = a later test used the current marker key.
+**Live proof (PID 47520, build 2fd9eff, same process the reporter hit):** `GOOD key -> 200`; `BAD key / NO key -> 503` on `/qbrainai/todo`, `/qbrainai/tools`, `/qbrainai/federation/status`. The 503 body is present (152 bytes, `application/json`) but has **no `Retry-After`** header. The reporter's "empty body" was a client artifact; "recovered without restart" = a later test used the current marker key.
 
 ### Health gap
 - `/health` and `/alive` only run `live`-tagged checks: `self` (always Healthy) + `upstream` (federation; "Federation disabled." -> Healthy).
-- `/ready` runs **all** checks, but **no** workspace/token/DB readiness check is registered (the "DB check" comment in `Extensions.cs` is Aspire-Npgsql-only; this app is SQLite). So `/ready` is also falsely Healthy while `/mcpserver/*` is 503.
+- `/ready` runs **all** checks, but **no** workspace/token/DB readiness check is registered (the "DB check" comment in `Extensions.cs` is Aspire-Npgsql-only; this app is SQLite). So `/ready` is also falsely Healthy while `/qbrainai/*` is 503.
 
 ---
 
 ## 2. Fix part A - `WorkspaceAuthMiddleware` 503/401 semantics (FR-MCP-132 / TR-MCP-AUTH-010)
 
-File: `src/McpServer.Support.Mcp/Middleware/WorkspaceAuthMiddleware.cs`.
+File: `src/QBrainAi.Support.Mcp/Middleware/WorkspaceAuthMiddleware.cs`.
 
 Replace the API-key section (current lines ~140-218, from the comment `// ── API key path (agents only) ──` through the final 401 write) with the control flow below. **Keep** the existing JWT, hub-token, OIDC, and "already authenticated" branches above it unchanged. Reuse the existing 401 and 403 JSON bodies verbatim.
 
@@ -133,11 +133,11 @@ The two existing tests `MissingWorkspaceToken_Returns503` and `EmptyWorkspaceCon
 
 ## 3. Fix part B - `WorkspaceReadinessHealthCheck` (FR-MCP-133 / TR-MCP-HEALTH-002)
 
-Create `src/McpServer.Services/Services/WorkspaceReadinessHealthCheck.cs`. **Use the same namespace and `using` directives as the existing `FederationUpstreamHealthCheck.cs` in that folder** so the existing `using` in `Program.cs` (which already references `FederationUpstreamHealthCheck`) resolves this type too. `IWorkspaceService` is **scoped**, so resolve it through `IServiceScopeFactory` (do NOT inject it directly into a health check). `WorkspaceTokenService` is a singleton and is injected directly.
+Create `src/QBrainAi.Services/Services/WorkspaceReadinessHealthCheck.cs`. **Use the same namespace and `using` directives as the existing `FederationUpstreamHealthCheck.cs` in that folder** so the existing `using` in `Program.cs` (which already references `FederationUpstreamHealthCheck`) resolves this type too. `IWorkspaceService` is **scoped**, so resolve it through `IServiceScopeFactory` (do NOT inject it directly into a health check). `WorkspaceTokenService` is a singleton and is injected directly.
 
 ```csharp
 /// <summary>
-/// FR-MCP-133 / TR-MCP-HEALTH-002: Readiness check for the subsystem that gates <c>/mcpserver/*</c>.
+/// FR-MCP-133 / TR-MCP-HEALTH-002: Readiness check for the subsystem that gates <c>/qbrainai/*</c>.
 /// Reports Unhealthy when the auth-token subsystem is uninitialized, when no enabled workspace is
 /// registered, or when the primary workspace has no seeded full-access token. Surfaced on <c>/ready</c>.
 /// </summary>
@@ -192,7 +192,7 @@ public sealed class WorkspaceReadinessHealthCheck : IHealthCheck
 }
 ```
 
-Register it in `src/McpServer.Support.Mcp/Program.cs` at the existing health-checks chain (currently lines 529-530). Add **one line** (do not rewrite the block):
+Register it in `src/QBrainAi.Support.Mcp/Program.cs` at the existing health-checks chain (currently lines 529-530). Add **one line** (do not rewrite the block):
 
 ```csharp
 builder.Services.AddHealthChecks()
@@ -200,31 +200,31 @@ builder.Services.AddHealthChecks()
     .AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"]);
 ```
 
-The `ready` tag keeps it off `/health` and `/alive` (which filter to `live`) and includes it in `/ready` (no predicate -> runs all checks). See `src/McpServer.ServiceDefaults/Extensions.cs:170-195`.
+The `ready` tag keeps it off `/health` and `/alive` (which filter to `live`) and includes it in `/ready` (no predicate -> runs all checks). See `src/QBrainAi.ServiceDefaults/Extensions.cs:170-195`.
 
 ---
 
 ## 4. Tests
 
 ### Already written (RED until part A lands)
-- `tests/McpServer.Support.Mcp.Tests/Middleware/WorkspaceAuthMiddlewareTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceAuthMiddlewareTests.cs`
   - `UnknownApiKey_Unresolved_Initialized_Returns401`
   - `NoApiKey_Unresolved_Initialized_Returns401`
   - `SubsystemNotInitialized_Returns503WithRetryAfter`
-- `tests/McpServer.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs` - `IsInitialized_*` (already GREEN; the property exists).
+- `tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs` - `IsInitialized_*` (already GREEN; the property exists).
 
 ### To add (part B + integration)
-Create `tests/McpServer.Support.Mcp.Tests/Services/WorkspaceReadinessHealthCheckTests.cs` (xUnit + NSubstitute, both available). Build the scope factory from a real `ServiceCollection` with a substituted `IWorkspaceService`:
+Create `tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceReadinessHealthCheckTests.cs` (xUnit + NSubstitute, both available). Build the scope factory from a real `ServiceCollection` with a substituted `IWorkspaceService`:
 
 ```csharp
-using McpServer.Support.Mcp.Services;        // WorkspaceTokenService (+ match the health check's namespace)
+using QBrainAi.Support.Mcp.Services;        // WorkspaceTokenService (+ match the health check's namespace)
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
 
-namespace McpServer.Support.Mcp.Tests.Services;
+namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TEST-MCP-HEALTH-002: Unit tests for WorkspaceReadinessHealthCheck.</summary>
 public sealed class WorkspaceReadinessHealthCheckTests
@@ -283,16 +283,16 @@ public sealed class WorkspaceReadinessHealthCheckTests
 }
 ```
 
-Create `tests/McpServer.Support.Mcp.IntegrationTests/ReadinessAndAuthIntegrationTests.cs` (mirror `HealthEndpointTests` / `MultiTenantIntegrationTests` conventions; `IClassFixture<CustomWebApplicationFactory>`):
+Create `tests/QBrainAi.Support.Mcp.IntegrationTests/ReadinessAndAuthIntegrationTests.cs` (mirror `HealthEndpointTests` / `MultiTenantIntegrationTests` conventions; `IClassFixture<CustomWebApplicationFactory>`):
 
 ```csharp
 using System.Net;
 using System.Text.Json;
-using McpServer.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace McpServer.Support.Mcp.IntegrationTests;
+namespace QBrainAi.Support.Mcp.IntegrationTests;
 
 /// <summary>TEST-MCP-HEALTH-003: agent-flow auth semantics + /ready readiness coverage.</summary>
 public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
@@ -310,7 +310,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
 
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Api-Key", token);
-        var resp = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var resp = await client.GetAsync(new Uri("/qbrainai/todo", UriKind.Relative));
         Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
     }
 
@@ -320,7 +320,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
     {
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Api-Key", "stale-or-wrong-key");
-        var resp = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var resp = await client.GetAsync(new Uri("/qbrainai/todo", UriKind.Relative));
         Assert.Equal(HttpStatusCode.Unauthorized, resp.StatusCode);
     }
 
@@ -345,12 +345,12 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
 
 ```powershell
 # RED before part A, GREEN after:
-dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~WorkspaceAuthMiddlewareTests"
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~WorkspaceAuthMiddlewareTests"
 # Part B unit + token signal:
-dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~WorkspaceReadinessHealthCheckTests"
-dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~WorkspaceTokenServiceTests"
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~WorkspaceReadinessHealthCheckTests"
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~WorkspaceTokenServiceTests"
 # Integration:
-dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug --filter "FullyQualifiedName~ReadinessAndAuthIntegrationTests"
+dotnet test tests/QBrainAi.Support.Mcp.IntegrationTests -c Debug --filter "FullyQualifiedName~ReadinessAndAuthIntegrationTests"
 # Full gates:
 ./build.ps1 Test
 ./build.ps1 ValidateTraceability
@@ -359,14 +359,14 @@ dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug --filter "Full
 Manual smoke against a running server (replace key from the marker):
 ```powershell
 # expect 200, 401, 401, 200
-irm  http://localhost:7147/mcpserver/todo -Headers @{ 'X-Api-Key' = '<current-marker-key>' }
-iwr  http://localhost:7147/mcpserver/todo -Headers @{ 'X-Api-Key' = 'bad' } -SkipHttpErrorCheck | % StatusCode  # 401
-iwr  http://localhost:7147/mcpserver/todo -SkipHttpErrorCheck | % StatusCode                                    # 401
+irm  http://localhost:7147/qbrainai/todo -Headers @{ 'X-Api-Key' = '<current-marker-key>' }
+iwr  http://localhost:7147/qbrainai/todo -Headers @{ 'X-Api-Key' = 'bad' } -SkipHttpErrorCheck | % StatusCode  # 401
+iwr  http://localhost:7147/qbrainai/todo -SkipHttpErrorCheck | % StatusCode                                    # 401
 iwr  http://localhost:7147/ready -SkipHttpErrorCheck | % StatusCode                                             # 200, body lists workspace-ready
 ```
 
 ## 6. Acceptance criteria
-- [ ] Unknown / stale / missing `X-Api-Key` on a workspace-independent `/mcpserver/*` route returns **401** once the token subsystem is initialized (was 503).
+- [ ] Unknown / stale / missing `X-Api-Key` on a workspace-independent `/qbrainai/*` route returns **401** once the token subsystem is initialized (was 503).
 - [ ] A genuine startup-not-ready state (`!WorkspaceTokenService.IsInitialized`) returns **503 with a `Retry-After` header** and a JSON body.
 - [ ] Valid full token (200), wrong key (401), default-token read (pass) / write (403) behavior is unchanged.
 - [ ] `/ready` returns **Unhealthy** when the token subsystem is uninitialized or no enabled workspace is registered; **Healthy** otherwise, and its body lists `workspace-ready`.

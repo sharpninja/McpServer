@@ -9,16 +9,16 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    const string TrustedThirdPartyServiceDefaultName = "McpServerKeyServer";
-    const string TrustedThirdPartyDefaultInstallPath = @"C:\ProgramData\McpServer-KeyServer";
+    const string TrustedThirdPartyServiceDefaultName = "QBrainAiKeyServer";
+    const string TrustedThirdPartyDefaultInstallPath = @"C:\ProgramData\QBrainAi-KeyServer";
     const int TrustedThirdPartyDefaultPort = 7167;
-    const string TrustedThirdPartyExeName = "McpServer.KeyServer.exe";
-    const string AgentExeName = "McpServer.McpAgent.SampleHost.exe";
+    const string TrustedThirdPartyExeName = "QBrainAi.KeyServer.exe";
+    const string AgentExeName = "QBrainAi.McpAgent.SampleHost.exe";
 
-    [Parameter("Trusted third-party Windows service name (default: McpServerKeyServer)")]
+    [Parameter("Trusted third-party Windows service name (default: QBrainAiKeyServer)")]
     readonly string TrustedThirdPartyServiceName = TrustedThirdPartyServiceDefaultName;
 
-    [Parameter("Trusted third-party installation directory (default: C:\\ProgramData\\McpServer-KeyServer)")]
+    [Parameter("Trusted third-party installation directory (default: C:\\ProgramData\\QBrainAi-KeyServer)")]
     readonly string TrustedThirdPartyInstallPath = TrustedThirdPartyDefaultInstallPath;
 
     [Parameter("Trusted third-party HTTP port (default: 7167)")]
@@ -78,11 +78,11 @@ partial class Build
         .Executes(() =>
         {
             var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmssfff");
-            var backupDir = Path.Combine(Path.GetTempPath(), $"McpServer-keyserver-update-backup-{timestamp}");
+            var backupDir = Path.Combine(Path.GetTempPath(), $"QBrainAi-keyserver-update-backup-{timestamp}");
             var archiveDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "McpServer-Backups");
-            var archivePath = Path.Combine(archiveDir, $"McpServer-keyserver-backup-{timestamp}.zip");
+                "QBrainAi-Backups");
+            var archivePath = Path.Combine(archiveDir, $"QBrainAi-keyserver-backup-{timestamp}.zip");
             var serviceProcessName = TrustedThirdPartyExeName.Replace(".exe", "");
             string stageDir;
             var ownsStageDir = false;
@@ -110,7 +110,7 @@ partial class Build
             }
             else
             {
-                stageDir = Path.Combine(Path.GetTempPath(), "McpServer-keyserver-publish-stage");
+                stageDir = Path.Combine(Path.GetTempPath(), "QBrainAi-keyserver-publish-stage");
                 if (Directory.Exists(stageDir))
                     Directory.Delete(stageDir, true);
 
@@ -175,9 +175,9 @@ partial class Build
                 Log.Information("  Archive : {Path}", backup.ArchivePath);
         });
 
-    AbsolutePath TrustedThirdPartyProject => SourceDirectory / "McpServer.KeyServer" / "McpServer.KeyServer.csproj";
+    AbsolutePath TrustedThirdPartyProject => SourceDirectory / "QBrainAi.KeyServer" / "QBrainAi.KeyServer.csproj";
 
-    AbsolutePath AgentProject => SourceDirectory / "McpServer.McpAgent.SampleHost" / "McpServer.McpAgent.SampleHost.csproj";
+    AbsolutePath AgentProject => SourceDirectory / "QBrainAi.McpAgent.SampleHost" / "QBrainAi.McpAgent.SampleHost.csproj";
 
     void PublishSingleFileProject(AbsolutePath project, AbsolutePath output)
     {

@@ -27,10 +27,10 @@ saas:
     - 15. Funding Requirements & Use of Funds
     - 16. Exit Strategy
     - '---'
-    - '**Company Name:** McpServer Cloud (working title; also viable: ContextHub, MCPHost, ContextForge)'
-    - '**Product:** A fully managed, cloud-hosted SaaS platform that provisions isolated McpServer instances for software development teams, enabling AI coding assistants (GitHub Copilot, Cursor, Claude, etc.) to access rich, persistent, project-specific context — including todos, session logs, repository search, and GitHub integration — without requiring teams to self-host or maintain infrastructure.'
-    - '**Problem:** AI coding assistants are becoming central to software development workflows, but they are stateless and context-poor. McpServer solves this by providing a persistent context layer — but today it requires manual installation, self-hosting expertise, infrastructure management, and a working knowledge of the MCP protocol. This excludes the vast majority of development teams who want the benefit without the operational overhead.'
-    - '**Solution:** McpServer Cloud abstracts away all infrastructure. Customers sign up, point the platform at a GitHub repository, and receive a dedicated hosted McpServer instance within minutes. A GitHub-style web portal lets them manage subscriptions, configure server settings, inspect session logs, manage todos, and invite teammates — all without touching a command line.'
+    - '**Company Name:** QBrainAi Cloud (working title; also viable: ContextHub, MCPHost, ContextForge)'
+    - '**Product:** A fully managed, cloud-hosted SaaS platform that provisions isolated QBrainAi instances for software development teams, enabling AI coding assistants (GitHub Copilot, Cursor, Claude, etc.) to access rich, persistent, project-specific context — including todos, session logs, repository search, and GitHub integration — without requiring teams to self-host or maintain infrastructure.'
+    - '**Problem:** AI coding assistants are becoming central to software development workflows, but they are stateless and context-poor. QBrainAi solves this by providing a persistent context layer — but today it requires manual installation, self-hosting expertise, infrastructure management, and a working knowledge of the MCP protocol. This excludes the vast majority of development teams who want the benefit without the operational overhead.'
+    - '**Solution:** QBrainAi Cloud abstracts away all infrastructure. Customers sign up, point the platform at a GitHub repository, and receive a dedicated hosted QBrainAi instance within minutes. A GitHub-style web portal lets them manage subscriptions, configure server settings, inspect session logs, manage todos, and invite teammates — all without touching a command line.'
     - '**Business Model:** Subscription SaaS (monthly/annual). Tiers from Free (single user, one server) through Enterprise (unlimited users, custom SLAs, SSO, SAML, audit logs, dedicated infrastructure).'
     - '**Target Market:** Software engineering teams (2–500+ developers) using AI coding tools professionally. Initial focus on small-to-mid-size startups and development agencies; expand to enterprise engineering organizations.'
     - '**Revenue Projections (Conservative):**'
@@ -46,16 +46,16 @@ saas:
     - '### Mission'
     - To make every AI coding assistant smarter by giving development teams a persistent, searchable, project-aware context layer — hosted, managed, and available everywhere.
     - '### Vision'
-    - In 5 years, McpServer Cloud will be the de-facto context infrastructure for AI-augmented software development, analogous to what GitHub is for version control or Datadog is for observability. Every team using an AI assistant will have a McpServer instance.
+    - In 5 years, QBrainAi Cloud will be the de-facto context infrastructure for AI-augmented software development, analogous to what GitHub is for version control or Datadog is for observability. Every team using an AI assistant will have a QBrainAi instance.
     - '### Values'
     - '- **Developer-first:** The product must feel natural to software engineers. Onboarding should take less time than reading a README.'
     - '- **Transparency:** Usage data, pricing, and server behavior are always visible to customers.'
     - '- **Security by default:** Isolated infrastructure per customer, encrypted at rest and in transit, never training on customer data.'
-    - '- **Open core:** McpServer itself remains open-source. The SaaS layer adds managed infrastructure, collaboration, and enterprise features.'
+    - '- **Open core:** QBrainAi itself remains open-source. The SaaS layer adds managed infrastructure, collaboration, and enterprise features.'
     - '### Legal Structure'
     - Delaware C-Corp (standard for venture-backed SaaS). Registered agent in Delaware; principal offices initially in the founders' location.
     - '### Founders'
-    - '_(Placeholder — to be filled with actual team bios. Ideal profile: 1–2 founders with prior .NET/cloud infrastructure or developer-tools SaaS experience, plus a technical co-founder deeply familiar with the MCP protocol and McpServer codebase.)_'
+    - '_(Placeholder — to be filled with actual team bios. Ideal profile: 1–2 founders with prior .NET/cloud infrastructure or developer-tools SaaS experience, plus a technical co-founder deeply familiar with the MCP protocol and QBrainAi codebase.)_'
     - '---'
   - id: saas-03-problem-statement
     title: SaaS Business Plan — Problem Statement
@@ -73,7 +73,7 @@ saas:
     - Teams work around this by manually pasting README files, copying documentation into prompts, or repeating the same context every session. This is slow, error-prone, and scales poorly.
     - '### 3.3 The MCP Protocol as Solution'
     - The Model Context Protocol (MCP), standardized by Anthropic and rapidly adopted by all major AI assistant vendors, solves this at a protocol level. MCP allows AI clients to connect to a context server that provides tools (read file, search context, list todos, query session history) as structured capabilities. The AI assistant then calls these tools during a conversation rather than requiring the user to manually inject context.
-    - 'McpServer implements MCP comprehensively: it indexes repositories, ingests documentation, stores session logs, manages todos, and integrates with GitHub — all queryable by an AI assistant in real time.'
+    - 'QBrainAi implements MCP comprehensively: it indexes repositories, ingests documentation, stores session logs, manages todos, and integrates with GitHub — all queryable by an AI assistant in real time.'
     - '### 3.4 The Self-Hosting Barrier'
     - 'Despite MCP being the right solution, adoption is bottlenecked by **operational complexity**:'
     - 1. **Installation:** Requires .NET 9, Docker, or MSIX depending on platform.
@@ -81,9 +81,9 @@ saas:
     - 3. **Persistence:** The SQLite database and vector index files must survive machine restarts, be backed up, and not be accidentally deleted.
     - 4. **Access:** By default the server runs on `localhost`. Sharing across a team requires tunneling (ngrok, Cloudflare) or reverse proxy setup.
     - 5. **Updates:** New versions require manual re-deployment.
-    - 6. **Multiple projects:** Each project ideally gets its own isolated McpServer instance, multiplying all of the above.
+    - 6. **Multiple projects:** Each project ideally gets its own isolated QBrainAi instance, multiplying all of the above.
     - 7. **Windows-only MSIX:** The packaging story is fragmented.
-    - 'The result: only highly technical individual developers run McpServer today. Teams do not.'
+    - 'The result: only highly technical individual developers run QBrainAi today. Teams do not.'
     - '### 3.5 Market Opportunity'
     - 'This creates a clear SaaS opportunity: take something that works well but requires expert setup, and make it available to anyone in 5 minutes.'
     - '---'
@@ -93,7 +93,7 @@ saas:
     description:
     - '### 4.1 Core Value Proposition'
     - '> **"Your AI assistant finally remembers everything — without you managing any servers."**'
-    - McpServer Cloud provides every development team with a **always-on, team-shared, project-aware context server** that their AI coding tools can query in real time. No installation. No configuration. No maintenance.
+    - QBrainAi Cloud provides every development team with a **always-on, team-shared, project-aware context server** that their AI coding tools can query in real time. No installation. No configuration. No maintenance.
     - '### 4.2 Customer Value by Persona'
     - '**Individual Developer:**'
     - '- One-click setup for a new project; MCP connection string ready in under 5 minutes.'
@@ -101,7 +101,7 @@ saas:
     - '- Context persists across machines (works on laptop and desktop equally).'
     - '- Free tier available.'
     - '**Engineering Team Lead:**'
-    - '- Shared context across the entire team — one McpServer instance, multiple users.'
+    - '- Shared context across the entire team — one QBrainAi instance, multiple users.'
     - '- Team todos synchronized; session logs visible for review and onboarding.'
     - '- GitHub integration managed centrally, not per-developer.'
     - '**Engineering Manager / Director:**'
@@ -115,10 +115,10 @@ saas:
     - '- Dedicated infrastructure for zero cross-tenant data risk.'
     - '- SLA guarantee (99.9% uptime).'
     - '### 4.3 Unique Differentiators'
-    - 1. **The only managed McpServer hosting platform.** There is no current competitor doing this specific thing.
+    - 1. **The only managed QBrainAi hosting platform.** There is no current competitor doing this specific thing.
     - 2. **GitHub-style developer UX.** The management portal is designed for developers, not IT admins. It feels like GitHub, not Salesforce.
-    - 3. **Open core.** The underlying McpServer is open-source; customers who want to self-host always can. This builds trust and creates a natural pipeline from open-source users.
-    - 4. **AI-native.** The platform itself uses McpServer internally (dogfooding) and exposes its own management API as MCP tools (meta!).
+    - 3. **Open core.** The underlying QBrainAi is open-source; customers who want to self-host always can. This builds trust and creates a natural pipeline from open-source users.
+    - 4. **AI-native.** The platform itself uses QBrainAi internally (dogfooding) and exposes its own management API as MCP tools (meta!).
     - 5. **No vendor lock-in for AI tools.** Works with any MCP-compatible AI assistant — GitHub Copilot, Cursor, Claude, Zed, VS Code, etc.
     - '---'
     depends-on:
@@ -134,10 +134,10 @@ saas:
     - '- **GitHub Copilot** alone has 1.8M paid individual subscribers + enterprise contracts covering millions more seats.'
     - '- **Cursor** reached $100M ARR in under 2 years.'
     - '- **JetBrains AI Assistant**, **Codeium/Windsurf**, and **Amazon Q** collectively cover tens of millions of developer seats.'
-    - All of these AI tools are MCP clients or will become MCP clients. Every developer using one is a potential McpServer Cloud customer.
+    - All of these AI tools are MCP clients or will become MCP clients. Every developer using one is a potential QBrainAi Cloud customer.
     - '**TAM estimate:** The global developer population is ~27 million professional developers. At $100/team/month for a team of 5, and assuming 30% of teams use AI tools professionally by 2026, TAM is ~$19B annually.'
     - '### 5.2 Serviceable Addressable Market (SAM)'
-    - 'McpServer Cloud targets teams using:'
+    - 'QBrainAi Cloud targets teams using:'
     - '- GitHub Copilot (Business or Enterprise plan)'
     - '- Cursor (Business plan)'
     - '- Claude for Developers / Claude Code'
@@ -188,18 +188,18 @@ saas:
     done: false
     description:
     - '### 9.1 Direct Competitors'
-    - As of early 2025, there are **no direct competitors** offering managed McpServer hosting specifically.
+    - As of early 2025, there are **no direct competitors** offering managed QBrainAi hosting specifically.
     - The closest analog is **Composio** (composio.dev), which provides managed MCP-compatible tool integrations, but focuses on pre-built integrations rather than custom project context.
     - '**Why no competitors yet:**'
     - '- MCP is a very new protocol (Anthropic published it in late 2024)'
-    - '- McpServer itself is a niche, specialized application'
+    - '- QBrainAi itself is a niche, specialized application'
     - "- The hosted infrastructure layer is the hard part that hasn't been built yet"
-    - This is a **first-mover advantage** window that will not stay open indefinitely. We estimate 6–18 months before well-funded infrastructure players (Fly.io, Railway, Render) attempt to build McpServer-specific managed offerings.
+    - This is a **first-mover advantage** window that will not stay open indefinitely. We estimate 6–18 months before well-funded infrastructure players (Fly.io, Railway, Render) attempt to build QBrainAi-specific managed offerings.
     - '### 9.2 Indirect Competitors'
     - '**General-purpose container/PaaS hosting:**'
     - '- Railway, Render, Fly.io, Heroku'
-    - '- A technical developer can self-host McpServer on any of these for ~$5–15/month'
-    - '- Missing: McpServer-specific management UI, collaboration features, GitHub integration, backup/restore, auto-updates, monitoring'
+    - '- A technical developer can self-host QBrainAi on any of these for ~$5–15/month'
+    - '- Missing: QBrainAi-specific management UI, collaboration features, GitHub integration, backup/restore, auto-updates, monitoring'
     - '**Context management products (adjacent):**'
     - '- **Mem.ai** — Personal knowledge base with AI; not developer-focused, not MCP-compatible'
     - '- **Obsidian Sync** — Personal knowledge sync; not team-oriented, not AI-assistant-first'
@@ -210,13 +210,13 @@ saas:
     - '- **Cursor** with `@docs` and codebase indexing — Built into the IDE, not portable, not team-shared'
     - '- **Codeium** context — Similar limitations'
     - '**Why these are not true substitutes:**'
-    - None of them implement the MCP protocol for external tool invocation. None provide the full McpServer feature set (todos, session logs, hybrid search, external docs indexing). They are single-vendor, single-tool solutions. McpServer Cloud is vendor-agnostic across all MCP-compatible AI tools.
+    - None of them implement the MCP protocol for external tool invocation. None provide the full QBrainAi feature set (todos, session logs, hybrid search, external docs indexing). They are single-vendor, single-tool solutions. QBrainAi Cloud is vendor-agnostic across all MCP-compatible AI tools.
     - '### 9.3 Competitive Moat'
     - 1. **Protocol alignment:** Deep, native MCP implementation. As MCP becomes standard, our moat deepens rather than erodes.
     - 2. **Open source trust:** Developers trust what they can inspect. The open-source core prevents "black box" concerns.
-    - 3. **Data depth:** The longer a team uses McpServer Cloud, the more context, session history, and todos are accumulated. Switching cost grows over time.
+    - 3. **Data depth:** The longer a team uses QBrainAi Cloud, the more context, session history, and todos are accumulated. Switching cost grows over time.
     - 4. **Workspace model:** The workspace architecture maps naturally to team/project structures. Competitors would need to redesign from scratch.
-    - 5. **First-mover brand:** In developer tools, brand matters. The team that builds the best McpServer Cloud experience in 2025 will be the recognized leader in 2027.
+    - 5. **First-mover brand:** In developer tools, brand matters. The team that builds the best QBrainAi Cloud experience in 2025 will be the recognized leader in 2027.
     - '---'
     depends-on:
     - saas-05-market-analysis
@@ -224,10 +224,10 @@ saas:
     title: SaaS Business Plan — Product & Service Offering
     done: false
     description:
-    - '### 6.1 Core Product: McpServer Cloud'
-    - A managed hosting platform for McpServer instances, with a web portal for management, billing, and collaboration.
+    - '### 6.1 Core Product: QBrainAi Cloud'
+    - A managed hosting platform for QBrainAi instances, with a web portal for management, billing, and collaboration.
     - '**What customers get:**'
-    - '- A dedicated McpServer instance provisioned in a Kubernetes pod (or isolated container) per server/project'
+    - '- A dedicated QBrainAi instance provisioned in a Kubernetes pod (or isolated container) per server/project'
     - '- A stable HTTPS endpoint (e.g., `https://contoso.mcpserver.cloud/`) ready to paste into Copilot or Cursor settings'
     - '- Persistent SQLite storage (backed up hourly to object storage)'
     - '- Persistent vector index (rebuilt on demand or on sync)'
@@ -236,7 +236,7 @@ saas:
     - '### 6.2 Tier Structure'
     - '#### Free Tier — "Starter"'
     - '- **Price:** $0/month'
-    - '- **Servers:** 1 McpServer instance'
+    - '- **Servers:** 1 QBrainAi instance'
     - '- **Users:** 1 user'
     - '- **Storage:** 500 MB (SQLite + vector index)'
     - '- **Syncs:** Up to 10 per day'
@@ -249,7 +249,7 @@ saas:
     - '- **Limitations:** No team collaboration, no custom domain, no SSO, community support only'
     - '#### Pro Tier — "Developer"'
     - '- **Price:** $19/month per user (or $190/year — 2 months free)'
-    - '- **Servers:** Up to 5 McpServer instances'
+    - '- **Servers:** Up to 5 QBrainAi instances'
     - '- **Users:** 1 user (personal plan)'
     - '- **Storage:** 5 GB per server'
     - '- **Syncs:** Unlimited'
@@ -263,7 +263,7 @@ saas:
     - '#### Team Tier — "Workspace"'
     - '- **Price:** $49/month per user (or $490/year)'
     - '- **Minimum:** 2 users'
-    - '- **Servers:** Up to 20 McpServer instances'
+    - '- **Servers:** Up to 20 QBrainAi instances'
     - '- **Users:** Unlimited (seat-licensed)'
     - '- **Storage:** 20 GB per server'
     - '- **Syncs:** Unlimited + scheduled auto-sync (cron)'
@@ -277,7 +277,7 @@ saas:
     - '#### Business Tier — "Organization"'
     - '- **Price:** $99/month per user (or $990/year)'
     - '- **Minimum:** 5 users'
-    - '- **Servers:** Unlimited McpServer instances'
+    - '- **Servers:** Unlimited QBrainAi instances'
     - '- **Users:** Unlimited (seat-licensed)'
     - '- **Storage:** 100 GB per server'
     - '- **Syncs:** Unlimited + priority queue (faster sync)'
@@ -298,16 +298,16 @@ saas:
     - '- **Features:** Everything in Business, plus: Dedicated infrastructure (no shared tenancy), custom data residency (US, EU, APAC), VPC peering / private link options, custom domain with wildcard SSL, SOC 2 Type II report, HIPAA BAA available, pen test report sharing, custom contract terms, SLA credits, multi-region active-active, custom ingestion connectors (Confluence, Notion, Linear, Jira, GitLab, Bitbucket), advanced analytics and BI data export, white-labeling option (reseller partners)'
     - '- **Procurement:** Annual contracts, PO-based invoicing, net-30 terms'
     - '### 6.3 Add-On Products'
-    - '**McpServer Analytics** (future, Year 2+)'
+    - '**QBrainAi Analytics** (future, Year 2+)'
     - '- Aggregated insights across all team servers: most-queried context, most-used tools, AI session patterns'
     - '- Price: $10/user/month add-on'
-    - '**McpServer Connect — Slack Integration** (future, Year 2+)'
+    - '**QBrainAi Connect — Slack Integration** (future, Year 2+)'
     - '- Surface todos and sync alerts directly in Slack'
     - '- Price: $5/user/month add-on'
-    - '**McpServer Audit Compliance Pack** (future, Year 2+)'
+    - '**QBrainAi Audit Compliance Pack** (future, Year 2+)'
     - '- SOC 2 + HIPAA compliance features: immutable audit logs, access reviews, compliance reports'
     - '- Price: $20/user/month add-on on Business tier; included in Enterprise'
-    - '**McpServer On-Premises** (future, Year 3+)'
+    - '**QBrainAi On-Premises** (future, Year 3+)'
     - '- Fully air-gapped deployment of the SaaS platform itself on customer infrastructure'
     - '- Price: ~$50K/year license + support'
     - '### 6.4 Free Trial Policy'
@@ -324,10 +324,10 @@ saas:
     - '**Primary:** Monthly or annual subscription (SaaS recurring revenue). Annual plans at ~17% discount (2 months free).'
     - '**Secondary (future):** Usage-based overages for storage and API calls beyond tier limits.'
     - '**Tertiary (future):** Professional services (onboarding, migration, custom integrations) for Enterprise customers.'
-    - '**Open Core:** The core McpServer code remains MIT-licensed on GitHub. The SaaS layer (multi-tenancy, web portal, billing, provisioning) is proprietary. This is the standard open-core SaaS model (HashiCorp, Grafana, GitLab, Sentry, etc.).'
+    - '**Open Core:** The core QBrainAi code remains MIT-licensed on GitHub. The SaaS layer (multi-tenancy, web portal, billing, provisioning) is proprietary. This is the standard open-core SaaS model (HashiCorp, Grafana, GitLab, Sentry, etc.).'
     - '### 7.2 Pricing Rationale'
     - '**Free tier:** Critical for growth. Developers discover the product, use it personally, then advocate for team adoption. The free tier is capped conservatively to ensure conversion pressure without being punitive. The cap on 1 server and 1 user creates natural upgrade triggers.'
-    - '**Pro tier ($19/mo):** Priced below psychological resistance ($20) for individual developers. Benchmarked against Railway ($5–20/mo), Render ($25/mo), Fly.io (~$15/mo) for comparable infrastructure. The value is not raw compute but managed McpServer-specific functionality.'
+    - '**Pro tier ($19/mo):** Priced below psychological resistance ($20) for individual developers. Benchmarked against Railway ($5–20/mo), Render ($25/mo), Fly.io (~$15/mo) for comparable infrastructure. The value is not raw compute but managed QBrainAi-specific functionality.'
     - '**Team tier ($49/user/mo):** Benchmarked against GitHub Copilot Business ($19/user/mo) and Datadog ($15–75/user/mo). Teams spending $19/user/month on Copilot to get AI assistance should rationally spend $49/user/month to make that AI assistant dramatically more effective.'
     - '**Business tier ($99/user/mo):** SSO and SCIM are table stakes for Enterprise IT. Priced to reflect the procurement overhead and support cost premium. Benchmarked against Notion ($16/user/mo), Linear ($16/user/mo Team, enterprise custom), and Sentry Business ($26/user/mo).'
     - '**Enterprise:** Custom pricing allows us to capture value proportional to ACV and organizational size. Starting floor of ~$5K/month ensures our enterprise sales motion is economically justified.'
@@ -451,42 +451,42 @@ saas:
     description:
     - '### 8.1 Phase 1 — Open Source Community & Developer Awareness'
     - '**Duration:** Pre-launch through Month 6'
-    - '**Goal:** Build a community of 1,000 active McpServer open-source users who become the first cloud customers.'
+    - '**Goal:** Build a community of 1,000 active QBrainAi open-source users who become the first cloud customers.'
     - '**Tactics:**'
-    - 1. **GitHub presence:** McpServer repository should have a polished README, comprehensive documentation, and active issue engagement. Target 1,000 GitHub stars within 3 months of concerted effort.
+    - 1. **GitHub presence:** QBrainAi repository should have a polished README, comprehensive documentation, and active issue engagement. Target 1,000 GitHub stars within 3 months of concerted effort.
     - '2. **Hacker News / Show HN:** Launch post with genuine technical depth. HN rewards real engineering work and transparency. A "Show HN: I built a managed MCP context server for AI coding assistants" post targeting front page.'
     - 3. **Reddit:** Engage authentically in r/LocalLLaMA, r/MachineLearning, r/programming, r/golang (though this is .NET, AI tool discussions span languages). Never spam; contribute answers and let the product speak.
     - 4. **Product Hunt launch:** Day-of campaign with coordinated upvotes from early users. Target top 5 in "Developer Tools" category on launch day.
-    - 5. **Dev.to / Hashnode / Medium:** Technical blog posts explaining MCP, the context gap in AI assistants, and how McpServer solves it. SEO-optimized for terms like "MCP server hosting", "GitHub Copilot context", "persistent AI memory for developers".
-    - '6. **YouTube / Loom demos:** Short (3–5 minute) screen recordings showing: "Set up McpServer Cloud in 5 minutes and instantly make Cursor smarter." Distribute on YouTube, Twitter/X, LinkedIn, Discord.'
-    - 7. **Discord & Slack communities:** Join developer AI tool communities (Cursor Discord has 50K+ members), be genuinely helpful, announce McpServer Cloud when relevant.
-    - 8. **GitHub Copilot ecosystem:** Engage with GitHub Copilot community. McpServer Cloud is a natural extension for Copilot users. Consider becoming a GitHub Marketplace partner.
+    - 5. **Dev.to / Hashnode / Medium:** Technical blog posts explaining MCP, the context gap in AI assistants, and how QBrainAi solves it. SEO-optimized for terms like "MCP server hosting", "GitHub Copilot context", "persistent AI memory for developers".
+    - '6. **YouTube / Loom demos:** Short (3–5 minute) screen recordings showing: "Set up QBrainAi Cloud in 5 minutes and instantly make Cursor smarter." Distribute on YouTube, Twitter/X, LinkedIn, Discord.'
+    - 7. **Discord & Slack communities:** Join developer AI tool communities (Cursor Discord has 50K+ members), be genuinely helpful, announce QBrainAi Cloud when relevant.
+    - 8. **GitHub Copilot ecosystem:** Engage with GitHub Copilot community. QBrainAi Cloud is a natural extension for Copilot users. Consider becoming a GitHub Marketplace partner.
     - '### 8.2 Phase 2 — Product-Led Growth Engine'
     - '**Duration:** Months 3–12'
-    - '**Goal:** Turn product usage into viral growth. Every team that uses McpServer Cloud should naturally lead to their collaborators discovering it.'
+    - '**Goal:** Turn product usage into viral growth. Every team that uses QBrainAi Cloud should naturally lead to their collaborators discovering it.'
     - '**Tactics:**'
-    - 1. **"Powered by McpServer Cloud" attribution:** New servers start with a visible but non-intrusive badge on the server's MCP metadata. When a team member connects their AI assistant and queries context, they see the server name and provider. This is like GitHub's social proof — your work is visible.
+    - 1. **"Powered by QBrainAi Cloud" attribution:** New servers start with a visible but non-intrusive badge on the server's MCP metadata. When a team member connects their AI assistant and queries context, they see the server name and provider. This is like GitHub's social proof — your work is visible.
     - 2. **GitHub OAuth login:** Using GitHub OAuth means team members show up with their GitHub avatars and usernames. This makes the portal feel familiar and leverages GitHub's social graph.
-    - '3. **Invite flows:** When a server owner adds a team member via GitHub handle (@username), that person receives a beautiful email invitation: "Jane has invited you to join [Project Name] on McpServer Cloud."'
+    - '3. **Invite flows:** When a server owner adds a team member via GitHub handle (@username), that person receives a beautiful email invitation: "Jane has invited you to join [Project Name] on QBrainAi Cloud."'
     - 4. **Public server pages (optional):** Teams can optionally make their server's index public (listing connected repos, indexed docs, tool configurations) — similar to GitHub profile pages. This creates SEO content and social proof.
-    - 5. **"Deploy to McpServer Cloud" button:** Like "Deploy to Heroku" or "Deploy to Railway" buttons, we create a GitHub Action and a button that can be added to any McpServer-compatible open-source project's README. One click → sign up → server provisioned with that repo connected.
-    - 6. **Free tier as top-of-funnel:** The free tier is genuinely useful. It turns individual developers into product advocates. When they recommend McpServer Cloud to their team lead, the team lead sees a real use case already in production.
+    - 5. **"Deploy to QBrainAi Cloud" button:** Like "Deploy to Heroku" or "Deploy to Railway" buttons, we create a GitHub Action and a button that can be added to any QBrainAi-compatible open-source project's README. One click → sign up → server provisioned with that repo connected.
+    - 6. **Free tier as top-of-funnel:** The free tier is genuinely useful. It turns individual developers into product advocates. When they recommend QBrainAi Cloud to their team lead, the team lead sees a real use case already in production.
     - "7. **In-product upgrade prompts:** When a free user hits a limit (e.g., 10 syncs/day) with contextual messaging: \"You've hit today's sync limit — upgrade to Pro to sync without limits\" with a one-click upgrade."
     - '### 8.3 Phase 3 — Sales-Assisted Growth for Mid-Market & Enterprise'
     - '**Duration:** Months 9–24'
     - '**Goal:** Close $50K–$240K enterprise contracts. Hire first sales rep at ~$1.2M ARR.'
     - '**Tactics:**'
-    - '1. **Inbound-led outbound:** When an enterprise domain (e.g., stripe.com, shopify.com) signs up for a free or Pro account, trigger a personalized outreach from a sales rep: "I noticed several engineers from [Company] are using McpServer Cloud. Happy to discuss an Enterprise plan."'
+    - '1. **Inbound-led outbound:** When an enterprise domain (e.g., stripe.com, shopify.com) signs up for a free or Pro account, trigger a personalized outreach from a sales rep: "I noticed several engineers from [Company] are using QBrainAi Cloud. Happy to discuss an Enterprise plan."'
     - 2. **Account-based marketing (ABM):** Target the Fortune 1000 + top-500 high-growth startups that are known Copilot or Cursor enterprise customers. LinkedIn outreach from technical founders.
-    - 3. **Partner channel:** Engage GitHub Enterprise resellers and Microsoft partner ecosystem (McpServer Cloud runs on Azure-compatible infrastructure; Azure Marketplace listing is a future goal).
+    - 3. **Partner channel:** Engage GitHub Enterprise resellers and Microsoft partner ecosystem (QBrainAi Cloud runs on Azure-compatible infrastructure; Azure Marketplace listing is a future goal).
     - '4. **Conference presence:** Attend and sponsor: GitHub Universe, KubeCon, AWS re:Invent (developer tools track), JetBrains DevEcosystem conference, AI Engineer Summit. Sponsor hackathons with "Best Use of AI Coding Tools" categories.'
     - 5. **Analyst relations:** Brief Gartner, Forrester, and G2 on the AI developer tools market when ARR exceeds $1M. G2 reviews are disproportionately influential in enterprise SaaS purchasing.
     - '6. **Case studies:** Develop 3–5 detailed customer case studies by Month 18, showing measurable productivity gains (reduced context-switching time, faster onboarding, fewer repeated AI prompts). Quantify: "Team reduced average AI prompt setup time from 4 minutes to 30 seconds."'
     - '### 8.4 Partnerships'
     - '**GitHub/Microsoft:** GitHub Copilot Extensions and MCP marketplace listing. Microsoft is investing heavily in the MCP ecosystem and may partner with or acquire tooling providers.'
     - "**Anthropic:** Claude.ai is the primary MCP reference implementation. An official \"Works with Claude\" partnership or listing on Anthropic's MCP directory provides significant credibility."
-    - '**Cursor:** Cursor is the fastest-growing AI IDE. An official "Recommended McpServer Provider" listing on cursor.sh would be enormously valuable.'
-    - '**Vercel / Railway / Render:** Integration partnerships — "Deploy your McpServer from Railway with one click, or use McpServer Cloud for fully managed hosting."'
+    - '**Cursor:** Cursor is the fastest-growing AI IDE. An official "Recommended QBrainAi Provider" listing on cursor.sh would be enormously valuable.'
+    - '**Vercel / Railway / Render:** Integration partnerships — "Deploy your QBrainAi from Railway with one click, or use QBrainAi Cloud for fully managed hosting."'
     - '---'
     depends-on:
     - saas-07-product-offering
@@ -582,13 +582,13 @@ saas:
     - '- Customer data is never used for training AI models'
     - '- Customers own all their data'
     - '- Permissible use: software development workflows, personal productivity'
-    - '- Prohibited: scraping, automated abuse, storing PII beyond workflow needs, competing product development using McpServer Cloud infrastructure'
+    - '- Prohibited: scraping, automated abuse, storing PII beyond workflow needs, competing product development using QBrainAi Cloud infrastructure'
     - '- Fair use policy for unlimited tiers (soft limits with communication before enforcement)'
     - '### 14.4 Intellectual Property'
-    - '- McpServer core: MIT license (maintained on GitHub)'
+    - '- QBrainAi core: MIT license (maintained on GitHub)'
     - '- SaaS platform layer: Proprietary'
     - '- Customer data: Customer owns; we have limited license to operate the service'
-    - '- Trademarks: Register "McpServer Cloud" and logo before launch in US, EU'
+    - '- Trademarks: Register "QBrainAi Cloud" and logo before launch in US, EU'
     - '---'
     depends-on:
     - saas-07-product-offering
@@ -701,7 +701,7 @@ saas:
     - '- Impact: Very High'
     - '- Mitigation: Azure Files ZRS for primary storage (hardware-level redundancy); hourly snapshots to Blob Storage; daily full backup; point-in-time recovery for 30 days.'
     - '### 13.2 Market Risks'
-    - '**Risk: GitHub builds native McpServer into Copilot**'
+    - '**Risk: GitHub builds native QBrainAi into Copilot**'
     - '- Probability: Medium (Microsoft owns GitHub, invested in MCP)'
     - '- Impact: High (potentially makes the product irrelevant for GitHub-only workflows)'
     - "- Mitigation: Multi-vendor support (Cursor, Claude, JetBrains, VS Code beyond Copilot); deeper feature set than what GitHub would likely build natively; focus on enterprise collaboration features GitHub wouldn't prioritize."
@@ -712,7 +712,7 @@ saas:
     - '**Risk: Price compression from PaaS players (Railway, Render, etc.)**'
     - '- Probability: Medium'
     - '- Impact: Medium (margin pressure on lower tiers)'
-    - '- Mitigation: Differentiate on McpServer-specific features, not raw compute pricing. These players optimize for general containerized apps, not MCP context servers specifically.'
+    - '- Mitigation: Differentiate on QBrainAi-specific features, not raw compute pricing. These players optimize for general containerized apps, not MCP context servers specifically.'
     - '### 13.3 Business Risks'
     - '**Risk: Founder dependency / single point of failure**'
     - '- Probability: Medium (early stage)'
@@ -769,7 +769,7 @@ saas:
     description:
     - '### 16.1 Strategic Acquirer Candidates'
     - '**Microsoft / GitHub:**'
-    - '- GitHub Copilot is a natural home for McpServer Cloud'
+    - '- GitHub Copilot is a natural home for QBrainAi Cloud'
     - '- Microsoft has explicitly invested in MCP ecosystem'
     - '- Acquisition price benchmark: 8–12x ARR at growth stage'
     - '**Anthropic:**'
@@ -829,7 +829,7 @@ saas:
     title: Add REST clients similar to MVP-MARKETING-004 for Python and TypeScript
     estimate: 5-7 days AI-assisted
     note: >-
-      Reference implementation: src/McpServer.Client/ (C# NuGet, PackageId: SharpNinja.McpServer.Client). Python uses httpx+pydantic, TypeScript uses fetch+zod. Both must cover all 82 endpoints across 15 controllers with identical API surface. Dual auth (API Key + Bearer JWT), SSE streaming, typed exception hierarchy, facade+sub-client composition.
+      Reference implementation: src/QBrainAi.Client/ (C# NuGet, PackageId: QBrainAI.Client). Python uses httpx+pydantic, TypeScript uses fetch+zod. Both must cover all 82 endpoints across 15 controllers with identical API surface. Dual auth (API Key + Bearer JWT), SSE streaming, typed exception hierarchy, facade+sub-client composition.
 
 
       ## Audit Snapshot (2026-03-03)
@@ -848,7 +848,7 @@ saas:
 
       ### Description Summary
 
-      - Build Python (PyPI) and TypeScript (npm) REST client SDKs mirroring `src/McpServer.Client`.
+      - Build Python (PyPI) and TypeScript (npm) REST client SDKs mirroring `src/QBrainAi.Client`.
 
       - Cover 82 endpoints across 15 controllers with typed DTOs, dual auth, SSE, and shared facade/sub-client composition.
 
@@ -887,32 +887,32 @@ saas:
 
       - `dependsOn`: none declared in TODO.
 
-      - External implementation dependency: `src/McpServer.Client/` exists and is designated as the canonical reference.
+      - External implementation dependency: `src/QBrainAi.Client/` exists and is designated as the canonical reference.
 
       - Referenced TODO `MVP-MARKETING-004` is not present in current TODO store.
     done: false
     description:
-    - Create typed REST client libraries for Python (PyPI) and TypeScript (npm) mirroring the McpServer.Client NuGet package — covering all 82 API endpoints across 15 controllers with typed models, error handling, and DI/factory patterns appropriate to each ecosystem.
-    - 'REFERENCE IMPLEMENTATION: src/McpServer.Client/ provides the definitive pattern — facade + sub-client composition, shared auth state, dynamic port, typed exception hierarchy, SSE streaming, dual auth (API Key + Bearer JWT). 11 sub-client classes, 11 model files, MockHttpHandler test pattern.'
+    - Create typed REST client libraries for Python (PyPI) and TypeScript (npm) mirroring the QBrainAi.Client NuGet package — covering all 82 API endpoints across 15 controllers with typed models, error handling, and DI/factory patterns appropriate to each ecosystem.
+    - 'REFERENCE IMPLEMENTATION: src/QBrainAi.Client/ provides the definitive pattern — facade + sub-client composition, shared auth state, dynamic port, typed exception hierarchy, SSE streaming, dual auth (API Key + Bearer JWT). 11 sub-client classes, 11 model files, MockHttpHandler test pattern.'
     - 'SCOPE: 82 REST endpoints across 15 controllers: Auth(4), Agents(14), Context(4), Diagnostic(2), Events(1 SSE), GitHub(13), Repo(3), Requirements(20), SessionLog(3), Sync(2), Todo(9), Tools(12), Tunnel(7), Voice(6), Workspace(11).'
     remaining: 'All phases. Python library (Phases 0-4: scaffold, base client, exceptions, options, 15 domain clients, facade, factory, ~80 tests). TypeScript library (Phases 5-8: scaffold, base client, exceptions, Zod types, 15 domain clients, facade, factory, ~63 tests). CI/CD (Phase 9: 4 workflows). Docs (Phase 10: 2 READMEs). Integration tests (Phase 11). Requirements (Phase 12).'
     technical-details:
-    - 'PYTHON LIBRARY ARCHITECTURE: Package name mcpserver-client on PyPI. Use httpx for async HTTP (SSE support via httpx-sse). Pydantic v2 models for all DTOs with Field(alias=camelCase) for JSON compat. Facade class McpServerClient with 15 sub-client properties (.todo, .context, .session_log, .github, .repo, .sync, .tunnel, .workspace, .tools, .auth_config, .diagnostic, .agents, .requirements, .voice, .events). Python 3.10+ for match statements and union types. async context manager (__aenter__/__aexit__) for httpx client lifecycle.'
-    - 'TYPESCRIPT LIBRARY ARCHITECTURE: Package name @sharpninja/mcpserver-client on npm. Use native fetch API. Zod schemas for runtime validation with inferred TypeScript types. Class-based facade McpServerClient with 15 sub-client properties. TypeScript 5.0+ with strict mode. ESM + CJS dual output via tsup. AsyncGenerator<T> for SSE streaming.'
+    - 'PYTHON LIBRARY ARCHITECTURE: Package name mcpserver-client on PyPI. Use httpx for async HTTP (SSE support via httpx-sse). Pydantic v2 models for all DTOs with Field(alias=camelCase) for JSON compat. Facade class QBrainAiClient with 15 sub-client properties (.todo, .context, .session_log, .github, .repo, .sync, .tunnel, .workspace, .tools, .auth_config, .diagnostic, .agents, .requirements, .voice, .events). Python 3.10+ for match statements and union types. async context manager (__aenter__/__aexit__) for httpx client lifecycle.'
+    - 'TYPESCRIPT LIBRARY ARCHITECTURE: Package name @sharpninja/mcpserver-client on npm. Use native fetch API. Zod schemas for runtime validation with inferred TypeScript types. Class-based facade QBrainAiClient with 15 sub-client properties. TypeScript 5.0+ with strict mode. ESM + CJS dual output via tsup. AsyncGenerator<T> for SSE streaming.'
     - 'AUTH MODEL: Both libraries must support dual auth — API Key (X-Api-Key header) and Bearer JWT (Authorization: Bearer header). Set-once credential pattern with logout() to reset. ApiKey and BearerToken are mutually exclusive. InitializeAsync fetches default API key from GET /api-key.'
     - 'SHARED STATE PATTERN: WorkspacePath set on facade propagates to all sub-clients via shared reference object. Port is read at call-time for dynamic URL construction ({scheme}://{host}:{port}/{path}). Auth credentials set once on facade, propagated to all sub-clients.'
-    - 'SSE STREAMING: Python — async generators yielding str from httpx-sse (data: line parsing, event: done termination). TypeScript — AsyncGenerator<string> using fetch with ReadableStream. Required for: GET /mcpserver/events (ChangeEvent), GET /mcpserver/todo/{id}/prompt/status|implement|plan (prompt text).'
+    - 'SSE STREAMING: Python — async generators yielding str from httpx-sse (data: line parsing, event: done termination). TypeScript — AsyncGenerator<string> using fetch with ReadableStream. Required for: GET /qbrainai/events (ChangeEvent), GET /qbrainai/todo/{id}/prompt/status|implement|plan (prompt text).'
     - 'ERROR HANDLING: Map HTTP status codes to typed exceptions — 400->ValidationError, 401->UnauthorizedError, 404->NotFoundError, 409->ConflictError, 5xx->ServerError. Extract error message from JSON response body (error or errorMessage field). Python: raise exceptions. TypeScript: throw errors.'
     - 'TESTING: Python — pytest + pytest-asyncio + respx (httpx mock transport). TypeScript — vitest + msw (Mock Service Worker). Mirror the C# MockHttpHandler pattern — intercept at HTTP transport layer, no network needed. Min 2 tests per client (GET + POST), ~60 tests per language.'
     - 'PACKAGING: Python — pyproject.toml with hatchling build backend, src layout, py.typed marker for PEP 561. TypeScript — package.json with tsup for bundling, dual ESM/CJS output, .d.ts type declarations. Both: README, LICENSE (MIT), CHANGELOG.'
     implementation-tasks:
     - task: 'Phase 0 — Scaffold Python project: Create lib/python/mcpserver-client/ with pyproject.toml (name=mcpserver-client, version=0.1.0, python>=3.10, deps: httpx>=0.27, httpx-sse>=0.4, pydantic>=2.0, dev-deps: pytest>=8.0, pytest-asyncio>=0.24, respx>=0.22, ruff>=0.8, mypy>=1.13). Create src/mcpserver_client/__init__.py with __version__ and __all__ exports. Create src/mcpserver_client/py.typed marker for PEP 561. Create tests/__init__.py and tests/conftest.py with shared fixtures (mock_transport, default_options). Add lib/python/ patterns to root .gitignore.'
       done: false
-    - task: 'Phase 1.1 — Python base client: Create src/mcpserver_client/_base.py with McpClientBase class. Fields: _client (httpx.AsyncClient), _options (McpServerClientOptions), _workspace_path_holder (dict ref for shared mutable state). Properties: api_key (set-once, clears bearer), bearer_token (set-once, clears api_key), workspace_path (backed by shared holder), port (read at call-time). Protected methods: _get_async(path, ct) -> T, _post_async(path, body, ct) -> T, _put_async(path, body, ct) -> T, _delete_async(path, ct) -> T, _stream_sse(path, ct) -> AsyncGenerator[str, None]. Private: _send_async(method, path, body) builds URL as {scheme}://{host}:{port}/{path}, attaches auth header (X-Api-Key or Authorization: Bearer), attaches X-Workspace-Path, serializes body with model_dump(by_alias=True), deserializes response, calls _throw_for_status on failure. SSE parser: reads lines, yields data: content, stops on event: done.'
+    - task: 'Phase 1.1 — Python base client: Create src/mcpserver_client/_base.py with McpClientBase class. Fields: _client (httpx.AsyncClient), _options (QBrainAiClientOptions), _workspace_path_holder (dict ref for shared mutable state). Properties: api_key (set-once, clears bearer), bearer_token (set-once, clears api_key), workspace_path (backed by shared holder), port (read at call-time). Protected methods: _get_async(path, ct) -> T, _post_async(path, body, ct) -> T, _put_async(path, body, ct) -> T, _delete_async(path, ct) -> T, _stream_sse(path, ct) -> AsyncGenerator[str, None]. Private: _send_async(method, path, body) builds URL as {scheme}://{host}:{port}/{path}, attaches auth header (X-Api-Key or Authorization: Bearer), attaches X-Workspace-Path, serializes body with model_dump(by_alias=True), deserializes response, calls _throw_for_status on failure. SSE parser: reads lines, yields data: content, stops on event: done.'
       done: false
     - task: 'Phase 1.2 — Python exceptions: Create src/mcpserver_client/exceptions.py. Base class McpClientError(Exception) with status_code (int), message (str), response_body (str|None). Subclasses: ValidationError (400), UnauthorizedError (401), NotFoundError (404), ConflictError (409), ServerError (5xx). Helper function _throw_for_status(response: httpx.Response) that reads response body, tries to extract error or errorMessage from JSON, maps status to exception type, raises with extracted message.'
       done: false
-    - task: 'Phase 1.3 — Python options: Create src/mcpserver_client/options.py with McpServerClientOptions dataclass (frozen=False): base_url (str, default "http://localhost"), api_key (str|None = None), bearer_token (str|None = None), workspace_path (str|None = None), port (int = 7147), timeout (float = 30.0). Add @classmethod from_marker_file(cls, path: str) -> Self that reads AGENTS-README-FIRST.yaml using PyYAML (pyyaml dep), extracts baseUrl, apiKey, workspacePath, port.'
+    - task: 'Phase 1.3 — Python options: Create src/mcpserver_client/options.py with QBrainAiClientOptions dataclass (frozen=False): base_url (str, default "http://localhost"), api_key (str|None = None), bearer_token (str|None = None), workspace_path (str|None = None), port (int = 7147), timeout (float = 30.0). Add @classmethod from_marker_file(cls, path: str) -> Self that reads AGENTS-README-FIRST.yaml using PyYAML (pyyaml dep), extracts baseUrl, apiKey, workspacePath, port.'
       done: false
     - task: 'Phase 2.1 — Python Todo models + client: Create src/mcpserver_client/models/todo.py with Pydantic v2 models (model_config = ConfigDict(populate_by_name=True)): ImplementationTask (task: str, done: bool), TodoFlatItem (id, title, section, priority, done, estimate, note, description, technical_details, implementation_tasks, completed_date, done_summary, remaining, priority_note, reference, depends_on, functional_requirements, technical_requirements — all with Field(alias=camelCase)), TodoCreateRequest, TodoUpdateRequest, TodoMutationResult (success, item, error, error_details), TodoQueryResult (items, total_count, limit, offset), RequirementsAnalysisResult. Create src/mcpserver_client/todo.py with TodoClient(McpClientBase): query_async(**kwargs) -> TodoQueryResult, get_async(id) -> TodoFlatItem, create_async(req) -> TodoMutationResult, update_async(id, req) -> TodoMutationResult, delete_async(id) -> TodoMutationResult, analyze_requirements_async(id) -> RequirementsAnalysisResult, stream_status_async(id) -> AsyncGenerator[str], stream_implement_async(id) -> AsyncGenerator[str], stream_plan_async(id) -> AsyncGenerator[str].'
       done: false
@@ -926,11 +926,11 @@ saas:
       done: false
     - task: 'Phase 2.6 — Python remaining domain clients (Sync, Workspace, ToolRegistry, Tunnel, Agent, Requirements, Voice, EventStream, AuthConfig, Diagnostic): Create models + client files for each. Sync: 2 methods. Workspace: 11 methods. ToolRegistry: 12 methods. Tunnel: 7 methods. Agent: 14 methods. Requirements: 20 methods + generate returning bytes. Voice: 6 methods. EventStream: 1 SSE method. AuthConfig: 1 method. Diagnostic: 2 methods. Total: ~76 methods across 10 client files.'
       done: false
-    - task: 'Phase 3.1 — Python facade: Create src/mcpserver_client/client.py with McpServerClient class. Constructor takes McpServerClientOptions, creates httpx.AsyncClient (timeout, base_url), creates shared _workspace_path_holder dict, instantiates all 15 sub-clients passing (client, options, holder). Properties: todo, context, session_log, github, repo, sync, workspace, tools, tunnel, agents, requirements, voice, events, auth_config, diagnostic. Credential propagation: setting api_key/bearer_token/workspace_path on facade iterates _all_clients list and sets on each. initialize_async(): fetches default API key from GET /api-key. logout(): clears credentials on all sub-clients. Async context manager: __aenter__ returns self, __aexit__ calls await _client.aclose().'
+    - task: 'Phase 3.1 — Python facade: Create src/mcpserver_client/client.py with QBrainAiClient class. Constructor takes QBrainAiClientOptions, creates httpx.AsyncClient (timeout, base_url), creates shared _workspace_path_holder dict, instantiates all 15 sub-clients passing (client, options, holder). Properties: todo, context, session_log, github, repo, sync, workspace, tools, tunnel, agents, requirements, voice, events, auth_config, diagnostic. Credential propagation: setting api_key/bearer_token/workspace_path on facade iterates _all_clients list and sets on each. initialize_async(): fetches default API key from GET /api-key. logout(): clears credentials on all sub-clients. Async context manager: __aenter__ returns self, __aexit__ calls await _client.aclose().'
       done: false
-    - task: 'Phase 3.2 — Python factory + exports: Create src/mcpserver_client/factory.py with McpServerClientFactory: create(options) -> McpServerClient, from_marker_file(path) -> McpServerClient (reads YAML, constructs options, returns client). Update src/mcpserver_client/__init__.py with __all__ listing all public classes: McpServerClient, McpServerClientOptions, McpServerClientFactory, all exception classes, all model classes, all sub-client classes.'
+    - task: 'Phase 3.2 — Python factory + exports: Create src/mcpserver_client/factory.py with QBrainAiClientFactory: create(options) -> QBrainAiClient, from_marker_file(path) -> QBrainAiClient (reads YAML, constructs options, returns client). Update src/mcpserver_client/__init__.py with __all__ listing all public classes: QBrainAiClient, QBrainAiClientOptions, QBrainAiClientFactory, all exception classes, all model classes, all sub-client classes.'
       done: false
-    - task: 'Phase 4.1 — Python tests — infrastructure: Create tests/conftest.py with shared fixtures: mock_transport (respx mock), default_options (McpServerClientOptions with test values), make_client (factory fixture returning configured TodoClient/etc). Create tests/test_base.py testing McpClientBase: (1) API key header injection, (2) Bearer token header injection, (3) mutual exclusion of API key and bearer, (4) X-Workspace-Path header, (5) dynamic port URL construction, (6) JSON request body serialization. Create tests/test_exceptions.py: (1) 400 -> ValidationError, (2) 401 -> UnauthorizedError, (3) 404 -> NotFoundError, (4) 409 -> ConflictError, (5) 500 -> ServerError, (6) error message extraction from JSON body.'
+    - task: 'Phase 4.1 — Python tests — infrastructure: Create tests/conftest.py with shared fixtures: mock_transport (respx mock), default_options (QBrainAiClientOptions with test values), make_client (factory fixture returning configured TodoClient/etc). Create tests/test_base.py testing McpClientBase: (1) API key header injection, (2) Bearer token header injection, (3) mutual exclusion of API key and bearer, (4) X-Workspace-Path header, (5) dynamic port URL construction, (6) JSON request body serialization. Create tests/test_exceptions.py: (1) 400 -> ValidationError, (2) 401 -> UnauthorizedError, (3) 404 -> NotFoundError, (4) 409 -> ConflictError, (5) 500 -> ServerError, (6) error message extraction from JSON body.'
       done: false
     - task: 'Phase 4.2 — Python tests — TodoClient: Create tests/test_todo.py: (1) query_async builds correct URL with all query params, (2) get_async URL-encodes special characters in ID, (3) create_async sends correct JSON body with camelCase keys, (4) update_async sends PUT with correct path, (5) delete_async sends DELETE, (6) stream_status_async yields SSE data lines and stops on event:done, (7) stream_implement_async SSE works, (8) error response raises correct exception type. ~10 test cases.'
       done: false
@@ -940,19 +940,19 @@ saas:
       done: false
     - task: 'Phase 5.0 — Scaffold TypeScript project: Create lib/typescript/mcpserver-client/ with: package.json (name=@sharpninja/mcpserver-client, version=0.1.0, type=module, exports for ESM+CJS, devDeps: typescript>=5.0, tsup, vitest, msw, zod, js-yaml, @types/js-yaml). tsconfig.json (strict, ESNext target, NodeNext module, declaration, declarationMap, sourceMap, outDir=dist). tsup.config.ts (entry: src/index.ts, format: [esm, cjs], dts: true, sourcemap: true, clean: true). vitest.config.ts. .npmignore (src/, tests/, tsconfig.json, vitest.config.ts). src/ and tests/ directories.'
       done: false
-    - task: 'Phase 5.1 — TypeScript base client: Create src/base.ts with McpClientBase class. Constructor(options: McpServerClientOptions, workspacePathHolder: {value: string|null}). Protected methods: get<T>(path), post<T>(path, body), put<T>(path, body), del<T>(path), streamSse(path) -> AsyncGenerator<string>. Private _send<T>(method, path, body?): builds URL as {scheme}://{host}:{port}/{path}, attaches headers (X-Api-Key or Authorization: Bearer, X-Workspace-Path, Content-Type: application/json), calls fetch(), calls throwForStatus on non-2xx, returns parsed JSON. SSE parser: reads response.body ReadableStream line by line, yields data: content, stops on event: done. Properties: apiKey, bearerToken (set-once mutual exclusion), workspacePath (backed by shared holder), port.'
+    - task: 'Phase 5.1 — TypeScript base client: Create src/base.ts with McpClientBase class. Constructor(options: QBrainAiClientOptions, workspacePathHolder: {value: string|null}). Protected methods: get<T>(path), post<T>(path, body), put<T>(path, body), del<T>(path), streamSse(path) -> AsyncGenerator<string>. Private _send<T>(method, path, body?): builds URL as {scheme}://{host}:{port}/{path}, attaches headers (X-Api-Key or Authorization: Bearer, X-Workspace-Path, Content-Type: application/json), calls fetch(), calls throwForStatus on non-2xx, returns parsed JSON. SSE parser: reads response.body ReadableStream line by line, yields data: content, stops on event: done. Properties: apiKey, bearerToken (set-once mutual exclusion), workspacePath (backed by shared holder), port.'
       done: false
     - task: 'Phase 5.2 — TypeScript exceptions: Create src/errors.ts. Base class McpClientError extends Error with statusCode (number), responseBody (string|undefined). Subclasses: ValidationError (400), UnauthorizedError (401), NotFoundError (404), ConflictError (409), ServerError (5xx). Function throwForStatus(response: Response): reads body text, tries JSON.parse for error/errorMessage, maps status to error class, throws.'
       done: false
-    - task: 'Phase 5.3 — TypeScript types with Zod: Create src/types/ directory. For each domain, create a .ts file with Zod schemas AND inferred types: todo.ts (TodoFlatItemSchema, TodoCreateRequestSchema, TodoMutationResultSchema, TodoQueryResultSchema, etc.), session-log.ts, context.ts, github.ts, repo.ts, sync.ts, workspace.ts, tools.ts, tunnel.ts, agents.ts, requirements.ts, voice.ts, events.ts, auth-config.ts, diagnostic.ts. Use z.object() with camelCase keys matching the JSON API. Export both schemas and inferred types (type TodoFlatItem = z.infer<typeof TodoFlatItemSchema>). Create src/options.ts with McpServerClientOptions interface: baseUrl, apiKey?, bearerToken?, workspacePath?, port?, timeout?.'
+    - task: 'Phase 5.3 — TypeScript types with Zod: Create src/types/ directory. For each domain, create a .ts file with Zod schemas AND inferred types: todo.ts (TodoFlatItemSchema, TodoCreateRequestSchema, TodoMutationResultSchema, TodoQueryResultSchema, etc.), session-log.ts, context.ts, github.ts, repo.ts, sync.ts, workspace.ts, tools.ts, tunnel.ts, agents.ts, requirements.ts, voice.ts, events.ts, auth-config.ts, diagnostic.ts. Use z.object() with camelCase keys matching the JSON API. Export both schemas and inferred types (type TodoFlatItem = z.infer<typeof TodoFlatItemSchema>). Create src/options.ts with QBrainAiClientOptions interface: baseUrl, apiKey?, bearerToken?, workspacePath?, port?, timeout?.'
       done: false
     - task: 'Phase 6.1 — TypeScript TodoClient: Create src/clients/todo.ts with TodoClient extends McpClientBase. Methods: query(params?: TodoQueryParams): Promise<TodoQueryResult>, get(id: string): Promise<TodoFlatItem>, create(request: TodoCreateRequest): Promise<TodoMutationResult>, update(id: string, request: TodoUpdateRequest): Promise<TodoMutationResult>, delete(id: string): Promise<TodoMutationResult>, analyzeRequirements(id: string): Promise<RequirementsAnalysisResult>, streamStatus(id: string): AsyncGenerator<string>, streamImplement(id: string): AsyncGenerator<string>, streamPlan(id: string): AsyncGenerator<string>. URL-encode path params with encodeURIComponent. Build query strings from params object.'
       done: false
     - task: 'Phase 6.2-6.13 — TypeScript remaining sub-clients: Create one file per domain in src/clients/: session-log.ts (3 methods), context.ts (4 methods), github.ts (13 methods), repo.ts (3 methods), sync.ts (2 methods), workspace.ts (11 methods), tools.ts (12 methods), tunnel.ts (7 methods), agents.ts (14 methods), requirements.ts (20 methods + generate returning ArrayBuffer), voice.ts (6 methods), events.ts (1 SSE method -> AsyncGenerator<ChangeEvent>), auth-config.ts (1 method), diagnostic.ts (2 methods). Each extends McpClientBase. Total: ~99 methods.'
       done: false
-    - task: 'Phase 7.1 — TypeScript facade: Create src/client.ts with McpServerClient class. Constructor takes McpServerClientOptions. Creates shared workspacePathHolder object. Instantiates all 15 sub-clients. Readonly properties: todo, context, sessionLog, github, repo, sync, workspace, tools, tunnel, agents, requirements, voice, events, authConfig, diagnostic. Credential setters propagate to _allClients array. initializeAsync(): fetches GET /api-key, sets on all. logout(): clears credentials. dispose(): AbortController cleanup.'
+    - task: 'Phase 7.1 — TypeScript facade: Create src/client.ts with QBrainAiClient class. Constructor takes QBrainAiClientOptions. Creates shared workspacePathHolder object. Instantiates all 15 sub-clients. Readonly properties: todo, context, sessionLog, github, repo, sync, workspace, tools, tunnel, agents, requirements, voice, events, authConfig, diagnostic. Credential setters propagate to _allClients array. initializeAsync(): fetches GET /api-key, sets on all. logout(): clears credentials. dispose(): AbortController cleanup.'
       done: false
-    - task: 'Phase 7.2 — TypeScript factory + exports: Create src/factory.ts with createClient(options: McpServerClientOptions): McpServerClient and fromMarkerFile(path: string): Promise<McpServerClient> (reads YAML with js-yaml, extracts connection details). Create src/index.ts barrel export: re-export McpServerClient, McpServerClientOptions, createClient, fromMarkerFile, all error classes, all type interfaces, all sub-client classes. Ensure tree-shaking friendly with named exports only.'
+    - task: 'Phase 7.2 — TypeScript factory + exports: Create src/factory.ts with createClient(options: QBrainAiClientOptions): QBrainAiClient and fromMarkerFile(path: string): Promise<QBrainAiClient> (reads YAML with js-yaml, extracts connection details). Create src/index.ts barrel export: re-export QBrainAiClient, QBrainAiClientOptions, createClient, fromMarkerFile, all error classes, all type interfaces, all sub-client classes. Ensure tree-shaking friendly with named exports only.'
       done: false
     - task: 'Phase 8.1 — TypeScript tests — infrastructure: Create tests/helpers.ts with mockFetch helper (returns vi.fn() with configurable responses). Create tests/base.test.ts: (1) API key header, (2) Bearer token header, (3) mutual exclusion, (4) X-Workspace-Path header, (5) dynamic port URL, (6) JSON body serialization. Create tests/errors.test.ts: (1-5) status code mapping, (6) error message extraction. ~12 test cases.'
       done: false
@@ -968,7 +968,7 @@ saas:
       done: false
     - task: 'Phase 9.4 — TypeScript publish: Create .github/workflows/typescript-client-publish.yml. Trigger: tag ts-client/v*. Steps: checkout, setup-node, npm ci, vitest run (gate), tsup, npm publish with NPM_TOKEN.'
       done: false
-    - task: 'Phase 10.1 — Python README: Create lib/python/mcpserver-client/README.md. Sections: Overview (what it does, API coverage), Installation (pip install mcpserver-client), Quick Start (async with McpServerClient.from_marker_file()), Authentication (API key vs Bearer JWT), Sub-client Usage (todo CRUD, context search, session log submit — code examples), SSE Streaming (async for event in client.events.subscribe_async()), Error Handling (try/except McpClientError), Full API Reference (table of all 82 endpoints mapped to client methods).'
+    - task: 'Phase 10.1 — Python README: Create lib/python/mcpserver-client/README.md. Sections: Overview (what it does, API coverage), Installation (pip install mcpserver-client), Quick Start (async with QBrainAiClient.from_marker_file()), Authentication (API key vs Bearer JWT), Sub-client Usage (todo CRUD, context search, session log submit — code examples), SSE Streaming (async for event in client.events.subscribe_async()), Error Handling (try/except McpClientError), Full API Reference (table of all 82 endpoints mapped to client methods).'
       done: false
     - task: 'Phase 10.2 — TypeScript README: Create lib/typescript/mcpserver-client/README.md. Sections: Overview, Installation (npm install @sharpninja/mcpserver-client), Quick Start (const client = await fromMarkerFile()), Authentication, Sub-client Usage, SSE Streaming (for await...of), Error Handling (try/catch McpClientError), API Reference table.'
       done: false

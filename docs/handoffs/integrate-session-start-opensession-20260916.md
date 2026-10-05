@@ -4,7 +4,7 @@ Copy everything below the line into the other agent.
 
 ---
 
-Integrate this in-progress fix into your current McpServer work. Do not re-diagnose. Do not start a parallel rewrite. Take these files, finish the remaining gates, and keep going on your assigned task.
+Integrate this in-progress fix into your current QBrainAi work. Do not re-diagnose. Do not start a parallel rewrite. Take these files, finish the remaining gates, and keep going on your assigned task.
 
 ## What was wrong
 
@@ -14,7 +14,7 @@ Verified 2026-09-16:
 
 - Cache claimed `GrokCode-20260916T184241Z-plugin-session` `status: verified`.
 - Native `sessionlog_query` `agent=GrokCode` `from=2026-09-16T18:00:00Z` returned `totalCount=0`.
-- GET `/mcpserver/sessionlog/GrokCode/GrokCode-20260916T184241Z-plugin-session` returned 404.
+- GET `/qbrainai/sessionlog/GrokCode/GrokCode-20260916T184241Z-plugin-session` returned 404.
 - Control GET of `GrokCode-20260909T130459Z-plugin-session` returned 200. The GET route works.
 
 Root cause in `Start-PluginSession` (`plugins/core/lib-ps/plugin-hook.ps1`): after `Invoke-FullBootstrap` it minted a sessionId and wrote `status: verified`. No `client.SessionLog.OpenSessionAsync`. `workflow.sessionlog.openSession` is still a local YAML write (`Invoke-WorkflowOpenSession`). Native `sessionlog_open` does persist (this handoff session was created that way: turnId 45128).
@@ -41,7 +41,7 @@ Copies already made (not in `git diff --stat` if those trees are unsynced/untrac
 - `F:\GitHub\mcpserver-grok-plugin\lib\plugin-hook.ps1`
 - `plugins/core/.staged-plugin/lib/plugin-hook.ps1`
 
-`git diff --stat` on the McpServer worktree at handoff: `plugin-hook.ps1` +46/-1, `PluginPowerShellRuntime.Tests.ps1` +148. Confirm with `git diff` before you commit.
+`git diff --stat` on the QBrainAi worktree at handoff: `plugin-hook.ps1` +46/-1, `PluginPowerShellRuntime.Tests.ps1` +148. Confirm with `git diff` before you commit.
 
 ## Receipts already in hand
 
@@ -56,8 +56,8 @@ Live proof (temp cache, did not overwrite `.mcpServer/grok`):
 - Hook: `F:\GitHub\mcpserver-grok-plugin\lib\plugin-hook.ps1` `-HookName session-start`
 - `MCP_SESSION_ID=GrokCode-20260916T190852Z-hook-open-proof`
 - Cache: `C:\Users\kingd\AppData\Local\Temp\mcp-hook-open-proof-20260916T190852Z\session-state.yaml` `status: verified`
-- GET `/mcpserver/sessionlog/GrokCode/GrokCode-20260916T190852Z-hook-open-proof` returned **200**
-- `mcpserver-repl` at `C:\Users\kingd\.dotnet\tools\mcpserver-repl.exe`
+- GET `/qbrainai/sessionlog/GrokCode/GrokCode-20260916T190852Z-hook-open-proof` returned **200**
+- `qbrain-ai-repl` at `C:\Users\kingd\.dotnet\tools\qbrain-ai-repl.exe`
 
 Handoff MCP session (native, persisted): `GrokCode-20260916T185700Z-fix-hook-local-session` / `req-20260916T185700Z-001-fix-hook-local-session` / turnId 45128.
 

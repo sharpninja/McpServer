@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>QBrainAi.QBAgent.Tools</RootNamespace>
+    <AssemblyName>QBrainAi.QBAgent.Tools</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QBrainAi.McpAgent\QBrainAi.McpAgent.csproj" />
+    <ProjectReference Include="..\QBrainAi.Common.AgentCli\QBrainAi.Common.AgentCli.csproj" />
+    <ProjectReference Include="..\QBrainAi.QBAgent.Skills\QBrainAi.QBAgent.Skills.csproj" />
+  </ItemGroup>
+</Project>

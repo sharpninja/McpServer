@@ -8,7 +8,10 @@ partial class Build
     [Parameter("Package version for NuGet pack (defaults to GitVersion output)")]
     readonly string PackageVersion = string.Empty;
 
-    /// <summary>Pack public McpServer libraries as NuGet packages.</summary>
+    /// <summary>
+    /// Packs public QBrainAI.* libraries. QBrainAi.Common.AgentCli is embedded in QBrainAI.Repl.Core
+    /// and is not packed on its own. SharpNinja.McpServer.* facades stay unpackaged in Phase 1.
+    /// </summary>
     public Target PackNuGet => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -18,11 +21,11 @@ partial class Build
             CleanNuGetPackageOutput(packageOutputDirectory);
             var projects = new[]
             {
-                SourceDirectory / "McpServer.Client" / "McpServer.Client.csproj",
-                SourceDirectory / "McpServer.Cqrs" / "McpServer.Cqrs.csproj",
-                SourceDirectory / "McpServer.Cqrs.Mvvm" / "McpServer.Cqrs.Mvvm.csproj",
-                SourceDirectory / "McpServer.Repl.Core" / "McpServer.Repl.Core.csproj",
-                SourceDirectory / "McpServer.McpAgent" / "McpServer.McpAgent.csproj",
+                SourceDirectory / "QBrainAi.Client" / "QBrainAi.Client.csproj",
+                SourceDirectory / "QBrainAi.Cqrs" / "QBrainAi.Cqrs.csproj",
+                SourceDirectory / "QBrainAi.Cqrs.Mvvm" / "QBrainAi.Cqrs.Mvvm.csproj",
+                SourceDirectory / "QBrainAi.Repl.Core" / "QBrainAi.Repl.Core.csproj",
+                SourceDirectory / "QBrainAi.McpAgent" / "QBrainAi.McpAgent.csproj",
             };
 
             foreach (var project in projects)

@@ -9,10 +9,12 @@
  */
 import { spawn, type ChildProcess } from 'child_process';
 import { EventEmitter } from 'events';
-import { dirname } from 'path';
+import { mkdtempSync, writeFileSync } from 'fs';
+import { tmpdir } from 'os';
+import { dirname, join } from 'path';
 import { PassThrough } from 'stream';
 import * as yaml from 'js-yaml';
-import { ReplBridge, type ReplResponse } from '../src/transport/repl-bridge.js';
+import { ReplBridge, resolveReplCommand, type ReplResponse } from '../src/transport/repl-bridge.js';
 
 jest.mock('child_process', () => ({
   spawn: jest.fn(),
@@ -39,7 +41,7 @@ function feedLine(bridge: ReplBridge, line: string): void {
   (bridge as unknown as { onLine: (line: string) => void }).onLine(line);
 }
 
-/** Frame a YAML envelope the way mcpserver-repl emits it: doc + `---` line. */
+/** Frame a YAML envelope the way qbrain-ai-repl emits it: doc + `---` line. */
 function feedEnvelope(bridge: ReplBridge, envelope: Record<string, unknown>): void {
   const text = yaml.dump(envelope, { lineWidth: -1 });
   for (const line of text.split('\n')) {
@@ -89,19 +91,22 @@ describe('ReplBridge process launch', () => {
     process.chdir(originalCwd);
   });
 
-  test('TEST-MCP-PLUGIN-PSONLY-001 starts mcpserver-repl with the MCP workspace cwd instead of the Node process cwd', async () => {
+  test('TEST-MCP-PLUGIN-PSONLY-001 starts qbrain-ai-repl with the MCP workspace cwd instead of the Node process cwd', async () => {
     const workspace = originalCwd;
     const wrongCurrentDirectory = dirname(originalCwd);
     process.chdir(wrongCurrentDirectory);
     process.env.MCP_WORKSPACE_PATH = workspace;
     process.env.MCP_AGENT_NAME = 'Cline';
+    process.env.PATH = mkdtempSync(join(tmpdir(), 'repl-empty-'));
+    delete process.env.MCPSERVER_REPL_BIN;
+    delete process.env.MCPSERVER_REPL_COMMAND;
     spawnMock.mockReturnValue(createMockChildProcess());
 
     const bridge = new ReplBridge();
     await bridge.ensure();
 
     expect(spawnMock).toHaveBeenCalledWith(
-      'mcpserver-repl',
+      'qbrain-ai-repl',
       ['--agent-stdio', '--agent', 'Cline'],
       expect.objectContaining({
         cwd: workspace,
@@ -111,6 +116,40 @@ describe('ReplBridge process launch', () => {
         }),
       }),
     );
+  });
+
+  test('uses mcpserver-repl when qbrain-ai-repl is not installed', async () => {
+    const bin = mkdtempSync(join(tmpdir(), 'repl-legacy-'));
+    writeFileSync(join(bin, 'mcpserver-repl'), '');
+    process.env.PATH = bin;
+    delete process.env.MCPSERVER_REPL_BIN;
+    delete process.env.MCPSERVER_REPL_COMMAND;
+    spawnMock.mockReturnValue(createMockChildProcess());
+
+    const bridge = new ReplBridge();
+    await bridge.ensure();
+
+    expect(spawnMock).toHaveBeenCalledWith(
+      'mcpserver-repl',
+      expect.any(Array),
+      expect.any(Object),
+    );
+    expect(resolveReplCommand()).toBe('mcpserver-repl');
+  });
+
+  test('prefers qbrain-ai-repl when both REPL commands are installed', async () => {
+    const bin = mkdtempSync(join(tmpdir(), 'repl-both-'));
+    writeFileSync(join(bin, 'mcpserver-repl'), '');
+    writeFileSync(join(bin, 'qbrain-ai-repl'), '');
+    process.env.PATH = bin;
+    delete process.env.MCPSERVER_REPL_BIN;
+    delete process.env.MCPSERVER_REPL_COMMAND;
+    spawnMock.mockReturnValue(createMockChildProcess());
+
+    const bridge = new ReplBridge();
+    await bridge.ensure();
+
+    expect(spawnMock.mock.calls[0][0]).toBe('qbrain-ai-repl');
   });
 });
 
@@ -335,11 +374,11 @@ describe('ReplBridge timeout handling', () => {
       bridge as unknown as {
         terminateAfterTimeout: (message: string, exceptRequestId?: string) => void;
       }
-    ).terminateAfterTimeout('mcpserver-repl timed out');
+    ).terminateAfterTimeout('qbrain-ai-repl timed out');
 
     expect(kill).toHaveBeenCalledWith('SIGTERM');
     expect((bridge as unknown as { proc: unknown }).proc).toBeNull();
-    expect(rejected[0].message).toBe('mcpserver-repl timed out');
+    expect(rejected[0].message).toBe('qbrain-ai-repl timed out');
     expect(pendingOf(bridge).size).toBe(0);
 
     jest.advanceTimersByTime(2000);

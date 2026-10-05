@@ -2,7 +2,7 @@
 
 ## Scope
 
-DOC-AUDIT-001 required a thorough documentation audit across MCP Server documentation surfaces, with special attention to stale or contradictory guidance around Byrd process, MCP TODO/session-log usage, Nuke deployment, plugin usage, federation topology, and requirements traceability.
+DOC-AUDIT-001 required a thorough documentation audit across QBrain.AI documentation surfaces, with special attention to stale or contradictory guidance around Byrd process, MCP TODO/session-log usage, Nuke deployment, plugin usage, federation topology, and requirements traceability.
 
 Audited surfaces:
 
@@ -16,10 +16,10 @@ Audited surfaces:
 ## Findings
 
 1. Agent STDIO protocol wording was stale in multiple agent-facing surfaces.
-   `README.md`, `docs/AGENT-PLUGIN-AVAILABILITY.md`, `docs/REPL-AGENT-GUIDE.md`, and `templates/prompt-templates.yaml` still described formatted YAML envelopes for direct `mcpserver-repl --agent-stdio` callers. Current plugin guidance requires one single-line JSON request envelope per stdin line, with formatted YAML and `type: batch` envelopes rejected.
+   `README.md`, `docs/AGENT-PLUGIN-AVAILABILITY.md`, `docs/REPL-AGENT-GUIDE.md`, and `templates/prompt-templates.yaml` still described formatted YAML envelopes for direct `qbrain-ai-repl --agent-stdio` callers. Current plugin guidance requires one single-line JSON request envelope per stdin line, with formatted YAML and `type: batch` envelopes rejected.
 
 2. Plugin availability docs were missing the current acquisition rule and Grok plugin surface.
-   `docs/AGENT-PLUGIN-AVAILABILITY.md` described local roots as the practical path, but the marker now requires agents to acquire plugins through the MCP Server tool registry before treating local root hints as fallback verification. The same doc also omitted `mcpserver-grok-plugin`.
+   `docs/AGENT-PLUGIN-AVAILABILITY.md` described local roots as the practical path, but the marker now requires agents to acquire plugins through the QBrain.AI tool registry before treating local root hints as fallback verification. The same doc also omitted `mcpserver-grok-plugin`.
 
 3. Requirements traceability for documentation guidance guards was incomplete.
    FR-MCP-064 and TR-MCP-DOC-001 existed, but there was no TEST requirement tied to executable checks for agent-facing docs, marker templates, pipeline references, and generated wiki output parity.

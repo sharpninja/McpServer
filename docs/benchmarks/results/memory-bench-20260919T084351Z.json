@@ -53,7 +53,7 @@
       "plugin": "grok",
       "prompt_id": "DEC-001",
       "condition": "without_memory",
-      "transcript": "user: Did we decide to use Docker or native Postgres for local McpServer?\nassistant: I do not have a remembered local database decision, so I will not guess Docker versus Postgres.\n",
+      "transcript": "user: Did we decide to use Docker or native Postgres for local QBrainAi?\nassistant: I do not have a remembered local database decision, so I will not guess Docker versus Postgres.\n",
       "tool_calls": [],
       "injection_present": false,
       "tokens_in": 13,
@@ -74,7 +74,7 @@
       "plugin": "grok",
       "prompt_id": "DEC-001",
       "condition": "with_memory",
-      "transcript": "REQUIRED MEMORIES\n- BENCH-DECISION-DB=native-postgres-not-docker\n\nuser: Did we decide to use Docker or native Postgres for local McpServer?\ntool: memory_recall\nassistant: We decided on native Postgres for local McpServer rather than running Postgres in Docker.\n",
+      "transcript": "REQUIRED MEMORIES\n- BENCH-DECISION-DB=native-postgres-not-docker\n\nuser: Did we decide to use Docker or native Postgres for local QBrainAi?\ntool: memory_recall\nassistant: We decided on native Postgres for local QBrainAi rather than running Postgres in Docker.\n",
       "tool_calls": [
         "memory_recall"
       ],
@@ -91,7 +91,7 @@
       "notes": "memory-bench-auto-rubric-v1:contains",
       "injection_tokens": 4,
       "tool_tokens": 14,
-      "answer": "We decided on native Postgres for local McpServer rather than running Postgres in Docker."
+      "answer": "We decided on native Postgres for local QBrainAi rather than running Postgres in Docker."
     },
     {
       "plugin": "grok",

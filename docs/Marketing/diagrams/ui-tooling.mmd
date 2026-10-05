@@ -12,19 +12,19 @@ config:
     fontSize: "15px"
 ---
 graph LR
-    MCP["McpServer\nhttp://localhost:7147"]
+    MCP["QBrainAi\nhttp://localhost:7147"]
     subgraph GUI["GUI Interfaces"]
         WEB["Blazor Web UI\nBrowser Dashboard"]
         TUI["Director TUI\ndirector ui"]
     end
     subgraph CLI_TOOLS["CLI Tools"]
-        CLI["Director CLI\nSharpNinja.McpServer.Director"]
+        CLI["Director CLI\nSharpNinja.QBrainAi.Director"]
     end
     subgraph IDE["IDE Extensions"]
-        VSIX["VS / VS Code Extension\nMcpServer-mcp-todo"]
+        VSIX["VS / VS Code Extension\nQBrainAi-mcp-todo"]
     end
     subgraph CODE["Code and Agent"]
-        NUGET["Client NuGet\nSharpNinja.McpServer.Client"]
+        NUGET["Client NuGet\nQBrainAI.Client"]
         STDIO["MCP STDIO / HTTP\nCopilot, Cursor, Codex, Claude"]
     end
     WEB -->|"HTTP REST"| MCP

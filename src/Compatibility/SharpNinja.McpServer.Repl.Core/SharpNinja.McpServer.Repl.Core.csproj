@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>SharpNinja.McpServer.Repl.Core</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>1.x compatibility package for QBrainAI.Repl.Core. Public types moved to namespace QBrainAi.Repl.Core. Removed at 2.0.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/SharpNinja/McpServer</RepositoryUrl>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RootNamespace>QBrainAi.Repl.Core</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj">
+      <PrivateAssets>none</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- TR-MCP-QBRAIN-003: dependency facade. Namespace-preserving type forwards are impossible once the root token changes. -->
+</Project>

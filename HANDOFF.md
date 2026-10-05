@@ -1,7 +1,7 @@
 # Handoff - 2026-06-23 Grok
 
 ## Current State
-- Workspace: F:\GitHub\McpServer
+- Workspace: F:\GitHub\QBrainAi
 - Branch: feat/xunit-v3-and-review-hardening (with uncommitted shim + prompt work)
 - Local changes (uncommitted):
   - M .gitattributes (added eol=lf for plugin sh/*.sh)
@@ -32,7 +32,7 @@
 - Wrote the full copy-paste reload + server-truth validation prompt (multiple variants in docs/prompts/) for Claude Desktop / Codex Desktop to:
   - Reload plugin after sync.
   - Run exact appendActions (design_decision + "filePath" mention + real filePath edit + commit) + completeTurn (multiline | block with : and lists).
-  - Verify **only via authenticated server GET /mcpserver/sessionlog** (not local "ok").
+  - Verify **only via authenticated server GET /qbrainai/sessionlog** (not local "ok").
   - Append structured results to shared F:\GitHub\vice-sharp\docs\mcpserver-bug6-server-truth-results.md .
 - Wrote detailed failure report: docs/failure-reports/repl-invoke-sh-quoting-defect-2026-06-23.md (includes Codex PASS after local patch at their 3294, Claude 3433, root cause, fix details).
 - Health verification + failsafe usage: Stopped all direct mcpserver__sessionlog_begin_turn calls on user instruction. Wrote failsafe json for the turn (in .mcpServer/failsafe/grok/) following shim _repl_failsafe_write pattern.
@@ -43,7 +43,7 @@
 - Direct begin_turn / sessionlog tools time out or blocked in current setup.
 - Using failsafe for this turn (per "use the failsafe" + stop calling begin turn).
 - Health passes (nonce echoed). Marker read. Grok source_type = GrokCode, plugin = mcpserver-grok-plugin.
-- Recommendation in handoff: Bootstrap via mcp_session_bootstrap (or equivalent) + plugin if available; otherwise continue with failsafe + REPL direct (mcpserver-repl --agent-stdio) for verification. Do not resume direct begin_turn until root cause (plugin bootstrap? server state? alias vs mcpserver__ ?) resolved.
+- Recommendation in handoff: Bootstrap via mcp_session_bootstrap (or equivalent) + plugin if available; otherwise continue with failsafe + REPL direct (qbrain-ai-repl --agent-stdio) for verification. Do not resume direct begin_turn until root cause (plugin bootstrap? server state? alias vs mcpserver__ ?) resolved.
 
 ## Validation / Byrd Notes
 - No full build/test run in this slice (focus was shim source + prompt + failure doc + failsafe).
@@ -62,7 +62,7 @@
    - Claude/Codex/Grok: full reload (quit+restart + plugin reload), run the exact payloads, server GET verification, append to shared results md.
    - Confirm no syntax error, full 3 actions (incl. design_decision with "filePath" word), codeEdits==1, multiline intact, no new failsafes, completed status.
 4. Resolve session logging:
-   - Investigate why mcpserver__sessionlog_begin_turn / direct calls timeout (try mcp_session_bootstrap first per hints; check grok plugin bootstrap via tool registry /mcpserver/tools/search?keyword=mcpserver-grok-plugin ; re-verify health/nonce/signature after any restart).
+   - Investigate why mcpserver__sessionlog_begin_turn / direct calls timeout (try mcp_session_bootstrap first per hints; check grok plugin bootstrap via tool registry /qbrainai/tools/search?keyword=mcpserver-grok-plugin ; re-verify health/nonce/signature after any restart).
    - Once unblocked, re-create proper turn (or recover from the failsafe json we wrote) and log this handoff work.
 5. If needed: run full `./build.ps1 Test` + ValidateTraceability after sync/commits. Ensure no other node -e '...' with quote issues remain.
 6. Related open from history: full multi-agent (incl. Cline) results in vice-sharp doc; any remaining REPL batch/envelope issues.

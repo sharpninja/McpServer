@@ -495,7 +495,7 @@ partial class Build
         var content = File.ReadAllText(fullPath);
         return Regex.IsMatch(
             content,
-            @"(\bbash\b|\blib-sh\b|\blib-node\b|(?<!\$)\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|mcpserver-repl --agent-stdio|repl_invoke)",
+            @"(\bbash\b|\blib-sh\b|\blib-node\b|(?<!\$)\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|qbrain-ai-repl --agent-stdio|repl_invoke)",
             RegexOptions.IgnoreCase);
     }
 

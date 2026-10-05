@@ -190,13 +190,13 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
                 markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
-            Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: kept response`ninterpretation: noted interpretation`ntags:`n  - life`ncontextList:`n  - src/McpServer.Services/Services/SessionLogService.cs`n"
+            Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: kept response`ninterpretation: noted interpretation`ntags:`n  - life`ncontextList:`n  - src/QBrainAi.Services/Services/SessionLogService.cs`n"
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
             $script:PersistCalls | Should -Be 1
             $script:LastPersistResponse | Should -Be 'kept response'
             $script:LastPersistInterpretation | Should -Be 'noted interpretation'
             $script:LastPersistTags | Should -Contain 'life'
-            $script:LastPersistContext | Should -Contain 'src/McpServer.Services/Services/SessionLogService.cs'
+            $script:LastPersistContext | Should -Contain 'src/QBrainAi.Services/Services/SessionLogService.cs'
             $script:LastReplPersistenceDetails.persisted | Should -BeFalse
         } finally {
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }

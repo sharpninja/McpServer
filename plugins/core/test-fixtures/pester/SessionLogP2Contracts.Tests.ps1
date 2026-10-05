@@ -2,7 +2,7 @@
 
 # TEST-MCP-SESSIONLIFE-001 / TEST-MCP-SESSIONLIFE-002 / FR-MCP-SESSIONLIFE-001..003
 # BUG-TRIAGE-246. Drives the real builder, shim, and repl-invoke.ps1 process entry.
-# MCP_PLUGIN_PERSIST_LOG stays unset. A local executable stands in for mcpserver-repl;
+# MCP_PLUGIN_PERSIST_LOG stays unset. A local executable stands in for qbrain-ai-repl;
 # durable server query is not claimed from that stand-in.
 
 Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {

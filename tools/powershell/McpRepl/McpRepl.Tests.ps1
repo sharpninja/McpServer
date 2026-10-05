@@ -2,7 +2,7 @@
 # Run from repo root:
 #   pwsh -NoProfile -Command "Invoke-Pester 'tools/powershell/McpRepl/McpRepl.Tests.ps1'"
 #
-# These tests live with the module source in McpServer so they travel with the canonical bits
+# These tests live with the module source in QBrainAi so they travel with the canonical bits
 # and can be executed in CI or locally before publishing to PSGallery.
 
 # Custom classes defined in the .psm1 are brought into scope via 'using module'.
@@ -70,11 +70,11 @@ payload:
 
 Describe 'High-level Invoke-McpRepl API' {
     It 'Invoke-McpReplRaw returns a structured object even on failure (when binary missing)' {
-        # This will fail because mcpserver-repl may not be in PATH in test env, but we test the structure
+        # This will fail because qbrain-ai-repl may not be in PATH in test env, but we test the structure
         try {
             $null = Invoke-McpReplRaw -Method 'client.Health.GetAsync' -TimeoutSeconds 2 -ErrorAction Stop
         } catch {
-            $_.Exception.Message | Should -Match 'mcpserver-repl not found'
+            $_.Exception.Message | Should -Match 'qbrain-ai-repl not found'
         }
     }
 }

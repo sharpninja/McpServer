@@ -9,6 +9,8 @@
 # The request id is generated in the canonical req-<utc>-<slug> format.
 
 _repl_persistent_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./repl-bin.sh
+source "${_repl_persistent_script_dir}/repl-bin.sh"
 
 repl_persistent_enabled() {
     [ "${MCPSERVER_REPL_PERSISTENT:-1}" != "0" ] && command -v node >/dev/null 2>&1
@@ -40,10 +42,16 @@ process.stdout.write(JSON.stringify({type:"request",payload:{requestId:rid,metho
 ' "$request_id" "$method")"
     fi
 
+    local repl_bin
+    if ! repl_bin="$(resolve_repl_bin)"; then
+        echo "ERROR: qbrain-ai-repl or mcpserver-repl not found on PATH" >&2
+        return 1
+    fi
+
     if repl_persistent_enabled; then
-        printf '%s\n' "$envelope" | node "$(_repl_persistent_native_path "$_repl_persistent_script_dir/repl-daemon.js")" --send
+        printf '%s\n' "$envelope" | MCPSERVER_REPL_BIN="$repl_bin" node "$(_repl_persistent_native_path "$_repl_persistent_script_dir/repl-daemon.js")" --send
     else
         # Fallback: classic one-process-per-request invocation.
-        printf '%s\n' "$envelope" | "${MCPSERVER_REPL_BIN:-mcpserver-repl}" --agent-stdio --agent "${MCP_AGENT_NAME:-${PLUGIN_AGENT_DEFAULT:-default}}"
+        printf '%s\n' "$envelope" | "$repl_bin" --agent-stdio --agent "${MCP_AGENT_NAME:-${PLUGIN_AGENT_DEFAULT:-default}}"
     fi
 }

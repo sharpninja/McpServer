@@ -438,7 +438,7 @@ async function todoHttpFallback(
 
   switch (name) {
     case 'todo_query': {
-      const queryUrl = new URL(`${root}/mcpserver/todo`);
+      const queryUrl = new URL(`${root}/qbrainai/todo`);
       const keyword = stringArg(source, 'keyword') || stringArg(source, 'title');
       const priority = stringArg(source, 'priority');
       const section = stringArg(source, 'section');
@@ -461,11 +461,11 @@ async function todoHttpFallback(
 
     case 'todo_get':
       if (!id) return null;
-      url = `${root}/mcpserver/todo/${encodeURIComponent(id)}`;
+      url = `${root}/qbrainai/todo/${encodeURIComponent(id)}`;
       break;
 
     case 'todo_create':
-      url = `${root}/mcpserver/todo`;
+      url = `${root}/qbrainai/todo`;
       init = {
         method: 'POST',
         headers: { ...headers, 'Content-Type': 'application/json' },
@@ -475,7 +475,7 @@ async function todoHttpFallback(
 
     case 'todo_update':
       if (!id) return null;
-      url = `${root}/mcpserver/todo/${encodeURIComponent(id)}`;
+      url = `${root}/qbrainai/todo/${encodeURIComponent(id)}`;
       init = {
         method: 'PUT',
         headers: { ...headers, 'Content-Type': 'application/json' },
@@ -485,13 +485,13 @@ async function todoHttpFallback(
 
     case 'todo_delete':
       if (!id) return null;
-      url = `${root}/mcpserver/todo/${encodeURIComponent(id)}`;
+      url = `${root}/qbrainai/todo/${encodeURIComponent(id)}`;
       init = { method: 'DELETE', headers };
       break;
 
     case 'todo_analyze_requirements':
       if (!id) return null;
-      url = `${root}/mcpserver/todo/${encodeURIComponent(id)}/requirements`;
+      url = `${root}/qbrainai/todo/${encodeURIComponent(id)}/requirements`;
       init = {
         method: 'POST',
         headers: { ...headers, 'Content-Type': 'application/json' },

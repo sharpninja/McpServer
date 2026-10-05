@@ -1,4 +1,4 @@
-# MCP Server setup implementation plan
+# QBrain.AI setup implementation plan
 
 Status: accepted within operator-amended scope; native-agent acceptance waived; BDPv4 memory binding independently verified.
 Operator: sharpninja. Agent: Codex.
@@ -60,15 +60,15 @@ Load this plan and setup-choices.manifest before every later setup step; persist
 
 4. From the workspace, build the primary REPL acquisition path:
    ./build.ps1 InstallReplTool
-   mcpserver-repl --version
-   PackageId: SharpNinja.McpServer.Repl. Do not also invoke plugin ensure-repl or a separate release installer.
+   qbrain-ai-repl --version
+   PackageId: QBrainAI.Repl. Do not also invoke plugin ensure-repl or a separate release installer.
    Evidence: successful build/install result and REPL version/path.
    Stop: build or installation failure; fix before further installation.
 
 ## 2. Prepare and install - executed; service restart verified, overall acceptance pending
 
-1. Build and publish the pinned MCP Server for this host:
-   dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj -c Release -r linux-x64 --self-contained true -o /tmp/mcpserver-setup/publish
+1. Build and publish the pinned QBrain.AI for this host:
+   dotnet publish src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj -c Release -r linux-x64 --self-contained true -o /tmp/mcpserver-setup/publish
    Use the approved SDK environment. Capture build status and product version from generated build metadata. Record product.version in the manifest before live comparison.
    Evidence: successful compile, apphost and required assets, binary checksums, version.
    Stop: errors, missing assets, unverified version. Do not edit product code as an unrecorded setup workaround.
@@ -105,7 +105,7 @@ Load this plan and setup-choices.manifest before every later setup step; persist
    User=mcpserver
    Group=mcpserver
    WorkingDirectory=/opt/mcpserver/app
-   ExecStart=/opt/mcpserver/app/McpServer.Support.Mcp --urls http://localhost:7147
+   ExecStart=/opt/mcpserver/app/QBrainAi.Support.Mcp --urls http://localhost:7147
    EnvironmentFile=/etc/mcpserver/mcpserver.env
    StateDirectory=mcpserver
    LogsDirectory=mcpserver
@@ -174,7 +174,7 @@ Installer recovery succeeded: authenticated SQL identity McpServer_Omarchy|mcpse
 Startup diagnosis: SQL encryption-state validation requires VIEW SERVER SECURITY STATE even when TDE is disabled. Journal identifies McpDatabaseEncryptionCoordinator.cs:131 and SQL error 300. Microsoft source: https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-database-encryption-keys-transact-sql?view=sql-server-ver17 . Apply this read-only server metadata permission to the dedicated login, retaining db_owner only for McpServer_Omarchy, then retry startup once and verify migrations/listener. No sysadmin grant.
 Automatic approval review rejected the prepared repair: server-wide security-state visibility exceeds database-only setup authorization. No grant or restart was executed. Explicit operator approval is pending; do not bypass the rejection. Service is failed/start-limit-hit, with no listener and no marker.
 Operator explicitly approved: grant VIEW SERVER SECURITY STATE to mcpserver_omarchy and restart mcpserver.service. The earlier automatic-review blocker is resolved for this specific action.
-Agent registration succeeded: Claude mcpserver@mcpserver-local 1.107.0 enabled at ~/.claude/plugins/cache/mcpserver-local/mcpserver/1.107.0; active settings hook installer and VerifyOnly passed. Grok installed trusted local plugin mcpserver-grok-plugin-e1212ea7 from approved checkout. Live server, Claude request/Stop/PostToolUse and Grok connected tool verification remain pending.
+Agent registration succeeded: Claude mcpserver@mcpserver-local 1.107.0 enabled at ~/.claude/plugins/cache/mcpserver-local/qbrainai/1.107.0; active settings hook installer and VerifyOnly passed. Grok installed trusted local plugin mcpserver-grok-plugin-e1212ea7 from approved checkout. Live server, Claude request/Stop/PostToolUse and Grok connected tool verification remain pending.
 Approved SQL grant applied and verified (HAS_PERMS_BY_NAME=1); database has 38 migrations and 66 tables. Startup progressed to missing default-marker-prompt because relative template storage resolves under DataFolder, not install root. Seed the unmodified shipped template document into /var/lib/mcpserver/templates with service ownership. Also observed a nonfatal session-log backfill ConnectionString-uninitialized exception; runtime verification and triage remain pending.
 Template seed restored startup and marker creation. Codex trusted signature/nonce, TODO query and memory list passed; memory preference persisted as MEMORY-PREFERENCE-001. Failsafe drain replayed three queued records with zero failures. Listener inspection found wildcard binding because production Program.cs overrides --urls. Staged explicit Kestrel LocalHttp endpoint localhost:7147 to satisfy loopback requirement; verify after restart.
 Loopback lifecycle passed: active PID 549448, correct apphost/user, enabled boot, no restarts, listeners 127.0.0.1 and ::1, marker removed on stop and readable after start. Post-restart trust failed because generated marker uses PAYTON-OMARCHY, resolved locally to 127.0.0.2 and ::1; the plugin health request selected 127.0.0.2. Add an explicit 127.0.0.2 listener, also loopback, preserving localhost endpoint and generated marker without editing signed content.

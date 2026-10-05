@@ -1,4 +1,4 @@
-# McpServer Plugin Core
+# QBrainAi Plugin Core
 
 Canonical shared infrastructure for every `mcpserver-*-plugin` repo. The
 plugin repos carry only their host manifest, host-specific hook entry points,
@@ -11,7 +11,7 @@ session-log logic lives here and is distributed by sync.
   manager, memory context, JS helper shims). Parameterized per host via
   `plugin-env.sh` in each plugin repo.
 - `lib-ps/` - PowerShell twins for hosts that run hooks under pwsh.
-- `lib-node/` - source of the `@sharpninja/mcpserver-plugin-core` npm package
+- `lib-node/` - source of the `@qbrainai/qbrain-ai-plugin-core` npm package
   consumed by the Node plugins (cline, cline-v2, opencode).
 - `hooks-templates/` - reference hook wrappers (5-10 lines each) that source
   `lib/plugin-env.sh` + the shared lib and call one shared entry function.
@@ -32,7 +32,7 @@ session-log logic lives here and is distributed by sync.
 
 ## Contract rules
 
-1. The REPL/REST wire contract is defined by this repository (McpServer); the
+1. The REPL/REST wire contract is defined by this repository (QBrainAi); the
    core libs and their contract tests change atomically with the server in
    one PR.
 2. Plugin repos never edit synced files. The checksum guard enforces this.

@@ -7,7 +7,7 @@ Paste the prompt below into Canva's AI presentation generator (**Magic Design �
 ## Prompt
 
 ```
-Create a 12-slide professional presentation for a developer tool called McpServer. 
+Create a 12-slide professional presentation for a developer tool called QBrainAi. 
 Audience: software engineers and technical leads evaluating AI-assisted development tooling.
 Style: dark, technical, GitHub-inspired. Deep navy (#0d1117) or near-black slide backgrounds. White headlines. GitHub blue (#0969da) accent. Clean sans-serif font (Inter or equivalent). No emojis. No gradients. Minimal, precise, confident tone — like a Vercel or Cloudflare engineering deck.
 
@@ -16,15 +16,15 @@ Style: dark, technical, GitHub-inspired. Deep navy (#0d1117) or near-black slide
 SLIDE 1 — TITLE SLIDE
 Layout: full-bleed dark background, centered content
 
-Title: McpServer
+Title: QBrainAi
 Subtitle: Context Intelligence for AI Coding Agents
 Tagline (smaller text below): Persistent memory. Shared workspace state. Open standard.
 Bottom-left: GitHub: https://github.com/sharpninja/McpServer
-Bottom-right: Client docs: https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
+Bottom-right: Client docs: https://github.com/sharpninja/McpServer/blob/develop/src/QBrainAi.Client/README.md
 
 Visual: abstract network/graph illustration — nodes connected by glowing lines on dark background, suggesting distributed agents connecting to a central hub.
 
-Speaker notes: McpServer is a self-hosted MCP context server. Today I'll cover what it does, why it exists, and how agents connect to it. This is technical infrastructure — the database layer for AI-assisted development.
+Speaker notes: QBrainAi is a self-hosted MCP context server. Today I'll cover what it does, why it exists, and how agents connect to it. This is technical infrastructure — the database layer for AI-assisted development.
 
 ---
 
@@ -41,14 +41,14 @@ Bullet points (large, one per line):
 
 Right visual: three separate boxes labeled "Copilot", "Cursor", "Codex" with NO connections between them — isolated silos with an X or broken-link icon between each.
 
-Speaker notes: The fundamental problem with today's AI coding agents is statefulness. They are incredibly capable within a session, but they forget everything when you close the window. If you run multiple agents — Copilot in VS Code, Cursor in the terminal, Codex running tasks — they have no awareness of each other. McpServer fixes this.
+Speaker notes: The fundamental problem with today's AI coding agents is statefulness. They are incredibly capable within a session, but they forget everything when you close the window. If you run multiple agents — Copilot in VS Code, Cursor in the terminal, Codex running tasks — they have no awareness of each other. QBrainAi fixes this.
 
 ---
 
 SLIDE 3 — THE SOLUTION
 Layout: headline at top, three equal columns below
 
-Title: McpServer: One Server. All Agents. One Truth.
+Title: QBrainAi: One Server. All Agents. One Truth.
 
 Three columns:
 
@@ -69,7 +69,7 @@ Text: Semantic search over your actual code and docs — not training data guess
 
 Bottom visual: clean dashboard mockup (dark-themed admin panel with sidebar and data grid).
 
-Speaker notes: McpServer is infrastructure, not an agent. It doesn't replace Copilot or Cursor — it makes them dramatically more effective. Think of it the same way you think of a database: your application doesn't work without it, but it's not the application itself.
+Speaker notes: QBrainAi is infrastructure, not an agent. It doesn't replace Copilot or Cursor — it makes them dramatically more effective. Think of it the same way you think of a database: your application doesn't work without it, but it's not the application itself.
 
 ---
 
@@ -82,13 +82,13 @@ Architecture diagram (draw or illustrate):
 
 TOP ROW — four boxes: "GitHub Copilot" | "Cursor" | "Codex" | "Claude / Custom"
 Arrows pointing DOWN from all four into:
-MIDDLE BOX — large box labeled "McpServer" with inner labels: "Context Search · TODO API · Session Log · GitHub Sync · GraphRAG · Requirements"
+MIDDLE BOX — large box labeled "QBrainAi" with inner labels: "Context Search · TODO API · Session Log · GitHub Sync · GraphRAG · Requirements"
 Arrow pointing DOWN into:
 BOTTOM BOX — "Your Workspace" with inner labels: "Source Code · Docs · TODOs · GitHub Issues"
 
-Caption below diagram: "McpServer is protocol-native. Agents connect over the open Model Context Protocol — no custom integration code required."
+Caption below diagram: "QBrainAi is protocol-native. Agents connect over the open Model Context Protocol — no custom integration code required."
 
-Speaker notes: McpServer implements MCP — the Model Context Protocol, an open standard for AI agent tool-calling. Any MCP-compatible agent connects out of the box. It also exposes a full REST API for direct integration from scripts, CI pipelines, or .NET applications.
+Speaker notes: QBrainAi implements MCP — the Model Context Protocol, an open standard for AI agent tool-calling. Any MCP-compatible agent connects out of the box. It also exposes a full REST API for direct integration from scripts, CI pipelines, or .NET applications.
 
 ---
 
@@ -103,13 +103,13 @@ Bullet points:
 • Zero cloud dependency — all embeddings run on-device
 • Keyword and semantic search combined
 • Workspace-scoped — only your code, your docs
-• Endpoint: GET /mcpserver/context/search
+• Endpoint: GET /qbrainai/context/search
 
 Right side: dark code block mockup showing a JSON response with fields like "score", "chunk", "source", "line" — representing a context search result.
 
 Small tag in corner: "No API Key Required"
 
-Speaker notes: The context search is the core feature. When an agent asks "what does this interface do?" or "find all places where this pattern is used," McpServer searches your actual codebase semantically. It runs 384-dimension vector embeddings locally using an ONNX model — no API key, no cloud, no data leaving your machine.
+Speaker notes: The context search is the core feature. When an agent asks "what does this interface do?" or "find all places where this pattern is used," QBrainAi searches your actual codebase semantically. It runs 384-dimension vector embeddings locally using an ONNX model — no API key, no cloud, no data leaving your machine.
 
 ---
 
@@ -122,13 +122,13 @@ LEFT PANEL — blue-tinted card:
 Icon: checklist
 Heading: TODO Management
 Text: CRUD API for structured TODO items. YAML or SQLite backend. Agents create, query, complete items. Bidirectional GitHub Issue sync.
-Endpoint: GET/POST/PUT/DELETE /mcpserver/todo
+Endpoint: GET/POST/PUT/DELETE /qbrainai/todo
 
 RIGHT PANEL — purple-tinted card:
 Icon: history / clock
 Heading: Session Logging
 Text: Every AI agent interaction captured. Query, response, decisions, actions, files modified, commit SHAs. Searchable. Attributed per agent.
-Endpoint: POST /mcpserver/sessionlog
+Endpoint: POST /qbrainai/sessionlog
 
 Speaker notes: These two features solve the coordination and auditability problems. Agents share a single TODO queue and can see what others are working on. The session log is a full audit trail — useful for code review, compliance, and resuming interrupted work.
 
@@ -141,7 +141,7 @@ Title: Your TODO List and GitHub Issues — In Sync
 
 Icon at top: GitHub Octocat or sync arrows
 
-Body text: McpServer syncs workspace TODO items bidirectionally with GitHub Issues.
+Body text: QBrainAi syncs workspace TODO items bidirectionally with GitHub Issues.
 
 Bullet points:
 • Create GitHub Issues from TODO items automatically
@@ -149,7 +149,7 @@ Bullet points:
 • Map ISSUE-* TODO IDs to GitHub issue numbers
 • Filter by labels, state, and milestone
 
-Visual: side-by-side mockup — left: a TODO item in McpServer marked "done"; right: the matching GitHub Issue shown as "closed". Double-headed arrow between them.
+Visual: side-by-side mockup — left: a TODO item in QBrainAi marked "done"; right: the matching GitHub Issue shown as "closed". Double-headed arrow between them.
 
 Link at bottom: https://github.com/sharpninja/McpServer
 
@@ -192,7 +192,7 @@ Note: GitHub's Primer CSS design system
 
 Card 2 — icon: terminal / >_
 Name: Director CLI
-Text: dotnet tool install --global SharpNinja.McpServer.Director
+Text: dotnet tool install --global SharpNinja.QBrainAi.Director
 Link: https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 
 Card 3 — icon: keyboard / TUI
@@ -205,15 +205,15 @@ Text: VSIX extension. Browse and update todos inside your editor.
 
 Card 5 — icon: NuGet / package box
 Name: Client NuGet
-Text: SharpNinja.McpServer.Client — typed C# client for all API endpoints
-Link: https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
+Text: QBrainAI.Client — typed C# client for all API endpoints
+Link: https://github.com/sharpninja/McpServer/blob/develop/src/QBrainAi.Client/README.md
 
 Card 6 — icon: plug / connect
 Name: MCP STDIO / HTTP
 Text: Connect Copilot, Cursor, Codex, or Claude with zero custom code
 Endpoint: POST <your-mcpserver-base-url>/mcp-transport
 
-Speaker notes: We built six access surfaces because different people work differently. The CLI is for automation and scripting. The TUI is for SSH sessions. The Web UI is for exploration and team review. The VSIX is for developers who don't want to leave VS Code. The NuGet client is for building on top of McpServer. And the MCP transport is for agents.
+Speaker notes: We built six access surfaces because different people work differently. The CLI is for automation and scripting. The TUI is for SSH sessions. The Web UI is for exploration and team review. The VSIX is for developers who don't want to leave VS Code. The NuGet client is for building on top of QBrainAi. And the MCP transport is for agents.
 
 ---
 
@@ -238,9 +238,9 @@ Block 2 label: Docker
 docker-compose -f docker-compose.mcp.yml up
 
 Block 3 label: MSIX
-scripts\Package-McpServerMsix.ps1
+scripts\Package-QBrainAiMsix.ps1
 
-Speaker notes: McpServer is designed to fit into whatever deployment model you already use. Local developer machines, CI/CD containers, enterprise fleet management via MSIX — the same binary, the same config model, the same API surface.
+Speaker notes: QBrainAi is designed to fit into whatever deployment model you already use. Local developer machines, CI/CD containers, enterprise fleet management via MSIX — the same binary, the same config model, the same API surface.
 
 ---
 
@@ -250,11 +250,11 @@ Layout: step-by-step numbered callouts, dark background
 Title: Running in Two Minutes
 
 Step 1 — Build (dark code block):
-dotnet restore McpServer.sln
-dotnet build McpServer.sln -c Staging
+dotnet restore QBrainAi.sln
+dotnet build QBrainAi.sln -c Staging
 
 Step 2 — Run (dark code block):
-.\scripts\Start-McpServer.ps1 -Configuration Staging
+.\scripts\Start-QBrainAi.ps1 -Configuration Staging
 
 Step 3 — Open Swagger:
 http://localhost:7147/swagger
@@ -276,7 +276,7 @@ Layout: full-bleed dark background, large centered text
 
 Main headline: Give Your Agents Memory.
 
-Body text: McpServer is open source, self-hosted, and ready to run.
+Body text: QBrainAi is open source, self-hosted, and ready to run.
 
 Three CTA blocks (stacked or side by side):
 
@@ -286,13 +286,13 @@ https://github.com/sharpninja/McpServer
 
 CTA 2 — outlined button:
 Install Director CLI
-dotnet tool install --global SharpNinja.McpServer.Director
+dotnet tool install --global SharpNinja.QBrainAi.Director
 https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 
 CTA 3 — outlined button:
 Add the C# Client
-dotnet add package SharpNinja.McpServer.Client
-https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
+dotnet add package QBrainAI.Client
+https://github.com/sharpninja/McpServer/blob/develop/src/QBrainAi.Client/README.md
 
 Footer links (small text at bottom):
 GitHub: https://github.com/sharpninja/McpServer
@@ -333,8 +333,8 @@ OVERALL DECK STYLE RULES:
 | Resource | URL |
 |---|---|
 | GitHub Repository | https://github.com/sharpninja/McpServer |
-| Client docs | https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md |
+| Client docs | https://github.com/sharpninja/McpServer/blob/develop/src/QBrainAi.Client/README.md |
 | Director docs | https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md |
 | Local Swagger UI | http://localhost:7147/swagger |
-| MCP Transport | POST /mcp-transport on your local McpServer base URL |
+| MCP Transport | POST /mcp-transport on your local QBrainAi base URL |
 | MCP Spec | https://modelcontextprotocol.io |

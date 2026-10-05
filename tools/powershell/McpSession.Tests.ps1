@@ -23,17 +23,17 @@ BeforeAll {
                 swagger = '/swagger/v1/swagger.json'
                 swaggerUi = '/swagger'
                 mcpTransport = '/mcp-transport'
-                sessionLog = '/mcpserver/sessionlog'
-                sessionLogDialog = '/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog'
-                contextSearch = '/mcpserver/context/search'
-                contextPack = '/mcpserver/context/pack'
-                contextSources = '/mcpserver/context/sources'
-                todo = '/mcpserver/todo'
-                repo = '/mcpserver/repo'
-                desktop = '/mcpserver/desktop'
-                gitHub = '/mcpserver/gh'
-                tools = '/mcpserver/tools'
-                workspace = '/mcpserver/workspace'
+                sessionLog = '/qbrainai/sessionlog'
+                sessionLogDialog = '/qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog'
+                contextSearch = '/qbrainai/context/search'
+                contextPack = '/qbrainai/context/pack'
+                contextSources = '/qbrainai/context/sources'
+                todo = '/qbrainai/todo'
+                repo = '/qbrainai/repo'
+                desktop = '/qbrainai/desktop'
+                gitHub = '/qbrainai/gh'
+                tools = '/qbrainai/tools'
+                workspace = '/qbrainai/workspace'
                 serverStartupUtc = '/server-startup-utc'
                 markerFileTimestamp = '/marker-file-timestamp?repoPath={workspacePath}'
             }
@@ -67,17 +67,17 @@ endpoints:
   swagger: /swagger/v1/swagger.json
   swaggerUi: /swagger
   mcpTransport: /mcp-transport
-  sessionLog: /mcpserver/sessionlog
-  sessionLogDialog: /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog
-  contextSearch: /mcpserver/context/search
-  contextPack: /mcpserver/context/pack
-  contextSources: /mcpserver/context/sources
-  todo: /mcpserver/todo
-  repo: /mcpserver/repo
-  desktop: /mcpserver/desktop
-  gitHub: /mcpserver/gh
-  tools: /mcpserver/tools
-  workspace: /mcpserver/workspace
+  sessionLog: /qbrainai/sessionlog
+  sessionLogDialog: /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+  contextSearch: /qbrainai/context/search
+  contextPack: /qbrainai/context/pack
+  contextSources: /qbrainai/context/sources
+  todo: /qbrainai/todo
+  repo: /qbrainai/repo
+  desktop: /qbrainai/desktop
+  gitHub: /qbrainai/gh
+  tools: /qbrainai/tools
+  workspace: /qbrainai/workspace
   serverStartupUtc: /server-startup-utc
   markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}
 workspace: demo
@@ -235,17 +235,17 @@ endpoints:
   swagger: "/swagger/v1/swagger.json"
   swaggerUi: "/swagger"
   mcpTransport: "/mcp-transport"
-  sessionLog: "/mcpserver/sessionlog"
-  sessionLogDialog: "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
-  contextSearch: "/mcpserver/context/search"
-  contextPack: "/mcpserver/context/pack"
-  contextSources: "/mcpserver/context/sources"
-  todo: "/mcpserver/todo"
-  repo: "/mcpserver/repo"
-  desktop: "/mcpserver/desktop"
-  gitHub: "/mcpserver/gh"
-  tools: "/mcpserver/tools"
-  workspace: "/mcpserver/workspace"
+  sessionLog: "/qbrainai/sessionlog"
+  sessionLogDialog: "/qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
+  contextSearch: "/qbrainai/context/search"
+  contextPack: "/qbrainai/context/pack"
+  contextSources: "/qbrainai/context/sources"
+  todo: "/qbrainai/todo"
+  repo: "/qbrainai/repo"
+  desktop: "/qbrainai/desktop"
+  gitHub: "/qbrainai/gh"
+  tools: "/qbrainai/tools"
+  workspace: "/qbrainai/workspace"
   serverStartupUtc: "/server-startup-utc"
   markerFileTimestamp: "/marker-file-timestamp?repoPath={workspacePath}"
 workspace: "TruckMate"
@@ -350,7 +350,7 @@ prompt: |
         It 'pushes to server on creation' {
             New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
+                $Method -eq 'Post' -and $Uri -like '*/qbrainai/sessionlog'
             }
         }
 
@@ -358,7 +358,7 @@ prompt: |
             $script:capturedBody = $null
             Mock Invoke-RestMethod {
                 param($Uri, $Method, $Body)
-                if ($Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog') {
+                if ($Method -eq 'Post' -and $Uri -like '*/qbrainai/sessionlog') {
                     $script:capturedBody = $Body
                 }
                 return $null
@@ -454,7 +454,7 @@ prompt: |
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $turn = Add-McpSessionTurn -Session $s -QueryTitle 'Trust' -QueryText 'Trust' -NoPush
             $turn.processingDialog.Count | Should -BeGreaterThan 0
-            $turn.processingDialog[0].content | Should -Match '(trusted MCP Server|established MCP connectivity)'
+            $turn.processingDialog[0].content | Should -Match '(trusted QBrain.AI|established MCP connectivity)'
         }
     }
 
@@ -501,7 +501,7 @@ prompt: |
             Mock Invoke-RestMethod { $null } -ModuleName McpSession
             Set-McpSessionTurn -Turn $e -Session $s -Response 'done'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
+                $Method -eq 'Post' -and $Uri -like '*/qbrainai/sessionlog'
             }
         }
     }
@@ -561,7 +561,7 @@ prompt: |
             Mock Invoke-RestMethod { $null } -ModuleName McpSession
             Add-McpAction -Turn $e -Session $s -Description 'Tracked change' -Type edit -FilePath 'src/a.cs' | Out-Null
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
+                $Method -eq 'Post' -and $Uri -like '*/qbrainai/sessionlog'
             }
         }
 
@@ -653,7 +653,7 @@ prompt: |
             Mock Invoke-RestMethod { $null } -ModuleName McpSession
             Update-McpSessionLog -Session $s
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
+                $Method -eq 'Post' -and $Uri -like '*/qbrainai/sessionlog'
             }
         }
 
@@ -702,14 +702,14 @@ prompt: |
         It 'uses default limit=5 and offset=0' {
             Get-McpSessionLog
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcpserver/sessionlog?limit=5&offset=0'
+                $Uri -eq 'http://test:9999/qbrainai/sessionlog?limit=5&offset=0'
             }
         }
 
         It 'passes custom limit and offset' {
             Get-McpSessionLog -Limit 20 -Offset 10
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcpserver/sessionlog?limit=20&offset=10'
+                $Uri -eq 'http://test:9999/qbrainai/sessionlog?limit=20&offset=10'
             }
         }
     }
@@ -725,7 +725,7 @@ prompt: |
             $s = New-McpSessionLog -SourceType 'Agent' -SessionId 'sess-42' -Title 't' -Model 'm'
             Send-McpDialog -Session $s -RequestId 'req-001' -Content 'Thinking...'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcpserver/sessionlog/Agent/sess-42/req-001/dialog' -and
+                $Uri -eq 'http://test:9999/qbrainai/sessionlog/Agent/sess-42/req-001/dialog' -and
                 $Method -eq 'Post'
             }
         }

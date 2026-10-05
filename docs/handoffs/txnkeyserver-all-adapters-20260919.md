@@ -16,7 +16,7 @@ Keep live `Mcp:TurnTransactions:Enabled=true` for QuadBrain. Do not flip that fl
 
 ## What shipped in this worktree (not live)
 
-`TurnTransactionKeyserverScope` (`src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs`):
+`TurnTransactionKeyserverScope` (`src/QBrainAi.TransactionSecurity/TurnTransactionKeyserverScope.cs`):
 
 - `RequiresKeyserver` is true only for publisher party prefix `brain-slot:` or operation prefix `brain-slot.` / `quadbrain.`
 - `ShouldBypassCoordinator` is true when coordinator is null or `!RequiresKeyserver`
@@ -29,7 +29,7 @@ Wired into:
 - `RequirementsController.ShouldDeferIngest`
 - `ContextController.ShouldDeferContextMutation`
 - `FederationController.ShouldDeferFederationControlMutation`
-- STDIO `FwhMcpTools` / `McpServerMcpTools.ShouldDeferContextMutation`
+- STDIO `FwhMcpTools` / `QBrainAiMcpTools.ShouldDeferContextMutation`
 - `TurnTransactionCoordinator.ExecuteAsync` also skips `SignManifestAsync` unless `RequiresKeyserver`
 
 Still fail-closed: `TransactionGatedSessionLogService.RepairWorkspaceStampsAsync` (uncompensated workspace-stamp repair).
