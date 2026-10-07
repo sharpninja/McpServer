@@ -36,9 +36,10 @@ public sealed class WorkspaceContext
     /// from a workspace root using the root's own path syntax.
     /// </summary>
     /// <param name="workspacePath">Resolved workspace root (any platform).</param>
-    public void SetDerivedPaths(string workspacePath)
+    /// <param name="pathNormalizer">Path normalizer; defaults to the process host.</param>
+    public void SetDerivedPaths(string workspacePath, QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer = null)
     {
-        var normalizer = QBrainAi.Client.WorkspacePathNormalizer.Process;
+        var normalizer = pathNormalizer ?? QBrainAi.Client.WorkspacePathNormalizer.Process;
         SessionsPath = normalizer.Combine(workspacePath, "docs", "sessions");
         ExternalDocsPath = normalizer.Combine(workspacePath, "docs", "external");
     }

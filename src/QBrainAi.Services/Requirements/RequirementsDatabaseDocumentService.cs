@@ -1464,7 +1464,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             workspacePath = TryInferWorkspacePathFromOptions();
         if (!string.IsNullOrWhiteSpace(workspacePath))
         {
-            workspacePath = QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath);
+            workspacePath = NormalizeRequestWorkspacePath(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process)!;
             var scopedWorkspace = scope.ServiceProvider.GetService<WorkspaceContext>();
             if (scopedWorkspace is not null)
             {
@@ -1475,7 +1475,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
         var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         if (!string.IsNullOrWhiteSpace(workspacePath))
-            ctx.OverrideWorkspaceId(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath));
+            ctx.OverrideWorkspaceId(NormalizeRequestWorkspacePath(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process)!);
 
         return new DbScope(scope, ctx);
     }
@@ -1553,8 +1553,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var workspacePath = requestCtx?.WorkspacePath;
         if (string.IsNullOrWhiteSpace(workspacePath))
             workspacePath = TryInferWorkspacePathFromOptions();
-        return string.IsNullOrWhiteSpace(workspacePath) ? null : QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath);
+        return NormalizeRequestWorkspacePath(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process);
     }
+
+    /// <summary>TR-MCP-FED-PATH-001: canonical request workspace path, or null when blank.</summary>
+    internal static string? NormalizeRequestWorkspacePath(string? workspacePath, QBrainAi.Client.IWorkspacePathNormalizer normalizer) =>
+        string.IsNullOrWhiteSpace(workspacePath) ? null : normalizer.Normalize(workspacePath);
 
     private static IReadOnlyList<string> NormalizeIds(IEnumerable<string>? ids) =>
         ids is null

@@ -4,14 +4,21 @@ using QBrainAi.Client;
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
 /// <summary>
-/// TEST-MCP-FED-PATH-001: Request-supplied workspace paths are interpreted by their own syntax,
-/// never by the host OS. The host is mocked so a Windows test run can simulate a Linux hub
-/// (working directory /opt/mcpserver/app) and vice versa.
+/// TEST-MCP-FED-PATH-001: contract tests for <see cref="IWorkspacePathNormalizer"/>. Request-supplied
+/// workspace paths are interpreted by their own syntax, never by the host OS. The host is an
+/// NSubstitute double so a Windows test run can simulate a Linux hub (working directory
+/// /opt/mcpserver/app) and vice versa.
+/// BDP v4 (plan section 2a): <see cref="WorkspacePathNormalizerMockDataTests"/> proves these tests
+/// green against scripted data; <see cref="WorkspacePathNormalizerRealTests"/> runs the same tests
+/// against the production implementation.
 /// </summary>
-public sealed class WorkspacePathNormalizerTests
+public abstract class WorkspacePathNormalizerContractTests
 {
-    private const string LinuxWorkingDirectory = "/opt/mcpserver/app";
-    private const string WindowsWorkingDirectory = @"C:\svc";
+    /// <summary>Working directory of the simulated Linux hub.</summary>
+    protected const string LinuxWorkingDirectory = SimulatedWorkspaceHosts.LinuxWorkingDirectory;
+
+    /// <summary>Creates the normalizer under test for the given host.</summary>
+    protected abstract IWorkspacePathNormalizer CreateSut(IWorkspaceHostEnvironment host);
 
     /// <summary>
     /// FR-MCP-FED-PATH-001-AC1: A Windows drive path received by a Linux host is never prefixed
@@ -21,14 +28,12 @@ public sealed class WorkspacePathNormalizerTests
     public void LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory()
     {
         var host = LinuxHost();
-        var normalizer = new WorkspacePathNormalizer(host);
+        var normalizer = CreateSut(host);
 
         var result = normalizer.Normalize(@"C:\Users\kingd");
 
         Assert.DoesNotContain(LinuxWorkingDirectory, result, StringComparison.Ordinal);
-        Assert.Equal(
-            WorkspaceIdentityPath.NormalizeLexicalPath(@"C:\Users\kingd", WorkspacePathPlatform.Windows),
-            result);
+        Assert.Equal(@"C:\Users\kingd", result);
         Assert.Equal(WorkspacePathPlatform.Windows, normalizer.DetectPlatform(@"C:\Users\kingd"));
         host.DidNotReceive().NormalizeNativePath(Arg.Any<string>());
     }
@@ -43,11 +48,7 @@ public sealed class WorkspacePathNormalizerTests
     [InlineData(@"C:\Users/kingd\")]
     public void LinuxHost_WindowsDrivePathSpellings_ResolveToOneIdentity(string input)
     {
-        var normalizer = new WorkspacePathNormalizer(LinuxHost());
-
-        Assert.Equal(
-            normalizer.Normalize(@"C:\Users\kingd"),
-            normalizer.Normalize(input));
+        Assert.Equal(@"C:\Users\kingd", CreateSut(LinuxHost()).Normalize(input));
     }
 
     /// <summary>
@@ -58,14 +59,14 @@ public sealed class WorkspacePathNormalizerTests
     public void LinuxHost_UncSpellings_AreWindowsAndEquivalent()
     {
         var host = LinuxHost();
-        var normalizer = new WorkspacePathNormalizer(host);
+        var normalizer = CreateSut(host);
 
         var backslash = normalizer.Normalize(@"\\srv\share\x");
         var forward = normalizer.Normalize("//srv/share/x");
 
+        Assert.Equal(@"\\srv\share\x", backslash);
         Assert.Equal(backslash, forward);
         Assert.Equal(WorkspacePathPlatform.Windows, normalizer.DetectPlatform("//srv/share/x"));
-        Assert.DoesNotContain(LinuxWorkingDirectory, backslash, StringComparison.Ordinal);
         host.DidNotReceive().NormalizeNativePath(Arg.Any<string>());
     }
 
@@ -76,11 +77,9 @@ public sealed class WorkspacePathNormalizerTests
     [Fact]
     public void LinuxHost_MixedSeparatorsAndDotSegments_CollapseLexically()
     {
-        var normalizer = new WorkspacePathNormalizer(LinuxHost());
-
         Assert.Equal(
-            normalizer.Normalize(@"C:\Users\kingd\repo\x"),
-            normalizer.Normalize(@"C:\Users/kingd\\repo/.\y\..\x"));
+            @"C:\Users\kingd\repo\x",
+            CreateSut(LinuxHost()).Normalize(@"C:\Users/kingd\\repo/.\y\..\x"));
     }
 
     /// <summary>
@@ -91,9 +90,8 @@ public sealed class WorkspacePathNormalizerTests
     public void LinuxHost_PosixAbsolutePath_UsesHostResolution()
     {
         var host = LinuxHost();
-        var normalizer = new WorkspacePathNormalizer(host);
 
-        var result = normalizer.Normalize("/home/sharpninja/github/McpServer");
+        var result = CreateSut(host).Normalize("/home/sharpninja/github/McpServer");
 
         Assert.Equal("/home/sharpninja/github/McpServer", result);
         host.Received(1).NormalizeNativePath("/home/sharpninja/github/McpServer");
@@ -107,7 +105,7 @@ public sealed class WorkspacePathNormalizerTests
     public void LinuxHost_RelativePath_ResolvesAgainstHostWorkingDirectory()
     {
         var host = LinuxHost();
-        var normalizer = new WorkspacePathNormalizer(host);
+        var normalizer = CreateSut(host);
 
         var result = normalizer.Normalize("relative/x");
 
@@ -124,7 +122,7 @@ public sealed class WorkspacePathNormalizerTests
     public void WindowsHost_PosixAbsolutePath_StaysPosix()
     {
         var host = WindowsHost();
-        var normalizer = new WorkspacePathNormalizer(host);
+        var normalizer = CreateSut(host);
 
         var result = normalizer.Normalize("/home/sharpninja/github/McpServer");
 
@@ -140,15 +138,14 @@ public sealed class WorkspacePathNormalizerTests
     /// host-native and use host resolution.
     /// </summary>
     [Theory]
-    [InlineData(@"C:\Users\kingd")]
-    [InlineData("relative")]
-    public void WindowsHost_NativePaths_UseHostResolution(string input)
+    [InlineData(@"C:\Users\kingd", @"C:\Users\kingd")]
+    [InlineData("relative", @"C:\svc\relative")]
+    public void WindowsHost_NativePaths_UseHostResolution(string input, string expected)
     {
         var host = WindowsHost();
-        var normalizer = new WorkspacePathNormalizer(host);
+        var normalizer = CreateSut(host);
 
-        normalizer.Normalize(input);
-
+        Assert.Equal(expected, normalizer.Normalize(input));
         host.Received(1).NormalizeNativePath(input);
         Assert.Equal(WorkspacePathPlatform.Windows, normalizer.DetectPlatform(input));
     }
@@ -157,11 +154,7 @@ public sealed class WorkspacePathNormalizerTests
     [Fact]
     public void Normalize_TrimsWhitespace()
     {
-        var normalizer = new WorkspacePathNormalizer(LinuxHost());
-
-        Assert.Equal(
-            normalizer.Normalize(@"C:\Users\kingd"),
-            normalizer.Normalize(@"  C:\Users\kingd  "));
+        Assert.Equal(@"C:\Users\kingd", CreateSut(LinuxHost()).Normalize(@"  C:\Users\kingd  "));
     }
 
     /// <summary>TR-MCP-FED-PATH-001: Blank input is rejected.</summary>
@@ -170,7 +163,7 @@ public sealed class WorkspacePathNormalizerTests
     [InlineData("   ")]
     public void Normalize_Blank_Throws(string input)
     {
-        var normalizer = new WorkspacePathNormalizer(LinuxHost());
+        var normalizer = CreateSut(LinuxHost());
 
         Assert.ThrowsAny<ArgumentException>(() => normalizer.Normalize(input));
         Assert.ThrowsAny<ArgumentException>(() => normalizer.DetectPlatform(input));
@@ -187,19 +180,17 @@ public sealed class WorkspacePathNormalizerTests
     [InlineData("/home/sharpninja/github/McpServer", "McpServer")]
     public void GetLeafName_UsesPathPlatformSeparators_OnEitherHost(string input, string expected)
     {
-        Assert.Equal(expected, new WorkspacePathNormalizer(LinuxHost()).GetLeafName(input));
-        Assert.Equal(expected, new WorkspacePathNormalizer(WindowsHost()).GetLeafName(input));
+        Assert.Equal(expected, CreateSut(LinuxHost()).GetLeafName(input));
+        Assert.Equal(expected, CreateSut(WindowsHost()).GetLeafName(input));
     }
 
     /// <summary>TR-MCP-FED-PATH-001: The leaf name of a bare root is the root itself.</summary>
     [Theory]
-    [InlineData(@"C:\")]
-    [InlineData("/")]
-    public void GetLeafName_Root_ReturnsNormalizedRoot(string input)
+    [InlineData(@"C:\", @"C:\")]
+    [InlineData("/", "/")]
+    public void GetLeafName_Root_ReturnsNormalizedRoot(string input, string expected)
     {
-        var normalizer = new WorkspacePathNormalizer(LinuxHost());
-
-        Assert.False(string.IsNullOrWhiteSpace(normalizer.GetLeafName(input)));
+        Assert.Equal(expected, CreateSut(LinuxHost()).GetLeafName(input));
     }
 
     /// <summary>
@@ -213,8 +204,8 @@ public sealed class WorkspacePathNormalizerTests
     [InlineData("relative", true, true)]
     public void IsHostNative_ComparesSyntaxPlatformWithHost(string input, bool nativeOnLinux, bool nativeOnWindows)
     {
-        Assert.Equal(nativeOnLinux, new WorkspacePathNormalizer(LinuxHost()).IsHostNative(input));
-        Assert.Equal(nativeOnWindows, new WorkspacePathNormalizer(WindowsHost()).IsHostNative(input));
+        Assert.Equal(nativeOnLinux, CreateSut(LinuxHost()).IsHostNative(input));
+        Assert.Equal(nativeOnWindows, CreateSut(WindowsHost()).IsHostNative(input));
     }
 
     /// <summary>
@@ -225,109 +216,29 @@ public sealed class WorkspacePathNormalizerTests
     [Theory]
     [InlineData(@"C:\Users\kingd", @"C:\Users\kingd\docs\sessions")]
     [InlineData("/home/sharpninja/github/McpServer", "/home/sharpninja/github/McpServer/docs/sessions")]
-    public void Combine_UsesRootPlatformSyntax_OnEitherHost(string root, string expectedRaw)
+    public void Combine_UsesRootPlatformSyntax_OnEitherHost(string root, string expected)
     {
-        foreach (var normalizer in new[] { new WorkspacePathNormalizer(LinuxHost()), new WorkspacePathNormalizer(WindowsHost()) })
-        {
-            Assert.Equal(normalizer.Normalize(expectedRaw), normalizer.Combine(root, "docs", "sessions"));
-        }
+        Assert.Equal(expected, CreateSut(LinuxHost()).Combine(root, "docs", "sessions"));
+        Assert.Equal(expected, CreateSut(WindowsHost()).Combine(root, "docs", "sessions"));
     }
 
     /// <summary>TR-MCP-FED-PATH-001: Dot segments collapse within the root's platform.</summary>
     [Fact]
     public void Combine_CollapsesDotSegments()
     {
-        var normalizer = new WorkspacePathNormalizer(LinuxHost());
-
-        Assert.Equal(
-            normalizer.Normalize(@"C:\Users\kingd\b"),
-            normalizer.Combine(@"C:\Users\kingd", "a", "..", "b"));
+        Assert.Equal(@"C:\Users\kingd\b", CreateSut(LinuxHost()).Combine(@"C:\Users\kingd", "a", "..", "b"));
     }
 
     /// <summary>TR-MCP-FED-PATH-001: A rooted segment replaces the root, as Path.Combine does.</summary>
     [Fact]
     public void Combine_RootedSegment_ReplacesRoot()
     {
-        var normalizer = new WorkspacePathNormalizer(LinuxHost());
-
-        Assert.Equal("/srv/other", normalizer.Combine(@"C:\Users\kingd", "/srv/other"));
+        Assert.Equal("/srv/other", CreateSut(LinuxHost()).Combine(@"C:\Users\kingd", "/srv/other"));
     }
 
-    /// <summary>TR-MCP-FED-PATH-001: A null host is rejected at construction.</summary>
-    [Fact]
-    public void Constructor_NullHost_Throws()
-    {
-        Assert.Throws<ArgumentNullException>(() => new WorkspacePathNormalizer(null!));
-    }
+    /// <summary>Simulated Linux hub: POSIX host, working directory /opt/mcpserver/app.</summary>
+    protected static IWorkspaceHostEnvironment LinuxHost() => SimulatedWorkspaceHosts.Linux();
 
-    /// <summary>
-    /// TR-MCP-FED-PATH-001: The process host reports the running OS and delegates host-native
-    /// resolution to <see cref="WorkspaceIdentityPath.NormalizePath(string, WorkspacePathPlatform)"/>.
-    /// </summary>
-    [Fact]
-    public void SystemHost_ReportsRunningPlatformAndNativeNormalization()
-    {
-        var host = SystemWorkspaceHostEnvironment.Instance;
-        var expectedPlatform = OperatingSystem.IsWindows()
-            ? WorkspacePathPlatform.Windows
-            : WorkspacePathPlatform.CaseSensitive;
-        var nativeSample = OperatingSystem.IsWindows() ? @"C:\svc\.\repo" : "/srv/./repo";
-
-        Assert.Equal(expectedPlatform, host.Platform);
-        Assert.Equal(Environment.CurrentDirectory, host.CurrentDirectory);
-        Assert.Equal(
-            WorkspaceIdentityPath.NormalizePath(nativeSample, expectedPlatform),
-            host.NormalizeNativePath(nativeSample));
-    }
-
-    /// <summary>
-    /// FR-MCP-FED-PATH-001-AC1/AC2: With the real process host, a foreign-platform absolute path
-    /// is returned without being re-rooted on the host (Windows runner: POSIX path; Linux runner:
-    /// Windows path).
-    /// </summary>
-    [Fact]
-    public void SystemHost_ForeignAbsolutePath_IsNotReRooted()
-    {
-        var normalizer = new WorkspacePathNormalizer(SystemWorkspaceHostEnvironment.Instance);
-        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/McpServer" : @"C:\Users\kingd";
-        var foreignPlatform = OperatingSystem.IsWindows()
-            ? WorkspacePathPlatform.CaseSensitive
-            : WorkspacePathPlatform.Windows;
-
-        Assert.Equal(
-            WorkspaceIdentityPath.NormalizeLexicalPath(foreign, foreignPlatform),
-            normalizer.Normalize(foreign));
-        Assert.DoesNotContain(
-            Environment.CurrentDirectory,
-            normalizer.Normalize(foreign),
-            StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static IWorkspaceHostEnvironment LinuxHost()
-    {
-        var host = Substitute.For<IWorkspaceHostEnvironment>();
-        host.Platform.Returns(WorkspacePathPlatform.CaseSensitive);
-        host.CurrentDirectory.Returns(LinuxWorkingDirectory);
-        host.NormalizeNativePath(Arg.Any<string>()).Returns(call =>
-        {
-            var path = call.Arg<string>()!;
-            var full = path.StartsWith('/') ? path : LinuxWorkingDirectory + "/" + path;
-            return WorkspaceIdentityPath.NormalizeLexicalPath(full, WorkspacePathPlatform.CaseSensitive);
-        });
-        return host;
-    }
-
-    private static IWorkspaceHostEnvironment WindowsHost()
-    {
-        var host = Substitute.For<IWorkspaceHostEnvironment>();
-        host.Platform.Returns(WorkspacePathPlatform.Windows);
-        host.CurrentDirectory.Returns(WindowsWorkingDirectory);
-        host.NormalizeNativePath(Arg.Any<string>()).Returns(call =>
-        {
-            var path = call.Arg<string>()!;
-            var full = path.Length >= 2 && path[1] == ':' ? path : WindowsWorkingDirectory + @"\" + path;
-            return WorkspaceIdentityPath.NormalizeLexicalPath(full, WorkspacePathPlatform.Windows);
-        });
-        return host;
-    }
+    /// <summary>Simulated Windows host: working directory C:\svc.</summary>
+    protected static IWorkspaceHostEnvironment WindowsHost() => SimulatedWorkspaceHosts.Windows();
 }

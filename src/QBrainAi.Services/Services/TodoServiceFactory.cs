@@ -47,11 +47,15 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
         _httpContextAccessor = httpContextAccessor;
     }
 
+    /// <summary>TR-MCP-FED-PATH-001: canonical workspace root (default "." for the primary store).</summary>
+    internal static string NormalizeWorkspaceRoot(string? workspacePath, QBrainAi.Client.IWorkspacePathNormalizer normalizer) =>
+        normalizer.Normalize(string.IsNullOrWhiteSpace(workspacePath) ? "." : workspacePath);
+
     /// <inheritdoc />
     public ITodoService CreatePrimary()
     {
         EnsureDatabaseProvider();
-        return BuildEfTodoService(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(_ingestionOptions.Value.RepoRoot ?? "."));
+        return BuildEfTodoService(NormalizeWorkspaceRoot(_ingestionOptions.Value.RepoRoot, QBrainAi.Client.WorkspacePathNormalizer.Process));
     }
 
     /// <inheritdoc />
@@ -64,7 +68,7 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
 
         // The database provider is process-wide (selected by Mcp:Database:Provider, TR-MCP-CFG-007);
         // workspaceContext is preserved for projection hooks but no longer selects a per-workspace store.
-        return BuildEfTodoService(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath));
+        return BuildEfTodoService(NormalizeWorkspaceRoot(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process));
     }
 
     private EfTodoService BuildEfTodoService(string workspacePath) => new(

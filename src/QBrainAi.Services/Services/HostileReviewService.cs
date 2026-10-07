@@ -36,6 +36,10 @@ public sealed class HostileReviewService : IHostileReviewService, IHostileReview
         _time = time ?? TimeProvider.System;
     }
 
+    /// <summary>TR-MCP-FED-PATH-001: whether a requested workspace is the service workspace, by path syntax.</summary>
+    internal static bool IsSameWorkspace(string requestedWorkspacePath, string currentWorkspacePath, QBrainAi.Client.IWorkspacePathNormalizer normalizer) =>
+        QBrainAi.Client.WorkspaceIdentityPath.AreEquivalent(normalizer.Normalize(requestedWorkspacePath), normalizer.Normalize(currentWorkspacePath));
+
     /// <inheritdoc />
     public async Task<HostileReviewResult> SubmitAsync(HostileReviewSubmitRequest request, CancellationToken cancellationToken = default)
     {
@@ -43,7 +47,7 @@ public sealed class HostileReviewService : IHostileReviewService, IHostileReview
         cancellationToken.ThrowIfCancellationRequested();
 
         if (!string.IsNullOrWhiteSpace(request.WorkspacePath)
-            && !QBrainAi.Client.WorkspaceIdentityPath.AreEquivalent(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(request.WorkspacePath), QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(_workspaceId))
+            && !IsSameWorkspace(request.WorkspacePath, _workspaceId, QBrainAi.Client.WorkspacePathNormalizer.Process)
             && !string.Equals(request.WorkspacePath, _workspaceId, StringComparison.OrdinalIgnoreCase))
         {
             return new HostileReviewResult

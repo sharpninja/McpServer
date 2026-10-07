@@ -35,15 +35,16 @@ public static class SessionLogWorkspaceAttributionValidator
     /// </summary>
     /// <param name="turn">The incoming turn payload.</param>
     /// <param name="workspaceRoot">Active workspace root, or empty to skip.</param>
+    /// <param name="pathNormalizer">TR-MCP-FED-PATH-001: path normalizer; defaults to the process host.</param>
     /// <exception cref="ArgumentException">When an unmarked path resolves outside the root.</exception>
-    public static void ValidateTurn(UnifiedRequestEntryDto turn, string? workspaceRoot)
+    public static void ValidateTurn(UnifiedRequestEntryDto turn, string? workspaceRoot, IWorkspacePathNormalizer? pathNormalizer = null)
     {
         ArgumentNullException.ThrowIfNull(turn);
         if (string.IsNullOrWhiteSpace(workspaceRoot))
             return;
 
-        ValidatePaths(turn.FilesModified, turn.Tags, workspaceRoot, "filesModified");
-        ValidateCommits(turn.Commits, turn.Tags, workspaceRoot);
+        ValidatePaths(turn.FilesModified, turn.Tags, workspaceRoot, "filesModified", pathNormalizer);
+        ValidateCommits(turn.Commits, turn.Tags, workspaceRoot, pathNormalizer);
     }
 
     /// <summary>
@@ -53,12 +54,14 @@ public static class SessionLogWorkspaceAttributionValidator
     /// <param name="tags">Turn tags that may mark the whole turn as foreign.</param>
     /// <param name="workspaceRoot">Active workspace root.</param>
     /// <param name="fieldName">Field name for the exception message.</param>
+    /// <param name="pathNormalizer">TR-MCP-FED-PATH-001: path normalizer; defaults to the process host.</param>
     /// <exception cref="ArgumentException">When an unmarked path resolves outside the root.</exception>
     public static void ValidatePaths(
         IEnumerable<string>? paths,
         IEnumerable<string>? tags,
         string workspaceRoot,
-        string fieldName)
+        string fieldName,
+        IWorkspacePathNormalizer? pathNormalizer = null)
     {
         ArgumentNullException.ThrowIfNull(workspaceRoot);
         ArgumentNullException.ThrowIfNull(fieldName);
@@ -72,7 +75,7 @@ public static class SessionLogWorkspaceAttributionValidator
                 continue;
             if (turnMarked || HasForeignPrefix(raw))
                 continue;
-            if (IsInsideWorkspace(raw, workspaceRoot))
+            if (IsInsideWorkspace(raw, workspaceRoot, pathNormalizer ?? WorkspacePathNormalizer.Process))
                 continue;
 
             throw new ArgumentException(
@@ -87,11 +90,13 @@ public static class SessionLogWorkspaceAttributionValidator
     /// <param name="commits">Commits to check; null skips.</param>
     /// <param name="tags">Turn tags that may mark the whole turn as foreign.</param>
     /// <param name="workspaceRoot">Active workspace root.</param>
+    /// <param name="pathNormalizer">TR-MCP-FED-PATH-001: path normalizer; defaults to the process host.</param>
     /// <exception cref="ArgumentException">When an unmarked commit path resolves outside the root.</exception>
     public static void ValidateCommits(
         IEnumerable<SessionLogCommitDto>? commits,
         IEnumerable<string>? tags,
-        string workspaceRoot)
+        string workspaceRoot,
+        IWorkspacePathNormalizer? pathNormalizer = null)
     {
         ArgumentNullException.ThrowIfNull(workspaceRoot);
         if (commits is null)
@@ -101,7 +106,7 @@ public static class SessionLogWorkspaceAttributionValidator
         {
             if (commit.FilesChanged is null)
                 continue;
-            ValidatePaths(commit.FilesChanged, tags, workspaceRoot, "commits.filesChanged");
+            ValidatePaths(commit.FilesChanged, tags, workspaceRoot, "commits.filesChanged", pathNormalizer);
         }
     }
 
@@ -137,11 +142,10 @@ public static class SessionLogWorkspaceAttributionValidator
         return false;
     }
 
-    private static bool IsInsideWorkspace(string path, string workspaceRoot)
+    private static bool IsInsideWorkspace(string path, string workspaceRoot, IWorkspacePathNormalizer normalizer)
     {
         // TR-MCP-FED-PATH-001: containment by the root's own path syntax. A relative path joins
         // the root in that syntax; an absolute path of another platform is never inside.
-        var normalizer = WorkspacePathNormalizer.Process;
         try
         {
             var root = normalizer.Normalize(workspaceRoot);

@@ -904,12 +904,16 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
     private static SemaphoreSlim GetStateLock(string statePath)
         => s_stateLocks.GetOrAdd(statePath, static _ => new SemaphoreSlim(1, 1));
 
-    private static string NormalizeWorkspacePath(string workspacePath)
+    private static string NormalizeWorkspacePath(string workspacePath) =>
+        NormalizeWorkspacePath(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process);
+
+    /// <summary>TR-MCP-FED-PATH-001: canonical workspace path for execution state.</summary>
+    internal static string NormalizeWorkspacePath(string workspacePath, QBrainAi.Client.IWorkspacePathNormalizer normalizer)
     {
         if (string.IsNullOrWhiteSpace(workspacePath))
             throw new ArgumentException("workspacePath is required.", nameof(workspacePath));
 
-        return QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath);
+        return normalizer.Normalize(workspacePath);
     }
 
     private static void ValidateRequired(string value, string paramName)

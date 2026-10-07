@@ -67,7 +67,8 @@ public sealed class WorkspaceResolutionMiddleware
         WorkspaceContext workspaceContext,
         WorkspaceTokenService tokenService,
         IWorkspaceService workspaceService,
-        McpDbContext? dbContext = null)
+        McpDbContext? dbContext = null,
+        QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer = null)
     {
         var path = context.Request.Path;
 
@@ -77,7 +78,7 @@ public sealed class WorkspaceResolutionMiddleware
         // orchestration loop. Unresolved requests still proceed; the controller enforces token validity.
         if (path.StartsWithSegments("/v1", StringComparison.OrdinalIgnoreCase))
         {
-            await ResolveQuadBrainOpenAiWorkspaceAsync(context, workspaceContext, tokenService, workspaceService, dbContext)
+            await ResolveQuadBrainOpenAiWorkspaceAsync(context, workspaceContext, tokenService, workspaceService, dbContext, pathNormalizer)
                 .ConfigureAwait(false);
             return;
         }
@@ -113,7 +114,7 @@ public sealed class WorkspaceResolutionMiddleware
 
             _logger.LogInformation("[WS-Resolve] {Method} {Path} | Tier1 OK: X-Workspace-Path='{HeaderValue}' → {WorkspaceName}",
                 method, path, headerValue, ws.Name);
-            PopulateContext(workspaceContext, ws, isDefault: false, context, dbContext);
+            PopulateContext(workspaceContext, ws, isDefault: false, context, dbContext, pathNormalizer);
             await _next(context).ConfigureAwait(false);
             return;
         }
@@ -134,7 +135,7 @@ public sealed class WorkspaceResolutionMiddleware
                     {
                         _logger.LogInformation("[WS-Resolve] {Method} {Path} | Tier2 OK: ApiKey reverse lookup → {WorkspaceName} (isDefault={IsDefault})",
                             method, path, ws.Name, isDefault);
-                        PopulateContext(workspaceContext, ws, isDefault, context, dbContext);
+                        PopulateContext(workspaceContext, ws, isDefault, context, dbContext, pathNormalizer);
                         await _next(context).ConfigureAwait(false);
                         return;
                     }
@@ -188,7 +189,8 @@ public sealed class WorkspaceResolutionMiddleware
         WorkspaceContext workspaceContext,
         WorkspaceTokenService tokenService,
         IWorkspaceService workspaceService,
-        McpDbContext? dbContext)
+        McpDbContext? dbContext,
+        QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer)
     {
         string? resolvedPath;
         var isDefault = false;
@@ -212,7 +214,7 @@ public sealed class WorkspaceResolutionMiddleware
         {
             var ws = await workspaceService.GetAsync(resolvedPath, context.RequestAborted).ConfigureAwait(false);
             if (ws is not null)
-                PopulateContext(workspaceContext, ws, isDefault, context, dbContext);
+                PopulateContext(workspaceContext, ws, isDefault, context, dbContext, pathNormalizer);
         }
 
         await _next(context).ConfigureAwait(false);
@@ -246,7 +248,7 @@ public sealed class WorkspaceResolutionMiddleware
         return false;
     }
 
-    private static void PopulateContext(WorkspaceContext ctx, WorkspaceDto ws, bool isDefault, HttpContext httpContext, McpDbContext? dbContext)
+    private static void PopulateContext(WorkspaceContext ctx, WorkspaceDto ws, bool isDefault, HttpContext httpContext, McpDbContext? dbContext, QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer)
     {
         ctx.WorkspacePath = ws.WorkspacePath;
         ctx.WorkspaceName = ws.Name;
@@ -259,6 +261,6 @@ public sealed class WorkspaceResolutionMiddleware
         ctx.IsDefaultKey = isDefault && httpContext.User.Identity?.IsAuthenticated != true;
 
         // Derive session and external docs paths in the workspace's own path syntax.
-        ctx.SetDerivedPaths(ws.WorkspacePath);
+        ctx.SetDerivedPaths(ws.WorkspacePath, pathNormalizer);
     }
 }

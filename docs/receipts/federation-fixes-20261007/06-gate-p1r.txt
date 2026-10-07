@@ -1,0 +1,76 @@
+P1.R gate (baseline-relative), 2026-10-07
+Working tree on claude/federation-fixes-20261007 (P1.R uncommitted) vs clean baseline f56dcf70.
+
+== Run 1 (all three suites)
+  QBrainAi.Support.Mcp.Tests exit=1
+  Failed!  - Failed:    16, Passed:  3109, Skipped:     0, Total:  3125, Duration: 6 m 44 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [FAIL]
+  QBrainAi.Client.Tests exit=0
+  Passed!  - Failed:     0, Passed:   304, Skipped:     0, Total:   304, Duration: 1 s - QBrainAi.Client.Tests.dll (net10.0)
+  Build.Tests exit=1
+  Failed!  - Failed:    13, Passed:   338, Skipped:     0, Total:   351, Duration: 4 m 10 s - Build.Tests.dll (net10.0)
+  NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False) [FAIL]
+  NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+  NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+  NukeBuild.Tests.BuildTargetTests.InstallReplTool_ParsesInstalledGlobalToolVersion [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "apphost") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "unit") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "configuration") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "environment") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [FAIL]
+  NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent) [FAIL]
+  
+  [exited with code 1]
+
+Run 1 set comparison vs baseline: baseline=26 branch=29; new failures: 3 (all SqlException Execution Timeout Expired against SQL Server):
+  SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation
+  SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows
+  SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows
+Run 1 result: GATE NOT PASSED.
+
+== Isolation rerun of the 3 timed-out tests (--no-build)
+  Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 27 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+Branch touches no migration or SQL Server source files (git diff --name-only f56dcf70 -- src | Migration|SqlServer: none).
+
+== Run 2: full QBrainAi.Support.Mcp.Tests rerun (--no-build)
+  QBrainAi.Support.Mcp.Tests (rerun) exit=1
+  Failed!  - Failed:    13, Passed:  3111, Skipped:     0, Total:  3124, Duration: 4 m 10 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [FAIL]
+  
+  [exited with code 1]
+
+Run 2 set comparison vs Support.Mcp.Tests baseline: baseline=13 rerun=13; new failures: 0; baseline now passing: 0.
+Client.Tests (304/304) and Build.Tests (13 baseline failures, 0 new) matched baseline in run 1.
+
+Result: GATE PASS on run 2 (failing set identical to baseline), with a recorded environmental flake in run 1 (SQL Server timeouts under parallel load; triaged).
+Open discrepancy: run 1 discovered 3125 Support.Mcp tests, run 2 discovered 3124 with the same build; not yet attributed (normal verbosity does not list passing tests).
