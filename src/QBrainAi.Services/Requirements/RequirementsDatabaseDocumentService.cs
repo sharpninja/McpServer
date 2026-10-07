@@ -1464,7 +1464,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             workspacePath = TryInferWorkspacePathFromOptions();
         if (!string.IsNullOrWhiteSpace(workspacePath))
         {
-            workspacePath = Path.GetFullPath(workspacePath);
+            workspacePath = QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath);
             var scopedWorkspace = scope.ServiceProvider.GetService<WorkspaceContext>();
             if (scopedWorkspace is not null)
             {
@@ -1475,7 +1475,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
         var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         if (!string.IsNullOrWhiteSpace(workspacePath))
-            ctx.OverrideWorkspaceId(Path.GetFullPath(workspacePath));
+            ctx.OverrideWorkspaceId(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath));
 
         return new DbScope(scope, ctx);
     }
@@ -1553,7 +1553,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var workspacePath = requestCtx?.WorkspacePath;
         if (string.IsNullOrWhiteSpace(workspacePath))
             workspacePath = TryInferWorkspacePathFromOptions();
-        return string.IsNullOrWhiteSpace(workspacePath) ? null : Path.GetFullPath(workspacePath);
+        return string.IsNullOrWhiteSpace(workspacePath) ? null : QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath);
     }
 
     private static IReadOnlyList<string> NormalizeIds(IEnumerable<string>? ids) =>

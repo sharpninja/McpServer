@@ -51,7 +51,7 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
     public ITodoService CreatePrimary()
     {
         EnsureDatabaseProvider();
-        return BuildEfTodoService(Path.GetFullPath(_ingestionOptions.Value.RepoRoot ?? "."));
+        return BuildEfTodoService(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(_ingestionOptions.Value.RepoRoot ?? "."));
     }
 
     /// <inheritdoc />
@@ -64,7 +64,7 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
 
         // The database provider is process-wide (selected by Mcp:Database:Provider, TR-MCP-CFG-007);
         // workspaceContext is preserved for projection hooks but no longer selects a per-workspace store.
-        return BuildEfTodoService(Path.GetFullPath(workspacePath));
+        return BuildEfTodoService(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath));
     }
 
     private EfTodoService BuildEfTodoService(string workspacePath) => new(

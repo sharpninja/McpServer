@@ -1124,8 +1124,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
     /// </summary>
     private static string BuildPooledDeviceId(string agentName, string workspacePath)
     {
-        var normalizedWorkspace = Path.GetFullPath(workspacePath)
-            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var normalizedWorkspace = QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath);
         var workspaceHash = Convert.ToHexString(
             System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(normalizedWorkspace)))
             .ToLowerInvariant()[..12];

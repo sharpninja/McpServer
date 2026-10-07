@@ -26,7 +26,7 @@ public sealed class TodoServiceResolver : IDisposable
         ArgumentNullException.ThrowIfNull(ingestionOptions);
         _todoServiceFactory = todoServiceFactory ?? throw new ArgumentNullException(nameof(todoServiceFactory));
 
-        _primaryWorkspacePath = Path.GetFullPath(ingestionOptions.Value.RepoRoot ?? ".");
+        _primaryWorkspacePath = QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(ingestionOptions.Value.RepoRoot ?? ".");
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public sealed class TodoServiceResolver : IDisposable
         if (!workspaceContext.IsResolved)
             return _primaryService;
 
-        var normalized = Path.GetFullPath(workspaceContext.WorkspacePath!);
+        var normalized = QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspaceContext.WorkspacePath!);
         if (string.Equals(normalized, _primaryWorkspacePath, StringComparison.OrdinalIgnoreCase))
             return _primaryService;
 

@@ -1,3 +1,4 @@
+using QBrainAi.Client;
 using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Services;
@@ -138,26 +139,18 @@ public static class SessionLogWorkspaceAttributionValidator
 
     private static bool IsInsideWorkspace(string path, string workspaceRoot)
     {
-        string fullRoot;
-        string fullPath;
+        // TR-MCP-FED-PATH-001: containment by the root's own path syntax. A relative path joins
+        // the root in that syntax; an absolute path of another platform is never inside.
+        var normalizer = WorkspacePathNormalizer.Process;
         try
         {
-            fullRoot = Path.GetFullPath(workspaceRoot);
-            fullPath = Path.IsPathRooted(path)
-                ? Path.GetFullPath(path)
-                : Path.GetFullPath(Path.Combine(fullRoot, path));
+            var root = normalizer.Normalize(workspaceRoot);
+            var candidate = normalizer.Combine(root, path);
+            return WorkspaceIdentityPath.IsWithinRoot(root, candidate);
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
             return false;
         }
-
-        var comparison = OperatingSystem.IsWindows()
-            ? StringComparison.OrdinalIgnoreCase
-            : StringComparison.Ordinal;
-        var rootWithSep = fullRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-            + Path.DirectorySeparatorChar;
-        return fullPath.Equals(fullRoot, comparison)
-            || fullPath.StartsWith(rootWithSep, comparison);
     }
 }

@@ -909,7 +909,7 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
         if (string.IsNullOrWhiteSpace(workspacePath))
             throw new ArgumentException("workspacePath is required.", nameof(workspacePath));
 
-        return Path.GetFullPath(workspacePath.Trim());
+        return QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath);
     }
 
     private static void ValidateRequired(string value, string paramName)

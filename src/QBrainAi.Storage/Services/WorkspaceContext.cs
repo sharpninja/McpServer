@@ -30,4 +30,16 @@ public sealed class WorkspaceContext
 
     /// <summary>Whether workspace resolution succeeded (i.e. <see cref="WorkspacePath"/> is non-null).</summary>
     public bool IsResolved => WorkspacePath is not null;
+
+    /// <summary>
+    /// TR-MCP-FED-PATH-001: Derives <see cref="SessionsPath"/> and <see cref="ExternalDocsPath"/>
+    /// from a workspace root using the root's own path syntax.
+    /// </summary>
+    /// <param name="workspacePath">Resolved workspace root (any platform).</param>
+    public void SetDerivedPaths(string workspacePath)
+    {
+        var normalizer = QBrainAi.Client.WorkspacePathNormalizer.Process;
+        SessionsPath = normalizer.Combine(workspacePath, "docs", "sessions");
+        ExternalDocsPath = normalizer.Combine(workspacePath, "docs", "external");
+    }
 }

@@ -71,7 +71,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         _httpContextAccessor = httpContextAccessor;
         _fixedWorkspacePath = string.IsNullOrWhiteSpace(fixedWorkspacePath)
             ? null
-            : Path.GetFullPath(fixedWorkspacePath);
+            : QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(fixedWorkspacePath);
     }
 
     /// <inheritdoc />

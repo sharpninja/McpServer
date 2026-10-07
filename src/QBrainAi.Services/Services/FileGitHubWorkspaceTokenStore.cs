@@ -319,8 +319,7 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         if (string.IsNullOrWhiteSpace(workspacePath))
             throw new ArgumentException("Workspace path is required.", nameof(workspacePath));
 
-        return Path.GetFullPath(workspacePath.Trim())
-            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspacePath);
     }
 
 }
