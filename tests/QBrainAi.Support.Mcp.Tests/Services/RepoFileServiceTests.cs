@@ -47,43 +47,6 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Contains("Hello", result.Content);
     }
 
-    /// <summary>
-    /// TEST-MCP-FED-PATH-001 / FR-MCP-FED-PATH-001-AC4: a workspace whose path belongs to another
-    /// platform (a Linux proxy's workspace on a Windows host, or the reverse) is not addressable on
-    /// this host, so repo writes fail and nothing is created at a host re-rooting of the path.
-    /// </summary>
-    [Fact]
-    public async Task WriteAsync_ForeignPlatformWorkspace_FailsAndCreatesNothing()
-    {
-        var leaf = $"__mcp_unit_test__repo_{Guid.NewGuid():N}";
-        var foreign = OperatingSystem.IsWindows() ? "/" + leaf : @"C:\" + leaf;
-        var hostRewrite = OperatingSystem.IsWindows()
-            ? Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf)
-            : Path.Combine(Environment.CurrentDirectory, @"C:\" + leaf);
-        var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
-        var sut = new RepoFileService(
-            options,
-            new WorkspaceContext { WorkspacePath = foreign },
-            _auditLog,
-            NullLogger<RepoFileService>.Instance,
-            _eventBus);
-
-        try
-        {
-            var result = await sut.WriteAsync("notes.md", "x", TestContext.Current.CancellationToken).ConfigureAwait(true);
-            var read = await sut.ReadAsync("notes.md", TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-            Assert.False(result.Written);
-            Assert.Null(read);
-            Assert.False(Directory.Exists(hostRewrite), $"Repo write created {hostRewrite}");
-        }
-        finally
-        {
-            if (Directory.Exists(hostRewrite))
-                Directory.Delete(hostRewrite, recursive: true);
-        }
-    }
-
     [Fact]
     public async Task ReadAsync_PathTraversal_ReturnsNull()
     {

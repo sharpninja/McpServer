@@ -16,17 +16,24 @@ public sealed class TodoServiceResolver : IDisposable
     private readonly ITodoServiceFactory _todoServiceFactory;
     private readonly string _primaryWorkspacePath;
 
-    /// <summary>Initializes a new instance of the <see cref="TodoServiceResolver"/> class.</summary>
+    private readonly QBrainAi.Client.IWorkspacePathNormalizer _pathNormalizer;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TodoServiceResolver"/> class. TR-MCP-FED-PATH-001:
+    /// workspace keys use the path normalizer (process host by default).
+    /// </summary>
     public TodoServiceResolver(
         ITodoService primaryService,
         IOptions<IngestionOptions> ingestionOptions,
-        ITodoServiceFactory todoServiceFactory)
+        ITodoServiceFactory todoServiceFactory,
+        QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer = null)
     {
+        _pathNormalizer = pathNormalizer ?? QBrainAi.Client.WorkspacePathNormalizer.Process;
         _primaryService = primaryService ?? throw new ArgumentNullException(nameof(primaryService));
         ArgumentNullException.ThrowIfNull(ingestionOptions);
         _todoServiceFactory = todoServiceFactory ?? throw new ArgumentNullException(nameof(todoServiceFactory));
 
-        _primaryWorkspacePath = QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(ingestionOptions.Value.RepoRoot ?? ".");
+        _primaryWorkspacePath = _pathNormalizer.Normalize(ingestionOptions.Value.RepoRoot ?? ".");
     }
 
     /// <summary>
@@ -38,7 +45,7 @@ public sealed class TodoServiceResolver : IDisposable
         if (!workspaceContext.IsResolved)
             return _primaryService;
 
-        var normalized = QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(workspaceContext.WorkspacePath!);
+        var normalized = _pathNormalizer.Normalize(workspaceContext.WorkspacePath!);
         if (string.Equals(normalized, _primaryWorkspacePath, StringComparison.OrdinalIgnoreCase))
             return _primaryService;
 

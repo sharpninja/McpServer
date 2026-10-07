@@ -69,10 +69,12 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _eventBus = eventBus;
         _httpContextAccessor = httpContextAccessor;
-        _fixedWorkspacePath = string.IsNullOrWhiteSpace(fixedWorkspacePath)
-            ? null
-            : QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(fixedWorkspacePath);
+        _fixedWorkspacePath = NormalizeFixedWorkspacePath(fixedWorkspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process);
     }
+
+    /// <summary>TR-MCP-FED-PATH-001: canonical fixed workspace path, or null when unset.</summary>
+    internal static string? NormalizeFixedWorkspacePath(string? fixedWorkspacePath, QBrainAi.Client.IWorkspacePathNormalizer normalizer) =>
+        string.IsNullOrWhiteSpace(fixedWorkspacePath) ? null : normalizer.Normalize(fixedWorkspacePath);
 
     /// <inheritdoc />
     public void Dispose() => _writeLock.Dispose();

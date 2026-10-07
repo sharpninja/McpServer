@@ -105,24 +105,6 @@ public sealed class WorkspaceTokenServiceTests
         Assert.Equal(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(@"C:\projects\test"), result, ignoreCase: true);
     }
 
-    /// <summary>
-    /// TEST-MCP-FED-PATH-001 / FR-MCP-FED-PATH-001-AC1/AC2: a token for a foreign-platform
-    /// workspace resolves back to that workspace's own path, not a host re-rooting of it.
-    /// </summary>
-    [Fact]
-    public void ResolveWorkspaceByToken_ForeignAbsoluteWorkspace_ReturnsUnmangledPath()
-    {
-        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/McpServer" : @"C:\Users\kingd";
-        var foreignPlatform = OperatingSystem.IsWindows()
-            ? QBrainAi.Client.WorkspacePathPlatform.CaseSensitive
-            : QBrainAi.Client.WorkspacePathPlatform.Windows;
-        var token = _sut.GenerateToken(foreign);
-
-        Assert.Equal(
-            QBrainAi.Client.WorkspaceIdentityPath.NormalizeLexicalPath(foreign, foreignPlatform),
-            _sut.ResolveWorkspaceByToken(token));
-        Assert.True(_sut.ValidateToken(foreign + "/", token));
-    }
 
     [Fact]
     public void ResolveWorkspaceByToken_ReturnsNull_ForUnknownToken()

@@ -62,36 +62,4 @@ public sealed class WorkspaceContextTests
         Assert.True(ctx.IsDefaultKey);
         Assert.True(ctx.IsResolved);
     }
-
-    /// <summary>
-    /// TEST-MCP-FED-PATH-001: derived paths for a foreign-platform workspace use the workspace's
-    /// own separators (no "/home/x\docs\sessions" on Windows, no "C:\x/docs/sessions" on Linux).
-    /// </summary>
-    [Fact]
-    public void SetDerivedPaths_ForeignPlatformWorkspace_UsesWorkspaceSyntax()
-    {
-        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/RideAudit" : @"C:\Users\kingd\repo";
-        var ctx = new WorkspaceContext();
-
-        ctx.SetDerivedPaths(foreign);
-
-        var normalizer = QBrainAi.Client.WorkspacePathNormalizer.Process;
-        Assert.Equal(normalizer.Combine(foreign, "docs", "sessions"), ctx.SessionsPath);
-        Assert.Equal(normalizer.Combine(foreign, "docs", "external"), ctx.ExternalDocsPath);
-        Assert.False(ctx.SessionsPath!.Contains('/') && ctx.SessionsPath.Contains('\\'), ctx.SessionsPath);
-    }
-
-    /// <summary>TEST-MCP-FED-PATH-001: host-native workspaces keep their existing derived paths.</summary>
-    [Fact]
-    public void SetDerivedPaths_NativeWorkspace_MatchesNormalizedCombine()
-    {
-        var native = Path.Combine(Path.GetTempPath(), "derived-native");
-        var ctx = new WorkspaceContext();
-
-        ctx.SetDerivedPaths(native);
-
-        Assert.Equal(
-            QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(Path.Combine(native, "docs", "sessions")),
-            ctx.SessionsPath);
-    }
 }

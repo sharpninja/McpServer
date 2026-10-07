@@ -1,0 +1,26 @@
+P1.R retrofit receipts, R1-R3 (BDP v4 per plan section 2a), 2026-10-07
+Order per increment: MockData fixtures (scripted data) green FIRST, then Real fixtures (production code) green under the same contract tests.
+Note: production code for P1.1-P1.3 already existed (commit 8ca38d5d); the retrofit establishes test validity against mocked data and keeps that proof in the suite.
+
+== R1+R2 MockData: WorkspacePathNormalizerMockDataTests | WorkspaceHostEnvironmentMockDataTests
+  Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 670 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== R1+R2 Real: WorkspacePathNormalizerRealTests | WorkspaceHostEnvironmentRealTests
+  Passed!  - Failed:     0, Passed:    33, Skipped:     0, Total:    33, Duration: 172 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== R3 triage MockData: TriageServiceCrossPlatformMockDataTests (+ normalizer MockData)
+  Passed!  - Failed:     0, Passed:    33, Skipped:     0, Total:    33, Duration: 3 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== R3 triage Real: TriageServiceCrossPlatformRealTests + existing TriageServiceTests
+  Passed!  - Failed:     0, Passed:    36, Skipped:     0, Total:    36, Duration: 9 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== R3 consumers MockData: WorkspaceServiceCrossPlatformMockDataTests | WorkspacePathConsumersMockDataTests
+  Passed!  - Failed:     0, Passed:    18, Skipped:     0, Total:    18, Duration: 2 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== R3 consumers Real: *RealTests + WorkspaceResolutionMiddleware | WorkspaceContext | RepoFile | HandoffWorkspacePaths | WorkspaceTokenService | SessionLog | McpStdio
+  Passed!  - Failed:     0, Passed:   546, Skipped:     0, Total:   546, Duration: 2 m 22 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+Test files restored byte-identical to base f56dcf70 (cases moved into contract classes): TriageServiceTests.cs, HandoffWorkspacePathsTests.cs, WorkspaceContextTests.cs, WorkspaceResolutionMiddlewareTests.cs, RepoFileServiceTests.cs (git diff --name-only f56dcf70 -- <files>: 0).
+Removed (replaced by contract classes): WorkspacePathNormalizerTests.cs, WorkspaceServiceCrossPlatformPathTests.cs, SessionLogWorkspaceAttributionValidatorCrossPlatformTests.cs.
+Additive production injection points (default = process normalizer, behaviour unchanged): SessionLogWorkspaceAttributionValidator.ValidateTurn/ValidatePaths/ValidateCommits, WorkspaceContext.SetDerivedPaths, RepoFileService ctor, WorkspaceResolutionMiddleware.InvokeAsync (passed through PopulateContext; no per-request state on the singleton middleware).
+
