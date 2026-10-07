@@ -1331,7 +1331,8 @@ public sealed class TriageServiceTests : IDisposable
         ITriageTodoCreator? todoCreator = null,
         IPromptTemplateService? promptTemplates = null,
         TimeSpan? quietPeriod = null,
-        TimeSpan? maxRunTime = null)
+        TimeSpan? maxRunTime = null,
+        QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer = null)
     {
         var workspaceContext = new WorkspaceContext { WorkspacePath = workspacePath, WorkspaceName = Path.GetFileName(workspacePath) };
         var workspaceService = Substitute.For<IWorkspaceService>();
@@ -1361,7 +1362,152 @@ public sealed class TriageServiceTests : IDisposable
                 MaxRunTime = maxRunTime ?? TimeSpan.FromMinutes(30),
             }),
             _time,
-            NullLogger<TriageService>.Instance);
+            NullLogger<TriageService>.Instance,
+            pathNormalizer);
+    }
+
+    private static QBrainAi.Client.IWorkspacePathNormalizer SimulatedHost(QBrainAi.Client.WorkspacePathPlatform platform)
+    {
+        const string linuxCwd = "/opt/mcpserver/app";
+        const string windowsCwd = @"C:\svc";
+        var host = Substitute.For<QBrainAi.Client.IWorkspaceHostEnvironment>();
+        host.Platform.Returns(platform);
+        host.CurrentDirectory.Returns(platform == QBrainAi.Client.WorkspacePathPlatform.Windows ? windowsCwd : linuxCwd);
+        host.NormalizeNativePath(Arg.Any<string>()).Returns(call =>
+        {
+            var path = call.Arg<string>()!;
+            var full = platform == QBrainAi.Client.WorkspacePathPlatform.Windows
+                ? (path.Length >= 2 && path[1] == ':' ? path : windowsCwd + @"\" + path)
+                : (path.StartsWith('/') ? path : linuxCwd + "/" + path);
+            return QBrainAi.Client.WorkspaceIdentityPath.NormalizeLexicalPath(full, platform);
+        });
+        return new QBrainAi.Client.WorkspacePathNormalizer(host);
+    }
+
+    /// <summary>
+    /// TEST-MCP-FED-PATH-001 / FR-MCP-FED-PATH-001-AC1: On a Linux hub (working directory
+    /// /opt/mcpserver/app) a report submitted for a Windows workspace keeps the Windows path as
+    /// its original and effective workspace; the hub working directory is never prepended.
+    /// </summary>
+    [Fact]
+    public async Task SubmitReportAsync_LinuxHost_WindowsWorkspace_IsNotPrefixedWithHostWorkingDirectory()
+    {
+        const string windowsWorkspace = @"C:\Users\kingd";
+        var linux = SimulatedHost(QBrainAi.Client.WorkspacePathPlatform.CaseSensitive);
+        var expected = linux.Normalize(windowsWorkspace);
+        var sut = CreateService(expected, pathNormalizer: linux);
+
+        var result = await sut.SubmitReportAsync(
+            CreateReport("linux-hub-windows-path") with { WorkspacePath = windowsWorkspace },
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(expected, result.WorkspacePath);
+        using var db = CreateDb(expected);
+        var report = await db.TriageReports.SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(expected, report.OriginalWorkspacePath);
+        Assert.Equal(expected, report.WorkspaceId);
+        Assert.DoesNotContain("/opt/mcpserver/app", report.OriginalWorkspacePath, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-FED-PATH-001 / FR-MCP-FED-PATH-001-AC2: On a Windows host a report submitted for a
+    /// POSIX workspace keeps the POSIX path; it is never re-rooted onto a Windows drive.
+    /// </summary>
+    [Fact]
+    public async Task SubmitReportAsync_WindowsHost_PosixWorkspace_IsNotReRootedOnDrive()
+    {
+        const string posixWorkspace = "/home/sharpninja/github/RideAudit";
+        var windows = SimulatedHost(QBrainAi.Client.WorkspacePathPlatform.Windows);
+        var sut = CreateService(posixWorkspace, pathNormalizer: windows);
+
+        var result = await sut.SubmitReportAsync(
+            CreateReport("windows-hub-posix-path") with { WorkspacePath = posixWorkspace },
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(posixWorkspace, result.WorkspacePath);
+        using var db = CreateDb(posixWorkspace);
+        var report = await db.TriageReports.SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(posixWorkspace, report.OriginalWorkspacePath);
+    }
+
+    /// <summary>
+    /// TEST-MCP-FED-PATH-001: A relative submitting path belongs to the host, so a Linux host
+    /// anchors it at its own working directory.
+    /// </summary>
+    [Fact]
+    public async Task SubmitReportAsync_LinuxHost_RelativeWorkspace_AnchorsAtHostWorkingDirectory()
+    {
+        var linux = SimulatedHost(QBrainAi.Client.WorkspacePathPlatform.CaseSensitive);
+        const string expected = "/opt/mcpserver/app/workspaces/rel";
+        var sut = CreateService(expected, pathNormalizer: linux);
+
+        var result = await sut.SubmitReportAsync(
+            CreateReport("linux-hub-relative-path") with { WorkspacePath = "workspaces/rel" },
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(expected, result.WorkspacePath);
+    }
+
+    /// <summary>
+    /// TEST-MCP-FED-PATH-001 / FR-MCP-FED-PATH-001-AC3: After a Linux hub accepts a report for a
+    /// Windows workspace, the report and its group are found again using the submitter's original
+    /// path, in either separator spelling.
+    /// </summary>
+    [Fact]
+    public async Task SubmitThenLookup_LinuxHost_WindowsWorkspace_RoundTripsByOriginalPath()
+    {
+        const string windowsWorkspace = @"C:\Users\kingd";
+        var linux = SimulatedHost(QBrainAi.Client.WorkspacePathPlatform.CaseSensitive);
+        var canonical = linux.Normalize(windowsWorkspace);
+        var submitted = await CreateService(canonical, pathNormalizer: linux).SubmitReportAsync(
+            CreateReport("linux-hub-roundtrip") with { WorkspacePath = windowsWorkspace },
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        var reader = CreateService(canonical, pathNormalizer: linux);
+        var report = await reader.GetReportAsync(submitted.ReportId, TestContext.Current.CancellationToken);
+        var groups = await CreateService(canonical, pathNormalizer: linux).QueryGroupsAsync(
+            workspacePath: "C:/Users/kingd",
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(submitted.ReportId, report.ReportId);
+        Assert.Single(groups.Items);
+        Assert.Equal(submitted.GroupId, groups.Items[0].GroupId);
+    }
+
+    /// <summary>
+    /// TEST-MCP-FED-PATH-001: On a Linux hub a QBrain.AI-related report from a Windows proxy
+    /// workspace is routed to the hub's registered POSIX QBrainAi workspace while the original
+    /// Windows path is preserved unmangled.
+    /// </summary>
+    [Fact]
+    public async Task SubmitReportAsync_LinuxHost_RoutedReport_PreservesWindowsOriginal()
+    {
+        const string windowsWorkspace = @"C:\Users\kingd";
+        const string hubProduct = "/home/sharpninja/github/QBrainAi";
+        var linux = SimulatedHost(QBrainAi.Client.WorkspacePathPlatform.CaseSensitive);
+        var original = linux.Normalize(windowsWorkspace);
+        var sut = CreateService(
+            original,
+            workspaces:
+            [
+                Workspace(original, "kingd"),
+                Workspace(hubProduct, "QBrainAi"),
+            ],
+            pathNormalizer: linux);
+
+        var result = await sut.SubmitReportAsync(new TriageReportRequest
+        {
+            Title = "mcpserver-codex-plugin masks method_not_found",
+            Summary = "The QBrain.AI Codex plugin reports success after a workflow.triage call fails.",
+            Component = "mcpserver-codex-plugin",
+            WorkspacePath = windowsWorkspace,
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(hubProduct, result.WorkspacePath);
+        using var db = CreateDb(hubProduct);
+        var report = await db.TriageReports.SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(original, report.OriginalWorkspacePath);
+        Assert.Equal(hubProduct, report.EffectiveWorkspacePath);
     }
 
     private sealed class ForwardingTriageTodoCreator : ITriageTodoCreator

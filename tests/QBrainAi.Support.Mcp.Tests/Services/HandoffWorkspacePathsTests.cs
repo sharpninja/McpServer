@@ -25,6 +25,47 @@ public sealed class HandoffWorkspacePathsTests
         Assert.True(Path.IsPathRooted(canonical));
     }
 
+    /// <summary>
+    /// TEST-MCP-FED-PATH-001 / FR-MCP-FED-PATH-001-AC1/AC2: a foreign-platform absolute path
+    /// (POSIX on a Windows runner, Windows on a Linux runner) is canonicalized lexically and never
+    /// re-rooted on the host. Every MCP tool workspace override flows through this method.
+    /// </summary>
+    [Fact]
+    public void Canonicalize_ForeignAbsolutePath_IsNotReRootedOnHost()
+    {
+        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/McpServer" : @"C:\Users\kingd";
+        var foreignPlatform = OperatingSystem.IsWindows()
+            ? QBrainAi.Client.WorkspacePathPlatform.CaseSensitive
+            : QBrainAi.Client.WorkspacePathPlatform.Windows;
+
+        Assert.Equal(
+            QBrainAi.Client.WorkspaceIdentityPath.NormalizeLexicalPath(foreign, foreignPlatform),
+            HandoffWorkspacePaths.Canonicalize(foreign));
+    }
+
+    /// <summary>
+    /// TEST-MCP-FED-PATH-001: with a simulated Linux hub, a Windows workspace stays unmangled and
+    /// a relative path anchors at the hub working directory.
+    /// </summary>
+    [Fact]
+    public void Canonicalize_SimulatedLinuxHost_UsesPathSyntax()
+    {
+        var host = Substitute.For<QBrainAi.Client.IWorkspaceHostEnvironment>();
+        host.Platform.Returns(QBrainAi.Client.WorkspacePathPlatform.CaseSensitive);
+        host.CurrentDirectory.Returns("/opt/mcpserver/app");
+        host.NormalizeNativePath(Arg.Any<string>()).Returns(call =>
+        {
+            var path = call.Arg<string>()!;
+            return QBrainAi.Client.WorkspaceIdentityPath.NormalizeLexicalPath(
+                path.StartsWith('/') ? path : "/opt/mcpserver/app/" + path,
+                QBrainAi.Client.WorkspacePathPlatform.CaseSensitive);
+        });
+        var linux = new QBrainAi.Client.WorkspacePathNormalizer(host);
+
+        Assert.Equal(linux.Normalize(@"C:\Users\kingd"), HandoffWorkspacePaths.Canonicalize(@"C:\Users\kingd", linux));
+        Assert.Equal("/opt/mcpserver/app/ws", HandoffWorkspacePaths.Canonicalize("ws", linux));
+    }
+
     /// <summary>P1-8: blank paths are rejected.</summary>
     [Fact]
     public void TryCanonicalize_Blank_Fails()

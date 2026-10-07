@@ -1,0 +1,57 @@
+Federation fixes: planning gate receipts
+Date: 2026-10-07
+Branch: claude/federation-fixes-20261007 (worktree .worktrees/federation-fixes-20261007, base origin/develop f56dcf70)
+Plan: docs/plans/2026-10-07-federation-fixes.md
+MCP session: ClaudeCode-20261007T135500Z-federation-fixes
+  turn req-20261007T135500Z-001-resume-federation-fixes-new-worktree (turnId 107796): completed
+  turn req-20261007T141000Z-002-decisions-d1-d4-register-requirements-todos (turnId 107808)
+
+1. Volume
+   Get-Volume F: Sources, ReFS, Healthy, SizeGiB 588.81, FreeGiB 389.98
+
+2. Baseline build (before any change)
+   dotnet build QBrainAi.sln -c Debug -nologo -v:minimal
+   exit=0; Build succeeded; 0 Error(s); Time Elapsed 00:01:56.51
+
+3. Hub probe (hub 10.42.0.214:7147, version 1.4.41-recovery+b53ce6b8, proxy hub token as X-Api-Key)
+   [no workspace header] -> 200 count=58 totalCount=58 firstIds=agent-pool-runtime-orchestration,ARCH-GRAPHRAG-001,ARCH-SERVICES-001,ARCH-STORAGE-001
+   [X-Workspace-Path=F:\GitHub\McpServer] -> 400 Unknown workspace path in X-Workspace-Path header: 'F:\GitHub\McpServer'.
+   [X-Workspace-Path=<hub hash id>] -> 400 Unknown workspace path in X-Workspace-Path header: '5D7B660CC7E8F984913D8CEBCFEB84C8408F2F3D896728AA3E5AAB525E6C2BB3'.
+   [proxy headers (as forwarded)] -> 400 Unknown workspace path in X-Workspace-Path header: 'F:\GitHub\McpServer'.
+
+4. Hub triage groups (GET /mcpserver/triage/groups/{id} on hub)
+   triage-group-18acf2d8a0adfecd status=failed createdTodoId=null lastError=Triage agent failed with state Error
+   triage-group-d708a0e30a2b7195 status=failed createdTodoId=null lastError=Triage agent failed with state Error
+   triage-group-bfc69ceba9e9f1fb status=failed createdTodoId=null lastError=Triage agent failed with state Error
+
+5. Operator decisions (AskUserQuestion, 2026-10-07)
+   D1 Fold into P1 (forward-slash storage lands with P1)
+   D2 Signed envelopes
+   D3 Hub-owned CurrentRequirementLayerKey
+   D4 Serve locally until per-workspace backfill completes
+
+6. Requirements registered (MCP requirements_create, workspace F:\GitHub\McpServer)
+   Readback dbo.Requirements (Id|Kind|WorkspaceId|IsDeleted):
+   FR-MCP-FED-BACKFILL-001|fr|F:\GitHub\McpServer|0
+   FR-MCP-FED-PATH-001|fr|F:\GitHub\McpServer|0
+   FR-MCP-FED-ROUTE-001|fr|F:\GitHub\McpServer|0
+   FR-MCP-FED-WSSYNC-001|fr|F:\GitHub\McpServer|0
+   FR-MCP-PATHNORM-001|fr|F:\GitHub\McpServer|0
+   TEST-MCP-FED-BACKFILL-001|test|F:\GitHub\McpServer|0
+   TEST-MCP-FED-PATH-001|test|F:\GitHub\McpServer|0
+   TEST-MCP-FED-ROUTE-001|test|F:\GitHub\McpServer|0
+   TEST-MCP-FED-WSSYNC-001|test|F:\GitHub\McpServer|0
+   TEST-MCP-PATHNORM-001|test|F:\GitHub\McpServer|0
+   TR-MCP-FED-BACKFILL-001|tr|F:\GitHub\McpServer|0
+   TR-MCP-FED-PATH-001|tr|F:\GitHub\McpServer|0
+   TR-MCP-FED-ROUTE-001|tr|F:\GitHub\McpServer|0
+   TR-MCP-FED-WSSYNC-001|tr|F:\GitHub\McpServer|0
+   TR-MCP-PATHNORM-001|tr|F:\GitHub\McpServer|0
+   Mappings (create responses): FR-MCP-FED-PATH-001->TR-MCP-FED-PATH-001/TEST-MCP-FED-PATH-001; FR-MCP-PATHNORM-001->TR-MCP-PATHNORM-001/TEST-MCP-PATHNORM-001; FR-MCP-FED-ROUTE-001->TR-MCP-FED-ROUTE-001/TEST-MCP-FED-ROUTE-001; FR-MCP-FED-WSSYNC-001->TR-MCP-FED-WSSYNC-001/TEST-MCP-FED-WSSYNC-001; FR-MCP-FED-BACKFILL-001->TR-MCP-FED-BACKFILL-001/TEST-MCP-FED-BACKFILL-001
+   Incidental: create responses report WorkspaceId "" (triage-report-430f89a36197402ea514069a09740afd, group triage-group-7fbb971dfefa49fb)
+
+7. TODOs (workspace F:\GitHub\McpServer), readback after PUT /mcpserver/todo/{id}
+   IMPL-FEDPATH-001 put=True FR=FR-MCP-FED-PATH-001,FR-MCP-PATHNORM-001 TR=TR-MCP-FED-PATH-001,TR-MCP-PATHNORM-001 dependsOn= tasks=5 ref=docs/plans/2026-10-07-federation-fixes.md
+   IMPL-FEDROUTE-001 put=True FR=FR-MCP-FED-ROUTE-001 TR=TR-MCP-FED-ROUTE-001 dependsOn=IMPL-FEDPATH-001 tasks=5 ref=docs/plans/2026-10-07-federation-fixes.md
+   IMPL-FEDWSSYNC-001 put=True FR=FR-MCP-FED-WSSYNC-001 TR=TR-MCP-FED-WSSYNC-001 dependsOn=IMPL-FEDROUTE-001 tasks=5 ref=docs/plans/2026-10-07-federation-fixes.md
+   IMPL-FEDBACKFILL-001 put=True FR=FR-MCP-FED-BACKFILL-001 TR=TR-MCP-FED-BACKFILL-001 dependsOn=IMPL-FEDWSSYNC-001 tasks=5 ref=docs/plans/2026-10-07-federation-fixes.md

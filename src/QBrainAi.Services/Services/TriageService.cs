@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using QBrainAi.Client;
 using QBrainAi.Support.Mcp;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Storage;
@@ -68,8 +69,13 @@ public sealed class TriageService : ITriageService
     private readonly TriageOptions _options;
     private readonly TimeProvider _timeProvider;
     private readonly ILogger<TriageService> _logger;
+    private readonly IWorkspacePathNormalizer _pathNormalizer;
 
-    /// <summary>Initializes a new instance of the <see cref="TriageService"/> class.</summary>
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TriageService"/> class. TR-MCP-FED-PATH-001:
+    /// request-supplied workspace paths go through the path normalizer, which defaults to the
+    /// running process host when none is injected.
+    /// </summary>
     public TriageService(
         McpDbContext db,
         WorkspaceContext workspaceContext,
@@ -80,8 +86,10 @@ public sealed class TriageService : ITriageService
         IPromptTemplateService promptTemplateService,
         IOptions<TriageOptions> options,
         TimeProvider timeProvider,
-        ILogger<TriageService> logger)
+        ILogger<TriageService> logger,
+        IWorkspacePathNormalizer? pathNormalizer = null)
     {
+        _pathNormalizer = pathNormalizer ?? new WorkspacePathNormalizer(SystemWorkspaceHostEnvironment.Instance);
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
         _workspaceService = workspaceService ?? throw new ArgumentNullException(nameof(workspaceService));
@@ -236,7 +244,7 @@ public sealed class TriageService : ITriageService
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(workspacePath))
-            _db.OverrideWorkspaceId(workspacePath.Trim());
+            _db.OverrideWorkspaceId(_pathNormalizer.Normalize(workspacePath));
 
         var query = _db.TriageGroups.AsQueryable();
         if (!string.IsNullOrWhiteSpace(status))
@@ -264,7 +272,7 @@ public sealed class TriageService : ITriageService
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(workspacePath))
-            _db.OverrideWorkspaceId(workspacePath.Trim());
+            _db.OverrideWorkspaceId(_pathNormalizer.Normalize(workspacePath));
 
         var groups = (await _db.TriageGroups
             .ToListAsync(cancellationToken)
@@ -302,7 +310,7 @@ public sealed class TriageService : ITriageService
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(workspacePath))
-            _db.OverrideWorkspaceId(workspacePath.Trim());
+            _db.OverrideWorkspaceId(_pathNormalizer.Normalize(workspacePath));
 
         var query = _db.TriageResearchRuns.AsQueryable();
         if (!string.IsNullOrWhiteSpace(status))
@@ -348,7 +356,7 @@ public sealed class TriageService : ITriageService
         CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(workspacePath))
-            _db.OverrideWorkspaceId(workspacePath.Trim());
+            _db.OverrideWorkspaceId(_pathNormalizer.Normalize(workspacePath));
 
         var runs = await _db.TriageResearchRuns
             .Where(run => !string.IsNullOrEmpty(run.CreatedTodoId))
@@ -891,7 +899,7 @@ public sealed class TriageService : ITriageService
             : group.EffectiveWorkspacePath;
         _workspaceContext.WorkspaceName = string.IsNullOrWhiteSpace(_workspaceContext.WorkspacePath)
             ? null
-            : Path.GetFileName(_workspaceContext.WorkspacePath);
+            : _pathNormalizer.GetLeafName(_workspaceContext.WorkspacePath);
     }
 
     private async Task ProcessGroupAsync(TriageGroupEntity group, CancellationToken cancellationToken)
@@ -1414,7 +1422,7 @@ public sealed class TriageService : ITriageService
         var candidate = TrimOrNull(request.WorkspacePath)
             ?? TrimOrNull(_workspaceContext.WorkspacePath)
             ?? Environment.CurrentDirectory;
-        return Path.GetFullPath(candidate);
+        return _pathNormalizer.Normalize(candidate);
     }
 
     private async Task<string> ResolveEffectiveWorkspaceAsync(
@@ -1429,7 +1437,7 @@ public sealed class TriageService : ITriageService
         var target = workspaces.Items.FirstOrDefault(IsQBrainAiWorkspace);
         return string.IsNullOrWhiteSpace(target?.WorkspacePath)
             ? originalWorkspacePath
-            : Path.GetFullPath(target.WorkspacePath);
+            : _pathNormalizer.Normalize(target.WorkspacePath);
     }
 
     private static bool IsQBrainAiWorkspace(WorkspaceDto workspace)

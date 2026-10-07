@@ -1,0 +1,90 @@
+P1.3 receipts (TEST-MCP-FED-PATH-001, TR-MCP-FED-PATH-001), 2026-10-07
+
+== P1.3a RED  WorkspaceServiceCrossPlatformPathTests
+  QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformPathTests.Init_ForeignPlatformWorkspace_CreatesNothingOnHost [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformPathTests.Get_WindowsHost_PosixWorkspace_FoundByEquivalentSpelling(registered: "/home/sharpninja/github/RideAudit", lookup: "/home/sharpninja/github/./RideAudit") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformPathTests.Get_WindowsHost_PosixWorkspace_FoundByEquivalentSpelling(registered: "/home/sharpninja/github/RideAudit", lookup: "/home/sharpninja/github/RideAudit/") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.WorkspaceServiceCrossPlatformPathTests.Create_WindowsHost_PosixWorkspace_StoresPosixIdentity [FAIL]
+  Failed!  - Failed:     4, Passed:     1, Skipped:     0, Total:     5, Duration: 1 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3a GREEN WorkspaceService*|WorkspacePathNormalizerTests|WorkspaceResolutionMiddleware|WorkspaceController
+  Passed!  - Failed:     0, Passed:    65, Skipped:     0, Total:    65, Duration: 2 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3a RED  HandoffWorkspacePathsTests|WorkspaceTokenServiceTests
+  QBrainAi.Support.Mcp.Tests.Services.WorkspaceTokenServiceTests.ResolveWorkspaceByToken_ForeignAbsoluteWorkspace_ReturnsUnmangledPath [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.HandoffWorkspacePathsTests.Canonicalize_SimulatedLinuxHost_UsesPathSyntax [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.HandoffWorkspacePathsTests.Canonicalize_ForeignAbsolutePath_IsNotReRootedOnHost [FAIL]
+  Failed!  - Failed:     3, Passed:    25, Skipped:     0, Total:    28, Duration: 3 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3a GREEN Handoff*|WorkspaceTokenService*|WorkspaceServiceAccessor|McpStdio|WorkspaceAuth|ApiKey (1 pre-existing baseline failure)
+  QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+  Failed!  - Failed:     1, Passed:   265, Skipped:     0, Total:   266, Duration: 11 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3b RED  ratchet|attribution validator|normalizer Combine
+  QBrainAi.Support.Mcp.Tests.Services.SessionLogWorkspaceAttributionValidatorCrossPlatformTests.ValidatePaths_HostRewriteOfForeignRoot_IsOutside [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.Combine_CollapsesDotSegments [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.Combine_RootedSegment_ReplacesRoot [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.Combine_UsesRootPlatformSyntax_OnEitherHost(root: "C:\\Users\\kingd", expectedRaw: "C:\\Users\\kingd\\docs\\sessions") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.Combine_UsesRootPlatformSyntax_OnEitherHost(root: "/home/sharpninja/github/McpServer", expectedRaw: "/home/sharpninja/github/McpServer/docs/sessions") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetTests.IdentityFiles_HaveNoDirectGetFullPath [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetTests.AllOtherFiles_StayWithinReviewedAllowlist [FAIL]
+  Failed!  - Failed:     7, Passed:    29, Skipped:     0, Total:    36, Duration: 614 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3b GREEN ratchet|attribution|normalizer|Todo|Requirements|HostileReview|AgentPool|GitHubWorkspaceToken|SessionLog (2 pre-existing baseline failures)
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [FAIL]
+  Failed!  - Failed:     2, Passed:   898, Skipped:     0, Total:   900, Duration: 2 m 20 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3c RED  WorkspaceContextTests|WorkspaceResolutionMiddlewareTests
+  QBrainAi.Support.Mcp.Tests.Services.WorkspaceContextTests.SetDerivedPaths_ForeignPlatformWorkspace_UsesWorkspaceSyntax [FAIL]
+  QBrainAi.Support.Mcp.Tests.Middleware.WorkspaceResolutionMiddlewareTests.XWorkspacePath_ForeignPlatformWorkspace_DerivesPathsInWorkspaceSyntax [FAIL]
+  Failed!  - Failed:     2, Passed:    26, Skipped:     0, Total:    28, Duration: 2 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3c GREEN WorkspaceContext|Middleware|McpStdio|WorkspacePath|Ingest
+  Passed!  - Failed:     0, Passed:   362, Skipped:     0, Total:   362, Duration: 1 m 2 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3c RED  RepoFileServiceTests
+  QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.WriteAsync_ForeignPlatformWorkspace_FailsAndCreatesNothing [FAIL]
+  Failed!  - Failed:     1, Passed:    38, Skipped:     0, Total:    39, Duration: 596 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.3c GREEN RepoFile|RepoController|ratchet
+  Passed!  - Failed:     0, Passed:    42, Skipped:     0, Total:    42, Duration: 1 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== Baseline (clean worktree .worktrees/federation-baseline-20261007 at f56dcf70, no changes; complete run)
+  QBrainAi.Support.Mcp.Tests exit=1
+  Failed!  - Failed:    13, Passed:  2975, Skipped:     0, Total:  2988, Duration: 15 h 9 m - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [FAIL]
+  QBrainAi.Client.Tests exit=0
+  Passed!  - Failed:     0, Passed:   304, Skipped:     0, Total:   304, Duration: 949 ms - QBrainAi.Client.Tests.dll (net10.0)
+  Build.Tests exit=1
+  Failed!  - Failed:    13, Passed:   338, Skipped:     0, Total:   351, Duration: 3 m 40 s - Build.Tests.dll (net10.0)
+  NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings [FAIL]
+  NukeBuild.Tests.BuildTargetTests.InstallReplTool_ParsesInstalledGlobalToolVersion [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "configuration") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "apphost") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "unit") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "environment") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles [FAIL]
+  NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+  NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False) [FAIL]
+  NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent) [FAIL]
+  
+  [exited with code 1]
+
+Pre-existing failures seen in P1.3 runs and present on baseline: HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport (triage-report-4635ba853ac74942996858c1981d3a81); RemoveTodoRecordsMigrationTests x2 (TriageGroups has no column IsQBrainAiRelated).
+

@@ -1,0 +1,44 @@
+P1.3 checkpoint gate (baseline-relative), 2026-10-07
+Branch claude/federation-fixes-20261007 working tree vs clean baseline f56dcf70
+
+  QBrainAi.Support.Mcp.Tests exit=1
+  Failed!  - Failed:    13, Passed:  3029, Skipped:     0, Total:  3042, Duration: 3 m 35 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [FAIL]
+  QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [FAIL]
+  QBrainAi.Client.Tests exit=0
+  Passed!  - Failed:     0, Passed:   304, Skipped:     0, Total:   304, Duration: 933 ms - QBrainAi.Client.Tests.dll (net10.0)
+  Build.Tests exit=1
+  Failed!  - Failed:    13, Passed:   338, Skipped:     0, Total:   351, Duration: 2 m 37 s - Build.Tests.dll (net10.0)
+  NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False) [FAIL]
+  NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+  NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+  NukeBuild.Tests.BuildTargetTests.InstallReplTool_ParsesInstalledGlobalToolVersion [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "apphost") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "unit") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "configuration") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "environment") [FAIL]
+  NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [FAIL]
+  NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent) [FAIL]
+  
+  [exited with code 1]
+
+Set comparison of [FAIL] names (branch vs baseline):
+  baseline=26 branch=26
+  new failures: 0
+  baseline now passing: 0
+  Support.Mcp.Tests total 2988 -> 3042 (+54 tests, all passing)
+Result: GATE PASS (failing set identical to baseline)

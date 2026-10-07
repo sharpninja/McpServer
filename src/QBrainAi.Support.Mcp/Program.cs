@@ -491,6 +491,9 @@ builder.Services.AddCqrsHandlers(typeof(RememberMemoryCommand).Assembly);
 builder.Services.AddUseCaseCqrs();
 builder.Services.AddProductCqrs();
 builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
+// TR-MCP-FED-PATH-001: request-supplied workspace paths are interpreted by their own syntax.
+builder.Services.AddSingleton<QBrainAi.Client.IWorkspaceHostEnvironment>(QBrainAi.Client.SystemWorkspaceHostEnvironment.Instance);
+builder.Services.AddSingleton<QBrainAi.Client.IWorkspacePathNormalizer>(QBrainAi.Client.WorkspacePathNormalizer.Process);
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
 builder.Services.AddScoped<IWorkspacePolicyService, WorkspacePolicyService>();

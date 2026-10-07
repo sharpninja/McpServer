@@ -270,6 +270,15 @@ public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
         if (IsPathTraversal(relativePath))
             return false;
 
+        // FR-MCP-FED-PATH-001-AC4: a foreign-platform workspace (e.g. a Windows proxy's workspace
+        // on a Linux hub) has no files on this host; resolving it would re-root it onto a host path.
+        var workspaceRoot = _workspaceContext.WorkspacePath ?? _options.RepoRoot;
+        if (string.IsNullOrWhiteSpace(workspaceRoot) ||
+            !QBrainAi.Client.WorkspacePathNormalizer.Process.IsHostNative(workspaceRoot))
+        {
+            return false;
+        }
+
         var repoRoot = GetRepoRoot();
         var candidate = Path.GetFullPath(Path.Combine(repoRoot, relativePath));
         if (!IsPathWithinRoot(repoRoot, candidate))

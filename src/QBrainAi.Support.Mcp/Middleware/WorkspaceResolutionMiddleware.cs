@@ -258,8 +258,7 @@ public sealed class WorkspaceResolutionMiddleware
         // workspace was resolved via the anonymous API key.
         ctx.IsDefaultKey = isDefault && httpContext.User.Identity?.IsAuthenticated != true;
 
-        // Derive session and external docs paths from workspace path
-        ctx.SessionsPath = Path.Combine(ws.WorkspacePath, "docs", "sessions");
-        ctx.ExternalDocsPath = Path.Combine(ws.WorkspacePath, "docs", "external");
+        // Derive session and external docs paths in the workspace's own path syntax.
+        ctx.SetDerivedPaths(ws.WorkspacePath);
     }
 }

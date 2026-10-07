@@ -43,7 +43,7 @@ public sealed class HostileReviewService : IHostileReviewService, IHostileReview
         cancellationToken.ThrowIfCancellationRequested();
 
         if (!string.IsNullOrWhiteSpace(request.WorkspacePath)
-            && !string.Equals(Path.GetFullPath(request.WorkspacePath), Path.GetFullPath(_workspaceId), StringComparison.OrdinalIgnoreCase)
+            && !QBrainAi.Client.WorkspaceIdentityPath.AreEquivalent(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(request.WorkspacePath), QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(_workspaceId))
             && !string.Equals(request.WorkspacePath, _workspaceId, StringComparison.OrdinalIgnoreCase))
         {
             return new HostileReviewResult

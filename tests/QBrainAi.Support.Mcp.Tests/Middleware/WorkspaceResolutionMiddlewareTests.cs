@@ -64,6 +64,28 @@ public sealed class WorkspaceResolutionMiddlewareTests
         return ctx;
     }
 
+    /// <summary>
+    /// TEST-MCP-FED-PATH-001: a foreign-platform workspace resolved by header gets derived paths
+    /// in its own syntax, not host Path.Combine output with mixed separators.
+    /// </summary>
+    [Fact]
+    public async Task XWorkspacePath_ForeignPlatformWorkspace_DerivesPathsInWorkspaceSyntax()
+    {
+        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/RideAudit" : @"C:\Users\kingd\repo";
+        var workspaceService = CreateWorkspaceService(MakeDto(foreign));
+        var wsContext = new WorkspaceContext();
+        var mw = CreateMiddleware(_ => Task.CompletedTask);
+        var ctx = CreateContext("/mcpserver/todo", workspaceHeader: foreign);
+
+        await mw.InvokeAsync(ctx, wsContext, new WorkspaceTokenService(), workspaceService);
+
+        Assert.Equal(foreign, wsContext.WorkspacePath);
+        Assert.Equal(
+            QBrainAi.Client.WorkspacePathNormalizer.Process.Combine(foreign, "docs", "sessions"),
+            wsContext.SessionsPath);
+        Assert.False(wsContext.SessionsPath!.Contains('/') && wsContext.SessionsPath.Contains('\\'), wsContext.SessionsPath);
+    }
+
     [Fact]
     public async Task XWorkspacePath_Header_ResolvesWorkspace()
     {

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using QBrainAi.Client;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Support.Mcp.Storage;
@@ -31,10 +32,16 @@ public sealed class WorkspaceService : IWorkspaceService
     private readonly IChangeEventBus? _eventBus;
     private readonly IWikiDumpService? _wikiDumpService;
     private readonly ILogger<WorkspaceService> _logger;
+    private readonly IWorkspacePathNormalizer _pathNormalizer;
 
-    /// <summary>Initializes a new instance of the <see cref="WorkspaceService"/> class.</summary>
-    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, IProcessRunner processRunner, ILogger<WorkspaceService> logger, IChangeEventBus? eventBus = null, IWikiDumpService? wikiDumpService = null)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WorkspaceService"/> class. TR-MCP-FED-PATH-001:
+    /// workspace paths are normalized by their own syntax through the path normalizer, which
+    /// defaults to the running process host.
+    /// </summary>
+    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, IProcessRunner processRunner, ILogger<WorkspaceService> logger, IChangeEventBus? eventBus = null, IWikiDumpService? wikiDumpService = null, IWorkspacePathNormalizer? pathNormalizer = null)
     {
+        _pathNormalizer = pathNormalizer ?? WorkspacePathNormalizer.Process;
         _configuration = configuration;
         _env = env;
         _processRunner = processRunner;
@@ -52,8 +59,9 @@ public sealed class WorkspaceService : IWorkspaceService
         IWorkspaceProjectionWriter projectionWriter,
         ILogger<WorkspaceService> logger,
         IChangeEventBus? eventBus = null,
-        IWikiDumpService? wikiDumpService = null)
-        : this(configuration, env, processRunner, logger, eventBus, wikiDumpService)
+        IWikiDumpService? wikiDumpService = null,
+        IWorkspacePathNormalizer? pathNormalizer = null)
+        : this(configuration, env, processRunner, logger, eventBus, wikiDumpService, pathNormalizer)
     {
         _db = db;
         _projectionWriter = projectionWriter;
@@ -113,8 +121,6 @@ public sealed class WorkspaceService : IWorkspaceService
         var normalized = NormalizePath(request.WorkspacePath);
         if (string.IsNullOrWhiteSpace(normalized))
             return new WorkspaceMutationResult(false, "WorkspacePath is required.");
-        if (!Path.IsPathRooted(normalized))
-            return new WorkspaceMutationResult(false, "WorkspacePath must be an absolute path.");
 
         await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -129,7 +135,7 @@ public sealed class WorkspaceService : IWorkspaceService
                 WorkspacePath = normalized,
                 Name = !string.IsNullOrWhiteSpace(request.Name) ? request.Name.Trim() : DeriveNameFromPath(normalized),
                 TodoPath = !string.IsNullOrWhiteSpace(request.TodoPath) ? request.TodoPath.Trim() : DefaultTodoPath,
-                DataDirectory = string.IsNullOrWhiteSpace(request.DataDirectory) ? null : Path.GetFullPath(request.DataDirectory.Trim()),
+                DataDirectory = NormalizeOptionalPath(request.DataDirectory),
                 TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim(),
                 RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim(),
                 PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim(),
@@ -186,7 +192,7 @@ public sealed class WorkspaceService : IWorkspaceService
             if (request.RunAs is not null)
                 entry.RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim();
             if (request.DataDirectory is not null)
-                entry.DataDirectory = string.IsNullOrWhiteSpace(request.DataDirectory) ? null : Path.GetFullPath(request.DataDirectory.Trim());
+                entry.DataDirectory = NormalizeOptionalPath(request.DataDirectory);
             if (request.IsPrimary is not null)
                 entry.IsPrimary = request.IsPrimary.Value;
             if (request.IsEnabled is not null)
@@ -266,6 +272,11 @@ public sealed class WorkspaceService : IWorkspaceService
         if (entry is null)
             return new WorkspaceInitResult(false, $"Workspace not found: {normalized}");
 
+        // FR-MCP-FED-PATH-001-AC4: a foreign-platform workspace (e.g. a Windows proxy's path on a
+        // Linux hub) is an identity only; creating it here would invent a host directory.
+        if (!_pathNormalizer.IsHostNative(normalized))
+            return new WorkspaceInitResult(false, $"Workspace path is not accessible on this host: {normalized}");
+
         var filesCreated = new List<string>();
         try
         {
@@ -311,8 +322,6 @@ public sealed class WorkspaceService : IWorkspaceService
         var normalized = NormalizePath(request.WorkspacePath);
         if (string.IsNullOrWhiteSpace(normalized))
             return new WorkspaceMutationResult(false, "WorkspacePath is required.");
-        if (!Path.IsPathRooted(normalized))
-            return new WorkspaceMutationResult(false, "WorkspacePath must be an absolute path.");
 
         await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -620,19 +629,26 @@ public sealed class WorkspaceService : IWorkspaceService
         return jsonContentRoot; // fallback — will throw a clear error on read
     }
 
-    private static string DeriveNameFromPath(string path)
-    {
-        var name = Path.GetFileName(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-        return string.IsNullOrWhiteSpace(name) ? "workspace" : name;
-    }
-
-    private static string NormalizePath(string path)
+    private string DeriveNameFromPath(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
-            return string.Empty;
+            return "workspace";
 
-        return Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+        // TR-MCP-FED-PATH-001: split on the path's own separators; a bare root has no leaf.
+        var name = _pathNormalizer.GetLeafName(path);
+        return string.IsNullOrWhiteSpace(name) || name == _pathNormalizer.Normalize(path) ? "workspace" : name;
     }
+
+    /// <summary>
+    /// TR-MCP-FED-PATH-001: canonical workspace identity by path syntax. The result is always
+    /// absolute: host-native paths are resolved against the host and foreign-platform paths are
+    /// already absolute in their own syntax.
+    /// </summary>
+    private string NormalizePath(string path) =>
+        string.IsNullOrWhiteSpace(path) ? string.Empty : _pathNormalizer.Normalize(path);
+
+    private string? NormalizeOptionalPath(string? path) =>
+        string.IsNullOrWhiteSpace(path) ? null : _pathNormalizer.Normalize(path);
 
     /// <summary>Returns null when the prompt value is empty/whitespace or matches the built-in default.</summary>
     private static string? StripIfDefault(string promptName, string? value)
@@ -667,7 +683,7 @@ public sealed class WorkspaceService : IWorkspaceService
         return normalized;
     }
 
-    private static WorkspaceConfigEntry CreateConfigEntry(WorkspaceCreateRequest request, string normalized)
+    private WorkspaceConfigEntry CreateConfigEntry(WorkspaceCreateRequest request, string normalized)
     {
         var now = DateTimeOffset.UtcNow;
         return new WorkspaceConfigEntry
@@ -675,7 +691,7 @@ public sealed class WorkspaceService : IWorkspaceService
             WorkspacePath = normalized,
             Name = !string.IsNullOrWhiteSpace(request.Name) ? request.Name.Trim() : DeriveNameFromPath(normalized),
             TodoPath = !string.IsNullOrWhiteSpace(request.TodoPath) ? request.TodoPath.Trim() : DefaultTodoPath,
-            DataDirectory = string.IsNullOrWhiteSpace(request.DataDirectory) ? null : Path.GetFullPath(request.DataDirectory.Trim()),
+            DataDirectory = NormalizeOptionalPath(request.DataDirectory),
             TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim(),
             RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim(),
             PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim(),
@@ -694,7 +710,7 @@ public sealed class WorkspaceService : IWorkspaceService
         };
     }
 
-    private static WorkspaceEntity ToEntity(WorkspaceConfigEntry entry)
+    private WorkspaceEntity ToEntity(WorkspaceConfigEntry entry)
     {
         var normalized = NormalizePath(entry.WorkspacePath);
         var created = entry.DateTimeCreated == default ? DateTimeOffset.UtcNow : entry.DateTimeCreated;
@@ -754,7 +770,7 @@ public sealed class WorkspaceService : IWorkspaceService
         };
     }
 
-    private static void ApplyConfigEntry(WorkspaceEntity entity, WorkspaceConfigEntry entry)
+    private void ApplyConfigEntry(WorkspaceEntity entity, WorkspaceConfigEntry entry)
     {
         entity.WorkspaceId = NormalizePath(entry.WorkspacePath);
         entity.WorkspacePath = NormalizePath(entry.WorkspacePath);
@@ -779,7 +795,7 @@ public sealed class WorkspaceService : IWorkspaceService
         entity.DateTimeModified = DateTimeOffset.UtcNow;
     }
 
-    private static void ApplyUpdate(WorkspaceEntity entity, WorkspaceUpdateRequest request, string normalized)
+    private void ApplyUpdate(WorkspaceEntity entity, WorkspaceUpdateRequest request, string normalized)
     {
         if (request.Name is not null)
             entity.Name = string.IsNullOrWhiteSpace(request.Name) ? DeriveNameFromPath(normalized) : request.Name.Trim();
@@ -790,7 +806,7 @@ public sealed class WorkspaceService : IWorkspaceService
         if (request.RunAs is not null)
             entity.RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim();
         if (request.DataDirectory is not null)
-            entity.DataDirectory = string.IsNullOrWhiteSpace(request.DataDirectory) ? null : Path.GetFullPath(request.DataDirectory.Trim());
+            entity.DataDirectory = NormalizeOptionalPath(request.DataDirectory);
         if (request.IsPrimary is not null)
             entity.IsPrimary = request.IsPrimary.Value;
         if (request.IsEnabled is not null)
