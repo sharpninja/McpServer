@@ -10,11 +10,11 @@ Copy everything below the line into the next agent.
 
 - The plan is **NOT APPROVED**. Do not implement any step, including P0 (requirements, use cases, TODO creation), until the operator explicitly approves it. The operator may still be typing corrections.
 - Authoritative copy: MCP TODO `PLAN-SESSIONTURNREVIEW-001` (priority high, section SessionLog, done=false). Retrieve with `workflow.todo.get` `id: PLAN-SESSIONTURNREVIEW-001`.
-  - `description`: the full plan text. Verified on 2026-10-09 after the round-4 and coordination edits: all 499 non-empty lines of the source file are stored exactly (PowerShell `Get-Content` count, non-empty = non-whitespace); the server drops blank lines.
+  - `description`: the full plan text. Verified on 2026-10-09 after the round-4 and coordination edits: all 501 non-empty lines of the source file are stored exactly (PowerShell `Get-Content` count, non-empty = non-whitespace); the server drops blank lines.
   - `implementationTasks` (30): operator approval, P0.1-P0.9, A1-A9, S1-S11.
   - `note`: the not-approved status. `technicalDetails`: session, worktree, and baseline facts.
   - FR/TR arrays are empty on purpose. The new FR/TR/TEST ids are created in P0 and do not exist in the store yet.
-- Local source of the plan, on PAYTON-OMARCHY only: `/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md` (616 lines, 499 non-empty, PowerShell `Get-Content` count after the round-4 and coordination edits). If the operator corrects the plan, update this file and the TODO description together, and verify the TODO round trip.
+- Local source of the plan, on PAYTON-OMARCHY only: `/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md` (618 lines, 501 non-empty, PowerShell `Get-Content` count after the round-4 and coordination edits). If the operator corrects the plan, update this file and the TODO description together, and verify the TODO round trip.
 
 ## What the plan does (one paragraph)
 
