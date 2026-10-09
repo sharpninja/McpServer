@@ -1,0 +1,259 @@
+{
+  "TimestampUtc": "2026-10-09T20:21:12Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "liveProofPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T15-05-26-01a12245-3e49-70b0-9be4-7e5280ba2c6e.jsonl",
+    "turnContextUtc": "2026-10-09T20:05:27Z",
+    "threadId": "01a12245-3e49-70b0-9be4-7e5280ba2c6e"
+  },
+  "MandatoryReads": {
+    "addProfileSkillRead": true,
+    "profileNonSkillMarkdownCount": 19,
+    "profileNonSkillMarkdownReadInFull": true,
+    "mainMarkerReadInFull": true,
+    "mainMarkerRestartUtc": "2026-10-09T20:03:47Z",
+    "memoryListRun": true,
+    "effectiveMemoryCount": 14,
+    "everyEffectiveMemoryRead": true,
+    "planLines": 643,
+    "planNonemptyLines": 523,
+    "handoffLines": 126,
+    "priorRoundsRead": [
+      "r1",
+      "r2",
+      "r3",
+      "r4",
+      "r5",
+      "r6",
+      "r7"
+    ]
+  },
+  "Scope": "Plan readiness only; implementation conduct, infrastructure repair and Pi3 monitor excluded.",
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "UNKNOWN",
+      "evidence": "Static routes, code anchors, targets, plugin inventory checked; empirical host behavior and executable gates remain unverified."
+    },
+    {
+      "id": "P2",
+      "status": "FAIL",
+      "evidence": "Mapping rows 394,406,410 claim TEST coverage absent from TEST statements 379,382,389.",
+      "findings": [
+        "F-R8-03"
+      ]
+    },
+    {
+      "id": "P3",
+      "status": "FAIL",
+      "evidence": "D1/D5 one-turn enqueue mint conflicts with hook fallback before detached bridge processes enqueue, lines 29-30,82,340,573.",
+      "findings": [
+        "F-R8-01"
+      ]
+    },
+    {
+      "id": "P4",
+      "status": "FAIL",
+      "evidence": "P0.2 omits host probes required at lines 85,87-89; universal installed-host smoke line 629 lacks D6 unsupported branch.",
+      "findings": [
+        "F-R8-02",
+        "F-R8-05"
+      ]
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "skipped_duplicate wire outcome has no trigger or cardinality definition, lines 119,215,540,569.",
+      "findings": [
+        "F-R8-01",
+        "F-R8-06"
+      ]
+    },
+    {
+      "id": "P6",
+      "status": "UNKNOWN",
+      "evidence": "Named paths and build targets exist, but SDK 10.0.111, missing Pester/bats/dotnet-ef prevent execution; P0.1 provisions them."
+    },
+    {
+      "id": "P7",
+      "status": "FAIL",
+      "evidence": "Mapping TEST declarations and S4/A3 RED cases miss named ACs, lines 367,389,439,573,595.",
+      "findings": [
+        "F-R8-01",
+        "F-R8-03",
+        "F-R8-04"
+      ]
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "Host table P0.2 probes differ from P0.2 checklist; universal smoke contradicts D6.",
+      "findings": [
+        "F-R8-02",
+        "F-R8-05"
+      ]
+    },
+    {
+      "id": "P9",
+      "status": "FAIL",
+      "evidence": "TODO description 523 nonempty lines and 30 tasks match; handoff line 94 claims five triage IDs appear in plan Risks 617-623, but they do not.",
+      "findings": [
+        "F-R8-07"
+      ]
+    },
+    {
+      "id": "P10",
+      "status": "PASS",
+      "evidence": "Plan risk reports and failed worktree group verified live; plugin defects scheduled A9; pending group relocation accurately disclosed and excluded from plan implementation score."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 94,
+  "Completeness": 86,
+  "Confidence": 97,
+  "PassCount": 1,
+  "FailCount": 7,
+  "UnknownCount": 2,
+  "FailList": [
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "UnknownList": [
+    "P1",
+    "P6"
+  ],
+  "Findings": [
+    {
+      "id": "F-R8-01",
+      "planLines": [
+        29,
+        30,
+        82,
+        340,
+        573
+      ],
+      "classification": "implementer_fix",
+      "defect": "Prompt hook can mint before detached arrival bridge handles same enqueue; bridge then mints a second turn.",
+      "fix": "Specify race-safe bidirectional correlation and reconciliation; RED tests for hook-first, bridge-first, concurrent and crash cases."
+    },
+    {
+      "id": "F-R8-02",
+      "planLines": [
+        85,
+        87,
+        88,
+        89,
+        169,
+        174
+      ],
+      "classification": "implementer_fix",
+      "defect": "P0.2 four-check list omits Copilot, Grok Bot and classic Cline probes required by host table.",
+      "fix": "Add probes, receipts, unavailable disposition and matching TODO task."
+    },
+    {
+      "id": "F-R8-03",
+      "planLines": [
+        379,
+        382,
+        389,
+        394,
+        406,
+        410
+      ],
+      "classification": "implementer_fix",
+      "defect": "FR to TEST mapping edges exceed what TEST validation statements name.",
+      "fix": "Align mapping rows and TEST validation statements with real AC coverage."
+    },
+    {
+      "id": "F-R8-04",
+      "planLines": [
+        367,
+        389,
+        439,
+        573,
+        595
+      ],
+      "classification": "implementer_fix",
+      "defect": "S4 RED omits catalog SessionLogTurnReviewSectionTests; contended-lock/no-mint AC lacks named test.",
+      "fix": "Name section and contended no-mint tests in catalog, allocation and slice RED."
+    },
+    {
+      "id": "F-R8-05",
+      "planLines": [
+        31,
+        83,
+        87,
+        88,
+        89,
+        251,
+        629
+      ],
+      "classification": "implementer_fix",
+      "defect": "Universal installed-host positive smoke contradicts allowed D6 unsupported hosts.",
+      "fix": "Branch smoke by supported versus unsupported capability disposition."
+    },
+    {
+      "id": "F-R8-06",
+      "planLines": [
+        119,
+        215,
+        540,
+        569
+      ],
+      "classification": "operator_decision",
+      "defect": "skipped_duplicate has no externally observable semantic trigger or cardinality.",
+      "options": [
+        "A: duplicate input entries in one submission are skipped_duplicate",
+        "B: identical no-op persisted turns are skipped_duplicate"
+      ],
+      "fix": "Choose semantics, specify outcome for other case and status/reason, add tests."
+    },
+    {
+      "id": "F-R8-07",
+      "planLines": [
+        617,
+        618,
+        619,
+        620,
+        621,
+        622,
+        623
+      ],
+      "handoffLine": 94,
+      "classification": "implementer_fix",
+      "defect": "Handoff claims five extra triage IDs are in plan Risks; they are not.",
+      "fix": "Correct handoff or add the five IDs with disposition to plan Risks and preserve TODO parity."
+    }
+  ],
+  "ImplementerFixes": [
+    "F-R8-01",
+    "F-R8-02",
+    "F-R8-03",
+    "F-R8-04",
+    "F-R8-05",
+    "F-R8-07"
+  ],
+  "OperatorDecisionFails": [
+    "F-R8-06"
+  ],
+  "HeadSha": "76c19e15695563c2d60e5955dff120fc0c97c767",
+  "ReceiptPaths": {
+    "markdown": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r8-20261009T200525Z.md",
+    "json": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r8-20261009T200525Z.json",
+    "requestJsonl": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T200525Z-plan-readiness-r8.request.jsonl",
+    "responseJsonl": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T200525Z-plan-readiness-r8.response.jsonl"
+  },
+  "MarkdownSha256": "e8abdf596991f21d2f299530d57ec5287669a439e564a64799d2311ead81182c",
+  "ReviewerSessionId": "Codex-20261009T200737Z-plugin-session",
+  "ReviewerRequestId": "req-20261009T200740Z-prompt-4eb2",
+  "ReviewerTurnId": 428,
+  "PersistenceProof": "client.SessionLog.QueryAsync after CompleteTurnAsync: session Codex-20261009T200737Z-plugin-session, request req-20261009T200740Z-prompt-4eb2, turn 428 completed; response 21926 chars at first readback, all 10 claim IDs and all 7 finding IDs, 3 actions, 1 design decision, 2 dialog entries. Final receipt update is repatched and reverified.",
+  "SecretHandling": "No credential value in reviewer receipt; runner response redacted after accidental marker output."
+}
