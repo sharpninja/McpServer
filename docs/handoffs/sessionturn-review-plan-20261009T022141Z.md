@@ -10,11 +10,11 @@ Copy everything below the line into the next agent.
 
 - The plan is **NOT APPROVED**. Do not implement any step, including P0 (requirements, use cases, TODO creation), until the operator explicitly approves it. The operator may still be typing corrections.
 - Authoritative copy: MCP TODO `PLAN-SESSIONTURNREVIEW-001` (priority high, section SessionLog, done=false). Retrieve with `workflow.todo.get` `id: PLAN-SESSIONTURNREVIEW-001`.
-  - `description`: the full plan text. Verified on 2026-10-09 after the round-4 and coordination edits: all 501 non-empty lines of the source file are stored exactly (PowerShell `Get-Content` count, non-empty = non-whitespace); the server drops blank lines.
+  - `description`: the full plan text. Verified on 2026-10-09 after the round-4 and coordination edits: all 507 non-empty lines of the source file are stored exactly (PowerShell `Get-Content` count, non-empty = non-whitespace); the server drops blank lines.
   - `implementationTasks` (30): operator approval, P0.1-P0.9, A1-A9, S1-S11.
   - `note`: the not-approved status. `technicalDetails`: session, worktree, and baseline facts.
   - FR/TR arrays are empty on purpose. The new FR/TR/TEST ids are created in P0 and do not exist in the store yet.
-- Local source of the plan, on PAYTON-OMARCHY only: `/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md` (618 lines, 501 non-empty, PowerShell `Get-Content` count after the round-4 and coordination edits). If the operator corrects the plan, update this file and the TODO description together, and verify the TODO round trip.
+- Local source of the plan, on PAYTON-OMARCHY only: `/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md` (624 lines, 507 non-empty, PowerShell `Get-Content` count after the round-4 and coordination edits). If the operator corrects the plan, update this file and the TODO description together, and verify the TODO round trip.
 
 ## What the plan does (one paragraph)
 
@@ -34,7 +34,7 @@ Scope covers the server, client, REPL, MCP tools, the PowerShell and Node plugin
 
 The full list is in the plan, section "Locked operator decisions (2026-10-09)". Key points:
 - Every user request is exactly one turn, including messages queued mid-turn. Actions and decisions map to the turn of the request that caused them.
-- Operator decisions on 2026-10-09 after Codex plan-readiness round 1: D1 the server issues the request token when a message arrives; D2 writes are tied to their request automatically through the agent app's hooks; D3 the use-case coverage gate checks only this plan's requirements; D4 a review with status Other requires the Other reason (`otherNotes`). After round 2 the operator chose D5: queued mid-turn messages are minted at enqueue by an arrival bridge ("Arrival bridge"). After round 3 the operator chose D6: hosts without an arrival mechanism are unsupported for turn logging, with no first-sight waivers ("Adapters or unsupported").
+- Operator decisions on 2026-10-09 after Codex plan-readiness round 1: D1 the server issues the request token when a message arrives; D2 writes are tied to their request automatically through the agent app's hooks; D3 the use-case coverage gate checks only this plan's requirements; D4 a review with status Other requires the Other reason (`otherNotes`). After round 2 the operator chose D5: queued mid-turn messages are minted at enqueue by an arrival bridge ("Arrival bridge"). After round 3 the operator chose D6: hosts without an arrival mechanism are unsupported for turn logging, with no first-sight waivers ("Adapters or unsupported"). The operator then confirmed D7 (plugin equivalence across all QBrain.AI plugins, limited by each hosts plugin infrastructure, with limitations documented in docs/AGENT-PLUGIN-FEATURE-MATRIX.md; D6 unsupported hosts are such documented limitations) and D8 (add mcpserver-grok-bot-plugin, making nine plugins).
 - Strict BDPv4 per slice:
   - contract and stubs first;
   - RED;
