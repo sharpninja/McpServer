@@ -722,6 +722,33 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <summary>Windows UpdateService validates a complete stage before it stops the live service.</summary>
+    [Fact]
+    public void UpdateService_StagesBaselineConfigurationBeforeStoppingWindowsService()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.UpdateService.cs"));
+        const string stageCall = "WindowsServiceHelper.EnsureBaselineConfiguration(stageDir, baselineConfigPath);";
+        const string stopCall = "WindowsServiceHelper.StopService(serviceName, serviceProcessName);";
+        const string backupCall = "WindowsServiceHelper.BackupPreservedState(installPath, backupDir, archivePath);";
+        const string copyCall = "WindowsServiceHelper.CopyDirectory(stageDir, installPath);";
+
+        Assert.Contains(stageCall, source, StringComparison.Ordinal);
+        Assert.Contains(stopCall, source, StringComparison.Ordinal);
+        Assert.Contains(backupCall, source, StringComparison.Ordinal);
+        Assert.Contains(copyCall, source, StringComparison.Ordinal);
+        Assert.True(
+            source.IndexOf(stageCall, StringComparison.Ordinal) < source.IndexOf(stopCall, StringComparison.Ordinal),
+            "The complete publish stage must be validated before the service is stopped.");
+        Assert.True(
+            source.IndexOf(stopCall, StringComparison.Ordinal) < source.IndexOf(backupCall, StringComparison.Ordinal),
+            "The live service must stop before its mutable state is backed up.");
+        Assert.True(
+            source.IndexOf(backupCall, StringComparison.Ordinal) < source.IndexOf(copyCall, StringComparison.Ordinal),
+            "Backup must complete before published files replace the live installation.");
+    }
+
+
     /// <summary>
     /// TEST-NUKE-002: BackupPreservedState tolerates a first-time install where the
     /// install root does not yet exist - it creates the root, performs no backup, and
