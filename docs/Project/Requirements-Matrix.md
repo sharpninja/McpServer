@@ -1238,6 +1238,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-USECASE-015 | Tracked | Functional-Requirements.md |
 | FR-MCP-USECASE-016 | Tracked | Functional-Requirements.md |
 | FR-MCP-USECASE-017 | Tracked | Functional-Requirements.md |
+| FR-MCP-USECASE-018 | Tracked | Functional-Requirements.md |
 | FR-WEB-001 | Tracked | Functional-Requirements.md |
 | FR-WEB-002 | Tracked | Functional-Requirements.md |
 | FR-WEB-003 | Tracked | Functional-Requirements.md |
@@ -1261,6 +1262,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-USECASE-017 | Tracked | Technical-Requirements.md |
 | TR-MCP-USECASE-018 | Tracked | Technical-Requirements.md |
 | TR-MCP-USECASE-019 | Tracked | Technical-Requirements.md |
+| TR-MCP-USECASE-020 | Tracked | Technical-Requirements.md |
 | TR-WEB-API-001 | Tracked | Technical-Requirements.md |
 | TR-WEB-BUDGET-001 | Tracked | Technical-Requirements.md |
 | TR-WEB-CTX-001 | Tracked | Technical-Requirements.md |
@@ -1278,6 +1280,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-USECASE-018 | Tracked | Testing-Requirements.md |
 | TEST-MCP-USECASE-019 | Tracked | Testing-Requirements.md |
 | TEST-MCP-USECASE-020 | Tracked | Testing-Requirements.md |
+| TEST-MCP-USECASE-021 | Tracked | Testing-Requirements.md |
 | TEST-WEB-001 | Tracked | Testing-Requirements.md |
 | TEST-WEB-002 | Tracked | Testing-Requirements.md |
 | TEST-WEB-003 | Tracked | Testing-Requirements.md |

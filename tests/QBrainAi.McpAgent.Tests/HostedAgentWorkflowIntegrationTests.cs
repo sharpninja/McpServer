@@ -458,16 +458,16 @@ public sealed class HostedAgentWorkflowIntegrationTests
             if (request.Method == HttpMethod.Get && request.RequestUri.AbsolutePath == "/qbrainai/todo")
                 return CreateTodoQueryResponse();
 
-            if (segments is ["mcpserver", "todo", var todoId] && request.Method == HttpMethod.Put)
+            if (segments is ["qbrainai", "todo", var todoId] && request.Method == HttpMethod.Put)
                 return CreateTodoMutationResponse(todoId, body!);
 
-            if (segments is ["mcpserver", "todo", _, "prompt", "status"] && request.Method == HttpMethod.Get)
+            if (segments is ["qbrainai", "todo", _, "prompt", "status"] && request.Method == HttpMethod.Get)
                 return CreateTodoStatusResponse();
 
-            if (segments is ["mcpserver", "repo", "list"] && request.Method == HttpMethod.Get)
+            if (segments is ["qbrainai", "repo", "list"] && request.Method == HttpMethod.Get)
                 return CreateRepoListResponse(request.RequestUri);
 
-            if (segments is ["mcpserver", "desktop", "launch"] && request.Method == HttpMethod.Post)
+            if (segments is ["qbrainai", "desktop", "launch"] && request.Method == HttpMethod.Post)
                 return CreateDesktopLaunchResponse();
 
             throw new InvalidOperationException(

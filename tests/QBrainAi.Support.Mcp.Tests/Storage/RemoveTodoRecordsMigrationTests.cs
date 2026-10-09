@@ -120,7 +120,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
                 "FirstReportAtUtc",
                 "LastReportAtUtc",
                 "QuietDeadlineUtc",
-                "IsQBrainAiRelated",
+                "IsMcpServerRelated",
                 "CreatedTodoId",
                 "IsDeleted"
             )
@@ -171,7 +171,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
                 "FirstReportAtUtc",
                 "LastReportAtUtc",
                 "QuietDeadlineUtc",
-                "IsQBrainAiRelated",
+                "IsMcpServerRelated",
                 "CreatedTodoId",
                 "IsDeleted"
             )

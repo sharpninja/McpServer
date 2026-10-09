@@ -130,6 +130,60 @@ public sealed class AttachUseCaseActorRequest
 }
 
 /// <summary>
+/// FR-MCP-USECASE-018 / TR-MCP-USECASE-020: Full replacement payload for an existing actor association.
+/// </summary>
+public sealed class UpdateUseCaseActorRequest
+{
+    /// <summary>Replacement actor name (required, max 100).</summary>
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>Replacement actor description; null clears the description.</summary>
+    public string? Description { get; set; }
+
+    /// <summary>Replacement actor type: Primary, Secondary, System, or External.</summary>
+    public string Type { get; set; } = "Primary";
+
+    /// <summary>Whether this actor is primary for the use case.</summary>
+    public bool IsPrimary { get; set; }
+}
+
+/// <summary>
+/// FR-MCP-USECASE-018 / TR-MCP-USECASE-020: Full replacement payload for an existing flow.
+/// </summary>
+public sealed class UpdateUseCaseFlowRequest
+{
+    /// <summary>Replacement flow type: Basic, Alternative, or Exception.</summary>
+    public string FlowType { get; set; } = "Basic";
+
+    /// <summary>Replacement flow name; null clears the name.</summary>
+    public string? Name { get; set; }
+
+    /// <summary>Replacement positive sequence number.</summary>
+    public int SequenceNumber { get; set; }
+}
+
+/// <summary>
+/// FR-MCP-USECASE-018 / TR-MCP-USECASE-020: Full replacement payload for an existing step.
+/// </summary>
+public sealed class UpdateUseCaseStepRequest
+{
+    /// <summary>Replacement positive step number.</summary>
+    public int StepNumber { get; set; }
+
+    /// <summary>Replacement actor id; null removes the actor assignment.</summary>
+    public long? ActorId { get; set; }
+
+    /// <summary>Replacement actor action text (required).</summary>
+    public string Action { get; set; } = string.Empty;
+
+    /// <summary>Replacement system response; null clears the response.</summary>
+    public string? SystemResponse { get; set; }
+
+    /// <summary>Replacement data-entity notes; null clears the notes.</summary>
+    public string? DataEntities { get; set; }
+}
+
+/// <summary>
 /// FR-MCP-USECASE-003 / TR-MCP-USECASE-002: Request to link a use case to an FR string id.
 /// </summary>
 public sealed class LinkUseCaseToFrRequest
@@ -244,6 +298,9 @@ public sealed class UseCaseActorDto
 {
     /// <summary>Actor id.</summary>
     public long ActorId { get; init; }
+
+    /// <summary>Parent use case id.</summary>
+    public long UseCaseId { get; init; }
 
     /// <summary>Actor name.</summary>
     public string Name { get; init; } = string.Empty;

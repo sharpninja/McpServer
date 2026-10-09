@@ -261,4 +261,156 @@ public sealed class UseCaseClientTests
         Assert.Single(items);
         Assert.Contains("/qbrainai/usecases/by-product/prod-mcp", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
+    /// <summary>TEST-MCP-USECASE-021: Component update methods use stable ids and full replacement payloads.</summary>
+    [Fact]
+    public async System.Threading.Tasks.Task UseCaseComponentUpdateMethods_SendStableRoutesAndFullPayloads()
+    {
+        var actorHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"actorId":20,"useCaseId":125,"name":"LAB-OMARCHY TruckMate Tentacle","description":"Replacement actor","type":"Supporting","isPrimary":false}""");
+        using var actorHttp = new HttpClient(actorHandler);
+        var actorClient = new UseCaseClient(actorHttp, DefaultOptions);
+        var actor = await actorClient.UpdateActorAsync(
+            125,
+            20,
+            new UpdateUseCaseActorRequest
+            {
+                Name = "LAB-OMARCHY TruckMate Tentacle",
+                Description = "Replacement actor",
+                Type = "Supporting",
+                IsPrimary = false,
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(20, actor.ActorId);
+        Assert.Equal(125, actor.UseCaseId);
+        Assert.Equal(HttpMethod.Put, actorHandler.LastRequest!.Method);
+        Assert.Equal("/qbrainai/usecases/125/actors/20", actorHandler.LastRequest.RequestUri!.AbsolutePath);
+        using (var actorBody = JsonDocument.Parse(actorHandler.LastRequestBody!))
+        {
+            Assert.Equal("LAB-OMARCHY TruckMate Tentacle", actorBody.RootElement.GetProperty("name").GetString());
+            Assert.Equal("Replacement actor", actorBody.RootElement.GetProperty("description").GetString());
+            Assert.Equal("Supporting", actorBody.RootElement.GetProperty("type").GetString());
+            Assert.False(actorBody.RootElement.GetProperty("isPrimary").GetBoolean());
+        }
+
+        var flowHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"flowId":314,"useCaseId":125,"flowType":"Alternate","name":"Octopus-owned deployment","sequenceNumber":2,"steps":[]}""");
+        using var flowHttp = new HttpClient(flowHandler);
+        var flowClient = new UseCaseClient(flowHttp, DefaultOptions);
+        var flow = await flowClient.UpdateFlowAsync(
+            125,
+            314,
+            new UpdateUseCaseFlowRequest
+            {
+                FlowType = "Alternate",
+                Name = "Octopus-owned deployment",
+                SequenceNumber = 2,
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(314, flow.FlowId);
+        Assert.Equal(125, flow.UseCaseId);
+        Assert.Equal(HttpMethod.Put, flowHandler.LastRequest!.Method);
+        Assert.Equal("/qbrainai/usecases/125/flows/314", flowHandler.LastRequest.RequestUri!.AbsolutePath);
+        using (var flowBody = JsonDocument.Parse(flowHandler.LastRequestBody!))
+        {
+            Assert.Equal("Alternate", flowBody.RootElement.GetProperty("flowType").GetString());
+            Assert.Equal("Octopus-owned deployment", flowBody.RootElement.GetProperty("name").GetString());
+            Assert.Equal(2, flowBody.RootElement.GetProperty("sequenceNumber").GetInt32());
+        }
+
+        var stepHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"stepId":383,"flowId":314,"stepNumber":4,"actorId":20,"action":"Run Nuke through Octopus","systemResponse":"Deployment succeeds","dataEntities":"Release"}""");
+        using var stepHttp = new HttpClient(stepHandler);
+        var stepClient = new UseCaseClient(stepHttp, DefaultOptions);
+        var step = await stepClient.UpdateStepAsync(
+            125,
+            314,
+            383,
+            new UpdateUseCaseStepRequest
+            {
+                StepNumber = 4,
+                ActorId = 20,
+                Action = "Run Nuke through Octopus",
+                SystemResponse = "Deployment succeeds",
+                DataEntities = "Release",
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(383, step.StepId);
+        Assert.Equal(314, step.FlowId);
+        Assert.Equal(HttpMethod.Put, stepHandler.LastRequest!.Method);
+        Assert.Equal("/qbrainai/usecases/125/flows/314/steps/383", stepHandler.LastRequest.RequestUri!.AbsolutePath);
+        using var stepBody = JsonDocument.Parse(stepHandler.LastRequestBody!);
+        Assert.Equal(4, stepBody.RootElement.GetProperty("stepNumber").GetInt32());
+        Assert.Equal(20, stepBody.RootElement.GetProperty("actorId").GetInt64());
+        Assert.Equal("Run Nuke through Octopus", stepBody.RootElement.GetProperty("action").GetString());
+        Assert.Equal("Deployment succeeds", stepBody.RootElement.GetProperty("systemResponse").GetString());
+        Assert.Equal("Release", stepBody.RootElement.GetProperty("dataEntities").GetString());
+    }
+
+    /// <summary>TEST-MCP-USECASE-021: Every component update method propagates caller cancellation.</summary>
+    [Fact]
+    public async System.Threading.Tasks.Task UseCaseComponentUpdateMethods_PropagateCancellation()
+    {
+        await AssertCancellationAsync(
+            (client, token) => client.UpdateActorAsync(
+                125,
+                20,
+                new UpdateUseCaseActorRequest { Name = "Tentacle", Type = "System" },
+                token)).ConfigureAwait(true);
+        await AssertCancellationAsync(
+            (client, token) => client.UpdateFlowAsync(
+                125,
+                314,
+                new UpdateUseCaseFlowRequest { FlowType = "Basic", SequenceNumber = 1 },
+                token)).ConfigureAwait(true);
+        await AssertCancellationAsync(
+            (client, token) => client.UpdateStepAsync(
+                125,
+                314,
+                383,
+                new UpdateUseCaseStepRequest { StepNumber = 1, Action = "Deploy" },
+                token)).ConfigureAwait(true);
+    }
+
+    private static async System.Threading.Tasks.Task AssertCancellationAsync(
+        Func<UseCaseClient, CancellationToken, System.Threading.Tasks.Task> invoke)
+    {
+        var handler = new CancellationProbeHandler();
+        using var http = new HttpClient(handler);
+        var client = new UseCaseClient(http, DefaultOptions);
+        using var cancellation = new CancellationTokenSource();
+
+        var requestTask = invoke(client, cancellation.Token);
+        cancellation.Cancel();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => requestTask).ConfigureAwait(true);
+        Assert.True(handler.ObservedCancellation);
+    }
+
+    private sealed class CancellationProbeHandler : HttpMessageHandler
+    {
+        public bool ObservedCancellation { get; private set; }
+
+        protected override async System.Threading.Tasks.Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                await System.Threading.Tasks.Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                ObservedCancellation = true;
+                throw;
+            }
+
+            throw new InvalidOperationException("Cancellation probe unexpectedly completed.");
+        }
+    }
 }

@@ -126,6 +126,7 @@ public sealed class AttachUseCaseActorCommandHandler(
             return Result<UseCaseActorDto>.Success(new UseCaseActorDto
             {
                 ActorId = actor.ActorId,
+                UseCaseId = command.UseCaseId,
                 Name = actor.Name,
                 Description = actor.Description,
                 Type = actor.Type,

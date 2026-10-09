@@ -2498,6 +2498,17 @@ Scope: layer-1+
 - [ ] Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary.
 - [ ] All current and prior requirements pass focused and cumulative Windows, native Linux/FUSE/non-root, SQLite, LocalDB, fresh PostgreSQL, deterministic external, BDPv4, build, traceability, Release, repository, history, harness, and EOL gates from C:-physical outputs with exact zero failures and zero skips.
 
+## FR-MCP-USECASE-018 Edit existing use-case actors, flows, and steps in place
+
+Operators and agents shall edit actor, flow, and step records through supported authenticated operations while preserving the existing component identities and parent relationships.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A supported authenticated operation updates an actor already associated with a use case, preserves ActorId and UseCaseId, and returns the changed name, description, type, and IsPrimary values.
+- [ ] A supported authenticated operation updates an existing flow in its parent use case, preserves FlowId and UseCaseId, and returns the changed FlowType, Name, and SequenceNumber values.
+- [ ] A supported authenticated operation updates an existing step in its parent flow and use case, preserves StepId and FlowId, and returns the changed StepNumber, ActorId, Action, SystemResponse, and DataEntities values.
+- [ ] Component updates reject missing, soft-deleted, cross-workspace, and parent-mismatched IDs without changing any row or creating duplicates.
+- [ ] Updating actors, flows, or steps leaves the use case approval status, version, links, unrelated actors, unrelated flows, and unrelated steps unchanged while advancing only the aggregate update timestamp.
+
 ## FR-MCP-VERIFYWRAP-001 Code-verify reports disk-full and honors timeout without hanging
 
 code-verify.ps1 reports a typed disk-capacity failure instead of an unhandled WriteAllText when the workspace drive is full, and preserves current-turn audit state. Each invocation completes or fails within its documented timeout and does not occupy the console after the child build exits. BUG-TRIAGE-125, BUG-TRIAGE-130.

@@ -1465,6 +1465,14 @@ These tests must pass with mocks before the real client construction logic is fi
   - [ ] Focused RED and GREEN, external deterministic 20/20, Agent Help 18/18, SQLite, LocalDB, fresh PostgreSQL, full BDPv4, build.ps1 Compile/Test/ValidateTraceability, exact-final-HEAD 12-project Release, repository/history/harness/EOL, cleanup, and all seven-current plus ten-prior maps pass exactly as required.
   - [ ] A generated-migration inventory proves the exact 23 historical SQL Server OPENJSON backfills remain byte-immutable and the test-only command interceptor scopes bounded plans to that inventory; a real LocalDB provider run completes within the finite 300-second allowance, preserves values, and leaves no database remnant.
   - [ ] Consumer and real Windows boundary tests persist and read acceptance criteria with opaque ws:test-style workspace identifiers without native path errors, while existing rooted-path cancellation, alias, and mount tests continue to require physical resolution.
+- TEST-MCP-USECASE-021: Prove identity-preserving actor, flow, and step editing through discriminating independent fakes before production, then bind the same assertions to CQRS, REST, client, MCP, persistence, and authenticated readback.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Before production edits, contract tests pass against correct independent fake editor responses and prove inside the passing harness that wrong IDs, parent IDs, fields, and mutation counts are rejected.
+  - [ ] The same contract cases and assertions pass against the real CQRS handlers for actor, flow, and step updates, including validation, missing, cross-workspace, and parent-mismatch cases.
+  - [ ] Controller tests prove the three update routes and classified 400/404 responses; typed-client tests prove HTTP methods, paths, payloads, cancellation, and response deserialization; MCP-tool tests prove dispatcher inputs and serialized results.
+  - [ ] A persistence test proves IDs and row counts are unchanged, aggregate approval/version and unrelated data are unchanged, UpdatedAtUtc advances, and authenticated readback returns the edited values.
+  - [ ] Focused tests, the full applicable unit suite, Compile, and ValidateTraceability complete with zero failures and zero skips before deployment.
 - TEST-MCP-VERIFYWRAP-001: Pester proves code-verify maps disk-full IOException to a typed status and returns within the documented timeout after a childless hang path. Validates TR-MCP-VERIFYWRAP-001 / BUG-TRIAGE-125 / BUG-TRIAGE-130.
   Scope: layer-1+
   **Acceptance Criteria:**

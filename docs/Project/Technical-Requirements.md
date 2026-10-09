@@ -3556,6 +3556,18 @@ Scope: layer-1+
 - [ ] Historical SQL Server migration bytes remain identical to the approved base. The real LocalDB provider harness applies semantics-preserving bounded execution-plan hints only at test execution time, without extending production timeouts; the existing 300-second allowance remains finite and test-only.
 - [ ] Opaque logical workspace identifiers that are not rooted filesystem paths, including ws:test-style storage keys, are normalized lexically and never sent to native physical traversal; rooted filesystem inputs continue through cancellable physical identity resolution.
 
+## TR-MCP-USECASE-020
+
+**Identity-preserving use-case component update pipeline** - Implement workspace- and parent-scoped CQRS mutations for existing actor, flow, and step components, exposed consistently through REST, typed client, source-generated JSON, and MCP tool surfaces.
+**Covered by:** FR: FR-MCP-USECASE-018; TEST: TEST-MCP-USECASE-021
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] CQRS update commands scope every actor, flow, and step lookup by workspace and complete parent identity, use tracked in-place mutations, and return not-found for mismatches.
+- [ ] Actor updates validate name and actor type, flow updates validate flow type, name, and positive sequence, and step updates validate positive order, nonempty action, and an actor associated with the same use case when ActorId is supplied.
+- [ ] REST routes, the typed client, generated JSON metadata, and MCP tools expose update-actor, update-flow, and update-step with cancellation and classified failures.
+- [ ] Each successful component update advances UseCaseEntity.UpdatedAtUtc, emits the established use-case mutation audit signal, and leaves approval/version and unrelated aggregate data unchanged.
+
 ## TR-MCP-VERIFYWRAP-001
 
 **code-verify catch disk-full and enforce wrapper timeout** — code-verify.ps1 catches IOException for disk full as a typed status and applies a hard timeout around the wrapper so the console is released. Covered by FR-MCP-VERIFYWRAP-001 TEST-MCP-VERIFYWRAP-001.

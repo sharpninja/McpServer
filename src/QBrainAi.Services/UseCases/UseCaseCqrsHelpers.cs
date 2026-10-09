@@ -107,6 +107,7 @@ internal static class UseCaseCqrsHelpers
             .Select(a => new UseCaseActorDto
             {
                 ActorId = a.ActorId,
+                UseCaseId = a.UseCaseId,
                 Name = a.Actor.Name,
                 Description = a.Actor.Description,
                 Type = a.Actor.Type,
