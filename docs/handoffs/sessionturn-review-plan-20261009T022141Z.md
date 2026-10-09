@@ -41,8 +41,8 @@ The full list is in the plan, section "Locked operator decisions (2026-10-09)". 
   - agent self-review;
   - real green, then refactor;
   - gates G1-G6 with zero failures and zero skips.
-- Hostile validation happens only at the completion of major phases (HV-P0, HV-A, HV-B), and only through PR comments. The implementing agent never spawns or drives the reviewer.
-  - Request and response comments are exported to `docs/receipts/hv/<utc>-<gate>.request.jsonl` and `.response.jsonl`.
+- Hostile validation happens at the completion of major phases (HV-P0, HV-A, HV-B) on Codex CLI with model `gpt-6-sol` at reasoning effort `xhigh`, launched by the implementing agent. This replaced the PR-comment protocol on 2026-10-09 (operator: "Yes, replace the PR-comment HV with Codex gpt-6-sol xhigh").
+  - The runner writes the brief and the reviewer's `--json` stream to `docs/receipts/hv/<utc>-<gate>.request.jsonl` and `.response.jsonl`; the reviewer writes `hostile-validator-<gate>-<utc>.md` and `.json`. Verify `model=gpt-6-sol`, `effort=xhigh` in the Codex rollout `turn_context`. Worked example: `docs/receipts/hv/20261009T034810Z-session-20261009-ops-hv-r2.*`.
   - The full verdict goes in the session log.
   - Pass requires AGREE with accuracy >= 98 and completeness >= 98.
 - Missing historical requirements were imported by "Upsert develop docs". This is done; see below.
@@ -89,7 +89,7 @@ The full list is in the plan, section "Locked operator decisions (2026-10-09)". 
 1. Run session start per `CLAUDE.md`: `/add-profile`, marker signature, `/health` nonce, plugin bootstrap, history and TODOs, then an initial turn.
 2. Read TODO `PLAN-SESSIONTURNREVIEW-001` and present the plan to the operator for corrections or approval.
 3. Apply operator corrections to the plan file and the TODO description, then re-verify the round trip.
-4. Only after explicit approval, execute P0 in order (P0.1-P0.9). Stop at HV-P0, which runs through PR comments.
+4. Only after explicit approval, execute P0 in order (P0.1-P0.9). Stop at HV-P0, which runs on Codex gpt-6-sol xhigh.
 5. File the triage items still pending: the "To file" list in the plan's "Risks and incidental bugs" section. (The dangling `CODEX-HANDOFF.md` citations are already filed as `triage-report-02e7a0198d064403a85b13efa6273637`.)
 
 ## Do not
