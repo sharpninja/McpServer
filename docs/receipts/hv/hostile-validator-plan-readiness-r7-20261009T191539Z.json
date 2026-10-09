@@ -1,0 +1,172 @@
+{
+  "TimestampUtc": "2026-10-09T19:37:14Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "LiveProof": "2026-10-09T19:15:43Z rollout turn_context and thread.started 01a12217-b094-7bd1-8402-351e6fcc9eba",
+    "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T14-15-42-01a12217-b094-7bd1-8402-351e6fcc9eba.jsonl"
+  },
+  "FirstActions": {
+    "AddProfileSkillRead": true,
+    "ProfileMarkdownFilesReadInFull": 19,
+    "MainMarkerReadInFull": true,
+    "MemoryListRead": true,
+    "EffectiveMemoriesReadInFull": 14,
+    "MemoryScope": "12 Global plus 2 Workspace"
+  },
+  "HeadSha": "3bdf04ba96ee37c2ea06f181fbe3404e5257295f",
+  "PlanPath": "/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md",
+  "TodoId": "PLAN-SESSIONTURNREVIEW-001",
+  "TodoWorkspace": "/home/sharpninja/github/McpServer",
+  "HandoffPath": "docs/handoffs/sessionturn-review-plan-20261009T022141Z.md",
+  "Claims": [
+    {
+      "Id": "P1",
+      "Status": "FAIL",
+      "Evidence": "Most inspected source anchors and nine plugin repo states matched HEAD. Plan line 61 mislocates the request-ID assignment; line 414 falsely says the new TEST statements name updated FR ACs. F-R7-01/02."
+    },
+    {
+      "Id": "P2",
+      "Status": "FAIL",
+      "Evidence": "Live main store returned 352 FR, 480 TR, 512 TEST; the 67 planned P0 FR/TR/TEST IDs were absent without collision. Ten mapping additions can merge with existing edges, but their target TEST statements omit the ACs they claim to cover. F-R7-02."
+    },
+    {
+      "Id": "P3",
+      "Status": "FAIL",
+      "Evidence": "D2-D10 and partial QB-AGENT-001 clearance were largely reflected. D1 is contradicted by the Copilot timestamp-only negative case that expects two turns. F-R7-03."
+    },
+    {
+      "Id": "P4",
+      "Status": "FAIL",
+      "Evidence": "Server, client, REPL, MCP, PowerShell and Node cores, nine plugins, and three provider migrations are named. Copilot event identity and declared Node 18/20 compatibility lack a valid implementation path. F-R7-03/04."
+    },
+    {
+      "Id": "P5",
+      "Status": "FAIL",
+      "Evidence": "Copilot stable identity versus unsupported status, and preserving Node support versus raising the runtime floor, remain material decisions. F-R7-03/04."
+    },
+    {
+      "Id": "P6",
+      "Status": "UNKNOWN",
+      "Evidence": "Named build targets, test-project paths, G1-G6 commands, and BDPv4 order exist statically; P0.1 now specifies an SDK 10.0.201 bootstrap. Installed SDK is 10.0.111 and Pester/bats are absent, so gate execution was not verified in review-only scope."
+    },
+    {
+      "Id": "P7",
+      "Status": "FAIL",
+      "Evidence": "Mapped updated ACs lack named TEST statements; Copilot negative test expects two turns; Node 20 score parsing has no compatible test. HV-P0, HV-A, HV-B and 98/98 are otherwise aligned. F-R7-02/03/04."
+    },
+    {
+      "Id": "P8",
+      "Status": "FAIL",
+      "Evidence": "Thirty tasks and phase ordering agree after round-6 edits, but D1/AC003 conflict with Copilot nonce construction and its negative test. F-R7-03."
+    },
+    {
+      "Id": "P9",
+      "Status": "FAIL",
+      "Evidence": "Live TODO description is 520/520 byte-equal to the plan's nonempty lines; all 30 tasks match in order; technicalDetails uses new IDs and marks 010G as legacy. Handoff current-marker and hook-registration claims are stale. F-R7-05."
+    },
+    {
+      "Id": "P10",
+      "Status": "PASS",
+      "Evidence": "Risks match source/provider observations. Nine listed triage report IDs resolve; worktree-only triage group resolves as grouped/failed and main route is absent as disclosed. Plugin defects are scheduled in A9."
+    }
+  ],
+  "Findings": [
+    {
+      "Id": "F-R7-01",
+      "Classification": "implementer edit",
+      "PlanLocation": "current source inventory, line 61.",
+      "ExactDefect": "`plugin-hook.ps1:863` is cited as the request-ID generator.",
+      "Evidence": "`plugins/core/lib-ps/plugin-hook.ps1:865` assigns `req-<timestamp>-prompt-<rand4>`; line 863 is not the assignment.",
+      "PassCondition": "correct the anchor to line 865."
+    },
+    {
+      "Id": "F-R7-02",
+      "Classification": "implementer edit",
+      "PlanLocation": "mapping additions lines 414-424, TEST statements lines 361-385, P0.4 line 167.",
+      "ExactDefect": "line 414 says every mapped TEST names its updated FR AC in its P0 statement; those statements omit them.",
+      "Evidence": "line 415 maps `TEST-MCP-SESSIONTURN-003` to `FR-MCP-SESSIONLIFE-001-AC006`, but line 365 omits that AC. Line 422 maps `TEST-MCP-SESSIONCLASS-002` to `FR-SUPPORT-013 ac-5`, but line 373 omits it. The ten added rows have the same gap.",
+      "PassCondition": "add every updated FR AC from lines 415-424 to the corresponding TEST statement, name its verifying test case, and require RED/green receipts for changed ACs before P0 creates the records and mappings."
+    },
+    {
+      "Id": "F-R7-03",
+      "Classification": "operator decision",
+      "PlanLocation": "locked D1 line 29, Copilot binding line 83, `FR-MCP-SESSIONTURN-001-AC003` line 190, A3 RED tests line 569.",
+      "ExactDefect": "one Copilot prompt can mint two turns when two hook deliveries carry different timestamps.",
+      "Evidence": "line 83 admits separate Copilot hooks may receive different timestamps and expects **two turns plus warning** for timestamp-only differences. Lines 29 and 190 require one nonce and one turn per event across every hook host; line 29 says that warning never counts as D1 compliance. A3 only tests two processes with identical recorded payloads.",
+      "PassCondition": "use a stable adapter/event identity and test two differing-timestamp deliveries yielding one turn; or declare Copilot turn logging unsupported before mint and align ACs, gates, matrix, and handoff. Operator options: **stable Copilot adapter with one-turn guarantee** or **Copilot turn logging unsupported until stable identity exists**."
+    },
+    {
+      "Id": "F-R7-04",
+      "Classification": "operator decision",
+      "PlanLocation": "C10 line 122, score parsing line 557, Node A8/S9.",
+      "ExactDefect": "required `JSON.parse` reviver `context.source` cannot provide lossless raw score lexemes on a declared supported Node 20 runtime.",
+      "Evidence": "`plugins/core/lib-node/package.json` declares `node >=20`; cline, cline-v2, and opencode declare `>=18`. Official Node 20.20.2 (V8 11.3.244.8) returned `undefined` for reviver `context.source`; local Node 26.8.2 returned `0.1` for the same probe. No compatible parser or runtime-floor migration is specified.",
+      "PassCondition": "choose the Node support floor. Options: **preserve Node 18/20 using a raw-token lossless parser and version-matrix tests**, or **raise engines and migrate host prerequisites with compatibility receipts**. Amend C10, A8/S9, TEST-MCP-SESSIONREVIEW-008/009, and G6."
+    },
+    {
+      "Id": "F-R7-05",
+      "Classification": "implementer edit",
+      "PlanLocation": "entry-point handoff pointer at plan line 3; handoff lines 55 and 80.",
+      "ExactDefect": "handoff presents old marker state and historical duplicate hook registration as current.",
+      "Evidence": "main marker `startedAt` is `2026-10-09T17:45:57.2150865+00:00`, not handoff's `13:58:49Z`. `~/.claude/settings.json` has no hooks key; MEMORY-FACT-003 and corrected plan line 13 say duplicate registration was historical, while handoff line 80 says it is current.",
+      "PassCondition": "mark the earlier marker and hook incident historical and state the current inventory."
+    }
+  ],
+  "PriorRoundRecheck": [
+    "F-R6-01 fixed in plan, stale handoff",
+    "F-R6-02 fixed",
+    "F-R6-03 partial",
+    "F-R6-04 fixed",
+    "F-R6-05 specified, unverified",
+    "F-R6-06 fixed",
+    "F-R6-07 fixed",
+    "F-R6-08 fixed"
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 94,
+  "Confidence": 0.96,
+  "PassCount": 1,
+  "FailCount": 8,
+  "UnknownCount": 1,
+  "FailList": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "UnknownList": [
+    "P6"
+  ],
+  "ImplementerFixes": [
+    "F-R7-01",
+    "F-R7-02",
+    "F-R7-05"
+  ],
+  "OperatorDecisionFails": [
+    "F-R7-03",
+    "F-R7-04"
+  ],
+  "ReviewerSessionId": "Codex-20261009T032846Z-plugin-session",
+  "ReviewerRequestId": "req-20261009T191808Z-plan-readiness-r7",
+  "RunnerRequestJsonl": "docs/receipts/hv/20261009T191539Z-plan-readiness-r7.request.jsonl",
+  "RunnerResponseJsonl": "docs/receipts/hv/20261009T191539Z-plan-readiness-r7.response.jsonl",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r7-20261009T191539Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r7-20261009T191539Z.json"
+  ],
+  "PersistenceProof": "Both full-result appendDialog calls, appendActions, and rich updateTurn returned persisted=true, degraded=false, queued=false; queryHistory showed same session in_progress with turnCount 4 and lastUpdated 2026-10-09T19:38:13Z. Final receipt reappend and completion follow.",
+  "WebSources": [
+    "https://nodejs.org/en/blog/announcements/v20-release-announce",
+    "https://nodejs.org/dist/v20.20.2/",
+    "https://builds.dotnet.microsoft.com/dotnet/release-metadata/10.0/releases.json",
+    "https://learn.chatgpt.com/docs/hooks",
+    "https://developers.openai.com/plugins/build/plugins"
+  ]
+}
