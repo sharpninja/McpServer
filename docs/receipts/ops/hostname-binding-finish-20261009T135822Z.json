@@ -1,0 +1,72 @@
+{
+  "timestampUtc": "20261009T135822Z",
+  "host": "LAB-OMARCHY",
+  "continues": "hostname-binding-20261009T134907Z",
+  "backupDir": "/etc/mcpserver/backup-20261009T135822Z-finish",
+  "steps": {
+    "backup": {
+      "file": "appsettings.yaml",
+      "sha256": "8DFB89680DB5CF5ADEFF885F3B090224AAE17849DADDC8BBE684DD7DB1051E3C"
+    },
+    "appsettings": {
+      "endpointsBefore": [
+        "LocalHttp=http://localhost:7147",
+        "HostLoopback=http://127.0.0.2:7147"
+      ],
+      "endpointsAfter": [
+        "AllInterfaces=http://0.0.0.0:7147"
+      ],
+      "otherContentIdentical": true,
+      "sha256After": "AD5135BCA8606B5A0915F4D0981EB75CBBCACEC2C9D8971A9E4B39512CD21F6B"
+    },
+    "systemdVerify": {
+      "exitCode": 0,
+      "output": ""
+    }
+  },
+  "verification": {
+    "systemctl": [
+      "ActiveState=active",
+      "SubState=running",
+      "NeedDaemonReload=no",
+      "MainPID=37033",
+      "Result=success",
+      "NRestarts=0",
+      "ExecMainStartTimestamp=Fri 2026-10-09 08:58:26 CDT"
+    ],
+    "listeners": null,
+    "markerExists": true,
+    "markerFresh": true,
+    "markerWriteUtc": "2026-10-09T13:58:49.1664129Z",
+    "health": {
+      "error": "Connection refused (payton-omarchy:7147)"
+    },
+    "journal": [
+      "[08:58:54 INF] Loaded marker prompt template 'default-marker-prompt' (27755 chars)",
+      "info: McpServer.Support.Mcp.Services.FileMarkerPromptProvider[0]",
+      "      Loaded marker prompt template '\"default-marker-prompt\"' (27755 chars)",
+      "      \"\"SELECT [a].[Id], [a].[AddedAt], [a].[AgentDefinitionId], [a].[AgentIsolation], [a].[Banned], [a].[BannedReason], [a].[BannedUntilPr], [a].[BranchStrategyOverride], [a].[DeleteReason], [a].[DeletedAtUtc], [a].[DeletedBy], [a].[Enabled], [a].[IsDeleted], [a].[LastLaunchedAt], [a].[LaunchCommandOverride], [a].[MarkerAdditions], [a].[RestartPolicy], [a].[SeedPromptOverride], [a].[WorkspaceId], [a].[WorkspacePath], [a1].[Id], [a4].[Id], [a4].[AgentWorkspaceId], [a4].[DeleteReason], [a4].[DeletedAtUtc], [a4].[DeletedBy], [a4].[IsDeleted], [a4].[ListType], [a4].[Ordinal], [a4].[Value], [a4].[WorkspaceId], [a1].[CreatedAt], [a1].[DefaultBranchStrategy], [a1].[DefaultInstructionFile], [a1].[DefaultLaunchCommand], [a1].[DefaultSeedPrompt], [a1].[DeleteReason], [a1].[DeletedAtUtc], [a1].[DeletedBy], [a1].[DisplayName], [a1].[IsBuiltIn], [a1].[IsDeleted], [a1].[ModifiedAt], [a1].[WorkspaceId], [a5].[Id], [a5].[AgentDefinitionId], [a5].[DeleteReason], [a5].[DeletedAtUtc], [a5].[DeletedBy], [a5].[IsDeleted], [a5].[Model], [a5].[Ordinal], [a5].[WorkspaceId]",
+      "SELECT [a].[Id], [a].[AddedAt], [a].[AgentDefinitionId], [a].[AgentIsolation], [a].[Banned], [a].[BannedReason], [a].[BannedUntilPr], [a].[BranchStrategyOverride], [a].[DeleteReason], [a].[DeletedAtUtc], [a].[DeletedBy], [a].[Enabled], [a].[IsDeleted], [a].[LastLaunchedAt], [a].[LaunchCommandOverride], [a].[MarkerAdditions], [a].[RestartPolicy], [a].[SeedPromptOverride], [a].[WorkspaceId], [a].[WorkspacePath], [a1].[Id], [a4].[Id], [a4].[AgentWorkspaceId], [a4].[DeleteReason], [a4].[DeletedAtUtc], [a4].[DeletedBy], [a4].[IsDeleted], [a4].[ListType], [a4].[Ordinal], [a4].[Value], [a4].[WorkspaceId], [a1].[CreatedAt], [a1].[DefaultBranchStrategy], [a1].[DefaultInstructionFile], [a1].[DefaultLaunchCommand], [a1].[DefaultSeedPrompt], [a1].[DeleteReason], [a1].[DeletedAtUtc], [a1].[DeletedBy], [a1].[DisplayName], [a1].[IsBuiltIn], [a1].[IsDeleted], [a1].[ModifiedAt], [a1].[WorkspaceId], [a5].[Id], [a5].[AgentDefinitionId], [a5].[DeleteReason], [a5].[DeletedAtUtc], [a5].[DeletedBy], [a5].[IsDeleted], [a5].[Model], [a5].[Ordinal], [a5].[WorkspaceId]",
+      "[08:58:55 WRN] Failed to update .gitignore at /opt/mcpserver/app/5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF",
+      "System.IO.DirectoryNotFoundException: Could not find a part of the path '/opt/mcpserver/app/5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF/.gitignore'.",
+      "   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)",
+      "   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)",
+      "   at McpServer.Support.Mcp.Services.MarkerFileService.EnsureGitIgnored(String workspacePath, ILogger logger) in /home/sharpninja/github/McpServer-mcp-session-recovery/src/McpServer.Services/Services/MarkerFileService.cs:line 345",
+      "      Failed to update .gitignore at \"/opt/mcpserver/app/5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF\"",
+      "      System.IO.DirectoryNotFoundException: Could not find a part of the path '/opt/mcpserver/app/5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF/.gitignore'.",
+      "         at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)",
+      "         at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)",
+      "         at McpServer.Support.Mcp.Services.MarkerFileService.EnsureGitIgnored(String workspacePath, ILogger logger) in /home/sharpninja/github/McpServer-mcp-session-recovery/src/McpServer.Services/Services/MarkerFileService.cs:line 345",
+      "      Failed to write default MCP wiki export config: \"/opt/mcpserver/app/5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF/docs/wiki.yaml\"",
+      "      System.UnauthorizedAccessException: Access to the path '/opt/mcpserver/app/5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF' is denied.",
+      "       ---> System.IO.IOException: Permission denied",
+      "         --- End of inner exception stack trace ---",
+      "         at McpServer.Support.Mcp.Services.MarkerFileService.EnsureDefaultWikiConfigAsync(String workspacePath, ILogger logger, CancellationToken ct) in /home/sharpninja/github/McpServer-mcp-session-recovery/src/McpServer.Services/Services/MarkerFileService.cs:line 258",
+      "[08:58:55 WRN] Failed to write default MCP wiki export config: /opt/mcpserver/app/5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF/docs/wiki.yaml",
+      "System.UnauthorizedAccessException: Access to the path '/opt/mcpserver/app/5405E6B009B30A707964BDCDC79027CE60EEB39FF7ED9A038AE36A7B03B40DAF' is denied.",
+      " ---> System.IO.IOException: Permission denied",
+      "   --- End of inner exception stack trace ---",
+      "   at McpServer.Support.Mcp.Services.MarkerFileService.EnsureDefaultWikiConfigAsync(String workspacePath, ILogger logger, CancellationToken ct) in /home/sharpninja/github/McpServer-mcp-session-recovery/src/McpServer.Services/Services/MarkerFileService.cs:line 258"
+    ]
+  }
+}
