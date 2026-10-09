@@ -1,0 +1,156 @@
+{
+  "TimestampUtc": "2026-10-09T16:18:09.4877867Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "surface": "Codex CLI",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "sessionId": "01a12169-d89d-75a2-8507-1c495d9369d3",
+    "rolloutPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T11-05-47-01a12169-d89d-75a2-8507-1c495d9369d3.jsonl",
+    "sessionMetaUtc": "2026-10-09T16:05:47.871Z",
+    "turnContextUtc": "2026-10-09T16:05:48.792Z"
+  },
+  "FirstActions": {
+    "addProfileSkillRead": true,
+    "profileNonSkillMarkdownCount": 19,
+    "profileAllRead": true,
+    "markerPath": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "markerLinesRead": 397,
+    "markerReadInFull": true,
+    "memoryListCalled": true,
+    "memoryCount": 13,
+    "allMemoriesRead": true
+  },
+  "Round1Reattack": {
+    "priorVerdict": "DISAGREE",
+    "priorAccuracy": 84,
+    "priorCompleteness": 68,
+    "priorFindings": "F01-F16",
+    "planLines": 581,
+    "planNonEmptyLines": 469,
+    "todoDescriptionLines": 469,
+    "descriptionMismatchCount": 0,
+    "implementationTasks": 30,
+    "newFr": 21,
+    "newTr": 23,
+    "newTest": 23,
+    "updatedRequirementRecords": 33,
+    "updatedRequirementEntries": 27,
+    "status": "NOT APPROVED"
+  },
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "FAIL",
+      "evidence": "Claude env-var reference contradicts unconditional stdio session-id equality; see R2-05"
+    },
+    {
+      "id": "P2",
+      "status": "FAIL",
+      "evidence": "P0 mapping rows use nonexistent shortened TR/TEST IDs; see R2-04"
+    },
+    {
+      "id": "P3",
+      "status": "FAIL",
+      "evidence": "D1 duplicate delivery and D2 cross-session or stale-key paths violate locked decisions; D3 and D4 faithfully applied"
+    },
+    {
+      "id": "P4",
+      "status": "FAIL",
+      "evidence": "Eight plugins and storage are enumerated, but Codex hook trust and no-key host attribution are omitted"
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "Mint route, idempotency, host fallback, and queued-message branch leave design choices"
+    },
+    {
+      "id": "P6",
+      "status": "FAIL",
+      "evidence": "Existing begin route cannot omit path ID; dotnet-ef not preflighted or pinned"
+    },
+    {
+      "id": "P7",
+      "status": "FAIL",
+      "evidence": "Existing-green ACs cannot furnish RED receipt; missing negative checks for hook trust and no-key cross-session writes"
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "Exactly-one contradicts random duplicate nonce behavior; universal RED contradicts P0 existing-green behavior"
+    },
+    {
+      "id": "P9",
+      "status": "UNKNOWN",
+      "evidence": "469 TODO description lines byte-equal to plan; 30 tasks; handoff counts match; triage group claim unverified"
+    },
+    {
+      "id": "P10",
+      "status": "UNKNOWN",
+      "evidence": "Ordinary triage IDs and code risks verified, but group triage-group-804b21086f3019ab not retrievable"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 90,
+  "Completeness": 78,
+  "Confidence": 96,
+  "passCount": 0,
+  "failCount": 8,
+  "unknownCount": 2,
+  "FAIL": [
+    "R2-01 ingress REST route requires requestId",
+    "R2-02 random nonce does not deduplicate duplicate hook process delivery",
+    "R2-03 workspace pointer can cross host sessions",
+    "R2-04 mapping shorthand lacks canonical TR/TEST IDs",
+    "R2-05 Claude stdio session key stale after /clear",
+    "R2-06 Codex plugin hooks need explicit trust",
+    "R2-07 dotnet-ef absent from preflight",
+    "R2-08 queued-message arrival contingency unresolved",
+    "R2-09 baseline-green ACs contradict universal RED rule"
+  ],
+  "UNKNOWN": [
+    "R2-10 triage group unverified through main-workspace route"
+  ],
+  "ImplementerFixes": [
+    "R2-01",
+    "R2-02",
+    "R2-03",
+    "R2-04",
+    "R2-05",
+    "R2-06",
+    "R2-07",
+    "R2-09",
+    "R2-10 evidence"
+  ],
+  "OperatorDecisionFails": [
+    "R2-08 conditional: if queued hook does not fire at arrival, choose host arrival bridge retaining D1 or explicitly revise D1"
+  ],
+  "headSha": "002461ffa3e6de5a99471ed1b432d9baa4c10096",
+  "receiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r2-20261009T160546Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r2-20261009T160546Z.json",
+    "docs/receipts/hv/20261009T160546Z-plan-readiness-r2.request.jsonl",
+    "docs/receipts/hv/20261009T160546Z-plan-readiness-r2.response.jsonl"
+  ],
+  "reviewerSessionId": "Codex-20261009T032846Z-plugin-session",
+  "reviewerRequestId": "req-20261009T160800Z-plan-readiness-r2",
+  "mcpPersistenceProof": {
+    "updateTurnPersisted": true,
+    "appendActionsPersisted": true,
+    "fullResultDialogPersisted": true,
+    "turnCompleted": true,
+    "historyVerified": true,
+    "markdownExactChars": 19110,
+    "markdownDialogParts": 7,
+    "queryMethod": "client.SessionLog.QueryAsync via installed Codex wrapper",
+    "queryStatus": "completed",
+    "serverDialogCount": 22,
+    "serverActionCount": 5,
+    "terminalReadbackUtc": "2026-10-09T16:21:30.5971038Z"
+  },
+  "sources": [
+    "https://code.claude.com/docs/en/env-vars",
+    "https://developers.openai.com/plugins/build/plugins"
+  ],
+  "note": "Full line-specific evidence and pass changes are in the Markdown companion."
+}
