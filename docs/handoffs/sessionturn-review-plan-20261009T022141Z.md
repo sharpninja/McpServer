@@ -10,19 +10,19 @@ Copy everything below the line into the next agent.
 
 - The plan is **NOT APPROVED**. Do not implement any step, including P0 (requirements, use cases, TODO creation), until the operator explicitly approves it. The operator may still be typing corrections.
 - Authoritative copy: MCP TODO `PLAN-SESSIONTURNREVIEW-001` (priority high, section SessionLog, done=false). Retrieve with `workflow.todo.get` `id: PLAN-SESSIONTURNREVIEW-001`.
-  - `description`: the full plan text. Verified on 2026-10-09: all 421 non-empty lines of the source file are stored exactly; the server drops blank lines.
+  - `description`: the full plan text. Verified on 2026-10-09 after the round-2 edits: all 469 non-empty lines of the source file are stored exactly (PowerShell `Get-Content` count, non-empty = non-whitespace); the server drops blank lines.
   - `implementationTasks` (30): operator approval, P0.1-P0.9, A1-A9, S1-S11.
   - `note`: the not-approved status. `technicalDetails`: session, worktree, and baseline facts.
   - FR/TR arrays are empty on purpose. The new FR/TR/TEST ids are created in P0 and do not exist in the store yet.
-- Local source of the plan, on PAYTON-OMARCHY only: `/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md` (530 lines). If the operator corrects the plan, update this file and the TODO description together, and verify the TODO round trip.
+- Local source of the plan, on PAYTON-OMARCHY only: `/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md` (581 lines, 469 non-empty, PowerShell `Get-Content` count after the round-2 edits). If the operator corrects the plan, update this file and the TODO description together, and verify the TODO round trip.
 
 ## What the plan does (one paragraph)
 
 It makes MCP session-log turns trustworthy (Phase A, ships first), then adds structured review data (Phase B):
-- **Phase A.** One turn per user request, including messages sent mid-turn. System events never open turns. A new prompt never cancels an open turn. Turn edits are independent per turn. Write receipts are truthful (`skipped_terminal`). The stop gate never auto-closes turns.
+- **Phase A.** One turn per user request, including messages sent mid-turn, with a server-issued request token minted at ingress (D1). Writes bind to their request automatically through host context (D2). System events never open turns. A new prompt never cancels an open turn. Turn edits are independent per turn. Write receipts are truthful (`skipped_terminal`). The stop gate never auto-closes turns.
 - **Phase B.** A `requestClass` turn field (Code, Docs, Chore) and two review records per turn (`agentReview`, `hostileReview`). Each record carries:
   - a status lifecycle: Unnecessary, Unstarted, Running, Pass, Fail, Other;
-  - `otherNotes`, writable only when status is Other;
+  - `otherNotes`, writable only when status is Other and required (non-empty) for Other (D4);
   - lossless decimal correctness and completeness (0..1);
   - server-derived Pass/Fail from per-workspace thresholds (default 0.98, inclusive, both scores must meet theirs), with the thresholds stamped on the record;
   - `reasons[]` and receipt paths.
@@ -34,6 +34,7 @@ Scope covers the server, client, REPL, MCP tools, the PowerShell and Node plugin
 
 The full list is in the plan, section "Locked operator decisions (2026-10-09)". Key points:
 - Every user request is exactly one turn, including messages queued mid-turn. Actions and decisions map to the turn of the request that caused them.
+- Operator decisions on 2026-10-09 after Codex plan-readiness round 1: D1 the server issues the request token when a message arrives; D2 writes are tied to their request automatically through the agent app's hooks; D3 the use-case coverage gate checks only this plan's requirements; D4 a review with status Other requires the Other reason (`otherNotes`).
 - Strict BDPv4 per slice:
   - contract and stubs first;
   - RED;
@@ -51,7 +52,7 @@ The full list is in the plan, section "Locked operator decisions (2026-10-09)". 
 
 - Worktree `/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009`, branch `worktree-session-20261009`, based on `f56dcf70` (equal to `develop` and `origin/develop` at 02:2xZ; QBrainAi rename, routes `qbrainai/*` with 1.x `mcpserver/*` aliases).
   - This file and the 12 handoff removals were committed in `3ed6c639` and pushed to `origin/worktree-session-20261009` on 2026-10-09 (see Handoff hygiene). Use `git log` for the current head.
-- Marker: `/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml`, baseUrl `http://PAYTON-OMARCHY:7147`, startedAt `2026-10-06T20:55:32Z`. The running server reported 1.4.41-recovery+b53ce6b8 with the SQL Server provider earlier in the session. Re-verify with the marker signature and the `/health` nonce.
+- Marker: `/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml`. After the 2026-10-09 restart it reads baseUrl `http://LAB-OMARCHY:7147`, startedAt `2026-10-09T13:58:49Z` (the server now binds `0.0.0.0:7147`; the host was renamed from PAYTON-OMARCHY, which still resolves to it). The running server reported 1.4.41-recovery+b53ce6b8 with the SQL Server provider earlier in the session. Re-verify with the marker signature and the `/health` nonce.
 - Claude plugin repo: `/home/sharpninja/github/mcpserver-claude-code-plugin`, `main` at `d3a07e0` (1.118.0).
 - Preserved stashes. They are not applied. Never drop them without operator direction.
   - Main checkout `/home/sharpninja/github/McpServer`: `3ba6fc5413d5bb9fa68d7c312229512da0d86832` ("claude-session-20261009-predevelop-sync-dirt-20261009T005407Z"). The stash stack is shared with all worktrees.
@@ -87,10 +88,10 @@ The full list is in the plan, section "Locked operator decisions (2026-10-09)". 
 ## Next steps (when the operator resumes)
 
 1. Run session start per `CLAUDE.md`: `/add-profile`, marker signature, `/health` nonce, plugin bootstrap, history and TODOs, then an initial turn.
-2. Read TODO `PLAN-SESSIONTURNREVIEW-001` and present the plan to the operator for corrections or approval.
+2. Read TODO `PLAN-SESSIONTURNREVIEW-001` and present the plan to the operator for corrections or approval. Plan-readiness hostile validation on Codex gpt-6-sol xhigh is iterated to AGREE >= 98/98 before approval is requested (operator, 2026-10-09). Round 1: `docs/receipts/hv/hostile-validator-plan-readiness-20261009T145521Z.md` (DISAGREE 84/68, 16 findings; four operator decisions D1-D4 answered and applied with the twelve implementer fixes). Later rounds add receipts with the same gate prefix.
 3. Apply operator corrections to the plan file and the TODO description, then re-verify the round trip.
 4. Only after explicit approval, execute P0 in order (P0.1-P0.9). Stop at HV-P0, which runs on Codex gpt-6-sol xhigh.
-5. Triage is filed (nothing pending). The plan's "Risks and incidental bugs" "To file" list was verified against source and filed on 2026-10-09: `triage-report-41d7d27c53f2464f8339fe963079a55e` (gated SessionQuery omits commit files), gated restore and clone do not carry PlanFile/TodoId (the original `-53dc4c8b359d496ea5327841deb1ea45` overstated the effect and was withdrawn by soft-deleting its one-report group; the corrected replacement is group `triage-group-804b21086f3019ab`, filed in the worktree workspace `/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009` by mistake and not reachable by the main-workspace plugin client), `-953f44d7574942419e6d5d3123acb971` (revive resurrects replaced children), `-d8c40d80a4ba454e8b5b96b9b5762105` (restamp skips commit files), `-ab06ac3befed4ff99725ef6047715158` (federation snapshot drops turn fields), `-04659db176a8473bbf2aa9b6caf1f98a` (`filesModified` vs `FileModified`). Also filed: `-36d2da231add47f18af5abd35a340e5f` (dialog ordinals repeat; delete-by-ordinal removes several items), `-ed3b0381bd2948e58d6315f6e1601b02` (delete-item fails for values containing `/`), `-bd1f438638f64f808e53a407aeb58c98` (hook validator depends on `CLAUDE_PLUGIN_ROOT`), `-e1f01430477f441fb86538469d15fc15` (plugin memory verbs log an undocumented `memory` action type and reuse action orders), and `-02e7a0198d064403a85b13efa6273637` (dangling `CODEX-HANDOFF.md` citations). The plan text still says "To file"; it is frozen until approval.
+5. Triage is filed (nothing left to file; one group relocation pending, below). The plan's "Risks and incidental bugs" "To file" list was verified against source and filed on 2026-10-09: `triage-report-41d7d27c53f2464f8339fe963079a55e` (gated SessionQuery omits commit files), gated restore and clone do not carry PlanFile/TodoId (the original `-53dc4c8b359d496ea5327841deb1ea45` overstated the effect and was withdrawn by soft-deleting its one-report group; the corrected replacement is group `triage-group-804b21086f3019ab`, filed in the worktree workspace `/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009` by mistake and not reachable by the main-workspace plugin client), `-953f44d7574942419e6d5d3123acb971` (revive resurrects replaced children), `-d8c40d80a4ba454e8b5b96b9b5762105` (restamp skips commit files), `-ab06ac3befed4ff99725ef6047715158` (federation snapshot drops turn fields), `-04659db176a8473bbf2aa9b6caf1f98a` (`filesModified` vs `FileModified`). Also filed: `-36d2da231add47f18af5abd35a340e5f` (dialog ordinals repeat; delete-by-ordinal removes several items), `-ed3b0381bd2948e58d6315f6e1601b02` (delete-item fails for values containing `/`), `-bd1f438638f64f808e53a407aeb58c98` (hook validator depends on `CLAUDE_PLUGIN_ROOT`), `-e1f01430477f441fb86538469d15fc15` (plugin memory verbs log an undocumented `memory` action type and reuse action orders), and `-02e7a0198d064403a85b13efa6273637` (dangling `CODEX-HANDOFF.md` citations). The plan's risks section now lists these filed ids instead of "To file" (round-2 edit, 2026-10-09). Moving group `triage-group-804b21086f3019ab` to the main workspace (operator: "2 move") is still pending.
 
 ## Do not
 
