@@ -49,8 +49,8 @@ The full list is in the plan, section "Locked operator decisions (2026-10-09)". 
 
 ## Workspace facts (verified 2026-10-09T02:2xZ)
 
-- Worktree `/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009`, branch `worktree-session-20261009`, HEAD `f56dcf70`, equal to `develop` and `origin/develop` (QBrainAi rename, routes `qbrainai/*` with 1.x `mcpserver/*` aliases).
-  - Uncommitted: this file only, plus the handoff removals once the operator completes them (see Handoff hygiene).
+- Worktree `/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009`, branch `worktree-session-20261009`, based on `f56dcf70` (equal to `develop` and `origin/develop` at 02:2xZ; QBrainAi rename, routes `qbrainai/*` with 1.x `mcpserver/*` aliases).
+  - This file and the 12 handoff removals were committed in `3ed6c639` and pushed to `origin/worktree-session-20261009` on 2026-10-09 (see Handoff hygiene). Use `git log` for the current head.
 - Marker: `/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml`, baseUrl `http://PAYTON-OMARCHY:7147`, startedAt `2026-10-06T20:55:32Z`. The running server reported 1.4.41-recovery+b53ce6b8 with the SQL Server provider earlier in the session. Re-verify with the marker signature and the `/health` nonce.
 - Claude plugin repo: `/home/sharpninja/github/mcpserver-claude-code-plugin`, `main` at `d3a07e0` (1.118.0).
 - Preserved stashes. They are not applied. Never drop them without operator direction.
@@ -103,7 +103,7 @@ The full list is in the plan, section "Locked operator decisions (2026-10-09)". 
 
 ## Handoff hygiene
 
-The operator directed removal of every existing handoff in the worktree. The first attempt was blocked by the Claude Code auto-mode classifier. On 2026-10-09T03:12Z, at the operator's explicit "Remove them", ClaudeCode removed all 12 with `git rm` (staged deletions, not committed). All 12 files are tracked at `f56dcf70` and remain readable with `git show f56dcf70:<path>`. The dangling `CODEX-HANDOFF.md` citations in `docs/Byrd-Dev-Process-v4-Project-Management-Guide.md` (lines 6 and 926) are filed as `triage-report-02e7a0198d064403a85b13efa6273637`.
+The operator directed removal of every existing handoff in the worktree. The first attempt was blocked by the Claude Code auto-mode classifier. On 2026-10-09T03:12Z, at the operator's explicit "Remove them", ClaudeCode removed all 12 with `git rm`; the deletions are committed in `3ed6c639` and pushed. All 12 files are tracked at `f56dcf70` and remain readable with `git show f56dcf70:<path>`. The dangling `CODEX-HANDOFF.md` citations in `docs/Byrd-Dev-Process-v4-Project-Management-Guide.md` (lines 6 and 926) are filed as `triage-report-02e7a0198d064403a85b13efa6273637`.
 
 - `HANDOFF.md` (2026-06-23 Grok)
 - `CODEX-HANDOFF.md` (2026-06-25 Codex)
