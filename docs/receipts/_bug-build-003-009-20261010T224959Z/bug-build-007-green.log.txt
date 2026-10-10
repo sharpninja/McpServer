@@ -1,0 +1,23 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:27.73]     NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess [FAIL]
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+  Failed NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess [9 ms]
+  Error Message:
+   Read child output and wait for children only through BoundedProcess (TR-MCP-NUKE-009 AC-006):
+TrimAnalysisWarningInventoryTests.cs:172: return new ProcessResult(result.ExitCode, string.Concat(result.StandardOutput, Environment.NewLine, result.StandardError));
+RequirementsWikiPublishScriptTests.cs:132: return new ProcessResult(result.ExitCode, result.StandardOutput, result.StandardError);
+YamlObjectMutationTests.cs:125: return (result.ExitCode, result.StandardOutput, result.StandardError);
+ServiceUpdateTests.cs:513: return result.StandardOutput;
+ServiceUpdateTests.cs:649: return Result(result.ExitCode, result.StandardOutput);
+MigrationAssemblyObsoleteWarningTests.cs:144: return new ProcessResult(result.ExitCode, result.StandardOutput, result.StandardError);
+  Stack Trace:
+     at NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess() in tests/Build.Tests/BoundedProcessTests.cs:line 147
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     5, Skipped:     0, Total:     6, Duration: 27 s - Build.Tests.dll (net10.0)

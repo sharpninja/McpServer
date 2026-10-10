@@ -1,0 +1,19 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.04]     NukeBuild.Tests.PluginParentResolutionTests.ResolveOfficialPluginSiblingParent_FromWorktree_ReturnsPluginParent(relativeWorktree: "McpServer/.claude/worktrees/session-1") [FAIL]
+  Failed NukeBuild.Tests.PluginParentResolutionTests.ResolveOfficialPluginSiblingParent_FromWorktree_ReturnsPluginParent(relativeWorktree: "McpServer/.claude/worktrees/session-1") [62 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+Expected: ···"-parent-34fe93c69ff948419e6c194354e19764"
+Actual:   ···"-parent-34fe93c69ff948419e6c194354e19764/McpServer"
+                                                      ↑ (pos 56)
+  Stack Trace:
+     at NukeBuild.Tests.PluginParentResolutionTests.ResolveOfficialPluginSiblingParent_FromWorktree_ReturnsPluginParent(String relativeWorktree) in tests/Build.Tests/PluginParentResolutionTests.cs:line 37
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     2, Skipped:     0, Total:     3, Duration: 91 ms - Build.Tests.dll (net10.0)

@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:31.02]     NukeBuild.Tests.TrimArtifactCleanupTests.TryDeleteArtifacts_PopulatedRoot_IsRemoved [FAIL]
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+  Failed NukeBuild.Tests.TrimArtifactCleanupTests.TryDeleteArtifacts_PopulatedRoot_IsRemoved [30 s]
+  Error Message:
+   TryDeleteArtifacts left /tmp/mcpserver-trim-cleanup-test/1156f4848b68471f98df8fd651e63236 in place.
+  Stack Trace:
+     at NukeBuild.Tests.TrimArtifactCleanupTests.TryDeleteArtifacts_PopulatedRoot_IsRemoved() in tests/Build.Tests/TrimArtifactCleanupTests.cs:line 33
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 30 s - Build.Tests.dll (net10.0)
