@@ -1,0 +1,174 @@
+{
+  "TimestampUtc": "2026-10-10T06:53:45Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "cliModel": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "liveProof": {
+      "threadId": "01a12489-b132-7550-adb9-542385042b57",
+      "rolloutPath": "/home/sharpninja/.codex/sessions/2026/10/10/rollout-2026-10-10T01-39-26-01a12489-b132-7550-adb9-542385042b57.jsonl",
+      "event": "turn_context",
+      "model": "gpt-6-sol",
+      "effort": "xhigh"
+    }
+  },
+  "addProfile": {
+    "skillRead": true,
+    "nonSkillMarkdownCount": 19,
+    "allRead": true
+  },
+  "markerRead": {
+    "path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "lineCount": 397,
+    "fullRead": true,
+    "secretFilterApplied": true,
+    "responseContainsMarkerCredential": false
+  },
+  "memoryRead": {
+    "method": "workflow.memory.list",
+    "count": 15,
+    "allTextsRead": true,
+    "process007Read": true,
+    "process008Read": true
+  },
+  "artifacts": {
+    "plan": "/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md",
+    "planLines": 652,
+    "planNonEmptyLines": 532,
+    "todoId": "PLAN-SESSIONTURNREVIEW-001",
+    "todoTaskCount": 30,
+    "todoDescriptionParity": true,
+    "handoff": "docs/handoffs/sessionturn-review-plan-20261009T022141Z.md",
+    "r36": "docs/receipts/hv/hostile-validator-plan-readiness-r36-20261010T062735Z.md",
+    "priorReceiptsChecked": "r1-r35",
+    "headSha": "c60be14746b2bddd6fa3c81bf57a62e493c319da"
+  },
+  "claims": [
+    {
+      "id": "P1",
+      "status": "PASS",
+      "evidence": "Source anchors and plugin paths spot-checked at HEAD; no source-file delta from prior audited baseline; current Node core engine is >=20"
+    },
+    {
+      "id": "P2",
+      "status": "PASS",
+      "evidence": "Main-workspace effective requirements read; 21 FR, 23 TR, 23 TEST proposed IDs have no live collision; operative mappings cross-checked"
+    },
+    {
+      "id": "P3",
+      "status": "FAIL",
+      "evidence": "F-R37-01 contradicts D5; F-R37-04 leaves option-1/C8 capture without durable rejected-drain path"
+    },
+    {
+      "id": "P4",
+      "status": "FAIL",
+      "evidence": "F-R37-02 omits Node-core withdrawn-before-delivery unsupported-session transition or justified P0.2 exclusion"
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "F-R37-04 leaves preservation and replay of carried audit evidence after atomic gate rejection undecided"
+    },
+    {
+      "id": "P6",
+      "status": "UNKNOWN",
+      "evidence": "Static paths and targets exist and BDPv4 sequence is specified; review-only run did not execute G1-G6 and Node-version matrix"
+    },
+    {
+      "id": "P7",
+      "status": "FAIL",
+      "evidence": "F-R37-02 and F-R37-03 omit plugin-core edge tests; F-R37-04 lacks restart/readback assertion"
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "F-R37-01 is a Stop AC/wire contradiction; F-R37-04 conflicts with C8 and atomic rejection"
+    },
+    {
+      "id": "P9",
+      "status": "PASS",
+      "evidence": "TODO 532 description lines exactly match plan nonempty lines; 30 tasks and NOT APPROVED note match handoff"
+    },
+    {
+      "id": "P10",
+      "status": "PASS",
+      "evidence": "Nine risk-section triage reports and the worktree triage group returned records via read-only wrapper"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 93,
+  "Confidence": 98,
+  "passCount": 4,
+  "failCount": 5,
+  "unknownCount": 1,
+  "FAIL": [
+    {
+      "id": "F-R37-01",
+      "planLocation": "Updated existing requirements line 464; AC001 line 226; TEST-006 line 378; A7 line 590",
+      "defect": "Broad AC007 blocks any opened in-progress turn, including queued undelivered, contradicting D5 and wire Stop clause line 551",
+      "evidence": "Wire and named queued test require warning only before delivery",
+      "passChange": "Narrow AC007 and AC001 to delivered ledger plus withdrawn scan, preserve queued warning, refine mapped test and sync TODO",
+      "classification": "implementer_edit"
+    },
+    {
+      "id": "F-R37-02",
+      "planLocation": "Common host rule line 81; AC001 line 226; TEST-008 line 380; A8 line 592",
+      "defect": "No Node-core combined withdrawn-before-delivery then unsupported failsafe test or documented P0.2 exclusion",
+      "evidence": "Node names only delivered-open unsupported-session case; A7 has the combined case",
+      "passChange": "Add Node jest case with original pair, warning, restart/drain and other-session negative, or substantiate per-host exclusion",
+      "classification": "implementer_edit"
+    },
+    {
+      "id": "F-R37-03",
+      "planLocation": "AC002/003 lines 318-319; TEST-005 line 390; TEST-008 line 393; S8 line 612; S9 line 614",
+      "defect": "Both plugin parsers lack a test for valid DISAGREE receipt with empty FAIL, UNKNOWN and reasons lists",
+      "evidence": "NoListedClaims appears only in S4 server mapping, not S8/S9 receipt tests",
+      "passChange": "Add PowerShell and Node receipt-input tests and TEST mappings for deterministic verdict-level reason plus response receipt path",
+      "classification": "implementer_edit"
+    },
+    {
+      "id": "F-R37-04",
+      "planLocation": "C8 line 128; AC005 line 274; AC003 line 286; S10 line 616",
+      "defect": "Rejected atomic drain persists no turn, clears failsafe, and permits carried evidence only to be reported unpersisted without durable recovery",
+      "evidence": "No retained record, replay owner, or restart/readback assertion after rejection",
+      "passChange": "Specify durable retained-payload or separate accepted-evidence write, idempotence, clear condition, and PowerShell/Node S10 restart/readback test",
+      "classification": "implementer_edit_under_existing_contract",
+      "operatorDecisionIfChangingContract": "Choose durable preservation or report-only loss; report-only loss needs fresh operator authorization"
+    }
+  ],
+  "UNKNOWN": [
+    {
+      "id": "U-R37-01",
+      "claim": "P6",
+      "reason": "Full gate command outcomes cannot be established without executing builds and tests, which would write outside receipt scope"
+    }
+  ],
+  "implementerFixes": [
+    "F-R37-01",
+    "F-R37-02",
+    "F-R37-03",
+    "F-R37-04"
+  ],
+  "operatorDecisionFails": [],
+  "reviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "reviewerRequestId": "req-20261010T064304Z-plan-r37-hv",
+  "receiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r37-20261010T063925Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r37-20261010T063925Z.json",
+    "docs/receipts/hv/20261010T063925Z-plan-readiness-r37.request.jsonl",
+    "docs/receipts/hv/20261010T063925Z-plan-readiness-r37.response.jsonl"
+  ],
+  "mcpPersistenceProof": {
+    "method": "client.SessionLog.QueryAsync via Codex wrapper",
+    "sessionIdFound": true,
+    "requestIdFound": true,
+    "fullResultFound": true,
+    "decisionDialogFound": true,
+    "receiptActionFound": true,
+    "localCacheActions": 3,
+    "localCacheDialog": 1,
+    "localCacheDecisions": 1,
+    "turnStatusAtReadback": "in_progress"
+  }
+}
