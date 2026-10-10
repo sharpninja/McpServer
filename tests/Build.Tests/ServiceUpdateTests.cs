@@ -148,6 +148,32 @@ public sealed class ServiceUpdateTests
     }
 
 
+    /// <summary>Reference double rejects a split legacy-service/canonical-directory identity before production binding.</summary>
+    [Fact]
+    public void MockContract_WindowsIdentityKeepsServiceAndInstallPaired()
+    {
+        static (string Service, string Install) Resolve(
+            bool canonicalServiceExists,
+            bool legacyServiceExists,
+            bool canonicalInstallExists,
+            bool legacyInstallExists)
+        {
+            if (canonicalServiceExists)
+                return ("QBrainAi", @"C:\ProgramData\QBrainAi");
+            if (legacyServiceExists)
+                return ("McpServer", @"C:\ProgramData\McpServer");
+            if (!canonicalInstallExists && legacyInstallExists)
+                return ("QBrainAi", @"C:\ProgramData\McpServer");
+            return ("QBrainAi", @"C:\ProgramData\QBrainAi");
+        }
+
+        var actual = Resolve(false, true, true, true);
+        Assert.Equal(("McpServer", @"C:\ProgramData\McpServer"), actual);
+        Assert.NotEqual(("McpServer", @"C:\ProgramData\QBrainAi"), actual);
+        Assert.Equal(("QBrainAi", @"C:\ProgramData\QBrainAi"), Resolve(true, true, true, true));
+    }
+
+
 
     /// <summary>FR-MCP-SERVICEUPDATE-001: host fixtures preserve Windows defaults and select Linux architecture.</summary>
     [Theory]
@@ -192,6 +218,17 @@ public sealed class ServiceUpdateTests
         Assert.Equal(@"C:\ProgramData\McpServer", Property(identity, "InstallPath"));
         Assert.Equal("QBrainAi.Support.Mcp.exe", Property(identity, "ExecutableName"));
     }
+
+    /// <summary>TR-MCP-QBRAIN-006: stale canonical files cannot split a live legacy service from its install.</summary>
+    [Fact]
+    public void WindowsInstall_LegacyServiceKeepsLegacyInstallWhenCanonicalDirectoryIsStale()
+    {
+        var identity = Call("ServiceUpdatePlatform", "ResolveExistingWindowsInstall", null,
+            "QBrainAi", @"C:\ProgramData\QBrainAi", false, true, true, true);
+        Assert.Equal("McpServer", Property(identity, "ServiceName"));
+        Assert.Equal(@"C:\ProgramData\McpServer", Property(identity, "InstallPath"));
+    }
+
 
     /// <summary>TR-MCP-QBRAIN-006: an explicit service name is not redirected onto the legacy registration.</summary>
     [Fact]
