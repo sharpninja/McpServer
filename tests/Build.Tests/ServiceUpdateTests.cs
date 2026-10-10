@@ -506,14 +506,11 @@ public sealed class ServiceUpdateTests
     /// <summary>Runs installed metadata utilities against an isolated fixture, failing on timeout or nonzero exit.</summary>
     private static string Native(string command, params string[] arguments)
     {
-        var info = new ProcessStartInfo(command) { UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true };
+        var info = new ProcessStartInfo(command);
         foreach (var argument in arguments) info.ArgumentList.Add(argument);
-        using var process = Process.Start(info)!;
-        var stdout = process.StandardOutput.ReadToEndAsync(); var stderr = process.StandardError.ReadToEndAsync();
-        Assert.True(process.WaitForExit(30000));
-        Task.WaitAll(stdout, stderr);
-        Assert.Equal(0, process.ExitCode);
-        return stdout.Result;
+        var result = BoundedProcess.Run(info, TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
+        Assert.Equal(0, result.ExitCode);
+        return result.Stdout;
     }
 
     /// <summary>Reflection keeps absent production contracts compilable for the red gate.</summary>
@@ -646,13 +643,10 @@ public sealed class ServiceUpdateTests
                 { Directory.CreateDirectory(Path.GetDirectoryName(path)!); File.WriteAllBytes(path, bytes); }
                 return Result(0, args.Contains("--version") ? "tar (GNU tar) test-double" : "");
             }
-            var info = new ProcessStartInfo(command) { RedirectStandardOutput = true, RedirectStandardError = true };
+            var info = new ProcessStartInfo(command);
             foreach (var arg in args) info.ArgumentList.Add(arg);
-            using var process = Process.Start(info)!;
-            var stdout = process.StandardOutput.ReadToEndAsync(); var stderr = process.StandardError.ReadToEndAsync();
-            Assert.True(process.WaitForExit(30000));
-            Task.WaitAll(stdout, stderr);
-            return Result(process.ExitCode, stdout.Result);
+            var result = BoundedProcess.Run(info, TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
+            return Result(result.ExitCode, result.Stdout);
         }
 
         /// <summary>Removes only this test's temporary tree.</summary>
