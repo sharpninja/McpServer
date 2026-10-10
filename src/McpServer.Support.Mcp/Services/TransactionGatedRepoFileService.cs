@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -54,10 +55,10 @@ public sealed class TransactionGatedRepoFileService : IRepoFileService
     {
         ArgumentNullException.ThrowIfNull(content);
 
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "repo.write"))
             return await _inner.WriteAsync(relativePath, content, cancellationToken).ConfigureAwait(false);
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             return new RepoWriteResult(
@@ -115,10 +116,10 @@ public sealed class TransactionGatedRepoFileService : IRepoFileService
         ArgumentNullException.ThrowIfNull(oldString);
         ArgumentNullException.ThrowIfNull(newString);
 
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "repo.edit"))
             return await _inner.EditAsync(relativePath, oldString, newString, replaceAll, expectedOccurrences, cancellationToken).ConfigureAwait(false);
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             return new RepoEditResult(

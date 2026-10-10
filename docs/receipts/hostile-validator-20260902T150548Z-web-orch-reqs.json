@@ -1,0 +1,182 @@
+{
+  "TimestampUtc": "2026-09-02T15:16:13Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class-1-project-requirement-work",
+  "SurfaceC": "applies",
+  "ActivePlan": "docs/plans/PLAN-WEB-ORCH-001.md",
+  "OverallVerdict": "DISAGREE",
+  "AddProfile": {
+    "executed": true,
+    "profileDirectory": "C:\\Users\\kingd\\.claude\\profile\\",
+    "nonSkillMarkdownFilesRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "ValidatorLimitation": "Cannot persist an MCP session-log turn. Operator directed failsafe: no MCP HTTP, MCP_UNTRUSTED, local files only.",
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Independent fetch of prompterhawk.dev and docs.html matches captured product nouns."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "54 records: 20 fr + 14 tr + 20 test; 128 AC all isSatisfied false."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Failsafe createBatch + 20 createMapping files; markdown projections not the write target."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "No src/McpServer.Web, no Web.Tests, no OrchestrationDashboard/TaskBank/LivePeek code."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "PLAN-WEB-ORCH-001.md exists and waits for operator approval."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Write script has no HTTP client calls; receipt httpProbed false."
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "All FR/TR/TEST IDs match claimed regexes."
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "Maps mission/agent/task to workspace/agent-pool/TODO; rejects PH Python clone."
+    },
+    {
+      "id": "A9",
+      "surface": "A",
+      "verdict": "PASS",
+      "summary": "grok session-state status MCP_UNTRUSTED; requirements queued in failsafe pending."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Phase 0 requirements-first; no product tests or implementation on disk."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Failsafe write receipt re-parsed against YAML objects."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "MCP-only via failsafe queue; no TODO.yaml or markdown-as-store write."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "PowerShell object-first YAML; no Python runtime used."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Claimed counts and paths match artifacts; no em-dash in scanned files."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "summary": "Plan-first wait; no unapproved implementation."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR-WEB-001..020, 14 TR-WEB-*, TEST-WEB-001..020 identified."
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Structured AC present on every record."
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "FAIL",
+      "summary": "FR-WEB-003 recycle SHALL has no AC; FR-WEB-010 files analyzed not in AC."
+    },
+    {
+      "id": "C4",
+      "surface": "C",
+      "verdict": "N/A",
+      "summary": "Phase 0; tests covering AC are the next inter-phase gate."
+    },
+    {
+      "id": "C5",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "FR/TR/TEST queued for new behavior; not marked satisfied."
+    },
+    {
+      "id": "C-map",
+      "surface": "C",
+      "verdict": "PASS",
+      "summary": "Each FR mapped to at least one TR and one TEST."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Phase 0 DoD artifacts exist; later phases not claimed done."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Plan names storage 503 and missing McpServer.Web."
+    },
+    {
+      "id": "D3",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "No Phase 1-6 completion marks."
+    },
+    {
+      "id": "D4",
+      "surface": "D",
+      "verdict": "PASS",
+      "summary": "Stop condition matches absence of product implementation."
+    }
+  ],
+  "FailList": [
+    "C3: FR-WEB-003 SHALL recycle has no acceptance criterion.",
+    "C3: FR-WEB-010 SHALL files analyzed (and PH lines added/removed as distinct from net change) is not in AC."
+  ],
+  "UnknownList": [],
+  "PassCount": 23,
+  "FailCount": 2,
+  "UnknownCount": 0,
+  "NaCount": 1,
+  "AccuracyRating": 9,
+  "CompletenessRating": 8,
+  "MarkdownReceipt": "docs/receipts/hostile-validator-20260902T150548Z-web-orch-reqs.md"
+}

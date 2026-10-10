@@ -1,0 +1,39 @@
+{
+  "index": 5,
+  "name": "repl-integration",
+  "exactCommand": "dotnet test tests\\McpServer.Repl.IntegrationTests\\McpServer.Repl.IntegrationTests.csproj",
+  "capturedCommand": "dotnet test tests\\McpServer.Repl.IntegrationTests\\McpServer.Repl.IntegrationTests.csproj --logger trx;LogFileName=05-repl-integration.trx --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z --nologo",
+  "startedUtc": "2026-08-22T15:30:49.4990152Z",
+  "endedUtc": "2026-08-22T15:41:09.7988537Z",
+  "durationSec": 620.3,
+  "exitCode": 0,
+  "passed": 181,
+  "failed": 0,
+  "skipped": 0,
+  "total": 181,
+  "countSource": "trx",
+  "logPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z\\05-repl-integration.log",
+  "logSha256": "95D0135E6F623880C386BE8AAC492D018C3DB3BA861BC5CFF4D5776B60E0488D",
+  "trxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z\\05-repl-integration.trx",
+  "trxSha256": "BB16CE5F8F1559F29DAAC5AF01BFCEEA3C3126C49EE9871369C3D50841DE8BA4",
+  "consoleCounts": {
+    "failed": 0,
+    "passed": 181,
+    "skipped": 0,
+    "total": 181,
+    "lines": 1
+  },
+  "trxCounts": {
+    "total": 181,
+    "executed": 181,
+    "passed": 181,
+    "failed": 0,
+    "notExecuted": 0,
+    "skipped": 0,
+    "skippedNames": [],
+    "failedNames": []
+  },
+  "gateFailed": false,
+  "gateSkipped": false,
+  "gateExitFail": false
+}

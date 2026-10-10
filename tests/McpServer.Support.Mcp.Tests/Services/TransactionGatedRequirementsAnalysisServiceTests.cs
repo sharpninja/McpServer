@@ -19,9 +19,14 @@ public sealed class TransactionGatedRequirementsAnalysisServiceTests
     /// analysis before Copilot or requirements document side effects run.
     /// </summary>
     [Fact]
-    public async Task AnalyzeAsync_WhenRequiredTransactionsActive_FailsClosedWithoutCallingInner()
+    public async Task AnalyzeAsync_WhenRequiredTransactionsActive_DelegatesToInner()
     {
+        var expected = new RequirementsAnalysisResult(
+            true,
+            FunctionalRequirements: ["FR-MCP-120"],
+            TechnicalRequirements: ["TR-MCP-TXN-001"]);
         var inner = Substitute.For<IRequirementsService>();
+        inner.AnalyzeAsync("PLAN-TXN-001", Arg.Any<CancellationToken>()).Returns(expected);
         var coordinator = new StatusCoordinator
         {
             Status = new TurnTransactionStatusResponse
@@ -38,9 +43,8 @@ public sealed class TransactionGatedRequirementsAnalysisServiceTests
 
         var result = await sut.AnalyzeAsync("PLAN-TXN-001", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Contains("not transaction compensated", result.Error, StringComparison.OrdinalIgnoreCase);
-        await inner.DidNotReceiveWithAnyArgs().AnalyzeAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(result.Success);
+        await inner.Received(1).AnalyzeAsync("PLAN-TXN-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -65,11 +69,12 @@ public sealed class TransactionGatedRequirementsAnalysisServiceTests
             coordinator,
             Microsoft.Extensions.Options.Options.Create(new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
 
+        inner.AnalyzeAsync("PLAN-TXN-001", Arg.Any<CancellationToken>())
+            .Returns(new RequirementsAnalysisResult(true, FunctionalRequirements: ["FR-MCP-120"]));
         var result = await sut.AnalyzeAsync("PLAN-TXN-001", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Contains("subscriber unavailable", result.Error, StringComparison.Ordinal);
-        await inner.DidNotReceiveWithAnyArgs().AnalyzeAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(result.Success);
+        await inner.Received(1).AnalyzeAsync("PLAN-TXN-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>

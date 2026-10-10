@@ -5,6 +5,7 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 ## What This Server Provides
 
 - HTTP API with Swagger UI
+- MCP Streamable HTTP transport (`POST /mcp-transport`; no API key)
 - MCP over STDIO transport (`--transport stdio`)
 - Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
 - Database-backed TODO storage following `Mcp:Database:Provider`; `docs/Project/TODO.yaml` is a read-only projection (TR-MCP-CFG-007)
@@ -77,6 +78,7 @@ Important keys:
 - `Mcp:TodoStorage:Provider` (`database`; `sqlite` is a deprecated alias for `database`, and the removed `yaml` value fails fast per TR-MCP-CFG-007)
 - `Mcp:TodoStorage:SqliteDataSource`
 - `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
+- `Mcp:TurnTransactions:*` (coordinator + keyserver). Repo default `Enabled: false`. Live box MCP keeps `Enabled: true` for QuadBrain. Keyserver signing is QuadBrain/brain-slot only (`TurnTransactionKeyserverScope`; FR-MCP-173). First-party adapters bypass the coordinator.
 - `Mcp:Triage:*` (asynchronous triage research runner: `AgentPath`, `ExecutionStrategy`, quiet period, fallback tiers). `AgentModel: auto` is a sentinel meaning "let the agent CLI pick its default model"; the Grok strategy omits `--model` for it and pins effort to `high` (current Grok CLIs reject `max`)
 - `Mcp:Instances:{name}:*` (per-instance overrides)
 
@@ -150,11 +152,32 @@ Windows service deployment and update must go through the Nuke build target:
 pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 ```
 
+Nuke `UpdateService` is Windows-only. A Linux box publish/swap into `/opt/mcpserver` is the box equivalent, not an `UpdateService` run. Do not claim a Windows Legion `UpdateService` unless that host actually ran the Nuke target.
+
+PLAN-TXNKEYSERVER-001 closed on the Linux box MCP after `develop` `8f30caf` was published/swapped to `/opt/mcpserver`. Live proof on that box: TODO, session-log, and requirements mutations with `TurnTransactions.Enabled=true` and no keyserver errors.
+
 The following operational/admin scripts are lower-level helpers for local development, diagnostics, or migration tasks. Do not use them as the normal Windows service redeploy path:
 
 - `scripts/Run-McpServer.ps1` - direct local run helper
 - `scripts/Manage-McpService.ps1` - install/start/stop/remove Windows service
 - `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
+
+## QuadBrain-only keyserver
+
+Shipped on `develop` (`facbb3a6` in `8f30caf`) and live on the Linux box MCP.
+
+`TurnTransactionKeyserverScope` (`src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs`):
+
+- `RequiresKeyserver` is true only for publisher party prefix `brain-slot:` or operation prefix `brain-slot.` / `quadbrain.`
+- `ShouldBypassCoordinator` is true when the coordinator is null or `RequiresKeyserver` is false
+
+Wired into all `TransactionGated*` adapters, `TransactionalTodoWorkflow`, federation apply, requirements ingest, context mutations, federation control, and STDIO context mutations. `TurnTransactionCoordinator.ExecuteAsync` also skips `SignManifestAsync` unless `RequiresKeyserver`.
+
+Still gated: `BrainSlotInvocationService` (`brain-slot.invoke`) and `QuadBrainOrchestrationService` (`brain-slot.weight-update`). Still fail-closed: `RepairWorkspaceStampsAsync`.
+
+Keep live `Mcp:TurnTransactions:Enabled=true` for QuadBrain. Do not flip that flag off to unblock general-agent writes.
+
+Box requirements restore: FR-MCP-173, TR-MCP-TXNKEY-001, TEST-MCP-221 plus mapping; FR-MCP-120 carve-out; TEST-MCP-161 retarget. Prior unit-suite HV AGREEs: `docs/receipts/hostile-validator-20260917T174749Z.md`, `docs/receipts/hostile-validator-20260917T184144Z.md`. Box deploy: `docs/receipts/implementer-txnkeyserver-box-deploy-20260919T154640Z.md`. Done-claim HV AGREE Accuracy 99 Completeness 98: `docs/receipts/hostile-validator-20260919T162808Z.md` (json twin + `docs/receipts/hv/20260919T162808Z-txnkeyserver-box-deploy-done-claim.*.jsonl`). Prior DISAGREE history: `docs/receipts/hostile-validator-20260919T161130Z.md`. Integration/Validation/Review were not run.
 
 ## GraphRAG
 
@@ -223,16 +246,25 @@ Track these operational indicators during rollout:
 Main endpoints:
 
 - `/mcpserver/todo`
+- `/mcpserver/handoff` - ingest, get run, and approve (`/ingest`, `/runs/{runId}`, `/runs/{runId}/approve`). See `docs/Handoff-Ingestion.md`.
 - `/mcpserver/sessionlog`
 - `/mcpserver/context`
 - `/mcpserver/repo`
 - `/mcpserver/gh`
 - `/mcpserver/sync`
-- `/mcpserver/usecases` — use case aggregates, structure, FR links, coverage, diagram-graph (UML canvas schema v1), sequence/UML diagram export, approval/product
-- `/usecases/` — first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
-- `/mcpserver/agent-help` — Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
-- `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` — provider transcript import
-- `/health` — liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.
+- `/mcpserver/usecases` - use case aggregates, structure, FR links, coverage, diagram-graph (UML canvas schema v1), sequence/UML diagram export, approval/product
+- `/usecases/` - first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
+- `/mcpserver/memory` - remember/recall/explore/consolidate/promote/versions/revert plus compat CRUD (`GET/POST/PUT/DELETE /mcpserver/memory`, `POST .../remember|recall|explore|consolidate|promote`, `GET .../{id}/versions`, `POST .../{id}/revert`)
+- `/memory/` - first-party Memory UI static assets from `wwwroot/memory` (REST-only; included in publish output / Linux service package; deploy via Nuke `UpdateService`)
+- STDIO/MCP tools: `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`, plus compat `memory_list|get|add|update|remove` (`docs/stdio-tool-contract.json`)
+- REPL: `workflow.memory.*` (same verb names). Typed client: `McpServerClient.Memory`
+- REQUIRED MEMORIES: all eight official plugins inject Effective raw `Content` (or legacy `Text`) at host request boundaries (`skills/memory` + `memory-descriptor.json` + always-on host injection). Empty set is `REQUIRED MEMORIES` / `- None`. Title/summary/confidence/tags are never injected. See `docs/context/memory.md`.
+- Memory plugin efficacy pack: `docs/benchmarks/memory-prompt-pack-v1.yaml` (smoke/regression; tokens primary). Real efficiency bench: `docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml`. Eight-plugin stub v2: `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`. Default CI plugin remains grok; `-Plugin all` is unblocked after H7a `agree:true`. See `docs/benchmarks/README.md`.
+- Hebbian explore edges stay off unless `Mcp:Memory:Hebbian:Enabled` or the request override is true.
+- `/mcpserver/agent-help` - Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
+- `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` - provider transcript import
+- `/health` - liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.
+- `/mcp-transport` - MCP Streamable HTTP JSON-RPC. No API key required.
 - `/swagger`
 
 ### Transcript Ingestion Limits
@@ -252,7 +284,7 @@ Host-local products (`PROD-*` keys such as `PROD-MCPSERVER`) map workspaces toge
 
 ## Requirements Wiki Export
 
-`docs/wiki.yaml` uses schema `mcp-wiki-export/v1` to define the requirements wiki document tree for GitHub and Azure exports. When the file is absent, wiki generation falls back to the canonical generated Home, requirements, traceability, matrix, GitHub sidebar/footer, Azure order files, and manifests.
+`docs/wiki.yaml` uses schema `mcp-wiki-export/v1` to define the requirements wiki document tree for GitHub and Azure exports. When the file is absent, wiki generation falls back to the canonical generated Home, requirements, traceability, matrix, GitHub sidebar/footer, Azure order files, and manifests. `GenerateAllAsync` opens a workspace-contained export root (`WorkspaceContainedFileSystem.OpenExportRoot`) before reading the on-disk requirements matrix so export I/O stays pinned inside the workspace.
 
 The optional `docfx` section is disabled by default with an empty workflow list:
 
@@ -333,13 +365,13 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 });
 ```
 
-Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
+Covers all API endpoints: Todo, Handoff, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
-Source: `src/McpServer.Client/` — see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
+Source: `src/McpServer.Client/` - see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
 
 ## Health, storage, and errors
 
-`GET /health` is liveness. Observed live payload keys on 1.4.30: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+`GET /health` is liveness. Observed live payload on `1.4.39+c59185ad0bcc518fd673a2f8b418d30739765f19`: `status` Healthy, `version`, `checks`, `nonce` echo, `storage` reachable. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
 
 ## Session log sanitization and incremental persist
 
@@ -351,8 +383,11 @@ Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, 
 
 ## Additional Documentation
 
+- Handoff ingestion: `Handoff-Ingestion.md`
 - User documentation: `USER-GUIDE.md`
 - Documentation index: `README.md`
 - FAQ: `FAQ.md`
 
+## Frontier agent setup prompt (draft)
 
+See [docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md](setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md) for the MCP-SETUPPROMPT-001 operator draft (HV overall AGREE 2026-09-28 CT on draft scope).

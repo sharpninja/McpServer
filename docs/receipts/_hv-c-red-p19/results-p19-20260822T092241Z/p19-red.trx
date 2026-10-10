@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a3fc02a4-4dce-41fe-8bda-04b1b4968bff" name="kingd@PAYTON-LEGION2 2026-08-22 04:22:59" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-22T04:22:59.7044069-05:00" queuing="2026-08-22T04:22:59.7044075-05:00" start="2026-08-22T04:22:57.1209167-05:00" finish="2026-08-22T04:22:59.7420743-05:00" />
+  <TestSettings name="default" id="51d7b3ac-41ce-4e70-b778-82603786d3fc">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-22_04_22_59" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a5f05d9a-ef89-4d59-b76f-a89f41e9375e" testId="1e85bb3b-0ec5-ee92-f4d0-634715996a1f" testName="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit" computerName="PAYTON-LEGION2" duration="00:00:00.0009247" startTime="2026-08-22T04:22:59.1216225-05:00" endTime="2026-08-22T04:22:59.1227749-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a5f05d9a-ef89-4d59-b76f-a89f41e9375e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-&lt;utc&gt; receipt directory exists.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceipt.LoadLatest(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceipt.cs:line 64&#xD;
+   at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceiptTests.cs:line 67&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="afa6567f-1d51-4bf1-a145-47b5c571a0df" testId="a0de7389-e5b9-42e1-e4a6-72ab822afe7c" testName="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero" computerName="PAYTON-LEGION2" duration="00:00:00.0019444" startTime="2026-08-22T04:22:59.1185485-05:00" endTime="2026-08-22T04:22:59.1208702-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="afa6567f-1d51-4bf1-a145-47b5c571a0df">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-&lt;utc&gt; receipt directory exists.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceipt.LoadLatest(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceipt.cs:line 64&#xD;
+   at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceiptTests.cs:line 46&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4a610c0c-02c4-4d8c-96f1-01fad44cd70f" testId="79270821-abce-65f2-c58f-b6cc3cece44f" testName="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero" computerName="PAYTON-LEGION2" duration="00:00:00.0819730" startTime="2026-08-22T04:22:58.9958349-05:00" endTime="2026-08-22T04:22:59.1102920-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4a610c0c-02c4-4d8c-96f1-01fad44cd70f">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-&lt;utc&gt; receipt directory exists.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceipt.LoadLatest(String repositoryRoot) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceipt.cs:line 64&#xD;
+   at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceiptTests.cs:line 21&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a0de7389-e5b9-42e1-e4a6-72ab822afe7c">
+      <Execution id="afa6567f-1d51-4bf1-a145-47b5c571a0df" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests" name="PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="1e85bb3b-0ec5-ee92-f4d0-634715996a1f">
+      <Execution id="a5f05d9a-ef89-4d59-b76f-a89f41e9375e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests" name="PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="79270821-abce-65f2-c58f-b6cc3cece44f">
+      <Execution id="4a610c0c-02c4-4d8c-96f1-01fad44cd70f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests" name="PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1e85bb3b-0ec5-ee92-f4d0-634715996a1f" executionId="a5f05d9a-ef89-4d59-b76f-a89f41e9375e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a0de7389-e5b9-42e1-e4a6-72ab822afe7c" executionId="afa6567f-1d51-4bf1-a145-47b5c571a0df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79270821-abce-65f2-c58f-b6cc3cece44f" executionId="4a610c0c-02c4-4d8c-96f1-01fad44cd70f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="3" executed="3" passed="0" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.31]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.75]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.01]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.22]       System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-&lt;utc&gt; receipt directory exists.&#xD;
+[xUnit.net 00:00:01.22]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceipt.cs(64,0): at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceipt.LoadLatest(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.22]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceiptTests.cs(21,0): at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero()&#xD;
+[xUnit.net 00:00:01.22]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.22]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.24]       System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-&lt;utc&gt; receipt directory exists.&#xD;
+[xUnit.net 00:00:01.24]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.24]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceipt.cs(64,0): at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceipt.LoadLatest(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.24]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceiptTests.cs(46,0): at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero()&#xD;
+[xUnit.net 00:00:01.24]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.24]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.24]       System.IO.FileNotFoundException : No docs/receipts/pluginint-p19-&lt;utc&gt; receipt directory exists.&#xD;
+[xUnit.net 00:00:01.24]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.24]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceipt.cs(64,0): at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceipt.LoadLatest(String repositoryRoot)&#xD;
+[xUnit.net 00:00:01.24]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginNativeSuiteReceiptTests.cs(67,0): at McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit()&#xD;
+[xUnit.net 00:00:01.24]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.24]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.25]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T04:22:59.1207647-05:00">
+        <Text>[xUnit.net 00:00:01.22]     McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T04:22:59.1426658-05:00">
+        <Text>[xUnit.net 00:00:01.24]     McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-22T04:22:59.1442759-05:00">
+        <Text>[xUnit.net 00:00:01.24]     McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

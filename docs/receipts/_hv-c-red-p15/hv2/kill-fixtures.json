@@ -1,0 +1,32 @@
+{
+  "TimestampUtc": "2026-08-22T05:55:11.0485459Z",
+  "KilledCount": 4,
+  "Killed": [
+    {
+      "ProcessId": 10924,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll",
+      "Killed": true
+    },
+    {
+      "ProcessId": 70044,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll",
+      "Killed": true
+    },
+    {
+      "ProcessId": 62992,
+      "Name": "testhost.exe",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.runtimeconfig.json\" --depsfile \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginI",
+      "Killed": true
+    },
+    {
+      "ProcessId": 86532,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll",
+      "Killed": true
+    }
+  ],
+  "Kept": [],
+  "AfterCount": 1
+}

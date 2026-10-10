@@ -33,7 +33,7 @@ public sealed class SessionLogController : ControllerBase
     /// </summary>
     /// <param name="dto">Unified session log payload.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>201 Created with location header, or 400 if validation fails.</returns>
+    /// <returns>201 Created with a durable-write receipt after persistence, or an error if validation or persistence fails.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,7 +71,17 @@ public sealed class SessionLogController : ControllerBase
 
             return Created(
                 new Uri($"/mcpserver/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
-                new { id, sourceType = dto.SourceType, sessionId = dto.SessionId });
+                new
+                {
+                    id,
+                    sourceType = dto.SourceType,
+                    sessionId = dto.SessionId,
+                    requestId = dto.Turns is { Count: 1 } ? dto.Turns.Single().RequestId : null,
+                    // TR-MCP-SESSIONLIFE-003: acknowledge only the awaited durable service write.
+                    persisted = true,
+                    degraded = false,
+                    queued = false
+                });
         }
         catch (Exception ex) when (ex is DbUpdateException or ArgumentException or InvalidOperationException or StorageCommandBudgetExceededException)
         {
@@ -247,6 +257,11 @@ public sealed class SessionLogController : ControllerBase
             return Ok(new { agent, sessionId, requestId, totalDialogCount = totalCount });
         }
         catch (InvalidOperationException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return ClassifiedError(ex);
+        }
+        catch (DbUpdateException ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
             return ClassifiedError(ex);

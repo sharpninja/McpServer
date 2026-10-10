@@ -1,0 +1,566 @@
+{
+  "mismatches": [],
+  "mismatchCount": 0,
+  "comparisons": [
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\agent-runtime-header.ps1",
+      "copy": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "file": "agent-runtime-header.ps1",
+      "canonical": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\cache-manager.ps1",
+      "copy": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "file": "cache-manager.ps1",
+      "canonical": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\classified-error.ps1",
+      "copy": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "file": "classified-error.ps1",
+      "canonical": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\ensure-repl.ps1",
+      "copy": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "file": "ensure-repl.ps1",
+      "canonical": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\final-response.ps1",
+      "copy": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "file": "final-response.ps1",
+      "canonical": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\Invoke-McpPlugin.ps1",
+      "copy": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "file": "Invoke-McpPlugin.ps1",
+      "canonical": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\marker-resolver.ps1",
+      "copy": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "file": "marker-resolver.ps1",
+      "canonical": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\mcp-status.ps1",
+      "copy": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C",
+      "file": "mcp-status.ps1",
+      "canonical": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\McpPluginShim.psm1",
+      "copy": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0",
+      "file": "McpPluginShim.psm1",
+      "canonical": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\plugin-env.ps1",
+      "copy": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698",
+      "file": "plugin-env.ps1",
+      "canonical": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\plugin-hook.ps1",
+      "copy": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478",
+      "file": "plugin-hook.ps1",
+      "canonical": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\repl-invoke.ps1",
+      "copy": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189",
+      "file": "repl-invoke.ps1",
+      "canonical": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\resolve-cache-dir.ps1",
+      "copy": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793",
+      "file": "resolve-cache-dir.ps1",
+      "canonical": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-codex-plugin",
+      "path": "F:\\GitHub\\mcpserver-codex-plugin\\lib\\yaml-object-mutation.ps1",
+      "copy": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "file": "yaml-object-mutation.ps1",
+      "canonical": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\agent-runtime-header.ps1",
+      "copy": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "file": "agent-runtime-header.ps1",
+      "canonical": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\cache-manager.ps1",
+      "copy": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "file": "cache-manager.ps1",
+      "canonical": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\classified-error.ps1",
+      "copy": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "file": "classified-error.ps1",
+      "canonical": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\ensure-repl.ps1",
+      "copy": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "file": "ensure-repl.ps1",
+      "canonical": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\final-response.ps1",
+      "copy": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "file": "final-response.ps1",
+      "canonical": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\Invoke-McpPlugin.ps1",
+      "copy": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "file": "Invoke-McpPlugin.ps1",
+      "canonical": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\marker-resolver.ps1",
+      "copy": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "file": "marker-resolver.ps1",
+      "canonical": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\mcp-status.ps1",
+      "copy": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C",
+      "file": "mcp-status.ps1",
+      "canonical": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\McpPluginShim.psm1",
+      "copy": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0",
+      "file": "McpPluginShim.psm1",
+      "canonical": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\plugin-env.ps1",
+      "copy": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698",
+      "file": "plugin-env.ps1",
+      "canonical": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\plugin-hook.ps1",
+      "copy": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478",
+      "file": "plugin-hook.ps1",
+      "canonical": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\repl-invoke.ps1",
+      "copy": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189",
+      "file": "repl-invoke.ps1",
+      "canonical": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\resolve-cache-dir.ps1",
+      "copy": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793",
+      "file": "resolve-cache-dir.ps1",
+      "canonical": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-claude-code-plugin",
+      "path": "F:\\GitHub\\mcpserver-claude-code-plugin\\lib\\yaml-object-mutation.ps1",
+      "copy": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "file": "yaml-object-mutation.ps1",
+      "canonical": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\agent-runtime-header.ps1",
+      "copy": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "file": "agent-runtime-header.ps1",
+      "canonical": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\cache-manager.ps1",
+      "copy": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "file": "cache-manager.ps1",
+      "canonical": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\classified-error.ps1",
+      "copy": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "file": "classified-error.ps1",
+      "canonical": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\ensure-repl.ps1",
+      "copy": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "file": "ensure-repl.ps1",
+      "canonical": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\final-response.ps1",
+      "copy": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "file": "final-response.ps1",
+      "canonical": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\Invoke-McpPlugin.ps1",
+      "copy": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "file": "Invoke-McpPlugin.ps1",
+      "canonical": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\marker-resolver.ps1",
+      "copy": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "file": "marker-resolver.ps1",
+      "canonical": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\mcp-status.ps1",
+      "copy": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C",
+      "file": "mcp-status.ps1",
+      "canonical": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\McpPluginShim.psm1",
+      "copy": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0",
+      "file": "McpPluginShim.psm1",
+      "canonical": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\plugin-env.ps1",
+      "copy": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698",
+      "file": "plugin-env.ps1",
+      "canonical": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\plugin-hook.ps1",
+      "copy": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478",
+      "file": "plugin-hook.ps1",
+      "canonical": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\repl-invoke.ps1",
+      "copy": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189",
+      "file": "repl-invoke.ps1",
+      "canonical": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\resolve-cache-dir.ps1",
+      "copy": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793",
+      "file": "resolve-cache-dir.ps1",
+      "canonical": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-copilot-plugin",
+      "path": "F:\\GitHub\\mcpserver-copilot-plugin\\lib\\yaml-object-mutation.ps1",
+      "copy": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "file": "yaml-object-mutation.ps1",
+      "canonical": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\agent-runtime-header.ps1",
+      "copy": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "file": "agent-runtime-header.ps1",
+      "canonical": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\cache-manager.ps1",
+      "copy": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "file": "cache-manager.ps1",
+      "canonical": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\classified-error.ps1",
+      "copy": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "file": "classified-error.ps1",
+      "canonical": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\ensure-repl.ps1",
+      "copy": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "file": "ensure-repl.ps1",
+      "canonical": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\final-response.ps1",
+      "copy": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "file": "final-response.ps1",
+      "canonical": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\Invoke-McpPlugin.ps1",
+      "copy": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "file": "Invoke-McpPlugin.ps1",
+      "canonical": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\marker-resolver.ps1",
+      "copy": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "file": "marker-resolver.ps1",
+      "canonical": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\mcp-status.ps1",
+      "copy": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C",
+      "file": "mcp-status.ps1",
+      "canonical": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\McpPluginShim.psm1",
+      "copy": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0",
+      "file": "McpPluginShim.psm1",
+      "canonical": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\plugin-env.ps1",
+      "copy": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698",
+      "file": "plugin-env.ps1",
+      "canonical": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\plugin-hook.ps1",
+      "copy": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478",
+      "file": "plugin-hook.ps1",
+      "canonical": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\repl-invoke.ps1",
+      "copy": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189",
+      "file": "repl-invoke.ps1",
+      "canonical": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\resolve-cache-dir.ps1",
+      "copy": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793",
+      "file": "resolve-cache-dir.ps1",
+      "canonical": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-cline-plugin",
+      "path": "F:\\GitHub\\mcpserver-cline-plugin\\lib\\yaml-object-mutation.ps1",
+      "copy": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "file": "yaml-object-mutation.ps1",
+      "canonical": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\agent-runtime-header.ps1",
+      "copy": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+      "file": "agent-runtime-header.ps1",
+      "canonical": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\cache-manager.ps1",
+      "copy": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+      "file": "cache-manager.ps1",
+      "canonical": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\classified-error.ps1",
+      "copy": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+      "file": "classified-error.ps1",
+      "canonical": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\ensure-repl.ps1",
+      "copy": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+      "file": "ensure-repl.ps1",
+      "canonical": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\final-response.ps1",
+      "copy": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+      "file": "final-response.ps1",
+      "canonical": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1",
+      "copy": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+      "file": "Invoke-McpPlugin.ps1",
+      "canonical": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\marker-resolver.ps1",
+      "copy": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+      "file": "marker-resolver.ps1",
+      "canonical": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\mcp-status.ps1",
+      "copy": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C",
+      "file": "mcp-status.ps1",
+      "canonical": "914D3D8CE13227220E641CDF2EE814FA800B7EFC571A51B4B694D04FF4DF7F6C"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\McpPluginShim.psm1",
+      "copy": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0",
+      "file": "McpPluginShim.psm1",
+      "canonical": "AAE81C95CD106311B7522CF9E8D3085DDDF51A60E1513A9A199EF88974455BF0"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\plugin-env.ps1",
+      "copy": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698",
+      "file": "plugin-env.ps1",
+      "canonical": "F995BB8391E27DCF6F13AB818030C0102D2AEF58D11CF76E4661E4E3F490F698"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\plugin-hook.ps1",
+      "copy": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478",
+      "file": "plugin-hook.ps1",
+      "canonical": "75D9571BA67DA4EA1BE755E8CD8E3CFD97A2EEAD497F3A39C636CCBCD68D6478"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\repl-invoke.ps1",
+      "copy": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189",
+      "file": "repl-invoke.ps1",
+      "canonical": "C3BCF669499F3F443EB822B93152AF1F560DA8DCAC244C9773B2FD12A5047189"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\resolve-cache-dir.ps1",
+      "copy": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793",
+      "file": "resolve-cache-dir.ps1",
+      "canonical": "9924A0F58A5157421E5EF6521B7626211776E517FECB09A0C2D50004E6348793"
+    },
+    {
+      "match": true,
+      "plugin": "mcpserver-grok-plugin",
+      "path": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\yaml-object-mutation.ps1",
+      "copy": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+      "file": "yaml-object-mutation.ps1",
+      "canonical": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A"
+    }
+  ]
+}

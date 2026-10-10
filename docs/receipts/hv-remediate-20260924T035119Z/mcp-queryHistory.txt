@@ -1,0 +1,12 @@
+﻿type: error
+payload:
+  requestId: req-20260924T035755Z-2dd5
+  code: method_invocation_error
+  message: backend_unavailable
+  retryable: false
+  details:
+    methodName: workflow.sessionlog.queryHistory
+    exceptionType: McpServer.Client.McpServerException
+
+---
+

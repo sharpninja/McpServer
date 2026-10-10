@@ -1,0 +1,663 @@
+type: result
+payload:
+  requestId: req-20260822T101535Z-3f95
+  result:
+    totalCount: 266
+    limit: 3
+    offset: 0
+    items:
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260821T113141Z-plugin-session
+      agentSessionId: 01a02453-31a6-78b3-afbf-9675dfad5d9a
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      title: Load operator profile and start new session
+      model: grok
+      started: 2026-08-21T11:33:01.0000000+00:00
+      lastUpdated: 2026-08-22T09:38:51.3558238+00:00
+      status: in_progress
+      turnCount: 15
+      turns:
+      - requestId: req-20260821T113258Z-001-add-profile-new-session
+        timestamp: 2026-08-21T11:33:01.0000000+00:00
+        queryText: /add-profile then new session
+        queryTitle: Load operator profile and start new session
+        response: Superseded by req-20260821T123721Z-prompt-1e32 before it was completed.
+        interpretation: 'Operator asked to load the global profile then start a new MCP session. Class 2 ops: bootstrap only, no product implementation.'
+        status: canceled
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: Read 18 operator profile markdown files from ~/.claude/profile excluding add-profile skill ports
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: Verified marker HMAC-SHA256 via plugin marker-resolver Test-MarkerSignature; signatureOk true
+          type: design_decision
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: 'Health nonce echoed exactly: nonce-1bcd467b9def481c859e97e863fae9d1 status Healthy'
+          type: design_decision
+          status: completed
+          filePath: ''
+        - order: 4
+          description: Tool registry exact name mcpserver-grok-plugin found; git pull --ff-only at F:\GitHub\mcpserver-grok-plugin already up to date, version 1.97.0 from plugin .version
+          type: design_decision
+          status: completed
+          filePath: F:\GitHub\mcpserver-grok-plugin
+        - order: 5
+          description: Opened canonical session GrokCode-20260821T113141Z-plugin-session and began turn req-20260821T113258Z-001-add-profile-new-session; server turnId 42441
+          type: design_decision
+          status: completed
+          filePath: ''
+        - order: 6
+          description: Chose plugin-generated session as canonical new session; completed hook session turn as superseded
+          type: design_decision
+          status: completed
+          filePath: ''
+        model: grok
+        tokenCount: 0
+        tags:
+        - session-start
+        - add-profile
+        - GrokCode
+        - class-2-ops
+        - hostile-disagree
+        contextList:
+        - AGENTS-README-FIRST.yaml
+        - C:\Users\kingd\.claude\profile\PROFILE.md
+        - C:\Users\kingd\.claude\skills\add-profile\SKILL.md
+        - C:\Users\kingd\.grok\skills\mcpserver-session\SKILL.md
+        - F:\GitHub\mcpserver-grok-plugin\.version
+        - F:\GitHub\McpServer\.mcpServer\grok\session-state.yaml
+        processingDialog:
+        - timestamp: 2026-08-21T11:30:52.0000000+00:00
+          role: model
+          content: Plugin marker-resolver Test-MarkerSignature returned signatureOk true and Invoke-FullBootstrap returned bootstrapOk true from F:\GitHub\McpServer.
+          category: observation
+        - timestamp: 2026-08-21T11:31:02.0000000+00:00
+          role: model
+          content: Health nonce sent nonce-1bcd467b9def481c859e97e863fae9d1; echo matched; healthStatus Healthy.
+          category: observation
+        - timestamp: 2026-08-21T11:31:27.0000000+00:00
+          role: model
+          content: Registry tool name mcpserver-grok-plugin exact match; commandTemplate git pull --ff-only at F:\GitHub\mcpserver-grok-plugin exit 0 Already up to date; plugin .version 1.97.0.
+          category: observation
+        - timestamp: 2026-08-21T11:33:13.0000000+00:00
+          role: model
+          content: 'Decision: canonical new session is GrokCode-20260821T113141Z-plugin-session. Hook session GrokCode-20260821T112802Z-plugin-session is superseded. Rationale: operator asked for a new session after add-profile. Alternative rejected: keep the hook session as canonical.'
+          category: decision
+        - timestamp: 2026-08-21T11:33:40.0000000+00:00
+          role: model
+          content: 'Native sessionlog_open success created=false; sessionlog_begin_turn success turnId=42441 status=in_progress. Open TODOs: 36. Failsafe pendingCount 53 (failsafe 53, quarantine 48).'
+          category: observation
+        designDecisions:
+        - 'Judgment: use plugin-generated sessionId GrokCode-20260821T113141Z-plugin-session as the canonical new session instead of UserPromptSubmit hook session GrokCode-20260821T112802Z-plugin-session. Consequence: hook turn completed as superseded; this session is the active work session.'
+        - 'Judgment: classify this request as a user-directed general action (class 2: profile load plus session bootstrap), not project implementation. Consequence: no FR/TR/TEST created; hostile surface C is N/A.'
+        - 'Judgment: prove session persistence with native sessionlog_open/begin_turn/query rather than plugin cache files alone, because plugin openSession is a local cache write. Consequence: server turnId 42441 is the persistence receipt.'
+        - 'Judgment: prefer replace_section over sessionlog_dialog for processing dialog because BUG-TRIAGE-165 documents appendDialog internal_server_error. Consequence: dialog persisted via section replace, not POST /dialog.'
+        - 'Judgment: I was wrong to claim session-state.yaml held the session title and remained on GrokCode-20260821T113141Z-plugin-session. Consequence: report DISAGREE A6/B1; treat current-turn.yaml plus sessionlog_query as the cache/server receipts; do not force-write session-state.yaml past plugin root-session protection.'
+        blockers:
+        - 'Hostile OverallVerdict DISAGREE: A6/B1. I attributed session title and canonical sessionId to .mcpServer/grok/session-state.yaml. After a later SessionStart (hostile validator), that file is status=verified sessionId=GrokCode-20260821T113501Z-plugin-session with no title key. Title and canonical ids live on current-turn.yaml and the server session. Plugin openSession refused to restick the root cache away from 113501.'
+        - 'Failsafe queue remains undrained: pendingCount 53, failsafe 53, quarantine 48. Not claimed drained.'
+      - requestId: req-20260821T142316Z-002-is-mcp-server-running
+        timestamp: 2026-08-21T14:35:03.3219120+00:00
+        queryText: Is MCP Server running?
+        queryTitle: Check whether MCP Server is running
+        response: Yes. MCP Server is running. Marker signature true. GET /health nonce nonce-13afca6083364986bdd4aa3b3d435014 echoed; status Healthy. Process 16936 McpServer.Support.Mcp owns Listen on TCP 7147. Windows service McpServer is Running (Automatic). McpManagementService is Stopped (Manual). Hostile review still in progress at complete time; no AGREE claimed.
+        interpretation: Operator wants a live running/not-running check of MCP Server, not a remembered state from session start.
+        status: completed
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: Plugin Test-MarkerSignature true against AGENTS-README-FIRST.yaml
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 2
+          description: GET /health nonce nonce-13afca6083364986bdd4aa3b3d435014 echoed; status Healthy
+          type: read
+          status: completed
+          filePath: http://PAYTON-LEGION2:7147/health
+        - order: 3
+          description: Process 16936 McpServer.Support.Mcp still live; Get-NetTCPConnection LocalPort 7147 OwningProcess 16936 Listen
+          type: read
+          status: completed
+          filePath: ''
+        - order: 4
+          description: Get-Service McpServer Status Running StartType Automatic; McpManagementService Stopped Manual
+          type: read
+          status: completed
+          filePath: ''
+        model: grok-4.6
+        tags:
+        - ops
+        - health
+        - class-2-ops
+        - mcp-server-running
+        processingDialog:
+        - timestamp: 2026-08-21T14:23:16.0000000+00:00
+          role: model
+          content: User asked whether MCP Server is running. Need live health, process, and service receipts, not the prior session bootstrap.
+          category: reasoning
+        - timestamp: 2026-08-21T14:23:45.0000000+00:00
+          role: model
+          content: signatureOk true. nonce-13afca6083364986bdd4aa3b3d435014 echoed. health status Healthy. marker pid 16936 process McpServer.Support.Mcp. port 7147 listen owner 16936. Service McpServer Running Automatic. McpManagementService Stopped Manual.
+          category: observation
+        - timestamp: 2026-08-21T14:23:50.0000000+00:00
+          role: model
+          content: 'Decision: answer yes, MCP Server is running. Rationale: signature, nonce, live PID, listen socket, and service Running all match. Alternative rejected: infer running from MCP tools already being connected.'
+          category: decision
+        designDecisions:
+        - 'Judgment: treat MCP Server as running only if marker signature, health nonce echo, listening PID, and Windows service Running all agree. Consequence: yes. Alternatives rejected: MCP tool connectivity alone, or marker pid without a live process.'
+        - 'Judgment: classify this as class-2 operator status check, not product implementation. Consequence: no FR/TR; hostile surface C N/A.'
+      - requestId: req-20260821T143556Z-003-post-queued-failsafe-triage
+        timestamp: 2026-08-21T15:23:09.4766264+00:00
+        queryText: Attempt to post all queued data to MCP Server and triage failure
+        queryTitle: Replay failsafe queue and triage failures
+        response: 'Posted 167 SessionLog.SubmitAsync failsafe records. Grok live and quarantine are empty. Claude quarantine empty. Codex live empty. Remaining: 3 Codex quarantine validation failures and 2 Codex importRecovery pending files (not SubmitAsync). workflow.failsafe.drain cannot post these because SubmitAsync timeout is hardcoded to 2s while draining. Four triage reports accepted. Summary receipt docs/receipts/failsafe-post-all-summary-20260821T152147Z.json.'
+        interpretation: Operator wanted every failsafe/pending YAML posted to MCP Server, then remaining failures triaged. Class 2 ops.
+        status: completed
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'workflow.failsafe.drain aborted after 1 scan: mcpserver-repl timed out after 2s'
+          type: design_decision
+          status: completed
+          filePath: F:\GitHub\mcpserver-grok-plugin\lib\repl-invoke.ps1
+        - order: 2
+          description: Posted 54 grok live SubmitAsync records (53 original plus 1 capture during 503 window); live queue now 0
+          type: edit
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\grok\failsafe
+        - order: 3
+          description: Posted 48 grok quarantine SubmitAsync records; quarantine now 0
+          type: edit
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\grok\failsafe\quarantine
+        - order: 4
+          description: Posted 12 Codex live, 12 Codex quarantine, 41 Claude quarantine SubmitAsync records; 3 Codex quarantine remain
+          type: edit
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\codex\failsafe
+        - order: 5
+          description: Triage drain 2s timeout reportId triage-report-bb6214a43c40430da3285a530deec758
+          type: design_decision
+          status: completed
+          filePath: ''
+        - order: 6
+          description: Triage 503 burst reportId triage-report-972623438ab84b489e8195f977698a86
+          type: design_decision
+          status: completed
+          filePath: ''
+        - order: 7
+          description: Triage 3 unpostable Codex quarantine records reportId triage-report-f52c6edada3f437bbe7aadcc5611c684
+          type: design_decision
+          status: completed
+          filePath: ''
+        - order: 8
+          description: Triage 2 Codex importRecovery pending files reportId triage-report-ab5a9da38021414b96dcb651bc6697e0
+          type: design_decision
+          status: completed
+          filePath: ''
+        model: grok-4.6
+        tags:
+        - failsafe
+        - replay
+        - triage
+        - class-2-ops
+        designDecisions:
+        - 'Judgment: do not use workflow.failsafe.drain for SubmitAsync replay because Get-ReplMethodTimeoutSeconds returns 2s while draining. Consequence: replay via repl-invoke client.SessionLog.SubmitAsync with REPL_TIMEOUT=120, then delete YAML only after type: result. Alternative rejected: patch plugin timeout in this turn (user asked to post and triage, not implement a timeout fix).'
+        - 'Judgment: retry grok quarantine because a sample SubmitAsync succeeded after server was healthy. Consequence: 48 grok quarantine records posted and removed. Alternative rejected: leave quarantine untouched as already-failed.'
+        - 'Judgment: leave 2 Codex importRecovery files in pending because they are not SubmitAsync records. Consequence: triage them separately instead of deleting or forcing session submit.'
+      - requestId: req-20260821T155027Z-004-continue-remaining-failsafe
+        timestamp: 2026-08-21T16:00:34.6675997+00:00
+        queryText: continue
+        queryTitle: Post remaining Codex failsafe files
+        response: 'Posted 4 itemized SubmitAsync records this turn: Codex quarantine 3358 id 12906, d5f9 id 13489, 9ad7 id 13540; grok live 665c id 13939. Codex quarantine now 0 yaml. Two Codex importRecovery pending files remain: GUID sessionIds rejected with HTTP 400 Invalid sessionId. Receipt docs/receipts/failsafe-continue-itemized-20260821T155934Z.json.'
+        interpretation: Continue remaining failsafe post after DISAGREE on unverifiable 167 count. Post the leftover files with itemized receipts.
+        status: completed
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: Posted 3358 quarantine record via sessionlog_submit; server id 12906; deleted yaml+reason
+          type: edit
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\codex\failsafe\quarantine\20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml
+        - order: 2
+          description: Posted d5f9 via SubmitAsync ParamsObject JSON-array turns; server id 13489; deleted yaml+reason
+          type: edit
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\codex\failsafe\quarantine\20260817T123057Z-session_submit-d5f9.yaml
+        - order: 3
+          description: Posted 9ad7 via SubmitAsync ParamsObject JSON-array turns; server id 13540; deleted yaml+reason
+          type: edit
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\codex\failsafe\quarantine\20260817T123219Z-session_submit-9ad7.yaml
+        - order: 4
+          description: Posted new grok failsafe 20260821T155001Z-session_submit-665c.yaml; server id 13939; deleted yaml
+          type: edit
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\grok\failsafe\20260821T155001Z-session_submit-665c.yaml
+        - order: 5
+          description: importRecovery Submit/REST 400 Invalid sessionId for two GUID sessionIds; files left in Codex pending
+          type: design_decision
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\codex\failsafe\pending
+        model: grok-4.6
+        designDecisions:
+        - 'Judgment: repair Codex quarantine turns by converting YAML/JSON so turns is a JSON array and filling omitted planFile/todoId with None, then SubmitAsync. Consequence: 3 quarantine files posted (server ids 12906, 13489, 13540) and deleted. Alternative rejected: leave them as unpostable.'
+        - 'Judgment: do not rewrite importRecovery GUID sessionIds into Agent-timestamp form. Consequence: both remaining pending files stay on disk after 400 Invalid sessionId. Alternative rejected: invent SessionIds.'
+      - requestId: req-20260821T160750Z-005-continue-importrecovery
+        timestamp: 2026-08-21T16:13:25.8959982+00:00
+        queryText: continue
+        queryTitle: Persist remaining Codex importRecovery files
+        response: No additional SubmitAsync posts this turn. Codex pending still has exactly 2 importRecovery yaml files. Source JSONL is missing. HTTP/MCP submit returns 400 Invalid sessionId for GUID sessionIds. In-process ingest persist would skip that check but needs JSONL normalize. Files left in place. Itemized receipt docs/receipts/failsafe-importrecovery-blocked-20260821T161241Z.json. Prior 4 posts remain in docs/receipts/failsafe-continue-itemized-20260821T155934Z.json. Hostile spawn last turn failed HTTP 402 usage balance exhausted; this turn did not claim AGREE.
+        interpretation: 'Continue remaining failsafe work: the two Codex importRecovery pending files after the itemized 4 SubmitAsync posts.'
+        status: completed
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'Re-counted queues: grok live/q/pending 0, Codex live/q 0, Claude q 0, Codex pending 2 importRecovery yaml'
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\codex\failsafe\pending
+        - order: 2
+          description: Searched McpServer and FunWasHad transcript trees for matching jsonl; none found
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\.mcpServer\codex\transcripts
+        - order: 3
+          description: Confirmed HTTP SubmitAsync validates sessionId unless sourceFilePath is set; ingest persist is the GUID-safe path and cannot run without jsonl
+          type: design_decision
+          status: completed
+          filePath: src\McpServer.Services\Services\SessionLogService.cs
+        model: grok-4.6
+        designDecisions:
+        - 'Judgment: do not invent Codex-timestamp SessionIds for the two importRecovery GUID sessions. Consequence: files stay in pending. Alternative rejected: rewrite IDs to pass HTTP validation.'
+        - 'Judgment: the only persist path that skips sessionId format checks is ISessionLogService.SubmitAsync with sourceFilePath, used by transcript ingest persist after JSONL normalize. JSONL is missing; YAML ingest fails JSON parse. Consequence: blocked, not deleted.'
+      - requestId: req-20260821T162915Z-006-list-open-todos
+        timestamp: 2026-08-21T16:29:48.8067709+00:00
+        queryText: list open todo
+        queryTitle: List open MCP TODOs
+        response: 'Native todo_list done=false returned totalCount 42, items 42, doneTrue 0. Priorities: high 30, medium 11, low 1. Receipt: MCP tool call-4a2bf00d parsed via ConvertFrom-Json.'
+        interpretation: Operator asked for open MCP TODOs (done false), not a local markdown list.
+        status: completed
+        planFile: None
+        todoId: None
+        model: grok-4.6
+        tags:
+        - todo
+        - query
+        - class-2-ops
+      - requestId: req-20260821T163000Z-007-plan-mcp-plugin-handoff-cluster
+        timestamp: 2026-08-21T16:36:30.6376981+00:00
+        queryText: Create highly detailed implementation plan for MCP-PLUGINCORE-004, MCP-HOSTILEREVIEW-001, MCP-PLUGININT-001, MCP-WORKSPACEHYGIENE-002, MCP-HANDOFF-001, MCP-HANDOFFPLAN-001, MCP-HANDOFFREVIEW-001, MCP-WIKIEXPORT-001 with full BDPv4, FR/TR/AC, 100% TDD, hostile validation per phase, plan stored in a new TODO before implementation.
+        queryTitle: BDPv4 plan for plugin handoff wiki hygiene cluster
+        status: in_progress
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: Loaded 18 operator profile markdown files from ~/.claude/profile excluding add-profile skill ports
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile
+        - order: 2
+          description: Health nonce 6561dde440af474ab9394bf42bd97577 echoed; status Healthy
+          type: read
+          status: completed
+          filePath: http://PAYTON-LEGION2:7147/health
+        - order: 3
+          description: todo_get of eight cluster TODOs via native MCP tools
+          type: read
+          status: completed
+          filePath: ''
+        - order: 4
+          description: Read hostile P0-A DISAGREE receipt 20260821T161800Z and BDPv4 plus live Handoff tests and McpDbContext DbSets
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\docs\receipts\hostile-validator-20260821T161800Z.md
+        - order: 5
+          description: 'Revised plan.md second pass: remaining 161800Z AGREE blockers (Handoff reuse vs red, field diagnostics, skill invocation, dump tables, payload bound, SHA-256, breaking flags, section 14 full copy)'
+          type: edit
+          status: completed
+          filePath: C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        tags:
+        - plan-mode
+        - PLAN-PLUGINHANDOFF-001
+        - BDPv4
+        - class-1-plan
+        - hostile-p0a-pending
+        - foreign-repo
+        contextList:
+        - AGENTS-README-FIRST.yaml
+        - docs/Development-Process-draft-v4.md
+        - docs/receipts/hostile-validator-20260821T161800Z.md
+        - MCP-PLUGINCORE-004
+        - MCP-PLUGININT-001
+        - MCP-HANDOFF-001
+        - MCP-HANDOFFPLAN-001
+        - MCP-HANDOFFREVIEW-001
+        - MCP-HOSTILEREVIEW-001
+        - MCP-WORKSPACEHYGIENE-002
+        - MCP-WIKIEXPORT-001
+        - src/McpServer.Storage/McpDbContext.cs
+        designDecisions:
+        - 'Judgment: keep one master PLAN-PLUGINHANDOFF-001 that holds the entire plan text, with eight child TODOs remaining open until hostile AGREE. Consequence: no child done:true from this planning turn. Alternatives rejected: eight separate plans; stub TODO that says see plan.md.'
+        - 'Judgment: classify existing Handoff tests as reuse, not new reds, and add remaining FR-HANDOFF-003 field-diagnostic tests plus actual plugin skill invocation. Consequence: D0 inventory then D1 remaining gaps only. Alternative rejected: rewrite D1 as if no tests exist.'
+        - 'Judgment: lock wiki dump tables to McpDbContext DbSet CLR names, SHA-256 integrity, --include-dump and --dump names, 1 MiB hostile-review payload, Director hygiene exit 1 on Error/Critical. Consequence: P0-A decision-completeness FAILs from 161800Z are addressed in plan text. Alternative rejected: inspect-do-not-guess deferrals.'
+        - 'Judgment: amend TEST-MCP-195 for drain timeout rather than invent TEST-MCP-REPL-041. Consequence: A5 stays in persist family. Alternative rejected: new TEST id.'
+        - 'Judgment: PLAN TODO body copies sections 1-18, not 1-13. Consequence: P0-B cannot omit gates, risks, task list. Alternative rejected: description plus see plan.md.'
+        filesModified:
+        - foreign:C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\01a02413-e4ee-7513-bd22-9eddd82adb73\plan.md
+        blockers:
+        - P0-A OverallVerdict DISAGREE on docs/receipts/hostile-validator-20260821T173914Z.md. Plan revised after that receipt to inventory all Handoff* tests as D0 reuse and to map TEST-HANDOFF AC to those covering methods. PLAN-PLUGINHANDOFF-001 must not be created until a later P0-A AGREE.
+      - requestId: req-20260821T211516Z-008-current-plan-id
+        timestamp: 2026-08-21T21:15:37.5132152+00:00
+        queryText: what is the ID of the current plan?
+        queryTitle: Identify current plan ID
+        response: PLAN-PLUGINHANDOFF-001. Live todo_get confirmed Done=false. File docs/plans/PLAN-PLUGINHANDOFF-001.md.
+        interpretation: Operator asked for the current plan TODO ID, not a new plan.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        designDecisions:
+        - 'Judgment: the current plan ID is PLAN-PLUGINHANDOFF-001 from live todo_get, not a session-local filename. Consequence: answer that ID only. Alternative rejected: cite only plan.md path.'
+      - requestId: req-20260821T211600Z-009-continue-plan-pluginhandoff
+        timestamp: 2026-08-21T21:16:58.4386312+00:00
+        queryText: /add-continuation-job 100% PLAN-PLUGINHANDOFF-001 Completion. Continue to 100% PLAN-PLUGINHANDOFF-001 Completion
+        queryTitle: Continue PLAN-PLUGINHANDOFF-001 to completion
+        status: in_progress
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+      - requestId: req-20260821T220000Z-010-continue-plan-pluginhandoff
+        timestamp: 2026-08-21T21:55:27.8894110+00:00
+        queryText: Continue to 100% PLAN-PLUGINHANDOFF-001 Completion with hostile validation agreement
+        queryTitle: Continue PLAN-PLUGINHANDOFF-001 to 100 percent
+        status: in_progress
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+      - requestId: req-20260821T215945Z-011-continue-plan-pluginhandoff
+        timestamp: 2026-08-22T00:56:07.1439811+00:00
+        queryText: Continue to 100% PLAN-PLUGINHANDOFF-001 Completion
+        queryTitle: Continue PLAN-PLUGINHANDOFF-001 to 100% closeout
+        response: Continued PLAN-PLUGINHANDOFF-001. Phase B complete with B5 AGREE and MCP-PLUGINCORE-004 done. Phase C P1-P4 green with hostile AGREEs. C-red-P5 AGREE; fixture StartAsync still unimplemented. PLAN and HYGIENE remain open. Not 100 percent closeout.
+        interpretation: User asked to continue to 100 percent PLAN-PLUGINHANDOFF-001 completion with hostile AGREE. Honest 100 percent forbids closing hygiene/master while keep-open applies and remaining phases are open.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Implemented Phase B drain timeout, V4 failsafe path, dispatcher coordinator isolation, exact-byte SyncAgentPlugins
+          type: edit
+          status: completed
+          filePath: plugins/core/lib-ps/repl-invoke.ps1
+        - order: 2
+          description: B5 AGREE then marked MCP-PLUGINCORE-004 done with receipt in doneSummary
+          type: edit
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260821T230457Z.md
+        - order: 3
+          description: Phase C P1-P4 PluginIntegration project, catalog validation, hostile AGREEs
+          type: create
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests
+        - order: 4
+          description: C-red-P5 fixture tests written; StartAsync not implemented; C-red-P5 AGREE
+          type: create
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginIntegrationServerFixtureTests.cs
+        processingDialog:
+        - timestamp: 2026-08-21T21:59:45.0000000+00:00
+          role: model
+          content: 'Resumed PLAN-PLUGINHANDOFF-001 after compaction. Profile loaded (18 files). Marker signature match 9CF9E31C7C1F4CA90A6367A1C9305EFD60C11307CB34517395C8AFDD84F59F02. Health nonce 064d9cd8c24d4958986ba25f69be22d4 echoed. Session GrokCode-20260821T113141Z-plugin-session turn req-20260821T215945Z-011-continue-plan-pluginhandoff. REQUIRED MEMORIES - MEMORY-LAB-001: Standing lab rule (Payton, 2026-07-22, locked): You may NOT use Python. No python, python3, py, or Python one-liners for scripts, parsing, JSON/YAML, freezes, verification, or analysis. Use pwsh.exe (PowerShell 7+) only for shell automation. Project-native tools and .NET are allowed; Python is not. Applies on PAYTON-DESKTOP and PAYTON-LEGION2 and every workspace in this lab. REQUIRED MEMORIES - MEMORY-LAB-002: Credentials for PAYTON-DESKTOP are in ~/.creds (Windows: C:\Users\kingd\.creds). Known files include paytondesktop.cred.xml and setup-payton-desktop-cred.ps1. Use these for WinRM/PSRemoting and other remote access to PAYTON-DESKTOP; do not hardcode passwords. Also present: octopus-payton.cred.xml for Octopus-related auth. Never print credential contents in logs or chat. Phase A6 AGREE already on disk. Phase B1 reds on disk. Waiting for independent B2 hostile subagent 01a0264f-aaec-7b32-86a5-2f7ccee10cce before B3 implementation.'
+          category: reasoning
+        - timestamp: 2026-08-21T21:59:50.0000000+00:00
+          role: model
+          content: 'Decision: do not implement Phase B3 until B2 OverallVerdict AGREE. BDPv4 inter-phase gate: red tests must be hostile-AGREE before product code. Alternative rejected: implementing in parallel with B2, which would mix red and green and void the gate. Consequence: hold drain timeout, Get-McpFailsafeDir V4 path, dispatcher coordinator isolation, and SyncAgentPlugins until the receipt exists.'
+          category: decision
+        - timestamp: 2026-08-21T22:36:32.0000000+00:00
+          role: model
+          content: Phase B3 implemented and B4 gates re-verified. Drain timeout uses REPL_FAILSAFE_DRAIN_TIMEOUT default 120. Get-McpFailsafeDir is V4 pending plus legacy checksum migrate. Dispatcher persists via coordinator when primary client fails. SyncAgentPlugins copies exact bytes. Compile succeeded. Pester PluginPowerShellRuntime Passed 124 Failed 0 Skipped 0. Repl.Core.Tests Passed 847 Failed 0 Skipped 0. build.ps1 Test succeeded Failed 0 Skipped 0. Spawned independent B5 hostile validator. Not marking PLUGINCORE-004 or PLAN-PLUGINHANDOFF-001 done until B5 AGREE.
+          category: observation
+        - timestamp: 2026-08-21T22:36:40.0000000+00:00
+          role: model
+          content: 'Decision: keep PLAN-PLUGINHANDOFF-001 and MCP-WORKSPACEHYGIENE-002 store-open. Mark MCP-PLUGINCORE-004 done only after B5 OverallVerdict AGREE cites the receipt in doneSummary. Alternative rejected: closing the master TODO at Phase B, which would violate owner keep-open on hygiene and remaining phases C-I.'
+          category: decision
+        - timestamp: 2026-08-21T23:48:30.0000000+00:00
+          role: model
+          content: 'Phase B closed: B5 AGREE docs/receipts/hostile-validator-20260821T230457Z.md. MCP-PLUGINCORE-004 done:true with that receipt in doneSummary. PLAN-PLUGINHANDOFF-001 and MCP-WORKSPACEHYGIENE-002 remain open. Phase C: C-red-P1 AGREE 232545Z, P2-P3 green, C-green-P1-P3 AGREE 234422Z. C-red-P4 catalog tests Failed 6 Skipped 0 against unimplemented LoadAndValidate. C-red-P4 hostile spawned. Phases C P4-P20 through I still open. Honest 100 percent is not reached this turn.'
+          category: observation
+      - requestId: req-20260822T010000Z-012-p5-p6-server-fixture
+        timestamp: 2026-08-22T00:57:16.0048672+00:00
+        queryText: Implement PluginIntegrationServerFixture.StartAsync, add ServerFixture_HealthReady_ExposesTrustedMarkerAndClient, get fixture tests Failed 0 Skipped 0, then C-green-P5-P6 hostile without mixing P7 reds.
+        queryTitle: Implement isolated PluginIntegration server fixture
+        status: in_progress
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+      - requestId: req-20260822T011654Z-013-continue-100-plan-pluginhandoff
+        timestamp: 2026-08-22T08:50:42.9268086+00:00
+        queryText: Continue to 100% PLAN-PLUGINHANDOFF-001 Completion
+        queryTitle: Continue PLAN-PLUGINHANDOFF-001 to 100 percent closeout
+        response: Phase C P5 through P18 shipped with independent hostile AGREE receipts. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done:false. P19-P20, D, E, F, G, H, I remain. Honest 100 percent still keeps MCP-WORKSPACEHYGIENE-002 and the master TODO store-open.
+        interpretation: Continue BDPv4 Phase C after C-green-P5-P6 through remaining red-green hostile groups without marking hygiene or master done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: PluginHostProcessAdapter and FakePluginProcessRunner C-red-P7 then P8-P10 green
+          type: create
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs
+        - order: 2
+          description: Workflow adapter, fixture-backed P11-P15, PLUGIN_ROOT_OVERRIDE and V4 failsafe
+          type: create
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs
+        - order: 3
+          description: AiStrategyFixture and AiTheory P16-P17
+          type: create
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/AiStrategyFixture.cs
+        - order: 4
+          description: PluginSessionLogIntegration aiUnit preflight and PluginInt trait TRX split after C-green-P16-P18 DISAGREE
+          type: edit
+          status: completed
+          filePath: build/Build.PluginSessionLogIntegration.cs
+        - order: 5
+          description: 'C-green-P16-P18 DISAGREE remediating: PreflightPluginSessionLogAiUnitStrategy plus PluginInt=Deterministic and PluginInt=AI TRX. Did not force PLAN or HYGIENE done.'
+          type: design_decision
+          status: completed
+          filePath: ''
+        tags:
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        processingDialog:
+        - timestamp: 2026-08-22T01:16:54.0000000+00:00
+          role: model
+          content: Continue PLAN-PLUGINHANDOFF-001 after compaction. Awaiting C-green-P5-P6 hostile subagent 01a02706-92e9-7592-b56e-2703c5fef6b4. Will not write P7 reds until OverallVerdict AGREE. Profile loaded (18 files). Session turn req-20260822T011654Z-013-continue-100-plan-pluginhandoff.
+          category: reasoning
+        - timestamp: 2026-08-22T01:26:51.0000000+00:00
+          role: model
+          content: >-
+            Decision: C-green-P5-P6 hostile OverallVerdict AGREE at docs/receipts/hostile-validator-20260822T012355Z.md (PASS 18 FAIL 0 UNKNOWN 0). Next is C-red-P7 only: Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr for eight PluginHostKind rows with a fake process runner. Adapter LaunchAsync throws until P8-P10. Do not write P8-P10 tests in this gate.
+
+            Rationale: plan forbids mixing red and green in one hostile gate.
+
+            Alternatives rejected: implementing adapter mapping now (would skip C-red-P7 AGREE); adding P8-P10 facts now (would mix greens).
+          category: decision
+        - timestamp: 2026-08-22T01:32:00.0000000+00:00
+          role: model
+          content: 'C-red-P7 red shown. Filter Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr: 8 failed, all InvalidOperationException PluginHostProcessAdapter.LaunchAsync is not implemented (Codex, ClaudeCode, ClaudeCowork, Copilot, Grok, Cline, ClineV2, OpenCode). Full PluginIntegration.Tests Failed 8 Passed 14 Skipped 0 Total 22 Duration 1 m 24 s. TRX C:\Users\kingd\AppData\Local\Temp\grok-goal-678ba5b2f579\implementer\c-red-p7-full.trx. P8-P10 test names absent. Spawning C-red-P7 hostile. Do not implement LaunchAsync until AGREE.'
+          category: observation
+        - timestamp: 2026-08-22T01:48:01.0000000+00:00
+          role: model
+          content: 'C-red-P7 hostile AGREE docs/receipts/hostile-validator-20260822T014442Z.md. Implementing P8-P10: PluginHostProcessAdapter.LaunchAsync maps PowerShell hosts to pwsh.exe -NoProfile -NonInteractive -File catalog entrypoint and Node hosts to node plus dist/index.js, forwarding stdin/env/cwd/timeout through FakePluginProcessRunner. Adding Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint, Adapter_ClineV1_StdioSessionLogTools, Adapter_ClineV2AndOpenCode_UseProductionExport. Not writing P11 reds.'
+          category: decision
+        - timestamp: 2026-08-22T01:52:00.0000000+00:00
+          role: model
+          content: P8-P10 green. PluginHostProcessAdapterTests Passed 16 Failed 0 Skipped 0 Duration 190 ms. Full PluginIntegration.Tests Passed 30 Failed 0 Skipped 0 Duration 1 m 14 s. TRX p8-p10-adapter.trx and p8-p10-full.trx under grok-goal-678ba5b2f579 implementer. P11 Theory_EachScenario_FailsUntilAdapterOperational not written. Spawning C-green-P7-P10 hostile.
+          category: observation
+        - timestamp: 2026-08-22T02:14:00.0000000+00:00
+          role: model
+          content: C-red-P11 red shown. Filter Theory_EachScenario_FailsUntilAdapterOperational Failed 8 Passed 0 Skipped 0 (all ExecuteCanonicalTurnAsync not implemented; each row started isolated fixture not 7147). Full PluginIntegration.Tests Failed 8 Passed 30 Skipped 0 Total 38 Duration 2 m 52 s. P12/P13 names absent. Spawning C-red-P11 hostile.
+          category: observation
+        - timestamp: 2026-08-22T03:20:00.0000000+00:00
+          role: model
+          content: P12-P13 green. PluginSessionLogWorkflowAdapter ExecuteCanonicalTurnAsync persists Open/Begin/AppendDialog/Complete on the isolated fixture and launches catalog entrypoints via RealPluginProcessRunner. Full PluginIntegration.Tests Passed 54 Failed 0 Skipped 0 Duration 8 m 32 s. P14 PluginRootOverride absent. Spawning C-green-P11-P13 hostile.
+          category: observation
+        - timestamp: 2026-08-22T03:56:00.0000000+00:00
+          role: model
+          content: 'C-green-P11-P13 hostile AGREE docs/receipts/hostile-validator-20260822T034932Z.md Passed 54 Failed 0 Skipped 0. C-red-P14 written: Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty Failed 8 Passed 0 Skipped 0 on PluginRootOverrideRejected false. P15 names absent. Spawning C-red-P14 hostile.'
+          category: observation
+        - timestamp: 2026-08-22T04:32:00.0000000+00:00
+          role: model
+          content: 'C-red-P14 hostile AGREE docs/receipts/hostile-validator-20260822T041327Z.md. P14 green: PLUGIN_ROOT_OVERRIDE rejected, cache under workspace .mcpServer/{cacheFolder}, poison empty, child env cleared. Filter Passed 8 Failed 0 Skipped 0. Full PluginIntegration.Tests Passed 62 Failed 0 Skipped 0 Duration 10 m 38 s. P15 not written. Spawning C-green-P14 hostile.'
+          category: observation
+        - timestamp: 2026-08-22T05:20:00.0000000+00:00
+          role: model
+          content: 'C-green-P14 hostile AGREE docs/receipts/hostile-validator-20260822T050748Z.md Passed 62 Failed 0 Skipped 0. C-red-P15 written: 24 theory rows Failed 24 Passed 0 Skipped 0 (FailsafePathVerified false; ExecuteFailedSubmitAsync and RetryFailedSubmitAsync not implemented). P16 AiTheory absent. Spawning C-red-P15 hostile.'
+          category: observation
+        - timestamp: 2026-08-22T06:00:00.0000000+00:00
+          role: model
+          content: 'C-red-P15 hostile AGREE docs/receipts/hostile-validator-20260822T053539Z.md. P15 green: FailsafePathVerified, V4 pending retain on failed submit, retry deletes matching and keeps sibling. Filter Passed 24 Failed 0 Skipped 0. Full PluginIntegration.Tests Passed 86 Failed 0 Skipped 0 Duration 16 m 43 s. P16 not written. Spawning C-green-P15 hostile.'
+          category: observation
+        - timestamp: 2026-08-22T07:16:00.0000000+00:00
+          role: model
+          content: 'C-green-P15 hostile AGREE docs/receipts/hostile-validator-20260822T071202Z.md Passed 86 Failed 0 Skipped 0. C-red-P16 written: AiTheory_Agent_RequiresValidJsonFields Failed 8 Passed 0 Skipped 0 Duration 140 ms (AiStrategyFixture.EvaluateAsync not implemented). P17 not written. Spawning C-red-P16 hostile.'
+          category: observation
+        - timestamp: 2026-08-22T07:45:00.0000000+00:00
+          role: model
+          content: 'C-red-P16 hostile AGREE docs/receipts/hostile-validator-20260822T073737Z.md. P16-P18 green: AiStrategyFixture JSON evaluation, AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure, NukeTarget_SkipIsFailure. PluginSessionLogAiTheoryTests Passed 9 Failed 0 Skipped 0. Build.Tests NukeTarget_SkipIsFailure Passed 1 Failed 0 Skipped 0. P19 not written. Spawning C-green-P16-P18 hostile.'
+          category: observation
+        designDecisions:
+        - 'Decision: persist canonical turns on the isolated fixture via McpServer.Client while launching catalog entrypoints through PluginHostProcessAdapter. Consequence: P12/P13 queryable without claiming plugin stdio wrote the turn. Alternatives rejected: skip process launch (AC3 miss) or hang on Node MCP stdio.'
+        - 'Decision: C-green-P16-P18 DISAGREE required aiUnit preflight and trait-split TRX on PluginSessionLogIntegration. Consequence: Build.PluginSessionLogIntegration.cs now preflights SharpNinja.aiUnit plus appsettings.aiunit.json then runs PluginInt=Deterministic and PluginInt=AI. Alternative rejected: treating NukeTarget_SkipIsFailure synthetic TRX as P18 DoD.'
+        - 'Decision: do not mark PLAN-PLUGINHANDOFF-001 or MCP-WORKSPACEHYGIENE-002 done. Honest 100 percent keeps hygiene and master store-open.'
+        filesModified:
+        - tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs
+        - tests/McpServer.PluginIntegration.Tests/AiStrategyFixture.cs
+        - build/Build.PluginSessionLogIntegration.cs
+        - tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+      - requestId: req-20260822T085134Z-014-c-red-p19-native-suites
+        timestamp: 2026-08-22T08:51:54.6468689+00:00
+        queryText: 'Continue PLAN-PLUGINHANDOFF-001. Start Phase C P19 in BDPv4 order: add red tests for official plugin native suites, SyncAgentPlugins copies, and branch/SHA receipts; get hostile AGREE they are red before implementing green.'
+        queryTitle: C-red-P19 plugin native suite red tests
+        status: in_progress
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        processingDialog:
+        - timestamp: 2026-08-22T08:52:00.0000000+00:00
+          role: model
+          content: 'C-red-P19 red tests written. PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero, PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero, PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit. Filter Failed 3 Passed 0 Skipped 0 Duration 131 ms. All FileNotFoundException: No docs/receipts/pluginint-p19-<utc> receipt directory exists. Tests pin eight catalog repositories, Failed 0 Skipped 0 parsed from native logs, afterSync, git.branch, 40-char SHA, unrelatedCommitCount 0, git.json. P20 names absent. Not creating receipts. Spawning C-red-P19 hostile.'
+          category: observation
+      - requestId: req-20260822T093836Z-015-continue-p19-native-suites-green
+        timestamp: 2026-08-22T09:38:51.3558238+00:00
+        queryText: Continue to 100% PLAN-PLUGINHANDOFF-001 Completion
+        queryTitle: Continue P19 native-suite green
+        status: in_progress
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        processingDialog:
+        - timestamp: 2026-08-22T09:39:12.9882510+00:00
+          role: model
+          content: Continue PLAN-PLUGINHANDOFF-001 at C-green-P19. C-red-P19 AGREE exists. Do not mix P20. Do not mark PLAN or PLUGININT or HYGIENE done.
+          category: planning
+        - timestamp: 2026-08-22T09:39:12.9882517+00:00
+          role: model
+          content: 'Decision: run real native suites as applicable on Windows. Do not fabricate Failed 0 footers. Bats-only plugins need executable wrappers bats can invoke. Consequence: inspect generate-wrappers and plugin test trees before writing receipts.'
+          category: decision
+        - timestamp: 2026-08-22T10:04:06.6001424+00:00
+          role: model
+          content: P19 green receipts written to docs/receipts/pluginint-p19-20260822T095842Z. PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0. SyncAgentPlugins succeeded. C-green-P19 hostile dispatched. P20 not started. PLAN and PLUGININT remain done:false.
+          category: progress
+        designDecisions:
+        - 'On Windows, P19 native suites are Pester for PowerShell-only hosts and Jest for Cline/OpenCode. Bats is not applicable because generate-wrappers.ps1 deletes .sh and ValidatePluginPowerShellOnly forbids them. Consequence: add Pester native suites to Codex, Cowork, Copilot, and Grok, then run before and after SyncAgentPlugins. Rejected regenerating .sh wrappers, skipping failing bats, and fabricating Failed 0 footers.'
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260822T084838Z-plugin-session
+      agentSessionId: 01a028a5-bea9-7b91-b9f8-ff360ce9864c
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      title: Hostile C-green-P16-P18 rerun validation
+      model: grok
+      started: 2026-08-22T08:48:42.0000000+00:00
+      lastUpdated: 2026-08-22T08:48:42.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T084835Z-001-hostile-c-green-p16-p18-rerun
+        timestamp: 2026-08-22T08:48:42.0000000+00:00
+        queryText: Independent hostile re-verification of PLAN-PLUGINHANDOFF-001 Phase C-green-P16-P18 after claimed P18 preflight/Trait-split closeout.
+        queryTitle: Hostile C-green-P16-P18 rerun validation
+        response: (turn opened)
+        status: in_progress
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        model: grok
+        tokenCount: 0
+        processingDialog:
+        - timestamp: 2026-08-22T08:48:35.0000000+00:00
+          role: model
+          content: 'Decision: classify this review as class 1 project implementation for PLAN-PLUGINHANDOFF-001 C-green-P16-P18 only. Surfaces A+B+C+D all apply. Review only; write receipt only; do not implement P19-P20 or mark TODOs done.'
+          category: decision
+        - timestamp: 2026-08-22T08:48:35.0000000+00:00
+          role: model
+          content: 'add-profile executed first: 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile\. Plugin bootstrap, marker signature, health nonce, and dedicated GrokSubagentHostile session follow before claim checks.'
+          category: observation
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260822T082521Z-pluginhandoff-p18
+      title: PLAN-PLUGINHANDOFF-001 P18 aiUnit preflight
+      model: grok-4
+      started: 2026-08-22T08:26:14.9451815+00:00
+      lastUpdated: 2026-08-22T08:45:54.5679947+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T082521Z-001-hourly-p18-preflight
+        timestamp: 2026-08-22T08:45:54.5679947+00:00
+        queryText: Hourly continuation after C-green-P16-P18 DISAGREE. Complete P18 aiUnit strategy preflight and Trait-split TRX, keep PLAN and MCP-PLUGININT-001 done false, then re-run hostile C-green-P16-P18.
+        queryTitle: Hourly PLAN-PLUGINHANDOFF-001 P18 preflight
+        response: 'Hourly continuation remediated C-green-P16-P18 DISAGREE 081750Z: aiUnit preflight, PluginInt trait TRX, SkipIsFailure empty/failed. Named filters and full PluginIntegration Passed 95 Failed 0. C-green-P16-P18 hostile re-dispatched. PLAN and MCP-PLUGININT-001 remain done false. P19 not started.'
+        interpretation: Continue PLAN-PLUGINHANDOFF-001 after C-red-P16 AGREE and C-green-P16-P18 DISAGREE by finishing P18 DoD then hostile.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        tags:
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-green-P16-P18
+        - FR-MCP-PLUGININT-001
+        processingDialog:
+        - timestamp: 2026-08-22T08:26:20.0000000+00:00
+          role: model
+          content: 'Hourly continuation after C-green-P16-P18 DISAGREE 081750Z. P18 on-disk now preflights aiUnit and splits Trait=PluginInt Deterministic/AI TRX. Named filters: Build.Tests PluginSessionLog Passed 4 Failed 0; AiTheory Passed 9 Failed 0. PLAN and MCP-PLUGININT-001 remain done false.'
+          category: observation
+        - timestamp: 2026-08-22T08:26:21.0000000+00:00
+          role: model
+          content: 'Decision: close the 081750Z C4/D2 gap in this P17-P18 green slice, then re-run independent C-green-P16-P18 hostile. Do not start P19. Do not mark TODOs done. Rejected: treating named-filter green as plan closeout.'
+          category: decision
+        - timestamp: 2026-08-22T08:44:34.0000000+00:00
+          role: model
+          content: 'Decision: re-dispatch independent C-green-P16-P18 hostile after remediating 081750Z C4/D2 (aiUnit preflight, PluginInt trait filters, SkipIsFailure empty/failed TRX). Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done. Do not start P19 until this green AGREE. Consequence: next hourly or this hostile receipt is the gate.'
+          category: decision
+        designDecisions:
+        - Close 081750Z C4/D2 in this P17-P18 green slice rather than start P19. Hostile re-dispatch is the gate; TODOs stay done false.
+        filesModified:
+        - build/Build.PluginSessionLogIntegration.cs
+        - tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+        - docs/receipts/plan-pluginhandoff-p18-dispatch-20260822T084434Z.md
+
+---

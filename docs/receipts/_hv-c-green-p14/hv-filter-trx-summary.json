@@ -1,0 +1,116 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\trx-p14-hv\\p14-filter.trx",
+  "lastWriteTimeUtc": "2026-08-22T04:55:50.7375002Z",
+  "length": 14615,
+  "outcome": "Completed",
+  "total": "8",
+  "executed": "8",
+  "passed": "8",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 8,
+  "failedNames": [],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Copilot)"
+  ],
+  "skippedNames": [],
+  "failedMessages": [],
+  "p14Count": 8,
+  "p14Failed": 0,
+  "p14Passed": 8,
+  "p14Skipped": 0,
+  "p15Count": 0,
+  "p16Count": 0,
+  "p14ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 4,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 4,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 4,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 4,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 4,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 4,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 4,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 4,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    }
+  ]
+}

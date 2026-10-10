@@ -1,0 +1,1120 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-09-28T02:30:52.3660516Z",
+  "agent": "Codex",
+  "candidateManifestPath": "docs/receipts/sessionlife-completion/20260928-p0/source-candidate-manifest.json",
+  "candidateManifestFileSha256": "6AAAC1A9AAB2B37559E35614F9C4FC3A885381A632AD22C5667E90D68E001162",
+  "candidateContentManifestSha256": "79289634B931D352969C8BECFC4A5EB7F35962AEB9740EAA3E4C3D4DFA18948D",
+  "selectedFilesChecked": 27,
+  "selectedFileMismatches": 0,
+  "originalWorktreeFilesChecked": 247,
+  "originalWorktreeFileMismatches": 0,
+  "gitDiffCheckExitCode": 0,
+  "headVerified": "6a565d8762072ed040469047791a57c80dbf1e88",
+  "scopeAccepted": false,
+  "requirementsGatePassed": false,
+  "notes": [
+    "MemoryTxnTests and two primary-checkout receipt redirections excluded.",
+    "P0 independent review remains pending final requirements acceptance manifest."
+  ],
+  "checks": [
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogService.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "matches": true
+    }
+  ],
+  "originalWorktreeChecks": [
+    {
+      "path": "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      "matches": true
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-20260919T091800Z.md",
+      "matches": true
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+      "matches": true
+    },
+    {
+      "path": "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Services/Services/MemoryService.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogService.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260919060000_AddMemoryIndexStorage.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260919193000_AddMemoryVersionSoftDeleteColumns.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Storage/McpDbContext.cs",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "matches": true
+    },
+    {
+      "path": "templates/prompt-templates.yaml",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Memory/MemoryTxnTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/_hv-remediate-latest.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/_sessionlife-resume-latest.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/BLOCKER-mcp-storage-unreachable.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/S0-SESSIONLIFE-proof.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/TODO-35-DoneFalse-proof.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/health.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/id-counts.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/ids-from-recap.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/ids-from-session-plan.md-extract.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/ids-from-session-root-plan.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-beginTurn.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-bootstrap.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-completeTurn.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-001.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-002.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-003.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-004.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-getFr-FR-MCP-SESSIONLIFE-005.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-invoke-log.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listFr-MCP.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listFr-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listTest-MCP.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listTest-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listTr-MCP.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-listTr-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-queryHistory.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-request-id.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-session-id.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-BUG-TRIAGE-false.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-todo-section-BUG-TRIAGE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/mcp-updateTurn.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/plan-checkbox-update.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/scratch-path.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/state-dump-depth6.json",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T035119Z/state-keys.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/01-health-sql-final.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/01-health-sql.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/S0-SESSIONLIFE-proof.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/SESSIONLOG-HV-turn.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/TODO-35-DoneFalse-proof.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/cache-clear.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/diag-boot.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/diag-qh.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-begin.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-boot.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-complete.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-open.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-qh.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/direct-update.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/hv-turn-body.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-beginTurn.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-beginTurn3.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap2.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-bootstrap3.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-completeTurn3.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-001.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-002.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-003.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-004.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getFr-FR-MCP-SESSIONLIFE-005.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-001.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-002.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-003.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-004.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTest-TEST-MCP-SESSIONLIFE-005.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSION-LIFE-001.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-001.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-002.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-003.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-004.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-getTr-TR-MCP-SESSIONLIFE-005.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-invoke-log.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listFr-MCP.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listFr-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listMappings.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listTest-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-listTr-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-mapping-001.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-openSession3.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-queryHistory-durable.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-queryHistory3.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-request-id-durable.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-request-id.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-session-id-durable.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-session-id.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-BUG-TRIAGE-false.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-SESSIONLIFE-false.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-072.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-082.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-085.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-086.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-097.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-121.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-122.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-139.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-160.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-163.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-164.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-165.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-get-BUG-TRIAGE-166.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-session-log-false.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo-sessionlog-false.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-165.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-170.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-171.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-172.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-173.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-175.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-180.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-181.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-182.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-184.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-185.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-186.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-198.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-199.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-200.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-202.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-204.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-205.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-208.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-210.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-213.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-214.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-221.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-226.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-229.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-232.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-234.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-236.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-239.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-240.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-241.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-243.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-244.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-245.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-todo35-get-BUG-TRIAGE-246.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/mcp-updateTurn3.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/plan-doc-candidates.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/scoped-35-count.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv-remediate-20260924T142043Z/scoped-35-ids.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20260924T031139Z-sessionlife-resume.request.jsonl",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20260924T031139Z-sessionlife-resume.response.jsonl",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20260924T031450Z-sessionlife-resume-hv.request.jsonl",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/hv/20260924T031450Z-sessionlife-resume-hv.response.jsonl",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/_TurnTransactionsClient.cs",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/_beginTurn-excerpt.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-candidate.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-from-recap.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/bug-triage-ids-parent-plan.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-path-rg.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-path-tools.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-pid.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-poll-final.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-poll.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-runner-console.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-runner-stderr.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-attempt1-rg-fail.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-attempt2-pluginint-50fail.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-fail1-rg-missing.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-projects.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test-summary.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/build-test.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/dirty-tree-summary.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/failsafe-ff8f.yaml",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/failsafe-quarantine-note.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/gate-status.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/goal-plan-copy.md",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-beginTurn.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-bootstrap.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-bootstrap2.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-FR-MCP-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-SESSIONLIFE.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-session-lifecycle.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-req-sessionlog-lifecycle.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-request-id.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-session-id.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/mcp-todo-probe.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-full-console.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-full-summary.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-full.transcript.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-full.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-pid.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll-final.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-poll2.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-runner-console.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pester-runner-stderr.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-fail-extract.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-console.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-hits.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-pid.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe-stderr.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pluginint-probe.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-used.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-version.err.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/pwsh-version.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/scratch-path.txt",
+      "matches": true
+    },
+    {
+      "path": "docs/receipts/sessionlife-resume-20260924T015616Z/turntransactions-temp-disable.txt",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "matches": true
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "matches": true
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "matches": true
+    }
+  ]
+}

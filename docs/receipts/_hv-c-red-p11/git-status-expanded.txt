@@ -1,0 +1,1 @@
+ M src/McpServer.Services/Services/HandoffIngestionService.cs ?? docs/plans/PLAN-PLUGINHANDOFF-001.md ?? tests/McpServer.PluginIntegration.Tests/

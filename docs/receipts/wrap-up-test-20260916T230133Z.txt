@@ -1,0 +1,12 @@
+utc=2026-09-16T23:01:33Z
+target=Test
+exit=0
+Support.Mcp Failed=0 Passed=2430 Skipped=0 Total=2430
+Client Failed=0 Passed=288 Skipped=0 Total=288
+Cqrs Failed=0 Passed=33 Skipped=0 Total=33
+Launcher Failed=0 Passed=20 Skipped=0 Total=20
+McpAgent Failed=0 Passed=63 Skipped=0 Total=63
+Repl.Core Failed=0 Passed=849 Skipped=0 Total=849
+QBAgent Failed=0 Passed=90 Skipped=0 Total=90
+PluginIntegration Failed=0 Passed=94 Skipped=0 Total=94 Duration=30m32s
+ValidateTraceability=Succeeded TRACE_EXIT=0

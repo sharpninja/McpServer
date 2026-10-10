@@ -25,7 +25,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
         Assert.Equal("codex", spawner.StartInfo!.FileName);
         Assert.Contains("exec", spawner.StartInfo.ArgumentList);
         Assert.Equal("model_reasoning_effort=\"xhigh\"", GetArgumentAfter(spawner.StartInfo, "-c"));
-        Assert.Equal("F:\\GitHub\\McpServer", GetArgumentAfter(spawner.StartInfo, "-C"));
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", GetArgumentAfter(spawner.StartInfo, "-C"));
         Assert.NotNull(GetArgumentAfter(spawner.StartInfo, "-o"));
         Assert.Contains("-", spawner.StartInfo.ArgumentList);
         Assert.DoesNotContain("--output-schema", spawner.StartInfo.ArgumentList);
@@ -47,7 +47,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
         Assert.Equal("claude", spawner.StartInfo!.FileName);
         Assert.Contains("-p", spawner.StartInfo.ArgumentList);
         Assert.Equal("plan", GetArgumentAfter(spawner.StartInfo, "--permission-mode"));
-        Assert.Equal("F:\\GitHub\\McpServer", GetArgumentAfter(spawner.StartInfo, "--add-dir"));
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", GetArgumentAfter(spawner.StartInfo, "--add-dir"));
         Assert.Equal("opus", GetArgumentAfter(spawner.StartInfo, "--model"));
         Assert.Equal("max", GetArgumentAfter(spawner.StartInfo, "--effort"));
         Assert.Equal("rendered prompt", spawner.Process!.StandardInputText);
@@ -66,7 +66,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
         Assert.Equal("grok final", result.Body);
         Assert.NotNull(spawner.StartInfo);
         Assert.Equal("grok", spawner.StartInfo!.FileName);
-        Assert.Equal("F:\\GitHub\\McpServer", GetArgumentAfter(spawner.StartInfo, "--cwd"));
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", GetArgumentAfter(spawner.StartInfo, "--cwd"));
         Assert.Equal("plan", GetArgumentAfter(spawner.StartInfo, "--permission-mode"));
         Assert.Equal("plain", GetArgumentAfter(spawner.StartInfo, "--output-format"));
         Assert.Equal("max", GetArgumentAfter(spawner.StartInfo, "--effort"));
@@ -90,7 +90,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
         Assert.NotNull(spawner.StartInfo);
         Assert.Equal("cline", spawner.StartInfo!.FileName);
         Assert.Contains("-p", spawner.StartInfo.ArgumentList);
-        Assert.Equal("F:\\GitHub\\McpServer", GetArgumentAfter(spawner.StartInfo, "-c"));
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", GetArgumentAfter(spawner.StartInfo, "-c"));
         Assert.Equal("xhigh", GetArgumentAfter(spawner.StartInfo, "--thinking"));
         Assert.Contains("rendered prompt", spawner.StartInfo.ArgumentList);
         Assert.Equal(string.Empty, spawner.Process!.StandardInputText);
@@ -113,14 +113,14 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     private static AgentExecutionSessionRequest CreateRequest(string agentPath) =>
         new(
             "rendered prompt",
-            "F:\\GitHub\\McpServer",
+            "Q:\\__mcp_unit_test__\\McpServer",
             "triage",
             "one-shot-cli",
             new AgentCliClientOptions
             {
                 AgentPath = agentPath,
                 Model = "auto",
-                WorkingDirectory = "F:\\GitHub\\McpServer",
+                WorkingDirectory = "Q:\\__mcp_unit_test__\\McpServer",
             });
 
     private static string? GetArgumentAfter(ProcessStartInfo startInfo, string argument)

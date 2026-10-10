@@ -1,0 +1,192 @@
+# MCP Server setup implementation plan
+
+Status: accepted within operator-amended scope; native-agent acceptance waived; BDPv4 memory binding independently verified.
+Operator: sharpninja. Agent: Codex.
+Load this plan and setup-choices.manifest before every later setup step; persist progress after meaningful changes. Session logging was unavailable before startup; it is now available through the Codex plugin. Prior full review texts have exact MCP readback proof.
+
+
+## Current state
+
+- Service/database installed. Loopback listeners, expected executable/account, boot enablement, hostname mapping and trusted Codex TODO/memory access verified. Final restart rotated the exposed API key; token change, PID611688, loopback listeners, expected executable/version and post-restart Codex trust/TODO/memory calls passed. Receipt: docs/setup/bdpv4-service-receipt.json.
+- SQL installer authenticated McpServer_Omarchy|mcpserver_omarchy and recorded 38 migrations/66 tables. The user explicitly requested retry after updating permissions. Independent SQL script now passed: database/login identity,38 migrations/66 tables,encrypted live connection,approved metadata grant and non-sysadmin status confirmed. Receipt: docs/receipts/hv/20260928-local-service-runtime.sql-proof.json.
+- Claude and Grok plugins registered, native login/acceptance checks waived by explicit operator request (not passed). Claude hook validation passes. Grok discovers129 tools while also logging an SSE error.
+- Cline checksum-only local repair is Git-proven; npm ci/build and32 tests pass with zero failures/skips. Cline4.1.21 extension and MCP entry installed. Plugin SDK stdio probe passes; actual VSCode Cline session/tool acceptance waived by explicit operator request (not passed).
+- BDPv4 is assigned through Workspace memories MEMORY-DEVPROCESS-001 (canonical policy with five punctuation-only dash substitutions) and MEMORY-PROCESS-001 (explicit assignment). Effective readback and request-boundary memory loader match the explicitly normalized snapshot exactly. Original source hash is retained in the receipt. See docs/setup/bdpv4-binding-receipt.json. Server-enforced process transitions are not exposed in this build and are not claimed.
+- Global memory MEMORY-PREFERENCE-001 is persisted. MCP session auditing is available; full earlier reviews read back exactly.
+- Operator amendment: skip Claude/Grok login and Cline native-session validation. These checks are waived, not passed. Independent BDPv4 review accepted the amended setup scope: AGREE99/99,8PASS0FAIL0UNKNOWN; full MCP verdict readback passed. Previous review scores below describe historical scope.
+## Approved choices
+
+- Host: PAYTON-OMARCHY, Linux/Omarchy.
+- Workspace: /home/sharpninja/github/McpServer; develop commit 6546a59f2baad45d99e717bb8f20b56e06d5911f.
+- Agents: Codex (agent-codex), GrokCode (agent-grok), Claude (agent-claude-code), Cline (agent-cline); agent-multi.
+- Agent sources: operator explicitly provided https://github.com/sharpninja/mcpserver-*-plugin. Exact repositories, verified commits, and proposed sibling checkout paths are in the manifest.
+- Process: process-bdpv4. Read and bind actual MCP memory/process policy after startup; do not invent process gates.
+- Storage: storage-mssql / sqlserver, existing sql-server-developer container, 127.0.0.1:1433, database McpServer_Omarchy.
+- Service: service-systemd, mcpserver.service, dedicated account mcpserver, /opt/mcpserver/app, http://localhost:7147.
+- Explicit override: operator said "override ddraft block". This permits implementing and validating this local systemd service despite SYSTEMD_PENDING_VALIDATION. Use Type=simple; no sd_notify assumption. Other verification and secret-handling requirements remain.
+- Artifacts: docs/setup/setup-choices.manifest (JSON) and docs/setup/setup-implementation.plan (Markdown).
+- Operator explicitly authorized direct pwsh.exe after PowerShell.MCP console startup stalled. All automation uses PowerShell 7. Privileged native utilities run through that tool using pkexec where needed. No Bash/Python playbooks.
+
+## Historical intake evidence (superseded by current state)
+
+- PowerShell.MCP 1.14.2 executes commands successfully under PowerShell 7.6.6.
+- SQL Server container is healthy and host TCP port 1433 is reachable. Authentication and database existence remain unverified.
+- No MCP-named system or user service was found; /opt/mcpserver does not exist; port 7147 has no listener.
+- SDK 10.0.111 is installed, but global.json requires 10.0.201 with latestFeature roll-forward. Only Microsoft.NETCore.App runtime was listed.
+- Codex plugin cache 1.107.0 exists. Codex, Grok, Claude, Node, npm, Git, tar, pkexec, and setfacl are present.
+- Other plugin roots and a Cline host connection have not been verified.
+- /home/sharpninja has owner-only permissions. The service account needs explicit workspace access; this must be provisioned and tested before startup.
+
+## 1. Obtain - executed; evidence recorded
+
+1. Recheck the manifest source commit and working tree. Keep the two setup artifacts; do not pull a newer product commit or overwrite unrelated changes.
+   Commands: git rev-parse HEAD; git status --short.
+   Evidence: exact source commit and initial dirty-file list.
+   Stop: source drift or conflicting user changes; reconcile without reset/rebase.
+
+2. Acquire a compatible .NET SDK using official Microsoft release metadata and a linux-x64 SDK archive.
+   Target SDK: 10.0.201. Retrieve https://builds.dotnet.microsoft.com/dotnet/release-metadata/10.0/releases.json through Invoke-RestMethod; locate the exact SDK archive URL and SHA-512. Download using Invoke-WebRequest, validate with Get-FileHash -Algorithm SHA512, extract with tar through PowerShell.MCP into /opt/mcpserver/dotnet after privileged directory creation.
+   Set the build process DOTNET_ROOT and PATH to this SDK. Preserve the globally installed SDK.
+   Commands after extraction: /opt/mcpserver/dotnet/dotnet --version; /opt/mcpserver/dotnet/dotnet --list-runtimes.
+   Evidence: official source URL, SDK version, checksum comparison, SDK location.
+   Stop: missing SDK artifact, checksum mismatch, incompatible global.json resolution.
+
+3. Acquire plugin source checkouts in the manifest paths using the explicitly supplied repositories.
+   Commands for each missing checkout: git clone <agents[].details.sourceRepository> <agents[].pluginRoot>; git -C <pluginRoot> checkout --detach <sourceCommit>; git -C <pluginRoot> rev-parse HEAD.
+   Inspect existing checkout state instead of replacing it. Read each plugin's actual installation/identity contract before activation.
+   The operator-specified repositories replace speculative acquisition URLs; no server tool-registry bootstrap is needed to find them.
+   Evidence: each repo URL, exact commit, canonical identity, installation entry point.
+   Stop: inaccessible repository, dirty/conflicting destination, identity mismatch, unsupported activation.
+
+4. From the workspace, build the primary REPL acquisition path:
+   ./build.ps1 InstallReplTool
+   mcpserver-repl --version
+   PackageId: SharpNinja.McpServer.Repl. Do not also invoke plugin ensure-repl or a separate release installer.
+   Evidence: successful build/install result and REPL version/path.
+   Stop: build or installation failure; fix before further installation.
+
+## 2. Prepare and install - executed; service restart verified, overall acceptance pending
+
+1. Build and publish the pinned MCP Server for this host:
+   dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj -c Release -r linux-x64 --self-contained true -o /tmp/mcpserver-setup/publish
+   Use the approved SDK environment. Capture build status and product version from generated build metadata. Record product.version in the manifest before live comparison.
+   Evidence: successful compile, apphost and required assets, binary checksums, version.
+   Stop: errors, missing assets, unverified version. Do not edit product code as an unrecorded setup workaround.
+
+2. Provision a dedicated mcpserver system account without interactive login, and create:
+   /opt/mcpserver/app (root-owned application files)
+   /var/lib/mcpserver (service-owned data)
+   /var/log/mcpserver (service-owned logs)
+   /etc/mcpserver (root-owned configuration/secrets)
+   Reuse a matching existing account safely; do not repurpose an unrelated account.
+   Record ownership and permissions. Snapshot existing ACLs before changes.
+   Grant traverse-only access to the private home directory and scoped workspace access needed by the server. Determine actual marker, TODO, context, requirements, and logging write paths from current source; keep runtime caches outside the checkout. Avoid granting the service access to unrelated private files or credentials.
+   Evidence: access probes executed as mcpserver for every required path.
+   Stop: access requires unreviewed broader permissions or tests fail.
+
+3. Verify SQL authentication using the existing bootstrap credential reference without printing it or placing it in command arguments.
+   Use a client that supports secret environment/input or an in-process database connection. Query server identity, database existence, and relevant login state.
+   Create McpServer_Omarchy only if missing. Create a dedicated SQL login mcpserver_omarchy with a generated credential and permissions scoped to this database for the product's schema/migration needs. Do not use sa as the service account, drop an existing database, or reset an existing login password blindly.
+   Store the service connection in /etc/mcpserver/mcpserver.env as Mcp__Database__SqlServer__ConnectionString. File owned by root, mode 0600; systemd reads it before switching to the service account.
+   Record only secret references and non-secret server/database/login identity. Inspect TLS capability and document the chosen local SQL transport settings before creating the final connection string.
+   Evidence: authenticated read-only DB identity probe; dedicated login DB access; no sysadmin role. Exception explicitly approved by operator: VIEW SERVER SECURITY STATE server metadata grant.
+   Stop: invalid bootstrap credential, conflicting existing database/login, missing safe credential channel.
+
+4. Prepare installed appsettings.yaml before starting the service. Use the complete-document YAML helper plugins/core/lib-ps/yaml-object-mutation.ps1; never edit YAML by text substitution.
+   Set Mcp:Database:Provider=sqlserver, omit empty SQL connection-string keys, set Mcp:RepoRoot, and register the workspace as the enabled primary entry using the actual WorkspacePath schema.
+   Remove unrelated lab workspaces/instance overrides from the installed copy. Configure service data/log paths outside the repo. Inspect current TodoStorage/provider integration and ensure any persistent store follows the selected database configuration; verify effective overlays rather than relying on labels.
+   Preserve the source template. Do not hand-author trust markers.
+   Copy verified publish output and the prepared YAML to /opt/mcpserver/app. Ensure the installed directory does not contain a legacy appsettings.json.
+   Evidence: redacted parsed configuration, resolved workspace list, file hashes, and correct permissions.
+   Stop: unsupported config schema, remaining foreign workspace/instance overrides, unintended SQLite selection.
+
+5. Write /etc/systemd/system/mcpserver.service with:
+   Type=simple
+   User=mcpserver
+   Group=mcpserver
+   WorkingDirectory=/opt/mcpserver/app
+   ExecStart=/opt/mcpserver/app/McpServer.Support.Mcp --urls http://localhost:7147
+   EnvironmentFile=/etc/mcpserver/mcpserver.env
+   StateDirectory=mcpserver
+   LogsDirectory=mcpserver
+   UMask=0027
+   Restart=on-failure
+   RestartSec=5
+   WantedBy=multi-user.target
+   Bound restarts with StartLimitIntervalSec/StartLimitBurst. Set service HOME to a dedicated service-owned state directory where required; do not expose operator credentials.
+   Declare network/docker ordering for the existing SQL container, then verify actual SQL availability rather than treating ordering as readiness.
+   Unit validation: systemd-analyze verify /etc/systemd/system/mcpserver.service.
+   Start: pkexec /usr/bin/systemctl daemon-reload; pkexec /usr/bin/systemctl enable --now mcpserver.service.
+   Status: systemctl show mcpserver.service -p ActiveState -p SubState -p MainPID -p User -p Group -p ExecStart; systemctl status mcpserver.service --no-pager.
+   Stop: pkexec /usr/bin/systemctl stop mcpserver.service.
+   Logs: pkexec /usr/bin/journalctl -u mcpserver.service -n 100 --no-pager (redact secrets before persisting).
+   Evidence: validated unit, active service, expected account/executable, bounded restart behavior.
+   Stop: failed unit validation or startup. After one diagnosed remediation, re-verify once; repeated failure remains blocked.
+
+## 3. Configure agent integration and process - accepted with explicit native waivers
+
+- Re-read both setup files. Set each plugin's host-matched root, canonical identity, and MCP_WORKSPACE_PATH for the operator sessions.
+- Bootstrap the existing Codex plugin against the selected endpoint and verify marker signature plus nonce. Do not use Codex Status as proof of trust/workspace/version.
+- Install/activate the selected plugin checkouts through their actual host-native contracts. Preserve existing Codex cache/plugin management and private operator skills; do not overwrite caches or mirror unrelated skills.
+- Grok: GrokCode identity; correct root/workspace environment; mirror only if required by the discovered host contract.
+- Claude Code: Claude identity; validate UserPromptSubmit/Stop/PostToolUse hooks and its MCP configuration; document any required host restart.
+- Cline: run npm ci and npm run build in its plugin root; configure its host MCP entry with node and the absolute dist/index.js path; actual connected Cline host/tool invocation is waived by explicit operator instruction. Existing SDK probe is transport evidence only.
+- Load BDPv4 from server memory/process binding after trusted API access exists. If policy is absent, record the missing binding; do not invent policy or claim it is active.
+- Evidence: host configuration paths, per-agent identities, trust receipt, hook/connection receipts, process policy source.
+- Stop: host unavailable, plugin activation unsupported, signature failure, missing required process evidence. Preserve successfully verified work and report incomplete agents honestly.
+
+## 4. Verify - operator-amended acceptance scope
+
+1. Health: use host-matched plugin trust/bootstrap against manifest.endpoint.baseUrl; require HTTP 200 and exact nonce echo, signature success, and health version matching the recorded deployment version.
+2. Service: active systemd service; MainPID > 0; expected User/Group and ExecStart; inspect /proc/<PID>/exe and compare with manifest.service.executable.
+3. Endpoint: inspect ss -ltnp for port 7147 through PowerShell.MCP with necessary privileges; join its process to systemd MainPID; verify loopback binding and manifest base URL.
+4. Storage: prove effective provider and non-secret server/database/login identity, including YAML/environment/instance/CLI precedence. An authenticated DB probe and resolved configuration provenance must match McpServer_Omarchy/sqlserver. Readiness connectivity alone is insufficient.
+5. Workspace: installed primary WorkspacePath and RepoRoot match the manifest; generated trusted marker belongs to that workspace; service account path probes pass.
+6. Agent smoke: Codex host-matched TODO/memory and written session readback remain required. Claude/Grok login and native tool/lifecycle acceptance, plus actual Cline native connection/tool acceptance, are skipped by explicit operator instruction on 2026-09-28. Keep their installed configuration and existing hook/transport/test receipts; do not label skipped checks passed.
+7. Lifecycle: stop and restart the service through the exact systemctl commands, then repeat PID/listener, trusted health, and DB checks. Verify the unit is enabled for boot without rebooting this machine.
+8. Append expected/actual/pass receipts to manifest.evidence and update every plan step. Fail closed on missing evidence or mismatch. Do not claim amended setup acceptance while any non-waived required comparison is unverified. The three explicit native-agent waivers above are excluded from acceptance and remain labeled unvalidated.
+
+## Rollback and recovery
+
+- Before modifications, save ACLs and any existing deployment/unit/config files with timestamps.
+- On a failed first install, stop/disable only the newly created MCP service. Retain logs and database for diagnosis.
+- Restore prior files and scoped ACLs from recorded backups if reverting. Do not remove shared SQL containers, volumes, unrelated services, or existing databases/logins.
+- Do not force-push, reset the repository, publish profiles, or commit/push these artifacts without a separate request.
+- Keep secrets out of the manifest, plan, output, Git, process arguments, and diagnostic receipts.
+
+## Review gate
+
+The invoked setup prompt says: "Show both to the operator and wait for acknowledgment before Phase 1 unless they said to proceed without review."
+The operator approved this plan with "approve". No further plan acknowledgment is needed.
+After acknowledgment, update artifact status and proceed without asking again for these approved choices.
+
+
+## Chronological execution history (older statements are not current status)
+
+Operator update: Always combine elevated actions into a single script. Bundle remaining privileged setup operations into one resumable PowerShell script and invoke that script once for each necessary execution phase; do not issue separate elevation prompts per command.
+
+Preflight correction: service-created marker and atomically replaced workspace documents need inherited ACLs for both sharpninja and mcpserver. Verify operator marker read access after start and restart. Cline acquisition is blocked by a committed dependency archive/lockfile checksum mismatch; do not bypass integrity verification.
+
+Installation progress: SDK 10.0.201 installed with SHA512 verified; four plugin source pins acquired; Nuke Compile/PackReplTool/InstallReplTool succeeded; self-contained Nuke Publish succeeded with assembly version 1.4.39+6546a59f2baad45d99e717bb8f20b56e06d5911f. Administrator invocation of /tmp/mcpserver-setup/install-local-service.ps1 is waiting for desktop authentication; no service/account/database provisioning has begun. No setup step has been accepted as fully verified.
+Recovery: administrator authentication completed. First installer failed with SQL Msg 911 because CREATE DATABASE and USE shared a batch. Account, ACLs and protected secret were created before that failure. Recovery requires exact account/secret/empty-app state and absent SQL database/login, preserves the secret and ACL backup, and separates SQL provisioning into independent calls. No successful service installation is claimed.
+Recovery check correction: DbConnectionStringBuilder requires set_ConnectionString in PowerShell because dictionary adaptation captures property assignment as a key. Reproduced using dummy data, corrected, and verified the expected server/database/login fields without reading or printing the real secret. The first recovery attempt made no further provisioning changes.
+Installer recovery succeeded: authenticated SQL identity McpServer_Omarchy|mcpserver_omarchy; systemd service enabled and active with MainPID 542100 and User=mcpserver. Health, storage initialization and agent verification remain pending.
+Startup diagnosis: SQL encryption-state validation requires VIEW SERVER SECURITY STATE even when TDE is disabled. Journal identifies McpDatabaseEncryptionCoordinator.cs:131 and SQL error 300. Microsoft source: https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-database-encryption-keys-transact-sql?view=sql-server-ver17 . Apply this read-only server metadata permission to the dedicated login, retaining db_owner only for McpServer_Omarchy, then retry startup once and verify migrations/listener. No sysadmin grant.
+Automatic approval review rejected the prepared repair: server-wide security-state visibility exceeds database-only setup authorization. No grant or restart was executed. Explicit operator approval is pending; do not bypass the rejection. Service is failed/start-limit-hit, with no listener and no marker.
+Operator explicitly approved: grant VIEW SERVER SECURITY STATE to mcpserver_omarchy and restart mcpserver.service. The earlier automatic-review blocker is resolved for this specific action.
+Agent registration succeeded: Claude mcpserver@mcpserver-local 1.107.0 enabled at ~/.claude/plugins/cache/mcpserver-local/mcpserver/1.107.0; active settings hook installer and VerifyOnly passed. Grok installed trusted local plugin mcpserver-grok-plugin-e1212ea7 from approved checkout. Live server, Claude request/Stop/PostToolUse and Grok connected tool verification remain pending.
+Approved SQL grant applied and verified (HAS_PERMS_BY_NAME=1); database has 38 migrations and 66 tables. Startup progressed to missing default-marker-prompt because relative template storage resolves under DataFolder, not install root. Seed the unmodified shipped template document into /var/lib/mcpserver/templates with service ownership. Also observed a nonfatal session-log backfill ConnectionString-uninitialized exception; runtime verification and triage remain pending.
+Template seed restored startup and marker creation. Codex trusted signature/nonce, TODO query and memory list passed; memory preference persisted as MEMORY-PREFERENCE-001. Failsafe drain replayed three queued records with zero failures. Listener inspection found wildcard binding because production Program.cs overrides --urls. Staged explicit Kestrel LocalHttp endpoint localhost:7147 to satisfy loopback requirement; verify after restart.
+Loopback lifecycle passed: active PID 549448, correct apphost/user, enabled boot, no restarts, listeners 127.0.0.1 and ::1, marker removed on stop and readable after start. Post-restart trust failed because generated marker uses PAYTON-OMARCHY, resolved locally to 127.0.0.2 and ::1; the plugin health request selected 127.0.0.2. Add an explicit 127.0.0.2 listener, also loopback, preserving localhost endpoint and generated marker without editing signed content.
+Native host checks: Grok doctor handshake protocol 2025-11-25 and 129 tools discovered, with healthy=1 failing=0 but additional SSE/session-delete client errors; do not claim end-to-end validation. Claude native details confirms 17 skills and seven hook event groups; runtime hook validation pending. Final hostname-loopback adjustment remains in exec session 48550 awaiting desktop authentication. No new elevated execution should be started while it is pending.
+Correction: earlier DNS observation came from sandbox network namespace. Host-side lookup resolves PAYTON-OMARCHY to network interface addresses, so adding 127.0.0.2 alone did not restore trust. Live service is active with no restarts and all three loopback listeners. Apply a guarded /etc/hosts mapping for this machine only to 127.0.0.1, with backup, resolver cache flush and operator-context trusted plugin verification in one script.
+Cline scope amendment: instead of downgrading to the old matching core or disabling integrity, Git-verified current archive blob b63a5443aeb3b3e8f71af439846975879294e46e and changed only its stale JSON lock checksum. Recorded derivative local source state; npm ci/build and all 5 suites/32 tests passed with zero failures/skips/todos. Older fail-closed blocker resolved by this explicitly documented local dependency repair. Claude auth=false; BDP Effective memory keyword Byrd has zero matches. Both earlier full reviews persisted and exact full-text readback passed through client.SessionLog.QueryAsync.
+Final independent addendum: F1 token exposure remediated by rotation and F2 stale current records reconciled;2 PASS/0 concrete FAIL/3 UNKNOWN. Accuracy99%, completeness97%, DISAGREE for overall acceptance. Unknowns: independent SQL inspection blocked by automatic approval review, native-agent login/session tests, BDPv4 binding. Full addendum persisted in isolated MCP session and exact full-response readback proved. Do not mark setup complete.
+Retry 2026-09-28T22:47:58Z: earlier independent SQL blocker resolved under explicitly updated permissions. First verifier attempt failed; corrected bounded sqlcmd formatting and retried, exit0/pass=true. No SQL grants, data changes or restart occurred. Claude and Grok retries still report unauthenticated; actual Cline host validation and BDPv4 binding remain outstanding.
+SQL retry review:4 PASS/0 FAIL/0 UNKNOWN, accuracy99%, completeness99%, AGREE for SQL verification only. Overall four-agent/process setup remains incomplete.
+
+Operator amendment 2026-09-28T23:18:23.7711542Z: native-agent checks waived as explicitly requested. BDPv4 assigned through supported Workspace MCP memory route, exact policy snapshot 34D3C89A0550DAFC687B1A90DE266CB22B88AD63A453BC11917F9D10A2F0A06A with explicit assignment. No invented gates, no product code changes, no server-enforced transition claim. Marker Windows path superseded explicitly by the assignment memory. Independent review pending.
+
+Binding verification correction: full policy has 20129 characters. Readback initially changed five en/em dashes to ASCII hyphens. Explicitly normalized those five punctuation characters and saved policy version3; assignment version2 pins SHA256 34D3C89A0550DAFC687B1A90DE266CB22B88AD63A453BC11917F9D10A2F0A06A. All other source characters match. Incidental issue accepted by triage as triage-report-91280cae19844c4b8be7c3b1892e522f. Service token rotated after my accidental embedded-token output; active PID611688,0 restarts,loopback listeners and trusted Codex calls passed. No template or product source modified; assignment explicitly supersedes old Windows-only marker path.
+
+Acceptance 2026-09-28T23:24:52.2644940Z: independent reviewer AGREE, accuracy99%,completeness99%,8PASS0FAIL0UNKNOWN for amended setup scope. Full verdict and exact completed MCP response readback: docs/receipts/hv/20260928-bdpv4-binding.verdict.txt and .session-readback.json. Session Codex-20260928T232037Z-bdp-review, turn req-20260928T232039Z-prompt-6e7e. BDPv4 binding accepted via Workspace policy/assignment memories; no server-enforced transitions claimed. Three native-agent checks remain explicitly skipped, not passed. No required acceptance work remains in amended scope.

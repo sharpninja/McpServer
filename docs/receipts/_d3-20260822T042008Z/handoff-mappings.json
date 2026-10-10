@@ -1,0 +1,159 @@
+{
+  "Source": "mcpserver__requirements_list type=mapping",
+  "ExtractedAtUtc": "2026-08-22T04:29:10.4664020Z",
+  "AllMatch": true,
+  "Compare": [
+    {
+      "FrId": "FR-HANDOFF-001",
+      "TrMatch": true,
+      "TestMatch": true,
+      "GotTr": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001"
+      ],
+      "GotTest": [
+        "TEST-HANDOFF-001",
+        "TEST-HANDOFF-002"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-002",
+      "TrMatch": true,
+      "TestMatch": true,
+      "GotTr": [
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-CONTRACT-001"
+      ],
+      "GotTest": [
+        "TEST-HANDOFF-003"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-003",
+      "TrMatch": true,
+      "TestMatch": true,
+      "GotTr": [
+        "TR-HANDOFF-VALIDATE-001"
+      ],
+      "GotTest": [
+        "TEST-HANDOFF-004"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-004",
+      "TrMatch": true,
+      "TestMatch": true,
+      "GotTr": [
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-VALIDATE-001"
+      ],
+      "GotTest": [
+        "TEST-HANDOFF-004"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-005",
+      "TrMatch": true,
+      "TestMatch": true,
+      "GotTr": [
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001"
+      ],
+      "GotTest": [
+        "TEST-HANDOFF-005"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-006",
+      "TrMatch": true,
+      "TestMatch": true,
+      "GotTr": [
+        "TR-HANDOFF-AUDIT-001"
+      ],
+      "GotTest": [
+        "TEST-HANDOFF-007"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-007",
+      "TrMatch": true,
+      "TestMatch": true,
+      "GotTr": [
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "GotTest": [
+        "TEST-HANDOFF-006"
+      ]
+    }
+  ],
+  "StoreRows": [
+    {
+      "FrId": "FR-HANDOFF-001",
+      "TrIds": [
+        "TR-HANDOFF-CONTRACT-001",
+        "TR-HANDOFF-SECURITY-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-001",
+        "TEST-HANDOFF-002"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-002",
+      "TrIds": [
+        "TR-HANDOFF-AGENT-001",
+        "TR-HANDOFF-CONTRACT-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-003"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-003",
+      "TrIds": [
+        "TR-HANDOFF-VALIDATE-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-004"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-004",
+      "TrIds": [
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-VALIDATE-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-004"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-005",
+      "TrIds": [
+        "TR-HANDOFF-MODES-001",
+        "TR-HANDOFF-TODO-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-005"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-006",
+      "TrIds": [
+        "TR-HANDOFF-AUDIT-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-007"
+      ]
+    },
+    {
+      "FrId": "FR-HANDOFF-007",
+      "TrIds": [
+        "TR-HANDOFF-SURFACE-001"
+      ],
+      "TestIds": [
+        "TEST-HANDOFF-006"
+      ]
+    }
+  ]
+}

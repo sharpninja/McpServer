@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142327Z-9403
+  result:
+    id: BUG-TRIAGE-214
+    title: updateTurn persist fails on empty QueryText binding
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - workflow.sessionlog.updateTurn is handled locally in plugins/core/lib-ps/repl-invoke.ps1 and then persisted through Invoke-ReplPersistTurn -> Invoke-ReplTurnUpsertParams -> New-McpPluginTurnUpsertRequest. QueryText is [Parameter(Mandatory)][string] with no AllowEmptyString, unlike Title which was already fixed for the same ParameterBindingValidationException (TR-MCP-REPL-018). updateTurn omits Title unless queryTitle is explicit, and QueryText is recovered only from current-turn.yaml then that empty Title. A valid model update (response, tags, contextList) therefore throws, the wrapper returns false (exit 1), and the live MCP turn is not patched. Persist-log tests never exercise this path; the STRICTCOUNT fixture even omits queryText and short-circuits before upsert. A session_submit failsafe can remain from write-ahead persist or an earlier beginTurn, but it is not a successful live-turn update.
+    - 'Triage group: triage-group-f98b9d1a62fa298e'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- A valid workflow.sessionlog.updateTurn payload that omits queryTitle and has empty or missing current-turn queryText must exit 0.'
+    - '- The persisted live turn must receive the submitted response, interpretation, tags, and contextList on MCP, not only a leftover session_submit failsafe.'
+    - '- New-McpPluginTurnUpsertRequest must accept empty QueryText without ParameterBindingValidationException.'
+    - '- Regression coverage must run the real persist/upsert path (not MCP_PLUGIN_PERSIST_LOG) with current-turn.yaml that has queryTitle but no queryText.'
+    - 'Implementation notes:'
+    - '- Mirror the Title fix in plugins/core/lib-ps/McpPluginShim.psm1: add [AllowEmptyString()] to QueryText on New-McpPluginTurnUpsertRequest.'
+    - "- In Invoke-ReplTurnUpsertParams, fall back to cached queryTitle when Get-ReplCurrentTurnQueryText and the persist Title are empty; do not bind Mandatory QueryText to ''."
+    - '- Server DTOs already treat QueryText as nullable and NormalizeTurn fills it from QueryTitle, so empty QueryText should be omitted or filled rather than rejected at the plugin bind.'
+    - '- completeTurn uses the same upsert helper and has the same empty-QueryText hole.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

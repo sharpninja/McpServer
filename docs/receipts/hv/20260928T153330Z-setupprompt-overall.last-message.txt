@@ -1,0 +1,20 @@
+2026-09-28T15:49:15Z
+
+**OverallVerdict: AGREE**  
+**DraftScopeVerdict: AGREE**
+
+- **Accuracy: 99/100.** Literal-fence tests and source checks support the draft.
+- **Completeness: 99/100.** Requested checks, F01-F09, and surfaces A-D evaluated.
+- **Draft:** 10 PASS / 0 FAIL / 0 UNKNOWN.
+- **ReviewerOnly:** 6 PASS / 0 FAIL / 0 UNKNOWN.
+- **Full FAIL list:** Scope=Draft: none. Scope=ReviewerOnly: none.
+- **ImagePath:** 28/28 PASS; zero parser errors; `ScriptBlock.Create` succeeds.
+- **Encoding:** zero non-ASCII codepoints; throw fix and strict regex preserved.
+- **Candidate:** unchanged; SHA-256 matches `5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766`.
+- **Model proof:** current runtime `turn_context`, line 8, confirms **gpt-6-astra / xhigh**.
+- **Credential hygiene: PASS.** Zero live echoes across 51 scanned tool outputs; all four artifacts pass credential checks.
+
+[Markdown receipt](F:/GitHub/McpServer/docs/receipts/hv/hostile-validator-setupprompt-overall-20260928T153330Z.md) · [JSON twin](F:/GitHub/McpServer/docs/receipts/hv/hostile-validator-setupprompt-overall-20260928T153330Z.json) · [Request JSONL](F:/GitHub/McpServer/docs/receipts/hv/20260928T153330Z-setupprompt-overall.request.jsonl) · [Sanitized response JSONL](F:/GitHub/McpServer/docs/receipts/hv/20260928T153330Z-setupprompt-overall.response.jsonl)
+
+No draft edits, MCP session-log writes, commits, pushes, or TODO completion. MCP-SETUPPROMPT-001 remains open.
+

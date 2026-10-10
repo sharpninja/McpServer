@@ -112,13 +112,15 @@ public sealed class McpServerClient
         AgentHelp = new AgentHelpClient(http, options, holder);
         UseCases = new UseCaseClient(http, options, holder);
         Handoff = new HandoffClient(http, options, holder);
+        HostileReview = new HostileReviewClient(http, options, holder);
+        WorkspaceValidation = new WorkspaceValidationClient(http, options, holder);
         Products = new ProductClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
             Todo, Context, GraphRag, SessionLog, Memory, GitHub, Requirements, Voice, Events,
             Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
-            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage, AgentHelp, UseCases, Handoff, Products
+            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage, AgentHelp, UseCases, Handoff, HostileReview, WorkspaceValidation, Products
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -459,6 +461,18 @@ public sealed class McpServerClient
     /// <para>See <see cref="HandoffClient"/> for the full method list.</para>
     /// </summary>
     public HandoffClient Handoff { get; }
+
+    /// <summary>
+    /// FR-MCP-HOSTILEREVIEW-006: Hostile-review submit/status/get/query endpoints.
+    /// <para>See <see cref="HostileReviewClient"/> for the full method list.</para>
+    /// </summary>
+    public HostileReviewClient HostileReview { get; }
+
+    /// <summary>
+    /// FR-MCP-HYGIENE-005: Read-only workspace hygiene validation.
+    /// <para>See <see cref="WorkspaceValidationClient"/> for the method list.</para>
+    /// </summary>
+    public WorkspaceValidationClient WorkspaceValidation { get; }
 
     /// <summary>
     /// TR-MCP-PRODUCT-API-001: Product CRUD and membership endpoints.

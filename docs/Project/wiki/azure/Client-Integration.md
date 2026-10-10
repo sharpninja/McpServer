@@ -31,6 +31,8 @@ MCP-compatible editor clients can connect directly through Streamable HTTP or ST
 
 See `docs/AGENT-PLUGIN-AVAILABILITY.md` for current plugin repositories, expected local roots, status wrappers, and failure behavior.
 
+Plugin and client first-party writes (TODO, session-log, requirements, memory) bypass the keyserver on `develop` and on the live Linux box MCP even when `Mcp:TurnTransactions:Enabled=true`. Keyserver signing is QuadBrain/brain-slot only. See `docs/USER-GUIDE.md` section 7f.
+
 ### Docker Mode
 
 When running the MCP server in Docker, the extension connects to the same URL
@@ -64,6 +66,7 @@ Key tool categories:
 - **Desktop**: `desktop_launch`
 - **Sync**: `sync_run`, `sync_status`
 - **TODO**: `todo_list`, `todo_get`, `todo_create`, `todo_update`, `todo_delete`
+- **Handoff**: `handoff_ingest`, `handoff_get`, `handoff_approve` (see `docs/Handoff-Ingestion.md`)
 - **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`, `sessionlog_open`, `sessionlog_begin_turn`, `sessionlog_complete_turn`, `sessionlog_fail_turn`
 - **Session Logs (replace/remove)**: `sessionlog_replace_turn`, `sessionlog_replace_section`, `sessionlog_clear_section`, `sessionlog_delete_item`, `sessionlog_delete_turn`, `sessionlog_delete_session` (PUT=replace, DELETE=remove; see [session-log-workflow-api.md](context/session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete))
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
@@ -71,6 +74,26 @@ Key tool categories:
 - **Use cases**: `usecase_list`, `usecase_get`, `usecase_create`, `usecase_update`, `usecase_delete`, `usecase_link`, `usecase_diagram`, `usecase_coverage`, approval/product tools (see Swagger and plugin `usecase` skill)
 - **Products**: `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`
 - **Requirements (effective)**: `requirements_effective` (`productScope=product|local`)
+- **Memory**: `memory_list`, `memory_get`, `memory_add`, `memory_update`, `memory_remove`, `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert` (see `docs/context/memory.md` and `docs/stdio-tool-contract.json`). Official plugins expose the same verbs and inject `REQUIRED MEMORIES` at host request boundaries.
+
+## Typed client: Handoff
+
+`McpServerClient.Handoff` (`HandoffClient`) covers `/mcpserver/handoff`:
+
+```csharp
+var run = await client.Handoff.IngestHandoffAsync(new HandoffIngestionRequest
+{
+    SourceKind = HandoffSourceKind.Path,
+    Path = "docs/handoffs/example.md",
+    Mode = HandoffIngestionMode.DraftOnly,
+});
+var inspect = await client.Handoff.GetHandoffRunAsync(run.Provenance!.RunId);
+var approved = await client.Handoff.ApproveHandoffAsync(
+    inspect.Provenance!.RunId,
+    new HandoffApprovalRequest { Approved = true, Reviewer = "operator" });
+```
+
+DraftOnly never mutates TODO state. Custom `promptTemplateId` values are rejected. See `docs/Handoff-Ingestion.md`.
 
 ## Typed client: Products
 
@@ -87,6 +110,38 @@ var effective = await client.Requirements.GetEffectiveRequirementsAsync(layerKey
 ```
 
 `RemoveMemberAsync` returns the DELETE response body. Do not follow a self-leave with GET (that is 404).
+
+## Typed client: Memory
+
+`McpServerClient.Memory` (`MemoryClient`) covers `/mcpserver/memory`:
+
+```csharp
+var remembered = await client.Memory.RememberAsync(new MemoryRememberRequest
+{
+    Content = "Prefer tokens_total as the memory bench primary metric.",
+    Type = "decision",
+    Scope = MemoryScope.Workspace,
+    UpdatedBy = "CursorGrok",
+});
+var recalled = await client.Memory.RecallAsync(new MemoryRecallRequest
+{
+    Query = "memory bench primary metric",
+    TopN = 5,
+});
+var promoted = await client.Memory.PromoteAsync(new MemoryPromoteRequest
+{
+    SourceKind = "sessionlog",
+    SourceRef = "req-20260919T000000Z-example",
+});
+var plan = await client.Memory.ConsolidateAsync(new MemoryConsolidateRequest
+{
+    DryRun = true,
+});
+```
+
+`RecallAsync` returns `MemoryRecallResult`: `items` (id, score, content), `rankingMode`, and `rerankApplied`. `workflow.memory.recall` returns the same fields. A canned body that includes `rankingMode` still has that field after deserialization.
+
+Prefer plugin or REPL `workflow.memory.*` when those surfaces are required. Compat `ListAsync` / `AddAsync` / `UpdateAsync` / `RemoveAsync` remain. `Idempotency-Key` is not supported; a duplicate remember creates a second row. See `docs/context/memory.md`.
 
 ## Typed client: Use Cases
 

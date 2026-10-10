@@ -1,0 +1,689 @@
+{
+  "startedUtc": "2026-08-21T15:06:16Z",
+  "updatedUtc": "2026-08-21T15:21:36Z",
+  "completedUtc": "2026-08-21T15:21:36Z",
+  "posted": 65,
+  "failed": 3,
+  "items": [
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T152731Z-session_submit-0804.yaml",
+      "startedUtc": "2026-08-21T15:06:16Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 40,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T123557Z-prompt-bda6"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T152820Z-session_submit-7ef3.yaml",
+      "startedUtc": "2026-08-21T15:06:56Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 61,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T123557Z-prompt-bda6"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T153405Z-session_submit-fe62.yaml",
+      "startedUtc": "2026-08-21T15:07:57Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 61,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T153405Z-prompt-a328"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T160701Z-session_submit-d092.yaml",
+      "startedUtc": "2026-08-21T15:08:58Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 66,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T153405Z-prompt-a328"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T161258Z-session_submit-ee47.yaml",
+      "startedUtc": "2026-08-21T15:10:04Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 74,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T153405Z-prompt-a328"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T161329Z-session_submit-69c5.yaml",
+      "startedUtc": "2026-08-21T15:11:18Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 59,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T161258Z-prompt-66e1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T163543Z-session_submit-71c4.yaml",
+      "startedUtc": "2026-08-21T15:12:17Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 62,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T161258Z-prompt-66e1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T173222Z-session_submit-38c9.yaml",
+      "startedUtc": "2026-08-21T15:13:19Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 60,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T161258Z-prompt-66e1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T173302Z-session_submit-e450.yaml",
+      "startedUtc": "2026-08-21T15:14:19Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 54,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T161258Z-prompt-66e1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T173341Z-session_submit-1299.yaml",
+      "startedUtc": "2026-08-21T15:15:13Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 63,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T161258Z-prompt-66e1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T182243Z-session_submit-cdb2.yaml",
+      "startedUtc": "2026-08-21T15:16:16Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 56,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T161258Z-prompt-66e1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\20260817T182313Z-session_submit-5242.yaml",
+      "startedUtc": "2026-08-21T15:17:11Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 56,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T182242Z-prompt-c0e6"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260722T232406Z-session_submit-3358.invalid-requestid-corrupted-shape.yaml",
+      "startedUtc": "2026-08-21T15:18:07Z",
+      "success": false,
+      "exitCode": 1,
+      "elapsedSec": 1,
+      "error": "type: error payload: requestId: req-20260821T151807Z-6604 code: method_invocation_error message: \"JSON deserialization error for parameter 'sessionLog': cannot deserialize to UnifiedSessionLogDto. The JSON value could not be converted to System.Collections.Generic.List`1[McpServer.Client.Models.UnifiedRequestEntryDto]. Path: $.turns | LineNumber: 0 | BytePositionInLine: 115.\" details: clientName: ",
+      "sessionId": "Codex-20260722T232402Z-plugin-session",
+      "requestId": null
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T175204Z-session_submit-78cd.yaml",
+      "startedUtc": "2026-08-21T15:18:08Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260816T175200Z-plugin-session",
+      "requestId": "req-20260816T174847Z-prompt-48d5"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T175215Z-session_submit-5f50.yaml",
+      "startedUtc": "2026-08-21T15:18:09Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260816T175210Z-plugin-session",
+      "requestId": "req-20260816T175200Z-prompt-166d"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T175409Z-session_submit-e367.yaml",
+      "startedUtc": "2026-08-21T15:18:10Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260816T175401Z-plugin-session",
+      "requestId": "req-20260816T175210Z-prompt-3e61"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T175527Z-session_submit-2fd3.yaml",
+      "startedUtc": "2026-08-21T15:18:11Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260816T175520Z-plugin-session",
+      "requestId": "req-20260816T175402Z-prompt-6fd3"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T175540Z-session_submit-c649.yaml",
+      "startedUtc": "2026-08-21T15:18:12Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260816T175532Z-plugin-session",
+      "requestId": "req-20260816T175521Z-prompt-15de"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T190757Z-session_submit-9c15.yaml",
+      "startedUtc": "2026-08-21T15:18:13Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "Codex-20260816T190752Z-plugin-session",
+      "requestId": "req-20260816T175521Z-prompt-15de"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T191638Z-session_submit-0d45.yaml",
+      "startedUtc": "2026-08-21T15:18:14Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260816T191637Z-plugin-session",
+      "requestId": "req-20260816T190752Z-prompt-661f"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T191954Z-session_submit-d2ee.yaml",
+      "startedUtc": "2026-08-21T15:18:15Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "Codex-20260816T191953Z-plugin-session",
+      "requestId": "req-20260816T191637Z-prompt-5dc9"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T192038Z-session_submit-210b.yaml",
+      "startedUtc": "2026-08-21T15:18:17Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260816T192038Z-plugin-session",
+      "requestId": "req-20260816T191953Z-prompt-c2d8"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T194009Z-session_submit-a0fd.yaml",
+      "startedUtc": "2026-08-21T15:18:18Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "Codex-20260816T194002Z-plugin-session",
+      "requestId": "req-20260816T192038Z-prompt-3943"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260816T202701Z-session_submit-3160.yaml",
+      "startedUtc": "2026-08-21T15:18:19Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 15,
+      "error": null,
+      "sessionId": "Codex-20260816T202151Z-plugin-session",
+      "requestId": "req-20260816T201923Z-prompt-f3ef"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260817T123057Z-session_submit-d5f9.yaml",
+      "startedUtc": "2026-08-21T15:18:34Z",
+      "success": false,
+      "exitCode": 1,
+      "elapsedSec": 1,
+      "error": "type: error payload: requestId: req-20260821T151834Z-e363 code: method_invocation_error message: \"HTTP 400: {\\\"type\\\":\\\"https://httpstatuses.io/400\\\",\\\"title\\\":\\\"validation_error\\\",\\\"status\\\":400,\\\"detail\\\":\\\"Invalid session turn planFile/todoId: planFile is omitted. (Parameter 'planFile')\\\",\\\"code\\\":\\\"validation_error\\\",\\\"message\\\":\\\"Invalid session turn planFile/todoId: planFile is omitted. (Par",
+      "sessionId": "GrokSubagentHostile-20260817T015741Z-handoff-hostile",
+      "requestId": "req-20260817T104212Z-prompt-6212"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260817T123219Z-session_submit-9ad7.yaml",
+      "startedUtc": "2026-08-21T15:18:35Z",
+      "success": false,
+      "exitCode": 1,
+      "elapsedSec": 58,
+      "error": "type: error payload: requestId: req-20260821T151835Z-4531 code: method_invocation_error message: \"HTTP 400: {\\\"type\\\":\\\"https://httpstatuses.io/400\\\",\\\"title\\\":\\\"validation_error\\\",\\\"status\\\":400,\\\"detail\\\":\\\"Invalid session turn planFile/todoId: planFile is omitted. (Parameter 'planFile')\\\",\\\"code\\\":\\\"validation_error\\\",\\\"message\\\":\\\"Invalid session turn planFile/todoId: planFile is omitted. (Par",
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T104212Z-prompt-6212"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\codex\\failsafe\\quarantine\\20260817T123605Z-session_submit-afe8.yaml",
+      "startedUtc": "2026-08-21T15:19:33Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 56,
+      "error": null,
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "requestId": "req-20260817T104212Z-prompt-6212"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260812T220204Z-session_submit-fcc0.yaml",
+      "startedUtc": "2026-08-21T15:20:29Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260812T220200Z-plugin-session",
+      "requestId": "req-20260812T214716Z-prompt-6f39"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260815T184956Z-session_submit-db57.yaml",
+      "startedUtc": "2026-08-21T15:20:31Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260815T184938Z-plugin-session",
+      "requestId": "req-20260812T224332Z-prompt-10c9"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260816T200601Z-session_submit-62bf.yaml",
+      "startedUtc": "2026-08-21T15:20:33Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260816T200540Z-plugin-session",
+      "requestId": "req-20260815T184950Z-prompt-f9e0"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260816T204655Z-session_submit-326b.yaml",
+      "startedUtc": "2026-08-21T15:20:34Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260816T204629Z-plugin-session",
+      "requestId": "req-20260815T184950Z-prompt-f9e0"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260816T205456Z-session_submit-7c66.yaml",
+      "startedUtc": "2026-08-21T15:20:36Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260816T204629Z-plugin-session",
+      "requestId": "req-20260816T204649Z-prompt-dbf1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260816T221612Z-session_submit-5100.yaml",
+      "startedUtc": "2026-08-21T15:20:37Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260816T221552Z-plugin-session",
+      "requestId": "req-20260816T204649Z-prompt-dbf1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T040056Z-session_submit-295d.yaml",
+      "startedUtc": "2026-08-21T15:20:38Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T040033Z-plugin-session",
+      "requestId": "req-20260816T204649Z-prompt-dbf1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T040754Z-session_submit-3f0c.yaml",
+      "startedUtc": "2026-08-21T15:20:39Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T040729Z-plugin-session",
+      "requestId": "req-20260816T204649Z-prompt-dbf1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T223836Z-session_submit-9ba8.yaml",
+      "startedUtc": "2026-08-21T15:20:40Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T223818Z-plugin-session",
+      "requestId": "req-20260816T204649Z-prompt-dbf1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T225300Z-session_submit-0f5c.yaml",
+      "startedUtc": "2026-08-21T15:20:41Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T225228Z-plugin-session",
+      "requestId": "req-20260817T223831Z-prompt-ac17"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T230932Z-session_submit-7f7d.yaml",
+      "startedUtc": "2026-08-21T15:20:42Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T230911Z-plugin-session",
+      "requestId": "req-20260817T223831Z-prompt-ac17"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T231118Z-session_submit-cc15.yaml",
+      "startedUtc": "2026-08-21T15:20:44Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T230911Z-plugin-session",
+      "requestId": "req-20260817T223831Z-prompt-ac17"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T231840Z-session_submit-9ff6.yaml",
+      "startedUtc": "2026-08-21T15:20:45Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T231819Z-plugin-session",
+      "requestId": "req-20260817T231646Z-prompt-6d44"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T232001Z-session_submit-3e3e.yaml",
+      "startedUtc": "2026-08-21T15:20:47Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T231819Z-plugin-session",
+      "requestId": "req-20260817T231646Z-prompt-6d44"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T233049Z-session_submit-3523.yaml",
+      "startedUtc": "2026-08-21T15:20:49Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T231819Z-plugin-session",
+      "requestId": "req-20260817T231646Z-prompt-6d44"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T233317Z-session_submit-f371.yaml",
+      "startedUtc": "2026-08-21T15:20:50Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T231819Z-plugin-session",
+      "requestId": "req-20260817T231646Z-prompt-6d44"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T233707Z-session_submit-847a.yaml",
+      "startedUtc": "2026-08-21T15:20:52Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 3,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T231819Z-plugin-session",
+      "requestId": "req-20260817T231646Z-prompt-6d44"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260817T235716Z-session_submit-6316.yaml",
+      "startedUtc": "2026-08-21T15:20:55Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260817T235655Z-plugin-session",
+      "requestId": "req-20260817T233700Z-prompt-9bec"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T001252Z-session_submit-f830.yaml",
+      "startedUtc": "2026-08-21T15:20:56Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T001231Z-plugin-session",
+      "requestId": "req-20260818T001140Z-prompt-e2bf"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T015139Z-session_submit-3341.yaml",
+      "startedUtc": "2026-08-21T15:20:58Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T015057Z-plugin-session",
+      "requestId": "req-20260818T005616Z-prompt-293f"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T132013Z-session_submit-d4b4.yaml",
+      "startedUtc": "2026-08-21T15:20:59Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T131953Z-plugin-session",
+      "requestId": "req-20260818T131800Z-prompt-1c00"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T132418Z-session_submit-84ad.yaml",
+      "startedUtc": "2026-08-21T15:21:01Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T132359Z-plugin-session",
+      "requestId": "req-20260818T132012Z-prompt-4ad3"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T134933Z-session_submit-2c02.yaml",
+      "startedUtc": "2026-08-21T15:21:03Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T134923Z-plugin-session",
+      "requestId": "req-20260818T134704Z-prompt-f6fa"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T135128Z-session_submit-01a1.yaml",
+      "startedUtc": "2026-08-21T15:21:05Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T134952Z-plugin-session",
+      "requestId": "req-20260818T134933Z-prompt-5041"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T135916Z-session_submit-2dc3.yaml",
+      "startedUtc": "2026-08-21T15:21:07Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T135323Z-plugin-session",
+      "requestId": "req-20260818T135122Z-prompt-023d"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T151313Z-session_submit-22ca.yaml",
+      "startedUtc": "2026-08-21T15:21:09Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T151253Z-plugin-session",
+      "requestId": "req-20260818T145523Z-prompt-aedf"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T153321Z-session_submit-f5ce.yaml",
+      "startedUtc": "2026-08-21T15:21:11Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T151253Z-plugin-session",
+      "requestId": "req-20260818T151322Z-prompt-5c82"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T164551Z-session_submit-cde8.yaml",
+      "startedUtc": "2026-08-21T15:21:13Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T164054Z-plugin-session",
+      "requestId": "req-20260818T161920Z-prompt-ac40"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T175019Z-session_submit-32aa.yaml",
+      "startedUtc": "2026-08-21T15:21:15Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T175007Z-plugin-session",
+      "requestId": "req-20260818T174820Z-prompt-e383"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T180823Z-session_submit-5790.yaml",
+      "startedUtc": "2026-08-21T15:21:16Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T180816Z-plugin-session",
+      "requestId": "req-20260818T175948Z-prompt-3a91"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T182210Z-session_submit-1483.yaml",
+      "startedUtc": "2026-08-21T15:21:18Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T180816Z-plugin-session",
+      "requestId": "req-20260818T175948Z-prompt-3a91"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T184131Z-session_submit-9d18.yaml",
+      "startedUtc": "2026-08-21T15:21:19Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T182743Z-plugin-session",
+      "requestId": "req-20260818T182205Z-prompt-6316"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T185425Z-session_submit-3575.yaml",
+      "startedUtc": "2026-08-21T15:21:21Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T185405Z-plugin-session",
+      "requestId": "req-20260818T184126Z-prompt-10aa"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T195841Z-session_submit-34dd.yaml",
+      "startedUtc": "2026-08-21T15:21:23Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T195831Z-plugin-session",
+      "requestId": "req-20260818T192504Z-prompt-bcc1"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T200811Z-session_submit-afae.yaml",
+      "startedUtc": "2026-08-21T15:21:25Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T200751Z-plugin-session",
+      "requestId": "req-20260818T195840Z-prompt-6623"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T203156Z-session_submit-acfe.yaml",
+      "startedUtc": "2026-08-21T15:21:26Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T202912Z-plugin-session",
+      "requestId": "req-20260818T201836Z-prompt-f358"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T211343Z-session_submit-0ef0.yaml",
+      "startedUtc": "2026-08-21T15:21:28Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T202912Z-plugin-session",
+      "requestId": "req-20260818T201836Z-prompt-f358"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T221324Z-session_submit-1cd8.yaml",
+      "startedUtc": "2026-08-21T15:21:29Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T215530Z-plugin-session",
+      "requestId": "req-20260818T214603Z-prompt-3a20"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T221324Z-session_submit-84ab.yaml",
+      "startedUtc": "2026-08-21T15:21:31Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T215530Z-plugin-session",
+      "requestId": "req-20260818T214603Z-prompt-3a20"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260818T221324Z-session_submit-fdbf.yaml",
+      "startedUtc": "2026-08-21T15:21:32Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260818T215530Z-plugin-session",
+      "requestId": "req-20260818T214603Z-prompt-3a20"
+    },
+    {
+      "file": "F:\\GitHub\\McpServer\\.mcpServer\\claude\\failsafe\\quarantine\\20260819T005145Z-session_submit-c161.yaml",
+      "startedUtc": "2026-08-21T15:21:34Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 2,
+      "error": null,
+      "sessionId": "ClaudeCode-20260819T002343Z-plugin-session",
+      "requestId": "req-20260819T000529Z-prompt-e37f"
+    }
+  ]
+}

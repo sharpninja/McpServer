@@ -1,0 +1,50 @@
+[
+  {
+    "Host": "Codex",
+    "Success": 1,
+    "FailedSubmit": 1,
+    "Retry": 1
+  },
+  {
+    "Host": "ClaudeCode",
+    "Success": 1,
+    "FailedSubmit": 1,
+    "Retry": 1
+  },
+  {
+    "Host": "ClaudeCowork",
+    "Success": 1,
+    "FailedSubmit": 1,
+    "Retry": 1
+  },
+  {
+    "Host": "Copilot",
+    "Success": 1,
+    "FailedSubmit": 1,
+    "Retry": 1
+  },
+  {
+    "Host": "Grok",
+    "Success": 1,
+    "FailedSubmit": 1,
+    "Retry": 1
+  },
+  {
+    "Host": "Cline",
+    "Success": 1,
+    "FailedSubmit": 1,
+    "Retry": 1
+  },
+  {
+    "Host": "ClineV2",
+    "Success": 1,
+    "FailedSubmit": 1,
+    "Retry": 1
+  },
+  {
+    "Host": "OpenCode",
+    "Success": 1,
+    "FailedSubmit": 1,
+    "Retry": 1
+  }
+]

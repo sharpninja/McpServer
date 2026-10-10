@@ -1,0 +1,68 @@
+PLAN-PLUGINHANDOFF-001 D2 commands and exit codes
+Agent: GrokCode
+Session: GrokCode-20260822T022210Z-pluginhandoff-d2
+Turn: req-20260822T022210Z-001-d2-implement-pluginhandoff
+TimestampUtc: 2026-08-22T02:43:00Z
+
+1. Test-MarkerSignature -MarkerFile AGENTS-README-FIRST.yaml
+   Result: True
+   Exit: 0
+
+2. GET http://PAYTON-LEGION2:7147/health?nonce=3471b12796ac49238e621444a7128354
+   Result: status Healthy, nonce echoed exactly, storage reachable
+   Exit: 0
+
+3. sessionlog_open agent GrokCode sessionId GrokCode-20260822T022210Z-pluginhandoff-d2
+   Result: created=true
+   Exit: 0 (MCP tool)
+
+4. sessionlog_begin_turn requestId req-20260822T022210Z-001-d2-implement-pluginhandoff todoId PLAN-PLUGINHANDOFF-001 planFile docs/plans/PLAN-PLUGINHANDOFF-001.md
+   Result: status in_progress turnId 42860
+   Exit: 0 (MCP tool)
+
+5. Invoke-Pester -Path plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1 -CI
+   First run (D1 assertion parse): PESTER_CHILD_EXIT=1 Passed=0 Failed=1 Skipped=0
+   Cause: Should -Match [regex]::Escape($method) bound as type-literal, $logged not matched
+   Fix: wrap as Should -Match ([regex]::Escape($method)); assertion intent unchanged
+   After fix: PESTER_CHILD_EXIT=0 Passed=1 Failed=0 Skipped=0 Total=1
+   After SyncAgentPlugins: PESTER_AFTER_SYNC_EXIT=0 Passed=1 Failed=0 Skipped=0 Total=1
+   XML: pester-PluginHandoffSkill-after-sync.xml total=1 failures=0 skipped=0
+
+6. dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~ProcessingLease_RenewsAndFencesTerminalUpdates|FullyQualifiedName~Provenance_IncludesEffectiveCustomPromptIdentityAndVersion"
+   DOTNET_NAMED_EXIT=0
+   TRX d2-handoff-csharp.trx Counters total=2 executed=2 passed=2 failed=0 notExecuted=0
+   Failed: 0 Passed: 2 Skipped: 0 Total: 2
+
+7. dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~HandoffDurabilityTests"
+   DOTNET_DURABILITY_EXIT=0
+   TRX d2-handoff-durability-class.trx Counters total=24 executed=24 passed=24 failed=0 notExecuted=0
+   Failed: 0 Passed: 24 Skipped: 0 Total: 24
+   Includes takeover reuse and IngestAsync_CustomPromptTemplate_IsRejected
+
+8. dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~PluginSync_HandoffSkill_MatchesCoreArtifact|FullyQualifiedName~IngestAsync_CustomPromptTemplate_IsRejected"
+   DOTNET_SYNC_REJECT_EXIT=0
+   TRX d2-plugin-sync-handoff.trx Counters total=2 executed=2 passed=2 failed=0 notExecuted=0
+
+9. dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug --filter "FullyQualifiedName~HandoffIngestionStorageMigrationTests"
+   First combined run: DOTNET_MIGRATION_EXIT=1
+   TRX d2-handoff-migration.trx Counters total=3 executed=3 passed=2 failed=1
+   Failed: SqlServer_HandoffMigration_DowngradeAndReupgrade Execution Timeout Expired (competing LocalDB)
+   Sqlite and PostgreSQL passed
+   Serial retry SqlServer only: DOTNET_SQLSERVER_MIGRATION_EXIT=0
+   TRX d2-handoff-migration-sqlserver.trx Counters total=1 executed=1 passed=1 failed=0 skipped=0
+   No D2 schema change. Existing AddHandoffIngestionStorage cycle proven on all three providers (Sqlite+Pg first run, SQL Server serial retry).
+
+10. ./build.ps1 SyncAgentPlugins
+    SYNC_AGENT_PLUGINS_EXIT=0
+    Target SyncAgentPlugins Succeeded duration 1:06
+    Official plugin copies include skills/handoff/invoke.ps1
+    Sibling plugin versions bumped to 1.100.0 by the Nuke target
+
+11. SHA256 core vs grok invoke.ps1
+    7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D equal
+    SKILL.md C475040B4924EDAA57A175A73FEAF88C76AF491EFBBA193C3AF541D3FE95C18E equal
+    grok CORE-MANIFEST.yaml lists skills/handoff/invoke.ps1 and SKILL.md
+
+PLAN-PLUGINHANDOFF-001 not updated (parent owns that row).
+MCP-HANDOFF* not marked done (D4/D5).
+Phase C P11/P12/P13 not implemented.

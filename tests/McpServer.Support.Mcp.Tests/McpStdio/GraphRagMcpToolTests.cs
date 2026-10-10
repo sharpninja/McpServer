@@ -39,8 +39,8 @@ public sealed class GraphRagMcpToolTests : IDisposable
         _db = new McpDbContext(dbOptions);
         _db.Database.EnsureCreated();
 
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
-        var workspaceContext = new WorkspaceContext { WorkspacePath = "." };
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
+        var workspaceContext = new WorkspaceContext { WorkspacePath = TestWorkspacePaths.UnusedRepoRoot };
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 

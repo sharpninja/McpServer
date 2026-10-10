@@ -1,0 +1,79 @@
+[
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260821T232545Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:26:58.6166044Z",
+    "Length": 12074,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260821T232545Z.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:26:58.6166044Z",
+    "Length": 5064,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\PluginSessionLogIntegrationTargetTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:08:56.4300101Z",
+    "Length": 3963,
+    "AfterCRedP1Agree": false
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\build\\Build.PluginSessionLogIntegration.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:33:11.9992945Z",
+    "Length": 2694,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z",
+    "Length": 1017,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationProjectTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z",
+    "Length": 1663,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCollection.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z",
+    "Length": 303,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostKind.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9516690Z",
+    "Length": 702,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogScenario.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9506726Z",
+    "Length": 845,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\scenarios\\plugin-sessionlog-scenarios.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9506726Z",
+    "Length": 1184,
+    "AfterCRedP1Agree": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\scenarios\\plugin-sessionlog-scenarios.json",
+    "Exists": false,
+    "LastWriteTimeUtc": null,
+    "Length": 0,
+    "AfterCRedP1Agree": null
+  }
+]

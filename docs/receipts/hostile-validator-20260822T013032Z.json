@@ -1,0 +1,185 @@
+{
+  "TimestampUtc": "2026-08-22T01:30:32Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": "add-profile.grok.md"
+  },
+  "ActivePlan": "docs/plans/PLAN-PLUGINHANDOFF-001.md section 8 D0/D1/D1.5",
+  "RequirementIds": [
+    "TEST-HANDOFF-006",
+    "FR-HANDOFF-007",
+    "TR-HANDOFF-SURFACE-001",
+    "TEST-HANDOFF-007",
+    "FR-HANDOFF-006",
+    "TR-HANDOFF-AUDIT-001",
+    "TEST-HANDOFF-003",
+    "FR-HANDOFF-002",
+    "TR-HANDOFF-AGENT-001"
+  ],
+  "ReviewSessionId": "GrokSubagentHostile-20260822T012452Z-pluginhandoff-d15",
+  "ReviewRequestId": "req-20260822T012452Z-001-d15-after-red-pluginhandoff",
+  "ServerTurnId": 42838,
+  "OverallVerdict": "AGREE",
+  "AccuracyRating": 95,
+  "CompletenessRating": 92,
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "title": "D0 inventory exists with three remaining gaps",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "title": "D1 red receipt and files exist",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "title": "Three named tests fail Skipped 0 against existing product",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "title": "Not D0 reuse relabels",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "title": "D2 remediations have not started",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "title": "PLAN-PLUGINHANDOFF-001 done false; D1/D1.5/D2 not marked done",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "title": "Honesty / receipts",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "title": "Byrd v4 after-red phase gate",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "title": "MCP-only storage",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "title": "PowerShell-only / no Python",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "title": "No D2 product implementation in this review",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "title": "FR/TR/TEST AC exist",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "title": "Mappings exist for remaining-gap families",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "title": "Remaining-gap ACs have currently failing named tests",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "title": "D1.5 remaining-gap red criteria",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "title": "Plan/TODO checkboxes not advanced by this review",
+      "verdict": "PASS"
+    }
+  ],
+  "TestReruns": {
+    "pester": {
+      "command": "pwsh.exe -NoProfile -Command \"Invoke-Pester -Path 'plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1' -CI\"",
+      "exitCode": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "notRun": 0,
+      "failure": "invoke.ps1 missing beside plugins/core/skills/handoff/SKILL.md"
+    },
+    "dotnet": {
+      "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~ProcessingLease_RenewsAndFencesTerminalUpdates|FullyQualifiedName~Provenance_IncludesEffectiveCustomPromptIdentityAndVersion",
+      "exitCode": 1,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "total": 2,
+      "trx": {
+        "total": 2,
+        "executed": 2,
+        "passed": 0,
+        "failed": 2,
+        "notExecuted": 0
+      },
+      "failures": [
+        "Heartbeat must renew ProcessingLeaseExpiresAtUtc when the injected clock advances by HeartbeatInterval.",
+        "Expected operator-handoff-custom/v3 Actual handoff-todo-draft/v1"
+      ]
+    }
+  },
+  "Todo": {
+    "id": "PLAN-PLUGINHANDOFF-001",
+    "done": false,
+    "d1TaskDone": false,
+    "d15TaskDone": false,
+    "d2TaskDone": false
+  },
+  "ReceiptMd": "docs/receipts/hostile-validator-20260822T013032Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260822T013032Z.json",
+  "EvidenceDir": "docs/receipts/_hv-d15-20260822T012452Z",
+  "SessionPersistence": {
+    "completeTurn": {
+      "success": true,
+      "turnId": 42838,
+      "status": "completed"
+    },
+    "queryAgent": "GrokSubagentHostile",
+    "queryFrom": "2026-08-22T01:20:00Z",
+    "sessionId": "GrokSubagentHostile-20260822T012452Z-pluginhandoff-d15",
+    "requestId": "req-20260822T012452Z-001-d15-after-red-pluginhandoff",
+    "turnStatus": "completed",
+    "actionCount": 8,
+    "dialogCount": 5,
+    "designDecisionCount": 3,
+    "proofFile": "docs/receipts/_hv-d15-20260822T012452Z/session-query.json"
+  }
+}

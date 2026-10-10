@@ -1,0 +1,121 @@
+{
+  "TimestampUtc": "2026-08-22T10:40:54Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN-PLUGINHANDOFF-001 Phase C-green-P19 r2",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginJsonVersion": "1.104.0",
+    "versionFile": "1.104.0",
+    "testMarkerSignature": true,
+    "invokeFullBootstrap": true,
+    "healthNonce": "nonce-hv-20260822103729-66902",
+    "healthNonceMatch": true,
+    "healthStatus": "Healthy"
+  },
+  "Session": {
+    "sessionId": "GrokSubagentHostile-20260822T103728Z-c-green-p19-r2",
+    "requestId": "req-20260822T103728Z-001-hostile-c-green-p19-r2",
+    "turnId": 42949,
+    "queryProof": "docs/receipts/_hv-c-green-p19-r2/sl-query-sid.txt"
+  },
+  "ActivePlan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "GoalPlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\goal\\plan.md",
+  "RequirementIds": [
+    "FR-MCP-PLUGININT-001",
+    "TR-MCP-PLUGININT-001",
+    "TEST-MCP-PLUGININT-001"
+  ],
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T101615Z.md",
+  "Collector": "docs/receipts/_hv-c-green-p19-r2/",
+  "ReceiptPair": [
+    "docs/receipts/hostile-validator-20260822T104054Z.md",
+    "docs/receipts/hostile-validator-20260822T104054Z.json"
+  ],
+  "OverallVerdict": "AGREE",
+  "PassCount": 24,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "FailList": [],
+  "UnknownList": [],
+  "IndependentNamedTests": {
+    "command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginNativeSuiteReceiptTests",
+    "exitCode": 0,
+    "console": "Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 133 ms",
+    "trx": "docs/receipts/_hv-c-green-p19-r2/results-p19-green/p19-green.trx",
+    "trxCounters": {
+      "total": 3,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  "IndependentClaudeCodePester": {
+    "command": "pwsh.exe -NoProfile -NonInteractive -Command \"Invoke-Pester -Path 'F:\\GitHub\\mcpserver-claude-code-plugin\\tests' -CI\"",
+    "exitCode": 0,
+    "discoveryFiles": 10,
+    "discoveryTests": 25,
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 33180
+  },
+  "LoadLatest": {
+    "dirs": [
+      "pluginint-p19-20260822T095842Z",
+      "pluginint-p19-20260822T102645Z"
+    ],
+    "latest": "pluginint-p19-20260822T102645Z",
+    "oldSubsetDiscoveryFiles": 7,
+    "r2DiscoveryFiles": 10
+  },
+  "GitLive": {
+    "branch": "develop",
+    "sha": "910a444959969a87099b800b4b6fe12c77c0aece"
+  },
+  "Todo": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "PLAN-C-P19": false,
+    "PLAN-C-P20": false,
+    "MCP-PLUGININT-001": false,
+    "PLUGININT-P19": false,
+    "PLUGININT-P20": false,
+    "MCP-WORKSPACEHYGIENE-002": false
+  },
+  "P20NamesInPluginIntegrationTests": 0,
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "Prior DISAGREE valid; this is r2 not 095842Z DoD" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "102645Z is LoadLatest with claimed files" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "Claude-code discovery 10 files / 25 tests Failed 0 Skipped 0 before and after-sync" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "Ten named Claude-code *.Tests.ps1 exist and appear in logs" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "claim": "Test-only ReplFailsafe/HookTurnDedupe/CurrentTurnSessionRebind fixes; not P20" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "claim": "Other plugins full Pester/Jest; Bats N/A" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "claim": "SyncAgentPlugins succeeded; after-sync Failed 0 Skipped 0" },
+    { "id": "A8", "surface": "A", "verdict": "PASS", "claim": "Independent PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0" },
+    { "id": "A9", "surface": "A", "verdict": "PASS", "claim": "git develop 910a444959969a87099b800b4b6fe12c77c0aece unrelatedCommitCount 0" },
+    { "id": "A10", "surface": "A", "verdict": "PASS", "claim": "P20 absent; PLAN/PLUGININT done false; hygiene keep-open" },
+    { "id": "A11", "surface": "A", "verdict": "PASS", "claim": "Honesty: r2 is not a 7-file subset" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "Byrd green gate native suite complete Failed 0 Skipped 0" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "Receipts independently re-run" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only TODO/session/requirements storage" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell only / no Python by this validator" },
+    { "id": "B5", "surface": "B", "verdict": "PASS", "claim": "Honesty: r2 claims match artifacts" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "FR/TR/TEST exist with AC and mappings" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "TEST-MCP-PLUGININT-001 AC5 native-suite half complete" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "claim": "AC testable; do not invent P20/store-close gap" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "claim": "Do not require P20 or plan closeout" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "Phase order C-red AGREE then execute then this green r2" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "claim": "P19 green DoD met: full applicable native suites, sync, SHA, named tests" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "claim": "Not plan closeout; PLAN/PLUGININT remain done false" },
+    { "id": "D4", "surface": "D", "verdict": "PASS", "claim": "P20 unstarted" }
+  ],
+  "Accuracy": 97,
+  "Completeness": 98
+}

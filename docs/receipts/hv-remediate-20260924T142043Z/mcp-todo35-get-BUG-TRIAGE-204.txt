@@ -1,0 +1,33 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142318Z-bbf4
+  result:
+    id: BUG-TRIAGE-204
+    title: Codex session-log wrappers fail with generic exit 1 after partial persist
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - With plugin Status showing an active session and turn, sequential Codex wrapper calls to workflow.sessionlog.appendDialog, appendActions, and updateTurn can run about 66 seconds and surface only 'Plugin command failed with exit code 1'. Invoke-McpPlugin.ps1 throws that message from the child exit code and attaches stdout only, so stderr diagnostics from repl-invoke.ps1 are dropped. Inner session-log REPL calls use a 30s default timeout (Get-ReplMethodTimeoutSeconds), which is below the 90s outer plugin timeout, so the already-classified outer command_timeout path does not fire. appendActions and updateTurn persist through Invoke-ReplPersistTurn, which writes a failsafe record before client.SessionLog.SubmitAsync and keeps it on timeout; that matches failsafe.status rising from 27 to 29. appendActions ignores the persist result and still returns success, while updateTurn returns false and exits 1. appendDialog uses a separate AppendDialogAsync path. The caller cannot tell which of the three writes persisted, queued, or only updated local turn cache, so retry and drain are unsafe.
+    - 'Triage group: triage-group-428dd7e86f2355e2'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Given plugin Status reports an active session and current turn, sequential wrapper invokes of workflow.sessionlog.appendDialog, appendActions, and updateTurn must each return a structured result that states whether that call persisted, queued to failsafe, or failed, including method name and failsafe path when queued.'
+    - "- A failed or timed-out session-log wrapper must not end only with 'Plugin command failed with exit code 1'. Timeout and HTTP 503 cases must emit a classified retryable envelope (command_timeout or backend_unavailable), including stderr/persist details, matching the existing outer Invoke-McpPlugin timeout classification."
+    - '- workflow.sessionlog.appendActions must not report success when Invoke-ReplPersistTurn returns false or leaves a failsafe record. Local current-turn audit/cache updates must not be treated as durable persistence.'
+    - '- After a mixed batch, workflow.failsafe.status pendingCount must be reconcilable to the named methods that queued, and a later Status/get of the same turn must make it observable which of dialog, actions, and turn fields were durably stored versus only queued.'
+    - 'Implementation notes:'
+    - '- plugins/core/lib-ps/Invoke-McpPlugin.ps1 (non-zero ExitCode throw): stop collapsing inner REPL failures into a stdout-only generic throw. Emit a YAML error envelope that includes stderr and LastReplPersistenceDetails when present.'
+    - '- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendActions: honor the Invoke-ReplPersistTurn boolean; do not `$null =` the result and return true. Delay or revert local audit increments until persist confirms, matching the appendDialog post-accept increment (BUG-TRIAGE-165).'
+    - '- Keep per-call inspectability. appendDialog uses client.SessionLog.AppendDialogAsync; appendActions and updateTurn use full SubmitAsync upserts that write failsafe first. Do not present the three wrappers as an atomic batch unless a real batch API is added. Failsafe SubmitAsync payloads may omit dialog items already accepted by AppendDialogAsync, so drain/retry must not blindly resubmit a later upsert over a successful earlier dialog write.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

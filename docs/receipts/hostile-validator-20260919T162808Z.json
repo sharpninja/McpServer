@@ -1,0 +1,170 @@
+{
+  "TimestampUtc": "2026-09-19T16:28:08Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Gate": "txnkeyserver-box-deploy-done-claim",
+  "TodoId": "PLAN-TXNKEYSERVER-001",
+  "WorkClass": 1,
+  "LiveBase": "http://localhost:7147",
+  "ImplementerReceipt": "/workspace/deliverables/txnkeyserver-box-deploy-20260919T154640Z.md",
+  "PriorDisagreeReceipt": "/workspace/repos/McpServer/docs/receipts/hostile-validator-20260919T161130Z.md",
+  "OverallVerdict": "AGREE",
+  "Accuracy": 99,
+  "Completeness": 98,
+  "PassCount": 12,
+  "FailCount": 1,
+  "UnknownCount": 1,
+  "MaterialFailCount": 0,
+  "FailList": [
+    "D-workspace-tip: Workspace repo tip expected develop 8f30caf"
+  ],
+  "MaterialFailList": [],
+  "UnknownList": [
+    "D-hmac-marker: Marker HMAC-SHA256 verifies (if feasible)"
+  ],
+  "ClaimResults": [
+    {
+      "id": "A1-live-version",
+      "claim": "Live box MCP redeployed from develop 8f30caf; health version 1.0.0+8f30caf...",
+      "result": "PASS",
+      "evidence": [
+        "GET http://localhost:7147/health => status=Healthy version=1.0.0+8f30caf98410166bb8cb11958dde5445491d3d61",
+        "handoff worktree /tmp/mcpserver-develop-handoff HEAD=8f30caf98410166bb8cb11958dde5445491d3d61",
+        "live binary mtime Sep 19 15:43; supervisor child pid 1223094 still running"
+      ]
+    },
+    {
+      "id": "A2-binary-KeyserverScope",
+      "claim": "Live binary contains TurnTransactionKeyserverScope",
+      "result": "PASS",
+      "evidence": [
+        "python count of b'TurnTransactionKeyserverScope' in /opt/mcpserver/McpServer.Support.Mcp => 2"
+      ]
+    },
+    {
+      "id": "A3-config-TurnTransactions",
+      "claim": "Mcp.TurnTransactions.Enabled true (RequiredForMutations true)",
+      "result": "PASS",
+      "evidence": [
+        "/opt/mcpserver/appsettings.yaml TurnTransactions.Enabled: true RequiredForMutations: true"
+      ]
+    },
+    {
+      "id": "A4-live-proof-mutations",
+      "claim": "Live proof succeeded without keyserver/Subscriber failures: TODO create+update, sessionlog begin, requirements PUT",
+      "result": "PASS",
+      "evidence": [
+        "Implementer artifacts /tmp/txnkeyserver-proof/ and deploy receipt 20260919T154640Z",
+        "HV re-verify: PUT todo BOX-DEPLOY-PROOF-TXNKEYSERVER-001 => 200 success=true failureKind=none",
+        "HV re-verify: POST todo HV-PROOF-TXNKEYSERVER-002 => 201 success=true failureKind=none; PUT update 200",
+        "HV re-verify: sessionlog open GrokSubagentHostile-20260919T162709Z-txnkey-closeout-hv => 200 created=true; begin req-20260919T162808Z-hv-verdict-txnkey-closeout => 201 turnId=11",
+        "HV re-verify: PUT requirements/fr/FR-MCP-173 and FR-MCP-120 notes stamps => 200; bodies retain product content"
+      ]
+    },
+    {
+      "id": "A5-prior-unit-HV-AGREE",
+      "claim": "Prior unit-suite HV AGREEs; no Integration/Validation/Review/AiReview required for this done claim",
+      "result": "PASS",
+      "evidence": [
+        "docs/receipts/hostile-validator-20260917T184144Z.json Gate=nuke-test-full-unit-suite OverallVerdict=AGREE",
+        "docs/receipts/hostile-validator-20260917T174749Z.json Gate=txnkey-all-adapters-rereview OverallVerdict=AGREE",
+        "HV did not re-run Integration/Validation/Review/AiReview suites (handoff constraint respected)"
+      ]
+    },
+    {
+      "id": "A6-keyserver-quadbrain-only",
+      "claim": "Keyserver remains required for QuadBrain/brain-slot only (code path exists)",
+      "result": "PASS",
+      "evidence": [
+        "Source /tmp/mcpserver-develop-handoff/src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs RequiresKeyserver for brain-slot:/brain-slot./quadbrain. only",
+        "Symbol present in live binary (A2); TurnTransactionKeyserverScopeTests present in handoff tree"
+      ]
+    },
+    {
+      "id": "B-FR-MCP-173",
+      "claim": "FR-MCP-173 present in MCP store with product content",
+      "result": "PASS",
+      "evidence": [
+        "GET fr/FR-MCP-173 => 200 title='Keyserver signs QuadBrain transactions only' placeholder=False body_len=786 ac=5",
+        "GET mapping/FR-MCP-173 => trIds=['TR-MCP-TXNKEY-001'] testIds=['TEST-MCP-221']",
+        "Restored from develop 8f30caf Functional-Requirements.md during close-out"
+      ]
+    },
+    {
+      "id": "B-FR-MCP-120",
+      "claim": "FR-MCP-120 present in MCP store with FR-MCP-173 carve-out wording",
+      "result": "PASS",
+      "evidence": [
+        "GET fr/FR-MCP-120 => 200 title='MCP Server transaction gating' body_len=715 ac=6",
+        "Body includes FR-MCP-173 carve-out; mapping remains TR-MCP-TXN-001 | TEST-MCP-161,TEST-MCP-168"
+      ]
+    },
+    {
+      "id": "B-TR-MCP-TXNKEY-001",
+      "claim": "TR-MCP-TXNKEY-001 present in MCP store with product content",
+      "result": "PASS",
+      "evidence": [
+        "GET tr/TR-MCP-TXNKEY-001 => 200 title='Keyserver gate is QuadBrain/brain-slot only' placeholder=False body_len=829 ac=3",
+        "Restored from develop 8f30caf Technical-Requirements.md"
+      ]
+    },
+    {
+      "id": "B-TEST-MCP-221",
+      "claim": "TEST-MCP-221 present in MCP store",
+      "result": "PASS",
+      "evidence": [
+        "GET test/TEST-MCP-221 => 200 title='QuadBrain-only keyserver scope and non-QuadBrain coordinator bypass' condition_len=914 ac=4",
+        "Created from develop 8f30caf Testing-Requirements.md; mapped from FR-MCP-173"
+      ]
+    },
+    {
+      "id": "B-TEST-MCP-161",
+      "claim": "TEST-MCP-161 present and retargeted to QuadBrain scope with FR-173/TEST-221 carve-out",
+      "result": "PASS",
+      "evidence": [
+        "GET test/TEST-MCP-161 => 200; condition cites FR-MCP-173 / TEST-MCP-221 for non-QuadBrain persist/bypass"
+      ]
+    },
+    {
+      "id": "C-plan-not-done",
+      "claim": "PLAN-TXNKEYSERVER-001 not pre-marked done before HV AGREE",
+      "result": "PASS",
+      "evidence": [
+        "GET todo/PLAN-TXNKEYSERVER-001 => done=False (must be false before mark-done)"
+      ]
+    },
+    {
+      "id": "D-workspace-tip",
+      "claim": "Workspace repo tip expected develop 8f30caf",
+      "result": "FAIL",
+      "evidence": [
+        "/workspace/repos/McpServer HEAD=e8916da7... develop=384d69d3... (NOT 8f30caf)",
+        "/tmp/mcpserver-develop-handoff HEAD=develop=8f30caf... (deploy source OK)",
+        "Residual vs deploy source: live version still 8f30caf. Non-material for requirements/deploy done-claim."
+      ],
+      "material": false
+    },
+    {
+      "id": "D-hmac-marker",
+      "claim": "Marker HMAC-SHA256 verifies (if feasible)",
+      "result": "UNKNOWN",
+      "evidence": [
+        "Prior HV 20260919T161130Z: independent HMAC recomputation did not match; gate minimum met via health+version+pid",
+        "Not re-litigated; non-blocking residual"
+      ]
+    }
+  ],
+  "MayMarkPlanDone": true,
+  "Session": {
+    "agent": "GrokSubagentHostile",
+    "sessionId": "GrokSubagentHostile-20260919T162709Z-txnkey-closeout-hv",
+    "requestId": "req-20260919T162808Z-hv-verdict-txnkey-closeout",
+    "turnId": 11
+  },
+  "StoreRestore": {
+    "FR-MCP-173": "replaced placeholder with develop product content + 5 AC + mapping to TR-MCP-TXNKEY-001/TEST-MCP-221",
+    "TR-MCP-TXNKEY-001": "replaced placeholder with develop product content + 3 AC",
+    "TEST-MCP-221": "created from Testing-Requirements.md",
+    "FR-MCP-120": "amended body with FR-MCP-173 carve-out + 6 AC; mapping kept TR-MCP-TXN-001|TEST-MCP-161,168",
+    "TEST-MCP-161": "retargeted condition to QuadBrain scope citing FR-173/TEST-221"
+  }
+}

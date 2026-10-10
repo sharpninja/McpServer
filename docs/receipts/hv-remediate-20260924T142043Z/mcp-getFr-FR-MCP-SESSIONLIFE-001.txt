@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142104Z-1059
+  result:
+    id: FR-MCP-SESSIONLIFE-001
+    title: Degraded begin keeps the full turn and does not advertise a stored open
+    description: A degraded beginTurn keeps queryText, queryTitle, planFile, todoId, turnRequestId, sessionId, openedAt, build state, and audit counters. Hook status is turn-opened-degraded until the store has the turn. Complete recovery order is cached queryText, then cached queryTitle, then Recovered session-log turn, without forcing queryTitle. Update and append omit an empty QueryText. Supersede persists canceled. appendDialog on a degraded missing turn resubmits once or queues a dialog failsafe. A genuine 404 that was never degraded does not.
+    status: pending
+    priority: high
+    area: MCP
+    notes: Governs BUG-TRIAGE-175, 180, 181, 184, 205, 208, 214, 245. Supersedes no FR-MCP-170 text. Tests use the real builder and shim with MCP_PLUGIN_PERSIST_LOG unset.
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:05.9256986+00:00
+    updatedAt: 2026-09-24T14:21:05.9257950+00:00
+  deprecated: true
+
+---
+

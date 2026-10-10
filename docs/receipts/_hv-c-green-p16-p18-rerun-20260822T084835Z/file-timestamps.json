@@ -1,0 +1,79 @@
+[
+  {
+    "path": "build/Build.PluginSessionLogIntegration.cs",
+    "exists": true,
+    "length": 4981,
+    "lastWriteTimeUtc": "2026-08-22T08:44:07.2351641Z",
+    "creationTimeUtc": "2026-08-21T23:29:05.9486685Z"
+  },
+  {
+    "path": "tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs",
+    "exists": true,
+    "length": 7146,
+    "lastWriteTimeUtc": "2026-08-22T08:43:22.1103753Z",
+    "creationTimeUtc": "2026-08-21T23:08:56.4285020Z"
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginSessionLogAiTheoryTests.cs",
+    "exists": true,
+    "length": 3531,
+    "lastWriteTimeUtc": "2026-08-22T08:23:31.3634308Z",
+    "creationTimeUtc": "2026-08-22T07:16:45.1961926Z"
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/AiStrategyFixture.cs",
+    "exists": true,
+    "length": 2769,
+    "lastWriteTimeUtc": "2026-08-22T07:44:14.2373902Z",
+    "creationTimeUtc": "2026-08-22T07:16:45.1961926Z"
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/AiStrategyEvaluation.cs",
+    "exists": true,
+    "length": 663,
+    "lastWriteTimeUtc": "2026-08-22T07:16:45.1971938Z",
+    "creationTimeUtc": "2026-08-22T07:16:45.1961926Z"
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/appsettings.aiunit.json",
+    "exists": true,
+    "length": 449,
+    "lastWriteTimeUtc": "2026-08-22T08:24:38.8316277Z",
+    "creationTimeUtc": "2026-08-22T08:24:38.8316277Z"
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/McpServer.PluginIntegration.Tests.csproj",
+    "exists": true,
+    "length": 1199,
+    "lastWriteTimeUtc": "2026-08-22T08:24:38.8316277Z",
+    "creationTimeUtc": "2026-08-21T23:29:05.9506726Z"
+  },
+  {
+    "path": "docs/receipts/hostile-validator-20260822T073737Z.md",
+    "exists": true,
+    "length": 15198,
+    "lastWriteTimeUtc": "2026-08-22T07:37:37.1953111Z",
+    "creationTimeUtc": "2026-08-22T07:37:37.1953111Z"
+  },
+  {
+    "path": "docs/receipts/hostile-validator-20260822T073737Z.json",
+    "exists": true,
+    "length": 6473,
+    "lastWriteTimeUtc": "2026-08-22T07:37:37.1903135Z",
+    "creationTimeUtc": "2026-08-22T07:37:37.1898058Z"
+  },
+  {
+    "path": "docs/receipts/hostile-validator-20260822T081750Z.md",
+    "exists": true,
+    "length": 17155,
+    "lastWriteTimeUtc": "2026-08-22T08:19:44.0934777Z",
+    "creationTimeUtc": "2026-08-22T08:19:44.0924762Z"
+  },
+  {
+    "path": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+    "exists": true,
+    "length": 68486,
+    "lastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "creationTimeUtc": "2026-08-21T20:34:08.7046729Z"
+  }
+]

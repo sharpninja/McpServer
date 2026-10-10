@@ -1,0 +1,23 @@
+{
+  "trxExists": true,
+  "total": "2",
+  "executed": "2",
+  "passed": "0",
+  "failed": "2",
+  "notExecuted": "0",
+  "skippedAttr": null,
+  "outcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+      "outcome": "Failed",
+      "duration": "00:00:00.0167973",
+      "message": "System.IO.FileNotFoundException : No docs/receipts/pluginint-p20-<utc> receipt directory exists."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag",
+      "outcome": "Failed",
+      "duration": "00:00:00.0009984",
+      "message": "System.IO.FileNotFoundException : Build.PluginPromotion.cs is missing."
+    }
+  ]
+}

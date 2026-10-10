@@ -1,0 +1,72 @@
+[
+  {
+    "file": "q-self-from.json",
+    "totalCount": 1,
+    "first": {
+      "sessionId": "GrokCode-20260821T153034Z-hostile-failsafe-post",
+      "turnCount": 1,
+      "lastUpdated": "08/21/2026 10:30:39",
+      "status": "in_progress"
+    }
+  },
+  {
+    "file": "q-grok-q-req.json",
+    "totalCount": 1,
+    "first": {
+      "sessionId": "GrokCode-20260812T191115Z-hostile-sessionlog-002-gates",
+      "turnCount": 7,
+      "lastUpdated": "08/12/2026 16:47:12",
+      "status": "in_progress"
+    }
+  },
+  {
+    "file": "q-codex-req.json",
+    "totalCount": 1,
+    "first": {
+      "sessionId": "Codex-20260817T104751Z-plugin-session",
+      "turnCount": 6,
+      "lastUpdated": "08/17/2026 13:22:43",
+      "status": "in_progress"
+    }
+  },
+  {
+    "file": "q-claude-req.json",
+    "totalCount": 1,
+    "first": {
+      "sessionId": "ClaudeCode-20260818T215530Z-plugin-session",
+      "turnCount": 8,
+      "lastUpdated": "08/18/2026 19:05:30",
+      "status": "in_progress"
+    }
+  },
+  {
+    "file": "q-grok-live-first.json",
+    "totalCount": 1,
+    "first": {
+      "sessionId": "GrokCode-20260819T161322Z-hostile-triageplugin",
+      "turnCount": 1,
+      "lastUpdated": "08/19/2026 11:14:49",
+      "status": "in_progress"
+    }
+  },
+  {
+    "file": "q-self-text.json",
+    "totalCount": 1,
+    "first": {
+      "sessionId": "GrokCode-20260821T153034Z-hostile-failsafe-post",
+      "turnCount": 1,
+      "lastUpdated": "08/21/2026 10:30:39",
+      "status": "in_progress"
+    }
+  },
+  {
+    "file": "q-implementer-post.json",
+    "totalCount": 1,
+    "first": {
+      "sessionId": "GrokCode-20260821T125112Z-plugin-session",
+      "turnCount": 3,
+      "lastUpdated": "08/21/2026 10:28:13",
+      "status": "in_progress"
+    }
+  }
+]

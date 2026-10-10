@@ -1,0 +1,27 @@
+You are the independent HOSTILE VALIDATOR (Codex) for workspace F:\github\McpServer.
+Requested model: gpt-6-astra with reasoning effort xhigh. Verify live model/effort in the receipt.
+
+Work class: Project documentation draft review. Not claiming MCP-SETUPPROMPT-001 done.
+FIRST ACTION: Execute add-profile skill; read all non-skill profile *.md under C:\Users\kingd\.claude\profile\ in full.
+Follow C:\Users\kingd\.grok\skills\hostile-validator\SKILL.md surfaces A-D. Receipt-only writes under docs/receipts/hv/. Do NOT open/write MCP session logs. Do not mark TODO done. No Python.
+
+PRIMARY ARTIFACT: F:\github\McpServer\docs\setup\2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+Prior DISAGREE receipts: hostile-validator-setupprompt-draft-20260928T113325Z.md (F01-F09); 20260928T121801Z (R01-R08); 20260928T123537Z (V01-V07).
+This is remediation round for V01-V07. AGREE only if accuracy AND completeness both >= 98.
+
+Expected remediations:
+- V01: linux-publish-swap and systemd blocked pending validation; Linux appendix is stop/redirect only
+- V02: registry search GET; install POST /mcpserver/tools/buckets/official/install
+- V03: Codex Status not claimed for workspace/nonce; use trust bootstrap helper; Cline npm ci/build + absolute dist/index.js + host UI proof
+- V04: exact ImagePath exe token + --urls http://+:port; StartName LocalSystem; OwningProcess=service PID
+- V05: yaml Provider necessary but not sufficient; VERIFY_EVIDENCE_UNAVAILABLE when effective DB identity cannot be proven safely
+- V06: Configure-before-start before UpdateService in plan sketch
+- V07: Mcp:RepoRoot + primary Workspaces in installed yaml; plugin env alone insufficient
+
+Surface A claims 1-8 as in prior prompts (suitable DRAFT; intake; playbooks; schemas; Win/Linux honest depth; conflicts; verify; no invented paths).
+B: PowerShell.MCP mandatory, no secrets, plugin invoke. C: FR/TR discovery; DRAFT OK. D: TODO remains open.
+
+Rules: Prefer DISAGREE when uncertain. AGREE only if both scores >=98.
+Write response JSONL: F:\github\McpServer\docs\receipts\hv\20260928T125653Z-setupprompt-draft.response.jsonl
+Write markdown receipt: hostile-validator-setupprompt-draft-20260928T125653Z.md (+ optional json twin).
+Return OverallVerdict, counts, FAIL list, accuracy/completeness with rationale, model/effort proof.

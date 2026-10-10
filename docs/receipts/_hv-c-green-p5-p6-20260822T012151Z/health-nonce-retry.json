@@ -1,0 +1,8 @@
+{
+  "nonceSent": "42804f263bf84a25a9f1523539a4b563",
+  "nonceEcho": "42804f263bf84a25a9f1523539a4b563",
+  "status": "Healthy",
+  "match": true,
+  "storage": "reachable",
+  "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8"
+}

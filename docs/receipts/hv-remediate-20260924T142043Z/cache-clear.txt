@@ -1,0 +1,1 @@
+cleared=F:\GitHub\mcpserver-grok-plugin\cache\current-turn.yaml

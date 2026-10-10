@@ -1,6 +1,6 @@
 {
   "name": "get_current_location",
-  "description": "Retrieves the current location and all available drives (providers) from the PowerShell session. Returns current_location and other_drive_locations array. Call this when you need to understand the current PowerShell context, as users may change location during the session. When executing multiple invoke_expression commands in succession, calling once at the beginning is sufficient.",
+  "description": "Retrieves the current location and all available drives (providers) from the PowerShell session. Returns a JSON document with a system section (OS, PowerShell version, host, user, culture, timezone) and an available_drives array (each drive's name, provider, root, and current path). Call this when you need to understand the current PowerShell context, as users may change location during the session. When executing multiple execute_command commands in succession, calling once at the beginning is sufficient.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -18,5 +18,8 @@
         "default": false
       }
     }
+  },
+  "execution": {
+    "taskSupport": "optional"
   }
 }

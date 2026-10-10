@@ -1,0 +1,56 @@
+[
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:07.9994265Z",
+    "length": 4700
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessReceipt.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:55.9205618Z",
+    "length": 4997
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginPromotionGate.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:07.9994265Z",
+    "length": 4567
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T09:58:41.1896609Z",
+    "length": 6520
+  },
+  {
+    "path": "build/Build.PluginPromotion.cs",
+    "exists": false,
+    "lastWriteTimeUtc": null,
+    "length": null
+  },
+  {
+    "path": "build/plugin-promotion-policy.json",
+    "exists": false,
+    "lastWriteTimeUtc": null,
+    "length": null
+  },
+  {
+    "path": "docs/receipts/plugin-promotion-approval-missing.json",
+    "exists": false,
+    "lastWriteTimeUtc": null,
+    "length": null
+  },
+  {
+    "path": "docs/receipts/hostile-validator-20260822T104054Z.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:42:32.5401420Z",
+    "length": 17777
+  },
+  {
+    "path": "docs/receipts/hostile-validator-20260822T104054Z.json",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:42:32.5401420Z",
+    "length": 5937
+  }
+]

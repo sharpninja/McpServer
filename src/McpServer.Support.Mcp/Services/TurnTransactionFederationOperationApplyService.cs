@@ -1,4 +1,5 @@
 using System.Text.Json;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Services;
 
@@ -33,6 +34,10 @@ public sealed class TurnTransactionFederationOperationApplyService : IFederation
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(operation);
+
+        var operationName = ResolveOperationName(operation);
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, operationName))
+            return await _inner.ApplyAsync(operation, cancellationToken).ConfigureAwait(false);
 
         var status = _coordinator.GetStatus();
         if (status.Degraded)

@@ -111,8 +111,9 @@ public sealed class BrainSlotInvocationService : IBrainSlotInvocationService
         {
             using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeoutCts.CancelAfter(TimeSpan.FromSeconds(slot.TimeoutSeconds <= 0 ? _brainSlotOptions.CurrentValue.DefaultTimeoutSeconds : slot.TimeoutSeconds));
-            var client = _chatClientFactory.Create(slot, credential);
-            output = await client.CompleteAsync(slot, request.Input, request.Temperature, timeoutCts.Token).ConfigureAwait(false);
+            var turnContext = request.TurnContext ?? BrainSlotTurnContext.FromInvokeRequest(request);
+            var strategy = _chatClientFactory.CreateStrategy(slot, credential);
+            output = await strategy.CompleteAsync(slot, request.Input, turnContext, request.Temperature, timeoutCts.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {

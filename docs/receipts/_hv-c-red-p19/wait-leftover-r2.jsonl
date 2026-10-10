@@ -1,0 +1,274 @@
+{
+  "TimestampUtc": "2026-08-22T09:13:51.1027371Z",
+  "Iteration": 0,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:14:07.6037556Z",
+  "Iteration": 1,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:14:23.8780025Z",
+  "Iteration": 2,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:14:40.2145831Z",
+  "Iteration": 3,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:14:56.4236225Z",
+  "Iteration": 4,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:15:12.6483661Z",
+  "Iteration": 5,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:15:29.2099136Z",
+  "Iteration": 6,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:15:45.6830436Z",
+  "Iteration": 7,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:16:02.4627256Z",
+  "Iteration": 8,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:16:19.1370408Z",
+  "Iteration": 9,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:16:35.5157923Z",
+  "Iteration": 10,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:16:52.0110906Z",
+  "Iteration": 11,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:17:08.3192093Z",
+  "Iteration": 12,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:17:25.0379311Z",
+  "Iteration": 13,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:17:41.7158954Z",
+  "Iteration": 14,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:17:58.5191080Z",
+  "Iteration": 15,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:18:15.2363036Z",
+  "Iteration": 16,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:18:31.5739850Z",
+  "Iteration": 17,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:18:48.0881177Z",
+  "Iteration": 18,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:19:04.5126174Z",
+  "Iteration": 19,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:19:20.7169919Z",
+  "Iteration": 20,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:19:36.8398202Z",
+  "Iteration": 21,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:19:53.1814158Z",
+  "Iteration": 22,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:20:09.3647706Z",
+  "Iteration": 23,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:20:25.5802805Z",
+  "Iteration": 24,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:20:41.9595694Z",
+  "Iteration": 25,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:20:58.4713233Z",
+  "Iteration": 26,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:21:14.5912058Z",
+  "Iteration": 27,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:21:30.6949110Z",
+  "Iteration": 28,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:21:46.8254423Z",
+  "Iteration": 29,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:22:03.0343742Z",
+  "Iteration": 30,
+  "BusyCount": 1,
+  "Pids": [
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:22:19.1753681Z",
+  "Iteration": 31,
+  "BusyCount": 0,
+  "Pids": []
+}

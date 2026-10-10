@@ -1,0 +1,44 @@
+{
+  "claimedTempExists": true,
+  "claimedTemp": {
+    "exists": true,
+    "total": 2,
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "notExecuted": 0,
+    "outcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+        "outcome": "Passed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag",
+        "outcome": "Passed"
+      }
+    ],
+    "creation": "2026-08-22T08:30:59.4752678-05:00"
+  },
+  "receiptNamedPluginUpdateExists": true,
+  "receiptNamedPluginUpdate": {
+    "exists": true,
+    "total": 2,
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "notExecuted": 0,
+    "outcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero",
+        "outcome": "Passed"
+      },
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginUpdateServiceHarnessTests.PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag",
+        "outcome": "Passed"
+      }
+    ],
+    "creation": "2026-08-22T08:30:59.4752678-05:00"
+  },
+  "receiptNamedP20GreenExists": false,
+  "receiptNamedP20Green": null
+}

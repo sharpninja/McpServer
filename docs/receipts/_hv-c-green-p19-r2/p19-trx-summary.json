@@ -1,0 +1,27 @@
+{
+  "total": "3",
+  "executed": "3",
+  "passed": "3",
+  "failed": "0",
+  "notExecuted": "0",
+  "skippedAttr": null,
+  "names": [
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit",
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero",
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero"
+  ],
+  "outcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit",
+      "outcome": "Passed"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero",
+      "outcome": "Passed"
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero",
+      "outcome": "Passed"
+    }
+  ]
+}

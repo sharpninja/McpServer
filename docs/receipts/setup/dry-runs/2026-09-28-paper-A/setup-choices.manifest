@@ -1,0 +1,59 @@
+﻿schemaVersion: 1
+createdAt: 2026-09-28T11:10:29
+dryRun: paper-A
+paperOnly: true
+host:
+  os: windows
+  notes: PAYTON-LEGION2 paper intake; no live mutation
+  hostname: PAYTON-LEGION2
+endpoint:
+  scheme: http
+  host: localhost
+  port: 7147
+  baseUrl: http://localhost:7147
+product:
+  version: null
+agents:
+  - family: grok
+    identity: GrokCode
+    pluginRoot: F:\github\mcpserver-grok-plugin
+    skillMirror: C:\Users\kingd\.grok\skills
+    playbookId: agent-grok
+    status: pending
+process:
+  kind: deferred
+  name: null
+  version: null
+  source: null
+storage:
+  kind: mssql
+  provider: sqlserver
+  connectionRef: env:Mcp__Database__SqlServer__ConnectionString
+  details:
+    host: Desktop-SQL-host-operator-owned
+    instanceOrPort: 1433
+    database: McpServer
+    authMode: integrated
+workspacePath: F:\github\McpServer
+service:
+  kind: windowsService
+  name: McpServer
+  installPath: C:\ProgramData\McpServer
+  port: 7147
+  runAs: LocalSystem
+  executable: McpServer.Support.Mcp.exe
+  runtimeDir: null
+  details: {}
+playbooks:
+  agents:
+    - agent-grok
+  agentCombo: agent-single
+  process: process-deferred
+  storage: storage-mssql
+  service: service-windowsService
+unsupportedFlags: []
+evidence: []
+notes:
+  - PAPER ONLY. Do not run UpdateService, sc.exe, service start/stop, live ProgramData writes, or InstallReplTool mutation.
+  - Secret binding by env NAME only; never read/print secret values.
+  - REPL acquisition pinned to ./build.ps1 InstallReplTool (path only on paper).

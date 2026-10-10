@@ -1,0 +1,7 @@
+{
+  "pluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "pluginJsonPath": "F:\\GitHub\\mcpserver-grok-plugin\\.grok-plugin\\plugin.json",
+  "pluginJsonVersion": "1.99.0",
+  "sourceType": "GrokSubagentHostile",
+  "pluginName": "mcpserver-grok-plugin"
+}

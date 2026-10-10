@@ -22,6 +22,53 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     public void Dispose() => _client.Dispose();
 
+    /// <summary>TEST-MCP-SESSIONLIFE-004: HTTP receipts survive typed binding, replay, and stale cancellation.</summary>
+    [Fact]
+    public async Task SubmitReceipt_ConfirmsReadableSession_AndReplayPreservesTerminalHistory()
+    {
+        var sessionId = BuildSessionId("Codex", $"receipt-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Codex", sessionId);
+        var turn = dto.Turns!.Single();
+        long? firstId = null;
+        for (var attempt = 0; attempt < 2; attempt++)
+        {
+            using var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative),
+                dto, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            var receipt = await response.Content.ReadFromJsonAsync<McpServer.Client.Models.SessionLogSubmitResult>(
+                cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.NotNull(receipt);
+            Assert.True(receipt.Persisted);
+            Assert.False(receipt.Degraded);
+            Assert.False(receipt.Queued);
+            Assert.True(receipt.Id > 0);
+            Assert.Equal("Codex", receipt.SourceType);
+            Assert.Equal(sessionId, receipt.SessionId);
+            Assert.Equal(turn.RequestId, receipt.RequestId);
+            firstId ??= receipt.Id;
+            Assert.Equal(firstId, receipt.Id);
+        }
+
+        var uri = new Uri($"/mcpserver/sessionlog/Codex/{sessionId}", UriKind.Relative);
+        var before = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(uri,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(before);
+        Assert.Equal("Test response", Assert.Single(before.Turns!).Response);
+
+        turn.Status = "canceled";
+        turn.Response = "Superseded by a stale local snapshot.";
+        using var staleResponse = await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative),
+            dto, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.Created, staleResponse.StatusCode);
+        var after = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(uri,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(after);
+        var storedTurn = Assert.Single(after.Turns!);
+        Assert.Equal("completed", storedTurn.Status);
+        Assert.Equal("Test response", storedTurn.Response);
+        Assert.Equal(turn.RequestId, storedTurn.RequestId);
+    }
+
     [Fact]
     public async Task WhenPostingValidSessionThenReturns201Created()
     {

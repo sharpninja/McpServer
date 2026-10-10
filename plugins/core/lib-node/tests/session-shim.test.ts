@@ -64,8 +64,28 @@ describe('SessionShim', () => {
         queryTitle: 'do x',
         queryText: 'please do x',
         status: 'in_progress',
+        planFile: 'None',
+        todoId: 'None',
         actions: [],
         dialogItems: [],
+      });
+    });
+
+    test('beginTurn keeps caller planFile and todoId for SubmitAsync', () => {
+      const shim = freshShim();
+      shim.open({ agent: 'Cline', sessionId: 'Cline-x-001', title: 'demo' });
+      shim.beginTurn({
+        requestId: 'req-001',
+        queryTitle: 'do x',
+        queryText: 'please do x',
+        planFile: 'docs/plans/PLAN-PLUGINHANDOFF-001.md',
+        todoId: 'MCP-PLUGININT-001',
+      });
+      const payload = shim.buildSubmitPayload() as { sessionLog: { turns: Record<string, unknown>[] } };
+      expect(payload.sessionLog.turns[0]).toMatchObject({
+        requestId: 'req-001',
+        planFile: 'docs/plans/PLAN-PLUGINHANDOFF-001.md',
+        todoId: 'MCP-PLUGININT-001',
       });
     });
 
@@ -206,6 +226,8 @@ describe('SessionShim', () => {
       expect(turn).not.toHaveProperty('dialogItems');
       expect(turn).not.toHaveProperty('errorMessage');
       expect(turn).not.toHaveProperty('tags');
+      expect(turn.planFile).toBe('None');
+      expect(turn.todoId).toBe('None');
     });
   });
 });

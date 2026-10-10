@@ -1,0 +1,50 @@
+{
+  "TimestampUtc": "2026-08-22T08:40:56.8975175Z",
+  "Iteration": 0,
+  "BusyCount": 4,
+  "Pids": [
+    82440,
+    51780,
+    49188,
+    31364
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T08:41:13.1082271Z",
+  "Iteration": 1,
+  "BusyCount": 4,
+  "Pids": [
+    82440,
+    51780,
+    49188,
+    81836
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T08:41:29.2265661Z",
+  "Iteration": 2,
+  "BusyCount": 4,
+  "Pids": [
+    82440,
+    51780,
+    49188,
+    50724
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T08:41:45.4804587Z",
+  "Iteration": 3,
+  "BusyCount": 4,
+  "Pids": [
+    82440,
+    51780,
+    49188,
+    54900
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T08:42:01.4553402Z",
+  "Iteration": 4,
+  "BusyCount": 0,
+  "Pids": []
+}

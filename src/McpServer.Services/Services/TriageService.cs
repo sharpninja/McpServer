@@ -30,6 +30,31 @@ public sealed class TriageService : ITriageService
     private static readonly string[] TriageQueueStatuses = ["new", "quieting", "pending", StatusCollecting];
     private static readonly string[] ReportGroupQueueStatuses = ["ready", StatusQueued, "in_progress", StatusProcessing, "retry_pending"];
 
+    /// <summary>
+    /// TR-MCP-HYGIENE-003: Returns whether a triage status is the failed terminal state from the
+    /// live triage domain model.
+    /// </summary>
+    public static bool IsFailedStatus(string? status) =>
+        string.Equals(status, StatusFailed, StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// TR-MCP-HYGIENE-003: Returns whether a triage status is non-terminal according to the live
+    /// queue and report-group status sets owned by <see cref="TriageService"/>.
+    /// </summary>
+    public static bool IsNonTerminalStatus(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status) ||
+            IsFailedStatus(status) ||
+            string.Equals(status, StatusCompleted, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        return TriageQueueStatuses.Contains(status, StringComparer.OrdinalIgnoreCase) ||
+               ReportGroupQueueStatuses.Contains(status, StringComparer.OrdinalIgnoreCase) ||
+               string.Equals(status, ReportStatusGrouped, StringComparison.OrdinalIgnoreCase);
+    }
+
     private static readonly SemaphoreSlim TodoCreationLock = new(1, 1);
 
     private readonly McpDbContext _db;

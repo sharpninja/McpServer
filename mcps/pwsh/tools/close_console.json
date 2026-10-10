@@ -1,0 +1,32 @@
+{
+  "name": "close_console",
+  "description": "Forcibly close (kill) a PowerShell console by its PID. Use to abandon a console paused at an interactive prompt (see the awaiting-input notice) or stuck on a runaway command. The PID is the number shown in tool output as '#<pid> <name>'. Only consoles owned by this session can be closed. Any undrained output the console still holds from an already-finished command — including on a busy console that is running a new command while an earlier result sits uncollected — is harvested and returned in this response before the console is killed. The next command auto-starts a fresh console.\r\n\r\nIf the target has unsubmitted text at its prompt, a human is typing in it: the first call REFUSES, closes nothing, and leaves its pending output untouched. Call close_console for the same pid again to close it anyway — the retry is the confirmation, so only repeat it if you actually intend to kill a console someone is using. A console that is merely awaiting_input (a program waiting on Read-Host, not a human mid-keystroke) closes on the first call as usual.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "pid": {
+        "description": "PID of the console to close (the number in '#<pid> <name>').",
+        "type": "integer"
+      },
+      "agent_id": {
+        "description": "Agent ID for sub-agent console isolation. Obtain this by calling start_console with is_subagent=true.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "is_subagent": {
+        "description": "Set to true if you are a sub-agent.",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": [
+      "pid"
+    ]
+  },
+  "execution": {
+    "taskSupport": "optional"
+  }
+}

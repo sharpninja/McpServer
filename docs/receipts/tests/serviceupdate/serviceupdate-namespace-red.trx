@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="4138be66-3794-4c68-8922-865d064293f6" name="@PAYTON-OMARCHY 2026-09-28 19:13:56" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-28T19:13:56.4902911-05:00" queuing="2026-09-28T19:13:56.4902913-05:00" start="2026-09-28T19:13:54.9795083-05:00" finish="2026-09-28T19:13:56.5229156-05:00" />
+  <TestSettings name="default" id="6b2b48ce-a256-4b8d-916d-6e2a1aaa7454">
+    <Deployment runDeploymentRoot="_PAYTON-OMARCHY_2026-09-28_19_13_56" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="af47b2b1-a43c-4b88-b795-34d5ef89b3d5" testId="d9bef65a-96d0-5330-e471-d0ddcc10f2e4" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;TemporaryFileSystem&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0427675" startTime="2026-09-28T19:13:56.2584543-05:00" endTime="2026-09-28T19:13:56.3095462-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af47b2b1-a43c-4b88-b795-34d5ef89b3d5" />
+    <UnitTestResult executionId="e58a90e3-7910-400c-b4d2-ab6c7e2c4be9" testId="20ba0c14-6645-90b7-9d88-f430528b1802" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;MountImages&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0030840" startTime="2026-09-28T19:13:56.3651278-05:00" endTime="2026-09-28T19:13:56.3684604-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e58a90e3-7910-400c-b4d2-ab6c7e2c4be9">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 326
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c8fbd812-311d-414b-96a8-12d31655f3b4" testId="f0995c77-d61e-8e6e-13fe-547b1e83cf26" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindReadOnlyPaths&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0010364" startTime="2026-09-28T19:13:56.3740011-05:00" endTime="2026-09-28T19:13:56.3750683-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8fbd812-311d-414b-96a8-12d31655f3b4" />
+    <UnitTestResult executionId="a7c37eee-9a89-4065-97f4-b4a9025141ab" testId="1f784c8f-fd0c-6f7a-7134-517978e56dcd" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootImage&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0007476" startTime="2026-09-28T19:13:56.3752590-05:00" endTime="2026-09-28T19:13:56.3760354-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a7c37eee-9a89-4065-97f4-b4a9025141ab" />
+    <UnitTestResult executionId="c5e31cd5-39ec-4c56-8430-5125ed07a44a" testId="16ce1e09-1ae0-7534-a169-1d5e1b91ebea" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--DataFolder=/unbacked&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0007547" startTime="2026-09-28T19:13:56.3856206-05:00" endTime="2026-09-28T19:13:56.3863981-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c5e31cd5-39ec-4c56-8430-5125ed07a44a" />
+    <UnitTestResult executionId="e0d28b6a-5b1b-4ae8-95ce-f095138fe17c" testId="eb634870-ab50-84b8-142e-4a55260bb78b" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;PrivateTmp&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0024188" startTime="2026-09-28T19:13:56.3689797-05:00" endTime="2026-09-28T19:13:56.3734728-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e0d28b6a-5b1b-4ae8-95ce-f095138fe17c">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 326
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3915e153-15a2-437a-a60f-f1635e8bd323" testId="c6edd597-0383-8d06-32d6-02c77174d8f5" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindPaths&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0013093" startTime="2026-09-28T19:13:56.3635011-05:00" endTime="2026-09-28T19:13:56.3648480-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3915e153-15a2-437a-a60f-f1635e8bd323" />
+    <UnitTestResult executionId="d5c6595a-4988-482d-8e56-592bad40b4c1" testId="e98ebfb3-d1ec-324e-7e07-0e0833a430c1" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--instance another&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0011486" startTime="2026-09-28T19:13:56.3796810-05:00" endTime="2026-09-28T19:13:56.3808565-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5c6595a-4988-482d-8e56-592bad40b4c1" />
+    <UnitTestResult executionId="3c28a93a-1a34-4aca-a3b7-2aed6eb8ff34" testId="5c0de397-4b8a-af92-3c15-4a3e2b963fb8" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;ExtensionImages&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0341785" startTime="2026-09-28T19:13:56.3159006-05:00" endTime="2026-09-28T19:13:56.3628177-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c28a93a-1a34-4aca-a3b7-2aed6eb8ff34">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 326
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="70c3a476-718b-43d9-91e2-90b76ae8b030" testId="be4d52d8-edf8-7cc6-8ada-6e833f89e481" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--contentRoot /unbacked&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0008427" startTime="2026-09-28T19:13:56.3810302-05:00" endTime="2026-09-28T19:13:56.3818943-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70c3a476-718b-43d9-91e2-90b76ae8b030" />
+    <UnitTestResult executionId="fdc9e5e1-a79d-4702-a5fd-f5789a76e27e" testId="9f994534-7aa8-2811-8e3a-54ac58483105" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootDirectory&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0017900" startTime="2026-09-28T19:13:56.3137539-05:00" endTime="2026-09-28T19:13:56.3156358-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fdc9e5e1-a79d-4702-a5fd-f5789a76e27e" />
+    <UnitTestResult executionId="77deadfb-a12c-4523-ba9b-99b6215ec6fd" testId="2ca330ae-d8b9-468c-ae1a-4d8f53e937f7" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;/Mcp:DataDirectory=/unbacked&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0014896" startTime="2026-09-28T19:13:56.3820567-05:00" endTime="2026-09-28T19:13:56.3836652-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="77deadfb-a12c-4523-ba9b-99b6215ec6fd">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(String arguments) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 340
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="21157b29-1f70-47c2-a70f-5dace03a31e7" testId="623a067d-ec6a-62e9-6141-92b03e361b91" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;/DataFolder=/unbacked&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0015178" startTime="2026-09-28T19:13:56.3838338-05:00" endTime="2026-09-28T19:13:56.3854485-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21157b29-1f70-47c2-a70f-5dace03a31e7">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(String arguments) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 340
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="41c1eea6-9fec-4300-8707-8829ae87a739" testId="686e16a5-a6ed-c023-063a-9dcffc9ddac1" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;ExtensionDirectories&quot;)" computerName="PAYTON-OMARCHY" duration="00:00:00.0015361" startTime="2026-09-28T19:13:56.3762123-05:00" endTime="2026-09-28T19:13:56.3778616-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="41c1eea6-9fec-4300-8707-8829ae87a739">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property) in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 326
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootImage&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="1f784c8f-fd0c-6f7a-7134-517978e56dcd">
+      <Execution id="a7c37eee-9a89-4065-97f4-b4a9025141ab" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;/DataFolder=/unbacked&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="623a067d-ec6a-62e9-6141-92b03e361b91">
+      <Execution id="21157b29-1f70-47c2-a70f-5dace03a31e7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--contentRoot /unbacked&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="be4d52d8-edf8-7cc6-8ada-6e833f89e481">
+      <Execution id="70c3a476-718b-43d9-91e2-90b76ae8b030" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;ExtensionDirectories&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="686e16a5-a6ed-c023-063a-9dcffc9ddac1">
+      <Execution id="41c1eea6-9fec-4300-8707-8829ae87a739" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;ExtensionImages&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5c0de397-4b8a-af92-3c15-4a3e2b963fb8">
+      <Execution id="3c28a93a-1a34-4aca-a3b7-2aed6eb8ff34" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindReadOnlyPaths&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f0995c77-d61e-8e6e-13fe-547b1e83cf26">
+      <Execution id="c8fbd812-311d-414b-96a8-12d31655f3b4" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--instance another&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="e98ebfb3-d1ec-324e-7e07-0e0833a430c1">
+      <Execution id="d5c6595a-4988-482d-8e56-592bad40b4c1" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;PrivateTmp&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="eb634870-ab50-84b8-142e-4a55260bb78b">
+      <Execution id="e0d28b6a-5b1b-4ae8-95ce-f095138fe17c" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootDirectory&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="9f994534-7aa8-2811-8e3a-54ac58483105">
+      <Execution id="fdc9e5e1-a79d-4702-a5fd-f5789a76e27e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;TemporaryFileSystem&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="d9bef65a-96d0-5330-e471-d0ddcc10f2e4">
+      <Execution id="af47b2b1-a43c-4b88-b795-34d5ef89b3d5" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindPaths&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="c6edd597-0383-8d06-32d6-02c77174d8f5">
+      <Execution id="3915e153-15a2-437a-a60f-f1635e8bd323" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;MountImages&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="20ba0c14-6645-90b7-9d88-f430528b1802">
+      <Execution id="e58a90e3-7910-400c-b4d2-ab6c7e2c4be9" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;/Mcp:DataDirectory=/unbacked&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="2ca330ae-d8b9-468c-ae1a-4d8f53e937f7">
+      <Execution id="77deadfb-a12c-4523-ba9b-99b6215ec6fd" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--DataFolder=/unbacked&quot;)" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="16ce1e09-1ae0-7534-a169-1d5e1b91ebea">
+      <Execution id="c5e31cd5-39ec-4c56-8430-5125ed07a44a" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="d9bef65a-96d0-5330-e471-d0ddcc10f2e4" executionId="af47b2b1-a43c-4b88-b795-34d5ef89b3d5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="20ba0c14-6645-90b7-9d88-f430528b1802" executionId="e58a90e3-7910-400c-b4d2-ab6c7e2c4be9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f0995c77-d61e-8e6e-13fe-547b1e83cf26" executionId="c8fbd812-311d-414b-96a8-12d31655f3b4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f784c8f-fd0c-6f7a-7134-517978e56dcd" executionId="a7c37eee-9a89-4065-97f4-b4a9025141ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16ce1e09-1ae0-7534-a169-1d5e1b91ebea" executionId="c5e31cd5-39ec-4c56-8430-5125ed07a44a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb634870-ab50-84b8-142e-4a55260bb78b" executionId="e0d28b6a-5b1b-4ae8-95ce-f095138fe17c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6edd597-0383-8d06-32d6-02c77174d8f5" executionId="3915e153-15a2-437a-a60f-f1635e8bd323" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e98ebfb3-d1ec-324e-7e07-0e0833a430c1" executionId="d5c6595a-4988-482d-8e56-592bad40b4c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5c0de397-4b8a-af92-3c15-4a3e2b963fb8" executionId="3c28a93a-1a34-4aca-a3b7-2aed6eb8ff34" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="be4d52d8-edf8-7cc6-8ada-6e833f89e481" executionId="70c3a476-718b-43d9-91e2-90b76ae8b030" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f994534-7aa8-2811-8e3a-54ac58483105" executionId="fdc9e5e1-a79d-4702-a5fd-f5789a76e27e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2ca330ae-d8b9-468c-ae1a-4d8f53e937f7" executionId="77deadfb-a12c-4523-ba9b-99b6215ec6fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="623a067d-ec6a-62e9-6141-92b03e361b91" executionId="21157b29-1f70-47c2-a70f-5dace03a31e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="686e16a5-a6ed-c023-063a-9dcffc9ddac1" executionId="41c1eea6-9fec-4300-8707-8829ae87a739" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="14" executed="14" passed="8" failed="6" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.5)
+[xUnit.net 00:00:00.19]   Discovering: Build.Tests
+[xUnit.net 00:00:00.54]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.74]   Starting:    Build.Tests
+[xUnit.net 00:00:00.93]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.94]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.94]       Stack Trace:
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(326,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.94]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.94]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.94]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.94]       Stack Trace:
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(326,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.94]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.94]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.94]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.94]       Stack Trace:
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(326,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.94]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.94]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.94]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.94]       Stack Trace:
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(326,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(String property)
+[xUnit.net 00:00:00.94]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(Object, Span`1)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.99]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.99]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.99]       Stack Trace:
+[xUnit.net 00:00:00.99]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(340,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(String arguments)
+[xUnit.net 00:00:00.99]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(Object, Span`1)
+[xUnit.net 00:00:00.99]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.99]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.99]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.99]       Stack Trace:
+[xUnit.net 00:00:00.99]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(340,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(String arguments)
+[xUnit.net 00:00:00.99]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(Object, Span`1)
+[xUnit.net 00:00:00.99]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.99]   Finished:    Build.Tests (ID = '070e063e78f718ddd459d193285f24b4cf4d728d52b859892c5bcb63d7119476')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:13:56.3721224-05:00">
+        <Text>[xUnit.net 00:00:00.93]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "ExtensionImages") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:13:56.3777895-05:00">
+        <Text>[xUnit.net 00:00:00.94]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "MountImages") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:13:56.3790355-05:00">
+        <Text>[xUnit.net 00:00:00.94]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "PrivateTmp") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:13:56.3813802-05:00">
+        <Text>[xUnit.net 00:00:00.94]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: "ExtensionDirectories") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:13:56.5019001-05:00">
+        <Text>[xUnit.net 00:00:00.99]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: "/Mcp:DataDirectory=/unbacked") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:13:56.5019611-05:00">
+        <Text>[xUnit.net 00:00:00.99]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: "/DataFolder=/unbacked") [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

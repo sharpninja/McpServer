@@ -1,0 +1,14 @@
+{
+  "enabledTrueCount": 8,
+  "contains": {
+    "Claude Cowork": true,
+    "Claude Code": true,
+    "OpenCode": true,
+    "Copilot": true,
+    "Codex": true,
+    "Grok": true,
+    "Cline": true,
+    "Cline v2": true
+  },
+  "length": 1184
+}

@@ -1,0 +1,19 @@
+{
+  "timestampUtc": "20260918T205531Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workClass": "Class 1 Planning H0",
+  "todoId": "MCP-MEMORY-002",
+  "gate": "H0",
+  "overallVerdict": "AGREE",
+  "pass": 18,
+  "fail": 0,
+  "unknown": 0,
+  "na": 0,
+  "accuracy": 99,
+  "completeness": 98,
+  "planFile": "docs/plans/mcp-memory-002.md",
+  "acCatalog": "docs/plans/mcp-memory-002-ac-catalog.json",
+  "gitHead": "e8916da7b0fb7f8bd9dc0a1345f7171f5b3ac2dd",
+  "sourceReceipt": "docs/receipts/hostile-validator-20260918T205531Z.md",
+  "notes": "Twin JSON for the H0 AGREE markdown receipt. TODO remains Done=false. No S1 product schema."
+}

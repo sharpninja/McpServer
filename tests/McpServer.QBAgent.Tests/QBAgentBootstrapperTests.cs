@@ -33,7 +33,7 @@ public sealed class QBAgentBootstrapperTests
             "baseUrl: http://PAYTON-LEGION2:7147",
             "apiKey: test-key-123",
             "workspace: McpServer",
-            "workspacePath: F:\\GitHub\\McpServer",
+            "workspacePath: Q:\\__mcp_unit_test__\\McpServer",
             "prompt: |",
             "  This block must be ignored: baseUrl http://wrong:9999 apiKey wrong");
 
@@ -43,7 +43,7 @@ public sealed class QBAgentBootstrapperTests
         Assert.NotNull(result.Options);
         Assert.Equal(new Uri("http://PAYTON-LEGION2:7147"), result.Options!.BaseUrl);
         Assert.Equal("test-key-123", result.Options.ApiKey);
-        Assert.Equal("F:\\GitHub\\McpServer", result.Options.WorkspacePath);
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", result.Options.WorkspacePath);
         // QBAgent identity is applied; the standard (non-ACID) profile keeps action tools available.
         Assert.Equal("QBAgent", result.Options.SourceType);
         Assert.NotEqual(McpAgentExecutionProfile.AcidTightlyCoupled, result.Options.ExecutionProfile);

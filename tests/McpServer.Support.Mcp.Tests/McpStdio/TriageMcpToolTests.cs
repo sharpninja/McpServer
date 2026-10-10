@@ -57,18 +57,18 @@ public sealed class TriageMcpToolTests : IDisposable
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 QuietDeadlineUtc = DateTimeOffset.Parse("2026-06-25T05:15:00Z"),
-                WorkspacePath = @"F:\GitHub\McpServer",
+                WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
             });
 
         var json = await _tools.TriageReport(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "mcpserver-codex-plugin masks method_not_found",
             "The plugin wrapper hides triage errors.",
             component: "mcpserver-codex-plugin",
             severity: "high",
             dedupeKey: "plugin-triage-wrapper",
             errorSignature: "method_not_found",
-            affectedPaths: @"F:\GitHub\mcpserver-codex-plugin\lib\repl-invoke.sh,F:\GitHub\mcpserver-codex-plugin\skills\triage\SKILL.md",
+            affectedPaths: @"Q:\__mcp_unit_test__\mcpserver-codex-plugin\lib\repl-invoke.sh,Q:\__mcp_unit_test__\mcpserver-codex-plugin\skills\triage\SKILL.md",
             reporterAgent: "Codex", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = JsonSerializer.Deserialize<TriageReportSubmitResult>(json, JsonOptions);
@@ -77,7 +77,7 @@ public sealed class TriageMcpToolTests : IDisposable
         Assert.Equal("triage-report-001", result.ReportId);
         await _triageService.Received(1).SubmitReportAsync(
             Arg.Is<TriageReportRequest>(request => request != null
-                && request.WorkspacePath == @"F:\GitHub\McpServer"
+                && request.WorkspacePath == @"Q:\__mcp_unit_test__\McpServer"
                 && request.Title == "mcpserver-codex-plugin masks method_not_found"
                 && request.Component == "mcpserver-codex-plugin"
                 && request.AffectedPaths != null
@@ -100,7 +100,7 @@ public sealed class TriageMcpToolTests : IDisposable
                 Summary = "details",
             });
 
-        var json = await _tools.TriageStatus(@"F:\GitHub\McpServer", reportId: "triage-report-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.TriageStatus(@"Q:\__mcp_unit_test__\McpServer", reportId: "triage-report-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<TriageReportDetail>(json, JsonOptions);
 
         Assert.NotNull(result);
@@ -127,7 +127,7 @@ public sealed class TriageMcpToolTests : IDisposable
                 ],
             });
 
-        var json = await _tools.TriageStatus(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var json = await _tools.TriageStatus(@"Q:\__mcp_unit_test__\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<TriageGroupQueryResult>(json, JsonOptions);
 
         Assert.NotNull(result);
@@ -138,8 +138,8 @@ public sealed class TriageMcpToolTests : IDisposable
 
     private static FwhMcpTools CreateTools(McpDbContext db, ITriageService triageService)
     {
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
-        var workspaceContext = new WorkspaceContext { WorkspacePath = "." };
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
+        var workspaceContext = new WorkspaceContext { WorkspacePath = TestWorkspacePaths.UnusedRepoRoot };
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var chunker = new Chunker();

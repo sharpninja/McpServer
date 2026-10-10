@@ -213,8 +213,31 @@ public static class MarkerFileService
             EnsureGitIgnored(workspacePath, logger);
             await EnsureDefaultWikiConfigAsync(workspacePath, logger, ct).ConfigureAwait(false);
             var yaml = s_yamlSerializer.Serialize(marker);
-            await File.WriteAllTextAsync(markerPath, yaml, ct).ConfigureAwait(false);
-            logger?.LogInformation("Wrote MCP marker file: {Path}", markerPath);
+            const int maxWriteAttempts = 5;
+            for (var attempt = 1; attempt <= maxWriteAttempts; attempt++)
+            {
+                try
+                {
+                    await using (var stream = new FileStream(
+                        markerPath,
+                        FileMode.Create,
+                        FileAccess.Write,
+                        FileShare.ReadWrite | FileShare.Delete,
+                        bufferSize: 4096,
+                        options: FileOptions.Asynchronous | FileOptions.SequentialScan))
+                    await using (var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)))
+                    {
+                        await writer.WriteAsync(yaml.AsMemory(), ct).ConfigureAwait(false);
+                    }
+
+                    logger?.LogInformation("Wrote MCP marker file: {Path}", markerPath);
+                    break;
+                }
+                catch (Exception ex) when ((ex is IOException or UnauthorizedAccessException) && attempt < maxWriteAttempts)
+                {
+                    await Task.Delay(50 * attempt, ct).ConfigureAwait(false);
+                }
+            }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
         {

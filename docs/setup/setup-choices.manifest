@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-28T14:16:45.835817-05:00",
+  "status": "installed-and-verified-with-explicit-native-agent-waivers",
+  "agentIdentity": "Codex",
+  "host": {
+    "os": "linux",
+    "hostname": "PAYTON-OMARCHY",
+    "notes": "Existing Omarchy host. Operator requested a local system service."
+  },
+  "endpoint": {
+    "scheme": "http",
+    "host": "localhost",
+    "port": 7147,
+    "baseUrl": "http://localhost:7147"
+  },
+  "product": {
+    "version": "1.4.39",
+    "sourceRepository": "https://github.com/sharpninja/McpServer.git",
+    "sourceBranch": "develop",
+    "sourceCommit": "6546a59f2baad45d99e717bb8f20b56e06d5911f",
+    "requiredSdk": "10.0.201",
+    "publishRuntime": "linux-x64",
+    "selfContained": true
+  },
+  "agents": [
+    {
+      "family": "codex",
+      "identity": "Codex",
+      "pluginRoot": "/home/sharpninja/github/mcpserver-codex-plugin",
+      "skillMirror": null,
+      "playbookId": "agent-codex",
+      "status": "trusted-workflows-and-session-audit-verified",
+      "details": {
+        "sourceRepository": "https://github.com/sharpninja/mcpserver-codex-plugin.git",
+        "sourceBranch": "main",
+        "sourceCommit": "b776df525fc721894ca76e2604a51764d49e1a4d",
+        "acquisition": "Operator-specified GitHub repository; clone and pin only after plan acknowledgment",
+        "existingInstalledPluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.107.0",
+        "skillMirrorPolicy": "Use plugin-native installation; inspect existing mirrors before copying; preserve private operator skills",
+        "runtimePluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.107.0"
+      }
+    },
+    {
+      "family": "grok",
+      "identity": "GrokCode",
+      "pluginRoot": "/home/sharpninja/github/mcpserver-grok-plugin",
+      "skillMirror": null,
+      "playbookId": "agent-grok",
+      "status": "registered-handshake-passed-native-acceptance-waived",
+      "details": {
+        "sourceRepository": "https://github.com/sharpninja/mcpserver-grok-plugin.git",
+        "sourceBranch": "main",
+        "sourceCommit": "a527ffc080e41198952848130b9675327e338f88",
+        "acquisition": "Operator-specified GitHub repository; clone and pin only after plan acknowledgment",
+        "skillMirrorPolicy": "Use plugin-native installation; inspect existing mirrors before copying; preserve private operator skills",
+        "liveSmoke": "Not signed in; grok login --device-code required",
+        "transport": "129 tools discovered; SSE stream error also logged",
+        "nativeAcceptance": "skipped by explicit operator request 2026-09-28; not validated"
+      }
+    },
+    {
+      "family": "claude-code",
+      "identity": "Claude",
+      "pluginRoot": "/home/sharpninja/github/mcpserver-claude-code-plugin",
+      "skillMirror": null,
+      "playbookId": "agent-claude-code",
+      "status": "registered-hooks-valid-native-acceptance-waived",
+      "details": {
+        "sourceRepository": "https://github.com/sharpninja/mcpserver-claude-code-plugin.git",
+        "sourceBranch": "main",
+        "sourceCommit": "7d5706636ed3a294937eb8e67f07d6eaea3c460e",
+        "acquisition": "Operator-specified GitHub repository; clone and pin only after plan acknowledgment",
+        "skillMirrorPolicy": "Use plugin-native installation; inspect existing mirrors before copying; preserve private operator skills",
+        "runtimePluginRoot": "/home/sharpninja/.claude/plugins/cache/mcpserver-local/mcpserver/1.107.0",
+        "authenticated": false,
+        "hooks": "validation status valid; native request/PostToolUse/Stop acceptance pending",
+        "nativeAcceptance": "skipped by explicit operator request 2026-09-28; not validated"
+      }
+    },
+    {
+      "family": "cline",
+      "identity": "Cline",
+      "pluginRoot": "/home/sharpninja/github/mcpserver-cline-plugin",
+      "skillMirror": null,
+      "playbookId": "agent-cline",
+      "status": "installed-built-tested-stdio-passed-native-acceptance-waived",
+      "details": {
+        "sourceRepository": "https://github.com/sharpninja/mcpserver-cline-plugin.git",
+        "sourceBranch": "main",
+        "sourceCommit": "4ded634073f9108f8a0c442801f21d9d4532a3eb",
+        "acquisition": "Operator-specified GitHub repository; clone and pin only after plan acknowledgment",
+        "skillMirrorPolicy": "Use plugin-native installation; inspect existing mirrors before copying; preserve private operator skills",
+        "localRepair": "Only package-lock.json integrity changed to match pinned Git archive; npm ci and build passed; 32 tests passed,0 failed,0 skipped.",
+        "hostExtension": "saoudrizwan.claude-dev@4.1.21",
+        "hostConfig": "/home/sharpninja/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json",
+        "validation": "5 suites/32 tests passed;0 failures/skips; standard SDK stdio handshake84 tools and todo_query result totalCount0. Actual Cline VSCode tool invocation pending.",
+        "nativeAcceptance": "skipped by explicit operator request 2026-09-28; not validated"
+      }
+    }
+  ],
+  "process": {
+    "kind": "bdpv4",
+    "name": "Byrd Development Process",
+    "version": "4",
+    "source": "Workspace MCP memories MEMORY-DEVPROCESS-001 and MEMORY-PROCESS-001",
+    "status": "bound-and-independently-verified-via-workspace-memory",
+    "receipt": "docs/setup/bdpv4-binding-receipt.json",
+    "policySha256": "34D3C89A0550DAFC687B1A90DE266CB22B88AD63A453BC11917F9D10A2F0A06A",
+    "serverEnforcedTransitions": false,
+    "normalization": "Five punctuation-only dash substitutions; source and stored snapshot hashes in receipt.",
+    "triageReportId": "triage-report-91280cae19844c4b8be7c3b1892e522f"
+  },
+  "storage": {
+    "kind": "mssql",
+    "provider": "sqlserver",
+    "connectionRef": "env:Mcp__Database__SqlServer__ConnectionString",
+    "details": {
+      "host": "127.0.0.1",
+      "instanceOrPort": 1433,
+      "database": "McpServer_Omarchy",
+      "authMode": "sql",
+      "username": "mcpserver_omarchy",
+      "usernameStatus": "created; dedicated login authenticated by installer",
+      "container": "sql-server-developer",
+      "containerImage": "mcr.microsoft.com/mssql/server:2025-latest",
+      "containerComposePath": "/home/sharpninja/Work/sql-server/compose.yaml",
+      "bootstrapCredentialRef": "container:sql-server-developer/env:MSSQL_SA_PASSWORD",
+      "serviceSecretFile": "/etc/mcpserver/mcpserver.env",
+      "tcpReachable": true,
+      "authenticationVerified": true,
+      "databaseExistenceVerified": true,
+      "sqlIdentity": "McpServer_Omarchy|mcpserver_omarchy",
+      "appliedMigrations": 38,
+      "applicationTables": 66,
+      "permission": "db_owner on McpServer_Omarchy plus explicitly approved VIEW SERVER SECURITY STATE",
+      "independentFreshSqlProbe": "passed: exact independent reviewer script executed in parent environment, exit0; durable SQL proof recorded",
+      "independentSqlReceipt": "docs/receipts/hv/20260928-local-service-runtime.sql-proof.json",
+      "nonSysadminVerified": true,
+      "liveEncryptedConnectionVerified": true
+    }
+  },
+  "workspacePath": "/home/sharpninja/github/McpServer",
+  "service": {
+    "kind": "systemd",
+    "name": "mcpserver.service",
+    "installPath": "/opt/mcpserver",
+    "port": 7147,
+    "runAs": "mcpserver",
+    "executable": "/opt/mcpserver/app/McpServer.Support.Mcp",
+    "runtimeDir": "/opt/mcpserver/app",
+    "details": {
+      "type": "simple",
+      "unitPath": "/etc/systemd/system/mcpserver.service",
+      "dataDirectory": "/var/lib/mcpserver",
+      "logDirectory": "/var/log/mcpserver",
+      "startOnBoot": true,
+      "urls": "http://localhost:7147",
+      "deploymentStyle": "First installation into app directory; no publish-swap lifecycle",
+      "status": "installed-active-enabled; final restart and token rotation verified",
+      "listeners": [
+        "127.0.0.1:7147",
+        "127.0.0.2:7147",
+        "[::1]:7147"
+      ],
+      "localHostnameMapping": "/etc/hosts: PAYTON-OMARCHY -> 127.0.0.1",
+      "mainPID": 611688,
+      "configurationSha256": "A8ECF6298B42E9BA3D437D8FA9E0097A9379BF832A8135C95E5C3B61A446A9A7"
+    }
+  },
+  "playbooks": {
+    "agents": [
+      "agent-codex",
+      "agent-grok",
+      "agent-claude-code",
+      "agent-cline"
+    ],
+    "agentCombo": "agent-multi",
+    "process": "process-bdpv4",
+    "storage": "storage-mssql",
+    "service": "service-systemd"
+  },
+  "unsupportedFlags": [
+    {
+      "code": "SYSTEMD_PENDING_VALIDATION",
+      "disposition": "explicit-operator-override",
+      "operatorInstruction": "override ddraft block",
+      "scope": "Local systemd installation on PAYTON-OMARCHY; create and validate a Type=simple unit. Verification gates remain mandatory."
+    }
+  ],
+  "artifacts": {
+    "manifest": "/home/sharpninja/github/McpServer/docs/setup/setup-choices.manifest",
+    "plan": "/home/sharpninja/github/McpServer/docs/setup/setup-implementation.plan",
+    "installer": "/home/sharpninja/github/McpServer/docs/setup/install-local-service.ps1"
+  },
+  "evidence": [
+    {
+      "check": "PowerShell.MCP execution",
+      "expected": ">=1.14.0 with execute_command available",
+      "actual": "PowerShell 7.6.6 / PowerShell.MCP 1.14.2; command execution passed",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "SQL container discovery",
+      "expected": "Existing SQL Server container with reachable port",
+      "actual": "sql-server-developer healthy; 127.0.0.1:1433 TCP reachable; SQL authentication not yet tested",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Source checkout",
+      "expected": "Use current checkout",
+      "actual": "develop at 6546a59f2baad45d99e717bb8f20b56e06d5911f; clean before artifact creation",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Agent repository discovery",
+      "expected": "Four operator-specified repositories accessible",
+      "actual": "All four main branch HEAD references verified; pins recorded in agents[].details.sourceCommit",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "SDK prerequisite",
+      "expected": ">=10.0.201 compatible with global.json",
+      "actual": "10.0.111 installed; prerequisite installation planned",
+      "pass": false,
+      "historicalAttempt": true
+    },
+    {
+      "check": "SDK installation",
+      "expected": "10.0.201 with official SHA512 match",
+      "actual": "Installed /opt/mcpserver/dotnet; version 10.0.201; checksum matched",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Nuke InstallReplTool",
+      "expected": "Successful build, pack and tool install",
+      "actual": "Restore, Compile, PackReplTool, InstallReplTool succeeded; version 1.4.39",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Cline npm ci",
+      "expected": "Vendored dependency matches lockfile checksum",
+      "actual": "EINTEGRITY: mcpserver-plugin-core.tgz does not match committed package-lock.json",
+      "pass": false,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Nuke InstallReplTool",
+      "expected": "Successful build, pack and tool install",
+      "actual": "Restore, Compile, PackReplTool, InstallReplTool succeeded; version 1.4.39",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Independent initial preflight",
+      "expected": "No concrete preflight defects",
+      "actual": "2 FAIL corrected; 2 UNKNOWN pending runtime/MCP persistence; rerun requested",
+      "pass": false,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Server publication",
+      "expected": "Self-contained linux-x64 binary from approved commit",
+      "actual": "1.4.39+6546a59f2baad45d99e717bb8f20b56e06d5911f",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Service startup",
+      "expected": "Healthy listener and trusted marker",
+      "actual": "SQL error 300: VIEW SERVER SECURITY STATE denied; restart limit hit. Proposed grant and restart rejected by automatic approval review; explicit permission requested.",
+      "pass": false,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Codex trusted bootstrap and memory",
+      "expected": "Signature nonce and plugin read pass",
+      "actual": "Bootstrap passed; TODO query returned result with 56 items; failsafe replayed=3 failed=0; memory list returned MEMORY-PREFERENCE-001 with exact requested text",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Loopback service lifecycle",
+      "expected": "Enabled active service with apphost PID and loopback listeners",
+      "actual": "PID 549448; mcpserver account; expected executable; localhost IPv4/IPv6 listeners; marker removed on stop and operator-readable after restart. Hostname 127.0.0.2 listener queued, awaiting pkexec authentication.",
+      "pass": true,
+      "historicalAttempt": true
+    },
+    {
+      "check": "Grok native MCP doctor",
+      "expected": "Native handshake and tool discovery",
+      "actual": "Protocol 2025-11-25; 129 tools; healthy=1 failing=0; client also logged empty SSE stream and session-delete errors. Tool invocation not yet verified.",
+      "pass": false,
+      "historicalAttempt": true
+    }
+  ],
+  "approval": {
+    "operatorText": "approve",
+    "recordedAt": "2026-09-28T14:48:39.0203475-05:00",
+    "directPowerShellAuthorized": true,
+    "sqlSecurityStateGrant": "Approve the specific grant and restart"
+  },
+  "pendingMemory": {
+    "content": "Always combine elevated actions into a single script.",
+    "scope": "Global",
+    "failsafePath": "/home/sharpninja/github/McpServer/.mcpServer/failsafe/Codex/workspaces/L2hvbWUvc2hhcnBuaW5qYS9naXRodWIvTWNwU2VydmVy/pending/20260928T195046Z-memory_combine_elevated_actions-483c.yaml",
+    "status": "persisted",
+    "memoryId": "MEMORY-PREFERENCE-001"
+  },
+  "currentVerification": {
+    "service": "active/enabled on loopback; product version1.4.39+6546a59f2baad45d99e717bb8f20b56e06d5911f",
+    "codex": "trusted TODO/memory and session readback passed",
+    "memory": "MEMORY-PREFERENCE-001 exact requested text",
+    "sessionLog": "available; prior two full review texts read back exactly",
+    "hostileReview": "AGREE accuracy99 completeness99;8PASS0FAIL0UNKNOWN for operator-amended setup scope. Native checks waived, not passed; memory-based binding only.",
+    "remaining": [],
+    "finalRestartReceipt": "docs/setup/bdpv4-service-receipt.json",
+    "reviewAddendum": "docs/receipts/hv/20260928-local-service-runtime.addendum.txt",
+    "sqlRetryReview": {
+      "verdict": "AGREE",
+      "accuracy": 99,
+      "completeness": 99,
+      "scope": "SQL retry only",
+      "receipt": "docs/receipts/hv/20260928-local-service-runtime.sql-addendum.txt"
+    },
+    "waivedByOperator": {
+      "timestamp": "2026-09-28T23:18:23.7614111Z",
+      "instruction": "Skip these, do BDPv4 binding",
+      "checks": [
+        "Claude login and native lifecycle test",
+        "Grok login and native tool call",
+        "Cline actual VSCode connected tool call"
+      ],
+      "disposition": "skipped by operator; not passed"
+    },
+    "bdpv4Review": {
+      "fail": 0,
+      "verdict": "AGREE",
+      "requestId": "req-20260928T232039Z-prompt-6e7e",
+      "sessionId": "Codex-20260928T232037Z-bdp-review",
+      "unknown": 0,
+      "completeness": 99,
+      "pass": 8,
+      "receipt": "docs/receipts/hv/20260928-bdpv4-binding.verdict.txt",
+      "fullResponseExactMatch": true,
+      "accuracy": 99
+    }
+  }
+}

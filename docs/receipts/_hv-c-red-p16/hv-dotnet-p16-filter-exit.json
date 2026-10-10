@@ -1,0 +1,11 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~AiTheory_Agent_RequiresValidJsonFields",
+  "ExitCode": 1,
+  "DurationMs": 15093,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p16\\hv-dotnet-p16-filter.log",
+  "ResultsDirectory": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p16\\results-20260822T072653Z",
+  "TrxFiles": [
+    "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p16\\results-20260822T072653Z\\p16-filter.trx"
+  ],
+  "FinishedUtc": "2026-08-22T07:27:08.3389882Z"
+}

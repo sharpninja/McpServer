@@ -21,8 +21,8 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class MemoryFederationStateAdapterTests
 {
-    private const string WorkspaceA = @"F:\GitHub\McpServer";
-    private const string WorkspaceB = @"F:\GitHub\OtherWorkspace";
+    private const string WorkspaceA = @"Q:\__mcp_unit_test__\McpServer";
+    private const string WorkspaceB = @"Q:\__mcp_unit_test__\OtherWorkspace";
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web);
 
     /// <summary>Memory create operations preserve explicit ids, categories, raw text, scopes, workspace ownership, and initial versions.</summary>

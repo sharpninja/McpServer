@@ -1,0 +1,7 @@
+8:/// catalog must exist before adapter work starts. Skipped tests are failures.
+13:    /// P1 red: Nuke target PluginSessionLogIntegration exists and treats skipped tests as failures.
+16:    public void BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail()
+27:            combined.Contains("Skipped", StringComparison.Ordinal) &&
+28:            (combined.Contains("SkipIsFailure", StringComparison.Ordinal) ||
+29:             Regex.IsMatch(combined, @"PluginSessionLogIntegration[\s\S]{0,4000}(Skipped|skip).*fail", RegexOptions.IgnoreCase)),
+30:            "PluginSessionLogIntegration must treat skipped tests as failures.");

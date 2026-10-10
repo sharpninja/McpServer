@@ -1,4 +1,5 @@
 using System.Data.Common;
+using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,16 @@ public static class McpErrorClassifier
                     ["reason"] = "pending_migration",
                 },
                 StatusCode: 503);
+        }
+
+        if (exception is RequirementsRecoveryConflictException)
+        {
+            return new McpErrorClassification(
+                Conflict,
+                exception.Message,
+                Retryable: false,
+                Details: ReasonDetails("conflict"),
+                StatusCode: 409);
         }
 
         if (exception is KeyNotFoundException

@@ -1,0 +1,62 @@
+[
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T053539Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:36:55.8921213Z",
+    "Length": 14977
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T053539Z.json",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:37:25.2468753Z",
+    "Length": 4421
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapter.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:40:18.7559535Z",
+    "Length": 13386
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowAdapterTests.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:40:18.7559535Z",
+    "Length": 15466
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogWorkflowResult.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:15:12.7115110Z",
+    "Length": 1549
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\plans\\PLAN-PLUGINHANDOFF-001.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "Length": 68486
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\resolve-cache-dir.ps1",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-21T22:31:34.2620934Z",
+    "Length": 17753
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostProcessAdapter.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T02:48:14.5453983Z",
+    "Length": 8594
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationServerFixture.cs",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T01:05:30.8859739Z",
+    "Length": 20101
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260822T050748Z.md",
+    "Exists": true,
+    "LastWriteTimeUtc": "2026-08-22T05:08:53.9385300Z",
+    "Length": 15792
+  }
+]

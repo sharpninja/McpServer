@@ -1,0 +1,98 @@
+[
+  {
+    "file": "Skills.Tests.ps1",
+    "other": "mcpserver-codex-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "ReplMethodTimeout.Tests.ps1",
+    "other": "mcpserver-codex-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "ReplWorkspaceResolution.Tests.ps1",
+    "other": "mcpserver-codex-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "SessionIdCanonicalAgent.Tests.ps1",
+    "other": "mcpserver-codex-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "Skills.Tests.ps1",
+    "other": "mcpserver-claude-cowork-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "ReplMethodTimeout.Tests.ps1",
+    "other": "mcpserver-claude-cowork-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "ReplWorkspaceResolution.Tests.ps1",
+    "other": "mcpserver-claude-cowork-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "SessionIdCanonicalAgent.Tests.ps1",
+    "other": "mcpserver-claude-cowork-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "Skills.Tests.ps1",
+    "other": "mcpserver-copilot-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "ReplMethodTimeout.Tests.ps1",
+    "other": "mcpserver-copilot-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "ReplWorkspaceResolution.Tests.ps1",
+    "other": "mcpserver-copilot-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "SessionIdCanonicalAgent.Tests.ps1",
+    "other": "mcpserver-copilot-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "Skills.Tests.ps1",
+    "other": "mcpserver-grok-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "ReplMethodTimeout.Tests.ps1",
+    "other": "mcpserver-grok-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "ReplWorkspaceResolution.Tests.ps1",
+    "other": "mcpserver-grok-plugin",
+    "exists": true,
+    "hashEqual": true
+  },
+  {
+    "file": "SessionIdCanonicalAgent.Tests.ps1",
+    "other": "mcpserver-grok-plugin",
+    "exists": true,
+    "hashEqual": true
+  }
+]

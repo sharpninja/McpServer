@@ -1,0 +1,116 @@
+{
+  "TimestampUtc": "2026-08-22T14:35:12.3412704Z",
+  "Stamp": "20260822T143512Z",
+  "TrxPath": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e7-7453-b027-93176ddfd033\\docs\\receipts\\_g-red-20260822T142236Z\\g-red.trx",
+  "LogPath": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e7-7453-b027-93176ddfd033\\docs\\receipts\\_g-red-20260822T142236Z\\dotnet-test.txt",
+  "Counters": {
+    "total": 12,
+    "executed": 12,
+    "passed": 0,
+    "failed": 12,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "Outcomes": [
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_IdempotentReimport_NoDuplicateTodos",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.TodoYaml_NotSourceOfTruth_WhenDumpPresent",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_ContainsTodoRowsAndRequirementLinksMatchingStore",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.WikiExport_WithoutDumpFlag_UnchangedBehavior",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Import_RemapsWorkspaceIdAndPaths_OldIdAbsent",
+      "outcome": "Failed"
+    },
+    {
+      "testName": "McpServer.Support.Mcp.Tests.Services.WikiDumpPhaseGTests.Dump_Sha256_MatchesCanonicalUtf8Json",
+      "outcome": "Failed"
+    }
+  ],
+  "NamedTestsOnDisk": [
+    {
+      "name": "WikiExport_WithoutDumpFlag_UnchangedBehavior",
+      "onDisk": true
+    },
+    {
+      "name": "WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace",
+      "onDisk": true
+    },
+    {
+      "name": "Dump_ContainsTodoRowsAndRequirementLinksMatchingStore",
+      "onDisk": true
+    },
+    {
+      "name": "Dump_Sha256_MatchesCanonicalUtf8Json",
+      "onDisk": true
+    },
+    {
+      "name": "AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml",
+      "onDisk": true
+    },
+    {
+      "name": "Import_RemapsWorkspaceIdAndPaths_OldIdAbsent",
+      "onDisk": true
+    },
+    {
+      "name": "Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected",
+      "onDisk": true
+    },
+    {
+      "name": "Import_IdempotentReimport_NoDuplicateTodos",
+      "onDisk": true
+    },
+    {
+      "name": "TodoYaml_NotSourceOfTruth_WhenDumpPresent",
+      "onDisk": true
+    },
+    {
+      "name": "TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete",
+      "onDisk": true
+    },
+    {
+      "name": "DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth",
+      "onDisk": true
+    },
+    {
+      "name": "CreateAsync_DumpParam_BoundOnWorkspaceCreateRequest",
+      "onDisk": true
+    }
+  ],
+  "TestFile": "C:\\Users\\kingd\\.grok\\worktrees\\github-mcpserver\\subagent-01a029d1-24e7-7453-b027-93176ddfd033\\tests\\McpServer.Support.Mcp.Tests\\Services\\WikiDumpPhaseGTests.cs",
+  "CsprojRefs": "<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <Configurations>Debug;Release;Staging</Configurations>\n    <Platforms>AnyCPU;x64;x86</Platforms>\n  </PropertyGroup>\n  <Import Project=\"..\\..\\lib\\NSubstitute\\NSubstitute.Reference.props\" />\n  <PropertyGroup>\n    <OutputType>Exe</OutputType>\n    <TargetFramework>net10.0</TargetFramework>\n    <IsPackable>false</IsPackable>\n    <Nullable>enable</Nullable>\n    <ImplicitUsings>enable</ImplicitUsings>\n    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>\n  </PropertyGroup>\n  <ItemGroup>\n    <PackageReference Include=\"Microsoft.Data.Sqlite\" />\n    <PackageReference Include=\"Microsoft.NET.Test.Sdk\" />\n    <PackageReference Include=\"xunit.v3\" />\n    <PackageReference Include=\"xunit.runner.visualstudio\" PrivateAssets=\"all\" />\n    <PackageReference Include=\"coverlet.collector\" />\n  </ItemGroup>\n  <ItemGroup>\n    <ProjectReference Include=\"..\\..\\src\\McpServer.TransactionSecurity\\McpServer.TransactionSecurity.csproj\" />\n    <ProjectReference Include=\"..\\..\\src\\McpServer.Support.Mcp\\McpServer.Support.Mcp.csproj\" />\n    <ProjectReference Include=\"..\\..\\src\\McpServer.Cqrs.Mvvm\\McpServer.Cqrs.Mvvm.csproj\" />\n    <ProjectReference Include=\"..\\..\\src\\McpServer.SessionLog.Transcripts\\McpServer.SessionLog.Transcripts.csproj\" />\n    <ProjectReference Include=\"..\\..\\src\\McpServer.Client\\McpServer.Client.csproj\" />\n    <ProjectReference Include=\"..\\..\\src\\McpServer.Repl.Core\\McpServer.Repl.Core.csproj\" />\n  </ItemGroup>\n  <ItemGroup>\n    <Using Include=\"Xunit\" />\n  </ItemGroup>\n</Project>\n"
+}

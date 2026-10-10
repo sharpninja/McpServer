@@ -1,0 +1,32 @@
+[
+  {
+    "FullName": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj",
+    "Length": 1017,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.951669Z"
+  },
+  {
+    "FullName": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginHostKind.cs",
+    "Length": 702,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.951669Z"
+  },
+  {
+    "FullName": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginIntegrationProjectTests.cs",
+    "Length": 1663,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.951669Z"
+  },
+  {
+    "FullName": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCollection.cs",
+    "Length": 303,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.951669Z"
+  },
+  {
+    "FullName": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogScenario.cs",
+    "Length": 845,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9506726Z"
+  },
+  {
+    "FullName": "F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\scenarios\\plugin-sessionlog-scenarios.json",
+    "Length": 1184,
+    "LastWriteTimeUtc": "2026-08-21T23:29:05.9506726Z"
+  }
+]

@@ -1,0 +1,4 @@
+ .worktrees/triage-stale-turns                      |   0
+ .worktrees/triage-transcript                       |   0
+ .../pester/PluginPowerShellRuntime.Tests.ps1       | 129 [32m+++++++++++++++++++++[m
+ 3 files changed, 129 insertions(+)

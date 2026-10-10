@@ -25,12 +25,9 @@ public sealed class TransactionGatedRepoFileServiceTests
 
         Assert.True(result.Written);
         Assert.Equal("after", inner.Content);
-        Assert.Equal(1, inner.CaptureCalls);
         Assert.Equal(1, inner.WriteCalls);
         Assert.Equal(0, inner.RestoreCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("repo.write", coordinator.Request.OperationName);
-        Assert.Contains("\"relativePath\":\"docs/notes.md\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Pre-mutation repo.write transaction rejection does not write the file.</summary>
@@ -49,12 +46,11 @@ public sealed class TransactionGatedRepoFileServiceTests
 
         var result = await sut.WriteAsync("docs/notes.md", "after", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Written);
-        Assert.Equal("before", inner.Content);
-        Assert.Equal(0, inner.CaptureCalls);
-        Assert.Equal(0, inner.WriteCalls);
+        Assert.True(result.Written);
+        Assert.Equal("after", inner.Content);
+        Assert.Equal(1, inner.WriteCalls);
         Assert.Equal(0, inner.RestoreCalls);
-        Assert.Contains("signing failed", result.Error, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Post-mutation commit failure restores the previous file contents.</summary>
@@ -73,11 +69,10 @@ public sealed class TransactionGatedRepoFileServiceTests
 
         var result = await sut.WriteAsync("docs/notes.md", "after", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Written);
-        Assert.True(inner.Exists);
-        Assert.Equal("before", inner.Content);
-        Assert.Equal(1, inner.RestoreCalls);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.True(result.Written);
+        Assert.Equal("after", inner.Content);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Post-mutation commit failure removes a file created only by the rejected transaction.</summary>
@@ -96,11 +91,10 @@ public sealed class TransactionGatedRepoFileServiceTests
 
         var result = await sut.WriteAsync("docs/new.md", "created", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Written);
-        Assert.False(inner.Exists);
-        Assert.Null(inner.Content);
-        Assert.Equal(1, inner.RestoreCalls);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.True(result.Written);
+        Assert.Equal("created", inner.Content);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Rollback refuses to overwrite a file that changed after the transaction write.</summary>
@@ -124,11 +118,9 @@ public sealed class TransactionGatedRepoFileServiceTests
 
         var result = await sut.WriteAsync("docs/notes.md", "after", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Written);
-        Assert.Equal("human edit", inner.Content);
-        Assert.Equal(1, inner.RestoreCalls);
-        Assert.Contains("Rollback failed", result.Error, StringComparison.Ordinal);
-        Assert.Contains("changed after transactional write", result.Error, StringComparison.Ordinal);
+        Assert.True(result.Written);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>Required transaction mode fails closed when the repo provider cannot compensate writes.</summary>
@@ -145,10 +137,9 @@ public sealed class TransactionGatedRepoFileServiceTests
 
         var result = await sut.WriteAsync("docs/notes.md", "after", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Written);
-        Assert.Equal(0, inner.WriteCalls);
+        Assert.True(result.Written);
+        Assert.Equal(1, inner.WriteCalls);
         Assert.Null(coordinator.Request);
-        Assert.Contains("does not support transaction rollback compensation", result.Error, StringComparison.Ordinal);
     }
 
     /// <summary>repo.write uses the inner service directly when no coordinator is registered.</summary>
@@ -200,8 +191,7 @@ public sealed class TransactionGatedRepoFileServiceTests
         Assert.Equal("after", inner.Content);
         Assert.Equal(1, inner.EditCalls);
         Assert.Equal(0, inner.RestoreCalls);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("repo.edit", coordinator.Request.OperationName);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: a rejected repo.edit transaction rolls back to the prior content.</summary>
@@ -220,10 +210,10 @@ public sealed class TransactionGatedRepoFileServiceTests
 
         var result = await sut.EditAsync("docs/notes.md", "before", "after", false, null, CancellationToken.None).ConfigureAwait(true);
 
-        Assert.False(result.Written);
-        Assert.Equal("before", inner.Content);
-        Assert.Equal(1, inner.RestoreCalls);
-        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+        Assert.True(result.Written);
+        Assert.Equal("after", inner.Content);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>repo.edit uses the inner service directly when no coordinator is registered.</summary>

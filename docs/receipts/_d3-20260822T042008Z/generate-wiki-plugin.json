@@ -1,0 +1,20 @@
+{
+  "method": "workflow.requirements.generateDocument",
+  "plugin": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\repl-invoke.ps1",
+  "params": {
+    "format": "wiki",
+    "docType": "all"
+  },
+  "exitCode": 0,
+  "startedUtc": "2026-08-22T04:30:10.0000000Z",
+  "endedUtc": "2026-08-22T04:30:16.0000000Z",
+  "durationSec": 5,
+  "success": true,
+  "filesEmptyInYaml": true,
+  "contentType": "application/zip",
+  "fileName": "requirements-wiki-documents.zip",
+  "contentBase64Chars": 1336572,
+  "generatedAt": "2026-08-22T04:30:15.0696910+00:00",
+  "deprecated": true,
+  "note": "REPL yaml returned zip bytes with files: []. Native requirements_generate wrote workspace wiki files at 2026-08-22T04:30:35.3860771+00:00."
+}

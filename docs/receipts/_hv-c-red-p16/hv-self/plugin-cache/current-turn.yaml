@@ -1,0 +1,17 @@
+turnRequestId: req-20260822T072417Z-001-hostile-c-red-p16
+queryTitle: Hostile C-red-P16 AiTheory companion rows
+openedAt: 2026-08-22T07:24:26Z
+status: completed
+sessionId: GrokSubagentHostile-20260822T072417Z-c-red-p16
+codeEdits: 0
+lastBuildStatus: unknown
+auditActions: 0
+auditDialog: 0
+auditDecisions: 0
+auditFiles: 0
+auditCommits: 0
+queryText: CLASS 1 hostile review of PLAN-PLUGINHANDOFF-001 Phase C-red-P16.
+planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+todoId: PLAN-PLUGINHANDOFF-001
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-21T10:20:37.4844112Z

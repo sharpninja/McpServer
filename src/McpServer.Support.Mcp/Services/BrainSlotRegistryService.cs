@@ -275,7 +275,7 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
 
         try { BrainSlotValidation.NormalizeProviderKind(slot.ProviderKind); } catch (BrainSlotValidationException ex) { Fail(ex.Message); }
         if (string.IsNullOrWhiteSpace(slot.ModelId)) Fail("modelId is required.");
-        if (!_credentialResolver.IsSupportedReference(slot.CredentialReference)) Fail("credentialReference must use env:, config:, or file:.");
+        if (!_credentialResolver.IsSupportedReference(slot.CredentialReference)) Fail("credentialReference must use env:, config:, file:, or cli:.");
         if (string.IsNullOrWhiteSpace(slot.PartyId)) Fail("partyId is required.");
         try { BrainSlotValidation.ValidateEndpoint(slot.ProviderKind, slot.Endpoint, _options); } catch (BrainSlotValidationException ex) { Fail(ex.Message); }
         if (!string.IsNullOrWhiteSpace(slot.PartyId))
@@ -320,7 +320,7 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
     private void ValidateCredentialReference(string reference)
     {
         if (!_credentialResolver.IsSupportedReference(reference))
-            throw new BrainSlotValidationException("credentialReference must use env:, config:, or file:.");
+            throw new BrainSlotValidationException("credentialReference must use env:, config:, file:, or cli:.");
     }
 
     private static void ValidateRequired(string value, string name)

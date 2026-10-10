@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="8" errors="0" failures="5" not-run="116" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-08-21" time="16:58:25">
+  <environment user-domain="PAYTON-LEGION2" nunit-version="2.5.8.0" clr-version="10.0.10" user="kingd" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" cwd="F:\GitHub\McpServer" os-version="10.0.26200" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Failure" success="False" time="3.9909" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1" executed="True" result="Failure" success="False" time="3.9909" asserts="0" description="F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="TEST-MCP-PLUGINCORE-004 session-log dialog parsing" executed="True" result="Success" success="True" time="1.4942" asserts="0" description="TEST-MCP-PLUGINCORE-004 session-log dialog parsing">
+            <results>
+              <test-case description="parses dictionary-backed dialogItems YAML and property-backed JSON" name="TEST-MCP-PLUGINCORE-004 session-log dialog parsing.parses dictionary-backed dialogItems YAML and property-backed JSON" time="1.1011" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects appendDialog when no dialog items can be parsed" name="TEST-MCP-PLUGINCORE-004 session-log dialog parsing.rejects appendDialog when no dialog items can be parsed" time="0.2926" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="TEST-MCP-195 session-log incremental persist and failsafe drain" executed="True" result="Failure" success="False" time="2.504" asserts="0" description="TEST-MCP-195 session-log incremental persist and failsafe drain">
+            <results>
+              <test-case description="Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds" name="TEST-MCP-195 session-log incremental persist and failsafe drain.Get-ReplMethodTimeoutSeconds_WhileDrainingSubmitAsync_IsNotTwoSeconds" time="0.3384" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected the actual value to be greater than 2, but got 2.</message>
+                  <stack-trace>at $seconds | Should -BeGreaterThan 2, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4957
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4957</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout" name="TEST-MCP-195 session-log incremental persist and failsafe drain.Get-ReplMethodTimeoutSeconds_CompleteTurnBeginTurn_RemainThirtySecondsWhileDrainSubmitUsesDrainTimeout" time="0.1643" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected the actual value to be greater than or equal to 120, but got 2.</message>
+                  <stack-trace>at (Get-ReplMethodTimeoutSeconds -Method 'client.SessionLog.SubmitAsync') | Should -BeGreaterOrEqual 120, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4971
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:4971</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="Invoke-ReplFailsafeDrain_SuccessfulSubmitWithinDrainTimeout_RemovesYaml" name="TEST-MCP-195 session-log incremental persist and failsafe drain.Invoke-ReplFailsafeDrain_SuccessfulSubmitWithinDrainTimeout_RemovesYaml" time="0.3269" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected 1, but got 0.</message>
+                  <stack-trace>at $summary.replayed | Should -Be 1, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:5012
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:5012</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="Invoke-ReplFailsafeDrainOnFirstSuccess_WhileReplRawInFlight_DoesNotRun" name="TEST-MCP-195 session-log incremental persist and failsafe drain.Invoke-ReplFailsafeDrainOnFirstSuccess_WhileReplRawInFlight_DoesNotRun" time="0.1665" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="TEST-MCP-REPL-010 V4 failsafe path unification" executed="True" result="Failure" success="False" time="2.9349" asserts="0" description="TEST-MCP-REPL-010 V4 failsafe path unification">
+            <results>
+              <test-case description="Get-McpFailsafeDir_MatchesV4FailsafeAgentWorkspacesPending" name="TEST-MCP-REPL-010 V4 failsafe path unification.Get-McpFailsafeDir_MatchesV4FailsafeAgentWorkspacesPending" time="0.208" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected regular expression '[\\/]\.mcpServer[\\/]failsafe[\\/]' to match 'C:\Users\kingd\AppData\Local\Temp\mcp-v4-failsafe-85dd5cae264e4972a70ae5c0c9c05455\.mcpServer\default\failsafe', but it did not match.</message>
+                  <stack-trace>at $dir | Should -Match '[\\/]\.mcpServer[\\/]failsafe[\\/]', F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:5048
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:5048</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="Get-McpFailsafeDir_MigratesLegacyPluginQueue_ChecksumMatchThenDeleteSource" name="TEST-MCP-REPL-010 V4 failsafe path unification.Get-McpFailsafeDir_MigratesLegacyPluginQueue_ChecksumMatchThenDeleteSource" time="0.2109" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected $true, but got $false.</message>
+                  <stack-trace>at Test-Path -LiteralPath $migrated | Should -BeTrue, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:5073
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginPowerShellRuntime.Tests.ps1:5073</stack-trace>
+                </failure>
+              </test-case>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

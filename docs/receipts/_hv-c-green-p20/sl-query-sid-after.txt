@@ -1,0 +1,518 @@
+type: result
+payload:
+  requestId: req-20260822T134407Z-cda8
+  result:
+    totalCount: 53
+    limit: 5
+    offset: 0
+    items:
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T133703Z-c-green-p20
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P20 UpdateService harness
+      model: grok-build-subagent
+      started: 2026-08-22T13:37:14.9081042+00:00
+      lastUpdated: 2026-08-22T13:43:53.7531192+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T133703Z-001-hostile-c-green-p20
+        timestamp: 2026-08-22T13:43:53.7531192+00:00
+        queryText: 'CLASS 1 hostile C-green-P20. Surfaces A+B+C+D. Review only. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done. Do not start Phase D. Attack C-green-P20 after C-red-P20 AGREE 20260822T132413Z: named tests green, Development UpdateService sanitized harness, Staging/Production promotion blocked without operator approval.'
+        queryTitle: Hostile C-green-P20 UpdateService harness
+        response: Hostile C-green-P20 review AGREE. Receipt docs/receipts/hostile-validator-20260822T134148Z.md. PluginUpdateServiceHarnessTests Failed 0 Passed 2 Skipped 0. Live pid 6220. Harness pluginint-p20-20260822T133039Z Development UpdateService sanitizedFixtures. P20Harness-20260822T133039Z-sanitized persisted. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Phase D not started.
+        interpretation: Hostile review Phase C-green-P20. Review only. Do not mark TODOs done. Do not start Phase D.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-retry-20260822133855-10725 echoed; plugin Test-MarkerSignature true; service pid 6220
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent PluginUpdateServiceHarnessTests Failed 0 Passed 2 Skipped 0 Duration 135 ms
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs
+        - order: 4
+          description: Confirmed pluginint-p20-20260822T133039Z Development UpdateService sanitizedFixtures and no raw apiKey
+          type: read
+          status: completed
+          filePath: docs/receipts/pluginint-p20-20260822T133039Z/summary.json
+        - order: 5
+          description: Confirmed RequiresOperatorApproval AllowPluginPromotion AssertPluginPromotionAllowed and policy requireOperatorApproval true
+          type: read
+          status: completed
+          filePath: build/Build.PluginPromotion.cs
+        - order: 6
+          description: dotnet build build/_build.csproj 0 Error(s)
+          type: test
+          status: completed
+          filePath: build/_build.csproj
+        - order: 7
+          description: Live todo_get PLAN/PLUGININT done false; C P20 combined task done false; hygiene keep-open
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-green-p20/todo-plan-client.txt
+        - order: 8
+          description: Independently confirmed 132413Z OverallVerdict AGREE FailCount 0 and red Failed 2
+          type: read
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T132413Z.md
+        - order: 9
+          description: Live P20Harness-20260822T133039Z-sanitized turn completed
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-green-p20/sl-p20harness-query.txt
+        - order: 10
+          description: Wrote hostile receipt pair 20260822T134148Z OverallVerdict AGREE FailCount 0 PassCount 17
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T134148Z.md
+        - order: 11
+          description: AGREE C-green-P20. Do not mark PLAN/PLUGININT done. Do not start Phase D.
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-green-P20
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs
+        - docs/receipts/hostile-validator-20260822T132413Z.md
+        - docs/receipts/pluginint-p20-20260822T133039Z/summary.json
+        - docs/receipts/hostile-validator-20260822T134148Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T13:37:15.1302437+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile (excluded add-profile.grok.md). Work class 1. Surfaces A+B+C+D apply. Scope is C-green-P20 only. Independent re-run of PluginUpdateServiceHarnessTests, live todo_get, live TEST-MCP-PLUGININT-001, promotion product files, pluginint-p20 receipt, prior 132413Z AGREE confirmation.
+          category: observation
+        - timestamp: 2026-08-22T13:37:15.1302437+00:00
+          role: model
+          content: 'Decision: treat this as CLASS 1 C-green-P20 phase-gate. Consequence: AGREE only if 132413Z is independently AGREE, reds existed before this green, independent named-filter is Failed 0 Passed 2 Skipped 0, harness receipt is Development/UpdateService/sanitizedFixtures with no raw apiKey, promotion gate exists and Staging/Production require approval, planted approval artifact is absent, PLAN/PLUGININT remain done false, Phase D not started. Alternatives rejected: treating implementer TRX as proof without re-run; marking PLAN/PLUGININT done; mixing Phase D.'
+          category: decision
+        - timestamp: 2026-08-22T13:43:46.5893551+00:00
+          role: model
+          content: Independent named filter Failed 0 Passed 2 Skipped 0 Duration 135 ms --no-build. _build.csproj 0 Error(s). C-red-P20 AGREE 132413Z FailCount 0. Live pid 6220 only listener. pluginint-p20-20260822T133039Z Development UpdateService sanitizedFixtures true Failed 0 Skipped 0 no raw apiKey. Live P20Harness-20260822T133039Z-sanitized turn completed. PLAN/PLUGININT/P20/hygiene done false. Planted approval absent.
+          category: observation
+        - timestamp: 2026-08-22T13:43:46.5893551+00:00
+          role: model
+          content: 'Decision: AGREE C-green-P20. Consequence: parent may record this green gate; must not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done:true without a later closeout citing this AGREE in doneSummary. Alternatives rejected: treating implementer TRX as proof; requiring PLAN/PLUGININT done; FAIL for leftover Handoff dirty files timestamped before the red gate; FAIL B2 from FR createdAt query stamps.'
+          category: decision
+        designDecisions:
+        - Score C-green-P20 from independently re-run PluginUpdateServiceHarnessTests, live MCP store, C-red-P20 AGREE 132413Z, live P20Harness session, and on-disk promotion/harness artifacts, not implementer TRX alone.
+        - 'AGREE: named filter Failed 0 Passed 2 Skipped 0 after red Failed 2. Do not mark PLAN or PLUGININT done. Phase D remains unstarted.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T134148Z.md
+        - docs/receipts/hostile-validator-20260822T134148Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T133042Z-c-red-p20-rebuild
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-red-P20 rebuild gate
+      model: grok-build-subagent
+      started: 2026-08-22T13:30:52.4630249+00:00
+      lastUpdated: 2026-08-22T13:31:01.1798902+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T133042Z-001-hostile-c-red-p20-rebuild
+        timestamp: 2026-08-22T13:31:01.1798902+00:00
+        queryText: CLASS 1 hostile C-red-P20 rebuild review. Surfaces A+B+C+D. Review only. Independent rebuild of PluginUpdateServiceHarnessTests after sibling 131910Z turn completed citing 132413Z. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done.
+        queryTitle: Hostile C-red-P20 rebuild named red tests
+        response: Hostile C-red-P20 rebuild review AGREE. Receipt docs/receipts/hostile-validator-20260822T132620Z.md. PluginUpdateServiceHarnessTests Failed 2 Passed 0 Skipped 0 with FileNotFoundException pluginint-p20 directory and Build.PluginPromotion.cs missing. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Combined C P20 task remains done false.
+        interpretation: Hostile review Phase C-red-P20 rebuild. Review only. Do not mark TODOs done. Do not write P20 green artifacts.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-ind-20260822132411-72537 echoed; plugin Test-MarkerSignature true
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent rebuild PluginUpdateServiceHarnessTests Failed 2 Passed 0 Skipped 0 Duration 47 ms
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs
+        - order: 4
+          description: Confirmed no pluginint-p20-* dirs and no Build.PluginPromotion.cs
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p20/independent-p20-green-absence.json
+        - order: 5
+          description: Live todo_get PLAN/PLUGININT done false; C P20 combined task done false; hygiene keep-open
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p20/independent-todo-plan-client.txt
+        - order: 6
+          description: Independently confirmed 104054Z OverallVerdict AGREE FailCount 0
+          type: read
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T104054Z.md
+        - order: 7
+          description: Wrote hostile receipt pair 20260822T132620Z OverallVerdict AGREE FailCount 0 PassCount 19
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T132620Z.md
+        - order: 8
+          description: AGREE C-red-P20 rebuild. Tests are new reds after 104054Z. Do not mark PLAN/PLUGININT done.
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-red-P20
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs
+        - docs/receipts/hostile-validator-20260822T104054Z.md
+        - docs/receipts/hostile-validator-20260822T132620Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T13:30:52.8178646+00:00
+          role: model
+          content: add-profile 18 files. Independent rebuild PluginUpdateServiceHarnessTests Failed 2 Passed 0 Skipped 0 Duration 47 ms. Two FileNotFoundException reasons. 104054Z AGREE FailCount 0. Live todos done false. Receipt docs/receipts/hostile-validator-20260822T132620Z.md. Sibling session GrokSubagentHostile-20260822T131910Z-c-red-p20 already completed citing 132413Z; this session is the rebuild review.
+          category: observation
+        - timestamp: 2026-08-22T13:30:52.8178646+00:00
+          role: model
+          content: 'Decision: AGREE C-red-P20 on independently rebuilt named filter. Consequence: parent may start P20 green after this AGREE; must not mark PLAN or PLUGININT done. Alternatives rejected: treating sibling 132413Z --no-build as this rebuild receipt; requiring P20 green at this red gate.'
+          category: decision
+        designDecisions:
+        - Score C-red-P20 from independently rebuilt PluginUpdateServiceHarnessTests, live MCP store, C-green-P19 AGREE 104054Z, and on-disk absence of P20 green artifacts, not implementer TRX and not sibling --no-build collector alone.
+        - 'AGREE: reds exist as new files after 104054Z, currently Failed 2 Passed 0 Skipped 0, two FileNotFoundException messages. Do not mark PLAN or PLUGININT done. P20 execute/green may start after this AGREE.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T132620Z.md
+        - docs/receipts/hostile-validator-20260822T132620Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T131910Z-c-red-p20
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-red-P20 UpdateService harness reds
+      model: grok-build-subagent
+      started: 2026-08-22T13:19:17.0559062+00:00
+      lastUpdated: 2026-08-22T13:26:25.2759043+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T131910Z-001-hostile-c-red-p20
+        timestamp: 2026-08-22T13:26:25.2759043+00:00
+        queryText: CLASS 1 hostile C-red-P20 only. Surfaces A+B+C+D. Inter-phase RED gate. Tests must exist and currently FAIL. Do not implement P20 green. Do not create Build.PluginPromotion.cs, plugin-promotion-policy.json, or docs/receipts/pluginint-p20-*. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done. Attack whether the two named P20 tests exist, encode TEST-MCP-PLUGININT-001 AC5 deploy half, and currently fail with two distinct FileNotFoundException messages.
+        queryTitle: Hostile C-red-P20 UpdateService harness reds
+        response: Hostile C-red-P20 review AGREE. Receipt docs/receipts/hostile-validator-20260822T132413Z.md. PluginUpdateServiceHarnessTests Failed 2 Passed 0 Skipped 0. Distinct FileNotFoundException messages. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Do not start P20 green without this AGREE; do not mark TODOs done.
+        interpretation: Hostile review Phase C-red-P20. Inter-phase RED gate. Review only. Do not implement P20 green. Do not mark TODOs done.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-20260822131910-33917 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42975
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent PluginUpdateServiceHarnessTests Failed 2 Passed 0 Skipped 0 Duration 53 ms
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs
+        - order: 4
+          description: 'Confirmed P20 green artifacts absent: no Build.PluginPromotion.cs, no plugin-promotion-policy.json, no pluginint-p20-*'
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p20/p20-green-absence.json
+        - order: 5
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P20 done false; hygiene keep-open
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p20/todo-plan-client.txt
+        - order: 6
+          description: Live getFr/getTr/getTest FR/TR/TEST-MCP-PLUGININT-001; TEST AC5 focused target plus native suites zero fail/skip
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-red-p20/req-test.txt
+        - order: 7
+          description: Wrote hostile receipt pair 20260822T132413Z OverallVerdict AGREE FailCount 0 PassCount 16
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T132413Z.md
+        - order: 8
+          description: 'AGREE C-red-P20: named reds exist and currently fail. Do not mark TODOs done. Do not skip C-green-P20.'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-red-P20
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessReceipt.cs
+        - tests/McpServer.PluginIntegration.Tests/PluginPromotionGate.cs
+        - docs/receipts/hostile-validator-20260822T104054Z.md
+        - docs/receipts/hostile-validator-20260822T132413Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T13:19:17.2574851+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile (excluded add-profile.grok.md). Work class 1. Surfaces A+B+C+D apply. Scope is C-red-P20 inter-phase red gate after C-green-P19 AGREE 20260822T104054Z. Independent PluginUpdateServiceHarnessTests rerun, live todo_get, live FR/TR/TEST, absence of P20 green artifacts.
+          category: observation
+        - timestamp: 2026-08-22T13:19:17.2574851+00:00
+          role: model
+          content: 'Decision: treat this as CLASS 1 C-red-P20 phase-gate. Consequence: AGREE only if the two named tests exist, encode Development UpdateService sanitized harness plus Staging/Production fail-closed without operator approval, currently Failed 2 Passed 0 Skipped 0 with two distinct FileNotFoundException messages, P20 green artifacts absent, PLAN/PLUGININT remain done false, and this review does not mix P20 green or TODO done. Alternatives rejected: trusting implementer TRX; treating C-green-P19 as C-red-P20; FAIL B2 from FR createdAt vs file mtimes; requiring green suite for this red gate.'
+          category: decision
+        - timestamp: 2026-08-22T13:24:27.3907578+00:00
+          role: model
+          content: Independent verify pass started. Continuing session GrokSubagentHostile-20260822T131910Z-c-red-p20. Re-query live todo/requirements, rebuild+rerun PluginUpdateServiceHarnessTests, recheck pluginint-p20 absence and 104054Z AGREE.
+          category: observation
+        - timestamp: 2026-08-22T13:24:27.3907578+00:00
+          role: model
+          content: 'Decision: continue the existing in-progress hostile session rather than open a duplicate. Consequence: persistence proof stays on requestId req-20260822T131910Z-001-hostile-c-red-p20. Alternatives rejected: new session that orphans turnId 42975; trusting prior --no-build collector as the independent rerun.'
+          category: decision
+        - timestamp: 2026-08-22T13:26:16.8572138+00:00
+          role: model
+          content: Independent PluginUpdateServiceHarnessTests ExitCode 1 Failed 2 Passed 0 Skipped 0 Duration 53 ms. Harness FileNotFoundException missing pluginint-p20-<utc> directory. Promotion FileNotFoundException Build.PluginPromotion.cs missing. P20 green artifacts absent. Live todo_get PLAN and PLUGININT done false; hygiene keep-open. Receipt docs/receipts/hostile-validator-20260822T132413Z.md OverallVerdict AGREE FailCount 0 PassCount 16.
+          category: observation
+        - timestamp: 2026-08-22T13:26:16.8572138+00:00
+          role: model
+          content: 'Decision: AGREE C-red-P20. The two named tests exist, encode TEST-MCP-PLUGININT-001 AC5 deploy half, and currently fail with two distinct FileNotFoundException messages. Consequence: parent may treat C-red-P20 as gated and may start P20 execute/green; must not mark PLAN or PLUGININT done:true; must not skip C-green-P20 hostile. Alternatives rejected: DISAGREE because PLAN remaining text is stale; DISAGREE because PLUGININT P1-P19 tasks remain done false (store lag, not this claim); AGREE as plan closeout (P20 green and PLAN still open).'
+          category: decision
+        - timestamp: 2026-08-22T13:28:30.6498159+00:00
+          role: model
+          content: Independent rebuild PluginUpdateServiceHarnessTests Failed 2 Passed 0 Skipped 0 Duration 47 ms. Harness FileNotFoundException no pluginint-p20-<utc> directory. Promotion FileNotFoundException Build.PluginPromotion.cs missing. 104054Z independently AGREE FailCount 0. Live todo_get PLAN/PLUGININT/HYGIENE done false. Combined C P20 task done false. Receipt docs/receipts/hostile-validator-20260822T132620Z.md OverallVerdict AGREE FailCount 0 PassCount 19.
+          category: observation
+        - timestamp: 2026-08-22T13:28:30.6498159+00:00
+          role: model
+          content: 'Decision: AGREE C-red-P20. Named tests exist as new reds after 104054Z, currently fail for the two claimed FileNotFoundException reasons, product greens absent, TODOs remain done false. Consequence: parent may treat C-red-P20 as gated and start P20 green only after this AGREE; must not mark PLAN or PLUGININT done:true; must not skip C-green-P20 hostile. Alternatives rejected: DISAGREE because store AC5 text omits UpdateService (plan/parent locked deploy half; red gate does not require isSatisfied); requiring P20 green at this red gate; opening a second hostile session instead of completing turnId 42975.'
+          category: decision
+        designDecisions:
+        - Score C-red-P20 from independently re-run PluginUpdateServiceHarnessTests, live MCP store, C-green-P19 AGREE, and on-disk absence of P20 green artifacts, not implementer TRX.
+        - 'AGREE: reds exist, currently Failed 2 Passed 0 Skipped 0, two distinct FileNotFoundException messages, AC5 deploy half encoded. Do not mark PLAN or PLUGININT done. P20 execute/green may start after this AGREE.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T132413Z.md
+        - docs/receipts/hostile-validator-20260822T132413Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T103728Z-c-green-p19-r2
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P19 r2 native suites
+      model: grok-build-subagent
+      started: 2026-08-22T10:37:52.2536643+00:00
+      lastUpdated: 2026-08-22T10:43:38.4314916+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T103728Z-001-hostile-c-green-p19-r2
+        timestamp: 2026-08-22T10:43:38.4314916+00:00
+        queryText: CLASS 1 hostile C-green-P19 r2. Surfaces A+B+C+D. Review only. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done. Do not write P20 tests. Attack whether Claude-code native Pester is now all 10 on-disk *.Tests.ps1.
+        queryTitle: Hostile C-green-P19 r2 native suite receipts
+        response: Hostile C-green-P19 r2 review AGREE. Receipt docs/receipts/hostile-validator-20260822T104054Z.md. PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0. Independent Claude-code Pester 10 files / 25 tests Failed 0 Skipped 0. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Do not start P20 without C-red-P20.
+        interpretation: Hostile review Phase C-green-P19 r2. Review only. Do not mark TODOs done. Do not write P20 tests.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-20260822103729-66902 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42949
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - order: 4
+          description: Inventoried official plugin native tests versus pluginint-p19-20260822T102645Z logs; Claude-code discovery 10 files
+          type: read
+          status: completed
+          filePath: docs/receipts/pluginint-p19-20260822T102645Z/summary.json
+        - order: 5
+          description: 'Independently ran Invoke-Pester -Path tests: 10 files / 25 tests Passed 25 Failed 0 Skipped 0'
+          type: test
+          status: completed
+          filePath: F:\GitHub\mcpserver-claude-code-plugin\tests
+        - order: 6
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P19/P20 done false; hygiene keep-open
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-green-p19-r2/todo-plan-client.txt
+        - order: 7
+          description: Wrote hostile receipt pair 20260822T104054Z OverallVerdict AGREE FailCount 0 PassCount 24
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T104054Z.md
+        - order: 8
+          description: 'AGREE C-green-P19 r2: Claude-code native Pester complete. Do not mark TODOs done. Do not skip C-red-P20.'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-green-P19-r2
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - docs/receipts/pluginint-p19-20260822T102645Z/summary.json
+        - docs/receipts/hostile-validator-20260822T101615Z.md
+        - docs/receipts/hostile-validator-20260822T104054Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T10:37:52.7055823+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile (excluded add-profile.grok.md). Work class 1. Surfaces A+B+C+D apply. Scope is C-green-P19 r2 remediating prior DISAGREE 20260822T101615Z. Independent PluginNativeSuiteReceiptTests rerun, live todo_get, Claude-code 10-file discovery, P20 absence, PLAN/PLUGININT remain done false.
+          category: observation
+        - timestamp: 2026-08-22T10:37:52.7055823+00:00
+          role: model
+          content: 'Decision: treat this as CLASS 1 C-green-P19 r2 phase-gate. Consequence: AGREE only if prior DISAGREE was valid, 102645Z is LoadLatest, Claude-code discovery is 10 files / 25 tests Failed 0 Skipped 0 before and after sync, other plugins run all on-disk native suites as applicable, named tests independently Passed 3 Failed 0 Skipped 0, P20 absent, TODOs remain done false. Alternatives rejected: trusting implementer summary.json without re-running named tests; treating 095842Z 7-file subset as DoD; marking PLAN/PLUGININT done.'
+          category: decision
+        - timestamp: 2026-08-22T10:43:29.2178969+00:00
+          role: model
+          content: Independent PluginNativeSuiteReceiptTests ExitCode 0 Passed 3 Failed 0 Skipped 0 Duration 133 ms. Independent Claude-code Invoke-Pester -Path tests ExitCode 0 discovery 10 files / 25 tests Passed 25 Failed 0 Skipped 0. LoadLatest is pluginint-p19-20260822T102645Z. 095842Z remains 7-file subset. Live todo_get PLAN and PLUGININT done false. P20 names absent. Receipt docs/receipts/hostile-validator-20260822T104054Z.md OverallVerdict AGREE FailCount 0 PassCount 24.
+          category: observation
+        - timestamp: 2026-08-22T10:43:29.2178969+00:00
+          role: model
+          content: 'Decision: AGREE C-green-P19 r2. Prior 101615Z DISAGREE was valid. Claude-code native Pester is now the full 10-file tree Failed 0 Skipped 0 before, after-sync, and independent rerun. Named tests independently Passed 3. P20 remains unstarted. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Consequence: parent may treat C-green-P19 as gated; must not mark PLAN or PLUGININT done:true; must not skip C-red-P20. Alternatives rejected: DISAGREE because named tests still omit discovery file-count assertions (current suite independently proven complete); AGREE as plan closeout (P20 open).'
+          category: decision
+        designDecisions:
+        - Score C-green-P19 r2 from independently re-run PluginNativeSuiteReceiptTests, independent Claude-code Invoke-Pester -Path tests, live MCP store, C-red-P19 AGREE, prior DISAGREE 101615Z, and plugin inventory versus 102645Z logs, not implementer narrative.
+        - 'AGREE: native suites as applicable are complete Failed 0 Skipped 0. 095842Z subset remains a documented FAIL. Do not mark PLAN or PLUGININT done. Do not start P20 without C-red-P20.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T104054Z.md
+        - docs/receipts/hostile-validator-20260822T104054Z.json
+    - sourceType: GrokSubagentHostile
+      sessionId: GrokSubagentHostile-20260822T101157Z-c-green-p19
+      title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P19 native suites
+      model: grok-build-subagent
+      started: 2026-08-22T10:12:25.4306844+00:00
+      lastUpdated: 2026-08-22T10:18:56.7784323+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260822T101157Z-001-hostile-c-green-p19
+        timestamp: 2026-08-22T10:18:56.7784323+00:00
+        queryText: CLASS 1 hostile C-green-P19. Surfaces A+B+C+D. Review only. Do not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done. Do not write P20 tests. Attack whether as-applicable native suites were actually run.
+        queryTitle: Hostile C-green-P19 native suite receipts
+        response: Hostile C-green-P19 review DISAGREE. Receipt docs/receipts/hostile-validator-20260822T101615Z.md. PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0. Claude-code omitted 3 Pester files; two pass independently. PLAN-PLUGINHANDOFF-001 and MCP-PLUGININT-001 remain done false. Do not start P20.
+        interpretation: Hostile review Phase C-green-P19. Review only. Do not mark TODOs done. Do not write P20 tests.
+        status: completed
+        planFile: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        todoId: PLAN-PLUGINHANDOFF-001
+        actions:
+        - order: 1
+          description: Executed add-profile; read 18 profile markdown files
+          type: read
+          status: completed
+          filePath: C:\Users\kingd\.claude\profile\PROFILE.md
+        - order: 2
+          description: Health nonce nonce-hv-20260822101202-68040 echoed; plugin Test-MarkerSignature true; BeginTurnAsync turnId 42943
+          type: read
+          status: completed
+          filePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+        - order: 3
+          description: Independent PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0
+          type: test
+          status: completed
+          filePath: tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - order: 4
+          description: Inventoried official plugin native tests versus pluginint-p19-20260822T095842Z logs; Claude-code omitted 3 Pester files
+          type: read
+          status: completed
+          filePath: docs/receipts/pluginint-p19-20260822T095842Z/summary.json
+        - order: 5
+          description: 'Independently ran omitted Claude-code Pester: ReplFailsafe pass, HookTurnDedupe pass, CurrentTurnSessionRebind fail'
+          type: test
+          status: completed
+          filePath: F:\GitHub\mcpserver-claude-code-plugin\tests\CurrentTurnSessionRebind.Tests.ps1
+        - order: 6
+          description: Live todo_get PLAN-PLUGINHANDOFF-001 done false; MCP-PLUGININT-001 done false P19/P20 done false; hygiene keep-open
+          type: read
+          status: completed
+          filePath: docs/receipts/_hv-c-green-p19/todo-plan-client.txt
+        - order: 7
+          description: Wrote hostile receipt pair 20260822T101615Z OverallVerdict DISAGREE FailCount 6 PassCount 16
+          type: create
+          status: completed
+          filePath: docs/receipts/hostile-validator-20260822T101615Z.md
+        - order: 8
+          description: 'DISAGREE C-green-P19: Claude-code native Pester incomplete. Do not mark TODOs done. Do not start P20.'
+          type: design_decision
+          status: completed
+          filePath: docs/plans/PLAN-PLUGINHANDOFF-001.md
+        model: grok-build-subagent
+        tags:
+        - hostile-validator
+        - PLAN-PLUGINHANDOFF-001
+        - MCP-PLUGININT-001
+        - C-green-P19
+        - FR-MCP-PLUGININT-001
+        - TR-MCP-PLUGININT-001
+        - TEST-MCP-PLUGININT-001
+        contextList:
+        - docs/plans/PLAN-PLUGINHANDOFF-001.md
+        - tests/McpServer.PluginIntegration.Tests/PluginNativeSuiteReceiptTests.cs
+        - docs/receipts/pluginint-p19-20260822T095842Z/summary.json
+        - docs/receipts/hostile-validator-20260822T092424Z.md
+        - docs/receipts/hostile-validator-20260822T101615Z.md
+        processingDialog:
+        - timestamp: 2026-08-22T10:12:25.9451578+00:00
+          role: model
+          content: add-profile executed first. 18 non-skill profile markdown files read under C:\Users\kingd\.claude\profile (excluded add-profile.grok.md). Work class 1. Surfaces A+B+C+D apply. Scope is C-green-P19. Independent PluginNativeSuiteReceiptTests rerun, live todo_get, native log honesty, Pester/Bats/Jest applicability, P20 absence, PLAN/PLUGININT remain done false.
+          category: observation
+        - timestamp: 2026-08-22T10:12:25.9451578+00:00
+          role: model
+          content: 'Decision: treat this as CLASS 1 C-green-P19 phase-gate. Consequence: AGREE only if C-red-P19 AGREE exists, P20 names absent, official native suites as applicable were actually run with Failed 0 Skipped 0 before and after SyncAgentPlugins, named tests independently pass Failed 0 Skipped 0, parser does not hide failures, TODOs remain done false, P20 unstarted. Alternatives rejected: trusting implementer summary.json without re-running tests; treating omitted failing Pester files as as-applicable; marking PLAN/PLUGININT done.'
+          category: decision
+        - timestamp: 2026-08-22T10:18:46.6959516+00:00
+          role: model
+          content: 'Independent PluginNativeSuiteReceiptTests ExitCode 0 Passed 3 Failed 0 Skipped 0. C-red-P19 AGREE exists. P20 names absent. Claude-code omitted ReplFailsafe/HookTurnDedupe/CurrentTurnSessionRebind. Independent omitted Pester: ReplFailsafe 2/0/0, HookTurnDedupe 2/0/0, CurrentTurnSessionRebind 0/1/0. Live todo_get PLAN and PLUGININT done false. Receipt docs/receipts/hostile-validator-20260822T101615Z.md OverallVerdict DISAGREE FailCount 6 PassCount 16.'
+          category: observation
+        - timestamp: 2026-08-22T10:18:46.6959516+00:00
+          role: model
+          content: 'Decision: DISAGREE C-green-P19. Named tests pass on a 7-file Claude-code Pester subset. Bats skip is as-applicable. Omitting two currently-passing native Pester files plus one failing rebind test is not a complete native suite and does not satisfy TEST-MCP-PLUGININT-001 AC5 or P19 green DoD. Consequence: parent must not mark PLAN-PLUGINHANDOFF-001 or MCP-PLUGININT-001 done:true and must not start P20 reds. Alternatives rejected: AGREE because named tests Passed 3; AGREE because Bats is inapplicable; FAIL Bats skip (PowerShell-only runtime deletes .sh).'
+          category: decision
+        designDecisions:
+        - Score C-green-P19 from independently re-run PluginNativeSuiteReceiptTests, omitted Claude-code Pester rerun, live MCP store, C-red-P19 AGREE, and plugin inventory versus receipt logs, not implementer narrative.
+        - 'DISAGREE: named tests pass on a Claude-code Pester subset. Two omitted files pass independently. TEST AC5 and P19 DoD require the applicable native suite complete. Do not mark PLAN or PLUGININT done. Do not start P20.'
+        filesModified:
+        - docs/receipts/hostile-validator-20260822T101615Z.md
+        - docs/receipts/hostile-validator-20260822T101615Z.json
+
+---

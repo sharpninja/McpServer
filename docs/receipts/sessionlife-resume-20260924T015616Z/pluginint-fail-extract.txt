@@ -1,0 +1,75 @@
+605: 21:20:28 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCowork) [11 s]
+606: 21:20:28 [DBG]   Error Message:
+607: 21:20:28 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-claude-cowork-plugin\lib\Invoke-McpPlugin.ps1:322
+622: 21:20:38 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClineV2) [10 s]
+623: 21:20:38 [DBG]   Error Message:
+624: 21:20:38 [DBG]    System.InvalidOperationException : Node plugin export invoke failed with exit 1 stderr=node:events:487
+652: 21:21:01 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: OpenCode) [9 s]
+653: 21:21:01 [DBG]   Error Message:
+654: 21:21:01 [DBG]    System.InvalidOperationException : Node plugin export invoke failed with exit 1 stderr=node:events:487
+682: 21:21:12 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Grok) [11 s]
+683: 21:21:12 [DBG]   Error Message:
+684: 21:21:12 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:322
+698: 21:21:21 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Codex) [9 s]
+699: 21:21:21 [DBG]   Error Message:
+700: 21:21:21 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-codex-plugin\Invoke-CodexMcpPlugin.ps1:173
+714: 21:21:32 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: Copilot) [10 s]
+715: 21:21:32 [DBG]   Error Message:
+716: 21:21:32 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-copilot-plugin\lib\Invoke-McpPlugin.ps1:322
+730: 21:21:41 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_Success_NoPendingFailsafe(hostKind: ClaudeCode) [9 s]
+731: 21:21:41 [DBG]   Error Message:
+732: 21:21:41 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-claude-code-plugin\lib\Invoke-McpPlugin.ps1:322
+746: 21:21:59 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCowork) [9 s]
+747: 21:21:59 [DBG]   Error Message:
+748: 21:21:59 [DBG]    System.InvalidOperationException : Production plugin persist against a stopped host did not retain failsafe YAML. workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-claude-cowork-plugin\lib\Invoke-McpPlugin.ps1:322
+761: 21:22:09 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Copilot) [9 s]
+762: 21:22:09 [DBG]   Error Message:
+763: 21:22:09 [DBG]    System.InvalidOperationException : Production plugin persist against a stopped host did not retain failsafe YAML. workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-copilot-plugin\lib\Invoke-McpPlugin.ps1:322
+776: 21:22:19 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: ClaudeCode) [10 s]
+777: 21:22:19 [DBG]   Error Message:
+778: 21:22:19 [DBG]    System.InvalidOperationException : Production plugin persist against a stopped host did not retain failsafe YAML. workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-claude-code-plugin\lib\Invoke-McpPlugin.ps1:322
+791: 21:22:29 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Grok) [10 s]
+792: 21:22:29 [DBG]   Error Message:
+793: 21:22:29 [DBG]    System.InvalidOperationException : Production plugin persist against a stopped host did not retain failsafe YAML. workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:322
+806: 21:22:50 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Cline) [10 s]
+807: 21:22:50 [DBG]   Error Message:
+808: 21:22:50 [DBG]    System.InvalidOperationException : Production plugin persist against a stopped host did not retain failsafe YAML. canonical turn did not throw.
+815: 21:23:00 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_FailedSubmit_RetainsRootIdPending(hostKind: Codex) [10 s]
+816: 21:23:00 [DBG]   Error Message:
+817: 21:23:00 [DBG]    System.InvalidOperationException : Production plugin persist against a stopped host did not retain failsafe YAML. workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-codex-plugin\Invoke-CodexMcpPlugin.ps1:173
+830: 21:23:18 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: OpenCode) [7 s]
+831: 21:23:18 [DBG]   Error Message:
+832: 21:23:18 [DBG]    System.InvalidOperationException : Node plugin export invoke failed with exit 1 stderr=node:events:487
+860: 21:23:30 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Codex) [11 s]
+861: 21:23:30 [DBG]   Error Message:
+862: 21:23:30 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-codex-plugin\Invoke-CodexMcpPlugin.ps1:173
+876: 21:23:38 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClineV2) [8 s]
+877: 21:23:38 [DBG]   Error Message:
+878: 21:23:38 [DBG]    System.InvalidOperationException : Node plugin export invoke failed with exit 1 stderr=node:events:487
+906: 21:23:48 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Grok) [9 s]
+907: 21:23:48 [DBG]   Error Message:
+908: 21:23:48 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:322
+922: 21:23:58 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCode) [9 s]
+923: 21:23:58 [DBG]   Error Message:
+924: 21:23:58 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-claude-code-plugin\lib\Invoke-McpPlugin.ps1:322
+938: 21:24:08 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: Copilot) [9 s]
+939: 21:24:08 [DBG]   Error Message:
+940: 21:24:08 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-copilot-plugin\lib\Invoke-McpPlugin.ps1:322
+954: 21:24:17 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_EachScenario_FailsUntilAdapterOperational(hostKind: ClaudeCowork) [9 s]
+955: 21:24:17 [DBG]   Error Message:
+956: 21:24:17 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-claude-cowork-plugin\lib\Invoke-McpPlugin.ps1:322
+970: 21:24:37 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClineV2) [9 s]
+971: 21:24:37 [DBG]   Error Message:
+972: 21:24:37 [DBG]    System.InvalidOperationException : Node plugin export invoke failed with exit 1 stderr=node:events:487
+1000: 21:24:47 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: ClaudeCode) [9 s]
+1001: 21:24:47 [DBG]   Error Message:
+1002: 21:24:47 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-claude-code-plugin\lib\Invoke-McpPlugin.ps1:322
+1016: 21:24:56 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Copilot) [9 s]
+1017: 21:24:56 [DBG]   Error Message:
+1018: 21:24:56 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-copilot-plugin\lib\Invoke-McpPlugin.ps1:322
+1032: 21:25:04 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: OpenCode) [7 s]
+1033: 21:25:04 [DBG]   Error Message:
+1034: 21:25:04 [DBG]    System.InvalidOperationException : Node plugin export invoke failed with exit 1 stderr=node:events:487
+1062: 21:25:14 [DBG]   Failed McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(hostKind: Codex) [9 s]
+1063: 21:25:14 [DBG]   Error Message:
+1064: 21:25:14 [DBG]    System.InvalidOperationException : workflow.sessionlog.bootstrap failed with exit 1 stderr=Exception: F:\GitHub\mcpserver-codex-plugin\Invoke-CodexMcpPlugin.ps1:173

@@ -3,6 +3,12 @@
 Load this file when you need to create, update, or query session logs.
 For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
 
+
+Session-log mutations (every source type, including QBAgent) persist without the turn-transaction
+coordinator or keyserver on `develop` and on the live Linux box MCP (FR-MCP-173). Keep live
+`Mcp:TurnTransactions:Enabled=true` for QuadBrain; do not disable it to make session-log writes
+succeed. Workspace-stamp repair remains fail-closed.
+
 ## Endpoints
 
 - `POST /mcpserver/sessionlog` — create or update a session log

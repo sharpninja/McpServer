@@ -1,0 +1,17 @@
+{
+  "Command": "list-p19",
+  "ExitCode": 0,
+  "DurationMs": 21792,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p19\\hv-dotnet-list-p19.log",
+  "FinishedUtc": "2026-08-22T09:22:41.7676939Z",
+  "Dotnet": "C:\\Program Files\\dotnet\\dotnet.exe",
+  "DotnetArgs": [
+    "test",
+    "tests/McpServer.PluginIntegration.Tests",
+    "-c",
+    "Debug",
+    "--list-tests",
+    "--filter",
+    "FullyQualifiedName~PluginNativeSuiteReceiptTests"
+  ]
+}

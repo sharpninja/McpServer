@@ -1,0 +1,37 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142331Z-c465
+  result:
+    id: BUG-TRIAGE-226
+    title: sessionlog_complete_turn subscriber commit fails on post-compaction additive reopen
+    section: Backlog
+    priority: high
+    done: false
+    note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+    description:
+    - "sessionlog_complete_turn is a supported additive upsert (FR-SUPPORT-014): CompleteTurn sets status=completed and calls UpsertTurnAsync, which merges onto an existing turn including one that is already completed. TransactionGatedSessionLogService gates that as sessionlog.upsert_turn. The coordinator applies the local mutation, then subscriber CommitDiffgramAsync is rejected; Failure() hardcodes 'Subscriber commit failed.', rollback of the pre-image session graph succeeds, and ToTransactionException surfaces exactly the reported message. McpErrorClassifier then maps that InvalidOperationException to non-retryable internal_server_error (500), dropping TransactionFailureReason (SubscriberUnavailable, CommitTimeout, StaleSequence, hash/decrypt mismatch, and so on). Post-compaction reopen-and-complete is the documented stateless lifecycle (begin reopens, complete merges). Rollback means the earlier completed turn is preserved and the additive compaction update is lost. TEST-MCP-161 covers submit/replace/delete commit-fail rollback, not UpsertTurnAsync, which is the complete_turn path."
+    - 'Triage group: triage-group-29e4a2b4b1b47130'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Calling sessionlog_complete_turn (or POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/complete) on an already completed turn with the same requestId and an additive payload persists the merge and returns success when the subscriber is healthy.'
+    - '- A second complete_turn after a prior successful complete of that turn (compaction-style additive update) also persists and returns success when the subscriber is healthy.'
+    - "- When subscriber commit is rejected after the local upsert, the client response includes the structured TransactionFailureReason and whether rollback completed; it must not be only the generic 'Subscriber commit failed.' string classified as internal_server_error."
+    - '- SubscriberUnavailable and CommitTimeout on this path are classified retryable (not retryable=false internal_server_error).'
+    - '- After a rejected subscriber commit, the turn graph matches the pre-mutation state (already-completed turn and its children unchanged), and a later retry of the same complete_turn succeeds once the subscriber accepts the commit.'
+    - 'Implementation notes:'
+    - "- Path: FwhMcpTools.SessionLog.SessionLogCompleteTurn -> SessionLogController.FinalizeTurnAsync -> SessionLogService.UpsertTurnAsync -> TransactionGatedSessionLogService.ExecuteMutationAsync('sessionlog.upsert_turn') -> TurnTransactionCoordinator.ExecuteAsync -> CommitDiffgramAsync. Failure at TurnTransactionCoordinator.cs around the 'Subscriber commit failed.' return; exception text at TransactionGatedSessionLogService.ToTransactionException; tool/REST envelope at McpErrorClassifier."
+    - '- Do not treat already-completed turns as immutable on the REST/MCP complete_turn path; additive merge on reopen is intentional. Fix commit confirmation, reason surfacing, and error classification rather than rejecting the second complete.'
+    - '- Include commit.Reason in Failure/ToTransactionException. Classify coordinator failures separately from generic 500, with retryable=true for SubscriberUnavailable and CommitTimeout.'
+    - '- Add a TEST-MCP-161-style UpsertTurnAsync commit-fail test (missing today) plus a healthy-subscriber test that completes the same requestId twice with an additive post-compaction payload.'
+    - '- The reported txn did not include the subscriber reason. Investigate timeout, subscriber unavailable, stale sequence, and hash/decrypt mismatch on large post-compaction turnJson. CaptureSessionAsync snapshots the entire session graph (all turns and children) before every upsert; a long session can delay mutation before commit even though the diffgram body is only the TurnPayload.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

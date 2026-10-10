@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142303Z-23ad
+  result:
+    id: BUG-TRIAGE-182
+    title: Plugin appendActions rebinds plugin-session and SubmitAsync omits planFile
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - Invoke-McpPlugin workflow.sessionlog.appendActions does not persist against a native in_progress turn. Assert-ReplCurrentTurnFresh rebinds current-turn.yaml sessionId from the cached plugin session to the active session-state.yaml id (observed GrokCode-...015431Z-plugin-session to GrokCode-...055228Z-plugin-session). Invoke-WorkflowAppendActions then calls Invoke-ReplPersistTurn without PlanFile or TodoId; New-McpPluginTurnUpsertRequest omits blank planFile/todoId; client.SessionLog.SubmitAsync still runs SessionLogTurnContextValidator.ValidateForNewEntry, which 400s with planFile is omitted unless status is canceled. Native mcpserver sessionlog_dialog to the real session/request succeeded, confirming the plugin cache is a separate *-plugin-session identity rather than the native turn.
+    - 'Triage group: triage-group-4724db7d264834be'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- After a native sessionlog_begin_turn with planFile and todoId, Invoke-McpPlugin workflow.sessionlog.appendActions persists the supplied actions onto that same sessionId and requestId.'
+    - '- appendActions must not rewrite current-turn.yaml sessionId from one *-plugin-session id onto a different *-plugin-session id when a native in_progress turn already exists.'
+    - '- The persist payload for an in_progress append must include the existing planFile and todoId, or the server must preserve omitted planFile/todoId on incremental upsert instead of returning HTTP 400 validation_error planFile is omitted.'
+    - '- The same native in_progress turn must accept both native sessionlog_dialog and plugin appendActions without failsafe session_submit 400s.'
+    - 'Implementation notes:'
+    - '- Fix plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowAppendActions: pass PlanFile and TodoId from current-turn cache (or bind to the native in_progress sessionId/requestId) before Invoke-ReplPersistTurn.'
+    - '- Assert-ReplCurrentTurnFresh sessionId rebind (TR-MCP-PLUGIN-012) is the observed plugin-session rotation; do not rebind away from a native in_progress turn.'
+    - '- New-McpPluginTurnUpsertRequest in McpPluginShim.psm1 only emits planFile/todoId when non-empty; SubmitAsync in SessionLogService always ValidateForNewEntry except canceled superseded hook persists that stamp None.'
+    - '- Prefer an incremental turn-append path (actions POST/upsert) over full-session SubmitAsync so omitted planFile cannot clobber or reject an already begun turn.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

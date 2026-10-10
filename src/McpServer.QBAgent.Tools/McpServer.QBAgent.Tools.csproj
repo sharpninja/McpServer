@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\McpServer.McpAgent\McpServer.McpAgent.csproj" />
-    <ProjectReference Include="..\McpServer.Services\McpServer.Services.csproj" />
+    <ProjectReference Include="..\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj" />
     <ProjectReference Include="..\McpServer.QBAgent.Skills\McpServer.QBAgent.Skills.csproj" />
   </ItemGroup>
 </Project>

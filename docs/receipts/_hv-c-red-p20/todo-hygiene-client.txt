@@ -1,0 +1,63 @@
+type: result
+payload:
+  requestId: req-20260822T131938Z-a5c1
+  result:
+    id: MCP-WORKSPACEHYGIENE-002
+    title: Add workspace data-hygiene validation across Server, Director, REPL, and plugin
+    section: Workspace Validation
+    priority: high
+    done: false
+    estimate: 3-5d
+    description:
+    - Replacement for soft-deleted MCP-WORKSPACEHYGIENE-001, which is tombstoned and cannot be recreated through workflow.todo.create.
+    - Add a read-only workspace validation service and API endpoint that performs deterministic hygiene analysis across the selected workspace data tables.
+    - Expose the same validation through a Director command, a REPL command, and a plugin Workspace Validation skill without duplicating rule logic.
+    - Report incomplete requirement acceptance criteria, traceability orphans, inconsistent TODO aggregate/task state, stale open session turns, pending triage processing, and other registered integrity rules with actionable evidence.
+    - Keep this TODO open per owner instruction; another chat may attempt to close or remove it prematurely.
+    technicalDetails:
+    - Original requested ID MCP-WORKSPACEHYGIENE-001 was soft-deleted by another chat. workflow.todo.get/update hide it as not found; workflow.todo.create fails because the tombstone still owns the ID.
+    - Define one versioned validation rule registry and one shared result contract containing rule code/version, severity, table/entity kind, workspace identity, record IDs, evidence, remediation guidance, run timestamp, duration, and summary counts.
+    - Initial rules must identify FR and TR records with no acceptance-criteria records; also evaluate TEST requirements for the same condition unless an explicitly documented rule excludes them.
+    - Traceability rules must identify TR records mapped to no FR, FR records lacking required TR/TEST coverage, TEST records mapped to no FR, broken references, and duplicate or invalid mappings.
+    - TODO consistency rules must identify done=true with any implementation task incomplete, done=false with all implementation tasks complete, completion without required doneSummary, remaining text inconsistent with completion, missing dependency targets, and missing referenced requirement IDs.
+    - Session-log rules must identify turns still open or in_progress more than 48 hours after their authoritative start/update timestamp, using a testable UTC clock and including session/turn/request/workspace evidence.
+    - Triage rules must identify reports still in any supported unprocessed/non-terminal state and distinguish processing failure from merely pending work; state names must come from the live triage domain model rather than a copied list.
+    - Validation is read-only by default and never silently repairs or deletes records. A later explicit repair surface requires separate authorization, dry-run, audit, and requirements.
+    - Proposed surfaces are a workspace-scoped REST validation endpoint, Director validate-workspace command with human and JSON output, REPL workspace.validate command, and plugin skill that invokes the supported wrapper/REPL path. Final names must follow the repository inspected current conventions.
+    - The default stale-turn threshold is 48 hours and must be represented in the request/result contract; any override is bounded, authenticated, and recorded.
+    implementationTasks:
+    - task: Inspect current workspace, requirements, TODO, session-log, triage, REST, Director, REPL, wrapper, and plugin-skill contracts; register FR/TR/TEST requirements and mappings before implementation
+      done: false
+    - task: Define the versioned workspace-validation rule registry, severity model, request/options, deterministic finding schema, summaries, and read-only service interface
+      done: false
+    - task: Implement batched workspace-scoped queries and initial rules for missing acceptance criteria, requirement/mapping orphans, TODO aggregate/task-state mismatches, stale open turns older than 48 hours, unprocessed triage reports, and referential-integrity defects
+      done: false
+    - task: Add the authenticated workspace validation API endpoint with bounded execution, cancellation, stable JSON, and complete workspace/run audit metadata
+      done: false
+    - task: Add the Director validate-workspace command with concise human output, machine-readable JSON output, nonzero exit behavior for configured severities, workspace selection, and 48-hour threshold reporting
+      done: false
+    - task: Add the REPL workspace validation command and exact wrapper schema using current requestId/workspace-resolution conventions
+      done: false
+    - task: Add and synchronize a Workspace Validation plugin skill that documents invocation, result interpretation, no-auto-repair safety, and follow-up workflow
+      done: false
+    - task: Add unit/property tests for every rule plus integration fixtures containing each defect and a clean workspace with zero false-positive findings
+      done: false
+    - task: Add parity tests proving API, Director, REPL, and plugin wrapper return the same rule codes, identities, severities, counts, and threshold semantics
+      done: false
+    - task: Add authorization, performance, cancellation, UTC-clock, pagination/large-workspace, audit, documentation, and requirements-traceability validation; build and run all affected suites
+      done: false
+    remaining: 'HEAD 2026-08-20T101500Z (20db61aa0dd70f2d4f94da06d2a133ecfe6967a8): keep open per owner. OrphanReason: no FR/TR family for workspace data-hygiene validation across Server, Director, REPL, and plugin. Needs requirements-first design. Do not store-close.'
+    functionalRequirements:
+    - FR-MCP-HYGIENE-001
+    - FR-MCP-HYGIENE-002
+    - FR-MCP-HYGIENE-003
+    - FR-MCP-HYGIENE-004
+    - FR-MCP-HYGIENE-005
+    technicalRequirements:
+    - TR-MCP-HYGIENE-001
+    - TR-MCP-HYGIENE-002
+    - TR-MCP-HYGIENE-003
+    - TR-MCP-HYGIENE-004
+    - TR-MCP-HYGIENE-005
+
+---

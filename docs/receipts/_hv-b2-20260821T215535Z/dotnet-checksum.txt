@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> F:\GitHub\McpServer\build\bin\Debug\_build.dll
+  Build.Tests -> F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll
+Test run for F:\GitHub\McpServer\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.57]     NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+  Failed NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [48 ms]
+  Error Message:
+   mcpserver-codex-plugin: checksum drift agent-runtime-header.ps1; mcpserver-codex-plugin: checksum drift repl-invoke.ps1; mcpserver-claude-code-plugin: checksum drift agent-runtime-header.ps1; mcpserver-claude-code-plugin: checksum drift repl-invoke.ps1; mcpserver-copilot-plugin: checksum drift agent-runtime-header.ps1; mcpserver-copilot-plugin: checksum drift repl-invoke.ps1; mcpserver-cline-plugin: checksum drift agent-runtime-header.ps1; mcpserver-cline-plugin: checksum drift repl-invoke.ps1; mcpserver-grok-plugin: checksum drift agent-runtime-header.ps1; mcpserver-grok-plugin: checksum drift repl-invoke.ps1
+  Stack Trace:
+     at NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore() in F:\GitHub\McpServer\tests\Build.Tests\SyncAgentPluginsChecksumTests.cs:line 63
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 89 ms - Build.Tests.dll (net10.0)

@@ -118,7 +118,7 @@ public sealed class FederationFanoutSyncServiceTests
         var request = new FederationLocalExecutionRequest
         {
             Method = "desktop_launch",
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
             ExecutablePath = @"C:\Windows\System32\notepad.exe",
         };
         var operation = new FederationOperationRequest
@@ -150,7 +150,7 @@ public sealed class FederationFanoutSyncServiceTests
             Arg.Is<FederationLocalExecutionRequest>(r =>
                 r != null &&
                 r.Method == "desktop_launch" &&
-                r.WorkspacePath == @"F:\GitHub\McpServer"),
+                r.WorkspacePath == @"Q:\__mcp_unit_test__\McpServer"),
             Arg.Any<CancellationToken>());
         Assert.Contains("\"status\":\"applied\"", handler.AckBodies.Single(), StringComparison.Ordinal);
     }

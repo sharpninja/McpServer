@@ -1,0 +1,193 @@
+{
+  "TimestampUtc": "2026-08-21T14:33:22Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "class 2",
+  "WorkClassDetail": "user-directed general action: Is MCP Server running?",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.97.0"
+  },
+  "Marker": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+  "MarkerSignature": true,
+  "Health": {
+    "collectedAtUtc": "2026-08-21T14:26:35Z",
+    "hostname": "PAYTON-LEGION2",
+    "url": "http://PAYTON-LEGION2:7147/health?nonce=nonce-1991ee642fc9411b890c5d8c1a7a30b3",
+    "statusCode": 200,
+    "status": "Healthy",
+    "nonce": "nonce-1991ee642fc9411b890c5d8c1a7a30b3",
+    "nonceMatch": true,
+    "version": "1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8",
+    "storage": "reachable"
+  },
+  "SessionId": "GrokCode-20260821T143100Z-hostile-mcp-running",
+  "RequestId": "req-20260821T143100Z-hostile-mcp-running",
+  "ServerTurnId": 42495,
+  "planFile": "None",
+  "todoId": "None",
+  "OverallVerdict": "AGREE",
+  "AccuracyRating": 98,
+  "CompletenessRating": 96,
+  "PassCount": 13,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "NaCount": 2,
+  "FailList": [],
+  "UnknownList": [],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "claim": "MCP Server is running now (2026-08-21T14:23:45Z check).",
+      "verdict": "PASS",
+      "evidence": "Independent re-check 2026-08-21T14:26:35Z: health 200 Healthy, Get-Process 16936 ProcessName=McpServer.Support.Mcp, TCP 7147 Listen OwningProcess 16936, Get-Service McpServer Running, CIM ProcessId 16936 PathName McpServer.Support.Mcp.exe."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "claim": "Plugin Test-MarkerSignature against AGENTS-README-FIRST.yaml returned true.",
+      "verdict": "PASS",
+      "evidence": "dot-source F:\\GitHub\\mcpserver-grok-plugin\\lib\\marker-resolver.ps1; Test-MarkerSignature -MarkerFile F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml => True."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "claim": "GET health with nonce-13afca6083364986bdd4aa3b3d435014 echoed that nonce and JSON status Healthy.",
+      "verdict": "PASS",
+      "evidence": "Operator required a fresh nonce. nonce-1991ee642fc9411b890c5d8c1a7a30b3 echoed exactly; status Healthy. Historical nonce not in repo (grep 0)."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "claim": "Marker pid 16936 is a live process named McpServer.Support.Mcp.",
+      "verdict": "PASS",
+      "evidence": "Get-Process -Id 16936 ProcessName=McpServer.Support.Mcp Responding=True. Win32_Process Name=McpServer.Support.Mcp.exe ProcessId=16936."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "claim": "Get-NetTCPConnection LocalPort 7147 State Listen OwningProcess 16936.",
+      "verdict": "PASS",
+      "evidence": "Get-NetTCPConnection -LocalPort 7147 -State Listen => LocalAddress :: LocalPort 7147 State Listen OwningProcess 16936."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "claim": "Get-Service McpServer Running Automatic. McpManagementService Stopped Manual (disclosed).",
+      "verdict": "PASS",
+      "evidence": "Get-Service McpServer Status=Running StartType=Automatic. Get-Service McpManagementService Status=Stopped StartType=Manual. CIM ProcessId 0."
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "claim": "No product change, no TODO marked done.",
+      "verdict": "PASS",
+      "evidence": "git porcelain: worktree gitlinks 0-line diffs plus untracked receipts; no src/. todo_list done=true totalCount 262; CompletedDate after 2026-08-21T14:00:00Z count 0."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "claim": "Honesty / no fabricated evidence.",
+      "verdict": "PASS",
+      "evidence": "Live commands match implementer running/signature/port/service claims."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "claim": "Receipts re-ran by validator.",
+      "verdict": "PASS",
+      "evidence": "docs/receipts/_hv-ops-running-20260821/live-evidence.json and this receipt pair."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "claim": "MCP-only storage.",
+      "verdict": "PASS",
+      "evidence": "No docs/todo.yaml in porcelain. Native sessionlog_* used. No todo_update."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "claim": "PowerShell only / no Python.",
+      "verdict": "PASS",
+      "evidence": "pwsh.exe -NoProfile -NonInteractive only."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "claim": "Honesty about tool failures.",
+      "verdict": "PASS",
+      "evidence": "StrictMode Get-Process StartTime null was not treated as process-missing; retry got ProcessName."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "claim": "Byrd v4.",
+      "verdict": "PASS",
+      "evidence": "N/A to class-2 ops; not scored as a Byrd FAIL."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "claim": "FR/TR/TEST/AC for this work.",
+      "verdict": "N/A",
+      "evidence": "Class 2 ops. Do not FAIL for missing FR/TR."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "claim": "Plan-step completion / DoD.",
+      "verdict": "N/A",
+      "evidence": "No plan-step done claim. planFile=None todoId=None."
+    }
+  ],
+  "SessionLogProof": {
+    "tool": "sessionlog_query",
+    "arguments": {
+      "workspacePath": "F:\\GitHub\\McpServer",
+      "agent": "GrokCode",
+      "from": "2026-08-21T14:30:00Z",
+      "limit": 20
+    },
+    "artifact": "docs/receipts/_hv-ops-running-20260821/sessionlog-query-from.json",
+    "totalCount": 1,
+    "sessionId": "GrokCode-20260821T143100Z-hostile-mcp-running",
+    "sourceType": "GrokCode",
+    "requestId": "req-20260821T143100Z-hostile-mcp-running",
+    "turnId": 42495,
+    "planFile": "None",
+    "todoId": "None",
+    "actionCount": 5,
+    "dialogCount": 4,
+    "decisionCount": 3
+  },
+  "LiveProcess": {
+    "Id": 16936,
+    "ProcessName": "McpServer.Support.Mcp",
+    "Responding": true,
+    "Win32Name": "McpServer.Support.Mcp.exe",
+    "CimPathName": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+    "CimProcessId": 16936
+  },
+  "Git": {
+    "head": "910a444959969a87099b800b4b6fe12c77c0aece",
+    "branch": "develop",
+    "porcelain": [
+      " M .worktrees/triage-stale-turns",
+      " M .worktrees/triage-transcript",
+      "?? docs/receipts/_hv-20260821T113500Z/",
+      "?? docs/receipts/hostile-validator-20260821T114530Z.json",
+      "?? docs/receipts/hostile-validator-20260821T114530Z.md"
+    ]
+  },
+  "TodoDone": {
+    "totalCount": 262,
+    "completedAfter20260821T140000Z": 0
+  }
+}

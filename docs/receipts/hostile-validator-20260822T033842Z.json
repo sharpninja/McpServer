@@ -1,0 +1,165 @@
+{
+  "TimestampUtc": "2026-08-22T03:38:42Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "AddProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": "add-profile.grok.md"
+  },
+  "ActivePlan": "docs/plans/PLAN-PLUGINHANDOFF-001.md section 8 D2",
+  "RequirementIds": [
+    "TEST-HANDOFF-006",
+    "FR-HANDOFF-007",
+    "TR-HANDOFF-SURFACE-001",
+    "TEST-HANDOFF-007",
+    "FR-HANDOFF-006",
+    "TR-HANDOFF-AUDIT-001",
+    "TEST-HANDOFF-003",
+    "FR-HANDOFF-002",
+    "TR-HANDOFF-AGENT-001"
+  ],
+  "ReviewSessionId": "GrokSubagentHostile-20260822T032428Z-pluginhandoff-d2g",
+  "ReviewRequestId": "req-20260822T032428Z-001-d2-green-pluginhandoff",
+  "ServerTurnId": 42873,
+  "OverallVerdict": "AGREE",
+  "AccuracyRating": 96,
+  "CompletenessRating": 90,
+  "FailList": [],
+  "UnknownList": [],
+  "NotesNotFail": [
+    "SQL Server Handoff migration timed out twice under competing testhosts; residual LocalDB, not automatic FAIL. Sqlite and PostgreSQL passed Failed 0 Skipped 0.",
+    "PLAN ImplementationTasks D1 and D1.5 are Done=true after D1.5 AGREE. D2/D3/D4/D5 remain Done=false. PLAN Done=false.",
+    "TEST-HANDOFF AC isSatisfied remains false until D5."
+  ],
+  "PassCount": 16,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "title": "D1.5 AGREE exists; D2 started after that AGREE",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "title": "Pester invoke test passes; invoke.ps1 exists; grok SHA256 matches",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "title": "Lease and provenance named tests pass Failed 0 Skipped 0",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "title": "HandoffDurabilityTests 24/0/0; CustomPromptTemplate and PluginSync still green",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "title": "No new Handoff migration; Sqlite minimum plus PostgreSQL green; SQL Server residual",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "title": "PLAN done false; MCP-HANDOFF* not done; D3/D4/D5 not claimed complete",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "title": "Honesty / receipts",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "title": "Byrd v4 D2-green after D1.5 AGREE",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "title": "MCP-only storage",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "title": "PowerShell-only / no Python",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "title": "Review-only; no D3 wiki export; no done flips",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "title": "Applicable FR/TR/TEST exist with structured AC",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "title": "Mappings exist for remaining-gap families",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "title": "Remaining-gap ACs have currently passing named tests",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "title": "D2 remaining-gap green; not program closeout",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "title": "Plan/TODO checkboxes not advanced by this review",
+      "verdict": "PASS"
+    }
+  ],
+  "TestReceipts": {
+    "pester": "Passed 1 Failed 0 Skipped 0",
+    "namedCsharp": "Passed 2 Failed 0 Skipped 0",
+    "durabilityClass": "Passed 24 Failed 0 Skipped 0",
+    "pluginSyncAndReject": "Passed 2 Failed 0 Skipped 0",
+    "sqliteMigration": "Passed 1 Failed 0 Skipped 0",
+    "postgresMigration": "Passed 1 Failed 0 Skipped 0",
+    "sqlServerMigration": "timeout residual (first and retry)"
+  },
+  "Sha256": {
+    "coreInvoke": "7F18F620474C5F5A73619E804648797AFDD1FFC781128B563BDC6F93A8016B5D",
+    "grokInvokeMatch": true,
+    "coreSkill": "C475040B4924EDAA57A175A73FEAF88C76AF491EFBBA193C3AF541D3FE95C18E",
+    "grokSkillMatch": true
+  },
+  "TodoState": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-HANDOFF-001": false,
+    "MCP-HANDOFFPLAN-001": false,
+    "MCP-HANDOFFREVIEW-001": false,
+    "D2TaskDone": false,
+    "D3TaskDone": false,
+    "D4TaskDone": false,
+    "D5TaskDone": false
+  },
+  "ReceiptMd": "docs/receipts/hostile-validator-20260822T033842Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260822T033842Z.json",
+  "EvidenceDir": "docs/receipts/_hv-d2g-20260822T032428Z"
+}

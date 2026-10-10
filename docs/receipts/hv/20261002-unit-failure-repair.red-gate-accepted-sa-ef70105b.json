@@ -1,0 +1,138 @@
+{
+  "Utc": "2026-10-02T01:05:32.7704035Z",
+  "Gate": "BUG-UNITFAIL-001 corrected red regression gate only",
+  "OverallVerdict": "AGREE",
+  "VerdictScope": "Accept the tests and red reproduction evidence before the already-approved implementation. This is NOT acceptance of the production repair, green test gate, or BUG-UNITFAIL-001 completion.",
+  "AccuracyScore": 99,
+  "CompletenessScore": 99,
+  "MinimumApprovalScore": 98,
+  "AccuracyRationale": "The corrected test source and exact failure stack show genuine queued recovery setup completed before the intended empty-output exception. All reported Pester counters and both client failures were independently parsed.",
+  "CompletenessRationale": "Both prior coverage findings are addressed for this bounded gate: actual generic/Codex wrapper subprocesses, caller-level empty-result behavior, genuine retained dialog bytes, stale-result protection, and both typed title client round trips. Production validation remains a subsequent phase.",
+  "Reviewer": {
+    "ConsoleAgentId": "sa-ef70105b",
+    "Model": "gpt-6-astra",
+    "SameReviewer": true,
+    "AdditionalAgents": 0,
+    "Effort": "xhigh",
+    "Agent": "Codex"
+  },
+  "Findings": [],
+  "ResolvedFindings": [
+    {
+      "Resolution": "Previously verified actual shared and Codex wrapper child tests cover primary, queued, rejected, lost and unchanged outcomes. Harness and typed-client test hashes remain unchanged from the prior review.",
+      "Id": "R1"
+    },
+    {
+      "Id": "R2",
+      "Line": 76,
+      "RedProof": "final-red-results.xml fails at test line 89 via production Invoke-WorkflowAppendDialog line 2476 and Invoke-ReplMethod line 3021: ParameterBindingValidationException for empty Output. Earlier queue, path and hash assertions were reached successfully.",
+      "Resolution": "Real Invoke-WorkflowAppendDialog with mocked 503 and isolated Get-ReplFailsafeDir produces the queued receipt. The test captures that receipt failsafePath, verifies existence and hashes its bytes. It seeds stale primary, retries identical parameters with empty successful transport output, and requires current method/request rejection, non-success, and the same recovery hash.",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\pester\\SessionLogReviewRegression.Tests.ps1"
+    },
+    {
+      "Resolution": "Both typed client methods have verified red deserialization/reserialization assertions; legitimate session-only receipt still has no requestId. No remaining test-design finding in this bounded surface.",
+      "Id": "typed-retitled-round-trip"
+    }
+  ],
+  "Claims": [
+    {
+      "Id": "RF01",
+      "Claim": "Final Pester red evidence",
+      "Status": "PASS",
+      "Evidence": "27 total: 2 passed, 25 failed, 0 skipped/notrun. The dialog failure is the intended empty-output binding exception after genuine queue setup."
+    },
+    {
+      "Id": "RF02",
+      "Claim": "Real public wrapper regression coverage",
+      "Status": "PASS",
+      "Evidence": "Both wrapper subprocess paths and all five dispositions already reviewed; harness unchanged."
+    },
+    {
+      "Id": "RF03",
+      "Claim": "Real caller rejection and recovery retention assertions",
+      "Status": "PASS",
+      "Evidence": "SetTurnTitle actual caller test plus corrected genuine appendDialog queued-file/path/hash retry test."
+    },
+    {
+      "Id": "RF04",
+      "Claim": "Typed-client title contract regressions",
+      "Status": "PASS",
+      "Evidence": "Both Client title tests deserialize actual HTTP mock replies and assert retitled after typed reserialization. Supplied TRX has 2 failed, 0 passed/skipped. Test source and TRX hashes unchanged from prior review."
+    },
+    {
+      "Id": "RF05",
+      "Claim": "Bounded read-only same-reviewer recheck",
+      "Status": "PASS",
+      "Evidence": "Only source/evidence reads and own supported session-log/receipt writes; no production edits, test execution, delegation or operator-action review."
+    },
+    {
+      "Id": "RF06",
+      "Claim": "Gate meaning remains red-before-green",
+      "Status": "PASS",
+      "Evidence": "No production fix accepted, no full validation completion claimed, and no TODO/requirement done-state mutation performed."
+    }
+  ],
+  "ClaimCounts": {
+    "PASS": 6,
+    "UNKNOWN": 0,
+    "FAIL": 0
+  },
+  "Pester": {
+    "Failed": 25,
+    "Total": 27,
+    "Passed": 2,
+    "Skipped": 0,
+    "NotRun": 0
+  },
+  "Client": {
+    "Failed": 2,
+    "Total": 2,
+    "Passed": 0,
+    "Skipped": 0
+  },
+  "ArtifactHashes": [
+    {
+      "Path": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\pester\\SessionLogReviewRegression.Tests.ps1",
+      "Sha256": "165D5E6C1BD5D9A9458A934BA19D05A8569901A3D44A51A386D9998A8DACB936"
+    },
+    {
+      "Path": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\SessionLogWrapperHarness.ps1",
+      "Sha256": "DD5D1B1EF9B4F33DFA64CD778153D126FAF7B217E36BB174FD10B55F17390264"
+    },
+    {
+      "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.Client.Tests\\SessionLogClientRequestBodyTests.cs",
+      "Sha256": "F6813FE19D19E587FFF872E5B7A583DFB62FB4A5A6EF24D1ADC808769B7C9CA6"
+    },
+    {
+      "Path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\final-red-results.xml",
+      "Sha256": "8104076BB3A0474696102043E5345A496FEE6E538927643D3E04A3B42542233D"
+    },
+    {
+      "Path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\client-retitle-red.trx",
+      "Sha256": "E985D3305BD67DC6B16100C4F77B522AEE57B1F93C977FA065CF14150C2A0F37"
+    }
+  ],
+  "UnchangedSupportingArtifacts": [
+    {
+      "Path": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\SessionLogWrapperHarness.ps1",
+      "Unchanged": true
+    },
+    {
+      "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.Client.Tests\\SessionLogClientRequestBodyTests.cs",
+      "Unchanged": true
+    },
+    {
+      "Path": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\client-retitle-red.trx",
+      "Unchanged": true
+    }
+  ],
+  "McpSessionId": "Codex-20261002T002034Z-bug-unitfail-001-review-sa-ef70105b",
+  "McpRequestId": "req-20261002T010410Z-red-gate-final",
+  "ReadbackReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.red-gate-accepted-sa-ef70105b.readback.json",
+  "RequestJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.request.jsonl",
+  "NativeResponseTranscript": "C:\\Users\\kingd\\.codex\\sessions\\2026\\10\\01\\rollout-2026-10-01T19-12-47-01a0f9f4-d605-7301-9b42-d8955d664e56.jsonl",
+  "ResponseCapture": "Native JSONL remains the complete event source; parent preserves the final byte-complete stream after reviewer finishes.",
+  "OriginalProductionVerdict": "DISAGREE",
+  "OriginalProductionReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.review-sa-ef70105b.json",
+  "Conclusion": "The bounded red gate is accepted. Proceed with the already-approved implementation, then supply green focused/full validation and synchronized scoped diffs to this same reviewer. This red-gate AGREE does not authorize BUG-UNITFAIL-001 done-state."
+}

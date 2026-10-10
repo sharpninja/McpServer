@@ -1,0 +1,8 @@
+F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:591:function Get-ReplMethodTimeoutSeconds {
+F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:601:    if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') {
+F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:655:    $timeout = Get-ReplMethodTimeoutSeconds -Method $Method
+F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:837:$script:ReplFailsafeDraining = $false
+F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:984:    if ($script:ReplFailsafeDraining) {
+F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:1001:    $script:ReplFailsafeDraining = $true
+F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:1095:        $script:ReplFailsafeDraining = $false
+F:\GitHub\McpServer\plugins\core\lib-ps\repl-invoke.ps1:1118:    if ($script:ReplFailsafeDraining) { return }

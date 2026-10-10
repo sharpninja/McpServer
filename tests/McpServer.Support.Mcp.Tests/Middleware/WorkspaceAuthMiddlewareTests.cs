@@ -86,6 +86,42 @@ public sealed class WorkspaceAuthMiddlewareTests
         Assert.True((bool)ctx.Items[WorkspaceAuthMiddleware.IsDefaultKeyItem]!);
     }
 
+    /// <summary>
+    /// FR-MCP-MEMORY-001: A full key for the configured default workspace can write memory
+    /// when the request workspace context is empty. Default keys stay read-only.
+    /// </summary>
+    [Fact]
+    public async Task EmptyWorkspaceContext_FullKey_AllowsMemoryWrite_DefaultKeyStillDenied()
+    {
+        var tokenService = CreateTokenService();
+        var fullToken = tokenService.GetToken(WorkspacePath)!;
+        var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
+        var fullNext = false;
+        var defaultNext = false;
+        var fullMiddleware = new WorkspaceAuthMiddleware(_ => { fullNext = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var defaultMiddleware = new WorkspaceAuthMiddleware(_ => { defaultNext = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var emptyWorkspace = new WorkspaceContext { WorkspacePath = string.Empty };
+
+        var fullContext = CreateContext("POST", "/mcpserver/memory", fullToken);
+        await fullMiddleware.InvokeAsync(fullContext, tokenService, CreateConfig(), emptyWorkspace, CreateFederationOptions());
+
+        var defaultContext = CreateContext("POST", "/mcpserver/memory", defaultToken);
+        await defaultMiddleware.InvokeAsync(defaultContext, tokenService, CreateConfig(), emptyWorkspace, CreateFederationOptions());
+
+        var recallNext = false;
+        var recallMiddleware = new WorkspaceAuthMiddleware(_ => { recallNext = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var recallContext = CreateContext("POST", "/mcpserver/memory/recall", defaultToken);
+        await recallMiddleware.InvokeAsync(recallContext, tokenService, CreateConfig(), new WorkspaceContext { WorkspacePath = string.Empty }, CreateFederationOptions());
+
+        Assert.True(fullNext);
+        Assert.Equal(200, fullContext.Response.StatusCode);
+        Assert.False(defaultNext);
+        Assert.Equal(403, defaultContext.Response.StatusCode);
+        Assert.True((bool)defaultContext.Items[WorkspaceAuthMiddleware.IsDefaultKeyItem]!);
+        Assert.True(recallNext);
+        Assert.Equal(200, recallContext.Response.StatusCode);
+    }
+
     [Fact]
     public async Task DefaultToken_DeniesWriteOnTodoRoute()
     {

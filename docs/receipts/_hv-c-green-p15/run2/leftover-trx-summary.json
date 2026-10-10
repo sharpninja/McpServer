@@ -1,0 +1,15 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\trx-p15-hv\\p15-filter.trx",
+  "lastWriteUtc": "2026-08-22T06:27:30.9135654Z",
+  "outcome": "Completed",
+  "total": "24",
+  "executed": "24",
+  "passed": "24",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "unitCount": 24,
+  "p16Count": 0,
+  "note": "Leftover 062054Z collector TRX. Corroboration only. Not this review independent proof."
+}

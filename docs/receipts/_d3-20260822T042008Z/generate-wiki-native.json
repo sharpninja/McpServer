@@ -1,0 +1,12 @@
+{
+  "method": "mcpserver__requirements_generate",
+  "format": "wiki",
+  "doc": "all",
+  "success": true,
+  "generatedAtUtc": "2026-08-22T04:30:35.3860771+00:00",
+  "outputRoot": "F:\\GitHub\\McpServer\\docs\\Project\\wiki",
+  "fileCountFromTool": 80,
+  "diskFileCount": 79,
+  "githubManifest": "F:\\GitHub\\McpServer\\docs\\Project\\wiki\\github\\.mcp-requirements-manifest.json",
+  "azureManifest": "F:\\GitHub\\McpServer\\docs\\Project\\wiki\\azure\\.mcp-requirements-manifest.json"
+}

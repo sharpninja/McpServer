@@ -1,0 +1,11 @@
+{
+  "Exists": true,
+  "Length": 11950,
+  "LastWriteTimeUtc": "2026-08-22T00:51:51.5572986Z",
+  "OverallVerdictLineMatch": true,
+  "MentionsCRedP5": true,
+  "MentionsStartAsyncNotImplemented": true,
+  "MentionsFailed6": true,
+  "JsonOverallVerdict": "AGREE",
+  "JsonFailCount": 0
+}

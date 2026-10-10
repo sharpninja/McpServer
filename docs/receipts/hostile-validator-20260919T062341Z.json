@@ -1,0 +1,233 @@
+{
+  "timestampUtc": "20260919T062341Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workClass": "Class 1 H3-red",
+  "todoId": "MCP-MEMORY-002",
+  "priorH2GreenAgree": "docs/receipts/hostile-validator-20260919T061025Z.md",
+  "planFile": "docs/plans/mcp-memory-002.md",
+  "acCatalog": "docs/plans/mcp-memory-002-ac-catalog.json",
+  "prNumber": null,
+  "prUrl": null,
+  "prNote": "HARD CONSTRAINT: no PR; push receipts to memory-s3-red only; search head:memory-s3-red = 0",
+  "gitHeadVerified": "99a12a5e452f879ab7c05b8af65b53e0f6b34b83",
+  "gitBranch": "memory-s3-red",
+  "baseBranch": "cursor/memory-s2-green-c63a",
+  "baseHead": "dc830bb7bc3264cc954fbc2684265211ae70b5a3",
+  "overallVerdict": "AGREE",
+  "passCount": 16,
+  "failCount": 0,
+  "unknownCount": 0,
+  "naCount": 0,
+  "accuracy": 99,
+  "completeness": 99,
+  "thresholdNote": "Strict AGREE only if every scored claim is PASS AND Accuracy>=98/100 AND Completeness>=98/100. Observed Accuracy=99, Completeness=99, FAIL=0, UNKNOWN=0 -> AGREE.",
+  "thresholdMet": true,
+  "operatorAgreeFloor": "every scored claim PASS AND Accuracy>=98 AND Completeness>=98",
+  "addProfile": {
+    "hostileSkillMissing": true,
+    "profileDirsAbsent": [
+      "/home/box/.claude/profile",
+      "/home/box/.grok/profile"
+    ],
+    "profileFileCount": 0
+  },
+  "trustBootstrap": {
+    "health": "Healthy",
+    "todoGetCurl": {
+      "done": false,
+      "id": "MCP-MEMORY-002",
+      "remainingNote": "stale: still cites Next S2 Green then H2-green despite S3 Red HEAD and H2-green AGREE on tip"
+    },
+    "evidenceSource": "origin/memory-s3-red worktree /tmp/s3-red-wt @ 99a12a5e452f879ab7c05b8af65b53e0f6b34b83",
+    "priorH2GreenAgreeOnBranch": true
+  },
+  "agentClaimCheck": {
+    "claimed": {
+      "failed": 20,
+      "passed": 131,
+      "skipped": 0,
+      "s3ProductionFailed": 20
+    },
+    "observed": {
+      "failed": 20,
+      "passed": 131,
+      "skipped": 0,
+      "s3ProductionFailed": 20,
+      "s3ProductionPassed": 0
+    },
+    "match": true
+  },
+  "testEvidence": {
+    "memoryNamespace": {
+      "failed": 20,
+      "passed": 131,
+      "skipped": 0,
+      "total": 151
+    },
+    "s3CatalogMatrix": {
+      "count": 20,
+      "coverage": "20/20",
+      "failed": 20,
+      "passed": 0,
+      "skipped": 0,
+      "missing": 0
+    },
+    "s3MocksFirst": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "methods": [
+        "PortMock_ExplicitEdge_ReturnedWithWeight",
+        "PortMock_HebbianOff_NoCoRetrievedOnlyEdges",
+        "PortMock_DepthBounds_Return400",
+        "PortMock_SelfLoop_Rejected",
+        "PortMock_Directed_NoImpliedReverse",
+        "PortMock_ForeignTarget_FailsClosed"
+      ]
+    },
+    "s2CatalogInSameFilter": {
+      "count": 40,
+      "failed": 0,
+      "passed": 40,
+      "skipped": 0,
+      "missing": 0
+    },
+    "s1CatalogInSameFilter": {
+      "count": 73,
+      "failed": 0,
+      "passed": 73,
+      "skipped": 0,
+      "missing": 0
+    },
+    "compatFr001_007": {
+      "failed": 0,
+      "passed": 37,
+      "skipped": 0,
+      "filter": "MemoryServiceTests|MemoryControllerTests|MemoryEntityScopeTests|MemoryContractArtifactTests|MemoryTxnGatedTests|MemoryMcpToolTests|MemoryFederationTests"
+    },
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+    "trxPath": "/tmp/s3-red-test-results/memory-s3-red.trx",
+    "logPath": "/tmp/s3-red-dotnet-test.log"
+  },
+  "focusFailures": {
+    "explicitEdgeReturn": "ExplicitEdge_ReturnedWithWeight Expected 200 Actual 501",
+    "hebbianOffDefault": "HebbianOff Expected 200 Actual 501; DefaultHebbianEnabled=false contract only",
+    "depthBounds": "DepthNonPositive/DepthAboveMax Expected 400 Actual 501; Depth_ControlsHops Expected 200 Actual 501",
+    "selfLoopReject": "SelfLoop_RejectedOrAbsent: no CreateMemoryEdgeCommand handler",
+    "directedNoImpliedReverse": "Directed_NoImpliedReverse Expected 200 Actual 501",
+    "foreignTargetFailClosed": "ForeignTarget_FailsClosed: no CreateMemoryEdgeCommand handler"
+  },
+  "noGreenHandlers": true,
+  "claims": [
+    {
+      "id": "H3R-1",
+      "verdict": "PASS",
+      "claim": "S3 Red suite 20/20 catalog methods present",
+      "evidence": "TRX 20/20 present Missing 0"
+    },
+    {
+      "id": "H3R-2",
+      "verdict": "PASS",
+      "claim": "Production Red fails for missing explore/edge/Hebbian not compile/skip",
+      "evidence": "Failed 20 Skipped 0; 501/handler DI failures"
+    },
+    {
+      "id": "H3R-3",
+      "verdict": "PASS",
+      "claim": "Mocks-first may pass; S3 production stays Red",
+      "evidence": "mocks 6/6; production 20 Failed / 0 Passed"
+    },
+    {
+      "id": "H3R-4",
+      "verdict": "PASS",
+      "claim": "No S3 Green explore/edge/Hebbian on Red branch",
+      "evidence": "no Explore/CreateEdge/Hebbian handlers; harness 501"
+    },
+    {
+      "id": "H3R-5",
+      "verdict": "PASS",
+      "claim": "S1+S2 Green Failed 0 in same Memory filter",
+      "evidence": "S1 73/73 Passed; S2 40/40 Passed"
+    },
+    {
+      "id": "H3R-6",
+      "verdict": "PASS",
+      "claim": "FR-001..007 compat unbroken",
+      "evidence": "compat filter Failed 0 Passed 37 Skipped 0"
+    },
+    {
+      "id": "H3R-7",
+      "verdict": "PASS",
+      "claim": "No Python product path",
+      "evidence": "git ls-tree .py empty"
+    },
+    {
+      "id": "H3R-8",
+      "verdict": "PASS",
+      "claim": "TODO done=false; no PR; no S3 Green by validator",
+      "evidence": "curl done=false; PR search 0; no handlers added"
+    },
+    {
+      "id": "H3R-9",
+      "verdict": "PASS",
+      "claim": "Honesty disclose gaps",
+      "evidence": "skill/profile/Hebbian appsettings residual/stale remaining"
+    },
+    {
+      "id": "H3R-10",
+      "verdict": "PASS",
+      "claim": "H2-green AGREE prerequisite exists; not rewritten",
+      "evidence": "hostile-validator-20260919T061025Z twin on branch"
+    },
+    {
+      "id": "H3R-F1",
+      "verdict": "PASS",
+      "claim": "explicit edge return focus",
+      "evidence": "ExplicitEdge Expected 200 Actual 501"
+    },
+    {
+      "id": "H3R-F2",
+      "verdict": "PASS",
+      "claim": "Hebbian off default focus",
+      "evidence": "HebbianOff Failed 501; DefaultHebbianEnabled=false"
+    },
+    {
+      "id": "H3R-F3",
+      "verdict": "PASS",
+      "claim": "depth bounds focus",
+      "evidence": "depth tests Failed as Red"
+    },
+    {
+      "id": "H3R-F4",
+      "verdict": "PASS",
+      "claim": "self-loop reject focus",
+      "evidence": "SelfLoop no CreateMemoryEdge handler"
+    },
+    {
+      "id": "H3R-F5",
+      "verdict": "PASS",
+      "claim": "directed no implied reverse focus",
+      "evidence": "Directed Expected 200 Actual 501"
+    },
+    {
+      "id": "H3R-F6",
+      "verdict": "PASS",
+      "claim": "foreign target fail-closed focus",
+      "evidence": "ForeignTarget no CreateMemoryEdge handler"
+    }
+  ],
+  "workspaceRules": {
+    "B1": "PASS",
+    "B2": "PASS",
+    "B3": "PASS",
+    "B4": "PASS",
+    "B5": "PASS",
+    "B6": "PASS"
+  },
+  "didNot": [
+    "mark TODO MCP-MEMORY-002 done",
+    "open pull request",
+    "implement S3 Green explore/edge/Hebbian handlers",
+    "rewrite prior H2-green AGREE receipts"
+  ]
+}

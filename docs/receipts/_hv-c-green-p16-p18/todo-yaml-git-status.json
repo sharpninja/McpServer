@@ -1,0 +1,9 @@
+{
+  "TimestampUtc": "2026-08-22T07:50:54.0540514Z",
+  "Porcelain": [
+    "?? build/Build.PluginSessionLogIntegration.cs",
+    "?? tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs",
+    "?? tests/McpServer.PluginIntegration.Tests/"
+  ],
+  "TodoYamlPorcelain": null
+}

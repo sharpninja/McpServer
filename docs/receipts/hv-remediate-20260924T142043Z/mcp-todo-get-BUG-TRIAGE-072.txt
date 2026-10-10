@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142151Z-c8a6
+  result:
+    id: BUG-TRIAGE-072
+    title: Raise timeout for Copilot-backed analyzeRequirements
+    section: Backlog
+    priority: high
+    done: true
+    note: 'DONE (D4, plugin core 1.74.0). Per-method REPL timeout: analyzeRequirements/generateDocument/ingestDocument use REPL_LONG_TIMEOUT (default 300s); sessionlog methods keep REPL_TIMEOUT (30s). ReplMethodTimeout.Tests.ps1 green. TR-MCP-REPL-012 + TEST-MCP-REPL-027.'
+    description:
+    - workflow.todo.analyzeRequirements maps to POST /mcpserver/todo/{id}/requirements, which runs RequirementsService.AnalyzeAsync and blocks on an external Copilot CLI invocation to propose FR/TR IDs. Plugin PowerShell REPL invocation kills mcpserver-repl after the default 30s (REPL_TIMEOUT or hard default in plugins/core/lib-ps/repl-invoke.ps1). That bound is shorter than typical agent-CLI latency, so live requirement-gap analysis for TODOs such as PLAN-WARNREMEDIATION-001 fails with a plugin timeout even when the server path is still working.
+    - 'Triage group: triage-group-d06160fd52123331'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Calling workflow.todo.analyzeRequirements for a valid TODO completes with a structured success or application error when Copilot finishes within an allowed bound, without the plugin killing the REPL process at 30s.'
+    - '- The plugin/REPL timeout applied to analyzeRequirements (and documented for other Copilot-backed todo workflows) is high enough for expected Agent CLI duration, or the call is made non-blocking/streaming with progress instead of a single short wait.'
+    - '- On true timeout, the client receives a clear method-specific timeout error rather than an opaque killed-process failure, and the default 30s path is covered by a regression test or fixture.'
+    - 'Implementation notes:'
+    - '- Primary timeout kill is in plugins/core/lib-ps/repl-invoke.ps1 Invoke-ReplRaw: default $timeout = 30 unless env:REPL_TIMEOUT is set; Wait uses $timeout * 1000 then Kill.'
+    - '- Server path: ReplCommandDispatcher AnalyzeRequirementsMethod -> TodoWorkflow.AnalyzeRequirementsAsync -> TodoClient POST mcpserver/todo/{id}/requirements -> RequirementsService.AnalyzeAsync, which invokes IAgentCliClient (Copilot) and may retry with streaming fallback.'
+    - '- Sibling plugin outer timeout is 90s (Invoke-McpPlugin.ps1 MCP_PLUGIN_TIMEOUT_SECONDS); Node REPL bridge defaults differently (MCPSERVER_REPL_TIMEOUT_MS 15000). Prefer per-method longer timeout for analyzeRequirements/stream* Copilot work, or convert analysis to async/job/SSE like status/plan streaming rather than only raising a global default.'
+    - '- Do not treat this as a missing TODO or bad PLAN-WARNREMEDIATION-001 payload unless AnalyzeAsync returns not-found; the reported failure mode is wall-clock timeout of the plugin REPL wrapper around a long Copilot call.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

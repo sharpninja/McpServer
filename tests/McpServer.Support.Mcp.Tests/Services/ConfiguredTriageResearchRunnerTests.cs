@@ -39,14 +39,14 @@ public sealed class ConfiguredTriageResearchRunnerTests
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 ReportCount = 1,
-                WorkspacePath = "F:\\GitHub\\McpServer",
+                WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                 Title = "Plugin triage bug",
                 Summary = "Plugin wrapper failed",
                 QuietDeadlineUtc = DateTimeOffset.UtcNow,
             },
             "{\"groupId\":\"triage-group-001\"}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
+            "Q:\\__mcp_unit_test__\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal("""{"title":"triage result"}""", result.OutputJson);
@@ -56,14 +56,14 @@ public sealed class ConfiguredTriageResearchRunnerTests
         Assert.Equal("fake-triage", resolver.LastStrategyName);
         Assert.NotNull(strategy.LastRequest);
         Assert.Equal("rendered prompt", strategy.LastRequest.InitialPrompt);
-        Assert.Equal("F:\\GitHub\\McpServer", strategy.LastRequest.WorkspacePath);
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", strategy.LastRequest.WorkspacePath);
         Assert.Equal("TriageAgent", strategy.LastRequest.AgentName);
         Assert.Equal("fake-triage", strategy.LastRequest.ExecutionStrategy);
         Assert.Equal("triage-agent.exe", strategy.LastRequest.Options.AgentPath);
         Assert.Equal("model-triage", strategy.LastRequest.Options.Model);
         Assert.True(strategy.LastRequest.Options.Silent);
         Assert.Equal(maxRunTime, strategy.LastRequest.Options.Timeout);
-        Assert.Equal("F:\\GitHub\\McpServer", strategy.LastRequest.Options.WorkingDirectory);
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", strategy.LastRequest.Options.WorkingDirectory);
         Assert.Equal("1", strategy.LastRequest.Options.EnvironmentVariables["TRIAGE_MODE"]);
         Assert.Equal(TimeSpan.FromSeconds(5), strategy.Session.EndTimeout);
     }
@@ -92,14 +92,14 @@ public sealed class ConfiguredTriageResearchRunnerTests
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 ReportCount = 1,
-                WorkspacePath = "F:\\GitHub\\McpServer",
+                WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                 Title = "Plugin triage bug",
                 Summary = "Plugin wrapper failed",
                 QuietDeadlineUtc = DateTimeOffset.UtcNow,
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer",
+            "Q:\\__mcp_unit_test__\\McpServer",
             update =>
             {
                 streamed.Add($"{update.StreamName}:{update.Text}");
@@ -138,14 +138,14 @@ public sealed class ConfiguredTriageResearchRunnerTests
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 ReportCount = 1,
-                WorkspacePath = "F:\\GitHub\\McpServer",
+                WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                 Title = "Plugin triage bug",
                 Summary = "Plugin wrapper failed",
                 QuietDeadlineUtc = DateTimeOffset.UtcNow,
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
+            "Q:\\__mcp_unit_test__\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.NotNull(strategy.LastRequest);
@@ -188,14 +188,14 @@ public sealed class ConfiguredTriageResearchRunnerTests
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 ReportCount = 1,
-                WorkspacePath = "F:\\GitHub\\McpServer",
+                WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                 Title = "Plugin triage bug",
                 Summary = "Plugin wrapper failed",
                 QuietDeadlineUtc = DateTimeOffset.UtcNow,
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
+            "Q:\\__mcp_unit_test__\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.Success);
         Assert.Equal("Codex CLI triage run was cancelled or timed out.", result.Error);
@@ -222,14 +222,14 @@ public sealed class ConfiguredTriageResearchRunnerTests
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 ReportCount = 1,
-                WorkspacePath = "F:\\GitHub\\McpServer",
+                WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                 Title = "Plugin triage bug",
                 Summary = "Plugin wrapper failed",
                 QuietDeadlineUtc = DateTimeOffset.UtcNow,
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
+            "Q:\\__mcp_unit_test__\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.Success);
         Assert.Contains("not configured", result.Error, StringComparison.OrdinalIgnoreCase);
@@ -277,14 +277,14 @@ public sealed class ConfiguredTriageResearchRunnerTests
                 GroupId = "triage-group-001",
                 Status = "collecting",
                 ReportCount = 1,
-                WorkspacePath = "F:\\GitHub\\McpServer",
+                WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
                 Title = "Plugin triage bug",
                 Summary = "Plugin wrapper failed",
                 QuietDeadlineUtc = DateTimeOffset.UtcNow,
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
+            "Q:\\__mcp_unit_test__\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(AgentExecutionStrategyNames.GrokCli, resolver.LastStrategyName);

@@ -65,9 +65,13 @@ public static class McpStdioHost
         builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
         builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
         builder.Services.Configure<TodoPromptOptions>(builder.Configuration.GetSection(TodoPromptOptions.SectionName));
+        builder.Services.AddOptions<SessionLogSubmitOptions>()
+            .Bind(builder.Configuration.GetSection(SessionLogSubmitOptions.SectionName))
+            .ValidateOnStart();
         builder.Services.AddOptions<SessionLogSanitizationOptions>()
             .Bind(builder.Configuration.GetSection(SessionLogSanitizationOptions.SectionName))
             .ValidateOnStart();
+        builder.Services.AddSingleton<IValidateOptions<SessionLogSubmitOptions>, SessionLogSubmitOptionsValidator>();
         builder.Services.AddSingleton<IValidateOptions<SessionLogSanitizationOptions>, SessionLogSanitizationOptionsValidator>();
         var requiredRepoAllowlistPatterns = new[]
         {
@@ -160,7 +164,10 @@ public static class McpStdioHost
         builder.Services.AddDataProtection();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
         builder.Services.AddSingleton<IRequirementsDocFxWorkflowRunner, RequirementsDocFxWorkflowRunner>();
-        builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator, RequirementsWikiExportOrchestrator>();
+        builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator>(sp =>
+            new RequirementsWikiExportOrchestrator(
+                sp.GetRequiredService<IRequirementsDocFxWorkflowRunner>(),
+                sp.GetRequiredService<IServiceScopeFactory>()));
         builder.Services.AddSingleton<IProcessSpawner, DefaultProcessSpawner>();
         builder.Services.AddSingleton<FileGitHubWorkspaceTokenStore>();
         builder.Services.AddSingleton<IGitHubWorkspaceTokenStore>(sp =>
@@ -211,6 +218,7 @@ public static class McpStdioHost
                 sp.GetService<IOptions<TurnTransactionOptions>>());
         });
         builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
+        builder.Services.AddScoped<McpServer.Support.Mcp.Requirements.IRequirementsRecoveryService, McpServer.Support.Mcp.Requirements.RequirementsRecoveryService>();
         builder.Services.AddSingleton<PromptTemplateRenderer>();
         builder.Services.AddSingleton<PromptTemplateService>();
         builder.Services.AddSingleton<IPromptTemplateService>(sp =>
@@ -249,6 +257,9 @@ public static class McpStdioHost
                 sp.GetService<ITurnTransactionCoordinator>(),
                 sp.GetService<IOptions<TurnTransactionOptions>>()));
         builder.Services.AddHandoffServices();
+        builder.Services.AddHostileReviewServices();
+        builder.Services.AddWorkspaceValidationServices();
+        builder.Services.AddScoped<IWikiDumpService, WikiDumpService>();
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
         builder.Services.AddScoped<ITranscriptSessionPersister, TranscriptSessionLogPersister>();
@@ -269,6 +280,7 @@ public static class McpStdioHost
                 sp.GetService<IOptions<TurnTransactionOptions>>());
         });
         builder.Services.AddScoped<DesktopLaunchService>();
+        builder.Services.AddScoped<IDesktopLaunchService>(sp => sp.GetRequiredService<DesktopLaunchService>());
         builder.Services.AddScoped<ISessionLogSanitizer, SessionLogSanitizer>();
         builder.Services.AddSingleton<SessionLogTurnContextExtractor>();
         builder.Services.AddScoped<ISessionLogTurnContextBackfill, SessionLogTurnContextBackfill>();
@@ -287,6 +299,7 @@ public static class McpStdioHost
         });
         builder.Services.AddScoped<IMemoryService, MemoryService>();
         builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
+        builder.Services.AddSingleton<CliBrainSlotSessionStore>();
         builder.Services.AddScoped<IBrainSlotCredentialResolver, BrainSlotCredentialResolver>();
         builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFactory>();
         builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
@@ -298,6 +311,7 @@ public static class McpStdioHost
         builder.Services.AddMcpGraphRag();
         // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by usecase_* tools and handlers.
         builder.Services.AddCqrsDispatcher();
+        builder.Services.AddCqrsHandlers(typeof(RememberMemoryCommand).Assembly);
         builder.Services.AddUseCaseCqrs();
         builder.Services.AddProductCqrs();
         DecorateGraphRagService(builder.Services);
@@ -320,7 +334,7 @@ public static class McpStdioHost
                 using var scope = host.Services.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
                 var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
-                await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, ct).ConfigureAwait(false);
+                await McpDatabaseMigrationCoordinator.EnsureReadyAsync(db, runtimeOptions, ct).ConfigureAwait(false);
                 await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, ct).ConfigureAwait(false);
                 await SessionLogTurnContextBackfillStartup.TryRunAsync(
                     db,

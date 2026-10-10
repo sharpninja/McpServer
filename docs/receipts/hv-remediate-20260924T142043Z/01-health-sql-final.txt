@@ -1,0 +1,4 @@
+﻿TimestampUtc=20260924T143056Z
+Tcp1433=False
+Ping=False
+Health=FAIL:The request was aborted: The request was canceled.

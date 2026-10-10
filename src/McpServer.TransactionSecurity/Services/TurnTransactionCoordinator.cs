@@ -308,7 +308,8 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
         request.PublisherPartyId = NormalizeParty(request.PublisherPartyId, options.PublisherPartyId);
         request.SubscriberPartyId = NormalizeParty(request.SubscriberPartyId, options.SubscriberPartyId);
 
-        if (!request.Mutating || !options.Enabled || !options.RequiredForMutations)
+        if (!request.Mutating || !options.Enabled || !options.RequiredForMutations ||
+            !TurnTransactionKeyserverScope.RequiresKeyserver(request))
         {
             var bypass = await mutation(cancellationToken).ConfigureAwait(false);
             var result = new TurnTransactionResult
@@ -609,6 +610,8 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
     {
         if (!options.Enabled)
             return "Turn transactions are disabled.";
+        if (!TurnTransactionKeyserverScope.RequiresKeyserver(request))
+            return "Keyserver signing is limited to QuadBrain transactions.";
         return request.Mutating
             ? "Turn transaction gating is enabled but not required for mutations."
             : "Read-only operation bypassed transaction gating.";

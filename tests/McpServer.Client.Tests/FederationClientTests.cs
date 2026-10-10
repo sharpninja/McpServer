@@ -259,7 +259,7 @@ public sealed class FederationClientTests
                 new FederationWorkspaceRegistrationRequest
                 {
                     WorkspaceName = "McpServer",
-                    WorkspacePath = @"F:\GitHub\McpServer",
+                    WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
                     Version = "v1",
                 },
             ],
@@ -291,7 +291,7 @@ public sealed class FederationClientTests
                 new FederationWorkspaceRegistrationRequest
                 {
                     WorkspaceName = "McpServer",
-                    WorkspacePath = @"F:\GitHub\McpServer",
+                    WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
                 },
             ],
         }, cancellationToken: TestContext.Current.CancellationToken);
@@ -308,7 +308,7 @@ public sealed class FederationClientTests
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
-            """{"globalWorkspaceId":"PAYTON-LEGION2:mcpserver","proxyId":"PAYTON-LEGION2","workspaceName":"McpServer","workspacePath":"F:\\GitHub\\McpServer","isEnabled":true,"version":"v1","lastSeenUtc":"2026-05-21T22:00:00Z"}""");
+            """{"globalWorkspaceId":"PAYTON-LEGION2:mcpserver","proxyId":"PAYTON-LEGION2","workspaceName":"McpServer","workspacePath":"Q:\\__mcp_unit_test__\\McpServer","isEnabled":true,"version":"v1","lastSeenUtc":"2026-05-21T22:00:00Z"}""");
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
@@ -316,7 +316,7 @@ public sealed class FederationClientTests
         {
             GlobalWorkspaceId = "PAYTON-LEGION2:mcpserver",
             WorkspaceName = "McpServer",
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
             IsEnabled = true,
             Version = "v1",
         }, cancellationToken: TestContext.Current.CancellationToken);
@@ -333,7 +333,7 @@ public sealed class FederationClientTests
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
-            """[{"globalWorkspaceId":"PAYTON-LEGION2:mcpserver","proxyId":"PAYTON-LEGION2","workspaceName":"McpServer","workspacePath":"F:\\GitHub\\McpServer","isEnabled":true,"lastSeenUtc":"2026-05-21T22:00:00Z"}]""");
+            """[{"globalWorkspaceId":"PAYTON-LEGION2:mcpserver","proxyId":"PAYTON-LEGION2","workspaceName":"McpServer","workspacePath":"Q:\\__mcp_unit_test__\\McpServer","isEnabled":true,"lastSeenUtc":"2026-05-21T22:00:00Z"}]""");
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 

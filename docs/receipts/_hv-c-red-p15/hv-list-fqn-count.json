@@ -1,0 +1,21 @@
+{
+  "TimestampUtc": "2026-08-22T05:34:57.5641865Z",
+  "UniqueFqnCount": 88,
+  "P14": 8,
+  "P15Success": 8,
+  "P15FailedSubmit": 8,
+  "P15Retry": 8,
+  "P16": 0,
+  "SkipListed": 0,
+  "SampleFqn": [
+    "McpServer.PluginIntegration.Tests -> F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.dll",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginHostProcessAdapterTests.Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(hostKind: ClineV2)"
+  ],
+  "WorkspaceFullPath": "F:\\GitHub\\McpServer",
+  "WorkspaceKeyUtf8Base64Url": "RjpcR2l0SHViXE1jcFNlcnZlcg",
+  "PluginStatusFailsafeKey": "RjpcR2l0SHViXE1jcFNlcnZlcg",
+  "PluginStatusKeyMatches": true
+}

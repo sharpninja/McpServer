@@ -449,7 +449,7 @@ public sealed class TodoControllerTests
         var controller = CreateController(todoService, todoMutations: gated);
         var actionResult = await controller.MoveAsync(
                 "TODO-TXN-HTTP-MOVE-001",
-                new TodoMoveRequest { TargetWorkspacePath = @"F:\GitHub\McpServer.Target" },
+                new TodoMoveRequest { TargetWorkspacePath = @"Q:\__mcp_unit_test__\McpServer.Target" },
                 CancellationToken.None)
             .ConfigureAwait(true);
 
@@ -481,7 +481,7 @@ public sealed class TodoControllerTests
         var controller = CreateController(todoService, todoMutations: gated);
         var actionResult = await controller.MoveAsync(
                 "TODO-TXN-HTTP-MOVE-002",
-                new TodoMoveRequest { TargetWorkspacePath = @"F:\GitHub\McpServer.Target" },
+                new TodoMoveRequest { TargetWorkspacePath = @"Q:\__mcp_unit_test__\McpServer.Target" },
                 CancellationToken.None)
             .ConfigureAwait(true);
 
@@ -627,7 +627,7 @@ public sealed class TodoControllerTests
             issueTodoSyncService,
             NullLogger<TodoUpdateService>.Instance);
 
-        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var todoServiceFactory = Substitute.For<ITodoServiceFactory>();
         var resolver = new TodoServiceResolver(todoService, ingestionOptions, todoServiceFactory);
 

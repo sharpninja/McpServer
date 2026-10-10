@@ -13,6 +13,14 @@ public sealed class OpenAiChatMessage
     /// <summary>Message content.</summary>
     [JsonPropertyName("content")]
     public string? Content { get; set; }
+
+    /// <summary>Tool-call id when <see cref="Role"/> is <c>tool</c>.</summary>
+    [JsonPropertyName("tool_call_id")]
+    public string? ToolCallId { get; set; }
+
+    /// <summary>Assistant tool calls when the model asked the client to run tools.</summary>
+    [JsonPropertyName("tool_calls")]
+    public List<OpenAiToolCall>? ToolCalls { get; set; }
 }
 
 /// <summary>FR-MCP-QBOPENAI-001: OpenAI-compatible chat-completion request accepted by the QuadBrain endpoint.</summary>
@@ -37,6 +45,48 @@ public sealed class OpenAiChatCompletionRequest
     /// <summary>Whether a streamed Server-Sent Events response was requested.</summary>
     [JsonPropertyName("stream")]
     public bool Stream { get; set; }
+
+    /// <summary>
+    /// FR-MCP-QBPROGRESS-001: live brain-role progress. Set by the controller for <c>stream=true</c>.
+    /// Not part of the OpenAI JSON body.
+    /// </summary>
+    [JsonIgnore]
+    public IProgress<QuadBrainRoleProgress>? Progress { get; set; }
+}
+
+/// <summary>
+/// FR-MCP-QBPROGRESS-001: One live brain-role status update.
+/// </summary>
+public sealed class QuadBrainRoleProgress
+{
+    /// <summary>SSE event name for OpenAI <c>stream=true</c> role updates.</summary>
+    public const string SseEventName = "quadbrain.role";
+
+    /// <summary>Role is starting its slot invocation.</summary>
+    public const string PhaseStarted = "started";
+
+    /// <summary>Role finished its slot invocation.</summary>
+    public const string PhaseCompleted = "completed";
+
+    /// <summary>Brain role name (Creativity, Logic, CuriosityEngine, ArbiterOfTruth).</summary>
+    [JsonPropertyName("role")]
+    public string Role { get; init; } = string.Empty;
+
+    /// <summary><see cref="PhaseStarted"/> or <see cref="PhaseCompleted"/>.</summary>
+    [JsonPropertyName("phase")]
+    public string Phase { get; init; } = string.Empty;
+
+    /// <summary>Role output text when <see cref="Phase"/> is completed.</summary>
+    [JsonPropertyName("output")]
+    public string? Output { get; init; }
+
+    /// <summary>Creates a started event for <paramref name="role"/>.</summary>
+    public static QuadBrainRoleProgress Started(string role)
+        => new() { Role = role, Phase = PhaseStarted };
+
+    /// <summary>Creates a completed event for <paramref name="role"/>.</summary>
+    public static QuadBrainRoleProgress Completed(string role, string? output)
+        => new() { Role = role, Phase = PhaseCompleted, Output = output };
 }
 
 /// <summary>FR-MCP-QBOPENAI-001: A tool the model may call (OpenAI function-tool shape).</summary>

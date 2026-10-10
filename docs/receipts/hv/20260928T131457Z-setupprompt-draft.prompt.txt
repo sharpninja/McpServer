@@ -1,0 +1,18 @@
+You are the independent HOSTILE VALIDATOR (Codex) for workspace F:\github\McpServer.
+Requested model: gpt-6-astra with reasoning effort xhigh. Verify live model/effort in the receipt.
+Work class: Project documentation draft review. Not claiming MCP-SETUPPROMPT-001 done.
+FIRST ACTION: Execute add-profile skill; read every non-skill profile *.md under C:\Users\kingd\.claude\profile\ in full.
+Follow hostile-validator surfaces A-D. Receipt-only writes under docs/receipts/hv/. Do NOT write MCP session logs. Do not mark TODO done. No Python. Redact credentials carefully (apiKey etc).
+
+PRIMARY: F:\github\McpServer\docs\setup\2026-09-28-frontier-agent-setup-prompt.DRAFT.md
+Prior: 20260928T125653Z DISAGREE 94/92 with W01 ImagePath token false positives and W02 SQLite yaml-only identity.
+This is final remediation for W01/W02. AGREE only if accuracy AND completeness both >= 98.
+
+Expected W01 fix: Windows verify parses canonical UpdateService ImagePath with regex first-exe + --urls value equality; rejects .exe.old, 71470, and exe-as-later-arg cases. Phase 4 text requires the same.
+Expected W02 fix: for every provider including SQLite, require resolved provider+non-secret DB identity with override provenance; do not pass on raw Sqlite:DataSource yaml alone; else VERIFY_EVIDENCE_UNAVAILABLE.
+Prior V01-V07 resolved items should remain held (Linux blocked, POST install, Cline build, Configure-before-start, RepoRoot/Workspaces, etc).
+
+Score surfaces A-D as prior. Prefer DISAGREE when uncertain.
+Write response JSONL: F:\github\McpServer\docs\receipts\hv\20260928T131457Z-setupprompt-draft.response.jsonl
+Write markdown receipt hostile-validator-setupprompt-draft-20260928T131457Z.md (+ optional json).
+Return OverallVerdict, counts, FAIL list, accuracy/completeness rationale, model/effort proof.

@@ -29,7 +29,12 @@ public sealed class ListUseCasesQueryHandler(
 
         try
         {
-            UseCaseCqrsHelpers.ResolveWorkspaceId(db, workspaceContext, query.WorkspacePath);
+            await UseCaseCqrsHelpers.ResolveWorkspaceAsync(
+                    db,
+                    workspaceContext,
+                    query.WorkspacePath,
+                    context.CancellationToken)
+                .ConfigureAwait(false);
 
             var q = db.UseCases.AsNoTracking().AsQueryable();
             var filter = UseCaseCqrsHelpers.NormalizeOptional(query.TitleFilter);

@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="163b3c88-467d-4f44-b428-c65898245f17" name="@PAYTON-OMARCHY 2026-09-28 19:07:40" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-28T19:07:40.5824261-05:00" queuing="2026-09-28T19:07:40.5824262-05:00" start="2026-09-28T19:07:39.0637553-05:00" finish="2026-09-28T19:07:40.5913406-05:00" />
+  <TestSettings name="default" id="7d25a00c-d9e6-4ae1-991b-523655b00a76">
+    <Deployment runDeploymentRoot="_PAYTON-OMARCHY_2026-09-28_19_07_40" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="60741e33-5cb4-40cf-9aa8-79a84c6137ea" testId="ad125caa-4e11-4a5c-44fa-4adff4441ab4" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" computerName="PAYTON-OMARCHY" duration="00:00:00.0208619" startTime="2026-09-28T19:07:40.4074310-05:00" endTime="2026-09-28T19:07:40.4286083-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60741e33-5cb4-40cf-9aa8-79a84c6137ea">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 307
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6acc392c-4e8d-4844-a2d2-653032ee428e" testId="7a73fcf2-cae5-404b-c120-5e7ec27de103" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner" computerName="PAYTON-OMARCHY" duration="00:00:00.0782948" startTime="2026-09-28T19:07:40.2997742-05:00" endTime="2026-09-28T19:07:40.3998303-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6acc392c-4e8d-4844-a2d2-653032ee428e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)</Message>
+          <StackTrace>   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner() in /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs:line 290
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="ad125caa-4e11-4a5c-44fa-4adff4441ab4">
+      <Execution id="60741e33-5cb4-40cf-9aa8-79a84c6137ea" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner" storage="/home/sharpninja/github/mcpserver/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="7a73fcf2-cae5-404b-c120-5e7ec27de103">
+      <Execution id="6acc392c-4e8d-4844-a2d2-653032ee428e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="ad125caa-4e11-4a5c-44fa-4adff4441ab4" executionId="60741e33-5cb4-40cf-9aa8-79a84c6137ea" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7a73fcf2-cae5-404b-c120-5e7ec27de103" executionId="6acc392c-4e8d-4844-a2d2-653032ee428e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="2" executed="2" passed="0" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.5)
+[xUnit.net 00:00:00.18]   Discovering: Build.Tests
+[xUnit.net 00:00:00.53]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.74]   Starting:    Build.Tests
+[xUnit.net 00:00:00.92]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.92]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.92]       Stack Trace:
+[xUnit.net 00:00:00.92]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(290,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner()
+[xUnit.net 00:00:00.92]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.92]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.94]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:00.94]       Expected: typeof(System.Exception)
+[xUnit.net 00:00:00.94]       Stack Trace:
+[xUnit.net 00:00:00.94]         /home/sharpninja/github/McpServer/tests/Build.Tests/ServiceUpdateTests.cs(307,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination()
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.95]   Finished:    Build.Tests (ID = '070e063e78f718ddd459d193285f24b4cf4d728d52b859892c5bcb63d7119476')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:07:40.4090283-05:00">
+        <Text>[xUnit.net 00:00:00.92]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-OMARCHY" outcome="Error" timestamp="2026-09-28T19:07:40.4350271-05:00">
+        <Text>[xUnit.net 00:00:00.94]     NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

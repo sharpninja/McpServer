@@ -18,9 +18,9 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class TriageServiceTests : IDisposable
 {
-    private const string PrimaryWorkspace = "F:\\GitHub\\IncidentSource";
-    private const string AlternateWorkspace = "F:\\GitHub\\OtherSource";
-    private const string McpServerWorkspace = "F:\\GitHub\\McpServer";
+    private const string PrimaryWorkspace = "Q:\\__mcp_unit_test__\\IncidentSource";
+    private const string AlternateWorkspace = "Q:\\__mcp_unit_test__\\OtherSource";
+    private const string McpServerWorkspace = "Q:\\__mcp_unit_test__\\McpServer";
 
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _dbOptions;
@@ -241,7 +241,7 @@ public sealed class TriageServiceTests : IDisposable
             Title = "mcpserver-codex-plugin masks method_not_found",
             Summary = "The MCP Server Codex plugin reports success after a workflow.triage call fails.",
             Component = "mcpserver-codex-plugin",
-            AffectedPaths = ["F:\\GitHub\\mcpserver-codex-plugin\\lib\\repl-invoke.sh"],
+            AffectedPaths = ["Q:\\__mcp_unit_test__\\mcpserver-codex-plugin\\lib\\repl-invoke.sh"],
         }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(McpServerWorkspace, result.WorkspacePath);

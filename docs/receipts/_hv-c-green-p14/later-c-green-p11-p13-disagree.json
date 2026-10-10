@@ -1,0 +1,16 @@
+{
+  "Exists": true,
+  "Length": 17626,
+  "LastWriteTimeUtc": "2026-08-22T03:57:26.9235584Z",
+  "OverallVerdictLineMatchAgree": false,
+  "OverallVerdictLineMatchDisagree": true,
+  "MentionsFailed8": true,
+  "MentionsPassed0": true,
+  "MentionsPluginRootOverrideRejected": false,
+  "MentionsCreateTrustedClient": true,
+  "EmDash": false,
+  "EnDash": false,
+  "JsonOverallVerdict": "DISAGREE",
+  "JsonFailCount": 4,
+  "JsonPhase": "C-green-P11-P13"
+}

@@ -1,0 +1,293 @@
+type: result
+payload:
+  requestId: req-20260822T021444Z-7b1b
+  result:
+  - agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T020204Z-c-green-p7-p10
+    title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P7-P10 process adapter
+    model: grok-build-subagent
+    started:
+      dateTime: 2026-08-22T02:02:29.2171792
+      utcDateTime: 2026-08-22T02:02:29.2171792Z
+      localDateTime: 2026-08-21T21:02:29.2171792-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 2
+      millisecond: 217
+      microsecond: 179
+      nanosecond: 200
+      minute: 2
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 29
+      ticks: 639229609492171792
+      utcTicks: 639229609492171792
+      timeOfDay: 02:02:29.2171792
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T02:14:27.7853381
+      utcDateTime: 2026-08-22T02:14:27.7853381Z
+      localDateTime: 2026-08-21T21:14:27.7853381-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 2
+      millisecond: 785
+      microsecond: 338
+      nanosecond: 100
+      minute: 14
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 27
+      ticks: 639229616677853381
+      utcTicks: 639229616677853381
+      timeOfDay: 02:14:27.7853381
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validator
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-green-P7-P10
+    - FR-MCP-PLUGININT-001
+    - TR-MCP-PLUGININT-001
+    - TEST-MCP-PLUGININT-001
+    filesModifiedCount: 7
+  - agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T010850Z-c-red-p7
+    title: Hostile review PLAN-PLUGINHANDOFF-001 C-red-P7 process adapter
+    model: grok-build-subagent
+    started:
+      dateTime: 2026-08-22T01:40:00.0989210
+      utcDateTime: 2026-08-22T01:40:00.0989210Z
+      localDateTime: 2026-08-21T20:40:00.0989210-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 1
+      millisecond: 98
+      microsecond: 921
+      nanosecond: 0
+      minute: 40
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 0
+      ticks: 639229596000989210
+      utcTicks: 639229596000989210
+      timeOfDay: 01:40:00.0989210
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T01:48:01.0756690
+      utcDateTime: 2026-08-22T01:48:01.0756690Z
+      localDateTime: 2026-08-21T20:48:01.0756690-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 1
+      millisecond: 75
+      microsecond: 669
+      nanosecond: 0
+      minute: 48
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 1
+      ticks: 639229600810756690
+      utcTicks: 639229600810756690
+      timeOfDay: 01:48:01.0756690
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validator
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-red-P7
+    - FR-MCP-PLUGININT-001
+    - TR-MCP-PLUGININT-001
+    - TEST-MCP-PLUGININT-001
+    filesModifiedCount: 6
+  - agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T012646Z-c-green-p5-p6
+    title: Hostile validate PLAN-PLUGINHANDOFF-001 C-green-P5-P6
+    model: grok-build-subagent
+    started:
+      dateTime: 2026-08-22T01:27:04.3920616
+      utcDateTime: 2026-08-22T01:27:04.3920616Z
+      localDateTime: 2026-08-21T20:27:04.3920616-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 1
+      millisecond: 392
+      microsecond: 61
+      nanosecond: 600
+      minute: 27
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 4
+      ticks: 639229588243920616
+      utcTicks: 639229588243920616
+      timeOfDay: 01:27:04.3920616
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T01:38:31.6426439
+      utcDateTime: 2026-08-22T01:38:31.6426439Z
+      localDateTime: 2026-08-21T20:38:31.6426439-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 1
+      millisecond: 642
+      microsecond: 643
+      nanosecond: 900
+      minute: 38
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 31
+      ticks: 639229595116426439
+      utcTicks: 639229595116426439
+      timeOfDay: 01:38:31.6426439
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validator
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-green-P5-P6
+    - FR-MCP-PLUGININT-001
+    - TR-MCP-PLUGININT-001
+    - TEST-MCP-PLUGININT-001
+    filesModifiedCount: 5
+  - agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T012452Z-pluginhandoff-d15
+    title: Hostile D1.5 after-red PLAN-PLUGINHANDOFF-001
+    model: grok
+    started:
+      dateTime: 2026-08-22T01:24:53.4738044
+      utcDateTime: 2026-08-22T01:24:53.4738044Z
+      localDateTime: 2026-08-21T20:24:53.4738044-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 1
+      millisecond: 473
+      microsecond: 804
+      nanosecond: 400
+      minute: 24
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 53
+      ticks: 639229586934738044
+      utcTicks: 639229586934738044
+      timeOfDay: 01:24:53.4738044
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T01:32:52.4061700
+      utcDateTime: 2026-08-22T01:32:52.4061700Z
+      localDateTime: 2026-08-21T20:32:52.4061700-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 1
+      millisecond: 406
+      microsecond: 170
+      nanosecond: 0
+      minute: 32
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 52
+      ticks: 639229591724061700
+      utcTicks: 639229591724061700
+      timeOfDay: 01:32:52.4061700
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-review
+    - class-1
+    - D1.5
+    - PLAN-PLUGINHANDOFF-001
+    - TEST-HANDOFF-003
+    - TEST-HANDOFF-006
+    - TEST-HANDOFF-007
+    - GrokSubagentHostile
+    filesModifiedCount: 8
+  - agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T011806Z-c-green-p5-p6
+    title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P5-P6 isolated server fixture
+    model: grok-build-subagent
+    started:
+      dateTime: 2026-08-22T01:18:17.4946096
+      utcDateTime: 2026-08-22T01:18:17.4946096Z
+      localDateTime: 2026-08-21T20:18:17.4946096-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 1
+      millisecond: 494
+      microsecond: 609
+      nanosecond: 600
+      minute: 18
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 17
+      ticks: 639229582974946096
+      utcTicks: 639229582974946096
+      timeOfDay: 01:18:17.4946096
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T01:26:28.9213923
+      utcDateTime: 2026-08-22T01:26:28.9213923Z
+      localDateTime: 2026-08-21T20:26:28.9213923-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 1
+      millisecond: 921
+      microsecond: 392
+      nanosecond: 300
+      minute: 26
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 28
+      ticks: 639229587889213923
+      utcTicks: 639229587889213923
+      timeOfDay: 01:26:28.9213923
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validator
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-green-P5-P6
+    - FR-MCP-PLUGININT-001
+    - TR-MCP-PLUGININT-001
+    - TEST-MCP-PLUGININT-001
+    filesModifiedCount: 6
+  deprecated: true
+
+---

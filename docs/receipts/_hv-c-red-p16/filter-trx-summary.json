@@ -1,0 +1,159 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p16\\results-20260822T072653Z\\p16-filter.trx",
+  "lastWriteTimeUtc": "2026-08-22T07:27:08.1441056Z",
+  "length": 28415,
+  "outcome": "Failed",
+  "total": "8",
+  "executed": "8",
+  "passed": "0",
+  "failed": "8",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 8,
+  "failedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2)"
+  ],
+  "passedNames": [],
+  "skippedNames": [],
+  "failedMessages": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode)",
+      "message": "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex)",
+      "message": "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline)",
+      "message": "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok)",
+      "message": "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode)",
+      "message": "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot)",
+      "message": "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork)",
+      "message": "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2)",
+      "message": "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+    }
+  ],
+  "p16Count": 8,
+  "p16Failed": 8,
+  "p16Passed": 0,
+  "p16Skipped": 0,
+  "p17Count": 0,
+  "p18Count": 0,
+  "unimplementedCount": 8,
+  "byHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 4,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 4,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 4,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 4,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 4,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 4,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 4,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+      ]
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 4,
+      "Failed": 1,
+      "Passed": 0,
+      "Skipped": 0,
+      "Messages": [
+        "System.InvalidOperationException : AiStrategyFixture.EvaluateAsync is not implemented."
+      ]
+    }
+  ],
+  "consoleHasPassedLine": false,
+  "consoleFailedMatch": "8",
+  "consoleTotalMatch": "8",
+  "consoleSkippedMatch": null,
+  "consolePassedMatch": null,
+  "listAiTheory": 8,
+  "listP17": 0,
+  "listP18": 0,
+  "listTotalAvailable": 94
+}

@@ -1,0 +1,78 @@
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Todo.Validation -> F:\GitHub\McpServer\tests\McpServer.Todo.Validation\bin\Debug\net10.0\McpServer.Todo.Validation.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Repl.Core.Tests -> F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.17]     McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess [FAIL]
+[xUnit.net 00:00:02.18]     McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess [FAIL]
+[xUnit.net 00:00:02.18]     McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess [FAIL]
+[xUnit.net 00:00:02.18]     McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess [FAIL]
+[xUnit.net 00:00:02.18]     McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath [FAIL]
+[xUnit.net 00:00:02.18]     McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_PrimarySuccess_NoPendingFailsafeArtifact [FAIL]
+  Failed McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess [11 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           Γåô (pos 0)
+Expected: "result"
+Actual:   "error"
+           Γåæ (pos 0)
+  Stack Trace:
+     at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.AssertNonTerminalSucceedsWhenPrimaryFailsAsync(String method) in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 90
+   at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess() in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 26
+--- End of stack trace from previous location ---
+  Failed McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess [1 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           Γåô (pos 0)
+Expected: "result"
+Actual:   "error"
+           Γåæ (pos 0)
+  Stack Trace:
+     at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.AssertNonTerminalSucceedsWhenPrimaryFailsAsync(String method) in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 90
+   at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess() in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 40
+--- End of stack trace from previous location ---
+  Failed McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess [1 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           Γåô (pos 0)
+Expected: "result"
+Actual:   "error"
+           Γåæ (pos 0)
+  Stack Trace:
+     at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.AssertNonTerminalSucceedsWhenPrimaryFailsAsync(String method) in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 90
+   at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess() in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 19
+--- End of stack trace from previous location ---
+  Failed McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess [1 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           Γåô (pos 0)
+Expected: "result"
+Actual:   "error"
+           Γåæ (pos 0)
+  Stack Trace:
+     at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.AssertNonTerminalSucceedsWhenPrimaryFailsAsync(String method) in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 90
+   at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess() in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 33
+--- End of stack trace from previous location ---
+  Failed McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           Γåô (pos 0)
+Expected: "result"
+Actual:   "error"
+           Γåæ (pos 0)
+  Stack Trace:
+     at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath() in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 59
+--- End of stack trace from previous location ---
+  Failed McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_PrimarySuccess_NoPendingFailsafeArtifact [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           Γåô (pos 0)
+Expected: "result"
+Actual:   "error"
+           Γåæ (pos 0)
+  Stack Trace:
+     at McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_PrimarySuccess_NoPendingFailsafeArtifact() in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\SessionLogPersistenceCoordinatorIsolationTests.cs:line 78
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     6, Passed:     1, Skipped:     0, Total:     7, Duration: 288 ms - McpServer.Repl.Core.Tests.dll (net10.0)

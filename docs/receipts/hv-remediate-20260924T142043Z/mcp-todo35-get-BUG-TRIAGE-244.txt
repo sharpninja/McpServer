@@ -1,0 +1,33 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142348Z-8105
+  result:
+    id: BUG-TRIAGE-244
+    title: updateTurn persist degrade exits 1 with empty stderr
+    section: Backlog
+    priority: medium
+    done: false
+    description:
+    - Isolated reviewer closure via workflow.sessionlog.appendDialog then updateTurn did not persist. Invoke-ReplPersistTurn writes a session_submit failsafe, then on timeout or HTTP 503 backend_unavailable returns false without throwing. Invoke-WorkflowUpdateTurn forwards that false with no Console.Error line, so repl-invoke script-entry exits 1 with empty stdout/stderr. The live request stays in_progress with the beginTurn placeholder '(turn opened)' (13 characters). FR-MCP-REPL-009 requires update and appendDialog to remain successful when failsafe succeeds; beginTurn already returns true and writes a queued/degraded diagnostic on the same persist path.
+    - 'Triage group: triage-group-bec438c68ef7c694'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- An isolated workflow.sessionlog.appendDialog then updateTurn closure whose primary persist times out or returns HTTP 503/backend_unavailable does not exit 1 with empty stderr.'
+    - '- When failsafe session_submit is retained, the command either exits 0 as degraded success or exits non-zero with stderr naming the method, requestId, failsafe path, and reason.'
+    - "- A live in_progress request whose response is still the 13-character beginTurn placeholder '(turn opened)' is reported as not durably updated."
+    - 'Implementation notes:'
+    - "- plugins/core/lib-ps/repl-invoke.ps1 Invoke-WorkflowUpdateTurn returns Invoke-ReplPersistTurn's false on the timeout/503 branch; that branch sets LastReplPersistenceDetails but never WriteLine, and script-entry then exit 1."
+    - '- Invoke-WorkflowAppendDialog timeout/503 writes label session_dialog and also returns false with no stderr; the reported session_submit label is the PersistTurn path used by updateTurn.'
+    - '- Align updateTurn (and appendDialog) with Invoke-WorkflowBeginTurn: on LastReplPersistenceDetails.degraded/queued, write the failsafe diagnostic and return true per FR-MCP-REPL-009 AC1.'
+    - '- Do not treat this as a parent-turn or product-write defect; the reporter did not attempt those writes.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

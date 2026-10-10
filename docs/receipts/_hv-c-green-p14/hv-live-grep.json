@@ -1,0 +1,18 @@
+{
+  "TimestampUtc": "2026-08-22T04:40:14.0299524Z",
+  "P15P16HitCount": 0,
+  "P15P16Hits": [],
+  "SkipHitCount": 0,
+  "SkipHits": [],
+  "AdapterOverrideHits": [
+    "50:var pluginRootOverride = Environment.GetEnvironmentVariable(\"PLUGIN_ROOT_OVERRIDE\");",
+    "51:var pluginRootOverrideRejected = !string.IsNullOrWhiteSpace(pluginRootOverride);",
+    "61:var extraEnvironment = new Dictionary<string, string>(StringComparer.Ordinal)",
+    "65:[\"PLUGIN_ROOT_OVERRIDE\"] = string.Empty,",
+    "75:extraEnvironment,",
+    "152:PluginRootOverrideRejected = pluginRootOverrideRejected,"
+  ],
+  "RunnerRemoveHits": [
+    "39:startInfo.Environment.Remove(pair.Key);"
+  ]
+}

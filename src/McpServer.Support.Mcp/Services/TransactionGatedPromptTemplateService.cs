@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using McpServer.Support.Mcp.Models;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -121,10 +122,10 @@ public sealed class TransactionGatedPromptTemplateService : IPromptTemplateServi
         Func<CancellationToken, Task<PromptTemplateMutationResult>> mutation,
         CancellationToken cancellationToken)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, operationName))
             return await mutation(cancellationToken).ConfigureAwait(false);
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
         {
             return new PromptTemplateMutationResult(

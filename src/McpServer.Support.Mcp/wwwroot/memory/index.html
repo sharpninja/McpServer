@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'" />
+  <title>Memory</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #fff;
+      --border: #d8dee6;
+      --text: #1a1f2c;
+      --muted: #5b6472;
+      --accent: #1f6feb;
+      --accent-soft: #e8f0fe;
+      --danger: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, Segoe UI, sans-serif;
+      margin: 0;
+      padding: 1rem 1.25rem 2rem;
+      color: var(--text);
+      background: var(--bg);
+    }
+    h1 { margin: 0 0 0.25rem; font-size: 1.6rem; }
+    h2 { margin: 1.25rem 0 0.5rem; font-size: 1.15rem; }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+    }
+    label { display: block; margin-top: 0.45rem; font-weight: 600; font-size: 0.85rem; }
+    input, textarea, select, button {
+      margin-top: 0.2rem;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      font: inherit;
+    }
+    input, textarea, select {
+      padding: 0.4rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+    }
+    button {
+      width: auto;
+      margin-right: 0.4rem;
+      margin-top: 0.55rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .row { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+    #list { list-style: none; padding: 0; margin: 0.4rem 0 0; max-height: 360px; overflow: auto; }
+    #list li {
+      padding: 0.4rem 0.45rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    #list li:hover, #list li.active { background: var(--accent-soft); }
+    .tag-chip {
+      display: inline-block;
+      margin: 0.15rem 0.2rem 0 0;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      font-size: 0.78rem;
+    }
+    #empty-state, #empty-results, #fail-closed {
+      padding: 0.65rem 0.2rem;
+      color: var(--muted);
+    }
+    #fail-closed { color: var(--danger); }
+    #detail-panel.hidden { display: none; }
+    #status {
+      white-space: pre-wrap;
+      background: #f4f6f8;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem;
+      max-height: 180px;
+      overflow: auto;
+      font-size: 0.82rem;
+    }
+    .version-list { list-style: none; padding: 0; margin: 0.4rem 0 0; }
+    .version-list li {
+      padding: 0.35rem 0.4rem;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    .version-list li.active { background: var(--accent-soft); }
+  </style>
+</head>
+<body>
+  <h1>Memory</h1>
+  <p class="muted">
+    First-party UI for the active workspace Effective set.
+    Calls live <code>/mcpserver/memory</code> REST only.
+  </p>
+
+  <div class="card">
+    <label>API base URL</label>
+    <input id="baseUrl" value="" placeholder="http://localhost:7147" />
+    <label>API key (X-Api-Key)</label>
+    <input id="apiKey" type="password" autocomplete="off" />
+    <label>Workspace path (X-Workspace-Path)</label>
+    <input id="workspace" />
+    <div class="row">
+      <button type="button" id="btnList" class="primary">List memories</button>
+    </div>
+  </div>
+
+  <div class="layout" style="margin-top: 1rem;">
+    <div class="card">
+      <h2>Search active workspace</h2>
+      <label>Query</label>
+      <input id="query" placeholder="recall by meaning or keyword" />
+      <label>Tag filter</label>
+      <input id="tagFilter" placeholder="tag chip, comma separated" />
+      <div id="tagChips"></div>
+      <div class="row">
+        <button type="button" id="btnSearch" class="primary">Search</button>
+      </div>
+      <div id="empty-state">No memories in the active workspace.</div>
+      <div id="empty-results" hidden>No matching memories.</div>
+      <ul id="list"></ul>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>Create</h2>
+        <label>Title</label>
+        <input id="title" />
+        <label>Content</label>
+        <textarea id="content" rows="4"></textarea>
+        <label>Tags</label>
+        <input id="tags" placeholder="comma separated" />
+        <div class="row">
+          <button type="button" id="btnCreate" class="primary">Create</button>
+        </div>
+        <p class="muted" id="createHint">Content is required.</p>
+      </div>
+
+      <div class="card" id="detail-panel" hidden>
+        <h2>Detail</h2>
+        <div id="fail-closed" hidden>Memory is not visible in the active workspace (fail-closed).</div>
+        <label>Id</label>
+        <input id="memoryId" readonly />
+        <label>Title</label>
+        <input id="editTitle" />
+        <label>Content</label>
+        <textarea id="editContent" rows="5"></textarea>
+        <div class="row">
+          <button type="button" id="btnSave" class="primary">Save</button>
+          <button type="button" id="btnVersions">Versions</button>
+          <button type="button" id="btnClose">Close</button>
+        </div>
+        <div id="version-panel" data-revert-actions="3" hidden>
+          <h2>Versions</h2>
+          <ul id="version-list" class="version-list"></ul>
+          <button type="button" id="btnRevert">Revert</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1rem;">
+        <h2>Status</h2>
+        <pre id="status"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

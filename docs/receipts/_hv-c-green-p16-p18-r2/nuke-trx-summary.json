@@ -1,0 +1,97 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\results-nuke-20260822T084054Z\\nuke-skip.trx",
+  "lastWriteTimeUtc": "2026-08-22T08:41:08.3252789Z",
+  "length": 2941,
+  "outcome": "Completed",
+  "total": "1",
+  "executed": "1",
+  "passed": "1",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 1,
+  "failedNames": [],
+  "passedCountNames": 1,
+  "skippedNames": [],
+  "failedMessages": [],
+  "p16Count": 0,
+  "p16Failed": 0,
+  "p16Passed": 0,
+  "p16Skipped": 0,
+  "p17Count": 0,
+  "p17Failed": 0,
+  "p17Passed": 0,
+  "p17Skipped": 0,
+  "p18Count": 1,
+  "p18Failed": 0,
+  "p18Passed": 1,
+  "p18Skipped": 0,
+  "p19Count": 0,
+  "aiCount": 0,
+  "aiFailed": 0,
+  "aiPassed": 0,
+  "aiSkipped": 0,
+  "p16ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 0,
+      "Failed": 0,
+      "Passed": 0,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 0,
+      "Failed": 0,
+      "Passed": 0,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 0,
+      "Failed": 0,
+      "Passed": 0,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 0,
+      "Failed": 0,
+      "Passed": 0,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 0,
+      "Failed": 0,
+      "Passed": 0,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 0,
+      "Failed": 0,
+      "Passed": 0,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 0,
+      "Failed": 0,
+      "Passed": 0,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 0,
+      "Failed": 0,
+      "Passed": 0,
+      "Skipped": 0
+    }
+  ],
+  "passedNames": [
+    "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.NukeTarget_SkipIsFailure"
+  ]
+}

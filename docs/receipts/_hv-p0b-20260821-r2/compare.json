@@ -1,0 +1,56 @@
+{
+  "Utc": "2026-08-21T20:51:14Z",
+  "Id": "PLAN-PLUGINHANDOFF-001",
+  "Done": false,
+  "Title": "Implement plugin core, hostile review queue, plugin integration harness, workspace hygiene, handoff remediations, and wiki dump/import",
+  "Remaining": "P0-A AGREE recorded. Next: P0-B hostile TODO fidelity vs docs/plans/PLAN-PLUGINHANDOFF-001.md. No product implementation until P0-B AGREE.",
+  "DescLineCount": 773,
+  "DescSectionCount": 19,
+  "EqualJoinLfNoTrailVsPlan": true,
+  "DescChars": 68485,
+  "PlanChars": 68485,
+  "ShaRepo": "7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E",
+  "ShaSession": "7D83528F9097AFBB894AB76545F06B2D702D0A16BD2F5D7FB3FBA8BE65E4698E",
+  "PlansByteIdentical": true,
+  "PlanRepoLen": 68486,
+  "PlanSessLen": 68486,
+  "PlanTaskCount": 31,
+  "TodoTaskCount": 31,
+  "TaskDiffs": [],
+  "AnyTaskDone": false,
+  "Task21Todo": "D1 remaining reds only: PluginHandoffSkill invoke, lease renewal, effective prompt identity. Field diagnostics stay D0 reuse (`Validate_InvalidFields_ProduceFieldDiagnostics`). AgentPool redaction stays D0 reuse.",
+  "Task21HasNamedTest": true,
+  "Task29Todo": "G0 confirm WorkspaceClient.CreateAsync `--dump` binding; G all reds + hostile, then implement dump/import/deprecation, then G-green hostile.",
+  "Task29HasDumpBackticks": true,
+  "FrCount": 25,
+  "TrCount": 30,
+  "TrUnique": 30,
+  "TrSetEqualsPriorUnion30": true,
+  "RequiredTrHits": [
+    { "Id": "TR-MCP-PLUGINCORE-005", "Present": true },
+    { "Id": "TR-MCP-REPL-011", "Present": true },
+    { "Id": "TR-MCP-REPL-013", "Present": true }
+  ],
+  "DependsOn": [
+    "MCP-PLUGINCORE-004",
+    "MCP-PLUGININT-001",
+    "MCP-HANDOFF-001",
+    "MCP-HANDOFFPLAN-001",
+    "MCP-HANDOFFREVIEW-001",
+    "MCP-HOSTILEREVIEW-001",
+    "MCP-WORKSPACEHYGIENE-002",
+    "MCP-WIKIEXPORT-001"
+  ],
+  "AuditEntryCount": 2,
+  "AuditSlim": [
+    { "AuditId": 14357, "Version": 1, "Action": "created", "RecordedAtUtc": "2026-08-21T20:36:37.6624242Z" },
+    { "AuditId": 14358, "Version": 2, "Action": "updated", "RecordedAtUtc": "2026-08-21T20:48:45.9510484Z" }
+  ],
+  "TrAddedInV2": [
+    "TR-MCP-PLUGINCORE-005",
+    "TR-MCP-REPL-011",
+    "TR-MCP-REPL-013"
+  ],
+  "AuditTaskDiffs": [21, 29],
+  "IdempotencyKey": "PLAN-PLUGINHANDOFF-001-p0a-203017Z"
+}

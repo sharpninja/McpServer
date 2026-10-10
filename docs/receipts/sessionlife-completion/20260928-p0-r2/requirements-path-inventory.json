@@ -1,0 +1,2258 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-09-28T03:49:03.2346671Z",
+  "workspace": "F:\\GitHub\\McpServer",
+  "candidateRoot": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928",
+  "scope": "All productionSurfaces, testSourcePaths, documentationSurfaces, and evidencePaths in the 109-row R2 acceptance manifest and 35 R2 TODO acceptance rows; root and isolated-candidate existence are recorded independently.",
+  "validation": {
+    "lineSuffixStrippedWith": "#L\\d+(?:-L?\\d+)?$",
+    "uniqueAnchorCount": 53,
+    "classifications": {
+      "existing-candidate-only": 8,
+      "existing-root-and-candidate": 39,
+      "existing-root-only-documentation-or-receipt": 1,
+      "proposed": 5
+    },
+    "exactReplacementCount": 83,
+    "unresolvedCount": 0,
+    "rootAndCandidateExistenceRecordedSeparately": true,
+    "candidateRequiredForProductionAndTestUnlessExplicitlyProposed": true,
+    "rootOnlyDocumentationAndReceiptsAllowed": true,
+    "allAnchorsExistingOrExplicitlyProposed": true
+  },
+  "exactReplacements": [
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC002",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC004",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC005",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-004-AC004",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Health/HealthService.cs",
+      "new": [
+        "src/McpServer.Support.Mcp/Services/StorageConnectivityHealthCheck.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-004-AC004",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Support.Mcp.Tests/Health/HealthServiceTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-004-AC005",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryIngestionService.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-004-AC006",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryIngestionService.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-004-AC007",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryReplayer.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-005-AC001",
+      "field": "productionSurfaces",
+      "old": "plugins/core/lib-ps/stop-gate.ps1",
+      "new": [
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-005-AC002",
+      "field": "productionSurfaces",
+      "old": "plugins/core/lib-ps/stop-gate.ps1",
+      "new": [
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-005-AC003",
+      "field": "productionSurfaces",
+      "old": "plugins/core/lib-ps/stop-gate.ps1",
+      "new": [
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-005-AC004",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/SessionLogService.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-005-AC005",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/SessionLogService.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-002-AC001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-002-AC002",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-002-AC003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-004-AC001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryIngestionService.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-004-AC002",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Health/HealthService.cs",
+      "new": [
+        "src/McpServer.Support.Mcp/Services/StorageConnectivityHealthCheck.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-004-AC002",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Support.Mcp.Tests/Health/HealthServiceTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-004-AC003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryIngestionService.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-004-AC004",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryIngestionService.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-004-AC004",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryReplayer.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-005-AC001",
+      "field": "productionSurfaces",
+      "old": "plugins/core/lib-ps/stop-gate.ps1",
+      "new": [
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-005-AC002",
+      "field": "productionSurfaces",
+      "old": "plugins/core/lib-ps/stop-gate.ps1",
+      "new": [
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-005-AC003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/SessionLogService.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-005-AC004",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/SessionLogService.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-002-AC001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-002-AC002",
+      "field": "productionSurfaces",
+      "old": "plugins/core/lib-ps/stop-gate.ps1",
+      "new": [
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/SessionLogService.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Health/HealthService.cs",
+      "new": [
+        "src/McpServer.Support.Mcp/Services/StorageConnectivityHealthCheck.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC001",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Support.Mcp.Tests/Health/HealthServiceTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC002",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryIngestionService.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC002",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryReplayer.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Storage.SqlServer",
+      "new": [
+        "src/McpServer.Storage.SqlServerMigrations/McpServer.Storage.SqlServerMigrations.csproj"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Storage.Sqlite",
+      "new": [
+        "src/McpServer.Storage.SqliteMigrations/McpServer.Storage.SqliteMigrations.csproj"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC003",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Storage.SqlServer.Tests/SessionLogProviderSchemaTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs",
+        "tests/McpServer.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-004-AC003",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Storage.Sqlite.Tests/SessionLogProviderSchemaTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs",
+        "tests/McpServer.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Services.Tests/Validation/SessionLogTurnContextValidatorTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextValidatorTests.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/SessionLogQueryService.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogQueryServiceTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/SessionLog/SessionLogContextBackfillService.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextBackfill.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Services.Tests/SessionLog/SessionLogContextBackfillServiceTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Ingestion/ImportRecoveryIngestionService.cs",
+      "new": [
+        "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Federation",
+      "new": [
+        "src/McpServer.Services/Services/FederationOperationApplyService.cs",
+        "src/McpServer.Services/Services/FederationStateAdapters.cs",
+        "src/McpServer.Support.Mcp/Services/FederationLocalExecutionService.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+      "field": "testSourcePaths",
+      "old": "tests/McpServer.Federation.Tests/SessionLogFederationApplyTests.cs",
+      "new": [
+        "tests/McpServer.Support.Mcp.Tests/Services/FederationOperationApplyServiceTests.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "ac-fr173-001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/TurnTransactionPolicy.cs",
+      "new": [
+        "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "ac-fr173-002",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/TurnTransactionPolicy.cs",
+      "new": [
+        "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "ac-fr173-003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/TurnTransactionPolicy.cs",
+      "new": [
+        "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "ac-fr173-004",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/TurnTransactionPolicy.cs",
+      "new": [
+        "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "ac-fr173-005",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/TurnTransactionPolicy.cs",
+      "new": [
+        "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "ac-trtxnkey-001",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/TurnTransactionPolicy.cs",
+      "new": [
+        "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "ac-trtxnkey-002",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/TurnTransactionPolicy.cs",
+      "new": [
+        "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "ac-trtxnkey-003",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Support.Mcp/Services/TurnTransactionPolicy.cs",
+      "new": [
+        "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-182",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-185",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-198",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-229",
+      "field": "productionSurfaces",
+      "old": "plugins/core/lib-ps/stop-gate.ps1",
+      "new": [
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-234",
+      "field": "productionSurfaces",
+      "old": "plugins/core/lib-ps/stop-gate.ps1",
+      "new": [
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-239",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-246",
+      "field": "productionSurfaces",
+      "old": "src/McpServer.Services/Validation/SessionLogTurnContextValidator.cs",
+      "new": [
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "reason": "Astra P0 anchor correction: replace nonexistent or mislocated component with verified repository surface."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC001",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC002",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC003",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC004",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "FR-MCP-SESSIONLIFE-002-AC005",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-002-AC001",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-002-AC002",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TR-MCP-SESSIONLIFE-002-AC003",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-002-AC001",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-002-AC002",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-002-AC003",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "requirementAcceptanceCoverage",
+      "recordId": "TEST-MCP-SESSIONLIFE-002-AC004",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-182",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-185",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-198",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-239",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    },
+    {
+      "collection": "todoAcceptanceRows",
+      "recordId": "BUG-TRIAGE-246",
+      "field": "documentationSurfaces",
+      "old": [
+        "docs/context/session-log-schema.md",
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-MIGRATION-GUIDE.md"
+      ],
+      "new": [
+        "docs/context/module-bootstrap.md",
+        "docs/REPL-USER-GUIDE.md",
+        "docs/context/repl-yaml-message.schema.json"
+      ],
+      "reason": "P0-R2 approved plan correction: use the exact module-bootstrap, REPL user guide, and REPL message schema identities."
+    }
+  ],
+  "inventory": [
+    {
+      "path": "build/Build.Test.cs#L13-L29",
+      "checkPath": "build/Build.Test.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\build\\Build.Test.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\build\\Build.Test.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-107-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC006:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC007:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC004:productionSurfaces"
+      ]
+    },
+    {
+      "path": "build/Build.TestDependencies.cs#L62-L82",
+      "checkPath": "build/Build.TestDependencies.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\build\\Build.TestDependencies.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\build\\Build.TestDependencies.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-107-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC006:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC007:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC004:productionSurfaces"
+      ]
+    },
+    {
+      "path": "docs/context/module-bootstrap.md",
+      "checkPath": "docs/context/module-bootstrap.md",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": false,
+      "documentationOrReceiptAnchor": true,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\docs\\context\\module-bootstrap.md",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\docs\\context\\module-bootstrap.md",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-001:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-002:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-003:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-004:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-005:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-006:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC004:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC005:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC004:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-182:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-185:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-198:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-239:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-246:documentationSurfaces"
+      ]
+    },
+    {
+      "path": "docs/context/repl-yaml-message.schema.json",
+      "checkPath": "docs/context/repl-yaml-message.schema.json",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": false,
+      "documentationOrReceiptAnchor": true,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\docs\\context\\repl-yaml-message.schema.json",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\docs\\context\\repl-yaml-message.schema.json",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC004:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC005:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC004:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-182:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-185:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-198:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-239:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-246:documentationSurfaces"
+      ]
+    },
+    {
+      "path": "docs/context/session-log-schema.md",
+      "checkPath": "docs/context/session-log-schema.md",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": false,
+      "documentationOrReceiptAnchor": true,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\docs\\context\\session-log-schema.md",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\docs\\context\\session-log-schema.md",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-001:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-002:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-003:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-004:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-005:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-006:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:documentationSurfaces"
+      ]
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json",
+      "checkPath": "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json",
+      "rootExists": true,
+      "candidateExists": false,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": true,
+      "classification": "existing-root-only-documentation-or-receipt",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\docs\\receipts\\sessionlife-completion\\20260928-p0\\acceptance-manifest.json",
+      "candidateResolvedPath": null,
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-107-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-003-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-005-AC003:productionSurfaces"
+      ]
+    },
+    {
+      "path": "docs/REPL-MIGRATION-GUIDE.md",
+      "checkPath": "docs/REPL-MIGRATION-GUIDE.md",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": false,
+      "documentationOrReceiptAnchor": true,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\docs\\REPL-MIGRATION-GUIDE.md",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\docs\\REPL-MIGRATION-GUIDE.md",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-001:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-002:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-003:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-004:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-005:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-006:documentationSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:documentationSurfaces"
+      ]
+    },
+    {
+      "path": "docs/REPL-USER-GUIDE.md",
+      "checkPath": "docs/REPL-USER-GUIDE.md",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": false,
+      "documentationOrReceiptAnchor": true,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\docs\\REPL-USER-GUIDE.md",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\docs\\REPL-USER-GUIDE.md",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC004:documentationSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC005:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC004:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC001:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC002:documentationSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC003:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-182:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-185:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-198:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-239:documentationSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-246:documentationSurfaces"
+      ]
+    },
+    {
+      "path": "plugins/core",
+      "checkPath": "plugins/core",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\plugins\\core",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core",
+      "references": [
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC003:productionSurfaces"
+      ]
+    },
+    {
+      "path": "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+      "checkPath": "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core\\lib-ps\\Invoke-McpPlugin.ps1",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC006:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC002:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-186:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-202:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-204:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-213:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-240:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-241:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-243:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-244:productionSurfaces"
+      ]
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "checkPath": "plugins/core/lib-ps/plugin-hook.ps1",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\plugin-hook.ps1",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core\\lib-ps\\plugin-hook.ps1",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-005-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-005-AC002:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-175:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-180:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-181:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-184:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-205:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-208:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-214:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-229:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-234:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-245:productionSurfaces"
+      ]
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "checkPath": "plugins/core/lib-ps/repl-invoke.ps1",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core\\lib-ps\\repl-invoke.ps1",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-001:productionSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-002:productionSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-003:productionSurfaces",
+        "requirementAcceptanceCoverage:AC1:productionSurfaces",
+        "requirementAcceptanceCoverage:AC2:productionSurfaces",
+        "requirementAcceptanceCoverage:AC3:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC006:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-005-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-005-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC002:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-170:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-175:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-180:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-181:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-182:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-184:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-185:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-186:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-198:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-202:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-204:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-205:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-208:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-213:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-214:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-239:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-240:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-241:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-243:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-244:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-245:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-246:productionSurfaces"
+      ]
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "checkPath": "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core\\test-fixtures\\pester\\PluginPowerShellRuntime.Tests.ps1",
+      "references": [
+        "requirementAcceptanceCoverage:AC1:testSourcePaths",
+        "requirementAcceptanceCoverage:AC2:testSourcePaths",
+        "requirementAcceptanceCoverage:AC3:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-005-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-005-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC002:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-170:testSourcePaths"
+      ]
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "checkPath": "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "rootExists": false,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-candidate-only",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core\\test-fixtures\\pester\\SessionLogAuditReconcile.Tests.ps1",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-170-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-REPL-009-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-003-AC006:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC003:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-165:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-186:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-202:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-204:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-213:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-240:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-241:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-243:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-244:testSourcePaths"
+      ]
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "checkPath": "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "rootExists": false,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-candidate-only",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core\\test-fixtures\\pester\\SessionLogLifecycle.Tests.ps1",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-170-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-001-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-001-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-001-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-001-AC003:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-171:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-172:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-173:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-175:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-180:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-181:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-184:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-205:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-208:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-214:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-221:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-245:testSourcePaths"
+      ]
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "checkPath": "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "rootExists": false,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-candidate-only",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core\\test-fixtures\\pester\\SessionLogLifecycleMetadata.Tests.ps1",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-001:testSourcePaths",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-002:testSourcePaths",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-005-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-005-AC002:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-182:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-185:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-186:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-198:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-202:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-204:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-213:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-229:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-234:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-239:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-240:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-241:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-243:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-244:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-246:testSourcePaths"
+      ]
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1",
+      "checkPath": "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1",
+      "rootExists": false,
+      "candidateExists": false,
+      "explicitlyProposed": true,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "proposed",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": null,
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-003-AC003:testSourcePaths"
+      ]
+    },
+    {
+      "path": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "checkPath": "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "rootExists": false,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-candidate-only",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\plugins\\core\\test-fixtures\\pester\\SessionLogQuarantineRepair.Tests.ps1",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-REPL-011-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC001:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-171:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-172:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-173:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-221:testSourcePaths"
+      ]
+    },
+    {
+      "path": "src/McpServer.Services/Services/FederationOperationApplyService.cs",
+      "checkPath": "src/McpServer.Services/Services/FederationOperationApplyService.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\FederationOperationApplyService.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Services\\Services\\FederationOperationApplyService.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Services/Services/FederationStateAdapters.cs",
+      "checkPath": "src/McpServer.Services/Services/FederationStateAdapters.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\FederationStateAdapters.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Services\\Services\\FederationStateAdapters.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogService.cs",
+      "checkPath": "src/McpServer.Services/Services/SessionLogService.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\SessionLogService.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Services\\Services\\SessionLogService.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-005:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-005-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-005-AC004:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogTurnContextBackfill.cs",
+      "checkPath": "src/McpServer.Services/Services/SessionLogTurnContextBackfill.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\SessionLogTurnContextBackfill.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Services\\Services\\SessionLogTurnContextBackfill.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-006:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs",
+      "checkPath": "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\SessionLogTurnContextValidator.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Services\\Services\\SessionLogTurnContextValidator.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-001:productionSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-002:productionSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-003:productionSurfaces",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-002-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-002-AC003:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-182:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-185:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-198:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-239:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-246:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "checkPath": "src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "rootExists": false,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-candidate-only",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.SessionLog.Transcripts\\ImportRecoveryReplayer.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC007:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC004:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "checkPath": "src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.SessionLog.Transcripts\\TranscriptIngestionService.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.SessionLog.Transcripts\\TranscriptIngestionService.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC006:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC004:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Storage.PostgreSqlMigrations/McpServer.Storage.PostgreSqlMigrations.csproj",
+      "checkPath": "src/McpServer.Storage.PostgreSqlMigrations/McpServer.Storage.PostgreSqlMigrations.csproj",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.PostgreSqlMigrations\\McpServer.Storage.PostgreSqlMigrations.csproj",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Storage.PostgreSqlMigrations\\McpServer.Storage.PostgreSqlMigrations.csproj",
+      "references": [
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC003:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Storage.SqliteMigrations/McpServer.Storage.SqliteMigrations.csproj",
+      "checkPath": "src/McpServer.Storage.SqliteMigrations/McpServer.Storage.SqliteMigrations.csproj",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqliteMigrations\\McpServer.Storage.SqliteMigrations.csproj",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Storage.SqliteMigrations\\McpServer.Storage.SqliteMigrations.csproj",
+      "references": [
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC003:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Storage.SqlServerMigrations/McpServer.Storage.SqlServerMigrations.csproj",
+      "checkPath": "src/McpServer.Storage.SqlServerMigrations/McpServer.Storage.SqlServerMigrations.csproj",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Storage.SqlServerMigrations\\McpServer.Storage.SqlServerMigrations.csproj",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Storage.SqlServerMigrations\\McpServer.Storage.SqlServerMigrations.csproj",
+      "references": [
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC003:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "checkPath": "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\Controllers\\SessionLogController.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Support.Mcp\\Controllers\\SessionLogController.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-170-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC001:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-165:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Services/FederationLocalExecutionService.cs",
+      "checkPath": "src/McpServer.Support.Mcp/Services/FederationLocalExecutionService.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\Services\\FederationLocalExecutionService.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Support.Mcp\\Services\\FederationLocalExecutionService.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Services/StorageConnectivityHealthCheck.cs",
+      "checkPath": "src/McpServer.Support.Mcp/Services/StorageConnectivityHealthCheck.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\Services\\StorageConnectivityHealthCheck.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Support.Mcp\\Services\\StorageConnectivityHealthCheck.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC002:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+      "checkPath": "src/McpServer.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\Services\\TransactionGatedSessionLogService.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.Support.Mcp\\Services\\TransactionGatedSessionLogService.cs",
+      "references": [
+        "requirementAcceptanceCoverage:ac-fr173-001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-003-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-003-AC002:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-199:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-200:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-210:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-226:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-232:productionSurfaces",
+        "todoAcceptanceRows:BUG-TRIAGE-236:productionSurfaces"
+      ]
+    },
+    {
+      "path": "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs",
+      "checkPath": "src/McpServer.TransactionSecurity/TurnTransactionKeyserverScope.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\src\\McpServer.TransactionSecurity\\TurnTransactionKeyserverScope.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\src\\McpServer.TransactionSecurity\\TurnTransactionKeyserverScope.cs",
+      "references": [
+        "requirementAcceptanceCoverage:ac-fr173-001:productionSurfaces",
+        "requirementAcceptanceCoverage:ac-fr173-002:productionSurfaces",
+        "requirementAcceptanceCoverage:ac-fr173-003:productionSurfaces",
+        "requirementAcceptanceCoverage:ac-fr173-004:productionSurfaces",
+        "requirementAcceptanceCoverage:ac-fr173-005:productionSurfaces",
+        "requirementAcceptanceCoverage:ac-trtxnkey-001:productionSurfaces",
+        "requirementAcceptanceCoverage:ac-trtxnkey-002:productionSurfaces",
+        "requirementAcceptanceCoverage:ac-trtxnkey-003:productionSurfaces"
+      ]
+    },
+    {
+      "path": "tests/Build.Tests/Build.Tests.csproj",
+      "checkPath": "tests/Build.Tests/Build.Tests.csproj",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\Build.Tests\\Build.Tests.csproj",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\Build.Tests\\Build.Tests.csproj",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-107-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC006:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC007:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC004:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs",
+      "checkPath": "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs",
+      "rootExists": false,
+      "candidateExists": false,
+      "explicitlyProposed": true,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "proposed",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": null,
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-107-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-003-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-005-AC003:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/Build.Tests/SessionLifeUnitGateTests.cs",
+      "checkPath": "tests/Build.Tests/SessionLifeUnitGateTests.cs",
+      "rootExists": false,
+      "candidateExists": false,
+      "explicitlyProposed": true,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "proposed",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": null,
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-107-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC006:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC007:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-001-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC004:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.IntegrationTests\\Controllers\\ProviderDatabaseIntegrationTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.IntegrationTests\\Controllers\\ProviderDatabaseIntegrationTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC003:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.IntegrationTests\\ProviderIntegrationTestSupport.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.IntegrationTests\\ProviderIntegrationTestSupport.cs",
+      "references": [
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC003:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Controllers\\SessionLogControllerErrorTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Controllers\\SessionLogControllerErrorTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-170-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-170-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC001:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-165:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-229:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-234:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "rootExists": false,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-candidate-only",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Ingestion\\ImportRecoveryEnvelopeTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC006:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC002:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-171:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-172:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-173:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-221:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "rootExists": false,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-candidate-only",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Ingestion\\ImportRecoveryIngestionTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC006:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC004:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-171:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-172:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-173:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-221:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs",
+      "rootExists": false,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-candidate-only",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Ingestion\\ImportRecoveryReplayerTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC007:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC002:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC004:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-171:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-172:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-173:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-221:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/PluginInventoryTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/PluginInventoryTests.cs",
+      "rootExists": false,
+      "candidateExists": false,
+      "explicitlyProposed": true,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "proposed",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": null,
+      "references": [
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC003:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/BrainSlotInvocationTransactionTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/BrainSlotInvocationTransactionTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\BrainSlotInvocationTransactionTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\BrainSlotInvocationTransactionTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:ac-fr173-002:testSourcePaths",
+        "requirementAcceptanceCoverage:ac-fr173-005:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/FederationOperationApplyServiceTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/FederationOperationApplyServiceTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\FederationOperationApplyServiceTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\FederationOperationApplyServiceTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-007:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogServiceTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogServiceTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-001:testSourcePaths",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-002:testSourcePaths",
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-005:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-005-AC005:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-005-AC003:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-005-AC004:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-229:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-234:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTurnContextBackfillTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTurnContextBackfillTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-006:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextValidatorTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextValidatorTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTurnContextValidatorTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTurnContextValidatorTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:AC-FR-MCP-SESSIONLOGCTX-001-004:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\StorageConnectivityHealthCheckTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\StorageConnectivityHealthCheckTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-SESSIONLIFE-004-AC004:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TR-MCP-SESSIONLIFE-004-AC002:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\TransactionGatedSessionLogServiceTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\TransactionGatedSessionLogServiceTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:ac-fr173-001:testSourcePaths",
+        "requirementAcceptanceCoverage:ac-fr173-003:testSourcePaths",
+        "requirementAcceptanceCoverage:ac-fr173-005:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-003-AC001:testSourcePaths",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-003-AC002:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-199:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-200:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-210:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-226:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-232:testSourcePaths",
+        "todoAcceptanceRows:BUG-TRIAGE-236:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\TurnTransactionCoordinatorTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\TurnTransactionCoordinatorTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:ac-fr173-002:testSourcePaths",
+        "requirementAcceptanceCoverage:ac-fr173-004:testSourcePaths",
+        "requirementAcceptanceCoverage:ac-fr173-005:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tests/McpServer.Support.Mcp.Tests/Services/TurnTransactionKeyserverScopeTests.cs",
+      "checkPath": "tests/McpServer.Support.Mcp.Tests/Services/TurnTransactionKeyserverScopeTests.cs",
+      "rootExists": true,
+      "candidateExists": true,
+      "explicitlyProposed": false,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "existing-root-and-candidate",
+      "rootResolvedPath": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\TurnTransactionKeyserverScopeTests.cs",
+      "candidateResolvedPath": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.Support.Mcp.Tests\\Services\\TurnTransactionKeyserverScopeTests.cs",
+      "references": [
+        "requirementAcceptanceCoverage:ac-fr173-005:testSourcePaths",
+        "requirementAcceptanceCoverage:ac-trtxnkey-001:testSourcePaths",
+        "requirementAcceptanceCoverage:ac-trtxnkey-002:testSourcePaths",
+        "requirementAcceptanceCoverage:ac-trtxnkey-003:testSourcePaths"
+      ]
+    },
+    {
+      "path": "tools/validation/Invoke-SessionLifeUnitGate.ps1",
+      "checkPath": "tools/validation/Invoke-SessionLifeUnitGate.ps1",
+      "rootExists": false,
+      "candidateExists": false,
+      "explicitlyProposed": true,
+      "productionOrTestAnchor": true,
+      "documentationOrReceiptAnchor": false,
+      "classification": "proposed",
+      "rootResolvedPath": null,
+      "candidateResolvedPath": null,
+      "references": [
+        "requirementAcceptanceCoverage:FR-MCP-107-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:FR-MCP-107-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC005:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC006:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-143-AC007:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-001-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-002-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TEST-MCP-SESSIONLIFE-004-AC004:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC001:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC002:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC003:productionSurfaces",
+        "requirementAcceptanceCoverage:TR-MCP-PLAN-001-AC004:productionSurfaces"
+      ]
+    }
+  ],
+  "proposedPolicy": "Only the five explicitly enumerated planned files may classify as proposed; every other anchor must exist in root or the isolated candidate.",
+  "revision2Correction": {
+    "revision": "20260928-p0-r2",
+    "baselinePathInventory": {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-path-inventory.json",
+      "sha256": "0161565803188CB1D6589A30D190C20ACD9BBDD39B5517E307100639C3496364"
+    },
+    "addedDocumentAnchors": [
+      "docs/REPL-USER-GUIDE.md",
+      "docs/context/repl-yaml-message.schema.json"
+    ],
+    "retainedLegacyDocumentAnchorsForOutsideBatchRows": [
+      "docs/context/session-log-schema.md",
+      "docs/REPL-MIGRATION-GUIDE.md"
+    ],
+    "correctedReferenceRows": 17
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "command": "Status",
+  "method": "",
+  "durationMs": 1001,
+  "error": null,
+  "output": "{\"status\":\"no-session\",\"agent\":\"GrokCode\",\"namespaces\":[\"workflow.sessionlog\",\"workflow.todo\",\"workflow.requirements\",\"workflow.triage\",\"workflow.graphrag\",\"workflow.memory\",\"workflow.failsafe\"],\"requirementMethods\":[\"workflow.requirements.listLayers\",\"workflow.requirements.createLayer\",\"workflow.requirements.updateLayer\",\"workflow.requirements.effective\"],\"requirementClientMethods\":[\"client.Requirements.ListRequirementLayersAsync\",\"client.Requirements.CreateRequirementLayerAsync\",\"client.Requirements.UpdateRequirementLayerAsync\",\"client.Requirements.GetEffectiveRequirementsAsync\"],\"cacheDir\":\"F:\\\\GitHub\\\\McpServer\\\\docs\\\\receipts\\\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\\\plugin-cache\",\"hasSession\":false,\"hasCurrentTurn\":false,\"pendingCount\":0,\"pendingTurnCount\":0,\"failsafeDir\":\"F:\\\\GitHub\\\\McpServer\\\\.mcpServer\\\\failsafe\\\\GrokCode\\\\workspaces\\\\RjpcR2l0SHViXE1jcFNlcnZlcg\\\\pending\",\"failsafeCount\":0,\"failsafeQuarantineCount\":0}"
+}

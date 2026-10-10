@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcpserver.local/schemas/memory-bench-multiturn-result.schema.json",
+  "title": "memory-bench-multiturn-result",
+  "type": "object",
+  "required": ["pack_id", "mode", "plugins", "turns", "jobs", "success_gated"],
+  "properties": {
+    "pack_id": { "type": "string" },
+    "mode": { "type": "string", "enum": ["stub", "recorded", "live"] },
+    "plugins": { "type": "array", "items": { "type": "string" } },
+    "turns": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/turn" }
+    },
+    "jobs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/job" }
+    },
+    "success_gated": { "$ref": "#/$defs/successGated" }
+  },
+  "$defs": {
+    "tokenFields": {
+      "tokens_in": { "type": "integer", "minimum": 0 },
+      "tokens_out": { "type": "integer", "minimum": 0 },
+      "tokens_total": { "type": "integer", "minimum": 0 },
+      "token_source": { "type": "string", "enum": ["host", "estimator", "recorded"] }
+    },
+    "turn": {
+      "type": "object",
+      "required": [
+        "plugin",
+        "job_id",
+        "turn_id",
+        "condition",
+        "tokens_in",
+        "tokens_out",
+        "tokens_total",
+        "token_source"
+      ],
+      "properties": {
+        "plugin": { "type": "string" },
+        "job_id": { "type": "string" },
+        "turn_id": { "type": "string" },
+        "role": { "type": "string" },
+        "condition": { "type": "string", "enum": ["without_memory", "with_memory"] },
+        "tokens_in": { "type": "integer", "minimum": 0 },
+        "tokens_out": { "type": "integer", "minimum": 0 },
+        "tokens_total": { "type": "integer", "minimum": 0 },
+        "token_source": { "type": "string", "enum": ["host", "estimator", "recorded"] },
+        "pass": { "type": "boolean" }
+      }
+    },
+    "job": {
+      "type": "object",
+      "required": [
+        "plugin",
+        "job_id",
+        "condition",
+        "tokens_in",
+        "tokens_out",
+        "tokens_total",
+        "token_source",
+        "pass"
+      ],
+      "properties": {
+        "plugin": { "type": "string" },
+        "job_id": { "type": "string" },
+        "condition": { "type": "string", "enum": ["without_memory", "with_memory"] },
+        "tokens_in": { "type": "integer", "minimum": 0 },
+        "tokens_out": { "type": "integer", "minimum": 0 },
+        "tokens_total": { "type": "integer", "minimum": 0 },
+        "token_source": { "type": "string", "enum": ["host", "estimator", "recorded"] },
+        "pass": { "type": "boolean" }
+      }
+    },
+    "successGated": {
+      "type": "object",
+      "required": [
+        "jobs_n",
+        "success_rate_with_memory",
+        "success_rate_without_memory"
+      ],
+      "properties": {
+        "jobs_n": { "type": "integer", "minimum": 0 },
+        "success_rate_with_memory": { "type": "number" },
+        "success_rate_without_memory": { "type": "number" },
+        "success_gated_mean_tokens_with_memory": { "type": ["number", "null"] },
+        "success_gated_mean_tokens_without_memory": { "type": ["number", "null"] }
+      }
+    }
+  }
+}

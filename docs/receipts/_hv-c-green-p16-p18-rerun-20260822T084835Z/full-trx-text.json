@@ -1,0 +1,20 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\results-full-20260822T090212Z\\pluginint-all.trx",
+  "lastWriteTimeUtc": "2026-08-22T09:22:11.2516577Z",
+  "total": "98",
+  "executed": "98",
+  "passed": "95",
+  "failed": "3",
+  "skipped": null,
+  "notExecuted": "0",
+  "p16Count": 8,
+  "p17Count": 1,
+  "p19Count": 3,
+  "nameCount": 98,
+  "failedNameHits": [
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero",
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero",
+    "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit"
+  ]
+}

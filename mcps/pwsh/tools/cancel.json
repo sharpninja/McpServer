@@ -1,0 +1,25 @@
+{
+  "name": "cancel",
+  "description": "Interrupt the command currently running in the agent's active console. Stops a runaway/long-running PowerShell pipeline (Start-Sleep, a loop, a slow cmdlet) by stopping the running pipeline, AND sends Ctrl+C to break a native CLI that is looping or waiting on stdin (git, npm, ssh, ping, etc.). A command stuck in a non-cooperative blocking call (e.g. [Threading.Thread]::Sleep, a blocking socket/read) may NOT stop — use close_console for that. It also does NOT cancel a PowerShell host prompt (Read-Host, a missing mandatory parameter, Get-Credential) — those are reported as 'awaiting_input', recovered by answering at the console or close_console. Targets the agent's active console directly — it does NOT route to a different console.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent_id": {
+        "description": "Agent ID for sub-agent console isolation. Obtain this by calling start_console with is_subagent=true.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "is_subagent": {
+        "description": "Set to true if you are a sub-agent.",
+        "type": "boolean",
+        "default": false
+      }
+    }
+  },
+  "execution": {
+    "taskSupport": "optional"
+  }
+}

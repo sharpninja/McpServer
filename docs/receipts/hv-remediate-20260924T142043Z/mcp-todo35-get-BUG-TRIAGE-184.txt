@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142305Z-c9ea
+  result:
+    id: BUG-TRIAGE-184
+    title: Codex updateTurn rejects active turn when cached QueryText is empty
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - workflow.sessionlog.updateTurn reports an active current-turn.yaml but then rebuilds a full client.SessionLog.SubmitAsync upsert. Invoke-ReplTurnUpsertParams reads cache queryText and, when that is empty, falls back only to Title. updateTurn omits Title per TR-MCP-REPL-015, so QueryText is passed as an empty string into New-McpPluginTurnUpsertRequest, whose QueryText parameter is Mandatory without AllowEmptyString. That bind fails before persist. Native REPL updateTurn does not require queryText, and the server already preserves omitted turn fields (FR-SUPPORT-015). Plugin status can still show the turn as active, so required model-authored session logging is blocked while the rest of the plugin looks healthy. The same persist helper is used by completeTurn, appendActions, failTurn, and supersede.
+    - 'Triage group: triage-group-cd540065f8f6a590'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- Given current-turn.yaml exists with status in_progress and queryText omitted or empty, workflow.sessionlog.updateTurn exits 0 and does not throw ParameterBindingValidationException or invalid_parameter for queryText.'
+    - '- When cached queryText is empty, the SubmitAsync turn payload omits queryText so the server preserves any previously persisted QueryText instead of writing an empty string.'
+    - '- Pester covers updateTurn against an in_progress cache with empty or omitted queryText and an omitted title, including the persist payload shape.'
+    - '- Plugin status continues to report the same active turn after a successful updateTurn.'
+    - 'Implementation notes:'
+    - '- Mirror Title handling in plugins/core/lib-ps/McpPluginShim.psm1 New-McpPluginTurnUpsertRequest: add AllowEmptyString to QueryText and include queryText on the turn object only when it is non-whitespace.'
+    - "- In plugins/core/lib-ps/repl-invoke.ps1 Get-ReplCurrentTurnQueryText / Invoke-ReplTurnUpsertParams, fall back cache queryText then cache queryTitle before using the Title argument; if still empty, omit queryText rather than sending ''."
+    - "- Do not send queryText: '' on incidental re-submits. SessionLogService.UpdateEntryFromDto treats a present empty string as an explicit value and would clobber a stored QueryText."
+    - '- Cover the shared Invoke-ReplPersistTurn path so completeTurn, appendActions, failTurn, and supersede do not fail the same empty-cache bind.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

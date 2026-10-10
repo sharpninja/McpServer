@@ -118,6 +118,71 @@ public sealed class WarningSuppressionScannerTests
         }
     }
 
+    /// <summary>
+    /// TEST-MCP-AIUNIT-002: Agent worktrees and durable receipt probes are not
+    /// product source. Scan must ignore suppressions under <c>.mcpServer/worktrees</c>,
+    /// <c>.worktrees</c>, and <c>docs/receipts</c> while still reporting product
+    /// <c>src</c> suppressions. PLAN-PLUGINHANDOFF-001 G1 hang GREEN.
+    /// </summary>
+    [Fact]
+    public void Scan_RepositoryBoundaries_ExcludesMcpServerWorktreesAndDocsReceipts()
+    {
+        var root = CreateTempRoot();
+        try
+        {
+            WriteFile(root, "src/McpServer.Services/Models/TodoModels.cs", """
+                #pragma warning disable CA2227
+                """);
+            WriteFile(
+                root,
+                ".mcpServer/worktrees/bug-triage-139-integrate/src/McpServer.Services/Models/TodoModels.cs",
+                """
+                #pragma warning disable CA2227
+                """);
+            WriteFile(
+                root,
+                ".mcpServer/worktrees/bug-triage-139-integrate/src/McpServer.Services/Models/UnifiedSessionLogDto.cs",
+                """
+                #pragma warning disable CA2227
+                """);
+            WriteFile(root, ".worktrees/triage-stale-turns/probe.csproj", "<Project><PropertyGroup><NoWarn>CA1819</NoWarn></PropertyGroup></Project>");
+            WriteFile(
+                root,
+                "docs/receipts/_hv-c-green-p4/failclosed-probe/FailClosedProbe.csproj",
+                "<Project><PropertyGroup><NoWarn>CS1591</NoWarn></PropertyGroup></Project>");
+
+            var occurrences = WarningSuppressionScanner.Scan(root);
+            var relativePaths = occurrences.Select(occurrence => occurrence.RelativePath).ToArray();
+            var diagnostics = occurrences.Select(occurrence => occurrence.DiagnosticId).ToArray();
+
+            Assert.Contains(occurrences, occurrence =>
+                occurrence.DiagnosticId == "CA2227"
+                && occurrence.RelativePath == "src/McpServer.Services/Models/TodoModels.cs");
+            Assert.DoesNotContain(
+                ".mcpServer/worktrees/bug-triage-139-integrate/src/McpServer.Services/Models/TodoModels.cs",
+                relativePaths,
+                StringComparer.OrdinalIgnoreCase);
+            Assert.DoesNotContain(
+                ".mcpServer/worktrees/bug-triage-139-integrate/src/McpServer.Services/Models/UnifiedSessionLogDto.cs",
+                relativePaths,
+                StringComparer.OrdinalIgnoreCase);
+            Assert.DoesNotContain(
+                ".worktrees/triage-stale-turns/probe.csproj",
+                relativePaths,
+                StringComparer.OrdinalIgnoreCase);
+            Assert.DoesNotContain(
+                "docs/receipts/_hv-c-green-p4/failclosed-probe/FailClosedProbe.csproj",
+                relativePaths,
+                StringComparer.OrdinalIgnoreCase);
+            Assert.DoesNotContain("CA1819", diagnostics);
+            Assert.DoesNotContain("CS1591", diagnostics);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
     private static string CreateTempRoot()
     {
         var path = Path.Combine(Path.GetTempPath(), $"mcpserver-warning-scanner-test-{Guid.NewGuid():N}");

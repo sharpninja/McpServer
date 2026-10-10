@@ -1,0 +1,10 @@
+131:function Get-McpFailsafeDir {
+134:TR-MCP-REPL-016: resolves the failsafe queue directory.
+137:the drain, and the status reporter all agree. MCPSERVER_FAILSAFE_DIR and
+138:MCP_FAILSAFE_DIR override the workspace cache for tests and recovery.
+143:if ($env:MCPSERVER_FAILSAFE_DIR) { return $env:MCPSERVER_FAILSAFE_DIR }
+144:if ($env:MCP_FAILSAFE_DIR) { return $env:MCP_FAILSAFE_DIR }
+145:return (Join-Path (Resolve-McpCacheDir -StartPath $StartPath) 'failsafe')
+148:function Get-McpFailsafeQuarantineDir {
+151:TR-MCP-REPL-017: resolves the quarantine directory under the failsafe queue.
+159:return (Join-Path (Get-McpFailsafeDir -StartPath $StartPath) 'quarantine')

@@ -1,0 +1,38 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\todo-plan-client-final.txt",
+  "topDone": false,
+  "taskCount": 31,
+  "doneTrueCount": 17,
+  "p16": [
+    {
+      "task": "C P16 red + hostile then P17-P18.",
+      "done": false
+    }
+  ],
+  "p17": [
+    {
+      "task": "C P16 red + hostile then P17-P18.",
+      "done": false
+    }
+  ],
+  "p18": [
+    {
+      "task": "C P16 red + hostile then P17-P18.",
+      "done": false
+    }
+  ],
+  "p19": [
+    {
+      "task": "C P19 named tests + hostile then native suites + SyncAgentPlugins receipts.",
+      "done": false
+    }
+  ],
+  "combinedC": [
+    {
+      "task": "C P16 red + hostile then P17-P18.",
+      "done": false
+    }
+  ],
+  "hasError": false
+}

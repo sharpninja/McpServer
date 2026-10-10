@@ -51,7 +51,7 @@ public sealed class TodoWorkflowSelectionStoreTests : IDisposable
         {
             BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
-            WorkspacePath = "F:\\GitHub\\McpServer",
+            WorkspacePath = "Q:\\__mcp_unit_test__\\McpServer",
         });
         return new TodoWorkflow(client, new FileTodoSelectionStore(storePath));
     }

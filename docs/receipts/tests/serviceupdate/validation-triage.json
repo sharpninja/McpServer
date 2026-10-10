@@ -1,0 +1,29 @@
+{
+  "status": "collecting",
+  "workspacePath": "/home/sharpninja/github/McpServer",
+  "groupId": "triage-group-a8bcf86d8c4cca0d",
+  "reportId": "triage-report-fa28239db64d4a74a986b82f74c6c07c",
+  "quietDeadlineUtc": {
+    "dayOfYear": 272,
+    "totalOffsetMinutes": 0,
+    "timeOfDay": "00:31:52.3031177",
+    "microsecond": 117,
+    "millisecond": 303,
+    "hour": 0,
+    "ticks": 639262387123031177,
+    "minute": 31,
+    "month": 9,
+    "dayOfWeek": "Tuesday",
+    "utcTicks": 639262387123031177,
+    "nanosecond": 700,
+    "localDateTime": "2026-09-28T19:31:52.3031177-05:00",
+    "date": "2026-09-29T00:00:00.0000000",
+    "year": 2026,
+    "utcDateTime": "2026-09-29T00:31:52.3031177Z",
+    "day": 29,
+    "second": 52,
+    "dateTime": "2026-09-29T00:31:52.3031177",
+    "offset": "00:00:00"
+  },
+  "success": true
+}

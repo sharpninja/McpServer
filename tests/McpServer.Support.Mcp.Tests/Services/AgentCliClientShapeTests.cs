@@ -17,7 +17,7 @@ public sealed class AgentCliClientShapeTests
         AgentCliClient client = new(
             new StaticOptionsMonitor<AgentCliClientOptions>(new AgentCliClientOptions
             {
-                WorkingDirectory = "F:\\GitHub\\McpServer",
+                WorkingDirectory = "Q:\\__mcp_unit_test__\\McpServer",
                 Model = "model-should-not-be-sent-to-cline",
             }),
             new CapturingProcessEnvironmentService(),
@@ -31,7 +31,7 @@ public sealed class AgentCliClientShapeTests
         Assert.NotNull(spawner.StartInfo);
         Assert.Equal("cline", spawner.StartInfo!.FileName);
         Assert.Contains("-p", spawner.StartInfo.ArgumentList);
-        Assert.Equal("F:\\GitHub\\McpServer", GetArgumentAfter(spawner.StartInfo, "-c"));
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", GetArgumentAfter(spawner.StartInfo, "-c"));
         Assert.Equal("xhigh", GetArgumentAfter(spawner.StartInfo, "--thinking"));
         Assert.Contains("rendered prompt", spawner.StartInfo.ArgumentList);
         Assert.DoesNotContain("--model", spawner.StartInfo.ArgumentList);
@@ -47,7 +47,7 @@ public sealed class AgentCliClientShapeTests
         AgentCliClient client = new(
             new StaticOptionsMonitor<AgentCliClientOptions>(new AgentCliClientOptions
             {
-                WorkingDirectory = "F:\\GitHub\\McpServer",
+                WorkingDirectory = "Q:\\__mcp_unit_test__\\McpServer",
                 Model = "model-should-not-be-sent-to-cline",
             }),
             new CapturingProcessEnvironmentService(),
@@ -60,7 +60,7 @@ public sealed class AgentCliClientShapeTests
         Assert.NotNull(spawner.StartInfo);
         Assert.Equal("cline", spawner.StartInfo!.FileName);
         Assert.DoesNotContain("-p", spawner.StartInfo.ArgumentList);
-        Assert.Equal("F:\\GitHub\\McpServer", GetArgumentAfter(spawner.StartInfo, "-c"));
+        Assert.Equal("Q:\\__mcp_unit_test__\\McpServer", GetArgumentAfter(spawner.StartInfo, "-c"));
         Assert.Equal("xhigh", GetArgumentAfter(spawner.StartInfo, "--thinking"));
         Assert.Contains("rendered prompt", spawner.StartInfo.ArgumentList);
         Assert.DoesNotContain("--model", spawner.StartInfo.ArgumentList);

@@ -1,0 +1,71 @@
+[
+  {
+    "Name": "Build.Tests"
+  },
+  {
+    "Name": "McpServer.Acid.IntegrationTests"
+  },
+  {
+    "Name": "McpServer.Client.Tests"
+  },
+  {
+    "Name": "McpServer.Context.Validation"
+  },
+  {
+    "Name": "McpServer.Cqrs.Tests"
+  },
+  {
+    "Name": "McpServer.GitHub.Validation"
+  },
+  {
+    "Name": "McpServer.Launcher.Tests"
+  },
+  {
+    "Name": "McpServer.McpAgent.Tests"
+  },
+  {
+    "Name": "McpServer.PlanReview.Tests"
+  },
+  {
+    "Name": "McpServer.QBAgent.Tests"
+  },
+  {
+    "Name": "McpServer.Repl.Core.Tests"
+  },
+  {
+    "Name": "McpServer.Repl.IntegrationTests"
+  },
+  {
+    "Name": "McpServer.Repo.Validation"
+  },
+  {
+    "Name": "McpServer.Review.Tests"
+  },
+  {
+    "Name": "McpServer.SessionLog.Validation"
+  },
+  {
+    "Name": "McpServer.Support.Mcp.IntegrationTests"
+  },
+  {
+    "Name": "McpServer.Support.Mcp.Tests"
+  },
+  {
+    "Name": "McpServer.Todo.Validation"
+  },
+  {
+    "Name": "McpServer.ToolRegistry.Validation"
+  },
+  {
+    "Name": "McpServer.TransactionSecurity.IntegrationTests"
+  },
+  {
+    "Name": "McpServer.Workspace.Validation"
+  },
+  {
+    "Name": "TestSupport.Shared"
+  },
+  {
+    "Name": "Validation.Shared"
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\results-ai-theory-20260822T085418Z\\ai-theory.trx",
+  "lastWriteTimeUtc": "2026-08-22T08:56:01.6603196Z",
+  "length": 15017,
+  "total": "9",
+  "executed": "9",
+  "passed": "9",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "nameCount": 9,
+  "p16Count": 8,
+  "p17Count": 1,
+  "p19Count": 0,
+  "failedNames": [],
+  "skippedNames": [],
+  "namesSample": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\sl-open.txt",
+  "length": 205,
+  "hasError": false,
+  "created": "true",
+  "sessionId": "GrokSubagentHostile-20260822T083324Z-c-green-p16-p18-r2",
+  "turnId": null,
+  "requestId": "req-20260822T083332Z-1c14",
+  "status": null,
+  "snippet": "type: result\r\npayload:\r\n  requestId: req-20260822T083332Z-1c14\r\n  result:\r\n    agent: GrokSubagentHostile\r\n    sessionId: GrokSubagentHostile-20260822T083324Z-c-green-p16-p18-r2\r\n    created: true\r\n\r\n---\r\n"
+}

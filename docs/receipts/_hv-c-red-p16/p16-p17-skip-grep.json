@@ -1,0 +1,22 @@
+{
+  "TimestampUtc": "2026-08-22T07:25:15.8205670Z",
+  "SkipHitCount": 0,
+  "SkipHits": [],
+  "P16AiTheoryHitCount": 2,
+  "P16AiTheoryHits": [
+    {
+      "File": "AiStrategyFixture.cs",
+      "Line": 5,
+      "Text": "/// C-red-P16 leaves EvaluateAsync unimplemented so AiTheory_Agent_RequiresValidJsonFields stays red."
+    },
+    {
+      "File": "PluginSessionLogAiTheoryTests.cs",
+      "Line": 25,
+      "Text": "public async Task AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)"
+    }
+  ],
+  "P17RejectsHitCount": 0,
+  "P17RejectsHits": [],
+  "P18NukeSkipHitCount": 0,
+  "P18NukeSkipHits": []
+}

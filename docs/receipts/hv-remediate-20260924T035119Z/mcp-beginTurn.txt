@@ -1,0 +1,2 @@
+﻿workflow.sessionlog.beginTurn could not persist superseded turn 'req-20260924T032045Z-begin-001': Cannot bind argument to parameter 'QueryText' because it is an empty string.
+workflow.sessionlog.beginTurn queued/degraded for 'req-20260924T035126Z-hv-remediate-001'. Failsafe retained; current-turn remains active.

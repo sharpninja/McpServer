@@ -28,7 +28,7 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
     private readonly IContextSearchService _searchService = Substitute.For<IContextSearchService>();
     private readonly IGraphRagService _graphRagService = Substitute.For<IGraphRagService>();
     private readonly IWebsiteIngestor _websiteIngestor = Substitute.For<IWebsiteIngestor>();
-    private readonly WorkspaceContext _workspaceContext = new() { WorkspacePath = @"F:\GitHub\McpServer" };
+    private readonly WorkspaceContext _workspaceContext = new() { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" };
 
     /// <summary>Initializes the in-memory context database used by these controller tests.</summary>
     public ContextControllerTransactionGateTests()
@@ -46,41 +46,48 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
         _db.Dispose();
     }
 
-    /// <summary>rebuild-index returns conflict before invoking the search index rebuild path.</summary>
+    /// <summary>rebuild-index delegates to the search index rebuild path while required transactions are active.</summary>
     [Fact]
-    public async Task RebuildIndexAsync_WhenTransactionsRequired_ReturnsConflictWithoutRebuild()
+    public async Task RebuildIndexAsync_WhenTransactionsRequired_DelegatesToRebuild()
     {
+        _searchService.RebuildAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
         var controller = CreateController(new CapturingCoordinator(enabled: true));
 
         var result = await controller.RebuildIndexAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var conflict = Assert.IsType<ConflictObjectResult>(result.Result);
-        Assert.Contains("not transaction compensated", conflict.Value?.ToString() ?? string.Empty, StringComparison.OrdinalIgnoreCase);
-        await _searchService.DidNotReceive()
+        Assert.IsType<OkObjectResult>(result.Result);
+        await _searchService.Received(1)
             .RebuildAsync(Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>ingest-website returns conflict before fetching pages or writing context rows.</summary>
+    /// <summary>ingest-website delegates to the website ingestor while required transactions are active.</summary>
     [Fact]
-    public async Task IngestWebsiteAsync_WhenTransactionsRequired_ReturnsConflictWithoutCallingWebsiteIngestor()
+    public async Task IngestWebsiteAsync_WhenTransactionsRequired_DelegatesToWebsiteIngestor()
     {
+        _websiteIngestor
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<WebsiteIngestPage>>([CreatePage()]));
         var controller = CreateController(new CapturingCoordinator(enabled: true));
 
         var result = await controller.IngestWebsiteAsync(new WebsiteIngestRequest { Url = "https://example.test/docs" }, CancellationToken.None)
             .ConfigureAwait(true);
 
-        var conflict = Assert.IsType<ConflictObjectResult>(result.Result);
-        Assert.Contains("not transaction compensated", conflict.Value?.ToString() ?? string.Empty, StringComparison.OrdinalIgnoreCase);
-        await _websiteIngestor.DidNotReceive()
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var ingestResult = Assert.IsType<WebsiteIngestResult>(ok.Value);
+        Assert.Equal(1, ingestResult.DocumentsIngested);
+        await _websiteIngestor.Received(1)
             .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
-    /// <summary>streaming website ingest returns HTTP 409 before the SSE stream starts when the coordinator is degraded.</summary>
+    /// <summary>streaming website ingest starts when the coordinator is degraded.</summary>
     [Fact]
-    public async Task IngestWebsiteStreamAsync_WhenCoordinatorDegraded_ReturnsConflictWithoutCallingWebsiteIngestor()
+    public async Task IngestWebsiteStreamAsync_WhenCoordinatorDegraded_DelegatesToWebsiteIngestor()
     {
+        _websiteIngestor
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<WebsiteIngestPage>>([CreatePage()]));
         var controller = CreateController(new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
         var httpContext = new DefaultHttpContext();
         await using var responseBody = new MemoryStream();
@@ -90,11 +97,8 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
         await controller.IngestWebsiteStreamAsync(new WebsiteIngestRequest { Url = "https://example.test/docs" }, CancellationToken.None)
             .ConfigureAwait(true);
 
-        Assert.Equal(StatusCodes.Status409Conflict, httpContext.Response.StatusCode);
-        responseBody.Position = 0;
-        var body = Encoding.UTF8.GetString(responseBody.ToArray());
-        Assert.Contains("txn degraded", body, StringComparison.OrdinalIgnoreCase);
-        await _websiteIngestor.DidNotReceive()
+        Assert.NotEqual(StatusCodes.Status409Conflict, httpContext.Response.StatusCode);
+        await _websiteIngestor.Received(1)
             .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
@@ -125,7 +129,7 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
         ITurnTransactionCoordinator coordinator,
         TurnTransactionOptions? transactionOptions = null)
     {
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var chunker = new Chunker();
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var sessionLogService = Substitute.For<ISessionLogService>();

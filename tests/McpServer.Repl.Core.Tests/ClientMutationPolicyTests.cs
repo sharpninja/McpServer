@@ -143,7 +143,7 @@ public sealed class ClientMutationPolicyTests
         {
             BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
-            WorkspacePath = @"F:\GitHub\McpServer",
+            WorkspacePath = @"Q:\__mcp_unit_test__\McpServer",
         });
         var policy = Substitute.For<IClientMutationPolicy>();
         policy.Evaluate("context", "RebuildIndexAsync", Arg.Any<IReadOnlyDictionary<string, object?>>())

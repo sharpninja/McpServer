@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="1" errors="0" failures="1" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-08-21" time="19:32:52">
+  <environment machine-name="PAYTON-LEGION2" os-version="10.0.26200" user="SYSTEM" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" user-domain="" cwd="F:\GitHub\McpServer" clr-version="10.0.10" nunit-version="2.5.8.0" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Failure" success="False" time="1.0826" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginHandoffSkill.Tests.ps1" executed="True" result="Failure" success="False" time="1.0826" asserts="0" description="F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginHandoffSkill.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="TEST-HANDOFF-006 plugin handoff skill-file invoke" executed="True" result="Failure" success="False" time="0.3837" asserts="0" description="TEST-HANDOFF-006 plugin handoff skill-file invoke">
+            <results>
+              <test-case description="PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods" name="TEST-HANDOFF-006 plugin handoff skill-file invoke.PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods" time="0.2892" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected $true, because TEST-HANDOFF-006 remaining gap is skill-file invoke beside F:\GitHub\McpServer\plugins\core\skills\handoff\SKILL.md, not checksum or C# dispatch, but got $false.</message>
+                  <stack-trace>at Test-Path -LiteralPath $invokePath | Should -BeTrue -Because "TEST-HANDOFF-006 remaining gap is skill-file invoke beside $skillPath, not checksum or C# dispatch", F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginHandoffSkill.Tests.ps1:40
+at &lt;ScriptBlock&gt;, F:\GitHub\McpServer\plugins\core\test-fixtures\pester\PluginHandoffSkill.Tests.ps1:40</stack-trace>
+                </failure>
+              </test-case>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

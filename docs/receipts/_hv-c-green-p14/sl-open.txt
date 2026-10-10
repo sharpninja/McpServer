@@ -1,0 +1,9 @@
+type: result
+payload:
+  requestId: req-20260822T042703Z-3768
+  result:
+    agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T042653Z-c-green-p14
+    created: true
+
+---

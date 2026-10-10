@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="723bf923-fe79-4320-91ae-ab8b950d7fdb" name="kingd@PAYTON-LEGION2 2026-08-21 19:48:05" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T19:48:05.1581819-05:00" queuing="2026-08-21T19:48:05.1581826-05:00" start="2026-08-21T19:48:03.2627070-05:00" finish="2026-08-21T19:48:05.1714004-05:00" />
+  <TestSettings name="default" id="e5554dd9-2a3e-4adf-a282-ddecc0b6681e">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_19_48_05" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="5eee3614-af04-4157-85ae-b5e1c4f77375" testId="87979b5e-268c-e227-3bdf-1cbbf14997ac" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust" computerName="PAYTON-LEGION2" duration="00:00:00.0023023" startTime="2026-08-21T19:48:04.9263401-05:00" endTime="2026-08-21T19:48:04.9294060-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5eee3614-af04-4157-85ae-b5e1c4f77375">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs:line 28&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 66&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 74&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="49eec664-a8a1-4a12-8b71-1ad3d7ac18e3" testId="9676f0d0-5f41-a32c-c2d9-8828d86f7808" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker" computerName="PAYTON-LEGION2" duration="00:00:00.0007776" startTime="2026-08-21T19:48:04.9361828-05:00" endTime="2026-08-21T19:48:04.9375212-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="49eec664-a8a1-4a12-8b71-1ad3d7ac18e3">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs:line 28&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 56&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 58&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0e65d680-65a0-4760-94ba-86d3f52a12a5" testId="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" computerName="PAYTON-LEGION2" duration="00:00:00.0009394" startTime="2026-08-21T19:48:04.9339229-05:00" endTime="2026-08-21T19:48:04.9354089-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e65d680-65a0-4760-94ba-86d3f52a12a5">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs:line 28&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 26&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 30&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c83d149d-1ab1-48f3-a6ca-0bace44f4e31" testId="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup" computerName="PAYTON-LEGION2" duration="00:00:00.0172979" startTime="2026-08-21T19:48:04.8630802-05:00" endTime="2026-08-21T19:48:04.9133983-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c83d149d-1ab1-48f3-a6ca-0bace44f4e31">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs:line 28&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 82&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bc4fdf53-4d9b-4cdf-b708-5fcf9f93620f" testId="5bb017ac-c90e-9a36-e020-70d7c3733126" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout" computerName="PAYTON-LEGION2" duration="00:00:00.0023056" startTime="2026-08-21T19:48:04.9302514-05:00" endTime="2026-08-21T19:48:04.9331816-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc4fdf53-4d9b-4cdf-b708-5fcf9f93620f">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs:line 28&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 41&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 48&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4bab9285-3bef-4e37-83c1-f0ffb3794bfe" testId="3432ff42-672e-0305-93be-fe61923bb416" testName="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort" computerName="PAYTON-LEGION2" duration="00:00:00.0013122" startTime="2026-08-21T19:48:04.9234570-05:00" endTime="2026-08-21T19:48:04.9255045-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4bab9285-3bef-4e37-83c1-f0ffb3794bfe">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.</Message>
+          <StackTrace>   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs:line 28&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 16&#xD;
+   at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort() in F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs:line 18&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e">
+      <Execution id="c83d149d-1ab1-48f3-a6ca-0bace44f4e31" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_DeterministicCleanup" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="3432ff42-672e-0305-93be-fe61923bb416">
+      <Execution id="4bab9285-3bef-4e37-83c1-f0ffb3794bfe" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_SelectsFreePort" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="87979b5e-268c-e227-3bdf-1cbbf14997ac">
+      <Execution id="5eee3614-af04-4157-85ae-b5e1c4f77375" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_SignatureAndNonceTrust" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33">
+      <Execution id="0e65d680-65a0-4760-94ba-86d3f52a12a5" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="5bb017ac-c90e-9a36-e020-70d7c3733126">
+      <Execution id="bc4fdf53-4d9b-4cdf-b708-5fcf9f93620f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_StartupTimeout" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="9676f0d0-5f41-a32c-c2d9-8828d86f7808">
+      <Execution id="49eec664-a8a1-4a12-8b71-1ad3d7ac18e3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests" name="ServerFixture_CreatesMarker" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="87979b5e-268c-e227-3bdf-1cbbf14997ac" executionId="5eee3614-af04-4157-85ae-b5e1c4f77375" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9676f0d0-5f41-a32c-c2d9-8828d86f7808" executionId="49eec664-a8a1-4a12-8b71-1ad3d7ac18e3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d5ed6bcc-b2a2-fa00-fe59-167759f6bb33" executionId="0e65d680-65a0-4760-94ba-86d3f52a12a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f4e1cd2-19d1-ace8-030c-fad1d9c42b3e" executionId="c83d149d-1ab1-48f3-a6ca-0bace44f4e31" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5bb017ac-c90e-9a36-e020-70d7c3733126" executionId="bc4fdf53-4d9b-4cdf-b708-5fcf9f93620f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3432ff42-672e-0305-93be-fe61923bb416" executionId="4bab9285-3bef-4e37-83c1-f0ffb3794bfe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="6" executed="6" passed="0" failed="6" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.29]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.62]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.93]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.06]       System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs(28,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.06]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(82,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup()&#xD;
+[xUnit.net 00:00:01.06]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.08]       System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.08]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs(28,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(16,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort()&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(18,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort()&#xD;
+[xUnit.net 00:00:01.08]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.08]       System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.08]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs(28,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(66,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust()&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(74,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust()&#xD;
+[xUnit.net 00:00:01.08]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.08]       System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.08]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs(28,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(41,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout()&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(48,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout()&#xD;
+[xUnit.net 00:00:01.08]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.08]       System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.08]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs(28,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(26,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase()&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(30,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase()&#xD;
+[xUnit.net 00:00:01.08]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.08]       System.InvalidOperationException : PluginIntegrationServerFixture.StartAsync is not implemented.&#xD;
+[xUnit.net 00:00:01.08]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixture.cs(28,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixture.StartAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(56,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker()&#xD;
+[xUnit.net 00:00:01.08]         F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginIntegrationServerFixtureTests.cs(58,0): at McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker()&#xD;
+[xUnit.net 00:00:01.08]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:01.10]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:48:04.9240743-05:00">
+        <Text>[xUnit.net 00:00:01.06]     McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_DeterministicCleanup [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:48:04.9402919-05:00">
+        <Text>[xUnit.net 00:00:01.08]     McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SelectsFreePort [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:48:04.9422764-05:00">
+        <Text>[xUnit.net 00:00:01.08]     McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_SignatureAndNonceTrust [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:48:04.9430156-05:00">
+        <Text>[xUnit.net 00:00:01.08]     McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_StartupTimeout [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:48:04.9438811-05:00">
+        <Text>[xUnit.net 00:00:01.08]     McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-08-21T19:48:04.9446321-05:00">
+        <Text>[xUnit.net 00:00:01.08]     McpServer.PluginIntegration.Tests.PluginIntegrationServerFixtureTests.ServerFixture_CreatesMarker [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,47 @@
+{
+  "TimestampUtc": "2026-08-21T23:43:30.7905309Z",
+  "Build": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p1-p3\\build-pluginsessionlog.trx",
+    "outcome": "Completed",
+    "total": "3",
+    "executed": "3",
+    "passed": "3",
+    "failed": "0",
+    "skipped": "missing-attr",
+    "notExecuted": "0",
+    "inconclusive": "0",
+    "unitOutcomes": [
+      {
+        "name": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Solution_ContainsMcpServerPluginIntegrationTestsProject",
+        "outcome": "Passed"
+      },
+      {
+        "name": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail",
+        "outcome": "Passed"
+      },
+      {
+        "name": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.Catalog_HasExactlyEightEnabledScenarios",
+        "outcome": "Passed"
+      }
+    ]
+  },
+  "Plugin": {
+    "exists": true,
+    "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p1-p3\\pluginintegration.trx",
+    "outcome": "Completed",
+    "total": "1",
+    "executed": "1",
+    "passed": "1",
+    "failed": "0",
+    "skipped": "missing-attr",
+    "notExecuted": "0",
+    "inconclusive": "0",
+    "unitOutcomes": [
+      {
+        "name": "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection",
+        "outcome": "Passed"
+      }
+    ]
+  }
+}

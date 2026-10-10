@@ -1,0 +1,41 @@
+{
+  "TimestampUtc": "2026-08-22T09:02:59.6594783Z",
+  "LoaderExists": true,
+  "TestsExist": true,
+  "StampPatternLiteral": true,
+  "LoadLatestThrowsWhenNoMatchingDir": true,
+  "LoadLatestRequiresSummaryJson": true,
+  "ValidateRowsRequiresRepositoryName": true,
+  "ValidateRowsRequiresNativeSuite": true,
+  "AllowedSuitesPesterBatsJestXunit": true,
+  "ValidateRowsRequiresLogFile": true,
+  "ValidateRowsChecksFailedSkipped": false,
+  "LoadLatestRequiresBranch": true,
+  "LoadLatestRequiresSha40Hex": true,
+  "ShaRegexIgnoreCase": true,
+  "UnrelatedCommitCountDefaultsZero": true,
+  "TestsRequireEightCatalog": true,
+  "TestsRequireEightPluginRows": true,
+  "TestsRequireEightAfterSyncRows": true,
+  "TestsMatchCatalogRepositoryName": true,
+  "TestsAssertFailedZero": 2,
+  "TestsAssertSkippedZero": 2,
+  "TestsRequireLogExists": true,
+  "TestsParseFailedSkippedFromLog": true,
+  "TestsRequireGitJson": true,
+  "TestsRequireGitJsonContainsBranchShaUnrelated": true,
+  "TestsShaLowercaseOnly": true,
+  "TestsCallLoadLatest": 3,
+  "EmptyFolderWouldFailMissingSummary": true,
+  "NoMatchingDirWouldThrowFileNotFound": true,
+  "NamedMethods": [
+    "PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero",
+    "PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero",
+    "PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit"
+  ],
+  "NamedMethodsPresent": [
+    true,
+    true,
+    true
+  ]
+}

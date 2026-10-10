@@ -1,0 +1,97 @@
+{
+  "TimestampUtc": "2026-08-21T23:35:00Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN-PLUGINHANDOFF-001 Phase C P1 red-test gate",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "OverallVerdict": "DISAGREE",
+  "SessionId": "GrokSubagentHostile-20260821T232638Z-c-red-p1",
+  "RequestId": "req-20260821T232638Z-001-hostile-validate-c-red-p1",
+  "TurnId": 42801,
+  "Collector": "docs/receipts/_hv-c-red-p1-reverify/",
+  "ReceiptMarkdown": "docs/receipts/hostile-validator-20260821T233500Z.md",
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "versionFromPluginJson": "1.99.0"
+  },
+  "Trust": {
+    "markerSignature": true,
+    "healthStatusCode": 200,
+    "nonceSent": "64dd0f3df23a46858d4bec6b1c14db36",
+    "nonceEchoed": true
+  },
+  "FirstTestRun": {
+    "trx": "docs/receipts/_hv-c-red-p1-reverify/hv-c-red-p1-reverify.trx",
+    "failed": 3,
+    "passed": 0,
+    "skipped": 0,
+    "exitCode": 1
+  },
+  "SecondTestRun": {
+    "log": "docs/receipts/_hv-c-red-p1-reverify/dotnet-test-rerun2.log",
+    "compileError": "CS0103 DotNetTest does not exist in build/Build.PluginSessionLogIntegration.cs line 24",
+    "trxProduced": false
+  },
+  "LateImplementation": {
+    "pluginIntegrationCsprojUtc": "2026-08-21T23:29:05.9516690Z",
+    "catalogUtc": "2026-08-21T23:29:05.9506726Z",
+    "nukeTargetUtc": "2026-08-21T23:30:57.2671084Z",
+    "slnUtc": "2026-08-21T23:31:00.1868248Z",
+    "firstScanUtc": "20260821T232638Z",
+    "firstScanExistence": {
+      "pluginIntegrationDirExists": false,
+      "pluginIntegrationCsprojExists": false,
+      "catalogInProjectExists": false,
+      "nukeTargetFileExists": false,
+      "testFileExists": true
+    },
+    "catalogEnabledTrueCount": 8
+  },
+  "Todos": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P1-through-P20": false,
+    "MCP-PLUGINCORE-004": true,
+    "MCP-WORKSPACEHYGIENE-002": false,
+    "PLAN-task-14": false
+  },
+  "MandatorySurfacesUnevaluated": [],
+  "ExplicitFailList": [
+    "A2",
+    "A3",
+    "A8",
+    "B1",
+    "B2",
+    "C1",
+    "D1"
+  ],
+  "Claims": [
+    { "id": "A1", "surface": "A", "claim": "Named P1 red tests exist in PluginSessionLogIntegrationTargetTests.cs", "verdict": "PASS" },
+    { "id": "A2", "surface": "A", "claim": "Those three tests currently fail (not skip)", "verdict": "FAIL" },
+    { "id": "A3", "surface": "A", "claim": "P2-P3 product implementation has not started", "verdict": "FAIL" },
+    { "id": "A4", "surface": "A", "claim": "Existing green tests were not relabeled as these P1 reds", "verdict": "PASS" },
+    { "id": "A5", "surface": "A", "claim": "PLAN Done remains false; PLUGININT P1-P20 remain Done=false", "verdict": "PASS" },
+    { "id": "A6", "surface": "A", "claim": "B5 AGREE exists; Phase C red tests allowed after that AGREE", "verdict": "PASS" },
+    { "id": "A7", "surface": "A", "claim": "PLUGINCORE-004 close is allowed via B5 AGREE receipt in doneSummary", "verdict": "PASS" },
+    { "id": "A8", "surface": "A", "claim": "Parent has not implemented P2-P3 and has not marked PLAN task 14 done", "verdict": "FAIL" },
+    { "id": "B1", "surface": "B", "claim": "Honesty and receipts for current artifacts", "verdict": "FAIL" },
+    { "id": "B2", "surface": "B", "claim": "Byrd v4 inter-phase order: red AGREE before P2-P3 green", "verdict": "FAIL" },
+    { "id": "B3", "surface": "B", "claim": "MCP-only TODO/session/requirements storage", "verdict": "PASS" },
+    { "id": "B4", "surface": "B", "claim": "PowerShell only; no Python", "verdict": "PASS" },
+    { "id": "B5", "surface": "B", "claim": "Look-before-delete", "verdict": "PASS" },
+    { "id": "C1", "surface": "C", "claim": "Remaining unsatisfied P1 ACs have currently failing new tests", "verdict": "FAIL" },
+    { "id": "C2", "surface": "C", "claim": "FR/TR/TEST PLUGININT-001 exist with mappings", "verdict": "PASS" },
+    { "id": "C3", "surface": "C", "claim": "Suite green is not treated as AC coverage", "verdict": "PASS" },
+    { "id": "D1", "surface": "D", "claim": "Plan order C-red-P1 AGREE then P2-P3 green", "verdict": "FAIL" },
+    { "id": "D2", "surface": "D", "claim": "PLAN task 14 not marked done", "verdict": "PASS" },
+    { "id": "D3", "surface": "D", "claim": "PLUGINCORE close is not C-red-P1 completion", "verdict": "PASS" },
+    { "id": "D4", "surface": "D", "claim": "Greens not relabeled; B5 AGREE before C red tests", "verdict": "PASS" }
+  ],
+  "AccuracyRating": 91,
+  "CompletenessRating": 94
+}

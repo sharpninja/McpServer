@@ -1,0 +1,17 @@
+{
+  "failsafeDirHits": [
+    "5:$script:OriginalFailsafeDir = $env:MCPSERVER_FAILSAFE_DIR",
+    "13:$env:MCPSERVER_FAILSAFE_DIR = $script:FailsafeDir",
+    "34:$env:MCPSERVER_FAILSAFE_DIR = $script:OriginalFailsafeDir",
+    "36:Remove-Item -LiteralPath Env:MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue",
+    "112:$env:MCPSERVER_FAILSAFE_DIR = $script:OriginalFailsafeDir",
+    "114:Remove-Item -LiteralPath Env:MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue"
+  ],
+  "workspacePathHits": [
+    "82:-WorkspacePath $script:TestRoot `",
+    "99:-WorkspacePath $script:TestRoot `"
+  ],
+  "rebindExpectHits": [
+    "51:[string]$turn['sessionId'] | Should -Be 'ClaudeCode-20260716T020000Z-plugin-session'"
+  ]
+}

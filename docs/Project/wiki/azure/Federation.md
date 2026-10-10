@@ -28,6 +28,8 @@ Use `GET /mcpserver/federation/status` or the corresponding client/plugin wrappe
 
 If `queueDepth`, `fanoutDepth`, `conflictCount`, or `staleReadStatus` is non-zero or non-clear, do not claim federation synchronization is complete. Record the status in the session log and include whether the current read may be stale.
 
+Federation apply and control-plane mutations are first-party FR-MCP-173 paths: they persist without keyserver/coordinator calls even when `Mcp:TurnTransactions:Enabled=true`. QuadBrain brain-slot operations remain coordinator-gated.
+
 ## Agent And Plugin Usage
 
 Agents should retrieve federation status through their required plugin or typed client wrapper after marker trust is verified. In plugin-required workspaces, do not use raw REST or another agent's plugin for normal federation status, queue inspection, or conflict-resolution workflow. Direct REST checks are acceptable only for implementation diagnostics after the plugin path has been ruled out.

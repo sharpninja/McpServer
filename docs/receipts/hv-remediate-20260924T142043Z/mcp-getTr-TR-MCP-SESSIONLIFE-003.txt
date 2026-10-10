@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142118Z-3ac2
+  result:
+    id: TR-MCP-SESSIONLIFE-003
+    title: Wrapper three-outcome exit contract
+    description: Invoke-McpPlugin reports primary success, classified queued success, or nonzero failure. appendActions honors requestId. updateTurn dedupes. Child REPL has one deadline with process-tree cleanup.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: SESSIONLIFE
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:19.1909989+00:00
+    updatedAt: 2026-09-24T14:21:19.1910978+00:00
+  deprecated: true
+
+---
+

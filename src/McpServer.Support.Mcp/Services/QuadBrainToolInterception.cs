@@ -138,17 +138,15 @@ public sealed class QuadBrainToolInterceptor
             var outcome = await _executor.TryExecuteAsync(call, turnId, cancellationToken).ConfigureAwait(false);
             if (outcome.Handled && outcome.Success)
             {
-                executed.Add(new ExecutedInternalTool(call, outcome)); // stripped from response
+                executed.Add(new ExecutedInternalTool(call, outcome));
+                continue;
             }
-            else
-            {
-                // Internal tool failure / no executor: NEVER send to the agent as a tool command. It is logged
-                // as a Session Log failure and surfaced to the agent as a note instead.
-                var failure = outcome.Handled
-                    ? outcome
-                    : InternalToolExecutionOutcome.Fail($"No server-side executor is registered for internal tool '{call.Function.Name}'.");
-                failed.Add(new ExecutedInternalTool(call, failure));
-            }
+
+            // FR-MCP-QBEXEC-001: internal failures and unhandled internals are notes, never agent tool commands.
+            var failure = outcome.Handled
+                ? outcome
+                : InternalToolExecutionOutcome.Fail($"No server-side executor is registered for internal tool '{call.Function.Name}'.");
+            failed.Add(new ExecutedInternalTool(call, failure));
         }
 
         return new ToolInterceptionResult(remaining, executed, failed);

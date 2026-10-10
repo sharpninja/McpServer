@@ -53,7 +53,11 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
     {
         ArgumentNullException.ThrowIfNull(request);
         if (request.Persist)
+        {
             TranscriptRunArtifactWriter.ValidatePersistenceRequest(request);
+            await ReplayPendingImportRecoveryAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
         var inputPath = TranscriptPathSecurity.ValidateReadablePath(request);
 
         var diagnostics = new List<TranscriptDiagnostic>();
@@ -100,6 +104,64 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
         }
 
         return new TranscriptIngestionResult(sessions, diagnostics);
+    }
+
+    private async Task ReplayPendingImportRecoveryAsync(TranscriptIngestionRequest request, CancellationToken cancellationToken)
+    {
+        if (_persister is null || string.IsNullOrWhiteSpace(request.WorkspacePath) || string.IsNullOrWhiteSpace(request.Agent))
+            return;
+
+        var pending = TranscriptRunArtifactWriter.GetPendingRecoveryDirectory(request.WorkspacePath, request.Agent);
+        await ImportRecoveryReplayer.ReplayDirectoryAsync(
+            pending,
+            (path, yaml, token) => PersistRecoveredEnvelopeAsync(request, path, yaml, token),
+            cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<bool> PersistRecoveredEnvelopeAsync(
+        TranscriptIngestionRequest request,
+        string envelopePath,
+        string yaml,
+        CancellationToken cancellationToken)
+    {
+        if (_persister is null)
+            return false;
+
+        var body = ImportRecoveryReplayer.ReadBody(yaml);
+        if (body is null || body.SourceFiles is null || body.SourceFiles.Count == 0)
+            return false;
+        if (!Enum.TryParse<TranscriptSourceKind>(body.SourceKind, ignoreCase: true, out var sourceKind) || sourceKind == TranscriptSourceKind.Auto)
+            return false;
+        if (!_adapters.TryGetValue(sourceKind, out var adapter))
+            return false;
+
+        var replayed = false;
+        foreach (var sourceFile in body.SourceFiles)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (string.IsNullOrWhiteSpace(sourceFile) || !File.Exists(sourceFile))
+                return false;
+            if (string.Equals(Path.GetFullPath(sourceFile), Path.GetFullPath(envelopePath), StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            var bundle = new TranscriptBundle(sourceFile, sourceKind, [sourceFile]);
+            var session = await adapter.NormalizeAsync(bundle, cancellationToken).ConfigureAwait(false);
+            if (session.CanonicalYaml.Contains("importRecovery:", StringComparison.Ordinal))
+                return false;
+
+            var receipt = new TranscriptSessionReceipt(
+                sourceKind,
+                string.IsNullOrWhiteSpace(body.RootId) ? "recovery" : body.RootId,
+                string.IsNullOrWhiteSpace(session.SessionId) ? body.SessionId ?? "recovery" : session.SessionId,
+                string.IsNullOrWhiteSpace(body.SourceHash) ? "recovery" : body.SourceHash,
+                "pending",
+                body.YamlArtifactPath ?? string.Empty,
+                envelopePath);
+            await _persister.PersistAsync(request, session, receipt, cancellationToken).ConfigureAwait(false);
+            replayed = true;
+        }
+
+        return replayed;
     }
 
     private async Task<TranscriptIngestionResult> PersistPendingAsync(

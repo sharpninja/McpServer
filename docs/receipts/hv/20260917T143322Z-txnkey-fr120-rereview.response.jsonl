@@ -1,0 +1,9 @@
+{"type":"hv.response.event","utc":"2026-09-17T14:29:02Z","event":"add-profile","profileFileCount":19,"excluded":"add-profile.grok.md"}
+{"type":"hv.response.event","utc":"2026-09-17T14:29:02Z","event":"trust","sigOk":true,"nonceOk":true,"healthVersion":"1.4.38+6a72d445dda56f1d288660de044a2b020291630d"}
+{"type":"hv.response.event","utc":"2026-09-17T14:29:10Z","event":"sessionlog_open","created":true,"sessionId":"GrokSubagentHostile-20260917T142902Z-txnkey-fr120-rereview"}
+{"type":"hv.response.event","utc":"2026-09-17T14:29:20Z","event":"sessionlog_begin_turn","turnId":45203,"requestId":"req-20260917T142902Z-001-txnkey-fr120-rereview","status":"in_progress"}
+{"type":"hv.response.event","utc":"2026-09-17T14:30:30Z","event":"getFr","id":"FR-MCP-120","acFr120001":"QBAgent session-log writes plus Non-QBAgent session-log writes governed by FR-MCP-173","notes":"Amended 2026-09-17 for FR-MCP-173"}
+{"type":"hv.response.event","utc":"2026-09-17T14:31:00Z","event":"mapping","fr173":"TR-MCP-TXNKEY-001,TEST-MCP-221","fr120":"TR-MCP-TXN-001,TEST-MCP-161,TEST-MCP-168"}
+{"type":"hv.response.event","utc":"2026-09-17T14:31:20Z","event":"todo_get","id":"PLAN-TXNKEYSERVER-001","Done":false}
+{"type":"hv.response.event","utc":"2026-09-17T14:31:40Z","event":"product","executeMutationBypass":"non-QBAgent","isQuadBrain":"QBAgent OrdinalIgnoreCase"}
+{"type":"hv.response.verdict","utc":"2026-09-17T14:33:22Z","OverallVerdict":"AGREE","Accuracy":99,"Completeness":99,"PassCount":16,"FailCount":0,"UnknownCount":0,"FailList":[],"ReceiptMarkdown":"F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260917T143322Z.md"}

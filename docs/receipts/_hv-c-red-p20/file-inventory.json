@@ -1,0 +1,50 @@
+[
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:07.9994265Z",
+    "length": 4700
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessReceipt.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:55.9205618Z",
+    "length": 4997
+  },
+  {
+    "path": "tests/McpServer.PluginIntegration.Tests/PluginPromotionGate.cs",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:49:07.9994265Z",
+    "length": 4567
+  },
+  {
+    "path": "build/Build.PluginPromotion.cs",
+    "exists": false,
+    "lastWriteTimeUtc": null,
+    "length": null
+  },
+  {
+    "path": "build/plugin-promotion-policy.json",
+    "exists": false,
+    "lastWriteTimeUtc": null,
+    "length": null
+  },
+  {
+    "path": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-21T20:22:34.7530926Z",
+    "length": 68486
+  },
+  {
+    "path": "docs/receipts/hostile-validator-20260822T104054Z.md",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T10:42:32.5401420Z",
+    "length": 17777
+  },
+  {
+    "path": "docs/receipts/_c-red-p20-20260822T131402Z/p20-red.trx",
+    "exists": true,
+    "lastWriteTimeUtc": "2026-08-22T13:14:15.6530975Z",
+    "length": 9235
+  }
+]

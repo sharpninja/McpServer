@@ -1,0 +1,28 @@
+{
+  "HarnessCatalogExists": true,
+  "RootCatalogExists": false,
+  "RowCount": 8,
+  "Names": [
+    "Codex",
+    "Claude Code",
+    "Claude Cowork",
+    "Copilot",
+    "Grok",
+    "Cline",
+    "Cline v2",
+    "OpenCode"
+  ],
+  "EnabledCount": 8,
+  "HasClineV2": true,
+  "HostKinds": [
+    "Codex",
+    "ClaudeCode",
+    "ClaudeCowork",
+    "Copilot",
+    "Grok",
+    "Cline",
+    "ClineV2",
+    "OpenCode"
+  ],
+  "MissingExpectedNames": []
+}

@@ -28,4 +28,22 @@ public interface IMemoryWorkflow
 
     /// <summary>Removes a visible memory item by id.</summary>
     Task<MemoryMutationResult> RemoveAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Remembers a multi-layer memory.</summary>
+    Task<MemoryRememberResult> RememberAsync(MemoryRememberRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Recalls memories by meaning or keyword and preserves ranked hits.</summary>
+    Task<MemoryRecallResult> RecallAsync(MemoryRecallRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Explores a memory neighborhood and preserves neighbor items/hits.</summary>
+    Task<MemoryExploreResult> ExploreAsync(MemoryExploreRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Plans or applies consolidate/sleep merge and preserves plan items.</summary>
+    Task<MemoryConsolidateResult> ConsolidateAsync(MemoryConsolidateRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Promotes a session-log or context source into memory.</summary>
+    Task<MemoryPromoteResult> PromoteAsync(MemoryPromoteRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Reverts a memory to snapshot N.</summary>
+    Task<MemoryRevertResult> RevertAsync(string id, int versionNumber, CancellationToken cancellationToken = default);
 }

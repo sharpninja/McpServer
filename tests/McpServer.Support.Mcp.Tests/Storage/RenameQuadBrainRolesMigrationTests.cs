@@ -78,7 +78,7 @@ public sealed class RenameQuadBrainRolesMigrationTests : IDisposable
     }
 
     /// <summary>
-    /// FR-MCP-129 and FR-MCP-134: migrating back down from head to
+    /// FR-MCP-129 and FR-MCP-134: migrating back down from the rename migration to
     /// <c>20260702193911_Decompose4nfAgentModelLists</c> reverses the rename, restoring
     /// LeftHemisphere/RightHemisphere role values, the legacy <c>brain-slot:left-hemisphere</c> and
     /// <c>brain-slot:right-hemisphere</c> party ids, and the role-derived slot ids, while leaving
@@ -90,7 +90,7 @@ public sealed class RenameQuadBrainRolesMigrationTests : IDisposable
         var now = new DateTime(2026, 7, 20, 0, 0, 0, DateTimeKind.Utc);
         using (var db = CreateContext())
         {
-            db.Database.Migrate();
+            db.GetService<IMigrator>().Migrate("20260720170000_RenameQuadBrainRolesToCreativityLogic");
             SeedSlot(db, "brain-slot-creativity-claude-code-opus-4-8", "Creativity", "brain-slot:creativity", now);
             SeedSlot(db, "brain-slot-logic-codex-cli-gpt-5-5", "Logic", "brain-slot:logic", now);
             SeedSlot(db, "brain-slot-curiosity-engine-claude-code-opus-4-8", "CuriosityEngine", "brain-slot:curiosity-engine", now);

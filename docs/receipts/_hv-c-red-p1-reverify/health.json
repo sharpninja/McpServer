@@ -1,0 +1,7 @@
+{
+  "nonceSent": "64dd0f3df23a46858d4bec6b1c14db36",
+  "statusCode": 200,
+  "echoed": true,
+  "body": "{\"status\":\"Healthy\",\"version\":\"1.4.30\\u002Bee89cd63f6d16aa43d8e8dfac2388246c6ba39f8\",\"checks\":[{\"name\":\"self\",\"status\":\"Healthy\",\"description\":null,\"duration\":0.2594},{\"name\":\"upstream\",\"status\":\"Healthy\",\"description\":\"Federation disabled.\",\"duration\":0.0164}],\"nonce\":\"64dd0f3df23a46858d4bec6b1c14db36\",\"storage\":\"reachable\"}",
+  "error": null
+}

@@ -7,22 +7,19 @@ namespace NukeBuild.Tests;
 /// </summary>
 public sealed class ConfigValidatorTests
 {
-    private static readonly string[] ValidYaml =
-    [
-        "Mcp:",
-        "  Instances:",
-        "    default:",
-        "      RepoRoot: F:\\GitHub\\McpServer",
-        "      Port: 7147",
-        "      TodoStorage:",
-        "        Provider: database",
-        "    alt-local:",
-        "      RepoRoot: F:\\GitHub\\McpServer",
-        "      Port: 7148",
-        "      TodoStorage:",
-        "        Provider: sqlite",
-        "        SqliteDataSource: todo.db",
-    ];
+    private static string[] ValidYaml
+    {
+        get
+        {
+            using var resource = typeof(ConfigValidatorTests).Assembly
+                .GetManifestResourceStream("Build.Tests.Fixtures.valid-instances.yaml")
+                ?? throw new InvalidOperationException("Missing embedded valid-instances.yaml.");
+            using var reader = new StreamReader(resource);
+            return reader.ReadToEnd()
+                .Replace("\r\n", "\n", StringComparison.Ordinal)
+                .Split('\n');
+        }
+    }
 
     [Fact]
     public void ParseInstances_ValidYaml_ReturnsTwoInstances()
@@ -38,7 +35,7 @@ public sealed class ConfigValidatorTests
     public void ParseInstances_ValidYaml_ParsesRepoRootAndPort()
     {
         var instances = ConfigValidator.ParseInstances(ValidYaml)!;
-        Assert.Equal(@"F:\GitHub\McpServer", instances["default"].RepoRoot);
+        Assert.Equal(@"Q:\__mcp_unit_test__\McpServer", instances["default"].RepoRoot);
         Assert.Equal(7147, instances["default"].Port);
     }
 

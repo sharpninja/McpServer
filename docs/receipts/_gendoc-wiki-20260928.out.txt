@@ -1,0 +1,17 @@
+type: result
+payload:
+  requestId: req-20260928T170432Z-64ce
+  result:
+    success: true
+    content: ''
+    contentBase64: <omitted; written to docs/requirements/requirements-wiki-documents.zip and docs/Project twin>
+    contentType: application/zip
+    fileName: requirements-wiki-documents.zip
+    files: []
+    format: wiki
+    docType: all
+    generatedAt: 2026-09-28T17:04:35.2286508+00:00
+    zipBytes: 1278835
+    sha256: BDE2C397C406B41F3DCF9CF66B85A09FA61A39320D08B4552827793EBB41EB0A
+    entryCount: 101
+  deprecated: true

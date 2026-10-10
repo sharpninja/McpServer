@@ -22,6 +22,13 @@ static partial class WarningSuppressionScanner
         "tests/Build.Tests/WarningSuppressionValidationTargetTests.cs",
     };
 
+    private static readonly string[] ExcludedRelativePathPrefixes =
+    [
+        ".mcpServer/",
+        ".worktrees/",
+        "docs/receipts/",
+    ];
+
     private static readonly HashSet<string> ScannedExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
         ".cs",
@@ -97,6 +104,12 @@ static partial class WarningSuppressionScanner
 
         var normalizedRelativePath = NormalizeRelativePath(relativePath);
         if (ExcludedRelativePaths.Contains(normalizedRelativePath))
+        {
+            return false;
+        }
+
+        if (ExcludedRelativePathPrefixes.Any(prefix =>
+            normalizedRelativePath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)))
         {
             return false;
         }

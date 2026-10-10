@@ -1,0 +1,19 @@
+{
+  "Utc": "2026-10-02T01:06:29.0078418Z",
+  "SessionId": "Codex-20261002T002034Z-bug-unitfail-001-review-sa-ef70105b",
+  "RequestId": "req-20261002T010410Z-red-gate-final",
+  "Model": "gpt-6-astra",
+  "Status": "completed",
+  "OverallVerdict": "AGREE",
+  "Scope": "Bounded red regression gate only, not production acceptance",
+  "FullVerdictReadback": true,
+  "Equality": "Ordinal equality after CRLF-to-LF and trailing whitespace normalization only",
+  "ResponseCharacters": 7371,
+  "ExpectedSha256": "1340D0C66DDAD8E8DC017F6FC170759E9BC009FB5B37DE3CEAEB653A7097F7CB",
+  "ActualSha256": "1340D0C66DDAD8E8DC017F6FC170759E9BC009FB5B37DE3CEAEB653A7097F7CB",
+  "Actions": 1,
+  "Decisions": 2,
+  "Dialogs": 1,
+  "Receipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.red-gate-accepted-sa-ef70105b.json",
+  "Method": "client.SessionLog.QueryAsync"
+}

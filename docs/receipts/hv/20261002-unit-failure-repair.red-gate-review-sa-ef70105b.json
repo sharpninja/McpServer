@@ -1,0 +1,124 @@
+{
+  "Utc": "2026-10-02T00:55:54.2500832Z",
+  "Gate": "BUG-UNITFAIL-001 regression red gate",
+  "OverallVerdict": "DISAGREE",
+  "VerdictMeaning": "The submitted red evidence is valid, but the bounded regression gate is incomplete until R1/R2 and the identified typed-model round-trip gap are covered. This is not a final repair recheck.",
+  "AccuracyScore": 98,
+  "CompletenessScore": 92,
+  "MinimumApprovalScore": 98,
+  "AccuracyRationale": "All 15 reported cases and the 13 intended failures agree with the XML and source assertions.",
+  "CompletenessRationale": "Actual public wrapper process behavior and empty-result caller recovery remain uncovered; typed client round-trip loss was independently confirmed and parent is adding that regression.",
+  "Reviewer": {
+    "ConsoleAgentId": "sa-ef70105b",
+    "Model": "gpt-6-astra",
+    "SameReviewer": true,
+    "AdditionalAgents": 0,
+    "Effort": "xhigh",
+    "Agent": "Codex"
+  },
+  "Scope": "Read-only review of new regression fixture and red XML, with parent-requested typed Retitled contract check. No operator-action review, production edits, test execution, commit, push, or deployment.",
+  "Source": {
+    "ResultXmlSha256": "9A6DF2C29331CB24E230D756197790EFCCA1AAD8B0490A9FE024079FFC3B26AE",
+    "Fixture": "plugins/core/test-fixtures/pester/SessionLogReviewRegression.Tests.ps1",
+    "FixtureLines": 127,
+    "FixtureSha256": "727C5259476A50109D3BD3A0FD1404FCE9E719BF1469C7933A6B48A422B739BA",
+    "ResultXml": "C:\\Users\\kingd\\.codex\\worktrees\\sessionlog-receipt-fix\\McpServer\\.mcpServer\\test-results\\unit-failure-repair-20261001T234526Z\\review-red\\results.xml",
+    "Workspace": "F:\\GitHub\\McpServer"
+  },
+  "Counts": {
+    "Failed": 13,
+    "Total": 15,
+    "Passed": 2,
+    "Skipped": 0,
+    "NotRun": 0
+  },
+  "ExpectedFailureBreakdown": {
+    "EmptyOutputBinding": 1,
+    "SupersessionMetadata": 2,
+    "StaleResultCase": 1,
+    "InvalidSessionTitleReceipts": 4,
+    "SilentDispatcherOutcomes": 5
+  },
+  "Findings": [
+    {
+      "Id": "R1",
+      "Severity": "P2",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\pester\\SessionLogReviewRegression.Tests.ps1",
+      "Line": 100,
+      "Title": "Public-boundary tests stop at the internal dispatcher",
+      "Evidence": "The five disposition cases invoke Invoke-ReplMethod in process with Invoke-WorkflowUpdateTurn mocked. They do not execute Invoke-McpPlugin.ps1 or Invoke-CodexMcpPlugin.ps1 and do not assert actual child exit status or stdout/stderr separation. LastInvokeReplMethodSuccess is an internal flag, not process exit proof.",
+      "Impact": "These cases can turn green while the public wrapper still swallows, duplicates, or contaminates the typed receipt or returns the wrong process result.",
+      "Remedy": "Keep the dispatcher unit tests. Add isolated deterministic wrapper/child tests for the generic and Codex entry points with primary, queued and failed outcomes. Assert one parseable stdout receipt, diagnostics only on stderr, and exit 0 for primary/queued versus nonzero for rejected/lost. Exercise unchanged/stale-result behavior where the wrapper exposes it. No live server or integration tests are needed.",
+      "Requirement": "TR-MCP-SESSIONLIFE-003-AC001/AC002; FR-MCP-SESSIONLIFE-003-AC001"
+    },
+    {
+      "Id": "R2",
+      "Severity": "P2",
+      "File": "F:\\GitHub\\McpServer\\plugins\\core\\test-fixtures\\pester\\SessionLogReviewRegression.Tests.ps1",
+      "Line": 54,
+      "Title": "Empty-output regression does not cover caller recovery behavior",
+      "Evidence": "The case invokes Test-ReplTypedSessionMutationResult directly and asserts only Ok=false and a message. It never invokes the setTurnTitle or appendDialog workflows that consume this result and own retained recovery payloads.",
+      "Impact": "An AllowEmptyString change alone can satisfy the helper test even if a caller throws, clears recovery data, publishes no rejection, or reuses stale success.",
+      "Remedy": "Add workflow-level cases with transport Success=true and Output empty for setTurnTitle and appendDialog. Use isolated valid identity/freshness state; assert no unclassified exception, false/nonzero result, newly published rejected receipt for the current method/identity, and unchanged retained failsafe bytes. Seed an earlier primary receipt to reject stale-success reuse.",
+      "Requirement": "FR-MCP-SESSIONLIFE-003-AC002/AC006; original F3 remediation acceptance"
+    }
+  ],
+  "ContractObservation": {
+    "Status": "CONFIRMED",
+    "Remedy": "Add actual typed-client deserialization/reserialization regressions for both title methods, then the documented mapped Retitled property. Preserve legitimate session-only receipts without requestId.",
+    "ParentStatus": "User says regression and approved model repair will be added; not reviewed yet.",
+    "Line": 488,
+    "File": "F:\\GitHub\\McpServer\\src\\McpServer.Client\\Models\\SessionLogModels.cs",
+    "Detail": "SessionLogMutationResult ends at Deleted without Retitled. SessionLogClient.SetSessionTitleAsync and SetTurnTitleAsync both deserialize into this type. SessionLogController.cs:325 emits retitled=true. The current hand-built response fixture bypasses that lossy model boundary."
+  },
+  "Claims": [
+    {
+      "Id": "RG01",
+      "Claim": "15/2/13/0/0 red counters and expected failure types",
+      "Status": "PASS",
+      "Evidence": "Parsed every test-case and root XML attributes."
+    },
+    {
+      "Id": "RG02",
+      "Claim": "Metadata and session-title fixture assertions reproduce F1/F2 without weakening assertions",
+      "Status": "PASS",
+      "Evidence": "Durable/degraded meaningful metadata cases fail and missing metadata fallback passes; invalid title cases fail while session-only valid case passes."
+    },
+    {
+      "Id": "RG03",
+      "Claim": "F4 public wrapper boundary coverage",
+      "Status": "FAIL",
+      "Evidence": "R1"
+    },
+    {
+      "Id": "RG04",
+      "Claim": "F3 caller-level classification and failsafe retention coverage",
+      "Status": "FAIL",
+      "Evidence": "R2"
+    },
+    {
+      "Id": "RG05",
+      "Claim": "Typed title round-trip coverage in submitted red gate",
+      "Status": "FAIL",
+      "Evidence": "SessionLogMutationResult has no Retitled; current response helper bypasses this; new parent test is pending."
+    },
+    {
+      "Id": "RG06",
+      "Claim": "Same-reviewer read-only boundary",
+      "Status": "PASS",
+      "Evidence": "Only file/evidence reads and own supported session-log/receipt operations."
+    }
+  ],
+  "ClaimCounts": {
+    "PASS": 3,
+    "UNKNOWN": 0,
+    "FAIL": 3
+  },
+  "McpSessionId": "Codex-20261002T002034Z-bug-unitfail-001-review-sa-ef70105b",
+  "McpRequestId": "req-20261002T005238Z-review-red-gate",
+  "OriginalReviewReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.review-sa-ef70105b.json",
+  "RequestJsonl": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.request.jsonl",
+  "NativeResponseTranscript": "C:\\Users\\kingd\\.codex\\sessions\\2026\\10\\01\\rollout-2026-10-01T19-12-47-01a0f9f4-d605-7301-9b42-d8955d664e56.jsonl",
+  "ResponseCapture": "Parent preserves full byte-complete native transcript after same reviewer completes.",
+  "ReadbackReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.red-gate-review-sa-ef70105b.readback.json"
+}

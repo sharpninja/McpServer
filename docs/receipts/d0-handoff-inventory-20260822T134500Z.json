@@ -1,0 +1,16 @@
+{
+  "timestampUtc": "2026-08-22T13:45:00Z",
+  "phase": "D0",
+  "cancellationTokenNoneInHandoffSrc": false,
+  "remainingGapTests": {
+    "ProcessingLease_RenewsAndFencesTerminalUpdates": { "status": "reuse-implemented-green", "dotnet": "Passed 1 Failed 0 Skipped 0" },
+    "Provenance_IncludesEffectiveCustomPromptIdentityAndVersion": { "status": "reuse-implemented-green", "dotnet": "Passed 1 Failed 0 Skipped 0" },
+    "PluginHandoffSkill_InvokeIngestGetApprove_UsesDocumentedWorkflowMethods": { "status": "reuse-implemented-green", "pester": "Passed 1 Failed 0 Skipped 0" }
+  },
+  "priorGates": {
+    "D1.5": "docs/receipts/hostile-validator-20260822T013032Z.md AGREE",
+    "D2": "docs/receipts/hostile-validator-20260822T033842Z.md AGREE",
+    "D3": "docs/receipts/d3-docs-wiki-20260822T042008Z.md"
+  },
+  "next": "D4 exact command gate"
+}

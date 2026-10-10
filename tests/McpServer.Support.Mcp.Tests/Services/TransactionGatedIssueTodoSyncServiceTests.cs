@@ -20,9 +20,19 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
     /// underlying sync implementation.
     /// </summary>
     [Fact]
-    public async Task Mutations_WhenTransactionsRequired_ReturnDeferredFailuresWithoutCallingInner()
+    public async Task Mutations_WhenTransactionsRequired_DelegateToInner()
     {
         var inner = Substitute.For<IIssueTodoSyncService>();
+        inner.SyncIssueToTodoAsync(Arg.Any<GitHubIssueDetail>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(true));
+        inner.SyncAllIssuesToTodosAsync("open", 30, Arg.Any<CancellationToken>())
+            .Returns(new IssueSyncResult { Synced = 1 });
+        inner.SyncTodoToIssueAsync("ISSUE-42", Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
+        inner.CommentOnTodoUpdateAsync(Arg.Any<TodoFlatItem>(), Arg.Any<TodoFlatItem>(), Arg.Any<CancellationToken>())
+            .Returns(new GitHubCommentResult(true, null));
+        inner.SyncAllTodosToIssuesAsync(Arg.Any<CancellationToken>())
+            .Returns(new IssueSyncResult { Synced = 1 });
         var sut = CreateSut(inner, new CapturingCoordinator());
         var previous = CreateTodo("ISSUE-42", "Before");
         var current = CreateTodo("ISSUE-42", "After");
@@ -33,22 +43,16 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
         var comment = await sut.CommentOnTodoUpdateAsync(previous, current, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var allTodos = await sut.SyncAllTodosToIssuesAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(issueToTodo.Success);
-        Assert.Equal(TodoMutationFailureKind.ExternalSyncFailed, issueToTodo.FailureKind);
-        Assert.Equal(1, allIssues.Failed);
-        Assert.False(todoToIssue.Success);
-        Assert.False(comment.Success);
-        Assert.Equal(1, allTodos.Failed);
-        Assert.Contains("not transaction compensated", issueToTodo.Error, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", allIssues.Errors.Single(), StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", todoToIssue.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", comment.Error, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("not transaction compensated", allTodos.Errors.Single(), StringComparison.OrdinalIgnoreCase);
-        await inner.DidNotReceive().SyncIssueToTodoAsync(Arg.Any<GitHubIssueDetail>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().SyncAllIssuesToTodosAsync(Arg.Any<string?>(), Arg.Any<int>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().SyncTodoToIssueAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().CommentOnTodoUpdateAsync(Arg.Any<TodoFlatItem>(), Arg.Any<TodoFlatItem>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.DidNotReceive().SyncAllTodosToIssuesAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        Assert.True(issueToTodo.Success);
+        Assert.Equal(1, allIssues.Synced);
+        Assert.True(todoToIssue.Success);
+        Assert.True(comment.Success);
+        Assert.Equal(1, allTodos.Synced);
+        await inner.Received(1).SyncIssueToTodoAsync(Arg.Any<GitHubIssueDetail>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).SyncAllIssuesToTodosAsync("open", 30, Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).SyncTodoToIssueAsync("ISSUE-42", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).CommentOnTodoUpdateAsync(Arg.Any<TodoFlatItem>(), Arg.Any<TodoFlatItem>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.Received(1).SyncAllTodosToIssuesAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -56,16 +60,17 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
     /// coordinator message.
     /// </summary>
     [Fact]
-    public async Task SyncTodoToIssueAsync_WhenCoordinatorDegraded_ReturnsCoordinatorFailure()
+    public async Task SyncTodoToIssueAsync_WhenCoordinatorDegraded_DelegatesToInner()
     {
         var inner = Substitute.For<IIssueTodoSyncService>();
+        inner.SyncTodoToIssueAsync("ISSUE-42", Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
         var sut = CreateSut(inner, new CapturingCoordinator(degraded: true, message: "txn degraded"));
 
         var result = await sut.SyncTodoToIssueAsync("ISSUE-42", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.False(result.Success);
-        Assert.Equal("txn degraded", result.ErrorMessage);
-        await inner.DidNotReceive().SyncTodoToIssueAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        Assert.True(result.Success);
+        await inner.Received(1).SyncTodoToIssueAsync("ISSUE-42", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>

@@ -1,0 +1,32 @@
+{
+  "id": "FR-MCP-PLUGINCORE-004",
+  "title": "Reliable plugin session-log dialog parsing",
+  "body": "Official McpServer plugins SHALL parse documented dialogItems and dialog payloads, preserve every item, and reject empty or unparseable appendDialog input instead of reporting a successful no-op.",
+  "workspaceId": "F:\\GitHub\\McpServer",
+  "priority": "critical",
+  "status": "pending",
+  "notes": null,
+  "acceptanceCriteria": [
+    {
+      "id": "FR-MCP-PLUGINCORE-004-AC001",
+      "text": "Documented dialogItems arrays preserve every dialog item and increment auditDialog by the accepted item count.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "FR-MCP-PLUGINCORE-004-AC002",
+      "text": "Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op.",
+      "isSatisfied": false,
+      "evidence": null
+    },
+    {
+      "id": "FR-MCP-PLUGINCORE-004-AC003",
+      "text": "The canonical parsing fix propagates to every official plugin distribution without checksum drift.",
+      "isSatisfied": false,
+      "evidence": null
+    }
+  ],
+  "scopeStartLayerKey": "layer-1",
+  "scopeEndLayerKey": null,
+  "linkedUseCases": []
+}

@@ -135,10 +135,15 @@ public sealed class DbFkContractTests
             "CorrelationId",
             "FederationOperationId",
             "OccurredAtUtc",
-            "PreviousSnapshotJson",
-            "CurrentSnapshotJson",
-            "DiffJson",
-            "MetadataJson",
+            "PreviousSnapshotJsonLegacy",
+            "CurrentSnapshotJsonLegacy",
+            "DiffJsonLegacy",
+            "MetadataJsonLegacy",
+            "PayloadEncodingVersion",
+            "PreviousSnapshotPayload",
+            "CurrentSnapshotPayload",
+            "DiffPayload",
+            "MetadataPayload",
         };
 
         var missing = required

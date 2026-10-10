@@ -1,0 +1,91 @@
+{
+  "TimestampUtc": "2026-08-21T20:18:13Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation PLAN / P0-A completeness",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "ActivePlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a02413-e4ee-7513-bd22-9eddd82adb73\\plan.md",
+  "PriorReceipts": [
+    "docs/receipts/hostile-validator-20260821T161800Z.md",
+    "docs/receipts/hostile-validator-20260821T171357Z.md",
+    "docs/receipts/hostile-validator-20260821T172735Z.md",
+    "docs/receipts/hostile-validator-20260821T173914Z.md",
+    "docs/receipts/hostile-validator-20260821T200636Z.md"
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 91,
+  "SessionLog": {
+    "persisted": true,
+    "sessionId": "GrokSubagentHostile-20260821T201324Z-p0a-plan",
+    "requestId": "req-20260821T201324Z-001-hostile-p0a-closed-fails",
+    "turnId": 42724,
+    "queryProof": "sessionlog_query agent=GrokSubagentHostile from=2026-08-21T20:10:00Z totalCount=1 turn status=completed actions=7 designDecisions=4 dialog=5"
+  },
+  "MandatorySurfacesUnevaluated": [],
+  "Counts": {
+    "PASS": 8,
+    "FAIL": 4,
+    "UNKNOWN": 0
+  },
+  "ExplicitFailList": [
+    "A5: 200636Z FAIL list not closed; named omissions now in D0/task21 but D0 remaining-gap inventory still incomplete (HandoffAuditDefectTests.IngestAsync_SecretInDraft_IsRedactedOnPersist missing from D0 Audit line)",
+    "A-expand: D0 is not the complete Handoff* inventory it claims; 112/113 Handoff* file methods in D0, SecretInDraft omitted",
+    "B1: D0 remaining-gap classification still incomplete while Audit enumerates six of seven HandoffAuditDefectTests facts",
+    "D: P0-A DoD complete D0 inventory not met; task 21 vs D1 consistency is now PASS"
+  ],
+  "Claims": [
+    { "id": "A1", "group": "A Requested", "verdict": "PASS", "summary": "D0 names UnknownSourceNotes, ExtractorCancelled, ArtifactSource, EnqueueOneShot HandoffContext, Publish HandoffContext, PostgreSql_CleanDatabase Handoff migration." },
+    { "id": "A2", "group": "A Requested", "verdict": "PASS", "summary": "AgentPool_DoesNotRetainRawHandoffSourceInPromptState is reuse, not a D1 new red. D1 new reds are three names." },
+    { "id": "A3", "group": "A Requested", "verdict": "PASS", "summary": "Section 18 task 21 no longer lists FR-HANDOFF-003 field diagnostics as D1 remaining reds." },
+    { "id": "A4", "group": "A Requested", "verdict": "PASS", "summary": "Dual P0-A/P0-B remain. PLAN-PLUGINHANDOFF-001 not found." },
+    { "id": "A5", "group": "A Requested", "verdict": "FAIL", "summary": "200636Z FAIL class not closed: D0 remaining-gap inventory still incomplete against on-disk covering tests." },
+    { "id": "A-expand", "group": "A Requested", "verdict": "FAIL", "summary": "D0 complete-inventory contract fails: IngestAsync_SecretInDraft_IsRedactedOnPersist absent from D0 Audit line." },
+    { "id": "B1", "group": "B Workspace rules", "verdict": "FAIL", "summary": "Remaining-gap classification untrustworthy while D0 omits an on-disk audit green." },
+    { "id": "B2", "group": "B Workspace rules", "verdict": "PASS", "summary": "Section 3 matched live todo_get and on-disk grep." },
+    { "id": "B3", "group": "B Workspace rules", "verdict": "PASS", "summary": "MCP-only storage instruction present." },
+    { "id": "B4", "group": "B Workspace rules", "verdict": "PASS", "summary": "pwsh-only / no Python named and followed in this review." },
+    { "id": "C", "group": "C Requirements", "verdict": "PASS", "summary": "200636Z C holes closed: UnknownSourceNotes and AgentPool/Publish are D0 reuse; TEST-HANDOFF AC maps remain." },
+    { "id": "D", "group": "D Plan", "verdict": "FAIL", "summary": "P0-A DoD complete D0 inventory not met. Task 21 vs D1 is consistent." }
+  ],
+  "EvidenceAnchors": {
+    "pluginintLiveP0Done": true,
+    "pluginintLiveP1toP20Open": true,
+    "planPluginHandoffTodoExists": false,
+    "dbSetCount": 62,
+    "planDbSetCount": 62,
+    "tableDiff": "NONE",
+    "drainHardcodedTwoSecondsPath": "plugins/core/lib-ps/repl-invoke.ps1:602",
+    "handoffIngestionServiceTestsFactCount": 21,
+    "handoffFileMethodsClassified": 113,
+    "d0Present": 112,
+    "d0Missing": ["HandoffAuditDefectTests.cs::IngestAsync_SecretInDraft_IsRedactedOnPersist"],
+    "healthNonceEchoed": "59813eb01c4b4ddbb53289d951ec89ca",
+    "planLastWriteTimeUtc": "2026-08-21T20:11:55.5811851Z",
+    "unknownSourceNotesInD0": true,
+    "extractorCancelledInD0": true,
+    "artifactSourceInD0": true,
+    "enqueueOneShotHandoffInD0": true,
+    "publishHandoffContextInD0": true,
+    "postgresHandoffCleanDbInD0": true,
+    "agentPoolDoesNotRetainAsD1NewRed": false,
+    "frHandoff003FieldDiagnosticsInPlan": false,
+    "listedPreviouslyInPlan": false,
+    "secretInDraftInPlan": true,
+    "secretInDraftInD0": false,
+    "d1NewRedCount": 3,
+    "d1NewRedsOnDisk": false,
+    "cancellationTokenNoneInSrcHandoff": false,
+    "task21Path": "plan.md:747",
+    "testingRequirementsAc": "docs/Project/Testing-Requirements.md:19-52",
+    "planAcMap": "plan.md:471-485",
+    "secretInDraftPath": "tests/McpServer.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs:152-174",
+    "agentPoolExistingGreenPath": "tests/McpServer.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs:222-254",
+    "publishHandoffPath": "tests/McpServer.Support.Mcp.Tests/Services/OneShotSensitivePromptPolicyTests.cs:12-19"
+  }
+}

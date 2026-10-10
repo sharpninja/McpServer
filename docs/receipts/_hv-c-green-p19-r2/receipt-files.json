@@ -1,0 +1,25 @@
+{
+  "files": [
+    "git.json",
+    "mcpserver-claude-code-plugin-after-sync.log",
+    "mcpserver-claude-code-plugin-before.log",
+    "mcpserver-claude-cowork-plugin-after-sync.log",
+    "mcpserver-claude-cowork-plugin-before.log",
+    "mcpserver-cline-plugin-after-sync.log",
+    "mcpserver-cline-plugin-before.log",
+    "mcpserver-cline-v2-plugin-after-sync.log",
+    "mcpserver-cline-v2-plugin-before.log",
+    "mcpserver-codex-plugin-after-sync.log",
+    "mcpserver-codex-plugin-before.log",
+    "mcpserver-copilot-plugin-after-sync.log",
+    "mcpserver-copilot-plugin-before.log",
+    "mcpserver-grok-plugin-after-sync.log",
+    "mcpserver-grok-plugin-before.log",
+    "mcpserver-opencode-plugin-after-sync.log",
+    "mcpserver-opencode-plugin-before.log",
+    "PluginNativeSuiteReceiptTests.trx",
+    "summary.json",
+    "sync-agent-plugins.log"
+  ],
+  "count": 20
+}

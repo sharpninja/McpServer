@@ -1,0 +1,2 @@
+[31m??[m docs/plans/PLAN-PLUGINHANDOFF-001.md
+[31m??[m tests/McpServer.PluginIntegration.Tests/

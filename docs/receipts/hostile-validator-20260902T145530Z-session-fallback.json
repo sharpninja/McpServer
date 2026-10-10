@@ -1,0 +1,177 @@
+{
+  "TimestampUtc": "2026-09-02T15:06:38Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": 2,
+  "WorkClassLabel": "user-directed ops: start session + MCP failsafe because wifi/storage down",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ],
+    "directory": "C:\\Users\\kingd\\.claude\\profile"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 15,
+    "FAIL": 1,
+    "UNKNOWN": 1,
+    "NA": 2
+  },
+  "AccuracyRating": 86,
+  "CompletenessRating": 88,
+  "McpSessionLogLimitation": "Reviewer cannot persist MCP session-log turn. MCP_UNTRUSTED. Operator failsafe-only. No /health /mcpserver/* /mcp-transport from this reviewer.",
+  "ExplicitFail": [
+    {
+      "id": "A6",
+      "verdict": "FAIL",
+      "summary": "Live session-state.yaml is 4-field MCP_UNTRUSTED; missing fallback, sessionId, agent, healthNonce. 14:55:30 write was clobbered."
+    }
+  ],
+  "ExplicitUnknown": [
+    {
+      "id": "R1",
+      "verdict": "UNKNOWN",
+      "summary": "Reviewer MCP session-log server persistence blocked; no queryHistory proof."
+    }
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "18 non-skill profile files read this Grok session"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "tools/search HTTP 503 backend_unavailable trace 00-25ec8bb3fa9863a86eb0775368faa671-acf1bda531f21603-01 at 2026-09-02T14:49:53.9765842+00:00"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "plugin.json version 1.106.0 is authoritative"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "no additional MCP HTTP in fallback write step"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "local HMAC-SHA256 succeeded without nonce probe"
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "verdict": "FAIL",
+      "claim": "session-state.yaml has MCP_UNTRUSTED, fallback failsafe, sessionId, agent, healthNonce"
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "current-turn.yaml session-start turnRequestId/status/queryTitle"
+    },
+    {
+      "id": "A8",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "two failsafe YAML records exist with claimed methods"
+    },
+    {
+      "id": "A9",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "no server-side session/TODO/history claim; local-only"
+    },
+    {
+      "id": "A10",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "YAML writes used Write-McpYamlObject/Update-McpYamlObject"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Byrd v4 N/A for class-2 ops"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "receipts / evidence"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "MCP-only storage; failsafe path"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "PowerShell only; no Python"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "honesty: no fabrication of 503/HMAC/failsafe files"
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "MCP_UNTRUSTED classification supported as operator fallback + prior UNTRUSTED"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "N/A",
+      "claim": "FR/TR/TEST not applicable to class-2 ops"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "N/A",
+      "claim": "no plan-step completion claimed for this slice"
+    },
+    {
+      "id": "R1",
+      "surface": "reviewer",
+      "verdict": "UNKNOWN",
+      "claim": "adversarial MCP session-log persistence"
+    }
+  ],
+  "Evidence": {
+    "HmacMatch": true,
+    "HmacExpected": "84E4082B065E2C4131DC8A12B6E37899E750EFB78CB51A4D52939EE18CC5E9B8",
+    "HmacActual": "84E4082B065E2C4131DC8A12B6E37899E750EFB78CB51A4D52939EE18CC5E9B8",
+    "PluginJsonVersion": "1.106.0",
+    "PluginJsonPath": "F:\\GitHub\\mcpserver-grok-plugin\\.grok-plugin\\plugin.json",
+    "SessionStatePath": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\session-state.yaml",
+    "SessionStateKeysAtFirstInspection": [
+      "status",
+      "lastUpdated",
+      "markerFilePath",
+      "markerLastWriteUtc"
+    ],
+    "SessionStateFirstInspectionUtc": "2026-09-02T14:56:09.2448439Z",
+    "SessionStateFirstInspectionLength": 169,
+    "CurrentTurnFirstInspectionTurnRequestId": "req-20260902T145530Z-001-start-new-session-fallback",
+    "FailsafeSubmit": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\GrokCode\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\20260902T145530Z-session_submit-5f02.yaml",
+    "FailsafeRecovery": "F:\\GitHub\\McpServer\\.mcpServer\\failsafe\\GrokCode\\workspaces\\RjpcR2l0SHViXE1jcFNlcnZlcg\\pending\\20260902T145530Z-session_recovery-3abc.yaml",
+    "ParentSessionId": "01a06296-e431-7ee2-bf2f-fb7ec7ce9e36",
+    "ValidatorSessionId": "01a0629e-b165-7260-bd2f-1d9620be5e7d",
+    "ToolSearchTraceId": "00-25ec8bb3fa9863a86eb0775368faa671-acf1bda531f21603-01"
+  },
+  "ReceiptMd": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260902T145530Z-session-fallback.md"
+}

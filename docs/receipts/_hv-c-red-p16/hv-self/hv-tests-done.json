@@ -1,0 +1,10 @@
+{
+  "TimestampUtc": "2026-08-22T07:32:26.2284671Z",
+  "Owner": "GrokSubagentHostile-20260822T072417Z-c-red-p16",
+  "ListExitCode": 0,
+  "FilterExitCode": 1,
+  "FilterStartedUtc": "2026-08-22T07:32:10.1568854Z",
+  "FilterEndedUtc": "2026-08-22T07:32:26.2252168Z",
+  "FilterDurationMs": 16068,
+  "TrxDir": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p16\\hv-self\\trx-p16-hv"
+}

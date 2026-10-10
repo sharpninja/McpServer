@@ -1,0 +1,253 @@
+{
+  "timestampUtc": "20260919T053914Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workClass": "Class 1 H1-green",
+  "todoId": "MCP-MEMORY-002",
+  "priorH1RedAgree": "docs/receipts/hostile-validator-20260919T052748Z.md",
+  "planFile": "docs/plans/mcp-memory-002.md",
+  "acCatalog": "docs/plans/mcp-memory-002-ac-catalog.json",
+  "prNumber": 44,
+  "prUrl": "https://github.com/sharpninja/McpServer/pull/44",
+  "gitHeadVerified": "fd807466ff4a12e92f11954b516291fea534a4a0",
+  "gitBranch": "cursor/memory-s1-green-4b97",
+  "baseBranch": "memory-s1-red",
+  "overallVerdict": "AGREE",
+  "passCount": 16,
+  "failCount": 0,
+  "unknownCount": 0,
+  "naCount": 0,
+  "accuracy": 99,
+  "completeness": 99,
+  "thresholdNote": "Strict AGREE only if every scored claim is PASS AND Accuracy>=98/100 AND Completeness>=98/100. Observed Accuracy=99, Completeness=99, FAIL=0, UNKNOWN=0 -> AGREE.",
+  "thresholdMet": true,
+  "operatorAgreeFloor": "every scored claim PASS AND Accuracy>=98 AND Completeness>=98",
+  "addProfile": {
+    "hostileSkillMissing": true,
+    "profileDirsAbsent": [
+      "/home/box/.claude/profile",
+      "/home/box/.grok/profile"
+    ],
+    "profileFileCount": 0
+  },
+  "trustBootstrap": {
+    "health": "Healthy",
+    "todoGetMcp": "timed_out",
+    "todoGetCurl": {
+      "done": false,
+      "id": "MCP-MEMORY-002"
+    },
+    "evidenceSource": "origin/cursor/memory-s1-green-4b97 worktree /tmp/s1-green-wt @ fd807466ff4a12e92f11954b516291fea534a4a0"
+  },
+  "testEvidence": {
+    "memoryNamespace": {
+      "failed": 0,
+      "passed": 76,
+      "skipped": 0,
+      "total": 76
+    },
+    "catalogMatrix": {
+      "count": 73,
+      "coverage": "73/73",
+      "failed": 0,
+      "passed": 73,
+      "skipped": 0
+    },
+    "mocksFirst": {
+      "passed": 3,
+      "failed": 0,
+      "methods": [
+        "MemoryS1PortMockTests.PortMock_Remember_EmptyContent_Returns400",
+        "MemoryS1PortMockTests.PortMock_Remember_ValidPayload_ReturnsMemoryId",
+        "MemoryS1PortMockTests.PortMock_Revert_RestoresSnapshot"
+      ]
+    },
+    "compatFr001_007": {
+      "failed": 0,
+      "passed": 28,
+      "skipped": 0,
+      "filter": "MemoryServiceTests|MemoryControllerTests|MemoryEntityScopeTests|MemoryContractArtifactTests"
+    },
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+    "trxPath": "/tmp/s1-green-test-results/memory-green.trx"
+  },
+  "migrations": [
+    "src/McpServer.Storage.SqliteMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+    "src/McpServer.Storage.PostgreSqlMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs",
+    "src/McpServer.Storage.SqlServerMigrations/Migrations/20260918223000_AddMemoryVersionAndEdgeStorage.cs"
+  ],
+  "claims": [
+    {
+      "id": "H1G-1",
+      "verdict": "PASS",
+      "claim": "Every S1-tagged AC passing named test",
+      "evidence": "73/73 S1 catalog methods Passed in independent TRX"
+    },
+    {
+      "id": "H1G-2",
+      "verdict": "PASS",
+      "claim": "Memory namespace Failed 0 Skipped 0",
+      "evidence": "dotnet test Memory filter: Failed 0 Passed 76 Skipped 0"
+    },
+    {
+      "id": "H1G-3",
+      "verdict": "PASS",
+      "claim": "Migrations *MemoryVersion* on SQLite/PostgreSQL/SQL Server",
+      "evidence": "20260918223000_AddMemoryVersionAndEdgeStorage.cs on all three providers; forward-only Down"
+    },
+    {
+      "id": "H1G-4",
+      "verdict": "PASS",
+      "claim": "Content backfill from legacy Text",
+      "evidence": "UPDATE SET Content=Text in all three migrations; Backfill_ContentFromLegacyText Passed"
+    },
+    {
+      "id": "H1G-5",
+      "verdict": "PASS",
+      "claim": "Unique(From,To,EdgeType)",
+      "evidence": "IX_MemoryEdges_FromMemoryId_ToMemoryId_EdgeType unique; UniqueFromToType_Enforced Passed"
+    },
+    {
+      "id": "H1G-6",
+      "verdict": "PASS",
+      "claim": "Handlers registered Remember/ListVersions/Revert",
+      "evidence": "Handler types + AddCqrsHandlers(typeof(RememberMemoryCommand).Assembly)"
+    },
+    {
+      "id": "H1G-7",
+      "verdict": "PASS",
+      "claim": "Multi-layer persistence",
+      "evidence": "Entity columns + DbSets mapped; PersistsMultiLayerFields Passed"
+    },
+    {
+      "id": "H1G-8",
+      "verdict": "PASS",
+      "claim": "Version revert restores and appends history",
+      "evidence": "RevertAsync adds next MemoryVersionEntity; Revert_* tests Passed"
+    },
+    {
+      "id": "H1G-9",
+      "verdict": "PASS",
+      "claim": "Compat Effective + REQUIRED MEMORIES raw unchanged",
+      "evidence": "compat 28/0/0; RequiredBlock_RawContentOnly Passed"
+    },
+    {
+      "id": "H1G-10",
+      "verdict": "PASS",
+      "claim": "Read-only key cannot mutate",
+      "evidence": "ReadOnlyKey_CannotMutate Passed; 403 in operations"
+    },
+    {
+      "id": "H1G-11",
+      "verdict": "PASS",
+      "claim": "Foreign workspace hidden",
+      "evidence": "WorkspaceMemory_HiddenFromOtherWorkspace + ProductMembership_DoesNotShareMemories Passed"
+    },
+    {
+      "id": "H1G-12",
+      "verdict": "PASS",
+      "claim": "CQRS-only new verbs; no public IMemoryService remember facade",
+      "evidence": "Command docs + MemoryCompetitiveOperations not IMemoryService facade"
+    },
+    {
+      "id": "H1G-13",
+      "verdict": "PASS",
+      "claim": "No AC weakening / test deletion",
+      "evidence": "Only MemoryS1Harness.cs modified under tests/; 73/73 retained"
+    },
+    {
+      "id": "H1G-14",
+      "verdict": "PASS",
+      "claim": "No Python product path",
+      "evidence": "git ls-tree no .py"
+    },
+    {
+      "id": "H1G-15",
+      "verdict": "PASS",
+      "claim": "TODO done:false; no merge; no S2",
+      "evidence": "curl todo done:false; PR #44 left draft"
+    },
+    {
+      "id": "H1G-16",
+      "verdict": "PASS",
+      "claim": "Honesty disclose gaps",
+      "evidence": "skill missing; MCP timeout; remote worktree"
+    }
+  ],
+  "focusSurface": [
+    {
+      "id": "H1G-F1",
+      "verdict": "PASS",
+      "topic": "migrations SQLite/PostgreSQL/SQL Server"
+    },
+    {
+      "id": "H1G-F2",
+      "verdict": "PASS",
+      "topic": "Content backfill"
+    },
+    {
+      "id": "H1G-F3",
+      "verdict": "PASS",
+      "topic": "Unique(From,To,EdgeType)"
+    },
+    {
+      "id": "H1G-F4",
+      "verdict": "PASS",
+      "topic": "compat Effective + REQUIRED MEMORIES raw"
+    },
+    {
+      "id": "H1G-F5",
+      "verdict": "PASS",
+      "topic": "read-only cannot mutate"
+    },
+    {
+      "id": "H1G-F6",
+      "verdict": "PASS",
+      "topic": "foreign workspace hidden"
+    },
+    {
+      "id": "H1G-F7",
+      "verdict": "PASS",
+      "topic": "Version revert appends history"
+    },
+    {
+      "id": "H1G-F8",
+      "verdict": "PASS",
+      "topic": "S1-tagged matrix rows all Green"
+    }
+  ],
+  "workspaceRules": [
+    {
+      "id": "B1",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B2",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B3",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B4",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B5",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B6",
+      "verdict": "PASS"
+    }
+  ],
+  "explicitFailList": [],
+  "unknownList": [],
+  "didNotMarkTodoDone": true,
+  "didNotMerge": true,
+  "didNotStartS2": true,
+  "receiptPaths": [
+    "docs/receipts/hostile-validator-20260919T053914Z.md",
+    "docs/receipts/hostile-validator-20260919T053914Z.json"
+  ]
+}

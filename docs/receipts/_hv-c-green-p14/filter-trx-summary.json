@@ -1,0 +1,174 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p14\\trx-p14\\p14-filter.trx",
+  "lastWriteTimeUtc": "2026-08-22T04:46:52.2813173Z",
+  "length": 14615,
+  "outcome": "Completed",
+  "total": "8",
+  "executed": "8",
+  "passed": "8",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 8,
+  "failedNames": [],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCowork)"
+  ],
+  "skippedNames": [],
+  "failedMessages": [],
+  "p14Count": 8,
+  "p14Failed": 0,
+  "p14Passed": 8,
+  "p14Skipped": 0,
+  "p15Count": 0,
+  "p16Count": 0,
+  "p14ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 5,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 5,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 5,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 5,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 5,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 5,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 5,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 5,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0,
+      "Messages": [
+        null
+      ]
+    }
+  ],
+  "unitOutcomes": [
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCode)",
+      "outcome": "Passed",
+      "duration": "00:00:17.5252591",
+      "message": null,
+      "stdout": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Grok)",
+      "outcome": "Passed",
+      "duration": "00:00:14.6295827",
+      "message": null,
+      "stdout": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClineV2)",
+      "outcome": "Passed",
+      "duration": "00:00:12.4934974",
+      "message": null,
+      "stdout": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Codex)",
+      "outcome": "Passed",
+      "duration": "00:00:12.5525728",
+      "message": null,
+      "stdout": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Cline)",
+      "outcome": "Passed",
+      "duration": "00:00:18.9276912",
+      "message": null,
+      "stdout": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: OpenCode)",
+      "outcome": "Passed",
+      "duration": "00:00:11.2072295",
+      "message": null,
+      "stdout": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Copilot)",
+      "outcome": "Passed",
+      "duration": "00:00:17.7811723",
+      "message": null,
+      "stdout": null
+    },
+    {
+      "name": "McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCowork)",
+      "outcome": "Passed",
+      "duration": "00:00:15.4002601",
+      "message": null,
+      "stdout": null
+    }
+  ]
+}

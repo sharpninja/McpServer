@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "frozenAtUtc": "2026-09-28T03:30:53.8583813Z",
+  "planId": "PLAN-SESSIONLIFE-001",
+  "planRevision": 4,
+  "planPath": "docs/plans/sessionlife-batch-completion-20260927.md",
+  "planSha256": "40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12",
+  "phase": "P0",
+  "state": "frozen-for-independent-review-not-accepted",
+  "candidate": {
+    "root": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928",
+    "branch": "codex/sessionlife-acceptance-20260928",
+    "head": "6a565d8762072ed040469047791a57c80dbf1e88",
+    "baseSha": "6a565d8762072ed040469047791a57c80dbf1e88",
+    "baseTree": "c30e04f5299ca9ae04c1a472ff68b7381070ef17",
+    "statusPorcelain": [
+      " M plugins/core/lib-ps/McpPluginShim.psm1",
+      " M plugins/core/lib-ps/plugin-hook.ps1",
+      " M plugins/core/lib-ps/repl-invoke.ps1",
+      " M plugins/core/lib-ps/resolve-cache-dir.ps1",
+      " M plugins/core/test-fixtures/pester/PluginHandoffSkill.Tests.ps1",
+      " M plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+      " M src/McpServer.Services/Services/SessionLogService.cs",
+      " M src/McpServer.SessionLog.Transcripts/TranscriptIngestionService.cs",
+      " M src/McpServer.SessionLog.Transcripts/TranscriptRunArtifactWriter.cs",
+      " M src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapter.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalog.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogCatalogTests.cs",
+      " M tests/McpServer.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs",
+      " M tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+      " M tests/McpServer.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+      " M tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+      "?? plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+      "?? plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+      "?? src/McpServer.SessionLog.Transcripts/ImportRecoveryReplayer.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/Fixtures/import-recovery-envelope.yaml",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs",
+      "?? tests/McpServer.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs"
+    ],
+    "trackedModifiedCount": 18,
+    "untrackedCopiedCount": 9,
+    "contentManifestAlgorithm": "SHA256 over UTF-8 sorted lines path NUL candidateSha256 NUL length LF",
+    "contentManifestSha256": "5389F7AEF9FA07D941C21A5FFC2972BD956EC0070A8439F24C347F0A2DA94B45",
+    "diffCheckExitCode": 0,
+    "diffCheckOutput": []
+  },
+  "artifacts": [
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json",
+      "length": 426511,
+      "sha256": "D662F206B2471DDC12EE7B2AEEFD1B15C12339E0896DE8FEC5E81612012A1CB8",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/approval.json",
+      "length": 804,
+      "sha256": "04511D74DA0DCF9F8DFC147DB6D4DD6207EEA4FBD7BC5C897F337D611B8AC365",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/decision-register.json",
+      "length": 6126,
+      "sha256": "C2E7E98021BB11B917EE9A2D140E6B226F389174F8BC72FEF8ADDEB043C3F049",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/existing-candidate-pester-inventory.json",
+      "length": 32357,
+      "sha256": "0C631013E2C31BA14E3D574862A846B5433B6E57CD1E2B12CA8A33A10F95694A",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/parent-action11-readback.json",
+      "length": 883,
+      "sha256": "6AE0E5D3FC9813FAF2C7A277021384A170701E70546063D80BFC2872A003EC82",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/parent-audit-readback.json",
+      "length": 5168,
+      "sha256": "CB458F04A0BC97E82AB4F7EAC0DFCD8A4FCB3049A80458810F414C5161528BE8",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/parent-final-input-verification.json",
+      "length": 2023,
+      "sha256": "9FD6657DAD127F936BE3D1B5B80012A582C6E54BAC41EDC183971EA067A0BCA7",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/parent-freeze-verification.json",
+      "length": 6619,
+      "sha256": "56DBD721C9AD3B25EEFAAB666B84BAE32B8257D2C52E08E153DE8941DDDEC50E",
+      "disposition": "source-and-history-proof;47-final-mappings-in-final-input-verification"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/parent-source-verification-v2.json",
+      "length": 9455,
+      "sha256": "DE4DBF5FCAD1E50847DC8E5CDC603896F25B5673E1DB2B9DF00FC71569CCE4A3",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/parent-source-verification.json",
+      "length": 35777,
+      "sha256": "97FEE471D1C93C0019BAF710BFEB542860FFB21410D9603F80E3B55CAADF2AE1",
+      "disposition": "historical-superseded-by-v2-and-final-verification"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/preflight-plugin-providers.json",
+      "length": 2383,
+      "sha256": "CC2063E3A95F5E1CE214F54008325792D674290886046AD58A9198AF2CC2B218",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/preflight-tools.json",
+      "length": 2513,
+      "sha256": "C7BD18DDB66A2320E08E35892E1B6C17FF6B02EE13C051DF3BEC31EDB77E02BE",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-baseline.json",
+      "length": 221740,
+      "sha256": "78AE53DEB349CF909E48CF6344DD8A33F96B3CA76A63A1C9FE92F55F8544390D",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-infrastructure-baseline.json",
+      "length": 3093,
+      "sha256": "179655E2D976F3AFD13AE958029C202C1C191A755DADE45F1BA27996A1C8EE19",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-path-inventory.json",
+      "length": 111129,
+      "sha256": "0161565803188CB1D6589A30D190C20ACD9BBDD39B5517E307100639C3496364",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-post-state.json",
+      "length": 313340,
+      "sha256": "FE7F7E970D003B8576CD0173C89C5C781220286FEE39A14F2C90E7B1B383C775",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/requirements-reconciliation.json",
+      "length": 24961,
+      "sha256": "21DFA3A977AAA19D785E60F5653982D9245F49A34CD7C4CE8F69E29447ACEF2E",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-audit-receipt.json",
+      "length": 5908,
+      "sha256": "B9104F42F9B2DA122C0843FDB76B3DB4AD4681C0C3A3847A404C8F9A7EE943DB",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-candidate-manifest.json",
+      "length": 29459,
+      "sha256": "EAFA54BEA79AA1CA4B755817E568CD92E10BF2EDB7CDA7C8DE266038362B2142",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-catalog-apply-patch-reconstitution.json",
+      "length": 2014,
+      "sha256": "EE499792698DF2946B7B6305ED929A0D002A7D6D936C847E18A4B272C0585D57",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-full-selected.patch",
+      "length": 70097,
+      "sha256": "48D3EE4A5E11920F10C9638C2EE110AED18DF12384E0FE37AA4DBC76C1408E97",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-scope-classification.json",
+      "length": 121432,
+      "sha256": "6D695DAD7C930F328F52EE19829F4DD8892BA697044CB5224698F5DED27A0C83",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-selected-hunk-exclusions.patch",
+      "length": 1544,
+      "sha256": "758A901E57F1A59448F0D558EA4CC7258F84EC0988468AF2C9F91143C6A8EB44",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-selected.patch",
+      "length": 69494,
+      "sha256": "FF8835E5DB2B74BDFD1EB1BD789CD53795317C3C76A755DB112F6527B29FE09D",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-summary.json",
+      "length": 7513,
+      "sha256": "DBFEFB8ED4F453B31EE146947EDFE633F276EA6EAFDE0FC1E89621978B87FF24",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-worktree-after.json",
+      "length": 79917,
+      "sha256": "5A96A2D10D2E7F46983087EDCAF05ABB1F7B0A14647FB7CF1F6D1690A9224DA6",
+      "disposition": "review-input"
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0/source-worktree-before.json",
+      "length": 79755,
+      "sha256": "3DD9F2063BF2421F38623DFFFD34795EB4BE88457BB0B85D0C2E57E95FBAE18E",
+      "disposition": "review-input"
+    }
+  ],
+  "knownOperationalBlockers": [
+    "Poincare and Hooke terminal audit calls failed; exact turns remain in_progress, not claimed completed. Poincare final needs-log envelope retained via normal plugin failsafe.",
+    "Live initial session graph query cancellation diagnosed; Cartesian expansion remains unproven. Early development-deployment sequence amendment awaits user approval."
+  ],
+  "privateDiagnostic": {
+    "path": ".mcpServer/codex/diagnostics/20260928-sessiongraph-timeout.json",
+    "sha256": "FD1DD4163CCEE5CEA35380E6699037C5EAD79F4C043C68FF322E5218B61D7F0D"
+  },
+  "reviewRequest": "docs/receipts/hv/20260928T021500Z-sessionlife-p0.request.jsonl",
+  "gate": "Independent code/document/evidence review: both scores >=98, zero applicable FAIL/UNKNOWN, full durable review body and terminal readback. No review of operator requests.",
+  "testsRun": false,
+  "newProductionEditsStarted": false
+}

@@ -1,0 +1,42 @@
+{
+  "TimestampUtc": "2026-08-22T07:30:47.8163405Z",
+  "ListAiTheoryHostKindRows": 8,
+  "P17": 0,
+  "P18": 0,
+  "SkipInList": 0,
+  "TotalAvailable": 94,
+  "HostCounts": [
+    {
+      "HostKind": "Codex",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 1
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1
+    }
+  ]
+}

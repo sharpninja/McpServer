@@ -1,0 +1,122 @@
+OverallVerdict=AGREE
+DraftScopeVerdict=AGREE
+AccuracyScore=99
+CompletenessScore=99
+AccuracyRationale=Candidate and literal fence unchanged; all 28 behavioral cases pass; source checks confirm the held fixes. Scores assess draft correctness and are not claims of a live installation or backend model attestation.
+CompletenessRationale=All requested checks and applicable A-D surfaces evaluated, with live requirements/TODO reads and separated reviewer hygiene. Inventory, live installation, agent UI activation and two Legion dry-runs remain explicitly outside this draft acceptance and open for the parent task.
+CountsPASS=16 FAIL=0 UNKNOWN=0
+DraftCountsPASS=10 FAIL=0 UNKNOWN=0
+FailuresCount=0
+DraftFailuresCount=0
+Model=gpt-6-astra Effort=xhigh
+LiteralKeys=SourceLines,Code,Summary,Cases,FixtureSource,HarnessToolCallSource,MockedCommands,Limit
+LV.SourceLines=630-662
+LV.Code=$name = 'McpServer'    # manifest.service.name
+$port = 7147           # manifest.endpoint.port
+$install = 'C:\ProgramData\McpServer'
+
+$svc = Get-Service -Name $name -ErrorAction Stop
+if ($svc.Status -ne 'Running') { throw "Service status=$($svc.Status)" }
+$wmi = Get-CimInstance Win32_Service -Filter "Name='$name'"
+$expectedExe = [IO.Path]::GetFullPath((Join-Path $install 'McpServer.Support.Mcp.exe'))
+$expectedUrls = "http://+:$port"
+# Strict canonical UpdateService ImagePath: BOTH exe and --urls value fully quoted, balanced, no trailing junk.
+# Rejects unbalanced quotes, unquoted paths with spaces, .exe.old, 71470, exe-as-later-arg, duplicate --urls.
+$actual = $wmi.PathName.Trim()
+$m = [regex]::Match($actual, '^"(?<exe>[^"]+\.exe)"\s+--urls\s+"(?<urls>[^"]+)"\s*$', 'IgnoreCase')
+if (-not $m.Success) { $form = '"{0}" --urls "{1}"' -f 'exe','http://+:port'; throw "ImagePath must be fully quoted UpdateService form: $form; got: $actual" }
+$actualExe = [IO.Path]::GetFullPath($m.Groups['exe'].Value)
+$actualUrls = $m.Groups['urls'].Value
+if (-not $actualExe.Equals($expectedExe, [StringComparison]::OrdinalIgnoreCase)) { throw "ImagePath exe mismatch: $actualExe" }
+if (-not $actualUrls.Equals($expectedUrls, [StringComparison]::OrdinalIgnoreCase)) { throw "ImagePath --urls mismatch: $actualUrls" }
+$canonical = '"{0}" --urls "{1}"' -f $expectedExe, $expectedUrls
+$normalized = '"{0}" --urls "{1}"' -f $actualExe, $actualUrls
+if (-not $normalized.Equals($canonical, [StringComparison]::OrdinalIgnoreCase)) { throw "ImagePath canonical mismatch" }
+$startOk = @('LocalSystem','NT AUTHORITY\SYSTEM','.\LocalSystem') -contains $wmi.StartName
+if (-not $startOk) { throw "StartName=$($wmi.StartName) not LocalSystem" }
+if ($wmi.ProcessId -le 0) { throw 'Service ProcessId missing' }
+if (-not (Test-Path $expectedExe)) { throw 'exe missing' }
+if (-not (Test-Path "$install\.mcpservice-deployment.json")) { throw 'deployment manifest missing' }
+if (-not (Test-Path "$install\appsettings.yaml")) { throw 'appsettings.yaml missing' }
+# Provider/DB: require resolved identity with provenance; yaml alone insufficient (incl. SQLite ConnectionString vs DataSource)
+$listeners = @(Get-NetTCPConnection -LocalPort $port -State Listen -EA SilentlyContinue | Where-Object OwningProcess -eq $wmi.ProcessId)
+if ($listeners.Count -lt 1) { throw "No listener on $port owned by PID $($wmi.ProcessId)" }
+# Evidence: assert reject for unbalanced quotes, unquoted Program Files path, .exe.old, http://+:71470, exe-as-later-arg.
+# Accept only fully quoted canonical form matching UpdateService GetServiceImagePath.
+# Trust/nonce against endpoint.baseUrl; per-agent smokes (Phase 4)
+
+LV.Summary PASS=28 FAIL=0
+LV.FixtureSource=Prior 140120Z receipt Cases[].Fixture, independently read and executed against freshly extracted literal fence
+LV.HarnessToolCallSource=text(await tools.mcp__powershell__execute_command({pipeline:"& ([scriptblock]::Create($var1))",var1:"$script:HvFenceMatch = [regex]::Match($script:HvDraft, '(?ms)^### Verify \\(Windows\\)\\r?\\n\\s*```powershell\\r?\\n(?<code>.*?)^```\\s*$')\nif (-not $script:HvFenceMatch.Success) { throw 'Verify (Windows) fence not found' }\n$script:HvFence = $script:HvFenceMatch.Groups['code'].Value\n$script:HvParseErrors = $null; $script:HvParseTokens = $null\n$null = [Management.Automation.Language.Parser]::ParseInput($script:HvFence,[ref]$script:HvParseTokens,[ref]$script:HvParseErrors)\n$script:HvBlock = [scriptblock]::Create($script:HvFence)\n$script:HvFenceHash = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($script:HvFence)))\n$script:HvLiteralResults = @(foreach ($previousCase in $script:HvPrior.LiteralVerification.Cases) {\n    & {\n        param($case)\n        $fixture = $case.Fixture\n        $trace = [Collections.Generic.List[string]]::new()\n        function Get-Service { [CmdletBinding()]param([string]$Name); $trace.Add(\"Get-Service:$Name\"); if($Name -cne 'McpServer'){throw 'HARNESS: bad service name'}; [pscustomobject]@{Status=$fixture.Status} }\n        function Get-CimInstance { [CmdletBinding()]param([string]$ClassName,[string]$Filter); $trace.Add(\"Get-CimInstance:$ClassName/$Filter\"); if($ClassName -cne 'Win32_Service' -or $Filter -cne \"Name='McpServer'\"){throw 'HARNESS: bad CIM request'}; [pscustomobject]@{PathName=$fixture.ImagePath;StartName=$fixture.StartName;ProcessId=$fixture.ServicePid} }\n        function Test-Path { [CmdletBinding()]param([string]$Path); $trace.Add(\"Test-Path:$Path\"); return $Path -ne $fixture.MissingPath }\n        function Get-NetTCPConnection { [CmdletBinding()]param([int]$LocalPort,[string]$State); $trace.Add(\"Get-NetTCPConnection:$LocalPort/$State\"); if($LocalPort -ne 7147 -or $State -cne 'Listen'){throw 'HARNESS: bad listener query'}; if($fixture.ListenerPresent){[pscustomobject]@{OwningProcess=$fixture.ListenerPid}} }\n        $accepted = $false; $errorText = $null\n        try { $null = & $script:HvBlock; $accepted = $true } catch { $errorText = $_.Exception.Message }\n        $rightReason = if($fixture.Expected){$trace.Count -eq 6}else{($errorText -match $fixture.ErrorPattern) -and ($errorText -notlike 'HARNESS:*')}\n        [pscustomobject]@{Id=$case.Id;ExpectedAccept=[bool]$fixture.Expected;ActualAccept=$accepted;Pass=($accepted -eq [bool]$fixture.Expected -and $rightReason);Error=$errorText;ExpectedErrorPattern=$fixture.ErrorPattern;Fixture=$fixture;Trace=@($trace)}\n    } $previousCase\n})\n$script:HvLiteralSummary = [pscustomobject]@{ParserErrorCount=@($script:HvParseErrors).Count;ScriptBlockCreate=($null -ne $script:HvBlock);FenceSha256=$script:HvFenceHash;ExactPriorFence=($script:HvFence -ceq $script:HvPrior.LiteralVerification.Code);Total=$script:HvLiteralResults.Count;Pass=@($script:HvLiteralResults | Where-Object Pass).Count;Fail=@($script:HvLiteralResults | Where-Object {-not $_.Pass}).Count;Skipped=0;LiteralFenceModified=$false;LiveInstallationClaimed=$false}\n$script:HvLiteralSummary | ConvertTo-Json\n$script:HvLiteralResults | ForEach-Object { '{0}: PASS={1}; accepted={2}; error={3}' -f $_.Id,$_.Pass,$_.ActualAccept,$_.Error }\nGet-Command Get-Service,Get-CimInstance,Test-Path,Get-NetTCPConnection | ForEach-Object { '{0}: {1} / {2}' -f $_.Name,$_.CommandType,$_.Source }",timeout_seconds:30}));
+
+LV.Limit=Full literal illustrative fence executed in local-scope mocks. Phase 4 prose additionally requires manifest content, legacy JSON absence, resolved DB identity, nonce and per-agent smoke; those live installation claims were not made.
+DRAFT_SHA=5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766
+PRIOR_SHA=5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766
+DRAFT_CHANGED=False
+stamp=20260928T153330Z
+md=F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-overall-20260928T153330Z.md
+json=F:\github\McpServer\docs\receipts\hv\hostile-validator-setupprompt-overall-20260928T153330Z.json
+prompt=F:\github\McpServer\docs\receipts\hv\20260928T153330Z-setupprompt-overall.prompt.txt
+resp=F:\github\McpServer\docs\receipts\hv\20260928T153330Z-setupprompt-overall.response.jsonl
+last=F:\github\McpServer\docs\receipts\hv\20260928T153330Z-setupprompt-overall.last-message.txt
+log=F:\github\McpServer\docs\receipts\hv\20260928T153330Z-setupprompt-overall.codex-exec-v155.log
+DONE_residualHits=none_from_prior
+SECRET_SCAN_HITS=0
+---LAST---
+2026-09-28T15:49:15Z
+
+**OverallVerdict: AGREE**  
+**DraftScopeVerdict: AGREE**
+
+- **Accuracy: 99/100.** Literal-fence tests and source checks support the draft.
+- **Completeness: 99/100.** Requested checks, F01-F09, and surfaces A-D evaluated.
+- **Draft:** 10 PASS / 0 FAIL / 0 UNKNOWN.
+- **ReviewerOnly:** 6 PASS / 0 FAIL / 0 UNKNOWN.
+- **Full FAIL list:** Scope=Draft: none. Scope=ReviewerOnly: none.
+- **ImagePath:** 28/28 PASS; zero parser errors; `ScriptBlock.Create` succeeds.
+- **Encoding:** zero non-ASCII codepoints; throw fix and strict regex preserved.
+- **Candidate:** unchanged; SHA-256 matches `5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766`.
+- **Model proof:** current runtime `turn_context`, line 8, confirms **gpt-6-astra / xhigh**.
+- **Credential hygiene: PASS.** Zero live echoes across 51 scanned tool outputs; all four artifacts pass credential checks.
+
+[Markdown receipt](F:/GitHub/McpServer/docs/receipts/hv/hostile-validator-setupprompt-overall-20260928T153330Z.md) Â· [JSON twin](F:/GitHub/McpServer/docs/receipts/hv/hostile-validator-setupprompt-overall-20260928T153330Z.json) Â· [Request JSONL](F:/GitHub/McpServer/docs/receipts/hv/20260928T153330Z-setupprompt-overall.request.jsonl) Â· [Sanitized response JSONL](F:/GitHub/McpServer/docs/receipts/hv/20260928T153330Z-setupprompt-overall.response.jsonl)
+
+No draft edits, MCP session-log writes, commits, pushes, or TODO completion. MCP-SETUPPROMPT-001 remains open.
+
+
+---MDHEAD---
+# Hostile validation: setup prompt overall rerun
+
+TimestampUtc: 2026-09-28T15:47:10.2934462Z
+ValidatorIdentity: Codex. Runner: GrokCode (operator supplied). Host: PAYTON-LEGION2.
+Work class: Project documentation draft review. This does not accept MCP-SETUPPROMPT-001 as done.
+
+OverallVerdict: **AGREE**. DraftScopeVerdict: **AGREE**.
+Draft: **10 PASS / 0 FAIL / 0 UNKNOWN**. Reviewer-only: **6 PASS / 0 FAIL / 0 UNKNOWN**. Total: **16 PASS / 0 FAIL / 0 UNKNOWN**.
+Accuracy: **99/100**. Candidate and literal fence unchanged; all 28 behavioral cases pass; source checks confirm the held fixes. Scores assess draft correctness and are not claims of a live installation or backend model attestation.
+Completeness: **99/100**. All requested checks and applicable A-D surfaces evaluated, with live requirements/TODO reads and separated reviewer hygiene. Inventory, live installation, agent UI activation and two Legion dry-runs remain explicitly outside this draft acceptance and open for the parent task.
+
+## Full FAIL and UNKNOWN lists
+
+- Scope=Draft: no FAILs; no UNKNOWNs within this draft review.
+- Scope=ReviewerOnly: no FAILs; no UNKNOWNs in this run.
+- Prior R01 was a reviewer-only credential leak in a different run. It is not a draft defect and does not force DISAGREE on this clean rerun.
+
+## Candidate, encoding, and literal fence
+
+Candidate: docs/setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md. No edits.
+Before and after SHA-256: `5B518FF2CF4AF0D4F74399F2B186486FEEA430801FB181D8EB92FE812718D766`. Exact supplied hash match.
+Encoding: 45,855 bytes and codepoints; **0 non-ASCII**; strict UTF-8 decode succeeds; 669 CRLF sequences. ASCII throw fix at line 643 preserved; strict regex at line 642 unchanged.
+Literal Verify (Windows) lines 630-662: **Parser.ParseInput 0 errors; ScriptBlock.Create succeeds; 28/28 PASS; 0 FAIL; 0 skipped**.
+Fence SHA-256: `E97D35C7C33B8F6FB4263E1EB8C7D36DBA858F37B29A287C3A64E6B25CB74D6C`. Exact prior accepted fence equality: true.
+The full extracted script block ran without changes. Mocks were limited to Get-Service, Get-CimInstance, Test-Path, and Get-NetTCPConnection in local scopes; post-test real command resolution was checked. Negative cases had to throw the intended error. A standalone regex result was not substituted for executing the fence.
+
+- canonical: PASS; ACCEPT
+- exe-open-only: PASS; REJECT; ImagePath must be fully quoted UpdateService form: "exe" --urls "http://+:port"; got: "C:\ProgramData\McpServer\McpServer.Support.Mcp.exe --urls "http://+:7147"
+- exe-close-only: PASS; REJECT; ImagePath must be fully quoted UpdateService form: "exe" --urls "http://+:port"; got: C:\ProgramData\McpServer\McpServer.Support.Mcp.exe" --urls "http://+:7147"
+- url-open-only: PASS; REJECT; ImagePath must be fully quoted UpdateService form: "exe" --urls "http://+:port"; got: "C:\ProgramData\McpServer\McpServer.Support.Mcp.exe" --urls "http://+:7147
+- url-close-only: PASS; REJECT; ImagePath must be fully quoted UpdateService form: "exe" --urls "http://+:port"; got: "C:\ProgramData\McpServer\McpServer.Support.Mcp.exe" --urls http://+:7147"
+- program-files-unquoted: PASS; REJECT; ImagePath must be fully quoted UpdateService form: "exe" --urls "http://+:port"; got: C:\Program Files\McpServer\McpServer.Support.Mcp.exe --urls "http://+:7147"
+- exe-old-quoted: PASS; REJECT; ImagePath must be fully quoted UpdateService form: "exe" --urls "http://+:port"; got: "C:\ProgramData\McpServer\McpServer.Support.Mcp.exe.old" --urls "http://+:7147"
+- exe-old-unquoted: PASS; REJECT; ImagePath must be fully quoted UpdateService form: "exe" --urls "http://+:port"; got: C:\ProgramData\McpServer\McpServer.Support.Mcp.exe.old --urls "http://+:7147"
+- prefix-port-71470: PASS; REJECT; ImagePath --urls mismatch: http://+:71470

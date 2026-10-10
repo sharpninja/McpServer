@@ -2,6 +2,11 @@
 
 Load this file when you need to create, update, query, or manage project TODOs.
 
+
+TODO mutations persist without the turn-transaction coordinator or keyserver on `develop` and on
+the live Linux box MCP (FR-MCP-173, PLAN-TXNKEYSERVER-001). Keep live
+`Mcp:TurnTransactions:Enabled=true` for QuadBrain. Do not edit `docs/Project/TODO.yaml` directly.
+
 ## Endpoints
 
 - `GET /mcpserver/todo` — list all todos

@@ -1,0 +1,10 @@
+{
+  "PlanWorkflowDone": "false",
+  "PlanClientDone": "false",
+  "PluginintWorkflowDone": "false",
+  "PluginintClientDone": "false",
+  "PluginintP5Done": true,
+  "PluginintP6DoneFalse": true,
+  "PluginintP7DoneFalse": true,
+  "PlanCTaskDoneFalse": true
+}

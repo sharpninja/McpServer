@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "createdAtUtc": "2026-09-28T08:35:25.2692022+00:00",
+  "reason": "Immutable source and plan inputs for rejected behavior Red r1 before future test-only corrections",
+  "candidateRoot": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928",
+  "frozenIndex": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/p1-behavior-red-r1-frozen-index.json",
+  "frozenIndexSha256": "B91471637AB8E74F2DF79F0BA3328E1BB195029A0B913AB3A2160874FB2B7C1A",
+  "files": [
+    {
+      "path": "build/_build.csproj",
+      "original": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\build\\_build.csproj",
+      "archive": "F:\\GitHub\\McpServer\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\_build.csproj",
+      "sha256": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+      "length": 1405
+    },
+    {
+      "path": "build/SessionLifeUnitGate.cs",
+      "original": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\build\\SessionLifeUnitGate.cs",
+      "archive": "F:\\GitHub\\McpServer\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\SessionLifeUnitGate.cs",
+      "sha256": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+      "length": 3198
+    },
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p1-behavior-red/p1-behavior-red-test-plan.md",
+      "original": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\p1-behavior-red-test-plan.md",
+      "archive": "F:\\GitHub\\McpServer\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\p1-behavior-red-test-plan.md",
+      "sha256": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+      "length": 9080
+    },
+    {
+      "path": "tests/Build.Tests/SessionLifeUnitGateConsumerTests.cs",
+      "original": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\Build.Tests\\SessionLifeUnitGateConsumerTests.cs",
+      "archive": "F:\\GitHub\\McpServer\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateConsumerTests.cs",
+      "sha256": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+      "length": 1216
+    },
+    {
+      "path": "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+      "original": "F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\Build.Tests\\SessionLifeUnitGateValidatorTests.cs",
+      "archive": "F:\\GitHub\\McpServer\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateValidatorTests.cs",
+      "sha256": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+      "length": 39292
+    }
+  ],
+  "notAcceptance": true,
+  "structuredSerialization": "Native PowerShell objects serialized with ConvertTo-Json; source files copied byte-for-byte"
+}

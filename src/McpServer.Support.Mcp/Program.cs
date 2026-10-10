@@ -178,6 +178,9 @@ builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(
 builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSection(GitHubIntegrationOptions.SectionName));
 builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
+builder.Services.AddOptions<SessionLogSubmitOptions>()
+    .Bind(builder.Configuration.GetSection(SessionLogSubmitOptions.SectionName))
+    .ValidateOnStart();
 builder.Services.AddOptions<SessionLogSanitizationOptions>()
     .Bind(builder.Configuration.GetSection(SessionLogSanitizationOptions.SectionName))
     .ValidateOnStart();
@@ -187,6 +190,7 @@ builder.Services.Configure<TriageOptions>(builder.Configuration.GetSection(Triag
 builder.Services.AddInProcessTransactionSecurity(builder.Configuration);
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
 builder.Services.AddSingleton<IValidateOptions<VoiceConversationOptions>, VoiceConversationOptionsValidator>();
+builder.Services.AddSingleton<IValidateOptions<SessionLogSubmitOptions>, SessionLogSubmitOptionsValidator>();
 builder.Services.AddSingleton<IValidateOptions<SessionLogSanitizationOptions>, SessionLogSanitizationOptionsValidator>();
 builder.Services.AddSingleton<AppSettingsFileService>();
 var requiredRepoAllowlistPatterns = new[]
@@ -295,7 +299,10 @@ builder.Services.AddSingleton<Chunker>();
 builder.Services.AddDataProtection();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
 builder.Services.AddSingleton<IRequirementsDocFxWorkflowRunner, RequirementsDocFxWorkflowRunner>();
-builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator, RequirementsWikiExportOrchestrator>();
+builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator>(sp =>
+    new RequirementsWikiExportOrchestrator(
+        sp.GetRequiredService<IRequirementsDocFxWorkflowRunner>(),
+        sp.GetRequiredService<IServiceScopeFactory>()));
 builder.Services.AddSingleton<IAgentProcessManager, AgentProcessManager>();
 builder.Services.AddSingleton<IAgentIsolationStrategy, NoneAgentIsolationStrategy>();
 builder.Services.AddSingleton<IAgentIsolationStrategy, WorktreeAgentIsolationStrategy>();
@@ -334,6 +341,7 @@ builder.Services.AddScoped<IRepoFileService>(sp =>
         sp.GetService<IOptions<TurnTransactionOptions>>());
 });
 builder.Services.AddScoped<DesktopLaunchService>();
+builder.Services.AddScoped<IDesktopLaunchService>(sp => sp.GetRequiredService<DesktopLaunchService>());
 builder.Services.AddSingleton<GitHubCliService>();
 builder.Services.AddSingleton<IGitHubCliService>(sp =>
     new TransactionGatedGitHubCliService(
@@ -382,11 +390,15 @@ builder.Services.AddSingleton<IRequirementsDocumentService>(sp =>
         sp.GetService<IOptions<TurnTransactionOptions>>());
 });
 builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
+builder.Services.AddScoped<McpServer.Support.Mcp.Requirements.IRequirementsRecoveryService, McpServer.Support.Mcp.Requirements.RequirementsRecoveryService>();
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddAgentHelpServices(builder.Configuration);
 builder.Services.AddTriageServices();
 builder.Services.AddHandoffServices();
+builder.Services.AddHostileReviewServices();
+builder.Services.AddWorkspaceValidationServices();
+builder.Services.AddScoped<IWikiDumpService, WikiDumpService>();
 builder.Services.AddSingleton<VoiceConversationService>();
 builder.Services.AddSingleton<IVoiceConversationService>(sp =>
     new TransactionGatedVoiceConversationService(
@@ -451,6 +463,7 @@ builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
 // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by UseCasesController and handlers.
 builder.Services.AddCqrsDispatcher();
+builder.Services.AddCqrsHandlers(typeof(RememberMemoryCommand).Assembly);
 builder.Services.AddUseCaseCqrs();
 builder.Services.AddProductCqrs();
 builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
@@ -488,6 +501,7 @@ builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(Oid
 builder.Services.Configure<IdentityServerOptions>(builder.Configuration.GetSection(IdentityServerOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
+builder.Services.AddSingleton<CliBrainSlotSessionStore>();
 builder.Services.AddScoped<IBrainSlotCredentialResolver, BrainSlotCredentialResolver>();
 builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFactory>();
 builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
@@ -499,6 +513,7 @@ builder.Services.AddScoped<IQuadBrainOrchestrationService, QuadBrainOrchestratio
 // FR-MCP-QBEXEC-002: concrete internal-tool executor routes QuadBrain's MCP-internal mutations through the
 // transaction-gated services; it is injected into the chat service's optional executor parameter, replacing the
 // NoopInternalToolExecutor fallback.
+builder.Services.AddScoped<IQuadBrainPowerShellSessions, InMemoryQuadBrainPowerShellSessions>();
 builder.Services.AddScoped<IQuadBrainInternalToolExecutor, QuadBrainInternalToolExecutor>();
 builder.Services.AddScoped<IQuadBrainOpenAiChatService, QuadBrainOpenAiChatService>();
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();
@@ -768,7 +783,7 @@ if (!app.Environment.IsEnvironment("Test"))
             using var scope = app.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
             var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
-            await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, ct).ConfigureAwait(false);
+            await McpDatabaseMigrationCoordinator.EnsureReadyAsync(db, runtimeOptions, ct).ConfigureAwait(false);
             if (!SessionLogSchemaGuard.Probe(db))
                 Log.Error("{Message}", SessionLogSchemaGuard.PendingMigrationMessage);
             await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);
@@ -862,7 +877,12 @@ app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
 // FR-MCP-USECASE-007: serve first-party Use Case UI from wwwroot (/usecases/, /usecases/index.html).
-// Static assets are not under /mcpserver/* so WorkspaceAuthMiddleware leaves them open; API stays protected.
+// FR-MCP-MEMORY-016 / TR-MCP-MEMORY-UI-002: serve first-party Memory UI from wwwroot (/memory/, /memory/index.html).
+// Static assets are not under /mcpserver/* so WorkspaceAuthMiddleware leaves them open; API stays protected
+// behind the same API-key auth as other /mcpserver pages (X-Api-Key), matching /usecases/.
+// Content-Security / no inline-eval policy matches sibling Use Case Manager static UIs.
+// Missing /memory/unknown-asset and hashed bundles return Results.NotFound (404), not a false 200 index.
+// Deep link /memory/{id} opens detail or fail-closed.
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
@@ -874,6 +894,7 @@ app.UseMiddleware<WorkspaceAuthMiddleware>();
 app.UseAuthorization();
 
 app.MapDefaultEndpoints();
+MemoryUiEndpoints.Map(app);
 
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context API v1"));

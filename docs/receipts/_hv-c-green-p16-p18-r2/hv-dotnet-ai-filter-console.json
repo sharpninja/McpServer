@@ -1,0 +1,14 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\hv-dotnet-ai-filter.log",
+  "successful": true,
+  "failedBang": false,
+  "totalTests": 9,
+  "passed": 9,
+  "failed": 0,
+  "skipped": 0,
+  "totalTime": null,
+  "failedResultLines": 0,
+  "length": 4521,
+  "lastWriteTimeUtc": "2026-08-22T08:43:15.0520515Z"
+}

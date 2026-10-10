@@ -1,4 +1,5 @@
 using System.Text.Json;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -228,10 +229,10 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
     public async Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
     {
         var todoService = _workspaceAccessor.GetTodoService();
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, "todo.projection.repair"))
             return await todoService.RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
             return ProjectionRepairUnavailable(status.Message);
 
@@ -251,13 +252,13 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
         Func<CancellationToken, Task<MutationExecution>> mutation,
         CancellationToken cancellationToken)
     {
-        if (_coordinator is null)
+        if (TurnTransactionKeyserverScope.ShouldBypassCoordinator(_coordinator, operationName))
         {
             var direct = await mutation(cancellationToken).ConfigureAwait(false);
             return direct.Result;
         }
 
-        var status = _coordinator.GetStatus();
+        var status = _coordinator!.GetStatus();
         if (status.Degraded)
             return TransactionUnavailable(status.Message);
 

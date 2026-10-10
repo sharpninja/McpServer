@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142112Z-478c
+  result:
+    id: FR-MCP-SESSIONLIFE-005
+    title: Stop hook stale pin and session-log uniqueness
+    description: Stop hook runs failed-build and incomplete-audit gates first. It allows a stale pin only when authoritative server completion shows the local request id is not the active turn. A genuinely active different request id is not cleared. Both timestamp and lastUpdated stale is the age case. A fresh lastUpdated alone must not pass a stale pin. BUG-TRIAGE-229 is predecessor-schema detection before save, classified provider text in details.inner, and one bounded uniqueness retry.
+    status: pending
+    priority: high
+    area: MCP
+    notes: Governs BUG-TRIAGE-229 and 234. 229 is not the coordinator bypass.
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:13.5526667+00:00
+    updatedAt: 2026-09-24T14:21:13.5527786+00:00
+  deprecated: true
+
+---
+

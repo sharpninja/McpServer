@@ -1,0 +1,8 @@
+{
+  "name": "dotnet-migration-sqlserver",
+  "exit": 1,
+  "startedUtc": "2026-08-22T03:30:02.1494055Z",
+  "endedUtc": "2026-08-22T03:33:41.5890963Z",
+  "durationSec": 219,
+  "stdout": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-d2g-20260822T032428Z\\dotnet-migration-sqlserver-stdout.txt"
+}

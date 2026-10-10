@@ -70,6 +70,37 @@ public sealed class MarkerFileChangeObserverTests
         }
     }
 
+    /// <summary>
+    /// Same-length in-place rewrite must complete even when the watcher is silent and
+    /// LastWriteTime is not a reliable signal under suite load.
+    /// </summary>
+    [Fact]
+    public async Task RenamedAndPoll_SameLengthInPlaceRewrite_ObservesContentChange()
+    {
+        var root = CreateRoot();
+        try
+        {
+            var markerPath = Path.Combine(root, MarkerFileService.MarkerFileName);
+            await File.WriteAllTextAsync(markerPath, "content-a", TestContext.Current.CancellationToken).ConfigureAwait(true);
+            using var watcher = CreateWatcher(root, raiseEvents: false);
+            var watch = MarkerFileChangeObserver.WatchAsync(
+                markerPath,
+                watcher,
+                MarkerFileChangeObserver.Mode.RenamedAndPoll,
+                TimeSpan.FromSeconds(2),
+                TestContext.Current.CancellationToken);
+
+            await File.WriteAllTextAsync(markerPath, "content-b", TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await watch.ConfigureAwait(true);
+
+            Assert.Equal("content-b", await File.ReadAllTextAsync(markerPath, TestContext.Current.CancellationToken).ConfigureAwait(true));
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
     private static string CreateRoot()
     {
         var root = Path.Combine(Path.GetTempPath(), "marker-observe-" + Guid.NewGuid().ToString("N"));

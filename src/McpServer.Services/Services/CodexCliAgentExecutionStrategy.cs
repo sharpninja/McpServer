@@ -18,10 +18,53 @@ internal sealed class CodexCliAgentExecutionStrategy(
     IProcessSpawner processSpawner,
     ILogger<CodexCliAgentExecutionStrategy> logger) : IAgentExecutionStrategy
 {
-    private const string HighestReasoningEffortConfig = "model_reasoning_effort=\"xhigh\"";
+    internal const string HighestReasoningEffortConfig = "model_reasoning_effort=\"xhigh\"";
 
     /// <inheritdoc />
     public string Name => AgentExecutionStrategyNames.CodexCli;
+
+    /// <summary>
+    /// Builds Codex CLI args for a QuadBrain Cli slot. A null <paramref name="sessionId"/> starts
+    /// <c>codex exec</c>; a non-empty id uses <c>codex exec resume</c> so the thread stays open.
+    /// </summary>
+    internal static IReadOnlyList<string> BuildPersistentCodexArgumentList(
+        string workingDirectory,
+        string outputPath,
+        string? model,
+        string? sessionId)
+    {
+        var arguments = new List<string>
+        {
+            "exec",
+            "--json",
+        };
+        if (!string.IsNullOrWhiteSpace(model) &&
+            !string.Equals(model.Trim(), "auto", StringComparison.OrdinalIgnoreCase))
+        {
+            arguments.Add("--model");
+            arguments.Add(model.Trim());
+        }
+
+        arguments.Add("-c");
+        arguments.Add(HighestReasoningEffortConfig);
+        arguments.Add("--sandbox");
+        arguments.Add("read-only");
+        arguments.Add("--color");
+        arguments.Add("never");
+        arguments.Add("--skip-git-repo-check");
+        arguments.Add("-C");
+        arguments.Add(workingDirectory);
+        arguments.Add("-o");
+        arguments.Add(outputPath);
+        if (!string.IsNullOrWhiteSpace(sessionId))
+        {
+            arguments.Add("resume");
+            arguments.Add(sessionId.Trim());
+        }
+
+        arguments.Add("-");
+        return arguments;
+    }
 
     /// <inheritdoc />
     public ValueTask<IAgentExecutionSession> CreateSessionAsync(

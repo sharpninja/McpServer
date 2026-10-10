@@ -24,5 +24,9 @@
   href: REPL-MIGRATION-GUIDE.md
 - name: Federation Reference
   href: context/federation.md
+- name: MCP Memories
+  href: context/memory.md
+- name: Memory Benchmarks
+  href: benchmarks/README.md
 - name: Release Checklist
   href: RELEASE-CHECKLIST.md

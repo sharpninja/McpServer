@@ -1,0 +1,199 @@
+{
+  "TimestampUtc": "2026-08-21T11:45:30Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "skillPortsExcluded": [
+      "add-profile.grok.md"
+    ],
+    "totalMarkdownInDirectory": 19
+  },
+  "WorkClass": "class-2-user-directed-general-action",
+  "WorkClassNote": "add-profile then new MCP session. Not project implementation. Surface C N/A. Surface D N/A.",
+  "Claims": [
+    {
+      "group": "A",
+      "id": "A1",
+      "claim": "Operator profile loaded from 18 non-skill markdown files in C:\\Users\\kingd\\.claude\\profile\\ (skill ports add-profile*.md excluded).",
+      "verdict": "PASS",
+      "evidence": "docs/receipts/_hv-20260821T113500Z/profile-count.json totalMd=19 nonSkillCount=18"
+    },
+    {
+      "group": "A",
+      "id": "A2",
+      "claim": "Marker signature verified true via plugin marker-resolver Test-MarkerSignature against F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml.",
+      "verdict": "PASS",
+      "evidence": "docs/receipts/_hv-20260821T113500Z/marker-sig.json equals true"
+    },
+    {
+      "group": "A",
+      "id": "A3",
+      "claim": "Health nonce echoed exactly nonce-1bcd467b9def481c859e97e863fae9d1; healthStatus Healthy at http://PAYTON-LEGION2:7147/health.",
+      "verdict": "PASS",
+      "evidence": "docs/receipts/_hv-20260821T113500Z/health.json claimedExact=true claimedStatus=Healthy. JSON field is status not healthStatus."
+    },
+    {
+      "group": "A",
+      "id": "A4",
+      "claim": "Tool registry search keyword mcpserver-grok-plugin returned exact name mcpserver-grok-plugin. commandTemplate executed as git pull --ff-only at F:\\GitHub\\mcpserver-grok-plugin exit 0 Already up to date. Plugin .version is 1.97.0.",
+      "verdict": "PASS",
+      "evidence": "docs/receipts/_hv-20260821T113500Z/tools-search.txt name mcpserver-grok-plugin; git-pull.json exit 0; plugin-version.json 1.97.0"
+    },
+    {
+      "group": "A",
+      "id": "A5",
+      "claim": "Canonical new session GrokCode-20260821T113141Z-plugin-session. Native sessionlog_open success true created false. Native sessionlog_begin_turn success true turnId 42441 requestId req-20260821T113258Z-001-add-profile-new-session status in_progress.",
+      "verdict": "PASS",
+      "evidence": "q-session-113141.json session+turn in_progress; reopen-113141.json created=false. Numeric turnId 42441 UNKNOWN (query DTO has no turnId)."
+    },
+    {
+      "group": "A",
+      "id": "A6",
+      "claim": "Plugin cache session-state.yaml has status verified, same sessionId, title Load operator profile and start new session. current-turn.yaml has the same sessionId and requestId and queryTitle (not User prompt).",
+      "verdict": "FAIL",
+      "evidence": "session-state.yaml sessionId GrokCode-20260821T113501Z-plugin-session, no title key, LastWrite 2026-08-21T11:35:01Z. current-turn.yaml matches claimed session/request/title, LastWrite 2026-08-21T11:33:09Z."
+    },
+    {
+      "group": "A",
+      "id": "A7",
+      "claim": "Hook session GrokCode-20260821T112802Z-plugin-session turn req-20260821T112813Z-prompt-ac0b completed as superseded (native complete_turn success, turnId 42436, status completed).",
+      "verdict": "PASS",
+      "evidence": "q-session-113141.json and q-turn-112813.json: turn status completed, superseded response and tags. Numeric turnId 42436 UNKNOWN."
+    },
+    {
+      "group": "A",
+      "id": "A8",
+      "claim": "Native replace_section succeeded for tags, designDecisions, actions, context, and dialog on the new turn.",
+      "verdict": "PASS",
+      "evidence": "Server turn has tags(4), designDecisions(4), actions(6), contextList(6), processingDialog(5)."
+    },
+    {
+      "group": "A",
+      "id": "A9",
+      "claim": "Open MCP TODOs done=false count is 36 (from todo_list).",
+      "verdict": "PASS",
+      "evidence": "todo_list done=false totalCount=36 items=36 doneFalse=36 doneTrue=0. extract-todo-mem.json"
+    },
+    {
+      "group": "A",
+      "id": "A10",
+      "claim": "Plugin Invoke-McpPlugin Status hasSession true, pendingCount 53, failsafeCount 53, failsafeQuarantineCount 48. Did not claim failsafe drained.",
+      "verdict": "PASS",
+      "evidence": "plugin-status.txt plus independent yaml counts failsafe 53 pending 0 quarantine 48"
+    },
+    {
+      "group": "A",
+      "id": "A11",
+      "claim": "Implementer did not mark any TODO done and did not claim product implementation complete.",
+      "verdict": "PASS",
+      "evidence": "todo_list still 36 open; git porcelain TODO.yaml empty; turn filesModified null"
+    },
+    {
+      "group": "A",
+      "id": "A12",
+      "claim": "Effective MCP memories include MEMORY-LAB-001 (no Python) and MEMORY-LAB-002 (credentials path).",
+      "verdict": "PASS",
+      "evidence": "memory-list-effective.json items MEMORY-LAB-001 and MEMORY-LAB-002 only"
+    },
+    {
+      "group": "B",
+      "id": "B1",
+      "claim": "Honesty / accuracy-first: cache file contents described correctly.",
+      "verdict": "FAIL",
+      "evidence": "session-state.yaml has no title key. Title is on current-turn.yaml queryTitle and server session title.",
+      "rule": "accuracy-first-verify-sources.md; bring-the-receipts.md"
+    },
+    {
+      "group": "B",
+      "id": "B2",
+      "claim": "MCP-only TODO and session-log storage.",
+      "verdict": "PASS",
+      "evidence": "Native sessionlog/todo tools used; git porcelain TODO.yaml empty",
+      "rule": "AGENTS.md MCP-only storage"
+    },
+    {
+      "group": "B",
+      "id": "B3",
+      "claim": "No Python in lab.",
+      "verdict": "PASS",
+      "evidence": "No python/python3/py observed on this bootstrap path",
+      "rule": "MEMORY-LAB-001; no-python-lab.md"
+    },
+    {
+      "group": "B",
+      "id": "B4",
+      "claim": "PowerShell only for lab automation.",
+      "verdict": "PASS",
+      "evidence": "Plugin and pwsh.exe used by implementer path and this review",
+      "rule": "AGENTS.md; PROFILE.md"
+    },
+    {
+      "group": "B",
+      "id": "B5",
+      "claim": "Look-before-delete.",
+      "verdict": "PASS",
+      "evidence": "N/A: no delete of operator data claimed or observed",
+      "rule": "lab-authorization.md look-before-delete"
+    },
+    {
+      "group": "B",
+      "id": "B6",
+      "claim": "Session turn titles summarize the request.",
+      "verdict": "PASS",
+      "evidence": "Canonical queryTitle Load operator profile and start new session, not User prompt",
+      "rule": "session-turn-title-summary.md"
+    },
+    {
+      "group": "B",
+      "id": "B7",
+      "claim": "Byrd v4 applies only to project implementation.",
+      "verdict": "PASS",
+      "evidence": "N/A class 2 ops",
+      "rule": "hostile-ops-vs-requirements.md"
+    },
+    {
+      "group": "C",
+      "id": "C1",
+      "claim": "FR/TR/TEST/AC required for claimed-complete project implementation.",
+      "verdict": "PASS",
+      "evidence": "N/A class 2. No product implementation claimed.",
+      "rule": "hostile-ops-vs-requirements.md"
+    },
+    {
+      "group": "D",
+      "id": "D1",
+      "claim": "Plan-step completion / plan DoD.",
+      "verdict": "PASS",
+      "evidence": "N/A. No plan path. No plan-step done claim.",
+      "rule": "hostile-ops-vs-requirements.md surface D"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "FailList": [
+    "A6: session-state.yaml does not carry the claimed sessionId at review time and does not contain the claimed title.",
+    "B1: implementer attributed current-turn.yaml / server title to session-state.yaml."
+  ],
+  "UnknownList": [
+    "A5 numeric turnId 42441: sessionlog_query DTO has no turnId; refused to re-open the in_progress turn.",
+    "A7 numeric turnId 42436: same DTO gap; refused to begin_turn a completed turn.",
+    "Pre-11:35:01Z bytes of session-state.yaml overwritten by later SessionStart."
+  ],
+  "AccuracyRating": 86,
+  "CompletenessRating": 93,
+  "ReviewSessionId": "GrokCode-20260821T114530Z-hostile-add-profile",
+  "ReviewRequestId": "req-20260821T114530Z-001-hostile-validate-add-profile",
+  "AgentIdentity": "GrokCode",
+  "ReceiptMarkdown": "docs/receipts/hostile-validator-20260821T114530Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260821T114530Z.json",
+  "PersistenceProof": {
+    "openCreated": true,
+    "beginTurnId": 42444,
+    "completeTurnId": 42444,
+    "completeStatus": "completed",
+    "queryTextSessionIdTotalCount": 0,
+    "queryFromFilterFound": true,
+    "queryFromArtifact": "docs/receipts/_hv-20260821T113500Z/q-self-from.json",
+    "implementerCurrentTurnPreserved": true
+  }
+}

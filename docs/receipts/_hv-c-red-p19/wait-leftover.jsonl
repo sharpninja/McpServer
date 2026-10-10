@@ -1,0 +1,405 @@
+{
+  "TimestampUtc": "2026-08-22T09:06:03.2952775Z",
+  "Iteration": 0,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:06:09.9850104Z",
+  "Iteration": 1,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:06:16.4874968Z",
+  "Iteration": 2,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:06:22.8592682Z",
+  "Iteration": 3,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:06:29.3829568Z",
+  "Iteration": 4,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:06:36.0307442Z",
+  "Iteration": 5,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:06:42.5953194Z",
+  "Iteration": 6,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:06:49.1965083Z",
+  "Iteration": 7,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:06:55.8606555Z",
+  "Iteration": 8,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:02.4515702Z",
+  "Iteration": 9,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:09.2070216Z",
+  "Iteration": 10,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:15.8479252Z",
+  "Iteration": 11,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:22.6254918Z",
+  "Iteration": 12,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:29.3478802Z",
+  "Iteration": 13,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:36.0116794Z",
+  "Iteration": 14,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:42.8789443Z",
+  "Iteration": 15,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:49.9456944Z",
+  "Iteration": 16,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:07:56.6780784Z",
+  "Iteration": 17,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:03.4783770Z",
+  "Iteration": 18,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:10.1108588Z",
+  "Iteration": 19,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:16.7768714Z",
+  "Iteration": 20,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:23.5144638Z",
+  "Iteration": 21,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:30.9232050Z",
+  "Iteration": 22,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:37.7654774Z",
+  "Iteration": 23,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:44.5108116Z",
+  "Iteration": 24,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:51.1553937Z",
+  "Iteration": 25,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:08:57.5069394Z",
+  "Iteration": 26,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:04.2608870Z",
+  "Iteration": 27,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:10.7213293Z",
+  "Iteration": 28,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:17.0508901Z",
+  "Iteration": 29,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:23.7295875Z",
+  "Iteration": 30,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:30.7680517Z",
+  "Iteration": 31,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:37.4756112Z",
+  "Iteration": 32,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:43.9927618Z",
+  "Iteration": 33,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:50.3302649Z",
+  "Iteration": 34,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:09:57.1766093Z",
+  "Iteration": 35,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:03.6685420Z",
+  "Iteration": 36,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:10.0890674Z",
+  "Iteration": 37,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:16.4641195Z",
+  "Iteration": 38,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:23.1082982Z",
+  "Iteration": 39,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:29.5628390Z",
+  "Iteration": 40,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:35.7894963Z",
+  "Iteration": 41,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:42.2793244Z",
+  "Iteration": 42,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:48.7417337Z",
+  "Iteration": 43,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}
+{
+  "TimestampUtc": "2026-08-22T09:10:55.4298954Z",
+  "Iteration": 44,
+  "BusyCount": 2,
+  "Pids": [
+    19200,
+    65116
+  ]
+}

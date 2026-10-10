@@ -1,0 +1,9 @@
+type: result
+payload:
+  requestId: req-20260822T103758Z-d101
+  result:
+    agent: GrokCode
+    sessionId: GrokCode-20260822T103449Z-pluginhandoff-p19green
+    created: true
+
+---

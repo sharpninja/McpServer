@@ -1,0 +1,102 @@
+{
+  "TimestampUtc": "2026-08-22T00:18:11Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-red-P4-rereview",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.99.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260821T235922Z.md",
+  "Collector": "docs/receipts/_hv-c-red-p4-r2/",
+  "SessionId": "GrokSubagentHostile-20260822T001410Z-c-red-p4-r2",
+  "RequestId": "req-20260822T001410Z-001-hostile-c-red-p4-rereview",
+  "TurnId": 42814,
+  "HealthNonce": "f803eb09c53a496fafada1be18070c48",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "InvokeFullBootstrap": true,
+  "HomemadeHmacMatch": false,
+  "OverallVerdict": "AGREE",
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "PassCount": 29,
+  "Accuracy": 95,
+  "Completeness": 96,
+  "ExplicitFailList": [],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "Filter": "FullyQualifiedName~PluginSessionLogCatalogTests",
+    "CatalogFilterExitCode": 1,
+    "CatalogFilterPassed": 0,
+    "CatalogFilterFailed": 6,
+    "CatalogFilterSkippedConsole": 0,
+    "CatalogFilterTrxNotExecuted": 0,
+    "PluginAllExitCode": 1,
+    "PluginAllPassed": 1,
+    "PluginAllFailed": 6,
+    "PluginAllSkippedConsole": 0,
+    "PluginAllTrxNotExecuted": 0,
+    "NamedFailed": [
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_UniqueAgentSourceCache",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RepositoryRootsExist",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_SupportedHostKinds",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_RequiredEntrypointFilesExist",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_VersionMetadataPresent",
+      "McpServer.PluginIntegration.Tests.PluginSessionLogCatalogTests.Catalog_ExactlyEightEnabled"
+    ],
+    "NamedPassedWholeProject": [
+      "McpServer.PluginIntegration.Tests.PluginIntegrationProjectTests.PluginIntegrationProject_HasXmlDocsAndNonparallelCollection"
+    ],
+    "FailureMessage": "System.InvalidOperationException : PluginSessionLogCatalog.LoadAndValidate is not implemented."
+  },
+  "TodoFlags": {
+    "PLAN-PLUGINHANDOFF-001": false,
+    "MCP-PLUGININT-001": false,
+    "MCP-PLUGININT-001-P4": false
+  },
+  "Timestamps": {
+    "CGreenP1P3AgreeName": "2026-08-21T23:44:22Z",
+    "CGreenP1P3AgreeMdLastWriteTimeUtc": "2026-08-21T23:48:25.8177416Z",
+    "PriorDisagreeName": "2026-08-21T23:59:22Z",
+    "CatalogTestsLastWriteTimeUtc": "2026-08-22T00:06:51.8604136Z",
+    "CatalogCsLastWriteTimeUtc": "2026-08-21T23:50:27.8247435Z",
+    "ScenarioCsLastWriteTimeUtc": "2026-08-22T00:05:08.5000833Z",
+    "CatalogJsonLastWriteTimeUtc": "2026-08-22T00:05:59.1337304Z"
+  },
+  "CatalogGaps": {
+    "ScenarioHasCacheFolder": true,
+    "ScenarioHasEntrypoint": true,
+    "ScenarioHasEnvVars": true,
+    "JsonHasCacheFolderProperty": true,
+    "JsonHasEntrypointProperty": true,
+    "JsonHasEnvProperty": true,
+    "UniqueKeyUsesCache": true,
+    "TestsOrThreeEntrypointPaths": false,
+    "TestsAssertClineV2": true,
+    "ClineV2CacheFolder": "cline-v2",
+    "SiblingAllCatalogEntrypointWouldPass": false,
+    "CodexCatalogEntrypointExists": false,
+    "AllSixDeserializeWouldPass": false
+  },
+  "SessionQueryProof": {
+    "QueryFile": "docs/receipts/_hv-c-red-p4-r2/sl-query-sid.txt",
+    "TurnStatus": "completed",
+    "TurnId": 42814,
+    "ActionCount": 6,
+    "DialogCount": 4,
+    "DesignDecisionCount": 2,
+    "ResponseContainsAgree": true
+  }
+}

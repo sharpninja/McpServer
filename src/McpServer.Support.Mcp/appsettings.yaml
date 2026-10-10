@@ -120,10 +120,16 @@ Mcp:
   BrainSlots:
     ExecutionEnabled: false
     AllowLoopbackEndpoints: false
-    DefaultTimeoutSeconds: 30
+    DefaultTimeoutSeconds: 180
     MaxTimeoutSeconds: 300
     AllowedEndpointHosts: []
+    CliRunAs: ''
+    CliWorkingDirectory: ''
+    CliGitHubToken: ''
     Slots: []
+  TurnTransactions:
+    Enabled: false
+    RequiredForMutations: true
   TodoStorage:
     Provider: sqlite
     SqliteDataSource: mcp.db
@@ -323,6 +329,8 @@ Mcp:
       - Id: example-internal-token
         Pattern: example-token-[A-Z0-9]{8,}
         Replacement: '[REDACTED:example-internal-token]'
+  SessionLog:
+    SubmitCommandBudgetSeconds: 30
 Triage:
   QuietPeriod: 00:15:00
   SweepInterval: 00:01:00

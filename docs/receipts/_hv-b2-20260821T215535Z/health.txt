@@ -1,0 +1,3 @@
+nonceSent=632c3fbec35648738c30b81ee6f7f630
+healthUrl=http://PAYTON-LEGION2:7147/health?nonce=632c3fbec35648738c30b81ee6f7f630
+health={"status":"Healthy","version":"1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.0017},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":0.2968}],"nonce":"632c3fbec35648738c30b81ee6f7f630","storage":"reachable"}

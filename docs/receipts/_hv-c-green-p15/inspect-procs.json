@@ -1,0 +1,83 @@
+{
+  "TimestampUtc": "2026-08-22T06:40:28.5213825Z",
+  "Count": 11,
+  "Processes": [
+    {
+      "ProcessId": 78036,
+      "ParentProcessId": 33712,
+      "Name": "pwsh.exe",
+      "CreationDate": "08/22/2026 01:28:24",
+      "CommandLine": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh.exe -NoProfile -NonInteractive -File \\\"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\wait-full.ps1\\\"\""
+    },
+    {
+      "ProcessId": 69556,
+      "ParentProcessId": 78036,
+      "Name": "pwsh.exe",
+      "CreationDate": "08/22/2026 01:28:25",
+      "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\wait-full.ps1"
+    },
+    {
+      "ProcessId": 52344,
+      "ParentProcessId": 62428,
+      "Name": "pwsh.exe",
+      "CreationDate": "08/22/2026 01:35:14",
+      "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File \"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\tests-run.ps1\""
+    },
+    {
+      "ProcessId": 79532,
+      "ParentProcessId": 52344,
+      "Name": "dotnet.exe",
+      "CreationDate": "08/22/2026 01:35:32",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~Theory_Agent_Success_NoPendingFailsafe|FullyQualifiedName~Theory_Agent_FailedSubmit_RetainsRootIdPending|FullyQualifiedName~Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending --logger trx --logger console --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2"
+    },
+    {
+      "ProcessId": 55832,
+      "ParentProcessId": 26048,
+      "Name": "dotnet.exe",
+      "CreationDate": "08/22/2026 01:35:46",
+      "CommandLine": "\"C:\\Program Files\\dotnet\\dotnet.exe\" exec \"C:\\Program Files\\dotnet\\sdk\\10.0.400\\vstest.console.dll\" --testAdapterPath:C:\\Users\\kingd\\.nuget\\packages\\coverlet.collector\\6.0.4\\build\\netstandard2.0\\ --framework:\".NETCoreApp,Version=v10.0\" --testCaseFilter:\"FullyQualifiedName~Theory_Agent_Success_NoPendingFailsafe|FullyQualifiedName~Theory_Agent_FailedSubmit_RetainsRootIdPending|FullyQualifiedName~The"
+    },
+    {
+      "ProcessId": 88560,
+      "ParentProcessId": 55832,
+      "Name": "testhost.exe",
+      "CreationDate": "08/22/2026 01:35:46",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.runtimeconfig.json\" --depsfile \"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.deps.json\" --port 64005 --endpoin"
+    },
+    {
+      "ProcessId": 88860,
+      "ParentProcessId": 33712,
+      "Name": "pwsh.exe",
+      "CreationDate": "08/22/2026 01:36:38",
+      "CommandLine": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh.exe -NoProfile -NonInteractive -File \\\"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\wait-for-tests.ps1\\\"\""
+    },
+    {
+      "ProcessId": 88380,
+      "ParentProcessId": 88860,
+      "Name": "pwsh.exe",
+      "CreationDate": "08/22/2026 01:36:39",
+      "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\run2\\wait-for-tests.ps1"
+    },
+    {
+      "ProcessId": 32636,
+      "ParentProcessId": 81896,
+      "Name": "dotnet.exe",
+      "CreationDate": "08/22/2026 01:40:15",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    },
+    {
+      "ProcessId": 82976,
+      "ParentProcessId": 33712,
+      "Name": "pwsh.exe",
+      "CreationDate": "08/22/2026 01:40:24",
+      "CommandLine": "\"pwsh\" -NoProfile -NonInteractive -Command \"pwsh.exe -NoProfile -NonInteractive -File \\\"F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\inspect-procs.ps1\\\"\""
+    },
+    {
+      "ProcessId": 28124,
+      "ParentProcessId": 82976,
+      "Name": "pwsh.exe",
+      "CreationDate": "08/22/2026 01:40:25",
+      "CommandLine": "\"C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\\pwsh.exe\" -NoProfile -NonInteractive -File F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\inspect-procs.ps1"
+    }
+  ]
+}

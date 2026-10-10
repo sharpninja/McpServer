@@ -1,0 +1,2 @@
+Using C:\Users\kingd\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.exe
+7.6.5

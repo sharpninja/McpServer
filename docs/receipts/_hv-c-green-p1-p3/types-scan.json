@@ -1,0 +1,15 @@
+{
+  "PluginHostKindExists": true,
+  "PluginSessionLogScenarioExists": true,
+  "PluginHostKindHasClineV2": true,
+  "EnumMembers": [
+    "Codex",
+    "ClaudeCode",
+    "ClaudeCowork",
+    "Copilot",
+    "Grok",
+    "Cline",
+    "ClineV2",
+    "OpenCode"
+  ]
+}

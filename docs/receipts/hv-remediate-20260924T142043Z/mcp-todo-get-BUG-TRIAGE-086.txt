@@ -1,0 +1,33 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142157Z-9ad5
+  result:
+    id: BUG-TRIAGE-086
+    title: Supersede path discards server-refined queryTitle; session.title clobbered each prompt
+    section: Backlog
+    priority: medium
+    done: true
+    note: 'Closed 2026-07-21 by commit 00a71449 on develop under TR-MCP-REPL-019 (FR-MCP-143). The supersede path no longer clobbers a server-refined title. Invoke-ReplSupersedeCurrentTurnIfInProgress now resolves the persisted title through Resolve-ReplSupersedeTitle: a locally refined title (non-empty, differing from the prompt first line and from the literal "User prompt") is kept with zero extra round trips; a raw or empty local title defers to the server title fetched via the existing client.SessionLog.QueryAsync passthrough with client-side sessionId/requestId matching; raw prompt text is never re-sent, and omission remains the fallback so the server-preserved title survives either way. Red receipt: seeded cache with a raw title plus stubbed server title, refined title was lost; green: refined title survives, TEST-MCP-REPL-040 8/8, plugin Pester 102/102. Known bound, recorded: the server-title fetch scans the 25 most recently updated agent sessions; older sessions fall back to omission, which still preserves the server title rather than clobbering it.'
+    description:
+    - "Confirmed in plugins/core/lib-ps/repl-invoke.ps1: Invoke-ReplSupersedeCurrentTurnIfInProgress (lines 1005-1020) reads queryTitle only from local current-turn.yaml, then re-persists the canceled turn via Invoke-ReplPersistTurn/SubmitAsync. Direct MCP sessionlog_replace_turn updates the server but does not update the plugin turn cache, so the next UserPromptSubmit supersede overwrites the refined queryTitle with the stale raw hook title (e.g. \"a\"). Invoke-ReplTurnUpsertParams (line 671) also always sources queryText from cache, reinforcing stale data on supersede persist. Separately, Invoke-ReplPersistTurn (lines 742-749) sets session.title from session-state.yaml or falls back to the current turn Title; Invoke-WorkflowOpenSession never writes title to session-state.yaml, and plugin-hook.ps1 (lines 644-693) passes each prompt's first line as queryTitle on every beginTurn. Each SubmitAsync carries a non-null title, and SessionLogService.MapDtoToEntity (line 1082) overwrites session.title when dto.Title is not null. No plugin workflow exposes session title updates after creation (openSession is create/bind only)."
+    - 'Triage group: triage-group-848609e2217dcb37'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - "- After an agent refines an in_progress turn's queryTitle (via sessionlog_replace_turn or workflow.sessionlog.updateTurn), superseding that turn on the next UserPromptSubmit must persist the refined queryTitle with status canceled, not revert to the raw prompt text"
+    - "- session.title must remain stable across turns once set and must not be silently overwritten with each new prompt's raw first line"
+    - '- A supported plugin workflow or MCP tool path must allow creating and updating session.title after session open (not create-only)'
+    - 'Implementation notes:'
+    - '- Fix supersede stale-cache bug in Invoke-ReplSupersedeCurrentTurnIfInProgress: either sync queryTitle to current-turn.yaml when replaceTurn/updateTurn runs, or fetch the latest server turn before cancel persist, or cancel via a section-only update that does not touch queryTitle'
+    - '- Stop session title clobber: persist title in Invoke-WorkflowOpenSession, stop falling back to raw turn Title in Invoke-ReplPersistTurn when session-state already has a title, and add workflow.sessionlog.updateSession (mirror McpAgent UpdateSessionAsync)'
+    - '- Add regression test: beginTurn with raw prompt, refine queryTitle server-side, submit next prompt, assert canceled turn retains refined queryTitle and session.title is unchanged'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

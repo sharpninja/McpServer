@@ -1,0 +1,14 @@
+12:    client.SessionLog.SubmitAsync route.
+591:function Get-ReplMethodTimeoutSeconds {
+601:    if ($script:ReplFailsafeDraining -and $Method -eq 'client.SessionLog.SubmitAsync') {
+603:        # REPL_FAILSAFE_DRAIN_TIMEOUT (default 120s), or REPL_TIMEOUT when greater.
+605:        $drain = if ($env:REPL_FAILSAFE_DRAIN_TIMEOUT) { [int]$env:REPL_FAILSAFE_DRAIN_TIMEOUT } else { 120 }
+660:    $timeout = Get-ReplMethodTimeoutSeconds -Method $Method
+842:$script:ReplFailsafeDraining = $false
+955:        succeeds, so a failure never loses data. client.SessionLog.SubmitAsync is an
+989:    if ($script:ReplFailsafeDraining) {
+1006:    $script:ReplFailsafeDraining = $true
+1100:        $script:ReplFailsafeDraining = $false
+1123:    if ($script:ReplFailsafeDraining) { return }
+1318:    $failsafePath = Write-ReplFailsafe -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml -Label 'session_submit'
+1323:    $result = Invoke-ReplRaw -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml

@@ -1,0 +1,9 @@
+{
+  "Command": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug",
+  "ExitCode": 0,
+  "DurationMs": 1006540,
+  "Log": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\full-rerun\\hv-dotnet-pluginint-all.log",
+  "Trx": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p15\\full-rerun\\trx-all-hv\\pluginint-all.trx",
+  "TrxExists": true,
+  "FinishedUtc": "2026-08-22T07:09:50.0364404Z"
+}

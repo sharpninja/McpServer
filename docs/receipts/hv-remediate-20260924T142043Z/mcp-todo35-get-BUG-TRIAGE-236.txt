@@ -1,0 +1,34 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142339Z-9774
+  result:
+    id: BUG-TRIAGE-236
+    title: sessionlog_begin_turn rolls back after subscriber commit failure
+    section: Backlog
+    priority: high
+    done: false
+    note: 'S0: rollback wording is superseded by effective FR-MCP-173. Ordinary sessionlog.* writes bypass the coordinator. Closeout is proof. Do not mark done until H-done AGREE.'
+    description:
+    - Native sessionlog_begin_turn for Codex-20260915T201211Z-r0-parity / req-20260917T134022Z-existing-gigdriving-app failed as nonretryable internal_server_error. The tool upserts an in_progress turn through TransactionGatedSessionLogService.UpsertTurnAsync (operation sessionlog.upsert_turn). TurnTransactionCoordinator signs the manifest, applies the session-log mutation, then CommitDiffgramAsync via pub-sub/subscriber did not return committed or duplicate for txn-0c488a1a6c48404d861edbdecaa5a2ea. The coordinator always replaces the structured commit.Reason with the generic message Subscriber commit failed., rolls back the mutation, and TransactionGatedSessionLogService throws InvalidOperationException (Rollback completed.). McpErrorClassifier maps that InvalidOperationException to retryable=false internal_server_error, so clients do not retry even for timeout or subscriber-unavailable. This is the post-mutation subscriber-commit stage of FR-MCP-120, not the earlier Keyserver manifest signing failed path (mutation never applied). Deduplicate only with other Subscriber commit failed. Rollback completed. reports.
+    - 'Triage group: triage-group-f9334cab9e154918'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- sessionlog_begin_turn on an existing session either commits sessionlog.upsert_turn (committed or duplicate) or returns a classified error that includes the subscriber commit.Reason (timeout, subscriber unavailable, hash mismatch, stale sequence, replay nonce, decrypt failure, or duplicate conflict).'
+    - '- When subscriber commit fails, the local session-log mutation stays rolled back: no orphan in_progress turn remains for that sessionId and requestId.'
+    - '- Subscriber unavailability and commit timeout are not classified as nonretryable internal_server_error.'
+    - 'Implementation notes:'
+    - '- Do not merge with Keyserver manifest signing failed reports: those fail in SignManifestAsync before mutation (mutationApplied false). This report is the later CommitDiffgramAsync reject/timeout/unavailable path.'
+    - '- TurnTransactionCoordinator.ExecuteAsync discards commit.Reason and always emits Subscriber commit failed. Preserve Reason (and DiffgramCommitResponse.Message if present) in TurnTransactionResult.Message so ToTransactionException can surface it.'
+    - '- McpErrorClassifier.Classify falls through generic InvalidOperationException to InternalError retryable false. Map TransactionFailureReason.CommitTimeout and SubscriberUnavailable to retryable timeout/backend-style codes.'
+    - '- Investigate live subscriber reject cause for txn-0c488a1a6c48404d861edbdecaa5a2ea: InMemorySubscriberCommitService can reject on verify failure, encrypted-body hash mismatch, decrypt failure, stale sequence, replay nonce, or duplicate conflict; the coordinator also maps publish exceptions to SubscriberUnavailable and commit deadline to CommitTimeout.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

@@ -1,0 +1,14 @@
+{
+  "Exists": true,
+  "Length": 13860,
+  "LastWriteTimeUtc": "2026-08-22T00:03:45.0163147Z",
+  "OverallVerdictLineMatch": true,
+  "MentionsC3": true,
+  "MentionsD5": true,
+  "JsonOverallVerdict": "DISAGREE",
+  "JsonFailCount": 2,
+  "ExplicitFailList": [
+    "C3 TR-MCP-PLUGININT-001 AC1 not pinned: no typed entrypoint, environment variables, or cache folder name; UniqueAgentSourceCache uses AgentSourceType:RepositoryName",
+    "D5 TDD-per-AC: trivial JSON loader would green all six tests against current sibling plugin roots without TR AC1 fields"
+  ]
+}

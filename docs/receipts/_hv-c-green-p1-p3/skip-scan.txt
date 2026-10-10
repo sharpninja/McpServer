@@ -1,0 +1,8 @@
+F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:8:/// catalog must exist before adapter work starts. Skipped tests are failures.
+F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:13:    /// P1 red: Nuke target PluginSessionLogIntegration exists and treats skipped tests as failures.
+F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:16:    public void BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail()
+F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:27:            combined.Contains("Skipped", StringComparison.Ordinal) &&
+F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:28:            (combined.Contains("SkipIsFailure", StringComparison.Ordinal) ||
+F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:29:             Regex.IsMatch(combined, @"PluginSessionLogIntegration[\s\S]{0,4000}(Skipped|skip).*fail", RegexOptions.IgnoreCase)),
+F:\GitHub\McpServer\tests\Build.Tests\PluginSessionLogIntegrationTargetTests.cs:30:            "PluginSessionLogIntegration must treat skipped tests as failures.");
+

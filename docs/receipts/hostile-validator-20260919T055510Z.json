@@ -1,0 +1,205 @@
+{
+  "timestampUtc": "20260919T055510Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workClass": "Class 1 H2-red",
+  "todoId": "MCP-MEMORY-002",
+  "priorH1GreenAgree": "docs/receipts/hostile-validator-20260919T053914Z.md",
+  "planFile": "docs/plans/mcp-memory-002.md",
+  "acCatalog": "docs/plans/mcp-memory-002-ac-catalog.json",
+  "prNumber": 47,
+  "prUrl": "https://github.com/sharpninja/McpServer/pull/47",
+  "gitHeadVerified": "998ba295b31051bcb873175c95ad01f253d19f36",
+  "gitBranch": "memory-s2-red",
+  "baseBranch": "cursor/memory-s1-green-4b97",
+  "overallVerdict": "AGREE",
+  "passCount": 16,
+  "failCount": 0,
+  "unknownCount": 0,
+  "naCount": 0,
+  "accuracy": 99,
+  "completeness": 99,
+  "thresholdNote": "Strict AGREE only if every scored claim is PASS AND Accuracy>=98/100 AND Completeness>=98/100. Observed Accuracy=99, Completeness=99, FAIL=0, UNKNOWN=0 -> AGREE.",
+  "thresholdMet": true,
+  "operatorAgreeFloor": "every scored claim PASS AND Accuracy>=98 AND Completeness>=98",
+  "addProfile": {
+    "hostileSkillMissing": true,
+    "profileDirsAbsent": [
+      "/home/box/.claude/profile",
+      "/home/box/.grok/profile"
+    ],
+    "profileFileCount": 0
+  },
+  "trustBootstrap": {
+    "health": "Healthy",
+    "todoGetMcp": "timed_out",
+    "todoGetCurl": {
+      "done": false,
+      "id": "MCP-MEMORY-002",
+      "remainingNote": "stale: still cites Next S2 Red then H2-red despite PR #47"
+    },
+    "evidenceSource": "origin/memory-s2-red worktree /tmp/s2-red-wt @ 998ba295b31051bcb873175c95ad01f253d19f36",
+    "priorH1GreenAgreeOnBranch": true
+  },
+  "testEvidence": {
+    "memoryNamespace": {
+      "failed": 37,
+      "passed": 88,
+      "skipped": 0,
+      "total": 125
+    },
+    "s2CatalogMatrix": {
+      "count": 40,
+      "coverage": "40/40",
+      "failed": 37,
+      "passed": 3,
+      "skipped": 0,
+      "missing": 0,
+      "passedMethods": [
+        "MemoryRecallTests.NoMatches_ReturnsEmpty200",
+        "MemoryRecallTests.DoesNotSearchSessionLog",
+        "MemoryIndexerTests.Cancel_LeavesSafeStatus"
+      ]
+    },
+    "s2MocksFirst": {
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    },
+    "s1CatalogInSameFilter": {
+      "count": 73,
+      "failed": 0,
+      "passed": 73,
+      "skipped": 0,
+      "missing": 0
+    },
+    "compatFr001_007": {
+      "failed": 0,
+      "passed": 37,
+      "skipped": 0,
+      "filter": "MemoryServiceTests|MemoryControllerTests|MemoryEntityScopeTests|MemoryContractArtifactTests|MemoryTxnGatedTests|MemoryMcpToolTests|MemoryFederationTests"
+    },
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~McpServer.Support.Mcp.Tests.Memory",
+    "trxPath": "/tmp/s2-red-test-results/memory-s2-red.trx",
+    "logPath": "/tmp/s2-red-dotnet-test.log"
+  },
+  "focusFailures": {
+    "emptyNullQuery400": "Expected 400 Actual 200",
+    "exactParaphrase": "ExactToken missing Score; Paraphrase empty matches",
+    "minScoreTopN": "bounds return 200 not 400; Score null; TopN default not applied",
+    "filterAnd": "CombinedFilters fails missing Score",
+    "softDeleteForeign": "tests Failed on Score after DoesNotContain",
+    "embeddingStatus": "no Index/Reconcile/Batch handlers; EmptyContent_NeverReady 501"
+  },
+  "noGreenHandlers": true,
+  "claims": [
+    {
+      "id": "H2R-1",
+      "verdict": "PASS",
+      "claim": "S2 Red suite 40/40 catalog methods present",
+      "evidence": "TRX 40/40 present Missing 0"
+    },
+    {
+      "id": "H2R-2",
+      "verdict": "PASS",
+      "claim": "Production Red fails for missing hybrid/indexer not compile/skip",
+      "evidence": "Failed 37 Skipped 0; 400/Score/handler failures"
+    },
+    {
+      "id": "H2R-3",
+      "verdict": "PASS",
+      "claim": "Mocks-first may pass; S2 production stays Red",
+      "evidence": "mocks 9/9; production 37 Failed / 3 Passed"
+    },
+    {
+      "id": "H2R-4",
+      "verdict": "PASS",
+      "claim": "No S2 Green indexer/hybrid on Red branch",
+      "evidence": "no Index/Reconcile/Batch handlers; keyword RecallMemoryQueryHandler"
+    },
+    {
+      "id": "H2R-5",
+      "verdict": "PASS",
+      "claim": "S1 Green Failed 0 in same Memory filter",
+      "evidence": "73/73 Passed Failed 0 Skipped 0"
+    },
+    {
+      "id": "H2R-6",
+      "verdict": "PASS",
+      "claim": "FR-001..007 compat unbroken",
+      "evidence": "compat filter Failed 0 Passed 37 Skipped 0"
+    },
+    {
+      "id": "H2R-7",
+      "verdict": "PASS",
+      "claim": "No Python product path",
+      "evidence": "git ls-tree .py empty"
+    },
+    {
+      "id": "H2R-8",
+      "verdict": "PASS",
+      "claim": "TODO done=false; no merge; no S2 Green by validator",
+      "evidence": "curl done=false; no todo update; no merge"
+    },
+    {
+      "id": "H2R-9",
+      "verdict": "PASS",
+      "claim": "Honesty disclose gaps",
+      "evidence": "skill/profile/MCP/SoftDeleted residual/stale remaining"
+    },
+    {
+      "id": "H2R-10",
+      "verdict": "PASS",
+      "claim": "H1-green AGREE prerequisite exists; not rewritten",
+      "evidence": "hostile-validator-20260919T053914Z twin on branch"
+    },
+    {
+      "id": "H2R-F1",
+      "verdict": "PASS",
+      "claim": "empty/null query 400 focus",
+      "evidence": "Empty/Whitespace/Null Expected 400 Actual 200"
+    },
+    {
+      "id": "H2R-F2",
+      "verdict": "PASS",
+      "claim": "exact + paraphrase fixtures focus",
+      "evidence": "ExactToken no Score; Paraphrase empty"
+    },
+    {
+      "id": "H2R-F3",
+      "verdict": "PASS",
+      "claim": "minScore/topN bounds focus",
+      "evidence": "bound tests Failed as Red"
+    },
+    {
+      "id": "H2R-F4",
+      "verdict": "PASS",
+      "claim": "filter AND semantics focus",
+      "evidence": "CombinedFilters Failed missing Score"
+    },
+    {
+      "id": "H2R-F5",
+      "verdict": "PASS",
+      "claim": "soft-delete/foreign exclusion focus",
+      "evidence": "named tests Failed overall; PortMock exclusion Passed"
+    },
+    {
+      "id": "H2R-F6",
+      "verdict": "PASS",
+      "claim": "EmbeddingStatus transitions focus",
+      "evidence": "indexer handler DI failures / 501"
+    }
+  ],
+  "workspaceRules": {
+    "B1": "PASS",
+    "B2": "PASS",
+    "B3": "PASS",
+    "B4": "PASS",
+    "B5": "PASS",
+    "B6": "PASS"
+  },
+  "didNot": [
+    "mark TODO done",
+    "merge PR #47",
+    "implement S2 Green"
+  ]
+}

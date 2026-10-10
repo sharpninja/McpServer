@@ -1,0 +1,130 @@
+{
+  "startedUtc": "2026-08-21T14:59:45Z",
+  "updatedUtc": "2026-08-21T15:01:14Z",
+  "completedUtc": "2026-08-21T15:01:14Z",
+  "posted": 12,
+  "failed": 0,
+  "remaining": 0,
+  "items": [
+    {
+      "file": "20260819T185537Z-session_submit-533b.yaml",
+      "startedUtc": "2026-08-21T14:59:45Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 76,
+      "error": null,
+      "sessionId": "GrokCode-20260818T182741Z-plugin-session",
+      "requestId": "req-20260819T153500Z-019-remediate-hook-cache-isolation"
+    },
+    {
+      "file": "20260819T185918Z-session_submit-b0b1.yaml",
+      "startedUtc": "2026-08-21T15:01:01Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185507Z-001-hostile-g8-120-closeout"
+    },
+    {
+      "file": "20260819T185924Z-session_submit-fa2e.yaml",
+      "startedUtc": "2026-08-21T15:01:03Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260819T191655Z-session_submit-039c.yaml",
+      "startedUtc": "2026-08-21T15:01:04Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260819T194312Z-session_submit-d1d1.yaml",
+      "startedUtc": "2026-08-21T15:01:05Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260819T194623Z-session_submit-f13b.yaml",
+      "startedUtc": "2026-08-21T15:01:06Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260819T200631Z-session_submit-d848.yaml",
+      "startedUtc": "2026-08-21T15:01:07Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260819T202211Z-session_submit-835c.yaml",
+      "startedUtc": "2026-08-21T15:01:08Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260819T211528Z-session_submit-8de5.yaml",
+      "startedUtc": "2026-08-21T15:01:09Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260819T213958Z-session_submit-ff16.yaml",
+      "startedUtc": "2026-08-21T15:01:10Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260819T220258Z-session_submit-cafd.yaml",
+      "startedUtc": "2026-08-21T15:01:11Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260819T185029Z-plugin-session",
+      "requestId": "req-20260819T185917Z-prompt-c12b"
+    },
+    {
+      "file": "20260821T145711Z-session_submit-b020.yaml",
+      "startedUtc": "2026-08-21T15:01:12Z",
+      "success": true,
+      "exitCode": 0,
+      "elapsedSec": 1,
+      "error": null,
+      "sessionId": "GrokCode-20260821T125112Z-plugin-session",
+      "requestId": "req-20260821T143526Z-prompt-de7d"
+    }
+  ]
+}

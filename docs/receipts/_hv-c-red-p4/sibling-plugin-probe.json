@@ -1,0 +1,90 @@
+[
+  {
+    "name": "mcpserver-codex-plugin",
+    "dirExists": true,
+    "repl": true,
+    "invoke": true,
+    "dist": false,
+    "version": true,
+    "packageJson": false,
+    "entrypointWouldPass": true,
+    "versionWouldPass": true
+  },
+  {
+    "name": "mcpserver-claude-code-plugin",
+    "dirExists": true,
+    "repl": true,
+    "invoke": true,
+    "dist": false,
+    "version": true,
+    "packageJson": false,
+    "entrypointWouldPass": true,
+    "versionWouldPass": true
+  },
+  {
+    "name": "mcpserver-claude-cowork-plugin",
+    "dirExists": true,
+    "repl": true,
+    "invoke": true,
+    "dist": false,
+    "version": true,
+    "packageJson": false,
+    "entrypointWouldPass": true,
+    "versionWouldPass": true
+  },
+  {
+    "name": "mcpserver-copilot-plugin",
+    "dirExists": true,
+    "repl": true,
+    "invoke": true,
+    "dist": false,
+    "version": true,
+    "packageJson": false,
+    "entrypointWouldPass": true,
+    "versionWouldPass": true
+  },
+  {
+    "name": "mcpserver-grok-plugin",
+    "dirExists": true,
+    "repl": true,
+    "invoke": true,
+    "dist": false,
+    "version": true,
+    "packageJson": false,
+    "entrypointWouldPass": true,
+    "versionWouldPass": true
+  },
+  {
+    "name": "mcpserver-cline-plugin",
+    "dirExists": true,
+    "repl": true,
+    "invoke": true,
+    "dist": true,
+    "version": true,
+    "packageJson": true,
+    "entrypointWouldPass": true,
+    "versionWouldPass": true
+  },
+  {
+    "name": "mcpserver-cline-v2-plugin",
+    "dirExists": true,
+    "repl": true,
+    "invoke": true,
+    "dist": true,
+    "version": true,
+    "packageJson": true,
+    "entrypointWouldPass": true,
+    "versionWouldPass": true
+  },
+  {
+    "name": "mcpserver-opencode-plugin",
+    "dirExists": true,
+    "repl": true,
+    "invoke": true,
+    "dist": true,
+    "version": true,
+    "packageJson": true,
+    "entrypointWouldPass": true,
+    "versionWouldPass": true
+  }
+]

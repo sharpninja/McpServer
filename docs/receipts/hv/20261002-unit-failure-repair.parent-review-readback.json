@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-02T01:57:42.0214594Z",
+  "sessionId": "Codex-20261001T133708Z-plugin-session",
+  "requestId": "req-20261001T234043Z-fix-unit-failures",
+  "parts": 8,
+  "fullEquality": true,
+  "normalizedSha256": "E195A19BCC49132520BE89FCB1C0028C1F0D21B901B2CCBD3EB13CBB3F5D7A99",
+  "sourceReceipt": "F:\\GitHub\\McpServer\\docs\\receipts\\hv\\20261002-unit-failure-repair.final-review-sa-ef70105b.json"
+}

@@ -1,0 +1,11 @@
+{
+  "staging": {
+    "requireOperatorApproval": true
+  },
+  "production": {
+    "requireOperatorApproval": true
+  },
+  "development": {
+    "requireOperatorApproval": false
+  }
+}

@@ -1,0 +1,37 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142159Z-4bb9
+  result:
+    id: BUG-TRIAGE-097
+    title: PS failsafe queue captures but never drains; Status ignores it
+    section: Backlog
+    priority: high
+    done: true
+    note: "Closed 2026-07-20 by commit b1615e9a on develop (pushed to origin and github, both branches). Implemented in plugins/core/lib-ps, the vendored source of truth that SyncAgentPlugins pushes to the plugin repos. (1) Invoke-ReplFailsafeDrain walks the queue oldest-first (file names are UTC-stamped so a name sort is chronological), re-issues each record's captured method and params, and deletes a record only after its submit succeeds; replay is idempotent because client.SessionLog.SubmitAsync is an upsert keyed by sessionId plus requestId. (2) Safety: a record the backend rejects stays on disk with an incremented drainAttempts counter and the walk continues, so one poison record cannot dam the queue; unreadable or malformed records are moved to failsafe/quarantine with a sibling reason file and never deleted; a record that burns the attempt budget is quarantined rather than retried forever; a transport failure aborts the pass without consuming attempts so an outage cannot quarantine good turns. (3) Trigger: the drain fires once per process from the first successful backend call rather than at bootstrap, because bootstrap only proves marker freshness, not reachability, and draining there would recurse. Opt-out via MCP_FAILSAFE_DRAIN_DISABLED=1. New verbs workflow.failsafe.drain and workflow.failsafe.status. (4) mcp-status.ps1 now counts the queue: pendingCount previously reported 0 while 33 records sat on disk, and the document adds pendingTurnCount, failsafeDir, failsafeCount, failsafeQuarantineCount. Queue-location resolution moved to Get-McpFailsafeDir in resolve-cache-dir.ps1 so writer, drain, and status cannot disagree. RECEIPTS: Pester red first, 9 new tests failing with CommandNotFoundException, then 10/10 green and the full plugin core suite 94/94. Real queue drained in two passes, 5 records then 28: scanned 33, replayed 33, failed 0, quarantined 0, skipped 0, aborted false; queue 33 to 0 and server-visible ClaudeCode sessions rose from 89 to 107. Requirements registered: FR-MCP-REPL-011, TR-MCP-REPL-016, TR-MCP-REPL-017, TEST-MCP-REPL-031 through 039 plus the mapping row. STILL OPEN as a separate gap, not covered here: plugins/core/lib-sh writes failsafe records with the same convention and has no drain, so a bash-path host still accumulates."
+    description:
+    - 'Claude plugin session_submit failsafe under .mcpServer/claude/failsafe works: Invoke-ReplPersistTurn writes a YAML record (method client.SessionLog.SubmitAsync) before submit and only Clear-ReplFailsafe on durable success. On 2026-07-20 outage, well-formed records (e.g. 20260720T120414Z-session_submit-0be8.yaml) retained correct sessionId/requestId/turn body. The defect is that nothing replays that directory: cache-manager.ps1 flush and plugin cache-flush only process cacheDir/pending; there is no PS bootstrap drain of failsafe. Records from 2026-07-14, 2026-07-16, and 2026-07-20 therefore accumulate indefinitely after backend recovery. mcp-status.ps1 pendingCount counts only pending/*.yaml, so Status can report pendingCount:0 while dozens of failsafe files remain. Paired same-timestamp session_submit files indicate PersistTurn (or an equivalent submit path) is invoked twice per turn under failure, doubling queue volume; Write-ReplFailsafe itself writes one file per call.'
+    - 'Triage group: triage-group-9009cd75b7a17711'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- After backend becomes reachable, queued failsafe/*.yaml records are replayed (e.g. at plugin bootstrap and/or first successful MCP call / cache-flush) and removed only after durable submit confirmation'
+    - '- Failed replay retains the record with bounded retry visibility; exhausted retries remain countable and do not silently vanish'
+    - '- Invoke-McpPlugin Status (mcp-status.ps1) pendingCount or an explicit failsafeCount includes failsafe directory backlog so operators see unpersisted work'
+    - '- A single turn open/complete under outage produces at most one session_submit failsafe for that requestId (no duplicate pair with identical content/timestamp)'
+    - '- Existing undrained records from prior outages are eligible for the same drain path once implemented'
+    - 'Implementation notes:'
+    - '- Primary PS surfaces: plugins/core/lib-ps/repl-invoke.ps1 (Write-ReplFailsafe, Clear-ReplFailsafe, Invoke-ReplPersistTurn), cache-manager.ps1 (pending-only write/status/flush), mcp-status.ps1 (pendingCount from pending only), plugin-hook.ps1 Invoke-CacheFlushHook -> cache-manager flush'
+    - '- Unify or dual-scan: either write session failsafes into pending so existing flush works, or extend flush/status to Get-ReplFailsafeDir and parse method/params for replay'
+    - '- Node lib-node already auto-flushes failsafe cache on run start (host-context flushCacheBestEffort); PS/Claude hook path lacks equivalent for failsafe/'
+    - '- Dedup: key by sessionId+requestId (or content hash) before write; investigate double callers of workflow.sessionlog.beginTurn/completeTurn vs hook+agent double invoke'
+    - '- Do not treat empty pending/ as healthy if failsafe/ is non-empty; document Status field semantics after the count change'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---
+

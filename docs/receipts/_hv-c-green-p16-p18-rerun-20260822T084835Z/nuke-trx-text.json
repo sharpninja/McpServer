@@ -1,0 +1,21 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-rerun-20260822T084835Z\\results-nuke-20260822T085418Z\\nuke-skip.trx",
+  "lastWriteTimeUtc": "2026-08-22T08:55:36.2059821Z",
+  "length": 2941,
+  "total": "1",
+  "executed": "1",
+  "passed": "1",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "nameCount": 1,
+  "p16Count": 0,
+  "p17Count": 0,
+  "p19Count": 0,
+  "failedNames": [],
+  "skippedNames": [],
+  "namesSample": [
+    "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.NukeTarget_SkipIsFailure"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "onlyInDb": [
+    "ProductWorkspaceMemberships"
+  ],
+  "onlyInPlan": [],
+  "dbSetCount": 62,
+  "planTableCount": 61
+}

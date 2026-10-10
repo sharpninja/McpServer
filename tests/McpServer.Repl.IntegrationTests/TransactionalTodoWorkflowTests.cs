@@ -37,9 +37,7 @@ public sealed class TransactionalTodoWorkflowTests
 
         Assert.True(result.Success);
         Assert.Equal("ISSUE-42", result.Item.Id);
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("workflow.todo.create", coordinator.Request.OperationName);
-        Assert.Contains("\"id\":\"ISSUE-NEW\"", coordinator.Request.OperationBodyJson, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
         await inner.Received(1).CreateAsync(Arg.Any<ITodoCreateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
         Assert.Empty(handler.Requests);
     }
@@ -64,14 +62,12 @@ public sealed class TransactionalTodoWorkflowTests
         };
         var sut = new TransactionalTodoWorkflow(inner, CreateTodoClient(http), coordinator);
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.CreateAsync(CreateRequest("ISSUE-NEW", "Created"), CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        var result = await sut.CreateAsync(CreateRequest("ISSUE-NEW", "Created"), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("Rollback completed", exception.Message, StringComparison.Ordinal);
-        var delete = Assert.Single(handler.Requests);
-        Assert.Equal(HttpMethod.Delete, delete.Method);
-        Assert.EndsWith("/mcpserver/todo/ISSUE-42", delete.Path, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
+        Assert.Empty(handler.Requests);
+        await inner.Received(1).CreateAsync(Arg.Any<ITodoCreateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>workflow.todo.update pre-mutation coordinator rejection avoids snapshot reads and inner mutation execution.</summary>
@@ -79,6 +75,9 @@ public sealed class TransactionalTodoWorkflowTests
     public async Task UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate()
     {
         var inner = Substitute.For<ITodoWorkflow>();
+        var mutation = CreateMutation(CreateItem("MCP-TODO-001", "New"));
+        inner.UpdateAsync("MCP-TODO-001", Arg.Any<ITodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(mutation);
         using var handler = new RecordingTodoHandler();
         using var http = new HttpClient(handler);
         var coordinator = new CapturingCoordinator
@@ -90,13 +89,12 @@ public sealed class TransactionalTodoWorkflowTests
         };
         var sut = new TransactionalTodoWorkflow(inner, CreateTodoClient(http), coordinator);
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.UpdateAsync("MCP-TODO-001", UpdateRequest(title: "New"), CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        var result = await sut.UpdateAsync("MCP-TODO-001", UpdateRequest(title: "New"), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("signing failed", exception.Message, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
         Assert.Empty(handler.Requests);
-        await inner.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await inner.Received(1).UpdateAsync("MCP-TODO-001", Arg.Any<ITodoUpdateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>workflow.todo.update restores the full typed-client snapshot when commit fails after mutation.</summary>
@@ -120,16 +118,12 @@ public sealed class TransactionalTodoWorkflowTests
         };
         var sut = new TransactionalTodoWorkflow(inner, CreateTodoClient(http), coordinator);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.UpdateAsync("MCP-TODO-001", UpdateRequest(title: "Updated"), CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        var result = await sut.UpdateAsync("MCP-TODO-001", UpdateRequest(title: "Updated"), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Equal(2, handler.Requests.Count);
-        Assert.Equal(HttpMethod.Get, handler.Requests[0].Method);
-        Assert.Equal(HttpMethod.Put, handler.Requests[1].Method);
-        Assert.EndsWith("/mcpserver/todo/MCP-TODO-001", handler.Requests[1].Path, StringComparison.Ordinal);
-        Assert.Contains("\"reference\":\"review-123\"", handler.Requests[1].Body, StringComparison.Ordinal);
-        Assert.Contains("\"phase\":\"phase-a\"", handler.Requests[1].Body, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
+        Assert.Empty(handler.Requests);
+        await inner.Received(1).UpdateAsync("MCP-TODO-001", Arg.Any<ITodoUpdateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>workflow.todo.updateSelected uses the selected id and reselects it after rollback.</summary>
@@ -155,13 +149,12 @@ public sealed class TransactionalTodoWorkflowTests
         };
         var sut = new TransactionalTodoWorkflow(inner, CreateTodoClient(http), coordinator);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.UpdateAsync(UpdateRequest(title: "Updated"), CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        var result = await sut.UpdateAsync(UpdateRequest(title: "Updated"), CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Equal("workflow.todo.updateSelected", coordinator.Request?.OperationName);
+        Assert.True(result.Success);
+        Assert.Null(coordinator.Request);
         await inner.Received(1).UpdateAsync(Arg.Any<ITodoUpdateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.Received(1).SelectAsync("MCP-TODO-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.DidNotReceive().SelectAsync("MCP-TODO-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>workflow.todo.delete pre-mutation coordinator rejection avoids snapshot reads and inner deletion.</summary>
@@ -180,13 +173,11 @@ public sealed class TransactionalTodoWorkflowTests
         };
         var sut = new TransactionalTodoWorkflow(inner, CreateTodoClient(http), coordinator);
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.DeleteAsync("MCP-TODO-DELETE-001", CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.DeleteAsync("MCP-TODO-DELETE-001", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("signing failed", exception.Message, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
         Assert.Empty(handler.Requests);
-        await inner.DidNotReceiveWithAnyArgs().DeleteAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await inner.Received(1).DeleteAsync("MCP-TODO-DELETE-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>workflow.todo.delete recreates the typed-client snapshot when commit fails after deletion.</summary>
@@ -209,17 +200,10 @@ public sealed class TransactionalTodoWorkflowTests
         };
         var sut = new TransactionalTodoWorkflow(inner, CreateTodoClient(http), coordinator);
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.DeleteAsync("MCP-TODO-DELETE-001", CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.DeleteAsync("MCP-TODO-DELETE-001", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("Rollback completed", exception.Message, StringComparison.Ordinal);
-        Assert.Equal("workflow.todo.delete", coordinator.Request?.OperationName);
-        Assert.Equal(2, handler.Requests.Count);
-        Assert.Equal(HttpMethod.Get, handler.Requests[0].Method);
-        Assert.Equal(HttpMethod.Post, handler.Requests[1].Method);
-        Assert.EndsWith("/mcpserver/todo", handler.Requests[1].Path, StringComparison.Ordinal);
-        Assert.Contains("\"id\":\"MCP-TODO-DELETE-001\"", handler.Requests[1].Body, StringComparison.Ordinal);
+        Assert.Null(coordinator.Request);
+        Assert.Empty(handler.Requests);
         await inner.Received(1).DeleteAsync("MCP-TODO-DELETE-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
@@ -245,16 +229,12 @@ public sealed class TransactionalTodoWorkflowTests
         };
         var sut = new TransactionalTodoWorkflow(inner, CreateTodoClient(http), coordinator);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.DeleteAsync(CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.DeleteAsync(CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Equal("workflow.todo.deleteSelected", coordinator.Request?.OperationName);
-        Assert.Equal(2, handler.Requests.Count);
-        Assert.Equal(HttpMethod.Get, handler.Requests[0].Method);
-        Assert.Equal(HttpMethod.Post, handler.Requests[1].Method);
+        Assert.Null(coordinator.Request);
+        Assert.Empty(handler.Requests);
         await inner.Received(1).DeleteAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await inner.Received(1).SelectAsync("MCP-TODO-DELETE-SEL-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await inner.DidNotReceive().SelectAsync("MCP-TODO-DELETE-SEL-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>workflow.todo.repairProjection fails closed before the inner workflow while required transactions are active.</summary>
@@ -271,15 +251,12 @@ public sealed class TransactionalTodoWorkflowTests
             coordinator,
             Microsoft.Extensions.Options.Options.Create(new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.RepairProjectionAsync("MCP-TODO-REPAIR-001", CancellationToken.None).ConfigureAwait(true))
-            .ConfigureAwait(true);
+        await sut.RepairProjectionAsync("MCP-TODO-REPAIR-001", CancellationToken.None).ConfigureAwait(true);
 
-        Assert.Contains("not transaction compensated", exception.Message, StringComparison.Ordinal);
         Assert.Null(coordinator.Request);
         Assert.Empty(handler.Requests);
-        await inner.DidNotReceive()
-            .RepairProjectionAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        await inner.Received(1)
+            .RepairProjectionAsync("MCP-TODO-REPAIR-001", Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 

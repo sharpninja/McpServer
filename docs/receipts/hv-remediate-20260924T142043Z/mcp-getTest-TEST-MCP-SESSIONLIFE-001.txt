@@ -1,0 +1,19 @@
+﻿type: result
+payload:
+  requestId: req-20260924T142125Z-9574
+  result:
+    id: TEST-MCP-SESSIONLIFE-001
+    title: Pester degraded cache, hook status, and empty query
+    description: SessionLogLifecycle.Tests.ps1 covers retained fields, hook status, 404 recovery, empty-query verbs, and same-request degraded beginTurn.
+    status: pending
+    priority: high
+    area: MCP
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-24T14:21:26.6033007+00:00
+    updatedAt: 2026-09-24T14:21:26.6033951+00:00
+  deprecated: true
+
+---
+

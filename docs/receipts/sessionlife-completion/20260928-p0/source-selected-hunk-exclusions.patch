@@ -1,0 +1,23 @@
+diff --git "a/F:\\GitHub\\McpServer\\.worktrees\\session-lifecycle\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalog.cs" "b/F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalog.cs"
+index 469b8c853a9ac72f3f5c897d1d922646d1a1af94..1c58a5a270f1df249eea1112e2611f00ae2c9674 100644
+--- "a/F:\\GitHub\\McpServer\\.worktrees\\session-lifecycle\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalog.cs"
++++ "b/F:\\GitHub\\McpServer\\.mcpServer\\worktrees\\sessionlife-acceptance-20260928\\tests\\McpServer.PluginIntegration.Tests\\PluginSessionLogCatalog.cs"
+@@ -15,18 +15,6 @@ public static class PluginSessionLogCatalog
+         AllowTrailingCommas = false,
+     };
+ 
+-    /// <summary>Primary clone root when <paramref name="repositoryRoot"/> is a worktree.</summary>
+-    /// <param name="repositoryRoot">McpServer checkout, including a worktree.</param>
+-    /// <returns>The main repository directory.</returns>
+-    public static string PrimaryRepositoryRoot(string repositoryRoot)
+-    {
+-        var parent = SiblingPluginParent(repositoryRoot);
+-        var primary = Path.Combine(parent, "McpServer");
+-        return Directory.Exists(primary) && File.Exists(Path.Combine(primary, "McpServer.sln"))
+-            ? primary
+-            : repositoryRoot;
+-    }
+-
+     /// <summary>
+     /// Parent directory that holds sibling plugin repositories, even when
+     /// <paramref name="repositoryRoot"/> is a git worktree.

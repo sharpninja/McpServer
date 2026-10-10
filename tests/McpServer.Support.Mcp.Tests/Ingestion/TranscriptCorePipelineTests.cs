@@ -151,7 +151,7 @@ public sealed class TranscriptCorePipelineTests
         {
             var transcriptPath = Path.Combine(tempDirectory, "session.jsonl");
             await File.WriteAllLinesAsync(transcriptPath, [
-                "{\"type\":\"session_meta\",\"payload\":{\"id\":\"codex-diagnostic-fixture\",\"cwd\":\"F:/GitHub/Sample\"}}",
+                "{\"type\":\"session_meta\",\"payload\":{\"id\":\"codex-diagnostic-fixture\",\"cwd\":\"Q:/__mcp_unit_test__/Sample\"}}",
                 "{\"type\":\"response_item\",\"payload\":{\"id\":\"msg-1\",\"role\":\"user\",\"content\":[{\"type\":\"input_text\",\"text\":\"hello\"}]}}",
                 "{\"type\":\"unmapped_record\",\"payload\":{\"reason\":\"should diagnose\"}}",
                 "{\"type\":\"response_item\",\"payload\":{\"id\":\"msg-missing-role\",\"content\":[{\"type\":\"output_text\",\"text\":\"dropped\"}]}}"
@@ -187,7 +187,7 @@ public sealed class TranscriptCorePipelineTests
         {
             var transcriptPath = Path.Combine(tempDirectory, "session.jsonl");
             await File.WriteAllLinesAsync(transcriptPath, [
-                "{\"type\":\"user\",\"sessionId\":\"claude-diagnostic-fixture\",\"cwd\":\"F:/GitHub/Sample\",\"uuid\":\"claude-msg-1\",\"message\":{\"role\":\"user\",\"content\":[{\"type\":\"text\",\"text\":\"hello\"}]}}",
+                "{\"type\":\"user\",\"sessionId\":\"claude-diagnostic-fixture\",\"cwd\":\"Q:/__mcp_unit_test__/Sample\",\"uuid\":\"claude-msg-1\",\"message\":{\"role\":\"user\",\"content\":[{\"type\":\"text\",\"text\":\"hello\"}]}}",
                 "{\"type\":\"summary\",\"sessionId\":\"claude-diagnostic-fixture\",\"summary\":\"should diagnose\"}",
                 "{\"type\":\"assistant\",\"sessionId\":\"claude-diagnostic-fixture\",\"uuid\":\"claude-missing-message\"}"
             ], TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -290,7 +290,7 @@ public sealed class TranscriptCorePipelineTests
         {
             var sessionPath = Path.Combine(tempDirectory, "session.json");
             var messagesPath = Path.Combine(tempDirectory, "messages.json");
-            await File.WriteAllTextAsync(sessionPath, "{\"session_id\":\"cline-diagnostic-fixture\",\"model\":\"cline-test\",\"workspace_root\":\"F:/GitHub/Sample\"}", TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await File.WriteAllTextAsync(sessionPath, "{\"session_id\":\"cline-diagnostic-fixture\",\"model\":\"cline-test\",\"workspace_root\":\"Q:/__mcp_unit_test__/Sample\"}", TestContext.Current.CancellationToken).ConfigureAwait(true);
             await File.WriteAllTextAsync(messagesPath, "{\"sessionId\":\"cline-diagnostic-fixture\",\"messages\":{\"invalid\":true}}", TestContext.Current.CancellationToken).ConfigureAwait(true);
             var service = TranscriptIngestionService.CreateDefault();
 
@@ -698,21 +698,7 @@ public sealed class TranscriptCorePipelineTests
     }
 
     private static string ResolveRealFixtureRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            var candidate = Path.Combine(directory.FullName, "tests", "McpServer.Support.Mcp.Tests", "Fixtures", "Transcripts", "real");
-            if (Directory.Exists(candidate))
-            {
-                return candidate;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Unable to locate real transcript fixture root from test output directory.");
-    }
+        => Path.Combine(AppContext.BaseDirectory, "Fixtures", "Transcripts", "real");
 
     private sealed class RecordingTranscriptPersister : ITranscriptSessionPersister
     {

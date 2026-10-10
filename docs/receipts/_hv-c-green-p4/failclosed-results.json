@@ -1,0 +1,42 @@
+[
+  {
+    "Case": "real",
+    "ExitCode": 1,
+    "StdOut": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Microsoft.Common.CurrentVersion.targets(2205,5): warning MSB9008: The referenced project ..\\..\\..\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj does not exist. [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]\r\nF:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\Program.cs(2,7): error CS0246: The type or namespace name 'McpServer' could not be found (are you missing a using directive or an assembly reference?) [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]"
+  },
+  {
+    "Case": "missing-catalog",
+    "ExitCode": 1,
+    "StdOut": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Microsoft.Common.CurrentVersion.targets(2205,5): warning MSB9008: The referenced project ..\\..\\..\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj does not exist. [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]\r\nF:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\Program.cs(2,7): error CS0246: The type or namespace name 'McpServer' could not be found (are you missing a using directive or an assembly reference?) [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]"
+  },
+  {
+    "Case": "missing-repo",
+    "ExitCode": 1,
+    "StdOut": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Microsoft.Common.CurrentVersion.targets(2205,5): warning MSB9008: The referenced project ..\\..\\..\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj does not exist. [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]\r\nF:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\Program.cs(2,7): error CS0246: The type or namespace name 'McpServer' could not be found (are you missing a using directive or an assembly reference?) [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]"
+  },
+  {
+    "Case": "missing-entrypoint",
+    "ExitCode": 1,
+    "StdOut": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Microsoft.Common.CurrentVersion.targets(2205,5): warning MSB9008: The referenced project ..\\..\\..\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj does not exist. [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]\r\nF:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\Program.cs(2,7): error CS0246: The type or namespace name 'McpServer' could not be found (are you missing a using directive or an assembly reference?) [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]"
+  },
+  {
+    "Case": "missing-version",
+    "ExitCode": 1,
+    "StdOut": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Microsoft.Common.CurrentVersion.targets(2205,5): warning MSB9008: The referenced project ..\\..\\..\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj does not exist. [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]\r\nF:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\Program.cs(2,7): error CS0246: The type or namespace name 'McpServer' could not be found (are you missing a using directive or an assembly reference?) [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]"
+  },
+  {
+    "Case": "missing-ac1",
+    "ExitCode": 1,
+    "StdOut": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Microsoft.Common.CurrentVersion.targets(2205,5): warning MSB9008: The referenced project ..\\..\\..\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj does not exist. [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]\r\nF:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\Program.cs(2,7): error CS0246: The type or namespace name 'McpServer' could not be found (are you missing a using directive or an assembly reference?) [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]"
+  },
+  {
+    "Case": "duplicate-key",
+    "ExitCode": 1,
+    "StdOut": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Microsoft.Common.CurrentVersion.targets(2205,5): warning MSB9008: The referenced project ..\\..\\..\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj does not exist. [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]\r\nF:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\Program.cs(2,7): error CS0246: The type or namespace name 'McpServer' could not be found (are you missing a using directive or an assembly reference?) [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]"
+  },
+  {
+    "Case": "enabled-count",
+    "ExitCode": 1,
+    "StdOut": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\Microsoft.Common.CurrentVersion.targets(2205,5): warning MSB9008: The referenced project ..\\..\\..\\tests\\McpServer.PluginIntegration.Tests\\McpServer.PluginIntegration.Tests.csproj does not exist. [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]\r\nF:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\Program.cs(2,7): error CS0246: The type or namespace name 'McpServer' could not be found (are you missing a using directive or an assembly reference?) [F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p4\\failclosed-probe\\FailClosedProbe.csproj]"
+  }
+]

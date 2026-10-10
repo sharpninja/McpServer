@@ -1,0 +1,2 @@
+﻿workflow.sessionlog.beginTurn could not persist superseded turn 'req-20260924T035126Z-hv-remediate-001': Cannot bind argument to parameter 'QueryText' because it is an empty string.
+Failsafe queue drain: replayed=1 failed=0 quarantined=0 skipped=1 dir='F:\GitHub\McpServer\.mcpServer\failsafe\GrokCode\workspaces\RjpcR2l0SHViXE1jcFNlcnZlcg\pending'.

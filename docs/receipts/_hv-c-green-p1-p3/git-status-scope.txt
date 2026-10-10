@@ -1,0 +1,10 @@
+ M McpServer.sln
+?? build/Build.PluginSessionLogIntegration.cs
+?? tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs
+?? tests/McpServer.PluginIntegration.Tests/McpServer.PluginIntegration.Tests.csproj
+?? tests/McpServer.PluginIntegration.Tests/PluginHostKind.cs
+?? tests/McpServer.PluginIntegration.Tests/PluginIntegrationProjectTests.cs
+?? tests/McpServer.PluginIntegration.Tests/PluginSessionLogCollection.cs
+?? tests/McpServer.PluginIntegration.Tests/PluginSessionLogScenario.cs
+?? tests/McpServer.PluginIntegration.Tests/scenarios/plugin-sessionlog-scenarios.json
+

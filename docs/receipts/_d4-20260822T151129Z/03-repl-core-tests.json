@@ -1,0 +1,39 @@
+{
+  "index": 3,
+  "name": "repl-core-tests",
+  "exactCommand": "dotnet test tests\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.csproj",
+  "capturedCommand": "dotnet test tests\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.csproj --logger trx;LogFileName=03-repl-core-tests.trx --results-directory F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z --nologo",
+  "startedUtc": "2026-08-22T15:26:01.3755421Z",
+  "endedUtc": "2026-08-22T15:26:13.8934044Z",
+  "durationSec": 12.518,
+  "exitCode": 0,
+  "passed": 847,
+  "failed": 0,
+  "skipped": 0,
+  "total": 847,
+  "countSource": "trx",
+  "logPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z\\03-repl-core-tests.log",
+  "logSha256": "CACA8A4A565E71DAAF5CDFE925299C26AF9D73004D1E223BBA692A9B46033904",
+  "trxPath": "F:\\GitHub\\McpServer\\docs\\receipts\\_d4-20260822T151129Z\\03-repl-core-tests.trx",
+  "trxSha256": "73C46DD3937638B0A4023B8219B96FF218C4556852764F3703062FC037401CD6",
+  "consoleCounts": {
+    "failed": 0,
+    "passed": 847,
+    "skipped": 0,
+    "total": 847,
+    "lines": 1
+  },
+  "trxCounts": {
+    "total": 847,
+    "executed": 847,
+    "passed": 847,
+    "failed": 0,
+    "notExecuted": 0,
+    "skipped": 0,
+    "skippedNames": [],
+    "failedNames": []
+  },
+  "gateFailed": false,
+  "gateSkipped": false,
+  "gateExitFail": false
+}

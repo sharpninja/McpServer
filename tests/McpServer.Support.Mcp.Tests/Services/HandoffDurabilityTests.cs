@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
@@ -589,6 +590,210 @@ public sealed class HandoffDurabilityTests : IDisposable
         Assert.DoesNotContain("supersecretvalue", stored.SourceLocator, StringComparison.Ordinal);
         Assert.DoesNotContain("supersecretvalue", stored.Reviewer ?? string.Empty, StringComparison.Ordinal);
         Assert.DoesNotContain("supersecretvalue", stored.ReviewNotes ?? string.Empty, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// D5 / TR-HANDOFF-AGENT-001: shipped <see cref="HandoffOneShotExtractor"/> reports the
+    /// pool's effective prompt identity, and a second ingest of the same content is a
+    /// deterministic replay instead of a unique-index collision.
+    /// </summary>
+    [Fact]
+    public async Task D5_ShippedExtractor_RepeatedIngest_ReplaysDeterministicallyWithEffectiveIdentity()
+    {
+        const string effectivePrompt = "handoff-todo-draft/v1-effective";
+        const string effectiveTemplate = "handoff-todo-draft-effective";
+        var pool = Substitute.For<IAgentPoolService>();
+        pool.EnqueueOneShotAsync(Arg.Any<AgentPoolOneShotRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new AgentPoolEnqueueResult
+            {
+                Success = true,
+                JobId = "job-handoff-replay",
+                AgentName = "plan-agent",
+                Model = "test-model",
+                PromptVersion = effectivePrompt,
+                PromptTemplateId = effectiveTemplate,
+            });
+        pool.SubscribeJobStreamAsync("job-handoff-replay", Arg.Any<CancellationToken>())
+            .Returns(CompletedStream(ValidDraft("MCP-HANDOFFDEMO-401")));
+        var extractor = new HandoffOneShotExtractor(pool);
+        var sut = CreateService(extractor, TrackingTodo());
+
+        var first = await sut.IngestAsync(ContentRequest("effective-replay"), TestContext.Current.CancellationToken);
+        Assert.True(first.Success, first.Error);
+        Assert.False(first.Replayed);
+        Assert.Equal(effectivePrompt, first.Provenance!.PromptVersion);
+        Assert.Equal(effectiveTemplate, first.Provenance.TemplateVersion);
+
+        var second = await sut.IngestAsync(ContentRequest("effective-replay"), TestContext.Current.CancellationToken);
+        Assert.True(second.Success, second.Error);
+        Assert.True(second.Replayed);
+        Assert.Equal(first.Provenance.RunId, second.Provenance!.RunId);
+        Assert.Equal(effectivePrompt, second.Provenance.PromptVersion);
+        Assert.Equal(effectiveTemplate, second.Provenance.TemplateVersion);
+    }
+
+    private static async IAsyncEnumerable<AgentPoolJobStreamEventDto> CompletedStream(string text)
+    {
+        yield return new AgentPoolJobStreamEventDto
+        {
+            JobId = "job-handoff-replay",
+            EventType = "completed",
+            Status = "completed",
+            Text = text,
+        };
+        await Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// TEST-HANDOFF-007 / FR-HANDOFF-006 / TR-HANDOFF-AUDIT-001: processing-lease heartbeat
+    /// renews <c>ProcessingLeaseExpiresAtUtc</c> on the injected clock interval without bumping
+    /// <c>StateVersion</c>, and a lost owner or version cannot persist a terminal update.
+    /// Fixtures: in-memory SQLite, blocked extractor, lease/clock fakes. Takeover names stay reuse.
+    /// </summary>
+    [Fact]
+    public async Task ProcessingLease_RenewsAndFencesTerminalUpdates()
+    {
+        var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var extractor = Substitute.For<IHandoffOneShotExtractor>();
+        extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(async ci =>
+            {
+                started.TrySetResult();
+                await release.Task.WaitAsync(ci.Arg<CancellationToken>());
+                return SuccessfulExtraction(ValidDraft("MCP-HANDOFFDEMO-301"));
+            });
+
+        var lease = new HandoffLeaseOptions
+        {
+            Duration = TimeSpan.FromMinutes(30),
+            HeartbeatInterval = TimeSpan.FromMinutes(10),
+            CompensationTimeout = TimeSpan.FromSeconds(5),
+        };
+        var sut = CreateService(extractor, Substitute.For<ITodoService>(), lease);
+        var ingestTask = sut.IngestAsync(ContentRequest("lease-heartbeat"), TestContext.Current.CancellationToken);
+        await started.Task.WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken);
+
+        string? owner = null;
+        int originalVersion = 0;
+        DateTimeOffset originalExpiry = default;
+        await WaitUntilAsync(
+            () =>
+            {
+                using var db = CreateDb();
+                var run = db.HandoffIngestionRuns.SingleOrDefault();
+                if (run is null
+                    || run.ProcessingState != nameof(HandoffProcessingState.Processing)
+                    || string.IsNullOrWhiteSpace(run.ProcessingOwner)
+                    || run.ProcessingLeaseExpiresAtUtc is null)
+                {
+                    return false;
+                }
+
+                owner = run.ProcessingOwner;
+                originalVersion = run.StateVersion;
+                originalExpiry = run.ProcessingLeaseExpiresAtUtc.Value;
+                return true;
+            },
+            TimeSpan.FromSeconds(5));
+
+        try
+        {
+            _time.Advance(lease.HeartbeatInterval + TimeSpan.FromSeconds(1));
+            await Task.Delay(250, TestContext.Current.CancellationToken);
+
+            DateTimeOffset? renewedExpiry;
+            int versionAfterHeartbeat;
+            string? ownerAfterHeartbeat;
+            using (var mid = CreateDb())
+            {
+                var run = Assert.Single(mid.HandoffIngestionRuns);
+                renewedExpiry = run.ProcessingLeaseExpiresAtUtc;
+                versionAfterHeartbeat = run.StateVersion;
+                ownerAfterHeartbeat = run.ProcessingOwner;
+            }
+
+            Assert.True(
+                renewedExpiry > originalExpiry,
+                "Heartbeat must renew ProcessingLeaseExpiresAtUtc when the injected clock advances by HeartbeatInterval.");
+            Assert.Equal(originalVersion, versionAfterHeartbeat);
+            Assert.Equal(owner, ownerAfterHeartbeat);
+
+            using (var steal = CreateDb())
+            {
+                var run = steal.HandoffIngestionRuns.Single();
+                run.ProcessingOwner = "other-instance";
+                run.StateVersion = originalVersion + 1;
+                steal.SaveChanges();
+            }
+
+            release.TrySetResult();
+            var firstResult = await ingestTask;
+
+            Assert.False(firstResult.Success);
+            Assert.Equal(HandoffErrorCodes.InProgress, firstResult.ErrorCode);
+            using var verify = CreateDb();
+            var stored = Assert.Single(verify.HandoffIngestionRuns);
+            Assert.Equal("other-instance", stored.ProcessingOwner);
+            Assert.Equal(nameof(HandoffProcessingState.Processing), stored.ProcessingState);
+            Assert.Equal(originalVersion + 1, stored.StateVersion);
+            Assert.NotEqual(nameof(HandoffReviewState.Failed), stored.ReviewState);
+        }
+        finally
+        {
+            release.TrySetResult();
+            try
+            {
+                await ingestTask.WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken);
+            }
+            catch (Exception)
+            {
+                // Drain the in-flight ingest so Dispose does not race the heartbeat loop.
+            }
+        }
+    }
+
+    /// <summary>
+    /// TEST-HANDOFF-003 / FR-HANDOFF-002 / TR-HANDOFF-AGENT-001: persisted provenance records the
+    /// effective prompt identity and version the extractor actually used. Fixtures: in-memory SQLite
+    /// and a stub extractor that reports a custom identity. Rejecting <c>PromptTemplateId</c> is reuse.
+    /// </summary>
+    [Fact]
+    public async Task Provenance_IncludesEffectiveCustomPromptIdentityAndVersion()
+    {
+        const string content = "effective-custom-prompt";
+        const string effectiveIdentity = "operator-handoff-custom";
+        const string effectiveVersion = "operator-handoff-custom/v3";
+        Assert.NotEqual(HandoffPromptDefaults.TemplateId, effectiveIdentity);
+        Assert.NotEqual(HandoffPromptDefaults.PromptVersion, effectiveVersion);
+
+        var extractor = Substitute.For<IHandoffOneShotExtractor>();
+        extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(new HandoffExtractionResult
+            {
+                Success = true,
+                ResponseText = ValidDraft("MCP-HANDOFFDEMO-302"),
+                AgentName = "plan-agent",
+                Model = "test-model",
+                PromptVersion = effectiveVersion,
+                TemplateVersion = effectiveIdentity,
+            });
+
+        var sut = CreateService(extractor, Substitute.For<ITodoService>());
+        var result = await sut.IngestAsync(ContentRequest(content), TestContext.Current.CancellationToken);
+
+        Assert.True(result.Success, result.Error);
+        Assert.NotNull(result.Provenance);
+        Assert.Equal(effectiveVersion, result.Provenance.PromptVersion);
+        Assert.Equal(effectiveIdentity, result.Provenance.TemplateVersion);
+
+        using var verify = CreateDb();
+        var stored = Assert.Single(verify.HandoffIngestionRuns);
+        Assert.Equal(effectiveVersion, stored.PromptVersion);
+        Assert.Equal(effectiveIdentity, stored.TemplateVersion);
+        Assert.Equal(
+            HandoffReplayKeys.Create(_workspace, Sha256(content), HandoffPromptDefaults.PromptVersion, force: false, stored.RunId),
+            stored.ReplayIdentity);
     }
 
     private static HandoffLeaseOptions ShortLease()

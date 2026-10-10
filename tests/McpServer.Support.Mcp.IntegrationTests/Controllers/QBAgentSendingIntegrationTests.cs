@@ -149,7 +149,7 @@ public sealed class QBAgentSendingIntegrationTests
             """
             {"tool_calls":[{"name":"write_file","arguments":{"path":"blocked/hello.cpp","content":"#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}\n"}}]}
             """,
-            "QBAgent action complete: wrote blocked/hello.cpp with the Hello World C++ program.");
+            """{"intent":"final","content":"write_file was rejected; the file was not created."}""");
         using var factory = BuildFactory(orchestration, new RecordingExecutor());
 
         await using var agentProvider = BuildAgentProvider(factory, out var token);
@@ -173,9 +173,8 @@ public sealed class QBAgentSendingIntegrationTests
         var text = await RunPromptAsync(agentProvider, factory, token, toolSet.Tools, prompt).ConfigureAwait(true);
 
         Assert.False(File.Exists(absolutePath), $"QBAgent must not create {absolutePath} after the MCP file tool rejects the path.");
-        Assert.Equal(1, orchestration.Calls);
-        Assert.Contains("external tool execution failed", text, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("requested action was not completed", text, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(2, orchestration.Calls);
+        Assert.Contains("write_file was rejected", text, StringComparison.Ordinal);
         Assert.DoesNotContain("QBAgent action complete", text, StringComparison.Ordinal);
         Assert.DoesNotContain("wrote blocked/hello.cpp", text, StringComparison.Ordinal);
 

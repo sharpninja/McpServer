@@ -1,0 +1,21 @@
+{
+  "TimestampUtc": "2026-08-22T05:55:50.0178012Z",
+  "Count": 3,
+  "Items": [
+    {
+      "ProcessId": 57188,
+      "Name": "McpServer.PluginIntegration.Tests.exe",
+      "CommandLine": "\"F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.PluginIntegration.Tests.exe\" @@ \"C:\\Users\\kingd\\AppData\\Local\\Temp\\tmpobpujv.tmp\""
+    },
+    {
+      "ProcessId": 77404,
+      "Name": "dotnet.exe",
+      "CommandLine": "\"dotnet\" F:\\GitHub\\McpServer\\tests\\McpServer.PluginIntegration.Tests\\bin\\Debug\\net10.0\\McpServer.Support.Mcp.dll"
+    },
+    {
+      "ProcessId": 47388,
+      "Name": "testhost.exe",
+      "CommandLine": "\"F:\\GitHub\\TCS2\\tests\\Tcs2.Tool.Tests\\bin\\Debug\\net10.0\\testhost.exe\"  --runtimeconfig \"F:\\GitHub\\TCS2\\tests\\Tcs2.Tool.Tests\\bin\\Debug\\net10.0\\Tcs2.Tool.Tests.runtimeconfig.json\" --depsfile \"F:\\GitHub\\TCS2\\tests\\Tcs2.Tool.Tests\\bin\\Debug\\net10.0\\Tcs2.Tool.Tests.deps.json\" --port 52691 --endpoint 127.0.0.1:052691 --role client --parentprocessid 87052 --telemetryoptedin false"
+    }
+  ]
+}

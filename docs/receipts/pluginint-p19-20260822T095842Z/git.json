@@ -1,0 +1,47 @@
+{
+  "branch": "develop",
+  "sha": "910a444959969a87099b800b4b6fe12c77c0aece",
+  "unrelatedCommitCount": 0,
+  "plugins": [
+    {
+      "repositoryName": "mcpserver-codex-plugin",
+      "branch": "main",
+      "sha": "ad147fe7840e3f341454693b4d33f74bc5c5f3d2"
+    },
+    {
+      "repositoryName": "mcpserver-claude-code-plugin",
+      "branch": "main",
+      "sha": "239dad926b71d0540960b0285a3bd9cd8b9b6054"
+    },
+    {
+      "repositoryName": "mcpserver-claude-cowork-plugin",
+      "branch": "main",
+      "sha": "f56bd106fcfcfb68e52bad30717f9b25514c98ef"
+    },
+    {
+      "repositoryName": "mcpserver-copilot-plugin",
+      "branch": "main",
+      "sha": "e0c6a173afa8600289020e2617b84a6a18d33833"
+    },
+    {
+      "repositoryName": "mcpserver-grok-plugin",
+      "branch": "main",
+      "sha": "e3a95067dca7a21880f0247ab5817d8b070b725c"
+    },
+    {
+      "repositoryName": "mcpserver-cline-plugin",
+      "branch": "main",
+      "sha": "5d9ba01949f19b16de6106517ca1292468a9d9df"
+    },
+    {
+      "repositoryName": "mcpserver-cline-v2-plugin",
+      "branch": "main",
+      "sha": "406e6dc43b064c2d3d4428b25750836ac054ed36"
+    },
+    {
+      "repositoryName": "mcpserver-opencode-plugin",
+      "branch": "master",
+      "sha": "5731b2872e17f3eba254312aab24c1b974414a6a"
+    }
+  ]
+}

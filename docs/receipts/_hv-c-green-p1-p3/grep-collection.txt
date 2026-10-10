@@ -1,0 +1,2 @@
+F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\PluginSessionLogCollection.cs:8:[CollectionDefinition("PluginSessionLog", DisableParallelization = true)]
+

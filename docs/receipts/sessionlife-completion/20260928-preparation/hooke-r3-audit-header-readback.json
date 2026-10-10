@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "timestampUtc": "2026-09-28T07:01:20.2491363Z",
+  "queryReceipt": "req-20260928T070027Z-9974",
+  "queryExit": 0,
+  "sessionCount": 1,
+  "sessionId": "Codex-20260928T064107Z-sessionlife-p1-r3-red",
+  "sessionStatus": "in_progress",
+  "requestId": "req-20260928T064107Z-sessionlife-p1-r3-contract-red",
+  "turnCount": 1,
+  "turnStatus": "failed",
+  "headers": {
+    "agentSessionId": "01a0e5c4-42a5-7672-a323-661996de9511",
+    "agentSessionTranscriptFile": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\27\\rollout-2026-09-27T21-07-19-01a0e5c4-42a5-7672-a323-661996de9511.jsonl",
+    "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+    "agentExecutableVersion": "codex-cli 0.157.1"
+  },
+  "nativeTranscriptIdentity": "01a0e5c4-42a5-7672-a323-661996de9511",
+  "nativeIdentityMatches": true,
+  "transcriptExists": true,
+  "executableExists": true,
+  "observedExecutableVersion": "codex-cli 0.157.1",
+  "versionMatches": true,
+  "actions": 3,
+  "decisions": 1,
+  "files": 1,
+  "blockers": 1,
+  "preservation": "Worker reports exact before/after nonheader projection SHA B8A1B82B21BD1122DC68FE076B278AE022B210496708AE0C50B448A56B332458; parent independently verifies current identity, fields, failed state and counts, not a missing parent before-snapshot",
+  "supersedes": "R4 frozen index pending-header observation only; historical P0 audit remains unresolved; no product or test acceptance"
+}

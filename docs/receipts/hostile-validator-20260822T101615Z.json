@@ -1,0 +1,119 @@
+{
+  "TimestampUtc": "2026-08-22T10:16:15Z",
+  "ReceiptStamp": "20260822T101615Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "Phase": "C-green-P19",
+  "Plan": "docs/plans/PLAN-PLUGINHANDOFF-001.md",
+  "TodoId": "PLAN-PLUGINHANDOFF-001",
+  "ChildTodoId": "MCP-PLUGININT-001",
+  "AddProfile": {
+    "executed": true,
+    "profileFilesRead": 18,
+    "excludedSkillPorts": [
+      "add-profile.grok.md"
+    ]
+  },
+  "Plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "version": "1.101.0"
+  },
+  "PriorReceipt": "docs/receipts/hostile-validator-20260822T092424Z.md",
+  "Collector": "docs/receipts/_hv-c-green-p19/",
+  "SessionId": "GrokSubagentHostile-20260822T101157Z-c-green-p19",
+  "RequestId": "req-20260822T101157Z-001-hostile-c-green-p19",
+  "TurnId": 42943,
+  "HealthNonce": "nonce-hv-20260822101202-68040",
+  "HealthNonceMatch": true,
+  "PluginMarkerSignature": true,
+  "HomemadeMarkerSignature": false,
+  "ToolSearchExactNamePresent": true,
+  "OverallVerdict": "DISAGREE",
+  "FailCount": 6,
+  "UnknownCount": 0,
+  "PassCount": 16,
+  "Accuracy": 94,
+  "Completeness": 96,
+  "ExplicitFailList": [
+    "A4: Claude-code Pester subset is not as-applicable; omitted 3 of 10 *.Tests.ps1; two omitted files pass independently",
+    "A5: omitted files do not currently fail independently for ReplFailsafe and HookTurnDedupe",
+    "B1: Byrd green gate requires complete applicable native suite; omitted native Pester files",
+    "B5: honesty: independent-fail claim and subset green",
+    "C2: TEST-MCP-PLUGININT-001 AC5 native suite not complete for Claude-code Pester",
+    "D2: PLAN-PLUGINHANDOFF-001 P19 green DoD not met for Claude-code native Pester completeness"
+  ],
+  "MandatorySurfacesUnevaluated": [],
+  "TestResults": {
+    "ListTestsCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --list-tests --filter FullyQualifiedName~PluginNativeSuiteReceiptTests",
+    "ListTestsExitCode": 0,
+    "ListedCount": 3,
+    "ListedNames": [
+      "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero",
+      "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero",
+      "McpServer.PluginIntegration.Tests.PluginNativeSuiteReceiptTests.PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit"
+    ],
+    "FilterCommand": "dotnet test tests/McpServer.PluginIntegration.Tests -c Debug --filter FullyQualifiedName~PluginNativeSuiteReceiptTests",
+    "FilterExitCode": 0,
+    "FilterDurationMs": 18949,
+    "ConsoleFailed": 0,
+    "ConsolePassed": 3,
+    "ConsoleSkipped": 0,
+    "ConsoleDurationMs": 166,
+    "TrxTotal": "3",
+    "TrxExecuted": "3",
+    "TrxPassed": "3",
+    "TrxFailed": "0",
+    "TrxNotExecuted": "0",
+    "TrxP20Count": 0,
+    "Trx": "docs/receipts/_hv-c-green-p19/results-p19-green/p19-green.trx",
+    "OmittedPester": [
+      {
+        "file": "ReplFailsafe.Tests.ps1",
+        "exitCode": 0,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "HookTurnDedupe.Tests.ps1",
+        "exitCode": 0,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "CurrentTurnSessionRebind.Tests.ps1",
+        "exitCode": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0
+      }
+    ]
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "title": "C-red-P19 AGREE exists; named tests were FileNotFound reds" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "title": "P20 named tests absent" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "title": "Evidence dir, SyncAgentPlugins, before and after-sync logs exist" },
+    { "id": "A4", "surface": "A", "verdict": "FAIL", "title": "Skipping Claude-code Pester files is not as-applicable" },
+    { "id": "A5", "surface": "A", "verdict": "FAIL", "title": "Omitted files do not all fail independently" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "title": "summary.json eight plugins afterSync git pin" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "title": "Independent PluginNativeSuiteReceiptTests Passed 3 Failed 0 Skipped 0" },
+    { "id": "A8", "surface": "A", "verdict": "PASS", "title": "Logs are real executions; OpenCode failsafe noise not counted" },
+    { "id": "A9", "surface": "A", "verdict": "PASS", "title": "PLAN and PLUGININT done false; hygiene keep-open" },
+    { "id": "A10", "surface": "A", "verdict": "PASS", "title": "Implementer turn 015 in_progress" },
+    { "id": "B1", "surface": "B", "verdict": "FAIL", "title": "Byrd green gate: native Pester suite incomplete" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "title": "Independent receipts re-run and re-read" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "title": "MCP-only TODO/session/requirements storage" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "title": "PowerShell only; validator did not invoke Python" },
+    { "id": "B5", "surface": "B", "verdict": "FAIL", "title": "Honesty: independent-fail claim false; subset green" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "title": "FR/TR/TEST PLUGININT-001 exist with AC and mappings" },
+    { "id": "C2", "surface": "C", "verdict": "FAIL", "title": "TEST AC5 native suite not complete for Claude-code" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "title": "AC testable; isSatisfied and P20 not required" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "title": "Did not demand P20 or plan closeout" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "title": "C-red then execute then this green review" },
+    { "id": "D2", "surface": "D", "verdict": "FAIL", "title": "P19 green DoD: Claude-code native Pester incomplete" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "title": "Not plan closeout; TODOs remain done false" },
+    { "id": "D4", "surface": "D", "verdict": "PASS", "title": "P20 unstarted" }
+  ]
+}

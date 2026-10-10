@@ -78,7 +78,8 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
 
         var choice = Assert.Single(body.Choices);
         Assert.Equal("stop", choice.FinishReason);
-        Assert.True(string.IsNullOrEmpty(choice.Message.Content));
+        Assert.False(string.IsNullOrWhiteSpace(choice.Message.Content));
+        Assert.Contains("no decision", choice.Message.Content, StringComparison.OrdinalIgnoreCase);
         Assert.Empty(factory.InvokedRoles);
     }
 
@@ -202,6 +203,9 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         public IBrainSlotChatClient Create(BrainSlotDefinitionEntity slot, string credential)
             => new RecordingChatClient(this, arbiterOutput);
 
+        public IBrainSlotCompletionStrategy CreateStrategy(BrainSlotDefinitionEntity slot, string credential)
+            => new RecordingCompletionStrategy(Create(slot, credential));
+
         private void Record(string role)
         {
             lock (_gate)
@@ -222,6 +226,17 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
                     : slot.Role + " evidence";
                 return Task.FromResult(output);
             }
+        }
+
+        private sealed class RecordingCompletionStrategy(IBrainSlotChatClient inner) : IBrainSlotCompletionStrategy
+        {
+            public Task<string> CompleteAsync(
+                BrainSlotDefinitionEntity slot,
+                string input,
+                BrainSlotTurnContext context,
+                double? temperature,
+                CancellationToken cancellationToken = default)
+                => inner.CompleteAsync(slot, input, temperature, cancellationToken);
         }
     }
 

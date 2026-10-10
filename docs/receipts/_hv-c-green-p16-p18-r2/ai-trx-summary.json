@@ -1,0 +1,105 @@
+{
+  "exists": true,
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-green-p16-p18-r2\\results-ai-20260822T084254Z\\ai-theory.trx",
+  "lastWriteTimeUtc": "2026-08-22T08:43:15.0420582Z",
+  "length": 15017,
+  "outcome": "Completed",
+  "total": "9",
+  "executed": "9",
+  "passed": "9",
+  "failed": "0",
+  "skipped": null,
+  "notExecuted": "0",
+  "inconclusive": "0",
+  "unitCount": 9,
+  "failedNames": [],
+  "passedCountNames": 9,
+  "skippedNames": [],
+  "failedMessages": [],
+  "p16Count": 8,
+  "p16Failed": 0,
+  "p16Passed": 8,
+  "p16Skipped": 0,
+  "p17Count": 1,
+  "p17Failed": 0,
+  "p17Passed": 1,
+  "p17Skipped": 0,
+  "p18Count": 0,
+  "p18Failed": 0,
+  "p18Passed": 0,
+  "p18Skipped": 0,
+  "p19Count": 0,
+  "aiCount": 9,
+  "aiFailed": 0,
+  "aiPassed": 9,
+  "aiSkipped": 0,
+  "p16ByHost": [
+    {
+      "HostKind": "Codex",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCode",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClaudeCowork",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Copilot",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Grok",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "Cline",
+      "Count": 2,
+      "Failed": 0,
+      "Passed": 2,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "ClineV2",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    },
+    {
+      "HostKind": "OpenCode",
+      "Count": 1,
+      "Failed": 0,
+      "Passed": 1,
+      "Skipped": 0
+    }
+  ],
+  "passedNames": [
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClineV2)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Grok)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Cline)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Copilot)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: OpenCode)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: ClaudeCowork)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields(hostKind: Codex)",
+    "McpServer.PluginIntegration.Tests.PluginSessionLogAiTheoryTests.AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure"
+  ]
+}

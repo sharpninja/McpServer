@@ -1,0 +1,36 @@
+{
+  "exists": true,
+  "kind": "FR",
+  "path": "F:\\GitHub\\McpServer\\docs\\receipts\\_hv-c-red-p19\\req-fr.txt",
+  "length": 1554,
+  "id": "FR-MCP-PLUGININT-001",
+  "title": "End-to-end Session Log validation for every agent plugin",
+  "status": "pending",
+  "isSatisfied": false,
+  "acCount": 5,
+  "acs": [
+    {
+      "id": "ac-1",
+      "text": "Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content."
+    },
+    {
+      "id": "ac-2",
+      "text": "Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}."
+    },
+    {
+      "id": "ac-3",
+      "text": "Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state."
+    },
+    {
+      "id": "ac-4",
+      "text": "The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios."
+    },
+    {
+      "id": "ac-5",
+      "text": "The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario."
+    }
+  ],
+  "snippet": "type: result\r\npayload:\r\n  requestId: req-20260822T090408Z-e52f\r\n  result:\r\n    id: FR-MCP-PLUGININT-001\r\n    title: End-to-end Session Log validation for every agent plugin\r\n    description: The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real MCP Server.\r\n    status: pending\r\n    priority: high\r\n    area: MCP\r\n    acceptanceCriteria:\r\n    - id: ac-1\r\n      text: Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content.\r\n      isSatisfied: false\r\n    - id: ac-2\r\n      text: Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}.\r\n      isSatisfied: false\r\n    - id: ac-3\r\n      text: Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state.\r\n      isSatisfied: false\r\n    - id: ac-4\r\n      text: The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios.\r\n      isSatisfied: false\r\n    - id: ac-5\r\n      text: The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario.\r\n      isSatisfied: false\r\n    scopeStartLayerKey: layer-1\r\n    createdAt: 2026-08-22T09:04:09.6106130+00:00\r\n    updatedAt: 2026-08-22T09:04:09.6108615+00:00\r\n  deprecated: true\r\n\r\n---\r\n",
+  "hasError": false,
+  "nativeSuiteMention": false
+}

@@ -1,0 +1,14 @@
+{
+  "head": "910a444959969a87099b800b4b6fe12c77c0aece",
+  "branch": "develop",
+  "scopedPorcelain": [
+    " M build/Build.SyncAgentPlugins.cs",
+    "?? build/Build.PluginPromotion.cs",
+    "?? build/plugin-promotion-policy.json",
+    "?? docs/plans/PLAN-PLUGINHANDOFF-001.md",
+    "?? tests/McpServer.PluginIntegration.Tests/PluginPromotionGate.cs",
+    "?? tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessReceipt.cs",
+    "?? tests/McpServer.PluginIntegration.Tests/PluginUpdateServiceHarnessTests.cs"
+  ],
+  "todoYamlPorcelain": []
+}

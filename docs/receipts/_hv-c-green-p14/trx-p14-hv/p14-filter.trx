@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="96a09db9-dae2-4cdd-a6aa-e21480351933" name="kingd@PAYTON-LEGION2 2026-08-21 23:54:05" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-21T23:54:05.5655146-05:00" queuing="2026-08-21T23:54:05.5655151-05:00" start="2026-08-21T23:53:37.2857143-05:00" finish="2026-08-21T23:55:50.7182116-05:00" />
+  <TestSettings name="default" id="0e23f20d-e36b-4c72-a928-1fb16c27bcc2">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-08-21_23_54_05" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="5984545b-a556-4ac1-b353-8f574c217aaa" testId="bce7a136-1b73-dc76-b617-9ce748826cf1" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Grok)" computerName="PAYTON-LEGION2" duration="00:00:12.3547692" startTime="2026-08-21T23:54:43.8605658-05:00" endTime="2026-08-21T23:54:56.2154064-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5984545b-a556-4ac1-b353-8f574c217aaa" />
+    <UnitTestResult executionId="aac506c3-c831-4b7f-af33-40c49bcae8a9" testId="252a30d6-4d8d-1fd5-e2fb-58fe95d92228" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Cline)" computerName="PAYTON-LEGION2" duration="00:00:23.9636054" startTime="2026-08-21T23:54:05.3284316-05:00" endTime="2026-08-21T23:54:29.2923519-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aac506c3-c831-4b7f-af33-40c49bcae8a9" />
+    <UnitTestResult executionId="a3596c0c-e26b-4534-bee1-a79a9e54902a" testId="a6a44763-4fd9-634a-0715-6589aa0ec795" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCode)" computerName="PAYTON-LEGION2" duration="00:00:14.5590217" startTime="2026-08-21T23:54:29.2999142-05:00" endTime="2026-08-21T23:54:43.8590637-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a3596c0c-e26b-4534-bee1-a79a9e54902a" />
+    <UnitTestResult executionId="50d3b519-a8fe-4121-a339-24ff86aef067" testId="cb237dfd-b286-873e-43f2-0c17c4064f6d" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Codex)" computerName="PAYTON-LEGION2" duration="00:00:13.5375140" startTime="2026-08-21T23:55:21.8678850-05:00" endTime="2026-08-21T23:55:35.4054583-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="50d3b519-a8fe-4121-a339-24ff86aef067" />
+    <UnitTestResult executionId="d9bab275-25cf-49bf-8454-6a1f766fa6af" testId="6366963e-8717-87a6-f440-2130aa9fc9dc" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCowork)" computerName="PAYTON-LEGION2" duration="00:00:12.2886566" startTime="2026-08-21T23:54:56.2159881-05:00" endTime="2026-08-21T23:55:08.5047561-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d9bab275-25cf-49bf-8454-6a1f766fa6af" />
+    <UnitTestResult executionId="42850b22-6d1e-4846-a930-e354aae45b79" testId="8d519d1b-4317-2b80-96aa-cfd6507428c8" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: OpenCode)" computerName="PAYTON-LEGION2" duration="00:00:13.3600241" startTime="2026-08-21T23:55:08.5063932-05:00" endTime="2026-08-21T23:55:21.8665371-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="42850b22-6d1e-4846-a930-e354aae45b79" />
+    <UnitTestResult executionId="1da20b18-de59-4714-a1fa-962c8e859680" testId="92211078-7eae-0ad3-1257-373a2bacdbc3" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClineV2)" computerName="PAYTON-LEGION2" duration="00:00:15.1060227" startTime="2026-08-21T23:55:35.4059723-05:00" endTime="2026-08-21T23:55:50.5120547-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1da20b18-de59-4714-a1fa-962c8e859680" />
+    <UnitTestResult executionId="ca0a4c43-a54e-4377-9d5f-4761ce541b00" testId="56713129-977e-f223-892f-ff8298e04f84" testName="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Copilot)" computerName="PAYTON-LEGION2" duration="00:00:25.5146265" startTime="2026-08-21T23:53:39.7668677-05:00" endTime="2026-08-21T23:54:05.2980125-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca0a4c43-a54e-4377-9d5f-4761ce541b00" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Copilot)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="56713129-977e-f223-892f-ff8298e04f84">
+      <Execution id="ca0a4c43-a54e-4377-9d5f-4761ce541b00" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="a6a44763-4fd9-634a-0715-6589aa0ec795">
+      <Execution id="a3596c0c-e26b-4534-bee1-a79a9e54902a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: OpenCode)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="8d519d1b-4317-2b80-96aa-cfd6507428c8">
+      <Execution id="42850b22-6d1e-4846-a930-e354aae45b79" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClaudeCowork)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="6366963e-8717-87a6-f440-2130aa9fc9dc">
+      <Execution id="d9bab275-25cf-49bf-8454-6a1f766fa6af" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Codex)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="cb237dfd-b286-873e-43f2-0c17c4064f6d">
+      <Execution id="50d3b519-a8fe-4121-a339-24ff86aef067" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Cline)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="252a30d6-4d8d-1fd5-e2fb-58fe95d92228">
+      <Execution id="aac506c3-c831-4b7f-af33-40c49bcae8a9" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: Grok)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="bce7a136-1b73-dc76-b617-9ce748826cf1">
+      <Execution id="5984545b-a556-4ac1-b353-8f574c217aaa" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty" />
+    </UnitTest>
+    <UnitTest name="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests.Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty(hostKind: ClineV2)" storage="f:\github\mcpserver\tests\mcpserver.pluginintegration.tests\bin\debug\net10.0\mcpserver.pluginintegration.tests.dll" id="92211078-7eae-0ad3-1257-373a2bacdbc3">
+      <Execution id="1da20b18-de59-4714-a1fa-962c8e859680" />
+      <TestMethod codeBase="F:\GitHub\McpServer\tests\McpServer.PluginIntegration.Tests\bin\Debug\net10.0\McpServer.PluginIntegration.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.PluginIntegration.Tests.PluginSessionLogWorkflowAdapterTests" name="Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="bce7a136-1b73-dc76-b617-9ce748826cf1" executionId="5984545b-a556-4ac1-b353-8f574c217aaa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="252a30d6-4d8d-1fd5-e2fb-58fe95d92228" executionId="aac506c3-c831-4b7f-af33-40c49bcae8a9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6a44763-4fd9-634a-0715-6589aa0ec795" executionId="a3596c0c-e26b-4534-bee1-a79a9e54902a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cb237dfd-b286-873e-43f2-0c17c4064f6d" executionId="50d3b519-a8fe-4121-a339-24ff86aef067" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6366963e-8717-87a6-f440-2130aa9fc9dc" executionId="d9bab275-25cf-49bf-8454-6a1f766fa6af" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d519d1b-4317-2b80-96aa-cfd6507428c8" executionId="42850b22-6d1e-4846-a930-e354aae45b79" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92211078-7eae-0ad3-1257-373a2bacdbc3" executionId="1da20b18-de59-4714-a1fa-962c8e859680" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56713129-977e-f223-892f-ff8298e04f84" executionId="ca0a4c43-a54e-4377-9d5f-4761ce541b00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="8" executed="8" passed="8" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.42]   Discovering: McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:00.96]   Discovered:  McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:00:01.39]   Starting:    McpServer.PluginIntegration.Tests&#xD;
+[xUnit.net 00:02:12.28]   Finished:    McpServer.PluginIntegration.Tests (ID = 'e01212c0ca6838d7a5f49436c8fcd17d4d1616c04bcd9ab0cc94bc0f8bfa83b4')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -27,7 +27,7 @@ public sealed class HandoffMcpToolTests : IDisposable
 {
     private readonly McpDbContext _db = new(
         new DbContextOptionsBuilder<McpDbContext>().UseInMemoryDatabase("handoff-tools-" + Guid.NewGuid().ToString("N")).Options,
-        new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" });
+        new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\McpServer" });
 
     /// <inheritdoc />
     public void Dispose() => _db.Dispose();
@@ -42,7 +42,7 @@ public sealed class HandoffMcpToolTests : IDisposable
         var tools = CreateTools(_db, service);
 
         var json = await tools.HandoffIngest(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "Content",
             content: "handoff",
             mode: "DraftOnly",
@@ -63,7 +63,7 @@ public sealed class HandoffMcpToolTests : IDisposable
         var service = Substitute.For<IHandoffIngestionService>();
         var tools = CreateTools(_db, service);
         var json = await tools.HandoffIngest(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "Content",
             content: "handoff",
             mode: "999",
@@ -113,8 +113,9 @@ public sealed class HandoffMcpToolTests : IDisposable
     public void PluginSync_HandoffSkill_MatchesCoreArtifact()
     {
         var root = FindRepoRoot();
+        var primary = FindPrimaryRepoRoot(root);
         var core = Path.Combine(root, "plugins", "core", "skills", "handoff", "SKILL.md");
-        var grok = Path.Combine(root, "..", "mcpserver-grok-plugin", "skills", "handoff", "SKILL.md");
+        var grok = Path.Combine(Directory.GetParent(primary)!.FullName, "mcpserver-grok-plugin", "skills", "handoff", "SKILL.md");
         Assert.True(File.Exists(core), core);
         Assert.True(File.Exists(grok), grok);
         Assert.Equal(
@@ -130,7 +131,7 @@ public sealed class HandoffMcpToolTests : IDisposable
         var tools = CreateTools(_db, service);
 
         var json = await tools.HandoffIngest(
-            @"F:\GitHub\McpServer",
+            @"Q:\__mcp_unit_test__\McpServer",
             "Content",
             content: "handoff",
             mode: "NotAMode",
@@ -142,8 +143,8 @@ public sealed class HandoffMcpToolTests : IDisposable
 
     private static FwhMcpTools CreateTools(McpDbContext db, IHandoffIngestionService handoffService)
     {
-        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
-        var workspaceContext = new WorkspaceContext { WorkspacePath = "." };
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
+        var workspaceContext = new WorkspaceContext { WorkspacePath = TestWorkspacePaths.UnusedRepoRoot };
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var chunker = new Chunker();
@@ -216,5 +217,26 @@ public sealed class HandoffMcpToolTests : IDisposable
         }
 
         throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
+    }
+
+    private static string FindPrimaryRepoRoot(string repoRoot)
+    {
+        var gitFile = Path.Combine(repoRoot, ".git");
+        if (!File.Exists(gitFile))
+            return repoRoot;
+
+        var gitDirLine = File.ReadLines(gitFile).FirstOrDefault(line => line.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
+        if (gitDirLine is null)
+            return repoRoot;
+
+        var gitDir = gitDirLine["gitdir:".Length..].Trim();
+        if (!Path.IsPathRooted(gitDir))
+            gitDir = Path.GetFullPath(Path.Combine(repoRoot, gitDir));
+
+        var main = Directory.GetParent(gitDir)?.Parent?.Parent;
+        if (main is not null && File.Exists(Path.Combine(main.FullName, "McpServer.sln")))
+            return main.FullName;
+
+        return repoRoot;
     }
 }

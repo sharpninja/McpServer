@@ -10,13 +10,19 @@ public sealed class McpDatabaseRuntimeOptions
     /// </summary>
     /// <param name="providerOptions">Resolved provider settings.</param>
     /// <param name="encryptionOptions">Resolved native encryption settings.</param>
+    /// <param name="autoMigrate">Whether the runtime applies provider migrations at startup.</param>
     public McpDatabaseRuntimeOptions(
         McpDatabaseProviderOptions providerOptions,
-        McpDatabaseEncryptionOptions encryptionOptions)
+        McpDatabaseEncryptionOptions encryptionOptions,
+        bool autoMigrate = true)
     {
         ProviderOptions = providerOptions ?? throw new ArgumentNullException(nameof(providerOptions));
         EncryptionOptions = encryptionOptions ?? throw new ArgumentNullException(nameof(encryptionOptions));
+        AutoMigrate = autoMigrate;
     }
+
+    /// <summary>Whether the runtime applies provider migrations at startup.</summary>
+    public bool AutoMigrate { get; }
 
     /// <summary>Gets the resolved provider settings.</summary>
     public McpDatabaseProviderOptions ProviderOptions { get; }

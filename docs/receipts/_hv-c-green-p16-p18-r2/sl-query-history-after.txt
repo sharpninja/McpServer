@@ -1,0 +1,255 @@
+type: result
+payload:
+  requestId: req-20260822T084944Z-1cac
+  result:
+  - agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T083324Z-c-green-p16-p18-r2
+    title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P16-P18-r2 remediating C4 D2
+    model: grok-build-subagent
+    started:
+      dateTime: 2026-08-22T08:33:35.2095484
+      utcDateTime: 2026-08-22T08:33:35.2095484Z
+      localDateTime: 2026-08-22T03:33:35.2095484-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 8
+      millisecond: 209
+      microsecond: 548
+      nanosecond: 400
+      minute: 33
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 35
+      ticks: 639229844152095484
+      utcTicks: 639229844152095484
+      timeOfDay: 08:33:35.2095484
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T08:49:24.4656839
+      utcDateTime: 2026-08-22T08:49:24.4656839Z
+      localDateTime: 2026-08-22T03:49:24.4656839-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 8
+      millisecond: 465
+      microsecond: 683
+      nanosecond: 900
+      minute: 49
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 24
+      ticks: 639229853644656839
+      utcTicks: 639229853644656839
+      timeOfDay: 08:49:24.4656839
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validator
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-green-P16-P18
+    - FR-MCP-PLUGININT-001
+    - TR-MCP-PLUGININT-001
+    - TEST-MCP-PLUGININT-001
+    filesModifiedCount: 8
+  - agent: GrokCode
+    sessionId: GrokCode-20260822T084838Z-plugin-session
+    title: Hostile C-green-P16-P18 rerun validation
+    model: grok
+    started: &o0
+      dateTime: 2026-08-22T08:48:42.0000000
+      utcDateTime: 2026-08-22T08:48:42.0000000Z
+      localDateTime: 2026-08-22T03:48:42.0000000-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 8
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 48
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 42
+      ticks: 639229853220000000
+      utcTicks: 639229853220000000
+      timeOfDay: 08:48:42
+      year: 2026
+    lastUpdated: *o0
+    status: in_progress
+    turnCount: 1
+    tags: []
+    filesModifiedCount: 0
+  - agent: GrokCode
+    sessionId: GrokCode-20260822T082521Z-pluginhandoff-p18
+    title: PLAN-PLUGINHANDOFF-001 P18 aiUnit preflight
+    model: grok-4
+    started:
+      dateTime: 2026-08-22T08:26:14.9451815
+      utcDateTime: 2026-08-22T08:26:14.9451815Z
+      localDateTime: 2026-08-22T03:26:14.9451815-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 8
+      millisecond: 945
+      microsecond: 181
+      nanosecond: 500
+      minute: 26
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 14
+      ticks: 639229839749451815
+      utcTicks: 639229839749451815
+      timeOfDay: 08:26:14.9451815
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T08:45:54.5679947
+      utcDateTime: 2026-08-22T08:45:54.5679947Z
+      localDateTime: 2026-08-22T03:45:54.5679947-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 8
+      millisecond: 567
+      microsecond: 994
+      nanosecond: 700
+      minute: 45
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 54
+      ticks: 639229851545679947
+      utcTicks: 639229851545679947
+      timeOfDay: 08:45:54.5679947
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-green-P16-P18
+    - FR-MCP-PLUGININT-001
+    filesModifiedCount: 3
+  - agent: GrokCode
+    sessionId: GrokCode-20260822T052146Z-plugin-session
+    title: <system-reminder>
+    model: grok
+    started:
+      dateTime: 2026-08-22T05:21:46.0000000
+      utcDateTime: 2026-08-22T05:21:46.0000000Z
+      localDateTime: 2026-08-22T00:21:46.0000000-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 5
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 21
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 46
+      ticks: 639229729060000000
+      utcTicks: 639229729060000000
+      timeOfDay: 05:21:46
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T08:25:45.0000000
+      utcDateTime: 2026-08-22T08:25:45.0000000Z
+      localDateTime: 2026-08-22T03:25:45.0000000-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 8
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 25
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 45
+      ticks: 639229839450000000
+      utcTicks: 639229839450000000
+      timeOfDay: 08:25:45
+      year: 2026
+    status: in_progress
+    turnCount: 4
+    tags: []
+    filesModifiedCount: 0
+  - agent: GrokSubagentHostile
+    sessionId: GrokSubagentHostile-20260822T075053Z-c-green-p16-p18
+    title: Hostile review PLAN-PLUGINHANDOFF-001 C-green-P16-P18 AiTheory and skip-fail
+    model: grok-build-subagent
+    started:
+      dateTime: 2026-08-22T07:51:02.5888227
+      utcDateTime: 2026-08-22T07:51:02.5888227Z
+      localDateTime: 2026-08-22T02:51:02.5888227-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 7
+      millisecond: 588
+      microsecond: 822
+      nanosecond: 700
+      minute: 51
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 2
+      ticks: 639229818625888227
+      utcTicks: 639229818625888227
+      timeOfDay: 07:51:02.5888227
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-22T08:21:35.0442911
+      utcDateTime: 2026-08-22T08:21:35.0442911Z
+      localDateTime: 2026-08-22T03:21:35.0442911-05:00
+      date: 2026-08-22T00:00:00.0000000
+      day: 22
+      dayOfWeek: Saturday
+      dayOfYear: 234
+      hour: 8
+      millisecond: 44
+      microsecond: 291
+      nanosecond: 100
+      minute: 21
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 35
+      ticks: 639229836950442911
+      utcTicks: 639229836950442911
+      timeOfDay: 08:21:35.0442911
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validator
+    - PLAN-PLUGINHANDOFF-001
+    - MCP-PLUGININT-001
+    - C-green-P16-P18
+    - FR-MCP-PLUGININT-001
+    - TR-MCP-PLUGININT-001
+    - TEST-MCP-PLUGININT-001
+    filesModifiedCount: 9
+  deprecated: true
+
+---
