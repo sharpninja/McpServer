@@ -1,0 +1,4 @@
+Test run for tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   304, Skipped:     0, Total:   304, Duration: 1 s - QBrainAi.Client.Tests.dll (net10.0)

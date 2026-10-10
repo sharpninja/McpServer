@@ -1,0 +1,29 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.99]     NukeBuild.Tests.BuildProjectSetTests.GetBuildProjectFiles_CoversEverySourceAndTestProject_ExceptBuildTests [FAIL]
+[xUnit.net 00:00:01.01]     NukeBuild.Tests.BuildProjectSetTests.RestoreAndCompile_UseTheSharedProjectSet [FAIL]
+  Failed NukeBuild.Tests.BuildProjectSetTests.GetBuildProjectFiles_CoversEverySourceAndTestProject_ExceptBuildTests [69 ms]
+  Error Message:
+   Assert.Equal() Failure: Collections differ
+           ↓ (pos 0)
+Expected: ["/home/sharpninja/github/McpServer/.claude/worktree"···, "/home/sharpninja/github/McpServer/.claude/worktree"···, "/home/sharpninja/github/McpServer/.claude/worktree"···, "/home/sharpninja/github/McpServer/.claude/worktree"···, "/home/sharpninja/github/McpServer/.claude/worktree"···, ···]
+Actual:   []
+  Stack Trace:
+     at NukeBuild.Tests.BuildProjectSetTests.GetBuildProjectFiles_CoversEverySourceAndTestProject_ExceptBuildTests() in tests/Build.Tests/BuildProjectSetTests.cs:line 30
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed NukeBuild.Tests.BuildProjectSetTests.RestoreAndCompile_UseTheSharedProjectSet [1 ms]
+  Error Message:
+   Assert.Contains() Failure: Sub-string not found
+String:    "using Nuke.Common;\nusing Nuke.Common.Tools.DotNet;"···
+Not found: "GetBuildProjectFiles(SourceDirectory, TestsDirecto"···
+  Stack Trace:
+     at NukeBuild.Tests.BuildProjectSetTests.RestoreAndCompile_UseTheSharedProjectSet() in tests/Build.Tests/BuildProjectSetTests.cs:line 46
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     2, Passed:     0, Skipped:     0, Total:     2, Duration: 98 ms - Build.Tests.dll (net10.0)

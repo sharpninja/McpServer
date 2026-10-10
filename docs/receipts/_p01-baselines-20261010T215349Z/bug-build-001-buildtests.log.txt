@@ -1,0 +1,51 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.24]     NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings [FAIL]
+[xUnit.net 00:00:01.25]     NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+[xUnit.net 00:00:01.25]     NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [FAIL]
+  Failed NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [187 ms]
+  Error Message:
+   mcpserver-codex-plugin: plugin root missing; mcpserver-claude-code-plugin: plugin root missing; mcpserver-copilot-plugin: plugin root missing; mcpserver-cline-plugin: plugin root missing; mcpserver-grok-plugin: plugin root missing
+  Stack Trace:
+     at NukeBuild.Tests.SyncAgentPluginsChecksumTests.SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore() in tests/Build.Tests/SyncAgentPluginsChecksumTests.cs:line 63
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings [1 ms]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at NukeBuild.Tests.DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings() in tests/Build.Tests/DocsSyncG8OverlayTests.cs:line 81
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore [1 ms]
+  Error Message:
+   mcpserver-codex-plugin: plugin root missing; mcpserver-claude-code-plugin: plugin root missing; mcpserver-copilot-plugin: plugin root missing; mcpserver-cline-plugin: plugin root missing; mcpserver-grok-plugin: plugin root missing
+  Stack Trace:
+     at NukeBuild.Tests.DocsSyncG8OverlayTests.G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore() in tests/Build.Tests/DocsSyncG8OverlayTests.cs:line 153
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.40]     NukeBuild.Tests.BuildTargetTests.InstallReplTool_ParsesInstalledGlobalToolVersion [FAIL]
+  Failed NukeBuild.Tests.BuildTargetTests.InstallReplTool_ParsesInstalledGlobalToolVersion [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+Expected: "6.1.1"
+Actual:   null
+  Stack Trace:
+     at NukeBuild.Tests.BuildTargetTests.InstallReplTool_ParsesInstalledGlobalToolVersion() in tests/Build.Tests/BuildTargetTests.cs:line 462
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:39.72]     NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent) [FAIL]
+  Failed NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(target: QBrainAi.McpAgent) [31 s]
+  Error Message:
+   Assert.Equal() Failure: Dictionaries differ
+Expected: []
+Actual:   [["IL2026"] = 2]
+  Stack Trace:
+     at NukeBuild.Tests.TrimAnalysisWarningInventoryTests.TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(TrimTarget target) in tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs:line 90
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     5, Passed:   347, Skipped:     0, Total:   352, Duration: 3 m 14 s - Build.Tests.dll (net10.0)
