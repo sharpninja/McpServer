@@ -164,8 +164,9 @@ partial class Build
 
     /// <summary>
     /// Resolves the directory that contains official sibling plugin repos.
-    /// Walks up from a git worktree under .worktrees (or .mcpServer/worktrees)
-    /// to the checkout parent that holds mcpserver-*-plugin siblings.
+    /// Walks up from a git worktree under .worktrees, or under a dot-folder of the checkout such as
+    /// .claude/worktrees or .mcpServer/worktrees, to the checkout parent that holds mcpserver-*-plugin siblings
+    /// (TR-MCP-NUKE-006).
     /// </summary>
     internal static string? ResolveOfficialPluginSiblingParent(string rootDirectory)
     {
@@ -190,7 +191,7 @@ partial class Build
                 || string.Equals(current.Name, "worktrees", StringComparison.OrdinalIgnoreCase))
             {
                 var checkoutRoot = parent;
-                if (string.Equals(checkoutRoot.Name, ".mcpServer", StringComparison.OrdinalIgnoreCase))
+                if (checkoutRoot.Name.StartsWith('.'))
                     checkoutRoot = checkoutRoot.Parent ?? checkoutRoot;
                 return checkoutRoot.Parent?.FullName ?? parent.FullName;
             }
