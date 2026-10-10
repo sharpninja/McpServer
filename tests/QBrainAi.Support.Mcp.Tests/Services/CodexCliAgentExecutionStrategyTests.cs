@@ -58,7 +58,16 @@ public sealed class CodexCliAgentExecutionStrategyTests
         Assert.Contains("--model", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("model-triage", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("-c", serializedArguments, StringComparison.Ordinal);
-        Assert.Contains("model_reasoning_effort=\\\"xhigh\\\"", serializedArguments, StringComparison.Ordinal);
+        if (OperatingSystem.IsWindows())
+        {
+            // The Windows launch goes through cmd.exe /c, which needs the TOML quotes escaped.
+            Assert.Contains("model_reasoning_effort=\\\"xhigh\\\"", serializedArguments, StringComparison.Ordinal);
+        }
+        else
+        {
+            // Elsewhere codex receives the TOML literal as one argv element (BUG-BASELINE-004).
+            Assert.Contains("model_reasoning_effort=\"xhigh\"", spawner.StartInfo.ArgumentList);
+        }
         Assert.Contains("--sandbox", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("read-only", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("--skip-git-repo-check", serializedArguments, StringComparison.Ordinal);
