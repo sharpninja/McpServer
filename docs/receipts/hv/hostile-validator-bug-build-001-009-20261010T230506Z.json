@@ -1,0 +1,235 @@
+{
+  "TimestampUtc": "2026-10-10T23:05:06.452115Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex CLI",
+    "Model": "gpt-6-sol",
+    "Effort": "xhigh",
+    "CliVersion": "0.160.1",
+    "NativeSessionId": "01a12807-2cd5-7b12-b05e-cd025532437f",
+    "Proof": "/home/sharpninja/.codex/sessions/2026/10/10/rollout-2026-10-10T17-55-21-01a12807-2cd5-7b12-b05e-cd025532437f.jsonl session_meta ordinal 0 and turn_context ordinal 7 (model gpt-6-sol, effort xhigh)"
+  },
+  "AddProfile": {
+    "SkillRead": true,
+    "NonSkillProfileMarkdownCount": 19,
+    "AllReadInFull": true
+  },
+  "MainMarkerReadInFull": true,
+  "LiveMemory": {
+    "Method": "workflow.memory.list",
+    "Count": 13,
+    "AllRead": true
+  },
+  "HeadSha": "e0cb480e9b1ba3b46c74a6ac7b10d13e82be9a24",
+  "Scope": "BUG-BUILD-001..007 and BUG-BUILD-009 TODO-done review; BUG-BUILD-008 and BUG-BASELINE-* checked only for triage/TODO tracking",
+  "Claims": [
+    {
+      "Id": "B1",
+      "Status": "PASS",
+      "Evidence": "a90e8b4c^ .nuke/parameters.json names missing McpServer.sln; HEAD names QBrainAi.sln. git show confirms the schema diff changes four description strings only. The RED assertion and green result are in the P0.1 logs."
+    },
+    {
+      "Id": "B2",
+      "Status": "PASS",
+      "Evidence": "Build.Compile.cs:31-36 preserves the prior enumerated set and OrdinalIgnoreCase order. Build.Restore.cs:16-23 normalizes Solution.GetAllProjects(\"*\") paths and restores projects absent from that set; the independent Linux Compile run restored exactly seven Compatibility projects and built all 53. QBrainAi.sln lists both other --no-restore target projects. Windows separator/case handling follows Path.GetFullPath and OrdinalIgnoreCase; Windows was not run."
+    },
+    {
+      "Id": "B3",
+      "Status": "PASS",
+      "Evidence": "cb8624f7^ walks past only .mcpServer; HEAD steps past any dot-folder. PluginParentResolutionTests covers .claude, .mcpServer, and .worktrees; independent targeted run passed all cases. Only ResolveAgentPluginParentDirectory calls the helper."
+    },
+    {
+      "Id": "B4",
+      "Status": "PASS",
+      "Evidence": "d6cf2bfd changes only BuildTargetTests sample. Build.InstallReplTool.cs:20,48,83-93 looks up QBrainAI.Repl by package id with OrdinalIgnoreCase, separately from the 1.x alias. The pre-fix test failed Expected 6.1.1/Actual null and now passes."
+    },
+    {
+      "Id": "B5",
+      "Status": "FAIL",
+      "Evidence": "ConfigValidator.cs:61,87 keeps one instances dictionary across both roots, so the later root wins. Read-only invocation of the built _build.dll gave QBrainAi then Mcp => legacy:7999, but reverse order => canonical:7147. McpInstanceResolver.cs:35-36 and CanonicalSectionProjectionProvider.cs:29 require QBrainAi to win within a file layer. Existing tests cover only one root at a time. Live canonical-only appsettings and independent ValidateConfig still pass."
+    },
+    {
+      "Id": "B6",
+      "Status": "PASS",
+      "Evidence": "789a9e91 introduced Bind at ServiceCollectionExtensions.cs:49. The pre-fix trim log has IL2026 at that line and the post-fix log reports 0 warnings after EnableConfigurationBindingGenerator. The full trim theory receipt says 8/8, 0 skips; McpAgent.Tests remains 8 failed/57 passed/0 skipped as in baseline. TR-MCP-QUALITY-001 covers warning remediation."
+    },
+    {
+      "Id": "B7",
+      "Status": "FAIL",
+      "Evidence": "bug-build-007-evidence.log.txt:3,12-13,20 proves a reusable MSBuild node holds both redirected pipes, but the test process elapsed 425 s and node elapsed 729 s. The node predates the test process by about 304 s, contradicting the assertion that this child build spawned it. The claimed idle-node intermittency mechanism is not established by that snapshot."
+    },
+    {
+      "Id": "B8",
+      "Status": "UNKNOWN",
+      "Evidence": "BoundedProcess.cs:52-106 bounds child exit and post-exit drain, drains both streams concurrently, and returns captured output; six call sites use it. The Linux targeted tests passed 6/6. This Linux host cannot verify whether Start-Process -NoNewWindow inherits both redirected handles in the Windows AC-001 test, or whether the helper and --disable-build-servers behave without race/leak on windows-latest. No Windows receipt is provided."
+    },
+    {
+      "Id": "B9",
+      "Status": "PASS",
+      "Evidence": "704d5a34 keeps the detached cmd.exe branch on Windows and calls Directory.Delete off Windows. The pre-fix Linux cleanup test failed after 30 s; post-fix passed. The 365-case receipt reports no new trim tree (46 before/after), with the two checksum failures attributed to BUG-BUILD-008."
+    },
+    {
+      "Id": "B10",
+      "Status": "PASS",
+      "Evidence": "P0.1 RED and green logs show assertion failures then passes for 001/002. The 003/005/007/009 RED logs likewise show pre-fix assertion failures and subsequent green. The 004 and 006 RED cases appear in the earlier full Build.Tests baseline, before their respective commits. No skips in the targeted green runs."
+    },
+    {
+      "Id": "B11",
+      "Status": "FAIL",
+      "Evidence": "Independent filtered Build.Tests passed 27/27, 0 skips; independent Compile and ValidateConfig exited 0. Receipt full Build.Tests completed but Failed 2, Passed 363, Skipped 0. BUG-BUILD-001 and -002 live TODOs explicitly leave their full Build.Tests zero-failure infrastructure gate undone, so the batched TODO-done gate is open. BUG-BUILD-008 and all 17 BUG-BASELINE reports/TODOs were verified filed and tracked; their defects are not scored here."
+    },
+    {
+      "Id": "B12",
+      "Status": "FAIL",
+      "Evidence": "Live MCP mappings link NUKE-002/-006/-007/-008/-009/-010 to FR-MCP-BUILD-001, with matching ACs/evidence and no TEST mapping; QUALITY-001 maps to FR-MCP-139 and TEST-MCP-AIUNIT-002. But every reviewed BUG-BUILD TODO has technicalRequirements: [] in the live store, so none is structurally attached to its required TR despite prose references."
+    },
+    {
+      "Id": "B13",
+      "Status": "PASS",
+      "Evidence": "All added files have SPDX-License-Identifier: Apache-2.0; new public test classes/methods and build members have XML docs. Directory.Build.props enables warnings-as-errors globally and overrides GenerateDocumentationFile=false for tests; this does not break the build. Only a property, not a package version, changed in the sole csproj diff. All ten reviewed commits have Signed and Co-Authored-By lines."
+    },
+    {
+      "Id": "B14",
+      "Status": "FAIL",
+      "Evidence": "7d0c299e, BUG-BUILD-007, TR-MCP-NUKE-009 notes, and the implementer session turn repeat the disproven spawned-by-child account. BUG-BUILD-003..006 TODO descriptions say these failures do not block A1, contrary to p01-baselines receipt line 30 and the stated P0.1 rule. BUG-BUILD-009 TODO still asks removal of 38 trees/4.0 GB though its later task and receipts say 46/5.0 GB. These are material audit-record mismatches."
+    }
+  ],
+  "Findings": [
+    {
+      "Id": "F-B5",
+      "Claim": "B5",
+      "Classification": "Implementer edit",
+      "Location": "build/ConfigValidator.cs:61,87; tests/Build.Tests/ConfigValidatorTests.cs:57",
+      "Defect": "The validator chooses whichever of QBrainAi or Mcp occurs last for an overlapping instance, unlike the server canonical-over-legacy precedence.",
+      "Evidence": "Read-only reflection call: canonical-first => legacy:7999; legacy-first => canonical:7147. Server precedence is declared at McpInstanceResolver.cs:35-36.",
+      "ChangeToPass": "Parse both roots into separate maps, merge per the server precedence regardless of document order, and add a dual-root regression test in both orders."
+    },
+    {
+      "Id": "F-B7",
+      "Claim": "B7",
+      "Classification": "Implementer edit",
+      "Location": "docs/receipts/_bug-build-003-009-20261010T224959Z/bug-build-007-evidence.log.txt:3,20; commit 7d0c299e; BUG-BUILD-007; TR-MCP-NUKE-009",
+      "Defect": "The asserted worker provenance and proposed cause of intermittency exceed the evidence and the provenance assertion is contradicted by elapsed time.",
+      "Evidence": "The worker was alive 729 s while the test process was alive 425 s; it could not have been spawned by that test child. Pipe ownership is proven at lines 12-13.",
+      "ChangeToPass": "Correct commit/receipt/TODO/TR/session-log wording to say an older reusable node held the pipes; remove or separately prove the spawn and idle-node explanation. Preserve the valid held-pipe observation."
+    },
+    {
+      "Id": "F-B11",
+      "Claim": "B11",
+      "Classification": "Operator decision",
+      "Location": "BUG-BUILD-001 and BUG-BUILD-002 implementationTasks; bug-build-009-buildtests.log.txt:25",
+      "Defect": "The full Build.Tests zero-failure gate required by the two TODOs is still open.",
+      "Evidence": "Full suite Failed 2, Passed 363, Skipped 0; the two failures are tracked as BUG-BUILD-008.",
+      "ChangeToPass": "Decide BUG-BUILD-008 sync timing: sync in P0 and rerun Build.Tests to 0 fail/0 skip, or explicitly approve deferring/revising the two TODO exit gates and P0.1 rule until A9. No implicit waiver."
+    },
+    {
+      "Id": "F-B12",
+      "Claim": "B12",
+      "Classification": "Implementer edit",
+      "Location": "Live TODOs BUG-BUILD-001..007 and BUG-BUILD-009, technicalRequirements field",
+      "Defect": "All eight TODOs have an empty technicalRequirements array despite required TR accountability.",
+      "Evidence": "workflow.todo.get returned technicalRequirements: [] for every reviewed TODO; requirement mappings themselves exist.",
+      "ChangeToPass": "Set technicalRequirements to TR-MCP-NUKE-002 for 001/002, -006 for 003, -007 for 004, -008 for 005, TR-MCP-QUALITY-001 for 006, -009 for 007, and -010 for 009; read back."
+    },
+    {
+      "Id": "F-B14a",
+      "Claim": "B14",
+      "Classification": "Implementer edit",
+      "Location": "BUG-BUILD-003..006 descriptions; docs/receipts/p01-baselines-20261010T215349Z.md:30",
+      "Defect": "The TODOs say their Build.Tests failures do not block A1, while the P0.1 baseline receipt and operator brief require each baseline failure fixed before A1.",
+      "Evidence": "Live TODO descriptions say \"does not block slice A1\"; baseline receipt line 30 says every failure above must be fixed before A1.",
+      "ChangeToPass": "Correct those TODO descriptions to distinguish infrastructure from unit tests without declaring an A1 exemption."
+    },
+    {
+      "Id": "F-B14b",
+      "Claim": "B14",
+      "Classification": "Implementer edit plus operator decision",
+      "Location": "BUG-BUILD-009 implementationTasks",
+      "Defect": "The pending cleanup task still names 38 leaked directories/4.0 GB after the later gate measured 46/5.0 GB.",
+      "Evidence": "BUG-BUILD-009 fix task and commit 704d5a34 state 46/5.0 GB; earlier cleanup task remains 38/4.0 GB.",
+      "ChangeToPass": "Update the TODO to the latest verified count (or a dynamic inventory). Operator decides whether to remove the existing trees now or track cleanup separately."
+    }
+  ],
+  "Commands": [
+    {
+      "Command": "dotnet test tests/Build.Tests/Build.Tests.csproj -c Debug --filter \"FullyQualifiedName~NukeParametersTests|FullyQualifiedName~BuildProjectSetTests|FullyQualifiedName~PluginParentResolutionTests|FullyQualifiedName~ConfigValidatorTests|FullyQualifiedName~BoundedProcessTests|FullyQualifiedName~TrimArtifactCleanupTests|FullyQualifiedName~InstallReplTool\"",
+      "ExitCode": 0,
+      "Result": "Failed 0, Passed 27, Skipped 0"
+    },
+    {
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 Compile",
+      "ExitCode": 0,
+      "Result": "Restore succeeded 0:14; Compile succeeded 2:34; 53 project builds and no NETSDK1004"
+    },
+    {
+      "Command": "pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 ValidateConfig",
+      "ExitCode": 0,
+      "Result": "Validated 2 instances"
+    },
+    {
+      "Command": "Read-only reflection invocation of ConfigValidator.ParseInstances from build/bin/Debug/_build.dll with both roots in both orders",
+      "ExitCode": 0,
+      "Result": "Canonical-first -> legacy:7999; legacy-first -> canonical:7147"
+    },
+    {
+      "Command": "git diff --check a90e8b4c^ HEAD",
+      "ExitCode": 2,
+      "Result": "Whitespace notices in committed raw logs/CRLF files only; not scored as material"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 88,
+  "Completeness": 86,
+  "Confidence": 98,
+  "PassCount": 8,
+  "FailCount": 5,
+  "UnknownCount": 1,
+  "FailList": [
+    "B5",
+    "B7",
+    "B11",
+    "B12",
+    "B14"
+  ],
+  "UnknownList": [
+    "B8"
+  ],
+  "ImplementerFixes": [
+    "B5: correct dual-root precedence and add a regression test",
+    "B7/B14: correct worker provenance and unsupported intermittency claims across records",
+    "B12: populate eight TODO technicalRequirements links",
+    "B14: correct stale A1 and leaked-tree TODO text",
+    "B8: obtain a windows-latest run or equivalent direct Windows proof for the process helper"
+  ],
+  "OperatorDecisionFails": [
+    "B11: BUG-BUILD-008 sync in P0 versus explicit deferred/waived full-suite exit gate at A9",
+    "B14: remove the existing trim trees now versus track cleanup as separate deferred work"
+  ],
+  "ReviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T225609Z-hv-bug-build",
+  "RequestJsonl": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T225520Z-bug-build-001-009.request.jsonl",
+  "ResponseJsonl": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T225520Z-bug-build-001-009.response.jsonl",
+  "ReceiptMarkdown": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-bug-build-001-009-20261010T230506Z.md",
+  "ReceiptJson": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-bug-build-001-009-20261010T230506Z.json",
+  "PersistenceProof": {
+    "Method": "client.SessionLog.QueryAsync via Codex plugin wrapper",
+    "ReviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+    "ReviewerRequestId": "req-20261010T225609Z-hv-bug-build",
+    "ServerTurnFound": true,
+    "FullResponseContainsVerdict": true,
+    "FullResponseContainsB14": true,
+    "ReadBackBlockCharacters": 21372,
+    "StatusAtReadBack": "in_progress",
+    "UpdateTurnAckPersisted": true,
+    "UpdateTurnAckDegraded": false,
+    "UpdateTurnAckQueued": false,
+    "TerminalReadBack": {
+      "Completed": true,
+      "FullVerdictPresent": true,
+      "ProofParagraphPresent": true,
+      "ReadBackBlockCharacters": 21777,
+      "CompleteTurnAckPersisted": true,
+      "CompleteTurnAckDegraded": false,
+      "CompleteTurnAckQueued": false
+    }
+  }
+}
