@@ -19,6 +19,8 @@
     <ReadmeFile>README.md</ReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
+    <!-- TR-MCP-QUALITY-001 W19 (BUG-BUILD-006): source-generated configuration binding keeps options binding trim-safe (no IL2026). -->
+    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
   </PropertyGroup>
 
   <ItemGroup>
