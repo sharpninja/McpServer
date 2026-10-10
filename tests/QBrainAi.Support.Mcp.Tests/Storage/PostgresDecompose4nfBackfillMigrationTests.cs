@@ -279,12 +279,13 @@ public sealed class PostgresDecompose4nfBackfillMigrationTests : IClassFixture<E
             WorkspacePath,
             """["src/A.cs","docs/B.md"]""");
 
+        // Historical schema: the column keeps its 1.x name until 20261005170000_RenameTriageIsMcpServerRelatedColumn.
         db.Database.ExecuteSqlRaw(
             """
             INSERT INTO "TriageGroups" (
                 "GroupId", "WorkspaceId", "GroupKey", "EffectiveWorkspacePath", "Title", "Summary",
                 "Status", "ReportCount", "FirstReportAtUtc", "LastReportAtUtc", "QuietDeadlineUtc",
-                "IsQBrainAiRelated", "IsDeleted"
+                "IsMcpServerRelated", "IsDeleted"
             )
             VALUES ({0}, {1}, {2}, {1}, {3}, {4}, {5}, 1, {6}, {6}, {6}, true, false);
             """,
