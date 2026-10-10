@@ -17,7 +17,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class TransactionGatedToolRegistryServiceTests
 {
-    private const string WorkspacePath = @"E:\tests\transaction-gated-tool-registry";
+    private static readonly string WorkspacePath = UnitTestPaths.Combine("tests", "transaction-gated-tool-registry");
 
     /// <summary>
     /// TEST-MCP-161: A pre-mutation coordinator rejection prevents a tool row

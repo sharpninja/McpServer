@@ -62,9 +62,9 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
         yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(timeoutSeconds: 3601)]), "timeout"];
         yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(id: "api-a", targetRoot: "api"), CreateDocFxWorkflow(id: "api-b", targetRoot: "api")]), "duplicate target root"];
         yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(workingDirectory: "../outside")]), "workingDirectory"];
-        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(outputRoot: "C:/outside/docfx")]), "outputRoot"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(outputRoot: UnitTestPaths.Combine("outside", "docfx"))]), "outputRoot"];
         yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(targetRoot: "../api")]), "targetRoot"];
-        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(targetRoot: "C:/api")]), "targetRoot"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(targetRoot: UnitTestPaths.Combine("api"))]), "targetRoot"];
     }
 
     public void Dispose()

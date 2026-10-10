@@ -41,10 +41,9 @@ public sealed class GrokCliAgentExecutionStrategyTests
     [Fact]
     public void ResolveGrokExecutable_ExplicitGrokPath_IsPreserved()
     {
+        var explicitPath = UnitTestPaths.Combine("home", ".grok", "bin", OperatingSystem.IsWindows() ? "grok.exe" : "grok");
         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable("grok"));
-        Assert.Equal(
-            @"C:\Users\kingd\.grok\bin\grok.exe",
-            GrokCliAgentExecutionStrategy.ResolveGrokExecutable(@"C:\Users\kingd\.grok\bin\grok.exe"));
+        Assert.Equal(explicitPath, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(explicitPath));
     }
 
     /// <summary>TEST-MCP-BUGTRIAGE-042: Grok one-shot forwards the configured model argument.</summary>

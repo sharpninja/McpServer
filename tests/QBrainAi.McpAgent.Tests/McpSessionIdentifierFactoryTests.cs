@@ -9,6 +9,10 @@ namespace QBrainAi.McpAgent.Tests;
 /// </summary>
 public sealed class McpSessionIdentifierFactoryTests
 {
+    // BUG-BASELINE-002: a fully qualified path on every OS ("E:\..." is relative off Windows and fails WorkspacePath validation).
+    private static readonly string TestWorkspacePath =
+        Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
+
     /// <summary>
     /// TEST-MCP-089: Verifies that the factory creates canonical session identifiers using the configured source type, UTC timestamp format, and normalized suffix slug.
     /// </summary>
@@ -99,7 +103,7 @@ public sealed class McpSessionIdentifierFactoryTests
         {
             options.ApiKey = "token";
             options.SourceType = "Copilot";
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -117,7 +121,7 @@ public sealed class McpSessionIdentifierFactoryTests
             ApiKey = "token",
             BaseUrl = new Uri("http://localhost:7147"),
             SourceType = sourceType,
-            WorkspacePath = @"E:\github\QBrainAi",
+            WorkspacePath = TestWorkspacePath,
         });
 
         return new McpSessionIdentifierFactory(options, new FixedTimeProvider(now));

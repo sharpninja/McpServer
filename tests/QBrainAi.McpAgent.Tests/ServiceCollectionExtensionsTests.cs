@@ -13,6 +13,10 @@ namespace QBrainAi.McpAgent.Tests;
 /// </summary>
 public sealed class ServiceCollectionExtensionsTests
 {
+    // BUG-BASELINE-002: a fully qualified path on every OS ("E:\..." is relative off Windows and fails WorkspacePath validation).
+    private static readonly string TestWorkspacePath =
+        Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
+
     /// <summary>
     /// TEST-MCP-089: Validates that an in-memory service collection configured with scaffold values resolves a hosted agent and projects those values into the MCP client.
     /// The test uses an in-memory service collection with a local workspace path and API key so the scaffold proves registration behavior without requiring a live MCP workflow runtime.
@@ -27,7 +31,7 @@ public sealed class ServiceCollectionExtensionsTests
             options.BaseUrl = new Uri("http://localhost:7147");
             options.Description = "Scaffolded MCP host agent";
             options.SourceType = "Copilot";
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -45,12 +49,12 @@ public sealed class ServiceCollectionExtensionsTests
         Assert.Equal("Scaffolded MCP host agent", hostedAgent.AgentOptions.Description);
         Assert.Equal("scaffold-token", hostedAgent.Client.ApiKey);
         Assert.Equal(7147, hostedAgent.Client.Port);
-        Assert.Equal(@"E:\github\QBrainAi", hostedAgent.Client.WorkspacePath);
+        Assert.Equal(TestWorkspacePath, hostedAgent.Client.WorkspacePath);
         Assert.Equal(agentOptions.Id, hostedAgent.AgentOptions.Id);
         Assert.Equal(agentOptions.Name, hostedAgent.AgentOptions.Name);
         Assert.Equal(agentOptions.Description, hostedAgent.AgentOptions.Description);
         Assert.Equal("scaffold-token", clientOptions.ApiKey);
-        Assert.Equal(@"E:\github\QBrainAi", clientOptions.WorkspacePath);
+        Assert.Equal(TestWorkspacePath, clientOptions.WorkspacePath);
         Assert.Same(identifierFactory, hostedAgent.Identifiers);
         Assert.Equal("Copilot", hostedAgent.Identifiers.SourceType);
         Assert.NotSame(hostedAgent, createdHostedAgent);
@@ -76,7 +80,7 @@ public sealed class ServiceCollectionExtensionsTests
             options.UseAcidTightlyCoupledProfile();
             options.ApiKey = "acid-token";
             options.BaseUrl = new Uri("http://localhost:7147");
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -104,7 +108,7 @@ public sealed class ServiceCollectionExtensionsTests
         services.AddQBrainAiMcpAgent(options =>
         {
             options.ApiKey = "token";
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -125,7 +129,7 @@ public sealed class ServiceCollectionExtensionsTests
         {
             options.ApiKey = "factory-token";
             options.SourceType = "Codex";
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -149,7 +153,7 @@ public sealed class ServiceCollectionExtensionsTests
         services.AddQBrainAiMcpAgent(options =>
         {
             options.BaseUrl = new Uri("http://localhost:7147");
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -172,7 +176,7 @@ public sealed class ServiceCollectionExtensionsTests
         {
             options.BaseUrl = new Uri("https://localhost:7147");
             options.BearerToken = "bearer-token";
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -193,7 +197,7 @@ public sealed class ServiceCollectionExtensionsTests
         {
             options.ApiKey = "token";
             options.SourceType = "agent-framework";
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -260,7 +264,7 @@ public sealed class ServiceCollectionExtensionsTests
         {
             options.ApiKey = "token";
             options.BaseUrl = new Uri("ftp://localhost:7147");
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -283,7 +287,7 @@ public sealed class ServiceCollectionExtensionsTests
         {
             options.BaseUrl = new Uri("http://localhost:7147");
             options.RequireAuthentication = false;
-            options.WorkspacePath = @"E:\github\QBrainAi";
+            options.WorkspacePath = TestWorkspacePath;
         });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -308,7 +312,7 @@ public sealed class ServiceCollectionExtensionsTests
                 options.AgentName = "Preconfigured Agent";
                 options.Description = "Configured before registration.";
                 options.SourceType = "Codex";
-                options.WorkspacePath = @"E:\github\QBrainAi";
+                options.WorkspacePath = TestWorkspacePath;
             });
 
         services.AddQBrainAiMcpAgent();
