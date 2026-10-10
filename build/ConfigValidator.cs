@@ -6,7 +6,8 @@ using System.Text.RegularExpressions;
 /// </summary>
 static partial class ConfigValidator
 {
-    [GeneratedRegex(@"^Mcp:\s*$")]
+    /// <summary>TR-MCP-NUKE-008: the configuration root, canonical <c>QBrainAi:</c> or legacy <c>Mcp:</c>.</summary>
+    [GeneratedRegex(@"^(QBrainAi|Mcp):\s*$")]
     private static partial Regex McpSectionRegex();
 
     [GeneratedRegex(@"^  Instances:\s*$")]

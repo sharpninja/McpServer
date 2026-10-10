@@ -19,7 +19,7 @@ partial class Build
 
             var lines = File.ReadAllLines(configPath);
             var instances = ConfigValidator.ParseInstances(lines)
-                ?? throw new InvalidOperationException("Missing 'Mcp' section in config.");
+                ?? throw new InvalidOperationException("Missing 'QBrainAi' (or legacy 'Mcp') section in config.");
 
             if (instances.Count == 0)
             {

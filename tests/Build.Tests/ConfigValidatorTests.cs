@@ -48,6 +48,22 @@ public sealed class ConfigValidatorTests
         Assert.Equal("todo.db", instances["alt-local"].SqliteDataSource);
     }
 
+    /// <summary>
+    /// TR-MCP-NUKE-008 AC-001 (BUG-BUILD-005): instances under the canonical QBrainAi: root parse like those under the legacy Mcp:
+    /// root; the live appsettings.yaml uses QBrainAi: since the rename. Inline YAML; no fixture file.
+    /// </summary>
+    [Fact]
+    public void ParseInstances_QBrainAiRoot_ReturnsInstances()
+    {
+        string[] yaml = ["QBrainAi:", "  Instances:", "    default:", "      RepoRoot: .", "      Port: 7147"];
+
+        var instances = ConfigValidator.ParseInstances(yaml);
+
+        Assert.NotNull(instances);
+        Assert.Equal(7147, instances!["default"].Port);
+        Assert.Equal(".", instances["default"].RepoRoot);
+    }
+
     [Fact]
     public void ParseInstances_NoMcpSection_ReturnsNull()
     {
