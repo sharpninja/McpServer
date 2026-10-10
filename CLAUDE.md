@@ -78,7 +78,8 @@ EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, Postgr
 
 ### Test Projects
 
-- Unit tests: `QBrainAi.Support.Mcp.Tests`, `QBrainAi.Client.Tests`, `QBrainAi.Cqrs.Tests`, `QBrainAi.Launcher.Tests`, `QBrainAi.McpAgent.Tests`, `QBrainAi.Repl.Core.Tests`, `Build.Tests`
+- Unit tests: `QBrainAi.Support.Mcp.Tests`, `QBrainAi.Client.Tests`, `QBrainAi.Cqrs.Tests`, `QBrainAi.Launcher.Tests`, `QBrainAi.McpAgent.Tests`, `QBrainAi.Repl.Core.Tests`
+- Infrastructure (Nuke build, accountable through TR only; not unit tests, not part of `./build.ps1 Test`): `Build.Tests`
 - Integration: `QBrainAi.Support.Mcp.IntegrationTests`, `QBrainAi.Repl.IntegrationTests`
 - BDD/Validation (Reqnroll): `QBrainAi.Context.Validation`, `QBrainAi.GitHub.Validation`, `QBrainAi.Repo.Validation`, `QBrainAi.SessionLog.Validation`, `QBrainAi.Todo.Validation`, `QBrainAi.ToolRegistry.Validation`, `QBrainAi.Workspace.Validation`
 
