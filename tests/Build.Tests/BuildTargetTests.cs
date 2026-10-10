@@ -428,8 +428,8 @@ public sealed class BuildTargetTests
         var installReplTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.InstallReplTool.cs"));
 
         Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("EnumerateFiles(SourceDirectory.ToString(), \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("EnumerateFiles(TestsDirectory.ToString(), \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("EnumerateFiles(sourceDirectory, \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("EnumerateFiles(testsDirectory, \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
         Assert.Contains("!path.EndsWith(Path.Combine(\"Build.Tests\", \"Build.Tests.csproj\"), StringComparison.OrdinalIgnoreCase)", compileTarget, StringComparison.Ordinal);
         Assert.DoesNotContain(".SetProjectFile(Solution)", compileTarget, StringComparison.Ordinal);
         Assert.Contains(".SetProperty(\"PackageVersion\", buildVersion)", compileTarget, StringComparison.Ordinal);
