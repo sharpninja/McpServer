@@ -173,13 +173,30 @@ public sealed partial class TrimAnalysisWarningInventoryTests
     }
 
     /// <summary>
-    /// Best-effort artifact cleanup. Recursive <see cref="Directory.Delete(string, bool)"/> of a
-    /// trimmed self-contained publish tree can block testhost for tens of minutes under AV scan.
+    /// Best-effort artifact cleanup on every OS (TR-MCP-NUKE-010 AC-001, BUG-BUILD-009). On Windows a recursive
+    /// <see cref="Directory.Delete(string, bool)"/> of a trimmed self-contained publish tree can block testhost for
+    /// tens of minutes under AV scan, so the delete runs in a detached cmd.exe there; elsewhere it runs in place.
     /// </summary>
-    private static void TryDeleteArtifacts(string artifactsRoot)
+    internal static void TryDeleteArtifacts(string artifactsRoot)
     {
         if (!Directory.Exists(artifactsRoot))
         {
+            return;
+        }
+
+        if (!OperatingSystem.IsWindows())
+        {
+            try
+            {
+                Directory.Delete(artifactsRoot, recursive: true);
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+
             return;
         }
 
