@@ -173,7 +173,7 @@
         },
         "InstallPath": {
           "type": "string",
-          "description": "Service installation directory (Windows: C:\\ProgramData\\McpServer; Linux: /opt/mcpserver/app)"
+          "description": "Service installation directory (Windows: C:\\ProgramData\\QBrainAi; Linux: /opt/mcpserver/app)"
         },
         "Instance": {
           "type": "string",
@@ -230,7 +230,7 @@
         },
         "ServiceName": {
           "type": "string",
-          "description": "Service name (Windows: McpServer; Linux: mcpserver.service)"
+          "description": "Service name (Windows: QBrainAi; Linux: mcpserver.service)"
         },
         "SkipBuild": {
           "type": "boolean",
@@ -263,7 +263,7 @@
         },
         "TrustedThirdPartyInstallPath": {
           "type": "string",
-          "description": "Trusted third-party installation directory (default: C:\\ProgramData\\McpServer-KeyServer)"
+          "description": "Trusted third-party installation directory (default: C:\\ProgramData\\QBrainAi-KeyServer)"
         },
         "TrustedThirdPartyPort": {
           "type": "integer",
@@ -276,7 +276,7 @@
         },
         "TrustedThirdPartyServiceName": {
           "type": "string",
-          "description": "Trusted third-party Windows service name (default: McpServerKeyServer)"
+          "description": "Trusted third-party Windows service name (default: QBrainAiKeyServer)"
         },
         "UninstallTool": {
           "type": "boolean",
