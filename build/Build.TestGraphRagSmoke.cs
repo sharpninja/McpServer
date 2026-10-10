@@ -27,7 +27,7 @@ partial class Build
 
             // Step 1: Status
             Log.Information("Step 1: Checking GraphRAG status...");
-            var statusResponse = await http.GetAsync("/mcpserver/graphrag/status");
+            var statusResponse = await http.GetAsync("/qbrainai/graphrag/status");
             statusResponse.EnsureSuccessStatusCode();
             var statusBody = await statusResponse.Content.ReadAsStringAsync();
             Log.Information("Status: {Body}", statusBody);
@@ -35,8 +35,8 @@ partial class Build
             // Step 2: Index
             Log.Information("Step 2: Triggering GraphRAG index...");
             var indexUri = string.IsNullOrWhiteSpace(WorkspacePath)
-                ? "/mcpserver/graphrag/index"
-                : $"/mcpserver/graphrag/index?workspacePath={Uri.EscapeDataString(WorkspacePath)}";
+                ? "/qbrainai/graphrag/index"
+                : $"/qbrainai/graphrag/index?workspacePath={Uri.EscapeDataString(WorkspacePath)}";
             var indexResponse = await http.PostAsync(indexUri, null);
             indexResponse.EnsureSuccessStatusCode();
             var indexBody = await indexResponse.Content.ReadAsStringAsync();
@@ -44,7 +44,7 @@ partial class Build
 
             // Step 3: Query
             Log.Information("Step 3: Querying GraphRAG...");
-            var queryUri = $"/mcpserver/graphrag/query?q={Uri.EscapeDataString(GraphRagQuery)}";
+            var queryUri = $"/qbrainai/graphrag/query?q={Uri.EscapeDataString(GraphRagQuery)}";
             var queryResponse = await http.GetAsync(queryUri);
             queryResponse.EnsureSuccessStatusCode();
             var queryBody = await queryResponse.Content.ReadAsStringAsync();

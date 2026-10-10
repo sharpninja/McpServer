@@ -1,0 +1,249 @@
+{
+  "TimestampUtc": "2026-09-30T17:11:16.7951581+00:00",
+  "Shell": "7.6.5",
+  "Tip": "340d40a6a1986f35b06c153bccaae981eab8da82",
+  "Observations": [
+    {
+      "id": "DOC246-FULL-FENCE",
+      "data": [
+        {
+          "fenceLine": 48,
+          "parse": "PASS"
+        },
+        {
+          "fenceLine": 64,
+          "parse": "FAIL",
+          "error": "Conversion from JSON failed with error: Additional text encountered after finished reading JSON content: `. Path '', line 3, position 0."
+        }
+      ]
+    },
+    {
+      "id": "SOURCE-FUNCTIONS",
+      "data": {
+        "sha256": "165ADFC1C4310769679F1C684F476D8546BE853AADA32C966023F00012A05A50",
+        "path": "plugins/core/lib-ps/repl-invoke.ps1",
+        "loaded": [
+          "Invoke-ReplPersistTurn",
+          "Get-ReplStableFingerprint",
+          "New-ReplSessionVerbReceipt",
+          "Find-ReplFailsafeByFingerprint",
+          "Invoke-WorkflowBeginTurn",
+          "Invoke-WorkflowAppendDialog",
+          "Invoke-WorkflowUpdateTurn",
+          "Get-ReplDialogItemsFromParams"
+        ]
+      }
+    },
+    {
+      "id": "empty-success-envelope",
+      "data": {
+        "remoteCalls": 1,
+        "failsafesRemaining": 0,
+        "return": true,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-R'.",
+          "childStderr": ""
+        },
+        "failsafesCleared": 1
+      }
+    },
+    {
+      "id": "unrelated-success-envelope",
+      "data": {
+        "remoteCalls": 1,
+        "failsafesRemaining": 0,
+        "return": true,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-R'.",
+          "childStderr": ""
+        },
+        "failsafesCleared": 1
+      }
+    },
+    {
+      "id": "wrong-identity-success",
+      "data": {
+        "remoteCalls": 1,
+        "failsafesRemaining": 0,
+        "return": true,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-R'.",
+          "childStderr": ""
+        },
+        "failsafesCleared": 1
+      }
+    },
+    {
+      "id": "persisted-and-degraded",
+      "data": {
+        "remoteCalls": 1,
+        "failsafesRemaining": 0,
+        "return": true,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-R'.",
+          "childStderr": ""
+        },
+        "failsafesCleared": 1
+      }
+    },
+    {
+      "id": "cross-session-queue-dedupe",
+      "data": {
+        "firstReceipt": {
+          "code": "queued",
+          "retryable": true,
+          "persisted": false,
+          "degraded": true,
+          "queued": true,
+          "method": "workflow.sessionlog.updateTurn",
+          "requestId": "req-R",
+          "failsafePath": "memory-failsafe/0.yaml",
+          "message": "Session log persist timed out or returned HTTP 503 backend_unavailable; failsafe retained and current-turn stays active.",
+          "childStderr": "HTTP 503 backend_unavailable "
+        },
+        "secondReturn": false,
+        "remoteCalls": 1,
+        "retainedRecordCount": 1,
+        "secondReceipt": {
+          "code": "queued",
+          "retryable": true,
+          "persisted": false,
+          "degraded": true,
+          "queued": true,
+          "method": "workflow.sessionlog.updateTurn",
+          "requestId": "req-R",
+          "failsafePath": "memory-failsafe/0.yaml",
+          "message": "unchanged session payload reused the retained failsafe requestId=req-R",
+          "childStderr": "duplicate failsafe suppressed"
+        },
+        "firstReturn": false,
+        "retainedSessions": [
+          "session-A"
+        ]
+      }
+    },
+    {
+      "id": "changed-processing-dialog-dedupe",
+      "data": {
+        "secondReceipt": {
+          "code": "unchanged",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "client.SessionLog.SubmitAsync",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "unchanged session payload did not create duplicate recovery work requestId=req-R",
+          "childStderr": ""
+        },
+        "remoteCalls": 1
+      }
+    },
+    {
+      "id": "begin-rebinds-local-turn-without-durability-proof",
+      "data": {
+        "beforeSession": "session-A",
+        "return": true,
+        "payload": {
+          "planBound": false,
+          "sessionId": "session-B",
+          "todoBound": false,
+          "requestId": "req-R"
+        },
+        "afterSession": "session-B",
+        "degradedFlagPresent": false
+      }
+    },
+    {
+      "id": "update-ignores-caller-request-and-explicit-metadata",
+      "data": {
+        "cachedResponse": "wrong caller write",
+        "cachedTodo": "todo-A",
+        "return": true,
+        "payload": {
+          "planBound": false,
+          "sessionId": "session-A",
+          "todoBound": false,
+          "requestId": "req-R"
+        },
+        "submitCalls": 1,
+        "cachedPlan": "plan-A"
+      }
+    },
+    {
+      "id": "dialog-ignores-caller-request",
+      "data": {
+        "auditDialog": 1,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendDialog",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "appendDialog persisted requestId=req-R",
+          "childStderr": ""
+        },
+        "return": true,
+        "remoteCalls": 1,
+        "cachedRequest": "req-R"
+      }
+    },
+    {
+      "id": "degraded-404-no-recovery-submit",
+      "data": {
+        "recoverySubmitCalls": 0,
+        "appendDialogCalls": 1,
+        "return": true,
+        "receipt": {
+          "code": "queued",
+          "retryable": true,
+          "persisted": false,
+          "degraded": true,
+          "queued": true,
+          "method": "workflow.sessionlog.appendDialog",
+          "requestId": "req-R",
+          "failsafePath": "memory-failsafe/0.yaml",
+          "message": "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=req-R",
+          "childStderr": "HTTP 404 not_found missing turn"
+        },
+        "retainedRecordCount": 1
+      }
+    }
+  ]
+}

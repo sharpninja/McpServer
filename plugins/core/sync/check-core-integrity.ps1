@@ -4,7 +4,7 @@
 .DESCRIPTION
     Verifies every file listed in a plugin repo's CORE-MANIFEST.yaml still
     matches its synced sha256. A mismatch means a synced core file was edited
-    locally - the fix belongs in McpServer/plugins/core followed by a re-sync.
+    locally - the fix belongs in QBrainAi/plugins/core followed by a re-sync.
 .PARAMETER PluginRoot
     Root of the plugin repository to verify.
 #>
@@ -36,7 +36,7 @@ foreach ($line in Get-Content $manifest) {
     }
     $actual = (Get-FileHash -Path $target -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($actual -ne $expected) {
-        Write-Warning "MODIFIED: $rel (local edit detected - edit McpServer/plugins/core and re-sync)"
+        Write-Warning "MODIFIED: $rel (local edit detected - edit QBrainAi/plugins/core and re-sync)"
         $failures++
     }
 }

@@ -229,7 +229,7 @@ if ($Apply) {
 
     foreach ($slot in $slots) {
         $escapedSlotId = [Uri]::EscapeDataString($slot.slotId)
-        $uri = ($BaseUrl.TrimEnd('/') + "/mcpserver/brain-slots/$escapedSlotId")
+        $uri = ($BaseUrl.TrimEnd('/') + "/qbrainai/brain-slots/$escapedSlotId")
         $body = $slot.upsertRequest | ConvertTo-Json -Depth 8
         if ($PSCmdlet.ShouldProcess($slot.slotId, "PUT $uri")) {
             Invoke-RestMethod -Method Put -Uri $uri -Headers $headers -Body $body -ContentType 'application/json' | Out-Null

@@ -1,10 +1,10 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Packs and publishes McpServer.Repl.Host as a dotnet global tool.
+    Packs and publishes QBrainAi.Repl.Host as a dotnet global tool.
 
 .DESCRIPTION
-    This script builds the McpServer.Repl.Host project in Release configuration,
+    This script builds the QBrainAi.Repl.Host project in Release configuration,
     packs it as a NuGet package, and publishes it to the local NuGet feed.
 
 .PARAMETER Clean
@@ -31,14 +31,14 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-$projectPath = Join-Path $PSScriptRoot '..' 'src' 'McpServer.Repl.Host' 'McpServer.Repl.Host.csproj'
+$projectPath = Join-Path $PSScriptRoot '..' 'src' 'QBrainAi.Repl.Host' 'QBrainAi.Repl.Host.csproj'
 $outputPath = Join-Path $PSScriptRoot '..' 'local-packages'
 $solutionRoot = Join-Path $PSScriptRoot '..'
 
 Push-Location $solutionRoot
 
 try {
-    Write-Host "==== Packing McpServer.Repl.Host as dotnet tool ====" -ForegroundColor Cyan
+    Write-Host "==== Packing QBrainAi.Repl.Host as dotnet tool ====" -ForegroundColor Cyan
 
     if ($Clean) {
         Write-Host "Cleaning project..." -ForegroundColor Yellow
@@ -67,13 +67,13 @@ try {
     Write-Host "Package location: $outputPath" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "To install as a global tool, run:" -ForegroundColor Yellow
-    Write-Host "  dotnet tool install --global SharpNinja.McpServer.Repl --add-source ./local-packages" -ForegroundColor White
+    Write-Host "  dotnet tool install --global QBrainAI.Repl --add-source ./local-packages" -ForegroundColor White
     Write-Host ""
     Write-Host "To update an existing installation, run:" -ForegroundColor Yellow
-    Write-Host "  dotnet tool update --global SharpNinja.McpServer.Repl --add-source ./local-packages" -ForegroundColor White
+    Write-Host "  dotnet tool update --global QBrainAI.Repl --add-source ./local-packages" -ForegroundColor White
     Write-Host ""
     Write-Host "To verify installation, run:" -ForegroundColor Yellow
-    Write-Host "  mcpserver-repl --version" -ForegroundColor White
+    Write-Host "  qbrain-ai-repl --version" -ForegroundColor White
     Write-Host ""
 }
 catch {

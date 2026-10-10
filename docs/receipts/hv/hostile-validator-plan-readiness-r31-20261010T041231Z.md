@@ -1,0 +1,69 @@
+# Hostile validator plan readiness: round 31
+
+TimestampUtc: 2026-10-10T04:22:00Z. HEAD: `0c0ba53292f791ed1c5572f571f18e9017e7f673`. **DISAGREE. Accuracy 94/100; completeness 90/100; confidence 96/100. Five PASS, five FAIL, zero UNKNOWN.** The plan remains NOT APPROVED and this verdict cannot authorize approval.
+
+## Identity and mandatory reads
+
+- Live identity proof: `CODEX_SESSION_ID=01a12403-342a-7b40-a25e-e7c882c1f313` matches the `session_meta` id in `/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T23-12-32-01a12403-342a-7b40-a25e-e7c882c1f313.jsonl`; its `turn_context` reports `model=gpt-6-sol`, `effort=xhigh`, and this worktree as cwd. The runner response JSONL begins with the matching `thread.started` id.
+- Executed add-profile: read its SKILL.md and all 19 non-skill Markdown files under `/home/sharpninja/.claude/profile/`. Read all 397 lines of the main `AGENTS-README-FIRST.yaml`; credential lines and the Authentication block were filtered from command output. `workflow.memory.list` on the main workspace returned 15 effective memory texts through the installed Codex wrapper and writable `/tmp/codex-hv-r31-cache`; inspected MEMORY-PROCESS-007 and the full MEMORY-PROCESS-008 checklist. The initial attempt using the plugin's read-only cache failed because the cache was unwritable, then `-CacheRoot` succeeded. No raw REST was used.
+- Reviewer turn: `Codex-20261010T041414Z-plugin-session`, `req-20261010T041425Z-turn-6b06`. `beginTurn` returned `persisted:true`, `degraded:false`. Review only: no product, plan, TODO, requirement, triage, memory, plugin, settings, or source changes.
+
+## Claims P1-P10
+
+- **P1 PASS.** Read all 651 plan lines and rechecked the source baseline, current worktree HEAD, nine plugin heads/versions/dirty counts, the named build targets, migration directories, and key source anchors. The worktree diff from `f56dcf70` contains no source, test, build, or plugin path, and the nine plugin inventory rows still match the plan's dated inventory. `FR-SUPPORT-010G` still has exactly 36 citations in nine source/test files. No false current-code assertion was found. The plan's future design contradictions are scored below, not treated as current-code facts.
+- **P2 PASS.** Extracted 21 new FR, 23 TR, 23 TEST IDs and 21 distinct new-FR mapping rows. Live `workflow.requirements.listFr/listTr/listTest` returned 354/482/514 records with zero collisions against those IDs. Both `TEST-SUPPORT-023` and `TEST-SUPPORT-024` returned `not_found`; `docs/Project/Requirements-Matrix.md:474` still has the stale 023 row. The plan now reserves 024 and explains 023 in P0.4. Existing IDs and new mappings were checked against the catalog and projections.
+- **P3 PASS.** D1-D12, partial clearance, Apache-2.0 on new files, `skipped_duplicate` removal, the 2026-10-10 unsupported-session failsafe choice 1, C1-C12 ACKs, and the 98/98 gate are present in the decision and process sections. No contrary operator ruling was identified.
+- **P4 FAIL.** F-R31-03 leaves the Cowork unavailable branch without an executable A3 test path. The other eight hosts, both plugin cores, server/client/REPL/MCP surfaces, and SQLite/PostgreSQL/SQL Server schema work have named tasks and tests.
+- **P5 FAIL.** F-R31-01, -02, -03, and -04 require an implementer to resolve slice ownership or choose which contradictory instruction to follow. The operator has already settled the relevant product behavior; these are implementer plan edits.
+- **P6 FAIL.** F-R31-01 and -03 make A3's stated RED-to-green gate impossible in an allowed P0 outcome. The round-30 graph/version repairs are present. G1-G6 targets and named projects exist; the P0 toolchain gate correctly records this host's current SDK 10.0.111 versus required 10.0.201, missing Pester 5, bats, and dotnet-ef. The BDPv4 contract/stubs, RED, mocks-green negative check, self-review, real green, refactor, and zero-failure/zero-skip gates remain specified.
+- **P7 FAIL.** F-R31-02 omits a named test for the terminal DELETE exception and conflicts with the broad section contract; F-R31-03 names a Cowork fixture that cannot exist in the allowed unavailable outcome. The HV-P0/HV-A/HV-B reviewer, effort, and 98/98 threshold are otherwise consistent.
+- **P8 FAIL.** F-R31-01 is an A3/A4 dependency cycle; F-R31-02 and -04 are cross-section contradictions. The P0.8 edges added for r30 are present, but they do not resolve A3's own dependency on A4.
+- **P9 PASS.** Live TODO `PLAN-SESSIONTURNREVIEW-001` is `done:false`; its description has 531 non-empty lines with zero differences from the plan's 531 non-empty lines; its 30 implementationTasks follow approval, P0.1-P0.9, A1-A9, S1-S11; note and technicalDetails say NOT APPROVED and include the round-31 fixes. The handoff has 214 lines, accurately states the 651/531 source count, TODO location/status/tasks, round-30 findings, and round-31 edits.
+- **P10 PASS.** Main-workspace `workflow.triage.getReport` returned the nine named plan-risk reports with matching titles and `grouped` status. Worktree `workflow.triage.getGroup` returned `triage-group-804b21086f3019ab` with title “Gated restore and clone do not carry PlanFile and TodoId” and status `failed`; the plan and handoff explicitly call out that unprocessed, misplaced group and P0.1 schedules a read-only recheck. The Claude plugin's `lib/session-start.ps1` is still absent, consistent with its triage item.
+
+## Findings and changes required
+
+### F-R31-01: A3 consumes A4's contract before A4 can run (implementer edit)
+
+- Plan locations: P0.8 line 178; FR-MCP-SESSIONTURN-007-AC001/006 lines 242/247; TR-MCP-SESSIONTURN-001 AC-006 line 345; TR-MCP-SESSIONTURN-003 AC-006/007 line 347; TEST-MCP-SESSIONTURN-001/003 lines 372/374; A3 line 581; A4 line 583.
+- Exact defect: A4 depends on A3, but A3's RED includes `Binding_VerbDrainsTranscriptBeforeBinding` and `Binding_DequeueAppendedAfterStartBeforeLock_BindsToEarlier`, plus bridge delivery that mutates `turn-state.yaml` and the write target. The plan first allocates the per-session state writer and `New-ReplInvocationBinding`/`Resolve-ReplTargetTurn` to A4. A3 cannot pass its own gate without implementing A4 behavior early, violating its AC allocation and the declared dependency chain.
+- Evidence: TR-001 AC-006 is tagged `[A3 +A5]` and calls `Sync-PluginArrivalLog` before a verb binds; TR-003 AC-006/007 and FR-007 AC-001/006 assign the needed binding/state contract to A4. A3 line 581 names both binding tests; A4 line 583 introduces those interfaces. This is a recurrence of the phase-boundary defect class flagged in r27-r29 and MEMORY-PROCESS-008.
+- Change to PASS: Put the minimal atomic queue/turn-state writer needed by A3 in A3's contract and move the two verb-binding RED cases, their AC ownership, and invocation-target assertions to A4; or split a foundation slice before both. Update FR/TR brackets, TEST spans, P0.8 dependsOn, A3/A4 tasks, TODO implementationTasks/technicalDetails, handoff, and gates together. Keep A3 independently green before A4 starts. No operator decision: D2/D5 and the existing behavior contract settle the outcome.
+
+### F-R31-02: terminal review-section DELETE conflicts with the general rule and lacks a named test (implementer edit)
+
+- Plan locations: FR-SUPPORT-016 `ac-5` line 192; FR-MCP-SESSIONREVIEW-001-AC004 line 291; TR-SUPPORT-CORE-016 `ac-2` line 344; TEST-SUPPORT-024 line 394; wire contract line 571; S4 task line 603.
+- Exact defect: AC004 requires section DELETE on `completed` or `failed` to return 400 `review_section_reset_on_terminal_turn` without mutation. The other four locations say section DELETE/clear resets to the default without a status exception. S4's named RED list only says “section DELETE resets”; no named case checks the terminal rejection or its no-mutation guarantee, leaving AC004 unproven.
+- Evidence: direct text comparison at those lines; a whole-plan search finds `review_section_reset_on_terminal_turn` only in AC004 and the error list (line 570), not in any named test or slice task.
+- Change to PASS: State the terminal exception identically in FR-SUPPORT-016, TR-SUPPORT-CORE-016, the wire contract, S4/S5 tasks, and TEST-SUPPORT-024. Name RED cases for completed and failed DELETE returning 400 with unchanged record, and for allowed nonterminal reset, then carry their green receipts through S4/S5. No operator decision: the specific AC004 already chooses the behavior.
+
+### F-R31-03: Cowork-unavailable outcome makes an unconditional A3 fixture impossible (implementer edit)
+
+- Plan locations: host binding row line 86; P0.2 line 172; FR-MCP-SESSIONTURN-001-AC009 line 203; TEST-MCP-SESSIONTURN-001 line 372; A3 line 581; feature-matrix AC line 258.
+- Exact defect: P0.2 expressly allows a Cowork probe outcome of `unavailable` or failed hooks/bridge probes and then selects D6 `turn_logging_unsupported`. A3 still requires `Bridge_Cowork_PromptFormsFixture_OneMintPerMessage` and `Bridge_Cowork_DequeueTakesHead` using “the same fixtures captured from Cowork” as unconditional RED cases. When Cowork cannot run, those fixtures cannot be captured, yet A3 must be green before A4.
+- Evidence: P0.2 pass/fail/unavailable rule and Cowork row versus A3's fixture wording. The general G6 installed-host split at line 637 does not qualify A3's RED obligation.
+- Change to PASS: Make A3's live Cowork fixture cases conditional on P0.2 pass; when unavailable or failing, require a named negative unsupported-host case and retain any portable synthetic bridge parser cases separately. Map both branches to the Cowork AC, TEST row, G4/G6, TODO task, and feature-matrix receipt. No operator decision: D6 already chooses unsupported.
+
+### F-R31-04: UC-7 requires structured hostileReview before that field exists (implementer edit)
+
+- Plan locations: process line 156; UC-7 line 491; Phase B S8 line 611.
+- Exact defect: UC-7 says that at P0 and at the end of each slice the coordinator records `hostileReview` from the receipt, including for pre-HV Code/Docs turns. The process contract correctly says P0, A1-A9, and S1-S7 cannot have per-turn review records and instead use dialog/designDecisions plus `RecordValidationResultAsync`; `recordReview` first ships in S8. The use-case basic flow therefore asks the implementer to use a field and verb that do not yet exist.
+- Evidence: direct comparison of lines 156, 491, and 611.
+- Change to PASS: Add the process line 156 phase split to UC-7's basic and alternate flows: coordinating-turn/validation records through S7, then per-turn `recordReview` and backfill from S8 onward. Align its test mapping and handoff wording. No operator decision: D10 and line 156 already settle the schedule.
+
+## Round-30 re-attack and prior-round sweep
+
+- F-R30-01 is repaired in P0.8 line 178: A4 now depends on A3, and S9 on S6. The new A3/A4 cycle above shows why edge-only repair was insufficient. F-R30-02 is repaired in the plan: A9 defines explicit idempotent `--plugin-version` with `SyncAgentPluginsExplicitVersionTests`, 1.119.0/1.120.0 calls, Node core 0.3.0/0.4.0, and all-nine G6 in S8 and S9. F-R30-03 is repaired: TEST-SUPPORT-024 is free in the live store, with the stale 023 matrix row documented. The r30 main-workspace wrapper UNKNOWNs are resolved using `-CacheRoot /tmp/codex-hv-r31-cache`; main TODO, memory, requirements, and triage reads succeeded.
+- Read the r1-r29 receipt summaries and handoff chronology. All 29 were DISAGREE. Checked the formerly recurring C2 alias permanence/acks, D6 unsupported-session failsafe, marker activation, TEST span, deployment elevation, mapping, and all-nine sync clauses against the current plan. No regression found in those clauses; A3/A4 is a sibling of the repeated phase-boundary class. The plan's dependency and test-allocation rules were applied to every phase boundary, with the four defects above retained as current blockers.
+- Review-only environment check: `dotnet --list-sdks` returned only 10.0.111; `global.json` requests 10.0.201; Pester 5 and bats are absent; node v26.8.2 and npm 11.19.1 are present. No product test or deploy was run, consistent with the unapproved plan and P0.1 gate.
+
+## Receipts and persistence
+
+- Markdown: `docs/receipts/hv/hostile-validator-plan-readiness-r31-20261010T041231Z.md`.
+- JSON: `docs/receipts/hv/hostile-validator-plan-readiness-r31-20261010T041231Z.json` (native PowerShell object, `ConvertTo-Json`).
+- Runner request: `docs/receipts/hv/20261010T041231Z-plan-readiness-r31.request.jsonl`.
+- Runner response: `docs/receipts/hv/20261010T041231Z-plan-readiness-r31.response.jsonl`.
+- Reviewer turn full-body readback and final completed-state proof are recorded in the JSON receipt; the full text of this Markdown verdict is the turn response. No marker credential was copied into any receipt.
+
+=== VERDICT JSON ===
+{"overallVerdict":"DISAGREE","accuracy":94,"completeness":90,"confidence":96,"passCount":5,"failCount":5,"unknownCount":0,"failList":["F-R31-01","F-R31-02","F-R31-03","F-R31-04"],"unknownList":[],"implementerFixes":["F-R31-01","F-R31-02","F-R31-03","F-R31-04"],"operatorDecisionFails":[],"headSha":"0c0ba53292f791ed1c5572f571f18e9017e7f673","receiptPaths":["/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r31-20261010T041231Z.md","/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r31-20261010T041231Z.json","/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T041231Z-plan-readiness-r31.request.jsonl","/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T041231Z-plan-readiness-r31.response.jsonl"],"reviewerSessionId":"Codex-20261010T041414Z-plugin-session","reviewerRequestId":"req-20261010T041425Z-turn-6b06"}

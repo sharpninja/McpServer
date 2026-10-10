@@ -159,7 +159,46 @@ partial class Build
         if (!string.IsNullOrWhiteSpace(pluginParent))
             return Path.GetFullPath(pluginParent);
 
-        return Directory.GetParent(rootDirectory.ToString())?.FullName;
+        return ResolveOfficialPluginSiblingParent(rootDirectory.ToString());
+    }
+
+    /// <summary>
+    /// Resolves the directory that contains official sibling plugin repos.
+    /// Walks up from a git worktree under .worktrees (or .mcpServer/worktrees)
+    /// to the checkout parent that holds mcpserver-*-plugin siblings.
+    /// </summary>
+    internal static string? ResolveOfficialPluginSiblingParent(string rootDirectory)
+    {
+        if (string.IsNullOrWhiteSpace(rootDirectory))
+            return null;
+
+        var current = new DirectoryInfo(Path.GetFullPath(rootDirectory));
+        while (current is not null)
+        {
+            var parent = current.Parent;
+            if (parent is null)
+                break;
+
+            if (Directory.Exists(Path.Combine(parent.FullName, "mcpserver-codex-plugin"))
+                || Directory.Exists(Path.Combine(parent.FullName, "mcpserver-grok-plugin"))
+                || Directory.Exists(Path.Combine(parent.FullName, "mcpserver-claude-code-plugin")))
+            {
+                return parent.FullName;
+            }
+
+            if (string.Equals(current.Name, ".worktrees", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(current.Name, "worktrees", StringComparison.OrdinalIgnoreCase))
+            {
+                var checkoutRoot = parent;
+                if (string.Equals(checkoutRoot.Name, ".mcpServer", StringComparison.OrdinalIgnoreCase))
+                    checkoutRoot = checkoutRoot.Parent ?? checkoutRoot;
+                return checkoutRoot.Parent?.FullName ?? parent.FullName;
+            }
+
+            current = parent;
+        }
+
+        return Directory.GetParent(Path.GetFullPath(rootDirectory))?.FullName;
     }
 
     private static string? ResolvePluginHostName(AbsolutePath pluginRoot)
@@ -456,7 +495,7 @@ partial class Build
         var content = File.ReadAllText(fullPath);
         return Regex.IsMatch(
             content,
-            @"(\bbash\b|\blib-sh\b|\blib-node\b|(?<!\$)\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|mcpserver-repl --agent-stdio|repl_invoke)",
+            @"(\bbash\b|\blib-sh\b|\blib-node\b|(?<!\$)\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|qbrain-ai-repl --agent-stdio|repl_invoke)",
             RegexOptions.IgnoreCase);
     }
 

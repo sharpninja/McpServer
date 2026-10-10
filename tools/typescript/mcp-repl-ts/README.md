@@ -1,23 +1,23 @@
-# @sharpninja/mcp-repl - Shared TypeScript Surface
+# @qbrainai/qbrain-ai-repl - Shared TypeScript Surface
 
-Canonical shared TypeScript package for McpServer agent plugins (Cline, Cline V2, OpenCode, and future TS plugins).
+Canonical shared TypeScript package for QBrainAi agent plugins (Cline, Cline V2, OpenCode, and future TS plugins).
 
 ## Location
 
-- Source: `tools/typescript/mcp-repl-ts` in the main McpServer repository
-- Published: [@sharpninja/mcp-repl on npm](https://www.npmjs.com/package/@sharpninja/mcp-repl)
+- Source: `tools/typescript/mcp-repl-ts` in the main QBrainAi repository
+- Published: [@qbrainai/qbrain-ai-repl on npm](https://www.npmjs.com/package/@qbrainai/qbrain-ai-repl)
 
 ## What it provides
 
 - Typed message entities aligned with the PowerShell `McpRepl` module
-- `ReplBridge` and `McpAgentClient` for communicating with `mcpserver-repl --agent-stdio`
+- `ReplBridge` and `McpAgentClient` for communicating with `qbrain-ai-repl --agent-stdio`
 - Marker resolution and cache/failsafe helpers
 - Common workflow method name registry
 
 ## Usage
 
 ```ts
-import { McpAgentClient, WorkflowMethods } from '@sharpninja/mcp-repl';
+import { McpAgentClient, WorkflowMethods } from '@qbrainai/qbrain-ai-repl';
 
 const client = new McpAgentClient(workspacePath);
 await client.ensureConnected();

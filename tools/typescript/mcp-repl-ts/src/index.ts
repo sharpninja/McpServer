@@ -1,6 +1,6 @@
 /**
- * @sharpninja/mcp-repl
- * The single shared TypeScript surface for McpServer agent plugins.
+ * @qbrainai/qbrain-ai-repl
+ * The single shared TypeScript surface for QBrainAi agent plugins.
  * Used by Cline, Cline V2, OpenCode, and future TS-based plugins.
  */
 export * from './types';

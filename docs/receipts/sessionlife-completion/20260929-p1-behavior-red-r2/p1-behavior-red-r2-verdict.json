@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-09-29T23:31:54.750205Z",
+  "gate": "P1 behavior Red r2",
+  "accepted": true,
+  "phaseComplete": false,
+  "OverallVerdict": "AGREE",
+  "counts": {
+    "PASS": 15,
+    "FAIL": 0,
+    "UNKNOWN": 0
+  },
+  "accuracy": {
+    "score": 99,
+    "rationale": "The plan and PR describe the oracles that the tests implement: classified InvalidDataException tokens, a 16-cell command matrix, independent freshness and run-binding mutations, a present wrongly bound report, a nested .mcpServer fixture, and FR/TR XMLDocs. An independent SDK 10.0.401 rerun on f4d8e656 reproduced the published 94/0/94/0 classification and the 88/5/1 failure split with zero setup failures. The author's original TRX bytes are gitignored, so that file was not rehashed; the rerun is the accuracy evidence. Ordinal substring checks match the R2 plan, and no reason token is a substring of another."
+  },
+  "completeness": {
+    "score": 99,
+    "rationale": "P1BR-F01 through P1BR-F06 are closed inside the stated tests-and-XMLDoc boundary. The scaffold still throws NotImplementedException, the Build method still does not delegate, the r1 archive hashes match, and producers, orchestration, Green, and TODO closure were not pulled in. The one-point holdback is that stale Build.Tests companion freshness is established by a single-file rewrite rather than the explicit companion asserts used for the Pester pair, and three inherited theory entry points still omit per-method requirement IDs. Neither gap reopens a prior finding or leaves a required mutation untested. Deferred Green, producers, and P2-P7 are not penalized."
+  },
+  "reviewResponse": "docs/receipts/hv/20260929T233154Z-sessionlife-p1-behavior-red-r2.response.jsonl",
+  "reviewResponseSha256": "12765703382F3FE85C3AB98EEF47FD40906DB9527A014640F3B64C13E8809E5D",
+  "reviewRequest": "docs/receipts/hv/20260929T233154Z-sessionlife-p1-behavior-red-r2.request.jsonl",
+  "reviewRequestSha256": "3309B0124486FA235E471EA1677D9244786681E2C9D7C757BF29412796235E2F",
+  "reviewedTip": "f4d8e656bb8d677332d313510def066499d85945",
+  "findings": [
+    {
+      "id": "P1BR-F01",
+      "severity": "high",
+      "status": "closed"
+    },
+    {
+      "id": "P1BR-F02",
+      "severity": "high",
+      "status": "closed"
+    },
+    {
+      "id": "P1BR-F03",
+      "severity": "high",
+      "status": "closed"
+    },
+    {
+      "id": "P1BR-F04",
+      "severity": "medium",
+      "status": "closed"
+    },
+    {
+      "id": "P1BR-F05",
+      "severity": "medium",
+      "status": "closed"
+    },
+    {
+      "id": "P1BR-F06",
+      "severity": "low",
+      "status": "closed"
+    }
+  ],
+  "openFindingIds": [],
+  "nextBoundary": "Accepted corrective behavior Red only. A separate change may implement minimal exactly-once delegation and then validator behavior for these fixtures. This receipt does not authorize Green inside the review commit, producers, orchestration, P1 exit, or TODO closure. Preserve history-r1.",
+  "reviewer": {
+    "agent": "GrokCode",
+    "name": "Grok Bot",
+    "model": "Grok 4.7"
+  },
+  "structuredSerialization": "Python json module serializing native objects"
+}

@@ -13,22 +13,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 # Build (Nuke orchestrator)
 ./build.ps1 Compile
-# or: dotnet build src/McpServer.Support.Mcp -c Debug
+# or: dotnet build src/QBrainAi.Support.Mcp -c Debug
 
 # Run all unit tests (excludes integration tests)
 ./build.ps1 Test
 
 # Run a specific test project
-dotnet test tests/McpServer.Support.Mcp.Tests -c Debug
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug
 
 # Run a single test by name
-dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests.QueryAsync_NoFilters_ReturnsAllItems"
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests.QueryAsync_NoFilters_ReturnsAllItems"
 
 # Run all tests in a class
-dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests"
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests"
 
 # Integration tests (CustomWebApplicationFactory, in-memory EF)
-dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug
+dotnet test tests/QBrainAi.Support.Mcp.IntegrationTests -c Debug
 
 # Validate appsettings configuration
 ./build.ps1 ValidateConfig
@@ -38,18 +38,18 @@ dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug
 
 # Start server
 ./build.ps1 StartServer --instance default
-# or: dotnet run --project src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj -c Staging -- --instance default
+# or: dotnet run --project src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj -c Staging -- --instance default
 ```
 
 Swagger UI: `http://localhost:7147/swagger`
 
 ## Architecture
 
-**McpServer** is an ASP.NET Core 9 server (.NET 9.0) providing workspace-scoped context retrieval, TODO management, session logging, repository operations, GraphRAG, and GitHub automation for AI agents.
+**QBrainAi** is an ASP.NET Core 9 server (.NET 9.0) providing workspace-scoped context retrieval, TODO management, session logging, repository operations, GraphRAG, and GitHub automation for AI agents.
 
 ### Transports
 
-- **HTTP REST** — Controllers at `/mcpserver/*` in `src/McpServer.Support.Mcp/Controllers/`
+- **HTTP REST** — Controllers at `/qbrainai/*` in `src/QBrainAi.Support.Mcp/Controllers/`
 - **MCP Streamable HTTP** — JSON-RPC wire protocol at `/mcp-transport`
 - **MCP STDIO** — `--transport stdio` flag; tools in `McpStdio/FwhMcpTools.cs`
 
@@ -67,20 +67,20 @@ EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, Postgr
 
 ### Key Projects
 
-- `McpServer.Support.Mcp` — main server application
-- `McpServer.Services` — ingestion, context search, models
-- `McpServer.Storage` — EF Core with SQLite FTS5 + HNSW vector search
-- `McpServer.Cqrs` — CQRS command/query handlers
-- `McpServer.McpAgent` — agent hosting & tool execution framework
-- `McpServer.Client` — typed REST client (published as NuGet `SharpNinja.McpServer.Client`)
-- `McpServer.GraphRag` — GraphRAG indexing & query (workspace-scoped, disabled by default)
-- `McpServer.Repl.Core` / `McpServer.Repl.Host` — REPL command interpreter and dotnet tool
+- `QBrainAi.Support.Mcp` — main server application
+- `QBrainAi.Services` — ingestion, context search, models
+- `QBrainAi.Storage` — EF Core with SQLite FTS5 + HNSW vector search
+- `QBrainAi.Cqrs` — CQRS command/query handlers
+- `QBrainAi.McpAgent` — agent hosting & tool execution framework
+- `QBrainAi.Client` — typed REST client (published as NuGet `QBrainAI.Client`)
+- `QBrainAi.GraphRag` — GraphRAG indexing & query (workspace-scoped, disabled by default)
+- `QBrainAi.Repl.Core` / `QBrainAi.Repl.Host` — REPL command interpreter and dotnet tool
 
 ### Test Projects
 
-- Unit tests: `McpServer.Support.Mcp.Tests`, `McpServer.Client.Tests`, `McpServer.Cqrs.Tests`, `McpServer.Launcher.Tests`, `McpServer.McpAgent.Tests`, `McpServer.Repl.Core.Tests`, `Build.Tests`
-- Integration: `McpServer.Support.Mcp.IntegrationTests`, `McpServer.Repl.IntegrationTests`
-- BDD/Validation (Reqnroll): `McpServer.Context.Validation`, `McpServer.GitHub.Validation`, `McpServer.Repo.Validation`, `McpServer.SessionLog.Validation`, `McpServer.Todo.Validation`, `McpServer.ToolRegistry.Validation`, `McpServer.Workspace.Validation`
+- Unit tests: `QBrainAi.Support.Mcp.Tests`, `QBrainAi.Client.Tests`, `QBrainAi.Cqrs.Tests`, `QBrainAi.Launcher.Tests`, `QBrainAi.McpAgent.Tests`, `QBrainAi.Repl.Core.Tests`, `Build.Tests`
+- Integration: `QBrainAi.Support.Mcp.IntegrationTests`, `QBrainAi.Repl.IntegrationTests`
+- BDD/Validation (Reqnroll): `QBrainAi.Context.Validation`, `QBrainAi.GitHub.Validation`, `QBrainAi.Repo.Validation`, `QBrainAi.SessionLog.Validation`, `QBrainAi.Todo.Validation`, `QBrainAi.ToolRegistry.Validation`, `QBrainAi.Workspace.Validation`
 
 ## Coding Conventions
 
@@ -141,12 +141,12 @@ If signature verification, `/health`, or nonce verification fails: log `MCP_UNTR
 - The user explicitly says "Start Session"
 - Signature verification fails
 - `/health` fails or nonce verification fails
-- Any `/mcpserver/*` call returns 401
+- Any `/qbrainai/*` call returns 401
 - The marker endpoint/key changes after a server restart
 
 ### Authentication
 
-All `/mcpserver/*` endpoints require a per-workspace auth token (from `AGENTS-README-FIRST.yaml`). These details are for plugin internals, typed client integration, and read-only diagnosis after plugin failure; they are not permission to bypass the required plugin route for session log, TODO, requirements, import/export, or traceability operations:
+All `/qbrainai/*` endpoints require a per-workspace auth token (from `AGENTS-README-FIRST.yaml`). These details are for plugin internals, typed client integration, and read-only diagnosis after plugin failure; they are not permission to bypass the required plugin route for session log, TODO, requirements, import/export, or traceability operations:
 - Header: `X-Api-Key: <token>`
 - Or query param: `?api_key=<token>`
 - If you receive a 401, re-read the marker file — the token rotates on each server restart
@@ -185,7 +185,7 @@ Include the requirement ID in your session log turn's tags. Capture requirements
 
 ## Context Loading by Task Type
 
-- Agent Help: see marker `## Agent Help (MCP Server issues)` in `AGENTS-README-FIRST.yaml`; API `/mcpserver/agent-help`
+- Agent Help: see marker `## Agent Help (QBrain.AI issues)` in `AGENTS-README-FIRST.yaml`; API `/qbrainai/agent-help`
 - Session logging: `docs/context/session-log-schema.md` + `docs/context/module-bootstrap.md`
 - TODO management: `docs/context/todo-schema.md` + `docs/context/module-bootstrap.md`
 - API integration: `docs/context/api-capabilities.md` (or `GET /swagger/v1/swagger.json`)
@@ -206,34 +206,34 @@ Include the requirement ID in your session log turn's tags. Capture requirements
 
 GitHub Actions (`.github/workflows/build.yml`) on Windows-latest with .NET 9.0. Triggers on push/PR to main/develop. Jobs: build-test, validate, package, msix, publish. The Nuke `Test` target excludes `*.IntegrationTests` projects.
 
-## MCP Server Claude Plugin and Hook Contract
+## QBrain.AI Claude Plugin and Hook Contract
 
-Claude must treat MCP Server plugin and hook setup as a live runtime contract, not background documentation. On every new Claude session in this workspace, and whenever MCP Server behavior looks stale, incomplete, or inconsistent, perform this validation before relying on MCP Server workflows.
+Claude must treat QBrain.AI plugin and hook setup as a live runtime contract, not background documentation. On every new Claude session in this workspace, and whenever QBrain.AI behavior looks stale, incomplete, or inconsistent, perform this validation before relying on QBrain.AI workflows.
 
 ### Required Startup Validation
 
-1. Read `AGENTS-README-FIRST.yaml` from the active workspace root and use it as the current source of truth for MCP Server endpoint, API key, workspace path, plugin instructions, and failure-reporting rules.
-2. Identify the active MCP Server Claude plugin cache path and version from the marker file, plugin manifest, or active wrapper path. Do not assume a previously cached path is current.
-3. Inspect `%USERPROFILE%\.claude\plugins\cache` for stale MCP Server plugin entries. Delete stale `mcpserver`, `mcpserver-*`, or `mcpserver-cowork` cache entries that are not the active plugin cache path/version for this session.
+1. Read `AGENTS-README-FIRST.yaml` from the active workspace root and use it as the current source of truth for QBrain.AI endpoint, API key, workspace path, plugin instructions, and failure-reporting rules.
+2. Identify the active QBrain.AI Claude plugin cache path and version from the marker file, plugin manifest, or active wrapper path. Do not assume a previously cached path is current.
+3. Inspect `%USERPROFILE%\.claude\plugins\cache` for stale QBrain.AI plugin entries. Delete stale `mcpserver`, `mcpserver-*`, or `mcpserver-cowork` cache entries that are not the active plugin cache path/version for this session.
 4. Do not delete the active plugin cache path for the current session. If unsure which path is active, stop deleting and report the ambiguity.
-5. Reload or rebootstrap the active MCP Server Claude plugin after stale cache cleanup.
-6. Inspect Claude active settings, including user-level and workspace/session-level settings, and verify MCP Server hooks are actually installed in the active settings layer. Do not accept hook files existing in the plugin package as proof that hooks are active.
-7. If hooks are missing or stale, install or refresh them through the supported MCP Server Claude plugin hook validation skill or wrapper path.
+5. Reload or rebootstrap the active QBrain.AI Claude plugin after stale cache cleanup.
+6. Inspect Claude active settings, including user-level and workspace/session-level settings, and verify QBrain.AI hooks are actually installed in the active settings layer. Do not accept hook files existing in the plugin package as proof that hooks are active.
+7. If hooks are missing or stale, install or refresh them through the supported QBrain.AI Claude plugin hook validation skill or wrapper path.
 8. Verify the plugin wrapper/status command works and record the exact command or tool path used.
 9. Verify subprocesses launched by the plugin use the workspace root as process current working directory, not the inherited user profile directory.
 
 ### Required Usage Rules
 
-1. Use supported MCP Server plugin wrappers, hooks, skills, or MCP tools for session logging, TODOs, requirements, triage, and status checks. Do not use raw REST when a supported wrapper, hook, skill, or MCP tool exists.
+1. Use supported QBrain.AI plugin wrappers, hooks, skills, or MCP tools for session logging, TODOs, requirements, triage, and status checks. Do not use raw REST when a supported wrapper, hook, skill, or MCP tool exists.
 2. Session logging must use the supported session wrapper or MCP tools and must create, update, and complete turns through the plugin flow.
 3. TODO operations must use the supported TODO wrapper, workflow, or MCP tools. Do not edit TODO storage directly.
 4. Requirements operations must use the supported requirements wrapper, workflow, or MCP tools. Do not edit requirements storage directly.
 5. Triage operations must use the supported triage wrapper, workflow, or MCP tools.
-6. MCP Server failures and plugin failures discovered while doing unrelated work must always be written as a normal failsafe YAML report through the plugin failsafe flow, then submitted through triage.
+6. QBrain.AI failures and plugin failures discovered while doing unrelated work must always be written as a normal failsafe YAML report through the plugin failsafe flow, then submitted through triage.
 7. If triage submission succeeds, Claude must continue the user active task without waiting for triage research or TODO creation. If triage submission fails, stop work and notify the user. Do not invent a raw REST fallback or alternate reporting channel.
 8. Normal plugin execution must use PowerShell only. Bash is allowed only for installing PowerShell. Node must not be used for JSON or YAML construction.
 9. JSON and YAML payloads must be built from native objects and serialized. Do not handwrite YAML or JSON as fragile string literals.
-10. If any validation check fails, report the exact failed check, the path or command involved, and the blocked capability. Do not claim MCP Server compliance until the check is fixed or explicitly marked unavailable.
+10. If any validation check fails, report the exact failed check, the path or command involved, and the blocked capability. Do not claim QBrain.AI compliance until the check is fixed or explicitly marked unavailable.
 
 ### Minimum Validation Report
 

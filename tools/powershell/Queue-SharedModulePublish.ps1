@@ -129,7 +129,7 @@ Write-Host "  Azure login token appears valid (expires: $loginCheck)" -Foregroun
 Write-Host "Ensuring pipeline secret variables are registered..." -ForegroundColor Cyan
 
 $org        = "https://dev.azure.com/McpServer"
-$project    = "McpServer"
+$project    = "QBrainAi"
 $pipelineId = 1
 
 foreach ($varName in @('PSGalleryApiKey', 'NPM_API_KEY')) {
@@ -170,7 +170,7 @@ Write-Host "Calling 'az pipelines build queue' (this can take 10-30 seconds or h
 
 $queueOutput = az pipelines build queue `
     --org https://dev.azure.com/McpServer `
-    --project McpServer `
+    --project QBrainAi `
     --definition-id 1 `
     --branch main `
     --variables "PSGalleryApiKey=$psGalleryKey" "NPM_API_KEY=$npmKey" `
@@ -215,7 +215,7 @@ if ($result) {
     Write-Host ""
     Write-Host "After the build completes, verify with:" -ForegroundColor Cyan
     Write-Host "  Find-Module McpRepl -AllVersions" -ForegroundColor White
-    Write-Host "  npm view @sharpninja/mcp-repl versions" -ForegroundColor White
+    Write-Host "  npm view @qbrainai/qbrain-ai-repl versions" -ForegroundColor White
 } else {
     Write-Error "Failed to queue build. az pipelines returned no result."
     exit 1

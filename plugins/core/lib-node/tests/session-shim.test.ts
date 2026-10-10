@@ -183,7 +183,7 @@ describe('SessionShim', () => {
         title: 'demo',
         model: 'claude-opus',
         agentSessionId: 'cline-native-session-001',
-        agentSessionTranscriptFile: 'F:\\GitHub\\McpServer\\.mcpServer\\cline\\session.jsonl',
+        agentSessionTranscriptFile: 'F:\\GitHub\\QBrainAi\\.mcpServer\\cline\\session.jsonl',
         agentExecutablePath: 'C:\\Users\\kingd\\AppData\\Roaming\\npm\\cline.cmd',
         agentExecutableVersion: '1.2.3',
       });
@@ -203,7 +203,7 @@ describe('SessionShim', () => {
         title: 'demo',
         model: 'claude-opus',
         agentSessionId: 'cline-native-session-001',
-        agentSessionTranscriptFile: 'F:\\GitHub\\McpServer\\.mcpServer\\cline\\session.jsonl',
+        agentSessionTranscriptFile: 'F:\\GitHub\\QBrainAi\\.mcpServer\\cline\\session.jsonl',
         agentExecutablePath: 'C:\\Users\\kingd\\AppData\\Roaming\\npm\\cline.cmd',
         agentExecutableVersion: '1.2.3',
         status: 'in_progress',
@@ -439,7 +439,7 @@ retryCount: 0
         contentType: 'application/json',
       });
       const call = (globalThis.fetch as jest.Mock).mock.calls[0];
-      expect(String(call[0])).toBe('http://127.0.0.1:8765/mcpserver/sessionlog?agent=Cline&limit=5');
+      expect(String(call[0])).toBe('http://127.0.0.1:8765/qbrainai/sessionlog?agent=Cline&limit=5');
       expect(call[1]).toEqual({
         headers: {
           'X-Api-Key': 'test-api-key',

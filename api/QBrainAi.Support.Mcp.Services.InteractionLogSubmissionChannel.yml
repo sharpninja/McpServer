@@ -1,0 +1,793 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel
+  commentId: T:QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel
+  id: InteractionLogSubmissionChannel
+  parent: QBrainAi.Support.Mcp.Services
+  children:
+  - QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.#ctor(Microsoft.Extensions.Options.IOptions{QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions})
+  - QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  - QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+  langs:
+  - csharp
+  - vb
+  name: InteractionLogSubmissionChannel
+  nameWithType: InteractionLogSubmissionChannel
+  fullName: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel
+  type: Class
+  source:
+    id: InteractionLogSubmissionChannel
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\InteractionLogSubmissionQueue.cs
+    startLine: 10
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: 'TR-PLANNED-CORE-013: Channel-based buffer for interaction log entries. Non-blocking enqueue; async dequeue for background submission.'
+  example: []
+  syntax:
+    content: 'public sealed class InteractionLogSubmissionChannel : IInteractionLogSubmissionChannel'
+    content.vb: Public NotInheritable Class InteractionLogSubmissionChannel Implements IInteractionLogSubmissionChannel
+  inheritance:
+  - System.Object
+  implements:
+  - QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.#ctor(Microsoft.Extensions.Options.IOptions{QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions})
+  commentId: M:QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.#ctor(Microsoft.Extensions.Options.IOptions{QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions})
+  id: '#ctor(Microsoft.Extensions.Options.IOptions{QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions})'
+  parent: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel
+  langs:
+  - csharp
+  - vb
+  name: InteractionLogSubmissionChannel(IOptions<McpInteractionLoggingOptions>)
+  nameWithType: InteractionLogSubmissionChannel.InteractionLogSubmissionChannel(IOptions<McpInteractionLoggingOptions>)
+  fullName: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.InteractionLogSubmissionChannel(Microsoft.Extensions.Options.IOptions<QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions>)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\InteractionLogSubmissionQueue.cs
+    startLine: 16
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
+  example: []
+  syntax:
+    content: public InteractionLogSubmissionChannel(IOptions<McpInteractionLoggingOptions> options)
+    parameters:
+    - id: options
+      type: Microsoft.Extensions.Options.IOptions{QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions}
+      description: Interaction logging options providing queue capacity.
+    content.vb: Public Sub New(options As IOptions(Of McpInteractionLoggingOptions))
+  overload: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.#ctor*
+  nameWithType.vb: InteractionLogSubmissionChannel.New(IOptions(Of McpInteractionLoggingOptions))
+  fullName.vb: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.New(Microsoft.Extensions.Options.IOptions(Of QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions))
+  name.vb: New(IOptions(Of McpInteractionLoggingOptions))
+- uid: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+  commentId: M:QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+  id: TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+  parent: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel
+  langs:
+  - csharp
+  - vb
+  name: TryEnqueue(InteractionLogEntry)
+  nameWithType: InteractionLogSubmissionChannel.TryEnqueue(InteractionLogEntry)
+  fullName: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+  type: Method
+  source:
+    id: TryEnqueue
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\InteractionLogSubmissionQueue.cs
+    startLine: 26
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: Attempts to enqueue an entry without blocking. Returns false if channel is full.
+  example: []
+  syntax:
+    content: public bool TryEnqueue(InteractionLogEntry entry)
+    parameters:
+    - id: entry
+      type: QBrainAi.Support.Mcp.Models.InteractionLogEntry
+      description: The interaction log entry to enqueue.
+    return:
+      type: System.Boolean
+      description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the entry was enqueued; <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> if the channel is full.
+    content.vb: Public Function TryEnqueue(entry As InteractionLogEntry) As Boolean
+  overload: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryEnqueue*
+  implements:
+  - QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+- uid: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  id: TryDequeueAsync(System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel
+  langs:
+  - csharp
+  - vb
+  name: TryDequeueAsync(CancellationToken)
+  nameWithType: InteractionLogSubmissionChannel.TryDequeueAsync(CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: TryDequeueAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\InteractionLogSubmissionQueue.cs
+    startLine: 32
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: Attempts to dequeue the next entry. Returns (true, entry) or (false, null). Used by the background submission service.
+  example: []
+  syntax:
+    content: public ValueTask<(bool Success, InteractionLogEntry? Entry)> TryDequeueAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the wait.
+    return:
+      type: System.Threading.Tasks.ValueTask{System.ValueTuple{System.Boolean,QBrainAi.Support.Mcp.Models.InteractionLogEntry}}
+      description: A tuple indicating success and the dequeued entry (or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>).
+    content.vb: Public Function TryDequeueAsync(cancellationToken As CancellationToken = Nothing) As ValueTask(Of (Success As Boolean, Entry As InteractionLogEntry))
+  overload: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryDequeueAsync*
+  implements:
+  - QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+references:
+- uid: QBrainAi.Support.Mcp.Services
+  commentId: N:QBrainAi.Support.Mcp.Services
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Services
+  nameWithType: QBrainAi.Support.Mcp.Services
+  fullName: QBrainAi.Support.Mcp.Services
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Services
+    name: Services
+    href: QBrainAi.Support.Mcp.Services.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Services
+    name: Services
+    href: QBrainAi.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  commentId: T:QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  parent: QBrainAi.Support.Mcp.Services
+  href: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.html
+  name: IInteractionLogSubmissionChannel
+  nameWithType: IInteractionLogSubmissionChannel
+  fullName: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.#ctor*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.#ctor
+  href: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_InteractionLogSubmissionChannel__ctor_Microsoft_Extensions_Options_IOptions_QBrainAi_Support_Mcp_Options_McpInteractionLoggingOptions__
+  name: InteractionLogSubmissionChannel
+  nameWithType: InteractionLogSubmissionChannel.InteractionLogSubmissionChannel
+  fullName: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.InteractionLogSubmissionChannel
+  nameWithType.vb: InteractionLogSubmissionChannel.New
+  fullName.vb: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.New
+  name.vb: New
+- uid: Microsoft.Extensions.Options.IOptions{QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions}
+  commentId: T:Microsoft.Extensions.Options.IOptions{QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions}
+  parent: Microsoft.Extensions.Options
+  definition: Microsoft.Extensions.Options.IOptions`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  name: IOptions<McpInteractionLoggingOptions>
+  nameWithType: IOptions<McpInteractionLoggingOptions>
+  fullName: Microsoft.Extensions.Options.IOptions<QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions>
+  nameWithType.vb: IOptions(Of McpInteractionLoggingOptions)
+  fullName.vb: Microsoft.Extensions.Options.IOptions(Of QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions)
+  name.vb: IOptions(Of McpInteractionLoggingOptions)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: <
+  - uid: QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions
+    name: McpInteractionLoggingOptions
+    href: QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions
+    name: McpInteractionLoggingOptions
+    href: QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions.html
+  - name: )
+- uid: Microsoft.Extensions.Options.IOptions`1
+  commentId: T:Microsoft.Extensions.Options.IOptions`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  name: IOptions<TOptions>
+  nameWithType: IOptions<TOptions>
+  fullName: Microsoft.Extensions.Options.IOptions<TOptions>
+  nameWithType.vb: IOptions(Of TOptions)
+  fullName.vb: Microsoft.Extensions.Options.IOptions(Of TOptions)
+  name.vb: IOptions(Of TOptions)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: <
+  - name: TOptions
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TOptions
+  - name: )
+- uid: Microsoft.Extensions.Options
+  commentId: N:Microsoft.Extensions.Options
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Options
+  nameWithType: Microsoft.Extensions.Options
+  fullName: Microsoft.Extensions.Options
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Options
+    name: Options
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Options
+    name: Options
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options
+- uid: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryEnqueue*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryEnqueue
+  href: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_InteractionLogSubmissionChannel_TryEnqueue_QBrainAi_Support_Mcp_Models_InteractionLogEntry_
+  name: TryEnqueue
+  nameWithType: InteractionLogSubmissionChannel.TryEnqueue
+  fullName: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryEnqueue
+- uid: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+  commentId: M:QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+  parent: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  href: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_IInteractionLogSubmissionChannel_TryEnqueue_QBrainAi_Support_Mcp_Models_InteractionLogEntry_
+  name: TryEnqueue(InteractionLogEntry)
+  nameWithType: IInteractionLogSubmissionChannel.TryEnqueue(InteractionLogEntry)
+  fullName: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+  spec.csharp:
+  - uid: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+    name: TryEnqueue
+    href: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_IInteractionLogSubmissionChannel_TryEnqueue_QBrainAi_Support_Mcp_Models_InteractionLogEntry_
+  - name: (
+  - uid: QBrainAi.Support.Mcp.Models.InteractionLogEntry
+    name: InteractionLogEntry
+    href: QBrainAi.Support.Mcp.Models.InteractionLogEntry.html
+  - name: )
+  spec.vb:
+  - uid: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(QBrainAi.Support.Mcp.Models.InteractionLogEntry)
+    name: TryEnqueue
+    href: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_IInteractionLogSubmissionChannel_TryEnqueue_QBrainAi_Support_Mcp_Models_InteractionLogEntry_
+  - name: (
+  - uid: QBrainAi.Support.Mcp.Models.InteractionLogEntry
+    name: InteractionLogEntry
+    href: QBrainAi.Support.Mcp.Models.InteractionLogEntry.html
+  - name: )
+- uid: QBrainAi.Support.Mcp.Models.InteractionLogEntry
+  commentId: T:QBrainAi.Support.Mcp.Models.InteractionLogEntry
+  parent: QBrainAi.Support.Mcp.Models
+  href: QBrainAi.Support.Mcp.Models.InteractionLogEntry.html
+  name: InteractionLogEntry
+  nameWithType: InteractionLogEntry
+  fullName: QBrainAi.Support.Mcp.Models.InteractionLogEntry
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: QBrainAi.Support.Mcp.Models
+  commentId: N:QBrainAi.Support.Mcp.Models
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Models
+  nameWithType: QBrainAi.Support.Mcp.Models
+  fullName: QBrainAi.Support.Mcp.Models
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Models
+    name: Models
+    href: QBrainAi.Support.Mcp.Models.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Models
+    name: Models
+    href: QBrainAi.Support.Mcp.Models.html
+- uid: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryDequeueAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryDequeueAsync
+  href: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_InteractionLogSubmissionChannel_TryDequeueAsync_System_Threading_CancellationToken_
+  name: TryDequeueAsync
+  nameWithType: InteractionLogSubmissionChannel.TryDequeueAsync
+  fullName: QBrainAi.Support.Mcp.Services.InteractionLogSubmissionChannel.TryDequeueAsync
+- uid: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  isExternal: true
+  href: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_IInteractionLogSubmissionChannel_TryDequeueAsync_System_Threading_CancellationToken_
+  name: TryDequeueAsync(CancellationToken)
+  nameWithType: IInteractionLogSubmissionChannel.TryDequeueAsync(CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+    name: TryDequeueAsync
+    href: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_IInteractionLogSubmissionChannel_TryDequeueAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+    name: TryDequeueAsync
+    href: QBrainAi.Support.Mcp.Services.IInteractionLogSubmissionChannel.html#QBrainAi_Support_Mcp_Services_IInteractionLogSubmissionChannel_TryDequeueAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.ValueTask{System.ValueTuple{System.Boolean,QBrainAi.Support.Mcp.Models.InteractionLogEntry}}
+  commentId: T:System.Threading.Tasks.ValueTask{System.ValueTuple{System.Boolean,QBrainAi.Support.Mcp.Models.InteractionLogEntry}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.ValueTask`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  name: ValueTask<(bool Success, InteractionLogEntry Entry)>
+  nameWithType: ValueTask<(bool Success, InteractionLogEntry Entry)>
+  fullName: System.Threading.Tasks.ValueTask<(bool Success, QBrainAi.Support.Mcp.Models.InteractionLogEntry Entry)>
+  nameWithType.vb: ValueTask(Of (Success As Boolean, Entry As InteractionLogEntry))
+  fullName.vb: System.Threading.Tasks.ValueTask(Of (Success As Boolean, Entry As QBrainAi.Support.Mcp.Models.InteractionLogEntry))
+  name.vb: ValueTask(Of (Success As Boolean, Entry As InteractionLogEntry))
+  spec.csharp:
+  - uid: System.Threading.Tasks.ValueTask`1
+    name: ValueTask
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  - name: <
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: " "
+  - uid: System.ValueTuple{System.Boolean,QBrainAi.Support.Mcp.Models.InteractionLogEntry}.Success
+    name: Success
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.boolean,mcpserver.support.mcp.models.interactionlogentry-.success
+  - name: ','
+  - name: " "
+  - uid: QBrainAi.Support.Mcp.Models.InteractionLogEntry
+    name: InteractionLogEntry
+    href: QBrainAi.Support.Mcp.Models.InteractionLogEntry.html
+  - name: " "
+  - uid: System.ValueTuple{System.Boolean,QBrainAi.Support.Mcp.Models.InteractionLogEntry}.Entry
+    name: Entry
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.boolean,mcpserver.support.mcp.models.interactionlogentry-.entry
+  - name: )
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.ValueTask`1
+    name: ValueTask
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: (
+  - uid: System.ValueTuple{System.Boolean,QBrainAi.Support.Mcp.Models.InteractionLogEntry}.Success
+    name: Success
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.boolean,mcpserver.support.mcp.models.interactionlogentry-.success
+  - name: " "
+  - name: As
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: ','
+  - name: " "
+  - uid: System.ValueTuple{System.Boolean,QBrainAi.Support.Mcp.Models.InteractionLogEntry}.Entry
+    name: Entry
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.boolean,mcpserver.support.mcp.models.interactionlogentry-.entry
+  - name: " "
+  - name: As
+  - name: " "
+  - uid: QBrainAi.Support.Mcp.Models.InteractionLogEntry
+    name: InteractionLogEntry
+    href: QBrainAi.Support.Mcp.Models.InteractionLogEntry.html
+  - name: )
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.ValueTask`1
+  commentId: T:System.Threading.Tasks.ValueTask`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  name: ValueTask<TResult>
+  nameWithType: ValueTask<TResult>
+  fullName: System.Threading.Tasks.ValueTask<TResult>
+  nameWithType.vb: ValueTask(Of TResult)
+  fullName.vb: System.Threading.Tasks.ValueTask(Of TResult)
+  name.vb: ValueTask(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.ValueTask`1
+    name: ValueTask
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.ValueTask`1
+    name: ValueTask
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

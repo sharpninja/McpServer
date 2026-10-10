@@ -1,0 +1,173 @@
+{
+  "TimestampUtc": "2026-10-09T17:57:55.8531293Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "sessionId": "01a121c0-f303-7540-bfdc-e4bdc83b7be6",
+    "rolloutPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T12-40-56-01a121c0-f303-7540-bfdc-e4bdc83b7be6.jsonl",
+    "turnContextUtc": "2026-10-09T17:40:57.504Z"
+  },
+  "AddProfileMarkdownCount": 19,
+  "MarkerReadConfirmation": "All 397 lines of /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml read",
+  "MemoryReadConfirmation": "workflow.memory.list and all 14 returned memories read",
+  "HeadSha": "19ebe9581bb4b4886df1220f832e8a4a000defd3",
+  "PlanStatus": "NOT APPROVED",
+  "PlanLines": 618,
+  "PlanNonemptyLines": 501,
+  "TodoDescriptionParity": "501/501 ordinal exact",
+  "ImplementationTasks": 30,
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "PASS",
+      "evidence": "Checked cited HEAD source, routes, hook payload shapes, plugin heads, and 36 FR-SUPPORT-010G citations in nine files."
+    },
+    {
+      "id": "P2",
+      "status": "PASS",
+      "evidence": "Live lists: 352 FR, 480 TR, 512 TEST; proposed ids absent; sampled existing citations and mappings resolve."
+    },
+    {
+      "id": "P3",
+      "status": "FAIL",
+      "evidence": "F-R4-03, F-R4-04, F-R4-05, F-R4-06 leave D1/D2/D5/D6 incompletely realized."
+    },
+    {
+      "id": "P4",
+      "status": "FAIL",
+      "evidence": "F-R4-01 permits zero-plugin sync; F-R4-05 omits Copilot sources."
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "F-R4-03 queue event replay, F-R4-04 causal binding, F-R4-05 policy duplicate handling leave design choices."
+    },
+    {
+      "id": "P6",
+      "status": "FAIL",
+      "evidence": "F-R4-01 sync/validation commands resolve wrong plugin parent and succeed with staged package alone."
+    },
+    {
+      "id": "P7",
+      "status": "FAIL",
+      "evidence": "F-R4-02 repeated Stop, F-R4-03 identical replay, F-R4-04 resumed R1, F-R4-05 all source tests absent."
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "F-R4-02 stop-active pass and F-R4-06 model mint contradict stated contracts; F-R4-01 contradicts all-eight gate."
+    },
+    {
+      "id": "P9",
+      "status": "FAIL",
+      "evidence": "501/501 plan/TODO lines and 30 tasks match, but group status in plan/handoff is stale (F-R4-07)."
+    },
+    {
+      "id": "P10",
+      "status": "FAIL",
+      "evidence": "F-R4-02 and F-R4-03 risks missing; F-R4-07 live group status differs from risk note."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 88,
+  "Completeness": 76,
+  "Confidence": 96,
+  "PassCount": 2,
+  "FailCount": 8,
+  "UnknownCount": 0,
+  "FailList": [
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9",
+    "P10"
+  ],
+  "UnknownList": [],
+  "Findings": [
+    {
+      "id": "F-R4-01",
+      "planLocation": "Plugin matrix lines 92-97; A9 560; S8-S9 578-580; S11 584; rollout 589",
+      "defect": "Default plugin parent resolves to McpServer, not github, so sync and validation can succeed with zero of eight plugin repos",
+      "evidence": "build/Build.SyncAgentPlugins.cs:49-54,75-86,170-196",
+      "fix": "Pass --agent-plugin-parent /home/sharpninja/github; assert exactly eight roots and core/version parity; regression test",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R4-02",
+      "planLocation": "FR-MCP-SESSIONTURN-005-AC006 line 218; wire 518; A7 556",
+      "defect": "stop_hook_active returns empty response with an unresolved open turn",
+      "evidence": "Claude Code Stop docs: stop_hook_active follows an earlier block and decision block is required to prevent stop",
+      "fix": "Re-evaluate unresolved ledger on every Stop; test repeat Stop and closure; specify continuation-cap outcome",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R4-03",
+      "planLocation": "Bridge algorithm 76; AC010 near 187; A3 548; wire 521; risks 594",
+      "defect": "Crash replay of remove or popAll can mutate second identical queued request",
+      "evidence": "Offset advances after apply; remove and popAll match oldest queued content hash; only enqueue explicitly idempotent",
+      "fix": "Stable queue event identity and atomic applied-state/offset or equivalent; duplicate-content crash fixtures",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R4-04",
+      "planLocation": "D2 lines 27,32; A4 550; use cases near 448",
+      "defect": "Latest delivered request may differ from cause of resumed earlier work",
+      "evidence": "After R2 delivery target remains R2, and only explicit requestId can direct later R1 work",
+      "fix": "Automatic per-invocation causal binding and R1-R2-R1 test; operator decision required only to weaken D2",
+      "classification": "implementer edit; operator decision if relaxing D2"
+    },
+    {
+      "id": "F-R4-05",
+      "planLocation": "Copilot host table line 79; A9 560",
+      "defect": "Claimed every hook source omits policy, .github/hooks, repo/user settings, and installed plugin sources",
+      "evidence": "Official GitHub Copilot hooks reference source list; distinct timestamps can yield two nonces",
+      "fix": "Enumerate all sources, repair owned duplicates, fail closed or get operator remediation for unremovable duplicates, test each",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R4-06",
+      "planLocation": "D1/D6 lines 29,31; A4 550",
+      "defect": "Model mintTurn test contradicts no model-invoked production mint",
+      "evidence": "A4 explicitly says model mintTurn mid-turn registers without cancel",
+      "fix": "Replace with host arrival/prompt-hook mint test or label diagnostic path excluded from ingress",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R4-07",
+      "planLocation": "Risk line 596; handoff line 94",
+      "defect": "Group described as unverified/not found despite successful current read-only lookup",
+      "evidence": "workflow.triage.getGroup: status failed, reportCount 1, grouped report triage-report-611ca1b413ea44ff946672f79bd7e850",
+      "fix": "Update plan and handoff with verified filed/failed status and pending relocation/processing",
+      "classification": "implementer edit"
+    }
+  ],
+  "ImplementerFixes": [
+    "F-R4-01",
+    "F-R4-02",
+    "F-R4-03",
+    "F-R4-04",
+    "F-R4-05",
+    "F-R4-06",
+    "F-R4-07"
+  ],
+  "OperatorDecisionFails": [],
+  "OperatorDecisionConditional": [
+    "F-R4-04: only if weakening D2 to latest-delivered/manual override",
+    "F-R4-05: only if accepting duplicates from a non-removable policy hook",
+    "F-R4-02: only if allowing open turns after one blocked Stop"
+  ],
+  "ReviewerSessionId": "Codex-20261009T175232Z-gpt-6-sol",
+  "ReviewerRequestId": "req-20261009T175235Z-plan-readiness-r4",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r4-20261009T174055Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r4-20261009T174055Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T174055Z-plan-readiness-r4.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T174055Z-plan-readiness-r4.response.jsonl"
+  ],
+  "MarkdownSha256": "a34470bef41b3c0dd35899ce2ea249cd1df18aee818d0e1be4b8e5755458e50c",
+  "PersistenceProof": "Read-only client.SessionLog.QueryAsync returned session Codex-20261009T175232Z-gpt-6-sol, request req-20261009T175235Z-plan-readiness-r4, with eight ordered observation dialog parts whose concatenated 15886 characters exactly equal the UTF-8 Markdown receipt; both appendDialog calls returned persisted:true; final read-only query returned status=completed, eight parts exact, six actions"
+}

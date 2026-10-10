@@ -7,7 +7,7 @@ Paste the prompt below directly into Canva's AI website generator (Magic Design 
 ## Prompt
 
 ```
-Create a professional developer-tool marketing website for a product called McpServer with the following structure, content, and style.
+Create a professional developer-tool marketing website for a product called QBrainAi with the following structure, content, and style.
 
 ---
 
@@ -27,13 +27,13 @@ SECTION 1 — HERO (dark background)
 
 Headline: "Your AI Agents, Finally Coordinated."
 
-Subheadline: "McpServer is a self-hosted context server that gives AI coding agents persistent memory, shared workspace state, and structured task management — using the open Model Context Protocol standard."
+Subheadline: "QBrainAi is a self-hosted context server that gives AI coding agents persistent memory, shared workspace state, and structured task management — using the open Model Context Protocol standard."
 
 Two buttons:
 - Primary (filled blue): "Get Started on GitHub →"
 - Secondary (outlined): "View Documentation"
 
-Visual: A clean architecture diagram showing three AI agent boxes (GitHub Copilot, Cursor, Codex) with arrows pointing down into a central "McpServer" box, which has an arrow pointing down into a "Your Workspace" box (Source Code, Docs, TODOs, GitHub Issues). Use a dark-themed diagram with blue connectors.
+Visual: A clean architecture diagram showing three AI agent boxes (GitHub Copilot, Cursor, Codex) with arrows pointing down into a central "QBrainAi" box, which has an arrow pointing down into a "Your Workspace" box (Source Code, Docs, TODOs, GitHub Issues). Use a dark-themed diagram with blue connectors.
 
 ---
 
@@ -66,7 +66,7 @@ Small label: "THE SOLUTION"
 
 Headline: "One Server. All Agents. One Truth."
 
-Body text: "McpServer runs locally alongside your codebase. It gives every connected agent the same view: your todos, your session history, your code — semantically searchable, always current. Agents coordinate through McpServer instead of working in isolation. Every decision is logged. Every action is audited. Context is retrieved, not hallucinated."
+Body text: "QBrainAi runs locally alongside your codebase. It gives every connected agent the same view: your todos, your session history, your code — semantically searchable, always current. Agents coordinate through QBrainAi instead of working in isolation. Every decision is logged. Every action is audited. Context is retrieved, not hallucinated."
 
 Visual: Dashboard screenshot placeholder (use a mockup of a clean dark-themed web admin panel with a sidebar and data tables).
 
@@ -125,7 +125,7 @@ Tool 1 — browser/dashboard icon
 
 Tool 2 — terminal/command icon
   Name: "Director CLI"
-  Text: "dotnet tool install --global SharpNinja.McpServer.Director"
+  Text: "dotnet tool install --global SharpNinja.QBrainAi.Director"
 
 Tool 3 — terminal/TUI icon
   Name: "Director TUI"
@@ -137,7 +137,7 @@ Tool 4 — puzzle piece / VS Code icon
 
 Tool 5 — NuGet / package icon
   Name: "Client NuGet"
-  Text: "SharpNinja.McpServer.Client — typed C# client for all endpoints."
+  Text: "QBrainAI.Client — typed C# client for all endpoints."
 
 Tool 6 — plug / MCP icon
   Name: "MCP STDIO / HTTP"
@@ -153,10 +153,10 @@ Headline: "Simple by design. Powerful at scale."
 
 Center a clean architecture diagram with three layers:
 Top layer: four boxes labeled "GitHub Copilot", "Cursor", "Codex", "Claude / Custom Agent" — connected by downward arrows to middle layer
-Middle layer: single large box labeled "McpServer" with sub-labels: "Context Search | TODO API | Session Log | GitHub Sync | GraphRAG | Requirements"
+Middle layer: single large box labeled "QBrainAi" with sub-labels: "Context Search | TODO API | Session Log | GitHub Sync | GraphRAG | Requirements"
 Bottom layer: single box labeled "Your Workspace" with sub-labels: "Source Code · Docs · TODOs · GitHub Issues"
 
-Caption below: "McpServer sits between your AI agents and your workspace. Agents read from it and write to it. Your workspace stays as the source of truth."
+Caption below: "QBrainAi sits between your AI agents and your workspace. Agents read from it and write to it. Your workspace stays as the source of truth."
 
 ---
 
@@ -170,12 +170,12 @@ Three numbered steps displayed side by side:
 
 Step 1 — "Build"
 Code block (dark background, monospace font):
-dotnet restore McpServer.sln
-dotnet build McpServer.sln -c Staging
+dotnet restore QBrainAi.sln
+dotnet build QBrainAi.sln -c Staging
 
 Step 2 — "Run"
 Code block:
-.\scripts\Start-McpServer.ps1 -Configuration Staging
+.\scripts\Start-QBrainAi.ps1 -Configuration Staging
 
 Step 3 — "Connect"
 Code block:
@@ -187,7 +187,7 @@ Button below: "View Full Documentation →" (filled blue)
 
 SECTION 8 — FOOTER (very dark background)
 
-Tagline: "McpServer — Context intelligence for AI-assisted development."
+Tagline: "QBrainAi — Context intelligence for AI-assisted development."
 
 Four footer link groups:
 Group 1 — "Project": GitHub Repository, Documentation, Changelog

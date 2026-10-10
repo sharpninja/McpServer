@@ -1,12 +1,12 @@
 # aiUnit Review: project
 
 - Run-log: `aiunit-review-project-20260622T161011.356Z.json`
-- Source: `F:\GitHub\McpServer\artifacts\aiunit-project-review\aiunit-review-project-20260622T161011.356Z.json`
+- Source: `F:\GitHub\QBrainAi\artifacts\aiunit-project-review\aiunit-review-project-20260622T161011.356Z.json`
 
 ## Prompt
 
 ```text
-Perform a full project review of the McpServer implementation focusing on the recent addition of --agent parameter support for REPL and plugins.
+Perform a full project review of the QBrainAi implementation focusing on the recent addition of --agent parameter support for REPL and plugins.
 
 Review:
 - CLI changes in Repl.Host
@@ -21,5 +21,5 @@ Provide structured findings with severity etc.
 ## Response
 
 ```json
-{"schemaVersion":"aiunit.review.findings.v1","reviewType":"project","status":"error","summary":"SessionEnd hook [bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-end.sh] failed: Hook cancelled\n","reviewedScope":"Full McpServer","agent":{"name":"cli","model":"claude-sonnet-4-6"},"findings":[]}
+{"schemaVersion":"aiunit.review.findings.v1","reviewType":"project","status":"error","summary":"SessionEnd hook [bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-end.sh] failed: Hook cancelled\n","reviewedScope":"Full QBrainAi","agent":{"name":"cli","model":"claude-sonnet-4-6"},"findings":[]}
 ```

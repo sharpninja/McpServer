@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
       "workspacePath": {
-        "description": "Workspace path for the current task. MCP Server-related bugs may route to the registered McpServer workspace.",
+        "description": "Workspace path for the current task. QBrain.AI-related bugs may route to the registered QBrainAi workspace.",
         "type": "string"
       },
       "title": {

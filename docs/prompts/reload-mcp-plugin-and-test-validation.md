@@ -1,34 +1,34 @@
-# Prompt: Reload McpServer Plugin and Run Server-Truth Validation (Claude Desktop / Codex Desktop)
+# Prompt: Reload QBrainAi Plugin and Run Server-Truth Validation (Claude Desktop / Codex Desktop)
 
 Copy the block below and paste it into a fresh conversation in **Claude Desktop** or **Codex Desktop**.
 
 ---
 
-You are now running inside **Claude Desktop** (or **Codex Desktop**) with the McpServer plugin.
+You are now running inside **Claude Desktop** (or **Codex Desktop**) with the QBrainAi plugin.
 
-The McpServer core (in F:\GitHub\McpServer) has been updated with fixes for the REPL shims. All envelopes are now built as proper objects and serialized (JSON in the node transport, object + ConvertTo-Json in PowerShell, object + JSON.stringify via node in the bash shim). This eliminates previous "Malformed YAML envelope" / `invalid_envelope` errors on rich sessionlog payloads.
+The QBrainAi core (in F:\GitHub\QBrainAi) has been updated with fixes for the REPL shims. All envelopes are now built as proper objects and serialized (JSON in the node transport, object + ConvertTo-Json in PowerShell, object + JSON.stringify via node in the bash shim). This eliminates previous "Malformed YAML envelope" / `invalid_envelope` errors on rich sessionlog payloads.
 
 ### 1. Reload the plugin (required first step)
 Perform a full reload so the desktop app picks up the new shim code:
 
 - **Claude Desktop**:
   - Completely quit and restart Claude Desktop.
-  - If the McpServer plugin exposes a reload command, status script, or "reload extensions" option, run it.
+  - If the QBrainAi plugin exposes a reload command, status script, or "reload extensions" option, run it.
   - Confirm you are now using the updated version from your local plugin checkout (typically F:\GitHub\mcpserver-claude-code-plugin or equivalent).
 
 - **Codex Desktop**:
   - Completely quit and restart Codex.
-  - Use any plugin reload / refresh mechanism available in Codex settings or the McpServer plugin panel.
+  - Use any plugin reload / refresh mechanism available in Codex settings or the QBrainAi plugin panel.
   - Confirm the plugin is now using the updated core from your local checkout (F:\GitHub\mcpserver-codex-plugin or equivalent).
 
-After reload, run a quick health or status check using the McpServer tools to verify the plugin is active and using the new object+JSON envelope code.
+After reload, run a quick health or status check using the QBrainAi tools to verify the plugin is active and using the new object+JSON envelope code.
 
 ### 2. Run the server-truth validation in your workspace
-Switch to (or confirm you are in) a registered McpServer workspace that has an `AGENTS-README-FIRST.yaml` (recommended: F:\GitHub\vice-sharp).
+Switch to (or confirm you are in) a registered QBrainAi workspace that has an `AGENTS-README-FIRST.yaml` (recommended: F:\GitHub\vice-sharp).
 
 Read the `AGENTS-README-FIRST.yaml` now.
 
-**Use only the official plugin shims** for mutations (`workflow.sessionlog.*` or the equivalent McpServer session tools). Do **not** use raw REST for `appendActions` or `completeTurn`.
+**Use only the official plugin shims** for mutations (`workflow.sessionlog.*` or the equivalent QBrainAi session tools). Do **not** use raw REST for `appendActions` or `completeTurn`.
 
 **Test case (exact payloads):**
 
@@ -70,7 +70,7 @@ response: |
    - Use your normal session query tool (`workflow.sessionlog.queryHistory`, `getHistory`, or equivalent).
    - Also run (or output the exact authenticated command for) a direct GET:
      ```
-     GET {baseUrl}/mcpserver/sessionlog?agent={your-sourceType}&sessionId={sessionId}&limit=5
+     GET {baseUrl}/qbrainai/sessionlog?agent={your-sourceType}&sessionId={sessionId}&limit=5
      Headers:
        X-Api-Key: {apiKey}
        X-Workspace-Path: {workspacePath}

@@ -1,5 +1,5 @@
 /**
- * Public entry for @sharpninja/mcpserver-agent-core
+ * Public entry for @qbrainai/qbrain-ai-agent-core
  * Phase 2 Core Package Integration wave - cache integrated
  */
 export * from './marker-trust.js';

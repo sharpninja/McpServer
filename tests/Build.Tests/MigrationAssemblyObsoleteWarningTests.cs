@@ -20,21 +20,21 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
     [
         new(
             "SQLite",
-            Path.Combine("src", "McpServer.Storage.SqliteMigrations", "McpServer.Storage.SqliteMigrations.csproj"),
-            Path.Combine("src", "McpServer.Storage.SqliteMigrations"),
+            Path.Combine("src", "QBrainAi.Storage.SqliteMigrations", "QBrainAi.Storage.SqliteMigrations.csproj"),
+            Path.Combine("src", "QBrainAi.Storage.SqliteMigrations"),
             []),
         new(
             "SQL Server",
-            Path.Combine("src", "McpServer.Storage.SqlServerMigrations", "McpServer.Storage.SqlServerMigrations.csproj"),
-            Path.Combine("src", "McpServer.Storage.SqlServerMigrations"),
+            Path.Combine("src", "QBrainAi.Storage.SqlServerMigrations", "QBrainAi.Storage.SqlServerMigrations.csproj"),
+            Path.Combine("src", "QBrainAi.Storage.SqlServerMigrations"),
             [
                 "SqlServerModelBuilderExtensions.UseIdentityColumns",
                 "SqlServerPropertyBuilderExtensions.UseIdentityColumn",
             ]),
         new(
             "PostgreSQL",
-            Path.Combine("src", "McpServer.Storage.PostgreSqlMigrations", "McpServer.Storage.PostgreSqlMigrations.csproj"),
-            Path.Combine("src", "McpServer.Storage.PostgreSqlMigrations"),
+            Path.Combine("src", "QBrainAi.Storage.PostgreSqlMigrations", "QBrainAi.Storage.PostgreSqlMigrations.csproj"),
+            Path.Combine("src", "QBrainAi.Storage.PostgreSqlMigrations"),
             [
                 "NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns",
                 "NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn",
@@ -164,7 +164,7 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }
@@ -172,7 +172,7 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
             directory = directory.Parent;
         }
 
-        throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
+        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
     }
 
     [GeneratedRegex(@"\b[A-Za-z0-9_]+Extensions\.[A-Za-z0-9_]+", RegexOptions.CultureInvariant)]

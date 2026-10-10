@@ -1,4 +1,4 @@
-# McpServer — Website Copy (Canva)
+# QBrainAi — Website Copy (Canva)
 
 Each section maps to a Canva website block.
 
@@ -8,7 +8,7 @@ Each section maps to a Canva website block.
 
 **Headline:** Your AI Agents, Finally Coordinated.
 
-**Subheadline:** McpServer is a self-hosted context server that gives AI coding agents persistent memory, shared workspace state, and structured task management — using the open Model Context Protocol standard.
+**Subheadline:** QBrainAi is a self-hosted context server that gives AI coding agents persistent memory, shared workspace state, and structured task management — using the open Model Context Protocol standard.
 
 **CTA Button:** Get Started on GitHub → https://github.com/sharpninja/McpServer
 **Secondary link:** View Documentation
@@ -33,7 +33,7 @@ Each section maps to a Canva website block.
 
 **Label:** THE SOLUTION
 **Headline:** One Server. All Agents. One Truth.
-**Body:** McpServer runs locally alongside your codebase. It gives every connected agent the same view: your todos, your session history, your code — semantically searchable, always current. Agents coordinate through McpServer instead of working in isolation. Every decision is logged. Every action is audited. Context is retrieved, not hallucinated.
+**Body:** QBrainAi runs locally alongside your codebase. It gives every connected agent the same view: your todos, your session history, your code — semantically searchable, always current. Agents coordinate through QBrainAi instead of working in isolation. Every decision is logged. Every action is audited. Context is retrieved, not hallucinated.
 
 **Feature map:** ![Features Overview](diagrams/features.png)
 
@@ -65,10 +65,10 @@ Each section maps to a Canva website block.
 **UI Tooling Diagram:** ![UI Tooling](diagrams/ui-tooling.png)
 
 **Tool 1 — Blazor Web UI:** Full browser-based dashboard. Todos, sessions, agents, templates, context search. GitHub Primer CSS.
-**Tool 2 — Director CLI:** `dotnet tool install --global SharpNinja.McpServer.Director` — https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
+**Tool 2 — Director CLI:** `dotnet tool install --global SharpNinja.QBrainAi.Director` — https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 **Tool 3 — Director TUI:** `director ui` — full terminal UI. Role-filtered tabs, keyboard navigation, auto-refresh. Works over SSH.
 **Tool 4 — VS / VS Code Extension:** VSIX extension. Browse and update todos without leaving your editor.
-**Tool 5 — Client docs:** `dotnet add package SharpNinja.McpServer.Client` — https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
+**Tool 5 — Client docs:** `dotnet add package QBrainAI.Client` — https://github.com/sharpninja/McpServer/blob/develop/src/QBrainAi.Client/README.md
 **Tool 6 — MCP STDIO / HTTP:** Native MCP transport. Connect GitHub Copilot, Cursor, Codex, or Claude with zero custom code.
 
 ---
@@ -79,7 +79,7 @@ Each section maps to a Canva website block.
 **Headline:** Simple by design. Powerful at scale.
 
 **Diagram:** ![Architecture](diagrams/architecture.png)
-**Caption:** McpServer sits between your AI agents and your workspace. Agents read from it and write to it. Your workspace stays as the source of truth.
+**Caption:** QBrainAi sits between your AI agents and your workspace. Agents read from it and write to it. Your workspace stays as the source of truth.
 
 ---
 
@@ -88,11 +88,11 @@ Each section maps to a Canva website block.
 **Label:** GET STARTED
 **Headline:** Running in under two minutes.
 
-Step 1: `dotnet restore McpServer.sln && dotnet build McpServer.sln -c Staging`
-Step 2: `.\scripts\Start-McpServer.ps1 -Configuration Staging`
+Step 1: `dotnet restore QBrainAi.sln && dotnet build QBrainAi.sln -c Staging`
+Step 2: `.\scripts\Start-QBrainAi.ps1 -Configuration Staging`
 Step 3: Open `http://localhost:7147/swagger`
 
-Or install Director: `dotnet tool install --global SharpNinja.McpServer.Director && director health`
+Or install Director: `dotnet tool install --global SharpNinja.QBrainAi.Director && director health`
 
 **CTA:** View Full Documentation → https://github.com/sharpninja/McpServer
 
@@ -100,10 +100,10 @@ Or install Director: `dotnet tool install --global SharpNinja.McpServer.Director
 
 ## Section 8 — Footer
 
-**Tagline:** McpServer — Context intelligence for AI-assisted development.
+**Tagline:** QBrainAi — Context intelligence for AI-assisted development.
 
 - GitHub Repository → https://github.com/sharpninja/McpServer
-- Client docs → https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
+- Client docs → https://github.com/sharpninja/McpServer/blob/develop/src/QBrainAi.Client/README.md
 - Director docs → https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 - Swagger UI → http://localhost:7147/swagger
 - MCP Spec → https://modelcontextprotocol.io

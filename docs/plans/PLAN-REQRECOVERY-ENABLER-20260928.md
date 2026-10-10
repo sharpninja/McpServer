@@ -1,6 +1,6 @@
 # PLAN-REQRECOVERY-ENABLER-20260928
 
-McpServer enabler plan. ViceSharp requirements apply stays out of scope.
+QBrainAi enabler plan. ViceSharp requirements apply stays out of scope.
 
 ## Slice 1 — Dense session-log graph load
 
@@ -12,7 +12,7 @@ Proof: `SessionLogDenseGraphTests` and `SessionLogSubmitBudgetTests`.
 
 `FR-MCP-REQRECOVERY-001`, `TR-MCP-REQRECOVERY-001`, and `TEST-MCP-REQRECOVERY-001`.
 
-- REST `POST /mcpserver/requirements/recovery` with `mode` `dry-run` or `apply`, and `GET /mcpserver/requirements/recovery/{idempotencyKey}`.
+- REST `POST /qbrainai/requirements/recovery` with `mode` `dry-run` or `apply`, and `GET /qbrainai/requirements/recovery/{idempotencyKey}`.
 - REPL `workflow.requirements.planRecovery`, `applyRecovery`, and `getRecovery`.
 - `RequirementsRecoveryRunEntity` primary key `(WorkspaceId, IdempotencyKey)`.
 - Forward migrations `20260929020000_AddRequirementsRecoveryRuns` on SQLite, SQL Server, and PostgreSQL.
@@ -29,7 +29,7 @@ Proof: `RequirementsRecoveryTests`, `RequirementsRecoveryControllerTests`, `Requ
 
 This cloud checkout's parent directory is `/`. None of the eight `mcpserver-*-plugin` repositories are present there, so SyncAgentPlugins has no sibling root to update. Those repositories are outside this repo and were not cloned or edited. The Nuke target invokes `pwsh.exe`; this VM has `pwsh`, and the same script and wrapper files were run with `pwsh`.
 
-`dotnet test tests/McpServer.PluginIntegration.Tests --filter PluginInt=Deterministic` compiled and ran: 13 passed, 81 failed, 0 skipped. Failures throw `Plugin repository root is missing: mcpserver-codex-plugin` from `PluginSessionLogCatalog.LoadAndValidate` before a host scenario runs. `PluginInt=AI` was not run. It needs `aiunit-grok-json.cmd` for the grok-build strategy in `appsettings.aiunit.json`, and that command is not on this VM. Native plugin suite receipts are absent for the same reason.
+`dotnet test tests/QBrainAi.PluginIntegration.Tests --filter PluginInt=Deterministic` compiled and ran: 13 passed, 81 failed, 0 skipped. Failures throw `Plugin repository root is missing: mcpserver-codex-plugin` from `PluginSessionLogCatalog.LoadAndValidate` before a host scenario runs. `PluginInt=AI` was not run. It needs `aiunit-grok-json.cmd` for the grok-build strategy in `appsettings.aiunit.json`, and that command is not on this VM. Native plugin suite receipts are absent for the same reason.
 
 ## Slice 4 — Operator deploy checklist
 
@@ -52,7 +52,7 @@ pwsh -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 Post-deploy proof on the live host, after `/health` succeeds:
 
 1. Dense session-log mutation. Submit or begin/complete a turn on a session that already has actions and tags. The call finishes without the previous 40–45 second cartesian load, and a failed load returns retryable HTTP 503 `backend_unavailable` instead of an empty session.
-2. Recovery dry-run. `POST /mcpserver/requirements/recovery` with `mode: dry-run`, a new idempotency key, and one valid item. The response status is `planned`. `GET /mcpserver/requirements/recovery/{idempotencyKey}` returns 404. Requirement rows are unchanged.
+2. Recovery dry-run. `POST /qbrainai/requirements/recovery` with `mode: dry-run`, a new idempotency key, and one valid item. The response status is `planned`. `GET /qbrainai/requirements/recovery/{idempotencyKey}` returns 404. Requirement rows are unchanged.
 3. Optional apply proof. Repeat with `mode: apply`. A second apply of the same body returns `replay: true`. A second apply with a different body returns 409 and leaves the first rows in place.
 
 ## Slice 5 — ViceSharp requirements apply

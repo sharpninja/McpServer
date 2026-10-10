@@ -1,0 +1,951 @@
+{
+  "TimestampUtc": "2026-10-02T20:56:27.1009522+00:00",
+  "Head": "e755378cdc5d7d3a73471bcebf6874801ed3be80",
+  "TrackedStatus": [
+    " \u001b[31mM\u001b[m .nuke/build.schema.json",
+    " \u001b[31mM\u001b[m docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " \u001b[31mM\u001b[m docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "SourceMismatch": [],
+  "ReportMismatch": [],
+  "HistoryMismatch": [],
+  "NativeTotal": 4298.0,
+  "CompiledGate": {
+    "status": "ACCEPTED",
+    "method": "SessionLifeUnitGateValidator.Validate",
+    "artifactMutation": false,
+    "note": "Direct compiled-validator invocation on existing normalized reports; not a fresh test-suite run."
+  },
+  "GateLogSha256": "803C34F0CD9B615E53CF23DD661F2669C59F60FF8BE3F4E51E4C0A77512A507F",
+  "PluginIntegrationTestRunLines": 0,
+  "TipChangedFiles": [
+    "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
+    "tests/McpServer.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs"
+  ],
+  "LivePR": {
+    "url": "https://github.com/sharpninja/McpServer/pull/72",
+    "number": 72,
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "head": "cursor/sessionlife-p2-contracts-5cb2",
+    "head_sha": "e755378cdc5d7d3a73471bcebf6874801ed3be80",
+    "base": "develop",
+    "base_sha": "16dff4d6675d6324c19949864a4fed01ad973cb0",
+    "updated_at": "2026-10-02T20:07:54Z",
+    "body": "<!-- CURSOR_AGENT_PR_BODY_BEGIN -->\n## Status\n\nDraft. Unmerged. This update only reconciles the branch onto current `origin/develop`. It does not claim P2 exit, HV AGREE, or TODO closure. All 35 SessionLife TODOs stay open. P3-P7 are not started. `history-r1` is unchanged.\n\nMerge commit `987cd8f39610c9fa301862e3b1d526d23e049469` has parents `ae427482309f7cf465f1dd05c3564f1573b652b1` (previous branch tip) and `16dff4d6675d6324c19949864a4fed01ad973cb0` (`origin/develop`). The branch is 0 behind develop and 51 ahead. Product tip `9a4d8ad9daa72e8e03b62d05bec72ff9b905ca10` and receipts tip `106d4e358bb58bccb5ba87cd60a5bd8598b754e5` remain ancestors.\n\nRebase was not used. It stopped at `af52ca32` with 21 conflicts in `plugins/core/lib-ps/repl-invoke.ps1`, and nine later commits also edit that file. A merge keeps the unit-gate and HV receipt history reachable.\n\n## Conflict resolution\n\n- `repl-invoke.ps1`, the requirements projections, and the QBAgent trim inventory follow develop's unit-failure repair. HV19 and HV20 ordinal checks are present in that develop text.\n- SessionLife P2 fixtures keep the HV15 marker helper and optional `PlanFile`/`TodoId` mocks. They also take develop's typed receipt doubles and the drain-enabled lock test.\n- `acceptance-manifest.json`, `SessionLogP2Contracts.Tests.ps1`, the PR72 handoff, and the 20261001T113858Z HV receipt are unchanged from the previous tip.\n- Frozen `history-manifest.json` SHA-256 remains `B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4`.\n\n## Verification in this reconcile\n\nPowerShell parser only, on the five touched `.ps1` files: 0 parse errors. No unit gate, no Pester run, no Nuke test, no Astra review.\n\n## Last HV still stands\n\nAstra `20261001T113858Z` on product tip `9a4d8ad9` remains DISAGREE. Accuracy 99. Completeness 97. Claims 15 PASS / 4 FAIL / 2 UNKNOWN. This merge does not clear those FAILs:\n\n- A1 / HV07: core and governing legacy AC mappings are incomplete.\n- A6 / HV09: completeness 97 is below 98.\n- C2 / HV07: raw metadata and invalid-artifact tests are not mapped. Eight legacy rows remain proposed-only.\n- D1: holistic P2 acceptance is blocked by traceability, sub-98 completeness, and B7/B8 UNKNOWN.\n\nReceipt: `docs/handoffs/sessionlife-p2-contracts-pr72-20261001T113858Z.md`.\n\n## Not in this change\n\nNo merge of this PR. No failsafe deletes. No CI investigation. No deployment. No API-key rotation.\n<!-- CURSOR_AGENT_PR_BODY_END -->\n\n<div><a href=\"https://cursor.com/agents/bc-da49bc5f-8067-5a17-8ec6-7e0aba275cb2?cursor_ref=pr_footer&cursor_cta=open_in_web\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cursor.com/assets/images/open-in-web-dark.png\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://cursor.com/assets/images/open-in-web-light.png\"><img alt=\"Open in Web\" width=\"114\" height=\"28\" src=\"https://cursor.com/assets/images/open-in-web-dark.png\"></picture></a>&nbsp;<a href=\"https://cursor.com/background-agent?bcId=bc-da49bc5f-8067-5a17-8ec6-7e0aba275cb2&cursor_ref=pr_footer&cursor_cta=open_in_cursor\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cursor.com/assets/images/open-in-cursor-dark.png\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://cursor.com/assets/images/open-in-cursor-light.png\"><img alt=\"Open in Cursor\" width=\"131\" height=\"28\" src=\"https://cursor.com/assets/images/open-in-cursor-dark.png\"></picture></a>&nbsp;</div>\n\n"
+  },
+  "IdentityAssertions": [
+    {
+      "name": "updateTurn-exact",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 0,
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      }
+    },
+    {
+      "name": "updateTurn-case-session",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml'."
+      }
+    },
+    {
+      "name": "updateTurn-case-request",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml'."
+      }
+    },
+    {
+      "name": "updateTurn-wrong-request",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml'."
+      }
+    },
+    {
+      "name": "appendActions-exact",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 0,
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.appendActions",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      }
+    },
+    {
+      "name": "appendActions-case-session",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.appendActions",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml'."
+      }
+    },
+    {
+      "name": "appendActions-case-request",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.appendActions",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml'."
+      }
+    },
+    {
+      "name": "appendActions-wrong-request",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.appendActions",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml'."
+      }
+    },
+    {
+      "name": "completeTurn-exact",
+      "pass": true,
+      "calls": 2,
+      "queueCount": 0,
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.completeTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      }
+    },
+    {
+      "name": "completeTurn-case-session",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.completeTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml'."
+      }
+    },
+    {
+      "name": "completeTurn-case-request",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.completeTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml'."
+      }
+    },
+    {
+      "name": "completeTurn-wrong-request",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.completeTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml'."
+      }
+    },
+    {
+      "name": "failTurn-exact",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 0,
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.failTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      }
+    },
+    {
+      "name": "failTurn-case-session",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.failTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml'."
+      }
+    },
+    {
+      "name": "failTurn-case-request",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.failTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml'."
+      }
+    },
+    {
+      "name": "failTurn-wrong-request",
+      "pass": true,
+      "calls": 1,
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.failTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml",
+        "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml'.",
+        "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml'."
+      }
+    },
+    {
+      "name": "begin-case-request-server-reject",
+      "pass": true,
+      "calls": 0,
+      "queueCount": 0,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+        "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+      }
+    },
+    {
+      "name": "begin-case-session-server-reject",
+      "pass": true,
+      "calls": 0,
+      "queueCount": 0,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+        "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+      }
+    }
+  ],
+  "RelevantNativeTests": [
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateReportFile)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MissingExitCode)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NegativeTrxCounter)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_DelegatesExactRequestExactlyOnce",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunCommandResults)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MalformedExitCode)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterReport)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: Missing)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: IncompleteTrxOutcome)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunSourceManifest)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingInventory)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: InconclusivePesterTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: NonZero)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterNativeCounter)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolPathDrift)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StaleBuildTestsReport)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterBlocks)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NonPassingBuildTestsReport)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: SkippedPesterTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: FailedTrxTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: AddedIncludedSource)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: Missing)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingTrxCounter)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DeletedIncludedSource)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ScopeMismatch)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleProjectReport)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalSkippedTrxTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MissingExitCode)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InconsistentTrxCounters)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: Missing)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_RejectsMissingRepeatedCopiedOrWrongTargetCall",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MissingExitCode)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterContainers)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MissingExitCode)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NotExecutedTrxTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: NonZero)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateProject)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterNativeResult)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NotRunPesterTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ProjectReportMismatch)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: Missing)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolVersionDrift)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: EditedIncludedSource)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunId)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MalformedTrxCounter)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MalformedExitCode)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterReport)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolByteHashDrift)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleInventory)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: NonZero)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MalformedExitCode)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MalformedExitCode)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingBuildTestsReport)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ZeroDiscoveredTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InvalidTrxTimes)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingProjectReport)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: NonZero)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalAdverseTrxTests)",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ImportMissingFields_ExtractsFromTurnText",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_LowercaseNone_ThrowsArgumentException",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_CanonicalTodoAndIssueId_Succeed",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullPlanFile_ThrowsArgumentException",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_CanceledStatus_RoundTrips(status: \"canceled\")",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.QueryAsync_TurnStatusInProgressAndStaleOlderThanHours_ReturnsOnlyStaleOpenTurns",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.ReplaceTurnAsync_OmittingFields_Throws",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_OmittedTodoIdEmpty_ThrowsArgumentException",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_IdenticalActions_DoesNotDuplicate",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateIfSupplied_BothNull_Succeeds",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithValidValues_RoundTripsOnGet",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_ExactWindowsPlan_Succeeds",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_CanceledStatus_RoundTrips(status: \"cancelled\")",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_HomeRelativePlan_ExpandsAndSucceeds",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_TextMatchesPlanFileOnly_ReturnsSession",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_FilterByTodoId_ReturnsOnlyMatches",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_ParentSegmentPlan_ThrowsArgumentException",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnSupplyingNewTodo_UpdatesTodoId",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_FilterByExactPlanFile_ReturnsOnlyMatches",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.ReplaceTurnAsync_MissingRequestId_ThrowsNotFound",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_ValidPlanAndTodo_Succeeds_AndNormalizesSlashes",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_FrIdAsTodo_ThrowsArgumentException",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.UpsertTurnAsync_OmittedPlanFileTodoId_WritesNoneAndCanceled",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateIfSupplied_InvalidWhenPresent_Throws",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_WhitespacePlanFile_ThrowsArgumentException",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    },
+    {
+      "name": "McpServer.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_SessionTags_RoundTrip",
+      "outcome": "Passed",
+      "report": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx"
+    }
+  ],
+  "LiveLegacyTextDifferences": [
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-001",
+      "manifest": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.",
+      "live": "Round-trip planFile/todoId on persist and get."
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+      "manifest": "When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).",
+      "live": "None sentinel persists and is never rewritten to null."
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+      "manifest": "The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId and insert no turn row. A canceled or cancelled supersession may omit the pair, stores the exact sentinel None for each missing value, and a durable reopen preserves that bounded exception.",
+      "live": "New persist without fields is rejected."
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+      "manifest": "planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.",
+      "live": "Relative, exact, and ~/ plan paths are accepted; .. is rejected."
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+      "manifest": "Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.",
+      "live": "Query filter and text search match planFile and todoId."
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+      "manifest": "Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.",
+      "live": "Backfill upgrades None from turn contents and ~ history."
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+      "manifest": "Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.",
+      "live": "Import/ingest/federation persist a validated pair, never null."
+    }
+  ],
+  "MetadataModelProof": [
+    {
+      "line": 1,
+      "type": "session_meta",
+      "timestamp": "2026-10-02T20:35:11.197Z",
+      "id": "01a0fe53-f1db-7fa0-b5ca-638e18e966aa",
+      "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2",
+      "originator": "codex_exec",
+      "cli_version": "0.159.3"
+    },
+    {
+      "line": 8,
+      "type": "turn_context",
+      "timestamp": "2026-10-02T20:35:13.003Z",
+      "turn_id": "01a0fe53-f7f7-7912-9247-9f8b2335d30f",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+    }
+  ],
+  "CriticalSources": [
+    {
+      "path": "docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json",
+      "length": 476410,
+      "sha256": "5085BE4BC1244A4BD33E2142A17470F80C0D11811368AC7D383F2DDE6946CD7C",
+      "provenance": "tracked-or-relevant-untracked"
+    },
+    {
+      "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+      "length": 23985,
+      "sha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375",
+      "provenance": "tracked-or-relevant-untracked"
+    },
+    {
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "length": 62903,
+      "sha256": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "provenance": "tracked-or-relevant-untracked"
+    },
+    {
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "length": 153980,
+      "sha256": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+      "provenance": "tracked-or-relevant-untracked"
+    },
+    {
+      "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+      "length": 19523,
+      "sha256": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+      "provenance": "tracked-or-relevant-untracked"
+    }
+  ]
+}

@@ -15,7 +15,7 @@
  * re-exports nothing brain-slot shaped.
  */
 import * as coreIndex from '../src/index.js';
-import { createMcpServerPluginCore, allToolDescriptors } from '../src/index.js';
+import { createQBrainAiPluginCore, allToolDescriptors } from '../src/index.js';
 import type { ReplBridge, ReplResponse } from '../src/transport/repl-bridge.js';
 
 /** Minimal in-memory ReplBridge stand-in: records calls, never touches a transport. */
@@ -51,11 +51,11 @@ const removedBrainSlotToolNames = [
 ];
 
 function newCore(fake: FakeBridge) {
-  return createMcpServerPluginCore({
+  return createQBrainAiPluginCore({
     agentName: 'Cline',
     pluginId: 'cline-v2',
     bridge: fake as unknown as ReplBridge,
-    workspacePath: 'F:\\GitHub\\McpServer',
+    workspacePath: 'F:\\GitHub\\QBrainAi',
     autoBootstrap: false,
     autoFlushCache: false,
   });
@@ -81,7 +81,7 @@ describe('QuadBrain absence in the shared plugin core', () => {
       const fake = new FakeBridge();
       const context = newCore(fake);
       await expect(
-        context.dispatchTool(name, { workspacePath: 'F:\\GitHub\\McpServer' }),
+        context.dispatchTool(name, { workspacePath: 'F:\\GitHub\\QBrainAi' }),
       ).rejects.toThrow(new RegExp(`Unknown tool: ${name}`));
       // Nothing reached the transport: the name is not routed anywhere.
       expect(fake.calls).toEqual([]);

@@ -218,7 +218,7 @@ cache_scope_session_state_file() {
 
 # =============================================================================
 # V4 parity: base64url workspace key + .mcpServer/failsafe layout
-# Matches V4CacheManager.GetScopedCachePath in @sharpninja/mcpserver-agent-core
+# Matches V4CacheManager.GetScopedCachePath in @qbrainai/qbrain-ai-agent-core
 # TR-MCP-AGENT-PARITY-013: cache scoped by workspace key (Base64URL) + agentId
 # =============================================================================
 

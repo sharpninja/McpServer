@@ -66,7 +66,7 @@ public sealed class SyncAgentPluginsVendorNameTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
                 return directory.FullName;
             directory = directory.Parent;
         }

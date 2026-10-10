@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sets up a Keycloak realm for McpServer with OIDC clients and GitHub Identity Provider.
+# Sets up a Keycloak realm for QBrainAi with OIDC clients and GitHub Identity Provider.
 # Reusable for deb/MSIX installation workflows.
 #
 # Usage:
@@ -27,7 +27,7 @@ while [[ $# -gt 0 ]]; do
         --realm)              REALM_NAME="$2"; shift 2 ;;
         --github-client-id|--GitHubClientId)   GITHUB_CLIENT_ID="$2"; shift 2 ;;
         --github-client-secret|--GitHubClientSecret) GITHUB_CLIENT_SECRET="$2"; shift 2 ;;
-        --mcp-server-url)     MCP_SERVER_URL="$2"; shift 2 ;;
+        --qbrain-ai-url)     MCP_SERVER_URL="$2"; shift 2 ;;
         -h|--help)
             echo "Usage: $0 [options]"
             echo "  --keycloak-url URL        Keycloak base URL (default: http://localhost:8080)"
@@ -36,7 +36,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --realm NAME              Realm name (default: mcpserver)"
             echo "  --github-client-id ID     GitHub OAuth App Client ID (alias: --GitHubClientId)"
             echo "  --github-client-secret S  GitHub OAuth App Client Secret (alias: --GitHubClientSecret)"
-            echo "  --mcp-server-url URL      MCP Server URL (default: http://localhost:7147)"
+            echo "  --qbrain-ai-url URL      QBrain.AI URL (default: http://localhost:7147)"
             exit 0
             ;;
         *) echo "Unknown option: $1"; exit 1 ;;
@@ -91,7 +91,7 @@ kc_api() {
     fi
 }
 
-echo -e "\n${MAGENTA}🔐 McpServer Keycloak Realm Setup${NC}"
+echo -e "\n${MAGENTA}🔐 QBrainAi Keycloak Realm Setup${NC}"
 echo -e "   ${GRAY}Keycloak: $KEYCLOAK_URL${NC}"
 echo -e "   ${GRAY}Realm:    $REALM_NAME${NC}"
 echo ""
@@ -116,8 +116,8 @@ REALM_JSON=$(cat <<EOF
 {
     "realm": "$REALM_NAME",
     "enabled": true,
-    "displayName": "MCP Server",
-    "displayNameHtml": "<h3>MCP Server</h3>",
+    "displayName": "QBrain.AI",
+    "displayNameHtml": "<h3>QBrain.AI</h3>",
     "registrationAllowed": false,
     "loginWithEmailAllowed": true,
     "duplicateEmailsAllowed": false,
@@ -144,7 +144,7 @@ step "Realm '$REALM_NAME' ready"
 info "Creating realm roles..."
 for ROLE in admin agent-manager viewer; do
     kc_api POST "/admin/realms/$REALM_NAME/roles" \
-        "{\"name\":\"$ROLE\",\"description\":\"McpServer $ROLE role\"}" "$TOKEN" > /dev/null
+        "{\"name\":\"$ROLE\",\"description\":\"QBrainAi $ROLE role\"}" "$TOKEN" > /dev/null
 done
 step "Roles created: admin, agent-manager, viewer"
 
@@ -153,8 +153,8 @@ info "Creating API client 'mcp-server-api'..."
 API_CLIENT_JSON=$(cat <<EOF
 {
     "clientId": "mcp-server-api",
-    "name": "MCP Server API",
-    "description": "Confidential client for MCP Server JWT Bearer validation",
+    "name": "QBrain.AI API",
+    "description": "Confidential client for QBrain.AI JWT Bearer validation",
     "enabled": true,
     "protocol": "openid-connect",
     "publicClient": false,

@@ -260,11 +260,11 @@ function Initialize-McpContext {
 
         Auto-discovers AGENTS-README-FIRST.yaml from current directory upward.
     .EXAMPLE
-        Initialize-McpContext -MarkerPath 'E:\github\McpServer\AGENTS-README-FIRST.yaml'
+        Initialize-McpContext -MarkerPath 'E:\github\QBrainAi\AGENTS-README-FIRST.yaml'
 
         Initializes from a specific marker file.
     .EXAMPLE
-        Initialize-McpContext -BaseUrl 'http://localhost:7147' -ApiKey 'key' -WorkspacePath 'E:\github\McpServer'
+        Initialize-McpContext -BaseUrl 'http://localhost:7147' -ApiKey 'key' -WorkspacePath 'E:\github\QBrainAi'
 
         Uses explicit values, bypassing marker parsing.
     #>
@@ -433,7 +433,7 @@ function Import-McpContextFolder {
 function Import-McpContextUrl {
     <#
     .SYNOPSIS
-        Ingests a URL directly via /mcpserver/context/ingest-website.
+        Ingests a URL directly via /qbrainai/context/ingest-website.
     .DESCRIPTION
         Calls the direct website ingestion endpoint with crawl and size controls.
         Uses SSE by default to stream progress in real time.
@@ -472,7 +472,7 @@ function Import-McpContextUrl {
     }
 
     if ($NoStream) {
-        return Invoke-McpRestJson -Method Post -Path 'mcpserver/context/ingest-website' -Body $body
+        return Invoke-McpRestJson -Method Post -Path 'qbrainai/context/ingest-website' -Body $body
     }
 
     return Invoke-McpWebsiteIngestSse -Body $body
@@ -515,7 +515,7 @@ function Search-McpContext {
     .SYNOPSIS
         Queries context search endpoint.
     .DESCRIPTION
-        Uses /mcpserver/context/search for hybrid retrieval with optional source filtering.
+        Uses /qbrainai/context/search for hybrid retrieval with optional source filtering.
     .EXAMPLE
         Search-McpContext -Query 'oauth token refresh' -Limit 10
 
@@ -539,7 +539,7 @@ function Search-McpContext {
         $body.sourceType = $SourceType
     }
 
-    Invoke-McpRestJson -Method Post -Path 'mcpserver/context/search' -Body $body
+    Invoke-McpRestJson -Method Post -Path 'qbrainai/context/search' -Body $body
 }
 
 function Query-McpGraphRag {
@@ -547,7 +547,7 @@ function Query-McpGraphRag {
     .SYNOPSIS
         Runs GraphRAG query endpoint.
     .DESCRIPTION
-        Calls /mcpserver/graphrag/query and returns answer, citations, and optional chunks.
+        Calls /qbrainai/graphrag/query and returns answer, citations, and optional chunks.
     .EXAMPLE
         Query-McpGraphRag -Query 'Summarize auth model changes' -Mode local -MaxChunks 8
 
@@ -574,7 +574,7 @@ function Query-McpGraphRag {
         includeContextChunks = -not [bool]$NoContextChunks
     }
 
-    Invoke-McpRestJson -Method Post -Path 'mcpserver/graphrag/query' -Body $body
+    Invoke-McpRestJson -Method Post -Path 'qbrainai/graphrag/query' -Body $body
 }
 
 function Get-McpGraphRagStatus {
@@ -590,7 +590,7 @@ function Get-McpGraphRagStatus {
     param()
 
     Assert-McpInitialized
-    Invoke-McpRestJson -Method Get -Path 'mcpserver/graphrag/status'
+    Invoke-McpRestJson -Method Get -Path 'qbrainai/graphrag/status'
 }
 
 function Invoke-McpGraphRagIndex {
@@ -612,7 +612,7 @@ function Invoke-McpGraphRagIndex {
     )
 
     Assert-McpInitialized
-    Invoke-McpRestJson -Method Post -Path 'mcpserver/graphrag/index' -Body @{ force = [bool]$Force }
+    Invoke-McpRestJson -Method Post -Path 'qbrainai/graphrag/index' -Body @{ force = [bool]$Force }
 }
 
 function Invoke-McpTool {
@@ -706,7 +706,7 @@ function Invoke-McpWebsiteIngestSse {
 
     Assert-McpInitialized
 
-    $uri = "$($script:McpBaseUrl)/mcpserver/context/ingest-website/stream"
+    $uri = "$($script:McpBaseUrl)/qbrainai/context/ingest-website/stream"
     $jsonBody = $Body | ConvertTo-Json -Depth 20
 
     $handler = [System.Net.Http.HttpClientHandler]::new()

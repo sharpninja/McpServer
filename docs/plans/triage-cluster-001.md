@@ -152,7 +152,7 @@ Agents stop losing turns, triage intake, and EXEC-TODO test-plan writes to opaqu
 Create in the MCP store, map FR to TR and TEST, export so `./build.ps1 ValidateTraceability` is green. Do not hang new AC only on FR-MCP-TRIAGE-002.
 
 **Functional**
-- **FR-MCP-TRIAGEERR-001** Every failure on REST `/mcpserver/*`, MCP tools, REPL workflow errors, and plugin shims returns `{ code, message, retryable, details? }` (REST as ProblemDetails extensions). Plugins and Agent Help can branch on `code` without scraping prose. Innermost EF/provider text lives in `details.inner`.
+- **FR-MCP-TRIAGEERR-001** Every failure on REST `/qbrainai/*`, MCP tools, REPL workflow errors, and plugin shims returns `{ code, message, retryable, details? }` (REST as ProblemDetails extensions). Plugins and Agent Help can branch on `code` without scraping prose. Innermost EF/provider text lives in `details.inner`.
 - **FR-MCP-TRIAGESTORE-001** Session-log persist is diagnosable and idempotent on identical action resubmit; session tags persist; replace missing turn is 404; canceled is queryable; superseded hook turns persist canceled with None sentinels and no opaque 500.
 - **FR-MCP-TRIAGESTORE-002** Session-log and triage mutating calls fail fast with a classified storage-unavailable error when SQL is unreachable, without flipping `/health` liveness.
 - **FR-MCP-TRIAGESCHEMA-001** After host start, sessionlog query never fails with missing AgentSession* column names; missing schema fails closed as pending-migration.
@@ -210,7 +210,7 @@ Expected red: types/branches named above do not exist or assert the old behavior
 ## Validation scope per slice
 
 - S0: `./build.ps1 ValidateTraceability` (Failed 0 on FR errors).
-- S1-S4, S6-S8: `dotnet test tests/McpServer.Support.Mcp.Tests` plus the touched sibling project (`Client.Tests`, `Repl.Core.Tests`) with Failed 0 / Skipped 0 on the executed filter, then the full `./build.ps1 Test` to exit the slice.
+- S1-S4, S6-S8: `dotnet test tests/QBrainAi.Support.Mcp.Tests` plus the touched sibling project (`Client.Tests`, `Repl.Core.Tests`) with Failed 0 / Skipped 0 on the executed filter, then the full `./build.ps1 Test` to exit the slice.
 - S5: Pester for plugins/core plus `./build.ps1 Test` (plugin scripts must not break C#). Then `./build.ps1 SyncAgentPlugins`.
 - S1 live AC and S3 live AC: after `./build.ps1 UpdateService`, query TruckMate/sessionlog and a storage-down drill only if a safe lab toggle exists; do not take production SQL down without operator presence.
 - S9: hostile receipt only.
@@ -227,7 +227,7 @@ Expected red: types/branches named above do not exist or assert the old behavior
 ## Risks
 
 - 148 500 may not be only missing planFile/todoId. S2 lands first so the next reproduce names the constraint. If it is a different constraint, stay on S4 until the named error is fixed; do not guess.
-- 114/115 may already be applied on McpServer's own DB (live sessionlog_query works here) but still fail on TruckMate/shared SQL Server. S1 is ops-verify plus fail-fast, not "rewrite SessionLogService mapping".
+- 114/115 may already be applied on QBrainAi's own DB (live sessionlog_query works here) but still fail on TruckMate/shared SQL Server. S1 is ops-verify plus fail-fast, not "rewrite SessionLogService mapping".
 - 139 closeout may DISAGREE. Budget a follow-on slice only for that FAIL list; do not stall S2-S8.
 - PowerShell.Mcp pool is third-party. If hook re-assert is insufficient, stop and report; do not vendor-patch PSGallery in this plan.
 - Raising all sessionlog timeouts would reintroduce hangs. Only agenthelp is long; beginTurn degrades instead.

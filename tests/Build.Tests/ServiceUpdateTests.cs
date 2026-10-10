@@ -30,9 +30,9 @@ public sealed class ServiceUpdateTests
 
     /// <summary>FR-MCP-SERVICEUPDATE-001: host fixtures preserve Windows defaults and select Linux architecture.</summary>
     [Theory]
-    [InlineData(true, false, Architecture.X64, "McpServer", "win-x64", "McpServer.Support.Mcp.exe")]
-    [InlineData(false, true, Architecture.X64, "mcpserver.service", "linux-x64", "McpServer.Support.Mcp")]
-    [InlineData(false, true, Architecture.Arm64, "mcpserver.service", "linux-arm64", "McpServer.Support.Mcp")]
+    [InlineData(true, false, Architecture.X64, "QBrainAi", "win-x64", "QBrainAi.Support.Mcp.exe")]
+    [InlineData(false, true, Architecture.X64, "mcpserver.service", "linux-x64", "QBrainAi.Support.Mcp")]
+    [InlineData(false, true, Architecture.Arm64, "mcpserver.service", "linux-arm64", "QBrainAi.Support.Mcp")]
     public void PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(bool windows, bool linux,
         Architecture architecture, string service, string rid, string executable)
     {
@@ -40,7 +40,7 @@ public sealed class ServiceUpdateTests
         Assert.Equal(service, Property(value, "DefaultServiceName"));
         Assert.Equal(rid, Property(value, "RuntimeIdentifier"));
         Assert.Equal(executable, Property(value, "ExecutableName"));
-        Assert.Equal(windows ? @"C:\ProgramData\McpServer" : "/opt/mcpserver/app", Property(value, "DefaultInstallPath"));
+        Assert.Equal(windows ? @"C:\ProgramData\QBrainAi" : "/opt/mcpserver/app", Property(value, "DefaultInstallPath"));
     }
 
     /// <summary>Unsupported hosts fail before any native effect (TR-MCP-SERVICEUPDATE-001).</summary>
@@ -54,11 +54,68 @@ public sealed class ServiceUpdateTests
 
     /// <summary>Unrelated Nuke targets can obtain defaults without a supported deployment host.</summary>
     [Theory]
-    [InlineData(false, "McpServer")]
+    [InlineData(false, "QBrainAi")]
     [InlineData(true, "mcpserver.service")]
     public void ParameterDefaults_DoNotRequireSupportedDeploymentHost(bool linux, string service)
     {
         Assert.Equal(service, Property(Call("ServiceUpdatePlatform", "ParameterDefaults", null, linux), "DefaultServiceName"));
+    }
+
+    /// <summary>TR-MCP-QBRAIN-006: default Windows parameters update an existing McpServer install in place.</summary>
+    [Fact]
+    public void WindowsInstall_UsesLegacyServiceWhenCanonicalRegistrationIsAbsent()
+    {
+        var identity = Call("ServiceUpdatePlatform", "ResolveExistingWindowsInstall", null,
+            "QBrainAi", @"C:\ProgramData\QBrainAi", false, true, false, true);
+        Assert.Equal("McpServer", Property(identity, "ServiceName"));
+        Assert.Equal(@"C:\ProgramData\McpServer", Property(identity, "InstallPath"));
+        Assert.Equal("QBrainAi.Support.Mcp.exe", Property(identity, "ExecutableName"));
+    }
+
+    /// <summary>TR-MCP-QBRAIN-006: an explicit service name is not redirected onto the legacy registration.</summary>
+    [Fact]
+    public void WindowsInstall_KeepsExplicitServiceName()
+    {
+        var identity = Call("ServiceUpdatePlatform", "ResolveExistingWindowsInstall", null,
+            "Custom", @"D:\services\custom", false, true, false, true);
+        Assert.Equal("Custom", Property(identity, "ServiceName"));
+        Assert.Equal(@"D:\services\custom", Property(identity, "InstallPath"));
+    }
+
+    /// <summary>TR-MCP-QBRAIN-006: a preserved Linux unit that still starts McpServer.Support.Mcp is retargeted.</summary>
+    [Fact]
+    public void LinuxUpdate_LegacyExecStartIsRetargeted()
+    {
+        using var f = new Fixture();
+        var legacy = Path.Combine(f.Install, "McpServer.Support.Mcp");
+        f.UnitExecutable = legacy;
+        var unitPath = Path.Combine(f.Root, "example.service");
+        File.WriteAllText(unitPath, "ExecStart=" + legacy + "\n");
+        f.Update();
+        var text = File.ReadAllText(unitPath);
+        Assert.Contains("QBrainAi.Support.Mcp", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("McpServer.Support.Mcp", text, StringComparison.Ordinal);
+        Assert.Contains("daemon-reload", f.Events);
+    }
+
+    /// <summary>TR-MCP-QBRAIN-006: a legacy ExecStart that lives only in a systemd drop-in is still retargeted.</summary>
+    [Fact]
+    public void LinuxUpdate_LegacyExecStartInDropInIsRetargeted()
+    {
+        using var f = new Fixture();
+        var legacy = Path.Combine(f.Install, "McpServer.Support.Mcp");
+        f.UnitExecutable = legacy;
+        var unitPath = Path.Combine(f.Root, "example.service");
+        File.WriteAllText(unitPath, "[Service]\nExecStart=/usr/bin/true\n");
+        var dropIn = Path.Combine(f.Root, "override.conf");
+        File.WriteAllText(dropIn, "[Service]\nExecStart=" + legacy + "\n");
+        f.DropIns = dropIn;
+        f.Update();
+        var dropInText = File.ReadAllText(dropIn);
+        Assert.Contains("QBrainAi.Support.Mcp", dropInText, StringComparison.Ordinal);
+        Assert.DoesNotContain("McpServer.Support.Mcp", dropInText, StringComparison.Ordinal);
+        Assert.DoesNotContain("QBrainAi.Support.Mcp", File.ReadAllText(unitPath), StringComparison.Ordinal);
+        Assert.Contains("daemon-reload", f.Events);
     }
 
     /// <summary>Quoted relative YAML and legacy fallback resolve to the actual preserved data root.</summary>
@@ -121,8 +178,8 @@ public sealed class ServiceUpdateTests
         if (defect == "symlink") { Directory.Delete(f.Data, true); Directory.CreateSymbolicLink(f.Data, f.Stage); }
         if (defect == "overlap") f.Backup = Path.Combine(f.Data, "backups");
         if (defect == "working-directory") f.WorkingDirectory = f.Data;
-        if (defect == "invalid-elf") File.WriteAllText(Path.Combine(f.Stage, "McpServer.Support.Mcp"), "not-ELF");
-        if (defect == "wrong-architecture") { var bytes = File.ReadAllBytes(Path.Combine(f.Stage, "McpServer.Support.Mcp")); bytes[18] = 183; File.WriteAllBytes(Path.Combine(f.Stage, "McpServer.Support.Mcp"), bytes); }
+        if (defect == "invalid-elf") File.WriteAllText(Path.Combine(f.Stage, "QBrainAi.Support.Mcp"), "not-ELF");
+        if (defect == "wrong-architecture") { var bytes = File.ReadAllBytes(Path.Combine(f.Stage, "QBrainAi.Support.Mcp")); bytes[18] = 183; File.WriteAllBytes(Path.Combine(f.Stage, "QBrainAi.Support.Mcp"), bytes); }
         Assert.ThrowsAny<Exception>(() => f.Update());
         Assert.DoesNotContain("stop", f.Events);
         Assert.Equal("old", File.ReadAllText(f.Executable));
@@ -165,7 +222,7 @@ public sealed class ServiceUpdateTests
         var phases = new[] { "stop", "archive", "defaults", "restore", "start", "health" };
         Assert.All(phases, phase => Assert.Contains(phase, f.Events));
         Assert.Equal(phases, f.Events.Where(phases.Contains));
-        Assert.Equal(File.ReadAllBytes(Path.Combine(f.Stage, "McpServer.Support.Mcp")), File.ReadAllBytes(f.Executable));
+        Assert.Equal(File.ReadAllBytes(Path.Combine(f.Stage, "QBrainAi.Support.Mcp")), File.ReadAllBytes(f.Executable));
         Assert.False(File.Exists(Path.Combine(f.Install, "stale.dll")));
         Assert.Equal("original", File.ReadAllText(Path.Combine(f.Data, "state")));
         Assert.Equal(f.OriginalConfig, File.ReadAllText(f.Config));
@@ -262,7 +319,7 @@ public sealed class ServiceUpdateTests
     {
         using var f = new Fixture();
         if (symlink) { Directory.Delete(f.Data, true); Directory.CreateSymbolicLink(f.Data, f.Stage); }
-        else File.SetUnixFileMode(Path.Combine(f.Stage, "McpServer.Support.Mcp"), UnixFileMode.UserRead);
+        else File.SetUnixFileMode(Path.Combine(f.Stage, "QBrainAi.Support.Mcp"), UnixFileMode.UserRead);
         Assert.ThrowsAny<Exception>(() => f.Update());
         Assert.DoesNotContain("stop", f.Events);
     }
@@ -304,10 +361,10 @@ public sealed class ServiceUpdateTests
     public void DeploymentManifest_HashesExtensionlessApphost()
     {
         using var f = new Fixture(false);
-        var path = WindowsServiceHelper.WriteDeploymentManifest(f.Install, "example.service", "McpServer.Support.Mcp", 7147, "update");
+        var path = WindowsServiceHelper.WriteDeploymentManifest(f.Install, "example.service", "QBrainAi.Support.Mcp", 7147, "update");
         using var json = JsonDocument.Parse(File.ReadAllText(path));
         Assert.Contains(json.RootElement.GetProperty("executableHashes").EnumerateArray(), x =>
-            x.GetProperty("name").GetString() == "McpServer.Support.Mcp" &&
+            x.GetProperty("name").GetString() == "QBrainAi.Support.Mcp" &&
             x.GetProperty("sha256").GetString()!.Equals(Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(f.Executable))), StringComparison.OrdinalIgnoreCase));
     }
 
@@ -421,7 +478,7 @@ public sealed class ServiceUpdateTests
         using var f = new Fixture { InspectRealFileKinds = true };
         var path = input switch
         {
-            "apphost" => Path.Combine(f.Stage, "McpServer.Support.Mcp"),
+            "apphost" => Path.Combine(f.Stage, "QBrainAi.Support.Mcp"),
             "configuration" => f.Config,
             "environment" => f.Env,
             _ => Path.Combine(f.Root, "example.service")
@@ -479,7 +536,7 @@ public sealed class ServiceUpdateTests
         public string Stage => Path.Combine(Root, "stage");
         public string Data => Path.Combine(Root, "data");
         public string Config => Path.Combine(Install, "appsettings.yaml");
-        public string Executable => Path.Combine(Install, "McpServer.Support.Mcp");
+        public string Executable => Path.Combine(Install, "QBrainAi.Support.Mcp");
         public string Env => Path.Combine(Root, "service.env");
         public string Backup { get; set; }
         public string UnitExecutable { get; set; }
@@ -519,9 +576,9 @@ public sealed class ServiceUpdateTests
             File.WriteAllText(Env, "ConnectionStrings__Default=private\n");
             File.WriteAllText(Path.Combine(Root, "example.service"), "[Service]\n");
             var elf = new byte[64]; elf[0] = 127; elf[1] = 69; elf[2] = 76; elf[3] = 70; elf[4] = 2; elf[5] = 1; elf[18] = 62;
-            File.WriteAllBytes(Path.Combine(Stage, "McpServer.Support.Mcp"), elf);
+            File.WriteAllBytes(Path.Combine(Stage, "QBrainAi.Support.Mcp"), elf);
             if (!OperatingSystem.IsWindows())
-                File.SetUnixFileMode(Path.Combine(Stage, "McpServer.Support.Mcp"), UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute | UnixFileMode.GroupRead | UnixFileMode.GroupExecute | UnixFileMode.OtherRead | UnixFileMode.OtherExecute);
+                File.SetUnixFileMode(Path.Combine(Stage, "QBrainAi.Support.Mcp"), UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute | UnixFileMode.GroupRead | UnixFileMode.GroupExecute | UnixFileMode.OtherRead | UnixFileMode.OtherExecute);
             File.WriteAllText(Path.Combine(Stage, "appsettings.yaml"), "DataFolder: wrong\n");
         }
 

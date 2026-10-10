@@ -188,9 +188,9 @@ function ConvertTo-McpInstanceMap {
 
 if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
     $candidatePaths = @(
-        "src/McpServer.Support.Mcp/appsettings.yaml",
-        "src/McpServer.Support.Mcp/appsettings.yml",
-        "src/McpServer.Support.Mcp/appsettings.json"
+        "src/QBrainAi.Support.Mcp/appsettings.yaml",
+        "src/QBrainAi.Support.Mcp/appsettings.yml",
+        "src/QBrainAi.Support.Mcp/appsettings.json"
     )
     $ConfigPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
 }

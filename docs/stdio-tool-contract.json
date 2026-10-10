@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "MCP Server STDIO Tool Contract",
-  "description": "Machine-readable manifest of all STDIO tools exposed by McpServer.Support.Mcp via ModelContextProtocol.",
+  "title": "QBrain.AI STDIO Tool Contract",
+  "description": "Machine-readable manifest of all STDIO tools exposed by QBrainAi.Support.Mcp via ModelContextProtocol.",
   "version": "1.0.0",
-  "generatedFrom": "src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs",
+  "generatedFrom": "src/QBrainAi.Support.Mcp/McpStdio/McpServerMcpTools.cs",
   "tools": [
     {
       "name": "context_search",
@@ -13,7 +13,7 @@
         "limit": { "type": "integer", "default": 20, "description": "Max chunks to return (default 20)" },
         "sourceType": { "type": "string", "required": false, "description": "Optional source type filter" }
       },
-      "httpEquivalent": "POST /mcpserver/context/search"
+      "httpEquivalent": "POST /qbrainai/context/search"
     },
     {
       "name": "context_pack",
@@ -23,13 +23,13 @@
         "limit": { "type": "integer", "default": 20, "description": "Max chunks in pack (default 20)" },
         "queryId": { "type": "string", "required": false, "description": "Optional query id for reproducibility" }
       },
-      "httpEquivalent": "POST /mcpserver/context/pack"
+      "httpEquivalent": "POST /qbrainai/context/pack"
     },
     {
       "name": "context_sources",
       "description": "List indexed document sources (sourceKey, sourceType, ingestedAt).",
       "parameters": {},
-      "httpEquivalent": "GET /mcpserver/context/sources"
+      "httpEquivalent": "GET /qbrainai/context/sources"
     },
     {
       "name": "context_ingest_website",
@@ -43,7 +43,7 @@
         "forceRefresh": { "type": "boolean", "default": false, "description": "Force refresh semantics for existing documents" },
         "triggerGraphRagIndex": { "type": "boolean", "default": false, "description": "Trigger GraphRAG index after ingest" }
       },
-      "httpEquivalent": "POST /mcpserver/context/ingest-website"
+      "httpEquivalent": "POST /qbrainai/context/ingest-website"
     },
     {
       "name": "repo_read",
@@ -51,7 +51,7 @@
       "parameters": {
         "path": { "type": "string", "required": true, "description": "Relative path from repo root" }
       },
-      "httpEquivalent": "GET /mcpserver/repo/{path}"
+      "httpEquivalent": "GET /qbrainai/repo/{path}"
     },
     {
       "name": "repo_list",
@@ -59,7 +59,7 @@
       "parameters": {
         "path": { "type": "string", "required": false, "description": "Relative path (optional, default repo root)" }
       },
-      "httpEquivalent": "GET /mcpserver/repo"
+      "httpEquivalent": "GET /qbrainai/repo"
     },
     {
       "name": "repo_write",
@@ -68,19 +68,19 @@
         "path": { "type": "string", "required": true, "description": "Relative path from repo root" },
         "content": { "type": "string", "required": true, "description": "File content to write" }
       },
-      "httpEquivalent": "PUT /mcpserver/repo/{path}"
+      "httpEquivalent": "PUT /qbrainai/repo/{path}"
     },
     {
       "name": "sync_run",
       "description": "Trigger full ingestion (repo, session logs, external docs). Returns run result.",
       "parameters": {},
-      "httpEquivalent": "POST /mcpserver/sync/ingest"
+      "httpEquivalent": "POST /qbrainai/sync/ingest"
     },
     {
       "name": "sync_status",
       "description": "Get last sync run status (lastRun, status, error, counts).",
       "parameters": {},
-      "httpEquivalent": "GET /mcpserver/sync/status"
+      "httpEquivalent": "GET /qbrainai/sync/status"
     },
     {
       "name": "memory_list",
@@ -92,7 +92,7 @@
         "keyword": { "type": "string", "required": false, "description": "Optional keyword filter" }
       },
       "ordering": "Effective lists return Global memories first sorted by ID, then current Workspace memories sorted by ID.",
-      "httpEquivalent": "GET /mcpserver/memory"
+      "httpEquivalent": "GET /qbrainai/memory"
     },
     {
       "name": "memory_get",
@@ -101,7 +101,7 @@
         "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
         "id": { "type": "string", "required": true, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Memory id" }
       },
-      "httpEquivalent": "GET /mcpserver/memory/{id}"
+      "httpEquivalent": "GET /qbrainai/memory/{id}"
     },
     {
       "name": "memory_add",
@@ -114,7 +114,7 @@
         "id": { "type": "string", "required": false, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Optional explicit memory id" },
         "updatedBy": { "type": "string", "required": false, "description": "Optional updater identity" }
       },
-      "httpEquivalent": "POST /mcpserver/memory"
+      "httpEquivalent": "POST /qbrainai/memory"
     },
     {
       "name": "memory_remember",
@@ -133,7 +133,7 @@
         "scope": { "type": "string", "required": false, "enum": ["Global", "Workspace"], "default": "Workspace", "description": "Memory scope" },
         "id": { "type": "string", "required": false, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Optional explicit memory id" }
       },
-      "httpEquivalent": "POST /mcpserver/memory/remember"
+      "httpEquivalent": "POST /qbrainai/memory/remember"
     },
     {
       "name": "memory_recall",
@@ -148,7 +148,7 @@
         "type": { "type": "string", "required": false, "description": "Optional type filter" },
         "scope": { "type": "string", "required": false, "enum": ["Global", "Workspace"], "description": "Optional scope filter" }
       },
-      "httpEquivalent": "POST /mcpserver/memory/recall"
+      "httpEquivalent": "POST /qbrainai/memory/recall"
     },
     {
       "name": "memory_explore",
@@ -162,7 +162,7 @@
         "maxNeighbors": { "type": "integer", "required": false, "description": "Optional neighbor cap" },
         "hebbianEnabled": { "type": "boolean", "required": false, "description": "Optional Hebbian override" }
       },
-      "httpEquivalent": "POST /mcpserver/memory/explore"
+      "httpEquivalent": "POST /qbrainai/memory/explore"
     },
     {
       "name": "memory_consolidate",
@@ -175,7 +175,7 @@
         "allowHardDelete": { "type": "boolean", "required": false, "description": "When true, merged-away rows may be hard-deleted" },
         "runId": { "type": "string", "required": false, "description": "Optional client run id" }
       },
-      "httpEquivalent": "POST /mcpserver/memory/consolidate"
+      "httpEquivalent": "POST /qbrainai/memory/consolidate"
     },
     {
       "name": "memory_promote",
@@ -188,7 +188,7 @@
         "content": { "type": "string", "required": false, "description": "Optional content override" },
         "summary": { "type": "string", "required": false, "description": "Optional summary override" }
       },
-      "httpEquivalent": "POST /mcpserver/memory/promote"
+      "httpEquivalent": "POST /qbrainai/memory/promote"
     },
     {
       "name": "memory_revert",
@@ -199,7 +199,7 @@
         "id": { "type": "string", "required": true, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Memory id" },
         "versionNumber": { "type": "integer", "required": true, "description": "Snapshot number to restore" }
       },
-      "httpEquivalent": "POST /mcpserver/memory/{id}/revert"
+      "httpEquivalent": "POST /qbrainai/memory/{id}/revert"
     },
     {
       "name": "memory_update",
@@ -212,7 +212,7 @@
         "scope": { "type": "string", "required": false, "enum": ["Global", "Workspace"], "description": "Optional scope replacement: Global or Workspace" },
         "updatedBy": { "type": "string", "required": false, "description": "Optional updater identity" }
       },
-      "httpEquivalent": "PUT /mcpserver/memory/{id}"
+      "httpEquivalent": "PUT /qbrainai/memory/{id}"
     },
     {
       "name": "memory_remove",
@@ -221,7 +221,7 @@
         "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
         "id": { "type": "string", "required": true, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Memory id" }
       },
-      "httpEquivalent": "DELETE /mcpserver/memory/{id}"
+      "httpEquivalent": "DELETE /qbrainai/memory/{id}"
     },
     {
       "name": "todo_list",
@@ -231,7 +231,7 @@
         "priority": { "type": "string", "required": false, "description": "Priority filter (high/medium/low)" },
         "done": { "type": "boolean", "required": false, "description": "Done filter (true/false)" }
       },
-      "httpEquivalent": "GET /mcpserver/todo"
+      "httpEquivalent": "GET /qbrainai/todo"
     },
     {
       "name": "todo_get",
@@ -239,7 +239,7 @@
       "parameters": {
         "id": { "type": "string", "required": true, "description": "TODO item id" }
       },
-      "httpEquivalent": "GET /mcpserver/todo/{id}"
+      "httpEquivalent": "GET /qbrainai/todo/{id}"
     },
     {
       "name": "todo_create",
@@ -252,7 +252,7 @@
         "estimate": { "type": "string", "required": false, "description": "Estimate string" },
         "description": { "type": "string", "required": false, "description": "Description text" }
       },
-      "httpEquivalent": "POST /mcpserver/todo"
+      "httpEquivalent": "POST /qbrainai/todo"
     },
     {
       "name": "todo_update",
@@ -264,7 +264,7 @@
         "done": { "type": "boolean", "required": false, "description": "Mark as done" },
         "note": { "type": "string", "required": false, "description": "Updated note" }
       },
-      "httpEquivalent": "PUT /mcpserver/todo/{id}"
+      "httpEquivalent": "PUT /qbrainai/todo/{id}"
     },
     {
       "name": "todo_delete",
@@ -272,7 +272,7 @@
       "parameters": {
         "id": { "type": "string", "required": true, "description": "TODO item id" }
       },
-      "httpEquivalent": "DELETE /mcpserver/todo/{id}"
+      "httpEquivalent": "DELETE /qbrainai/todo/{id}"
     },
     {
       "name": "sessionlog_submit",
@@ -280,7 +280,7 @@
       "parameters": {
         "json": { "type": "string", "required": true, "description": "JSON string of the session log payload" }
       },
-      "httpEquivalent": "POST /mcpserver/sessionlog"
+      "httpEquivalent": "POST /qbrainai/sessionlog"
     },
     {
       "name": "sessionlog_query",
@@ -293,7 +293,7 @@
         "to": { "type": "string", "required": false, "description": "To date (ISO 8601)" },
         "limit": { "type": "integer", "required": false, "description": "Max results (default 100)" }
       },
-      "httpEquivalent": "GET /mcpserver/sessionlog"
+      "httpEquivalent": "GET /qbrainai/sessionlog"
     },
     {
       "name": "sessionlog_dialog",
@@ -304,7 +304,7 @@
         "requestId": { "type": "string", "required": true, "description": "Request id" },
         "itemsJson": { "type": "string", "required": true, "description": "JSON array of dialog items" }
       },
-      "httpEquivalent": "POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
+      "httpEquivalent": "POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
     },
     {
       "name": "github_list_issues",
@@ -313,7 +313,7 @@
         "state": { "type": "string", "required": false, "description": "State filter (open/closed/all)" },
         "limit": { "type": "integer", "default": 30, "description": "Max issues to return (default 30)" }
       },
-      "httpEquivalent": "GET /mcpserver/gh/issues"
+      "httpEquivalent": "GET /qbrainai/gh/issues"
     },
     {
       "name": "github_list_pulls",
@@ -322,7 +322,7 @@
         "state": { "type": "string", "required": false, "description": "State filter (open/closed/all)" },
         "limit": { "type": "integer", "default": 30, "description": "Max PRs to return (default 30)" }
       },
-      "httpEquivalent": "GET /mcpserver/gh/pulls"
+      "httpEquivalent": "GET /qbrainai/gh/pulls"
     },
     {
       "name": "github_create_issue",
@@ -331,7 +331,7 @@
         "title": { "type": "string", "required": true, "description": "Issue title" },
         "body": { "type": "string", "required": false, "description": "Issue body" }
       },
-      "httpEquivalent": "POST /mcpserver/gh/issues"
+      "httpEquivalent": "POST /qbrainai/gh/issues"
     },
     {
       "name": "github_comment_issue",
@@ -340,7 +340,7 @@
         "issueId": { "type": "string", "required": true, "description": "Issue number or id" },
         "body": { "type": "string", "required": true, "description": "Comment body" }
       },
-      "httpEquivalent": "POST /mcpserver/gh/issues/{issueId}/comments"
+      "httpEquivalent": "POST /qbrainai/gh/issues/{issueId}/comments"
     },
     {
       "name": "github_comment_pull",
@@ -349,7 +349,7 @@
         "prId": { "type": "string", "required": true, "description": "PR number or id" },
         "body": { "type": "string", "required": true, "description": "Comment body" }
       },
-      "httpEquivalent": "POST /mcpserver/gh/pulls/{prId}/comments"
+      "httpEquivalent": "POST /qbrainai/gh/pulls/{prId}/comments"
     }
   ]
 }

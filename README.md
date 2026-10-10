@@ -1,4 +1,4 @@
-# MCP Server
+# QBrain.AI
 
 Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, durable agent memory, repository operations, GitHub automation, GraphRAG, host-local Products for shared requirements, and agent orchestration over HTTP and MCP STDIO transports.
 
@@ -15,9 +15,9 @@ Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orche
 - **Products** - host-local `PROD-*` workspace groups that share FR/TR/TEST/layers into effective queries and `product-requirements` context without copying rows
 - **Use cases** - workspace-scoped use-case modeling with FR Realizes links, coverage, UML canvas graph (schema v1), sequence diagrams, first-party UI at `/usecases/`, REST + MCP + typed client
 - **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with startup migrations enabled by default; `Mcp:Database:AutoMigrate=false` requires an administrator to apply pending migrations before startup
-- **REPL CLI tool** - `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
+- **REPL CLI tool** - `qbrain-ai-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
 - **Agent memory** - workspace-scoped remember/recall/explore/promote/consolidate/revert plus compat CRUD. All eight official plugins inject a raw `REQUIRED MEMORIES` block at host-supported request boundaries. Default CI bench stays Grok; `./build.ps1 BenchMemory -Plugin all` is unblocked after H7a `agree:true`. Multi-turn v2 uses tokens as the primary metric (`docs/benchmarks/`).
-- **Typed .NET client** - `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
+- **Typed .NET client** - `QBrainAI.Client` NuGet package covering all API endpoints
 
 ## Quick Start
 
@@ -45,19 +45,19 @@ Operator-facing copy-paste setup prompt for frontier coding agents (MCP-SETUPPRO
 
 ```
 src/
-  McpServer.Support.Mcp     ASP.NET Core server (controllers, STDIO host, auth)
-  McpServer.Client           Typed REST client library (NuGet)
-  McpServer.McpAgent         Microsoft Agent Framework integration
-  McpServer.Repl.Core        REPL protocol, request envelopes, trust bootstrap
-  McpServer.Repl.Host        mcpserver-repl CLI tool
-  McpServer.SessionLog.Transcripts  Transcript detection, normalization, and canonical YAML (Claude, Codex, Grok, Cline, Copilot, OpenCode)
-  McpServer.Services         Business logic (ingestion, indexing, TODO, GitHub, agents)
-  McpServer.Storage          EF Core abstraction + vector indexing
-  McpServer.GraphRag         Hybrid semantic search with GraphRAG
-  McpServer.Cqrs             Lightweight async CQRS framework (NuGet)
-  McpServer.Cqrs.Mvvm        MVVM extensions for CQRS
-  McpServer.Launcher          Windows GUI launcher
-  McpServer.ServiceDefaults  Aspire service defaults, OpenTelemetry, health checks
+  QBrainAi.Support.Mcp     ASP.NET Core server (controllers, STDIO host, auth)
+  QBrainAi.Client           Typed REST client library (NuGet)
+  QBrainAi.McpAgent         Microsoft Agent Framework integration
+  QBrainAi.Repl.Core        REPL protocol, request envelopes, trust bootstrap
+  QBrainAi.Repl.Host        qbrain-ai-repl CLI tool
+  QBrainAi.SessionLog.Transcripts  Transcript detection, normalization, and canonical YAML (Claude, Codex, Grok, Cline, Copilot, OpenCode)
+  QBrainAi.Services         Business logic (ingestion, indexing, TODO, GitHub, agents)
+  QBrainAi.Storage          EF Core abstraction + vector indexing
+  QBrainAi.GraphRag         Hybrid semantic search with GraphRAG
+  QBrainAi.Cqrs             Lightweight async CQRS framework (NuGet)
+  QBrainAi.Cqrs.Mvvm        MVVM extensions for CQRS
+  QBrainAi.Launcher          Windows GUI launcher
+  QBrainAi.ServiceDefaults  Aspire service defaults, OpenTelemetry, health checks
 ```
 
 ## Transports
@@ -80,15 +80,15 @@ POST http://localhost:7147/mcp-transport
 ### MCP STDIO
 
 ```powershell
-dotnet run --project src/McpServer.Support.Mcp -- --transport stdio --instance default
+dotnet run --project src/QBrainAi.Support.Mcp -- --transport stdio --instance default
 ```
 
 ### REPL
 
 ```powershell
 ./build.ps1 InstallReplTool
-mcpserver-repl --interactive              # interactive mode
-mcpserver-repl --agent-stdio              # STDIO mode for agent integration
+qbrain-ai-repl --interactive              # interactive mode
+qbrain-ai-repl --agent-stdio              # STDIO mode for agent integration
 ```
 
 Direct `--agent-stdio` callers send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a `type: batch` envelope.
@@ -97,29 +97,29 @@ Direct `--agent-stdio` callers send one single-line JSON request envelope per st
 
 | Route | Capability |
 |---|---|
-| `/mcpserver/todo` | TODO CRUD, audit history, priority/section filtering, prompt generation |
-| `/mcpserver/sessionlog` | Session log upsert, query, full-text search, pagination, transcript import (six agent formats, size ceilings of `Int32.MaxValue`) |
-| `/mcpserver/context` | Hybrid semantic search with GraphRAG, deterministic context packs |
-| `/mcpserver/agents` | Agent definitions, workspace config, deployment status |
-| `/mcpserver/agent-pool` | Pool lifecycle, health monitoring, process isolation |
-| `/mcpserver/repo` | Repository read/list/write with allowlist enforcement |
-| `/mcpserver/requirements` | FR/TR/TEST documents, validation, Markdown/ZIP export, `productScope` on effective |
-| `/mcpserver/products` | Product CRUD and workspace membership (`PROD-*` keys) |
-| `/mcpserver/usecases` | Use case CRUD, flows/steps/actors/FR links, diagram-graph, coverage, approval/product |
+| `/qbrainai/todo` | TODO CRUD, audit history, priority/section filtering, prompt generation |
+| `/qbrainai/sessionlog` | Session log upsert, query, full-text search, pagination, transcript import (six agent formats, size ceilings of `Int32.MaxValue`) |
+| `/qbrainai/context` | Hybrid semantic search with GraphRAG, deterministic context packs |
+| `/qbrainai/agents` | Agent definitions, workspace config, deployment status |
+| `/qbrainai/agent-pool` | Pool lifecycle, health monitoring, process isolation |
+| `/qbrainai/repo` | Repository read/list/write with allowlist enforcement |
+| `/qbrainai/requirements` | FR/TR/TEST documents, validation, Markdown/ZIP export, `productScope` on effective |
+| `/qbrainai/products` | Product CRUD and workspace membership (`PROD-*` keys) |
+| `/qbrainai/usecases` | Use case CRUD, flows/steps/actors/FR links, diagram-graph, coverage, approval/product |
 | `/usecases/` | First-party Use Case Manager UI (REST-only; UML canvas + secondary forms) |
-| `/mcpserver/memory` | Remember, recall, explore, consolidate, promote, versions/revert, plus compat CRUD |
+| `/qbrainai/memory` | Remember, recall, explore, consolidate, promote, versions/revert, plus compat CRUD |
 | `/memory/` | First-party Memory UI (REST-only; Effective set search/edit/revert) |
-| `/mcpserver/workspace` | Multi-tenant workspace resolution and management |
-| `/mcpserver/gh` | GitHub issues, PRs, workflows, repository metadata |
-| `/mcpserver/tools` | Tool capability registration, discovery, schema validation |
-| `/mcpserver/graphrag` | GraphRAG query with mode selection |
-| `/mcpserver/events` | Server-sent events for real-time change notifications |
-| `/mcpserver/templates` | Prompt template storage and rendering |
-| `/mcpserver/voice` | Voice conversation management |
-| `/mcpserver/desktop` | Desktop application launch (Windows) |
-| `/mcpserver/diagnostic` | Health, version, database connectivity, index status |
-| `/mcpserver/configuration` | Application configuration retrieval |
-| `/mcpserver/tunnel` | Reverse proxy for agent communication |
+| `/qbrainai/workspace` | Multi-tenant workspace resolution and management |
+| `/qbrainai/gh` | GitHub issues, PRs, workflows, repository metadata |
+| `/qbrainai/tools` | Tool capability registration, discovery, schema validation |
+| `/qbrainai/graphrag` | GraphRAG query with mode selection |
+| `/qbrainai/events` | Server-sent events for real-time change notifications |
+| `/qbrainai/templates` | Prompt template storage and rendering |
+| `/qbrainai/voice` | Voice conversation management |
+| `/qbrainai/desktop` | Desktop application launch (Windows) |
+| `/qbrainai/diagnostic` | Health, version, database connectivity, index status |
+| `/qbrainai/configuration` | Application configuration retrieval |
+| `/qbrainai/tunnel` | Reverse proxy for agent communication |
 | `/auth` | OIDC discovery, device authorization flow, token endpoint |
 | `/health` | Health check |
 | `/swagger` | OpenAPI documentation |
@@ -161,9 +161,9 @@ Environment overrides: `PORT` (runtime port), `MCP_INSTANCE` (instance selection
 
 | Provider | Project |
 |---|---|
-| SQLite (default) | `McpServer.Storage.SqliteMigrations` |
-| SQL Server | `McpServer.Storage.SqlServerMigrations` |
-| PostgreSQL | `McpServer.Storage.PostgreSqlMigrations` |
+| SQLite (default) | `QBrainAi.Storage.SqliteMigrations` |
+| SQL Server | `QBrainAi.Storage.SqlServerMigrations` |
+| PostgreSQL | `QBrainAi.Storage.PostgreSqlMigrations` |
 
 TODO items live in the configured database (the sole source of truth); `docs/Project/TODO.yaml` is a read-only projection. The removed `yaml` provider fails fast, and `sqlite` is a deprecated alias for `database` (TR-MCP-CFG-007).
 
@@ -192,10 +192,10 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | `Test` | Run all unit tests |
 | `Publish` | Publish server for deployment |
 | `UpdateService` | Build/publish, backup config/data, update the Windows service, restore config/data, and health-check (Windows-only; Linux box uses publish/swap to `/opt/mcpserver`) |
-| `PackNuGet` | Pack McpServer.Client NuGet package |
-| `PackReplTool` | Pack mcpserver-repl to local-packages/ |
+| `PackNuGet` | Pack QBrainAi.Client NuGet package |
+| `PackReplTool` | Pack qbrain-ai-repl to local-packages/ |
 | `PackageMsix` | Create MSIX package for Windows |
-| `InstallReplTool` | Install mcpserver-repl as a global dotnet tool |
+| `InstallReplTool` | Install qbrain-ai-repl as a global dotnet tool |
 | `StartServer` | Build and run MCP server |
 | `BumpVersion` | Increment patch version in GitVersion.yml |
 | `ValidateConfig` | Validate appsettings instance configuration |
@@ -217,11 +217,11 @@ Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.39`). See `docs
 ## Client Library
 
 ```powershell
-dotnet add package SharpNinja.McpServer.Client
+dotnet add package QBrainAI.Client
 ```
 
 ```csharp
-builder.Services.AddMcpServerClient(options =>
+builder.Services.AddQBrainAiClient(options =>
 {
     options.BaseUrl = new Uri("http://localhost:7147");
     options.ApiKey = "your-api-key";
@@ -230,37 +230,37 @@ builder.Services.AddMcpServerClient(options =>
 
 Covers: Todo, Context, SessionLog, Memory, GitHub, Repo, Workspace, ToolRegistry, Sync, and more.
 
-Source: `src/McpServer.Client/` | [Package README](src/McpServer.Client/README.md)
+Source: `src/QBrainAi.Client/` | [Package README](src/QBrainAi.Client/README.md)
 
 ## Agent Framework
 
-`McpServer.McpAgent` integrates with the Microsoft Agent Framework:
+`QBrainAi.McpAgent` integrates with the Microsoft Agent Framework:
 
 ```csharp
-builder.Services.AddMcpServerMcpAgent();
+builder.Services.AddQBrainAiMcpAgent();
 ```
 
 Built-in MCP tools: `mcp_repo_read`, `mcp_repo_list`, `mcp_repo_write`, `mcp_desktop_launch`, `mcp_powershell_session_*`.
 Workflows: session log lifecycle, TODO management, requirements ingestion.
 
-Sample host: `src/McpServer.McpAgent.SampleHost/`
+Sample host: `src/QBrainAi.McpAgent.SampleHost/`
 
 ## Tests
 
-22 test projects covering unit, integration, and Reqnroll validation (plus the `McpServer.ProcessTree.TestHelper` support project):
+22 test projects covering unit, integration, and Reqnroll validation (plus the `QBrainAi.ProcessTree.TestHelper` support project):
 
 - `Build.Tests` - build system and configuration
-- `McpServer.Support.Mcp.Tests` / `.IntegrationTests` - server API and database
-- `McpServer.Client.Tests` - REST client serialization
-- `McpServer.McpAgent.Tests` - agent workflows and tool adapters
-- `McpServer.Repl.Core.Tests` / `.IntegrationTests` - REPL protocol
-- `McpServer.Cqrs.Tests` - CQRS dispatcher and pipeline
-- `McpServer.QBAgent.Tests` - QuadBrain agent behavior
-- `McpServer.Launcher.Tests` - launcher host
-- `McpServer.Acid.IntegrationTests` - ACID turn-closure matrix
-- `McpServer.TransactionSecurity.IntegrationTests` - durable transaction security storage
-- `McpServer.PlanReview.Tests` / `McpServer.Review.Tests` - plan and AI review flows
-- `McpServer.PluginIntegration.Tests` - plugin integration
+- `QBrainAi.Support.Mcp.Tests` / `.IntegrationTests` - server API and database
+- `QBrainAi.Client.Tests` - REST client serialization
+- `QBrainAi.McpAgent.Tests` - agent workflows and tool adapters
+- `QBrainAi.Repl.Core.Tests` / `.IntegrationTests` - REPL protocol
+- `QBrainAi.Cqrs.Tests` - CQRS dispatcher and pipeline
+- `QBrainAi.QBAgent.Tests` - QuadBrain agent behavior
+- `QBrainAi.Launcher.Tests` - launcher host
+- `QBrainAi.Acid.IntegrationTests` - ACID turn-closure matrix
+- `QBrainAi.TransactionSecurity.IntegrationTests` - durable transaction security storage
+- `QBrainAi.PlanReview.Tests` / `QBrainAi.Review.Tests` - plan and AI review flows
+- `QBrainAi.PluginIntegration.Tests` - plugin integration
 - 7 Reqnroll validation projects (Context, GitHub, Repo, SessionLog, Todo, ToolRegistry, Workspace)
 
 `./build.ps1 Test` runs the unit gate only: it excludes every `*.IntegrationTests` project and filters out
@@ -270,7 +270,7 @@ through `./build.ps1 MigrationIntegrationTests` or by targeting the project dire
 The audit payload migration integration tests cover SQLite, SQL Server (LocalDB by default), and PostgreSQL (ephemeral cluster by default). Run the focused provider set with:
 
 ```powershell
-dotnet test tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj --filter "FullyQualifiedName~AuditPayloadMigrationTests|FullyQualifiedName~SqlServerAuditPayloadMigrationTests|FullyQualifiedName~PostgreSqlAuditPayloadMigrationTests"
+dotnet test tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --filter "FullyQualifiedName~AuditPayloadMigrationTests|FullyQualifiedName~SqlServerAuditPayloadMigrationTests|FullyQualifiedName~PostgreSqlAuditPayloadMigrationTests"
 ```
 
 Integration tests provision what they need. The QuadBrain Ollama tests probe `http://localhost:11434` at fixture
@@ -291,7 +291,7 @@ failure names the `InstallOllama` target, which stages the portable binaries and
 | [User Guide](docs/USER-GUIDE.md) | End-user setup and usage |
 | [Server Guide](docs/MCP-SERVER.md) | Operations and configuration |
 | [Client Integration](docs/CLIENT-INTEGRATION.md) | NuGet client library usage |
-| [REPL Migration Guide](docs/REPL-MIGRATION-GUIDE.md) | Migrating to mcpserver-repl |
+| [REPL Migration Guide](docs/REPL-MIGRATION-GUIDE.md) | Migrating to qbrain-ai-repl |
 | [FAQ](docs/FAQ.md) | Common questions |
 | [MCP Memories](docs/context/memory.md) | Remember/recall/promote/consolidate and REQUIRED MEMORIES injection |
 | [Memory benchmarks](docs/benchmarks/README.md) | Token-primary bench; v2 multi-turn is the efficiency claim; `-Plugin all` after H7a |
@@ -305,9 +305,9 @@ See [LICENSE](LICENSE) for details.
 
 ## Shared Plugin Surfaces
 
-This repository is the canonical home for the shared client surfaces used by all McpServer agent plugins:
+This repository is the canonical home for the shared client surfaces used by all QBrainAi agent plugins:
 
 - **PowerShell**: `tools/powershell/McpRepl` (published to PS Gallery as `McpRepl`)
-- **TypeScript**: `tools/typescript/mcp-repl-ts` (published to npm as `@sharpninja/mcp-repl`)
+- **TypeScript**: `tools/typescript/mcp-repl-ts` (published to npm as `@qbrainai/qbrain-ai-repl`)
 
 See the respective READMEs in those directories and `GROK-USAGE.md` in the grok-plugin for usage details.

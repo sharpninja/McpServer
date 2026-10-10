@@ -10,7 +10,7 @@
       "without_memory": "I do not have a remembered editor preference."
     },
     "DEC-001": {
-      "with_memory": "We decided to use native Postgres, not Docker, for local McpServer.",
+      "with_memory": "We decided to use native Postgres, not Docker, for local QBrainAi.",
       "without_memory": "I do not have a remembered local database decision."
     },
     "FACT-001": {

@@ -1,6 +1,6 @@
 /// <summary>
 /// Utilities for MSIX packaging: SDK tool resolution and AppxManifest generation.
-/// Ported from scripts/Package-McpServerMsix.ps1.
+/// Ported from scripts/Package-QBrainAiMsix.ps1.
 /// </summary>
 static class MsixHelper
 {
@@ -58,8 +58,8 @@ static class MsixHelper
                 <rescap:Capability Name="runFullTrust" />
               </Capabilities>
               <Applications>
-                <Application Id="McpServer" Executable="McpServer.Support.Mcp.exe" EntryPoint="Windows.FullTrustApplication">
-                  <uap:VisualElements DisplayName="{packageName}" Square44x44Logo="Square44x44Logo.png" Square150x150Logo="Square150x150Logo.png" Description="FunWasHad MCP Server" BackgroundColor="transparent" />
+                <Application Id="QBrainAi" Executable="QBrainAi.Support.Mcp.exe" EntryPoint="Windows.FullTrustApplication">
+                  <uap:VisualElements DisplayName="{packageName}" Square44x44Logo="Square44x44Logo.png" Square150x150Logo="Square150x150Logo.png" Description="FunWasHad QBrain.AI" BackgroundColor="transparent" />
                 </Application>
               </Applications>
             </Package>

@@ -20,7 +20,7 @@ Describe 'TEST-HANDOFF-006 plugin handoff skill-file invoke' {
                 $gitDir = $gitDirLine.Substring(7).Trim()
                 if (-not [System.IO.Path]::IsPathRooted($gitDir)) { $gitDir = Join-Path $script:RepoRoot $gitDir }
                 $main = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $gitDir))
-                if (Test-Path -LiteralPath (Join-Path $main 'McpServer.sln')) { $primary = $main }
+                if (Test-Path -LiteralPath (Join-Path $main 'QBrainAi.sln')) { $primary = $main }
             }
         }
         $script:GrokSkill = Join-Path (Split-Path -Parent $primary) 'mcpserver-grok-plugin\skills\handoff\SKILL.md'

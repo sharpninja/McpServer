@@ -4,11 +4,11 @@ Load this file when setting up helper modules at session start.
 
 ## Overview
 
-**Preferred: `mcpserver-repl` (single-line JSON envelopes)** - The `mcpserver-repl` CLI tool is the recommended agent entrypoint. Direct `--agent-stdio` callers send one single-line JSON request envelope per stdin line and receive result, error, or event envelopes on stdout. Do not send formatted YAML or wrap multiple requests in `type: batch`; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
+**Preferred: `qbrain-ai-repl` (single-line JSON envelopes)** - The `qbrain-ai-repl` CLI tool is the recommended agent entrypoint. Direct `--agent-stdio` callers send one single-line JSON request envelope per stdin line and receive result, error, or event envelopes on stdout. Do not send formatted YAML or wrap multiple requests in `type: batch`; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
 
 **Supported: PowerShell helper modules** - `McpSession.psm1` and `McpTodo.psm1` remain supported until feature parity is validated. Use these modules when you need direct PowerShell integration or when REPL usage is not practical.
 
-Helper modules handle workspace routing (`X-Workspace-Path` header) automatically. Raw `Invoke-RestMethod` / `curl` calls to `/mcpserver/sessionlog` and `/mcpserver/todo` endpoints will target the wrong workspace. Use REPL or modules instead.
+Helper modules handle workspace routing (`X-Workspace-Path` header) automatically. Raw `Invoke-RestMethod` / `curl` calls to `/qbrainai/sessionlog` and `/qbrainai/todo` endpoints will target the wrong workspace. Use REPL or modules instead.
 
 ## REPL Bootstrap (Preferred)
 
@@ -18,13 +18,13 @@ After handshake, send one single-line JSON request envelope per stdin line. Buil
 
 ```powershell
 # Launch the REPL in the workspace directory
-mcpserver-repl --workspace "C:\projects\MyWorkspace"
+qbrain-ai-repl --workspace "C:\projects\MyWorkspace"
 
 # STDIO mode for agent integration
-mcpserver-repl --agent-stdio
+qbrain-ai-repl --agent-stdio
 
 # Or use the default workspace if registered as primary
-mcpserver-repl
+qbrain-ai-repl
 ```
 
 ### Handshake
@@ -46,7 +46,7 @@ Server hello response:
 All REPL requests use a typed envelope. The request body is `type: request` with a `payload` that carries a unique `requestId`, the namespaced `method`, and its `params`:
 
 ```json
-{"type":"request","payload":{"requestId":"<unique-request-id>","method":"workflow.sessionlog.beginTurn","params":{"requestId":"<unique-request-id>","queryTitle":"Implement feature X","queryText":"User requested feature X"}}}
+{"type":"request","payload":{"requestId":"<unique-request-id>","method":"workflow.sessionlog.beginTurn","params":{"requestId":"<unique-request-id>","queryTitle":"Implement feature X","queryText":"User requested feature X","planFile":"None","todoId":"None"}}}
 ```
 
 Methods are namespaced: `workflow.sessionlog.*` and `workflow.todo.*` are plugin-local workflow verbs that update the cache and `current-turn.yaml` and persist through the real client; `client.<Client>.<Method>` is a passthrough to any typed sub-client method.
@@ -64,6 +64,8 @@ Methods are namespaced: `workflow.sessionlog.*` and `workflow.todo.*` are plugin
 ```json
 {"type":"request","payload":{"requestId":"req-20260304T113901Z-003","method":"workflow.sessionlog.beginTurn","params":{"requestId":"req-20260304T113901Z-003","queryTitle":"Implement feature X","queryText":"User requested feature X","planFile":"None","todoId":"None"}}}
 ```
+
+`workflow.sessionlog.beginTurn` metadata precedence is explicit `planFile` and `todoId`, then verified cache values, then exact `None` for both fields. Ordinary first persistence requires that pair: a missing, null, empty, or whitespace field is not a valid raw first-persist payload. Supersession accepts both `canceled` and `cancelled` and stores exact `None` when either field is omitted. A same-request durable reopen omits an absent field so the stored value is preserved.
 
 ```json
 {"type":"request","payload":{"requestId":"req-20260304T113901Z-003","method":"workflow.sessionlog.updateTurn","params":{"response":"Implementing feature X","interpretation":"User requested feature X"}}}
@@ -124,8 +126,8 @@ Streaming uses `type: event` envelopes on stdout.
 ```powershell
 # 1. Discover and download modules from the Tool Registry
 $headers = @{ "X-Api-Key" = "<apiKey from AGENTS-README-FIRST.yaml>" }
-Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/tools/search?keyword=session" -Headers $headers
-Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/tools/search?keyword=todo" -Headers $headers
+Invoke-RestMethod -Uri "http://localhost:7147/qbrainai/tools/search?keyword=session" -Headers $headers
+Invoke-RestMethod -Uri "http://localhost:7147/qbrainai/tools/search?keyword=todo" -Headers $headers
 # Save the downloaded files as McpSession.psm1 and McpTodo.psm1
 
 # 2. Import and initialize
@@ -177,4 +179,4 @@ If module download fails, retry with exponential backoff.
 | Nested data | Native JSON objects | Hashtable/PSObject |
 | Preferred for agents | Yes | No (legacy) |
 
-`McpSession.psm1` and `McpTodo.psm1` remain supported until parity is validated. New agent workflows should prefer `mcpserver-repl`.
+`McpSession.psm1` and `McpTodo.psm1` remain supported until parity is validated. New agent workflows should prefer `qbrain-ai-repl`.

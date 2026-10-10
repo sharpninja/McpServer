@@ -219,7 +219,7 @@ public sealed class BuildTargetTests
 
         try
         {
-            var repoRoot = Path.Combine(root, "McpServer");
+            var repoRoot = Path.Combine(root, "QBrainAi");
             var pluginRoot = Path.Combine(root, "mcpserver-codex-plugin");
             Directory.CreateDirectory(repoRoot);
             Directory.CreateDirectory(pluginRoot);
@@ -247,7 +247,7 @@ public sealed class BuildTargetTests
 
         try
         {
-            var repoRoot = Path.Combine(root, "workspace", "lib", "McpServer");
+            var repoRoot = Path.Combine(root, "workspace", "lib", "QBrainAi");
             var pluginParent = Path.Combine(root, "plugins");
             var claudeRoot = Path.Combine(pluginParent, "mcpserver-claude-code-plugin");
             var codexRoot = Path.Combine(pluginParent, "mcpserver-codex-plugin");
@@ -283,7 +283,7 @@ public sealed class BuildTargetTests
     public void QBAgentProject_IsConfiguredAsDotNetTool()
     {
         var repoRoot = FindRepositoryRoot();
-        var projectPath = Path.Combine(repoRoot, "src", "McpServer.QBAgent", "McpServer.QBAgent.csproj");
+        var projectPath = Path.Combine(repoRoot, "src", "QBrainAi.QBAgent", "QBrainAi.QBAgent.csproj");
         var properties = XDocument.Load(projectPath)
             .Descendants("PropertyGroup")
             .Elements()
@@ -293,11 +293,11 @@ public sealed class BuildTargetTests
         Assert.Equal("true", properties["IsPackable"]);
         Assert.Equal("true", properties["PackAsTool"]);
         Assert.Equal("qbagent", properties["ToolCommandName"]);
-        Assert.Equal("SharpNinja.McpServer.QBAgent", properties["PackageId"]);
+        Assert.Equal("QBrainAI.QBAgent", properties["PackageId"]);
     }
 
     /// <summary>
-    /// PackQBAgentTool must pack McpServer.QBAgent.csproj only. Depending on solution Compile
+    /// PackQBAgentTool must pack QBrainAi.QBAgent.csproj only. Depending on solution Compile
     /// builds every test project and fails when testhosts lock those outputs.
     /// </summary>
     [Fact]
@@ -305,7 +305,7 @@ public sealed class BuildTargetTests
     {
         var source = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "build", "Build.PackQBAgentTool.cs"));
         Assert.DoesNotContain("DependsOn(Compile)", source, StringComparison.Ordinal);
-        Assert.Contains("McpServer.QBAgent.csproj", source, StringComparison.Ordinal);
+        Assert.Contains("QBrainAi.QBAgent.csproj", source, StringComparison.Ordinal);
         Assert.DoesNotContain("TestsDirectory", source, StringComparison.Ordinal);
     }
 
@@ -453,11 +453,11 @@ public sealed class BuildTargetTests
         const string output = """
             Package Id                    Version      Commands
             ---------------------------------------------------
-            sharpninja.mcpserver.repl     6.1.1        mcpserver-repl
+            sharpninja.mcpserver.repl     6.1.1        qbrain-ai-repl
             other.tool                    1.0.0        other
             """;
 
-        var version = Build.GetInstalledGlobalToolVersion(output, "SharpNinja.McpServer.Repl");
+        var version = Build.GetInstalledGlobalToolVersion(output, "QBrainAI.Repl");
 
         Assert.Equal("6.1.1", version);
         Assert.Null(Build.GetInstalledGlobalToolVersion(output, "missing.tool"));

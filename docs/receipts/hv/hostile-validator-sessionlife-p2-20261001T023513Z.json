@@ -1,0 +1,2448 @@
+{
+  "TimestampUtc": "2026-10-01T02:55:40.5633079Z",
+  "ValidatorIdentity": "Codex/gpt-6-astra/xhigh",
+  "WorkClass": "Project implementation: P2 SessionLife contracts",
+  "Workspace": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2",
+  "tipSha": "5e6b236c958505b5e202e2fb86604b7dec1eb968",
+  "RunId": "p2-unit-legion-20261001T022033Z",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 99,
+  "Completeness": 96,
+  "Confidence": 99,
+  "ScoreRationale": "Accuracy 99: findings reproduced through real functions, native outcomes parsed, exact source evidence and controls checked. Completeness 96: all A-D surfaces and 35 core criteria assessed, but criterion-level branch/evidence gaps and historical B7/B8 provenance remain; evidence does not establish 98-percent readiness. Scores are review judgments, not a measured code-coverage percentage.",
+  "AddProfile": {
+    "skill": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "fileCount": 21,
+    "profiles": [
+      {
+        "name": "accuracy-first-verify-sources.md",
+        "length": 1207,
+        "sha256": "D9BD665C6229E1D29A77EC7EF42B96DC52678817D5E88B711F20CDFD320F5E96"
+      },
+      {
+        "name": "adversarial-review-global.md",
+        "length": 7722,
+        "sha256": "2FA01939E3D7F626C514AC63FE9CE760F0B798E2CED31B86B4D2E26DC430BB49"
+      },
+      {
+        "name": "approve-before-execute.md",
+        "length": 2269,
+        "sha256": "A61FD0A5FACA21AC172474F0A0A7084CDAC70E8CD7EB3A7BC2C6D26560E4CAB4"
+      },
+      {
+        "name": "bring-the-receipts.md",
+        "length": 2056,
+        "sha256": "E425710866D9D7E50F38ADC6DA393D52721DD5482BEA08EAA246D70691F76F31"
+      },
+      {
+        "name": "hostile-on-goal-state.md",
+        "length": 1734,
+        "sha256": "480984F745566769A4D6479028BA311D4550105336540F49916D635FC77DAE87"
+      },
+      {
+        "name": "hostile-ops-vs-requirements.md",
+        "length": 2050,
+        "sha256": "A73EA4A7B125D94B6D2A64F20A160CDA12EB235A918FB034A5E56FCE97203602"
+      },
+      {
+        "name": "hostile-phase-gates.md",
+        "length": 1317,
+        "sha256": "EE448E9FD9E0F1C12E13277A89696482E57752CE0A4EC0FE5EF9B4093C754B9C"
+      },
+      {
+        "name": "hv-jsonl-and-session-log.md",
+        "length": 4208,
+        "sha256": "8A8CB1500FE6C35B2F267064EC47CE290E54C9F39713303729733B88EE073B52"
+      },
+      {
+        "name": "kill-assumption-iteration.md",
+        "length": 1240,
+        "sha256": "8D01893F00116712CB5822AF67C99304575B8A7D7EE7930F5E8463310E504094"
+      },
+      {
+        "name": "lab-authorization.md",
+        "length": 2183,
+        "sha256": "E7575409948FF11C59DC86D6D6DB943DC541592F579323838607E540868C575F"
+      },
+      {
+        "name": "log-decisions-as-conclusions.md",
+        "length": 2060,
+        "sha256": "DF2973F5353B194413C22722C3819A323AB12E1E6A9DFAB70F87A7BD7910E07A"
+      },
+      {
+        "name": "never-skip-explicit-actions.md",
+        "length": 2957,
+        "sha256": "577B1375C11D764018F076DF858C779E61602A2E19D7E3B1B36C967F94C2C84E"
+      },
+      {
+        "name": "no-attitude-honesty-tell.md",
+        "length": 1357,
+        "sha256": "4730B15F8B99DCC5ACF0796DC343FF915C037892BF9FFFEAF90FA1F551B578BD"
+      },
+      {
+        "name": "no-python-lab.md",
+        "length": 1096,
+        "sha256": "DC7E5D396873CD1F4899797E9914A76D3F9F748FD790E604CF0A913A5FCD895D"
+      },
+      {
+        "name": "no-shortcuts-precision-over-convenience.md",
+        "length": 2030,
+        "sha256": "E2A25D7D577DF221B69E7059E71BEEEDA91872C43447E4E2D5BF449CE4505392"
+      },
+      {
+        "name": "philosophical-dialogue-mode.md",
+        "length": 1230,
+        "sha256": "0C43A1A1899B36F6F73AF3B9A8091A5C05D26BF36B163048F8CDB46B09A0737F"
+      },
+      {
+        "name": "PROFILE.md",
+        "length": 18480,
+        "sha256": "A929C28D1DF2E7BFE4DB91C0E82FA27F2E4C1B5312D4E8E2E25F85A392B88A7A"
+      },
+      {
+        "name": "requirement-change-plan-first.md",
+        "length": 2215,
+        "sha256": "64A5558B0BC9C321D0CB3D206F73B16A680CA12E8D8390431D126FF02D8CF9F9"
+      },
+      {
+        "name": "session-turn-title-summary.md",
+        "length": 1196,
+        "sha256": "15DEE8BB21BC8FB948403078BEA6C525411161558E290A1C2A3ECF3B5E33BD95"
+      },
+      {
+        "name": "user-payton-byrd.md",
+        "length": 1519,
+        "sha256": "C47927C3086B462A9EE5031F8A8DF94697B7B384AFE9590324D81A8246D8DBDA"
+      },
+      {
+        "name": "wireframe-app-visual-fidelity.md",
+        "length": 945,
+        "sha256": "A6783BDE5BE9321045A432F13E848B9507BB3B5AA4CDEDDB24879C9012F7787D"
+      }
+    ],
+    "executed": true
+  },
+  "ModelEffortProof": {
+    "rollout": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\30\\rollout-2026-09-30T21-35-14-01a0f550-e4e5-7601-89c5-ecf17ea97a13.jsonl",
+    "turnContext": {
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2",
+      "turn_id": "01a0f550-e7ef-71a1-a2dc-40281af54ba5"
+    },
+    "sessionMeta": {
+      "id": "01a0f550-e4e5-7601-89c5-ecf17ea97a13",
+      "timestamp": "2026-10-01T02:35:14.717Z",
+      "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2",
+      "originator": "codex_exec",
+      "cli_version": "0.158.0-alpha.2.1",
+      "source": "exec",
+      "model_provider": "openai"
+    }
+  },
+  "OperatorOverrides": [
+    "Astra gpt-6-astra/xhigh replaces Grok for this pass.",
+    "Prefer available pwsh; approved Windows PowerShell 5.1 fallback on PAYTON-LEGION2 was unnecessary.",
+    "MCP session-log persistence waived; receipt-only Markdown/JSON/JSONL required.",
+    "Review only; no product remediation, merge, commit/push, TODO/goal changes, or bulk closure.",
+    "AGREE only when every applicable A-D claim PASS and both scores >=98; no prior HV AGREE invented."
+  ],
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "status": "FAIL",
+      "claim": "All prior HV01-HV14 and A1/C2/C3/D1 deficiencies are remediated without weakening scope.",
+      "evidence": "65 original runtime assertions pass again, as do ten canonical HV16/HV17 workflow probes. HV07 still has incomplete raw-metadata and gate mappings; HV09 and D1 remain unsatisfied. Expanded attacks reveal two other case-sensitive identity defects, HV19/HV20. Original repaired inputs are distinguished from new counterexamples."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "Run p2-unit-legion-20261001T022033Z is green for the reviewed bound source content.",
+      "evidence": "Independently parsed every NUnit test-case and TRX UnitTestResult: Pester 212/0/0; Nuke seven projects 4252/0/0; Build.Tests 321/0/0. All three command exit codes are zero. Pester NotRun/Inconclusive/FailedBlocks/FailedContainers are zero. Existing compiled SessionLifeUnitGateValidator.Validate independently ACCEPTED twice. Native logs/validate.log:16 reports acceptance. This review did not rerun the full suite. Source hashes match current tip inputs; missing outer log is separately A7."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "PluginIntegration is deliberately excluded from the unit inventory and stays P6-owned.",
+      "evidence": "build/Build.Test.cs:14-25 explicitly excludes PluginIntegration and uses the same selected array for inventory and execution. selected-projects.json has seven unit projects and no PluginIntegration. Plan:400 names PluginSessionLogIntegration under P6. Existing exclusion regression Passed."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "Source binding includes the consumed P2 runtime/docs inputs and acceptance manifest.",
+      "evidence": "build/SessionLifeUnitGateManifest.cs:22 now includes docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json. Native manifest includes its 473963 bytes and SHA256 458E61FAC96CFD5D8C1AE8D7AE59B3E91DE6A653442FEF80BA3DF300CD405394. All 2229 declared sources match on initial and final checks; runtime, shim, hook, cache resolver, gate orchestrator and three contract docs are bound. HV18 is repaired."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "Frozen history-r1 and the inherited P1 gate stack remain intact.",
+      "evidence": "All five historical files match frozen manifest hashes. git diff f80e9af6 HEAD -- history-r1 is empty. All 95 inherited SessionLifeUnitGate native cases plus the PluginIntegration exclusion case passed (96 total). Frozen history manifest SHA256: B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "status": "FAIL",
+      "claim": "Concrete AC/branch evidence establishes completeness >=98 without closing TODOs.",
+      "evidence": "35/35 core rows contain existing native names, with zero ghost names and zero missing declared source files. Nevertheless, two specific mappings remain semantically incomplete and two real identity branches fail. Completeness is 96. All 35 TODO rows remain not-accepted/done=false; no closure used to inflate completeness."
+    },
+    {
+      "id": "A7",
+      "surface": "A",
+      "status": "FAIL",
+      "claim": "The supplied outer gate log path exists and is reviewable.",
+      "evidence": "Test-Path docs/receipts/hv/p2-unit-legion-20261001T022033Z-gate.log is false, independently checked twice; no matching 022033 file exists there. Accessible TestResults/.../logs/validate.log plus full native artifacts substantiate green independently. No replacement log was manufactured."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Mandatory add-profile first action completed.",
+      "evidence": "First attempted tool action read the exact Claude add-profile SKILL.md; sandbox launch failed before execution with os error 206. The PowerShell connector then read that skill and all 21 non-skill profile Markdown files in full before claim checks. Truncated aggregate reads were re-read in complete bounded chunks. Full profile file inventory/hashes is attached. Hostile-validator skill surfaces A-D were read and applied."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Live validator identity and evidence shell satisfy operator overrides.",
+      "evidence": "session_meta and turn_context from rollout-2026-09-30T21-35-14-01a0f550-e4e5-7601-89c5-ecf17ea97a13.jsonl establish Codex exec in the requested workspace, model gpt-6-astra, effort xhigh. Thread 01a0f550-e4e5-7601-89c5-ecf17ea97a13; turn 01a0f550-e7ef-71a1-a2dc-40281af54ba5. PowerShell connector and child probes use 7.6.5 on PAYTON-LEGION2; no Python/Bash or Windows PowerShell fallback used."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Receipt-only logging meets this review override.",
+      "evidence": "Operator explicitly waived MCP session-log persistence and required Markdown, JSON and request/response JSONL under docs/receipts/hv. Exact user requests and sanitized live identity proof are recorded. Response JSONL includes user-visible assistant/tool events plus complete verdict, with snapshot boundary stated. Runner may append CLI stream. No MCP persistence is claimed. Root marker contains only workspacePath and test apiKey, not a trusted endpoint."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Local branch and live PR identify the requested review target.",
+      "evidence": "git rev-parse HEAD and GitHub get_pr_info agree on 5e6b236c958505b5e202e2fb86604b7dec1eb968; branch cursor/sessionlife-p2-contracts-5cb2. PR #72 is open, draft=true, merged=false, base=develop. GitHub read-only query only; no PR changes."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Prior acceptance/HV agreement is not fabricated.",
+      "evidence": "Historical p2-contracts-verdict.json:5-7 still has accepted=false, phaseComplete=false, hvAgreeClaimed=false. Current PR body explicitly disclaims P2 exit/HV AGREE and reports an older red run; its historical counts are not used for current green. All 35 exported TODOs remain open/unaccepted."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Marker fixture, recovery YAML and StrictCount repairs are supported.",
+      "evidence": "Three actual Get-TestMarkerSnapshot function bodies reject implicit missing root-marker creation and create only explicit isolated fixtures through Write-McpYamlObject. Root marker stays unchanged. Actual Open-PluginTurn space/# recovery paths round-trip and exist. PluginPowerShellRuntime.Tests.ps1:4713-4722 resets markerless nonpersisted state for each StrictCount case; native runtime/TriagePluginIdentity cases passed."
+    },
+    {
+      "id": "B7",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Historical implementation automation and authoritative MCP-store provenance fully complied.",
+      "evidence": "Historical p2-contracts-verdict.json:53 and p2-unit-gate-failures.json:1037 still declare Python json module serializing native objects. Original author execution and authoritative store provenance were not established in this pass. Do not infer either compliant execution or a proven forbidden execution from this conflicting record alone. Receipt waiver does not make the test marker a trusted requirements/TODO query."
+    },
+    {
+      "id": "B8",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Required P2 Red-test inter-phase hostile AGREE is established.",
+      "evidence": "Scoped P2 plan/receipt chain contains no linked P2 Red-test AGREE; predecessor reference is P1 acceptance. Plan:259 and :384 require independent inter-phase review; :248 forbids reconstructing history from present reruns. Historical phaseComplete remains false. No file-mtime chronology inference is used."
+    },
+    {
+      "id": "B9",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Review preserves product, Git and acceptance state.",
+      "evidence": "Authored scripts, probes, isolated YAML fixtures and receipts are confined to docs/receipts/hv. No remediation, merge, commit/push, deployment or TODO/goal/requirement mutation. Final HEAD unchanged; 2229 source hashes, 17 native artifact hashes and five history files unchanged. No git-status change outside receipts relative to baseline. Oversized PowerShell connector outputs produced diagnostic Temp spill files automatically; zero incidental host-tool writes is not claimed."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "status": "PASS",
+      "claim": "Governing P2 FR/TR/TEST/AC and mapping projection exists.",
+      "evidence": "Acceptance manifest has 109 structured criteria, 47 independently counted distinct mapping edges, and 35 unique TODO rows. FR/TR/TEST SESSIONLIFE-001..003 contributes 35 core rows; each has a fresh disposition with mapped tests, boundaries and integration obligations. This is exported projection evidence, not a fresh authoritative MCP query."
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "status": "FAIL",
+      "claim": "Criterion-specific mappings cover each applicable P2 branch.",
+      "evidence": "FR-MCP-SESSIONLIFE-002-AC002 at manifest:563 still maps wrapper whitespace/empty/null plan cases but not actual raw omitted/null/server metadata validation tests or todoId branches. TEST-MCP-SESSIONLIFE-002-AC004 at :2962 maps only textual inventory and generic wrapper outcomes. The corrected validator source path and regex checks for test method names are not actual invalid-report execution links. Existing real C# validator and consumer tests Passed but remain absent from criterionSpecificExistingTests. HV19/HV20 branches lack adequate regressions."
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "status": "FAIL",
+      "claim": "Runtime meets immutable exact identity and truthful persistence contracts.",
+      "evidence": "Invoke-ReplPersistTurn:1751-1752 still uses case-insensitive -ne for supplied response IDs. Eight update/appendActions/complete/fail cases accept altered session/request casing as persisted=true and delete recovery; failTurn also removes current turn. Invoke-WorkflowBeginTurn:2162/:2166 similarly treats different-cased IDs as a durable reopen and overwrites binding at :2221-2222, omitting creation metadata even when backend returns HTTP 400. See remaining-identity-probes-v2.json."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "status": "FAIL",
+      "claim": "P2 holistic DoD permits slice exit.",
+      "evidence": "Plan:254-260, :371, :377, :383-384 and :392 require immutable identity, truthful results, concrete coverage and complete independent acceptance. Green native gate is real, but HV19/HV20, HV07 residual mappings, missing referenced log, completeness 96 and B7/B8 UNKNOWN prevent exit. No later phase or done-state authorization is issued."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "status": "PASS",
+      "claim": "Later-phase scope and nonacceptance boundaries remain intact.",
+      "evidence": "P3 deadline/Stop, P4 replay/security/provider persistence, P5 synchronization/activation, and P6 exact durable readback/provider/integration remain explicit obligations. P2:257 expressly allows later durable-query proof. TEST003 provider/readback is not inferred from mocks. PluginSessionLogIntegration remains excluded from units/P6-owned. All 35 TODOs stay not-accepted/done=false."
+    }
+  ],
+  "Findings": [
+    {
+      "id": "HV19",
+      "priority": "P1",
+      "title": "Generic submit-result identity remains case-insensitive",
+      "location": "plugins/core/lib-ps/repl-invoke.ps1:1751",
+      "evidence": "20261001T023513Z-remaining-identity-probes-v2.json",
+      "detail": "Eight case-session/case-request responses across updateTurn, appendActions, completeTurn and failTurn produce true/persisted=true and zero retained recovery files. Exact controls pass; four ordinary different-ID controls reject and retain one recovery file. failTurn deletes current-turn.yaml on the false primary result. No remote server mutation is claimed; only immediate transport is doubled.",
+      "requiredCorrection": "Enforce ordinal equality for every supplied response identity before clearing write-ahead recovery; add real-function negative coverage for all SubmitAsync consumers."
+    },
+    {
+      "id": "HV20",
+      "priority": "P1",
+      "title": "beginTurn treats case-different identity as the same durable turn",
+      "location": "plugins/core/lib-ps/repl-invoke.ps1:2162",
+      "evidence": "20261001T023513Z-remaining-identity-probes-v2.json",
+      "detail": "Canonical cached req-20261001T000000Z-casea or sessiona is replaced by caseA/sessionA. Same-turn/session comparisons at :2162/:2166 are case-insensitive; :2221-2222 overwrite IDs and durable metadata omission applies. Both probes return false after HTTP 400 yet cache hashes and bound identities have already changed. Canonical identifier validator separately rejects uppercase-suffix variants.",
+      "requiredCorrection": "Use exact identity when deciding reopen/session match and preserve an existing bound turn when identity proof fails. Add beginTurn case-request and case-session regression cases, including backend rejection."
+    },
+    {
+      "id": "HV07-residual",
+      "priority": "P2",
+      "title": "Raw metadata and real gate-test traceability remain incomplete",
+      "location": "docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json:563",
+      "evidence": "20261001T023513Z-ac-dispositions.json",
+      "detail": "Ghost names and nonexistent paths are repaired. However FR002-AC002 does not link raw missing metadata/server validation tests, and TEST002-AC004 still maps text inspection instead of actual invalid-artifact validator tests. New wrapper empty/null plan test covers only part of the raw pair contract.",
+      "requiredCorrection": "Map exact existing C# validator, raw-entry and consumer cases to their ACs, close any uncovered metadata branches, and add HV19/HV20 regressions without accepting or closing TODOs."
+    },
+    {
+      "id": "HV21",
+      "priority": "P2",
+      "title": "Supplied gate log receipt path is absent",
+      "location": "docs/receipts/hv/p2-unit-legion-20261001T022033Z-gate.log",
+      "evidence": "20261001T023513Z-final-verification.json",
+      "detail": "Named outer gate.log is absent. Accessible native logs/validate.log and direct compiled validator independently substantiate the green result.",
+      "requiredCorrection": "Correct the evidence index/brief to an existing preserved log, or provide the actual runner log. Do not reconstruct a historical log."
+    },
+    {
+      "id": "HV09",
+      "priority": "gate",
+      "title": "Completeness below required threshold",
+      "detail": "Completeness 96 is below 98. Branch/mapping gaps and unresolved historical evidence remain. Native green and populated mapping arrays are insufficient.",
+      "requiredCorrection": "Resolve evidence and behavior gaps, then obtain independent review; no TODO closure as a substitute."
+    },
+    {
+      "id": "D1",
+      "priority": "gate",
+      "title": "Holistic P2 exit gate fails",
+      "detail": "Remaining product/traceability defects, missing supplied receipt, sub-98 completeness and B7/B8 unknown evidence prevent acceptance.",
+      "requiredCorrection": "Keep P2 and all 35 TODO acceptance states unaccepted."
+    }
+  ],
+  "ExplicitFailList": [
+    "HV19: Generic submit-result identity remains case-insensitive",
+    "HV20: beginTurn treats case-different identity as the same durable turn",
+    "HV07-residual: Raw metadata and real gate-test traceability remain incomplete",
+    "HV21: Supplied gate log receipt path is absent",
+    "HV09: Completeness below required threshold",
+    "D1: Holistic P2 exit gate fails"
+  ],
+  "UnknownEvidence": [
+    {
+      "id": "B7",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Historical implementation automation and authoritative MCP-store provenance fully complied.",
+      "evidence": "Historical p2-contracts-verdict.json:53 and p2-unit-gate-failures.json:1037 still declare Python json module serializing native objects. Original author execution and authoritative store provenance were not established in this pass. Do not infer either compliant execution or a proven forbidden execution from this conflicting record alone. Receipt waiver does not make the test marker a trusted requirements/TODO query."
+    },
+    {
+      "id": "B8",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Required P2 Red-test inter-phase hostile AGREE is established.",
+      "evidence": "Scoped P2 plan/receipt chain contains no linked P2 Red-test AGREE; predecessor reference is P1 acceptance. Plan:259 and :384 require independent inter-phase review; :248 forbids reconstructing history from present reruns. Historical phaseComplete remains false. No file-mtime chronology inference is used."
+    }
+  ],
+  "PriorHvReattack": [
+    {
+      "id": "HV01",
+      "status": "PASS",
+      "evidence": "Ten compiled first-persist payload checks and degraded/never-degraded real 404 branches pass."
+    },
+    {
+      "id": "HV02",
+      "status": "PASS",
+      "evidence": "Original missing-session/wrong-workspace/rebind probes reject; ordinary session-rotation preserves session A. Expanded begin casing fault is HV20."
+    },
+    {
+      "id": "HV03",
+      "status": "PASS",
+      "evidence": "All six original caller mismatch mutation probes reject without calls/cache changes."
+    },
+    {
+      "id": "HV04",
+      "status": "PASS",
+      "evidence": "Actual initial and duplicate hook results reference existing recovery files."
+    },
+    {
+      "id": "HV05",
+      "status": "PASS",
+      "evidence": "Identical degraded retry reaches primary and clears matching recovery."
+    },
+    {
+      "id": "HV06",
+      "status": "PASS",
+      "evidence": "Successful retry clears degraded/failsafePath; older distinct envelopes remain distinct."
+    },
+    {
+      "id": "HV07",
+      "status": "FAIL",
+      "evidence": "Native names and stale nonexistent paths repaired; semantic raw/gate mapping defects remain."
+    },
+    {
+      "id": "HV08",
+      "status": "PASS",
+      "evidence": "Actual hook recovery path with spaces/# round-trips through object YAML."
+    },
+    {
+      "id": "HV09",
+      "status": "FAIL",
+      "evidence": "Completeness 96 < 98."
+    },
+    {
+      "id": "HV10",
+      "status": "PASS",
+      "evidence": "Durable update/append/complete omit absent metadata in actual SubmitAsync payloads."
+    },
+    {
+      "id": "HV11",
+      "status": "PASS",
+      "evidence": "Explicit append metadata lands in cache and first payload; subsequent durable complete omits fields."
+    },
+    {
+      "id": "HV12",
+      "status": "PASS",
+      "evidence": "Persisted missing-marker and wrong-marker degraded begin reject with zero calls and unchanged cache."
+    },
+    {
+      "id": "HV13",
+      "status": "PASS",
+      "evidence": "Six missing-marker caller mismatches reject before cache freshness mutation."
+    },
+    {
+      "id": "HV14",
+      "status": "PASS",
+      "evidence": "Original missing/null/blank/wrong typed IDs and retitled faults reject; title recovery stays retained."
+    },
+    {
+      "id": "HV15",
+      "status": "PASS",
+      "evidence": "Three actual marker helpers reject implicit missing root fixture creation; explicit object fixtures work."
+    },
+    {
+      "id": "HV16",
+      "status": "PASS",
+      "evidence": "All six canonical case-different caller mutation probes now reject with zero calls and unchanged cache."
+    },
+    {
+      "id": "HV17",
+      "status": "PASS",
+      "evidence": "All four typed dialog/title case-session/case-request responses reject primary; exact typed controls pass."
+    },
+    {
+      "id": "HV18",
+      "status": "PASS",
+      "evidence": "Exact consumed acceptance-manifest path/hash now in canonical producer roots and all 2229 hashes match."
+    }
+  ],
+  "NativeGate": {
+    "TimestampUtc": "2026-10-01T02:41:26.7833300+00:00",
+    "RunId": "p2-unit-legion-20261001T022033Z",
+    "Shell": "7.6.5",
+    "Reports": [
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\build-tests\\Build.Tests.trx",
+        "sha256": "875FB0B3A6136D3142BC1E282C6FE07AE51AE36425CE74D1D36F057D3A26801D",
+        "outcome": "Completed",
+        "total": 321,
+        "executed": 321,
+        "passed": 321,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 321,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T21:30:36.2219135-05:00",
+        "finish": "2026-09-30T21:33:14.9397444-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+        "sha256": "14259FFF4FF4328436079965076E388999939097178D34F744C094767C6134AF",
+        "outcome": "Completed",
+        "total": 301,
+        "executed": 301,
+        "passed": 301,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 301,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T21:30:09.4789421-05:00",
+        "finish": "2026-09-30T21:30:11.7297510-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+        "sha256": "CBF6FEF5463096D5B5BEAFDE22CBB3991061E8CCCA772944A50272AF0ACA5FF1",
+        "outcome": "Completed",
+        "total": 33,
+        "executed": 33,
+        "passed": 33,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 33,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T21:30:12.6833463-05:00",
+        "finish": "2026-09-30T21:30:14.1685243-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+        "sha256": "33BED357447D3CC09138132A48933C7C1DA455FB646D4F52D44D2F22F8801BE8",
+        "outcome": "Completed",
+        "total": 20,
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 20,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T21:30:15.0965365-05:00",
+        "finish": "2026-09-30T21:30:16.4890481-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+        "sha256": "80D2497E25AB389DD18C2D95AC3E7B2D76F7584E05DF6B682C82C29D88B6F108",
+        "outcome": "Completed",
+        "total": 63,
+        "executed": 63,
+        "passed": 63,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 63,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T21:30:17.4195104-05:00",
+        "finish": "2026-09-30T21:30:25.7964377-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+        "sha256": "188F36827E05C9096DD0A9E925DB07D93F7CB016AF5778EE51D87334D723E8D5",
+        "outcome": "Completed",
+        "total": 90,
+        "executed": 90,
+        "passed": 90,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 90,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T21:30:30.5632135-05:00",
+        "finish": "2026-09-30T21:30:32.3116481-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+        "sha256": "43AFC66559EA1C30F2EE6174ACB38DC170E2B3CE7839B934CF154A53AD0770A9",
+        "outcome": "Completed",
+        "total": 866,
+        "executed": 866,
+        "passed": 866,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 866,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T21:30:26.7449705-05:00",
+        "finish": "2026-09-30T21:30:29.4003777-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+        "sha256": "21FC1AADB4EDD34FE456444505DAABC0581FD70F970A3985EDE377E4DA53150A",
+        "outcome": "Completed",
+        "total": 2879,
+        "executed": 2879,
+        "passed": 2879,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 2879,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T21:26:51.8042250-05:00",
+        "finish": "2026-09-30T21:30:07.6187356-05:00"
+      }
+    ],
+    "ManifestSources": 2229,
+    "P1Results": [
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ScopeMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_RejectsMissingRepeatedCopiedOrWrongTargetCall",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunCommandResults)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterNativeCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalAdverseTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunSourceManifest)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: IncompleteTrxOutcome)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.TestTarget_ExcludesPluginIntegrationFromUnitInventory",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterBlocks)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ValidUnitArtifacts_DoNotRequireProviderLane",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_ReportOnlyWrite_DoesNotCauseSourceDrift",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ScopeMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NegativeTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolByteHashDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DuplicateProject)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: NotExecutedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateReportFile)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InconsistentTrxCounters)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunCommandResults)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ReportWrittenAfterManifest_DoesNotCauseSourceDrift",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: StaleInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunSourceManifest)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolPathDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: FailedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalSkippedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ProjectReportMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateProject)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ZeroDiscoveredTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: InconclusivePesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MalformedTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ProjectReportMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InvalidTrxTimes)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NotRunPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: FailedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolVersionDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterContainers)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolByteHashDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: OptionalAdverseTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: SkippedPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolPathDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: InvalidTrxTimes)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ValidProviderArtifacts_DoNotRequireUnitLane",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_DelegatesExactRequestExactlyOnce",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunId)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NonPassingBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunId)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: IncompleteTrxOutcome)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: StaleProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MalformedTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: InconsistentTrxCounters)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StaleBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolVersionDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterNativeResult)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: NegativeTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: OptionalSkippedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DuplicateReportFile)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NotExecutedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_AcceptsValidUnitArtifacts",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ZeroDiscoveredTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: NonZero)",
+        "outcome": "Passed"
+      }
+    ],
+    "Pester": {
+      "total": 212,
+      "actualCases": 212,
+      "nonSuccess": 0,
+      "date": "2026-10-01",
+      "time": "02:20:47",
+      "native": {
+        "RunId": "p2-unit-legion-20261001T022033Z",
+        "ExecutedAt": "2026-09-30T21:20:46.3367064-05:00",
+        "Total": 212,
+        "Passed": 212,
+        "Failed": 0,
+        "Skipped": 0,
+        "Inconclusive": 0,
+        "NotRun": 0,
+        "FailedBlocks": 0,
+        "FailedContainers": 0
+      },
+      "sha256": "8FE9C5B16C034B0F505A68925466CD7B5EBA56513983C8958CEB60AC18142646",
+      "P2Cases": [
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects an absent current-turn cache without a server write",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refreshes same-path marker drift without rewriting the bound session",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence",
+          "result": "Success"
+        }
+      ]
+    },
+    "CommandResults": {
+      "schemaVersion": 1,
+      "runId": "p2-unit-legion-20261001T022033Z",
+      "scope": "unit",
+      "commands": [
+        {
+          "name": "pester",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T21:20:46.3367064-05:00",
+          "finishedAtUtc": "2026-09-30T21:24:58.1046143-05:00"
+        },
+        {
+          "name": "nuke-test",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T21:24:58.1293596-05:00",
+          "finishedAtUtc": "2026-09-30T21:30:33.554063-05:00"
+        },
+        {
+          "name": "build-tests",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T21:30:33.5576636-05:00",
+          "finishedAtUtc": "2026-09-30T21:33:15.1296756-05:00"
+        }
+      ]
+    },
+    "SourceMismatches": [],
+    "OmittedCriticalInputs": [
+      {
+        "path": "plugins/core/lib-ps/repl-invoke.ps1",
+        "inManifest": true,
+        "currentSha256": "F1595760592F718F711C5D38A3A329F03D3A993A52A090A5273C9AE56A369720"
+      },
+      {
+        "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+        "inManifest": true,
+        "currentSha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375"
+      },
+      {
+        "path": "plugins/core/lib-ps/plugin-hook.ps1",
+        "inManifest": true,
+        "currentSha256": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B"
+      },
+      {
+        "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+        "inManifest": true,
+        "currentSha256": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405"
+      },
+      {
+        "path": "tools/validation/Invoke-SessionLifeUnitGate.ps1",
+        "inManifest": true,
+        "currentSha256": "B26FD1BD1E8BBC2573F44665610F74C460006B7D5D05FAAB9808CA40F29B1CB8"
+      },
+      {
+        "path": "docs/context/module-bootstrap.md",
+        "inManifest": true,
+        "currentSha256": "F4918499C18D4F16169012EB65834D3D66AE4362ABC8F34E613CB48DFEDCAE11"
+      },
+      {
+        "path": "docs/REPL-USER-GUIDE.md",
+        "inManifest": true,
+        "currentSha256": "D80D6074FF21BBDC1AFD57AC90D642E4C36F4A4E8C4A5707556DFC34D3AD24B9"
+      },
+      {
+        "path": "docs/context/repl-yaml-message.schema.json",
+        "inManifest": true,
+        "currentSha256": "FABCF8D539D1CCE2D3EE1CCE0D1573E654E6642D628A3ECFF1E46CF12F57A031"
+      }
+    ],
+    "ArtifactHashes": [
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\command-results.json",
+        "length": 671,
+        "sha256": "B79459CDD9519CAA628660D2E56E51515709E1063A9DB24E4C3700B5180224E9"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\source-manifest.json",
+        "length": 583372,
+        "sha256": "F361161835A69BEA283C5CD9CAFD74DF32CD080AAC4BC0F6566A35D0A2CB4440"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\build-tests\\Build.Tests.trx",
+        "length": 455434,
+        "sha256": "875FB0B3A6136D3142BC1E282C6FE07AE51AE36425CE74D1D36F057D3A26801D"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\logs\\build-tests.log",
+        "length": 794,
+        "sha256": "15106C0FC95DCD802C387E08E9D24DE803EE4356A28645FE5BEF00DEEFA01561"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\logs\\capture-manifest.log",
+        "length": 3704,
+        "sha256": "CCA25BA85DDFD24C4E7022C65E3072D307369B6EBE3F5619E9F0D48FAA45BF93"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\logs\\nuke-test.log",
+        "length": 719427,
+        "sha256": "147137364E4110856FA9232FE787CE684E8AFAD5D3A4A191B2F0B9784A9A5334"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\logs\\validate.log",
+        "length": 3515,
+        "sha256": "FF6DA661D94B8E9D7B6BB8D32F8E1B633919C56C16C97CB7972545D5DBDB0B94"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\pester\\native-run.json",
+        "length": 260,
+        "sha256": "422AD7A517FF0B7E1FCE2FAD4D4627DED401DE8B828032A23B6A0EB6EE0B80B2"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\pester\\results.xml",
+        "length": 86480,
+        "sha256": "8FE9C5B16C034B0F505A68925466CD7B5EBA56513983C8958CEB60AC18142646"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\selected-projects.json",
+        "length": 1761,
+        "sha256": "12C0756523921AF455BE8038B64E5BDA810F614402CEF9AE3E82B9FE462B9A22"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+        "length": 425697,
+        "sha256": "14259FFF4FF4328436079965076E388999939097178D34F744C094767C6134AF"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+        "length": 46202,
+        "sha256": "CBF6FEF5463096D5B5BEAFDE22CBB3991061E8CCCA772944A50272AF0ACA5FF1"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+        "length": 30732,
+        "sha256": "33BED357447D3CC09138132A48933C7C1DA455FB646D4F52D44D2F22F8801BE8"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+        "length": 96112,
+        "sha256": "80D2497E25AB389DD18C2D95AC3E7B2D76F7584E05DF6B682C82C29D88B6F108"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+        "length": 130319,
+        "sha256": "188F36827E05C9096DD0A9E925DB07D93F7CB016AF5778EE51D87334D723E8D5"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+        "length": 1297942,
+        "sha256": "43AFC66559EA1C30F2EE6174ACB38DC170E2B3CE7839B934CF154A53AD0770A9"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20261001T022033Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+        "length": 4426245,
+        "sha256": "21FC1AADB4EDD34FE456444505DAABC0581FD70F970A3985EDE377E4DA53150A"
+      }
+    ],
+    "HistoryManifestSha256": "B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4",
+    "HistoryFiles": [
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\_build.csproj",
+        "expected": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+        "actual": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\SessionLifeUnitGate.cs",
+        "expected": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+        "actual": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\p1-behavior-red-test-plan.md",
+        "expected": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+        "actual": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateConsumerTests.cs",
+        "expected": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+        "actual": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateValidatorTests.cs",
+        "expected": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+        "actual": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+        "match": true
+      }
+    ],
+    "ValidatorAssemblySha256": "D11230EC83E7C06A68D633C942DD9BAD1C9E36B14BE965568288DF9A0F2F5280",
+    "IndependentValidatorResult": {
+      "status": "ACCEPTED",
+      "method": "SessionLifeUnitGateValidator.Validate",
+      "artifactMutation": false,
+      "note": "Direct compiled-validator invocation on existing normalized reports; not a fresh test-suite run."
+    }
+  },
+  "CoreAcDispositions": {
+    "TimestampUtc": "2026-10-01T02:50:15.1822930+00:00",
+    "totalCriteria": 109,
+    "coreCriteria": 35,
+    "uniqueEdges": 47,
+    "todoRows": 35,
+    "todoNotAccepted": 35,
+    "todoDoneFalse": 35,
+    "missingNativeMappings": [],
+    "missingSourcePaths": [],
+    "criteria": [
+      {
+        "id": "FR-MCP-SESSIONLIFE-001-AC001",
+        "requirementId": "FR-MCP-SESSIONLIFE-001",
+        "text": "A degraded begin retains every cached turn field, including prompt, context, metadata, identity, status, timestamps, title, and counters; it never replaces the turn with a reduced three-field object.",
+        "disposition": "P2 PASS",
+        "assessment": "Real degraded begin preserves query, title, metadata, openedAt and audit fields. Expanded probes and native lifecycle assertions confirm preservation; no durable server claim.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.does not replace queryText queryTitle planFile todoId openedAt or audit counters",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Begin with primary persistence failure, inspect the retained cache and recovery envelope, then query after replay."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-001-AC002",
+        "requirementId": "FR-MCP-SESSIONLIFE-001",
+        "text": "Prompt-hook status reports durable opened only after confirmed primary persistence; otherwise it reports opened-degraded and identifies the retained recovery artifact without representing the turn as server-persisted.",
+        "disposition": "P2 PASS",
+        "assessment": "Actual Open-PluginTurn initial and duplicate degraded paths identify existing retained artifacts. Eight-verb native child-process matrix distinguishes primary/queued/lost. General submit identity faults remain tracked separately under FR003.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Run prompt hook once with primary success and once with a retained failsafe."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-001-AC003",
+        "requirementId": "FR-MCP-SESSIONLIFE-001",
+        "text": "Complete recovers required query text from the cached query text, then a valid cached title, then the approved placeholder, without replacing a valid title; update omits empty query text so stored query text and title are preserved.",
+        "disposition": "P2 PASS",
+        "assessment": "Lifecycle test asserts exact cached query, title fallback, placeholder and unchanged valid title. Real builder/shim empty-query case passed natively.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.complete recovery uses cached queryText then queryTitle then the placeholder",
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.update omits an empty queryText so the server value can stay",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Complete turns with each fallback state and update a durable turn with empty query."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-001-AC004",
+        "requirementId": "FR-MCP-SESSIONLIFE-001",
+        "text": "A missing-turn appendDialog on an already degraded local turn performs at most one bounded recovery submit and then retains a session_dialog failsafe; an unrelated never-degraded not-found remains a classified nonretryable error.",
+        "disposition": "P2 PASS",
+        "assessment": "Actual appendDialog degraded 404 attempts one submit then retains dialog; never-degraded 404 has zero submits and no queue.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Compare degraded and never-degraded missing-turn paths with submit and queue call counts."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-001-AC005",
+        "requirementId": "FR-MCP-SESSIONLIFE-001",
+        "text": "A same-request retry supplies preserved creation metadata, normalizes canceled and cancelled supersession consistently, and never silently converts locally active state into proof of server persistence.",
+        "disposition": "P2 PASS",
+        "assessment": "Real same-request degraded retry sends cached metadata, tries primary again and clears matching recovery. Native supersede and canceled/cancelled builder branches pass.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Retry the exact request under both spelling variants and inspect cache plus outcome."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-002-AC001",
+        "requirementId": "FR-MCP-SESSIONLIFE-002",
+        "text": "First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.",
+        "disposition": "P2 PASS",
+        "assessment": "Ten real outgoing first-persist payloads pass the compiled server metadata validator. Explicit, cache, and None branches exercised.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Run first persistence with explicit values, verified cached values, and no active plan/TODO."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-002-AC002",
+        "requirementId": "FR-MCP-SESSIONLIFE-002",
+        "text": "Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.",
+        "disposition": "P2 FAIL",
+        "assessment": "HV07 residual: new wrapper test covers empty/null planFile, but criterion still lacks exact links to raw missing metadata/server validator tests and todoId branches. HV20 also selects durable omission for case-different identity.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Exercise four invalid ordinary inputs, two supersession spellings, and a durable reopen."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-002-AC003",
+        "requirementId": "FR-MCP-SESSIONLIFE-002",
+        "text": "Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.",
+        "disposition": "P2 FAIL",
+        "assessment": "HV10/HV11 original omitted/explicit metadata probes pass. HV20 disproves exact matching identity before durable omission.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Update metadata, reopen exact identity, then attempt omission under each identity drift."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-002-AC004",
+        "requirementId": "FR-MCP-SESSIONLIFE-002",
+        "text": "Freshness validation rejects workspace, agent, session, or request drift and never rewrites or rebinds an already cached session identifier from a marker or inherited process value.",
+        "disposition": "P2 FAIL",
+        "assessment": "HV16 six caller guards now pass, but beginTurn compares current request/session case-insensitively and overwrites a canonical bound ID after a case-only input, even when backend rejects. HV20.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Mutate one identity dimension at a time, including inherited environment and marker values."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-002-AC005",
+        "requirementId": "FR-MCP-SESSIONLIFE-002",
+        "text": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+        "disposition": "P2 PASS",
+        "assessment": "All 48 YAML/JSON fences parse; raw/parsed begin example counts are 2/2 and 3/3. Read schema and creation/supersession/reopen wording. Native exhaustive document oracle passed.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Dynamically discover all supported fenced request-example bodies without fixed selectors. The current inventory must report module-bootstrap examples at lines 49 and 65 and REPL user-guide examples at lines 118, 471, and 819; the user-guide inventory bullet at line 173 is non-example prose and must not enter the fenced-example raw count. Require every supported fence to parse, require fenced-body raw and parsed beginTurn counts to match, evaluate every discovered example, and fail on any omitted pair lacking an explicit approved omission context. Then validate the nonbreaking state-aware JSON-schema branch."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-003-AC001",
+        "requirementId": "FR-MCP-SESSIONLIFE-003",
+        "text": "Every session-log mutation returns exactly one truthful outcome: primary persisted, degraded queued with a confirmed retained failsafe, or failed/lost with a nonzero process result.",
+        "disposition": "P2 FAIL",
+        "assessment": "HV19: eight submit-result case-identity probes across update/appendActions/complete/fail claim persisted=true and clear recovery; generic result identity check still uses -ne.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Drive primary success, confirmed queued recovery, and total loss through the wrapper."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-003-AC002",
+        "requirementId": "FR-MCP-SESSIONLIFE-003",
+        "text": "The result includes code, retryable, persisted, degraded, queued, method, requestId, failsafePath, message, and diagnostic stderr fields appropriate to the observed outcome.",
+        "disposition": "P2 FAIL",
+        "assessment": "Native 24 child-process outcome branches assert required fields. HV19 shows presence is insufficient: persisted/code fields are false assurances for a mismatched identity.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Serialize and round-trip each primary, queued, and lost outcome."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-003-AC003",
+        "requirementId": "FR-MCP-SESSIONLIFE-003",
+        "text": "Caller requestId is honored only when it matches the active turn; mismatches are rejected without mutating cache, server state, or recovery artifacts.",
+        "disposition": "P2 PASS",
+        "assessment": "Six non-case and six case-different caller mutation probes reject before transport/cache mutation. Missing-marker variants also preserve cache hashes. beginTurn durable-binding defect is separately FR002/HV20.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Attempt every mutation against a different active request and compare pre/post hashes."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-003-AC004",
+        "requirementId": "FR-MCP-SESSIONLIFE-003",
+        "text": "A primary-success result is accepted only with exact server readback of the intended response, interpretation, tags, contextList, actions or dialog, and identity.",
+        "disposition": "DEFERRED P6",
+        "assessment": "Plan P2:257 expressly defers durable exact server query to integration. Mock transport is not durable readback and cannot satisfy this entire AC.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Persist a full turn, query exact request, and inject mismatched readback for each section."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-003-AC005",
+        "requirementId": "FR-MCP-SESSIONLIFE-003",
+        "text": "Repeated unchanged updates and sequential append/complete calls are idempotent: no duplicate recovery work, child rows, or outcome ambiguity is introduced.",
+        "disposition": "P2 SUBSET PASS",
+        "assessment": "Native duplicate queued update/additive methods and fresh cross-session fingerprint probes pass. Server child-row replay idempotence remains P4/P6.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Run duplicate update then sequential append and complete with exact readback."
+      },
+      {
+        "id": "FR-MCP-SESSIONLIFE-003-AC006",
+        "requirementId": "FR-MCP-SESSIONLIFE-003",
+        "text": "Write-ahead recovery is retained before backend submission and deleted only after durable confirmation; a queued result is never represented as primary persistence or accepted TODO completion evidence.",
+        "disposition": "P2 FAIL",
+        "assessment": "HV19 removes write-ahead recovery on case-different response identity and failTurn removes current turn. Original missing/wrong/contradictory typed cases retain recovery.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Observe queue state before, during, and after primary success, queued degradation, and rejection."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-001-AC001",
+        "requirementId": "TR-MCP-SESSIONLIFE-001",
+        "text": "One real begin-turn builder or shim preserves the complete cached turn on degraded persistence and exposes a shared, truthful degraded transition used by all hooks.",
+        "disposition": "P2 PASS",
+        "assessment": "Unchanged shared real builder/shim and hook bodies executed; preserve full cached object on degraded begin.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.does not replace queryText queryTitle planFile todoId openedAt or audit counters",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Trigger degraded begin through prompt, complete, update, and dialog hooks and compare normalized transition."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-001-AC002",
+        "requirementId": "TR-MCP-SESSIONLIFE-001",
+        "text": "Prompt, complete, update, and dialog hooks consume the shared transition without reduced-object replacement, empty-query overwrite, or false server-persisted status.",
+        "disposition": "P2 PASS",
+        "assessment": "Actual hook plus native lifecycle complete/update omission assertions exercise shared transition. No fixture-only durability inference.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.complete recovery uses cached queryText then queryTitle then the placeholder",
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.update omits an empty queryText so the server value can stay",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Run the four hooks against identical cached state under primary and degraded outcomes."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-001-AC003",
+        "requirementId": "TR-MCP-SESSIONLIFE-001",
+        "text": "Degraded missing-turn dialog recovery is bounded to one submit attempt and one retained dialog failsafe, while unrelated not-found remains nonretryable.",
+        "disposition": "P2 PASS",
+        "assessment": "One-submit degraded 404 versus never-degraded rejection freshly reproduced; retained session_dialog envelope inspected.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Compare degraded and never-degraded 404 paths with exact invocation counts."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-002-AC001",
+        "requirementId": "TR-MCP-SESSIONLIFE-002",
+        "text": "A single durability-first metadata resolver implements explicit, verified-cache, and None precedence for planFile and todoId.",
+        "disposition": "P2 PASS",
+        "assessment": "Resolve-ReplPersistPlanTodo omitted durable fields and Set-ReplPersistPlanTodoArgs explicit cache update freshly tested for update/append/complete.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Call resolver directly and through first-persist hooks."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-002-AC002",
+        "requirementId": "TR-MCP-SESSIONLIFE-002",
+        "text": "Workspace, agent, session, and request identity are immutable after binding; freshness checks diagnose drift and never rebind from markers or inherited variables.",
+        "disposition": "P2 FAIL",
+        "assessment": "HV20 durable begin mutates request/session casing; immutable exact binding is not enforced at every entry point.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Inject marker and inherited-environment drift one dimension at a time."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-002-AC003",
+        "requirementId": "TR-MCP-SESSIONLIFE-002",
+        "text": "Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.",
+        "disposition": "P2 FAIL",
+        "assessment": "Docs are consistent and original metadata branches pass, but raw criterion links and exact-identity durable reopen remain incomplete (HV07/HV20).",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Execute the unchanged ordinary-first-persist, both-supersession-spelling, and durable-reopen runtime matrix; then dynamically discover all 2 module-bootstrap and all 3 REPL user-guide fenced beginTurn examples, including the multi-document block, while excluding the line 173 inventory bullet. Require every supported fence to parse and fenced-body raw/parsed inventories to match before validating each example and the schema branch."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-003-AC001",
+        "requirementId": "TR-MCP-SESSIONLIFE-003",
+        "text": "The wrapper exposes a typed primary, queued, or failed outcome contract and no session-log mutation collapses that result to an unclassified boolean.",
+        "disposition": "P2 FAIL",
+        "assessment": "Typed three-outcome wrapper exists and native process matrix passes. Generic submit envelope still accepts nonidentical case-only identity (HV19).",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Drive each mutation through all three durability outcomes."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-003-AC002",
+        "requirementId": "TR-MCP-SESSIONLIFE-003",
+        "text": "Result serialization includes identity, method, durability, queue, retryability, diagnostic, and failsafe fields without claiming primary success for queued work.",
+        "disposition": "P2 FAIL",
+        "assessment": "Serialized fields exist, but HV19 demonstrates wrong durability classification and deletion of recovery.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Round-trip typed outcomes and compare to backend/failsafe evidence."
+      },
+      {
+        "id": "TR-MCP-SESSIONLIFE-003-AC003",
+        "requirementId": "TR-MCP-SESSIONLIFE-003",
+        "text": "Child REPL execution uses one operation deadline with deterministic process-tree cleanup, and dedupe preserves sequential method labels and queue counts.",
+        "disposition": "P2 SUBSET PASS",
+        "assessment": "Sequential method/fingerprint/queue evidence verified. One-deadline and process-tree cleanup branches belong to P3, not accepted by this review.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Run process fixture matrix, then sequential append/update/complete dedupe scenario."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-001-AC001",
+        "requirementId": "TEST-MCP-SESSIONLIFE-001",
+        "text": "Mock-backed consumer tests prove degraded complete-turn preservation, truthful hook status, empty-query omission, bounded missing-turn dialog recovery, and same-request cached metadata.",
+        "disposition": "P2 PASS",
+        "assessment": "Real transport-boundary tests and fresh hostile fixtures cover preservation, hook, query, bounded 404 and cached metadata.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Run the complete lifecycle Pester context and capture each named case separately."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-001-AC002",
+        "requirementId": "TEST-MCP-SESSIONLIFE-001",
+        "text": "At least one real builder or shim test runs with MCP_PLUGIN_PERSIST_LOG unset and asserts the complete cached object and serialized persistence payload rather than only fixture echo.",
+        "disposition": "P2 PASS",
+        "assessment": "Fresh expanded/additional/supplemental probes explicitly clear MCP_PLUGIN_PERSIST_LOG; real builders, shim and YAML IO run.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Clear the environment variable, force degradation, and inspect both object and payload."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-001-AC003",
+        "requirementId": "TEST-MCP-SESSIONLIFE-001",
+        "text": "The accepted test scope exits with zero failures and zero skips and records the concrete test names and evidence paths in the acceptance manifest.",
+        "disposition": "P2 PASS",
+        "assessment": "212 Pester and 4573 TRX results all passed; named criterion tests are present. This proves green inventory, not overall AC acceptance.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary"
+        ],
+        "declaredTestSources": [
+          "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-175",
+          "BUG-TRIAGE-180",
+          "BUG-TRIAGE-181",
+          "BUG-TRIAGE-184",
+          "BUG-TRIAGE-205",
+          "BUG-TRIAGE-208",
+          "BUG-TRIAGE-214",
+          "BUG-TRIAGE-245"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Execute the accepted cumulative gate after review and verify manifest evidence paths."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-002-AC001",
+        "requirementId": "TEST-MCP-SESSIONLIFE-002",
+        "text": "Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.",
+        "disposition": "P2 FAIL",
+        "assessment": "HV07 residual raw metadata mappings; newly exposed begin identity branch lacks an adequate regression. Existing new empty/null wrapper case does not cover the entire raw contract.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-165",
+          "BUG-TRIAGE-171",
+          "BUG-TRIAGE-172",
+          "BUG-TRIAGE-173",
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-221",
+          "BUG-TRIAGE-229",
+          "BUG-TRIAGE-234",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Run the unchanged runtime contexts and three document parsers. Any extra, malformed, skipped, unparsed, or contradictory supported fenced beginTurn example fails because fenced-body raw and parsed inventories must match and every parsed example must satisfy explicit-pair-or-approved-omission. Non-example prose such as the line 173 inventory bullet is preserved and excluded. The schema case retains exact None, both supersession spellings, durable reopen, and no discriminator."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-002-AC002",
+        "requirementId": "TEST-MCP-SESSIONLIFE-002",
+        "text": "Named process tests cover primary, queued, and lost wrapper exits, structured result serialization, single child deadline and cleanup, Stop ordering, quarantine repair, audit reconciliation, and dialog classification.",
+        "disposition": "P2 SUBSET PASS",
+        "assessment": "Eight verbs times primary/queued/lost child process cases passed. Deadline/Stop/quarantine branches remain later P3/P4 obligations.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
+          "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+          "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+          "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+          "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-165",
+          "BUG-TRIAGE-171",
+          "BUG-TRIAGE-172",
+          "BUG-TRIAGE-173",
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-221",
+          "BUG-TRIAGE-229",
+          "BUG-TRIAGE-234",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Run the complete mixed process/runtime matrix with one isolated fixture per behavior."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-002-AC003",
+        "requirementId": "TEST-MCP-SESSIONLIFE-002",
+        "text": "Every mock-backed consumer case has a corresponding real implementation assertion and recorded process exit or serialized receipt; unaccepted candidate tests remain explicitly not accepted.",
+        "disposition": "P2 FAIL",
+        "assessment": "Existing real-code/process tests are genuine, but complete branch coverage is contradicted by HV19/HV20; no adequate committed regression for those counterexamples.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-165",
+          "BUG-TRIAGE-171",
+          "BUG-TRIAGE-172",
+          "BUG-TRIAGE-173",
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-221",
+          "BUG-TRIAGE-229",
+          "BUG-TRIAGE-234",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Validate manifest referential completeness before any production edit."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-002-AC004",
+        "requirementId": "TEST-MCP-SESSIONLIFE-002",
+        "text": "The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.",
+        "disposition": "P2 FAIL",
+        "assessment": "Gate is truly green and invalid-artifact C# tests pass. Criterion maps only textual inventory and wrapper outcomes; merely matching C# test method text does not exercise invalid reports. HV07 residual traceability gap.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+        ],
+        "declaredTestSources": [
+          "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-165",
+          "BUG-TRIAGE-171",
+          "BUG-TRIAGE-172",
+          "BUG-TRIAGE-173",
+          "BUG-TRIAGE-182",
+          "BUG-TRIAGE-185",
+          "BUG-TRIAGE-186",
+          "BUG-TRIAGE-198",
+          "BUG-TRIAGE-202",
+          "BUG-TRIAGE-204",
+          "BUG-TRIAGE-213",
+          "BUG-TRIAGE-221",
+          "BUG-TRIAGE-229",
+          "BUG-TRIAGE-234",
+          "BUG-TRIAGE-239",
+          "BUG-TRIAGE-240",
+          "BUG-TRIAGE-241",
+          "BUG-TRIAGE-243",
+          "BUG-TRIAGE-244",
+          "BUG-TRIAGE-246"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Execute Pester, Nuke Test, and Build.Tests under one run ID."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-003-AC001",
+        "requirementId": "TEST-MCP-SESSIONLIFE-003",
+        "text": "Transaction-gated session-log tests prove non-QuadBrain action, dialog, update, and additive complete persistence without coordinator or keyserver invocation.",
+        "disposition": "DEFERRED P4/P6",
+        "assessment": "Provider/transaction-coordinator bypass proof is not established by P2 transport doubles. Preserve FR173 subset boundary.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        ],
+        "declaredTestSources": [
+          "tests/McpServer.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-199",
+          "BUG-TRIAGE-200",
+          "BUG-TRIAGE-210",
+          "BUG-TRIAGE-226",
+          "BUG-TRIAGE-232",
+          "BUG-TRIAGE-236"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Enable required transactions, invoke each general-agent mutation, and verify durable rows plus zero coordinator calls."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-003-AC002",
+        "requirementId": "TEST-MCP-SESSIONLIFE-003",
+        "text": "Exact durable readback verifies every child collection and repeated additive complete remains duplicate-free.",
+        "disposition": "DEFERRED P4/P6",
+        "assessment": "Exact durable child readback/additive replay requires actual integration; P2 native process captures are not server proof.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+        ],
+        "declaredTestSources": [
+          "tests/McpServer.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-199",
+          "BUG-TRIAGE-200",
+          "BUG-TRIAGE-210",
+          "BUG-TRIAGE-226",
+          "BUG-TRIAGE-232",
+          "BUG-TRIAGE-236"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Persist action/dialog/update/complete twice and compare normalized durable readback."
+      },
+      {
+        "id": "TEST-MCP-SESSIONLIFE-003-AC003",
+        "requirementId": "TEST-MCP-SESSIONLIFE-003",
+        "text": "The subset proof is linked to FR-MCP-173 but does not mark its broader first-party adapter obligations satisfied.",
+        "disposition": "P2 BOUNDARY PASS",
+        "assessment": "FR173 to TEST003 edge remains present; no broad FR173 satisfaction or TODO closure is claimed.",
+        "mappedTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts"
+        ],
+        "declaredTestSources": [
+          "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
+        ],
+        "todoIds": [
+          "BUG-TRIAGE-199",
+          "BUG-TRIAGE-200",
+          "BUG-TRIAGE-210",
+          "BUG-TRIAGE-226",
+          "BUG-TRIAGE-232",
+          "BUG-TRIAGE-236"
+        ],
+        "acceptanceState": "not-accepted",
+        "storeSatisfied": false,
+        "integrationScenario": "Validate traceability after subset tests without promoting the broad requirement."
+      }
+    ]
+  },
+  "FinalVerification": {
+    "TimestampUtc": "2026-10-01T02:51:26.8152572Z",
+    "tipSha": "5e6b236c958505b5e202e2fb86604b7dec1eb968",
+    "branch": "cursor/sessionlife-p2-contracts-5cb2",
+    "sourceCount": 2229,
+    "sourceMismatches": [],
+    "artifactChanges": [],
+    "artifactCount": 17,
+    "historyFiles": [
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\_build.csproj",
+        "expected": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+        "actual": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\SessionLifeUnitGate.cs",
+        "expected": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+        "actual": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\p1-behavior-red-test-plan.md",
+        "expected": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+        "actual": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateConsumerTests.cs",
+        "expected": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+        "actual": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateValidatorTests.cs",
+        "expected": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+        "actual": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+        "match": true
+      }
+    ],
+    "validator": {
+      "status": "ACCEPTED",
+      "method": "SessionLifeUnitGateValidator.Validate",
+      "artifactMutation": false,
+      "note": "Direct compiled-validator invocation on existing normalized reports; not a fresh test-suite run."
+    },
+    "outsideReceiptStatusChanges": [],
+    "gateLogExists": false
+  },
+  "ReceiptPaths": [
+    "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T023513Z.md",
+    "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T023513Z.json",
+    "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T023513Z-sessionlife-p2-contracts-hv.request.jsonl",
+    "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T023513Z-sessionlife-p2-contracts-hv.response.jsonl"
+  ],
+  "Verdict": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 99,
+    "completeness": 96,
+    "confidence": 99,
+    "failList": [
+      "HV19: Generic submit-result identity remains case-insensitive",
+      "HV20: beginTurn treats case-different identity as the same durable turn",
+      "HV07-residual: Raw metadata and real gate-test traceability remain incomplete",
+      "HV21: Supplied gate log receipt path is absent",
+      "HV09: Completeness below required threshold",
+      "D1: Holistic P2 exit gate fails"
+    ],
+    "passCount": 13,
+    "failCount": 6,
+    "unknownCount": 2,
+    "tipSha": "5e6b236c958505b5e202e2fb86604b7dec1eb968",
+    "receiptPaths": [
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T023513Z.md",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T023513Z.json",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T023513Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T023513Z-sessionlife-p2-contracts-hv.response.jsonl"
+    ]
+  },
+  "Limitations": [
+    "No full-suite rerun; independent native artifact parsing plus existing compiled validator invocation and fresh hostile runtime probes.",
+    "Transport doubles capture actual serialized payloads; they do not establish remote persistence or provider integration.",
+    "Exported acceptance-manifest state is not a fresh authoritative MCP-store query.",
+    "Initial extra identity harness stopped on an expected thrown rejection; v2 catches that boundary and completes all 18 cases. Initial artifact retained rather than claimed successful.",
+    "PowerShell connector labeled expected child stderr as errors even where child exit was zero; verdict uses actual exit/outcomes.",
+    "Some bounded file reads were retried after output truncation or invalid line-range input.",
+    "Response JSONL records user-visible message/tool events through receipt preparation and full final verdict; external runner owns trailing CLI stream.",
+    "Oversized connector output automatically spilled to host Temp; deliberate writes stayed under docs/receipts/hv."
+  ]
+}

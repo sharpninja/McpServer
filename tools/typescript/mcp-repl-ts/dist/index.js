@@ -16,8 +16,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.invokeMcpMethod = exports.ReplClient = exports.McpAgentClient = exports.ReplBridge = void 0;
 /**
- * @sharpninja/mcp-repl
- * The single shared TypeScript surface for McpServer agent plugins.
+ * @qbrainai/qbrain-ai-repl
+ * The single shared TypeScript surface for QBrainAi agent plugins.
  * Used by Cline, Cline V2, OpenCode, and future TS-based plugins.
  */
 __exportStar(require("./types"), exports);

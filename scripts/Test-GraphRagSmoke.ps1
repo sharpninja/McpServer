@@ -3,7 +3,7 @@
     Runs a GraphRAG smoke test sequence against MCP server.
 
 .DESCRIPTION
-    Executes status -> index -> query against /mcpserver/graphrag endpoints and exits non-zero on failure.
+    Executes status -> index -> query against /qbrainai/graphrag endpoints and exits non-zero on failure.
     Intended for local verification and CI smoke checks.
 
 .PARAMETER BaseUrl
@@ -40,12 +40,12 @@ $headers = @{
 }
 
 Write-Host "1/3 GraphRAG status..." -ForegroundColor Cyan
-$status = Invoke-RestMethod -Method Get -Uri "$BaseUrl/mcpserver/graphrag/status" -Headers $headers
+$status = Invoke-RestMethod -Method Get -Uri "$BaseUrl/qbrainai/graphrag/status" -Headers $headers
 Write-Host ("  State={0}; Indexed={1}; Backend={2}" -f $status.state, $status.isIndexed, $status.backend) -ForegroundColor DarkGray
 
 Write-Host "2/3 GraphRAG index..." -ForegroundColor Cyan
 $indexBody = @{ force = $false } | ConvertTo-Json
-$indexed = Invoke-RestMethod -Method Post -Uri "$BaseUrl/mcpserver/graphrag/index" -Headers $headers -Body $indexBody
+$indexed = Invoke-RestMethod -Method Post -Uri "$BaseUrl/qbrainai/graphrag/index" -Headers $headers -Body $indexBody
 if (-not $indexed.isIndexed) {
     throw ("GraphRAG index failed: {0} ({1})" -f $indexed.lastError, $indexed.failureCode)
 }
@@ -58,7 +58,7 @@ $queryBody = @{
     maxChunks = 10
     includeContextChunks = $true
 } | ConvertTo-Json
-$queryResult = Invoke-RestMethod -Method Post -Uri "$BaseUrl/mcpserver/graphrag/query" -Headers $headers -Body $queryBody
+$queryResult = Invoke-RestMethod -Method Post -Uri "$BaseUrl/qbrainai/graphrag/query" -Headers $headers -Body $queryBody
 if ([string]::IsNullOrWhiteSpace([string]$queryResult.answer)) {
     throw "GraphRAG query returned empty answer."
 }

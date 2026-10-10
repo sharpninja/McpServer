@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-    Manages the MCP Server Windows service (install, uninstall, start, stop, restart, status).
+    Manages the QBrain.AI Windows service (install, uninstall, start, stop, restart, status).
 
 .DESCRIPTION
-    Manages an already-deployed MCP Server Windows service.
+    Manages an already-deployed QBrain.AI Windows service.
     Deployment and installation must go through Update-McpService.ps1 so
     configuration restore and deployment verification always run.
 
@@ -11,16 +11,16 @@
     The management action to perform: Install, Uninstall, Start, Stop, Restart, Status, Publish.
 
 .PARAMETER ServiceName
-    The Windows service name. Default: McpServer.
+    The Windows service name. Default: QBrainAi.
 
 .PARAMETER DisplayName
-    The display name shown in services.msc. Default: MCP Server.
+    The display name shown in services.msc. Default: QBrain.AI.
 
 .PARAMETER Description
     The service description. Default: MCP Model Context Protocol Server.
 
 .PARAMETER InstallPath
-    Where the published output is placed. Default: C:\ProgramData\McpServer.
+    Where the published output is placed. Default: C:\ProgramData\QBrainAi.
 
 .PARAMETER Instance
     Optional instance name passed as --instance to the executable.
@@ -42,10 +42,10 @@ param(
     [ValidateSet('Install', 'Uninstall', 'Start', 'Stop', 'Restart', 'Status', 'Publish')]
     [string]$Action,
 
-    [string]$ServiceName = 'McpServer',
-    [string]$DisplayName = 'MCP Server',
+    [string]$ServiceName = 'QBrainAi',
+    [string]$DisplayName = 'QBrain.AI',
     [string]$Description = 'MCP Model Context Protocol Server',
-    [string]$InstallPath = 'C:\ProgramData\McpServer',
+    [string]$InstallPath = 'C:\ProgramData\QBrainAi',
     [string]$Instance = '',
     [int]$Port = 7147
 )
@@ -53,9 +53,9 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$ProjectDir = Join-Path $PSScriptRoot '..\src\McpServer.Support.Mcp'
-$ProjectFile = Join-Path $ProjectDir 'McpServer.Support.Mcp.csproj'
-$ExeName = 'McpServer.Support.Mcp.exe'
+$ProjectDir = Join-Path $PSScriptRoot '..\src\QBrainAi.Support.Mcp'
+$ProjectFile = Join-Path $ProjectDir 'QBrainAi.Support.Mcp.csproj'
+$ExeName = 'QBrainAi.Support.Mcp.exe'
 
 # ---------------------------------------------------------------------------
 # Helpers

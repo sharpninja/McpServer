@@ -12,10 +12,10 @@ public static class GeneratedMigrationObsoletePragmaNormalizer
 
     private static readonly string[] MigrationRoots =
     [
-        "src/McpServer.Storage/Migrations",
-        "src/McpServer.Storage.SqliteMigrations",
-        "src/McpServer.Storage.SqlServerMigrations",
-        "src/McpServer.Storage.PostgreSqlMigrations",
+        "src/QBrainAi.Storage/Migrations",
+        "src/QBrainAi.Storage.SqliteMigrations",
+        "src/QBrainAi.Storage.SqlServerMigrations",
+        "src/QBrainAi.Storage.PostgreSqlMigrations",
     ];
 
     /// <summary>

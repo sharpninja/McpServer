@@ -75,7 +75,7 @@ public sealed class DocsSyncG8OverlayTests
     [Fact]
     public void G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings()
     {
-        var configPath = Path.Combine(FindRepositoryRoot(), "src", "McpServer.Support.Mcp", "appsettings.yaml");
+        var configPath = Path.Combine(FindRepositoryRoot(), "src", "QBrainAi.Support.Mcp", "appsettings.yaml");
         Assert.True(File.Exists(configPath), configPath);
         var instances = ConfigValidator.ParseInstances(File.ReadAllLines(configPath));
         Assert.NotNull(instances);
@@ -105,7 +105,7 @@ public sealed class DocsSyncG8OverlayTests
         var repoRoot = FindRepositoryRoot();
         var canonicalDir = Path.Combine(repoRoot, "plugins", "core", "lib-ps");
         Assert.True(Directory.Exists(canonicalDir), canonicalDir);
-        var githubRoot = Directory.GetParent(repoRoot)?.FullName;
+        var githubRoot = Build.ResolveOfficialPluginSiblingParent(repoRoot);
         Assert.False(string.IsNullOrWhiteSpace(githubRoot));
         var officialPlugins = new[]
         {
@@ -158,11 +158,11 @@ public sealed class DocsSyncG8OverlayTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
                 return directory.FullName;
             directory = directory.Parent;
         }
 
-        throw new InvalidOperationException("McpServer.sln not found.");
+        throw new InvalidOperationException("QBrainAi.sln not found.");
     }
 }

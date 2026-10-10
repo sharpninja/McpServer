@@ -1,0 +1,37 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Logging
+  commentId: N:QBrainAi.Support.Mcp.Logging
+  id: QBrainAi.Support.Mcp.Logging
+  children:
+  - QBrainAi.Support.Mcp.Logging.ParseableBatchFormatter
+  - QBrainAi.Support.Mcp.Logging.ParseableEventFormatter
+  - QBrainAi.Support.Mcp.Logging.ParseableHttpClient
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.Logging
+  nameWithType: QBrainAi.Support.Mcp.Logging
+  fullName: QBrainAi.Support.Mcp.Logging
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.Logging.ParseableBatchFormatter
+  commentId: T:QBrainAi.Support.Mcp.Logging.ParseableBatchFormatter
+  href: QBrainAi.Support.Mcp.Logging.ParseableBatchFormatter.html
+  name: ParseableBatchFormatter
+  nameWithType: ParseableBatchFormatter
+  fullName: QBrainAi.Support.Mcp.Logging.ParseableBatchFormatter
+- uid: QBrainAi.Support.Mcp.Logging.ParseableEventFormatter
+  commentId: T:QBrainAi.Support.Mcp.Logging.ParseableEventFormatter
+  href: QBrainAi.Support.Mcp.Logging.ParseableEventFormatter.html
+  name: ParseableEventFormatter
+  nameWithType: ParseableEventFormatter
+  fullName: QBrainAi.Support.Mcp.Logging.ParseableEventFormatter
+- uid: QBrainAi.Support.Mcp.Logging.ParseableHttpClient
+  commentId: T:QBrainAi.Support.Mcp.Logging.ParseableHttpClient
+  href: QBrainAi.Support.Mcp.Logging.ParseableHttpClient.html
+  name: ParseableHttpClient
+  nameWithType: ParseableHttpClient
+  fullName: QBrainAi.Support.Mcp.Logging.ParseableHttpClient

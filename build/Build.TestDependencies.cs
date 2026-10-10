@@ -27,12 +27,13 @@ partial class Build
     /// ambiguous and fail the content assertions.
     /// </summary>
     static string RequiredOllamaModel =>
-        Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL") is { Length: > 0 } configured
+        (Environment.GetEnvironmentVariable("QBRAINAI_QUADBRAIN_OLLAMA_MODEL")
+            ?? Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL")) is { Length: > 0 } configured
             ? configured.Trim()
             : "gemma4:e4b";
 
     static AbsolutePath TestToolsDirectory =>
-        (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "McpServer" / "test-tools";
+        (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "QBrainAi" / "test-tools";
 
     /// <summary>
     /// Idempotent installer for the provider integration-test dependencies:
@@ -68,16 +69,62 @@ partial class Build
             // makes the test runner fail the target.
             var projectsWithIntegrationTests = new[]
             {
-                TestsDirectory / "McpServer.Support.Mcp.Tests" / "McpServer.Support.Mcp.Tests.csproj",
+                TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
                 TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
             };
 
+            var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);
+            if (runId is not null)
+            {
+                SessionLifeUnitGateReports.WriteInventory(
+                    RootDirectory,
+                    runId,
+                    "provider",
+                    projectsWithIntegrationTests.Select(project => (
+                        Path.GetFileNameWithoutExtension(project.ToString()),
+                        Path.GetRelativePath(RootDirectory, project).Replace('\\', '/'))));
+            }
+
+            var failures = new List<string>();
             foreach (var project in projectsWithIntegrationTests)
             {
-                DotNetTest(_ => _
-                    .SetProjectFile(project)
-                    .SetFilter("Category=Integration")
-                    .SetVerbosity(DotNetVerbosity.minimal));
+                var projectName = Path.GetFileNameWithoutExtension(project.ToString());
+                try
+                {
+                    if (runId is null)
+                    {
+                        DotNetTest(_ => _
+                            .SetProjectFile(project)
+                            .SetFilter("Category=Integration")
+                            .SetVerbosity(DotNetVerbosity.minimal));
+                    }
+                    else
+                    {
+                        var directory = SessionLifeUnitGateReports.LaneProjectDirectory(RootDirectory, runId, "provider", projectName);
+                        Directory.CreateDirectory(directory);
+                        DotNetTest(_ => _
+                            .SetProjectFile(project)
+                            .SetFilter("Category=Integration")
+                            .SetVerbosity(DotNetVerbosity.minimal)
+                            .SetResultsDirectory(directory)
+                            .SetLoggers($"trx;LogFileName={projectName}.trx"));
+                        SessionLifeUnitGateReports.EnsureCanonicalTrx(directory, $"{projectName}.trx");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (runId is null)
+                        throw;
+
+                    failures.Add(projectName);
+                    Log.Error(ex, "Session-life provider project {Project} failed.", projectName);
+                }
+            }
+
+            if (failures.Count > 0)
+            {
+                throw new InvalidOperationException(
+                    "Session-life provider test projects failed: " + string.Join(", ", failures));
             }
         });
 

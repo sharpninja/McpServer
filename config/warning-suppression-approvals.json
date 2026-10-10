@@ -30,14 +30,14 @@
     "diagnosticId": "CA1416",
     "scope": "build/Build.TestDependencies.cs",
     "mechanism": "PragmaWarningDisable",
-    "justification": "Integration-test dependency tooling targets the Windows development host used for MCP Server validation.",
+    "justification": "Integration-test dependency tooling targets the Windows development host used for QBrain.AI validation.",
     "owner": "Build",
     "permanence": "conditional",
     "reviewCondition": "Remove when test dependency setup is made cross-platform or isolated behind platform-specific build configuration."
   },
   {
     "diagnosticId": "CA2227",
-    "scope": "src/McpServer.Services/Models/TodoModels.cs",
+    "scope": "src/QBrainAi.Services/Models/TodoModels.cs",
     "mechanism": "PragmaWarningDisable",
     "justification": "YamlDotNet models require settable collection properties for TODO YAML deserialization compatibility.",
     "owner": "Services",
@@ -46,7 +46,7 @@
   },
   {
     "diagnosticId": "CA2227",
-    "scope": "src/McpServer.Services/Models/UnifiedSessionLogDto.cs",
+    "scope": "src/QBrainAi.Services/Models/UnifiedSessionLogDto.cs",
     "mechanism": "SuppressMessage",
     "justification": "Session log DTO collections are settable to preserve JSON schema compatibility and deserialization behavior.",
     "owner": "Services",
@@ -55,7 +55,7 @@
   },
   {
     "diagnosticId": "CA1819",
-    "scope": "src/McpServer.Storage/Entities/ContextChunkEntity.cs",
+    "scope": "src/QBrainAi.Storage/Entities/ContextChunkEntity.cs",
     "mechanism": "SuppressMessage",
     "justification": "EF Core stores embedding bytes as a nullable BLOB; byte[] is the storage contract rather than a public mutable API.",
     "owner": "Storage",
@@ -64,7 +64,7 @@
   },
   {
     "diagnosticId": "CA1416",
-    "scope": "src/McpServer.Support.Mcp/Program.cs",
+    "scope": "src/QBrainAi.Support.Mcp/Program.cs",
     "mechanism": "PragmaWarningDisable",
     "justification": "Windows EventLog setup is guarded by SupportedOSPlatform and only used for Windows service diagnostics.",
     "owner": "Support.Mcp",

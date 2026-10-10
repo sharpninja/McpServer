@@ -32,7 +32,7 @@ All requested components have been fully implemented:
 ### 2. ✅ Fake ISessionLogState with In-Memory Tracking
 
 **Implementation:** `FakeSessionLogState` class  
-**Location:** tests/McpServer.Repl.Core.Tests/SessionLogWorkflowTests.cs (lines 1051-1147)
+**Location:** tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowTests.cs (lines 1051-1147)
 
 **Methods Implemented:**
 - `OpenSession()` - Initialize session state
@@ -197,7 +197,7 @@ All workflow commands correctly route to their corresponding methods.
 All tests can be executed with:
 
 ```powershell
-dotnet test tests/McpServer.Repl.Core.Tests
+dotnet test tests/QBrainAi.Repl.Core.Tests
 ```
 
 ### Test Results

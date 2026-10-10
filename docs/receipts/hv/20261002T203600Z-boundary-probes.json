@@ -1,0 +1,556 @@
+{
+  "timestampUtc": "2026-10-02T15:42:31.5284732-05:00",
+  "tipSha": "e755378cdc5d7d3a73471bcebf6874801ed3be80",
+  "rawValidator": [
+    {
+      "variant": "null",
+      "accepted": false,
+      "field": "planFile",
+      "pass": true,
+      "exception": "System.ArgumentException"
+    },
+    {
+      "variant": "empty",
+      "accepted": false,
+      "field": "planFile",
+      "pass": true,
+      "exception": "System.ArgumentException"
+    },
+    {
+      "variant": "space",
+      "accepted": false,
+      "field": "planFile",
+      "pass": true,
+      "exception": "System.ArgumentException"
+    },
+    {
+      "variant": "tab",
+      "accepted": false,
+      "field": "planFile",
+      "pass": true,
+      "exception": "System.ArgumentException"
+    },
+    {
+      "variant": "valid",
+      "accepted": true,
+      "field": "planFile",
+      "pass": true,
+      "exception": null
+    },
+    {
+      "variant": "null",
+      "accepted": false,
+      "field": "todoId",
+      "pass": true,
+      "exception": "System.ArgumentException"
+    },
+    {
+      "variant": "empty",
+      "accepted": false,
+      "field": "todoId",
+      "pass": true,
+      "exception": "System.ArgumentException"
+    },
+    {
+      "variant": "space",
+      "accepted": false,
+      "field": "todoId",
+      "pass": true,
+      "exception": "System.ArgumentException"
+    },
+    {
+      "variant": "tab",
+      "accepted": false,
+      "field": "todoId",
+      "pass": true,
+      "exception": "System.ArgumentException"
+    },
+    {
+      "variant": "valid",
+      "accepted": true,
+      "field": "todoId",
+      "pass": true,
+      "exception": null
+    }
+  ],
+  "beginIdentity": [
+    {
+      "state": "durable",
+      "pass": true,
+      "afterHash": "0A1DD2146F244949A2D6DB0CBBA67944E35E1C615256283E1BADA3766231817A",
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      },
+      "payloads": [
+        {
+          "method": "client.SessionLog.SubmitAsync",
+          "params": {
+            "sessionLog": {
+              "status": "in_progress",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "turns": [
+                {
+                  "requestId": "req-20261001T000000Z-casea",
+                  "response": "(turn opened)",
+                  "status": "in_progress",
+                  "timestamp": "2026-10-02T15:42:31.7775834-05:00",
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryTitle": "boundary title",
+                  "queryText": "boundary query"
+                }
+              ],
+              "model": "codex",
+              "lastUpdated": "2026-10-02T20:42:32Z",
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "started": "2026-10-02T15:42:31.7775834-05:00",
+              "agentExecutableVersion": "codex-cli 0.159.3"
+            }
+          }
+        }
+      ],
+      "calls": 1,
+      "beforeHash": "9E0008D3D69E1E5C5C902DF59A9C169A3C246F674F92BDFD9A51E6C94AB41E57",
+      "identity": "exact",
+      "error": null,
+      "result": true
+    },
+    {
+      "state": "durable",
+      "pass": true,
+      "afterHash": "71B78C84B4BB4CF9D0CA0242F5D69415F86CF99617964B60B612F0957DA95400",
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+        "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+      },
+      "payloads": [],
+      "calls": 0,
+      "beforeHash": "71B78C84B4BB4CF9D0CA0242F5D69415F86CF99617964B60B612F0957DA95400",
+      "identity": "case-request",
+      "error": null,
+      "result": false
+    },
+    {
+      "state": "durable",
+      "pass": true,
+      "afterHash": "C1602DF7DF41EBB731D6116AFDF3C7CB35CFE644F6048D56CAE3234BDB78934B",
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+        "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+      },
+      "payloads": [],
+      "calls": 0,
+      "beforeHash": "C1602DF7DF41EBB731D6116AFDF3C7CB35CFE644F6048D56CAE3234BDB78934B",
+      "identity": "case-session",
+      "error": null,
+      "result": false
+    },
+    {
+      "state": "degraded",
+      "pass": true,
+      "afterHash": "6E0AC6934D62D257C719C47E6D3FA786B5D07CA55D2CF3049FA4CBA2F6211449",
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      },
+      "payloads": [
+        {
+          "method": "client.SessionLog.SubmitAsync",
+          "params": {
+            "sessionLog": {
+              "status": "in_progress",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "turns": [
+                {
+                  "requestId": "req-20261001T000000Z-casea",
+                  "response": "(turn opened)",
+                  "status": "in_progress",
+                  "timestamp": "2026-10-02T15:42:32.7593377-05:00",
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryTitle": "boundary title",
+                  "planFile": "docs/plans/p2.md",
+                  "queryText": "original query",
+                  "todoId": "BUG-TRIAGE-246"
+                }
+              ],
+              "model": "codex",
+              "lastUpdated": "2026-10-02T20:42:32Z",
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "started": "2026-10-02T15:42:32.7593377-05:00",
+              "agentExecutableVersion": "codex-cli 0.159.3"
+            }
+          }
+        }
+      ],
+      "calls": 1,
+      "beforeHash": "B2C7256EBFFC40864DA357799C977D12F28F97289792FECF1714C1686EB81F2C",
+      "identity": "exact",
+      "error": null,
+      "result": true
+    },
+    {
+      "state": "degraded",
+      "pass": true,
+      "afterHash": "7E4F43DAB297C25910F910AB09DDA56AAEA974021A5996DE8C9AE82F7AA68AEF",
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+        "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+      },
+      "payloads": [],
+      "calls": 0,
+      "beforeHash": "7E4F43DAB297C25910F910AB09DDA56AAEA974021A5996DE8C9AE82F7AA68AEF",
+      "identity": "case-request",
+      "error": null,
+      "result": false
+    },
+    {
+      "state": "degraded",
+      "pass": true,
+      "afterHash": "53426B0D72777A530C0102989058F3E7135B6D00D6B576EF3AF5133F2482DDFB",
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+        "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+      },
+      "payloads": [],
+      "calls": 0,
+      "beforeHash": "53426B0D72777A530C0102989058F3E7135B6D00D6B576EF3AF5133F2482DDFB",
+      "identity": "case-session",
+      "error": null,
+      "result": false
+    },
+    {
+      "state": "unpersisted",
+      "pass": true,
+      "afterHash": "ACBF203525DAED846F4162E6CAAE98ED56F175B1CF3FB6D86E4B9428A9D803C6",
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+        "childStderr": ""
+      },
+      "payloads": [
+        {
+          "method": "client.SessionLog.SubmitAsync",
+          "params": {
+            "sessionLog": {
+              "status": "in_progress",
+              "sourceType": "Codex",
+              "turnCount": 1,
+              "turns": [
+                {
+                  "requestId": "req-20261001T000000Z-casea",
+                  "response": "(turn opened)",
+                  "status": "in_progress",
+                  "timestamp": "2026-10-02T20:42:33Z",
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryTitle": "boundary title",
+                  "planFile": "docs/plans/p2.md",
+                  "queryText": "boundary query",
+                  "todoId": "BUG-TRIAGE-246"
+                }
+              ],
+              "model": "codex",
+              "lastUpdated": "2026-10-02T20:42:33Z",
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "sessionId": "Codex-20260930T000000Z-sessiona",
+              "started": "2026-10-02T20:42:33Z",
+              "agentExecutableVersion": "codex-cli 0.159.3"
+            }
+          }
+        }
+      ],
+      "calls": 1,
+      "beforeHash": "437512727C6ED627C3C97738DB720B634D8C92F8F87768983AF35C3DCC3E1217",
+      "identity": "exact",
+      "error": null,
+      "result": true
+    },
+    {
+      "state": "unpersisted",
+      "pass": true,
+      "afterHash": "9BDA290A55B4490F1EDBF37BE8A251A5E6017A551A3AA933CE043C58FD6B59D8",
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+        "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+      },
+      "payloads": [],
+      "calls": 0,
+      "beforeHash": "9BDA290A55B4490F1EDBF37BE8A251A5E6017A551A3AA933CE043C58FD6B59D8",
+      "identity": "case-request",
+      "error": null,
+      "result": false
+    },
+    {
+      "state": "unpersisted",
+      "pass": true,
+      "afterHash": "832ACBAFEFA495633FF3A96E9B47913144A9D8E47340A160DCCDA8456470ACFC",
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.beginTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-20261001T000000Z-casea",
+        "failsafePath": "",
+        "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+        "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+      },
+      "payloads": [],
+      "calls": 0,
+      "beforeHash": "832ACBAFEFA495633FF3A96E9B47913144A9D8E47340A160DCCDA8456470ACFC",
+      "identity": "case-session",
+      "error": null,
+      "result": false
+    }
+  ],
+  "submitBooleans": [
+    {
+      "variant": "false-bool",
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-R",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-bool\\failsafe\\20261002T204234Z-session_submit-b395.yaml",
+        "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-bool\\failsafe\\20261002T204234Z-session_submit-b395.yaml'.",
+        "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-bool\\failsafe\\20261002T204234Z-session_submit-b395.yaml'."
+      },
+      "pass": true,
+      "result": false
+    },
+    {
+      "variant": "false-string",
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-R",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-string\\failsafe\\20261002T204234Z-session_submit-9e9d.yaml",
+        "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-string\\failsafe\\20261002T204234Z-session_submit-9e9d.yaml'.",
+        "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-string\\failsafe\\20261002T204234Z-session_submit-9e9d.yaml'."
+      },
+      "pass": true,
+      "result": false
+    },
+    {
+      "variant": "missing-persisted",
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-R",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-missing-persisted\\failsafe\\20261002T204234Z-session_submit-3f28.yaml",
+        "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-missing-persisted\\failsafe\\20261002T204234Z-session_submit-3f28.yaml'.",
+        "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-missing-persisted\\failsafe\\20261002T204234Z-session_submit-3f28.yaml'."
+      },
+      "pass": true,
+      "result": false
+    },
+    {
+      "variant": "null-persisted",
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-R",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-null-persisted\\failsafe\\20261002T204234Z-session_submit-0dfc.yaml",
+        "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-null-persisted\\failsafe\\20261002T204234Z-session_submit-0dfc.yaml'.",
+        "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-null-persisted\\failsafe\\20261002T204234Z-session_submit-0dfc.yaml'."
+      },
+      "pass": true,
+      "result": false
+    },
+    {
+      "variant": "degraded-bool",
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-R",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-bool\\failsafe\\20261002T204235Z-session_submit-eab5.yaml",
+        "message": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-bool\\failsafe\\20261002T204235Z-session_submit-eab5.yaml'.",
+        "childStderr": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-bool\\failsafe\\20261002T204235Z-session_submit-eab5.yaml'."
+      },
+      "pass": true,
+      "result": false
+    },
+    {
+      "variant": "degraded-string",
+      "queueCount": 1,
+      "receipt": {
+        "code": "rejected",
+        "retryable": false,
+        "persisted": false,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-R",
+        "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-string\\failsafe\\20261002T204235Z-session_submit-fe9c.yaml",
+        "message": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-string\\failsafe\\20261002T204235Z-session_submit-fe9c.yaml'.",
+        "childStderr": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-string\\failsafe\\20261002T204235Z-session_submit-fe9c.yaml'."
+      },
+      "pass": true,
+      "result": false
+    },
+    {
+      "variant": "valid-string",
+      "queueCount": 0,
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-R",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-R'.",
+        "childStderr": ""
+      },
+      "pass": true,
+      "result": true
+    },
+    {
+      "variant": "valid-bool",
+      "queueCount": 0,
+      "receipt": {
+        "code": "persisted",
+        "retryable": false,
+        "persisted": true,
+        "degraded": false,
+        "queued": false,
+        "method": "workflow.sessionlog.updateTurn",
+        "agent": "Codex",
+        "sessionId": "Codex-20260930T000000Z-sessiona",
+        "requestId": "req-R",
+        "failsafePath": "",
+        "message": "Session log persist confirmed a durable write for request 'req-R'.",
+        "childStderr": ""
+      },
+      "pass": true,
+      "result": true
+    }
+  ]
+}

@@ -6,6 +6,36 @@
 
 Describe 'FR-MCP-SESSIONLIFE-005 audit dialog reconcile' {
     BeforeAll {
+    function Get-TestMarkerSnapshot {
+        # HV15: never handwrite AGENTS-README-FIRST.yaml at the repository root.
+        # RepoRoot is read-only (marker must already exist). Isolated fixture
+        # workspaces may create the marker via Write-McpYamlObject.
+        param([string]$Workspace = $script:RepoRoot)
+        if ([string]::IsNullOrWhiteSpace($Workspace)) {
+            throw 'Get-TestMarkerSnapshot requires a Workspace path.'
+        }
+        $resolved = [System.IO.Path]::GetFullPath($Workspace)
+        $repo = [System.IO.Path]::GetFullPath([string]$script:RepoRoot)
+        $isRepoRoot = ($resolved.TrimEnd('\','/') -eq $repo.TrimEnd('\','/'))
+        $marker = Join-Path $Workspace 'AGENTS-README-FIRST.yaml'
+        if (-not (Test-Path -LiteralPath $marker)) {
+            if ($isRepoRoot) {
+                throw 'Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.'
+            }
+            $yamlLib = Join-Path $script:RepoRoot 'plugins\core\lib-ps\yaml-object-mutation.ps1'
+            . $yamlLib
+            if (Get-Command Import-McpYamlSerializer -ErrorAction SilentlyContinue) {
+                Import-McpYamlSerializer
+            }
+            Write-McpYamlObject -Path $marker -Document ([ordered]@{
+                workspacePath = $Workspace
+                apiKey = 'test'
+            })
+        }
+        return Get-MarkerFileSnapshot -StartDir $Workspace
+    }
+
+
         $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
         . (Join-Path $script:RepoRoot 'plugins\core\lib-ps\repl-invoke.ps1')
         if ($env:MCP_PLUGIN_PERSIST_LOG) { Remove-Item Env:MCP_PLUGIN_PERSIST_LOG }
@@ -29,8 +59,8 @@ Describe 'FR-MCP-SESSIONLIFE-005 audit dialog reconcile' {
                 [string]$Status = '',
                 [string]$ResponseText = '',
                 [string]$ActionsYaml = '',
-                [string]$PlanFile,
-                [string]$TodoId
+                [string]$PlanFile = '',
+                [string]$TodoId = ''
             )
             return $true
         }
@@ -66,6 +96,8 @@ payload:
                 status = 'in_progress'
                 queryText = 'keep'
                 auditDialog = 5
+                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
+                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
             })
             $failed = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: classified`n"
             $failed | Should -BeFalse

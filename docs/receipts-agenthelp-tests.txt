@@ -1,10 +1,10 @@
-=== dotnet test tests/McpServer.Repl.Core.Tests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
+=== dotnet test tests/QBrainAi.Repl.Core.Tests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
 Passed!  - Failed: 0, Passed: 9, Skipped: 0, Total: 9
 
-=== dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
+=== dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
 Passed!  - Failed: 0, Passed: 24, Skipped: 0, Total: 24
 
-=== dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
+=== dotnet test tests/QBrainAi.Support.Mcp.IntegrationTests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
 Passed!  - Failed: 0, Passed: 4, Skipped: 0, Total: 4
 
 === Combined AgentHelp test totals ===
@@ -16,4 +16,4 @@ Grand total: 37 passed, 0 skipped
 Build succeeded on 7/8/2026 12:59:38 PM (2:11 total, 0 warnings, 0 errors)
 
 === build.ps1 UpdateService ===
-Update complete: Service McpServer Running, version 1.4.2+c56f391a, Health OK, WSHealth OK (25/25)
+Update complete: Service QBrainAi Running, version 1.4.2+c56f391a, Health OK, WSHealth OK (25/25)

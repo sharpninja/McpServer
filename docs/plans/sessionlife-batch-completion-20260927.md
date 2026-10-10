@@ -2,7 +2,7 @@
 
 Status: revision 4 approved for execution. P0 is in progress; no implementation gate or bug closure is accepted.
 
-Workspace: `F:\GitHub\McpServer`.
+Workspace: `F:\GitHub\QBrainAi`.
 Implementation worktree: `.worktrees/session-lifecycle`, branch `grok/session-lifecycle`.
 Integration branch: `develop`; do not substitute `main`.
 Planning TODO: `PLAN-SESSIONLIFE-001`.
@@ -177,7 +177,7 @@ For documentation-only work, test executable contract/inventory assertions befor
 
 ### Locked Stop Reconciliation Design
 
-Add compatible typed SessionLogClient.GetAsync(agent, sessionId, cancellationToken) for the existing GET /mcpserver/sessionlog/{agent}/{sessionId} route, already backed by ISessionLogService.GetAsync. Return existing UnifiedSessionLogDto; no new server endpoint/store. Register the method in supported client invocation and test delegation/serialization. Agents call the plugin, not raw REST.
+Add compatible typed SessionLogClient.GetAsync(agent, sessionId, cancellationToken) for the existing GET /qbrainai/sessionlog/{agent}/{sessionId} route, already backed by ISessionLogService.GetAsync. Return existing UnifiedSessionLogDto; no new server endpoint/store. Register the method in supported client invocation and test delegation/serialization. Agents call the plugin, not raw REST.
 
 Shared helper Get-ReplTurnPersistenceProof(workspacePath, agent, sessionId, requestId) calls that operation once within the remaining hook deadline. Require exact workspace, sourceType, sessionId, and exactly one matching requestId. Exact-session retrieval avoids pagination/text-search ambiguity. Return identity, observedAtUtc, serverStatus, and outcome Completed, Active, Missing, Ambiguous, or Unavailable. Only exact completed authorizes stale in_progress completion repair; failed/canceled/cancelled are not relabeled completed. Missing fields, duplicate IDs, truncated data, 404, timeout, or contradictory identity cannot authorize clearing.
 
@@ -241,7 +241,7 @@ A tested validator requires every expected fresh report under TestResults/<id>, 
 
 ### P1. Restore Baseline and Record Genuine Coverage Gaps
 
-1. Preflight rg, pwsh, dotnet SDK, Pester, mcpserver-repl, plugin source roots, test-specific database prerequisites, and child PATH. Record resolved executable versions. Use existing build dependency targets, not improvised database repair.
+1. Preflight rg, pwsh, dotnet SDK, Pester, qbrain-ai-repl, plugin source roots, test-specific database prerequisites, and child PATH. Record resolved executable versions. Use existing build dependency targets, not improvised database repair.
 2. Establish report plumbing through the mandatory per-increment gate, then run the complete unit inventory on the selected clean candidate. Preserve full logs and machine reports. Keep baseline failures distinct from new red assertions; all required failures must be resolved before leaving a coding slice.
 3. Inventory existing lifecycle, metadata, quarantine, audit, transaction-bypass, service, controller, import, and plugin tests against every manifest row. Examine assertions and actual process/service paths. Reject tests that only echo fixtures or bypass the implementation under test.
 4. Add only missing mock-backed consumer tests for the next small increment; prove boundary contracts with mocks, then show the new real-code assertion failing for the intended reason. Record names, expected/actual failure, and the production diff before Green.
@@ -302,8 +302,8 @@ Run from the selected clean acceptance candidate with the frozen generated plugi
 .\build.ps1 ValidateTraceability
 .\build.ps1 ValidatePluginPowerShellOnly --agent-plugin-parent F:\GitHub
 .\build.ps1 MigrationIntegrationTests --test-run-id <unique-provider-run-id>
-dotnet test tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj --logger 'trx;LogFileName=sessionlife-support-integration.trx'
-dotnet test tests\McpServer.Repl.IntegrationTests\McpServer.Repl.IntegrationTests.csproj --logger 'trx;LogFileName=sessionlife-repl-integration.trx'
+dotnet test tests\QBrainAi.Support.Mcp.IntegrationTests\QBrainAi.Support.Mcp.IntegrationTests.csproj --logger 'trx;LogFileName=sessionlife-support-integration.trx'
+dotnet test tests\QBrainAi.Repl.IntegrationTests\QBrainAi.Repl.IntegrationTests.csproj --logger 'trx;LogFileName=sessionlife-repl-integration.trx'
 .\build.ps1 PluginSessionLogIntegration
 ```
 

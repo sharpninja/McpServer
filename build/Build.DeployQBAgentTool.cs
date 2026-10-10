@@ -11,7 +11,7 @@ partial class Build
         .DependsOn(PackQBAgentTool)
         .Executes(() =>
         {
-            const string packageId = "SharpNinja.McpServer.QBAgent";
+            const string packageId = "QBrainAI.QBAgent";
             const string commandName = "qbagent";
             var packageVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
             var packageSource = SecurityElement.Escape(LocalPackagesDirectory.ToString());

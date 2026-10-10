@@ -1,0 +1,180 @@
+{
+  "TimestampUtc": "2026-10-10T02:11:38.2227094Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "liveProofPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T20-59-21-01a12389-45b0-7b40-9a02-039f681e4198.jsonl",
+    "liveThreadId": "01a12389-45b0-7b40-9a02-039f681e4198",
+    "turnContextTimestampUtc": "2026-10-10T01:59:23.038Z",
+    "runnerResponseJsonl": "docs/receipts/hv/20261010T015920Z-plan-readiness-r25.response.jsonl"
+  },
+  "FirstActions": {
+    "addProfileSkillRead": true,
+    "nonSkillProfileMarkdownCount": 19,
+    "allProfileFilesReadInFull": true,
+    "mainMarkerLinesRead": 397,
+    "markerApiKeyAndAuthenticationFiltered": true,
+    "markerSignatureValid": true,
+    "markerBootstrapValid": true,
+    "workflowMemoryListCalled": true,
+    "effectiveMemoriesReadInFull": 15,
+    "globalMemories": 13,
+    "workspaceMemories": 2,
+    "memoryProcess007Characters": 91423,
+    "memoryProcess008Read": true
+  },
+  "Scope": {
+    "planSource": "/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md",
+    "planLines": 650,
+    "planNonemptyLines": 530,
+    "todoId": "PLAN-SESSIONTURNREVIEW-001",
+    "todoTasks": 30,
+    "todoDescriptionExactNonemptyMatch": true,
+    "handoff": "docs/handoffs/sessionturn-review-plan-20261009T022141Z.md",
+    "priorReceipts": "r1-r24 re-attacked",
+    "requirementsStoreCounts": {
+      "FR": 354,
+      "TR": 482,
+      "TEST": 514
+    },
+    "proposedIdsFree": 67,
+    "triageReportsVerified": 9,
+    "headSha": "05b6bf4451a33a288942cf6ea4b81492e9f166cf"
+  },
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "PASS",
+      "evidence": "HEAD 05b6bf4 has no source/build/test/plugin changes from f56dcf70; source anchors, plugin heads, routes, targets and toolchain checked."
+    },
+    {
+      "id": "P2",
+      "status": "PASS",
+      "evidence": "Live store FR 354/TR 482/TEST 514; 52 numeric existing IDs resolve, historical FR-SUPPORT-010G explicitly obsolete; all 67 proposed IDs free; mappings checked."
+    },
+    {
+      "id": "P3",
+      "status": "FAIL",
+      "evidence": "FR-005 capture of review writes conflicts with S8/S9 no-failsafe; D6 fail-closed causes beyond the two named unsupportedSince causes leave open turns unable to accept Stop remedy.",
+      "findings": [
+        "F-R25-01",
+        "F-R25-02"
+      ]
+    },
+    {
+      "id": "P4",
+      "status": "PASS",
+      "evidence": "Server/client/REPL/MCP, both plugin cores, eight requested hosts plus grok-bot, and three providers allocated with tasks, tests and migration handling."
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "Captured-review stale replay order and the other unsupported transitions are left to implementer despite conflicting or absent directions.",
+      "findings": [
+        "F-R25-01",
+        "F-R25-02"
+      ]
+    },
+    {
+      "id": "P6",
+      "status": "FAIL",
+      "evidence": "Named G1-G6 targets and BDPv4 order exist; Stop accepted-remedy gate is impossible for an open turn after unknown bridge format. P0.1 correctly gates missing local SDK/Pester/bats/EF.",
+      "findings": [
+        "F-R25-02"
+      ]
+    },
+    {
+      "id": "P7",
+      "status": "FAIL",
+      "evidence": "No S8/S9 RED for review capture and stale replay; no A3/A7 RED for unknown bridge format after an open turn. HV-P0/A/B model and 98/98 consistent.",
+      "findings": [
+        "F-R25-01",
+        "F-R25-02"
+      ]
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "FR-005 includes review failsafe while TR-REVIEW-005 and S8/S9 forbid it; unknown-shape unsupported state conflicts with bounded failsafe and Stop remedy.",
+      "findings": [
+        "F-R25-01",
+        "F-R25-02"
+      ]
+    },
+    {
+      "id": "P9",
+      "status": "PASS",
+      "evidence": "TODO description equals all 530 nonempty plan lines; 30 tasks and sequence agree; handoff status, counts, locations and prior rounds correct."
+    },
+    {
+      "id": "P10",
+      "status": "PASS",
+      "evidence": "Nine triage report IDs resolve; misplaced group resolves failed with one report under worktree marker, not main; risks filed or scheduled."
+    }
+  ],
+  "Findings": [
+    {
+      "id": "F-R25-01",
+      "classification": "implementer plan edit",
+      "planLocation": "Locked decision line 29; FR-MCP-SESSIONTURN-005-AC001 line 224; FR-MCP-SESSIONREVIEW-001-AC003 line 289; TR-MCP-SESSIONREVIEW-005 line 361; S8 line 610; S9 line 612; TEST-REVIEW-005/008 lines 388/391",
+      "defect": "FR-005 requires every review write for an already open turn in unsupportedSince to be captured; PowerShell and Node review tasks prohibit failsafe/replay, and give no stale-review replay ordering rule.",
+      "evidence": "Plan line 224 explicitly enumerates reviews in unsupported_session records; lines 361, 610, 612 state no failsafe; line 610 says this avoids older queued review overwriting newer; no named RED covers the exception.",
+      "makePass": "Specify narrowly scoped unsupported_session review capture for both cores, durable causal order or conditional revision rejecting stale replay, original-pair recovery, restart cases, completion-gate tests, and propagate to TR/TEST/S8/S9/TODO/handoff.",
+      "operatorDecisionNeeded": false,
+      "conditionalOperatorDecision": "Only if author changes the stated older-review protection: choose original-write order or drain-arrival order."
+    },
+    {
+      "id": "F-R25-02",
+      "classification": "implementer plan edit",
+      "planLocation": "Bridge row line 84; FR-MCP-SESSIONTURN-001-AC009 line 202; FR-MCP-SESSIONTURN-005 lines 224-228; FR-MCP-SESSIONTURN-008-AC004 line 255; wire line 549; A3 line 580; A7 line 588; D11 line 37 and Copilot row line 87",
+      "defect": "Unsupported-session failsafe covers queue_removal_ambiguous and indistinguishable_arrival only, while unknown bridge format, truncated transcript and later duplicate-check failure also make every verb unsupported. With R1 already open, Stop blocks and its evidence/close remedy is refused.",
+      "evidence": "Plan bridge row line 84 requires turn_logging_unsupported on every verb for unknown record; FR-005 line 224 bounds failsafe to two causes; A3 unknown-shape test has no open turn, A7 tests only the two causes.",
+      "makePass": "Define atomic unsupportedSince transition and existing-turn failsafe for every later D6 fail-closed cause; propagate FR/TR/TEST, bridge/wire, A3/A7/A8/A9 and feature matrix; name R1-open RED cases through Stop, restart and ordered drain.",
+      "operatorDecisionNeeded": false,
+      "conditionalOperatorDecision": ""
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 95,
+  "Confidence": 98,
+  "PassCount": 5,
+  "FailCount": 5,
+  "UnknownCount": 0,
+  "FailList": [
+    "F-R25-01",
+    "F-R25-02"
+  ],
+  "UnknownList": [],
+  "ImplementerFixes": [
+    "F-R25-01",
+    "F-R25-02"
+  ],
+  "OperatorDecisionFails": [],
+  "ReviewerSessionId": "Codex-20261010T020253Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T020303Z-hv-plan-r25",
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r25-20261010T015920Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r25-20261010T015920Z.json",
+    "docs/receipts/hv/20261010T015920Z-plan-readiness-r25.request.jsonl",
+    "docs/receipts/hv/20261010T015920Z-plan-readiness-r25.response.jsonl"
+  ],
+  "PreviousRoundCheck": "F-R24-02 concrete AC/test qualifications hold. F-R24-01 holds for its two named causes but recurs for unknown bridge format. r1-r23 repaired anchors checked; no separate regression found.",
+  "PersistenceProof": {
+    "Verified": true,
+    "Method": "Read-only client.SessionLog.QueryAsync through Codex plugin wrapper against main workspace; compared completed response with Markdown after terminal newline trim and plugin em-dash-to-hyphen normalization",
+    "SessionId": "Codex-20261010T020253Z-plugin-session",
+    "RequestId": "req-20261010T020303Z-hv-plan-r25",
+    "TurnStatus": "completed",
+    "ResponseMatchesNormalizedMarkdown": true,
+    "ResponseLength": 12626,
+    "MarkdownLength": 12626,
+    "MarkdownEmDashesNormalized": 12,
+    "AuditActionCount": 6,
+    "AuditDialogCount": 4,
+    "ContextCount": 10,
+    "VerifiedAtUtc": "2026-10-10T02:14:38.0586682Z",
+    "ProofDialogPersisted": true
+  }
+}

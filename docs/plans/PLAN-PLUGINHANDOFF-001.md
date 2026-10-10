@@ -2,7 +2,7 @@
 
 Status: third revision after hostile P0-A DISAGREE `docs/receipts/hostile-validator-20260821T171357Z.md` (7 FAIL) and earlier `docs/receipts/hostile-validator-20260821T161800Z.md` (9 FAIL). Still draft until a fresh P0-A AGREE on this text, operator approval, then P0-B. Not implemented. No PLAN-PLUGINHANDOFF-001 create and no product code until those gates.
 
-Owner: Payton Byrd. Executor: GrokCode after approval. Process: Byrd Development Process v4 (`docs/Development-Process-draft-v4.md`). Workspace: `F:\GitHub\McpServer`.
+Owner: Payton Byrd. Executor: GrokCode after approval. Process: Byrd Development Process v4 (`docs/Development-Process-draft-v4.md`). Workspace: `F:\GitHub\QBrainAi`.
 
 Verified this continuation (2026-08-21): MCP `/health` nonce `6561dde440af474ab9394bf42bd97577` echoed, status Healthy. Live `todo_get` of all eight child TODOs. Marker `AGENTS-README-FIRST.yaml` port 7147, pid 16936. Session `GrokCode-20260821T113141Z-plugin-session` turn `req-20260821T163000Z-007-plan-mcp-plugin-handoff-cluster`.
 
@@ -17,7 +17,7 @@ Deliver one gated implementation program that closes or faithfully remediates th
 - MCP-WORKSPACEHYGIENE-002: Workspace data-hygiene validation across Server, Director, REPL, plugin
 - MCP-WIKIEXPORT-001: Workspace-keyed wiki JSON dump, add-workspace import hydration, todo.yaml deprecation
 
-Viable: each slice has existing or proposed FR/TR/TEST with structured AC, named tests, and a zero-fail zero-skip gate. Valuable: these items are the remaining high-priority MCP Server operator/agent surfaces (plugin reliability, review automation, hygiene, handoff, portability).
+Viable: each slice has existing or proposed FR/TR/TEST with structured AC, named tests, and a zero-fail zero-skip gate. Valuable: these items are the remaining high-priority QBrain.AI operator/agent surfaces (plugin reliability, review automation, hygiene, handoff, portability).
 
 ## 2. Locked decisions
 
@@ -29,7 +29,7 @@ Viable: each slice has existing or proposed FR/TR/TEST with structured AC, named
 6. MCP-HANDOFFPLAN-001 is an execution prompt for MCP-HANDOFF-001, not a second product. Do not re-implement Handoff from scratch. Remaining work: satisfy FR-HANDOFF-001..007 AC (`isSatisfied` still false), remediate MCP-HANDOFFREVIEW-001 P1/P2/P3 that are still red after D0 inventory, docs/wiki export, serial gates. Closeout requires both a fresh independent Codex APPROVED verdict (HANDOFFREVIEW remaining text) and hostile OverallVerdict AGREE. One does not replace the other.
 7. PLUGININT failsafe assertions cannot pass while drain SubmitAsync is hardcoded to 2 seconds (`plugins/core/lib-ps/repl-invoke.ps1` Get-ReplMethodTimeoutSeconds). Repair is in-scope for Phase B by amending TR-MCP-PERSIST-003 and TEST-MCP-195 (FR-MCP-172), not by inventing TEST-MCP-REPL-041. Also amend TR-MCP-REPL-012 AC1 with an explicit exception: sessionlog workflow methods (completeTurn, beginTurn, appendDialog, appendActions, open, update) stay at REPL_TIMEOUT default 30s; TEST-MCP-REPL-027 keeps asserting 30 for completeTurn/beginTurn. The only drain-time exception is `client.SessionLog.SubmitAsync` while `ReplFailsafeDraining` is set, which uses `REPL_FAILSAFE_DRAIN_TIMEOUT` default 120 seconds, or `REPL_TIMEOUT` when that is greater. Nested automatic drain stays deferred via `ReplRawInFlight` / `ReplFailsafeDrainDeferred` so getFr still returns before 30s when a queued submit 503s (TEST-MCP-195 AC4). The 2s hardcoded return is removed. Timeout abort still must not increment drainAttempts and must not set ReplFailsafeDrainCompleted.
 8. BUG-TRIAGE-165 (appendDialog HTTP 500) is a known adjacent defect. If PLUGININT append-dialog against a real server hits it, remediate 165 inside Phase C as a pre-approved bug (operator 2026-07-13: bug reports execute via Byrd immediately). Do not silently skip dialog assertions.
-9. Deploy McpServer via Nuke only (`UpdateService`). Never manual binary copy. Plugin sync via `./build.ps1 SyncAgentPlugins`. No Python. `pwsh.exe -NoProfile -NonInteractive` only. No em-dashes in artifacts. XMLDocs on all public members. Central package management. Migrations for Sqlite, PostgreSQL, and SQL Server when schema changes. Apply/round-trip/down-up on all three providers.
+9. Deploy QBrainAi via Nuke only (`UpdateService`). Never manual binary copy. Plugin sync via `./build.ps1 SyncAgentPlugins`. No Python. `pwsh.exe -NoProfile -NonInteractive` only. No em-dashes in artifacts. XMLDocs on all public members. Central package management. Migrations for Sqlite, PostgreSQL, and SQL Server when schema changes. Apply/round-trip/down-up on all three providers.
 10. No goal-state `done: true` on PLAN-PLUGINHANDOFF-001 or any child TODO without hostile OverallVerdict AGREE citing a receipt path in `doneSummary`.
 11. Out of scope unless a named AC forces them: QuadBrain/QBCODE playlist, FILETOOLS, Octopus, TR-AUDIT, avalonia-remote, importRecovery GUID sessionId product change (BUG-TRIAGE-173 stays its own TODO unless Phase G dump/import must hydrate those envelopes).
 12. Failsafe filesystem path is the existing V4 layout proven by `SessionLogPersistenceStrategyTests.FilesystemPersistAsync_WritesReplayableV4ScopedEnvelope`: `{workspace}/.mcpServer/failsafe/{agent}/workspaces/{workspace-key}/pending/`. Plugin `Get-McpFailsafeDir` currently resolving `{workspace}/.mcpServer/{agent}/failsafe` must be unified to that V4 layout in Phase B (red test: both resolver and C# strategy write the same tree). Do not invent a third path. Existing plugin-queue YAML is migrated (copy then delete source after checksum match), never silently deleted.
@@ -40,7 +40,7 @@ Viable: each slice has existing or proposed FR/TR/TEST with structured AC, named
 17. Wiki dump integrity: SHA-256 of canonical UTF-8 JSON per table payload, plus root SHA-256 over the sorted `tableName:hash` list. Algorithm name in the dump is `SHA-256`.
 18. todo.yaml deprecation is a breaking change for add-workspace hydration and for any workflow that treated todo.yaml as TODO source of truth. It is not a breaking change for wiki export without `--include-dump`. Default no-flag wiki export remains byte-equivalent to current behavior.
 19. Wiki dump `tables[]` membership is the `McpDbContext` DbSet CLR property names listed in section 11. Import remaps rows that have a workspace id or workspace path column. Rows without workspace identity use `importPolicy: skip-if-exists` and emit a diagnostic. Hostile-review DbSets are included only if Phase E has landed; otherwise dump records diagnostic `tables-omitted: HostileReview*`.
-20. add-workspace dump parameter name is `--dump` (file or directory). Wiki export dump flag is `--include-dump` (default off). Bind `--dump` on live add-workspace: `WorkspaceClient.CreateAsync` and `POST /mcpserver/workspace` (`WorkspaceController.CreateAsync`). If the CLI/skill wrapper has no `--dump` yet, the first red test is a failing consumer of `--dump` on that CreateAsync contract (Director/REPL/plugin wrapper of workspace create). Do not bind hydration to `FederationClient.RegisterWorkspaceAsync` (that posts `mcpserver/federation/proxies/{proxyId}/workspaces` and is out of scope unless a named AC later requires federation proxy hydration).
+20. add-workspace dump parameter name is `--dump` (file or directory). Wiki export dump flag is `--include-dump` (default off). Bind `--dump` on live add-workspace: `WorkspaceClient.CreateAsync` and `POST /qbrainai/workspace` (`WorkspaceController.CreateAsync`). If the CLI/skill wrapper has no `--dump` yet, the first red test is a failing consumer of `--dump` on that CreateAsync contract (Director/REPL/plugin wrapper of workspace create). Do not bind hydration to `FederationClient.RegisterWorkspaceAsync` (that posts `qbrainai/federation/proxies/{proxyId}/workspaces` and is out of scope unless a named AC later requires federation proxy hydration).
 21. Plugin Pester gate is `pwsh -NoProfile -Command "Invoke-Pester -Path 'plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1' -CI"` plus sibling pester files under `plugins/core/test-fixtures/pester/` that a slice touches. No Nuke Pester target exists in `build/*.cs` today; do not invent one as a skip.
 22. Existing green tests are never relabeled as new reds. D0/B1 inventory classifies reuse vs remaining gap before any new test file is written.
 
@@ -49,7 +49,7 @@ Viable: each slice has existing or proposed FR/TR/TEST with structured AC, named
 Store receipts from `todo_get` (not TODO.yaml):
 
 - MCP-PLUGINCORE-004: open. FR-MCP-PLUGINCORE-004 and FR-MCP-REPL-009 pending. Tasks 1-8 all Done=false. Canonical parser tests already exist in `plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1` (`parses dictionary-backed dialogItems YAML and property-backed JSON`, empty-payload reject). Remaining is reliability, checksum sync across official plugins, and REPL strategy isolation per TR-MCP-REPL-010.
-- MCP-PLUGININT-001: P0 planning task marked done. P1-P20 open. No `tests/McpServer.PluginIntegration.Tests` project found in repo search. FR-MCP-PLUGININT-001 / TR-MCP-PLUGININT-001 / TEST-MCP-PLUGININT-001 exist; AC unchecked.
+- MCP-PLUGININT-001: P0 planning task marked done. P1-P20 open. No `tests/QBrainAi.PluginIntegration.Tests` project found in repo search. FR-MCP-PLUGININT-001 / TR-MCP-PLUGININT-001 / TEST-MCP-PLUGININT-001 exist; AC unchecked.
 - MCP-HANDOFF-001: ImplementationTasks 1-10 marked done in store; task 11 docs/wiki open. Code exists: `HandoffIngestionService`, `HandoffController`, `HandoffClient`, `HandoffDirectorCommands`, `HandoffMcpToolTests`, `HandoffIngestionServiceTests`, SQLite `HandoffIngestionRuns`. FR-HANDOFF-001..007 linked; `isSatisfied` false. Do not store-close.
 - MCP-HANDOFFPLAN-001: same code; independent Codex review NOT APPROVED. New-migration gate: `AddHandoffIngestionStorage` apply/round-trip/down-up on Sqlite, SQL Server, PostgreSQL, serially.
 - MCP-HANDOFFREVIEW-001: DependsOn HANDOFF-001 and HANDOFFPLAN-001. Remaining text still requires a fresh independent Codex APPROVED plus (this plan) hostile AGREE. P1 lease/fencing/heal/containment/mode-enum/path-scope; P2 8 MiB-before-allocate, prompt identity, HTTP mapping, missing tests; P3 dead `ReplayOfRunId` and `HandoffReviewState.Approved`. Many of those already have on-disk tests (section 8 D0). Do not rewrite those as new reds.
@@ -313,7 +313,7 @@ AGREE that every remaining unsatisfied AC has a currently failing new test, and 
 ### B3. Implement (green)
 
 - Canonical `Get-ReplDialogItemsFromParams` / `Invoke-WorkflowAppendDialog` in `plugins/core/lib-ps/repl-invoke.ps1`. Fail closed on empty parse. Do not increment auditDialog before server success (align with BUG-TRIAGE-165 plugin-side if still present).
-- `ISessionLogPersistenceStrategy` primary vs failsafe + coordinator in `src/McpServer.Repl.Core` per TR-MCP-REPL-010. Atomic V4 path `{workspace}/.mcpServer/failsafe/{agent}/workspaces/{key}/pending/` (same string the existing C# test already asserts). Unify plugin `Get-McpFailsafeDir` to that tree. Migrate legacy plugin queue files with checksum match then delete source.
+- `ISessionLogPersistenceStrategy` primary vs failsafe + coordinator in `src/QBrainAi.Repl.Core` per TR-MCP-REPL-010. Atomic V4 path `{workspace}/.mcpServer/failsafe/{agent}/workspaces/{key}/pending/` (same string the existing C# test already asserts). Unify plugin `Get-McpFailsafeDir` to that tree. Migrate legacy plugin queue files with checksum match then delete source.
 - Remove hardcoded `return 2` drain SubmitAsync timeout; use locked `REPL_FAILSAFE_DRAIN_TIMEOUT` (default 120) as in decision 7; keep ReplRawInFlight deferral. Amend TEST-MCP-195 rather than adding TEST-MCP-REPL-041.
 - `./build.ps1 SyncAgentPlugins`. Verify checksums of official plugin lib copies.
 
@@ -322,7 +322,7 @@ AGREE that every remaining unsatisfied AC has a currently failing new test, and 
 ```
 pwsh -NoProfile -File .\build.ps1 Compile
 pwsh -NoProfile -Command "Invoke-Pester -Path 'plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1' -CI"
-dotnet test tests/McpServer.Repl.Core.Tests -c Debug
+dotnet test tests/QBrainAi.Repl.Core.Tests -c Debug
 pwsh -NoProfile -File .\build.ps1 Test
 ```
 
@@ -351,9 +351,9 @@ Hostile-after-red-before-implement order (cannot write all C reds first because 
 - C-red-P19 AGREE, then P19 execute, then C-green-P19 AGREE
 - C-red-P20 AGREE, then P20 execute, then C-green-P20 AGREE
 
-P1 red: `BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail`; `Solution_ContainsMcpServerPluginIntegrationTestsProject`; `Catalog_HasExactlyEightEnabledScenarios`. Hostile C-red-P1. Then P2-P3 green.
+P1 red: `BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail`; `Solution_ContainsQBrainAiPluginIntegrationTestsProject`; `Catalog_HasExactlyEightEnabledScenarios`. Hostile C-red-P1. Then P2-P3 green.
 
-P2 green of P1: create `tests/McpServer.PluginIntegration.Tests` (xUnit v3, SharpNinja.aiUnit, McpServer.Client, XMLDocs, nonparallel). Test: `PluginIntegrationProject_HasXmlDocsAndNonparallelCollection`.
+P2 green of P1: create `tests/QBrainAi.PluginIntegration.Tests` (xUnit v3, SharpNinja.aiUnit, QBrainAi.Client, XMLDocs, nonparallel). Test: `PluginIntegrationProject_HasXmlDocsAndNonparallelCollection`.
 
 P3 green of P1: `PluginSessionLogScenario` / `PluginHostKind` plus `scenarios/plugin-sessionlog-scenarios.json` with Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, OpenCode.
 
@@ -361,7 +361,7 @@ P4 red: `Catalog_UniqueAgentSourceCache`, `Catalog_RepositoryRootsExist`, `Catal
 
 P5 red: `ServerFixture_SelectsFreePort`, `ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase`, `ServerFixture_StartupTimeout`, `ServerFixture_CreatesMarker`, `ServerFixture_SignatureAndNonceTrust`, `ServerFixture_DeterministicCleanup`. Never the developer service DB. Hostile C-red-P5. Then P6.
 
-P6 green of P5: implement fixture launching compiled `McpServer.Support.Mcp` on loopback. Test: `ServerFixture_HealthReady_ExposesTrustedMarkerAndClient`.
+P6 green of P5: implement fixture launching compiled `QBrainAi.Support.Mcp` on loopback. Test: `ServerFixture_HealthReady_ExposesTrustedMarkerAndClient`.
 
 P7 red: `Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr` for each PluginHostKind (eight rows or one theory). Mocks: fake process runner. Hostile C-red-P7. Then P8-P10.
 
@@ -375,9 +375,9 @@ P11 red: `Theory_EachScenario_FailsUntilAdapterOperational` (eight rows). Maps T
 
 P12 green of P11: `Theory_{Agent}_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt` for each of the eight agents. Maps TEST-MCP-PLUGININT-001 AC2 workflow half.
 
-P13 green of P11: `Theory_{Agent}_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace` via McpServer.Client. Maps TEST-MCP-PLUGININT-001 AC2 durable query.
+P13 green of P11: `Theory_{Agent}_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace` via QBrainAi.Client. Maps TEST-MCP-PLUGININT-001 AC2 durable query.
 
-P14 red: `Theory_{Agent}_PluginRootOverride_WritesOnlyWorkspaceMcpServerAgent_PoisonEmpty`. Maps TEST-MCP-PLUGININT-001 AC4. Hostile C-red-P14. Then P14 green.
+P14 red: `Theory_{Agent}_PluginRootOverride_WritesOnlyWorkspaceQBrainAiAgent_PoisonEmpty`. Maps TEST-MCP-PLUGININT-001 AC4. Hostile C-red-P14. Then P14 green.
 
 P15 red: `Theory_{Agent}_Success_NoPendingFailsafe`; `Theory_{Agent}_FailedSubmit_RetainsRootIdPending`; `Theory_{Agent}_RetrySuccess_DeletesOnlyMatchingPending`. Requires Phase B drain timeout and V4 failsafe path. Maps remaining AC2 isolation plus failsafe. Hostile C-red-P15. Then P15 green.
 
@@ -406,7 +406,7 @@ Validation commands after P18:
 
 ```
 dotnet test tests/Build.Tests --filter FullyQualifiedName~PluginSessionLog
-dotnet test tests/McpServer.PluginIntegration.Tests -c Debug
+dotnet test tests/QBrainAi.PluginIntegration.Tests -c Debug
 pwsh -NoProfile -File .\build.ps1 PluginSessionLogIntegration
 ```
 
@@ -501,11 +501,11 @@ MCP-HANDOFF-001 task 11: docs, examples, mappings, `./build.ps1 ValidateTraceabi
 Exact commands from MCP-HANDOFFPLAN-001:
 
 ```
-dotnet test tests\McpServer.Client.Tests\McpServer.Client.Tests.csproj
-dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj
-dotnet test tests\McpServer.Repl.Core.Tests\McpServer.Repl.Core.Tests.csproj
-dotnet test tests\McpServer.Support.Mcp.IntegrationTests\McpServer.Support.Mcp.IntegrationTests.csproj
-dotnet test tests\McpServer.Repl.IntegrationTests\McpServer.Repl.IntegrationTests.csproj
+dotnet test tests\QBrainAi.Client.Tests\QBrainAi.Client.Tests.csproj
+dotnet test tests\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.csproj
+dotnet test tests\QBrainAi.Repl.Core.Tests\QBrainAi.Repl.Core.Tests.csproj
+dotnet test tests\QBrainAi.Support.Mcp.IntegrationTests\QBrainAi.Support.Mcp.IntegrationTests.csproj
+dotnet test tests\QBrainAi.Repl.IntegrationTests\QBrainAi.Repl.IntegrationTests.csproj
 .\build.ps1 Compile
 .\build.ps1 Test
 .\build.ps1 ValidateTraceability
@@ -535,7 +535,7 @@ Entities: ReviewRequest, QueueItem, ArtifactLink, ReviewExecution, ReviewerIdent
 
 Tool: `hostile_review_submit`, `hostile_review_status`, `hostile_review_get`, `hostile_review_query` (final names follow existing snake_case MCP tools).
 
-REST under `/mcpserver/hostile-review/*`. Client methods. REPL `workflow.hostileReview.*`. Plugin skill.
+REST under `/qbrainai/hostile-review/*`. Client methods. REPL `workflow.hostileReview.*`. Plugin skill.
 
 Default queue-and-record. No auto-edit of product files from verdicts. Payload max 1,048,576 bytes.
 
@@ -614,7 +614,7 @@ add-workspace `--dump` file or folder. Remap workspace id, paths, machine keys, 
 
 Write every named G test first. Hostile G-red AGREE that they are failing. Then implement dump, import, and deprecation. Hostile G-green AGREE. Do not implement import or deprecation before G-red.
 
-Wiki generateDocument remains `workflow.requirements.generateDocument` format wiki docType all. The dump flag is an extension of that export path plus any Director wrapper that already calls it. add-workspace hydration binds to `WorkspaceClient.CreateAsync` / `POST /mcpserver/workspace`. G0 confirms that binding and any Director/REPL/plugin wrapper names, then checkpoints them on the PLAN TODO before G1 tests. Federation proxy register stays out of scope.
+Wiki generateDocument remains `workflow.requirements.generateDocument` format wiki docType all. The dump flag is an extension of that export path plus any Director wrapper that already calls it. add-workspace hydration binds to `WorkspaceClient.CreateAsync` / `POST /qbrainai/workspace`. G0 confirms that binding and any Director/REPL/plugin wrapper names, then checkpoints them on the PLAN TODO before G1 tests. Federation proxy register stays out of scope.
 
 ## 12. Phase H: Documentation, plugin sync, traceability, regression
 
@@ -663,11 +663,11 @@ Always zero fails and zero skips in the named scope.
 - Unit (CI Test target): `pwsh -NoProfile -File .\build.ps1 Test`
 - Traceability: `pwsh -NoProfile -File .\build.ps1 ValidateTraceability`
 - Plugin sync: `pwsh -NoProfile -File .\build.ps1 SyncAgentPlugins`
-- Repl core: `dotnet test tests/McpServer.Repl.Core.Tests -c Debug`
-- Support unit: `dotnet test tests/McpServer.Support.Mcp.Tests -c Debug`
-- Client: `dotnet test tests/McpServer.Client.Tests -c Debug`
-- Support integration: `dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug`
-- Repl integration: `dotnet test tests/McpServer.Repl.IntegrationTests -c Debug`
+- Repl core: `dotnet test tests/QBrainAi.Repl.Core.Tests -c Debug`
+- Support unit: `dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug`
+- Client: `dotnet test tests/QBrainAi.Client.Tests -c Debug`
+- Support integration: `dotnet test tests/QBrainAi.Support.Mcp.IntegrationTests -c Debug`
+- Repl integration: `dotnet test tests/QBrainAi.Repl.IntegrationTests -c Debug`
 - Plugin Pester (locked): `pwsh -NoProfile -Command "Invoke-Pester -Path 'plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1' -CI"` plus sibling pester files under `plugins/core/test-fixtures/pester/` that Phase B or D touches
 - Plugin integration: new Nuke target from P18
 - Migrations: provider-specific apply/round-trip/down-up for every new migration
@@ -678,12 +678,12 @@ Always zero fails and zero skips in the named scope.
 Blast radius (product code after gates):
 
 - `plugins/core/lib-ps/repl-invoke.ps1` and SyncAgentPlugins copies into official plugin repos
-- `src/McpServer.Repl.Core` persistence coordinator
-- `src/McpServer.Support.Mcp` controllers, MCP tools, Director commands
-- `src/McpServer.Storage` entities and three-provider migrations
-- `src/McpServer.Client` typed client
-- `src/McpServer.Services` hygiene, hostile-review, wiki dump/import
-- `tests/Build.Tests`, new `tests/McpServer.PluginIntegration.Tests`, Pester fixtures
+- `src/QBrainAi.Repl.Core` persistence coordinator
+- `src/QBrainAi.Support.Mcp` controllers, MCP tools, Director commands
+- `src/QBrainAi.Storage` entities and three-provider migrations
+- `src/QBrainAi.Client` typed client
+- `src/QBrainAi.Services` hygiene, hostile-review, wiki dump/import
+- `tests/Build.Tests`, new `tests/QBrainAi.PluginIntegration.Tests`, Pester fixtures
 - docs and generated wiki after green
 
 Breaking:

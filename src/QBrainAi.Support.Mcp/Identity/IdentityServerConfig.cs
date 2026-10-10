@@ -1,0 +1,84 @@
+using Duende.IdentityServer.Models;
+using DuendeClient = Duende.IdentityServer.Models.Client;
+
+namespace QBrainAi.Support.Mcp.Identity;
+
+/// <summary>
+/// Static IdentityServer resource and client definitions for the QBrain.AI.
+/// </summary>
+internal static class IdentityServerConfig
+{
+    public static IEnumerable<IdentityResource> GetIdentityResources() =>
+    [
+        new IdentityResources.OpenId(),
+        new IdentityResources.Profile(),
+        new IdentityResources.Email(),
+        new IdentityResource("roles", "User roles", ["role", "realm_roles"]),
+    ];
+
+    public static IEnumerable<ApiScope> GetApiScopes(IdentityServerOptions options) =>
+    [
+        new ApiScope(options.ApiScopeName, "QBrain.AI API")
+        {
+            UserClaims = ["role", "realm_roles", "preferred_username"],
+        },
+    ];
+
+    public static IEnumerable<ApiResource> GetApiResources(IdentityServerOptions options) =>
+    [
+        new ApiResource(options.ApiResourceName, "QBrain.AI API")
+        {
+            Scopes = { options.ApiScopeName },
+            UserClaims = ["role", "realm_roles", "preferred_username"],
+        },
+    ];
+
+    public static IEnumerable<DuendeClient> GetClients(IdentityServerOptions options) =>
+    [
+        // Machine-to-machine client for agents and services
+        new DuendeClient
+        {
+            ClientId = "mcp-agent",
+            ClientName = "MCP Agent Client",
+            AllowedGrantTypes = GrantTypes.ClientCredentials,
+            ClientSecrets = { new Secret("mcp-agent-secret".Sha256()) },
+            AllowedScopes = { options.ApiScopeName },
+        },
+
+        // Unified public client for CLI tools, web UI, and browser-based flows
+        new DuendeClient
+        {
+            ClientId = "mcp-director",
+            ClientName = "MCP Director",
+            AllowedGrantTypes =
+            {
+                GrantType.AuthorizationCode,
+                "urn:ietf:params:oauth:grant-type:device_code",
+                GrantType.ResourceOwnerPassword,
+            },
+            RequirePkce = true,
+            RequireClientSecret = false,
+            RedirectUris =
+            {
+                "http://localhost:7147/auth/callback", "https://localhost:7147/auth/callback",
+                "https://localhost:39983/signin-oidc", "http://localhost:39984/signin-oidc",
+            },
+            PostLogoutRedirectUris =
+            {
+                "http://localhost:7147/", "https://localhost:7147/",
+                "https://localhost:39983/", "http://localhost:39984/",
+            },
+            AllowedCorsOrigins =
+            {
+                "http://localhost:7147", "https://localhost:7147",
+                "https://localhost:39983", "http://localhost:39984",
+            },
+            AllowedScopes = { "openid", "profile", "email", "roles", options.ApiScopeName },
+            AllowOfflineAccess = true,
+            AccessTokenLifetime = 3600,
+            RefreshTokenUsage = TokenUsage.ReUse,
+            RefreshTokenExpiration = TokenExpiration.Sliding,
+            SlidingRefreshTokenLifetime = 86400,
+        },
+    ];
+}

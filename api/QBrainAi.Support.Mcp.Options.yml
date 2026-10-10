@@ -1,0 +1,127 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Options
+  commentId: N:QBrainAi.Support.Mcp.Options
+  id: QBrainAi.Support.Mcp.Options
+  children:
+  - QBrainAi.Support.Mcp.Options.CloudflareTunnelOptions
+  - QBrainAi.Support.Mcp.Options.FrpTunnelOptions
+  - QBrainAi.Support.Mcp.Options.McpInstanceResolver
+  - QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions
+  - QBrainAi.Support.Mcp.Options.McpParseableOptions
+  - QBrainAi.Support.Mcp.Options.NgrokTunnelOptions
+  - QBrainAi.Support.Mcp.Options.PairingOptions
+  - QBrainAi.Support.Mcp.Options.PairingUser
+  - QBrainAi.Support.Mcp.Options.TodoStorageOptions
+  - QBrainAi.Support.Mcp.Options.TunnelOptions
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.Options
+  nameWithType: QBrainAi.Support.Mcp.Options
+  fullName: QBrainAi.Support.Mcp.Options
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.Options.McpInstanceResolver
+  commentId: T:QBrainAi.Support.Mcp.Options.McpInstanceResolver
+  href: QBrainAi.Support.Mcp.Options.McpInstanceResolver.html
+  name: McpInstanceResolver
+  nameWithType: McpInstanceResolver
+  fullName: QBrainAi.Support.Mcp.Options.McpInstanceResolver
+- uid: QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions
+  commentId: T:QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions
+  href: QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions.html
+  name: McpInteractionLoggingOptions
+  nameWithType: McpInteractionLoggingOptions
+  fullName: QBrainAi.Support.Mcp.Options.McpInteractionLoggingOptions
+- uid: QBrainAi.Support.Mcp.Options.McpParseableOptions
+  commentId: T:QBrainAi.Support.Mcp.Options.McpParseableOptions
+  href: QBrainAi.Support.Mcp.Options.McpParseableOptions.html
+  name: McpParseableOptions
+  nameWithType: McpParseableOptions
+  fullName: QBrainAi.Support.Mcp.Options.McpParseableOptions
+- uid: QBrainAi.Support.Mcp.Options.PairingOptions
+  commentId: T:QBrainAi.Support.Mcp.Options.PairingOptions
+  href: QBrainAi.Support.Mcp.Options.PairingOptions.html
+  name: PairingOptions
+  nameWithType: PairingOptions
+  fullName: QBrainAi.Support.Mcp.Options.PairingOptions
+- uid: QBrainAi.Support.Mcp.Options.PairingUser
+  commentId: T:QBrainAi.Support.Mcp.Options.PairingUser
+  href: QBrainAi.Support.Mcp.Options.PairingUser.html
+  name: PairingUser
+  nameWithType: PairingUser
+  fullName: QBrainAi.Support.Mcp.Options.PairingUser
+- uid: QBrainAi.Support.Mcp.Options.TodoStorageOptions
+  commentId: T:QBrainAi.Support.Mcp.Options.TodoStorageOptions
+  href: QBrainAi.Support.Mcp.Options.TodoStorageOptions.html
+  name: TodoStorageOptions
+  nameWithType: TodoStorageOptions
+  fullName: QBrainAi.Support.Mcp.Options.TodoStorageOptions
+- uid: QBrainAi.Support.Mcp.Options.TunnelOptions
+  commentId: T:QBrainAi.Support.Mcp.Options.TunnelOptions
+  href: QBrainAi.Support.Mcp.Options.TunnelOptions.html
+  name: TunnelOptions
+  nameWithType: TunnelOptions
+  fullName: QBrainAi.Support.Mcp.Options.TunnelOptions
+- uid: QBrainAi.Support.Mcp.Options.NgrokTunnelOptions
+  commentId: T:QBrainAi.Support.Mcp.Options.NgrokTunnelOptions
+  parent: QBrainAi.Support.Mcp.Options
+  href: QBrainAi.Support.Mcp.Options.NgrokTunnelOptions.html
+  name: NgrokTunnelOptions
+  nameWithType: NgrokTunnelOptions
+  fullName: QBrainAi.Support.Mcp.Options.NgrokTunnelOptions
+- uid: QBrainAi.Support.Mcp.Options.CloudflareTunnelOptions
+  commentId: T:QBrainAi.Support.Mcp.Options.CloudflareTunnelOptions
+  parent: QBrainAi.Support.Mcp.Options
+  href: QBrainAi.Support.Mcp.Options.CloudflareTunnelOptions.html
+  name: CloudflareTunnelOptions
+  nameWithType: CloudflareTunnelOptions
+  fullName: QBrainAi.Support.Mcp.Options.CloudflareTunnelOptions
+- uid: QBrainAi.Support.Mcp.Options.FrpTunnelOptions
+  commentId: T:QBrainAi.Support.Mcp.Options.FrpTunnelOptions
+  parent: QBrainAi.Support.Mcp.Options
+  href: QBrainAi.Support.Mcp.Options.FrpTunnelOptions.html
+  name: FrpTunnelOptions
+  nameWithType: FrpTunnelOptions
+  fullName: QBrainAi.Support.Mcp.Options.FrpTunnelOptions
+- uid: QBrainAi.Support.Mcp.Options
+  commentId: N:QBrainAi.Support.Mcp.Options
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Options
+  nameWithType: QBrainAi.Support.Mcp.Options
+  fullName: QBrainAi.Support.Mcp.Options
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Options
+    name: Options
+    href: QBrainAi.Support.Mcp.Options.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Options
+    name: Options
+    href: QBrainAi.Support.Mcp.Options.html

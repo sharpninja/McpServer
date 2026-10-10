@@ -19,12 +19,12 @@ partial class Build
     [Parameter("Code signing certificate password")]
     readonly string CertificatePassword = string.Empty;
 
-    /// <summary>Package McpServer.Support.Mcp as a Windows MSIX installer.</summary>
+    /// <summary>Package QBrainAi.Support.Mcp as a Windows MSIX installer.</summary>
     public Target PackageMsix => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
-            var project = SourceDirectory / "McpServer.Support.Mcp" / "McpServer.Support.Mcp.csproj";
+            var project = SourceDirectory / "QBrainAi.Support.Mcp" / "QBrainAi.Support.Mcp.csproj";
             var publishDir = ArtifactsDirectory / "mcp-msix-publish";
             var stagingDir = ArtifactsDirectory / "mcp-msix-staging";
             var outputDir = ArtifactsDirectory / "msix";
@@ -42,7 +42,7 @@ partial class Build
             publishDir.Copy(stagingDir, Nuke.Common.IO.ExistsPolicy.MergeAndOverwrite);
 
             // Generate manifest
-            var manifestContent = MsixHelper.GenerateManifest("McpServer.Support.Mcp", Publisher, MsixVersion);
+            var manifestContent = MsixHelper.GenerateManifest("QBrainAi.Support.Mcp", Publisher, MsixVersion);
             File.WriteAllText(stagingDir / "AppxManifest.xml", manifestContent);
 
             // Create placeholder logos if missing
@@ -56,7 +56,7 @@ partial class Build
             var makeAppx = MsixHelper.FindSdkTool("makeappx.exe")
                 ?? throw new InvalidOperationException("makeappx.exe not found. Install Windows SDK.");
 
-            var msixPath = outputDir / $"McpServer.Support.Mcp-{MsixVersion}.msix";
+            var msixPath = outputDir / $"QBrainAi.Support.Mcp-{MsixVersion}.msix";
             Log.Information("Creating MSIX: {Path}", msixPath);
 
             ProcessTasks.StartProcess(makeAppx, $"pack /d \"{stagingDir}\" /p \"{msixPath}\" /o")

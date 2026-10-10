@@ -109,14 +109,14 @@ static partial class WindowsServiceHelper
         string installRoot,
         string exeName,
         int port,
-        string displayName = "MCP Server",
+        string displayName = "QBrain.AI",
         string description = "MCP Model Context Protocol Server")
     {
         var exePath = Path.Combine(installRoot, exeName);
         if (!File.Exists(exePath))
             throw new FileNotFoundException($"Deployment is missing {exeName} under {installRoot}.");
 
-        var binPath = GetServiceImagePath(installRoot, exeName, port);
+        var binPath = GetServiceImagePath(installRoot, exeName, port, serviceName);
 
         // sc.exe requires binPath= value where the value is a single argument.
         // When the value itself contains quotes/spaces, wrap the entire value in an outer set of quotes.
@@ -346,7 +346,7 @@ static partial class WindowsServiceHelper
     /// Queries the running server (loopback) for the DB-backed workspace list and probes the shared health endpoint.
     /// </summary>
     /// <remarks>
-    /// Workspaces are sourced from the DB via <c>GET /mcpserver/workspace</c>, not from the deployed appsettings.
+    /// Workspaces are sourced from the DB via <c>GET /qbrainai/workspace</c>, not from the deployed appsettings.
     /// Auth is bootstrapped via the loopback-only <c>GET /api-key</c> endpoint which returns the primary
     /// workspace's default (read-only) token and path.
     /// </remarks>
@@ -388,13 +388,13 @@ static partial class WindowsServiceHelper
         List<(string Name, string Path, bool IsEnabled, bool IsPrimary)> workspaces;
         try
         {
-            using var wsRequest = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/mcpserver/workspace");
+            using var wsRequest = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/qbrainai/workspace");
             wsRequest.Headers.TryAddWithoutValidation("X-Api-Key", apiKey);
             wsRequest.Headers.TryAddWithoutValidation("X-Workspace-Path", primaryWorkspacePath);
             using var wsResponse = http.SendAsync(wsRequest).GetAwaiter().GetResult();
             if (!wsResponse.IsSuccessStatusCode)
             {
-                Log.Warning("  GET /mcpserver/workspace returned {Status}; skipping workspace health checks.", wsResponse.StatusCode);
+                Log.Warning("  GET /qbrainai/workspace returned {Status}; skipping workspace health checks.", wsResponse.StatusCode);
                 return new WorkspaceHealthResult(0, 0, 0);
             }
             var wsJson = wsResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -414,7 +414,7 @@ static partial class WindowsServiceHelper
         }
         catch (Exception ex)
         {
-            Log.Warning("  GET /mcpserver/workspace failed: {Error}; skipping workspace health checks.", ex.Message);
+            Log.Warning("  GET /qbrainai/workspace failed: {Error}; skipping workspace health checks.", ex.Message);
             return new WorkspaceHealthResult(0, 0, 0);
         }
 
@@ -485,10 +485,50 @@ static partial class WindowsServiceHelper
     }
 
     /// <summary>Builds the Windows service ImagePath (binPath) argument string.</summary>
-    public static string GetServiceImagePath(string installRoot, string exeName, int port)
+    /// <param name="installRoot">Deployment directory.</param>
+    /// <param name="exeName">Host executable file name.</param>
+    /// <param name="port">HTTP port passed to the host.</param>
+    /// <param name="serviceName">Service registration. The legacy McpServer name is passed through to the host.</param>
+    /// <returns>The ImagePath value.</returns>
+    public static string GetServiceImagePath(string installRoot, string exeName, int port, string? serviceName = null)
     {
         var exePath = Path.Combine(installRoot, exeName);
-        return $"\"{exePath}\" --urls \"http://+:{port}\"";
+        var image = $"\"{exePath}\" --urls \"http://+:{port}\"";
+        if (string.Equals(serviceName, "McpServer", StringComparison.OrdinalIgnoreCase))
+            image += " --service-name McpServer";
+        return image;
+    }
+
+    /// <summary>
+    /// TR-MCP-QBRAIN-006: Process image to wait for after stopping a service.
+    /// A legacy McpServer service still running the old host is stopped by that image name.
+    /// After the first in-place update the process image is the QBrainAi host.
+    /// </summary>
+    /// <param name="serviceName">Service being updated.</param>
+    /// <returns>Process name without the .exe suffix.</returns>
+    public static string SelectStopProcessName(string serviceName)
+    {
+        if (string.Equals(serviceName, "McpServer", StringComparison.OrdinalIgnoreCase)
+            && IsProcessRunning("McpServer.Support.Mcp"))
+        {
+            return "McpServer.Support.Mcp";
+        }
+
+        return "QBrainAi.Support.Mcp";
+    }
+
+    private static bool IsProcessRunning(string processName)
+    {
+        var processes = Process.GetProcessesByName(processName);
+        try
+        {
+            return processes.Length > 0;
+        }
+        finally
+        {
+            foreach (var process in processes)
+                process.Dispose();
+        }
     }
 
     // ── Private helpers ──────────────────────────────────────────────────

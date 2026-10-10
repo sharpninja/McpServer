@@ -1,0 +1,167 @@
+{
+  "TimestampUtc": "2026-09-30T16:52:20Z",
+  "ValidatorIdentity": "Codex/gpt-6-astra/xhigh (requested; model and effort unverified)",
+  "WorkClass": "Project implementation: P2 SessionLife contracts",
+  "ReviewStatus": "BLOCKED; independent implementation validation not performed",
+  "Workspace": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2",
+  "RequestedTipSha": "340d40a6a1986f35b06c153bccaae981eab8da82",
+  "VerifiedTipSha": null,
+  "AddProfile": {
+    "Executed": true,
+    "ProfileFileCount": 21,
+    "SkillPath": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "ReadMechanism": "Get-Content -Raw; no dedicated Read tool available",
+    "OutputTruncationRecovered": true
+  },
+  "ModelEffortProof": {
+    "Status": "UNKNOWN",
+    "RequestedModel": "gpt-6-astra",
+    "RequestedEffort": "xhigh",
+    "TurnContext": null,
+    "SessionMeta": null
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "status": "UNKNOWN",
+      "claim": "P2 contracts and BUG-TRIAGE-246 proofs implemented at requested tip",
+      "evidence": "Implementation and contract tests not inspected because shell review stopped."
+    },
+    {
+      "id": "A2",
+      "status": "UNKNOWN",
+      "claim": "RunId counts green and bound to tip 340d40a6",
+      "evidence": "TRX, NUnit and native-run artifacts not parsed. e9932a49 versus 340d40a6 binding unresolved."
+    },
+    {
+      "id": "A3",
+      "status": "UNKNOWN",
+      "claim": "PluginIntegration deliberately excluded and retained for P6",
+      "evidence": "Nuke producers and Build.Tests exclusion assertions not inspected."
+    },
+    {
+      "id": "A4",
+      "status": "UNKNOWN",
+      "claim": "Gate plumbing and Pester UTC normalization correct",
+      "evidence": "Gate script, producers and UTC normalization not inspected."
+    },
+    {
+      "id": "A5",
+      "status": "UNKNOWN",
+      "claim": "history-r1 and P1 stack preserved",
+      "evidence": "No diff or regression evidence inspected."
+    },
+    {
+      "id": "B1",
+      "status": "PASS",
+      "claim": "Mandatory add-profile performed before validation",
+      "evidence": "First attempted action read add-profile SKILL.md. Subsequently read all 21 non-skill profile Markdown files; re-read truncated middle and PROFILE.md in full. No claim checks preceded the profile load. Reads used Get-Content, since no dedicated Read tool exists."
+    },
+    {
+      "id": "B2",
+      "status": "FAIL",
+      "claim": "Validator shell execution complied with pwsh-only rule",
+      "evidence": "exec_command was passed shell=pwsh.exe, login=false, but Get-Process -Id $PID reported C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe and PSVersion 5.1.26100.9444. Earlier profile/instruction reads therefore did not comply. Shell execution stopped immediately on discovery; exception requested and unanswered."
+    },
+    {
+      "id": "B3",
+      "status": "FAIL",
+      "claim": "Complete MCP review turn and persistence proof",
+      "evidence": "AGENTS-README-FIRST.yaml is absent in active worktree. No trusted bootstrap, review session/turn or complete-verdict persistence established. No raw API fallback used."
+    },
+    {
+      "id": "B4",
+      "status": "UNKNOWN",
+      "claim": "Byrd v4 inter-phase gates and full zero-skip exit",
+      "evidence": "No phase-gate receipts or native tests inspected. No post-hoc FR-versus-file timestamp inference made."
+    },
+    {
+      "id": "B5",
+      "status": "UNKNOWN",
+      "claim": "Implementer honesty and MCP-only requirements/TODO storage",
+      "evidence": "Implementation history and MCP records not inspected."
+    },
+    {
+      "id": "B6",
+      "status": "PASS",
+      "claim": "Validator observed review-only and no product/goal mutations",
+      "evidence": "No product edits, tests/builds, deletions, commits, pushes, merges, or TODO/goal status changes. Only requested receipt writes attempted."
+    },
+    {
+      "id": "B7",
+      "status": "UNKNOWN",
+      "claim": "Live requested model and effort proved",
+      "evidence": "Requested Codex/gpt-6-astra/xhigh; session directory names enumerated, but no turn_context or session_meta payload read. Requested identity is not verified runtime identity."
+    },
+    {
+      "id": "B8",
+      "status": "FAIL",
+      "claim": "Complete request/response native JSONL stream exists",
+      "evidence": "The requested response sidecar did not exist (apply_patch read returned os error 2). Created it with the complete blocked verdict annotation, but it lacks the native tool/event stream. Existing request sidecar was preserved and annotated. Full stream capture is incomplete."
+    },
+    {
+      "id": "C1",
+      "status": "UNKNOWN",
+      "claim": "P2 FR/TR/TEST/AC and mappings cover all behavior",
+      "evidence": "Project implementation class applies. Requirement documents, MCP requirements and mapped tests not inspected; green suite not accepted as AC evidence."
+    },
+    {
+      "id": "D1",
+      "status": "UNKNOWN",
+      "claim": "Holistic P2 DoD and outstanding items accurately represented",
+      "evidence": "Active P2 plan not inspected. No completion or prior HV AGREE inferred; brief says hvAgreeClaimed=false."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 0,
+  "Completeness": 0,
+  "Confidence": 100,
+  "ScoreMeaning": "Accuracy/completeness 0 indicate no substantiation of submitted implementation claims, not a measured code quality score. Confidence 100 applies only to withholding AGREE while required checks are unperformed.",
+  "ExplicitFailList": [
+    "B2: Validator commands ran under Windows PowerShell 5.1 despite an explicit pwsh.exe tool request.",
+    "B3: No complete MCP review turn or persistence proof.",
+    "B8: Response JSONL contains the blocked verdict but lacks the complete native machine stream.",
+    "Accuracy and completeness are both 0, below 98; substantive implementation validation was blocked."
+  ],
+  "PassCount": 2,
+  "FailCount": 3,
+  "UnknownCount": 10,
+  "Limitations": [
+    "Sandbox launcher failed before command execution with os error 206.",
+    "PowerShell MCP console could not start: system cannot find the file specified.",
+    "Unsandboxed command tool ignored requested pwsh.exe selection and ran Windows PowerShell 5.1.",
+    "No further shell use after runtime mismatch was discovered.",
+    "User exception request remains unanswered.",
+    "No test counts, PR state, tip, requirement coverage or DoD independently established.",
+    "No MCP session-log persistence established.",
+    "Sidecar annotations do not establish a complete native machine stream."
+  ],
+  "ReceiptPaths": {
+    "markdown": "F:/GitHub/McpServer/.worktrees/sessionlife-p2-contracts-5cb2/docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T164250Z.md",
+    "json": "F:/GitHub/McpServer/.worktrees/sessionlife-p2-contracts-5cb2/docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T164250Z.json",
+    "requestJsonl": "F:/GitHub/McpServer/.worktrees/sessionlife-p2-contracts-5cb2/docs/receipts/hv/20260930T164250Z-sessionlife-p2-contracts-hv.request.jsonl",
+    "responseJsonl": "F:/GitHub/McpServer/.worktrees/sessionlife-p2-contracts-5cb2/docs/receipts/hv/20260930T164250Z-sessionlife-p2-contracts-hv.response.jsonl"
+  },
+  "VerdictJson": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 0,
+    "completeness": 0,
+    "confidence": 100,
+    "failList": [
+      "B2: Validator commands ran under Windows PowerShell 5.1 despite an explicit pwsh.exe tool request.",
+      "B3: No complete MCP review turn or persistence proof.",
+      "B8: Response JSONL contains the blocked verdict but lacks the complete native machine stream.",
+      "Accuracy and completeness are both 0, below 98; substantive implementation validation was blocked."
+    ],
+    "passCount": 2,
+    "failCount": 3,
+    "unknownCount": 10,
+    "tipSha": "340d40a6a1986f35b06c153bccaae981eab8da82",
+    "receiptPaths": [
+      "F:/GitHub/McpServer/.worktrees/sessionlife-p2-contracts-5cb2/docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T164250Z.md",
+      "F:/GitHub/McpServer/.worktrees/sessionlife-p2-contracts-5cb2/docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T164250Z.json",
+      "F:/GitHub/McpServer/.worktrees/sessionlife-p2-contracts-5cb2/docs/receipts/hv/20260930T164250Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "F:/GitHub/McpServer/.worktrees/sessionlife-p2-contracts-5cb2/docs/receipts/hv/20260930T164250Z-sessionlife-p2-contracts-hv.response.jsonl"
+    ]
+  }
+}

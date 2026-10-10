@@ -1,0 +1,43 @@
+{
+  "TimestampUtc": "2026-10-02T18:00:09.4180433-05:00",
+  "verdict": "DISAGREE",
+  "profileCount": 21,
+  "claimCount": 21,
+  "pass": 15,
+  "fail": 4,
+  "unknown": 2,
+  "criterionCount": 43,
+  "criterionPass": 31,
+  "criterionFail": 9,
+  "criterionDeferred": 3,
+  "files": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261002T223800Z.md",
+      "bytes": 36711,
+      "parsedJsonlLines": 0
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261002T223800Z.json",
+      "bytes": 235445,
+      "parsedJsonlLines": 0
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T223800Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "bytes": 10522,
+      "parsedJsonlLines": 2
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T223800Z-sessionlife-p2-contracts-hv.response.jsonl",
+      "bytes": 715147,
+      "parsedJsonlLines": 90
+    }
+  ],
+  "head": "6e3215ffeab727c345739fb452aeaa0abdc416ab",
+  "trackedDirty": [
+    ".nuke/build.schema.json",
+    "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+  ],
+  "gateHash": "94222BBF9A11DA3D766B9A2BEC566F0CD52B37CD1B1D2598DF726A6027D21937",
+  "artifactDrift": []
+}

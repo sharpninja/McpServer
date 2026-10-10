@@ -1,15 +1,15 @@
 import type { ReplBridge } from '../transport/repl-bridge.js';
 
 /**
- * Process-wide configuration for @sharpninja/mcpserver-plugin-core.
+ * Process-wide configuration for @qbrainai/qbrain-ai-plugin-core.
  *
- * Host plugins call setCoreConfig() (usually via createMcpServerPluginCore)
+ * Host plugins call setCoreConfig() (usually via createQBrainAiPluginCore)
  * before dispatching tools so the shared modules pick up the host identity
  * instead of hardcoded 'Cline'/'cline-v2' strings. Environment variables
  * (PLUGIN_AGENT_NAME / PLUGIN_TAG) act as fallbacks so the modules also work
  * when imported standalone.
  */
-export interface McpServerPluginCoreConfig {
+export interface QBrainAiPluginCoreConfig {
   /** Display agent name, e.g. Cline, OpenCode (session_open agent field, log prefixes). */
   agentName?: string;
   /** Lowercase plugin id, e.g. cline, cline-v2, opencode (cache path segments, error codes). */
@@ -32,14 +32,14 @@ export interface McpServerPluginCoreConfig {
   replCommand?: string;
 }
 
-let activeConfig: McpServerPluginCoreConfig = {};
+let activeConfig: QBrainAiPluginCoreConfig = {};
 
-export function setCoreConfig(config: McpServerPluginCoreConfig): void {
+export function setCoreConfig(config: QBrainAiPluginCoreConfig): void {
   activeConfig = { ...config };
   publishCoreIdentity(activeConfig);
 }
 
-export function getCoreConfig(): McpServerPluginCoreConfig {
+export function getCoreConfig(): QBrainAiPluginCoreConfig {
   return activeConfig;
 }
 
@@ -51,7 +51,7 @@ export function corePluginId(): string {
   return activeConfig.pluginId || process.env.PLUGIN_TAG || 'cline-v2';
 }
 
-function publishCoreIdentity(config: McpServerPluginCoreConfig): void {
+function publishCoreIdentity(config: QBrainAiPluginCoreConfig): void {
   const agentName = config.agentName || process.env.PLUGIN_AGENT_NAME || 'Cline';
   const pluginId = config.pluginId || process.env.PLUGIN_TAG || 'cline-v2';
   process.env.PLUGIN_AGENT_NAME = agentName;

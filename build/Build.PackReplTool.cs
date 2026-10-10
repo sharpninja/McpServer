@@ -4,12 +4,12 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    /// <summary>Build and pack McpServer.Repl.Host as a NuGet global tool.</summary>
+    /// <summary>Build and pack QBrainAi.Repl.Host as a NuGet global tool.</summary>
     public Target PackReplTool => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
-            var project = SourceDirectory / "McpServer.Repl.Host" / "McpServer.Repl.Host.csproj";
+            var project = SourceDirectory / "QBrainAi.Repl.Host" / "QBrainAi.Repl.Host.csproj";
             var packageVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
 
             var settings = new DotNetPackSettings()

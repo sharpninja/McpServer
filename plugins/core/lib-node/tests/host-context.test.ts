@@ -1,5 +1,5 @@
 /**
- * New coverage for runtime/host-context.ts + the createMcpServerPluginCore
+ * New coverage for runtime/host-context.ts + the createQBrainAiPluginCore
  * factory. This replaces the cline-v2 plugin.test.ts (which exercised the
  * @cline/core AgentPlugin contract, manifest, and registerTool wiring -
  * host glue that stays in the consuming repo). Here we test the host-neutral
@@ -8,7 +8,7 @@
  * validation gate, and the startSession / appendToolAction / completeSession
  * session-audit choreography.
  */
-import { createMcpServerPluginCore, HostContext, allToolDescriptors, contextLogger } from '../src/index.js';
+import { createQBrainAiPluginCore, HostContext, allToolDescriptors, contextLogger } from '../src/index.js';
 import type { ReplBridge, ReplResponse } from '../src/transport/repl-bridge.js';
 import { __resetSessionShimForTests } from '../src/tools/session.js';
 
@@ -32,7 +32,7 @@ function asBridge(fake: FakeBridge): ReplBridge {
 }
 
 function newCore(fake = new FakeBridge(), overrides: Record<string, unknown> = {}) {
-  const context = createMcpServerPluginCore({
+  const context = createQBrainAiPluginCore({
     agentName: 'Cline',
     pluginId: 'cline-v2',
     bridge: asBridge(fake),
@@ -75,7 +75,7 @@ beforeEach(() => {
   __resetSessionShimForTests();
 });
 
-describe('createMcpServerPluginCore', () => {
+describe('createQBrainAiPluginCore', () => {
   test('returns a HostContext that reflects the configured identity', () => {
     const { context } = newCore();
     expect(context).toBeInstanceOf(HostContext);

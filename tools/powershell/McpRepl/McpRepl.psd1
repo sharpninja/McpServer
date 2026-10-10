@@ -5,7 +5,7 @@
     Author            = 'SharpNinja'
     CompanyName       = 'SharpNinja'
     Copyright         = '(c) 2026 SharpNinja. All rights reserved.'
-    Description       = 'Consolidated PowerShell module for McpServer REPL protocol, typed message entities, YAML serialization, and shared plugin helpers. Canonical home: tools/powershell/McpRepl in the main McpServer repository. Published to the PowerShell Gallery.'
+    Description       = 'Consolidated PowerShell module for QBrainAi REPL protocol, typed message entities, YAML serialization, and shared plugin helpers. Canonical home: tools/powershell/McpRepl in the main QBrainAi repository. Published to the PowerShell Gallery.'
     PowerShellVersion = '7.0'
     FunctionsToExport = @(
         'ConvertTo-McpYaml',
@@ -20,7 +20,7 @@
     )
     PrivateData = @{
         PSData = @{
-            Tags         = @('McpServer', 'REPL', 'MCP', 'YAML', 'AgentPlugin', 'Grok', 'Claude', 'Codex')
+            Tags         = @('QBrainAi', 'REPL', 'MCP', 'YAML', 'AgentPlugin', 'Grok', 'Claude', 'Codex')
             LicenseUri   = 'https://github.com/sharpninja/McpServer/blob/main/LICENSE'
             ProjectUri   = 'https://github.com/sharpninja/McpServer'
         }

@@ -156,7 +156,7 @@ describe('handleRequirementsTool', () => {
       preferredWikiFormat: 'github',
       documents: {
         'github/Functional-Requirements.md': {
-          content: '# Functional Requirements (MCP Server)',
+          content: '# Functional Requirements (QBrain.AI)',
           lastModifiedUtc: '2026-05-08T12:00:00Z',
         },
       },
@@ -612,7 +612,7 @@ describe('handleRequirementsTool', () => {
 
       expect(JSON.stringify(result)).toContain('UEsDBA==');
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://127.0.0.1:8765/mcpserver/requirements/generate?doc=all&format=wiki',
+        'http://127.0.0.1:8765/qbrainai/requirements/generate?doc=all&format=wiki',
         {
           headers: {
             'X-Api-Key': 'test-api-key',
