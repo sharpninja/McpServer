@@ -1035,7 +1035,7 @@ Section `Mcp:AgentContext` (declared under `QBrainAi: AgentContext:` in `appsett
 - `BytesPerToken` (int, default 4, must be 1..16): the deterministic token estimate is `ceil(utf8ByteCount / BytesPerToken)` per item.
 - `Trust:Correctness`, `Trust:Completeness` (decimal in [0,1], default 0.98, inclusive).
 - `MaxCandidatesPerKind` (int, default 50, 1..1000) and `MaxPriorResponses` (int, default 10, 0..100).
-- `ProfileSources` (list of file globs; default the operator profile files configured for the workspace) and `RuleSources` (list; default `CLAUDE.md`, `AGENTS.md`, and `AGENTS-README-FIRST.yaml` with secret values redacted).
+- `ProfileSources` (list of file globs resolved on the server host; default `~/.claude/profile/*.md` excluding `add-profile*.md`, the set the `/add-profile` skill reads) and `RuleSources` (list of workspace-relative paths; default `CLAUDE.md`, `AGENTS.md`, and `AGENTS-README-FIRST.yaml`, secret values redacted). Profile and rules are mandatory: when no profile file or no rule file resolves, the build fails with 409 `agent_context_profile_unavailable` instead of building a package without them.
 - `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-sol`), `ModelGrader:RequiredEffort` (default `xhigh`): a model grade from any other grader is refused.
 - `GraphRag:ProjectionEnabled` (bool, default true) and `GraphRag:UseForRetrieval` (bool, default true).
 - Validation failures (startup): `TokenBudget`, `BytesPerToken`, thresholds outside their ranges, an empty `RuleSources`, or an empty grader identity.
@@ -1067,6 +1067,17 @@ Common rules: string keys `[StringLength(128)]` with the prefixes below; child r
 - `Mandatory` (bool), `Score` (decimal 0..1, null for mandatory items), `Rationale` (2048), `TokenCount` (int).
 - `RetrievalPath` (16): `Relational` or `GraphRag`.
 - `Content` (text, sanitized; secret values redacted in mandatory items).
+
+Source hashes (`SourceSha256`, `ToSha256`), all SHA-256 over UTF-8 bytes:
+
+- `Code`, `Profile`, `Rule`, `Receipt`, `CodeFile`: the file content at the recorded commit for files under version control (never the working copy), otherwise the file content as read; line endings are kept as stored.
+- `Requirement`: the canonical JSON of the record (id, title, description, status, and its acceptance criteria in order), serialized with sorted keys and no insignificant whitespace.
+- `SessionLogTurn`: the canonical JSON of the turn's request text, response, status, actions, and decisions, excluding timestamps.
+- `Todo`: the canonical JSON of the TODO's id, title, description lines, tasks, and done state.
+- `PriorResponse`, `Response`: `ContentSha256`. `Package`: `ContentSha256`.
+- `Request`: the sanitized request text.
+
+Ranking scores are decimals rounded half-even to 6 places before ordering, so float differences between hosts never reorder candidates; ties break on `sourceRef` by ordinal comparison.
 
 `AgentContextOmissionEntity` (table `AgentContextOmissions`, `long Id`)
 
@@ -1105,6 +1116,7 @@ Common rules: string keys `[StringLength(128)]` with the prefixes below; child r
 - `Correctness`, `Completeness`, `CorrectnessThreshold`, `CompletenessThreshold` (decimal).
 - `PassCount`, `FailCount`, `UnknownCount` (int).
 - `Verdict` (16): `Pass` or `Fail`, derived: `Pass` only when both scores meet their thresholds and `FailCount` and `UnknownCount` are zero.
+- "Latest grade" of a kind means the grade with the greatest `GradedUtc`, ties broken by the greatest `GradeId` by ordinal comparison; concurrent grade writes are all kept and the trust decision (C11) is recomputed after each one inside the same transaction.
 - `RequestJsonlPath`, `ResponseJsonlPath` (2048, required for `Model`).
 - `GradedUtc`.
 - Child `Findings`.
@@ -1125,6 +1137,7 @@ Common rules: string keys `[StringLength(128)]` with the prefixes below; child r
 - `WorkspaceId`.
 - `State` (16): `Pending`, `Projected`, `Removed`, `Skipped`, `Failed`.
 - `GraphRagDocumentId` (128), `ProjectedContentSha256` (64), `LastError` (2048), `UpdatedUtc`.
+- Projection always uses `GraphRagStorageScope.Workspace`; a projected document never reaches the global GraphRAG scope or another workspace.
 
 ```mermaid
 erDiagram
@@ -1217,6 +1230,7 @@ Error codes (problem+json body `{ type, title, status, detail, code, message, re
 - 409 `agent_context_response_not_gradable` (response `Rejected` or `Superseded`).
 - 409 `agent_context_supersede_invalid` (cross-package request mismatch, a cycle, or a terminal target).
 - 409 `agent_context_commit_unavailable` (the workspace is not a git checkout or the recorded commit cannot be read).
+- 409 `agent_context_profile_unavailable` (no configured profile file or no rule file resolves; mandatory context cannot be assembled).
 - 409 `conflict` (idempotency key reused with different inputs).
 - 422 `agent_context_budget_exceeded` with `details { tokenBudget, mandatoryTokenCount, overflowTokenCount, mandatoryItems [{ kind, sourceRef, tokenCount }] }`.
 
@@ -1245,7 +1259,8 @@ flowchart TD
 
 - REST `POST /qbrainai/agent-context/packages`; MCP `agent_context_build_package(workspacePath, requestJson)`; client `BuildPackageAsync(BuildAgentContextPackageRequest)`; REPL `client.AgentContext.BuildPackageAsync`; PowerShell `New-McpAgentContextBuildPackageParams`; Node tool `agent_context_build_package`.
 - Request `BuildAgentContextPackageRequest`. Response 201 `AgentContextPackageResult` (Location `/qbrainai/agent-context/packages/{packageId}`), or 200 with the existing package when the idempotency key repeats with identical inputs.
-- Errors: 400 `validation_error`; 404 `not_found` (`session_turn`); 409 `agent_context_disabled`, `agent_context_commit_unavailable`, `conflict` (key reused with different inputs); 422 `agent_context_budget_exceeded` (an `Overflow` package is stored for audit).
+- Errors: 400 `validation_error`; 404 `not_found` (`session_turn`); 409 `agent_context_disabled`, `agent_context_commit_unavailable`, `agent_context_profile_unavailable`, `conflict` (key reused with different inputs); 422 `agent_context_budget_exceeded` (an `Overflow` package is stored for audit).
+- Concurrency: two builds with the same idempotency key race on the unique index; the loser re-reads the winner's package and returns it with 200 when the inputs match, or 409 `conflict` when they differ.
 - Deterministic construction: candidates are gathered per kind, filtered, ranked by score descending then `sourceRef` ordinal, and rendered in the fixed kind order Request, Profile, Rule, Requirement, Todo, SessionLogTurn, Receipt, PriorResponse, Code; the rendered text is canonical (LF line endings, one header line per item `[kind] sourceRef sha256`), so the same inputs at the same commit give the same `contentSha256`.
 
 ```mermaid
@@ -1260,7 +1275,9 @@ flowchart TD
     T -->|no| E3(["404 not_found session_turn"])
     T -->|yes| GIT{"Workspace commit readable?"}
     GIT -->|no| E4(["409 agent_context_commit_unavailable"])
-    GIT -->|yes| GA["Gather candidates: request, profile, rules, applicable requirements from the turn's TODO and relationships, TODOs, session-log turns, receipts, trusted prior responses (C18), code at the commit"]
+    GIT -->|yes| PRF{"At least one profile file and one rule file resolve?"}
+    PRF -->|no| E7(["409 agent_context_profile_unavailable"])
+    PRF -->|yes| GA["Gather candidates: request, profile, rules, applicable requirements from the turn's TODO and relationships, TODOs, session-log turns, receipts, trusted prior responses (C18), code at the commit"]
     GA --> IH["Compute every source hash and InputsSha256"]
     IH --> ID{"Idempotency key already used?"}
     ID -->|yes, same InputsSha256| EX(["200 existing package"])
@@ -1281,7 +1298,10 @@ flowchart TD
     MORE -->|no| FD["Findings: contradicts links between included items, blocks links on the request's TODO or turn"]
     FD --> RD["Render canonically in the fixed kind order and compute ContentSha256"]
     RD --> SV["Save package, items, omissions, findings in one transaction"]
-    SV --> REL["Link package derived_from each included source and relevant_to the turn"]
+    SV --> RACE{"Idempotency unique index violated by a concurrent build?"}
+    RACE -->|yes, winner has the same InputsSha256| EX2(["200 the winner's package"])
+    RACE -->|yes, different inputs| E8(["409 conflict"])
+    RACE -->|no| REL["Link package derived_from each included source and relevant_to the turn"]
     REL --> OK(["201 AgentContextPackageResult"])
 ```
 
@@ -1370,7 +1390,10 @@ flowchart TD
     ID -->|yes, different content| E5(["409 conflict"])
     ID -->|no| SAN["Sanitize content, compute ContentSha256, read the workspace commit"]
     SAN --> SV["Save response (status Submitted), claims, evidence; copy root ids from the package"]
-    SV --> REL["Link response derived_from package, and evidence links of kind Requirement or File as supports"]
+    SV --> RACE{"Idempotency unique index violated by a concurrent submit?"}
+    RACE -->|yes, same content hash| EX2(["200 the winner's response"])
+    RACE -->|yes, different content| E6(["409 conflict"])
+    RACE -->|no| REL["Link response derived_from package, and evidence links of kind Requirement or File as supports"]
     REL --> OK(["201 AgentResponseResult status Submitted"])
 ```
 
@@ -1415,7 +1438,7 @@ flowchart TD
 #### C9 Run the deterministic grade [FR-MCP-AGENTCONTEXT-004]
 
 - REST `POST /qbrainai/agent-context/responses/{responseId}/grades/deterministic`; MCP `agent_context_grade_deterministic(workspacePath, responseId)`; client `RunDeterministicGradeAsync(responseId)`; REPL `client.AgentContext.RunDeterministicGradeAsync`; PowerShell `New-McpAgentContextGradeDeterministicParams`; Node tool `agent_context_grade_deterministic`.
-- Checks, one finding per check and claim: every claim has at least one evidence item; every `File` evidence exists at its commit with the cited hash; every `Requirement` evidence id exists in the requirement store; every `Receipt` path exists with the cited hash; every `SessionLogTurn` evidence resolves; the content contains no secret; the package is not stale. A check that cannot be evaluated is UNKNOWN.
+- Checks, one finding per check and claim: every claim has at least one evidence item; every `File` evidence exists at its commit with the cited hash; every `Requirement` evidence id exists in the requirement store; every `Receipt` path exists with the cited hash; every `SessionLogTurn` evidence resolves; the content, every claim text, and every evidence ref contain no secret; the package is not stale. A check that cannot be evaluated is UNKNOWN.
 - Scores: correctness = PASS findings / (PASS + FAIL) over evaluated checks; completeness = claims with every evidence check PASS / all claims; both exact decimals.
 - Response 201 `AgentResponseGradeResult`. Errors: 404 workspace or `not_found` (`response`), 409 `agent_context_disabled`, `agent_context_response_not_gradable`.
 
@@ -1438,7 +1461,7 @@ flowchart TD
     FF --> NX
     UF --> NX
     NX -->|yes| CL
-    NX -->|no| GL["Global checks: secret scan of content, package staleness"]
+    NX -->|no| GL["Global checks: secret scan of content, claims, and evidence refs; package staleness"]
     GL --> SC["Compute correctness and completeness as exact decimals"]
     SC --> VD["Verdict Pass only if both meet the trust thresholds and FAIL and UNKNOWN counts are zero"]
     VD --> SV["Save grade and findings, stamp thresholds"]
@@ -1482,7 +1505,7 @@ flowchart TD
 #### C11 Decide trust (internal, after every grade) [FR-MCP-AGENTCONTEXT-004]
 
 - Trigger: C9 and C10 after their grade is saved. No endpoint.
-- Rule: a response is `Trusted` only when it is not `Rejected`, `Stale`, or `Superseded`, its latest deterministic grade is `Pass`, and its latest model grade is `Pass`; otherwise it is `Grading`.
+- Rule: a response is `Trusted` only when it is not `Rejected`, `Stale`, or `Superseded`, its latest deterministic grade is `Pass`, and its latest model grade is `Pass` ("latest" as defined in section 6.3: greatest `GradedUtc`, then greatest `GradeId`); otherwise it is `Grading`. The decision runs in the same transaction as the grade insert, so concurrent grades each see a consistent latest pair.
 
 ```mermaid
 flowchart TD
@@ -1716,10 +1739,13 @@ flowchart TD
 - Trigger: a delivered user request (Phase A Units A3 and A4) on a host whose plugin reads `Mode` through C1.
 - PowerShell: `Invoke-PluginAgentContextInvocation` in `plugin-hook.ps1`; Node: `runAgentContextInvocation` in the Node core. Hosts inject the rendered package through their prompt-context mechanism (hook additional context or the host's system-context API).
 - Output: in `Stateless` mode the model receives only the rendered package and the request, without prior conversation turns; in `Pilot` mode the package is built and recorded but not injected; in `Off` nothing happens.
+- A host recorded `turn_logging_unsupported` (Phase A, D6) has no minted turn, so C20 does not run there: the plugin stays stateful and reports `turn_logging_unsupported`, and the feature-matrix row records the limitation.
 
 ```mermaid
 flowchart TD
-    S(["Request delivered and minted"]) --> MD["Read Mode from status (cached per host session start)"]
+    S(["Request delivered"]) --> SUP{"Host supported for turn logging and the turn minted?"}
+    SUP -->|no| UNS(["turn_logging_unsupported: stateful, no package"])
+    SUP -->|yes| MD["Read Mode from status (cached per host session start)"]
     MD --> M{"Mode"}
     M -->|Off| OFF(["Stateful turn as today"])
     M -->|Pilot or Stateless| BP["Build package (C2) for sessionId and requestId, idempotency key = requestId"]
@@ -1821,6 +1847,10 @@ sequenceDiagram
             alt commit unreadable
                 B-->>SVC: commit unavailable
                 API-->>Caller: 409 agent_context_commit_unavailable
+            else no profile or rule file resolves
+                B-->>SVC: profile unavailable
+                API-->>Caller: 409 agent_context_profile_unavailable
+                Caller->>Caller: report, run statefully, operator fixes ProfileSources or RuleSources
             else idempotency key reused with same inputs
                 SVC-->>API: existing package
                 API-->>Caller: 200 AgentContextPackageResult
