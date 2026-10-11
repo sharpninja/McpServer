@@ -1,0 +1,364 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  QBrainAi.ProcessTree.TestHelper -> tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+  QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+  QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+  QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+  QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+  QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+  QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+  QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+  QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+  QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+  QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+  QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+  QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+  QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+  QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+  QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+  QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+  QBrainAi.Support.Mcp.Tests -> tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll
+Test run for tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:25.74]     QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [428 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-g3-handoff-d3-0aa6373eaccf42c6964c44a9454b43e3/markdown'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 604
+   at QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport() in tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:line 112
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:31.02]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors [1 s]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-1217397eb35f44b98aeb253797925897/legacy-bold/docs/Project/wiki'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDatabaseDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:line 1093
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:line 503
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:34.88]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope [3 s]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/6b9e057ad4c34ff9b0dd37670ca64364/wiki-di'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope() in tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:line 160
+   at QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope() in tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:line 166
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:36.03]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure [1 s]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-892ee9bbeede40e2b6f0b44bd186df25/stale-link/docs/Project/wiki'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDatabaseDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:line 1093
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:line 555
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:37.51]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome [FAIL]
+[xUnit.net 00:00:37.57]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome [99 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-3fbc727e/docs/Project/wiki'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:line 151
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure [31 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-f4f97e46/docs/Project/wiki'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:line 103
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:37.78]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput [14 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-757e51eb/docs/Project/wiki'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:line 165
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:49.45]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace [1 s]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/40082d85328b4960873a417de7769a61/wiki-dump'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:line 86
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:50.55]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace [1 s]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-c7e40b9b445f429baf1b15b1469eb101/a/docs/Project/export'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDatabaseDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:line 1052
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:line 57
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:51.03]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior [1 s]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/48aa0ad273114cf88d12c9d7f74c9206/out-a'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior() in tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:line 72
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:56.50]     QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [FAIL]
+[xUnit.net 00:00:56.52]     QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [25 ms]
+  Error Message:
+   System.ComponentModel.Win32Exception : An error occurred trying to start process 'sqllocaldb' with working directory 'tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0'. No such file or directory
+  Stack Trace:
+     at System.Diagnostics.Process.ForkAndExecProcess(ProcessStartInfo startInfo, String resolvedFilename, String[] argv, String[] envp, String cwd, Boolean setCredentials, UInt32 userId, UInt32 groupId, UInt32[] groups, Int32& stdinFd, Int32& stdoutFd, Int32& stderrFd, Boolean usesTerminal, Boolean throwOnNoExec)
+   at System.Diagnostics.Process.StartCore(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.EnsureLocalDbRunning() in tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:line 478
+   at QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently() in tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:line 218
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [4 ms]
+  Error Message:
+   System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor() in tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:line 34
+   at QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently() in tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:line 305
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:01.24]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly [FAIL]
+[xUnit.net 00:01:01.28]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly [27 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-e4f1f99fc22246da86b2e8da2b1ecfde/wiki-output'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:line 131
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner [24 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-76a232f25b9f48d1af0685acc3b7125b/wiki-output'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:line 106
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:03.64]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging [2 s]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-fc091b20caa34b07ba933afe648ba1fe/wiki-output'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:line 237
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:04.03]     QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr [3 ms]
+  Error Message:
+   PostgreSQL binaries not found. Run InstallTestDependencies or install PostgreSQL locally. Do not skip.
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr() in tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs:line 24
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:04.04]     QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump [21 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/g8-wiki-88d75aed3ada43888dcceea9335f34e0/docs/Project/wiki'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump() in tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:line 62
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:05.13]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup [62 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : /tmp/mcp-wiki-orchestrator-tests-758e63f882364f5fb6e66c383abaa8fc/wiki-output/azure
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxPathBeneathRoot(SafeFileHandle rootHandle, String relativePath, UInt64 flags, UInt64 mode, String displayPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 891
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.EnumerateLinuxFilesFromPinnedRoot(SafeFileHandle rootHandle, UnixStatx rootIdentity, String root, String directory, WorkspaceTraversalLimits limits, WorkspaceTraversalBudget budget, List`1 entries, List`1 directories, WorkspaceTraversalCancellationState cancellationState) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 669
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.<>c__DisplayClass29_0.<EnumerateLinuxBoundedAsync>b__0(WorkspaceTraversalCancellationState state) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 554
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.<>c__DisplayClass59_0`1.<RunBoundedTraversalWorkerAsync>b__2() in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 1008
+--- End of stack trace from previous location ---
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.RunBoundedTraversalWorkerAsync[T](Func`2 operation, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 1080
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.EnumerateLinuxBoundedAsync(String relativeDirectory, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 548
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.EnumerateFilesBoundedAsync(String relativeDirectory, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 479
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.DeleteStaleFilesAsync(WorkspaceExportRoot exportRoot, IReadOnlyCollection`1 cleanRelativeDirectories, IEnumerable`1 expectedFiles, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 587
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(WorkspaceExportRoot exportRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 529
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 499
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:line 189
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:12.33]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly [68 ms]
+  Error Message:
+   System.NotSupportedException : Linux requirements export cleanup rejects nested stale paths before mutation because the kernel lacks a contained atomic delete: 'azure/Old.md'.
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.DeleteStaleFilesAsync(WorkspaceExportRoot exportRoot, IReadOnlyCollection`1 cleanRelativeDirectories, IEnumerable`1 expectedFiles, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 624
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(WorkspaceExportRoot exportRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 529
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 499
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 207
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:12.36]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace [FAIL]
+[xUnit.net 00:01:12.37]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace [19 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-cf4137b7/export/canonical'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 604
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 75
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly [11 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-433a33be/export/canonical-readonly'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 604
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 107
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:12.48]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata [52 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : /tmp/mcp-reqdocs-tests-fceb4333/docs/Project/wiki/github
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxPathBeneathRoot(SafeFileHandle rootHandle, String relativePath, UInt64 flags, UInt64 mode, String displayPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 891
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.EnumerateLinuxFilesFromPinnedRoot(SafeFileHandle rootHandle, UnixStatx rootIdentity, String root, String directory, WorkspaceTraversalLimits limits, WorkspaceTraversalBudget budget, List`1 entries, List`1 directories, WorkspaceTraversalCancellationState cancellationState) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 669
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.<>c__DisplayClass29_0.<EnumerateLinuxBoundedAsync>b__0(WorkspaceTraversalCancellationState state) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 554
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.<>c__DisplayClass59_0`1.<RunBoundedTraversalWorkerAsync>b__2() in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 1008
+--- End of stack trace from previous location ---
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.RunBoundedTraversalWorkerAsync[T](Func`2 operation, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 1080
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.EnumerateLinuxBoundedAsync(String relativeDirectory, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 548
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.EnumerateFilesBoundedAsync(String relativeDirectory, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 479
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.DeleteStaleFilesAsync(WorkspaceExportRoot exportRoot, IReadOnlyCollection`1 cleanRelativeDirectories, IEnumerable`1 expectedFiles, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 587
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(WorkspaceExportRoot exportRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 529
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 499
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 153
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:12.51]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds [13 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-4f0615e2/export/canonical-with-matrix'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 604
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 134
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:12.56]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria [13 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-21cbcb92/docs/Project/wiki'.
+  Stack Trace:
+     at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 225
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:23.64]     QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject [FAIL]
+[xUnit.net 00:01:23.67]     QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject [39 ms]
+  Error Message:
+   Unexpected alias-race failure: System.IO.IOException: Unable to open contained Linux traversal entry '/tmp/mcp-twelfth-root-7027fcc3bccc492c8ee3d6b4779e55c3/wiki/document.md'.
+ ---> System.ComponentModel.Win32Exception (17): File exists
+   --- End of inner exception stack trace ---
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxPathBeneathRoot(SafeFileHandle rootHandle, String relativePath, UInt64 flags, UInt64 mode, String displayPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 891
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxContainedFileRooted(SafeFileHandle rootHandle, UnixStatx rootIdentity, String relativeFile, String displayPath, Boolean write, Boolean asyncHandle) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 237
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.OpenFileForWrite(String relativePath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 274
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenFileForWrite(String rootPath, String filePath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.cs:line 233
+   at InvokeStub_WorkspaceContainedFileSystem.OpenFileForWrite(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.AssertExpectedAliasRaceRejection(Exception failure) in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 276
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 208
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 221
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject [11 ms]
+  Error Message:
+   Unexpected alias-race failure: System.IO.DirectoryNotFoundException: /tmp/mcp-twelfth-root-06cdf65e722e4479814600ce33140731/wiki/document.md
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxPathBeneathRoot(SafeFileHandle rootHandle, String relativePath, UInt64 flags, UInt64 mode, String displayPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 891
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxContainedFileRooted(SafeFileHandle rootHandle, UnixStatx rootIdentity, String relativeFile, String displayPath, Boolean write, Boolean asyncHandle) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 227
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.OpenFileForRead(String relativePath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 249
+   at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenFileForRead(String rootPath, String filePath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.cs:line 222
+   at InvokeStub_WorkspaceContainedFileSystem.OpenFileForRead(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.AssertExpectedAliasRaceRejection(Exception failure) in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 276
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 145
+   at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 158
+--- End of stack trace from previous location ---
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+
+Failed!  - Failed:    26, Passed:  2901, Skipped:     0, Total:  2927, Duration: 1 m 31 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)

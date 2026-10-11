@@ -1,0 +1,53 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+  QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+  QBrainAi.ProcessTree.TestHelper -> tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+  QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+  QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+  QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+  QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+  QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+  QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+  QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+  QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+  QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+  QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+  QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+  QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+  QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+  QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+  QBrainAi.Support.Mcp.Tests -> tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll
+Test run for tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.62]     QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedPathInsideRoot_AcrossRepoOperations_ResolvesRepoRelative [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedPathInsideRoot_AcrossRepoOperations_ResolvesRepoRelative [9 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "src/code.cs"
+Actual:   "tmp/repo_test_5f6d7416892e4a5f926bd573cc7e2298/src"···
+           ↑ (pos 0)
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedPathInsideRoot_AcrossRepoOperations_ResolvesRepoRelative() in tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:line 110
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:02.65]     QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected [8 ms]
+  Error Message:
+   Assert.Null() Failure: Value is not null
+Expected: null
+Actual:   RepoFileReadResult { RelativePath = tmp/repo_external_6ba78cdf6d1a4092a15471f500f944e5/outside.txt, Content = , Exists = False }
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected() in tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:line 77
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:02.72]     QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.LeadingSeparatorPath_IsNotReinterpretedAsRepoRelative [FAIL]
+  Failed QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.LeadingSeparatorPath_IsNotReinterpretedAsRepoRelative [2 ms]
+  Error Message:
+   Assert.Null() Failure: Value is not null
+Expected: null
+Actual:   RepoFileReadResult { RelativePath = src/code.cs, Content = class Foo {}, Exists = True }
+  Stack Trace:
+     at QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.LeadingSeparatorPath_IsNotReinterpretedAsRepoRelative() in tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:line 135
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     3, Passed:    46, Skipped:     0, Total:    49, Duration: 318 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)

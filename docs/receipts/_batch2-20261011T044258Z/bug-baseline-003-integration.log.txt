@@ -1,0 +1,37 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+  QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+  QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+  QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+  QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+  QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+  QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+  QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+  QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+  QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+  QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+  QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+  QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+  QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+  QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+  QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+  QBrainAi.QBAgent -> src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+  QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+  QBrainAi.Repl.Host -> src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+  QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+  QBrainAi.Support.Mcp.IntegrationTests -> tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll
+Test run for tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:06.50]     QBrainAi.Support.Mcp.IntegrationTests.Controllers.QBAgentToolsIntegrationTests.Agent_LoadsSkill_ThenWritesAndEditsFile_ThroughServer [FAIL]
+  Failed QBrainAi.Support.Mcp.IntegrationTests.Controllers.QBAgentToolsIntegrationTests.Agent_LoadsSkill_ThenWritesAndEditsFile_ThroughServer [5 s]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 4
+Actual:   6
+  Stack Trace:
+     at QBrainAi.Support.Mcp.IntegrationTests.Controllers.QBAgentToolsIntegrationTests.Agent_LoadsSkill_ThenWritesAndEditsFile_ThroughServer() in tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QBAgentToolsIntegrationTests.cs:line 65
+   at QBrainAi.Support.Mcp.IntegrationTests.Controllers.QBAgentToolsIntegrationTests.Agent_LoadsSkill_ThenWritesAndEditsFile_ThroughServer() in tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QBAgentToolsIntegrationTests.cs:line 70
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     1, Passed:     3, Skipped:     0, Total:     4, Duration: 5 s - QBrainAi.Support.Mcp.IntegrationTests.dll (net10.0)
