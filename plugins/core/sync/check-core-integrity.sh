@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# FR-MCP-PLUGINCORE-002: CI checksum guard. Verifies every file listed in a
+# FR-MCP-PLUGINCORE-001 / TR-MCP-PLUGINCORE-001: checksum guard. Verifies every file listed in a
 # plugin repo's CORE-MANIFEST.yaml still matches its synced sha256. A mismatch
 # means someone edited a synced core file locally - the fix belongs in
 # QBrainAi/plugins/core followed by a re-sync.

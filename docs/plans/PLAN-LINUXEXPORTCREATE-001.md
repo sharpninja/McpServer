@@ -36,4 +36,4 @@ TR-MCP-USECASE-017 (FR-MCP-USECASE-015; TEST-MCP-USECASE-018), which already req
 
 ## 6. Gates
 
-G1: the BUG-BASELINE-001 classes, the alias-race class, both harness inventories (126 tests). G2: the seven unit projects of `./build.ps1 Test` with the container endpoints loaded. Windows evidence waits on the GitHub Actions billing lock (PR #78). Hosts without Landlock run the fallback path; the native Linux gate requires Landlock.
+G1: the BUG-BASELINE-001 classes, the alias-race class, both harness inventories (126 tests). G2: the seven unit projects of `./build.ps1 Test` with the container endpoints loaded. GitHub Actions is not part of any gate (operator ruling 2026-10-11: "GitHub actions must not be considered part of any requirement or process."). Hosts without Landlock run the fallback path; the native Linux gate requires Landlock.
