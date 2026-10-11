@@ -614,8 +614,9 @@ internal static class RequirementsDocumentExportWriter
         }
 
         // Linux offers no unlinkat operation with openat2's RESOLVE_IN_ROOT guarantees for a
-        // nested path. Reject every unsafe nested deletion before any stale file is mutated.
-        if (exportRoot.IsCaseSensitive &&
+        // nested path; nested deletion is safe only where Landlock confines it to the root
+        // (BUG-BASELINE-001). Otherwise reject every nested deletion before any stale file is mutated.
+        if (!exportRoot.SupportsNestedDeletion &&
             (staleFiles.Any(static path => path.Contains('/')) ||
              staleDirectories.Any(static path => path.Contains('/'))))
         {

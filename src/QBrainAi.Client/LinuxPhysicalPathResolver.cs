@@ -283,6 +283,80 @@ internal static class LinuxPhysicalPathResolver
 
 
 
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): pins the deepest existing directory of
+    /// <paramref name="lexicalPath"/> for confined creation of its missing tail. The approved mount is
+    /// classified and pinned first, then each mount-relative component is opened from the previous
+    /// descriptor with <c>openat2</c> and <c>RESOLVE_NO_SYMLINKS | RESOLVE_NO_XDEV | RESOLVE_NO_MAGICLINKS</c>,
+    /// so no link is followed and no mount is crossed, matching the export-root capture.
+    /// </summary>
+    /// <param name="lexicalPath">Absolute path whose deepest existing directory is wanted.</param>
+    /// <param name="operation">Operation name for error messages.</param>
+    /// <param name="missingRelativeTail">The missing components below the returned directory, '/'-separated; empty when the path exists.</param>
+    /// <returns>An owning descriptor for the deepest existing directory.</returns>
+    internal static SafeFileHandle OpenDeepestExistingDirectoryNoCrossDevice(
+        string lexicalPath,
+        string operation,
+        out string missingRelativeTail)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(lexicalPath);
+        ArgumentException.ThrowIfNullOrWhiteSpace(operation);
+        if (!OperatingSystem.IsLinux())
+            throw new PlatformNotSupportedException("Linux directory pinning requires Linux.");
+
+        var normalizedPath = Path.GetFullPath(lexicalPath);
+        var mount = BoundedFileSystemPolicy.GetApprovedLinuxMount(normalizedPath, operation);
+        var current = OpenApprovedMountAnchor(mount, operation);
+        try
+        {
+            if (!TryGetMountRelativePath(mount.MountPoint, normalizedPath, out var relativePath))
+            {
+                throw new IOException(
+                    $"{operation} cannot anchor '{normalizedPath}' at approved mount '{mount.MountPoint}'.");
+            }
+
+            var components = relativePath.Split('/', StringSplitOptions.RemoveEmptyEntries)
+                .Where(component => component != ".")
+                .ToArray();
+            for (var index = 0; index < components.Length; index++)
+            {
+                var how = new OpenHow
+                {
+                    Flags = OpenPath | OpenDirectory | OpenNoFollow | OpenCloseOnExec,
+                    Resolve = ResolveNoCrossDevice | ResolveNoMagicLinks | ResolveNoSymbolicLinks,
+                };
+                var descriptor = OpenAt2(
+                    OpenAt2SystemCall,
+                    current.DangerousGetHandle().ToInt32(),
+                    components[index],
+                    ref how,
+                    (nuint)Marshal.SizeOf<OpenHow>());
+                if (descriptor < 0)
+                {
+                    var error = Marshal.GetLastPInvokeError();
+                    if (error == ErrorNoEntry)
+                    {
+                        missingRelativeTail = string.Join('/', components[index..]);
+                        return current;
+                    }
+
+                    throw CreateAtomicDirectoryOpenException(normalizedPath, error);
+                }
+
+                current.Dispose();
+                current = new SafeFileHandle((nint)descriptor, ownsHandle: true);
+            }
+
+            missingRelativeTail = string.Empty;
+            return current;
+        }
+        catch
+        {
+            current.Dispose();
+            throw;
+        }
+    }
+
     private static SafeFileHandle OpenApprovedMountAnchor(
         BoundedFileSystemPolicy.LinuxMount mount,
         string operation)

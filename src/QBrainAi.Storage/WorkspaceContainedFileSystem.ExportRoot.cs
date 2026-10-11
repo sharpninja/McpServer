@@ -77,9 +77,22 @@ public static partial class WorkspaceContainedFileSystem
         // Directory capture classifies the provider and resolves every component through the
         // policy-approved mount descriptor in one authority acquisition. In particular, no
         // pathname-based policy decision is reused to open rootPath later.
-        var rootHandle = LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(
-            rootPath,
-            Volatile.Read(ref s_afterLinuxExportRootPolicyClassification));
+        SafeFileHandle rootHandle;
+        try
+        {
+            rootHandle = LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(
+                rootPath,
+                Volatile.Read(ref s_afterLinuxExportRootPolicyClassification));
+        }
+        catch (DirectoryNotFoundException) when (GetLandlockAbiVersion() >= 1)
+        {
+            // BUG-BASELINE-001: create the missing root on a thread Landlock confines to its deepest
+            // existing ancestor, then capture it exactly as an existing root is captured.
+            CreateLinuxExportRootConfined(rootPath);
+            rootHandle = LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(
+                rootPath,
+                Volatile.Read(ref s_afterLinuxExportRootPolicyClassification));
+        }
         try
         {
             var rootIdentity = FStatUnix(rootHandle.DangerousGetHandle().ToInt32());
@@ -95,6 +108,26 @@ public static partial class WorkspaceContainedFileSystem
             rootHandle.Dispose();
             throw;
         }
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): creates a missing Linux export root and its missing
+    /// ancestors beneath the deepest existing directory, which is pinned from its approved mount
+    /// without following links or crossing mounts; creation runs Landlock-confined to that directory.
+    /// </summary>
+    [SupportedOSPlatform("linux")]
+    private static void CreateLinuxExportRootConfined(string rootPath)
+    {
+        using var ancestor = LinuxPhysicalPathResolver.OpenDeepestExistingDirectoryNoCrossDevice(
+            rootPath,
+            "Requirements export root creation",
+            out var missingTail);
+        if (missingTail.Length == 0)
+            return;
+
+        var ancestorIdentity = FStatUnix(ancestor.DangerousGetHandle().ToInt32());
+        EnsureLinuxDirectory(ancestorIdentity, rootPath);
+        CreateLinuxDirectoriesConfined(ancestor, ancestorIdentity, string.Empty, missingTail.Split('/'));
     }
 
     /// <summary>
@@ -125,6 +158,13 @@ public static partial class WorkspaceContainedFileSystem
 
         /// <summary>Gets whether root-relative name comparison is case-sensitive.</summary>
         public bool IsCaseSensitive => _platform == ExportRootPlatform.Linux;
+
+        /// <summary>
+        /// BUG-BASELINE-001 (TR-MCP-USECASE-017): gets whether entries below a subdirectory of this root can be
+        /// deleted safely; always on Windows, and on Linux only when Landlock confines the deletion to this root.
+        /// </summary>
+        public bool SupportsNestedDeletion =>
+            _platform != ExportRootPlatform.Linux || GetLandlockAbiVersion() >= 1;
 
         /// <summary>Gets the filesystem-appropriate root-relative name comparer.</summary>
         public StringComparer NameComparer =>
@@ -552,16 +592,26 @@ public static partial class WorkspaceContainedFileSystem
                         var files = new List<WorkspaceContainedFileEntry>();
                         var directories = new List<string>();
                         var budget = new WorkspaceTraversalBudget(limits);
-                        EnumerateLinuxFilesFromPinnedRoot(
-                            _rootHandle,
-                            _linuxRootIdentity,
-                            RootPath,
-                            directory,
-                            limits,
-                            budget,
-                            files,
-                            directories,
-                            state);
+                        try
+                        {
+                            EnumerateLinuxFilesFromPinnedRoot(
+                                _rootHandle,
+                                _linuxRootIdentity,
+                                RootPath,
+                                directory,
+                                limits,
+                                budget,
+                                files,
+                                directories,
+                                state);
+                        }
+                        catch (DirectoryNotFoundException) when (!LinuxStartDirectoryExists(relativeDirectory))
+                        {
+                            // BUG-BASELINE-001: parity with the Windows traversal, which treats a missing
+                            // path as empty: an export directory that does not exist yet has no entries.
+                            return CompletePhysicalTraversal(RootPath, [], []);
+                        }
+
                         return CompletePhysicalTraversal(RootPath, files, directories);
                     },
                     timeout,
@@ -593,8 +643,11 @@ public static partial class WorkspaceContainedFileSystem
             }
 
             // unlinkat has no RESOLVE_IN_ROOT equivalent. A pre-opened nested parent could be
-            // renamed outside the root between validation and mutation, so only a leaf directly
-            // beneath the pinned root is safe to delete. Reject nested cleanup before mutation.
+            // renamed outside the root between validation and mutation, so nested cleanup runs only
+            // on a thread Landlock confines to the root (BUG-BASELINE-001); without Landlock it is
+            // rejected before mutation.
+            if (relative.Contains('/') && GetLandlockAbiVersion() >= 1)
+                return DeleteNestedLinuxEntryConfined(relative, directory);
             if (relative.Contains('/'))
             {
                 throw new NotSupportedException(
@@ -613,6 +666,104 @@ public static partial class WorkspaceContainedFileSystem
             if (error == UnixNoEntry || (directory && error == UnixDirectoryNotEmpty))
                 return false;
             throw CreateUnixIOException($"Unable to delete contained entry '{relative}'.", error);
+        }
+
+        /// <summary>True when the traversal start directory resolves beneath the pinned root (Linux).</summary>
+        [SupportedOSPlatform("linux")]
+        private bool LinuxStartDirectoryExists(string relativeDirectory)
+        {
+            var relative = NormalizeRelativePath(relativeDirectory);
+            if (string.Equals(relative, ".", StringComparison.Ordinal))
+                return true;
+            try
+            {
+                using var start = OpenLinuxPathBeneathRoot(
+                    _rootHandle,
+                    relative,
+                    LinuxOpenPath | LinuxOpenDirectory | LinuxOpenNoFollow | LinuxOpenCloseOnExec,
+                    mode: 0,
+                    relative);
+                return true;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// BUG-BASELINE-001 (TR-MCP-USECASE-017): deletes a nested entry on a Landlock-confined thread
+        /// through its pinned parent after verifying the target's kind and identity; a missing parent
+        /// or target returns false, as a missing direct leaf does.
+        /// </summary>
+        [SupportedOSPlatform("linux")]
+        private bool DeleteNestedLinuxEntryConfined(string relative, bool directory)
+        {
+            const ulong directoryFlags = LinuxOpenReadOnly | LinuxOpenDirectory | LinuxOpenNoFollow | LinuxOpenCloseOnExec;
+            var parentRelative = GetRelativeParent(relative);
+            var leaf = relative[(relative.LastIndexOf('/') + 1)..];
+            return RunLandlockConfined(
+                _rootHandle,
+                () =>
+                {
+                    SafeFileHandle parent;
+                    try
+                    {
+                        parent = OpenLinuxPathBeneathRoot(_rootHandle, parentRelative, directoryFlags, mode: 0, parentRelative);
+                    }
+                    catch (DirectoryNotFoundException)
+                    {
+                        return false;
+                    }
+
+                    using (parent)
+                    {
+                        var parentDescriptor = parent.DangerousGetHandle().ToInt32();
+                        EnsureLinuxDirectory(FStatUnix(parentDescriptor), parentRelative);
+                        EnsureLinuxDescriptorOnRootMount(_linuxRootIdentity, parent, parentRelative);
+                        SafeFileHandle target;
+                        try
+                        {
+                            target = OpenLinuxPathBeneathRoot(
+                                _rootHandle,
+                                relative,
+                                LinuxOpenPath | LinuxOpenNoFollow | LinuxOpenCloseOnExec,
+                                mode: 0,
+                                relative);
+                        }
+                        catch (DirectoryNotFoundException)
+                        {
+                            return false;
+                        }
+
+                        using (target)
+                        {
+                            var targetIdentity = FStatUnix(target.DangerousGetHandle().ToInt32());
+                            if (directory)
+                                EnsureLinuxDirectory(targetIdentity, relative);
+                            else
+                                EnsureLinuxRegularFile(targetIdentity, relative);
+                            if (StatxUnix(parentDescriptor, leaf, UnixAtSymlinkNoFollow, UnixStatxBasicStats, out var entry) != 0)
+                            {
+                                var statError = Marshal.GetLastPInvokeError();
+                                if (statError == UnixNoEntry)
+                                    return false;
+                                throw CreateUnixIOException($"Unable to inspect contained entry '{relative}'.", statError);
+                            }
+
+                            EnsureSameLinuxObject(targetIdentity, entry, relative);
+                        }
+
+                        InvokeBeforeLinuxConfinedMutation(relative);
+                        if (UnlinkAtUnix(parentDescriptor, leaf, directory ? UnixAtRemoveDirectory : 0) == 0)
+                            return true;
+
+                        var error = Marshal.GetLastPInvokeError();
+                        if (error == UnixNoEntry || (directory && error == UnixDirectoryNotEmpty))
+                            return false;
+                        throw CreateUnixIOException($"Unable to delete contained entry '{relative}'.", error);
+                    }
+                });
         }
 
         private void ThrowIfDisposed()

@@ -271,7 +271,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
             : ioFailure.HResult & 0xFFFF;
         var expectedNativeError = OperatingSystem.IsWindows()
             ? new[] { 2, 3, 5, 32, 33, 4390, 4392, 4393 }.Contains(nativeError)
-            : new[] { 2, 13, 20, 40, 116 }.Contains(nativeError);
+            : new[] { 2, 3, 13, 17, 20, 40, 116 }.Contains(nativeError); // 3: openat2 ENOENT surfaced as DirectoryNotFoundException; 17: EEXIST from the O_CREAT|O_EXCL retry after a swap (BUG-BASELINE-001)
 
         Assert.True(
             expectedContractMessage || expectedNativeError,

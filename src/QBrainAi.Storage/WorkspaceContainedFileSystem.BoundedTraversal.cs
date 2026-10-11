@@ -268,28 +268,104 @@ public static partial class WorkspaceContainedFileSystem
         if (string.Equals(relativeDirectory, ".", StringComparison.Ordinal))
             return;
 
-        // openat2 can atomically resolve and create an ordinary file beneath this root, but Linux
-        // has no equivalent descriptor-relative directory-create operation with RESOLVE_IN_ROOT.
-        // A validate-then-mkdirat sequence lets an attacker move a pinned parent outside the root.
-        // Therefore a Linux export may use only directories that already resolve under the pinned
-        // root; it fails before any externally visible directory mutation.
+        // openat2 can atomically resolve and create an ordinary file beneath this root, but Linux has
+        // no descriptor-relative directory create with RESOLVE_IN_ROOT, so a pinned parent could be
+        // moved outside the root before mkdirat. BUG-BASELINE-001: missing folders are therefore
+        // created only on a thread that Landlock confines to this root (the kernel denies mkdirat in a
+        // parent moved outside); without Landlock the export fails before any directory mutation.
         var current = string.Empty;
-        foreach (var segment in SplitContainedSegments(relativeDirectory))
+        var segments = SplitContainedSegments(relativeDirectory).ToArray();
+        for (var index = 0; index < segments.Length; index++)
         {
-            var child = string.IsNullOrEmpty(current) ? segment : $"{current}/{segment}";
-            using var existing = OpenLinuxPathBeneathRoot(
-                rootHandle,
-                child,
-                LinuxOpenReadOnly |
-                LinuxOpenDirectory |
-                LinuxOpenNoFollow |
-                LinuxOpenCloseOnExec,
-                mode: 0,
-                child);
-            EnsureLinuxDirectory(FStatUnix(existing.DangerousGetHandle().ToInt32()), child);
-            EnsureLinuxDescriptorOnRootMount(rootIdentity, existing, child);
+            var child = string.IsNullOrEmpty(current) ? segments[index] : $"{current}/{segments[index]}";
+            try
+            {
+                using var existing = OpenLinuxPathBeneathRoot(
+                    rootHandle,
+                    child,
+                    LinuxOpenReadOnly |
+                    LinuxOpenDirectory |
+                    LinuxOpenNoFollow |
+                    LinuxOpenCloseOnExec,
+                    mode: 0,
+                    child);
+                EnsureLinuxDirectory(FStatUnix(existing.DangerousGetHandle().ToInt32()), child);
+                EnsureLinuxDescriptorOnRootMount(rootIdentity, existing, child);
+            }
+            catch (DirectoryNotFoundException) when (GetLandlockAbiVersion() >= 1)
+            {
+                CreateLinuxDirectoriesConfined(rootHandle, rootIdentity, current, segments[index..]);
+                return;
+            }
+
             current = child;
         }
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): creates the missing <paramref name="segments"/> below
+    /// <paramref name="parentRelative"/> (relative to <paramref name="anchor"/>) on a Landlock-confined
+    /// thread, each with mkdirat on the pinned parent, then re-resolves every new folder beneath the anchor
+    /// and requires a directory on the anchor's mount before it becomes the next parent.
+    /// </summary>
+    [SupportedOSPlatform("linux")]
+    private static void CreateLinuxDirectoriesConfined(
+        SafeFileHandle anchor,
+        UnixStatx anchorIdentity,
+        string parentRelative,
+        IReadOnlyList<string> segments)
+    {
+        const ulong directoryFlags = LinuxOpenReadOnly | LinuxOpenDirectory | LinuxOpenNoFollow | LinuxOpenCloseOnExec;
+        _ = RunLandlockConfined(
+            anchor,
+            () =>
+            {
+                var parent = string.IsNullOrEmpty(parentRelative)
+                    ? null
+                    : OpenLinuxPathBeneathRoot(anchor, parentRelative, directoryFlags, mode: 0, parentRelative);
+                try
+                {
+                    var prefix = parentRelative;
+                    foreach (var segment in segments)
+                    {
+                        var child = string.IsNullOrEmpty(prefix) ? segment : $"{prefix}/{segment}";
+                        var parentDescriptor = (parent ?? anchor).DangerousGetHandle().ToInt32();
+                        InvokeBeforeLinuxConfinedMutation(child);
+                        if (MakeDirectoryAtUnix(parentDescriptor, segment, 0x1FFu) != 0)
+                        {
+                            var error = Marshal.GetLastPInvokeError();
+                            if (error != UnixAlreadyExists)
+                            {
+                                throw CreateUnixIOException(
+                                    $"Unable to create contained Linux directory '{child}'.",
+                                    error);
+                            }
+                        }
+
+                        var created = OpenLinuxPathBeneathRoot(anchor, child, directoryFlags, mode: 0, child);
+                        try
+                        {
+                            EnsureLinuxDirectory(FStatUnix(created.DangerousGetHandle().ToInt32()), child);
+                            EnsureLinuxDescriptorOnRootMount(anchorIdentity, created, child);
+                        }
+                        catch
+                        {
+                            created.Dispose();
+                            throw;
+                        }
+
+                        parent?.Dispose();
+                        parent = created;
+                        prefix = child;
+                    }
+
+                    return true;
+                }
+                finally
+                {
+                    parent?.Dispose();
+                }
+            });
     }
 
     private static WorkspacePhysicalTraversalResult TraversePhysical(
