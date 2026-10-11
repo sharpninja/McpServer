@@ -27,7 +27,12 @@ public sealed class GetUseCaseQueryHandler(
 
         try
         {
-            UseCaseCqrsHelpers.ResolveWorkspaceId(db, workspaceContext, query.WorkspacePath);
+            await UseCaseCqrsHelpers.ResolveWorkspaceAsync(
+                    db,
+                    workspaceContext,
+                    query.WorkspacePath,
+                    context.CancellationToken)
+                .ConfigureAwait(false);
             var entity = await UseCaseCqrsHelpers.LoadAggregateAsync(db, query.UseCaseId, context.CancellationToken)
                 .ConfigureAwait(false);
             if (entity is null)
