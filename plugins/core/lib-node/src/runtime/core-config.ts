@@ -32,6 +32,12 @@ export interface QBrainAiPluginCoreConfig {
   replCommand?: string;
 }
 
+/**
+ * @deprecated 1.x alias of {@link QBrainAiPluginCoreConfig}, kept through 1.x for host plugins
+ * built before the QBrainAi rename (TR-MCP-QBRAIN-003).
+ */
+export type McpServerPluginCoreConfig = QBrainAiPluginCoreConfig;
+
 let activeConfig: QBrainAiPluginCoreConfig = {};
 
 export function setCoreConfig(config: QBrainAiPluginCoreConfig): void {
