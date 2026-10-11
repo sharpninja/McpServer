@@ -88,6 +88,8 @@ public sealed class BugTriage139FifteenthHarnessTests
                     "BugTriage139EighteenthLinuxTests.OpenExportRoot_MissingRootAndAncestors_IsCreatedUnderLandlock",
                     "BugTriage139EighteenthLinuxTests.OpenExportRoot_MissingRoot_FailsClosedWithoutLandlock",
                     "BugTriage139EighteenthLinuxTests.LandlockConfinement_DeniesDirectoryCreationOutsideItsHierarchy",
+                    "BugTriage139EighteenthLinuxTests.LandlockConfinement_RuleSetupFailure_NeverRunsTheOperation",
+                    "BugTriage139EighteenthLinuxTests.EnsureDirectory_SymlinkPlantedAtMissingSegment_IsNeverFollowed",
                     "BugTriage139EighteenthLinuxTests.RequirementsExport_NestedStaleCleanup_DeletesStaleUnderLandlock",
                     "BugTriage139EighteenthLinuxTests.RestoreFileAsync_RollsBackUnixPermissionsThroughPinnedAuthority",
                     "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_Fifo_IsIgnoredWithoutBlocking",

@@ -223,6 +223,62 @@ public sealed class BugTriage139EighteenthLinuxTests
         Assert.IsAssignableFrom<UnauthorizedAccessException>(failure.InnerException);
         Assert.False(Directory.Exists(outside));
     }
+
+    /// <summary>
+    /// BUG-BASELINE-001 what-if (TR-MCP-USECASE-017 AC-004): when the confinement cannot be set up, the
+    /// operation never runs and the call fails. The kernel itself rejects the path-beneath rule here,
+    /// because directory rights cannot be granted on a regular-file descriptor (landlock_add_rule EINVAL).
+    /// </summary>
+    [Fact]
+    public void LandlockConfinement_RuleSetupFailure_NeverRunsTheOperation()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var regularFile = Path.Combine(fixture.LiveParent, "not-a-directory");
+        File.WriteAllText(regularFile, "file");
+        var run = typeof(WorkspaceContainedFileSystem).GetMethod(
+            "RunLandlockConfined",
+            BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.NotNull(run);
+        var descriptor = OpenPathDescriptor(regularFile, 0x200000 | 0x80000);
+        Assert.True(descriptor >= 0, $"open(O_PATH) failed: {Marshal.GetLastPInvokeError()}");
+        using var hierarchy = new Microsoft.Win32.SafeHandles.SafeFileHandle((nint)descriptor, ownsHandle: true);
+        var ran = false;
+
+        var failure = Assert.IsType<TargetInvocationException>(
+            Record.Exception(() => run!.MakeGenericMethod(typeof(bool)).Invoke(
+                null,
+                [hierarchy, (Func<bool>)(() =>
+                {
+                    ran = true;
+                    return true;
+                })])));
+
+        Assert.IsAssignableFrom<IOException>(failure.InnerException);
+        Assert.False(ran);
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 what-if (TR-MCP-USECASE-017 AC-005): a symbolic link planted at a missing folder
+    /// name just before mkdirat is never followed. mkdirat reports EEXIST, the re-open beneath the anchor
+    /// refuses the link, the call fails, and nothing is created through the link outside the root.
+    /// </summary>
+    [Fact]
+    public void EnsureDirectory_SymlinkPlantedAtMissingSegment_IsNeverFollowed()
+    {
+        using var fixture = new LinuxMutationFixture();
+        Directory.CreateDirectory(fixture.ExternalParent);
+        var planted = Path.Combine(fixture.LiveParent, "created");
+        using var seam = BeforeConfinedMutation(
+            () => Directory.CreateSymbolicLink(planted, fixture.ExternalParent));
+
+        Assert.NotNull(Record.Exception(
+            () => WorkspaceContainedFileSystem.EnsureDirectory(
+                fixture.Root,
+                Path.Combine(planted, "nested"))));
+
+        Assert.Empty(Directory.EnumerateFileSystemEntries(fixture.ExternalParent));
+    }
+
     /// <summary>
     /// Proves a rejected Linux export transaction restores both bytes and the exact Unix permissions
     /// through the retained root authority rather than by reopening an untrusted pathname.
