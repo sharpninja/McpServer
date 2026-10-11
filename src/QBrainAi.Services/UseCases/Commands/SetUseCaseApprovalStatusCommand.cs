@@ -35,7 +35,12 @@ public sealed class SetUseCaseApprovalStatusCommandHandler(
         ArgumentNullException.ThrowIfNull(command);
         try
         {
-            UseCaseCqrsHelpers.ResolveWorkspaceId(db, workspaceContext, command.WorkspacePath);
+            await UseCaseCqrsHelpers.ResolveWorkspaceAsync(
+                    db,
+                    workspaceContext,
+                    command.WorkspacePath,
+                    context.CancellationToken)
+                .ConfigureAwait(false);
             var status = command.Status?.Trim() ?? string.Empty;
             if (!Allowed.Contains(status))
                 return Result<UseCaseDetailDto>.Failure($"Invalid approval status '{command.Status}'.");
