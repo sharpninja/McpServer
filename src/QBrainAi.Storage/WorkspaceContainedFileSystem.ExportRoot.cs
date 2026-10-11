@@ -330,7 +330,8 @@ public static partial class WorkspaceContainedFileSystem
                         asyncHandle: false);
                 },
                 timeout,
-                cancellationToken);
+                cancellationToken,
+                pinnedHandle: _rootHandle);
         }
 
         /// <summary>
@@ -564,7 +565,8 @@ public static partial class WorkspaceContainedFileSystem
                         return CompletePhysicalTraversal(RootPath, files, directories);
                     },
                     timeout,
-                    cancellationToken)
+                    cancellationToken,
+                    pinnedHandle: _rootHandle)
                 .ConfigureAwait(false);
         }
 

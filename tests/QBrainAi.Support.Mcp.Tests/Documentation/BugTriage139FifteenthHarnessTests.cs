@@ -73,6 +73,7 @@ public sealed class BugTriage139FifteenthHarnessTests
                     "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_SafeSymlinkIntoFuse_IsRejectedByAtomicNoCrossDeviceResolver",
                     "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_AliasReplacement_IsRejectedByAtomicNoCrossDeviceResolver",
                     "BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker",
+                    "BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount",
                     "BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementBeforePhysicalResolution_IsRejected",
                     "BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected",
                     "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_UnstoppableUnixHelper_RemainsObservableAfterPublicTimeout",

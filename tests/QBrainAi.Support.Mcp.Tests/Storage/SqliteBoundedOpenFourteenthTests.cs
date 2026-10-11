@@ -97,6 +97,94 @@ public sealed class SqliteBoundedOpenFourteenthTests
     }
 
     /// <summary>
+    /// BUG-BASELINE-009 (C2): the caller-side data-source preflight runs under the open's finite timeout. A preflight
+    /// step that does not return (held at the pre-resolution boundary) must not block the caller: OpenAsync hands back
+    /// its task at once and fails with TimeoutException at the bound, no open worker starts, and the held preflight
+    /// stays counted until it actually returns. Fixture: a file data source in a temporary directory.
+    /// </summary>
+    [Fact(Timeout = 60_000)]
+    public async Task OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "mcp-sqlite-preflight-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        using var connection = new SqliteConnection(
+            new SqliteConnectionStringBuilder
+            {
+                DataSource = Path.Combine(root, "preflight.db"),
+                Mode = SqliteOpenMode.ReadWriteCreate,
+                Pooling = false,
+            }.ToString());
+        var hookField = typeof(SqliteBoundedConnectionOpener).GetField(
+            "s_beforeDataSourcePhysicalResolution",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        Assert.NotNull(hookField);
+        Assert.Null(hookField!.GetValue(null));
+        using var entered = new ManualResetEventSlim();
+        using var release = new ManualResetEventSlim();
+        var invocationsBefore = SqliteBoundedConnectionOpener.WorkerInvocationCount;
+        Exception? publicFailure = null;
+        var returnedAfter = TimeSpan.MaxValue;
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            hookField.SetValue(
+                null,
+                (Action)(() =>
+                {
+                    entered.Set();
+                    release.Wait(TimeSpan.FromSeconds(20));
+                }));
+            var operation = SqliteBoundedConnectionOpener.OpenAsync(
+                connection,
+                TimeSpan.FromMilliseconds(250),
+                TestContext.Current.CancellationToken);
+            returnedAfter = stopwatch.Elapsed;
+            try
+            {
+                using var opened = await operation
+                    .WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken)
+                    .ConfigureAwait(true);
+            }
+            catch (Exception operationFailure)
+            {
+                publicFailure = operationFailure;
+            }
+
+            stopwatch.Stop();
+        }
+        finally
+        {
+            release.Set();
+            hookField.SetValue(null, null);
+        }
+
+        try
+        {
+            Assert.True(entered.IsSet, "The preflight never reached the pre-resolution boundary.");
+            Assert.True(
+                returnedAfter < TimeSpan.FromMilliseconds(500),
+                $"OpenAsync blocked its caller for {returnedAfter} before returning a task.");
+            Assert.IsType<TimeoutException>(publicFailure);
+            Assert.True(
+                stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+                $"The held preflight was not bounded by the open's timeout: {stopwatch.Elapsed}.");
+            Assert.Equal(invocationsBefore, SqliteBoundedConnectionOpener.WorkerInvocationCount);
+            Assert.Equal(0, SqliteBoundedConnectionOpener.ActiveWorkerCount);
+            var preflightField = typeof(SqliteBoundedConnectionOpener).GetField(
+                "s_activePreflightCount",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            Assert.NotNull(preflightField);
+            Assert.True(
+                SpinWait.SpinUntil(() => (int)preflightField!.GetValue(null)! == 0, TimeSpan.FromSeconds(5)),
+                "The released preflight was not counted until it actually returned.");
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// A provider-native shared-cache lock encountered during Open must honor the finite deadline,
     /// close the partial handle, and leave no worker behind.
     /// </summary>

@@ -962,10 +962,20 @@ public static partial class WorkspaceContainedFileSystem
         }
     }
 
+    /// <summary>Runs one traversal operation on an isolated, truthfully counted worker under a finite deadline.</summary>
+    /// <param name="operation">Traversal work executed on the worker thread.</param>
+    /// <param name="timeout">Finite public deadline.</param>
+    /// <param name="cancellationToken">Exact caller cancellation token.</param>
+    /// <param name="pinnedHandle">
+    /// BUG-BASELINE-009: a handle the worker uses through its raw value (for example the export root descriptor). The
+    /// worker holds a reference on it from before it starts until it actually exits, so disposing the owner at the public
+    /// deadline defers the close instead of letting the worker use a closed, possibly reused, descriptor.
+    /// </param>
     private static async Task<T> RunBoundedTraversalWorkerAsync<T>(
         Func<WorkspaceTraversalCancellationState, T> operation,
         TimeSpan timeout,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        SafeHandle? pinnedHandle = null)
         where T : class
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -997,6 +1007,7 @@ public static partial class WorkspaceContainedFileSystem
             },
             (state, timeoutSignal));
 
+        var pinnedHandleAdded = false;
         var thread = new Thread(
             () =>
             {
@@ -1013,6 +1024,8 @@ public static partial class WorkspaceContainedFileSystem
                 }
                 finally
                 {
+                    if (pinnedHandleAdded)
+                        pinnedHandle!.DangerousRelease();
                     workerOutcome.TrySetResult(new WorkspaceTraversalOutcome<T>(result, failure));
                 }
             })
@@ -1021,6 +1034,7 @@ public static partial class WorkspaceContainedFileSystem
             Name = "McpContainedTraversal",
         };
 
+        pinnedHandle?.DangerousAddRef(ref pinnedHandleAdded);
         ReserveTraversalWorkerSlot();
         try
         {
@@ -1028,6 +1042,8 @@ public static partial class WorkspaceContainedFileSystem
         }
         catch
         {
+            if (pinnedHandleAdded)
+                pinnedHandle!.DangerousRelease();
             Interlocked.Decrement(ref s_activeTraversalWorkerCount);
             state.Complete();
             throw;

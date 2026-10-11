@@ -57,7 +57,18 @@ public sealed class BugTriage139EighteenthTraversalTests
             Assert.Contains("traversal", exception.Message, StringComparison.OrdinalIgnoreCase);
             Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Timeout took {stopwatch.Elapsed}.");
             Assert.Equal(1, ReadCounter(activeWorkers));
-            Assert.ThrowsAny<IOException>(() => Directory.Move(fixture.Root, fixture.RenamedRoot));
+            if (OperatingSystem.IsWindows())
+            {
+                Assert.ThrowsAny<IOException>(() => Directory.Move(fixture.Root, fixture.RenamedRoot));
+            }
+            else
+            {
+                // BUG-BASELINE-009: a Linux descriptor never blocks rename; the root stays pinned when the worker still
+                // holds an open descriptor for it after the public timeout disposed the export root.
+                Assert.True(
+                    IsDirectoryDescriptorOpen(fixture.Root),
+                    "The pinned root descriptor was closed while the traversal worker still used it.");
+            }
         }
         finally
         {
@@ -67,6 +78,36 @@ public sealed class BugTriage139EighteenthTraversalTests
                 SpinWait.SpinUntil(() => ReadCounter(activeWorkers) == 0, TimeSpan.FromSeconds(2)),
                 "Traversal worker remained counted after its actual exit.");
         }
+
+        if (!OperatingSystem.IsWindows())
+        {
+            Assert.True(
+                SpinWait.SpinUntil(() => !IsDirectoryDescriptorOpen(fixture.Root), TimeSpan.FromSeconds(2)),
+                "The pinned root descriptor stayed open after the traversal worker exited.");
+        }
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-009: true when this process holds an open descriptor whose /proc/self/fd link names
+    /// <paramref name="directory"/> (Linux).
+    /// </summary>
+    private static bool IsDirectoryDescriptorOpen(string directory)
+    {
+        var wanted = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar);
+        foreach (var descriptor in Directory.EnumerateFileSystemEntries("/proc/self/fd"))
+        {
+            try
+            {
+                if (string.Equals(new FileInfo(descriptor).LinkTarget, wanted, StringComparison.Ordinal))
+                    return true;
+            }
+            catch (IOException)
+            {
+                // The descriptor closed while the table was being read.
+            }
+        }
+
+        return false;
     }
 
     /// <summary>

@@ -50,7 +50,11 @@ internal static class LinuxPhysicalPathResolver
         if (!OperatingSystem.IsLinux())
             throw new PlatformNotSupportedException("Linux physical resolution requires Linux.");
 
-        var normalizedPath = Path.GetFullPath(lexicalPath);
+        // BUG-BASELINE-009 (C3): like the data-file open, resolve symbolic-link prefixes through the mount table first, so
+        // an absolute same-filesystem alias is not walked from / through a nested mount such as /tmp under RESOLVE_NO_XDEV.
+        var normalizedPath = ResolveSymlinksOnApprovedMounts(
+            Path.GetFullPath(lexicalPath),
+            "Linux physical identity resolution");
         var mount = BoundedFileSystemPolicy.GetApprovedLinuxMount(
             normalizedPath,
             "Linux physical identity resolution");
@@ -386,50 +390,46 @@ internal static class LinuxPhysicalPathResolver
             $"{operation} exceeded {MaxAncestorDepth} symbolic-link ancestors.");
     }
 
+    private const ushort FileTypeMask = 0xF000;
+    private const ushort SymbolicLinkFileType = 0xA000;
+
+    /// <summary>
+    /// BUG-BASELINE-009 (C1): classifies <paramref name="path"/> with <c>statx(AT_SYMLINK_NOFOLLOW)</c> and reads a
+    /// link's target with <c>readlink</c>, so preflight never asks the filesystem behind a link. File.GetAttributes
+    /// follows a link with <c>stat</c> to report whether its target is a directory, which sends a userspace mount a
+    /// lookup before the mount table can reject the target.
+    /// </summary>
     private static bool TryGetLinuxLinkTarget(string path, out string target)
     {
         target = string.Empty;
-        try
+        if (!TryStatxPath(path, out var identity) ||
+            (identity.Mode & FileTypeMask) != SymbolicLinkFileType)
         {
-            var attributes = File.GetAttributes(path);
-            if ((attributes & FileAttributes.ReparsePoint) == 0)
+            return false;
+        }
+
+        var size = 1024;
+        while (size <= MaximumLinkBuffer)
+        {
+            var buffer = new byte[size];
+            var length = ReadLink(path, buffer, (nuint)buffer.Length);
+            if (length <= 0)
                 return false;
 
-            var linkTarget = (attributes & FileAttributes.Directory) != 0
-                ? new DirectoryInfo(path).LinkTarget
-                : new FileInfo(path).LinkTarget;
-            if (string.IsNullOrEmpty(linkTarget))
-                return false;
+            if (length < buffer.Length)
+            {
+                target = Encoding.UTF8.GetString(buffer, 0, checked((int)length));
+                return true;
+            }
 
-            target = linkTarget;
-            return true;
+            size = checked(size * 2);
         }
-        catch (IOException)
-        {
-            return false;
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return false;
-        }
+
+        return false;
     }
 
-    private static bool LinuxPathExistsWithoutFollowing(string path)
-    {
-        try
-        {
-            _ = File.GetAttributes(path);
-            return true;
-        }
-        catch (IOException)
-        {
-            return false;
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return false;
-        }
-    }
+    /// <summary>BUG-BASELINE-009 (C1): existence without following a final link (<c>statx(AT_SYMLINK_NOFOLLOW)</c>).</summary>
+    private static bool LinuxPathExistsWithoutFollowing(string path) => TryStatxPath(path, out _);
 
     private const int AtFdCwd = -100;
     private const int AtSymlinkNoFollow = 0x100;
@@ -626,6 +626,9 @@ internal static class LinuxPhysicalPathResolver
     [StructLayout(LayoutKind.Explicit, Size = 256)]
     private struct UnixStatxIdentity
     {
+        [FieldOffset(28)]
+        internal ushort Mode;
+
         [FieldOffset(32)]
         internal ulong Inode;
 

@@ -164,7 +164,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Proves traversal rejects a real delayed FUSE child mount at the root-descriptor boundary
     /// without entering its blocking metadata implementation.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_DelayedFuseChildMount_IsRejectedBeforeTraversal()
     {
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -191,7 +191,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// FUSE filesystem. Traversal must finish from the original descriptor without opening the
     /// replacement mount or consuming a bounded worker.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -217,7 +217,7 @@ public sealed class BugTriage139EighteenthLinuxTests
                     return;
                 Directory.Move(root, movedRoot);
                 Directory.CreateDirectory(root);
-                fixture.BindMountAtAsync(root).GetAwaiter().GetResult();
+                fixture.MountDelayedFuseAtAsync(root).GetAwaiter().GetResult();
             }));
 
         try
@@ -251,7 +251,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Every caller must complete from its already-pinned root descriptor; no blocked replacement
     /// provider may consume an admission slot for a later caller.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -283,7 +283,7 @@ public sealed class BugTriage139EighteenthLinuxTests
                 Assert.InRange(index, 0, roots.Length - 1);
                 Directory.Move(roots[index], movedRoots[index]);
                 Directory.CreateDirectory(roots[index]);
-                fixture.BindMountAtAsync(roots[index]).GetAwaiter().GetResult();
+                fixture.MountDelayedFuseAtAsync(roots[index]).GetAwaiter().GetResult();
             }));
 
         try
@@ -361,7 +361,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// descriptor authority capture. Every attempted caller must reject promptly without consuming
     /// a traversal worker, and a later caller of the original retained tree must still succeed.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -389,7 +389,7 @@ public sealed class BugTriage139EighteenthLinuxTests
                     {
                         Directory.Move(root, movedRoot);
                         Directory.CreateDirectory(root);
-                        fixture.BindMountAtAsync(root).GetAwaiter().GetResult();
+                        fixture.MountDelayedFuseAtAsync(root).GetAwaiter().GetResult();
                     }
                     finally
                     {
@@ -453,7 +453,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// root-relative validation and immediately before O_CREAT. The atomic openat2 mutation must
     /// write only through the pinned root descriptor, never through the replacement mount.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -472,7 +472,7 @@ public sealed class BugTriage139EighteenthLinuxTests
                     return;
                 Directory.Move(root, movedRoot);
                 Directory.CreateDirectory(root);
-                fixture.BindMountAtAsync(root).GetAwaiter().GetResult();
+                fixture.MountDelayedFuseAtAsync(root).GetAwaiter().GetResult();
             }));
 
         try
