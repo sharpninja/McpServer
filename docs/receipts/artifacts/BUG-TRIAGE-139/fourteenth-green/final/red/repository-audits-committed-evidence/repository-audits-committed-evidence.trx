@@ -1,0 +1,196 @@
+<TestRun id="86b78778-3855-490a-818e-51f046b3cb7a" name="SYSTEM@PAYTON-LEGION2 2026-09-04T05:52:35.4633707-05:00" runUser="SYSTEM" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T05:52:35.4633707-05:00" queuing="2026-09-04T05:52:35.4633707-05:00" start="2026-09-04T05:52:35.4633707-05:00" finish="2026-09-04T10:52:57.1549591+00:00" />
+  <TestSettings name="default" id="6c4d5628-128d-4c3b-a1a4-ab366a4594ad" />
+  <Results>
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="3b6fc1d4-5893-4b1e-abe2-b722dac79377" executionId="3b6fc1d4-5893-4b1e-abe2-b722dac79377" computerName="PAYTON-LEGION2" duration="00:00:00.0140187" startTime="2026-09-04T10:52:35.5263578+00:00" endTime="2026-09-04T10:52:35.5497753+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_RepeatedQuickProcessesDoNotRaceJobAttachment" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="400ae39a-2d5d-4c27-a379-9d2ac8f769c6" executionId="400ae39a-2d5d-4c27-a379-9d2ac8f769c6" computerName="PAYTON-LEGION2" duration="00:00:05.2310050" startTime="2026-09-04T10:52:35.5562521+00:00" endTime="2026-09-04T10:52:40.7874557+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="56c0e6f7-7811-4b46-b113-ffcdaa6e9c58" executionId="56c0e6f7-7811-4b46-b113-ffcdaa6e9c58" computerName="PAYTON-LEGION2" duration="00:00:00.0013962" startTime="2026-09-04T10:52:40.7878309+00:00" endTime="2026-09-04T10:52:40.7892759+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="633840d0-816c-437a-ab81-5aaf5a3c3cee" executionId="633840d0-816c-437a-ab81-5aaf5a3c3cee" computerName="PAYTON-LEGION2" duration="00:00:02.0786376" startTime="2026-09-04T10:52:40.7894790+00:00" endTime="2026-09-04T10:52:42.8682862+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.PreBugTriage139SqlServerMigrations_AreByteIdenticalToBase" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="73618cb2-475c-4ea4-9688-95bececbce83" executionId="73618cb2-475c-4ea4-9688-95bececbce83" computerName="PAYTON-LEGION2" duration="00:00:00.3197232" startTime="2026-09-04T10:52:42.8761615+00:00" endTime="2026-09-04T10:52:43.1959857+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.ChangedCodeAndTestTextFiles_UseOneDominantByteLevelTerminatorStyle" outcome="Failed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="08bbe5eb-73d2-4476-b82c-d3c16d97f3a3" executionId="08bbe5eb-73d2-4476-b82c-d3c16d97f3a3" computerName="PAYTON-LEGION2" duration="00:00:09.9863351" startTime="2026-09-04T10:52:43.1963924+00:00" endTime="2026-09-04T10:52:53.2010302+00:00">
+      <Output>
+        <ErrorInfo>
+          <Message>Byte-level EOL drift:
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/SHA256SUMS.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/affected-providers-final7/affected-providers-final7-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/affected-providers-final7/affected-providers-final7-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/client-usecase-final3/client-usecase-final3-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/client-usecase-final3/client-usecase-final3-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/command-mapping-audit-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/command-mapping-audit-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/git-diff-cached-check-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/git-diff-cached-check-final-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/git-diff-cached-check-final-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/git-diff-cached-check-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/inventory-verification-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/inventory-verification-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/review-provenance-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/review-provenance-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/fourteenth-harness-final2/fourteenth-harness-final2-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/fourteenth-harness-final2/fourteenth-harness-final2-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/global-empty-workspace-green-rerun/global-empty-workspace-green-rerun-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/global-empty-workspace-green-rerun/global-empty-workspace-green-rerun-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/global-identity-agenthelp-green/global-identity-agenthelp-green-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/global-identity-agenthelp-green/global-identity-agenthelp-green-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-build-after-timeout-adjustment/hermetic-external-build-after-timeout-adjustment-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-build-after-timeout-adjustment/hermetic-external-build-after-timeout-adjustment-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-no-env-final3/hermetic-external-no-env-final3-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-no-env-final3/hermetic-external-no-env-final3-environment.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-no-env-final3/hermetic-external-no-env-final3-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-sqlserver-green/hermetic-external-sqlserver-green-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-sqlserver-green/hermetic-external-sqlserver-green-environment.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-sqlserver-green/hermetic-external-sqlserver-green-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/identity-static-policy-green/identity-static-policy-green-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/identity-static-policy-green/identity-static-policy-green-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/marker-trust-final2/marker-trust-final2-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/marker-trust-final2/marker-trust-final2-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-compile-final3/nuke-compile-final3-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-compile-final3/nuke-compile-final3-environment.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-compile-final3/nuke-compile-final3-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-test-final6/nuke-test-final6-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-test-final6/nuke-test-final6-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-traceability-final2/nuke-traceability-final2-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-traceability-final2/nuke-traceability-final2-environment.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-traceability-final2/nuke-traceability-final2-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/release-build-matrix-final3/release-build-matrix-final3-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/release-build-matrix-final3/release-build-matrix-final3-environment.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/release-build-matrix-final3/release-build-matrix-final3-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/repository-audits-final4/repository-audits-final4-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/repository-audits-final4/repository-audits-final4-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/repository-audits-post-evidence/repository-audits-post-evidence-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/repository-audits-post-evidence/repository-audits-post-evidence-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/requirements-wiki-final3/requirements-wiki-final3-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/requirements-wiki-final3/requirements-wiki-final3-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/rest-mcp-usecase-final3/rest-mcp-usecase-final3-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/rest-mcp-usecase-final3/rest-mcp-usecase-final3-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-1-affected-diagnostic/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-2-identifiers-providers/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-3-physical-identity-affected-green2/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-4-5-6-affected-providers-final2/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-8-9-harness-affected/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/usecase-authoritative-final2/usecase-authoritative-final2-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/usecase-authoritative-final2/usecase-authoritative-final2-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/workspace-identity-provider-final3/workspace-identity-provider-final3-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/workspace-identity-provider-final3/workspace-identity-provider-final3-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/global-empty-workspace-red/global-empty-workspace-red-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/global-empty-workspace-red/global-empty-workspace-red-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final/hermetic-external-no-env-final-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final/hermetic-external-no-env-final-environment.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final/hermetic-external-no-env-final-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final2/hermetic-external-no-env-final2-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final2/hermetic-external-no-env-final2-environment.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final2/hermetic-external-no-env-final2-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-sqlserver-recovery/hermetic-external-sqlserver-recovery-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-sqlserver-recovery/hermetic-external-sqlserver-recovery-environment.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-sqlserver-recovery/hermetic-external-sqlserver-recovery-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/nuke-test-final4/nuke-test-final4-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/nuke-test-final4/nuke-test-final4-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-1-intended/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-2-identifiers/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-3-physical-identity-intended/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-4-6-sqlite-state/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-4-sqlite-aggregate-state/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-5-sqlite-bounded-open/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-8-root-discovery/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-9-descendant-pipe-confirmed/command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/sqlite-save-cancellation-green-tests/sqlite-save-cancellation-green-tests-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/sqlite-save-cancellation-green-tests/sqlite-save-cancellation-green-tests-result.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/usecase-authoritative/usecase-authoritative-command.txt: missing final newline
+docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/usecase-authoritative/usecase-authoritative-result.txt: missing final newline</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.ChangedCodeAndTestTextFiles_UseOneDominantByteLevelTerminatorStyle() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139EleventhRepositoryAuditTests.cs:line 194
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.FeatureHistory_ContainsExactlyOneFormalAdjacentAiTrailerPairPerCommit" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="0ecb851b-b0a9-4192-9f41-7e178c8fa4ee" executionId="0ecb851b-b0a9-4192-9f41-7e178c8fa4ee" computerName="PAYTON-LEGION2" duration="00:00:03.6324056" startTime="2026-09-04T10:52:53.2020422+00:00" endTime="2026-09-04T10:52:56.8345275+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.ChangedUseCaseIdentityTest_HasNoSilentNonWindowsReturn" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="39138899-8ecb-47a1-aef9-4f9efbb217f7" executionId="39138899-8ecb-47a1-aef9-4f9efbb217f7" computerName="PAYTON-LEGION2" duration="00:00:00.0008451" startTime="2026-09-04T10:52:56.8349477+00:00" endTime="2026-09-04T10:52:56.8358419+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.EleventhReviewNarrative_IsRepositoryOwnedAndMatchesProvenanceHash" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="0dabe413-3aac-4a26-a8bb-f8318738bb27" executionId="0dabe413-3aac-4a26-a8bb-f8318738bb27" computerName="PAYTON-LEGION2" duration="00:00:00.0007829" startTime="2026-09-04T10:52:56.8362925+00:00" endTime="2026-09-04T10:52:56.8371195+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.TwelfthReviewNarrative_IsRepositoryOwnedAndMatchesProvenanceHash" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="32e53540-33de-4e29-8aea-01f52b956032" executionId="32e53540-33de-4e29-8aea-01f52b956032" computerName="PAYTON-LEGION2" duration="00:00:00.0005421" startTime="2026-09-04T10:52:56.8383439+00:00" endTime="2026-09-04T10:52:56.8389219+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.NamedEvidenceTests_UseSharedExplicitValidatedRepositoryRoot" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="00d66baa-2a81-4fb6-8ce4-566751029199" executionId="00d66baa-2a81-4fb6-8ce4-566751029199" computerName="PAYTON-LEGION2" duration="00:00:00.0016881" startTime="2026-09-04T10:52:56.8390368+00:00" endTime="2026-09-04T10:52:56.8408484+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.SharedProcessRunner_UnresponsiveProcess_IsKilledWithinBound" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="52a692fd-1f96-464b-9ee8-3b22303edca6" executionId="52a692fd-1f96-464b-9ee8-3b22303edca6" computerName="PAYTON-LEGION2" duration="00:00:00.3080596" startTime="2026-09-04T10:52:56.8413896+00:00" endTime="2026-09-04T10:52:57.1495515+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.EditableTextAudit_CoversClaimedExtensionsAndRequiresFinalNewline" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="d7d7a0b7-f7d1-445a-b197-7d2ec40486e2" executionId="d7d7a0b7-f7d1-445a-b197-7d2ec40486e2" computerName="PAYTON-LEGION2" duration="00:00:00.0039661" startTime="2026-09-04T10:52:57.1498531+00:00" endTime="2026-09-04T10:52:57.1538850+00:00" />
+    <UnitTestResult testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.RepositoryRootResolution_ExternalArtifactsPath_RemainsStable" outcome="Passed" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="7b734f67-5963-4afb-b661-606717b06d43" executionId="7b734f67-5963-4afb-b661-606717b06d43" computerName="PAYTON-LEGION2" duration="00:00:00.0007413" startTime="2026-09-04T10:52:57.1541749+00:00" endTime="2026-09-04T10:52:57.1549591+00:00" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver" id="3b6fc1d4-5893-4b1e-abe2-b722dac79377" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="3b6fc1d4-5893-4b1e-abe2-b722dac79377" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="RepositoryRootConsumers_DelegateToSharedResolver" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_RepeatedQuickProcessesDoNotRaceJobAttachment" id="400ae39a-2d5d-4c27-a379-9d2ac8f769c6" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="400ae39a-2d5d-4c27-a379-9d2ac8f769c6" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="ProcessRunner_RepeatedQuickProcessesDoNotRaceJobAttachment" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" id="56c0e6f7-7811-4b46-b113-ffcdaa6e9c58" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="56c0e6f7-7811-4b46-b113-ffcdaa6e9c58" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" id="633840d0-816c-437a-ab81-5aaf5a3c3cee" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="633840d0-816c-437a-ab81-5aaf5a3c3cee" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.PreBugTriage139SqlServerMigrations_AreByteIdenticalToBase" id="73618cb2-475c-4ea4-9688-95bececbce83" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="73618cb2-475c-4ea4-9688-95bececbce83" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests" name="PreBugTriage139SqlServerMigrations_AreByteIdenticalToBase" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.ChangedCodeAndTestTextFiles_UseOneDominantByteLevelTerminatorStyle" id="08bbe5eb-73d2-4476-b82c-d3c16d97f3a3" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="08bbe5eb-73d2-4476-b82c-d3c16d97f3a3" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests" name="ChangedCodeAndTestTextFiles_UseOneDominantByteLevelTerminatorStyle" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.FeatureHistory_ContainsExactlyOneFormalAdjacentAiTrailerPairPerCommit" id="0ecb851b-b0a9-4192-9f41-7e178c8fa4ee" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="0ecb851b-b0a9-4192-9f41-7e178c8fa4ee" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests" name="FeatureHistory_ContainsExactlyOneFormalAdjacentAiTrailerPairPerCommit" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.ChangedUseCaseIdentityTest_HasNoSilentNonWindowsReturn" id="39138899-8ecb-47a1-aef9-4f9efbb217f7" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="39138899-8ecb-47a1-aef9-4f9efbb217f7" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests" name="ChangedUseCaseIdentityTest_HasNoSilentNonWindowsReturn" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.EleventhReviewNarrative_IsRepositoryOwnedAndMatchesProvenanceHash" id="0dabe413-3aac-4a26-a8bb-f8318738bb27" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="0dabe413-3aac-4a26-a8bb-f8318738bb27" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests" name="EleventhReviewNarrative_IsRepositoryOwnedAndMatchesProvenanceHash" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.TwelfthReviewNarrative_IsRepositoryOwnedAndMatchesProvenanceHash" id="32e53540-33de-4e29-8aea-01f52b956032" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="32e53540-33de-4e29-8aea-01f52b956032" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests" name="TwelfthReviewNarrative_IsRepositoryOwnedAndMatchesProvenanceHash" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.NamedEvidenceTests_UseSharedExplicitValidatedRepositoryRoot" id="00d66baa-2a81-4fb6-8ce4-566751029199" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="00d66baa-2a81-4fb6-8ce4-566751029199" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests" name="NamedEvidenceTests_UseSharedExplicitValidatedRepositoryRoot" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.SharedProcessRunner_UnresponsiveProcess_IsKilledWithinBound" id="52a692fd-1f96-464b-9ee8-3b22303edca6" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="52a692fd-1f96-464b-9ee8-3b22303edca6" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests" name="SharedProcessRunner_UnresponsiveProcess_IsKilledWithinBound" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.EditableTextAudit_CoversClaimedExtensionsAndRequiresFinalNewline" id="d7d7a0b7-f7d1-445a-b197-7d2ec40486e2" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="d7d7a0b7-f7d1-445a-b197-7d2ec40486e2" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests" name="EditableTextAudit_CoversClaimedExtensionsAndRequiresFinalNewline" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests.RepositoryRootResolution_ExternalArtifactsPath_RemainsStable" id="7b734f67-5963-4afb-b661-606717b06d43" storage="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll">
+      <Execution id="7b734f67-5963-4afb-b661-606717b06d43" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139TwelfthRepositoryAuditTests" name="RepositoryRootResolution_ExternalArtifactsPath_RemainsStable" adapterTypeName="executor://86b78778-3855-490a-818e-51f046b3cb7a/xunit.v3/3.2.2" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="3b6fc1d4-5893-4b1e-abe2-b722dac79377" executionId="3b6fc1d4-5893-4b1e-abe2-b722dac79377" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="400ae39a-2d5d-4c27-a379-9d2ac8f769c6" executionId="400ae39a-2d5d-4c27-a379-9d2ac8f769c6" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="56c0e6f7-7811-4b46-b113-ffcdaa6e9c58" executionId="56c0e6f7-7811-4b46-b113-ffcdaa6e9c58" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="633840d0-816c-437a-ab81-5aaf5a3c3cee" executionId="633840d0-816c-437a-ab81-5aaf5a3c3cee" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="73618cb2-475c-4ea4-9688-95bececbce83" executionId="73618cb2-475c-4ea4-9688-95bececbce83" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="08bbe5eb-73d2-4476-b82c-d3c16d97f3a3" executionId="08bbe5eb-73d2-4476-b82c-d3c16d97f3a3" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="0ecb851b-b0a9-4192-9f41-7e178c8fa4ee" executionId="0ecb851b-b0a9-4192-9f41-7e178c8fa4ee" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="39138899-8ecb-47a1-aef9-4f9efbb217f7" executionId="39138899-8ecb-47a1-aef9-4f9efbb217f7" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="0dabe413-3aac-4a26-a8bb-f8318738bb27" executionId="0dabe413-3aac-4a26-a8bb-f8318738bb27" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="32e53540-33de-4e29-8aea-01f52b956032" executionId="32e53540-33de-4e29-8aea-01f52b956032" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="00d66baa-2a81-4fb6-8ce4-566751029199" executionId="00d66baa-2a81-4fb6-8ce4-566751029199" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="52a692fd-1f96-464b-9ee8-3b22303edca6" executionId="52a692fd-1f96-464b-9ee8-3b22303edca6" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="d7d7a0b7-f7d1-445a-b197-7d2ec40486e2" executionId="d7d7a0b7-f7d1-445a-b197-7d2ec40486e2" />
+    <TestEntry testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" testId="7b734f67-5963-4afb-b661-606717b06d43" executionId="7b734f67-5963-4afb-b661-606717b06d43" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="14" executed="14" passed="13" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>

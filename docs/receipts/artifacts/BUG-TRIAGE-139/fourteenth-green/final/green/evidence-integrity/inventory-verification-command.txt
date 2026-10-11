@@ -1,0 +1,3 @@
+$root = 'docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final'
+Enumerate every file recursively with -Force except SHA256SUMS.txt, sort normalized relative paths, compute SHA-256, and write "HASH  relative/path".
+Independently parse SHA256SUMS.txt, reject malformed or duplicate entries, rehash every listed file, and compare the listed set to a fresh filesystem enumeration.

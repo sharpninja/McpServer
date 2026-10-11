@@ -1,0 +1,17 @@
+exit_code=-1
+classification=failed
+assemblies=1
+total=2040
+passed=2038
+failed=2
+not_executed_or_skipped=0
+aborted=0
+inconclusive=0
+trx_emitted=false
+count_source=complete console summaries
+started_utc=2026-09-04T09:32:13.4792275+00:00
+finished_utc=2026-09-04T09:36:45.1669351+00:00
+duration_seconds=271.688
+physical_artifact_target=C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\nested-logical-artifacts-target
+runtime_temp=C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\runtime-temp
+test_results_target=C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\nuke-test-results

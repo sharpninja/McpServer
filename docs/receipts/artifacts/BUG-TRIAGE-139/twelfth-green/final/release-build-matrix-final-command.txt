@@ -1,0 +1,12 @@
+dotnet build 'src/McpServer.Client/McpServer.Client.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'src/McpServer.Repl.Host/McpServer.Repl.Host.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'src/McpServer.Storage/McpServer.Storage.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'src/McpServer.Services/McpServer.Services.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'src/McpServer.GraphRag/McpServer.GraphRag.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'src/McpServer.Storage.SqliteMigrations/McpServer.Storage.SqliteMigrations.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'src/McpServer.Storage.SqlServerMigrations/McpServer.Storage.SqlServerMigrations.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'src/McpServer.Storage.PostgreSqlMigrations/McpServer.Storage.PostgreSqlMigrations.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'tests/McpServer.Repl.IntegrationTests/McpServer.Repl.IntegrationTests.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror
+dotnet build 'tests/McpServer.Client.Tests/McpServer.Client.Tests.csproj' -c Release --no-restore --nologo --verbosity minimal --maxcpucount:1 -p:UseSharedCompilation=false -warnaserror

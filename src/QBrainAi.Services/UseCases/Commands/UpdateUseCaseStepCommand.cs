@@ -37,7 +37,11 @@ public sealed class UpdateUseCaseStepCommandHandler(
 
         try
         {
-            _ = UseCaseCqrsHelpers.ResolveWorkspaceId(db, workspaceContext, command.WorkspacePath);
+            await UseCaseCqrsHelpers.ResolveWorkspaceAsync(
+                db,
+                workspaceContext,
+                command.WorkspacePath,
+                context.CancellationToken).ConfigureAwait(false);
 
             if (command.Request.StepNumber <= 0)
                 return Result<UseCaseStepDto>.Failure(UseCaseResultCodes.ValidationMsg("StepNumber must be positive."));

@@ -35,7 +35,11 @@ public sealed class UpdateUseCaseActorCommandHandler(
 
         try
         {
-            _ = UseCaseCqrsHelpers.ResolveWorkspaceId(db, workspaceContext, command.WorkspacePath);
+            await UseCaseCqrsHelpers.ResolveWorkspaceAsync(
+                db,
+                workspaceContext,
+                command.WorkspacePath,
+                context.CancellationToken).ConfigureAwait(false);
 
             var name = UseCaseCqrsHelpers.NormalizeOptional(command.Request.Name);
             if (name is null)

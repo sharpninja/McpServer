@@ -35,7 +35,11 @@ public sealed class UpdateUseCaseFlowCommandHandler(
 
         try
         {
-            _ = UseCaseCqrsHelpers.ResolveWorkspaceId(db, workspaceContext, command.WorkspacePath);
+            await UseCaseCqrsHelpers.ResolveWorkspaceAsync(
+                db,
+                workspaceContext,
+                command.WorkspacePath,
+                context.CancellationToken).ConfigureAwait(false);
 
             var flowType = UseCaseConstants.CanonicalizeFlowType(command.Request.FlowType);
             if (flowType is null)

@@ -1,0 +1,58 @@
+  Determining projects to restore...
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj (in 394 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj (in 394 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj (in 394 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj (in 394 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj (in 394 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\McpServer.Client.csproj (in 387 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Cqrs\McpServer.Cqrs.csproj (in 394 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj (in 454 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpServer.Storage.csproj (in 454 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj (in 454 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj (in 454 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.McpAgent\McpServer.McpAgent.csproj (in 527 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Services\McpServer.Services.csproj (in 527 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.GraphRag\McpServer.GraphRag.csproj (in 527 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj (in 528 ms).
+  Restored F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj (in 536 ms).
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Common.AgentCli\debug\McpServer.Common.AgentCli.dll
+  McpServer.SessionLog.Transcripts -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.SessionLog.Transcripts\debug\McpServer.SessionLog.Transcripts.dll
+  McpServer.Cqrs -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Cqrs\debug\McpServer.Cqrs.dll
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.ServiceDefaults\debug\McpServer.ServiceDefaults.dll
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.TransactionSecurity\debug\McpServer.TransactionSecurity.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Client\debug\McpServer.Client.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Repl.Core\debug\McpServer.Repl.Core.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Storage\debug\McpServer.Storage.dll
+  McpServer.McpAgent -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.McpAgent\debug\McpServer.McpAgent.dll
+  McpServer.Storage.PostgreSqlMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Storage.PostgreSqlMigrations\debug\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Storage.SqlServerMigrations\debug\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Storage.SqliteMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Storage.SqliteMigrations\debug\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Services -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Services\debug\McpServer.Services.dll
+  McpServer.GraphRag -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.GraphRag\debug\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Support.Mcp\debug\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll
+Test run for C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.74]     McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout [FAIL]
+[xUnit.net 00:00:01.75]     McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver [FAIL]
+  Failed McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout [16 ms]
+  Error Message:
+   System.InvalidOperationException : Explicit repository root is invalid: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Support.Mcp.Tests\debug
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Infrastructure.RepositoryEvidenceTestSupport.ResolveRepositoryRoot() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Infrastructure\RepositoryEvidenceTestSupport.cs:line 42
+   at McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139FourteenthHarnessTests.cs:line 34
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver [5 ms]
+  Error Message:
+   Assert.DoesNotContain() Failure: Sub-string found
+                                           ↓ (pos 8995)
+String: ···".Ordinal);\r\n    }\r\n\r\n    private static string Res"···
+Found:  "private static string ResolveRepositoryRoot("
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139FourteenthHarnessTests.cs:line 87
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\results\slice-8-root-red.trx
+
+Failed!  - Failed:     2, Passed:     0, Skipped:     0, Total:     2, Duration: 56 ms - McpServer.Support.Mcp.Tests.dll (net10.0)

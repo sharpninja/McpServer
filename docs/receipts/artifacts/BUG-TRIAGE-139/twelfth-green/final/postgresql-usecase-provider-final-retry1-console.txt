@@ -1,0 +1,7 @@
+Test run for C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+The active test run was aborted. Reason: Test host process crashed
+Results File: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\final-gate\postgresql-usecase-provider-final-retry1.trx
+
+Passed!  - Failed:     0, Passed:    11, Skipped:     0, Total:    11, Duration: 34 s - McpServer.Support.Mcp.Tests.dll (net10.0)
+Test Run Aborted.

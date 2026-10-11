@@ -1,0 +1,165 @@
+xUnit.net v3 Microsoft.Testing.Platform v1 Runner v3.2.2+728c1dce01 (64-bit .NET 10.0.11)
+
+failed McpServer.Support.Mcp.Tests.Storage.SqliteUseCaseFifthProviderTests.BlockingLock_ObservesCancellation (5s 318ms)
+  Assert.Same() Failure: Values are not the same instance
+  Expected: Task<Result<UseCaseDetailDto>> { Status = Canceled }
+  Actual:   Task { Status = RanToCompletion }
+    at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:385
+    at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:386
+    at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:386
+    at McpServer.Support.Mcp.Tests.Storage.UseCaseFifthProviderScenarios.AssertBlockingCancellationAsync(ProviderTestDatabase database) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\UseCaseFifthProviderTests.cs:387
+    --- End of stack trace from previous location ---
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory F:/GitHub/McpServer/.mcpServer/tmp/mcp-test-pgdata-7df25c0c2eba4ecba399fc9f3e976c30 ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"F^:^\GitHub^\McpServer^\^.mcpServer^\tmp^\mcp^-test^-pgdata^-7df25c0c2eba4ecba399fc9f3e976c30^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory F:/GitHub/McpServer/.mcpServer/tmp/mcp-test-pgdata-cc3363a21b5244139fa9505768175a37 ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"F^:^\GitHub^\McpServer^\^.mcpServer^\tmp^\mcp^-test^-pgdata^-cc3363a21b5244139fa9505768175a37^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory F:/GitHub/McpServer/.mcpServer/tmp/mcp-test-pgdata-560594f08a05464fad9091969e34da1e ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"F^:^\GitHub^\McpServer^\^.mcpServer^\tmp^\mcp^-test^-pgdata^-560594f08a05464fad9091969e34da1e^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory F:/GitHub/McpServer/.mcpServer/tmp/mcp-test-pgdata-7e0e2fc9d19246a2adb8b677b6816a24 ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"F^:^\GitHub^\McpServer^\^.mcpServer^\tmp^\mcp^-test^-pgdata^-7e0e2fc9d19246a2adb8b677b6816a24^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+failed McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly (2s 463ms)
+  Assert.Same() Failure: Values are not the same instance
+  Expected: Task<Result<UseCaseDetailDto>> { Status = Canceled }
+  Actual:   Task { Status = RanToCompletion }
+    at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:260
+    at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:261
+    at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:261
+    at McpServer.Support.Mcp.Tests.Services.UseCaseFifthAdversarialReviewTests.CreateUseCase_BlockedSqliteWriterLock_CancelsPromptly() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Services\UseCaseFifthAdversarialReviewTests.cs:261
+    --- End of stack trace from previous location ---
+The files belonging to this database system will be owned by user "kingd".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_United States.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+creating directory F:/GitHub/McpServer/.mcpServer/tmp/mcp-test-pgdata-3d0280b390274284981c9615f0051d00 ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... America/Chicago
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Program^ Files^\PostgreSQL^\17^\bin^\pg^_ctl^" -D ^"F^:^\GitHub^\McpServer^\^.mcpServer^\tmp^\mcp^-test^-pgdata^-3d0280b390274284981c9615f0051d00^" -l logfile start
+
+waiting for server to start.... done
+server started
+waiting for server to shut down.... done
+server stopped
+
+  In process file artifacts produced:
+    - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\usecase-authoritative\usecase-authoritative.trx
+
+Test run summary: Failed! - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll (net10.0|x64)
+  total: 252
+  failed: 2
+  succeeded: 250
+  skipped: 0
+  duration: 3m 07s 686ms

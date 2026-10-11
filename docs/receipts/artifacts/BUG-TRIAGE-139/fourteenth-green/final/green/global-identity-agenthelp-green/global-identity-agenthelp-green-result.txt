@@ -1,0 +1,10 @@
+exit_code=0
+minimum_expected=10
+total=23
+passed=23
+failed=0
+not_executed_or_skipped=0
+aborted=0
+inconclusive=0
+classification=passed
+trx=global-identity-agenthelp-green.trx

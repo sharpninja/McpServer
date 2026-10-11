@@ -158,7 +158,7 @@ documents:
       - azure
   - id: usecase-extension-design-v3
     title: Use Case Extension Design v3
-    source: docs/McpServer-UseCase-Extension-Design-v3.0.md
+    source: docs/QBrainAi-UseCase-Extension-Design-v3.0.md
     target: Use-Case-Extension-Design-v3.md
     platforms:
       - github
@@ -322,8 +322,8 @@ documents:
     source: docs/Operations/permanent-local-audit-sqlserver.md
     target: Operations/Permanent-Local-Audit-Storage.md
     platforms:
-    - github
-    - azure
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements

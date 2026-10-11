@@ -1,0 +1,14 @@
+[2026-09-03 22:01:57.802] [0000648C] === Logging started ===
+[2026-09-03 22:01:57.808] [0000648C] Executing: "C:\Program Files\dotnet\dotnet.exe" test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj -c Release --no-build --no-restore --artifacts-path C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z --settings docs\receipts\artifacts\BUG-TRIAGE-139\ninth-green\serial.runsettings --filter FullyQualifiedName~UseCase --results-directory C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\final-gate --logger trx;LogFileName=usecase-authoritative-final.trx --logger console;verbosity=minimal, PID: 25740, PPID: 35716
+[2026-09-03 22:01:57.809] [0000648C] IsElevated: False
+[2026-09-03 22:01:57.809] [0000648C] Is64BitProcess: True
+[2026-09-03 22:01:57.809] [0000648C] RebootPending: False
+[2026-09-03 22:01:57.809] [0000648C] ProcessorArchitecture: amd64
+[2026-09-03 22:01:57.809] [0000648C] HostArchitecture: x64
+[2026-09-03 22:01:57.809] [0000648C] SdkDirectory: 10.0.400
+[2026-09-03 22:01:57.810] [0000648C] VerifySignatures: False
+[2026-09-03 22:01:57.810] [0000648C] SDK feature band: 10.0.400
+[2026-09-03 22:02:34.901] [0000648C] Shutting down
+[2026-09-03 22:02:34.901] [0000648C] Shutdown completed.
+[2026-09-03 22:02:34.901] [0000648C] Restart required: False
+[2026-09-03 22:02:34.901] [0000648C] === Logging ended ===
