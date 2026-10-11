@@ -24,10 +24,20 @@ function asBridge(fake: FakeBridge): ReplBridge {
   return fake as unknown as ReplBridge;
 }
 
+/**
+ * BUG-BASELINE-018: an absolute workspace path on every OS with no marker anywhere above it, so
+ * marker bootstrap fails and workspace_ensure takes its register/init path. A drive-letter literal
+ * is relative on Linux and resolved under the test's working directory, where marker discovery
+ * walks up to the enclosing checkout's marker instead.
+ */
+function unmarkedWorkspacePath(name: string): string {
+  return path.join(os.tmpdir(), `core-workspace-unmarked-${process.pid}-${Date.now()}`, name);
+}
+
 describe('workspace_ensure', () => {
   test('registers and initializes a missing untrusted workspace with failsafe-protected mutations', async () => {
     const fake = new FakeBridge();
-    const workspacePath = 'F:\\GitHub\\NewWorkspace';
+    const workspacePath = unmarkedWorkspacePath('NewWorkspace');
     const oldFailsafeDir = process.env.MCPSERVER_FAILSAFE_DIR;
     const failsafeDir = fs.mkdtempSync(path.join(os.tmpdir(), 'core-workspace-failsafe-'));
     process.env.MCPSERVER_FAILSAFE_DIR = failsafeDir;
@@ -70,7 +80,7 @@ describe('workspace_ensure', () => {
 
   test('does not create when the workspace is already registered', async () => {
     const fake = new FakeBridge();
-    const workspacePath = 'F:\\GitHub\\ExistingWorkspace';
+    const workspacePath = unmarkedWorkspacePath('ExistingWorkspace');
     fake.responses = [
       { type: 'result', payload: { result: { items: [{ workspacePath }], totalCount: 1 } } },
       { type: 'result', payload: { result: { success: true, filesCreated: [] } } },
@@ -91,7 +101,7 @@ describe('workspace_ensure', () => {
 
   test('keeps a YAML failsafe when workspace creation fails', async () => {
     const fake = new FakeBridge();
-    const workspacePath = 'F:\\GitHub\\FailWorkspace';
+    const workspacePath = unmarkedWorkspacePath('FailWorkspace');
     const oldFailsafeDir = process.env.MCPSERVER_FAILSAFE_DIR;
     const failsafeDir = fs.mkdtempSync(path.join(os.tmpdir(), 'core-workspace-failsafe-'));
     process.env.MCPSERVER_FAILSAFE_DIR = failsafeDir;
