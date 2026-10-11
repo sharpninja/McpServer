@@ -11,11 +11,27 @@ public sealed class EphemeralPostgresFixtureTests
     /// <summary>
     /// Overlay G1 leftover: when initdb exits non-zero, the fixture exception must retain
     /// sanitized executable path, arguments, cwd, exit code, stdout, and stderr. "initdb exited 1"
-    /// alone is not sufficient. TEST-MCP-AIUNIT-002 adjacent provider diagnosis.
+    /// alone is not sufficient. TEST-MCP-AIUNIT-002 adjacent provider diagnosis. When
+    /// MCP_TEST_POSTGRES_CONNECTION names a server (the container endpoint; operator decision
+    /// 2026-10-11 for BUG-BASELINE-005), the fixture provisions nothing locally and initdb never
+    /// runs, so the test proves that adoption instead: the fixture uses that server and holds no
+    /// local binaries or data directory. The comparison never prints the connection string.
     /// </summary>
     [Fact]
     public void EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr()
     {
+        var external = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");
+        if (!string.IsNullOrWhiteSpace(external))
+        {
+            using var fixture = new EphemeralPostgresFixture();
+            Assert.True(
+                string.Equals(external, fixture.ServerConnectionString, StringComparison.Ordinal),
+                "The fixture did not adopt MCP_TEST_POSTGRES_CONNECTION.");
+            Assert.Null(GetPrivateField(fixture, "_pgBin"));
+            Assert.Null(GetPrivateField(fixture, "_dataDir"));
+            return;
+        }
+
         var find = typeof(EphemeralPostgresFixture).GetMethod(
             "FindPostgresBinaries",
             BindingFlags.NonPublic | BindingFlags.Static);
@@ -45,5 +61,12 @@ public sealed class EphemeralPostgresFixtureTests
         Assert.Contains("cwd", message, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), message, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("initdb.exe", message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static object? GetPrivateField(EphemeralPostgresFixture fixture, string name)
+    {
+        var field = typeof(EphemeralPostgresFixture).GetField(name, BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.NotNull(field);
+        return field!.GetValue(fixture);
     }
 }
