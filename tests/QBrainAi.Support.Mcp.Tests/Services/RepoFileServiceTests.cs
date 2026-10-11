@@ -56,7 +56,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>
-    /// TR-MCP-QUALITY-001: Rooted paths outside the active workspace are rejected
+    /// TR-MCP-QBTOOLS-000 AC-001 (BUG-BASELINE-003): Rooted paths outside the active workspace are rejected
     /// before any repository read, list, write, edit, or transactional capture.
     /// </summary>
     [Fact]
@@ -85,6 +85,71 @@ public sealed class RepoFileServiceTests : IDisposable
         {
             Directory.Delete(outsideDir, recursive: true);
         }
+    }
+
+    /// <summary>
+    /// TR-MCP-QBTOOLS-000 AC-001 (BUG-BASELINE-003): an absolute path inside the repository root is accepted on every OS and
+    /// resolves to the matching repo-relative path for read, list, write, edit, and transactional capture. Fixture: the
+    /// temporary repository built by the constructor, addressed through its absolute paths.
+    /// </summary>
+    [Fact]
+    public async Task RootedPathInsideRoot_AcrossRepoOperations_ResolvesRepoRelative()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var code = Path.Combine(_tempDir, "src", "code.cs");
+        var notes = Path.Combine(_tempDir, "src", "notes.txt");
+        var created = Path.Combine(_tempDir, "src", "created.txt");
+
+        var read = await _sut.ReadAsync(code, cancellationToken: ct).ConfigureAwait(true);
+        var list = await _sut.ListAsync(Path.Combine(_tempDir, "src"), cancellationToken: ct).ConfigureAwait(true);
+        var write = await _sut.WriteAsync(created, "created", cancellationToken: ct).ConfigureAwait(true);
+        var edit = await _sut.EditAsync(notes, "notes", "edited", cancellationToken: ct).ConfigureAwait(true);
+        var snapshot = await _sut.CaptureForWriteAsync(code, cancellationToken: ct).ConfigureAwait(true);
+
+        Assert.NotNull(read);
+        Assert.Equal("src/code.cs", read.RelativePath);
+        Assert.Equal("class Foo {}", read.Content);
+        Assert.Equal("src", list.Path);
+        Assert.Contains(list.Entries, e => e.Name == "code.cs");
+        Assert.True(write.Written);
+        Assert.Equal("created", await File.ReadAllTextAsync(created, ct).ConfigureAwait(true));
+        Assert.True(edit.Written);
+        Assert.Equal("edited", await File.ReadAllTextAsync(notes, ct).ConfigureAwait(true));
+        Assert.NotNull(snapshot);
+        Assert.Equal("src/code.cs", snapshot.RelativePath);
+    }
+
+    /// <summary>
+    /// TR-MCP-QBTOOLS-000 AC-001 (BUG-BASELINE-003): a leading separator marks an absolute path and is never reinterpreted as
+    /// repo-relative, so "/src/code.cs" (a path outside the temporary root) is rejected and the repository's src/code.cs is
+    /// neither read nor changed. Fixture: the temporary repository built by the constructor.
+    /// </summary>
+    [Fact]
+    public async Task LeadingSeparatorPath_IsNotReinterpretedAsRepoRelative()
+    {
+        var ct = TestContext.Current.CancellationToken;
+
+        var read = await _sut.ReadAsync("/src/code.cs", cancellationToken: ct).ConfigureAwait(true);
+        var write = await _sut.WriteAsync("/src/code.cs", "changed", cancellationToken: ct).ConfigureAwait(true);
+
+        Assert.Null(read);
+        Assert.False(write.Written);
+        Assert.Equal("class Foo {}", await File.ReadAllTextAsync(Path.Combine(_tempDir, "src", "code.cs"), ct).ConfigureAwait(true));
+    }
+
+    /// <summary>
+    /// TR-MCP-QBTOOLS-000 AC-001 (BUG-BASELINE-003): an absolute path with a .. segment is rejected like a relative one, even
+    /// when lexical normalization would land inside the root. Fixture: the temporary repository built by the constructor.
+    /// </summary>
+    [Fact]
+    public async Task RootedPathWithParentSegment_IsRejected()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var viaParent = _tempDir + "/src/../readme.md";
+
+        var read = await _sut.ReadAsync(viaParent, cancellationToken: ct).ConfigureAwait(true);
+
+        Assert.Null(read);
     }
 
     [Fact]
