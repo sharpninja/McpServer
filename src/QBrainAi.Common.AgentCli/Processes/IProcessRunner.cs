@@ -1,4 +1,4 @@
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Common.AgentCli.Processes;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: Abstraction for running external processes, enabling testability.

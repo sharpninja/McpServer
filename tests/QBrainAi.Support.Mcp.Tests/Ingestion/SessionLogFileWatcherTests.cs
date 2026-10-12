@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 
@@ -35,7 +36,7 @@ public sealed class SessionLogFileWatcherTests : IDisposable
             SessionsPath = "docs/sessions"
         }));
         services.AddSingleton(typeof(Microsoft.Extensions.Logging.ILogger<>), typeof(NullLogger<>));
-        services.AddSingleton<QBrainAi.Support.Mcp.Indexing.Chunker>();
+        services.AddSingleton<QBrainAi.Support.Mcp.Storage.Indexing.Chunker>();
         services.AddScoped<ISessionLogService, SessionLogService>();
         services.AddScoped(_ => new WorkspaceContext
         {

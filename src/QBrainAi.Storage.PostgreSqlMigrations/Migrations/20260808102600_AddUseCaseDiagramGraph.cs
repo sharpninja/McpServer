@@ -5,29 +5,28 @@ using QBrainAi.Support.Mcp.Storage;
 
 #nullable disable
 
-namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
+namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations;
+
+/// <inheritdoc />
+[DbContext(typeof(McpDbContext))]
+[Migration("20260808102600_AddUseCaseDiagramGraph")]
+public partial class AddUseCaseDiagramGraph : Migration
 {
     /// <inheritdoc />
-    [DbContext(typeof(McpDbContext))]
-    [Migration("20260808102600_AddUseCaseDiagramGraph")]
-    public partial class AddUseCaseDiagramGraph : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "DiagramGraphJson",
-                table: "UseCases",
-                type: "text",
-                nullable: true);
-        }
+        migrationBuilder.AddColumn<string>(
+            name: "DiagramGraphJson",
+            table: "UseCases",
+            type: "text",
+            nullable: true);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "DiagramGraphJson",
-                table: "UseCases");
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "DiagramGraphJson",
+            table: "UseCases");
     }
 }

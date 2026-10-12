@@ -1,7 +1,9 @@
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp;
+using QBrainAi.GraphRag.Models;
 
-namespace QBrainAi.Support.Mcp.GraphRag;
+namespace QBrainAi.GraphRag.Services;
 
 /// <summary>
 /// FR-MCP-084: Abstraction for querying GraphRAG data (entities, relationships,

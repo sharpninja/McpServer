@@ -1,6 +1,7 @@
 using System.Text;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-018-16 / FR-MCP-MEMORY-018-46 / FR-MCP-MEMORY-018-49:

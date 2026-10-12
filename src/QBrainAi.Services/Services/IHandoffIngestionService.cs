@@ -1,3 +1,5 @@
+using QBrainAi.Support.Mcp.Models;
+
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>TR-HANDOFF-SURFACE-001: Shared handoff ingestion service used by every public surface.</summary>

@@ -1,6 +1,8 @@
 using QBrainAi.Cqrs;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Commands;
 
 /// <summary>
 /// TR-MCP-MEMORY-SEARCH-002: CQRS command to index one memory into the dedicated memory ANN/FTS index.

@@ -1,4 +1,7 @@
-namespace QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp;
+
+namespace QBrainAi.GraphRag.Options;
 
 /// <summary>
 /// Configuration for GraphRAG integration.

@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
+using QBrainAi.Support.Mcp.Storage.Ingestion;
 
-namespace QBrainAi.Support.Mcp.Ingestion;
+namespace QBrainAi.Support.Mcp.Storage;
 
 /// <summary>
 /// TR-PLANNED-CORE-013, TR-MCP-MT-004: In-memory store for last sync run result, workspace-keyed.

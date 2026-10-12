@@ -1,4 +1,4 @@
-namespace QBrainAi.Support.Mcp.Ingestion;
+namespace QBrainAi.Support.Mcp.Storage.Ingestion;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: Result of a single sync (ingestion) run.

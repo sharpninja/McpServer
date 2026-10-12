@@ -1,4 +1,4 @@
-namespace QBrainAi.Support.Mcp.Models;
+namespace QBrainAi.Support.Mcp.Storage.Models;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: Chunked content for full-text and vector retrieval.

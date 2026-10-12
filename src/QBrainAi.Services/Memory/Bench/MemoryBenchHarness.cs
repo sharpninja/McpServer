@@ -1,6 +1,8 @@
 using System.Text.Json;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-018 / TR-MCP-MEMORY-BENCH-002: Grok-first with/without memory harness.

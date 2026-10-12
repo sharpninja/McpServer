@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Services;
 

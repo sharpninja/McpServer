@@ -1,4 +1,5 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Bench;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 

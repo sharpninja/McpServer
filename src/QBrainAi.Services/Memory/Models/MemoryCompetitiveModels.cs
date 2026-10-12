@@ -1,4 +1,7 @@
-namespace QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Models;
+
+namespace QBrainAi.Support.Mcp.Memory.Models;
 
 /// <summary>
 /// FR-MCP-MEMORY-010 / TR-MCP-MEMORY-MODEL-002: Documented validation limits and defaults

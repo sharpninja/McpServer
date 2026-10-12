@@ -10,7 +10,7 @@
     <RepositoryUrl>https://github.com/SharpNinja/McpServer</RepositoryUrl>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <RootNamespace>QBrainAi.Repl.Core</RootNamespace>
+    <RootNamespace>QBrainAi.Repl.Core.Compatibility</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj">

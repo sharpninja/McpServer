@@ -1,7 +1,9 @@
 using System.Text;
 using System.Text.Json;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-019 / TR-MCP-MEMORY-BENCH-003: Multi-turn Grok-first harness.

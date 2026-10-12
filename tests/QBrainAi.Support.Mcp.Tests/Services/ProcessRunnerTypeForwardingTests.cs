@@ -1,4 +1,5 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

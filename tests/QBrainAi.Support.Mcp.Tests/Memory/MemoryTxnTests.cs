@@ -2,6 +2,8 @@ using QBrainAi.Support.Mcp.Services;
 using QBrainAi.TransactionSecurity.Models;
 using QBrainAi.TransactionSecurity.Services;
 using NSubstitute;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 

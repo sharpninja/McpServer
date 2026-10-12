@@ -8,6 +8,8 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
+using QBrainAi.Common.AgentCli.Processes;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

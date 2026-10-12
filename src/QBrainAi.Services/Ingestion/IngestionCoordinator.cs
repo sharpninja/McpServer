@@ -1,4 +1,3 @@
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Notifications;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
@@ -6,6 +5,9 @@ using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using QBrainAi.Support.Mcp.Storage.Indexing;
+using QBrainAi.Support.Mcp.Storage.Ingestion;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Ingestion;
 
@@ -342,7 +344,7 @@ public sealed class IngestionCoordinator
 
     private async Task UpsertDocumentAndChunksAsync(
         Models.ContextDocument doc,
-        IReadOnlyList<Models.ContextChunk> chunks,
+        IReadOnlyList<Storage.Models.ContextChunk> chunks,
         CancellationToken cancellationToken)
     {
         var existingDocs = await _db.Documents

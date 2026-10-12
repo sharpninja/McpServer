@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.Support.Mcp.Services;
 

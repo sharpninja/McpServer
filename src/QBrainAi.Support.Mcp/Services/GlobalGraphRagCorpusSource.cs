@@ -2,6 +2,9 @@ using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Support.Mcp.Services.AgentHelp;
 using Microsoft.Extensions.Options;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Options;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.Support.Mcp.Services;
 

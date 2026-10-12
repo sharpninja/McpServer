@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using QBrainAi.Support.Mcp.Indexing;
+using QBrainAi.Support.Mcp.Storage.Indexing;
 using QBrainAi.Support.Mcp.Ingestion;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Options;
@@ -14,8 +14,14 @@ using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.Support.Mcp.Storage.Models;
+using QBrainAi.GraphRag.Options;
+using QBrainAi.Support.Mcp.Storage.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.GraphRag.Services;
 
 /// <summary>
 /// Orchestrates workspace-scoped GraphRAG lifecycle and routes backend execution to adapter implementations.

@@ -1,4 +1,6 @@
-namespace QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
+
+namespace QBrainAi.Support.Mcp.Models;
 
 /// <summary>
 /// FR-MCP-TRIAGE-001: Workspace-scoped incidental bug report submitted to the triage intake.

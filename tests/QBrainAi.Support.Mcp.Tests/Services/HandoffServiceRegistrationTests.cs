@@ -3,6 +3,7 @@ using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

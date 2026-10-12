@@ -2,59 +2,58 @@
 
 #nullable disable
 
-namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
+namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations;
+
+/// <inheritdoc />
+public partial class AddSessionLogTurnPlanFileAndTodoId : Migration
 {
     /// <inheritdoc />
-    public partial class AddSessionLogTurnPlanFileAndTodoId : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "PlanFile",
-                table: "SessionLogTurns",
-                type: "character varying(2048)",
-                maxLength: 2048,
-                nullable: false,
-                defaultValue: "None");
+        migrationBuilder.AddColumn<string>(
+            name: "PlanFile",
+            table: "SessionLogTurns",
+            type: "character varying(2048)",
+            maxLength: 2048,
+            nullable: false,
+            defaultValue: "None");
 
-            migrationBuilder.AddColumn<string>(
-                name: "TodoId",
-                table: "SessionLogTurns",
-                type: "character varying(128)",
-                maxLength: 128,
-                nullable: false,
-                defaultValue: "None");
+        migrationBuilder.AddColumn<string>(
+            name: "TodoId",
+            table: "SessionLogTurns",
+            type: "character varying(128)",
+            maxLength: 128,
+            nullable: false,
+            defaultValue: "None");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SessionLogTurns_PlanFile",
-                table: "SessionLogTurns",
-                column: "PlanFile");
+        migrationBuilder.CreateIndex(
+            name: "IX_SessionLogTurns_PlanFile",
+            table: "SessionLogTurns",
+            column: "PlanFile");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_SessionLogTurns_TodoId",
-                table: "SessionLogTurns",
-                column: "TodoId");
-        }
+        migrationBuilder.CreateIndex(
+            name: "IX_SessionLogTurns_TodoId",
+            table: "SessionLogTurns",
+            column: "TodoId");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropIndex(
-                name: "IX_SessionLogTurns_PlanFile",
-                table: "SessionLogTurns");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropIndex(
+            name: "IX_SessionLogTurns_PlanFile",
+            table: "SessionLogTurns");
 
-            migrationBuilder.DropIndex(
-                name: "IX_SessionLogTurns_TodoId",
-                table: "SessionLogTurns");
+        migrationBuilder.DropIndex(
+            name: "IX_SessionLogTurns_TodoId",
+            table: "SessionLogTurns");
 
-            migrationBuilder.DropColumn(
-                name: "PlanFile",
-                table: "SessionLogTurns");
+        migrationBuilder.DropColumn(
+            name: "PlanFile",
+            table: "SessionLogTurns");
 
-            migrationBuilder.DropColumn(
-                name: "TodoId",
-                table: "SessionLogTurns");
-        }
+        migrationBuilder.DropColumn(
+            name: "TodoId",
+            table: "SessionLogTurns");
     }
 }

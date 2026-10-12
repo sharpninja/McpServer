@@ -1,7 +1,11 @@
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Options;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.GraphRag.Services;
 
 /// <summary>
 /// Backend adapter abstraction for GraphRAG runtime operations.

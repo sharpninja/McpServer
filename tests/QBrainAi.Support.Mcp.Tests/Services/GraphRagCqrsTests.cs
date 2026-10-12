@@ -6,6 +6,8 @@ using QBrainAi.Support.Mcp.Services;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

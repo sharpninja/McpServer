@@ -1,6 +1,8 @@
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.Support.Mcp.Controllers;
 

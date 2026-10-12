@@ -1,4 +1,6 @@
-namespace QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
+
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// TR-MCP-MEMORY-BENCH-002-02: Documented adapter interface used by the harness.

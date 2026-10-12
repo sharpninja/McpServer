@@ -1,6 +1,9 @@
 using QBrainAi.Cqrs;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Queries;
 
 /// <summary>
 /// FR-MCP-MEMORY-011 / FR-MCP-MEMORY-014-14 / TR-MCP-MEMORY-SEARCH-002:

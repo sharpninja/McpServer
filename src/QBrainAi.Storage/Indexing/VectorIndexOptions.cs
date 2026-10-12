@@ -1,4 +1,4 @@
-namespace QBrainAi.Support.Mcp.Indexing;
+namespace QBrainAi.Support.Mcp.Storage.Indexing;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: Configuration options for the HNSW vector index.

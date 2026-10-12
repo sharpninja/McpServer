@@ -2,6 +2,7 @@ using QBrainAi.Support.Mcp.Ingestion;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests;
 

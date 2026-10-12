@@ -4,6 +4,8 @@ using QBrainAi.TransactionSecurity.Models;
 using QBrainAi.TransactionSecurity.Options;
 using QBrainAi.TransactionSecurity.Services;
 using Microsoft.Extensions.Options;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.Support.Mcp.Services;
 

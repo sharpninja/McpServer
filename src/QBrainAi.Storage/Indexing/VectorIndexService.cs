@@ -4,7 +4,7 @@ using HNSWIndex.Metrics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace QBrainAi.Support.Mcp.Indexing;
+namespace QBrainAi.Support.Mcp.Storage.Indexing;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: HNSW-based vector index using HnswIndex 1.6.0 NuGet.

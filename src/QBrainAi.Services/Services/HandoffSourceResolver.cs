@@ -3,6 +3,7 @@ using System.Text;
 using QBrainAi.Support.Mcp.Requirements;
 using QBrainAi.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Services;
 

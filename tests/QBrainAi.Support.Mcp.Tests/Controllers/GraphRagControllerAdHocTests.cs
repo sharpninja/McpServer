@@ -4,6 +4,8 @@ using QBrainAi.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Xunit;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Controllers;
 

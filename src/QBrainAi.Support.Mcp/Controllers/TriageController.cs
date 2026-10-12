@@ -2,6 +2,7 @@ using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Controllers;
 

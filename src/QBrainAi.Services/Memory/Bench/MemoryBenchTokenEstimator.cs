@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-018-34 / TR-MCP-MEMORY-BENCH-002-11:

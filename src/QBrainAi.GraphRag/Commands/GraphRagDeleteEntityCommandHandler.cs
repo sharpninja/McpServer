@@ -1,5 +1,6 @@
 using QBrainAi.Cqrs;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.GraphRag.Commands;
 

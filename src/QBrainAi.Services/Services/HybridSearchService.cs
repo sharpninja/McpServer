@@ -1,7 +1,7 @@
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using QBrainAi.Support.Mcp.Storage.Indexing;
 
 namespace QBrainAi.Support.Mcp.Services;
 

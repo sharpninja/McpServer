@@ -2,6 +2,7 @@
 using QBrainAi.Support.Mcp.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.Support.Mcp.Services;
 

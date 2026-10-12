@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Models;
 
 /// <summary>TR-HANDOFF-CONTRACT-001: Source kinds accepted by handoff ingestion.</summary>
 [JsonConverter(typeof(HandoffStrictStringEnumConverter<HandoffSourceKind>))]

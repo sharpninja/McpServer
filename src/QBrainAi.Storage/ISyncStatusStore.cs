@@ -1,4 +1,6 @@
-namespace QBrainAi.Support.Mcp.Ingestion;
+using QBrainAi.Support.Mcp.Storage.Ingestion;
+
+namespace QBrainAi.Support.Mcp.Storage;
 
 /// <summary>
 /// TR-PLANNED-CORE-013, TR-MCP-MT-004: Stores last sync run result per workspace for sync.status endpoint.

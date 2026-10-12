@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Models;
 
 /// <summary>Memory visibility scope.</summary>
 [JsonConverter(typeof(JsonStringEnumConverter<MemoryScope>))]

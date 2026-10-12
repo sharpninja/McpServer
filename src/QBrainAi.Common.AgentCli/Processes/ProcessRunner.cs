@@ -3,7 +3,7 @@ using QBrainAi.Common.AgentCli;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Common.AgentCli.Processes;
 
 /// <summary>
 /// Configuration for <see cref="ProcessRunner"/>. Provides the GitHub token

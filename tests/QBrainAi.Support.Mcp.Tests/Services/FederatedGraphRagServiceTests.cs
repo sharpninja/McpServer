@@ -1,4 +1,3 @@
-using QBrainAi.Support.Mcp.GraphRag;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Support.Mcp.Services;
@@ -6,6 +5,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using QBrainAi.GraphRag.Services;
+using QBrainAi.GraphRag.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

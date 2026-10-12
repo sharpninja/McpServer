@@ -1,6 +1,7 @@
 using System.Text.Json;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-018-47 / FR-MCP-MEMORY-018-50: H7a Grok value-gate policy.

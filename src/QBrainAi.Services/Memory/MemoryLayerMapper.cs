@@ -1,7 +1,9 @@
 using System.Text.Json;
 using QBrainAi.Support.Mcp.Storage.Entities;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory;
 
 /// <summary>
 /// FR-MCP-MEMORY-010 / TR-MCP-MEMORY-MODEL-002: Maps multi-layer memory fields and tags JSON.

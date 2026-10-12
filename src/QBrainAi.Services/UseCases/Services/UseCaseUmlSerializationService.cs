@@ -1,7 +1,7 @@
 using System.Text;
-using QBrainAi.Support.Mcp.UseCases.Models;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.UseCases;
+namespace QBrainAi.Support.Mcp.UseCases.Services;
 
 /// <summary>
 /// FR-MCP-USECASE-013 / FR-MCP-USECASE-014 / TR-MCP-USECASE-014:

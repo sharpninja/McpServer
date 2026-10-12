@@ -1,7 +1,11 @@
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Options;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.GraphRag.Services;
 
 /// <summary>
 /// Internal default GraphRAG adapter used when no external backend command is configured.

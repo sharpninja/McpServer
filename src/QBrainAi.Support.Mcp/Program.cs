@@ -16,7 +16,6 @@ using QBrainAi.Support.Mcp.Products;
 using QBrainAi.SessionLog.Transcripts;
 using QBrainAi.Support.Mcp.DatabaseMaintenance;
 using QBrainAi.Support.Mcp.Ingestion;
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Logging;
 using QBrainAi.Support.Mcp.McpStdio;
 using QBrainAi.Support.Mcp.Middleware;
@@ -46,6 +45,13 @@ using ModelContextProtocol.AspNetCore;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.File;
+using QBrainAi.Support.Mcp.Storage.Indexing;
+using QBrainAi.GraphRag.Options;
+using QBrainAi.Common.AgentCli.Processes;
+using QBrainAi.GraphRag.Services;
+using QBrainAi.Support.Mcp.Memory.Commands;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 if (IsStdioTransportRequested(args))
 {
@@ -618,10 +624,10 @@ builder.Services.AddSingleton<IMcpErrorClassifier, McpErrorClassifierAdapter>();
 
 // FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
 // Register the HTTP client and data client used by federation decorators.
-builder.Services.AddHttpClient(QBrainAi.Support.Mcp.FederationDataClient.HttpClientName);
-builder.Services.AddSingleton<QBrainAi.Support.Mcp.FederationDataClient>();
-builder.Services.AddSingleton<IFederationDataClient>(sp => sp.GetRequiredService<QBrainAi.Support.Mcp.FederationDataClient>());
-builder.Services.AddSingleton<QBrainAi.Support.Mcp.GraphRag.IGraphRagFederationClient>(sp => sp.GetRequiredService<QBrainAi.Support.Mcp.FederationDataClient>());
+builder.Services.AddHttpClient(QBrainAi.Support.Mcp.Services.FederationDataClient.HttpClientName);
+builder.Services.AddSingleton<QBrainAi.Support.Mcp.Services.FederationDataClient>();
+builder.Services.AddSingleton<IFederationDataClient>(sp => sp.GetRequiredService<QBrainAi.Support.Mcp.Services.FederationDataClient>());
+builder.Services.AddSingleton<QBrainAi.GraphRag.Services.IGraphRagFederationClient>(sp => sp.GetRequiredService<QBrainAi.Support.Mcp.Services.FederationDataClient>());
 
 // Decorate ITodoService with federated merge.
 {
@@ -672,11 +678,11 @@ builder.Services.AddSingleton<QBrainAi.Support.Mcp.GraphRag.IGraphRagFederationC
     builder.Services.AddScoped<IGraphRagService>(sp =>
     {
         var inner = (IGraphRagService)ActivatorUtilities.CreateInstance(sp, innerType);
-        var federated = new QBrainAi.Support.Mcp.GraphRag.FederatedGraphRagService(
+        var federated = new QBrainAi.GraphRag.Services.FederatedGraphRagService(
             inner,
             sp.GetRequiredService<FederationRegistry>(),
-            sp.GetRequiredService<QBrainAi.Support.Mcp.GraphRag.IGraphRagFederationClient>(),
-            sp.GetRequiredService<ILogger<QBrainAi.Support.Mcp.GraphRag.FederatedGraphRagService>>());
+            sp.GetRequiredService<QBrainAi.GraphRag.Services.IGraphRagFederationClient>(),
+            sp.GetRequiredService<ILogger<QBrainAi.GraphRag.Services.FederatedGraphRagService>>());
         return new TransactionGatedGraphRagService(
             federated,
             sp.GetService<ITurnTransactionCoordinator>(),

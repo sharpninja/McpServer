@@ -1,5 +1,6 @@
 using QBrainAi.Cqrs;
 using QBrainAi.Support.Mcp.Models;
+using QBrainAi.GraphRag.Models;
 
 namespace QBrainAi.GraphRag.Queries;
 

@@ -1,6 +1,6 @@
 using QBrainAi.Client;
 using QBrainAi.QBAgent.Tools;
-using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.QBAgent.Tests.Tools;
 

@@ -13,7 +13,7 @@ public sealed class MemoryMcpSchemaTests
     public void UnknownFields_Policy()
     {
         var root = MemoryS5Catalog.FindRepoRoot();
-        var policyType = typeof(QBrainAi.Support.Mcp.Services.MemoryLimits).Assembly.GetTypes()
+        var policyType = typeof(QBrainAi.Support.Mcp.Memory.Models.MemoryLimits).Assembly.GetTypes()
             .FirstOrDefault(type => type.Name == "MemoryMcpSchemaPolicy");
         Assert.NotNull(policyType);
         var additional = policyType!.GetField("AdditionalPropertiesAllowed", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);

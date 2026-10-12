@@ -1,7 +1,8 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-018-01 / TR-MCP-MEMORY-BENCH-002-04: Loads and validates the prompt pack.

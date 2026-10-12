@@ -1,8 +1,12 @@
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Memory.Queries;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory;
 
 /// <summary>
 /// FR-MCP-MEMORY-012 / TEST-MCP-MEMORY-012: CQRS-owned explore, explicit-edge, and Hebbian

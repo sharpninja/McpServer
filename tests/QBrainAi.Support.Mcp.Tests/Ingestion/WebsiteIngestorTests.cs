@@ -1,13 +1,14 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Ingestion;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Indexing;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 

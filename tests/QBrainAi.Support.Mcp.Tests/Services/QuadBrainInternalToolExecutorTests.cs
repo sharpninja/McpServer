@@ -4,6 +4,10 @@ using QBrainAi.Support.Mcp.Requirements.Models;
 using QBrainAi.Support.Mcp.Services;
 using NSubstitute;
 using Xunit;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.Common.AgentCli.Processes;
+using QBrainAi.GraphRag.Services;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

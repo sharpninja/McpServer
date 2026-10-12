@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory;
 
 /// <summary>
 /// FR-MCP-MEMORY-010-05: Secrets/policy rejection for memory payloads.

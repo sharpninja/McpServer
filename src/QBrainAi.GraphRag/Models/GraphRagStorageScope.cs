@@ -1,4 +1,7 @@
-namespace QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp;
+
+namespace QBrainAi.GraphRag.Models;
 
 /// <summary>
 /// TR-MCP-GRAPHRAG-GLOBAL-001: Identifies whether GraphRAG artifacts are workspace-local or host-global.

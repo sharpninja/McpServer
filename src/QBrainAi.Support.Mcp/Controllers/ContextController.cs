@@ -14,6 +14,11 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.Support.Mcp.Storage.Models;
+using QBrainAi.GraphRag.Options;
+using QBrainAi.GraphRag.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
 
 namespace QBrainAi.Support.Mcp.Controllers;
 

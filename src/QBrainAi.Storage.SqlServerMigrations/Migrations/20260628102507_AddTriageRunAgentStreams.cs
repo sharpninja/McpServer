@@ -2,47 +2,46 @@
 
 #nullable disable
 
-namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations
+namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations;
+
+/// <inheritdoc />
+public partial class AddTriageRunAgentStreams : Migration
 {
     /// <inheritdoc />
-    public partial class AddTriageRunAgentStreams : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<int>(
-                name: "AgentExitCode",
-                table: "TriageResearchRuns",
-                type: "int",
-                nullable: true);
+        migrationBuilder.AddColumn<int>(
+            name: "AgentExitCode",
+            table: "TriageResearchRuns",
+            type: "int",
+            nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "AgentStderr",
-                table: "TriageResearchRuns",
-                type: "nvarchar(max)",
-                nullable: true);
+        migrationBuilder.AddColumn<string>(
+            name: "AgentStderr",
+            table: "TriageResearchRuns",
+            type: "nvarchar(max)",
+            nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "AgentStdout",
-                table: "TriageResearchRuns",
-                type: "nvarchar(max)",
-                nullable: true);
-        }
+        migrationBuilder.AddColumn<string>(
+            name: "AgentStdout",
+            table: "TriageResearchRuns",
+            type: "nvarchar(max)",
+            nullable: true);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "AgentExitCode",
-                table: "TriageResearchRuns");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "AgentExitCode",
+            table: "TriageResearchRuns");
 
-            migrationBuilder.DropColumn(
-                name: "AgentStderr",
-                table: "TriageResearchRuns");
+        migrationBuilder.DropColumn(
+            name: "AgentStderr",
+            table: "TriageResearchRuns");
 
-            migrationBuilder.DropColumn(
-                name: "AgentStdout",
-                table: "TriageResearchRuns");
-        }
+        migrationBuilder.DropColumn(
+            name: "AgentStdout",
+            table: "TriageResearchRuns");
     }
 }

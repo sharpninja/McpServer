@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 using TxnFailureReason = QBrainAi.TransactionSecurity.Models.TransactionFailureReason;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;

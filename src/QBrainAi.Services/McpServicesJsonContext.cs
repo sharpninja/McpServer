@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Text.Json;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using System.Text.Json.Serialization;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp;
 
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, PropertyNameCaseInsensitive = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
 [JsonSerializable(typeof(List<string>))]

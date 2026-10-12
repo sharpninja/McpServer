@@ -1,7 +1,7 @@
 using QBrainAi.Client;
 using QBrainAi.McpAgent.PowerShellSessions;
-using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.AI;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.QBAgent.Tools;
 

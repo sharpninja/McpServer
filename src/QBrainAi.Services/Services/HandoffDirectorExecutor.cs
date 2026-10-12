@@ -1,4 +1,5 @@
 using QBrainAi.Cqrs.Mvvm;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Services;
 

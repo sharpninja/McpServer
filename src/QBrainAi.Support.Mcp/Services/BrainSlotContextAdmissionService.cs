@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Storage.Indexing;
 
 namespace QBrainAi.Support.Mcp.Services;
 

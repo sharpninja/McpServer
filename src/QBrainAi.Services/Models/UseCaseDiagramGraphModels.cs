@@ -1,4 +1,6 @@
-namespace QBrainAi.Support.Mcp.UseCases.Models;
+using QBrainAi.Support.Mcp.UseCases;
+
+namespace QBrainAi.Support.Mcp.Models;
 
 /// <summary>
 /// FR-MCP-USECASE-012 / TR-MCP-USECASE-011: Persisted UML use-case diagram graph (schema v1).

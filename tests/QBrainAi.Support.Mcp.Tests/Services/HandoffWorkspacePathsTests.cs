@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using MsOptions = Microsoft.Extensions.Options.Options;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

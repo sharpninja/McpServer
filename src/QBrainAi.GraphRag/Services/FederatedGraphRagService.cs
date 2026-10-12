@@ -1,8 +1,10 @@
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging;
+using QBrainAi.Support.Mcp;
+using QBrainAi.GraphRag.Models;
 
-namespace QBrainAi.Support.Mcp.GraphRag;
+namespace QBrainAi.GraphRag.Services;
 
 /// <summary>
 /// FR-MCP-084: Decorator that wraps an <see cref="IGraphRagService"/> to merge local

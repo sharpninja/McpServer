@@ -1,3 +1,5 @@
+using QBrainAi.Common.AgentCli.Processes;
+
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>FR-MCP-QBEXEC-002: In-process PowerShell session map used by QuadBrain mcp_powershell_* tools.</summary>

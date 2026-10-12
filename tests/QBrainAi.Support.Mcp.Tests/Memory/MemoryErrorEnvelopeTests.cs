@@ -3,6 +3,7 @@ using QBrainAi.Support.Mcp.Controllers;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using QBrainAi.Support.Mcp.Memory.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 

@@ -1,5 +1,7 @@
 using System.Text.Json;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Bench;
+using QBrainAi.Support.Mcp.Memory.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
@@ -26,7 +28,7 @@ public sealed class MemoryPluginSyncTests
     [Fact]
     public void MissingVerb_FailsValidation()
     {
-        var validatorType = typeof(QBrainAi.Support.Mcp.Services.MemoryLimits).Assembly.GetTypes()
+        var validatorType = typeof(QBrainAi.Support.Mcp.Memory.Models.MemoryLimits).Assembly.GetTypes()
             .FirstOrDefault(type => type.Name == "MemoryPluginVerbChecklist");
         Assert.NotNull(validatorType);
         var validate = validatorType!.GetMethod("Validate", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);

@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Text.Json;
 using QBrainAi.Support.Mcp.Services;
 using ModelContextProtocol.Server;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.McpStdio;
 

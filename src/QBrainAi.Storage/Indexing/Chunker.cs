@@ -1,8 +1,8 @@
 using System.Security.Cryptography;
 using System.Text;
-using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Storage.Models;
 
-namespace QBrainAi.Support.Mcp.Indexing;
+namespace QBrainAi.Support.Mcp.Storage.Indexing;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: Splits content into fixed-size chunks for full-text and vector indexing.

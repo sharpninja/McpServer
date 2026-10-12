@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Options;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.Support.Mcp.Services;
 

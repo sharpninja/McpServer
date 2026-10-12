@@ -6,6 +6,7 @@ using QBrainAi.Support.Mcp.Products.Models;
 using QBrainAi.Support.Mcp.Products.Queries;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Controllers;
 

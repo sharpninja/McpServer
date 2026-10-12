@@ -4,11 +4,12 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using QBrainAi.Support.Mcp.Storage.Indexing;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Ingestion;
 

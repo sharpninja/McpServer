@@ -4,10 +4,11 @@ using QBrainAi.Cqrs;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
-using QBrainAi.Support.Mcp.UseCases.Models;
 using QBrainAi.Support.Mcp.UseCases.Queries;
 using Xunit;
 using Xunit.Sdk;
+using QBrainAi.Support.Mcp.Storage.Services;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
