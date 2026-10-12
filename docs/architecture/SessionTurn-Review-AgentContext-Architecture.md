@@ -3,14 +3,14 @@
 
 Status: architecture documentation of the merged plan PLAN-SESSIONTURNREVIEW-001 (`docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md`), pending operator approval of the merged plan. Operator directives (2026-10-11, verbatim): "Integrate attached to current plan.", "Reconstruct plan with added requirements", "Also publish the doc to develop", "Outline now, catalog in P0", "No new code until I approve merged plan.", "I want every model defined.  I want every unit of work request and respone defined.  I want every endpoint defined.", and "I want a single, complete activity diagram (mermaid) for every unit of work.  I want sequence diagrams for submitting each request type and processing every response.  I want a md doc describing the who plan as architecture documentation."; for plugins and scripts, "You should be designing all scripts and script tools around PowerShell and only PowerShell.", "This should have already been the standard for plugins.", and "I have not chosen PowerShell for scripting because of Microsoft or Windows. I have chosen it because it is simply the best tool for the job."
 
-This document describes the whole merged plan as architecture: the components, the data each part owns, every unit of work with its request, response, and error contract, one complete activity diagram per unit of work, and sequence diagrams for submitting each request type and processing each response. The plan document remains the authority for slices, gates, tests, and acceptance criteria; the agent-context contracts are specified in `docs/Stateless-Agent-Context-Management.md`, and this document repeats them so it stands alone.
+This document describes the whole merged plan as architecture: the components, the data each part owns, every unit of work with its request, response, and error contract, one complete activity diagram per unit of work, and sequence diagrams for submitting each request type and processing each response. The plan document remains the authority for the scope entries, the four execution phases, gates, tests, and acceptance criteria; the agent-context contracts are specified in `docs/Stateless-Agent-Context-Management.md`, and this document repeats them so it stands alone.
 
 How to read the diagrams:
 
 - Activity diagrams are Mermaid flowcharts read top to bottom. A rounded terminal is a start or an end, a diamond is a decision, a rectangle is an action, and every error exit is drawn and ends in a terminal that names the error code.
 - Sequence diagrams show who sends what. Each `alt` block lists every response the caller can receive and how the caller processes it.
 - Three kinds of activity diagram: a unit of work is exactly one CQRS command or query with its handler (operator, 2026-10-11: "I want to be clear, unit of work maps to one CQRS handler") and is labelled by the record's name; a policy is a rule a handler applies (for example CompletionGate); a process is plugin, host, REPL, or build orchestration that calls handlers (for example ApplyArrivalBridgeRecord). All labels are meaningful names (operator: "Please use human-readable, meaningful identifiers.").
-- Requirement ids in brackets name the functional requirement the unit of work realizes. Ids of the form `FR-MCP-AGENTCONTEXT-*` are reserved for P0, where the agent-context catalog is created.
+- Requirement ids in brackets name the functional requirement the unit of work realizes. Ids of the form `FR-MCP-AGENTCONTEXT-*` are reserved for Phase 1 (the plan's P0 steps 1-9), where the agent-context catalog is created.
 
 ## 1. Goals
 
@@ -72,21 +72,21 @@ flowchart LR
 
 - Workspace scoping: every request is scoped to one workspace through the `X-Workspace-Path` header (REST), the `workspacePath` parameter (MCP tools, REPL), or `MCP_WORKSPACE_PATH` (plugins). Every stored record carries its `WorkspaceId`, and no read ever crosses workspaces.
 - Authentication: `X-Api-Key` (or `api_key`) from the workspace marker. Plugins never call REST directly; they use the REPL wrapper.
-- Plugin scripting: PowerShell only (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell."). `plugins/core/lib-ps` is the one plugin core for all nine hosts; cline, cline-v2, and opencode keep only the adapter entry file their host API forces, which forwards host events to `lib/plugin-hook.ps1` and tool calls to `lib/Invoke-McpPlugin.ps1` and registers the tools listed in `lib/tool-descriptors.json`; Pester is the only plugin test runner.
+- Plugin scripting: PowerShell only (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell."). `plugins/core/lib-ps` is the one plugin core for all nine hosts; cline, cline-v2, and opencode keep only the adapter entry file their host API forces, which forwards each host hook invocation (`{ input, output }`) to `lib/plugin-hook.ps1 -HostEvent` and applies the returned `output`, forwards each tool call (`{ params, hostContext }`) to `lib/Invoke-McpPlugin.ps1 -InvocationFromStdin`, and registers the tools listed in `lib/tool-descriptors.json`; the host's own build compiles that one file into the git-ignored `dist/`; Pester is the only plugin test runner.
 - Routes: every REST route exists under `/qbrainai/...` with the legacy alias `/mcpserver/...`.
-- Errors: every REST error is the `ClassifiedError` problem+json body `{ "type", "title", "status", "detail", "code", "message", "retryable", "details" }` emitted through `McpErrorClassifier` (`SessionLogController.cs` and the agent-context controller); `code` carries the unit's error code (for example `review_status_conflict`, `agent_context_budget_exceeded`), the HTTP status is the one stated per unit (400 validation, 403 not allowed, 404 not found, 409 conflict or disabled, 422 semantic refusal), and MCP tools return `{ code, error, message, retryable, details }`. The REPL error envelope is `type: error` with `code`, `message`, and `retryable`.
+- Errors: every REST error of a unit this plan adds or changes is the `ClassifiedError` problem+json body `{ "type", "title", "status", "detail", "code", "message", "retryable", "details" }` emitted through `McpErrorClassifier` (`SessionLogController.cs` and the agent-context controller); `code` carries the unit's error code (for example `review_status_conflict`, `agent_context_budget_exceeded`), the HTTP status is the one stated per unit (400 validation, 403 not allowed, 404 not found, 409 conflict or disabled, 422 semantic refusal), and MCP tools return `{ code, error, message, retryable, details }`. Existing routes whose behavior this plan does not change keep today's error bodies (for example the `{ error }` 400 of the dialog route and the "Invalid session identifier." problem of the open and title routes), stated per unit. The REPL error envelope is `type: error` with `code`, `message`, and `retryable`.
 - Identifiers: every identifier is human-readable and meaningful (operator, 2026-10-11: "Please use human-readable, meaningful identifiers."). Session ids `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>`; server-minted request ids `req-<yyyyMMddTHHmmssZ>-<8 hex>`; agent-context record keys derive from the turn and session they belong to (section 6.3): packages `pkg-<requestId>-<nn>`, responses `rsp-<requestId>-<nn>`, grades `grd-<responseId>-<kind>-<nn>`, relationships `rel-<type>-<yyyyMMddTHHmmssZ>-<nn>`, HV requests `hvr-<sessionId>-<yyyyMMddTHHmmssZ>`. Document labels use the command, query, process, and policy names.
 - Root ids: every record carries the root ids of its parents (workspace, MCP session, request, and for agent context the package and response).
 - Secrets: no API key, token, password, or credential is ever stored in a turn field, a context package, or a response; the session-log sanitizer and the agent-context secret filter redact on write and on every read surface.
-- Process: every slice follows the Byrd Development Process v4 (requirements, tests red, mocks green, implementation green, full gates with zero failures and zero skips) and ends with a Codex gpt-6-astra max hostile validation at accuracy and completeness of at least 98 with every claim PASS. Builds and tests run as Nuke targets natively on Windows or Linux; GitHub Actions and Azure Pipelines are not part of any requirement or process; Octopus (container on LAB-OMARCHY) is used only for releases.
+- Process: the plan runs in the four execution phases of section 8 under the Byrd Development Process v4 (requirements, tests red, mocks green, implementation green, full gates with zero failures and zero skips); each prerequisite, the end of Phase 1, Phase 2, and Phase 3, each bounded context at the end of its Phase 4 work package, and the phase-wide Phase 4 HV end with a Codex gpt-6-astra max hostile validation at accuracy and completeness of at least 98 with every claim PASS. Builds and tests run as Nuke targets natively on Windows or Linux; GitHub Actions and Azure Pipelines are not part of any requirement or process; Octopus (container on LAB-OMARCHY) is used only for releases.
 
 ## 4. Phase A: correct, independent turn logging
 
 ### 4.1 Components and data
 
-- Server: `SessionLogService.SubmitWithOutcomesAsync` (per-turn outcomes), `ISessionLogService.MintTurnAsync`, `ISessionLogRequestIdMinter`, `ISessionLogTurnUpsertGuard`, `SessionLogTurnEntity.IngressNonce` (unique filtered index per MCP session).
+- Server: `SessionLogService.SubmitWithOutcomesAsync` (per-turn outcomes), `ISessionLogService.MintTurnAsync`, `ISessionLogRequestIdMinter`, `ISessionLogTurnUpsertGuard`, `SessionLogTurnEntity.IngressNonce` (unique filtered index on (WorkspaceId, SessionLogId, IngressNonce) where not null, and a second unique filtered index on (WorkspaceId, RequestId) where IngressNonce is not null, so minted request ids are unique across the workspace's sessions while legacy rows are untouched; TR-MCP-SESSIONTURN-004 AC-006).
 - PowerShell plugin core (`plugins/core/lib-ps`): prompt hook, arrival bridge (claude-code, claude-cowork), `Sync-PluginArrivalLog`, verb binding (`New-ReplInvocationBinding`, `Resolve-ReplTargetTurn`), truthful persist (`Get-ReplTurnWriteOutcome`, `Invoke-ReplPersistTurn`), failsafe and alias journal, Stop gate (`Get-PluginStopGateTurns`, pure `Get-PluginStopGateFindings`).
-- TypeScript-host bindings (cline, cline-v2, opencode) in the same PowerShell core, reached through each host's logic-free adapter, which forwards host events to `lib/plugin-hook.ps1` and tool calls to `lib/Invoke-McpPlugin.ps1` and registers the tools listed in `lib/tool-descriptors.json` (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell."); `plugins/core/lib-node` receives no new work and is retired.
+- TypeScript-host bindings (cline, cline-v2, opencode) in the same PowerShell core, reached through each host's logic-free adapter, which forwards each host hook invocation (`{ input, output }`) to `lib/plugin-hook.ps1 -HostEvent` and applies the returned `output`, forwards each tool call (`{ params, hostContext }`) to `lib/Invoke-McpPlugin.ps1 -InvocationFromStdin`, and registers the tools listed in `lib/tool-descriptors.json` (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell."); `plugins/core/lib-node` receives no new work and is retired.
 - Plugin per-host-session state (one directory per host session key under the plugin cache):
   - `turns/<requestId>.yaml` with its own lock `turns/<requestId>.lock`: one file per turn.
   - `sessions/<hostSessionKey>/turn-state.yaml`: `writeTarget { requestId, deliveredAtUtc, source }`, `openDelivered [requestId]`, `queue [{ kind, requestId, nonce, enqueueOffset, enqueueTimestamp, promptSha256, state, stateOffset, mintedAtUtc }]`, `appliedThroughOffset`, `mcpSessionId`, `ledger [...]`, `unsupportedSince { causeOffset, causeOperation, reason }`; every entry carries the root ids; written by one atomic replace under `turn-open.lock`.
@@ -145,11 +145,12 @@ flowchart TD
 
 #### SubmitSessionLogCommand: submit a session log with per-turn outcomes [FR-MCP-SESSIONTURN-004]
 
-- Handler: `SubmitSessionLogCommand(string WorkspacePath, UnifiedSessionLogDto Log) : ICommand<SessionLogSubmitResult>` and `SubmitSessionLogCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/SubmitSessionLogCommand.cs`, delegating to `ISessionLogService.SubmitWithOutcomesAsync` and applying policy TerminalTurnOutcomeGuard per turn.
-- Surfaces: `POST /qbrainai/sessionlog` (existing route), MCP `sessionlog_submit`, client `SubmitAsync`, REPL submit.
+- Handler: `SubmitSessionLogCommand(string WorkspacePath, UnifiedSessionLogDto Log) : ICommand<SessionLogSubmitResult>` and `SubmitSessionLogCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/SubmitSessionLogCommand.cs`, delegating to `ISessionLogService.SubmitWithOutcomesAsync` and applying, per turn, policy TerminalTurnOutcomeGuard, policy RequestClassification when the turn carries `requestClass`, and policy CompletionGate when the write moves the turn to `completed` or `failed` (from S10).
+- Surfaces: `POST /qbrainai/sessionlog` (existing route), MCP `sessionlog_submit`, client `SubmitAsync`, REPL submit. This is the route every turn verb already uses: the plugin verbs `appendActions`, `appendDecisions`, `updateTurn`, `completeTurn`, and `failTurn` send the one bound turn in a session document (`Invoke-ReplPersistTurn`, `plugins/core/lib-ps/repl-invoke.ps1:1602-1736`, method `client.SessionLog.SubmitAsync`; process PersistTurnWriteWithReceipt), and so do the REPL workflow (`src/QBrainAi.Repl.Core/SessionLogWorkflow.cs`) and McpAgent (`src/QBrainAi.McpAgent/SessionLog/SessionLogWorkflow.cs`). Dialog and titles use their own routes (AppendTurnDialogCommand, SetTurnTitleCommand, SetSessionTitleCommand).
 - Request: the unified session-log document (`UnifiedSessionLogDto`) with its turns.
 - Response 201 `SessionLogSubmitResult`: existing fields plus `turns: [{ requestId, outcome, storedStatus, reason }]`, where `outcome` is `created`, `merged`, or `skipped_terminal`. MCP returns `{ success, id, turns }`. The status code stays 201.
-- Rules: an identical resubmit is `merged` with reason `no_change`; duplicate request ids in one submission apply last-wins with one outcome each; a write that would move a terminal turn is `skipped_terminal` and changes nothing; there is no `skipped_duplicate` outcome.
+- Rules: an identical resubmit is `merged` with reason `no_change`; duplicate request ids in one submission apply last-wins with one outcome each; a write whose status would move a terminal turn (the stored status is `completed`, `failed`, or `canceled`, and the incoming status is supplied, differs, and is not terminal, or the write is a superseded hook persist; today's guard at `SessionLogService.cs:1611-1618`, which the seam `ISessionLogTurnUpsertGuard` replaces unchanged, TR-MCP-SESSIONTURN-004 AC-002) is `skipped_terminal` and changes nothing, while a write that omits the status merges additively even on a terminal turn (omitted-status enrichment, FR-MCP-SESSIONTURN-004-AC003); there is no `skipped_duplicate` outcome.
+- Errors: 400 `validation_error`; 400 `request_class_invalid`; 400 `session_turn_completion_gate` (from S10: a turn of the submission moves to `completed` or `failed` without meeting the gate; the whole submission is rejected atomically and the error names that `requestId` and its missing items).
 
 ```mermaid
 flowchart TD
@@ -159,15 +160,25 @@ flowchart TD
     D --> L["For each turn in the submission"]
     L --> F{"Turn exists in store?"}
     F -->|no| CR["Insert turn: outcome created"]
-    F -->|yes| T{"Stored turn terminal and incoming write would change it?"}
+    F -->|yes| T{"Policy TerminalTurnOutcomeGuard: stored status terminal and incoming status supplied, different, and not terminal, or a superseded hook persist?"}
     T -->|yes| SK["Leave stored turn unchanged: outcome skipped_terminal with storedStatus and reason"]
     T -->|no| Q{"Incoming equals stored?"}
     Q -->|yes| NC["outcome merged, reason no_change"]
-    Q -->|no| MG["Merge fields: outcome merged"]
-    CR --> NX{"More turns?"}
+    Q -->|no| MG["Merge fields additively: outcome merged"]
+    CR --> RC{"Turn carries requestClass?"}
+    MG --> RC
+    RC -->|yes| PC["Policy RequestClassification: normalize, Chore flip on an in-progress turn"]
+    PC --> PCV{"Class valid?"}
+    PCV -->|no| E3(["400 request_class_invalid: change tracker cleared, nothing saved"])
+    PCV -->|yes| TRN
+    RC -->|no| TRN{"Write moves the turn to completed or failed?"}
+    TRN -->|yes| GT["Policy CompletionGate (from S10)"]
+    GT --> GTR{"Gate met?"}
+    GTR -->|no| E4(["400 session_turn_completion_gate naming the requestId and its missing items: change tracker cleared, nothing saved"])
+    GTR -->|yes| NX
+    TRN -->|no| NX{"More turns?"}
     SK --> NX
     NC --> NX
-    MG --> NX
     NX -->|yes| L
     NX -->|no| SV["Save changes in one transaction"]
     SV --> R(["201 with turns outcome list"])
@@ -176,7 +187,7 @@ flowchart TD
 #### UpsertSessionTurnCommand: append or merge one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-006, FR-MCP-SESSIONTURN-007]
 
 - Handler: `UpsertSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, SessionLogTurnUpsertRequest Request) : ICommand<SessionLogTurnWriteResult>` and `UpsertSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/UpsertSessionTurnCommand.cs`, delegating to `ISessionLogService.SubmitWithOutcomesAsync` for one turn.
-- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/turn` (alias `/mcpserver/...`), client `UpsertTurnAsync`, no dedicated MCP tool (MCP callers write turns through `sessionlog_submit`, SubmitSessionLogCommand, and `sessionlog_replace_turn`, ReplaceSessionTurnCommand), REPL and plugin verbs `appendActions`, `appendDialog`, `appendDecisions`, `updateTurn`, `setTurnTitle` (each builds this request with its binding, process BindVerbToTurn).
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/turn` (alias `/mcpserver/...`), client `UpsertTurnAsync`, REPL `client.SessionLog.UpsertTurnAsync`, no dedicated MCP tool (MCP callers write turns through `sessionlog_submit`, SubmitSessionLogCommand, and `sessionlog_replace_turn`, ReplaceSessionTurnCommand). The plugin, REPL workflow, and McpAgent verbs do not use this route; they persist through SubmitSessionLogCommand.
 - Request `SessionLogTurnUpsertRequest`: the turn's `requestId` and the fields to add or merge (actions, dialog, `designDecisions`, `requirementsDiscovered`, `blockers`, title, `requestClass` from Phase B, status).
 - Response `SessionLogTurnWriteResult { requestId, outcome, storedStatus, reason }` with `outcome` in `created`, `merged`, `skipped_terminal`.
 - Errors: 400 `validation_error`; 400 `request_class_invalid` (policy RequestClassification); 400 `session_turn_completion_gate` when the write transitions the turn to `completed` or `failed` and the gate is unmet (policy CompletionGate, from S10); 404 `session_not_open`.
@@ -268,7 +279,7 @@ flowchart TD
 #### CompleteSessionTurnCommand: complete one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONCLASS-002]
 
 - Handler: `CompleteSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, SessionLogTurnCloseRequest Request) : ICommand<SessionLogTurnWriteResult>` and `CompleteSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/CompleteSessionTurnCommand.cs`.
-- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/complete`, MCP `sessionlog_complete_turn`, client `CompleteTurnAsync`, REPL and plugin `completeTurn` (process PersistTurnWriteWithReceipt maps its result; the plugin's model-evidence check and advisory pre-check run before dispatch, processes PersistTurnWriteWithReceipt and AdvisoryCompletionPrecheck).
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/complete`, MCP `sessionlog_complete_turn`, client `CompleteTurnAsync`, REPL `client.SessionLog.CompleteTurnAsync`. The plugin `completeTurn` verb does not call this route: it sends the bound turn with status `completed` through SubmitSessionLogCommand after its model-evidence check and advisory pre-check (processes PersistTurnWriteWithReceipt and AdvisoryCompletionPrecheck), and the same policies apply there.
 - Request `SessionLogTurnCloseRequest { response, requestClass, designDecisions, requirementsDiscovered, blockers }`; response `SessionLogTurnWriteResult`.
 - Errors: 400 `validation_error`, `request_class_invalid`, `session_turn_completion_gate` (from S10); 404 `not_found`; a terminal turn returns `skipped_terminal`.
 
@@ -295,7 +306,7 @@ flowchart TD
 #### FailSessionTurnCommand: fail one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONCLASS-002]
 
 - Handler: `FailSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, SessionLogTurnFailRequest Request) : ICommand<SessionLogTurnWriteResult>` and `FailSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/FailSessionTurnCommand.cs`.
-- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/fail`, MCP `sessionlog_fail_turn`, client `FailTurnAsync`, REPL and plugin `failTurn`.
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/fail`, MCP `sessionlog_fail_turn`, client `FailTurnAsync`, REPL `client.SessionLog.FailTurnAsync`. The plugin `failTurn` verb sends the bound turn with status `failed` and its error message through SubmitSessionLogCommand (process PersistTurnWriteWithReceipt), where the same policies apply.
 - Request `SessionLogTurnFailRequest { errorMessage, requestClass, designDecisions, requirementsDiscovered, blockers }`; response `SessionLogTurnWriteResult`.
 - Errors: 400 `validation_error` (blank error message), `request_class_invalid`, `session_turn_completion_gate` (class missing, from S10); 404 `not_found`.
 
@@ -319,21 +330,92 @@ flowchart TD
     SV --> R(["Result merged, storedStatus failed"])
 ```
 
+#### OpenSessionLogCommand: open (ensure) a session [FR-MCP-SESSIONTURN-001, FR-MCP-SESSIONTURN-007]
+
+- Handler: `OpenSessionLogCommand(string WorkspacePath, string Agent, string SessionId, string? Title, string? Model) : ICommand<SessionLogOpenResult>` and `OpenSessionLogCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/OpenSessionLogCommand.cs`, delegating to `ISessionLogService.OpenSessionAsync` (`SessionLogService.cs:596-620`, behavior unchanged).
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/open` (`SessionLogController.cs:282`), MCP `sessionlog_open`, client `OpenSessionAsync`, REPL and plugin `workflow.sessionlog.openSession`; called by processes StartHostSession, DrainFailsafe (the idempotent session open replayed before a drained mint), and the first-ingress writer of hosts without SessionStart.
+- Request: route `agent` and `sessionId`, optional `title` and `model`. Response 200 `{ agent, sessionId, created }` (`created` false when the session already existed; an existing session is never changed).
+- Errors: 400 problem "Invalid session identifier." for a session id invalid for the agent (today's body, unchanged).
+
+```mermaid
+flowchart TD
+    S(["OpenSessionLogCommand dispatched"]) --> V{"Session id valid for the agent?"}
+    V -->|no| E1(["400 invalid session identifier"])
+    V -->|yes| EX{"Session exists in the workspace?"}
+    EX -->|yes| R1(["200 created false: nothing changed"])
+    EX -->|no| SV["Create the session in_progress with the optional title and model"]
+    SV --> R2(["200 created true"])
+```
+
+#### AppendTurnDialogCommand: append processing dialog to one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-007]
+
+- Handler: `AppendTurnDialogCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, IReadOnlyList<ProcessingDialogItemDto> Items) : ICommand<SessionLogDialogAppendResult>` and `AppendTurnDialogCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/AppendTurnDialogCommand.cs`, delegating to `ISessionLogService.AppendProcessingDialogAsync` (`SessionLogService.cs:405-465`, behavior unchanged).
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog` (`SessionLogController.cs:232`), MCP `sessionlog_dialog`, client `AppendDialogAsync`, REPL `client.SessionLog.AppendDialogAsync`, plugin verb `appendDialog` (bound by process BindVerbToTurn; `repl-invoke.ps1:2492-2572`), the REPL workflow, and McpAgent. The HV protocol stores a long reviewer result as ordered dialog parts on the reviewer's own turn through this unit.
+- Request: one or more `{ timestamp, role, content, category }` items, appended after the highest existing ordinal. Response 200 `{ agent, sessionId, requestId, totalDialogCount }`.
+- Errors: 400 `{ error }` for no item or an invalid session or request id, and 404 for a missing turn (today's bodies, `SessionLogController.cs:232-280`, unchanged). The server appends on any turn status; the plugin refuses `appendDialog` on a turn it knows is terminal with `turn_immutable` before any call (FR-MCP-SESSIONTURN-004-AC004).
+
+```mermaid
+flowchart TD
+    S(["AppendTurnDialogCommand dispatched"]) --> V{"At least one item, session and request ids valid?"}
+    V -->|no| E1(["400 with error text"])
+    V -->|yes| F{"Turn found in the session and workspace?"}
+    F -->|no| E2(["404 not_found"])
+    F -->|yes| AP["Append the items after the highest ordinal, role defaulting to model"]
+    AP --> SV["Save"]
+    SV --> R(["200 totalDialogCount"])
+```
+
+#### SetTurnTitleCommand: retitle one turn [FR-MCP-SESSIONTURN-003, FR-MCP-SESSIONTURN-007]
+
+- Handler: `SetTurnTitleCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, string Title) : ICommand<SessionLogTitleResult>` and `SetTurnTitleCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/SetTurnTitleCommand.cs`, delegating to `ISessionLogService.SetTurnTitleAsync` (`SessionLogService.cs:922-955`, behavior unchanged: an explicit overwrite of `QueryTitle` that incidental submits never reset, TR-MCP-SESSIONLOG-005).
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/title` (`SessionLogController.cs:350`), client `SetTurnTitleAsync`, REPL `client.SessionLog.SetTurnTitleAsync`, plugin verb `setTurnTitle` (bound by process BindVerbToTurn, so an explicit `requestId` retitles only that turn, TR-MCP-SESSIONTURN-003 AC-005; `repl-invoke.ps1:2925-2941`); no MCP tool.
+- Request `{ title }` (a missing body stores an empty title, as today). Response 200 `{ turnId, agent, sessionId, requestId, retitled: true }` (`SessionLogController.cs:363`). Errors: 400 for an invalid session or request id; 404 `not_found` for a missing session or turn (`ClassifiedError`). The plugin refuses `setTurnTitle` on a locally terminal turn with `turn_immutable` (FR-MCP-SESSIONTURN-004-AC004).
+
+```mermaid
+flowchart TD
+    S(["SetTurnTitleCommand dispatched"]) --> V{"Session and request ids valid?"}
+    V -->|no| E1(["400 invalid turn identifier"])
+    V -->|yes| F{"Session and turn found?"}
+    F -->|no| E2(["404 not_found"])
+    F -->|yes| W["Overwrite this turn's QueryTitle only"]
+    W --> SV["Save"]
+    SV --> R(["200 turnId, retitled true"])
+```
+
+#### SetSessionTitleCommand: retitle a session [FR-MCP-SESSIONTURN-007]
+
+- Handler: `SetSessionTitleCommand(string WorkspacePath, string Agent, string SessionId, string Title) : ICommand<SessionLogTitleResult>` and `SetSessionTitleCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/SetSessionTitleCommand.cs`, delegating to `ISessionLogService.SetSessionTitleAsync` (`SessionLogService.cs:892-918`, behavior unchanged).
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/title` (`SessionLogController.cs:313`), client `SetSessionTitleAsync`, REPL `client.SessionLog.SetSessionTitleAsync`, plugin verb `setSessionTitle` (targets the host session's own `mcpSessionId`, process StartHostSession); no MCP tool.
+- Request `{ title }` (a missing body stores an empty title, as today). Response 200 `{ turnId, agent, sessionId, retitled: true }`, where `turnId` carries the session row id (`SessionLogController.cs:326`, unchanged). Errors: 400 for an invalid session id; 404 `not_found` for a missing session (`ClassifiedError`).
+
+```mermaid
+flowchart TD
+    S(["SetSessionTitleCommand dispatched"]) --> V{"Session id valid?"}
+    V -->|no| E1(["400 invalid session identifier"])
+    V -->|yes| F{"Session found?"}
+    F -->|no| E2(["404 not_found"])
+    F -->|yes| W["Overwrite the session Title"]
+    W --> SV["Save"]
+    SV --> R(["200 retitled true"])
+```
+
+Existing session-log routes this plan does not change (they keep today's behavior and are not units of this plan): `POST .../{requestId}/begin` (`BeginTurnAsync`; the plugins stop calling it, because ingress mints through MintSessionTurnCommand), `DELETE .../{requestId}` and `DELETE .../{sessionId}` (turn and session delete), `POST /qbrainai/sessionlog/repair-workspace-stamps`, and the section routes `PUT` and `DELETE .../sections/{section}` and `DELETE .../sections/{section}/items/{itemKey}` for every section other than the two review sections. For `agentReview` and `hostileReview` (and their aliases) the section `PUT` dispatches RecordSessionTurnReviewCommand, the section `DELETE` dispatches ResetSessionTurnReviewCommand, and the item `DELETE` is refused by the existing delete-item handler (Phase B, S4).
+
 ### 4.3 Policies applied inside Phase A handlers
 
 #### Policy TerminalTurnOutcomeGuard: terminal-turn outcome guard (`ISessionLogTurnUpsertGuard`) [FR-MCP-SESSIONTURN-004]
 
-Applied by SubmitSessionLogCommand, UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand. It never saves; it returns the outcome the handler must honor.
+Applied by SubmitSessionLogCommand, UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand. It never saves; it returns the outcome the handler must honor. The seam replaces the inline guard at `SessionLogService.cs:1606-1618` without changing its rule (TR-MCP-SESSIONTURN-004 AC-002): only a status move away from a terminal status is skipped; a write that omits the status, a review-section write, and a requestClass-only write merge on a terminal turn (FR-MCP-SESSIONTURN-004-AC003, AC004).
 
 ```mermaid
 flowchart TD
     S(["Guard called with stored and incoming turn"]) --> EX{"Stored turn exists?"}
     EX -->|no| C(["created"])
-    EX -->|yes| TM{"Stored turn terminal and the incoming write would change any field?"}
+    EX -->|yes| TM{"Stored status terminal, and the incoming status supplied, different, and not terminal, or the write a superseded hook persist?"}
     TM -->|yes| SK(["skipped_terminal with storedStatus and reason"])
     TM -->|no| EQ{"Incoming equals stored?"}
     EQ -->|yes| NC(["merged, reason no_change"])
-    EQ -->|no| MG(["merged"])
+    EQ -->|no| MG(["merged: omitted fields never clobber stored values"])
 ```
 
 ### 4.4 Processes (plugin, host, and build; they call the handlers above)
@@ -374,8 +456,8 @@ flowchart TD
     RR -->|no| EQ2{"Exactly one queued entry matches?"}
     EQ2 -->|yes| WD["Matched entry withdrawn: write target unchanged"]
     EQ2 -->|no| UF
-    OP -->|popAll| PA{"Popped line count equals queued request count?"}
-    PA -->|yes| WA["Every queued entry withdrawn"]
+    OP -->|popAll| PA{"Popped line count equals the count of every queued entry, request and system (every enqueue takes a queue position)?"}
+    PA -->|yes| WA["Every queued request entry withdrawn, every queued system entry dropped"]
     PA -->|no| UF
     QS --> AT["Atomic replace of turn-state.yaml, advance appliedThroughOffset"]
     QR --> AT
@@ -398,11 +480,14 @@ flowchart TD
 flowchart TD
     S(["Prompt hook fires"]) --> UNS{"Host supported for turn logging and its P0.2 row passed?"}
     UNS -->|no| UL(["turn_logging_unsupported: no mint, no write"])
-    UNS -->|yes| SYS{"System event: task-notification, agent-message, agent_id, subagentType, or subagent env marker?"}
+    UNS -->|yes| SYS{"System event: task-notification, agent-message, agent_id, subagentType, subagent env marker, or an opencode task child session?"}
     SYS -->|yes| SK(["system-event-skipped: no mint"])
     SYS -->|no| LK{"turn-open.lock acquired?"}
     LK -->|no| CT(["turn-open-contended: no mint"])
-    LK -->|yes| NN{"Host nonce field present?"}
+    LK -->|yes| FI{"Host without a SessionStart event (cline, cline-v2, opencode) and no mcpSessionId recorded for this host session?"}
+    FI -->|yes| FIW["First-ingress writer: open the session (OpenSessionLogCommand) and record its mcpSessionId in turn-state.yaml under the host session lock, before the mint"]
+    FIW --> NN
+    FI -->|no| NN{"Host nonce field present?"}
     NN -->|no| NF(["turn-open-failed nonce_source_missing: failsafe diagnostic, no invented nonce"])
     NN -->|yes| MN["Mint with the host nonce (MintSessionTurnCommand)"]
     MN --> MR{"Mint result"}
@@ -437,14 +522,17 @@ flowchart TD
     KEY -->|yes| KS["Load sessions/key/turn-state.yaml"]
     INF --> KS
     KS --> UNS{"unsupportedSince recorded?"}
-    UNS -->|yes| OPN{"Target is a turn already open when the session failed closed?"}
+    UNS -->|yes| OPN{"Verb other than recordReview, and its target a turn already open when the session failed closed?"}
     OPN -->|yes| FS(["Bind and capture the write to the failsafe as unsupported_session"])
-    OPN -->|no| UL(["Refuse turn_logging_unsupported"])
-    UNS -->|no| EXP{"Explicit requestId supplied?"}
-    EXP -->|yes| KN{"Known open turn of this MCP session?"}
+    OPN -->|no| UL(["Refuse turn_logging_unsupported: a review is recorded after the drain through the original pair"])
+    UNS -->|no| EXP{"Explicit target supplied?"}
+    EXP -->|"original pair (sessionId, requestId) of an earlier MCP session"| PV{"Pair verified on the server and recorded for this host session?"}
+    PV -->|no| RU3(["Refuse request_unknown: a pair from another conversation is never accepted"])
+    PV -->|yes| TERM
+    EXP -->|requestId| KN{"requestId known in this host session's MCP session?"}
     KN -->|no| RU(["Refuse request_unknown"])
     KN -->|yes| TERM
-    EXP -->|no| CNT{"Delivered requests open"}
+    EXP -->|none| CNT{"Delivered requests open"}
     CNT -->|two or more| AMB(["Refuse request_ambiguous naming the open requests"])
     CNT -->|none| NT{"Write target set?"}
     NT -->|no| RU2(["Refuse request_unknown naming the host session key"])
@@ -456,14 +544,22 @@ flowchart TD
     TERM -->|no, or review or class-only update| B(["Binding captured once: proceed to persist (process PersistTurnWriteWithReceipt)"])
 ```
 
-#### Process PersistTurnWriteWithReceipt: persist a turn write with a truthful receipt (dispatches UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand through the REPL) [FR-MCP-SESSIONTURN-004]
+#### Process PersistTurnWriteWithReceipt: persist a turn write with a truthful receipt (dispatches SubmitSessionLogCommand with the one bound turn, AppendTurnDialogCommand, or SetTurnTitleCommand through the REPL) [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-005]
 
-- Request: a turn upsert (`POST /qbrainai/sessionlog/{agent}/{sessionId}/turn`, `PATCH` or `PUT .../{requestId}`, `POST .../complete` or `.../fail`) built by `New-McpPluginTurnUpsertRequest` with the binding.
-- Response (plugin receipt): `persisted` (bool), `code` (`persisted`, `skipped_terminal`, `queued`, or the server error code), `storedStatus`, `reason`; exit code 0 or 1.
+- Request: for `appendActions`, `appendDecisions`, `updateTurn`, `completeTurn`, and `failTurn`, a session document holding only the bound turn, built by `New-McpPluginTurnUpsertRequest` with the binding and sent as `client.SessionLog.SubmitAsync` (`POST /qbrainai/sessionlog`, `Invoke-ReplPersistTurn`); for `appendDialog`, `client.SessionLog.AppendDialogAsync` (`POST .../{requestId}/dialog`); for `setTurnTitle`, `client.SessionLog.SetTurnTitleAsync` (`POST .../{requestId}/title`).
+- Close verbs first: `completeTurn` and `failTurn` are refused locally with `turn_missing_model_evidence` when the turn has no model-authored action, design decision, or commit (hook invocations excluded; FR-MCP-SESSIONTURN-005-AC002), and a close that carries evidence writes it as a verified additive non-transition write before the transition, so a gate refusal loses nothing (FR-MCP-SESSIONCLASS-004-AC003, from S8).
+- Response (plugin receipt): `persisted` (bool), `code` (`persisted`, `skipped_terminal`, `queued`, `turn_missing_model_evidence`, or the server error code), `storedStatus`, `reason`, and `outcomeVerified` (false when the server answered without per-turn outcomes, FR-MCP-SESSIONTURN-004-AC005); exit code 0 or 1.
 
 ```mermaid
 flowchart TD
-    S(["Bound write ready"]) --> SEND["Send upsert through the REPL"]
+    S(["Bound write ready"]) --> CV{"Close verb?"}
+    CV -->|yes| EV{"Model-authored action, design decision, or commit on the turn?"}
+    EV -->|no| NE(["Refuse turn_missing_model_evidence: turn stays in progress, nothing sent"])
+    EV -->|yes| CE{"Close carries evidence?"}
+    CE -->|yes| EW["Send the evidence as an additive non-transition write and verify it"]
+    EW --> SEND
+    CE -->|no| SEND
+    CV -->|no| SEND["Send through the REPL: submit with the bound turn, dialog append, or turn title"]
     SEND --> RES{"Result"}
     RES -->|transport outage| FQ["Write failsafe record keyed by the bound requestId"]
     FQ --> QD(["Receipt persisted false, code queued: degraded persistence, exit 1"])
@@ -471,7 +567,9 @@ flowchart TD
     ER -->|session_turn_completion_gate| GR["Record the server refusal and missing items locally: turn stays in progress"]
     GR --> GRE(["Receipt persisted false with the server message and missing items, exit 1"])
     ER -->|other| OE(["Receipt persisted false with the server code, exit 1"])
-    RES -->|turns outcome list| OUT{"Outcome for the bound requestId"}
+    RES -->|dialog or title 200| OK
+    RES -->|submit 201 without a turns list| UV(["Receipt outcomeVerified false: never a confirmed close, so openDelivered and the ledger keep the request"])
+    RES -->|submit 201 with the turns outcome list| OUT{"Outcome for the bound requestId"}
     OUT -->|created or merged| CL{"Close verb?"}
     CL -->|yes| RM["Remove from openDelivered and the ledger after the confirmed close"]
     CL -->|no| OK
@@ -532,10 +630,15 @@ flowchart TD
     EACH --> REF{"Most recent close refused by the server with session_turn_completion_gate?"}
     REF -->|yes| B1["Block session_turn_completion_gate: server missing items first"]
     REF -->|no| WDR{"Withdrawn and still in progress?"}
-    WDR -->|yes| B2["Block turn_withdrawn_unclosed: remedy failTurn withdrawn before delivery"]
-    WDR -->|no| DLV{"Delivered and still in progress?"}
-    DLV -->|yes| UNS{"Session unsupportedSince and the close is captured in the failsafe?"}
-    UNS -->|yes| W1["Warn: unsupported session, drained at next SessionStart"]
+    WDR -->|yes| WC{"Its close captured in the failsafe (unsupported session) or held there by an outage?"}
+    WC -->|yes| W4["Warn: close captured, drained later (FR-MCP-SESSIONTURN-005-AC001)"]
+    WC -->|no| B2["Block turn_withdrawn_unclosed: remedy failTurn withdrawn before delivery"]
+    WDR -->|no| SRV{"Server reports the turn terminal from another surface?"}
+    SRV -->|yes| DROP["Drop it from the open list: eligible to clear"]
+    SRV -->|no| DLV{"Delivered and still in progress?"}
+    DLV -->|yes| UNS{"Session unsupportedSince recorded?"}
+    UNS -->|yes, close captured in the failsafe| W1["Warn: unsupported session, drained at next SessionStart"]
+    UNS -->|yes, close not yet captured| B4["Block with the reduced remedy: missing model evidence and the close call (from S8 also requestClass), never the reviews"]
     UNS -->|no| OUTG{"Model close held in the failsafe by an outage?"}
     OUTG -->|yes| W2["Warn: degraded persistence, ledger kept until confirmed"]
     OUTG -->|no| B3["Block turn_in_progress: accumulated remedy"]
@@ -545,7 +648,10 @@ flowchart TD
     B1 --> AGG
     B2 --> AGG
     B3 --> AGG
+    B4 --> AGG
+    DROP --> AGG
     W1 --> AGG
+    W4 --> AGG
     W2 --> AGG
     W3 --> AGG
     CLR --> AGG["Add diagnostics: duplicate_delivery_suspected, nonce_source_missing, unbound legacy failsafe, legacy current-turn"]
@@ -614,7 +720,7 @@ flowchart TD
 #### Process SyncAgentPluginsAtVersion: sync the agent plugins at a fixed version [TR-MCP-NUKE-003 under FR-MCP-BUILD-001]
 
 - Surface: `./build.ps1 SyncAgentPlugins --agent-plugin-parent <dir> --plugin-version <x.y.z>` (Nuke), then `./build.ps1 ValidatePluginPowerShellOnly --agent-plugin-parent <dir>`.
-- Output: a receipt listing exactly nine repos with version and `lib/plugin-hook.ps1` SHA-256; the gate fails on any other count or a mismatch. `ValidatePluginPowerShellOnly` then fails on any bats, bash, Node, or Python script outside each TypeScript host's adapter entry file (TR-MCP-NUKE-003 AC-005).
+- Output: a receipt listing exactly nine repos with version and `lib/plugin-hook.ps1` SHA-256; the gate fails on any other count or a mismatch. `ValidatePluginPowerShellOnly` then checks every tracked file (`git ls-files`) and allows on a TypeScript host only the adapter entry file `src/index.ts`, `tsconfig.json`, `package.json`, and the npm-owned lockfile, plus, in the git-ignored `dist/`, only the compiler output of that entry file (`index.js`, `index.d.ts`, and their `.map` files) from the host's existing `npm run build` (`tsc`); the git-ignored `node_modules/` holds installed dependencies, not plugin code, and is not scanned; any other bats, bash, Node, TypeScript, or Python file fails the run (TR-MCP-NUKE-003 AC-005).
 
 ```mermaid
 flowchart TD
@@ -634,11 +740,10 @@ flowchart TD
     MORE -->|no| RC["Write the receipt: nine repos, versions, plugin-hook SHA-256"]
     RC --> CV{"All nine converged on version and hash?"}
     CV -->|no| F3(["Fail the gate: re-run until converged"])
-    CV -->|yes| PSO{"ValidatePluginPowerShellOnly: no bats, bash, Node, or Python script outside each adapter entry file?"}
+    CV -->|yes| PSO{"ValidatePluginPowerShellOnly: tracked files only the allowed set, and dist/ only the compiler output of src/index.ts?"}
     PSO -->|no| F4(["Fail: non-PowerShell script found"])
     PSO -->|yes| OK(["Sync passes"])
 ```
-
 
 #### Process RunArrivalBridge: arrival bridge lifecycle (claude-code, claude-cowork) [FR-MCP-SESSIONTURN-001]
 
@@ -726,7 +831,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant W as Writer (client, REPL, MCP caller)
+    participant W as Writer (client, REPL, MCP caller, or a plugin, REPL-workflow, or McpAgent turn verb)
     participant S as SessionLogController or sessionlog_submit
     participant X as IDispatcher and SubmitSessionLogCommandHandler
     participant L as SessionLogService
@@ -739,25 +844,32 @@ sequenceDiagram
         L->>G: evaluate stored turn and incoming turn
         alt new turn
             G-->>L: created
-        else stored terminal and change requested
+        else stored status terminal and the incoming status supplied, different, and not terminal
             G-->>L: skipped_terminal with storedStatus and reason
         else identical
             G-->>L: merged, reason no_change
-        else mergeable
+        else mergeable (omitted fields never clobber stored values)
             G-->>L: merged
         end
+        L->>L: policy RequestClassification when the turn carries requestClass, policy CompletionGate when it moves to completed or failed (from S10)
     end
-    L->>D: save in one transaction
     alt saved
+        L->>D: save in one transaction
         S-->>W: 201 with turns [requestId, outcome, storedStatus, reason]
         W->>W: persisted only for created and merged. skipped_terminal is reported, never retried
     else invalid document
         S-->>W: 400 validation_error
         W->>W: report the code, nothing persisted
+    else invalid class
+        S-->>W: 400 request_class_invalid, nothing saved
+        W->>W: correct the class and resend
+    else a transition refused by the gate
+        S-->>W: 400 session_turn_completion_gate naming the requestId and its missing items, nothing saved
+        W->>W: supply the missing items by the turn's pair, keep the turn open
     end
 ```
 
-#### Sequence: submit UpsertSessionTurnCommand from a verb and process each response
+#### Sequence: submit SubmitSessionLogCommand from a plugin verb and process each response
 
 ```mermaid
 sequenceDiagram
@@ -767,8 +879,8 @@ sequenceDiagram
     participant F as Failsafe
     participant R as qbrain-ai-repl
     participant S as SessionLogController
-    participant L as SessionLogService
-    M->>P: appendActions or updateTurn or appendDecisions (optional requestId)
+    participant X as IDispatcher and SubmitSessionLogCommandHandler
+    M->>P: appendActions, appendDecisions, or updateTurn (optional requestId or original pair)
     P->>P: Sync-PluginArrivalLog, bind once (process BindVerbToTurn)
     alt binding refused
         P-->>M: request_unknown, request_ambiguous, turn_immutable, host_session_unknown, host_session_ambiguous, or turn_logging_unsupported
@@ -776,27 +888,63 @@ sequenceDiagram
         P->>F: capture as unsupported_session record
         P-->>M: captured, drained at next SessionStart
     else bound
-        P->>R: upsert with binding
-        R->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/turn
-        S->>L: SendAsync(UpsertSessionTurnCommand), handler applies TerminalTurnOutcomeGuard, RequestClassification, CompletionGate
+        P->>R: client.SessionLog.SubmitAsync with a session document holding only the bound turn
+        R->>S: POST /qbrainai/sessionlog
+        S->>X: SendAsync(SubmitSessionLogCommand): TerminalTurnOutcomeGuard, RequestClassification, CompletionGate per turn
         alt created or merged
-            S-->>R: outcome for the bound requestId
+            S-->>R: 201 turns outcome for the bound requestId
             R-->>P: outcome
             P-->>M: persisted true, exit 0
         else skipped_terminal
-            S-->>R: skipped_terminal with storedStatus
+            S-->>R: 201 skipped_terminal with storedStatus
             R-->>P: outcome
             P->>P: cache terminal status, clear failsafe
             P-->>M: persisted false, code skipped_terminal, exit 1
-        else validation error
-            S-->>R: 400 with code
+        else server without per-turn outcomes
+            S-->>R: 201 without turns
+            R-->>P: result
+            P-->>M: outcomeVerified false, never a confirmed close
+        else validation, class, or gate error
+            S-->>R: 400 with code (gate: missing items)
             R-->>P: error
+            P->>P: on session_turn_completion_gate, record the refusal for the Stop gate
             P-->>M: persisted false with the code, exit 1
         else transport outage
             R-->>P: outage
             P->>F: record keyed by the bound requestId
             P-->>M: persisted false, code queued, exit 1
         end
+    end
+```
+
+#### Sequence: submit UpsertSessionTurnCommand and process each response
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client or REPL (client.SessionLog.UpsertTurnAsync)
+    participant S as SessionLogController
+    participant X as IDispatcher and UpsertSessionTurnCommandHandler
+    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/turn (SessionLogTurnUpsertRequest)
+    S->>X: SendAsync(UpsertSessionTurnCommand)
+    alt created or merged
+        X-->>S: SessionLogTurnWriteResult
+        S-->>C: 200 outcome and storedStatus
+        C->>C: persisted
+    else unchanged
+        S-->>C: 200 merged, reason no_change
+    else stored turn terminal and the status move refused
+        S-->>C: 200 outcome skipped_terminal
+        C->>C: report persisted false, never retry
+    else invalid request or class
+        S-->>C: 400 validation_error or request_class_invalid
+        C->>C: fix and resend
+    else session not open
+        S-->>C: 404 session_not_open
+        C->>C: open the session (OpenSessionLogCommand) first
+    else transition refused by the gate
+        S-->>C: 400 session_turn_completion_gate with missing items
+        C->>C: supply the missing items, keep the turn open
     end
 ```
 
@@ -862,18 +1010,19 @@ sequenceDiagram
         S-->>C: 400 session_turn_completion_gate with missing items
     end
 ```
-#### Sequence: submit CompleteSessionTurnCommand and process each response
+
+#### Sequence: close a turn from a plugin verb (completeTurn or failTurn through SubmitSessionLogCommand) and process each response
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant M as Model
+    participant M as Model or clear-session coordinator
     participant P as Plugin close verb
     participant R as qbrain-ai-repl
     participant S as SessionLogController
-    participant L as SessionLogService
+    participant X as IDispatcher and SubmitSessionLogCommandHandler
     participant G as Completion gate (Phase B, S10)
-    M->>P: completeTurn (requestClass and evidence optional)
+    M->>P: completeTurn, or failTurn with errorMessage (requestClass and evidence optional)
     P->>P: bind (process BindVerbToTurn), model-evidence check
     alt no model-authored action, decision, or commit
         P-->>M: refused turn_missing_model_evidence, turn stays in progress
@@ -883,33 +1032,67 @@ sequenceDiagram
             P-->>M: warning with the exact gate message (the close is still sent)
         end
         opt close carries evidence
-            P->>R: additive non-transition write first, verified
+            P->>R: additive non-transition write first (submit without a status), verified
         end
-        P->>R: completeTurn
-        R->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/complete
-        S->>L: SendAsync(CompleteSessionTurnCommand), handler applies RequestClassification
-        L->>G: CompletionGate check for completed (transition only, origin Agent)
+        P->>R: client.SessionLog.SubmitAsync with the bound turn at status completed or failed
+        R->>S: POST /qbrainai/sessionlog
+        S->>X: SendAsync(SubmitSessionLogCommand): RequestClassification, then CompletionGate for the transition (origin Agent)
         alt gate met
-            L-->>S: completed
-            S-->>R: 200 with storedStatus
+            X-->>S: turns outcome merged, storedStatus completed or failed
+            S-->>R: 201
             R-->>P: confirmed
             P->>P: remove from openDelivered and the ledger
             P-->>M: persisted true
         else gate unmet
-            G-->>L: SessionTurnCompletionGateException with missing items
-            L-->>S: atomic rejection
-            S-->>R: 400 session_turn_completion_gate, missing items in order
+            G-->>X: SessionTurnCompletionGateException with missing items
+            X-->>S: atomic rejection
+            S-->>R: 400 session_turn_completion_gate, missing items in order (failed: requestClass only)
             R-->>P: refusal
             P->>P: record refusal for the Stop gate, keep open and ledgered
             P-->>M: server message and missing items, exit 1
+        else invalid class or document
+            S-->>R: 400 request_class_invalid or validation_error
+            P-->>M: code surfaced, nothing changed
         else target already terminal
-            S-->>R: skipped_terminal
+            S-->>R: 201 outcome skipped_terminal
+            R-->>P: outcome
             P-->>M: persisted false, skipped_terminal
+        else server without per-turn outcomes
+            S-->>R: 201 without turns
+            P-->>M: outcomeVerified false, request kept open and ledgered
         else outage
             R-->>P: outage
             P->>P: failsafe close, ledger kept until confirmed
             P-->>M: queued, degraded
         end
+    end
+```
+
+#### Sequence: submit CompleteSessionTurnCommand and process each response
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client, REPL, or MCP sessionlog_complete_turn
+    participant S as SessionLogController or MCP tool
+    participant X as IDispatcher and CompleteSessionTurnCommandHandler
+    participant G as Completion gate (Phase B, S10)
+    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/complete (SessionLogTurnCloseRequest)
+    S->>X: SendAsync(CompleteSessionTurnCommand): RequestClassification, then CompletionGate
+    alt gate met
+        X-->>S: merged, storedStatus completed
+        S-->>C: 200 SessionLogTurnWriteResult
+    else gate unmet
+        G-->>X: SessionTurnCompletionGateException with missing items
+        S-->>C: 400 session_turn_completion_gate, missing items in order, nothing saved
+        C->>C: supply the class or reviews, then close again
+    else invalid request or class
+        S-->>C: 400 validation_error or request_class_invalid
+    else unknown requestId
+        S-->>C: 404 not_found
+    else already terminal
+        S-->>C: 200 outcome skipped_terminal
+        C->>C: report persisted false, never retry
     end
 ```
 
@@ -918,43 +1101,145 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant M as Model or clear-session coordinator
-    participant P as Plugin failTurn verb
-    participant R as qbrain-ai-repl
-    participant S as SessionLogController
+    participant C as Client, REPL, or MCP sessionlog_fail_turn
+    participant S as SessionLogController or MCP tool
     participant X as IDispatcher and FailSessionTurnCommandHandler
-    M->>P: failTurn (errorMessage, requestClass, optional evidence)
-    P->>P: bind (process BindVerbToTurn), model-evidence check
-    alt no model-authored evidence
-        P-->>M: refused turn_missing_model_evidence, turn stays in progress
-    else evidence present
-        P->>R: failTurn
-        R->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/fail
-        S->>X: SendAsync(FailSessionTurnCommand)
-        alt class present
-            X-->>S: merged, storedStatus failed
-            S-->>R: 200
-            R-->>P: confirmed
-            P->>P: remove from openDelivered and the ledger
-            P-->>M: persisted true
-        else class missing or Unclassified
-            X-->>S: SessionTurnCompletionGateException
-            S-->>R: 400 session_turn_completion_gate, missing requestClass
-            P->>P: record refusal for the Stop gate, keep open
-            P-->>M: write the class then fail again
-        else blank error message or invalid class
-            S-->>R: 400 validation_error or request_class_invalid
-            P-->>M: code surfaced, nothing changed
-        else already terminal
-            S-->>R: 200 outcome skipped_terminal
-            P-->>M: persisted false, skipped_terminal
+    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/fail (SessionLogTurnFailRequest)
+    S->>X: SendAsync(FailSessionTurnCommand)
+    alt class present and not Unclassified
+        X-->>S: merged, storedStatus failed
+        S-->>C: 200 SessionLogTurnWriteResult
+    else class missing or Unclassified
+        X-->>S: SessionTurnCompletionGateException
+        S-->>C: 400 session_turn_completion_gate, missing requestClass
+        C->>C: write the class, then fail again
+    else blank error message or invalid class
+        S-->>C: 400 validation_error or request_class_invalid
+    else unknown requestId
+        S-->>C: 404 not_found
+    else already terminal
+        S-->>C: 200 outcome skipped_terminal
+    end
+```
+
+#### Sequence: submit OpenSessionLogCommand and process each response
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Plugin (SessionStart, drain, or first ingress), client, REPL, or MCP sessionlog_open
+    participant S as SessionLogController or MCP tool
+    participant X as IDispatcher and OpenSessionLogCommandHandler
+    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/open (optional title, model)
+    S->>X: SendAsync(OpenSessionLogCommand)
+    alt session created
+        S-->>C: 200 created true
+        C->>C: record the session's mcpSessionId in turn-state.yaml (plugin)
+    else session already existed
+        S-->>C: 200 created false, nothing changed
+        C->>C: same as created: the open is idempotent
+    else invalid session identifier
+        S-->>C: 400 Invalid session identifier
+        C->>C: final: report, never retry unchanged
+    else outage
+        C->>C: plugin drain stops and keeps its records
+    end
+```
+
+#### Sequence: submit AppendTurnDialogCommand from a plugin verb and process each response
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant M as Model, or the HV reviewer storing its result
+    participant P as Plugin appendDialog verb
+    participant F as Failsafe
+    participant R as qbrain-ai-repl
+    participant S as SessionLogController or sessionlog_dialog
+    participant X as IDispatcher and AppendTurnDialogCommandHandler
+    M->>P: appendDialog (items, optional requestId or original pair)
+    P->>P: bind once (process BindVerbToTurn)
+    alt binding refused, or the turn known locally terminal
+        P-->>M: refusal code, turn_immutable for a terminal turn
+    else unsupported session and turn already open
+        P->>F: capture as unsupported_session record
+        P-->>M: captured, drained at next SessionStart
+    else bound
+        P->>R: client.SessionLog.AppendDialogAsync
+        R->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+        S->>X: SendAsync(AppendTurnDialogCommand)
+        alt appended
+            S-->>R: 200 totalDialogCount
+            R-->>P: result
+            P-->>M: persisted true, exit 0
+        else no item or invalid ids
+            S-->>R: 400 with error text
+            P-->>M: persisted false with the error, exit 1
+        else turn not found
+            S-->>R: 404
+            P-->>M: persisted false, request_unknown, exit 1
         else outage
             R-->>P: outage
-            P->>P: failsafe close, ledger kept until confirmed
-            P-->>M: queued, degraded
+            P->>F: record keyed by the bound requestId
+            P-->>M: persisted false, code queued, exit 1
         end
     end
 ```
+
+#### Sequence: submit SetTurnTitleCommand from a plugin verb and process each response
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant M as Model
+    participant P as Plugin setTurnTitle verb
+    participant R as qbrain-ai-repl
+    participant S as SessionLogController
+    participant X as IDispatcher and SetTurnTitleCommandHandler
+    M->>P: setTurnTitle (title, optional requestId)
+    P->>P: bind once (process BindVerbToTurn): an explicit requestId retitles only that turn
+    alt binding refused, or the turn known locally terminal
+        P-->>M: refusal code, turn_immutable for a terminal turn
+    else bound
+        P->>R: client.SessionLog.SetTurnTitleAsync
+        R->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/title
+        S->>X: SendAsync(SetTurnTitleCommand)
+        alt retitled
+            S-->>R: 200 turnId, retitled true
+            P-->>M: persisted true, exit 0
+        else invalid ids
+            S-->>R: 400 Invalid turn identifier
+            P-->>M: persisted false, exit 1
+        else session or turn not found
+            S-->>R: 404 not_found
+            P-->>M: persisted false, request_unknown, exit 1
+        else outage
+            R-->>P: outage
+            P-->>M: persisted false, queued in the failsafe keyed by the bound requestId
+        end
+    end
+```
+
+#### Sequence: submit SetSessionTitleCommand and process each response
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Plugin setSessionTitle verb, client, or REPL
+    participant S as SessionLogController
+    participant X as IDispatcher and SetSessionTitleCommandHandler
+    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/title (title)
+    S->>X: SendAsync(SetSessionTitleCommand)
+    alt retitled
+        S-->>C: 200 turnId (the session row id), retitled true
+    else invalid session identifier
+        S-->>C: 400 Invalid session identifier
+    else session not found
+        S-->>C: 404 not_found
+        C->>C: open the session first (OpenSessionLogCommand)
+    end
+```
+
 #### Sequence: replay the failsafe (process DrainFailsafe) and process each response
 
 ```mermaid
@@ -1030,30 +1315,41 @@ stateDiagram-v2
     Fail --> Other
     Other --> Pass
     Other --> Fail
+    Running --> Unstarted: section reset on a nonterminal turn
+    Pass --> Unstarted: section reset on a nonterminal turn
+    Fail --> Unstarted: section reset on a nonterminal turn
+    Other --> Unstarted: section reset on a nonterminal turn
+    Pass --> Unnecessary: hostile section reset on a nonterminal Chore turn
+    Fail --> Unnecessary: hostile section reset on a nonterminal Chore turn
+    Other --> Unnecessary: hostile section reset on a nonterminal Chore turn
+    Running --> Unnecessary: hostile section reset on a nonterminal Chore turn
 ```
 
 ### 5.2 Units of work (CQRS handlers)
 
-The same rule as section 4.2: each unit is one command or query and its handler. Request classification and the completion gate are not units of their own; they are policies the turn write and close handlers (UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand) apply (section 5.3).
+The same rule as section 4.2: each unit is one command or query and its handler. Request classification and the completion gate are not units of their own; they are policies the turn write and close handlers (SubmitSessionLogCommand, the route every plugin, REPL-workflow, and McpAgent turn verb uses, and UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand) apply (section 5.3).
 
 #### RecordSessionTurnReviewCommand: record a review [FR-MCP-SESSIONREVIEW-001, -002, -003, -004, -005, -006, -007, FR-SUPPORT-016]
 
 - Handler: `RecordSessionTurnReviewCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, SessionLogTurnReviewKind Kind, SessionLogTurnReviewInput Review) : ICommand<SessionLogTurnReviewDto>` and `RecordSessionTurnReviewCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/RecordSessionTurnReviewCommand.cs`, applying policy HvVerdictMapping when `hvVerdict` is supplied.
 - Surfaces: `PUT /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}` with section `agentReview` or `hostileReview` (aliases `agent-review`, `agent_review`, `hostile-review`, `hostile_review`, case-insensitive); MCP `sessionlog_record_review(agent, sessionId, requestId, kind, reviewJson, workspacePath)`; client `RecordTurnReviewAsync`; REPL and plugin `workflow.sessionlog.recordReview` (plugin also accepts `hvReceiptPath`, mapped locally; hostile kind accepts `hvVerdict`).
-- Request `SessionLogTurnReviewInput`: `status` (optional), `otherNotes`, `correctness`, `completeness` (JSON number or numeric string, lexeme `^[0-9]+(\.[0-9]+)?$`, at most 28 fractional digits, value in [0,1]), `reasons`, `reviewer`, `reviewedAt` (UTC with offset), `requestJsonlPath`, `responseJsonlPath`, `hvVerdict` (hostile only). Thresholds on input are ignored.
+- Request `SessionLogTurnReviewInput`: `status` (optional), `otherNotes`, `correctness`, `completeness` (JSON number or numeric string, lexeme `^[0-9]+(\.[0-9]+)?$`, at most 28 fractional digits, value in [0,1]), `reasons`, `reviewer`, `reviewedAt` (UTC with offset), `requestJsonlPath`, `responseJsonlPath`, `hvVerdict` (hostile only: on an agent review it is refused with 400 `validation_error`, `details.field` `hvVerdict`). Thresholds on input are ignored.
 - Response: the turn's review record with server-derived status and stamped thresholds. Works on every turn status, including completed and failed turns.
-- Errors (400 `validation_error` with the code unless noted): `review_invalid_status`, `review_unnecessary_not_client_writable`, `review_other_notes_not_allowed`, `review_other_notes_required`, `review_field_forbidden_for_status`, `review_field_required_for_status`, `review_score_out_of_range`, `review_receipt_paths_required`, `review_score_format`, `review_score_precision`, `review_field_too_long`, `review_timestamp_invalid`, `review_reason_blank`, 422 `review_status_conflict` (includes the thresholds in force and the derived status).
+- Errors: 404 `not_found` (turn); 400 `validation_error` for an unknown section or `hvVerdict` on an agent review; 400 with the code: `review_invalid_status`, `review_unnecessary_not_client_writable`, `review_other_notes_not_allowed`, `review_other_notes_required`, `review_field_forbidden_for_status`, `review_field_required_for_status`, `review_score_out_of_range`, `review_receipt_paths_required`, `review_score_format`, `review_score_precision`, `review_field_too_long`, `review_timestamp_invalid`, `review_reason_blank`, 422 `review_status_conflict` (includes the thresholds in force and the derived status).
 
 ```mermaid
 flowchart TD
     S(["Review write received"]) --> SEC{"Section is agentReview or hostileReview or an alias?"}
     SEC -->|no| E0(["400 validation_error unknown section"])
-    SEC -->|yes| LEX{"Score lexemes match the pattern, at most 28 fraction digits, value in 0..1?"}
+    SEC -->|yes| TF{"Turn found in the session?"}
+    TF -->|no| E16(["404 not_found"])
+    TF -->|yes| LEX{"Score lexemes match the pattern, at most 28 fraction digits, value in 0..1?"}
     LEX -->|format| E1(["400 review_score_format"])
     LEX -->|precision| E2(["400 review_score_precision"])
     LEX -->|range| E3(["400 review_score_out_of_range"])
-    LEX -->|ok| HV{"Hostile kind with hvVerdict?"}
-    HV -->|yes| MAP["Policy HvVerdictMapping: map the verdict to status, reasons, and otherNotes"]
+    LEX -->|ok| HV{"hvVerdict supplied?"}
+    HV -->|on an agent review| E17(["400 validation_error, details.field hvVerdict"])
+    HV -->|on a hostile review| MAP["Policy HvVerdictMapping: map the verdict to status, reasons, and otherNotes"]
     HV -->|no| ST
     MAP --> ST{"Status supplied?"}
     ST -->|Unnecessary or Unstarted| E4(["400 review_unnecessary_not_client_writable"])
@@ -1086,13 +1382,15 @@ flowchart TD
 - Handler: `ResetSessionTurnReviewCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, SessionLogTurnReviewKind Kind) : ICommand<SessionLogTurnReviewDto>` and `ResetSessionTurnReviewCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/ResetSessionTurnReviewCommand.cs`. The item route is not a review unit: it stays on the existing delete-item handler, which refuses review sections.
 - Surface: `DELETE /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}`; client `ClearTurnReviewAsync`. Item delete `DELETE .../sections/{section}/items/{itemKey}` on a review section is rejected.
 - Response: the record reset to the creation default for the turn's current class.
-- Errors: 400 `review_section_reset_on_terminal_turn` (record unchanged), 400 on item delete.
+- Errors: 400 `validation_error` (unknown section); 404 `not_found` (turn); 400 `review_section_reset_on_terminal_turn` (record unchanged). The item delete on a review section never reaches this unit: the existing delete-item handler refuses it with 400.
 
 ```mermaid
 flowchart TD
-    S(["DELETE review section"]) --> IT{"Item key in the route?"}
-    IT -->|yes| E1(["400: items cannot be deleted from a review section"])
-    IT -->|no| TS{"Turn completed or failed?"}
+    S(["DELETE review section"]) --> SEC{"Section is agentReview or hostileReview or an alias?"}
+    SEC -->|no| E0(["400 validation_error unknown section"])
+    SEC -->|yes| TF{"Turn found in the session?"}
+    TF -->|no| E1(["404 not_found"])
+    TF -->|yes| TS{"Turn completed or failed?"}
     TS -->|yes| E2(["400 review_section_reset_on_terminal_turn: nothing changed"])
     TS -->|no| DEF{"Hostile kind and class Chore?"}
     DEF -->|yes| UN["Reset to Unnecessary"]
@@ -1133,11 +1431,12 @@ flowchart TD
     SAN --> SER["Serialize scores as exact decimal lexemes, unset fields as null"]
     SER --> OK(["200 totalCount, limit, offset, items"])
 ```
+
 ### 5.3 Policies applied inside handlers
 
 #### Policy RequestClassification: request classification and the Chore flip [FR-MCP-SESSIONCLASS-001, FR-MCP-SESSIONREVIEW-006]
 
-- Applied by: UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand whenever a write carries `requestClass` (surfaces: `requestClass` on `updateTurn`, `completeTurn`, `failTurn` through REST turn upsert, PATCH, PUT, complete, fail, MCP tools, client, REPL, and plugin verbs).
+- Applied by: SubmitSessionLogCommand, UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand whenever a write carries `requestClass` (surfaces: the plugin, REPL-workflow, and McpAgent verbs `updateTurn`, `completeTurn`, and `failTurn` through submit; REST turn upsert, PATCH, PUT, complete, and fail; MCP tools; client; REPL).
 - Request: `requestClass` (string). Response: the turn with canonical `requestClass` and the review records after any lifecycle effect.
 - Errors: 400 `request_class_invalid`.
 
@@ -1175,6 +1474,7 @@ flowchart TD
     C -->|yes| R3(["Status Other: otherNotes names those claims"])
     C -->|no| R4(["Status Other: otherNotes gives the verdict-level reason"])
 ```
+
 #### Policy CompletionGate: completion gate [FR-MCP-SESSIONCLASS-002, -003, -004]
 
 - Applied by: every handler that can transition a turn to `completed` or `failed` (SubmitSessionLogCommand submit, UpsertSessionTurnCommand upsert, PatchSessionTurnCommand patch, ReplaceSessionTurnCommand replace, CompleteSessionTurnCommand complete, FailSessionTurnCommand fail), from S10.
@@ -1258,15 +1558,13 @@ flowchart TD
     RSN2 --> PRE
     PRE -->|yes| FT["failTurn by original pair with the reason"]
     FT --> NX
-    PRE -->|no| REP["Report queryText, reason, and missing prerequisites in Stop remedy order"]
-    REP --> MW["Model writes designDecision then class by the original pair"]
-    MW --> RR["Coordinator rerun reads them back"]
-    RR --> FT
+    PRE -->|no| REP["Report queryText, reason, and missing prerequisites in Stop remedy order: the model writes a designDecision and then the class by the original pair and reruns the coordinator, which reads them back at this decision"]
+    REP --> NX
 ```
 
 #### Process AdvisoryCompletionPrecheck: advisory completion pre-check (plugins, REPL, McpAgent) [FR-MCP-SESSIONCLASS-004]
 
-- Run by: the plugin close verbs (S8, S9), the REPL workflow (S6), and McpAgent (S7) before they dispatch CompleteSessionTurnCommand or FailSessionTurnCommand. It never refuses: the server gate (CompletionGate) is the only authority.
+- Run by: the plugin close verbs (S8, S9), the REPL workflow (S6), and McpAgent (S7) before they send the close (a turn at status `completed` or `failed` through SubmitSessionLogCommand, the route all three use). It never refuses: the server gate (CompletionGate) is the only authority.
 
 ```mermaid
 flowchart TD
@@ -1293,6 +1591,7 @@ flowchart TD
     P -->|range| E3(["Error review_score_out_of_range"])
     P -->|ok| FW(["Forward the lexeme unchanged as a JSON number token"])
 ```
+
 ### 5.5 Phase B sequence diagrams
 
 #### Sequence: submit RecordSessionTurnReviewCommand and process each response
@@ -1304,7 +1603,7 @@ sequenceDiagram
     participant P as Plugin recordReview
     participant R as qbrain-ai-repl
     participant S as SessionLogController or sessionlog_record_review
-    participant L as SessionLogService
+    participant L as IDispatcher and RecordSessionTurnReviewCommandHandler
     A->>P: recordReview (kind, review input or hvReceiptPath, optional requestId or original pair)
     P->>P: bind (D2, D9, or trusted pair). No failsafe for reviews
     alt unsupported session
@@ -1314,7 +1613,7 @@ sequenceDiagram
     else bound
         P->>R: recordReview with lossless score lexemes
         R->>S: PUT .../sections/agentReview or hostileReview
-        S->>L: validate, derive, stamp, replace
+        S->>L: SendAsync(RecordSessionTurnReviewCommand): validate, derive, stamp, replace
         alt valid
             S-->>R: 200 record (derived status, stamped thresholds)
             R-->>P: record
@@ -1325,6 +1624,9 @@ sequenceDiagram
         else 400 field code
             S-->>R: validation code
             P-->>A: code surfaced, nothing changed
+        else turn not found
+            S-->>R: 404 not_found
+            P-->>A: request_unknown, nothing changed
         else outage
             R-->>P: outage
             P-->>A: failed, not queued (an older review must never overwrite a newer one)
@@ -1339,33 +1641,39 @@ sequenceDiagram
     autonumber
     participant C as Client
     participant S as SessionLogController
-    participant L as SessionLogService
+    participant X as IDispatcher and ResetSessionTurnReviewCommandHandler
     C->>S: DELETE .../sections/{section} (ClearTurnReviewAsync)
-    S->>L: reset section
-    alt in-progress turn
-        L-->>S: reset to the default for the class
+    S->>X: SendAsync(ResetSessionTurnReviewCommand)
+    alt nonterminal turn
+        X-->>S: reset to the default for the class
         S-->>C: 200 reset record
     else completed or failed turn
         S-->>C: 400 review_section_reset_on_terminal_turn
         C->>C: report, record unchanged
-    else item key in route
-        S-->>C: 400 item delete rejected
+    else unknown section
+        S-->>C: 400 validation_error
+    else turn not found
+        S-->>C: 404 not_found
     end
+    Note over C,S: DELETE .../sections/{section}/items/{itemKey} on a review section goes to the existing delete-item handler, which refuses it with 400
 ```
 
-#### Sequence: submit a classification through PatchSessionTurnCommand (policy RequestClassification) and process each response
+#### Sequence: submit a classification through SubmitSessionLogCommand from the plugin updateTurn verb (policy RequestClassification) and process each response
 
 ```mermaid
 sequenceDiagram
     autonumber
     participant M as Model
     participant P as Plugin updateTurn
-    participant S as Server
-    M->>P: updateTurn requestClass Chore
-    P->>S: PATCH .../{requestId} with requestClass
+    participant S as SessionLogController
+    participant X as IDispatcher and SubmitSessionLogCommandHandler
+    M->>P: updateTurn requestClass Chore (optional requestId, allowed on a locally terminal turn as a class-only update)
+    P->>P: bind once (process BindVerbToTurn)
+    P->>S: POST /qbrainai/sessionlog with the bound turn carrying requestClass (client.SessionLog.SubmitAsync)
+    S->>X: SendAsync(SubmitSessionLogCommand)
     alt valid class
-        S->>S: normalize, store, apply the Chore flip on an in-progress turn
-        S-->>P: turn with canonical class and review statuses
+        X->>X: normalize, store, apply the Chore flip on an in-progress turn
+        S-->>P: 201 turns outcome merged
         P-->>M: persisted, hostile status shown
     else invalid class
         S-->>P: 400 request_class_invalid
@@ -1373,14 +1681,18 @@ sequenceDiagram
     end
 ```
 
+The same policy runs when a client, REPL, or MCP caller sends `requestClass` through PatchSessionTurnCommand, UpsertSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, or FailSessionTurnCommand; their sequences in section 4.5 carry the `request_class_invalid` branch.
+
 #### Sequence: submit GetSessionLogQuery and process the response
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant C as Client, REPL, MCP caller, or plugin
-    participant S as Server
+    participant C as REST caller (the typed client, REPL, MCP, and plugins read through QuerySessionLogsQuery)
+    participant S as SessionLogController
+    participant X as IDispatcher and GetSessionLogQueryHandler
     C->>S: GET /qbrainai/sessionlog/{agent}/{sessionId}
+    S->>X: QueryAsync(GetSessionLogQuery)
     alt found
         S-->>C: 200 turns with requestClass and both review records
         C->>C: read scores as exact decimals (lossless scalars in the PowerShell core, and the TypeScript-host adapters pass scores through as strings)
@@ -1419,7 +1731,7 @@ sequenceDiagram
 - A response becomes trusted only when a deterministic evidence grade and an independent model grade both reach correctness and completeness of at least 98 percent with zero FAIL and zero UNKNOWN findings. The model grade is recorded by the HV agent for the responses of an HV request that names a range of session-log turns; this effort has no grading worker or HV pipeline (operator, 2026-10-11). Rejected, stale, and superseded responses are kept for audit and never retrieved as trusted context.
 - Mandatory context is never truncated: when it exceeds the token budget, package construction fails explicitly, and in `Pilot` or `Stateless` mode the invocation fails: no answer is produced (operator, 2026-10-11: "Fail the invocation").
 - The mode is opt-in (`Mcp:AgentContext:Mode`); the current stateful behavior stays the default during the pilot.
-- Requirement ids (reserved for P0, created there with acceptance criteria, mappings, and use cases): FR-MCP-AGENTCONTEXT-001 package construction and provenance; -002 token budget and overflow; -003 response submission; -004 grading, HV requests, and trust; -005 rejection, staleness, and supersession; -006 typed relationships; -007 GraphRAG projection and fallback; -008 REST, MCP, client, REPL, and plugin surfaces; -009 opt-in mode and pilot. The matching TR-MCP-AGENTCONTEXT-* and TEST-MCP-AGENTCONTEXT-* records are created in P0.
+- Requirement ids (reserved for Phase 1, the plan's P0 steps 1-9, and created there with acceptance criteria, mappings, and use cases): FR-MCP-AGENTCONTEXT-001 package construction and provenance; -002 token budget and overflow; -003 response submission; -004 grading, HV requests, and trust; -005 rejection, staleness, and supersession; -006 typed relationships; -007 GraphRAG projection and fallback; -008 REST, MCP, client, REPL, and plugin surfaces; -009 opt-in mode and pilot. The matching TR-MCP-AGENTCONTEXT-* and TEST-MCP-AGENTCONTEXT-* records are created in Phase 1.
 
 ### 6.2 Configuration: `AgentContextOptions`
 
@@ -1438,7 +1750,7 @@ Section `Mcp:AgentContext` (declared under `QBrainAi: AgentContext:` in `appsett
 
 ### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities`)
 
-Common rules: string keys `[StringLength(128)]`, human-readable and derived from the records they belong to (formats per entity below). Bounded readable keys: a key is `<prefix><parentId><tail>` when that is at most 128 characters; otherwise the embedded parent id is shortened to its first `128 - length(prefix) - length(tail) - 13` characters followed by `-` and the first 12 hex digits of the SHA-256 of the full parent id, so keys stay readable, deterministic, and distinct for distinct parents; the complete parent ids are always stored in their own root-id columns, which keep the live length of 256 (`SessionLogEntity.SessionId` and `SessionLogTurnEntity.RequestId` allow 256), so no root id is ever truncated (`AgentContextKeys_MaxLengthRootIds_FitAndStayDistinct` on SQLite, PostgreSQL, and SQL Server; `AgentContextKeys_ShortRootIds_KeepFullReadableForm`); a sequence suffix `<nn>` (two digits, from 01) is allocated as one more than the highest existing suffix for that prefix, and a unique-index violation from a concurrent insert retries with the next suffix (at most five times, then 409 `conflict`); child rows use `long` identity keys; every entity has `[Required][StringLength(1024)] WorkspaceId` with the named `Workspace` query filter and `StampWorkspaceId` on add; timestamps are `DateTimeOffset` named `*Utc`; decimals are `HasPrecision(29, 28)`; list-valued data is stored in 4NF child tables; idempotency comes from unique indexes (the store has no concurrency tokens). Migrations `<yyyyMMddHHmmss>_AddAgentContext` are generated for SQLite, PostgreSQL, and SQL Server with the existing `dotnet ef migrations add` procedure.
+Common rules: string keys `[StringLength(128)]`, human-readable and derived from the records they belong to (formats per entity below). Bounded readable keys: a key is `<prefix><parentId><tail>` when that is at most 128 characters; otherwise the embedded parent id is shortened to its first `128 - length(prefix) - length(tail) - 13` characters followed by `-` and the first 12 hex digits of the SHA-256 of the full parent id, so keys stay readable, deterministic, and distinct for distinct parents; the complete parent ids are always stored in their own root-id columns, which keep the live length of 256 (`SessionLogEntity.SessionId` and `SessionLogTurnEntity.RequestId` allow 256), so no root id is ever truncated (`AgentContextKeys_MaxLengthRootIds_FitAndStayDistinct` on SQLite, PostgreSQL, and SQL Server; `AgentContextKeys_ShortRootIds_KeepFullReadableForm`); a sequence suffix `<nn>` (two digits, from 01) is allocated as one more than the highest existing suffix for that prefix, and a unique-index violation from a concurrent insert retries with the next suffix (at most five times, then 409 `conflict`); child rows use `long` identity keys; every entity has `[Required][StringLength(1024)] WorkspaceId` with the named `Workspace` query filter and `StampWorkspaceId` on add; timestamps are `DateTimeOffset` named `*Utc`; decimals are `HasPrecision(29, 28)`; list-valued data is stored in 4NF child tables; idempotency comes from unique indexes (the store has no concurrency tokens). Per-response serialization: every write that changes a response's grades or status (RunDeterministicGradeCommand and RecordModelGradeCommand with DecideAgentResponseTrustCommand, RejectAgentResponseCommand, SupersedeAgentResponseCommand, and EvaluateStalenessCommand) runs in one transaction at `IsolationLevel.Serializable` (the convention of `SessionLogService.cs:156`) whose first statement increments that response's `StatusVersion`, so every such operation on one response takes the row's write lock first and they serialize in commit order on SQLite, PostgreSQL, and SQL Server; a serialization failure or deadlock (PostgreSQL 40001 or 40P01, SQL Server 1205, SQLite busy) rolls the whole operation back and retries it from the start, at most three times, then returns 409 `conflict` with `retryable: true` (`Trust_ForcedInterleaving_DeterministicFailVsModelPass_NeverTrustedOnSupersededGrade`, `Trust_ForcedInterleaving_RejectVsGrade_RejectedNeverRevived`, each on the three providers). Migrations `<yyyyMMddHHmmss>_AddAgentContext` are generated for SQLite, PostgreSQL, and SQL Server with the existing `dotnet ef migrations add` procedure.
 
 `AgentContextPackageEntity` (table `AgentContextPackages`, key `PackageId` = `pkg-<requestId>-<nn>`, for example `pkg-req-20261011T223749Z-prompt-cc85-01`)
 
@@ -1477,6 +1789,7 @@ Source hashes (`SourceSha256`, `ToSha256`), all SHA-256 over UTF-8 bytes:
 - `Todo`: the canonical JSON of the TODO's id, title, description lines, tasks, and done state.
 - `PriorResponse`, `Response`: `ContentSha256`. `Package`: `ContentSha256`.
 - `Request`: the sanitized request text.
+- Response evidence (`AgentResponseEvidence.Sha256`, computed by the server at submission from the cited source): `File` as `Code`, and `Requirement`, `Receipt`, and `SessionLogTurn` as their kinds above; a submitted hash that differs makes that evidence check FAIL in the deterministic grade. These hashes are dependencies of the response: staleness compares them with the current source. `Commit` and `Command` evidence is not a dependency (a commit is immutable; a command result is checked only by the deterministic grade).
 
 Ranking scores are decimals rounded half-even to 6 places before ordering, so float differences between hosts never reorder candidates; ties break on `sourceRef` by ordinal comparison.
 
@@ -1497,6 +1810,8 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 - `WorkspaceId`, `PackageId` (FK, required), `SessionId`, `RequestId`, `Agent`, all required (root ids).
 - `Model` (128), `Effort` (32), `InvocationMode` (16): `Stateful` or `Stateless`.
 - `IdempotencyKey` (128): unique with `WorkspaceId`.
+- `SubmissionSha256` (64, required): SHA-256 of the canonical JSON (sorted keys, no insignificant whitespace) of the whole submission: `packageId`, `agent`, `model`, `effort`, `invocationMode`, `contentFormat`, `content`, and `claims` and `evidence` in order; a repeated idempotency key returns the stored response only when this fingerprint is equal, otherwise 409 `conflict`.
+- `StatusVersion` (long, default 0): the lock counter of the per-response serialization rule (not an EF concurrency token).
 - `Status` (16): `Submitted`, `Grading`, `Trusted`, `Rejected`, `Stale`, `Superseded`.
 - `StatusReason` (2048), `SupersededByResponseId` (128).
 - `ContentFormat` (16): `markdown`, `text`, or `json`. `Content` (text, sanitized), `ContentSha256` (64).
@@ -1517,10 +1832,11 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 - `Correctness`, `Completeness`, `CorrectnessThreshold`, `CompletenessThreshold` (decimal).
 - `PassCount`, `FailCount`, `UnknownCount` (int).
 - `Verdict` (16): `Pass` or `Fail`, derived: `Pass` only when both scores meet their thresholds and `FailCount` and `UnknownCount` are zero.
-- "Latest grade" of a kind means the grade with the greatest `GradedUtc`, ties broken by the greatest `GradeId` by ordinal comparison; concurrent grade writes are all kept and the trust decision (DecideAgentResponseTrustCommand) is recomputed after each one inside the same transaction.
+- "Latest grade" of a kind means the grade with the greatest `GradedUtc`, ties broken by the greatest `GradeId` by ordinal comparison; concurrent grade writes are all kept, and the trust decision (DecideAgentResponseTrustCommand) is recomputed after each one inside that grade's serialized transaction (per-response serialization rule above), so the stored status always reflects the latest committed grade pair.
 - `HvRequestId` (128, required for `Model`, null for `Deterministic`): the HV request whose review produced the grade.
 - `ReviewerSessionId`, `ReviewerRequestId` (256, required for `Model`): the reviewer's own session-log turn that holds its entire result; `VerdictJsonSha256` (64): the hash of the verdict block the grade was verified against.
 - `RequestJsonlPath`, `ResponseJsonlPath` (2048, required for `Model`, workspace-relative under `ModelGrader:ReceiptRoot`), `RequestJsonlSha256`, `ResponseJsonlSha256` (64): the receipts and their hashes as verified when the grade was recorded.
+- `RolloutJsonlPath` (2048, required for `Model`, under `ModelGrader:ReceiptRoot`), `RolloutJsonlSha256` (64), `ReviewerThreadId` (64, required for `Model`): the reviewer's own Codex rollout receipt (the HV runner copies the completed reviewer thread's rollout file next to the request and response jsonl, redacted by the receipt rule) and the thread id it records; check 8 (`runtime_identity`) verifies them.
 - `GradedUtc`.
 - Child `Findings`.
 
@@ -1540,11 +1856,11 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 - `WorkspaceId`, `SessionId` (256), `Agent` (64): the MCP session whose turns are reviewed.
 - `FromRequestId`, `ToRequestId` (256): the first and last turns of the range, inclusive, in the session's turn order.
 - `RequestedBy` (128), `Reason` (2048).
-- `Status` (16): `Open` (accepting grades) or `Completed` (every listed response has a model grade from this request).
+- `Status` (16): `Open` (accepting grades) or `Completed` (no item is `Pending`: every item is `Graded` by this request or `Closed` because its response became `Rejected` or `Superseded`).
 - `CreatedUtc`, `CompletedUtc`.
 - Child `Items`.
 
-`AgentContextHvRequestItemEntity` (table `AgentContextHvRequestItems`, `long Id`): `WorkspaceId`, `HvRequestId` (FK), `Ordinal`, `RequestId` (256), `ResponseId` (128, unique with `HvRequestId`), `Graded` (bool). Items are the agent responses whose `RequestId` lies in the range when the request is created.
+`AgentContextHvRequestItemEntity` (table `AgentContextHvRequestItems`, `long Id`): `WorkspaceId`, `HvRequestId` (FK), `Ordinal`, `RequestId` (256), `ResponseId` (128, unique with `HvRequestId`), `Disposition` (16): `Pending`, `Graded`, or `Closed`, and `ClosedReason` (32): `rejected` or `superseded`. Items are the agent responses whose `RequestId` lies in the range when the request is created and whose status is `Submitted`, `Grading`, `Trusted`, or `Stale` (a `Rejected` or `Superseded` response is never listed); when a listed response becomes `Rejected` or `Superseded` while the request is `Open`, RejectAgentResponseCommand or SupersedeAgentResponseCommand sets its item `Closed` with that reason in the same serialized transaction and completes the request when no item stays `Pending` (`HvRequest_RangeWithRejectedResponse_NotListed`, `HvRequest_ItemRejectedMidReview_ClosedAndRequestCompletes`, `HvRequest_ItemSupersededMidReview_Closed`).
 
 Receipt and reviewer verification (RecordModelGradeCommand), before a model grade is saved; each failure refuses the grade with 422 `agent_context_receipt_unverified` and `details.check` naming the check:
 
@@ -1554,9 +1870,10 @@ Receipt and reviewer verification (RecordModelGradeCommand), before a model grad
 4. `verdict_binding`: that verdict names this `hvRequestId` and has a `grades` entry for this `responseId` whose `contentSha256` equals the response's `ContentSha256`.
 5. `verdict_match`: the submitted `correctness`, `completeness`, and `findings` equal that entry exactly (same score lexemes; the same claimIds, checks, and outcomes in the same order), and the entry's findings name every claim of the response at least once (an empty or partial finding list is refused).
 6. `reviewer_turn`: the session-log turn (`reviewerSessionId`, `reviewerRequestId`) exists in the workspace, its session's agent is `ModelGrader:AgentName`, the turn was created at or after the HV request's `CreatedUtc`, and its stored result contains the same verdict block byte for byte, where the stored result is the turn's response followed by its processingDialog parts in part order with each part's header line removed (the HV protocol stores the entire result on the reviewer's own turn and splits a long result into ordered parts; `ModelGrade_VerdictSplitAcrossDialogParts_RejoinedAndAccepted`).
-7. `reviewer_independent`: the reviewer's MCP session is neither the session the HV request reviews nor the session that submitted the response, and the reviewer's agent differs from the response's `Agent`.
+7. `reviewer_independent`: the reviewer's MCP session is neither the session the HV request reviews nor the session that submitted the response; independence is a separate review session and execution, not a different agent name, so an independently launched Codex reviewer grades a Codex-authored response (`ModelGrade_CodexResponse_IndependentCodexReviewerSession_Accepted`).
+8. `runtime_identity`: the rollout receipt at `rolloutJsonlPath` resolves under `ModelGrader:ReceiptRoot`; its `session_meta` record's `id` equals `reviewerThreadId` and the `thread_id` of the response jsonl's `thread.started` event; every `turn_context` record in it has `model` equal to `ModelGrader:RequiredModel` and `effort` equal to `ModelGrader:RequiredEffort`; and the verdict JSON names the same `reviewerThreadId`. The declared `request_meta` alone never satisfies this check (`ModelGrade_LaunchMetaCorrect_RolloutTurnContextOtherModelOrEffort_Refused_RuntimeIdentity`, `ModelGrade_RolloutThreadDiffersFromResponseStream_Refused_RuntimeIdentity`).
 
-The hashes of both jsonl files and of the verdict block are stored on the grade. The remaining trust assumption is the workspace's session-log identity model (every agent of a workspace authenticates with the workspace key), which this plan does not change: a forged grade would need a forged reviewer session, a forged verdict, and matching receipts, and each is checked against the others. Negative cases: `ModelGrade_DisagreeVerdictPassingScores_Refused_VerdictMatch`, `ModelGrade_EmptyOrPartialFindings_Refused_VerdictMatch`, `ModelGrade_VerdictForOtherResponseOrContent_Refused_VerdictBinding`, `ModelGrade_NoCompletedTurnOrTwoVerdicts_Refused_VerdictBlock`, `ModelGrade_ReviewerTurnMissing_Refused_ReviewerTurn`, `ModelGrade_ReviewerTurnVerdictDiffers_Refused_ReviewerTurn`, `ModelGrade_ReviewerTurnBeforeHvRequest_Refused_ReviewerTurn`, `ModelGrade_ReviewerSameSessionOrAgentAsReviewed_Refused_ReviewerIndependent`.
+The hashes of the three jsonl receipts (request, response, rollout) and of the verdict block are stored on the grade. The remaining trust assumption is the workspace's session-log identity model (every agent of a workspace authenticates with the workspace key), which this plan does not change: a forged grade would need a forged reviewer session, a forged verdict, a forged rollout, and matching receipts, and each is checked against the others. Negative cases: `ModelGrade_DisagreeVerdictPassingScores_Refused_VerdictMatch`, `ModelGrade_EmptyOrPartialFindings_Refused_VerdictMatch`, `ModelGrade_VerdictForOtherResponseOrContent_Refused_VerdictBinding`, `ModelGrade_NoCompletedTurnOrTwoVerdicts_Refused_VerdictBlock`, `ModelGrade_ReviewerTurnMissing_Refused_ReviewerTurn`, `ModelGrade_ReviewerTurnVerdictDiffers_Refused_ReviewerTurn`, `ModelGrade_ReviewerTurnBeforeHvRequest_Refused_ReviewerTurn`, `ModelGrade_ReviewerSameSessionAsProducingOrReviewed_Refused_ReviewerIndependent`, `ModelGrade_LaunchMetaCorrect_RolloutTurnContextOtherModelOrEffort_Refused_RuntimeIdentity`, `ModelGrade_RolloutThreadDiffersFromResponseStream_Refused_RuntimeIdentity`; acceptance case `ModelGrade_CodexResponse_IndependentCodexReviewerSession_Accepted`.
 
 `AgentContextProjectionEntity` (table `AgentContextProjections`, key `ResponseId`)
 
@@ -1620,7 +1937,7 @@ Shared types
 - `AgentContextFindingDto { ordinal, kind, sourceRef, otherSourceRef, relationshipId, summary }`.
 - `AgentResponseClaimDto { claimId, text }`; `AgentResponseEvidenceDto { claimId, kind, ref, sha256, commitSha }`.
 - `AgentResponseGradeFindingDto { claimId, check, outcome, evidence }`.
-- `AgentResponseGradeDto { gradeId, responseId, kind, grader, correctness, completeness, correctnessThreshold, completenessThreshold, passCount, failCount, unknownCount, verdict, hvRequestId, reviewerSessionId, reviewerRequestId, requestJsonlPath, responseJsonlPath, verdictJsonSha256, gradedUtc, findings }`.
+- `AgentResponseGradeDto { gradeId, responseId, kind, grader, correctness, completeness, correctnessThreshold, completenessThreshold, passCount, failCount, unknownCount, verdict, hvRequestId, reviewerSessionId, reviewerRequestId, reviewerThreadId, requestJsonlPath, responseJsonlPath, rolloutJsonlPath, verdictJsonSha256, gradedUtc, findings }`.
 - `AgentContextRelationshipDto { relationshipId, fromKind, fromRef, type, toKind, toRef, toSha256, evidenceRef, createdBy, createdUtc }`.
 - `AgentContextCandidateDto { kind, sourceRef, sourceSha256, score, rationale, retrievalPath }`.
 - Query results follow `{ totalCount, limit, offset, items }`.
@@ -1632,11 +1949,11 @@ Requests and results (one pair per unit of work, section 6.5)
 - GetAgentContextPackageQuery get package: route id plus `includeContent` (bool, default true); result `AgentContextPackageResult`.
 - QueryAgentContextPackagesQuery `AgentContextPackageQuery { requestId, sessionId, status, limit, offset }`; result `AgentContextPackageQueryResult` of package summaries (all fields except items, omissions, findings, and content).
 - ReplayAgentContextPackageQuery replay: route id; result `AgentContextReplayResult { packageId, builderVersion, identical, originalContentSha256, replayContentSha256, originalInputsSha256, replayInputsSha256, differences [{ ordinal, kind, sourceRef, change }] }` with `change` in `added`, `removed`, `hashChanged`, `reordered`.
-- SubmitAgentResponseCommand `SubmitAgentResponseRequest { packageId, agent, model, effort, invocationMode, contentFormat, content, claims, evidence, idempotencyKey }` (at least one claim, and every claim at least one evidence item); result `AgentResponseResult { responseId, packageId, sessionId, requestId, agent, model, effort, invocationMode, status, statusReason, supersededByResponseId, contentFormat, contentSha256, commitSha, submittedUtc, statusChangedUtc, trustedUtc, claims, evidence, grades, content }`.
+- SubmitAgentResponseCommand `SubmitAgentResponseRequest { packageId, agent, model, effort, invocationMode, contentFormat, content, claims, evidence, idempotencyKey }` (at least one claim, and every claim at least one evidence item); result `AgentResponseResult { responseId, packageId, sessionId, requestId, agent, model, effort, invocationMode, status, statusReason, supersededByResponseId, contentFormat, contentSha256, submissionSha256, commitSha, submittedUtc, statusChangedUtc, trustedUtc, claims, evidence, grades, content }`.
 - GetAgentResponseQuery get response: route id plus `includeContent`; result `AgentResponseResult`.
 - QueryAgentResponsesQuery `AgentResponseQuery { requestId, packageId, status, trustedOnly, limit, offset }`; result `AgentResponseQueryResult` of response summaries.
 - RunDeterministicGradeCommand deterministic grade: route id, no body; result `AgentResponseGradeResult { grade, responseStatus, statusReason }`.
-- RecordModelGradeCommand `RecordModelGradeRequest { hvRequestId, reviewerSessionId, reviewerRequestId, grader, model, effort, correctness, completeness, findings, requestJsonlPath, responseJsonlPath, gradedUtc }` (scores and findings equal the reviewer's verdict entry for the response, section 6.3); result `AgentResponseGradeResult` plus `hvRequestStatus`.
+- RecordModelGradeCommand `RecordModelGradeRequest { hvRequestId, reviewerSessionId, reviewerRequestId, reviewerThreadId, grader, model, effort, correctness, completeness, findings, requestJsonlPath, responseJsonlPath, rolloutJsonlPath, gradedUtc }` (scores and findings equal the reviewer's verdict entry for the response, section 6.3); result `AgentResponseGradeResult` plus `hvRequestStatus`.
 - DecideAgentResponseTrustCommand trust decision (internal, no surface): result `AgentResponseTrustDecision { responseId, previousStatus, status, statusReason, deterministicGradeId, modelGradeId, decidedUtc }`; the dispatching grade handler copies `status` and `statusReason` into `AgentResponseGradeResult.responseStatus` and `statusReason`.
 - RejectAgentResponseCommand `RejectAgentResponseRequest { reason }`; result `AgentResponseResult`.
 - SupersedeAgentResponseCommand `SupersedeAgentResponseRequest { supersededByResponseId, reason }`; result `AgentResponseResult`.
@@ -1644,17 +1961,18 @@ Requests and results (one pair per unit of work, section 6.5)
 - CreateAgentContextRelationshipCommand `CreateAgentContextRelationshipRequest { fromKind, fromRef, type, toKind, toRef, evidenceRef }`; result `AgentContextRelationshipDto` plus `created` (bool).
 - DeleteAgentContextRelationshipCommand delete relationship: route id; result 204.
 - QueryAgentContextRelationshipsQuery `AgentContextRelationshipQuery { nodeKind, nodeRef, type, direction (out, in, both), limit, offset }`; result `AgentContextRelationshipQueryResult`.
-- RetrieveAgentContextCandidatesQuery `AgentContextRetrieveRequest { queryText, kinds, limit, trustedOnly, preferGraphRag }` (`trustedOnly` defaults to true and only `true` is accepted for `PriorResponse`); result `AgentContextRetrieveResult { retrievalPath, fallbackReason, candidates }`.
+- RetrieveAgentContextCandidatesQuery `AgentContextRetrieveRequest { queryText, sessionId, requestId, focusRefs, kinds, limit, trustedOnly, preferGraphRag }` (`sessionId` and `requestId` together name the turn whose relationship neighborhood ranks the relational path, both or neither; `focusRefs` optional; `trustedOnly` defaults to true and only `true` is accepted for `PriorResponse`); result `AgentContextRetrieveResult { retrievalPath, fallbackReason, candidates }`.
 - ProjectAgentResponsesCommand `ProjectAgentContextRequest { responseIds }` (empty means every response whose projection is pending or out of date); result `AgentContextProjectionResult { projected, removed, skipped, failed [{ responseId, error }], skippedReason }`.
 - RunStatelessInvocation stateless invocation: plugin-internal; it uses GetAgentContextStatusQuery, BuildAgentContextPackageCommand, and SubmitAgentResponseCommand; on a build failure the invocation fails (no answer) and the turn is closed `canceled` with the error.
-- CreateAgentContextHvRequestCommand `CreateAgentContextHvRequestRequest { sessionId, agent, fromRequestId, toRequestId, requestedBy, reason }`; result `AgentContextHvRequestResult { hvRequestId, status, sessionId, agent, fromRequestId, toRequestId, requestedBy, reason, createdUtc, completedUtc, items [{ requestId, responseId, graded }] }`.
-- GetAgentContextHvRequestQuery get: route id, result `AgentContextHvRequestResult`; query `AgentContextHvRequestQuery { sessionId, status, limit, offset }`, result `AgentContextHvRequestQueryResult` of results without items.
+- CreateAgentContextHvRequestCommand `CreateAgentContextHvRequestRequest { sessionId, agent, fromRequestId, toRequestId, requestedBy, reason }`; result `AgentContextHvRequestResult { hvRequestId, status, sessionId, agent, fromRequestId, toRequestId, requestedBy, reason, createdUtc, completedUtc, items [{ requestId, responseId, disposition, closedReason }] }`.
+- GetAgentContextHvRequestQuery get HV request: route id; result `AgentContextHvRequestResult`.
+- QueryAgentContextHvRequestsQuery `AgentContextHvRequestQuery { sessionId, status, limit, offset }`; result `AgentContextHvRequestQueryResult` of results without items.
 - GetAgentContextPilotReportQuery `AgentContextPilotReportQuery { fromUtc, toUtc }`; result `AgentContextPilotReport { fromUtc, toUtc, byMode [{ invocationMode, responses, trusted, rejected, stale, meanCorrectness, meanCompleteness, trustRate }] }`.
 
 Error codes (problem+json body `{ type, title, status, detail, code, message, retryable, details }`; MCP tools return `{ code, error, message, retryable, details }`)
 
 - 400 `validation_error` with `details.field` for malformed input, plus the Phase B score codes `review_score_format`, `review_score_precision`, `review_score_out_of_range` for grade scores.
-- 400 `agent_context_receipt_paths_required` (model grade without both jsonl paths or without the reviewer turn ids).
+- 400 `agent_context_receipt_paths_required` (model grade without its request, response, and rollout jsonl paths, the reviewer turn ids, or `reviewerThreadId`).
 - 400 `agent_context_relationship_invalid` (unknown kind or type, or a self-link).
 - 400 `agent_context_hv_request_invalid` (unknown session, an unknown or out-of-order range, a range over `HvRequest:MaxTurns`, or a range with no agent response).
 - 403 `agent_context_grader_not_allowed` (model grade from a grader other than the configured one).
@@ -1668,16 +1986,16 @@ Error codes (problem+json body `{ type, title, status, detail, code, message, re
 - 409 `agent_context_profile_unavailable` (no configured profile file or no rule file resolves; mandatory context cannot be assembled).
 - 409 `conflict` (idempotency key reused with different inputs).
 - 409 `agent_context_replay_snapshot_unavailable` (the package has no stored input snapshot) and 409 `agent_context_replay_builder_changed` (the package was built by another builder version; `details { recorded, current }`).
-- 422 `agent_context_receipt_unverified` with `details.check` naming the failed check: `receipt_path`, `request_meta`, `verdict_block`, `verdict_binding`, `verdict_match`, `reviewer_turn`, or `reviewer_independent`.
+- 422 `agent_context_receipt_unverified` with `details.check` naming the failed check: `receipt_path`, `request_meta`, `verdict_block`, `verdict_binding`, `verdict_match`, `reviewer_turn`, `reviewer_independent`, or `runtime_identity`.
 - 422 `agent_context_budget_exceeded` with `details { tokenBudget, mandatoryTokenCount, overflowTokenCount, mandatoryItems [{ kind, sourceRef, tokenCount }] }`.
 
 ### 6.5 Units of work (CQRS handlers), endpoints, and activity diagrams
 
 Each unit is exactly one CQRS command or query with its handler (operator, 2026-10-11: "I want to be clear, unit of work maps to one CQRS handler"), in `src/QBrainAi.Services/AgentContext/Commands` or `Queries` (namespace `QBrainAi.Support.Mcp.AgentContext.Commands` or `.Queries`), one file per record and handler, registered by `AddCqrsHandlers`. Every surface dispatches the same record through `IDispatcher`: the controller and the MCP tool call `SendAsync` or `QueryAsync`; the typed client, REPL, and plugins reach them over REST. A handler reports a contract error as `Result<T>.Failure(new AgentContextException(code, statusCode, message, details))`; `McpErrorClassifier` maps `AgentContextException` to the problem+json body with that status and `code`. The stateless invocation is not a unit: it is the plugin process RunStatelessInvocation (section 6.6).
 
-Every REST route below exists under `/qbrainai/agent-context` and the alias `/mcpserver/agent-context` (controller `AgentContextController`, `[ApiController]`, workspace required through `X-Workspace-Path`, authenticated by `WorkspaceAuthMiddleware`). MCP tools live in `FwhMcpTools.AgentContext.cs` with `workspacePath` as the first parameter and JSON-string bodies. The typed client is `AgentContextClient : McpClientBase`, exposed as `QBrainAiClient.AgentContext`. The REPL reaches it as `client.AgentContext.<Method>` (added to the `GenericClientPassthrough` allow-list as `AGENTCONTEXT`; mutating methods registered in `ClientMutationPolicy`; YAML validators registered with explicit `payload.params.<key>` paths). PowerShell plugins call `Invoke-McpPlugin.ps1 -Command Invoke -Method client.AgentContext.<Method> -ParamsObject <params>` with `<params>` from the exported builder named in each unit (`McpPluginShim.psm1`). Builder contract, one builder per externally callable unit: `New-McpAgentContext<Verb>Params` takes one parameter per field of the unit's request record, named in PascalCase, typed string as `[string]`, bool as `[bool]`, int as `[int]`, a decimal score as `[string]` holding the exact lexeme, and a list as `[object[]]` of hashtables with the record's camelCase keys; a parameter is mandatory exactly when the record field is required, an omitted optional parameter is left out of the output (the server applies the record's default), and route ids (`packageId`, `responseId`, `relationshipId`, `hvRequestId`) are mandatory `[string]` parameters; the builder returns an ordered hashtable whose keys are the record's camelCase field names in record order with the values unchanged, and never calls the server (`AgentContextBuilders_ParametersMatchRequestRecords_OutputKeysAndValuesExact`, generated over every unit from `docs/context/agent-context-contract.json`). Tool descriptor contract: each externally callable unit has one entry in `lib/tool-descriptors.json` with `name` (the `agent_context_*` name in each unit), `description`, `inputSchema` (the JSON schema of the unit's request record, route ids as required string properties, scores as strings), `method` (the `client.AgentContext.<Method>` REPL method listed in each unit), and `mutates` (true for commands, false for queries); a TypeScript host's adapter runs `Invoke-McpPlugin.ps1 -Command Invoke -Method <method> -ParamsFromStdin` with the call's arguments as JSON on stdin (TR-MCP-SESSIONTURN-008), so PowerShell and TypeScript hosts reach the same command (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell.").
+Every REST route below exists under `/qbrainai/agent-context` and the alias `/mcpserver/agent-context` (controller `AgentContextController`, `[ApiController]`, workspace required through `X-Workspace-Path`, authenticated by `WorkspaceAuthMiddleware`). MCP tools live in `FwhMcpTools.AgentContext.cs` with `workspacePath` as the first parameter and JSON-string bodies. The typed client is `AgentContextClient : McpClientBase`, exposed as `QBrainAiClient.AgentContext`. The REPL reaches it as `client.AgentContext.<Method>` (added to the `GenericClientPassthrough` allow-list as `AGENTCONTEXT`; mutating methods registered in `ClientMutationPolicy`; YAML validators registered with explicit `payload.params.<key>` paths). Typed client signatures, which the REPL binds by parameter name, case-insensitively (`GenericClientPassthrough.cs:649-695`; a missing required parameter fails with `Missing required parameter`): a route id is a separate `string` parameter named `packageId`, `responseId`, `relationshipId`, or `hvRequestId`; a command's body record is one parameter named `request`; a query's filter record is one parameter named `query`; a scalar such as `includeContent` keeps its name. So the REPL params of BuildPackageAsync are `{ request: { sessionId, agent, requestId, queryText, tokenBudget, focusRefs, idempotencyKey } }`, of GetPackageAsync `{ packageId, includeContent }`, of RejectResponseAsync `{ responseId, request: { reason } }`, and of QueryPackagesAsync `{ query: { requestId, sessionId, status, limit, offset } }`. PowerShell plugins call `Invoke-McpPlugin.ps1 -Command Invoke -Method client.AgentContext.<Method> -ParamsObject <params>` with `<params>` from the exported builder named in each unit (`McpPluginShim.psm1`). Builder contract, one builder per externally callable unit: `New-McpAgentContext<Verb>Params` takes one PowerShell parameter per route id, scalar, and body or filter field, named in PascalCase, typed string as `[string]`, bool as `[bool]`, int as `[int]`, a decimal score as `[string]` holding the exact lexeme, and a list as `[object[]]` of hashtables with the record's camelCase keys; a parameter is mandatory exactly when the client parameter or record field is required, and an omitted optional parameter is left out of the output (the server applies the default); the builder returns that envelope as an ordered hashtable: route ids and scalars at the top level under their client parameter names, and the record's camelCase fields, in record order with the values unchanged, nested under `request` or `query`; it never calls the server (`AgentContextBuilders_ParametersMatchRequestRecords_OutputKeysAndValuesExact`, generated over every unit from `docs/context/agent-context-contract.json`, and `AgentContextBuilders_EnvelopesBindThroughGenericClientPassthrough`, which binds every builder's output through the real `GenericClientPassthrough` binder against the real `AgentContextClient` signatures). Tool descriptor contract: each externally callable unit has one entry in `lib/tool-descriptors.json` with `name` (the `agent_context_*` name in each unit), `description`, `inputSchema` (the JSON schema of that same envelope: route ids and scalars as top-level properties, the body as a required `request` or `query` object with the record's schema, scores as strings), `method` (the `client.AgentContext.<Method>` REPL method listed in each unit), and `mutates` (true for commands, false for queries); a TypeScript host's adapter runs `Invoke-McpPlugin.ps1 -Command Invoke -Method <method> -InvocationFromStdin` with `{ params, hostContext }` as JSON on stdin (the call's arguments, an envelope of that schema, and the host's separate tool context) (TR-MCP-SESSIONTURN-008), so PowerShell and TypeScript hosts reach the same command (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell.").
 
-Every unit except GetAgentContextStatusQuery, DecideAgentResponseTrustCommand, and RunStatelessInvocation (including CreateAgentContextHvRequestCommand and GetAgentContextHvRequestQuery) starts with the same two checks, drawn in each diagram: the workspace resolves (otherwise 404 `Workspace required`), and the mode is not `Off` (otherwise 409 `agent_context_disabled`).
+Every unit except GetAgentContextStatusQuery, DecideAgentResponseTrustCommand, and RunStatelessInvocation (including CreateAgentContextHvRequestCommand, GetAgentContextHvRequestQuery, and QueryAgentContextHvRequestsQuery) starts with the same two checks, drawn in each diagram: the workspace resolves (otherwise 404 `Workspace required`), and the mode is not `Off` (otherwise 409 `agent_context_disabled`).
 
 #### GetAgentContextStatusQuery: get status [FR-MCP-AGENTCONTEXT-008, -009]
 
@@ -1817,8 +2135,8 @@ flowchart TD
 
 - Handler: `SubmitAgentResponseCommand(string WorkspacePath, SubmitAgentResponseRequest Request) : ICommand<AgentResponseResult>` and `SubmitAgentResponseCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/SubmitAgentResponseCommand.cs`.
 - REST `POST /qbrainai/agent-context/responses`; MCP `agent_context_submit_response(workspacePath, requestJson)`; client `SubmitResponseAsync(SubmitAgentResponseRequest)`; REPL `client.AgentContext.SubmitResponseAsync`; PowerShell `New-McpAgentContextSubmitResponseParams`; tool descriptor `agent_context_submit_response`.
-- Response 201 `AgentResponseResult` with status `Submitted`, or 200 with the existing response for a repeated idempotency key with identical content.
-- Errors: 400 `validation_error` (empty content, no claim, a claim with no evidence item, duplicate claimId, evidence pointing to an unknown claim, unknown format or mode); 404 `not_found` (`package`); 409 `agent_context_disabled`, `agent_context_package_overflow`, `conflict`.
+- Response 201 `AgentResponseResult` with status `Submitted`, or 200 with the existing response for a repeated idempotency key with an identical submission (`SubmissionSha256`, section 6.3; `Submit_SameKeyIdenticalSubmission_200Existing`, `Submit_SameKeySameContentDifferentPackage_409Conflict`, `Submit_SameKeySameContentDifferentClaimsOrEvidence_409Conflict`).
+- Errors: 400 `validation_error` (empty content, no claim, a claim with no evidence item, duplicate claimId, evidence pointing to an unknown claim, unknown format or mode); 404 `not_found` (`package`); 409 `agent_context_disabled`, `agent_context_package_overflow`, `conflict` (key reused with a different submission: any differing package, agent, model, effort, mode, format, content, claim, or evidence).
 
 ```mermaid
 flowchart TD
@@ -1832,14 +2150,15 @@ flowchart TD
     P -->|no| E3(["404 not_found package"])
     P -->|yes| OV{"Package Overflow?"}
     OV -->|yes| E4(["409 agent_context_package_overflow"])
-    OV -->|no| ID{"Idempotency key used before?"}
-    ID -->|yes, same content hash| EX(["200 existing response"])
-    ID -->|yes, different content| E5(["409 conflict"])
-    ID -->|no| SAN["Sanitize content, compute ContentSha256, read the workspace commit"]
-    SAN --> SV["Save response (status Submitted), claims, evidence; copy root ids from the package"]
+    OV -->|no| FP["Sanitize content, compute ContentSha256 and SubmissionSha256 over the whole submission"]
+    FP --> ID{"Idempotency key used before?"}
+    ID -->|yes, same SubmissionSha256| EX(["200 existing response"])
+    ID -->|yes, different submission| E5(["409 conflict"])
+    ID -->|no| SAN["Compute each File, Requirement, Receipt, and SessionLogTurn evidence hash from its source, read the workspace commit"]
+    SAN --> SV["Save response (status Submitted), claims, evidence with hashes; copy root ids from the package"]
     SV --> RACE{"Idempotency unique index violated by a concurrent submit?"}
-    RACE -->|yes, same content hash| EX2(["200 the winner's response"])
-    RACE -->|yes, different content| E6(["409 conflict"])
+    RACE -->|yes, same SubmissionSha256| EX2(["200 the winner's response"])
+    RACE -->|yes, different submission| E6(["409 conflict"])
     RACE -->|no| REL["Link response derived_from package, and evidence links of kind Requirement or File as supports"]
     REL --> OK(["201 AgentResponseResult status Submitted"])
 ```
@@ -1913,7 +2232,7 @@ flowchart TD
     NX -->|yes| CL
     NX -->|no| GL["Global checks: secret scan of content, claims, and evidence refs; package staleness"]
     GL --> SC["Compute correctness and completeness as exact decimals"]
-    SC --> VD["Verdict Pass only if both meet the trust thresholds and FAIL and UNKNOWN counts are zero"]
+    SC --> VD["Verdict Pass only if both scores meet the trust thresholds (never below 0.98) and FAIL and UNKNOWN counts are zero"]
     VD --> SV["Save grade and findings, stamp thresholds"]
     SV --> TR["Decide trust (DecideAgentResponseTrustCommand returns AgentResponseTrustDecision)"]
     TR --> R(["201 AgentResponseGradeResult with the response status"])
@@ -1923,7 +2242,7 @@ flowchart TD
 
 - Handler: `RecordModelGradeCommand(string WorkspacePath, string ResponseId, RecordModelGradeRequest Request) : ICommand<AgentResponseGradeResult>` and `RecordModelGradeCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/RecordModelGradeCommand.cs`.
 - Caller: the HV agent (the configured grader, launched as every HV is) after it reviews the turns of an HV request (CreateAgentContextHvRequestCommand). There is no grading worker or HV pipeline in this effort (operator, 2026-10-11).
-- REST `POST /qbrainai/agent-context/responses/{responseId}/grades/model`; MCP `agent_context_record_model_grade(string workspacePath, string responseId, string gradeJson)`; client `RecordModelGradeAsync(responseId, RecordModelGradeRequest)`; REPL `client.AgentContext.RecordModelGradeAsync`; PowerShell `New-McpAgentContextRecordModelGradeParams` (also builds the request from the reviewer's verdict: the scores and findings of its `grades` entry for the response copied exactly, and the reviewer's own session-log turn ids); tool descriptor `agent_context_record_model_grade`.
+- REST `POST /qbrainai/agent-context/responses/{responseId}/grades/model`; MCP `agent_context_record_model_grade(string workspacePath, string responseId, string gradeJson)`; client `RecordModelGradeAsync(responseId, RecordModelGradeRequest)`; REPL `client.AgentContext.RecordModelGradeAsync`; PowerShell `New-McpAgentContextRecordModelGradeParams` (also builds the request from the reviewer's verdict: the scores and findings of its `grades` entry for the response copied exactly, the reviewer's own session-log turn ids, its thread id, and the request, response, and rollout jsonl paths); tool descriptor `agent_context_record_model_grade`.
 - Response 201 `AgentResponseGradeResult` with `hvRequestStatus` (`Completed` once every item of the HV request is graded).
 - Errors: 400 `validation_error`, `review_score_format`, `review_score_precision`, `review_score_out_of_range`, `agent_context_receipt_paths_required`; 403 `agent_context_grader_not_allowed`; 404 `not_found` (`response`, `hv_request`); 409 `agent_context_disabled`, `agent_context_response_not_gradable`, `agent_context_grade_not_in_hv_request`, `agent_context_hv_request_closed`; 422 `agent_context_receipt_unverified`.
 
@@ -1937,7 +2256,7 @@ flowchart TD
     LX -->|format| E2(["400 review_score_format"])
     LX -->|precision| E3(["400 review_score_precision"])
     LX -->|range| E4(["400 review_score_out_of_range"])
-    LX -->|ok| RP{"hvRequestId, both jsonl paths, reviewerSessionId, and reviewerRequestId present?"}
+    LX -->|ok| RP{"hvRequestId, the request, response, and rollout jsonl paths, reviewerSessionId, reviewerRequestId, and reviewerThreadId present?"}
     RP -->|no| E5(["400 agent_context_receipt_paths_required"])
     RP -->|yes| FV{"Findings valid: outcome PASS, FAIL, or UNKNOWN, claimIds known?"}
     FV -->|no| E6(["400 validation_error"])
@@ -1953,13 +2272,13 @@ flowchart TD
     HO -->|no| E11(["409 agent_context_hv_request_closed"])
     HO -->|yes| IT{"Response is an item of the HV request?"}
     IT -->|no| E12(["409 agent_context_grade_not_in_hv_request"])
-    IT -->|yes| RV{"Receipt and reviewer checks pass: receipt_path, request_meta, verdict_block, verdict_binding, verdict_match, reviewer_turn, reviewer_independent (section 6.3)?"}
+    IT -->|yes| RV{"Receipt and reviewer checks pass: receipt_path, request_meta, verdict_block, verdict_binding, verdict_match, reviewer_turn, reviewer_independent, runtime_identity (section 6.3)?"}
     RV -->|no| E13(["422 agent_context_receipt_unverified with the failed check"])
     RV -->|yes| CNT["Count PASS, FAIL, UNKNOWN findings"]
     CNT --> VD["Verdict Pass only if both scores meet the trust thresholds (never below 0.98) and FAIL and UNKNOWN counts are zero"]
-    VD --> SV["Save grade with hvRequestId, findings, receipt paths and hashes; stamp thresholds; mark the item graded"]
+    VD --> SV["In the per-response serialized transaction: save grade with hvRequestId, findings, receipt paths and hashes; stamp thresholds; set the item Graded"]
     SV --> TR["Decide trust (DecideAgentResponseTrustCommand returns AgentResponseTrustDecision)"]
-    TR --> ALL{"Every item of the HV request graded?"}
+    TR --> ALL{"No item of the HV request still Pending?"}
     ALL -->|yes| CMP["HV request Completed, CompletedUtc set"]
     ALL -->|no| R
     CMP --> R(["201 AgentResponseGradeResult with the response status and hvRequestStatus"])
@@ -1969,7 +2288,7 @@ flowchart TD
 
 - Handler: `DecideAgentResponseTrustCommand(string WorkspacePath, string ResponseId) : ICommand<AgentResponseTrustDecision>` and `DecideAgentResponseTrustCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/DecideAgentResponseTrustCommand.cs`; internal, dispatched through `IDispatcher.SendAsync` by the RunDeterministicGradeCommand and RecordModelGradeCommand handlers inside their transaction, never by a surface.
 - Trigger: the RunDeterministicGradeCommand and RecordModelGradeCommand handlers dispatch it after their grade is saved, in the same transaction. No endpoint.
-- Rule: a response is `Trusted` only when it is not `Rejected`, `Stale`, or `Superseded`, its latest deterministic grade is `Pass`, and its latest model grade is `Pass` ("latest" as defined in section 6.3: greatest `GradedUtc`, then greatest `GradeId`); otherwise it is `Grading`. The decision runs in the same transaction as the grade insert, so concurrent grades each see a consistent latest pair.
+- Rule: a response is `Trusted` only when it is not `Rejected`, `Stale`, or `Superseded`, its latest deterministic grade is `Pass`, and its latest model grade is `Pass` ("latest" as defined in section 6.3: greatest `GradedUtc`, then greatest `GradeId`); otherwise it is `Grading`. The decision runs inside the grade's serialized transaction (per-response serialization rule, section 6.3), so the stored status always reflects the latest committed grade pair, and a concurrent reject, supersede, or staleness change on the same response is ordered before or after it, never interleaved.
 
 ```mermaid
 flowchart TD
@@ -2009,7 +2328,7 @@ flowchart TD
     F -->|yes| ST{"Current status"}
     ST -->|Rejected| SAME(["200 unchanged"])
     ST -->|Superseded| E4(["409 agent_context_response_not_gradable"])
-    ST -->|Submitted, Grading, Trusted, or Stale| RJ["Status Rejected with reason, StatusChangedUtc"]
+    ST -->|Submitted, Grading, Trusted, or Stale| RJ["In the per-response serialized transaction: status Rejected with reason, StatusChangedUtc; its Pending items in Open HV requests set Closed (rejected), and each such request completed when no item stays Pending"]
     RJ --> PR{"Projected?"}
     PR -->|yes| RM["Mark projection Pending for removal (ProjectAgentResponsesCommand)"]
     PR -->|no| OK
@@ -2034,7 +2353,7 @@ flowchart TD
     F -->|no| E3(["404 not_found response"])
     F -->|yes| RQ{"Same requestId, replacement not Rejected or Superseded, no cycle?"}
     RQ -->|no| E4(["409 agent_context_supersede_invalid"])
-    RQ -->|yes| SP["Status Superseded, SupersededByResponseId set"]
+    RQ -->|yes| SP["In the per-response serialized transaction: status Superseded, SupersededByResponseId set; its Pending items in Open HV requests set Closed (superseded), and each such request completed when no item stays Pending"]
     SP --> LK["Create relationship replacement supersedes original"]
     LK --> PR["Mark the original's projection Pending for removal when projected"]
     PR --> OK(["200 AgentResponseResult status Superseded"])
@@ -2044,8 +2363,8 @@ flowchart TD
 
 - Handler: `EvaluateStalenessCommand(string WorkspacePath, EvaluateStalenessRequest Request) : ICommand<AgentContextStalenessResult>` and `EvaluateStalenessCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/EvaluateStalenessCommand.cs`.
 - REST `POST /qbrainai/agent-context/staleness/evaluate`; MCP `agent_context_evaluate_staleness(workspacePath, responseIdsJson)`; client `EvaluateStalenessAsync(EvaluateStalenessRequest)`; REPL `client.AgentContext.EvaluateStalenessAsync`; PowerShell `New-McpAgentContextEvaluateStalenessParams`; tool descriptor `agent_context_evaluate_staleness`.
-- Also triggered internally before BuildAgentContextPackageCommand gathers prior responses and after a requirement update or delete.
-- Rule: a non-terminal response is stale when any `depends_on` or `derived_from` target of the response or of its package now hashes differently from `ToSha256`, or a cited requirement was deleted or superseded.
+- Also triggered internally before BuildAgentContextPackageCommand gathers prior responses, by RetrieveAgentContextCandidatesQuery for every prior-response candidate before it is returned, and after a requirement update or delete.
+- Rule: a non-terminal response is stale when any `depends_on`, `derived_from`, or `supports` target of the response or of its package now hashes differently from its `ToSha256`, when any of its `File`, `Requirement`, `Receipt`, or `SessionLogTurn` evidence (including evidence outside its package) now hashes differently from the evidence's recorded `Sha256`, or when a cited requirement was deleted or superseded (`Staleness_ResponseOnlyEvidenceChanged_MarksStale`); each status change runs in the per-response serialized transaction.
 - Response 200 `AgentContextStalenessResult`. Errors: 400 `validation_error` (malformed list, more than 1000 ids, an id without the `rsp-` prefix), 404 workspace, 409 `agent_context_disabled`.
 
 ```mermaid
@@ -2064,7 +2383,7 @@ flowchart TD
     NX -->|none| R(["200 evaluatedCount and newlyStale"])
     NX -->|response| TERM{"Rejected, Superseded, or already Stale?"}
     TERM -->|yes| NX
-    TERM -->|no| DEP["Collect depends_on and derived_from links of the response and its package"]
+    TERM -->|no| DEP["Collect depends_on, derived_from, and supports links of the response and its package, and the response's evidence hashes"]
     DEP --> H{"Any target hash changed, missing, deleted, or superseded?"}
     H -->|no| NX
     H -->|yes| MK["Status Stale with the changed ref and relationship; projection Pending for removal when projected"]
@@ -2143,9 +2462,9 @@ flowchart TD
 #### RetrieveAgentContextCandidatesQuery: retrieve candidate context [FR-MCP-AGENTCONTEXT-007]
 
 - Handler: `RetrieveAgentContextCandidatesQuery(string WorkspacePath, AgentContextRetrieveRequest Request) : IQuery<AgentContextRetrieveResult>` and `RetrieveAgentContextCandidatesQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/RetrieveAgentContextCandidatesQuery.cs`.
-- REST `POST /qbrainai/agent-context/retrieve`; MCP `agent_context_retrieve(workspacePath, requestJson)`; client `RetrieveAsync(AgentContextRetrieveRequest)`; REPL `client.AgentContext.RetrieveAsync`; PowerShell `New-McpAgentContextRetrieveParams`; tool descriptor `agent_context_retrieve`. Also called by BuildAgentContextPackageCommand.
-- The relational path ranks by explicit relationships to the request's requirements, TODO, and turn first, then by the existing hybrid search (FTS5 BM25 with vector similarity), with ties broken by `sourceRef`. The GraphRAG path queries the projected responses; any fallback uses the relational path and reports `fallbackReason` (`graphrag_disabled`, `graphrag_not_initialized`, `graphrag_not_indexed`, `index_in_progress`, `retrieval_disabled`, or `graphrag_error`).
-- Response 200 `AgentContextRetrieveResult`. Errors: 400 `validation_error` (`trustedOnly: false` with kind `PriorResponse`, limit out of range), 404 workspace, 409 `agent_context_disabled`.
+- REST `POST /qbrainai/agent-context/retrieve`; MCP `agent_context_retrieve(workspacePath, requestJson)`; client `RetrieveAsync(AgentContextRetrieveRequest)`; REPL `client.AgentContext.RetrieveAsync`; PowerShell `New-McpAgentContextRetrieveParams`; tool descriptor `agent_context_retrieve`. Also called by BuildAgentContextPackageCommand with the package's `sessionId`, `requestId`, and `focusRefs`.
+- When the request names a turn (`sessionId` and `requestId`) or `focusRefs`, the relational path ranks by explicit relationships to that turn, its TODO, its requirements, and the focus refs first (`Retrieve_SameQueryTextTwoTurnNeighborhoods_DifferentRanking`); without them it ranks by the hybrid search alone. Every `PriorResponse` candidate is checked for staleness (EvaluateStalenessCommand) before it is returned, so a response whose dependency changed is marked `Stale` and omitted (`Retrieve_AfterEvidenceFileChange_ResponseStaleAndExcluded`). The relational path then ranks by the existing hybrid search (FTS5 BM25 with vector similarity), with ties broken by `sourceRef`. The GraphRAG path queries the projected responses; any fallback uses the relational path and reports `fallbackReason` (`graphrag_disabled`, `graphrag_not_initialized`, `graphrag_not_indexed`, `index_in_progress`, `retrieval_disabled`, or `graphrag_error`).
+- Response 200 `AgentContextRetrieveResult`. Errors: 400 `validation_error` (`trustedOnly: false` with kind `PriorResponse`, limit out of range, only one of `sessionId` and `requestId`), 404 workspace, 404 `not_found` (`session_turn`) for a named turn that does not exist in the workspace (`Retrieve_UnknownTurn_404SessionTurn`), 409 `agent_context_disabled`.
 
 ```mermaid
 flowchart TD
@@ -2155,7 +2474,11 @@ flowchart TD
     MO -->|yes| E1(["409 agent_context_disabled"])
     MO -->|no| V{"Request valid, trustedOnly true for PriorResponse?"}
     V -->|no| E2(["400 validation_error"])
-    V -->|yes| UG{"preferGraphRag and UseForRetrieval?"}
+    V -->|yes| NT{"Turn named?"}
+    NT -->|yes| TF{"Turn exists in the workspace?"}
+    TF -->|no| E3(["404 not_found session_turn"])
+    TF -->|yes| UG
+    NT -->|no| UG{"preferGraphRag and UseForRetrieval?"}
     UG -->|no| REL["Relational path"]
     UG -->|yes| GS["IGraphRagService.GetStatusAsync"]
     GS --> EN{"Enabled and indexed?"}
@@ -2165,10 +2488,10 @@ flowchart TD
     GQ --> GQR{"Query result"}
     GQR -->|FallbackUsed or exception| FB2["fallbackReason from the result or graphrag_error"]
     FB2 --> REL
-    GQR -->|ok| MAPG["Map hits to Trusted responses only, drop the rest"]
+    GQR -->|ok| MAPG["Map hits to Trusted responses that pass a staleness check (EvaluateStalenessCommand), drop the rest"]
     MAPG --> RES(["200 retrievalPath GraphRag with candidates"])
-    REL --> R1["Score: linked by relationships first, then hybrid search score"]
-    R1 --> R2["Filter to Trusted for PriorResponse, order by score then sourceRef, cut to limit"]
+    REL --> R1["Score: linked by relationships to the named turn and focus refs first, then hybrid search score"]
+    R1 --> R2["Filter PriorResponse to Trusted responses that pass a staleness check, order by score then sourceRef, cut to limit"]
     R2 --> RES2(["200 retrievalPath Relational, fallbackReason when a fallback happened"])
 ```
 
@@ -2234,9 +2557,9 @@ flowchart TD
 - Handler: `CreateAgentContextHvRequestCommand(string WorkspacePath, CreateAgentContextHvRequestRequest Request) : ICommand<AgentContextHvRequestResult>` and `CreateAgentContextHvRequestCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/CreateAgentContextHvRequestCommand.cs`.
 - Caller: any agent (operator, 2026-10-11: "Agents will specify a range of session turns to be HV, the HV agent will mark the grade you have been working.").
 - REST `POST /qbrainai/agent-context/hv-requests`; MCP `agent_context_create_hv_request(string workspacePath, string sessionId, string agent, string fromRequestId, string toRequestId, string requestedBy, string reason)`; client `CreateHvRequestAsync(CreateAgentContextHvRequestRequest)`; REPL `client.AgentContext.CreateHvRequestAsync`; PowerShell `New-McpAgentContextCreateHvRequestParams`; tool descriptor `agent_context_create_hv_request`.
-- Response 201 `AgentContextHvRequestResult` (Location `/qbrainai/agent-context/hv-requests/{hvRequestId}`) with its items: every agent response whose `RequestId` lies in the range, in turn order.
+- Response 201 `AgentContextHvRequestResult` (Location `/qbrainai/agent-context/hv-requests/{hvRequestId}`) with its items: every agent response whose `RequestId` lies in the range and whose status is not `Rejected` or `Superseded`, in turn order, each `Pending`.
 - Review contract: the brief for an HV request asks the reviewer to emit in its `=== VERDICT JSON ===` the `hvRequestId` and `grades`, one entry per item `{ responseId, contentSha256, correctness, completeness, findings [{ claimId, check, outcome }] }` naming every claim of the response, and to store its entire result on its own session-log turn; RecordModelGradeCommand accepts a grade only when it equals that entry and that turn (section 6.3).
-- Errors: 400 `validation_error` (blank fields), `agent_context_hv_request_invalid` (unknown session, an endpoint turn not in the session, from after to, a range longer than `HvRequest:MaxTurns`, or a range with no agent response); 404 workspace; 409 `agent_context_disabled`.
+- Errors: 400 `validation_error` (blank fields), `agent_context_hv_request_invalid` (unknown session, an endpoint turn not in the session, from after to, a range longer than `HvRequest:MaxTurns`, or a range with no gradable agent response); 404 workspace; 409 `agent_context_disabled`.
 
 ```mermaid
 flowchart TD
@@ -2252,9 +2575,9 @@ flowchart TD
     EP -->|no| E4(["400 agent_context_hv_request_invalid range"])
     EP -->|yes| LEN{"Turns in range at most HvRequest:MaxTurns?"}
     LEN -->|no| E5(["400 agent_context_hv_request_invalid too long"])
-    LEN -->|yes| RS["Collect agent responses whose RequestId lies in the range, in turn order"]
+    LEN -->|yes| RS["Collect agent responses whose RequestId lies in the range and whose status is not Rejected or Superseded, in turn order, each Pending"]
     RS --> ANY{"At least one response?"}
-    ANY -->|no| E6(["400 agent_context_hv_request_invalid no responses"])
+    ANY -->|no| E6(["400 agent_context_hv_request_invalid no gradable responses"])
     ANY -->|yes| SV["Save HV request (Open) and its items"]
     SV --> R(["201 AgentContextHvRequestResult"])
 ```
@@ -2273,7 +2596,7 @@ flowchart TD
     MO -->|yes| E1(["409 agent_context_disabled"])
     MO -->|no| F{"HV request found?"}
     F -->|no| E2(["404 not_found hv_request"])
-    F -->|yes| L["Load items with their graded flags"]
+    F -->|yes| L["Load items with their dispositions"]
     L --> R(["200 AgentContextHvRequestResult"])
 ```
 
@@ -2303,7 +2626,8 @@ flowchart TD
 - Trigger: a delivered user request (Phase A processes ApplyArrivalBridgeRecord and OpenTurnFromPromptHook) on a host whose plugin reads `Mode` through GetAgentContextStatusQuery.
 - PowerShell core: `Invoke-PluginAgentContextInvocation` in `plugin-hook.ps1`, for all nine hosts (the TypeScript hosts through their adapters). Hosts inject the rendered package through their prompt-context mechanism (hook additional context or the host's system-context API).
 - Output: in `Stateless` mode the model receives only the rendered package and the request, without prior conversation turns; in `Pilot` mode the package is built and recorded but not injected; in `Off` nothing happens.
-- Package failure (operator, 2026-10-11: "Fail the invocation"): in `Pilot` or `Stateless` mode, when the build fails (budget overflow, profile unavailable, commit unavailable, any other error, or an outage), the plugin refuses the prompt with the error code and message shown to the operator, produces no answer, and closes the request's turn `canceled` with that reason (canceled turns are not gated, FR-MCP-SESSIONCLASS-002). A host whose prompt hook cannot refuse a prompt cannot run `Pilot` or `Stateless`; its plugin treats those modes as `Off` and its feature-matrix row records the limitation.
+- Package failure (operator, 2026-10-11: "Fail the invocation"): in `Pilot` or `Stateless` mode, when the build fails (budget overflow, profile unavailable, commit unavailable, any other error, or an outage), the plugin refuses the prompt with the error code and message shown to the operator, produces no answer, and closes the request's turn `canceled` with that reason (canceled turns are not gated, FR-MCP-SESSIONCLASS-002). This is the only `canceled` a hook ever writes, and only for the failed request's own turn, never another turn (the Phase A isolation rule, refined for this case: `Isolation_HooksNeverPersistCanceled_ExceptOwnTurnPackageFailure`); the plugin removes the request from `openDelivered` and the Stop ledger only after the server confirms the close, so the Stop gate never waits on a turn the plugin itself closed (`StatelessPackageFailure_ClosesOwnTurnCanceled_RemovedFromLedger_NoOtherTurnTouched`). A host whose prompt hook cannot refuse a prompt cannot run `Pilot` or `Stateless`; its plugin treats those modes as `Off` and its feature-matrix row records the limitation.
+- History exclusion (operator: "Each agent invocation can run stateless"): in `Stateless` mode the model's input for the request is exactly the rendered package plus the current request. The plugin achieves it only through an authoritative host operation recorded in the host's P0.2 row: replacing the model's message list for that request (opencode `experimental.chat.messages.transform`, whose `output.messages` the adapter replaces with the list the core returns) or starting a fresh host invocation whose only input is the package and the request. A host without such an operation cannot run `Stateless`: its plugin treats `Stateless` as `Pilot` (the package is built and recorded, the model answers statefully) and its feature-matrix row records the limitation (`Stateless_HostWithoutHistoryExclusion_TreatedAsPilot_FeatureMatrixRow`). Each supported host has a host-level test that sends a sentinel prior turn and asserts, on the model request the host actually sends (recorded by the adapter fixture), that the sentinel is absent while the package and the current request are present (`StatelessHost_SentinelPriorTurn_AbsentFromModelRequest`).
 - A host recorded `turn_logging_unsupported` (Phase A, D6) has no minted turn, so RunStatelessInvocation does not run there: the plugin stays stateful and reports `turn_logging_unsupported`.
 - After the model answers, the response is submitted (SubmitAgentResponseCommand) at turn close and graded deterministically (RunDeterministicGradeCommand); its model grade comes later from an HV request covering its turn (CreateAgentContextHvRequestCommand, RecordModelGradeCommand).
 
@@ -2319,12 +2643,14 @@ flowchart TD
     CAN -->|yes| BP["Build package (BuildAgentContextPackageCommand) for sessionId and requestId, idempotency key = requestId"]
     BP --> BR{"Build result"}
     BR -->|any error or outage| REF["Refuse the prompt with the error code and message shown to the operator"]
-    REF --> CN["Close the turn canceled with the reason"]
+    REF --> CN["Close this request's own turn canceled with the reason; after the server confirms, remove it from openDelivered and the Stop ledger"]
     CN --> FAIL(["Invocation failed: no answer produced"])
     BR -->|built| MM{"Mode"}
     MM -->|Pilot| PIL["Record packageId on the turn, no injection"]
     PIL --> RUN1["Model answers statefully"]
-    MM -->|Stateless| INJ["Inject the rendered package as the model context, no history"]
+    MM -->|Stateless| HX{"Host has an authoritative history-exclusion operation (P0.2 row)?"}
+    HX -->|no| PIL
+    HX -->|yes| INJ["Replace the model input with the rendered package and the request (message-list replacement or fresh invocation): no history reaches the model"]
     INJ --> RUN2["Model answers from the package"]
     RUN1 --> SUB["At turn close submit the response (SubmitAgentResponseCommand) with claims, evidence, and invocationMode"]
     RUN2 --> SUB
@@ -2348,7 +2674,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as AgentContextController or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and GetAgentContextStatusQueryHandler
     participant GR as IGraphRagService
     participant DB as Store
     Caller->>API: GET /qbrainai/agent-context/status
@@ -2356,7 +2682,7 @@ sequenceDiagram
         API-->>Caller: 404 Workspace required
         Caller->>Caller: report, fix X-Workspace-Path or workspacePath
     else resolved
-        API->>SVC: GetStatusAsync
+        API->>SVC: QueryAsync(GetAgentContextStatusQuery)
         SVC->>GR: GetStatusAsync
         GR-->>SVC: enabled, state
         SVC->>DB: count packages and responses by status
@@ -2373,7 +2699,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and BuildAgentContextPackageCommandHandler
     participant B as Package builder
     participant RT as Retrieval (RetrieveAgentContextCandidatesQuery)
     participant SL as Session log, requirements, TODO stores
@@ -2388,37 +2714,40 @@ sequenceDiagram
         API-->>Caller: 400 validation_error with details.field
         Caller->>Caller: fix the field, do not retry unchanged
     else accepted
-        API->>SVC: BuildPackageAsync
+        API->>SVC: SendAsync(BuildAgentContextPackageCommand)
         SVC->>SL: load turn, TODO, requirements, receipts
         alt turn missing
             SVC-->>API: not found
             API-->>Caller: 404 not_found session_turn
             Caller->>Caller: open or mint the turn first
-        else turn found
+        else commit unreadable
+            SVC-->>API: commit unavailable
+            API-->>Caller: 409 agent_context_commit_unavailable
+            Caller->>Caller: refuse the prompt with the code, close the turn canceled (RunStatelessInvocation)
+        else no profile or rule file resolves
+            SVC-->>API: profile unavailable
+            API-->>Caller: 409 agent_context_profile_unavailable
+            Caller->>Caller: refuse the prompt with the code, close the turn canceled, operator fixes ProfileSources or RuleSources
+        else turn, commit, profile, and rules available
             SVC->>B: gather, hash, filter, budget
             B->>RT: retrieve trusted prior responses and related items
             RT-->>B: candidates
-            alt commit unreadable
-                B-->>SVC: commit unavailable
-                API-->>Caller: 409 agent_context_commit_unavailable
-                Caller->>Caller: refuse the prompt with the code, close the turn canceled (RunStatelessInvocation)
-            else no profile or rule file resolves
-                B-->>SVC: profile unavailable
-                API-->>Caller: 409 agent_context_profile_unavailable
-                Caller->>Caller: refuse the prompt with the code, close the turn canceled, operator fixes ProfileSources or RuleSources
-            else idempotency key reused with same inputs
+            alt idempotency key reused with same inputs
                 SVC-->>API: existing package
                 API-->>Caller: 200 AgentContextPackageResult
                 Caller->>Caller: use the returned package
             else idempotency key reused with different inputs
+                SVC-->>API: conflict
                 API-->>Caller: 409 conflict
                 Caller->>Caller: new key or same inputs
             else mandatory context over budget
                 B->>DB: store Overflow package
+                SVC-->>API: budget exceeded
                 API-->>Caller: 422 agent_context_budget_exceeded with token counts
                 Caller->>Caller: refuse the prompt with the token counts, close the turn canceled, never truncate mandatory context
             else built
-                B->>DB: save package, items, omissions, findings, links
+                B->>DB: save package, items, omissions, findings, input snapshot, links
+                SVC-->>API: package
                 API-->>Caller: 201 AgentContextPackageResult with Location
                 Caller->>Caller: Stateless mode injects renderedContent. Pilot mode records packageId
             end
@@ -2433,14 +2762,14 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and GetAgentContextPackageQueryHandler
     Caller->>API: GET /packages/{packageId}?includeContent
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
     else mode Off
         API-->>Caller: 409 agent_context_disabled
     else accepted
-        API->>SVC: GetPackageAsync
+        API->>SVC: QueryAsync(GetAgentContextPackageQuery)
         alt not found
             API-->>Caller: 404 not_found package
             Caller->>Caller: report the id
@@ -2458,7 +2787,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and QueryAgentContextPackagesQueryHandler
     Caller->>API: GET /packages?requestId&sessionId&status&limit&offset
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
@@ -2467,7 +2796,7 @@ sequenceDiagram
     else invalid filters
         API-->>Caller: 400 validation_error
     else accepted
-        API->>SVC: QueryPackagesAsync
+        API->>SVC: QueryAsync(QueryAgentContextPackagesQuery)
         SVC-->>API: page
         API-->>Caller: 200 totalCount, limit, offset, items
         Caller->>Caller: page with offset until offset plus count reaches totalCount
@@ -2481,7 +2810,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and ReplayAgentContextPackageQueryHandler
     participant B as Package builder
     Caller->>API: POST /packages/{packageId}/replay
     alt workspace not resolved
@@ -2489,7 +2818,7 @@ sequenceDiagram
     else mode Off
         API-->>Caller: 409 agent_context_disabled
     else accepted
-        API->>SVC: ReplayPackageAsync
+        API->>SVC: QueryAsync(ReplayAgentContextPackageQuery)
         alt package not found
             API-->>Caller: 404 not_found package
         else package Overflow
@@ -2519,7 +2848,7 @@ sequenceDiagram
     autonumber
     participant Caller as Plugin at turn close
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and SubmitAgentResponseCommandHandler
     participant DB as Store
     Caller->>API: POST /responses (SubmitAgentResponseRequest)
     alt workspace not resolved
@@ -2530,15 +2859,15 @@ sequenceDiagram
         API-->>Caller: 400 validation_error with details.field
         Caller->>Caller: fix and resend
     else accepted
-        API->>SVC: SubmitResponseAsync
+        API->>SVC: SendAsync(SubmitAgentResponseCommand)
         alt package not found
             API-->>Caller: 404 not_found package
         else package Overflow
             API-->>Caller: 409 agent_context_package_overflow
-        else key reused with same content
+        else key reused with the same SubmissionSha256
             API-->>Caller: 200 existing AgentResponseResult
             Caller->>Caller: treat as submitted
-        else key reused with different content
+        else key reused with a different submission (any field)
             API-->>Caller: 409 conflict
         else saved
             SVC->>DB: response, claims, evidence, links
@@ -2555,14 +2884,14 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and GetAgentResponseQueryHandler
     Caller->>API: GET /responses/{responseId}?includeContent
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
     else mode Off
         API-->>Caller: 409 agent_context_disabled
     else accepted
-        API->>SVC: GetResponseAsync
+        API->>SVC: QueryAsync(GetAgentResponseQuery)
         alt not found
             API-->>Caller: 404 not_found response
         else found
@@ -2579,7 +2908,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and QueryAgentResponsesQueryHandler
     Caller->>API: GET /responses?requestId&packageId&status&trustedOnly&limit&offset
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
@@ -2588,7 +2917,7 @@ sequenceDiagram
     else invalid filters
         API-->>Caller: 400 validation_error
     else accepted
-        API->>SVC: QueryResponsesAsync
+        API->>SVC: QueryAsync(QueryAgentResponsesQuery)
         API-->>Caller: 200 totalCount, limit, offset, items
         Caller->>Caller: page until complete
     end
@@ -2601,7 +2930,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and RunDeterministicGradeCommandHandler
     participant DG as Deterministic grader
     participant SRC as Git, requirement, receipt, session-log stores
     participant DB as Store
@@ -2611,7 +2940,7 @@ sequenceDiagram
     else mode Off
         API-->>Caller: 409 agent_context_disabled
     else accepted
-        API->>SVC: RunDeterministicGradeAsync
+        API->>SVC: SendAsync(RunDeterministicGradeCommand)
         alt response not found
             API-->>Caller: 404 not_found response
         else Rejected or Superseded
@@ -2624,7 +2953,7 @@ sequenceDiagram
             SVC->>DB: save grade, decide trust (DecideAgentResponseTrustCommand)
             API-->>Caller: 201 AgentResponseGradeResult with responseStatus
             alt verdict Pass and status Grading
-                Caller->>Caller: launch the model grade (slice HV)
+                Caller->>Caller: the model grade comes from an HV request covering the turn (CreateAgentContextHvRequestCommand, then the HV agent's RecordModelGradeCommand)
             else verdict Fail
                 Caller->>Caller: show every FAIL and UNKNOWN finding, fix and resubmit a new response
             end
@@ -2641,11 +2970,11 @@ sequenceDiagram
     participant HV as HV agent (Codex gpt-6-astra max, launched as every HV is)
     participant API as Controller or MCP tool
     participant SVC as IDispatcher and RecordModelGradeCommandHandler
-    participant T as DecideAgentResponseTrustCommandHandler (DecideAgentResponseTrustCommand)
+    participant T as IDispatcher and DecideAgentResponseTrustCommandHandler
     participant DB as Store
-    AG->>API: CreateAgentContextHvRequestCommand (CreateAgentContextHvRequestCommand) for a turn range
+    AG->>API: POST /hv-requests (CreateAgentContextHvRequestCommand) for a turn range
     API-->>AG: 201 hvRequestId with its response items
-    HV->>HV: review the turns and responses, write request and response jsonl, emit the VERDICT JSON with a grades entry per response, store the entire result on its own session-log turn
+    HV->>HV: review the turns and responses, write request and response jsonl, emit the VERDICT JSON with a grades entry per response and its own thread id, store the entire result on its own session-log turn, and the runner copies the completed thread's rollout file next to the request and response jsonl
     loop each response item of the HV request
         HV->>API: POST /responses/{responseId}/grades/model (hvRequestId, scores and findings copied from its grades entry, receipt paths, reviewer turn ids)
         API->>SVC: SendAsync(RecordModelGradeCommand)
@@ -2655,7 +2984,7 @@ sequenceDiagram
             API-->>HV: 409 agent_context_disabled
         else score lexeme invalid
             API-->>HV: 400 review_score_format, review_score_precision, or review_score_out_of_range
-        else hvRequestId, a jsonl path, or a reviewer turn id missing
+        else hvRequestId, a request, response, or rollout jsonl path, a reviewer turn id, or reviewerThreadId missing
             API-->>HV: 400 agent_context_receipt_paths_required
         else invalid findings
             API-->>HV: 400 validation_error
@@ -2669,7 +2998,7 @@ sequenceDiagram
             API-->>HV: 409 agent_context_hv_request_closed
         else response not an item of the HV request
             API-->>HV: 409 agent_context_grade_not_in_hv_request
-        else a receipt or reviewer check fails
+        else a receipt, reviewer, or runtime-identity check fails (eight checks, section 6.3)
             API-->>HV: 422 agent_context_receipt_unverified with the failed check
             HV->>HV: make the submission equal its own verdict entry and turn, or rerun the HV on the configured grader
         else recorded
@@ -2685,6 +3014,7 @@ sequenceDiagram
         end
     end
 ```
+
 #### Sequence: submit RejectAgentResponseCommand
 
 ```mermaid
@@ -2692,7 +3022,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and RejectAgentResponseCommandHandler
     Caller->>API: POST /responses/{responseId}/reject (reason)
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
@@ -2701,7 +3031,7 @@ sequenceDiagram
     else blank reason
         API-->>Caller: 400 validation_error
     else accepted
-        API->>SVC: RejectResponseAsync
+        API->>SVC: SendAsync(RejectAgentResponseCommand)
         alt not found
             API-->>Caller: 404 not_found response
         else Superseded
@@ -2710,7 +3040,7 @@ sequenceDiagram
             API-->>Caller: 200 unchanged
         else rejected
             API-->>Caller: 200 AgentResponseResult status Rejected
-            Caller->>Caller: excluded from trusted retrieval, projection removal pending
+            Caller->>Caller: excluded from trusted retrieval, projection removal pending, its Pending HV items closed
         end
     end
 ```
@@ -2722,7 +3052,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and SupersedeAgentResponseCommandHandler
     Caller->>API: POST /responses/{responseId}/supersede (supersededByResponseId, reason)
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
@@ -2731,7 +3061,7 @@ sequenceDiagram
     else self-reference or blank reason
         API-->>Caller: 400 validation_error
     else accepted
-        API->>SVC: SupersedeResponseAsync
+        API->>SVC: SendAsync(SupersedeAgentResponseCommand)
         alt either response not found
             API-->>Caller: 404 not_found response
         else different request, cycle, or invalid replacement
@@ -2750,7 +3080,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and EvaluateStalenessCommandHandler
     participant DB as Store
     Caller->>API: POST /staleness/evaluate (responseIds)
     alt workspace not resolved
@@ -2760,7 +3090,7 @@ sequenceDiagram
     else invalid ids
         API-->>Caller: 400 validation_error
     else accepted
-        API->>SVC: EvaluateStalenessAsync
+        API->>SVC: SendAsync(EvaluateStalenessCommand)
         SVC->>DB: compare current target hashes with ToSha256
         API-->>Caller: 200 evaluatedCount and newlyStale
         Caller->>Caller: list each stale response with its changed ref
@@ -2774,7 +3104,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and CreateAgentContextRelationshipCommandHandler
     Caller->>API: POST /relationships
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
@@ -2783,7 +3113,7 @@ sequenceDiagram
     else invalid kind, type, or self-link
         API-->>Caller: 400 agent_context_relationship_invalid
     else accepted
-        API->>SVC: CreateRelationshipAsync
+        API->>SVC: SendAsync(CreateAgentContextRelationshipCommand)
         alt a ref does not resolve
             API-->>Caller: 404 not_found ref
         else supersedes cycle
@@ -2803,14 +3133,14 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and DeleteAgentContextRelationshipCommandHandler
     Caller->>API: DELETE /relationships/{relationshipId}
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
     else mode Off
         API-->>Caller: 409 agent_context_disabled
     else accepted
-        API->>SVC: DeleteRelationshipAsync
+        API->>SVC: SendAsync(DeleteAgentContextRelationshipCommand)
         alt not found
             API-->>Caller: 404 not_found relationship
         else backs a Superseded response
@@ -2828,7 +3158,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and QueryAgentContextRelationshipsQueryHandler
     Caller->>API: GET /relationships?nodeKind&nodeRef&type&direction&limit&offset
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
@@ -2837,7 +3167,7 @@ sequenceDiagram
     else invalid filters
         API-->>Caller: 400 validation_error
     else accepted
-        API->>SVC: QueryRelationshipsAsync
+        API->>SVC: QueryAsync(QueryAgentContextRelationshipsQuery)
         API-->>Caller: 200 totalCount, limit, offset, items
         Caller->>Caller: page until complete
     end
@@ -2850,23 +3180,25 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as Retrieval service
+    participant SVC as IDispatcher and RetrieveAgentContextCandidatesQueryHandler
     participant GR as IGraphRagService
     participant HS as Hybrid search and relationships
-    Caller->>API: POST /retrieve (queryText, kinds, limit, trustedOnly, preferGraphRag)
+    Caller->>API: POST /retrieve (queryText, sessionId and requestId or neither, focusRefs, kinds, limit, trustedOnly, preferGraphRag)
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
     else mode Off
         API-->>Caller: 409 agent_context_disabled
     else invalid request
         API-->>Caller: 400 validation_error
+    else named turn not found
+        API-->>Caller: 404 not_found session_turn
     else accepted
-        API->>SVC: RetrieveAsync
+        API->>SVC: QueryAsync(RetrieveAgentContextCandidatesQuery)
         alt GraphRAG preferred and enabled and indexed
             SVC->>GR: QueryAsync
             alt result ok
                 GR-->>SVC: hits
-                SVC->>SVC: keep Trusted responses only
+                SVC->>SVC: keep Trusted responses that pass a staleness check (EvaluateStalenessCommand)
                 API-->>Caller: 200 retrievalPath GraphRag
             else FallbackUsed or error
                 GR-->>SVC: fallback reason
@@ -2888,7 +3220,7 @@ sequenceDiagram
     autonumber
     participant Caller as Caller or background pass
     participant API as Controller or MCP tool
-    participant SVC as Projection service
+    participant SVC as IDispatcher and ProjectAgentResponsesCommandHandler
     participant GR as IGraphRagService
     participant DB as Store
     Caller->>API: POST /projection/graphrag (responseIds)
@@ -2899,7 +3231,7 @@ sequenceDiagram
     else invalid ids
         API-->>Caller: 400 validation_error
     else accepted
-        API->>SVC: ProjectToGraphRagAsync
+        API->>SVC: SendAsync(ProjectAgentResponsesCommand)
         alt projection disabled or GraphRAG disabled
             SVC->>DB: projections Skipped
             API-->>Caller: 200 skipped with skippedReason
@@ -2939,22 +3271,22 @@ sequenceDiagram
     participant M as Model
     OP->>H: prompt
     H->>SL: mint turn (MintSessionTurnCommand), deliver (ApplyArrivalBridgeRecord or OpenTurnFromPromptHook)
-    H->>AC: GetAgentContextStatusQuery (GetAgentContextStatusQuery, cached Mode)
+    H->>AC: GET /status (GetAgentContextStatusQuery), Mode cached per host session
     alt Mode Off, or the host cannot refuse a prompt
         H->>M: prompt with conversation history (stateful)
     else Mode Pilot or Stateless
-        H->>AC: BuildAgentContextPackageCommand (BuildAgentContextPackageCommand), idempotency key requestId
+        H->>AC: POST /packages (BuildAgentContextPackageCommand), idempotency key requestId
         alt 201 or 200 package
-            alt Stateless
-                H->>M: rendered package plus request, no history
-            else Pilot
+            alt Stateless on a host with a history-exclusion operation (P0.2 row)
+                H->>M: model input replaced by the rendered package plus the request (message-list replacement or fresh invocation), no history
+            else Pilot, or Stateless on a host without that operation (treated as Pilot, feature-matrix limitation)
                 H->>SL: record packageId on the turn
                 H->>M: prompt with conversation history
             end
             M-->>H: answer with claims and evidence
-            H->>AC: SubmitAgentResponseCommand (SubmitAgentResponseCommand) with invocationMode
+            H->>AC: POST /responses (SubmitAgentResponseCommand) with invocationMode
             alt 201 or 200
-                H->>AC: RunDeterministicGradeCommand (RunDeterministicGradeCommand)
+                H->>AC: POST /responses/{responseId}/grades/deterministic (RunDeterministicGradeCommand)
                 AC-->>H: grade and responseStatus Grading
                 H->>H: model grade comes later from an HV request covering the turn (CreateAgentContextHvRequestCommand, RecordModelGradeCommand)
             else error or outage
@@ -2967,6 +3299,7 @@ sequenceDiagram
         end
     end
 ```
+
 #### Sequence: submit GetAgentContextPilotReportQuery
 
 ```mermaid
@@ -2974,7 +3307,7 @@ sequenceDiagram
     autonumber
     participant Caller
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and GetAgentContextPilotReportQueryHandler
     Caller->>API: GET /pilot/report?fromUtc&toUtc
     alt workspace not resolved
         API-->>Caller: 404 Workspace required
@@ -2983,7 +3316,7 @@ sequenceDiagram
     else invalid window
         API-->>Caller: 400 validation_error
     else accepted
-        API->>SVC: GetPilotReportAsync
+        API->>SVC: QueryAsync(GetAgentContextPilotReportQuery)
         API-->>Caller: 200 AgentContextPilotReport
         Caller->>Caller: compare trust rates by invocationMode before changing any default
     end
@@ -3035,7 +3368,7 @@ sequenceDiagram
             API-->>Caller: 404 not_found hv_request
         else found
             API-->>Caller: 200 AgentContextHvRequestResult
-            Caller->>Caller: list ungraded items still awaiting the HV agent
+            Caller->>Caller: list Pending items still awaiting the HV agent
         end
     end
 ```
@@ -3243,7 +3576,7 @@ flowchart LR
 
 ### 7.12 Use case: Submit and grade an agent response [FR-MCP-AGENTCONTEXT-003, -004]
 
-Actors: model, plugin, server, hostile reviewer. Basic flow: at turn close the plugin submits the model's response with its claims and evidence; the server runs the deterministic grade; the coordinator runs the slice HV and records the model grade; the server marks the response trusted when both grades pass at 98/98 with zero FAIL and zero UNKNOWN. Alternate flows: a grade fails and the response stays `Grading` with every failure shown; a grader other than the configured one is refused; the operator rejects the response.
+Actors: model, plugin, server, hostile reviewer. Basic flow: at turn close the plugin submits the model's response with its claims and evidence; the server runs the deterministic grade; an agent creates an HV request covering the turn (CreateAgentContextHvRequestCommand) and the HV agent records the model grade (RecordModelGradeCommand) after the receipt and reviewer checks; the server marks the response trusted when both grades pass at 98/98 with zero FAIL and zero UNKNOWN. Alternate flows: a grade fails and the response stays `Grading` with every failure shown; a grader other than the configured one is refused; the operator rejects the response.
 
 ```mermaid
 flowchart LR
@@ -3322,8 +3655,8 @@ Operator directive (2026-10-11, verbatim): "I want the implementation plan to be
 
 ```mermaid
 flowchart LR
-    PRE["Prerequisites: P0.1 baseline, REPL generateDocument fix, Nuke Test parameters, TestPluginCore, TestAgentPlugins, bats cases ported to Pester"] --> REQ["Phase 1 Requirements: every FR, TR, TEST, AC, mapping, use case, TODO"]
-    REQ --> DES["Phase 2 Interfaces and code stubs: every command, query, policy, seam, entity, migration, DTO, surface, plugin signature"]
+    PRE["Prerequisites: P0.1 baseline, REPL generateDocument fix, Nuke Test parameters, TestPluginCore, TestAgentPlugins, bats cases ported to Pester, Build.Tests out of MigrationIntegrationTests"] --> REQ["Phase 1 Requirements (the plan's P0 steps 1-9): every FR, TR, TEST, AC, mapping, use case, TODO"]
+    REQ --> DES["Phase 2 Interfaces and code stubs: every command, query, policy, seam, unregistered entity and configuration class, DTO, surface, plugin signature"]
     DES --> TST["Phase 3 TDD unit tests with mocks: every unit test RED on stubs, then green on mocks with negative checks"]
     TST --> IMP["Phase 4 Implementation: one coding agent per bounded context, in parallel"]
     IMP --> VER["Integration, live checks on Linux and Windows, phase-wide HV, operator approval"]
@@ -3333,9 +3666,9 @@ Each arrow is crossed only after that phase's gates are green with zero failures
 
 ### 8.2 What each phase delivers
 
-- Prerequisites: every pre-existing failure fixed under its own TODO (P0.1, including the Windows findings), the REPL `generateDocument` validator fix, the Nuke targets every later gate runs through (`Test --test-projects --test-filter`, `TestPluginCore`, `TestAgentPlugins`), and the port of every bats case to Pester (P0.1b; Pester is the only plugin test runner, operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell.").
-- Phase 1, requirements: the whole catalog of Phases A, B, and C created in the requirement store from the plan text, the use cases, the feature matrix rows, and the phase and domain TODOs (`REQ-MERGEDPLAN-001`, `DESIGN-MERGEDPLAN-001`, `TEST-MERGEDPLAN-001`, one `IMPL-<CONTEXT>-001` per bounded context, `VERIFY-MERGEDPLAN-001`).
-- Phase 2, interfaces and code stubs: every command and query record with a handler stub, every policy and seam interface with a stub, every entity with its `McpDbContext` configuration as compiling model seams (the three migrations and the S3 backfill belong to the Phase 4 context StorageSchema), every DTO and client mirror with JSON context registration, every controller route, MCP tool, client method, and REPL method (they only dispatch), every plugin function and tool signature, the options classes and `appsettings.yaml` sections, DI, and the golden contract files. Stubs return neutral values and never throw, so Phase 3 tests fail on assertions.
+- Prerequisites: every pre-existing failure fixed under its own TODO (P0.1, including the Windows findings), the REPL `generateDocument` validator fix, the Nuke targets every later gate runs through (`Test --test-projects --test-filter`, `TestPluginCore`, `TestAgentPlugins`), and the port of every bats case to Pester (P0.1b; Pester is the only plugin test runner, operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell."), and Build.Tests removed from `MigrationIntegrationTests` (P0.1c, TR-MCP-NUKE-014).
+- Phase 1, requirements (the plan's P0 steps 1-9): the whole catalog of Phases A, B, and C created in the requirement store from the plan text, the use cases, the feature matrix rows, and the phase and domain TODOs (`REQ-MERGEDPLAN-001`, `DESIGN-MERGEDPLAN-001`, `TEST-MERGEDPLAN-001`, one `IMPL-<CONTEXT>-001` per bounded context, `VERIFY-MERGEDPLAN-001`).
+- Phase 2, interfaces and code stubs: every command and query record with a handler stub, every policy and seam interface with a stub, every new entity class and its `IEntityTypeConfiguration<T>` as compiling, unregistered classes (no `DbSet`, no registration in `McpDbContext`, and no new property on an existing entity, because `McpDbContext.cs:301-308` ignores the pending-model-changes warning, so a registered model change without its migration would make queries select columns the database lacks and regress the existing tests that call `Migrate()`; the registered model change, the three migrations, and the S3 backfill belong to the Phase 4 context StorageSchema), every DTO and client mirror with JSON context registration, every controller route, MCP tool, client method, and REPL method (they only dispatch), every plugin function and tool signature, the options classes and `appsettings.yaml` sections, DI, and the golden contract files. Stubs return neutral values and never throw, so Phase 3 tests fail on assertions.
 - Phase 3, unit tests with mocks: every unit test the catalog names, written from the acceptance criteria, recorded RED against the stubs, then green against mocks with the oracle and mutant pattern and a recorded negative check each.
 - Phase 4, implementation: each bounded context replaces its stubs with the real implementation until its Phase 3 tests pass unchanged, adds its integration tests, and runs its gates; then the contexts merge in the rollout order and the integration gates, live checks, and phase-wide HV run.
 
@@ -3343,7 +3676,7 @@ Each arrow is crossed only after that phase's gates are green with zero failures
 
 ```mermaid
 flowchart TB
-    SS["StorageSchema (serialized, first): migrations for three providers, S3 backfill"]
+    SS["StorageSchema (serialized, first): registered McpDbContext model change, migrations for three providers, S3 backfill"]
     subgraph Server["Server (parallel)"]
         STL["SessionTurnLogging: turn handlers, minter, outcome guard, SessionLogService"]
         TR["TurnReviews: review handlers, classification, verdict mapping, completion gate, thresholds"]
@@ -3376,7 +3709,18 @@ flowchart TB
     RT -. "reads packages through the query handler" .- CP
 ```
 
-Ownership rule: Phase 2 completes every shared file except the migrations (`McpDbContext`, `McpClientJsonContext`, DTOs, REPL allow-lists and validators, `ClientMutationPolicy`, DI, configuration, controllers, MCP tools, client methods, golden contracts), so each context edits only its own files: StorageSchema owns the migrations and the S3 backfill; SessionTurnLogging owns `SessionLogService.cs` and the turn handler bodies; TurnReviews owns the review seams' implementations and the review handler bodies; the three agent-context server contexts own `src/QBrainAi.Services/AgentContext/Packages`, `Responses`, and `Graph`; PluginCorePowerShell owns `plugins/core/lib-ps`; BuildTooling owns `build/`; HostPluginAdoption owns the nine plugin repos; Documentation owns `docs/` and `templates/`. A context that needs a change outside its files stops and raises a Phase 2 amendment instead of editing another context's files.
+Ownership rule: Phase 2 completes every shared file except the registered model change and the migrations (`McpClientJsonContext`, DTOs, REPL allow-lists and validators, `ClientMutationPolicy`, DI, configuration, controllers, MCP tools, client methods, golden contracts, and the unregistered entity and configuration classes), so each context edits only its own files:
+
+- StorageSchema: the registered `McpDbContext` model change (new `DbSet`s and configuration registrations, the new properties on `SessionLogTurnEntity`, the `ResolveWorkspaceIdForAddedEntity` cases), the three migrations per provider, and the S3 backfill.
+- SessionTurnLogging: `SessionLogService.cs` and `TransactionGatedSessionLogService.cs`, including every review-related change in them (the S4 service wiring of the review seams, the review sections in `TurnSection` and `ParseSection`, default records at turn creation, the Chore flip, include chains, graph paths, and the S10 write-origin scope with the gate call next to `ValidateTerminalTurnCompliance`), and the bodies of MintSessionTurnCommand, SubmitSessionLogCommand, UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand, OpenSessionLogCommand, AppendTurnDialogCommand, SetTurnTitleCommand, SetSessionTitleCommand, GetSessionLogQuery, and QuerySessionLogsQuery, the minter, and the TerminalTurnOutcomeGuard implementation.
+- TurnReviews: the S1 seams in `src/QBrainAi.Client/SessionLog/`, the review mapper, validator, normalizer, deriver, defaults, and threshold provider, the `SessionLogSanitizer` review paths, the RecordSessionTurnReviewCommand and ResetSessionTurnReviewCommand bodies, and the RequestClassification, HvVerdictMapping, and CompletionGate implementations; SessionTurnLogging calls them only through the Phase 2 seams, so the two contexts run in parallel.
+- ContextPackages: the handler files of GetAgentContextStatusQuery, BuildAgentContextPackageCommand, GetAgentContextPackageQuery, QueryAgentContextPackagesQuery, ReplayAgentContextPackageQuery, and RetrieveAgentContextCandidatesQuery (with its relational path), and `src/QBrainAi.Services/AgentContext/Packages/` (builder, candidate sources, ranker, renderer, token estimator, secret filter, commit reader).
+- ResponsesAndTrust: the handler files of SubmitAgentResponseCommand, GetAgentResponseQuery, QueryAgentResponsesQuery, RunDeterministicGradeCommand, RecordModelGradeCommand, DecideAgentResponseTrustCommand, RejectAgentResponseCommand, SupersedeAgentResponseCommand, EvaluateStalenessCommand, CreateAgentContextHvRequestCommand, GetAgentContextHvRequestQuery, QueryAgentContextHvRequestsQuery, and GetAgentContextPilotReportQuery, and `src/QBrainAi.Services/AgentContext/Responses/` (grader, receipt verifier, staleness).
+- ContextGraph: the handler files of CreateAgentContextRelationshipCommand, DeleteAgentContextRelationshipCommand, QueryAgentContextRelationshipsQuery, and ProjectAgentResponsesCommand, the GraphRAG retrieval path behind the retrieval seam, and `src/QBrainAi.Services/AgentContext/Graph/`.
+- ReplAndAgents: the REPL normalizer and workflow and the McpAgent workflow files named by S6 and S7.
+- PluginCorePowerShell owns `plugins/core/lib-ps`; BuildTooling owns `build/`; HostPluginAdoption owns the nine plugin repos; Documentation owns `docs/` and `templates/`.
+
+A context that needs a change outside its files stops and raises a Phase 2 amendment instead of editing another context's files.
 
 #### Process RunPlanPhases: run the four phases
 
@@ -3432,7 +3776,7 @@ flowchart TD
 
 ### 8.5 Rollout and rollback
 
-- Merge and deploy order: StorageSchema, SessionTurnLogging, TurnReviews without the CompletionGate enforcement change set, ContextPackages, ResponsesAndTrust, ContextGraph, ReplAndAgents; deploy the server (agent context Mode `Off`); merge PluginCorePowerShell, BuildTooling; sync all nine plugins; merge HostPluginAdoption (then `MAINT-LIBSHRETIRE-001`, and once Codex ACKs the 2026-10-12 PowerShell-only CONTRACT entry or the operator resolves it `MAINT-LIBNODERETIRE-001`); merge and deploy the CompletionGate enforcement change set; Documentation; then the integration checks.
+- Merge and deploy order: StorageSchema, SessionTurnLogging, TurnReviews without the CompletionGate enforcement change set, ContextPackages, ResponsesAndTrust, ContextGraph, ReplAndAgents; deploy the server (agent context Mode `Off`); merge PluginCorePowerShell, BuildTooling; sync all nine plugins once at one explicit version (`./build.ps1 SyncAgentPlugins --agent-plugin-parent /home/sharpninja/github --plugin-version 1.119.0`, which carries the Phase A, B, and C plugin work together; the installed-equals-synced step and the operator's codex hook trust follow, and a same-version re-sync, which refreshes content and never bumps the version, runs only when a later Phase 4 fix changes `plugins/core/lib-ps`); merge HostPluginAdoption (then `MAINT-LIBSHRETIRE-001`, and once Codex ACKs the 2026-10-12 PowerShell-only CONTRACT entry or the operator resolves it `MAINT-LIBNODERETIRE-001`); merge and deploy the CompletionGate enforcement change set; Documentation; then the integration checks.
 - Mode `Pilot` only on the operator's instruction; the pilot report goes to the operator; `Stateless` as a default is a later operator decision.
 - Server deploys run through the Nuke `UpdateService` target with operator approval; releases use Octopus only. Rollback: Mode `Off` stops agent-context behavior without a deploy; migrations roll back only through their tested Down.
 
@@ -3443,9 +3787,9 @@ flowchart TD
 
 ## 9. Diagram index
 
-- Activity diagrams, one per unit of work (each a CQRS command or query): turn logging (MintSessionTurnCommand, SubmitSessionLogCommand, UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand), reviews (RecordSessionTurnReviewCommand, ResetSessionTurnReviewCommand, GetSessionLogQuery, QuerySessionLogsQuery), and agent context (the twenty-three handlers of section 6.5).
+- Activity diagrams, one per unit of work (each a CQRS command or query): turn logging (MintSessionTurnCommand, SubmitSessionLogCommand, UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand, OpenSessionLogCommand, AppendTurnDialogCommand, SetTurnTitleCommand, SetSessionTitleCommand), reviews (RecordSessionTurnReviewCommand, ResetSessionTurnReviewCommand, GetSessionLogQuery, QuerySessionLogsQuery), and agent context (the twenty-three handlers of section 6.5).
 - Activity diagrams for policies (TerminalTurnOutcomeGuard, RequestClassification, HvVerdictMapping, CompletionGate) and processes (ApplyArrivalBridgeRecord, OpenTurnFromPromptHook, BindVerbToTurn, PersistTurnWriteWithReceipt, DrainFailsafe, EvaluateStopGate, ValidateHookRegistration, StartHostSession, EndHostSession, SyncAgentPluginsAtVersion, RunArrivalBridge, ConvertHvReceiptToReview, ClearSession, AdvisoryCompletionPrecheck, PreserveReviewScoreLexemes, RunStatelessInvocation, RunPlanPhases, RunDomainCodingAgent).
-- Sequence diagrams: one per command or query submitted by a surface, each processing every response (sections 4.5, 5.5, 6.7), plus the process sequences for DrainFailsafe and RunStatelessInvocation.
+- Sequence diagrams: one per command or query submitted by a surface, each processing every response (sections 4.5, 5.5, 6.7), plus the plugin-verb sequences (turn writes and closes through SubmitSessionLogCommand, dialog, turn title, classification) and the process sequences for DrainFailsafe and RunStatelessInvocation.
 - Use case diagrams: the overview and every use case (section 7).
 - State diagrams: request lifecycle (4.1), review status (5.1), response lifecycle (6.3). Entity relationship diagrams: 6.3 and Addendum A. System context: 2. Phase order and bounded contexts: 8.1, 8.3.
 
@@ -3476,7 +3820,7 @@ erDiagram
         long Id PK
         string WorkspaceId
         long SessionLogId FK
-        string RequestId UK "server-minted from Phase A"
+        string RequestId UK "server-minted from Phase A, workspace-unique where IngressNonce is set"
         string IngressNonce UK "Phase A, unique filtered per session"
         string QueryTitle
         string QueryText
@@ -3492,6 +3836,8 @@ erDiagram
         string AgentReviewOtherNotes "Phase B"
         string AgentReviewReviewer "Phase B"
         datetimeoffset AgentReviewReviewedAt "Phase B"
+        string AgentReviewRequestJsonlPath "Phase B"
+        string AgentReviewResponseJsonlPath "Phase B"
         string HostileReviewStatus "Phase B"
         decimal HostileReviewCorrectness "Phase B"
         decimal HostileReviewCompleteness "Phase B"
@@ -3686,6 +4032,8 @@ erDiagram
         string SessionId "root id"
         string RequestId "root id"
         string IdempotencyKey UK
+        string SubmissionSha256 "whole-submission fingerprint"
+        long StatusVersion "per-response lock counter"
         string InvocationMode "Stateful or Stateless"
         string Status "Submitted, Grading, Trusted, Rejected, Stale, Superseded"
         string SupersededByResponseId "self reference"
@@ -3728,6 +4076,8 @@ erDiagram
         string HvRequestId FK "model grades only"
         string ReviewerSessionId "model grades only"
         string ReviewerRequestId "model grades only"
+        string ReviewerThreadId "model grades only, runtime identity"
+        string RolloutJsonlSha256 "model grades only"
         string VerdictJsonSha256
         string RequestJsonlSha256
         string ResponseJsonlSha256
@@ -3750,7 +4100,8 @@ erDiagram
         int Ordinal
         string RequestId
         string ResponseId UK
-        bool Graded
+        string Disposition "Pending, Graded, Closed"
+        string ClosedReason "rejected or superseded"
     }
     AgentResponseGradeFinding {
         long Id PK
@@ -3769,6 +4120,20 @@ erDiagram
         string ToKind UK
         string ToRef UK
         string ToSha256
+    }
+    ContextDocument {
+        string Id PK "adhoc-Guid, GraphRAG ingest"
+        string WorkspaceId
+        string SourceType
+        string SourceKey
+        string ContentHash
+    }
+    ContextChunk {
+        string Id PK
+        string WorkspaceId
+        string DocumentId FK
+        int ChunkIndex
+        int TokenCount
     }
     AgentContextProjection {
         string ResponseId PK
@@ -3824,16 +4189,17 @@ erDiagram
     AgentContextRelationship }o..o{ Requirement : "From or To kind Requirement"
     AgentContextRelationship }o..o{ SessionLogTurn : "From or To kind SessionLogTurn"
     AgentContextRelationship }o..o{ TodoItem : "From or To kind Todo"
-    AgentContextProjection |o..|| GraphEntity : "GraphRagDocumentId, workspace scope"
+    ContextDocument ||--o{ ContextChunk : "chunks"
+    AgentContextProjection |o..|| ContextDocument : "GraphRagDocumentId, workspace scope"
 ```
 
 Relationship notes:
 
 - `SessionLog` to `SessionLogTurn` and every turn child are existing foreign keys; Phase B adds `SessionLogTurnReviewReason` as a new child of the turn (one row per reason, discriminated by `Kind`, ordered by `Ordinal`), and the review fields as columns on the turn row (one record per kind per turn, so no separate review table).
-- Phase A adds `SessionLogTurn.IngressNonce` with a unique filtered index per MCP session; `RequestId` becomes server-minted and stays unique per session.
+- Phase A adds `SessionLogTurn.IngressNonce` with a unique filtered index per MCP session (WorkspaceId, SessionLogId, IngressNonce), and a second unique filtered index on (WorkspaceId, RequestId) where IngressNonce is set, so a server-minted `RequestId` is unique across the workspace's sessions; legacy rows keep their per-session uniqueness (TR-MCP-SESSIONTURN-004 AC-006).
 - `AgentContextPackage` and `AgentResponse` refer to their turn by the root ids `SessionId` and `RequestId` (with `Agent` on the package), not by the turn's numeric `Id`, so packages and responses survive turn soft-delete and federation snapshots that renumber turn rows; the service validates the turn exists when a package is built (BuildAgentContextPackageCommand).
 - `AgentContextPackageItem.SourceRef`, `AgentContextRelationship.FromRef`/`ToRef`, and `AgentContextFinding.RelationshipId` are polymorphic or soft references resolved by kind in the service layer; staleness (EvaluateStalenessCommand) compares each reference's current hash with the stored `SourceSha256` or `ToSha256`.
 - `AgentResponse.SupersededByResponseId` is a self reference within one request; SupersedeAgentResponseCommand prevents cycles, and a `supersedes` row in `AgentContextRelationship` records the same link with its evidence.
-- `AgentContextProjection` has at most one row per response (key `ResponseId`) and refers to the GraphRAG document it created in the workspace scope; it never points at the global scope.
+- `AgentContextProjection` has at most one row per response (key `ResponseId`); its `GraphRagDocumentId` is the id of the `ContextDocumentEntity` row (the `Documents` set, id `adhoc-<Guid>`) that `IGraphRagService.IngestTextAsync` creates with its `ContextChunkEntity` children (`src/QBrainAi.GraphRag/Services/GraphRagService.cs:348-372`), always in the workspace scope; removal deletes that document and its chunks (`IGraphRagService.DeleteDocumentAsync`). It never points at a knowledge-graph entity (`GraphEntity`, which stays a separate graph node) or at the global scope.
 - Requirement-family keys are composite (`WorkspaceId`, `Kind`, `Id`); TODO keys are (`WorkspaceId`, `Id`); agent-context keys are human-readable strings derived from the turn and session they belong to (`pkg-`, `rsp-`, `grd-`, `rel-`, `hvr-`, section 6.3); every child row of the new tables uses a `long` identity key.
 - `AgentContextHvRequest` names a range of turns of one MCP session (logical reference by `SessionId`); its items list the responses in that range when it was created; each model grade names the HV request that produced it (foreign key), and the request completes when every item is graded.
