@@ -17,7 +17,7 @@ Each agent invocation can run stateless: it receives a bounded, reproducible pac
 - Relationships: `implements`, `verifies`, `depends_on`, `supports`, `contradicts`, `supersedes`, `blocks`, `derived_from`, `relevant_to`.
 - An opt-in `Mcp:AgentContext` mode keeps the current stateful behavior during the pilot.
 
-BDPv4 implementation order: register requirements, use cases, acceptance criteria, and interface contracts (P0); establish green, discriminating mock tests with negative controls; add authoritative storage; implement deterministic package construction; implement grading, acceptance, staleness, rejection, and supersession; add the GraphRAG projection with the deterministic fallback; expose REST, MCP, client, REPL, and plugin interfaces; pilot stateless execution against the stateful workflow before changing any default. Tests cover deterministic replay, mandatory profile completeness, ranking, contradictions, grading thresholds, stale dependencies, workspace isolation, secret exclusion, token overflow, GraphRAG fallback, concurrency, idempotency, and the full zero-failure, zero-skip suite.
+Execution follows the merged plan's four phases (section 8): requirements, interfaces and code stubs, test-driven unit tests with mocks, then implementation by bounded context with parallel coding agents; every unit of work is one CQRS command or query with its handler, and every identifier is a meaningful name. Plugin behavior lives once in the PowerShell plugin core, which all nine hosts use, the TypeScript hosts through logic-free adapters (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell."). The attached plan's BDPv4 implementation order, mapped onto those phases: register requirements, use cases, acceptance criteria, and interface contracts (P0); establish green, discriminating mock tests with negative controls; add authoritative storage; implement deterministic package construction; implement grading, acceptance, staleness, rejection, and supersession; add the GraphRAG projection with the deterministic fallback; expose REST, MCP, client, REPL, and plugin interfaces; pilot stateless execution against the stateful workflow before changing any default. Tests cover deterministic replay, mandatory profile completeness, ranking, contradictions, grading thresholds, stale dependencies, workspace isolation, secret exclusion, token overflow, GraphRAG fallback, concurrency, idempotency, and the full zero-failure, zero-skip suite.
 
 ## 6. Phase C: stateless agent context
 
@@ -26,10 +26,10 @@ BDPv4 implementation order: register requirements, use cases, acceptance criteri
 - Each agent invocation can run stateless: it receives a bounded, reproducible context package instead of carrying conversation history forward.
 - A package contains the current request, the canonical operator profile and standing rules, the applicable requirements, related session-log evidence, trusted prior responses, and relevant code at the current commit, each with its provenance.
 - The relational store is authoritative for packages, responses, grades, and relationships. Response artifacts are projected into GraphRAG for semantic retrieval, with a deterministic relational fallback that gives the same result whenever GraphRAG is disabled, uninitialized, or unavailable.
-- A response becomes trusted only when a deterministic evidence grade and an independent model grade both reach correctness and completeness of at least 98 percent with zero FAIL and zero UNKNOWN findings. Rejected, stale, and superseded responses are kept for audit and never retrieved as trusted context.
-- Mandatory context is never truncated: when it exceeds the token budget, package construction fails explicitly.
+- A response becomes trusted only when a deterministic evidence grade and an independent model grade both reach correctness and completeness of at least 98 percent with zero FAIL and zero UNKNOWN findings. The model grade is recorded by the HV agent for the responses of an HV request that names a range of session-log turns; this effort has no grading worker or HV pipeline (operator, 2026-10-11). Rejected, stale, and superseded responses are kept for audit and never retrieved as trusted context.
+- Mandatory context is never truncated: when it exceeds the token budget, package construction fails explicitly, and in `Pilot` or `Stateless` mode the invocation fails: no answer is produced (operator, 2026-10-11: "Fail the invocation").
 - The mode is opt-in (`Mcp:AgentContext:Mode`); the current stateful behavior stays the default during the pilot.
-- Requirement ids (reserved for P0, created there with acceptance criteria, mappings, and use cases): FR-MCP-AGENTCONTEXT-001 package construction and provenance; -002 token budget and overflow; -003 response submission; -004 grading and trust; -005 rejection, staleness, and supersession; -006 typed relationships; -007 GraphRAG projection and fallback; -008 REST, MCP, client, REPL, and plugin surfaces; -009 opt-in mode and pilot. The matching TR-MCP-AGENTCONTEXT-* and TEST-MCP-AGENTCONTEXT-* records are created in P0.
+- Requirement ids (reserved for P0, created there with acceptance criteria, mappings, and use cases): FR-MCP-AGENTCONTEXT-001 package construction and provenance; -002 token budget and overflow; -003 response submission; -004 grading, HV requests, and trust; -005 rejection, staleness, and supersession; -006 typed relationships; -007 GraphRAG projection and fallback; -008 REST, MCP, client, REPL, and plugin surfaces; -009 opt-in mode and pilot. The matching TR-MCP-AGENTCONTEXT-* and TEST-MCP-AGENTCONTEXT-* records are created in P0.
 
 ### 6.2 Configuration: `AgentContextOptions`
 
@@ -41,15 +41,16 @@ Section `Mcp:AgentContext` (declared under `QBrainAi: AgentContext:` in `appsett
 - `Trust:Correctness`, `Trust:Completeness` (decimal in [0,1], default 0.98, inclusive).
 - `MaxCandidatesPerKind` (int, default 50, 1..1000) and `MaxPriorResponses` (int, default 10, 0..100).
 - `ProfileSources` (list of file globs resolved on the server host; default `~/.claude/profile/*.md` excluding `add-profile*.md`, the set the `/add-profile` skill reads) and `RuleSources` (list of workspace-relative paths; default `CLAUDE.md`, `AGENTS.md`, and `AGENTS-README-FIRST.yaml`, secret values redacted). Profile and rules are mandatory: when no profile file or no rule file resolves, the build fails with 409 `agent_context_profile_unavailable` instead of building a package without them.
-- `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-sol`), `ModelGrader:RequiredEffort` (default `xhigh`): a model grade from any other grader is refused.
+- `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-sol`), `ModelGrader:RequiredEffort` (default `xhigh`), `ModelGrader:ReceiptRoot` (workspace-relative, default `docs/receipts/hv`): a model grade from any other grader, or whose receipts are outside the receipt root or do not verify, is refused.
+- `HvRequest:MaxTurns` (int, default 200, 1..2000): the largest turn range one HV request may name.
 - `GraphRag:ProjectionEnabled` (bool, default true) and `GraphRag:UseForRetrieval` (bool, default true).
-- Validation failures (startup): `TokenBudget`, `BytesPerToken`, thresholds outside their ranges, an empty `RuleSources`, or an empty grader identity.
+- Validation failures (startup): `TokenBudget`, `BytesPerToken`, `HvRequest:MaxTurns`, thresholds outside their ranges, an empty `RuleSources`, an empty grader identity, or an empty `ModelGrader:ReceiptRoot`.
 
 ### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities`)
 
-Common rules: string keys `[StringLength(128)]` with the prefixes below; child rows use `long` identity keys; every entity has `[Required][StringLength(1024)] WorkspaceId` with the named `Workspace` query filter and `StampWorkspaceId` on add; timestamps are `DateTimeOffset` named `*Utc`; decimals are `HasPrecision(29, 28)`; list-valued data is stored in 4NF child tables; idempotency comes from unique indexes (the store has no concurrency tokens). Migrations `<yyyyMMddHHmmss>_AddAgentContext` are generated for SQLite, PostgreSQL, and SQL Server with the existing `dotnet ef migrations add` procedure.
+Common rules: string keys `[StringLength(128)]`, human-readable and derived from the records they belong to (formats per entity below; request and session ids are at most 64 characters, so every key fits); a sequence suffix `<nn>` (two digits, from 01) is allocated as one more than the highest existing suffix for that prefix, and a unique-index violation from a concurrent insert retries with the next suffix (at most five times, then 409 `conflict`); child rows use `long` identity keys; every entity has `[Required][StringLength(1024)] WorkspaceId` with the named `Workspace` query filter and `StampWorkspaceId` on add; timestamps are `DateTimeOffset` named `*Utc`; decimals are `HasPrecision(29, 28)`; list-valued data is stored in 4NF child tables; idempotency comes from unique indexes (the store has no concurrency tokens). Migrations `<yyyyMMddHHmmss>_AddAgentContext` are generated for SQLite, PostgreSQL, and SQL Server with the existing `dotnet ef migrations add` procedure.
 
-`AgentContextPackageEntity` (table `AgentContextPackages`, key `PackageId` = `acp-{Guid:N}`)
+`AgentContextPackageEntity` (table `AgentContextPackages`, key `PackageId` = `pkg-<requestId>-<nn>`, for example `pkg-req-20261011T223749Z-prompt-cc85-01`)
 
 - `WorkspaceId`, `SessionId` (128, the MCP session), `Agent` (64), `RequestId` (128, the turn), all required.
 - `IdempotencyKey` (128, required): unique with `WorkspaceId`.
@@ -96,7 +97,7 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 - `Kind` (16): `Contradiction` (two included items are linked by `contradicts`) or `Blocker` (an open item `blocks` the request's TODO or turn).
 - `SourceRef` (512), `OtherSourceRef` (512, contradictions only), `RelationshipId` (128), `Summary` (2048).
 
-`AgentResponseEntity` (table `AgentResponses`, key `ResponseId` = `acr-{Guid:N}`)
+`AgentResponseEntity` (table `AgentResponses`, key `ResponseId` = `rsp-<requestId>-<nn>`)
 
 - `WorkspaceId`, `PackageId` (FK, required), `SessionId`, `RequestId`, `Agent`, all required (root ids).
 - `Model` (128), `Effort` (32), `InvocationMode` (16): `Stateful` or `Stateless`.
@@ -113,7 +114,7 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 
 `AgentResponseEvidenceEntity` (table `AgentResponseEvidence`, `long Id`): `WorkspaceId`, `ResponseId`, `Ordinal`, `ClaimId` (64), `Kind` (16: `File`, `Requirement`, `Receipt`, `Commit`, `Command`, `SessionLogTurn`), `Ref` (2048), `Sha256` (64), `CommitSha` (64).
 
-`AgentResponseGradeEntity` (table `AgentResponseGrades`, key `GradeId` = `acg-{Guid:N}`)
+`AgentResponseGradeEntity` (table `AgentResponseGrades`, key `GradeId` = `grd-<responseId>-<deterministic|model>-<nn>`, for example `grd-rsp-req-20261011T223749Z-prompt-cc85-01-model-01`)
 
 - `WorkspaceId`, `ResponseId` (FK), `PackageId`, `RequestId` (root ids).
 - `Kind` (16): `Deterministic` or `Model`.
@@ -121,14 +122,15 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 - `Correctness`, `Completeness`, `CorrectnessThreshold`, `CompletenessThreshold` (decimal).
 - `PassCount`, `FailCount`, `UnknownCount` (int).
 - `Verdict` (16): `Pass` or `Fail`, derived: `Pass` only when both scores meet their thresholds and `FailCount` and `UnknownCount` are zero.
-- "Latest grade" of a kind means the grade with the greatest `GradedUtc`, ties broken by the greatest `GradeId` by ordinal comparison; concurrent grade writes are all kept and the trust decision (C11) is recomputed after each one inside the same transaction.
-- `RequestJsonlPath`, `ResponseJsonlPath` (2048, required for `Model`).
+- "Latest grade" of a kind means the grade with the greatest `GradedUtc`, ties broken by the greatest `GradeId` by ordinal comparison; concurrent grade writes are all kept and the trust decision (DecideAgentResponseTrustCommand) is recomputed after each one inside the same transaction.
+- `HvRequestId` (128, required for `Model`, null for `Deterministic`): the HV request whose review produced the grade.
+- `RequestJsonlPath`, `ResponseJsonlPath` (2048, required for `Model`, workspace-relative under `ModelGrader:ReceiptRoot`), `RequestJsonlSha256`, `ResponseJsonlSha256` (64): the receipts and their hashes as verified when the grade was recorded.
 - `GradedUtc`.
 - Child `Findings`.
 
 `AgentResponseGradeFindingEntity` (table `AgentResponseGradeFindings`, `long Id`): `WorkspaceId`, `GradeId`, `Ordinal`, `ClaimId` (64), `Check` (256), `Outcome` (16: `PASS`, `FAIL`, `UNKNOWN`), `Evidence` (text, sanitized).
 
-`AgentContextRelationshipEntity` (table `AgentContextRelationships`, key `RelationshipId` = `acl-{Guid:N}`)
+`AgentContextRelationshipEntity` (table `AgentContextRelationships`, key `RelationshipId` = `rel-<type>-<yyyyMMddTHHmmssZ>-<nn>`, for example `rel-depends_on-20261011T234000Z-01`)
 
 - `WorkspaceId`, `FromKind` (32), `FromRef` (512), `Type` (32), `ToKind` (32), `ToRef` (512).
 - Node kinds: `Package`, `Response`, `Requirement`, `SessionLogTurn`, `Todo`, `CodeFile`, `Receipt`, `Profile`, `Rule`.
@@ -136,6 +138,19 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 - `ToSha256` (64): the target's content hash when linked (used for staleness of `depends_on` and `derived_from`).
 - `EvidenceRef` (2048), `CreatedBy` (128), `CreatedUtc`.
 - Unique (`WorkspaceId`, `FromKind`, `FromRef`, `Type`, `ToKind`, `ToRef`); indexes on (`WorkspaceId`, `FromKind`, `FromRef`) and (`WorkspaceId`, `ToKind`, `ToRef`).
+
+`AgentContextHvRequestEntity` (table `AgentContextHvRequests`, key `HvRequestId` = `hvr-<sessionId>-<yyyyMMddTHHmmssZ>`, with `-<nn>` appended only when two are created in the same second)
+
+- `WorkspaceId`, `SessionId` (128), `Agent` (64): the MCP session whose turns are reviewed.
+- `FromRequestId`, `ToRequestId` (128): the first and last turns of the range, inclusive, in the session's turn order.
+- `RequestedBy` (128), `Reason` (2048).
+- `Status` (16): `Open` (accepting grades) or `Completed` (every listed response has a model grade from this request).
+- `CreatedUtc`, `CompletedUtc`.
+- Child `Items`.
+
+`AgentContextHvRequestItemEntity` (table `AgentContextHvRequestItems`, `long Id`): `WorkspaceId`, `HvRequestId` (FK), `Ordinal`, `RequestId` (128), `ResponseId` (128, unique with `HvRequestId`), `Graded` (bool). Items are the agent responses whose `RequestId` lies in the range when the request is created.
+
+Receipt verification (RecordModelGradeCommand), before a model grade is saved: both paths resolve inside the workspace under `ModelGrader:ReceiptRoot`; the request jsonl's first line is a JSON object with `type` `hv_request_meta` whose `reviewer.agent` contains `ModelGrader:AgentName`, `reviewer.model` equals `ModelGrader:RequiredModel`, and `reviewer.effort` equals `ModelGrader:RequiredEffort` (the HV runner writes exactly this object); the request jsonl's body names the `hvRequestId`; the response jsonl is nonempty and contains the `=== VERDICT JSON ===` block; the hashes of both files are stored on the grade. Any failure refuses the grade with 422 `agent_context_receipt_unverified` naming the failed check.
 
 `AgentContextProjectionEntity` (table `AgentContextProjections`, key `ResponseId`)
 
@@ -155,6 +170,9 @@ erDiagram
     AgentResponses ||--o{ AgentResponseGrades : graded_by
     AgentResponseGrades ||--o{ AgentResponseGradeFindings : lists
     AgentResponses ||--o| AgentContextProjections : projected_as
+    AgentContextHvRequests ||--o{ AgentContextHvRequestItems : lists
+    AgentResponses ||--o{ AgentContextHvRequestItems : reviewed_in
+    AgentContextHvRequests ||--o{ AgentResponseGrades : model_grades
     AgentContextRelationships }o--o{ AgentResponses : links
     SessionLogTurns ||--o{ AgentContextPackages : built_for
 ```
@@ -201,34 +219,38 @@ Shared types
 
 Requests and results (one pair per unit of work, section 6.5)
 
-- C1 `AgentContextStatusResult { mode, tokenBudget, bytesPerToken, trustCorrectness, trustCompleteness, graphRag { enabled, state, projectionEnabled, useForRetrieval }, counts { packages, responsesByStatus } }`.
-- C2 `BuildAgentContextPackageRequest { sessionId, agent, requestId, queryText, tokenBudget, focusRefs, idempotencyKey }` (`tokenBudget` optional and at most the configured budget; `focusRefs` optional list of `{ kind, ref }` to prefer); result `AgentContextPackageResult { packageId, status, sessionId, agent, requestId, commitSha, workingTreeDirty, builderVersion, tokenBudget, mandatoryTokenCount, totalTokenCount, inputsSha256, contentSha256, createdUtc, items, omissions, findings, renderedContent }`.
-- C3 get package: route id plus `includeContent` (bool, default true); result `AgentContextPackageResult`.
-- C4 `AgentContextPackageQuery { requestId, sessionId, status, limit, offset }`; result `AgentContextPackageQueryResult` of package summaries (all fields except items, omissions, findings, and content).
-- C5 replay: route id; result `AgentContextReplayResult { packageId, identical, originalContentSha256, replayContentSha256, originalInputsSha256, replayInputsSha256, differences [{ ordinal, kind, sourceRef, change }] }` with `change` in `added`, `removed`, `hashChanged`, `reordered`.
-- C6 `SubmitAgentResponseRequest { packageId, agent, model, effort, invocationMode, contentFormat, content, claims, evidence, idempotencyKey }`; result `AgentResponseResult { responseId, packageId, sessionId, requestId, agent, model, effort, invocationMode, status, statusReason, supersededByResponseId, contentFormat, contentSha256, commitSha, submittedUtc, statusChangedUtc, trustedUtc, claims, evidence, grades, content }`.
-- C7 get response: route id plus `includeContent`; result `AgentResponseResult`.
-- C8 `AgentResponseQuery { requestId, packageId, status, trustedOnly, limit, offset }`; result `AgentResponseQueryResult` of response summaries.
-- C9 deterministic grade: route id, no body; result `AgentResponseGradeResult { grade, responseStatus, statusReason }`.
-- C10 `RecordModelGradeRequest { grader, model, effort, correctness, completeness, findings, requestJsonlPath, responseJsonlPath, gradedUtc }`; result `AgentResponseGradeResult`.
-- C11 trust decision: internal, result is the response status in `AgentResponseGradeResult`.
-- C12 `RejectAgentResponseRequest { reason }`; result `AgentResponseResult`.
-- C13 `SupersedeAgentResponseRequest { supersededByResponseId, reason }`; result `AgentResponseResult`.
-- C14 `EvaluateStalenessRequest { responseIds }` (empty means every non-terminal response); result `AgentContextStalenessResult { evaluatedCount, newlyStale [{ responseId, changedRef, relationshipId, reason }] }`.
-- C15 `CreateAgentContextRelationshipRequest { fromKind, fromRef, type, toKind, toRef, evidenceRef }`; result `AgentContextRelationshipDto` plus `created` (bool).
-- C16 delete relationship: route id; result 204.
-- C17 `AgentContextRelationshipQuery { nodeKind, nodeRef, type, direction (out, in, both), limit, offset }`; result `AgentContextRelationshipQueryResult`.
-- C18 `AgentContextRetrieveRequest { queryText, kinds, limit, trustedOnly, preferGraphRag }` (`trustedOnly` defaults to true and only `true` is accepted for `PriorResponse`); result `AgentContextRetrieveResult { retrievalPath, fallbackReason, candidates }`.
-- C19 `ProjectAgentContextRequest { responseIds }` (empty means every response whose projection is pending or out of date); result `AgentContextProjectionResult { projected, removed, skipped, failed [{ responseId, error }], skippedReason }`.
-- C20 stateless invocation: plugin-internal; it uses C2, C6, and the grading chain.
-- C21 `AgentContextPilotReportQuery { fromUtc, toUtc }`; result `AgentContextPilotReport { fromUtc, toUtc, byMode [{ invocationMode, responses, trusted, rejected, stale, meanCorrectness, meanCompleteness, trustRate }] }`.
+- GetAgentContextStatusQuery `AgentContextStatusResult { mode, tokenBudget, bytesPerToken, trustCorrectness, trustCompleteness, graphRag { enabled, state, projectionEnabled, useForRetrieval }, counts { packages, responsesByStatus } }`.
+- BuildAgentContextPackageCommand `BuildAgentContextPackageRequest { sessionId, agent, requestId, queryText, tokenBudget, focusRefs, idempotencyKey }` (`tokenBudget` optional and at most the configured budget; `focusRefs` optional list of `{ kind, ref }` to prefer); result `AgentContextPackageResult { packageId, status, sessionId, agent, requestId, commitSha, workingTreeDirty, builderVersion, tokenBudget, mandatoryTokenCount, totalTokenCount, inputsSha256, contentSha256, createdUtc, items, omissions, findings, renderedContent }`.
+- GetAgentContextPackageQuery get package: route id plus `includeContent` (bool, default true); result `AgentContextPackageResult`.
+- QueryAgentContextPackagesQuery `AgentContextPackageQuery { requestId, sessionId, status, limit, offset }`; result `AgentContextPackageQueryResult` of package summaries (all fields except items, omissions, findings, and content).
+- ReplayAgentContextPackageQuery replay: route id; result `AgentContextReplayResult { packageId, identical, originalContentSha256, replayContentSha256, originalInputsSha256, replayInputsSha256, differences [{ ordinal, kind, sourceRef, change }] }` with `change` in `added`, `removed`, `hashChanged`, `reordered`.
+- SubmitAgentResponseCommand `SubmitAgentResponseRequest { packageId, agent, model, effort, invocationMode, contentFormat, content, claims, evidence, idempotencyKey }` (at least one claim, and every claim at least one evidence item); result `AgentResponseResult { responseId, packageId, sessionId, requestId, agent, model, effort, invocationMode, status, statusReason, supersededByResponseId, contentFormat, contentSha256, commitSha, submittedUtc, statusChangedUtc, trustedUtc, claims, evidence, grades, content }`.
+- GetAgentResponseQuery get response: route id plus `includeContent`; result `AgentResponseResult`.
+- QueryAgentResponsesQuery `AgentResponseQuery { requestId, packageId, status, trustedOnly, limit, offset }`; result `AgentResponseQueryResult` of response summaries.
+- RunDeterministicGradeCommand deterministic grade: route id, no body; result `AgentResponseGradeResult { grade, responseStatus, statusReason }`.
+- RecordModelGradeCommand `RecordModelGradeRequest { hvRequestId, grader, model, effort, correctness, completeness, findings, requestJsonlPath, responseJsonlPath, gradedUtc }`; result `AgentResponseGradeResult` plus `hvRequestStatus`.
+- DecideAgentResponseTrustCommand trust decision: internal, result is the response status in `AgentResponseGradeResult`.
+- RejectAgentResponseCommand `RejectAgentResponseRequest { reason }`; result `AgentResponseResult`.
+- SupersedeAgentResponseCommand `SupersedeAgentResponseRequest { supersededByResponseId, reason }`; result `AgentResponseResult`.
+- EvaluateStalenessCommand `EvaluateStalenessRequest { responseIds }` (empty means every non-terminal response); result `AgentContextStalenessResult { evaluatedCount, newlyStale [{ responseId, changedRef, relationshipId, reason }] }`.
+- CreateAgentContextRelationshipCommand `CreateAgentContextRelationshipRequest { fromKind, fromRef, type, toKind, toRef, evidenceRef }`; result `AgentContextRelationshipDto` plus `created` (bool).
+- DeleteAgentContextRelationshipCommand delete relationship: route id; result 204.
+- QueryAgentContextRelationshipsQuery `AgentContextRelationshipQuery { nodeKind, nodeRef, type, direction (out, in, both), limit, offset }`; result `AgentContextRelationshipQueryResult`.
+- RetrieveAgentContextCandidatesQuery `AgentContextRetrieveRequest { queryText, kinds, limit, trustedOnly, preferGraphRag }` (`trustedOnly` defaults to true and only `true` is accepted for `PriorResponse`); result `AgentContextRetrieveResult { retrievalPath, fallbackReason, candidates }`.
+- ProjectAgentResponsesCommand `ProjectAgentContextRequest { responseIds }` (empty means every response whose projection is pending or out of date); result `AgentContextProjectionResult { projected, removed, skipped, failed [{ responseId, error }], skippedReason }`.
+- RunStatelessInvocation stateless invocation: plugin-internal; it uses GetAgentContextStatusQuery, BuildAgentContextPackageCommand, and SubmitAgentResponseCommand; on a build failure the invocation fails (no answer) and the turn is closed `canceled` with the error.
+- CreateAgentContextHvRequestCommand `CreateAgentContextHvRequestRequest { sessionId, agent, fromRequestId, toRequestId, requestedBy, reason }`; result `AgentContextHvRequestResult { hvRequestId, status, sessionId, agent, fromRequestId, toRequestId, requestedBy, reason, createdUtc, completedUtc, items [{ requestId, responseId, graded }] }`.
+- GetAgentContextHvRequestQuery get: route id, result `AgentContextHvRequestResult`; query `AgentContextHvRequestQuery { sessionId, status, limit, offset }`, result `AgentContextHvRequestQueryResult` of results without items.
+- GetAgentContextPilotReportQuery `AgentContextPilotReportQuery { fromUtc, toUtc }`; result `AgentContextPilotReport { fromUtc, toUtc, byMode [{ invocationMode, responses, trusted, rejected, stale, meanCorrectness, meanCompleteness, trustRate }] }`.
 
 Error codes (problem+json body `{ type, title, status, detail, code, message, retryable, details }`; MCP tools return `{ code, error, message, retryable, details }`)
 
 - 400 `validation_error` with `details.field` for malformed input, plus the Phase B score codes `review_score_format`, `review_score_precision`, `review_score_out_of_range` for grade scores.
 - 400 `agent_context_receipt_paths_required` (model grade without both jsonl paths).
 - 400 `agent_context_relationship_invalid` (unknown kind or type, or a self-link).
+- 400 `agent_context_hv_request_invalid` (unknown session, an unknown or out-of-order range, a range over `HvRequest:MaxTurns`, or a range with no agent response).
 - 403 `agent_context_grader_not_allowed` (model grade from a grader other than the configured one).
+- 409 `agent_context_grade_not_in_hv_request` (the response is not an item of the named HV request) and 409 `agent_context_hv_request_closed` (the HV request is `Completed`).
 - 404 `not_found` with `details.resource` (`package`, `response`, `relationship`, `session_turn`, `ref`).
 - 409 `agent_context_disabled` (mode `Off`).
 - 409 `agent_context_package_overflow` (a response or replay against an `Overflow` package).
@@ -237,17 +259,21 @@ Error codes (problem+json body `{ type, title, status, detail, code, message, re
 - 409 `agent_context_commit_unavailable` (the workspace is not a git checkout or the recorded commit cannot be read).
 - 409 `agent_context_profile_unavailable` (no configured profile file or no rule file resolves; mandatory context cannot be assembled).
 - 409 `conflict` (idempotency key reused with different inputs).
+- 422 `agent_context_receipt_unverified` with `details.check` naming the failed receipt check.
 - 422 `agent_context_budget_exceeded` with `details { tokenBudget, mandatoryTokenCount, overflowTokenCount, mandatoryItems [{ kind, sourceRef, tokenCount }] }`.
 
-### 6.5 Units of work, endpoints, and activity diagrams
+### 6.5 Units of work (CQRS handlers), endpoints, and activity diagrams
 
-Every REST route below exists under `/qbrainai/agent-context` and the alias `/mcpserver/agent-context` (controller `AgentContextController`, `[ApiController]`, workspace required through `X-Workspace-Path`, authenticated by `WorkspaceAuthMiddleware`). MCP tools live in `FwhMcpTools.AgentContext.cs` with `workspacePath` as the first parameter and JSON-string bodies. The typed client is `AgentContextClient : McpClientBase`, exposed as `QBrainAiClient.AgentContext`. The REPL reaches it as `client.AgentContext.<Method>` (added to the `GenericClientPassthrough` allow-list as `AGENTCONTEXT`; mutating methods registered in `ClientMutationPolicy`; YAML validators registered with explicit `payload.params.<key>` paths). PowerShell plugins call `Invoke-McpPlugin.ps1 -Command Invoke -Method client.AgentContext.<Method>` with parameters built by exported `New-McpAgentContext<Verb>Params` builders in `McpPluginShim.psm1`; Node plugins use `plugins/core/lib-node/src/tools/agent-context.ts` (tool descriptors, a `toolMethodMap` to `client.AgentContext.*`, and a `mutatingAgentContextTools` set).
+Each unit is exactly one CQRS command or query with its handler (operator, 2026-10-11: "I want to be clear, unit of work maps to one CQRS handler"), in `src/QBrainAi.Services/AgentContext/Commands` or `Queries` (namespace `QBrainAi.Support.Mcp.AgentContext.Commands` or `.Queries`), one file per record and handler, registered by `AddCqrsHandlers`. Every surface dispatches the same record through `IDispatcher`: the controller and the MCP tool call `SendAsync` or `QueryAsync`; the typed client, REPL, and plugins reach them over REST. A handler reports a contract error as `Result<T>.Failure(new AgentContextException(code, statusCode, message, details))`; `McpErrorClassifier` maps `AgentContextException` to the problem+json body with that status and `code`. The stateless invocation is not a unit: it is the plugin process RunStatelessInvocation (section 6.6).
 
-Every unit except C1, C11, and C20 starts with the same two checks, drawn in each diagram: the workspace resolves (otherwise 404 `Workspace required`), and the mode is not `Off` (otherwise 409 `agent_context_disabled`).
+Every REST route below exists under `/qbrainai/agent-context` and the alias `/mcpserver/agent-context` (controller `AgentContextController`, `[ApiController]`, workspace required through `X-Workspace-Path`, authenticated by `WorkspaceAuthMiddleware`). MCP tools live in `FwhMcpTools.AgentContext.cs` with `workspacePath` as the first parameter and JSON-string bodies. The typed client is `AgentContextClient : McpClientBase`, exposed as `QBrainAiClient.AgentContext`. The REPL reaches it as `client.AgentContext.<Method>` (added to the `GenericClientPassthrough` allow-list as `AGENTCONTEXT`; mutating methods registered in `ClientMutationPolicy`; YAML validators registered with explicit `payload.params.<key>` paths). PowerShell plugins call `Invoke-McpPlugin.ps1 -Command Invoke -Method client.AgentContext.<Method>` with parameters built by exported `New-McpAgentContext<Verb>Params` builders in `McpPluginShim.psm1`; the TypeScript hosts reach the same commands through their adapters and the agent-context entries of `lib/tool-descriptors.json`, each naming its `Invoke-McpPlugin.ps1` command and whether it mutates (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell.").
 
-#### C1 Get status [FR-MCP-AGENTCONTEXT-008, -009]
+Every unit except GetAgentContextStatusQuery, DecideAgentResponseTrustCommand, and RunStatelessInvocation (including CreateAgentContextHvRequestCommand and GetAgentContextHvRequestQuery) starts with the same two checks, drawn in each diagram: the workspace resolves (otherwise 404 `Workspace required`), and the mode is not `Off` (otherwise 409 `agent_context_disabled`).
 
-- REST `GET /qbrainai/agent-context/status`; MCP `agent_context_status(workspacePath)`; client `GetStatusAsync()`; REPL `client.AgentContext.GetStatusAsync`; PowerShell `New-McpAgentContextStatusParams`; Node tool `agent_context_status`.
+#### GetAgentContextStatusQuery: get status [FR-MCP-AGENTCONTEXT-008, -009]
+
+- Handler: `GetAgentContextStatusQuery(string WorkspacePath) : IQuery<AgentContextStatusResult>` and `GetAgentContextStatusQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/GetAgentContextStatusQuery.cs`.
+- REST `GET /qbrainai/agent-context/status`; MCP `agent_context_status(workspacePath)`; client `GetStatusAsync()`; REPL `client.AgentContext.GetStatusAsync`; PowerShell `New-McpAgentContextStatusParams`; tool descriptor `agent_context_status`.
 - Request: none. Response 200 `AgentContextStatusResult`. Errors: 404 workspace.
 
 ```mermaid
@@ -260,9 +286,10 @@ flowchart TD
     C --> R(["200 AgentContextStatusResult"])
 ```
 
-#### C2 Build a context package [FR-MCP-AGENTCONTEXT-001, -002]
+#### BuildAgentContextPackageCommand: build a context package [FR-MCP-AGENTCONTEXT-001, -002]
 
-- REST `POST /qbrainai/agent-context/packages`; MCP `agent_context_build_package(workspacePath, requestJson)`; client `BuildPackageAsync(BuildAgentContextPackageRequest)`; REPL `client.AgentContext.BuildPackageAsync`; PowerShell `New-McpAgentContextBuildPackageParams`; Node tool `agent_context_build_package`.
+- Handler: `BuildAgentContextPackageCommand(string WorkspacePath, BuildAgentContextPackageRequest Request) : ICommand<AgentContextPackageResult>` and `BuildAgentContextPackageCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/BuildAgentContextPackageCommand.cs`.
+- REST `POST /qbrainai/agent-context/packages`; MCP `agent_context_build_package(workspacePath, requestJson)`; client `BuildPackageAsync(BuildAgentContextPackageRequest)`; REPL `client.AgentContext.BuildPackageAsync`; PowerShell `New-McpAgentContextBuildPackageParams`; tool descriptor `agent_context_build_package`.
 - Request `BuildAgentContextPackageRequest`. Response 201 `AgentContextPackageResult` (Location `/qbrainai/agent-context/packages/{packageId}`), or 200 with the existing package when the idempotency key repeats with identical inputs.
 - Errors: 400 `validation_error`; 404 `not_found` (`session_turn`); 409 `agent_context_disabled`, `agent_context_commit_unavailable`, `agent_context_profile_unavailable`, `conflict` (key reused with different inputs); 422 `agent_context_budget_exceeded` (an `Overflow` package is stored for audit).
 - Concurrency: two builds with the same idempotency key race on the unique index; the loser re-reads the winner's package and returns it with 200 when the inputs match, or 409 `conflict` when they differ.
@@ -282,7 +309,7 @@ flowchart TD
     GIT -->|no| E4(["409 agent_context_commit_unavailable"])
     GIT -->|yes| PRF{"At least one profile file and one rule file resolve?"}
     PRF -->|no| E7(["409 agent_context_profile_unavailable"])
-    PRF -->|yes| GA["Gather candidates: request, profile, rules, applicable requirements from the turn's TODO and relationships, TODOs, session-log turns, receipts, trusted prior responses (C18), code at the commit"]
+    PRF -->|yes| GA["Gather candidates: request, profile, rules, applicable requirements from the turn's TODO and relationships, TODOs, session-log turns, receipts, trusted prior responses (RetrieveAgentContextCandidatesQuery), code at the commit"]
     GA --> IH["Compute every source hash and InputsSha256"]
     IH --> ID{"Idempotency key already used?"}
     ID -->|yes, same InputsSha256| EX(["200 existing package"])
@@ -310,9 +337,10 @@ flowchart TD
     REL --> OK(["201 AgentContextPackageResult"])
 ```
 
-#### C3 Get a package [FR-MCP-AGENTCONTEXT-001]
+#### GetAgentContextPackageQuery: get a package [FR-MCP-AGENTCONTEXT-001]
 
-- REST `GET /qbrainai/agent-context/packages/{packageId}?includeContent=true`; MCP `agent_context_get_package(workspacePath, packageId, includeContent)`; client `GetPackageAsync(packageId, includeContent)`; REPL `client.AgentContext.GetPackageAsync`; PowerShell `New-McpAgentContextGetPackageParams`; Node tool `agent_context_get_package`.
+- Handler: `GetAgentContextPackageQuery(string WorkspacePath, string PackageId, bool IncludeContent) : IQuery<AgentContextPackageResult>` and `GetAgentContextPackageQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/GetAgentContextPackageQuery.cs`.
+- REST `GET /qbrainai/agent-context/packages/{packageId}?includeContent=true`; MCP `agent_context_get_package(workspacePath, packageId, includeContent)`; client `GetPackageAsync(packageId, includeContent)`; REPL `client.AgentContext.GetPackageAsync`; PowerShell `New-McpAgentContextGetPackageParams`; tool descriptor `agent_context_get_package`.
 - Response 200 `AgentContextPackageResult`. Errors: 404 workspace or `not_found` (`package`), 409 `agent_context_disabled`.
 
 ```mermaid
@@ -330,9 +358,10 @@ flowchart TD
     SUM --> R
 ```
 
-#### C4 Query packages [FR-MCP-AGENTCONTEXT-001]
+#### QueryAgentContextPackagesQuery: query packages [FR-MCP-AGENTCONTEXT-001]
 
-- REST `GET /qbrainai/agent-context/packages?requestId&sessionId&status&limit&offset` (limit default 50, max 1000); MCP `agent_context_query_packages(workspacePath, requestId, sessionId, status, limit, offset)`; client `QueryPackagesAsync(AgentContextPackageQuery)`; REPL `client.AgentContext.QueryPackagesAsync`; PowerShell `New-McpAgentContextQueryPackagesParams`; Node tool `agent_context_query_packages`.
+- Handler: `QueryAgentContextPackagesQuery(string WorkspacePath, AgentContextPackageQuery Query) : IQuery<AgentContextPackageQueryResult>` and `QueryAgentContextPackagesQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/QueryAgentContextPackagesQuery.cs`.
+- REST `GET /qbrainai/agent-context/packages?requestId&sessionId&status&limit&offset` (limit default 50, max 1000); MCP `agent_context_query_packages(workspacePath, requestId, sessionId, status, limit, offset)`; client `QueryPackagesAsync(AgentContextPackageQuery)`; REPL `client.AgentContext.QueryPackagesAsync`; PowerShell `New-McpAgentContextQueryPackagesParams`; tool descriptor `agent_context_query_packages`.
 - Response 200 `AgentContextPackageQueryResult`. Errors: 400 `validation_error` (limit or offset out of range, unknown status), 404 workspace, 409 `agent_context_disabled`.
 
 ```mermaid
@@ -347,9 +376,10 @@ flowchart TD
     Q --> R(["200 totalCount, limit, offset, items"])
 ```
 
-#### C5 Replay a package [FR-MCP-AGENTCONTEXT-001]
+#### ReplayAgentContextPackageQuery: replay a package [FR-MCP-AGENTCONTEXT-001]
 
-- REST `POST /qbrainai/agent-context/packages/{packageId}/replay`; MCP `agent_context_replay_package(workspacePath, packageId)`; client `ReplayPackageAsync(packageId)`; REPL `client.AgentContext.ReplayPackageAsync`; PowerShell `New-McpAgentContextReplayPackageParams`; Node tool `agent_context_replay_package`.
+- Handler: `ReplayAgentContextPackageQuery(string WorkspacePath, string PackageId) : IQuery<AgentContextReplayResult>` and `ReplayAgentContextPackageQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/ReplayAgentContextPackageQuery.cs`.
+- REST `POST /qbrainai/agent-context/packages/{packageId}/replay`; MCP `agent_context_replay_package(workspacePath, packageId)`; client `ReplayPackageAsync(packageId)`; REPL `client.AgentContext.ReplayPackageAsync`; PowerShell `New-McpAgentContextReplayPackageParams`; tool descriptor `agent_context_replay_package`.
 - Replay rebuilds the package from its recorded inputs at its recorded commit without storing anything and compares the result.
 - Response 200 `AgentContextReplayResult`. Errors: 404 workspace or `not_found` (`package`), 409 `agent_context_disabled`, `agent_context_package_overflow`, `agent_context_commit_unavailable` (the recorded commit is no longer readable).
 
@@ -365,18 +395,19 @@ flowchart TD
     OV -->|yes| E3(["409 agent_context_package_overflow"])
     OV -->|no| C{"Recorded commit readable?"}
     C -->|no| E4(["409 agent_context_commit_unavailable"])
-    C -->|yes| RB["Rebuild in memory with the recorded options and commit (C2 steps, nothing stored)"]
+    C -->|yes| RB["Rebuild in memory with the recorded options and commit (BuildAgentContextPackageCommand steps, nothing stored)"]
     RB --> CMP["Compare InputsSha256, ContentSha256, and items by ordinal"]
     CMP --> SAME{"Identical?"}
     SAME -->|yes| R1(["200 identical true"])
     SAME -->|no| R2(["200 identical false with differences: added, removed, hashChanged, reordered"])
 ```
 
-#### C6 Submit a response [FR-MCP-AGENTCONTEXT-003]
+#### SubmitAgentResponseCommand: submit a response [FR-MCP-AGENTCONTEXT-003]
 
-- REST `POST /qbrainai/agent-context/responses`; MCP `agent_context_submit_response(workspacePath, requestJson)`; client `SubmitResponseAsync(SubmitAgentResponseRequest)`; REPL `client.AgentContext.SubmitResponseAsync`; PowerShell `New-McpAgentContextSubmitResponseParams`; Node tool `agent_context_submit_response`.
+- Handler: `SubmitAgentResponseCommand(string WorkspacePath, SubmitAgentResponseRequest Request) : ICommand<AgentResponseResult>` and `SubmitAgentResponseCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/SubmitAgentResponseCommand.cs`.
+- REST `POST /qbrainai/agent-context/responses`; MCP `agent_context_submit_response(workspacePath, requestJson)`; client `SubmitResponseAsync(SubmitAgentResponseRequest)`; REPL `client.AgentContext.SubmitResponseAsync`; PowerShell `New-McpAgentContextSubmitResponseParams`; tool descriptor `agent_context_submit_response`.
 - Response 201 `AgentResponseResult` with status `Submitted`, or 200 with the existing response for a repeated idempotency key with identical content.
-- Errors: 400 `validation_error` (empty content, duplicate claimId, evidence pointing to an unknown claim, unknown format or mode); 404 `not_found` (`package`); 409 `agent_context_disabled`, `agent_context_package_overflow`, `conflict`.
+- Errors: 400 `validation_error` (empty content, no claim, a claim with no evidence item, duplicate claimId, evidence pointing to an unknown claim, unknown format or mode); 404 `not_found` (`package`); 409 `agent_context_disabled`, `agent_context_package_overflow`, `conflict`.
 
 ```mermaid
 flowchart TD
@@ -384,7 +415,7 @@ flowchart TD
     W -->|no| E0(["404 Workspace required"])
     W -->|yes| MO{"Mode Off?"}
     MO -->|yes| E1(["409 agent_context_disabled"])
-    MO -->|no| V{"Content, claims, evidence, format, and mode valid?"}
+    MO -->|no| V{"Content nonempty, at least one claim, every claim with evidence, format and mode valid?"}
     V -->|no| E2(["400 validation_error"])
     V -->|yes| P{"Package found?"}
     P -->|no| E3(["404 not_found package"])
@@ -402,9 +433,10 @@ flowchart TD
     REL --> OK(["201 AgentResponseResult status Submitted"])
 ```
 
-#### C7 Get a response [FR-MCP-AGENTCONTEXT-003]
+#### GetAgentResponseQuery: get a response [FR-MCP-AGENTCONTEXT-003]
 
-- REST `GET /qbrainai/agent-context/responses/{responseId}?includeContent=true`; MCP `agent_context_get_response(workspacePath, responseId, includeContent)`; client `GetResponseAsync(responseId, includeContent)`; REPL `client.AgentContext.GetResponseAsync`; PowerShell `New-McpAgentContextGetResponseParams`; Node tool `agent_context_get_response`.
+- Handler: `GetAgentResponseQuery(string WorkspacePath, string ResponseId, bool IncludeContent) : IQuery<AgentResponseResult>` and `GetAgentResponseQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/GetAgentResponseQuery.cs`.
+- REST `GET /qbrainai/agent-context/responses/{responseId}?includeContent=true`; MCP `agent_context_get_response(workspacePath, responseId, includeContent)`; client `GetResponseAsync(responseId, includeContent)`; REPL `client.AgentContext.GetResponseAsync`; PowerShell `New-McpAgentContextGetResponseParams`; tool descriptor `agent_context_get_response`.
 - Response 200 `AgentResponseResult` (with every grade). Errors: 404 workspace or `not_found` (`response`), 409 `agent_context_disabled`.
 
 ```mermaid
@@ -419,9 +451,10 @@ flowchart TD
     L --> R(["200 AgentResponseResult"])
 ```
 
-#### C8 Query responses [FR-MCP-AGENTCONTEXT-003, -004]
+#### QueryAgentResponsesQuery: query responses [FR-MCP-AGENTCONTEXT-003, -004]
 
-- REST `GET /qbrainai/agent-context/responses?requestId&packageId&status&trustedOnly&limit&offset`; MCP `agent_context_query_responses(...)`; client `QueryResponsesAsync(AgentResponseQuery)`; REPL `client.AgentContext.QueryResponsesAsync`; PowerShell `New-McpAgentContextQueryResponsesParams`; Node tool `agent_context_query_responses`.
+- Handler: `QueryAgentResponsesQuery(string WorkspacePath, AgentResponseQuery Query) : IQuery<AgentResponseQueryResult>` and `QueryAgentResponsesQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/QueryAgentResponsesQuery.cs`.
+- REST `GET /qbrainai/agent-context/responses?requestId&packageId&status&trustedOnly&limit&offset`; MCP `agent_context_query_responses(string workspacePath, string? requestId = null, string? packageId = null, string? status = null, bool trustedOnly = false, int limit = 50, int offset = 0)`; client `QueryResponsesAsync(AgentResponseQuery)`; REPL `client.AgentContext.QueryResponsesAsync`; PowerShell `New-McpAgentContextQueryResponsesParams`; tool descriptor `agent_context_query_responses`.
 - Response 200 `AgentResponseQueryResult`. Errors: 400 `validation_error`, 404 workspace, 409 `agent_context_disabled`.
 
 ```mermaid
@@ -440,11 +473,12 @@ flowchart TD
     Q --> R(["200 totalCount, limit, offset, items"])
 ```
 
-#### C9 Run the deterministic grade [FR-MCP-AGENTCONTEXT-004]
+#### RunDeterministicGradeCommand: run the deterministic grade [FR-MCP-AGENTCONTEXT-004]
 
-- REST `POST /qbrainai/agent-context/responses/{responseId}/grades/deterministic`; MCP `agent_context_grade_deterministic(workspacePath, responseId)`; client `RunDeterministicGradeAsync(responseId)`; REPL `client.AgentContext.RunDeterministicGradeAsync`; PowerShell `New-McpAgentContextGradeDeterministicParams`; Node tool `agent_context_grade_deterministic`.
+- Handler: `RunDeterministicGradeCommand(string WorkspacePath, string ResponseId) : ICommand<AgentResponseGradeResult>` and `RunDeterministicGradeCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/RunDeterministicGradeCommand.cs`.
+- REST `POST /qbrainai/agent-context/responses/{responseId}/grades/deterministic`; MCP `agent_context_grade_deterministic(workspacePath, responseId)`; client `RunDeterministicGradeAsync(responseId)`; REPL `client.AgentContext.RunDeterministicGradeAsync`; PowerShell `New-McpAgentContextGradeDeterministicParams`; tool descriptor `agent_context_grade_deterministic`.
 - Checks, one finding per check and claim: every claim has at least one evidence item; every `File` evidence exists at its commit with the cited hash; every `Requirement` evidence id exists in the requirement store; every `Receipt` path exists with the cited hash; every `SessionLogTurn` evidence resolves; the content, every claim text, and every evidence ref contain no secret; the package is not stale. A check that cannot be evaluated is UNKNOWN.
-- Scores: correctness = PASS findings / (PASS + FAIL) over evaluated checks; completeness = claims with every evidence check PASS / all claims; both exact decimals.
+- Scores: correctness = PASS findings / (PASS + FAIL) over evaluated checks, and 0 when no check could be evaluated (PASS + FAIL = 0); completeness = claims whose every evidence check is PASS / all claims (SubmitAgentResponseCommand guarantees at least one claim, each with evidence); both exact decimals. Any UNKNOWN finding already fails the verdict, so a zero denominator can never yield trust.
 - Response 201 `AgentResponseGradeResult`. Errors: 404 workspace or `not_found` (`response`), 409 `agent_context_disabled`, `agent_context_response_not_gradable`.
 
 ```mermaid
@@ -470,15 +504,17 @@ flowchart TD
     GL --> SC["Compute correctness and completeness as exact decimals"]
     SC --> VD["Verdict Pass only if both meet the trust thresholds and FAIL and UNKNOWN counts are zero"]
     VD --> SV["Save grade and findings, stamp thresholds"]
-    SV --> TR["Decide trust (C11)"]
+    SV --> TR["Decide trust (DecideAgentResponseTrustCommand)"]
     TR --> R(["201 AgentResponseGradeResult with the response status"])
 ```
 
-#### C10 Record a model grade [FR-MCP-AGENTCONTEXT-004]
+#### RecordModelGradeCommand: record a model grade from an HV review [FR-MCP-AGENTCONTEXT-004]
 
-- REST `POST /qbrainai/agent-context/responses/{responseId}/grades/model`; MCP `agent_context_record_model_grade(workspacePath, responseId, gradeJson)`; client `RecordModelGradeAsync(responseId, RecordModelGradeRequest)`; REPL `client.AgentContext.RecordModelGradeAsync`; PowerShell `New-McpAgentContextRecordModelGradeParams` (also builds the request from a Codex HV receipt, mapping accuracy to correctness as an exact decimal over 100, the same mapping as Unit B5); Node tool `agent_context_record_model_grade`.
-- Response 201 `AgentResponseGradeResult`.
-- Errors: 400 `validation_error`, `review_score_format`, `review_score_precision`, `review_score_out_of_range`, `agent_context_receipt_paths_required`; 403 `agent_context_grader_not_allowed`; 404 `not_found` (`response`); 409 `agent_context_disabled`, `agent_context_response_not_gradable`.
+- Handler: `RecordModelGradeCommand(string WorkspacePath, string ResponseId, RecordModelGradeRequest Request) : ICommand<AgentResponseGradeResult>` and `RecordModelGradeCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/RecordModelGradeCommand.cs`.
+- Caller: the HV agent (the configured grader, launched as every HV is) after it reviews the turns of an HV request (CreateAgentContextHvRequestCommand). There is no grading worker or HV pipeline in this effort (operator, 2026-10-11).
+- REST `POST /qbrainai/agent-context/responses/{responseId}/grades/model`; MCP `agent_context_record_model_grade(string workspacePath, string responseId, string gradeJson)`; client `RecordModelGradeAsync(responseId, RecordModelGradeRequest)`; REPL `client.AgentContext.RecordModelGradeAsync`; PowerShell `New-McpAgentContextRecordModelGradeParams` (also builds the request from a Codex HV receipt, mapping accuracy to correctness as an exact decimal over 100, the same mapping as process ConvertHvReceiptToReview); tool descriptor `agent_context_record_model_grade`.
+- Response 201 `AgentResponseGradeResult` with `hvRequestStatus` (`Completed` once every item of the HV request is graded).
+- Errors: 400 `validation_error`, `review_score_format`, `review_score_precision`, `review_score_out_of_range`, `agent_context_receipt_paths_required`; 403 `agent_context_grader_not_allowed`; 404 `not_found` (`response`, `hv_request`); 409 `agent_context_disabled`, `agent_context_response_not_gradable`, `agent_context_grade_not_in_hv_request`, `agent_context_hv_request_closed`; 422 `agent_context_receipt_unverified`.
 
 ```mermaid
 flowchart TD
@@ -490,7 +526,7 @@ flowchart TD
     LX -->|format| E2(["400 review_score_format"])
     LX -->|precision| E3(["400 review_score_precision"])
     LX -->|range| E4(["400 review_score_out_of_range"])
-    LX -->|ok| RP{"Both jsonl paths present?"}
+    LX -->|ok| RP{"hvRequestId and both jsonl paths present?"}
     RP -->|no| E5(["400 agent_context_receipt_paths_required"])
     RP -->|yes| FV{"Findings valid: outcome PASS, FAIL, or UNKNOWN, claimIds known?"}
     FV -->|no| E6(["400 validation_error"])
@@ -500,16 +536,28 @@ flowchart TD
     F -->|no| E8(["404 not_found response"])
     F -->|yes| GS{"Status Rejected or Superseded?"}
     GS -->|yes| E9(["409 agent_context_response_not_gradable"])
-    GS -->|no| CNT["Count PASS, FAIL, UNKNOWN findings"]
+    GS -->|no| HR{"HV request found?"}
+    HR -->|no| E10(["404 not_found hv_request"])
+    HR -->|yes| HO{"HV request Open?"}
+    HO -->|no| E11(["409 agent_context_hv_request_closed"])
+    HO -->|yes| IT{"Response is an item of the HV request?"}
+    IT -->|no| E12(["409 agent_context_grade_not_in_hv_request"])
+    IT -->|yes| RV{"Receipts verify: under ReceiptRoot, meta agent, model, effort match, body names hvRequestId, response holds the VERDICT JSON block?"}
+    RV -->|no| E13(["422 agent_context_receipt_unverified with the failed check"])
+    RV -->|yes| CNT["Count PASS, FAIL, UNKNOWN findings"]
     CNT --> VD["Verdict Pass only if both scores meet the trust thresholds and FAIL and UNKNOWN counts are zero"]
-    VD --> SV["Save grade, findings, receipt paths; stamp thresholds"]
-    SV --> TR["Decide trust (C11)"]
-    TR --> R(["201 AgentResponseGradeResult with the response status"])
+    VD --> SV["Save grade with hvRequestId, findings, receipt paths and hashes; stamp thresholds; mark the item graded"]
+    SV --> TR["Decide trust (DecideAgentResponseTrustCommand)"]
+    TR --> ALL{"Every item of the HV request graded?"}
+    ALL -->|yes| CMP["HV request Completed, CompletedUtc set"]
+    ALL -->|no| R
+    CMP --> R(["201 AgentResponseGradeResult with the response status and hvRequestStatus"])
 ```
 
-#### C11 Decide trust (internal, after every grade) [FR-MCP-AGENTCONTEXT-004]
+#### DecideAgentResponseTrustCommand: decide trust (internal, after every grade) [FR-MCP-AGENTCONTEXT-004]
 
-- Trigger: C9 and C10 after their grade is saved. No endpoint.
+- Handler: `DecideAgentResponseTrustCommand(string WorkspacePath, string ResponseId) : ICommand<AgentResponseTrustDecision>` and `DecideAgentResponseTrustCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/DecideAgentResponseTrustCommand.cs`; internal, dispatched through `IDispatcher.SendAsync` by the RunDeterministicGradeCommand and RecordModelGradeCommand handlers inside their transaction, never by a surface.
+- Trigger: the RunDeterministicGradeCommand and RecordModelGradeCommand handlers dispatch it after their grade is saved, in the same transaction. No endpoint.
 - Rule: a response is `Trusted` only when it is not `Rejected`, `Stale`, or `Superseded`, its latest deterministic grade is `Pass`, and its latest model grade is `Pass` ("latest" as defined in section 6.3: greatest `GradedUtc`, then greatest `GradeId`); otherwise it is `Grading`. The decision runs in the same transaction as the grade insert, so concurrent grades each see a consistent latest pair.
 
 ```mermaid
@@ -526,14 +574,15 @@ flowchart TD
     WAS -->|no| E1(["Done"])
     PR --> E1
     T --> PJ{"GraphRag ProjectionEnabled?"}
-    PJ -->|yes| PP["Mark projection Pending for projection (C19)"]
+    PJ -->|yes| PP["Mark projection Pending for projection (ProjectAgentResponsesCommand)"]
     PJ -->|no| E2(["Done"])
     PP --> E2
 ```
 
-#### C12 Reject a response [FR-MCP-AGENTCONTEXT-005]
+#### RejectAgentResponseCommand: reject a response [FR-MCP-AGENTCONTEXT-005]
 
-- REST `POST /qbrainai/agent-context/responses/{responseId}/reject`; MCP `agent_context_reject_response(workspacePath, responseId, reason)`; client `RejectResponseAsync(responseId, RejectAgentResponseRequest)`; REPL `client.AgentContext.RejectResponseAsync`; PowerShell `New-McpAgentContextRejectResponseParams`; Node tool `agent_context_reject_response`.
+- Handler: `RejectAgentResponseCommand(string WorkspacePath, string ResponseId, RejectAgentResponseRequest Request) : ICommand<AgentResponseResult>` and `RejectAgentResponseCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/RejectAgentResponseCommand.cs`.
+- REST `POST /qbrainai/agent-context/responses/{responseId}/reject`; MCP `agent_context_reject_response(workspacePath, responseId, reason)`; client `RejectResponseAsync(responseId, RejectAgentResponseRequest)`; REPL `client.AgentContext.RejectResponseAsync`; PowerShell `New-McpAgentContextRejectResponseParams`; tool descriptor `agent_context_reject_response`.
 - Response 200 `AgentResponseResult` with status `Rejected` (a repeat on a rejected response returns 200 unchanged). Errors: 400 `validation_error` (blank reason), 404, 409 `agent_context_disabled`, `agent_context_response_not_gradable` (already `Superseded`).
 
 ```mermaid
@@ -551,14 +600,15 @@ flowchart TD
     ST -->|Superseded| E4(["409 agent_context_response_not_gradable"])
     ST -->|Submitted, Grading, Trusted, or Stale| RJ["Status Rejected with reason, StatusChangedUtc"]
     RJ --> PR{"Projected?"}
-    PR -->|yes| RM["Mark projection Pending for removal (C19)"]
+    PR -->|yes| RM["Mark projection Pending for removal (ProjectAgentResponsesCommand)"]
     PR -->|no| OK
     RM --> OK(["200 AgentResponseResult status Rejected"])
 ```
 
-#### C13 Supersede a response [FR-MCP-AGENTCONTEXT-005]
+#### SupersedeAgentResponseCommand: supersede a response [FR-MCP-AGENTCONTEXT-005]
 
-- REST `POST /qbrainai/agent-context/responses/{responseId}/supersede`; MCP `agent_context_supersede_response(workspacePath, responseId, supersededByResponseId, reason)`; client `SupersedeResponseAsync(responseId, SupersedeAgentResponseRequest)`; REPL `client.AgentContext.SupersedeResponseAsync`; PowerShell `New-McpAgentContextSupersedeResponseParams`; Node tool `agent_context_supersede_response`.
+- Handler: `SupersedeAgentResponseCommand(string WorkspacePath, string ResponseId, SupersedeAgentResponseRequest Request) : ICommand<AgentResponseResult>` and `SupersedeAgentResponseCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/SupersedeAgentResponseCommand.cs`.
+- REST `POST /qbrainai/agent-context/responses/{responseId}/supersede`; MCP `agent_context_supersede_response(workspacePath, responseId, supersededByResponseId, reason)`; client `SupersedeResponseAsync(responseId, SupersedeAgentResponseRequest)`; REPL `client.AgentContext.SupersedeResponseAsync`; PowerShell `New-McpAgentContextSupersedeResponseParams`; tool descriptor `agent_context_supersede_response`.
 - Response 200 `AgentResponseResult` with status `Superseded`. Errors: 400 `validation_error` (self-reference, blank reason), 404 (either response), 409 `agent_context_disabled`, `agent_context_supersede_invalid` (different request, a supersede cycle, or the replacement itself rejected or superseded).
 
 ```mermaid
@@ -579,12 +629,13 @@ flowchart TD
     PR --> OK(["200 AgentResponseResult status Superseded"])
 ```
 
-#### C14 Evaluate staleness [FR-MCP-AGENTCONTEXT-005]
+#### EvaluateStalenessCommand: evaluate staleness [FR-MCP-AGENTCONTEXT-005]
 
-- REST `POST /qbrainai/agent-context/staleness/evaluate`; MCP `agent_context_evaluate_staleness(workspacePath, responseIdsJson)`; client `EvaluateStalenessAsync(EvaluateStalenessRequest)`; REPL `client.AgentContext.EvaluateStalenessAsync`; PowerShell `New-McpAgentContextEvaluateStalenessParams`; Node tool `agent_context_evaluate_staleness`.
-- Also triggered internally before C2 gathers prior responses and after a requirement update or delete.
+- Handler: `EvaluateStalenessCommand(string WorkspacePath, EvaluateStalenessRequest Request) : ICommand<AgentContextStalenessResult>` and `EvaluateStalenessCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/EvaluateStalenessCommand.cs`.
+- REST `POST /qbrainai/agent-context/staleness/evaluate`; MCP `agent_context_evaluate_staleness(workspacePath, responseIdsJson)`; client `EvaluateStalenessAsync(EvaluateStalenessRequest)`; REPL `client.AgentContext.EvaluateStalenessAsync`; PowerShell `New-McpAgentContextEvaluateStalenessParams`; tool descriptor `agent_context_evaluate_staleness`.
+- Also triggered internally before BuildAgentContextPackageCommand gathers prior responses and after a requirement update or delete.
 - Rule: a non-terminal response is stale when any `depends_on` or `derived_from` target of the response or of its package now hashes differently from `ToSha256`, or a cited requirement was deleted or superseded.
-- Response 200 `AgentContextStalenessResult`. Errors: 400 `validation_error`, 404 workspace, 409 `agent_context_disabled`.
+- Response 200 `AgentContextStalenessResult`. Errors: 400 `validation_error` (malformed list, more than 1000 ids, an id without the `rsp-` prefix), 404 workspace, 409 `agent_context_disabled`.
 
 ```mermaid
 flowchart TD
@@ -592,8 +643,10 @@ flowchart TD
     W -->|no| E0(["404 Workspace required"])
     W -->|yes| MO{"Mode Off?"}
     MO -->|yes| E1(["409 agent_context_disabled"])
-    MO -->|no| SEL{"responseIds supplied?"}
-    SEL -->|yes| L1["Load those responses"]
+    MO -->|no| VID{"responseIds well formed, at most 1000, every id rsp-prefixed?"}
+    VID -->|no| E2(["400 validation_error"])
+    VID -->|yes| SEL{"responseIds supplied?"}
+    SEL -->|yes| L1["Load those responses (unknown ids reported as not evaluated)"]
     SEL -->|no| L2["Load every Submitted, Grading, and Trusted response"]
     L1 --> NX{"Next response"}
     L2 --> NX
@@ -607,9 +660,10 @@ flowchart TD
     MK --> NX
 ```
 
-#### C15 Create a relationship [FR-MCP-AGENTCONTEXT-006]
+#### CreateAgentContextRelationshipCommand: create a relationship [FR-MCP-AGENTCONTEXT-006]
 
-- REST `POST /qbrainai/agent-context/relationships`; MCP `agent_context_create_relationship(workspacePath, relationshipJson)`; client `CreateRelationshipAsync(CreateAgentContextRelationshipRequest)`; REPL `client.AgentContext.CreateRelationshipAsync`; PowerShell `New-McpAgentContextCreateRelationshipParams`; Node tool `agent_context_create_relationship`.
+- Handler: `CreateAgentContextRelationshipCommand(string WorkspacePath, CreateAgentContextRelationshipRequest Request) : ICommand<AgentContextRelationshipResult>` and `CreateAgentContextRelationshipCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/CreateAgentContextRelationshipCommand.cs`.
+- REST `POST /qbrainai/agent-context/relationships`; MCP `agent_context_create_relationship(workspacePath, relationshipJson)`; client `CreateRelationshipAsync(CreateAgentContextRelationshipRequest)`; REPL `client.AgentContext.CreateRelationshipAsync`; PowerShell `New-McpAgentContextCreateRelationshipParams`; tool descriptor `agent_context_create_relationship`.
 - Response 201 with `created: true`, or 200 with `created: false` for an identical existing link. Errors: 400 `agent_context_relationship_invalid`, 404 `not_found` (`ref`), 409 `agent_context_disabled`, `agent_context_supersede_invalid` (a `supersedes` cycle).
 
 ```mermaid
@@ -631,10 +685,11 @@ flowchart TD
     SV --> OK(["201 link, created true"])
 ```
 
-#### C16 Delete a relationship [FR-MCP-AGENTCONTEXT-006]
+#### DeleteAgentContextRelationshipCommand: delete a relationship [FR-MCP-AGENTCONTEXT-006]
 
-- REST `DELETE /qbrainai/agent-context/relationships/{relationshipId}`; MCP `agent_context_delete_relationship(workspacePath, relationshipId)`; client `DeleteRelationshipAsync(relationshipId)`; REPL `client.AgentContext.DeleteRelationshipAsync`; PowerShell `New-McpAgentContextDeleteRelationshipParams`; Node tool `agent_context_delete_relationship`.
-- Response 204. Errors: 404, 409 `agent_context_disabled`. A `supersedes` link created by C13 cannot be deleted while the response stays `Superseded` (409 `agent_context_supersede_invalid`).
+- Handler: `DeleteAgentContextRelationshipCommand(string WorkspacePath, string RelationshipId) : ICommand<bool>` and `DeleteAgentContextRelationshipCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/DeleteAgentContextRelationshipCommand.cs`.
+- REST `DELETE /qbrainai/agent-context/relationships/{relationshipId}`; MCP `agent_context_delete_relationship(workspacePath, relationshipId)`; client `DeleteRelationshipAsync(relationshipId)`; REPL `client.AgentContext.DeleteRelationshipAsync`; PowerShell `New-McpAgentContextDeleteRelationshipParams`; tool descriptor `agent_context_delete_relationship`.
+- Response 204. Errors: 404, 409 `agent_context_disabled`. A `supersedes` link created by SupersedeAgentResponseCommand cannot be deleted while the response stays `Superseded` (409 `agent_context_supersede_invalid`).
 
 ```mermaid
 flowchart TD
@@ -650,9 +705,10 @@ flowchart TD
     D --> OK(["204"])
 ```
 
-#### C17 Query relationships [FR-MCP-AGENTCONTEXT-006]
+#### QueryAgentContextRelationshipsQuery: query relationships [FR-MCP-AGENTCONTEXT-006]
 
-- REST `GET /qbrainai/agent-context/relationships?nodeKind&nodeRef&type&direction&limit&offset`; MCP `agent_context_query_relationships(...)`; client `QueryRelationshipsAsync(AgentContextRelationshipQuery)`; REPL `client.AgentContext.QueryRelationshipsAsync`; PowerShell `New-McpAgentContextQueryRelationshipsParams`; Node tool `agent_context_query_relationships`.
+- Handler: `QueryAgentContextRelationshipsQuery(string WorkspacePath, AgentContextRelationshipQuery Query) : IQuery<AgentContextRelationshipQueryResult>` and `QueryAgentContextRelationshipsQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/QueryAgentContextRelationshipsQuery.cs`.
+- REST `GET /qbrainai/agent-context/relationships?nodeKind&nodeRef&type&direction&limit&offset`; MCP `agent_context_query_relationships(string workspacePath, string? nodeKind = null, string? nodeRef = null, string? type = null, string direction = "both", int limit = 50, int offset = 0)`; client `QueryRelationshipsAsync(AgentContextRelationshipQuery)`; REPL `client.AgentContext.QueryRelationshipsAsync`; PowerShell `New-McpAgentContextQueryRelationshipsParams`; tool descriptor `agent_context_query_relationships`.
 - Response 200 `AgentContextRelationshipQueryResult`. Errors: 400 `validation_error` (node kind without ref, unknown type or direction), 404 workspace, 409 `agent_context_disabled`.
 
 ```mermaid
@@ -673,9 +729,10 @@ flowchart TD
     P --> R(["200 totalCount, limit, offset, items"])
 ```
 
-#### C18 Retrieve candidate context [FR-MCP-AGENTCONTEXT-007]
+#### RetrieveAgentContextCandidatesQuery: retrieve candidate context [FR-MCP-AGENTCONTEXT-007]
 
-- REST `POST /qbrainai/agent-context/retrieve`; MCP `agent_context_retrieve(workspacePath, requestJson)`; client `RetrieveAsync(AgentContextRetrieveRequest)`; REPL `client.AgentContext.RetrieveAsync`; PowerShell `New-McpAgentContextRetrieveParams`; Node tool `agent_context_retrieve`. Also called by C2.
+- Handler: `RetrieveAgentContextCandidatesQuery(string WorkspacePath, AgentContextRetrieveRequest Request) : IQuery<AgentContextRetrieveResult>` and `RetrieveAgentContextCandidatesQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/RetrieveAgentContextCandidatesQuery.cs`.
+- REST `POST /qbrainai/agent-context/retrieve`; MCP `agent_context_retrieve(workspacePath, requestJson)`; client `RetrieveAsync(AgentContextRetrieveRequest)`; REPL `client.AgentContext.RetrieveAsync`; PowerShell `New-McpAgentContextRetrieveParams`; tool descriptor `agent_context_retrieve`. Also called by BuildAgentContextPackageCommand.
 - The relational path ranks by explicit relationships to the request's requirements, TODO, and turn first, then by the existing hybrid search (FTS5 BM25 with vector similarity), with ties broken by `sourceRef`. The GraphRAG path queries the projected responses; any fallback uses the relational path and reports `fallbackReason` (`graphrag_disabled`, `graphrag_not_initialized`, `graphrag_not_indexed`, `index_in_progress`, `retrieval_disabled`, or `graphrag_error`).
 - Response 200 `AgentContextRetrieveResult`. Errors: 400 `validation_error` (`trustedOnly: false` with kind `PriorResponse`, limit out of range), 404 workspace, 409 `agent_context_disabled`.
 
@@ -704,10 +761,11 @@ flowchart TD
     R2 --> RES2(["200 retrievalPath Relational, fallbackReason when a fallback happened"])
 ```
 
-#### C19 Project responses into GraphRAG [FR-MCP-AGENTCONTEXT-007]
+#### ProjectAgentResponsesCommand: project responses into GraphRAG [FR-MCP-AGENTCONTEXT-007]
 
-- REST `POST /qbrainai/agent-context/projection/graphrag`; MCP `agent_context_project_graphrag(workspacePath, responseIdsJson)`; client `ProjectToGraphRagAsync(ProjectAgentContextRequest)`; REPL `client.AgentContext.ProjectToGraphRagAsync`; PowerShell `New-McpAgentContextProjectGraphRagParams`; Node tool `agent_context_project_graphrag`. Also run by a background pass after C11, C12, C13, and C14 mark a projection `Pending`.
-- Response 200 `AgentContextProjectionResult`. Errors: 400 `validation_error`, 404 workspace, 409 `agent_context_disabled`. GraphRAG being disabled is not an error: every selected projection is `Skipped` with `skippedReason: graphrag_disabled`.
+- Handler: `ProjectAgentResponsesCommand(string WorkspacePath, ProjectAgentContextRequest Request) : ICommand<AgentContextProjectionResult>` and `ProjectAgentResponsesCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/ProjectAgentResponsesCommand.cs`.
+- REST `POST /qbrainai/agent-context/projection/graphrag`; MCP `agent_context_project_graphrag(workspacePath, responseIdsJson)`; client `ProjectToGraphRagAsync(ProjectAgentContextRequest)`; REPL `client.AgentContext.ProjectToGraphRagAsync`; PowerShell `New-McpAgentContextProjectGraphRagParams`; tool descriptor `agent_context_project_graphrag`. Also run by a background pass after DecideAgentResponseTrustCommand, RejectAgentResponseCommand, SupersedeAgentResponseCommand, and EvaluateStalenessCommand mark a projection `Pending`.
+- Response 200 `AgentContextProjectionResult`. Errors: 400 `validation_error` (malformed list, more than 1000 ids, an id without the `rsp-` prefix), 404 workspace, 409 `agent_context_disabled`. GraphRAG being disabled is not an error: every selected projection is `Skipped` with `skippedReason: graphrag_disabled`.
 
 ```mermaid
 flowchart TD
@@ -715,7 +773,9 @@ flowchart TD
     W -->|no| E0(["404 Workspace required"])
     W -->|yes| MO{"Mode Off?"}
     MO -->|yes| E1(["409 agent_context_disabled"])
-    MO -->|no| PE{"ProjectionEnabled and GraphRAG enabled?"}
+    MO -->|no| VID{"responseIds well formed, at most 1000, every id rsp-prefixed?"}
+    VID -->|no| E2(["400 validation_error"])
+    VID -->|yes| PE{"ProjectionEnabled and GraphRAG enabled?"}
     PE -->|no| SK["Every selected projection Skipped"]
     SK --> R0(["200 skipped with skippedReason"])
     PE -->|yes| SEL["Select requested responses, or every Pending or out-of-date projection"]
@@ -739,40 +799,10 @@ flowchart TD
     WAS -->|no| NX
 ```
 
-#### C20 Run a stateless invocation (plugin) [FR-MCP-AGENTCONTEXT-009]
+#### GetAgentContextPilotReportQuery: pilot report [FR-MCP-AGENTCONTEXT-009]
 
-- Trigger: a delivered user request (Phase A Units A3 and A4) on a host whose plugin reads `Mode` through C1.
-- PowerShell: `Invoke-PluginAgentContextInvocation` in `plugin-hook.ps1`; Node: `runAgentContextInvocation` in the Node core. Hosts inject the rendered package through their prompt-context mechanism (hook additional context or the host's system-context API).
-- Output: in `Stateless` mode the model receives only the rendered package and the request, without prior conversation turns; in `Pilot` mode the package is built and recorded but not injected; in `Off` nothing happens.
-- A host recorded `turn_logging_unsupported` (Phase A, D6) has no minted turn, so C20 does not run there: the plugin stays stateful and reports `turn_logging_unsupported`, and the feature-matrix row records the limitation.
-
-```mermaid
-flowchart TD
-    S(["Request delivered"]) --> SUP{"Host supported for turn logging and the turn minted?"}
-    SUP -->|no| UNS(["turn_logging_unsupported: stateful, no package"])
-    SUP -->|yes| MD["Read Mode from status (cached per host session start)"]
-    MD --> M{"Mode"}
-    M -->|Off| OFF(["Stateful turn as today"])
-    M -->|Pilot or Stateless| BP["Build package (C2) for sessionId and requestId, idempotency key = requestId"]
-    BP --> BR{"Build result"}
-    BR -->|budget exceeded| OVF["Report agent_context_budget_exceeded to the model and the session log"]
-    OVF --> FBK(["Stateful turn: no injection"])
-    BR -->|other error or outage| ERR["Record the cause on the turn"]
-    ERR --> FBK
-    BR -->|built| MM{"Mode"}
-    MM -->|Pilot| PIL["Record packageId on the turn, no injection"]
-    PIL --> RUN1(["Model answers statefully: response submitted with invocationMode Stateful"])
-    MM -->|Stateless| INJ["Inject the rendered package as the model context, no history"]
-    INJ --> RUN2(["Model answers: response submitted with invocationMode Stateless"])
-    RUN1 --> SUB["Submit response (C6) with claims and evidence at turn close"]
-    RUN2 --> SUB
-    SUB --> GRD["Deterministic grade (C9) then the slice HV records the model grade (C10)"]
-    GRD --> E(["Trust decided (C11)"])
-```
-
-#### C21 Pilot report [FR-MCP-AGENTCONTEXT-009]
-
-- REST `GET /qbrainai/agent-context/pilot/report?fromUtc&toUtc`; MCP `agent_context_pilot_report(workspacePath, fromUtc, toUtc)`; client `GetPilotReportAsync(AgentContextPilotReportQuery)`; REPL `client.AgentContext.GetPilotReportAsync`; PowerShell `New-McpAgentContextPilotReportParams`; Node tool `agent_context_pilot_report`.
+- Handler: `GetAgentContextPilotReportQuery(string WorkspacePath, AgentContextPilotReportQuery Query) : IQuery<AgentContextPilotReport>` and `GetAgentContextPilotReportQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/GetAgentContextPilotReportQuery.cs`.
+- REST `GET /qbrainai/agent-context/pilot/report?fromUtc&toUtc`; MCP `agent_context_pilot_report(workspacePath, fromUtc, toUtc)`; client `GetPilotReportAsync(AgentContextPilotReportQuery)`; REPL `client.AgentContext.GetPilotReportAsync`; PowerShell `New-McpAgentContextPilotReportParams`; tool descriptor `agent_context_pilot_report`.
 - Response 200 `AgentContextPilotReport`. Errors: 400 `validation_error` (missing offset or from after to), 404 workspace, 409 `agent_context_disabled`.
 
 ```mermaid
@@ -788,11 +818,118 @@ flowchart TD
     AGG --> R(["200 AgentContextPilotReport"])
 ```
 
-### 6.6 Phase C sequence diagrams
+#### CreateAgentContextHvRequestCommand: create an HV request for a range of turns [FR-MCP-AGENTCONTEXT-004]
 
-In every diagram, `Caller` is any surface (plugin through the REPL, the REPL, the typed client, or an MCP client); REST requests go through `AgentContextController` and MCP requests through `FwhMcpTools.AgentContext`, both into `IAgentContextService`. The mode-Off and workspace responses are the same for every request and are drawn once per diagram as the first `alt` branches.
+- Handler: `CreateAgentContextHvRequestCommand(string WorkspacePath, CreateAgentContextHvRequestRequest Request) : ICommand<AgentContextHvRequestResult>` and `CreateAgentContextHvRequestCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/CreateAgentContextHvRequestCommand.cs`.
+- Caller: any agent (operator, 2026-10-11: "Agents will specify a range of session turns to be HV, the HV agent will mark the grade you have been working.").
+- REST `POST /qbrainai/agent-context/hv-requests`; MCP `agent_context_create_hv_request(string workspacePath, string sessionId, string agent, string fromRequestId, string toRequestId, string requestedBy, string reason)`; client `CreateHvRequestAsync(CreateAgentContextHvRequestRequest)`; REPL `client.AgentContext.CreateHvRequestAsync`; PowerShell `New-McpAgentContextCreateHvRequestParams`; tool descriptor `agent_context_create_hv_request`.
+- Response 201 `AgentContextHvRequestResult` (Location `/qbrainai/agent-context/hv-requests/{hvRequestId}`) with its items: every agent response whose `RequestId` lies in the range, in turn order.
+- Errors: 400 `validation_error` (blank fields), `agent_context_hv_request_invalid` (unknown session, an endpoint turn not in the session, from after to, a range longer than `HvRequest:MaxTurns`, or a range with no agent response); 404 workspace; 409 `agent_context_disabled`.
 
-#### SC1: Get status
+```mermaid
+flowchart TD
+    S(["POST hv-requests"]) --> W{"Workspace resolved?"}
+    W -->|no| E0(["404 Workspace required"])
+    W -->|yes| MO{"Mode Off?"}
+    MO -->|yes| E1(["409 agent_context_disabled"])
+    MO -->|no| V{"sessionId, agent, both requestIds, requestedBy, and reason nonblank?"}
+    V -->|no| E2(["400 validation_error"])
+    V -->|yes| SS{"Session exists for agent and sessionId?"}
+    SS -->|no| E3(["400 agent_context_hv_request_invalid unknown session"])
+    SS -->|yes| EP{"Both turns exist in the session and from is not after to?"}
+    EP -->|no| E4(["400 agent_context_hv_request_invalid range"])
+    EP -->|yes| LEN{"Turns in range at most HvRequest:MaxTurns?"}
+    LEN -->|no| E5(["400 agent_context_hv_request_invalid too long"])
+    LEN -->|yes| RS["Collect agent responses whose RequestId lies in the range, in turn order"]
+    RS --> ANY{"At least one response?"}
+    ANY -->|no| E6(["400 agent_context_hv_request_invalid no responses"])
+    ANY -->|yes| SV["Save HV request (Open) and its items"]
+    SV --> R(["201 AgentContextHvRequestResult"])
+```
+
+#### GetAgentContextHvRequestQuery: get an HV request [FR-MCP-AGENTCONTEXT-004]
+
+- Handler: `GetAgentContextHvRequestQuery(string WorkspacePath, string HvRequestId) : IQuery<AgentContextHvRequestResult>` and `GetAgentContextHvRequestQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/GetAgentContextHvRequestQuery.cs`.
+- REST `GET /qbrainai/agent-context/hv-requests/{hvRequestId}`; MCP `agent_context_get_hv_request(string workspacePath, string hvRequestId)`; client `GetHvRequestAsync(hvRequestId)`; REPL `client.AgentContext.GetHvRequestAsync`; PowerShell `New-McpAgentContextGetHvRequestParams`; tool descriptor `agent_context_get_hv_request`.
+- Response 200 `AgentContextHvRequestResult` with its items. Errors: 404 workspace or `not_found` (`hv_request`), 409 `agent_context_disabled`.
+
+```mermaid
+flowchart TD
+    S(["GET hv-requests/{hvRequestId}"]) --> W{"Workspace resolved?"}
+    W -->|no| E0(["404 Workspace required"])
+    W -->|yes| MO{"Mode Off?"}
+    MO -->|yes| E1(["409 agent_context_disabled"])
+    MO -->|no| F{"HV request found?"}
+    F -->|no| E2(["404 not_found hv_request"])
+    F -->|yes| L["Load items with their graded flags"]
+    L --> R(["200 AgentContextHvRequestResult"])
+```
+
+#### QueryAgentContextHvRequestsQuery: query HV requests [FR-MCP-AGENTCONTEXT-004]
+
+- Handler: `QueryAgentContextHvRequestsQuery(string WorkspacePath, AgentContextHvRequestQuery Query) : IQuery<AgentContextHvRequestQueryResult>` and `QueryAgentContextHvRequestsQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/QueryAgentContextHvRequestsQuery.cs`.
+- REST `GET /qbrainai/agent-context/hv-requests?sessionId&status&limit&offset`; MCP `agent_context_query_hv_requests(string workspacePath, string? sessionId = null, string? status = null, int limit = 50, int offset = 0)`; client `QueryHvRequestsAsync(AgentContextHvRequestQuery)`; REPL `client.AgentContext.QueryHvRequestsAsync`; PowerShell `New-McpAgentContextQueryHvRequestsParams`; tool descriptor `agent_context_query_hv_requests`.
+- Response 200 `AgentContextHvRequestQueryResult`. Errors: 400 `validation_error` (unknown status, limit or offset out of range), 404 workspace, 409 `agent_context_disabled`.
+
+```mermaid
+flowchart TD
+    S(["GET hv-requests"]) --> W{"Workspace resolved?"}
+    W -->|no| E0(["404 Workspace required"])
+    W -->|yes| MO{"Mode Off?"}
+    MO -->|yes| E1(["409 agent_context_disabled"])
+    MO -->|no| V{"Filters valid: known status, limit 1..1000, offset 0 or more?"}
+    V -->|no| E2(["400 validation_error"])
+    V -->|yes| Q["Filter, order by CreatedUtc descending then HvRequestId, count, page"]
+    Q --> R(["200 totalCount, limit, offset, items"])
+```
+
+### 6.6 Processes (plugin)
+
+#### Process RunStatelessInvocation: run a stateless invocation (plugin process) [FR-MCP-AGENTCONTEXT-009]
+
+- Not a unit of work: the plugin orchestrates the handlers GetAgentContextStatusQuery (status), BuildAgentContextPackageCommand (build), SubmitAgentResponseCommand (submit), and RunDeterministicGradeCommand (deterministic grade) through the REPL.
+- Trigger: a delivered user request (Phase A processes ApplyArrivalBridgeRecord and OpenTurnFromPromptHook) on a host whose plugin reads `Mode` through GetAgentContextStatusQuery.
+- PowerShell core: `Invoke-PluginAgentContextInvocation` in `plugin-hook.ps1`, for all nine hosts (the TypeScript hosts through their adapters). Hosts inject the rendered package through their prompt-context mechanism (hook additional context or the host's system-context API).
+- Output: in `Stateless` mode the model receives only the rendered package and the request, without prior conversation turns; in `Pilot` mode the package is built and recorded but not injected; in `Off` nothing happens.
+- Package failure (operator, 2026-10-11: "Fail the invocation"): in `Pilot` or `Stateless` mode, when the build fails (budget overflow, profile unavailable, commit unavailable, any other error, or an outage), the plugin refuses the prompt with the error code and message shown to the operator, produces no answer, and closes the request's turn `canceled` with that reason (canceled turns are not gated, FR-MCP-SESSIONCLASS-002). A host whose prompt hook cannot refuse a prompt cannot run `Pilot` or `Stateless`; its plugin treats those modes as `Off` and its feature-matrix row records the limitation.
+- A host recorded `turn_logging_unsupported` (Phase A, D6) has no minted turn, so RunStatelessInvocation does not run there: the plugin stays stateful and reports `turn_logging_unsupported`.
+- After the model answers, the response is submitted (SubmitAgentResponseCommand) at turn close and graded deterministically (RunDeterministicGradeCommand); its model grade comes later from an HV request covering its turn (CreateAgentContextHvRequestCommand, RecordModelGradeCommand).
+
+```mermaid
+flowchart TD
+    S(["Request delivered"]) --> SUP{"Host supported for turn logging and the turn minted?"}
+    SUP -->|no| UNS(["turn_logging_unsupported: stateful, no package"])
+    SUP -->|yes| MD["Read Mode from status (cached per host session start)"]
+    MD --> M{"Mode"}
+    M -->|Off| OFF(["Stateful turn as today"])
+    M -->|Pilot or Stateless| CAN{"Host prompt hook can refuse a prompt?"}
+    CAN -->|no| LIM(["Treated as Off: stateful, limitation in the feature matrix"])
+    CAN -->|yes| BP["Build package (BuildAgentContextPackageCommand) for sessionId and requestId, idempotency key = requestId"]
+    BP --> BR{"Build result"}
+    BR -->|any error or outage| REF["Refuse the prompt with the error code and message shown to the operator"]
+    REF --> CN["Close the turn canceled with the reason"]
+    CN --> FAIL(["Invocation failed: no answer produced"])
+    BR -->|built| MM{"Mode"}
+    MM -->|Pilot| PIL["Record packageId on the turn, no injection"]
+    PIL --> RUN1["Model answers statefully"]
+    MM -->|Stateless| INJ["Inject the rendered package as the model context, no history"]
+    INJ --> RUN2["Model answers from the package"]
+    RUN1 --> SUB["At turn close submit the response (SubmitAgentResponseCommand) with claims, evidence, and invocationMode"]
+    RUN2 --> SUB
+    SUB --> SR{"Submit result"}
+    SR -->|201 or 200| GRD["Deterministic grade (RunDeterministicGradeCommand)"]
+    SR -->|error or outage| SE["Record the cause on the turn, keep the turn open for the Stop gate"]
+    SE --> E3(["Response not recorded: the model or operator resubmits"])
+    GRD --> GDR{"Grade result"}
+    GDR -->|201| WAIT(["Response Grading until an HV request covering the turn records its model grade (CreateAgentContextHvRequestCommand, RecordModelGradeCommand)"])
+    GDR -->|error| GE(["Cause recorded on the turn: the deterministic grade is re-run on request"])
+```
+
+### 6.7 Phase C sequence diagrams
+
+In every diagram, `Caller` is any surface (plugin through the REPL, the REPL, the typed client, or an MCP client); REST requests go through `AgentContextController` and MCP requests through `FwhMcpTools.AgentContext`, both dispatching the unit's command or query through `IDispatcher` to its handler (shown as `SVC`). The mode-Off and workspace responses are the same for every request and are drawn once per diagram as the first `alt` branches.
+
+#### Sequence: submit GetAgentContextStatusQuery
 
 ```mermaid
 sequenceDiagram
@@ -817,7 +954,7 @@ sequenceDiagram
     end
 ```
 
-#### SC2: Build a package
+#### Sequence: submit BuildAgentContextPackageCommand
 
 ```mermaid
 sequenceDiagram
@@ -826,7 +963,7 @@ sequenceDiagram
     participant API as Controller or MCP tool
     participant SVC as IAgentContextService
     participant B as Package builder
-    participant RT as Retrieval (C18)
+    participant RT as Retrieval (RetrieveAgentContextCandidatesQuery)
     participant SL as Session log, requirements, TODO stores
     participant DB as Store
     Caller->>API: POST /packages (BuildAgentContextPackageRequest)
@@ -852,10 +989,11 @@ sequenceDiagram
             alt commit unreadable
                 B-->>SVC: commit unavailable
                 API-->>Caller: 409 agent_context_commit_unavailable
+                Caller->>Caller: refuse the prompt with the code, close the turn canceled (RunStatelessInvocation)
             else no profile or rule file resolves
                 B-->>SVC: profile unavailable
                 API-->>Caller: 409 agent_context_profile_unavailable
-                Caller->>Caller: report, run statefully, operator fixes ProfileSources or RuleSources
+                Caller->>Caller: refuse the prompt with the code, close the turn canceled, operator fixes ProfileSources or RuleSources
             else idempotency key reused with same inputs
                 SVC-->>API: existing package
                 API-->>Caller: 200 AgentContextPackageResult
@@ -866,7 +1004,7 @@ sequenceDiagram
             else mandatory context over budget
                 B->>DB: store Overflow package
                 API-->>Caller: 422 agent_context_budget_exceeded with token counts
-                Caller->>Caller: report overflow, run statefully, never truncate mandatory context
+                Caller->>Caller: refuse the prompt with the token counts, close the turn canceled, never truncate mandatory context
             else built
                 B->>DB: save package, items, omissions, findings, links
                 API-->>Caller: 201 AgentContextPackageResult with Location
@@ -876,7 +1014,7 @@ sequenceDiagram
     end
 ```
 
-#### SC3: Get a package
+#### Sequence: submit GetAgentContextPackageQuery
 
 ```mermaid
 sequenceDiagram
@@ -901,7 +1039,7 @@ sequenceDiagram
     end
 ```
 
-#### SC4: Query packages
+#### Sequence: submit QueryAgentContextPackagesQuery
 
 ```mermaid
 sequenceDiagram
@@ -924,7 +1062,7 @@ sequenceDiagram
     end
 ```
 
-#### SC5: Replay a package
+#### Sequence: submit ReplayAgentContextPackageQuery
 
 ```mermaid
 sequenceDiagram
@@ -959,7 +1097,7 @@ sequenceDiagram
     end
 ```
 
-#### SC6: Submit a response
+#### Sequence: submit SubmitAgentResponseCommand
 
 ```mermaid
 sequenceDiagram
@@ -995,7 +1133,7 @@ sequenceDiagram
     end
 ```
 
-#### SC7: Get a response
+#### Sequence: submit GetAgentResponseQuery
 
 ```mermaid
 sequenceDiagram
@@ -1019,7 +1157,7 @@ sequenceDiagram
     end
 ```
 
-#### SC8: Query responses
+#### Sequence: submit QueryAgentResponsesQuery
 
 ```mermaid
 sequenceDiagram
@@ -1041,7 +1179,7 @@ sequenceDiagram
     end
 ```
 
-#### SC9: Run the deterministic grade
+#### Sequence: submit RunDeterministicGradeCommand
 
 ```mermaid
 sequenceDiagram
@@ -1068,7 +1206,7 @@ sequenceDiagram
             DG->>SRC: verify files, hashes, requirement ids, receipts, turns
             SRC-->>DG: verified, contradicted, or not evaluable per check
             DG-->>SVC: findings and exact scores
-            SVC->>DB: save grade, decide trust (C11)
+            SVC->>DB: save grade, decide trust (DecideAgentResponseTrustCommand)
             API-->>Caller: 201 AgentResponseGradeResult with responseStatus
             alt verdict Pass and status Grading
                 Caller->>Caller: launch the model grade (slice HV)
@@ -1079,48 +1217,60 @@ sequenceDiagram
     end
 ```
 
-#### SC10: Record a model grade
+#### Sequence: submit RecordModelGradeCommand from an HV review
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant HV as Coordinator after the Codex HV run
+    participant AG as Agent
+    participant HV as HV agent (Codex gpt-6-sol xhigh, launched as every HV is)
     participant API as Controller or MCP tool
-    participant SVC as IAgentContextService
+    participant SVC as IDispatcher and RecordModelGradeCommandHandler
+    participant T as DecideAgentResponseTrustCommandHandler (DecideAgentResponseTrustCommand)
     participant DB as Store
-    HV->>API: POST /responses/{responseId}/grades/model (RecordModelGradeRequest from the HV receipt)
-    alt workspace not resolved
-        API-->>HV: 404 Workspace required
-    else mode Off
-        API-->>HV: 409 agent_context_disabled
-    else score lexeme invalid
-        API-->>HV: 400 review_score_format, review_score_precision, or review_score_out_of_range
-    else jsonl paths missing
-        API-->>HV: 400 agent_context_receipt_paths_required
-    else invalid findings
-        API-->>HV: 400 validation_error
-    else grader not the configured one
-        API-->>HV: 403 agent_context_grader_not_allowed
-        HV->>HV: rerun HV on the configured grader
-    else accepted
-        API->>SVC: RecordModelGradeAsync
-        alt response not found
-            API-->>HV: 404 not_found response
-        else Rejected or Superseded
+    AG->>API: CreateAgentContextHvRequestCommand (CreateAgentContextHvRequestCommand) for a turn range
+    API-->>AG: 201 hvRequestId with its response items
+    HV->>HV: review the turns and responses of the HV request, write request and response jsonl
+    loop each response item of the HV request
+        HV->>API: POST /responses/{responseId}/grades/model (hvRequestId, scores, findings, receipt paths)
+        API->>SVC: SendAsync(RecordModelGradeCommand)
+        alt workspace not resolved
+            API-->>HV: 404 Workspace required
+        else mode Off
+            API-->>HV: 409 agent_context_disabled
+        else score lexeme invalid
+            API-->>HV: 400 review_score_format, review_score_precision, or review_score_out_of_range
+        else hvRequestId or a jsonl path missing
+            API-->>HV: 400 agent_context_receipt_paths_required
+        else invalid findings
+            API-->>HV: 400 validation_error
+        else grader not the configured one
+            API-->>HV: 403 agent_context_grader_not_allowed
+        else response or HV request not found
+            API-->>HV: 404 not_found response or hv_request
+        else response Rejected or Superseded
             API-->>HV: 409 agent_context_response_not_gradable
+        else HV request Completed
+            API-->>HV: 409 agent_context_hv_request_closed
+        else response not an item of the HV request
+            API-->>HV: 409 agent_context_grade_not_in_hv_request
+        else receipts do not verify
+            API-->>HV: 422 agent_context_receipt_unverified with the failed check
+            HV->>HV: fix the receipt paths or rerun the HV on the configured grader
         else recorded
-            SVC->>DB: save grade, decide trust (C11)
-            API-->>HV: 201 AgentResponseGradeResult with responseStatus
+            SVC->>DB: save grade, findings, receipt hashes, mark item graded
+            SVC->>T: SendAsync(DecideAgentResponseTrustCommand)
+            T-->>SVC: Trusted or Grading
+            API-->>HV: 201 AgentResponseGradeResult with responseStatus and hvRequestStatus
             alt responseStatus Trusted
-                HV->>HV: response becomes retrievable context, projection pending
+                HV->>HV: response becomes retrievable context
             else responseStatus Grading
-                HV->>HV: show every failure, remediate, rerun HV
+                HV->>HV: report every FAIL and UNKNOWN to the agent that requested the HV
             end
         end
     end
 ```
-
-#### SC12: Reject a response
+#### Sequence: submit RejectAgentResponseCommand
 
 ```mermaid
 sequenceDiagram
@@ -1150,7 +1300,7 @@ sequenceDiagram
     end
 ```
 
-#### SC13: Supersede a response
+#### Sequence: submit SupersedeAgentResponseCommand
 
 ```mermaid
 sequenceDiagram
@@ -1178,7 +1328,7 @@ sequenceDiagram
     end
 ```
 
-#### SC14: Evaluate staleness
+#### Sequence: submit EvaluateStalenessCommand
 
 ```mermaid
 sequenceDiagram
@@ -1202,7 +1352,7 @@ sequenceDiagram
     end
 ```
 
-#### SC15: Create a relationship
+#### Sequence: submit CreateAgentContextRelationshipCommand
 
 ```mermaid
 sequenceDiagram
@@ -1231,7 +1381,7 @@ sequenceDiagram
     end
 ```
 
-#### SC16: Delete a relationship
+#### Sequence: submit DeleteAgentContextRelationshipCommand
 
 ```mermaid
 sequenceDiagram
@@ -1256,7 +1406,7 @@ sequenceDiagram
     end
 ```
 
-#### SC17: Query relationships
+#### Sequence: submit QueryAgentContextRelationshipsQuery
 
 ```mermaid
 sequenceDiagram
@@ -1278,7 +1428,7 @@ sequenceDiagram
     end
 ```
 
-#### SC18: Retrieve candidate context
+#### Sequence: submit RetrieveAgentContextCandidatesQuery
 
 ```mermaid
 sequenceDiagram
@@ -1316,7 +1466,7 @@ sequenceDiagram
     end
 ```
 
-#### SC19: Project responses into GraphRAG
+#### Sequence: submit ProjectAgentResponsesCommand
 
 ```mermaid
 sequenceDiagram
@@ -1362,7 +1512,7 @@ sequenceDiagram
     end
 ```
 
-#### SC20: Stateless invocation end to end
+#### Sequence: stateless invocation end to end (process RunStatelessInvocation)
 
 ```mermaid
 sequenceDiagram
@@ -1372,14 +1522,13 @@ sequenceDiagram
     participant SL as Session log (Phase A)
     participant AC as Agent context API
     participant M as Model
-    participant HV as Codex HV
     OP->>H: prompt
-    H->>SL: mint turn (A1), deliver (A3 or A4)
-    H->>AC: status (cached Mode)
-    alt Mode Off
+    H->>SL: mint turn (MintSessionTurnCommand), deliver (ApplyArrivalBridgeRecord or OpenTurnFromPromptHook)
+    H->>AC: GetAgentContextStatusQuery (GetAgentContextStatusQuery, cached Mode)
+    alt Mode Off, or the host cannot refuse a prompt
         H->>M: prompt with conversation history (stateful)
     else Mode Pilot or Stateless
-        H->>AC: build package (C2), idempotency key requestId
+        H->>AC: BuildAgentContextPackageCommand (BuildAgentContextPackageCommand), idempotency key requestId
         alt 201 or 200 package
             alt Stateless
                 H->>M: rendered package plus request, no history
@@ -1387,21 +1536,23 @@ sequenceDiagram
                 H->>SL: record packageId on the turn
                 H->>M: prompt with conversation history
             end
-        else 422 budget exceeded or other error
-            H->>SL: record the cause on the turn
-            H->>M: prompt with conversation history
+            M-->>H: answer with claims and evidence
+            H->>AC: SubmitAgentResponseCommand (SubmitAgentResponseCommand) with invocationMode
+            alt 201 or 200
+                H->>AC: RunDeterministicGradeCommand (RunDeterministicGradeCommand)
+                AC-->>H: grade and responseStatus Grading
+                H->>H: model grade comes later from an HV request covering the turn (CreateAgentContextHvRequestCommand, RecordModelGradeCommand)
+            else error or outage
+                H->>SL: record the cause on the turn, keep it open for the Stop gate
+            end
+        else 422, 409, any other error, or an outage
+            H-->>OP: prompt refused with the error code and message
+            H->>SL: close the turn canceled with the reason
+            Note over H,M: Invocation failed, no answer produced (operator: "Fail the invocation")
         end
-        M-->>H: answer with claims and evidence
-        H->>AC: submit response (C6) with invocationMode
-        AC-->>H: 201 Submitted
-        H->>AC: deterministic grade (C9)
-        AC-->>H: grade and status
-        HV->>AC: model grade (C10) after the slice HV
-        AC-->>HV: Trusted or Grading
     end
 ```
-
-#### SC21: Pilot report
+#### Sequence: submit GetAgentContextPilotReportQuery
 
 ```mermaid
 sequenceDiagram
@@ -1423,91 +1574,164 @@ sequenceDiagram
     end
 ```
 
+#### Sequence: submit CreateAgentContextHvRequestCommand
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Caller as Agent
+    participant API as Controller or MCP tool
+    participant SVC as IDispatcher and CreateAgentContextHvRequestCommandHandler
+    Caller->>API: POST /hv-requests (sessionId, agent, fromRequestId, toRequestId, requestedBy, reason)
+    alt workspace not resolved
+        API-->>Caller: 404 Workspace required
+    else mode Off
+        API-->>Caller: 409 agent_context_disabled
+    else blank field
+        API-->>Caller: 400 validation_error
+    else accepted
+        API->>SVC: SendAsync(CreateAgentContextHvRequestCommand)
+        alt unknown session, bad range, too long, or no responses
+            API-->>Caller: 400 agent_context_hv_request_invalid with the reason
+            Caller->>Caller: correct the range
+        else created
+            API-->>Caller: 201 AgentContextHvRequestResult with items
+            Caller->>Caller: hand hvRequestId to the HV agent in its brief
+        end
+    end
+```
+
+#### Sequence: submit GetAgentContextHvRequestQuery
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Caller
+    participant API as Controller or MCP tool
+    participant SVC as IDispatcher and GetAgentContextHvRequestQueryHandler
+    Caller->>API: GET /hv-requests/{hvRequestId}
+    alt workspace not resolved
+        API-->>Caller: 404 Workspace required
+    else mode Off
+        API-->>Caller: 409 agent_context_disabled
+    else accepted
+        API->>SVC: QueryAsync(GetAgentContextHvRequestQuery)
+        alt not found
+            API-->>Caller: 404 not_found hv_request
+        else found
+            API-->>Caller: 200 AgentContextHvRequestResult
+            Caller->>Caller: list ungraded items still awaiting the HV agent
+        end
+    end
+```
+
+#### Sequence: submit QueryAgentContextHvRequestsQuery
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Caller
+    participant API as Controller or MCP tool
+    participant SVC as IDispatcher and QueryAgentContextHvRequestsQueryHandler
+    Caller->>API: GET /hv-requests?sessionId&status&limit&offset
+    alt workspace not resolved
+        API-->>Caller: 404 Workspace required
+    else mode Off
+        API-->>Caller: 409 agent_context_disabled
+    else invalid filters
+        API-->>Caller: 400 validation_error
+    else accepted
+        API->>SVC: QueryAsync(QueryAgentContextHvRequestsQuery)
+        API-->>Caller: 200 totalCount, limit, offset, items
+        Caller->>Caller: page until complete
+    end
+```
+
 ## 7. Agent-context use cases
 
-### 7.11 UC-10 Build a context package for a request [FR-MCP-AGENTCONTEXT-001, -002]
+### 7.11 Use case: Build a context package for a request [FR-MCP-AGENTCONTEXT-001, -002]
 
 Actors: agent host and plugin, server. Precondition: the request's turn exists (UC-1) and the mode is `Pilot` or `Stateless`. Basic flow: the plugin asks the server to build a package for the request; the server gathers the request, profile, rules, applicable requirements, related turns, TODOs, receipts, trusted prior responses, and code at the current commit, filters secrets and untrusted items, ranks, fills the budget, records provenance, and returns the rendered package. Alternate flows: mandatory context exceeds the budget and the build fails with `agent_context_budget_exceeded`; the same idempotency key returns the same package; the commit is unreadable; replay proves the package is reproducible.
 
 ```mermaid
 flowchart LR
-    HO(["Agent host and plugin"]) --- U(("UC-10 Build a context package (C2)"))
+    HO(["Agent host and plugin"]) --- U(("Build a context package (BuildAgentContextPackageCommand)"))
     SV(["Server"]) --- U
-    U -. include .-> I1(("Retrieve candidates (C18)"))
+    U -. include .-> I1(("Retrieve candidates (RetrieveAgentContextCandidatesQuery)"))
     U -. include .-> I2(("Record provenance, omissions, findings"))
-    E1(("Mandatory over budget: 422, stateful fallback")) -. extend .-> U
+    E1(("Mandatory over budget: 422, invocation fails")) -. extend .-> U
     E2(("Repeated key: same package")) -. extend .-> U
-    E3(("Replay proves determinism (C5)")) -. extend .-> U
+    E3(("Replay proves determinism (ReplayAgentContextPackageQuery)")) -. extend .-> U
 ```
 
-### 7.12 UC-11 Submit and grade an agent response [FR-MCP-AGENTCONTEXT-003, -004]
+### 7.12 Use case: Submit and grade an agent response [FR-MCP-AGENTCONTEXT-003, -004]
 
 Actors: model, plugin, server, hostile reviewer. Basic flow: at turn close the plugin submits the model's response with its claims and evidence; the server runs the deterministic grade; the coordinator runs the slice HV and records the model grade; the server marks the response trusted when both grades pass at 98/98 with zero FAIL and zero UNKNOWN. Alternate flows: a grade fails and the response stays `Grading` with every failure shown; a grader other than the configured one is refused; the operator rejects the response.
 
 ```mermaid
 flowchart LR
-    MD(["Model"]) --- U(("UC-11 Submit and grade a response"))
+    MD(["Model"]) --- U(("Submit and grade a response"))
     PL(["Plugin"]) --- U
     HR(["Hostile reviewer"]) --- U
     SV(["Server"]) --- U
-    U -. include .-> I1(("Submit (C6)"))
-    U -. include .-> I2(("Deterministic grade (C9)"))
-    U -. include .-> I3(("Model grade (C10)"))
-    U -. include .-> I4(("Decide trust (C11)"))
+    U -. include .-> I1(("Submit (SubmitAgentResponseCommand)"))
+    U -. include .-> I2(("Deterministic grade (RunDeterministicGradeCommand)"))
+    U -. include .-> I3(("Model grade (RecordModelGradeCommand)"))
+    U -. include .-> I4(("Decide trust (DecideAgentResponseTrustCommand)"))
     E1(("Grade fails: stays Grading, failures shown")) -. extend .-> U
     E2(("Unconfigured grader: 403")) -. extend .-> U
-    E3(("Rejected by operator (C12)")) -. extend .-> U
+    E3(("Rejected by operator (RejectAgentResponseCommand)")) -. extend .-> U
 ```
 
-### 7.13 UC-12 Retrieve trusted prior context [FR-MCP-AGENTCONTEXT-007]
+### 7.13 Use case: Retrieve trusted prior context [FR-MCP-AGENTCONTEXT-007]
 
 Actors: server (inside package construction), client apps. Basic flow: retrieval returns ranked candidates, only trusted responses among prior responses, preferring GraphRAG. Alternate flow: GraphRAG disabled, uninitialized, not indexed, or failing, and the deterministic relational path answers with the fallback reason.
 
 ```mermaid
 flowchart LR
-    SV(["Server: package builder"]) --- U(("UC-12 Retrieve trusted prior context (C18)"))
+    SV(["Server: package builder"]) --- U(("Retrieve trusted prior context (RetrieveAgentContextCandidatesQuery)"))
     CA(["Client apps"]) --- U
     E1(("GraphRAG unavailable: relational fallback with reason")) -. extend .-> U
 ```
 
-### 7.14 UC-13 Maintain relationships, staleness, and supersession [FR-MCP-AGENTCONTEXT-005, -006]
+### 7.14 Use case: Maintain relationships, staleness, and supersession [FR-MCP-AGENTCONTEXT-005, -006]
 
 Actors: model, operator, server. Basic flow: links are created between packages, responses, requirements, turns, TODOs, code, and receipts; when a dependency changes, its dependents become stale; a newer response supersedes an older one. Alternate flows: invalid link, cycle, or unresolvable ref refused.
 
 ```mermaid
 flowchart LR
-    MD(["Model"]) --- U(("UC-13 Maintain relationships and staleness"))
+    MD(["Model"]) --- U(("Maintain relationships and staleness"))
     OP(["Operator"]) --- U
     SV(["Server"]) --- U
-    U -. include .-> I1(("Create, delete, query links (C15 to C17)"))
-    U -. include .-> I2(("Evaluate staleness (C14)"))
-    E1(("Supersede a response (C13)")) -. extend .-> U
+    U -. include .-> I1(("Create, delete, query links (CreateAgentContextRelationshipCommand to QueryAgentContextRelationshipsQuery)"))
+    U -. include .-> I2(("Evaluate staleness (EvaluateStalenessCommand)"))
+    E1(("Supersede a response (SupersedeAgentResponseCommand)")) -. extend .-> U
     E2(("Invalid link or cycle refused")) -. extend .-> U
 ```
 
-### 7.15 UC-14 Run a stateless or pilot invocation [FR-MCP-AGENTCONTEXT-009]
+### 7.15 Use case: Run a stateless or pilot invocation [FR-MCP-AGENTCONTEXT-009]
 
-Actors: operator, agent host and plugin, model. Basic flow: in `Stateless` mode the plugin builds the package for a delivered request and the model answers from the package alone; in `Pilot` mode the package is built and recorded but the model answers statefully; the pilot report compares both before any default changes. Alternate flows: mode `Off` keeps today's behavior; a build failure falls back to stateful with the cause recorded.
+Actors: operator, agent host and plugin, model. Basic flow: in `Stateless` mode the plugin builds the package for a delivered request and the model answers from the package alone; in `Pilot` mode the package is built and recorded but the model answers statefully; the pilot report compares both before any default changes. Alternate flows: mode `Off` keeps today's behavior; a build failure (operator, 2026-10-11: "Fail the invocation") refuses the prompt with the error code and message shown to the operator, produces no answer, and closes the turn `canceled`; a host whose prompt hook cannot refuse a prompt treats `Pilot` and `Stateless` as `Off`, with the limitation in its feature-matrix row.
 
 ```mermaid
 flowchart LR
-    OP(["Operator"]) --- U(("UC-14 Run a stateless or pilot invocation (C20)"))
+    OP(["Operator"]) --- U(("Run a stateless or pilot invocation (RunStatelessInvocation)"))
     HO(["Agent host and plugin"]) --- U
     MD(["Model"]) --- U
-    U -. include .-> I1(("Build a context package (UC-10)"))
-    U -. include .-> I2(("Submit and grade a response (UC-11)"))
+    U -. include .-> I1(("Build a context package for a request"))
+    U -. include .-> I2(("Submit and grade an agent response"))
     E1(("Mode Off: stateful")) -. extend .-> U
-    E2(("Build fails: stateful fallback, cause recorded")) -. extend .-> U
-    E3(("Pilot report (C21)")) -. extend .-> U
+    E2(("Build fails: prompt refused, turn canceled")) -. extend .-> U
+    E3(("Pilot report (GetAgentContextPilotReportQuery)")) -. extend .-> U
 ```
 
-### 7.16 UC-15 Project responses into GraphRAG [FR-MCP-AGENTCONTEXT-007]
+### 7.16 Use case: Project responses into GraphRAG [FR-MCP-AGENTCONTEXT-007]
 
 Actors: server (background pass), operator. Basic flow: trusted responses are ingested into GraphRAG and responses that stop being trusted are removed. Alternate flows: GraphRAG disabled and every projection skipped; an ingest or delete error is recorded and retried on the next pass.
 
 ```mermaid
 flowchart LR
-    SV(["Server background pass"]) --- U(("UC-15 Project responses into GraphRAG (C19)"))
+    SV(["Server background pass"]) --- U(("Project responses into GraphRAG (ProjectAgentResponsesCommand)"))
     OP(["Operator"]) --- U
     E1(("GraphRAG disabled: skipped")) -. extend .-> U
     E2(("Ingest or delete error: Failed, retried")) -. extend .-> U
@@ -1515,31 +1739,119 @@ flowchart LR
 
 ## 8. Delivery
 
-### 8.2 Phase C slices (each a full BDPv4 loop ending in its own Codex gpt-6-sol xhigh HV)
+### 8.1 Phase order
 
-- AC1 MCP-AGENTCONTEXT-001 Contracts: `AgentContextOptions` and validation, enums (`AgentContextMode`, item kinds, omission reasons, response statuses, grade kinds, relationship kinds and types), every DTO in section 6.4 (server and client) with `McpClientJsonContext` registration, error codes, and the golden contract file `docs/context/agent-context-contract.json` (kinds, types, statuses, error codes, trust rule cases, canonical rendering cases), frozen before RED. Gates G1, G2, G5.
-- AC2 MCP-AGENTCONTEXT-002 Storage: the entities of section 6.3, `McpDbContext` configuration (query filters, indexes, restrict deletes), and migration `<utc>_AddAgentContext` for SQLite, PostgreSQL, and SQL Server with Up and Down tests. Gates G1, G2, G3 (`./build.ps1 MigrationIntegrationTests`), G5.
-- AC3 MCP-AGENTCONTEXT-003 Package construction: C2 to C5 and the relational path of C18 (gathering, secret filter, ranking, budget and overflow, provenance, findings, canonical rendering, replay). Gates G1, G2, G3, G5.
-- AC4 MCP-AGENTCONTEXT-004 Responses and trust: C6 to C14 (submission, deterministic grader, model grade intake with the grader allow rule, trust decision, rejection, supersession, staleness). Gates G1, G2, G3, G5.
-- AC5 MCP-AGENTCONTEXT-005 Relationships: C15 to C17 and the link creation inside C2, C6, and C13. Gates G1, G2, G5.
-- AC6 MCP-AGENTCONTEXT-006 GraphRAG: the GraphRAG path of C18 and C19 (projection, removal, fallback reasons, background pass). Gates G1, G2, G3, G5.
-- AC7 MCP-AGENTCONTEXT-007 Server surfaces: `AgentContextController` (every route of section 6.5 with the alias), the MCP tools, `AgentContextClient`, the REPL passthrough allow-list entry, `ClientMutationPolicy`, YAML validators, C1, and C21. Gates G1, G2, G3, G5.
-- AC8 MCP-AGENTCONTEXT-008 Plugin cores: PowerShell builders and C20 in `plugin-hook.ps1`, Node `src/tools/agent-context.ts` and `runAgentContextInvocation`, then `SyncAgentPlugins` at a fixed version for all nine plugins. Gates G4, G6 (all nine), G2, the Build.Tests infrastructure step when `build/` changes.
-- AC9 MCP-AGENTCONTEXT-009 Documentation, pilot, and exit: `docs/Stateless-Agent-Context-Management.md`, this document, `docs/AGENT-PLUGIN-FEATURE-MATRIX.md` agent-context rows, config keys in `docs/MCP-SERVER.md`; full G1 to G6 with zero failures and zero skips; HV-C phase-wide.
+```mermaid
+flowchart LR
+    PRE["Prerequisites: P0.1 baseline, REPL generateDocument fix, Nuke Test parameters, TestPluginCore, TestAgentPlugins, bats cases ported to Pester"] --> REQ["Phase 1 Requirements: every FR, TR, TEST, AC, mapping, use case, TODO"]
+    REQ --> DES["Phase 2 Interfaces and code stubs: every command, query, policy, seam, entity, migration, DTO, surface, plugin signature"]
+    DES --> TST["Phase 3 TDD unit tests with mocks: every unit test RED on stubs, then green on mocks with negative checks"]
+    TST --> IMP["Phase 4 Implementation: one coding agent per bounded context, in parallel"]
+    IMP --> VER["Integration, live checks on Linux and Windows, phase-wide HV, operator approval"]
+```
 
-### 8.3 Gates (unchanged from the plan, applied to Phase C)
+Each arrow is crossed only after that phase's gates are green with zero failures and zero skips, its hostile validation (Codex gpt-6-sol xhigh) returns AGREE at accuracy and completeness of at least 98 with every claim PASS, and the operator approves.
 
-- G1 targeted tests, G2 the unit gate (`./build.ps1 Test`), G3 integration suites, G4 PowerShell plugin core (Pester), G5 config and traceability (`./build.ps1 ValidateConfig`, `./build.ps1 ValidateTraceability`), G6 per-plugin suites (Pester and bats for the six PowerShell hosts; `npm ci; npm run build; npm test` for the Node core and cline, cline-v2, opencode).
+### 8.2 What each phase delivers
+
+- Prerequisites: every pre-existing failure fixed under its own TODO (P0.1, including the Windows findings), the REPL `generateDocument` validator fix, the Nuke targets every later gate runs through (`Test --test-projects --test-filter`, `TestPluginCore`, `TestAgentPlugins`), and the port of every bats case to Pester (P0.1b; Pester is the only plugin test runner, operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell.").
+- Phase 1, requirements: the whole catalog of Phases A, B, and C created in the requirement store from the plan text, the use cases, the feature matrix rows, and the phase and domain TODOs (`REQ-MERGEDPLAN-001`, `DESIGN-MERGEDPLAN-001`, `TEST-MERGEDPLAN-001`, one `IMPL-<CONTEXT>-001` per bounded context, `VERIFY-MERGEDPLAN-001`).
+- Phase 2, interfaces and code stubs: every command and query record with a handler stub, every policy and seam interface with a stub, every entity with `McpDbContext` configuration and the three migrations (generated in order so the model snapshots stay linear), every DTO and client mirror with JSON context registration, every controller route, MCP tool, client method, and REPL method (they only dispatch), every plugin function and tool signature, the options classes and `appsettings.yaml` sections, DI, and the golden contract files. Stubs return neutral values and never throw, so Phase 3 tests fail on assertions.
+- Phase 3, unit tests with mocks: every unit test the catalog names, written from the acceptance criteria, recorded RED against the stubs, then green against mocks with the oracle and mutant pattern and a recorded negative check each.
+- Phase 4, implementation: each bounded context replaces its stubs with the real implementation until its Phase 3 tests pass unchanged, adds its integration tests, and runs its gates; then the contexts merge in the rollout order and the integration gates, live checks, and phase-wide HV run.
+
+### 8.3 Bounded contexts (Phase 4 work packages)
+
+```mermaid
+flowchart TB
+    subgraph Server["Server (parallel)"]
+        STL["SessionTurnLogging: turn handlers, minter, outcome guard, SessionLogService"]
+        TR["TurnReviews: review handlers, classification, verdict mapping, completion gate, thresholds"]
+        CP["ContextPackages: build, get, query, replay, status, relational retrieval"]
+        RT["ResponsesAndTrust: submit, grades, trust, reject, supersede, staleness, HV requests, pilot report"]
+        CG["ContextGraph: relationships, GraphRAG projection and retrieval path"]
+        RA["ReplAndAgents: REPL lossless scores and pre-check, McpAgent fields and pre-check"]
+    end
+    subgraph Plugins["Plugins and build (parallel)"]
+        PS["PluginCorePowerShell, the one plugin core: hooks, bridge, verbs, failsafe, Stop gate, clear-session, receipts, stateless invocation, TypeScript-host bindings, tool descriptors"]
+        BT["BuildTooling: SyncAgentPlugins version, receipt, lib-ps to all nine, PowerShell-only validation, ConfigValidator thresholds"]
+    end
+    HPA["HostPluginAdoption: nine plugin repos, one agent per repo, TypeScript adapters with Pester suites"]
+    DOC["Documentation"]
+    PS --> HPA
+    BT --> HPA
+    STL --> DOC
+    TR --> DOC
+    CP --> DOC
+    RT --> DOC
+    CG --> DOC
+    RA --> DOC
+    HPA --> DOC
+    CP -. "calls the retrieval seam" .- CG
+    RT -. "reads packages through the query handler" .- CP
+```
+
+Ownership rule: Phase 2 completes every shared file (`McpDbContext`, migrations, `McpClientJsonContext`, DTOs, REPL allow-lists and validators, `ClientMutationPolicy`, DI, configuration, controllers, MCP tools, client methods, golden contracts), so each context edits only its own files: SessionTurnLogging owns `SessionLogService.cs` and the turn handler bodies; TurnReviews owns the review seams' implementations and the review handler bodies; the three agent-context server contexts own `src/QBrainAi.Services/AgentContext/Packages`, `Responses`, and `Graph`; PluginCorePowerShell owns `plugins/core/lib-ps`; BuildTooling owns `build/`; HostPluginAdoption owns the nine plugin repos; Documentation owns `docs/` and `templates/`. A context that needs a change outside its files stops and raises a Phase 2 amendment instead of editing another context's files.
+
+#### Process RunPlanPhases: run the four phases
+
+```mermaid
+flowchart TD
+    S(["Merged plan approved"]) --> P0["Run the prerequisites, each under its own TODO and HV"]
+    P0 --> PH["Next phase: Requirements, Interfaces and stubs, or Unit tests with mocks"]
+    PH --> WK["Do the phase's work for the entire plan"]
+    WK --> GT{"Phase gates green with zero failures and zero skips?"}
+    GT -->|no| FX["Fix within the phase"]
+    FX --> GT
+    GT -->|yes| HV["Launch the phase HV (Codex gpt-6-sol xhigh) and store the full verdict"]
+    HV --> HR{"AGREE, both scores at least 98, every claim PASS?"}
+    HR -->|no| SH["Show every FAIL and UNKNOWN to the operator, fix, relaunch"]
+    SH --> HV
+    HR -->|yes| OA{"Operator approves?"}
+    OA -->|no| WAIT(["Stop: wait for the operator"])
+    OA -->|yes| MORE{"Phase 3 done?"}
+    MORE -->|no| PH
+    MORE -->|yes| P4["Phase 4: launch one coding agent per ready bounded context (process RunDomainCodingAgent)"]
+    P4 --> ALL{"Every context merged in the rollout order?"}
+    ALL -->|no| P4
+    ALL -->|yes| INT["Integration gates, PluginSessionLogIntegration, live checks on Linux and Windows"]
+    INT --> FHV["Phase-wide HV, then operator approval"]
+    FHV --> E(["Plan complete"])
+```
+
+#### Process RunDomainCodingAgent: one Phase 4 work package
+
+```mermaid
+flowchart TD
+    S(["Context TODO ready: its dependencies merged"]) --> BR["Branch from the Phase 3 head"]
+    BR --> AG["Coding agent briefed with the context's files, stubs, tests, and standing rules"]
+    AG --> IM["Replace stubs with the real implementation"]
+    IM --> OUT{"Change needed outside the context's files?"}
+    OUT -->|yes| AMD(["Stop: raise a Phase 2 amendment for the operator"])
+    OUT -->|no| T3{"Context's Phase 3 tests green, unchanged?"}
+    T3 -->|no| IM
+    T3 -->|yes| IT["Add the context's integration tests"]
+    IT --> G{"Context gates green, zero failures and zero skips, Linux and Windows?"}
+    G -->|no| IM
+    G -->|yes| HV["Context HV (Codex gpt-6-sol xhigh)"]
+    HV --> HR{"AGREE at 98/98, every claim PASS?"}
+    HR -->|no| IM
+    HR -->|yes| MG(["Ready to merge in the rollout order"])
+```
+
+### 8.4 Gates
+
+- G1 targeted tests through `./build.ps1 Test --test-projects --test-filter`, G2 the unit gate (`./build.ps1 Test`), G3 integration suites, G4 the PowerShell plugin core through `./build.ps1 TestPluginCore`, G5 config and traceability (`./build.ps1 ValidateConfig`, `./build.ps1 ValidateTraceability`), G6 the plugin suites (Pester in all nine repos) through `./build.ps1 TestAgentPlugins`.
 - Build.Tests is independent of Nuke and runs directly as the infrastructure check when `build/` changes.
 - Windows evidence runs natively on PAYTON-LEGION2 through the operator's WSMan route in a worktree of `F:/GitHub/McpServer`; Linux evidence runs natively on LAB-OMARCHY.
 
-### 8.4 Rollout and rollback for Phase C
+### 8.5 Rollout and rollback
 
-- Deploy order: server with AC1 to AC7 (Mode `Off` by default, so nothing changes for agents), then the plugin sync with AC8, then Mode `Pilot` on the operator's instruction, then the pilot report (C21) reviewed by the operator; `Stateless` becomes a default only by a later operator decision.
-- Server deploys run through the Nuke `UpdateService` target with operator approval; releases use Octopus only.
-- Rollback: Mode `Off` stops all agent-context behavior without a deploy; the migration rolls back only through its tested Down.
+- Merge and deploy order: SessionTurnLogging, TurnReviews without the CompletionGate enforcement change set, ContextPackages, ResponsesAndTrust, ContextGraph, ReplAndAgents; deploy the server (agent context Mode `Off`); merge PluginCorePowerShell, BuildTooling; sync all nine plugins; merge HostPluginAdoption (then `MAINT-LIBSHRETIRE-001`, and on the operator's disposition of QB-AGENT-001's Node work `MAINT-LIBNODERETIRE-001`); merge and deploy the CompletionGate enforcement change set; Documentation; then the integration checks.
+- Mode `Pilot` only on the operator's instruction; the pilot report goes to the operator; `Stateless` as a default is a later operator decision.
+- Server deploys run through the Nuke `UpdateService` target with operator approval; releases use Octopus only. Rollback: Mode `Off` stops agent-context behavior without a deploy; migrations roll back only through their tested Down.
 
-### 8.5 End-to-end verification for Phase C
+### 8.6 End-to-end verification
 
-- With Mode `Pilot` on this host: a delivered request builds one package (`client.AgentContext.QueryPackagesAsync` shows it with the request's root ids), replay reports `identical: true`, an over-budget fixture returns 422 with the token counts and stores an `Overflow` package, a submitted response passes the deterministic grade and, after the slice HV, the model grade, and becomes `Trusted`; a later package retrieves it as a prior response; changing a file it depends on makes it `Stale` and the next package omits it with reason `stale`; with GraphRAG disabled, retrieval reports `graphrag_disabled` and returns the relational candidates; with GraphRAG enabled, the trusted response is projected and a rejected one is removed.
-- The same checks on PAYTON-LEGION2 through the WSMan route.
+- Turn logging and reviews: the live checks of the plan's "End-to-end verification" section.
+- Agent context with Mode `Pilot` on LAB-OMARCHY and PAYTON-LEGION2: a delivered request builds one package with the request's root ids; replay reports `identical: true`; an over-budget fixture refuses the prompt with `agent_context_budget_exceeded` and closes the turn `canceled`; a submitted response passes the deterministic grade, an HV request covering its turn is created, the HV agent records a passing model grade with verified receipts, and the response becomes `Trusted`; a later package includes it as a prior response; changing a file it depends on makes it `Stale`; with GraphRAG disabled retrieval reports `graphrag_disabled` and answers from the relational path; with GraphRAG enabled the trusted response is projected and a rejected one removed.
