@@ -38,7 +38,7 @@ Section `Mcp:AgentContext` (declared under `QBrainAi: AgentContext:` in `appsett
 - `Mode` (enum `AgentContextMode`: `Off`, `Pilot`, `Stateless`; default `Off`). `Off`: every agent-context endpoint except status returns 409 `agent_context_disabled`. `Pilot`: packages are built and responses graded, but plugins keep the stateful conversation (no injection). `Stateless`: plugins inject the package and carry no history.
 - `TokenBudget` (int, default 32000, must be 1024..1000000).
 - `BytesPerToken` (int, default 4, must be 1..16): the deterministic token estimate is `ceil(utf8ByteCount / BytesPerToken)` per item.
-- `Trust:Correctness`, `Trust:Completeness` (decimal in [0,1], default 0.98, inclusive).
+- `Trust:Correctness`, `Trust:Completeness` (decimal in [0.98, 1], default 0.98, inclusive): the attached plan's minimum of 98 percent is a floor that configuration cannot lower; a value below 0.98 or above 1 fails startup validation (`AgentContextOptions_TrustBelow098_FailsStartup`, `AgentContextOptions_TrustAt098And1_Accepted`), and RunDeterministicGradeCommand, RecordModelGradeCommand, and DecideAgentResponseTrustCommand apply `max(configured, 0.98)` so no stored or earlier value below the floor can trust a response (`Trust_StoredThresholdBelowFloor_FloorApplied`). The Phase B review thresholds (FR-MCP-SESSIONREVIEW-007) stay configurable as approved.
 - `MaxCandidatesPerKind` (int, default 50, 1..1000) and `MaxPriorResponses` (int, default 10, 0..100).
 - `ProfileSources` (list of file globs resolved on the server host; default `~/.claude/profile/*.md` excluding `add-profile*.md`, the set the `/add-profile` skill reads) and `RuleSources` (list of workspace-relative paths; default `CLAUDE.md`, `AGENTS.md`, and `AGENTS-README-FIRST.yaml`, secret values redacted). Profile and rules are mandatory: when no profile file or no rule file resolves, the build fails with 409 `agent_context_profile_unavailable` instead of building a package without them.
 - `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-astra`), `ModelGrader:RequiredEffort` (default `max`), `ModelGrader:ReceiptRoot` (workspace-relative, default `docs/receipts/hv`): a model grade from any other grader, or whose receipts are outside the receipt root or do not verify, is refused.
@@ -48,21 +48,22 @@ Section `Mcp:AgentContext` (declared under `QBrainAi: AgentContext:` in `appsett
 
 ### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities`)
 
-Common rules: string keys `[StringLength(128)]`, human-readable and derived from the records they belong to (formats per entity below; request and session ids are at most 64 characters, so every key fits); a sequence suffix `<nn>` (two digits, from 01) is allocated as one more than the highest existing suffix for that prefix, and a unique-index violation from a concurrent insert retries with the next suffix (at most five times, then 409 `conflict`); child rows use `long` identity keys; every entity has `[Required][StringLength(1024)] WorkspaceId` with the named `Workspace` query filter and `StampWorkspaceId` on add; timestamps are `DateTimeOffset` named `*Utc`; decimals are `HasPrecision(29, 28)`; list-valued data is stored in 4NF child tables; idempotency comes from unique indexes (the store has no concurrency tokens). Migrations `<yyyyMMddHHmmss>_AddAgentContext` are generated for SQLite, PostgreSQL, and SQL Server with the existing `dotnet ef migrations add` procedure.
+Common rules: string keys `[StringLength(128)]`, human-readable and derived from the records they belong to (formats per entity below). Bounded readable keys: a key is `<prefix><parentId><tail>` when that is at most 128 characters; otherwise the embedded parent id is shortened to its first `128 - length(prefix) - length(tail) - 13` characters followed by `-` and the first 12 hex digits of the SHA-256 of the full parent id, so keys stay readable, deterministic, and distinct for distinct parents; the complete parent ids are always stored in their own root-id columns, which keep the live length of 256 (`SessionLogEntity.SessionId` and `SessionLogTurnEntity.RequestId` allow 256), so no root id is ever truncated (`AgentContextKeys_MaxLengthRootIds_FitAndStayDistinct` on SQLite, PostgreSQL, and SQL Server; `AgentContextKeys_ShortRootIds_KeepFullReadableForm`); a sequence suffix `<nn>` (two digits, from 01) is allocated as one more than the highest existing suffix for that prefix, and a unique-index violation from a concurrent insert retries with the next suffix (at most five times, then 409 `conflict`); child rows use `long` identity keys; every entity has `[Required][StringLength(1024)] WorkspaceId` with the named `Workspace` query filter and `StampWorkspaceId` on add; timestamps are `DateTimeOffset` named `*Utc`; decimals are `HasPrecision(29, 28)`; list-valued data is stored in 4NF child tables; idempotency comes from unique indexes (the store has no concurrency tokens). Migrations `<yyyyMMddHHmmss>_AddAgentContext` are generated for SQLite, PostgreSQL, and SQL Server with the existing `dotnet ef migrations add` procedure.
 
 `AgentContextPackageEntity` (table `AgentContextPackages`, key `PackageId` = `pkg-<requestId>-<nn>`, for example `pkg-req-20261011T223749Z-prompt-cc85-01`)
 
-- `WorkspaceId`, `SessionId` (128, the MCP session), `Agent` (64), `RequestId` (128, the turn), all required.
+- `WorkspaceId`, `SessionId` (256, the MCP session), `Agent` (64), `RequestId` (256, the turn), all required.
 - `IdempotencyKey` (128, required): unique with `WorkspaceId`.
 - `Status` (16): `Built` or `Overflow`.
 - `CommitSha` (64, required), `WorkingTreeDirty` (bool).
 - `BuilderVersion` (32), `TokenBudget` (int), `BytesPerToken` (int), `MandatoryTokenCount` (int), `TotalTokenCount` (int).
 - `InputsSha256` (64): hash of the canonical build inputs (request text, options in force, commit, and every candidate source hash).
+- `OptionsSnapshotJson` (text, required): the canonical JSON of every `AgentContextOptions` value the build used (mode, budget, bytes per token, candidate limits, profile and rule sources, trust floor, GraphRAG flags), so replay never reads current configuration.
 - `ContentSha256` (64): hash of the canonical rendered package; null for `Overflow`.
 - `QueryText` (text, sanitized), `RenderedContent` (text; null for `Overflow`).
 - `CreatedUtc`.
 - Indexes: (`WorkspaceId`, `RequestId`), (`WorkspaceId`, `SessionId`, `CreatedUtc`), unique (`WorkspaceId`, `IdempotencyKey`).
-- Children: `Items`, `Omissions`, `Findings` (`DeleteBehavior.Restrict`).
+- Children: `Items`, `Omissions`, `Findings`, `FocusRefs`, `Inputs` (`DeleteBehavior.Restrict`).
 
 `AgentContextPackageItemEntity` (table `AgentContextPackageItems`, `long Id`)
 
@@ -73,6 +74,10 @@ Common rules: string keys `[StringLength(128)]`, human-readable and derived from
 - `Mandatory` (bool), `Score` (decimal 0..1, null for mandatory items), `Rationale` (2048), `TokenCount` (int).
 - `RetrievalPath` (16): `Relational` or `GraphRag`.
 - `Content` (text, sanitized; secret values redacted in mandatory items).
+
+`AgentContextPackageFocusRefEntity` (table `AgentContextPackageFocusRefs`, `long Id`): `WorkspaceId`, `PackageId` (FK), `Ordinal`, `Kind` (32), `Ref` (512): the request's `focusRefs` exactly as given.
+
+`AgentContextPackageInputEntity` (table `AgentContextPackageInputs`, `long Id`): the immutable replay snapshot of every candidate the builder considered, included or omitted: `WorkspaceId`, `PackageId` (FK), `Ordinal` (unique with `PackageId`), `Kind` (32), `SourceRef` (512), `SourceSha256` (64), `SourceCommitSha` (64), `SourceVersion` (128: the git blob id for files under version control, otherwise the record's version or `UpdatedUtc` as read), `Content` (text, exactly as the builder read it after sanitization and before ranking), `RankingFeaturesJson` (text: the canonical JSON of every ranking input of the candidate, including its raw score before rounding and its retrieval path). Replay reads only this snapshot, `OptionsSnapshotJson`, the focus refs, and `BuilderVersion`; it never reads live sources, so later changes to configuration, omitted sources, requirements, TODOs, turns, profile files, or the working tree cannot change a replay.
 
 Source hashes (`SourceSha256`, `ToSha256`), all SHA-256 over UTF-8 bytes:
 
@@ -116,7 +121,7 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 
 `AgentResponseGradeEntity` (table `AgentResponseGrades`, key `GradeId` = `grd-<responseId>-<deterministic|model>-<nn>`, for example `grd-rsp-req-20261011T223749Z-prompt-cc85-01-model-01`)
 
-- `WorkspaceId`, `ResponseId` (FK), `PackageId`, `RequestId` (root ids).
+- `WorkspaceId`, `ResponseId` (FK), `PackageId`, `RequestId` (256) (root ids).
 - `Kind` (16): `Deterministic` or `Model`.
 - `Grader` (256): `agent-context-deterministic/<BuilderVersion>`, or `<AgentName>/<model>/<effort>`.
 - `Correctness`, `Completeness`, `CorrectnessThreshold`, `CompletenessThreshold` (decimal).
@@ -124,6 +129,7 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 - `Verdict` (16): `Pass` or `Fail`, derived: `Pass` only when both scores meet their thresholds and `FailCount` and `UnknownCount` are zero.
 - "Latest grade" of a kind means the grade with the greatest `GradedUtc`, ties broken by the greatest `GradeId` by ordinal comparison; concurrent grade writes are all kept and the trust decision (DecideAgentResponseTrustCommand) is recomputed after each one inside the same transaction.
 - `HvRequestId` (128, required for `Model`, null for `Deterministic`): the HV request whose review produced the grade.
+- `ReviewerSessionId`, `ReviewerRequestId` (256, required for `Model`): the reviewer's own session-log turn that holds its entire result; `VerdictJsonSha256` (64): the hash of the verdict block the grade was verified against.
 - `RequestJsonlPath`, `ResponseJsonlPath` (2048, required for `Model`, workspace-relative under `ModelGrader:ReceiptRoot`), `RequestJsonlSha256`, `ResponseJsonlSha256` (64): the receipts and their hashes as verified when the grade was recorded.
 - `GradedUtc`.
 - Child `Findings`.
@@ -141,16 +147,26 @@ Ranking scores are decimals rounded half-even to 6 places before ordering, so fl
 
 `AgentContextHvRequestEntity` (table `AgentContextHvRequests`, key `HvRequestId` = `hvr-<sessionId>-<yyyyMMddTHHmmssZ>`, with `-<nn>` appended only when two are created in the same second)
 
-- `WorkspaceId`, `SessionId` (128), `Agent` (64): the MCP session whose turns are reviewed.
-- `FromRequestId`, `ToRequestId` (128): the first and last turns of the range, inclusive, in the session's turn order.
+- `WorkspaceId`, `SessionId` (256), `Agent` (64): the MCP session whose turns are reviewed.
+- `FromRequestId`, `ToRequestId` (256): the first and last turns of the range, inclusive, in the session's turn order.
 - `RequestedBy` (128), `Reason` (2048).
 - `Status` (16): `Open` (accepting grades) or `Completed` (every listed response has a model grade from this request).
 - `CreatedUtc`, `CompletedUtc`.
 - Child `Items`.
 
-`AgentContextHvRequestItemEntity` (table `AgentContextHvRequestItems`, `long Id`): `WorkspaceId`, `HvRequestId` (FK), `Ordinal`, `RequestId` (128), `ResponseId` (128, unique with `HvRequestId`), `Graded` (bool). Items are the agent responses whose `RequestId` lies in the range when the request is created.
+`AgentContextHvRequestItemEntity` (table `AgentContextHvRequestItems`, `long Id`): `WorkspaceId`, `HvRequestId` (FK), `Ordinal`, `RequestId` (256), `ResponseId` (128, unique with `HvRequestId`), `Graded` (bool). Items are the agent responses whose `RequestId` lies in the range when the request is created.
 
-Receipt verification (RecordModelGradeCommand), before a model grade is saved: both paths resolve inside the workspace under `ModelGrader:ReceiptRoot`; the request jsonl's first line is a JSON object with `type` `hv_request_meta` whose `reviewer.agent` contains `ModelGrader:AgentName`, `reviewer.model` equals `ModelGrader:RequiredModel`, and `reviewer.effort` equals `ModelGrader:RequiredEffort` (the HV runner writes exactly this object); the request jsonl's body names the `hvRequestId`; the response jsonl is nonempty and contains the `=== VERDICT JSON ===` block; the hashes of both files are stored on the grade. Any failure refuses the grade with 422 `agent_context_receipt_unverified` naming the failed check.
+Receipt and reviewer verification (RecordModelGradeCommand), before a model grade is saved; each failure refuses the grade with 422 `agent_context_receipt_unverified` and `details.check` naming the check:
+
+1. `receipt_path`: both jsonl paths resolve inside the workspace under `ModelGrader:ReceiptRoot`.
+2. `request_meta`: the request jsonl's first line is a JSON object with `type` `hv_request_meta` whose `reviewer.agent` contains `ModelGrader:AgentName`, `reviewer.model` equals `ModelGrader:RequiredModel`, and `reviewer.effort` equals `ModelGrader:RequiredEffort` (the HV runner writes exactly this object), and the request jsonl's body record names the `hvRequestId`.
+3. `verdict_block`: the response jsonl records a completed turn (`turn.completed`) whose last agent message contains exactly one `=== VERDICT JSON ===` block that parses as one JSON object.
+4. `verdict_binding`: that verdict names this `hvRequestId` and has a `grades` entry for this `responseId` whose `contentSha256` equals the response's `ContentSha256`.
+5. `verdict_match`: the submitted `correctness`, `completeness`, and `findings` equal that entry exactly (same score lexemes; the same claimIds, checks, and outcomes in the same order), and the entry's findings name every claim of the response at least once (an empty or partial finding list is refused).
+6. `reviewer_turn`: the session-log turn (`reviewerSessionId`, `reviewerRequestId`) exists in the workspace, its session's agent is `ModelGrader:AgentName`, the turn was created at or after the HV request's `CreatedUtc`, and its stored result contains the same verdict block byte for byte, where the stored result is the turn's response followed by its processingDialog parts in part order with each part's header line removed (the HV protocol stores the entire result on the reviewer's own turn and splits a long result into ordered parts; `ModelGrade_VerdictSplitAcrossDialogParts_RejoinedAndAccepted`).
+7. `reviewer_independent`: the reviewer's MCP session is neither the session the HV request reviews nor the session that submitted the response, and the reviewer's agent differs from the response's `Agent`.
+
+The hashes of both jsonl files and of the verdict block are stored on the grade. The remaining trust assumption is the workspace's session-log identity model (every agent of a workspace authenticates with the workspace key), which this plan does not change: a forged grade would need a forged reviewer session, a forged verdict, and matching receipts, and each is checked against the others. Negative cases: `ModelGrade_DisagreeVerdictPassingScores_Refused_VerdictMatch`, `ModelGrade_EmptyOrPartialFindings_Refused_VerdictMatch`, `ModelGrade_VerdictForOtherResponseOrContent_Refused_VerdictBinding`, `ModelGrade_NoCompletedTurnOrTwoVerdicts_Refused_VerdictBlock`, `ModelGrade_ReviewerTurnMissing_Refused_ReviewerTurn`, `ModelGrade_ReviewerTurnVerdictDiffers_Refused_ReviewerTurn`, `ModelGrade_ReviewerTurnBeforeHvRequest_Refused_ReviewerTurn`, `ModelGrade_ReviewerSameSessionOrAgentAsReviewed_Refused_ReviewerIndependent`.
 
 `AgentContextProjectionEntity` (table `AgentContextProjections`, key `ResponseId`)
 
@@ -164,6 +180,8 @@ erDiagram
     AgentContextPackages ||--o{ AgentContextPackageItems : contains
     AgentContextPackages ||--o{ AgentContextOmissions : records
     AgentContextPackages ||--o{ AgentContextFindings : records
+    AgentContextPackages ||--o{ AgentContextPackageFocusRefs : focuses
+    AgentContextPackages ||--o{ AgentContextPackageInputs : snapshots
     AgentContextPackages ||--o{ AgentResponses : answered_by
     AgentResponses ||--o{ AgentResponseClaims : asserts
     AgentResponses ||--o{ AgentResponseEvidence : cites
@@ -212,7 +230,7 @@ Shared types
 - `AgentContextFindingDto { ordinal, kind, sourceRef, otherSourceRef, relationshipId, summary }`.
 - `AgentResponseClaimDto { claimId, text }`; `AgentResponseEvidenceDto { claimId, kind, ref, sha256, commitSha }`.
 - `AgentResponseGradeFindingDto { claimId, check, outcome, evidence }`.
-- `AgentResponseGradeDto { gradeId, responseId, kind, grader, correctness, completeness, correctnessThreshold, completenessThreshold, passCount, failCount, unknownCount, verdict, requestJsonlPath, responseJsonlPath, gradedUtc, findings }`.
+- `AgentResponseGradeDto { gradeId, responseId, kind, grader, correctness, completeness, correctnessThreshold, completenessThreshold, passCount, failCount, unknownCount, verdict, hvRequestId, reviewerSessionId, reviewerRequestId, requestJsonlPath, responseJsonlPath, verdictJsonSha256, gradedUtc, findings }`.
 - `AgentContextRelationshipDto { relationshipId, fromKind, fromRef, type, toKind, toRef, toSha256, evidenceRef, createdBy, createdUtc }`.
 - `AgentContextCandidateDto { kind, sourceRef, sourceSha256, score, rationale, retrievalPath }`.
 - Query results follow `{ totalCount, limit, offset, items }`.
@@ -223,13 +241,13 @@ Requests and results (one pair per unit of work, section 6.5)
 - BuildAgentContextPackageCommand `BuildAgentContextPackageRequest { sessionId, agent, requestId, queryText, tokenBudget, focusRefs, idempotencyKey }` (`tokenBudget` optional and at most the configured budget; `focusRefs` optional list of `{ kind, ref }` to prefer); result `AgentContextPackageResult { packageId, status, sessionId, agent, requestId, commitSha, workingTreeDirty, builderVersion, tokenBudget, mandatoryTokenCount, totalTokenCount, inputsSha256, contentSha256, createdUtc, items, omissions, findings, renderedContent }`.
 - GetAgentContextPackageQuery get package: route id plus `includeContent` (bool, default true); result `AgentContextPackageResult`.
 - QueryAgentContextPackagesQuery `AgentContextPackageQuery { requestId, sessionId, status, limit, offset }`; result `AgentContextPackageQueryResult` of package summaries (all fields except items, omissions, findings, and content).
-- ReplayAgentContextPackageQuery replay: route id; result `AgentContextReplayResult { packageId, identical, originalContentSha256, replayContentSha256, originalInputsSha256, replayInputsSha256, differences [{ ordinal, kind, sourceRef, change }] }` with `change` in `added`, `removed`, `hashChanged`, `reordered`.
+- ReplayAgentContextPackageQuery replay: route id; result `AgentContextReplayResult { packageId, builderVersion, identical, originalContentSha256, replayContentSha256, originalInputsSha256, replayInputsSha256, differences [{ ordinal, kind, sourceRef, change }] }` with `change` in `added`, `removed`, `hashChanged`, `reordered`.
 - SubmitAgentResponseCommand `SubmitAgentResponseRequest { packageId, agent, model, effort, invocationMode, contentFormat, content, claims, evidence, idempotencyKey }` (at least one claim, and every claim at least one evidence item); result `AgentResponseResult { responseId, packageId, sessionId, requestId, agent, model, effort, invocationMode, status, statusReason, supersededByResponseId, contentFormat, contentSha256, commitSha, submittedUtc, statusChangedUtc, trustedUtc, claims, evidence, grades, content }`.
 - GetAgentResponseQuery get response: route id plus `includeContent`; result `AgentResponseResult`.
 - QueryAgentResponsesQuery `AgentResponseQuery { requestId, packageId, status, trustedOnly, limit, offset }`; result `AgentResponseQueryResult` of response summaries.
 - RunDeterministicGradeCommand deterministic grade: route id, no body; result `AgentResponseGradeResult { grade, responseStatus, statusReason }`.
-- RecordModelGradeCommand `RecordModelGradeRequest { hvRequestId, grader, model, effort, correctness, completeness, findings, requestJsonlPath, responseJsonlPath, gradedUtc }`; result `AgentResponseGradeResult` plus `hvRequestStatus`.
-- DecideAgentResponseTrustCommand trust decision: internal, result is the response status in `AgentResponseGradeResult`.
+- RecordModelGradeCommand `RecordModelGradeRequest { hvRequestId, reviewerSessionId, reviewerRequestId, grader, model, effort, correctness, completeness, findings, requestJsonlPath, responseJsonlPath, gradedUtc }` (scores and findings equal the reviewer's verdict entry for the response, section 6.3); result `AgentResponseGradeResult` plus `hvRequestStatus`.
+- DecideAgentResponseTrustCommand trust decision (internal, no surface): result `AgentResponseTrustDecision { responseId, previousStatus, status, statusReason, deterministicGradeId, modelGradeId, decidedUtc }`; the dispatching grade handler copies `status` and `statusReason` into `AgentResponseGradeResult.responseStatus` and `statusReason`.
 - RejectAgentResponseCommand `RejectAgentResponseRequest { reason }`; result `AgentResponseResult`.
 - SupersedeAgentResponseCommand `SupersedeAgentResponseRequest { supersededByResponseId, reason }`; result `AgentResponseResult`.
 - EvaluateStalenessCommand `EvaluateStalenessRequest { responseIds }` (empty means every non-terminal response); result `AgentContextStalenessResult { evaluatedCount, newlyStale [{ responseId, changedRef, relationshipId, reason }] }`.
@@ -246,7 +264,7 @@ Requests and results (one pair per unit of work, section 6.5)
 Error codes (problem+json body `{ type, title, status, detail, code, message, retryable, details }`; MCP tools return `{ code, error, message, retryable, details }`)
 
 - 400 `validation_error` with `details.field` for malformed input, plus the Phase B score codes `review_score_format`, `review_score_precision`, `review_score_out_of_range` for grade scores.
-- 400 `agent_context_receipt_paths_required` (model grade without both jsonl paths).
+- 400 `agent_context_receipt_paths_required` (model grade without both jsonl paths or without the reviewer turn ids).
 - 400 `agent_context_relationship_invalid` (unknown kind or type, or a self-link).
 - 400 `agent_context_hv_request_invalid` (unknown session, an unknown or out-of-order range, a range over `HvRequest:MaxTurns`, or a range with no agent response).
 - 403 `agent_context_grader_not_allowed` (model grade from a grader other than the configured one).
@@ -259,14 +277,15 @@ Error codes (problem+json body `{ type, title, status, detail, code, message, re
 - 409 `agent_context_commit_unavailable` (the workspace is not a git checkout or the recorded commit cannot be read).
 - 409 `agent_context_profile_unavailable` (no configured profile file or no rule file resolves; mandatory context cannot be assembled).
 - 409 `conflict` (idempotency key reused with different inputs).
-- 422 `agent_context_receipt_unverified` with `details.check` naming the failed receipt check.
+- 409 `agent_context_replay_snapshot_unavailable` (the package has no stored input snapshot) and 409 `agent_context_replay_builder_changed` (the package was built by another builder version; `details { recorded, current }`).
+- 422 `agent_context_receipt_unverified` with `details.check` naming the failed check: `receipt_path`, `request_meta`, `verdict_block`, `verdict_binding`, `verdict_match`, `reviewer_turn`, or `reviewer_independent`.
 - 422 `agent_context_budget_exceeded` with `details { tokenBudget, mandatoryTokenCount, overflowTokenCount, mandatoryItems [{ kind, sourceRef, tokenCount }] }`.
 
 ### 6.5 Units of work (CQRS handlers), endpoints, and activity diagrams
 
 Each unit is exactly one CQRS command or query with its handler (operator, 2026-10-11: "I want to be clear, unit of work maps to one CQRS handler"), in `src/QBrainAi.Services/AgentContext/Commands` or `Queries` (namespace `QBrainAi.Support.Mcp.AgentContext.Commands` or `.Queries`), one file per record and handler, registered by `AddCqrsHandlers`. Every surface dispatches the same record through `IDispatcher`: the controller and the MCP tool call `SendAsync` or `QueryAsync`; the typed client, REPL, and plugins reach them over REST. A handler reports a contract error as `Result<T>.Failure(new AgentContextException(code, statusCode, message, details))`; `McpErrorClassifier` maps `AgentContextException` to the problem+json body with that status and `code`. The stateless invocation is not a unit: it is the plugin process RunStatelessInvocation (section 6.6).
 
-Every REST route below exists under `/qbrainai/agent-context` and the alias `/mcpserver/agent-context` (controller `AgentContextController`, `[ApiController]`, workspace required through `X-Workspace-Path`, authenticated by `WorkspaceAuthMiddleware`). MCP tools live in `FwhMcpTools.AgentContext.cs` with `workspacePath` as the first parameter and JSON-string bodies. The typed client is `AgentContextClient : McpClientBase`, exposed as `QBrainAiClient.AgentContext`. The REPL reaches it as `client.AgentContext.<Method>` (added to the `GenericClientPassthrough` allow-list as `AGENTCONTEXT`; mutating methods registered in `ClientMutationPolicy`; YAML validators registered with explicit `payload.params.<key>` paths). PowerShell plugins call `Invoke-McpPlugin.ps1 -Command Invoke -Method client.AgentContext.<Method>` with parameters built by exported `New-McpAgentContext<Verb>Params` builders in `McpPluginShim.psm1`; the TypeScript hosts reach the same commands through their adapters and the agent-context entries of `lib/tool-descriptors.json`, each naming its `Invoke-McpPlugin.ps1` command and whether it mutates (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell.").
+Every REST route below exists under `/qbrainai/agent-context` and the alias `/mcpserver/agent-context` (controller `AgentContextController`, `[ApiController]`, workspace required through `X-Workspace-Path`, authenticated by `WorkspaceAuthMiddleware`). MCP tools live in `FwhMcpTools.AgentContext.cs` with `workspacePath` as the first parameter and JSON-string bodies. The typed client is `AgentContextClient : McpClientBase`, exposed as `QBrainAiClient.AgentContext`. The REPL reaches it as `client.AgentContext.<Method>` (added to the `GenericClientPassthrough` allow-list as `AGENTCONTEXT`; mutating methods registered in `ClientMutationPolicy`; YAML validators registered with explicit `payload.params.<key>` paths). PowerShell plugins call `Invoke-McpPlugin.ps1 -Command Invoke -Method client.AgentContext.<Method> -ParamsObject <params>` with `<params>` from the exported builder named in each unit (`McpPluginShim.psm1`). Builder contract, one builder per externally callable unit: `New-McpAgentContext<Verb>Params` takes one parameter per field of the unit's request record, named in PascalCase, typed string as `[string]`, bool as `[bool]`, int as `[int]`, a decimal score as `[string]` holding the exact lexeme, and a list as `[object[]]` of hashtables with the record's camelCase keys; a parameter is mandatory exactly when the record field is required, an omitted optional parameter is left out of the output (the server applies the record's default), and route ids (`packageId`, `responseId`, `relationshipId`, `hvRequestId`) are mandatory `[string]` parameters; the builder returns an ordered hashtable whose keys are the record's camelCase field names in record order with the values unchanged, and never calls the server (`AgentContextBuilders_ParametersMatchRequestRecords_OutputKeysAndValuesExact`, generated over every unit from `docs/context/agent-context-contract.json`). Tool descriptor contract: each externally callable unit has one entry in `lib/tool-descriptors.json` with `name` (the `agent_context_*` name in each unit), `description`, `inputSchema` (the JSON schema of the unit's request record, route ids as required string properties, scores as strings), `method` (the `client.AgentContext.<Method>` REPL method listed in each unit), and `mutates` (true for commands, false for queries); a TypeScript host's adapter runs `Invoke-McpPlugin.ps1 -Command Invoke -Method <method> -ParamsFromStdin` with the call's arguments as JSON on stdin (TR-MCP-SESSIONTURN-008), so PowerShell and TypeScript hosts reach the same command (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell.").
 
 Every unit except GetAgentContextStatusQuery, DecideAgentResponseTrustCommand, and RunStatelessInvocation (including CreateAgentContextHvRequestCommand and GetAgentContextHvRequestQuery) starts with the same two checks, drawn in each diagram: the workspace resolves (otherwise 404 `Workspace required`), and the mode is not `Off` (otherwise 409 `agent_context_disabled`).
 
@@ -329,7 +348,7 @@ flowchart TD
     MORE -->|yes| FILL
     MORE -->|no| FD["Findings: contradicts links between included items, blocks links on the request's TODO or turn"]
     FD --> RD["Render canonically in the fixed kind order and compute ContentSha256"]
-    RD --> SV["Save package, items, omissions, findings in one transaction"]
+    RD --> SV["Save package with OptionsSnapshotJson, items, omissions, findings, focus refs, and the input snapshot of every candidate in one transaction"]
     SV --> RACE{"Idempotency unique index violated by a concurrent build?"}
     RACE -->|yes, winner has the same InputsSha256| EX2(["200 the winner's package"])
     RACE -->|yes, different inputs| E8(["409 conflict"])
@@ -380,8 +399,8 @@ flowchart TD
 
 - Handler: `ReplayAgentContextPackageQuery(string WorkspacePath, string PackageId) : IQuery<AgentContextReplayResult>` and `ReplayAgentContextPackageQueryHandler` in `src/QBrainAi.Services/AgentContext/Queries/ReplayAgentContextPackageQuery.cs`.
 - REST `POST /qbrainai/agent-context/packages/{packageId}/replay`; MCP `agent_context_replay_package(workspacePath, packageId)`; client `ReplayPackageAsync(packageId)`; REPL `client.AgentContext.ReplayPackageAsync`; PowerShell `New-McpAgentContextReplayPackageParams`; tool descriptor `agent_context_replay_package`.
-- Replay rebuilds the package from its recorded inputs at its recorded commit without storing anything and compares the result.
-- Response 200 `AgentContextReplayResult`. Errors: 404 workspace or `not_found` (`package`), 409 `agent_context_disabled`, `agent_context_package_overflow`, `agent_context_commit_unavailable` (the recorded commit is no longer readable).
+- Replay rebuilds the package in memory from its immutable input snapshot only (`OptionsSnapshotJson`, focus refs, and `AgentContextPackageInputs`, section 6.3) with the same builder version, reads no live source or configuration, stores nothing, and compares the result, so replay stays identical after configuration, omitted-source, and non-Git source changes (`Replay_AfterConfigChange_Identical`, `Replay_AfterOmittedSourceChange_Identical`, `Replay_AfterRequirementTodoTurnProfileChange_Identical`).
+- Response 200 `AgentContextReplayResult`. Errors: 404 workspace or `not_found` (`package`), 409 `agent_context_disabled`, `agent_context_package_overflow`, `agent_context_replay_snapshot_unavailable` (no stored snapshot), `agent_context_replay_builder_changed` (built by another builder version; `details { recorded, current }`).
 
 ```mermaid
 flowchart TD
@@ -393,9 +412,11 @@ flowchart TD
     F -->|no| E2(["404 not_found package"])
     F -->|yes| OV{"Status Overflow?"}
     OV -->|yes| E3(["409 agent_context_package_overflow"])
-    OV -->|no| C{"Recorded commit readable?"}
-    C -->|no| E4(["409 agent_context_commit_unavailable"])
-    C -->|yes| RB["Rebuild in memory with the recorded options and commit (BuildAgentContextPackageCommand steps, nothing stored)"]
+    OV -->|no| SN{"Input snapshot stored?"}
+    SN -->|no| E4(["409 agent_context_replay_snapshot_unavailable"])
+    SN -->|yes| BV{"BuilderVersion equals the running builder's version?"}
+    BV -->|no| E5(["409 agent_context_replay_builder_changed with recorded and current"])
+    BV -->|yes| RB["Rebuild in memory from OptionsSnapshotJson, focus refs, and the input snapshot only (ranking, budget, and rendering steps of BuildAgentContextPackageCommand; no live source read, nothing stored)"]
     RB --> CMP["Compare InputsSha256, ContentSha256, and items by ordinal"]
     CMP --> SAME{"Identical?"}
     SAME -->|yes| R1(["200 identical true"])
@@ -504,7 +525,7 @@ flowchart TD
     GL --> SC["Compute correctness and completeness as exact decimals"]
     SC --> VD["Verdict Pass only if both meet the trust thresholds and FAIL and UNKNOWN counts are zero"]
     VD --> SV["Save grade and findings, stamp thresholds"]
-    SV --> TR["Decide trust (DecideAgentResponseTrustCommand)"]
+    SV --> TR["Decide trust (DecideAgentResponseTrustCommand returns AgentResponseTrustDecision)"]
     TR --> R(["201 AgentResponseGradeResult with the response status"])
 ```
 
@@ -512,7 +533,7 @@ flowchart TD
 
 - Handler: `RecordModelGradeCommand(string WorkspacePath, string ResponseId, RecordModelGradeRequest Request) : ICommand<AgentResponseGradeResult>` and `RecordModelGradeCommandHandler` in `src/QBrainAi.Services/AgentContext/Commands/RecordModelGradeCommand.cs`.
 - Caller: the HV agent (the configured grader, launched as every HV is) after it reviews the turns of an HV request (CreateAgentContextHvRequestCommand). There is no grading worker or HV pipeline in this effort (operator, 2026-10-11).
-- REST `POST /qbrainai/agent-context/responses/{responseId}/grades/model`; MCP `agent_context_record_model_grade(string workspacePath, string responseId, string gradeJson)`; client `RecordModelGradeAsync(responseId, RecordModelGradeRequest)`; REPL `client.AgentContext.RecordModelGradeAsync`; PowerShell `New-McpAgentContextRecordModelGradeParams` (also builds the request from a Codex HV receipt, mapping accuracy to correctness as an exact decimal over 100, the same mapping as process ConvertHvReceiptToReview); tool descriptor `agent_context_record_model_grade`.
+- REST `POST /qbrainai/agent-context/responses/{responseId}/grades/model`; MCP `agent_context_record_model_grade(string workspacePath, string responseId, string gradeJson)`; client `RecordModelGradeAsync(responseId, RecordModelGradeRequest)`; REPL `client.AgentContext.RecordModelGradeAsync`; PowerShell `New-McpAgentContextRecordModelGradeParams` (also builds the request from the reviewer's verdict: the scores and findings of its `grades` entry for the response copied exactly, and the reviewer's own session-log turn ids); tool descriptor `agent_context_record_model_grade`.
 - Response 201 `AgentResponseGradeResult` with `hvRequestStatus` (`Completed` once every item of the HV request is graded).
 - Errors: 400 `validation_error`, `review_score_format`, `review_score_precision`, `review_score_out_of_range`, `agent_context_receipt_paths_required`; 403 `agent_context_grader_not_allowed`; 404 `not_found` (`response`, `hv_request`); 409 `agent_context_disabled`, `agent_context_response_not_gradable`, `agent_context_grade_not_in_hv_request`, `agent_context_hv_request_closed`; 422 `agent_context_receipt_unverified`.
 
@@ -526,7 +547,7 @@ flowchart TD
     LX -->|format| E2(["400 review_score_format"])
     LX -->|precision| E3(["400 review_score_precision"])
     LX -->|range| E4(["400 review_score_out_of_range"])
-    LX -->|ok| RP{"hvRequestId and both jsonl paths present?"}
+    LX -->|ok| RP{"hvRequestId, both jsonl paths, reviewerSessionId, and reviewerRequestId present?"}
     RP -->|no| E5(["400 agent_context_receipt_paths_required"])
     RP -->|yes| FV{"Findings valid: outcome PASS, FAIL, or UNKNOWN, claimIds known?"}
     FV -->|no| E6(["400 validation_error"])
@@ -542,12 +563,12 @@ flowchart TD
     HO -->|no| E11(["409 agent_context_hv_request_closed"])
     HO -->|yes| IT{"Response is an item of the HV request?"}
     IT -->|no| E12(["409 agent_context_grade_not_in_hv_request"])
-    IT -->|yes| RV{"Receipts verify: under ReceiptRoot, meta agent, model, effort match, body names hvRequestId, response holds the VERDICT JSON block?"}
+    IT -->|yes| RV{"Receipt and reviewer checks pass: receipt_path, request_meta, verdict_block, verdict_binding, verdict_match, reviewer_turn, reviewer_independent (section 6.3)?"}
     RV -->|no| E13(["422 agent_context_receipt_unverified with the failed check"])
     RV -->|yes| CNT["Count PASS, FAIL, UNKNOWN findings"]
-    CNT --> VD["Verdict Pass only if both scores meet the trust thresholds and FAIL and UNKNOWN counts are zero"]
+    CNT --> VD["Verdict Pass only if both scores meet the trust thresholds (never below 0.98) and FAIL and UNKNOWN counts are zero"]
     VD --> SV["Save grade with hvRequestId, findings, receipt paths and hashes; stamp thresholds; mark the item graded"]
-    SV --> TR["Decide trust (DecideAgentResponseTrustCommand)"]
+    SV --> TR["Decide trust (DecideAgentResponseTrustCommand returns AgentResponseTrustDecision)"]
     TR --> ALL{"Every item of the HV request graded?"}
     ALL -->|yes| CMP["HV request Completed, CompletedUtc set"]
     ALL -->|no| R
@@ -824,6 +845,7 @@ flowchart TD
 - Caller: any agent (operator, 2026-10-11: "Agents will specify a range of session turns to be HV, the HV agent will mark the grade you have been working.").
 - REST `POST /qbrainai/agent-context/hv-requests`; MCP `agent_context_create_hv_request(string workspacePath, string sessionId, string agent, string fromRequestId, string toRequestId, string requestedBy, string reason)`; client `CreateHvRequestAsync(CreateAgentContextHvRequestRequest)`; REPL `client.AgentContext.CreateHvRequestAsync`; PowerShell `New-McpAgentContextCreateHvRequestParams`; tool descriptor `agent_context_create_hv_request`.
 - Response 201 `AgentContextHvRequestResult` (Location `/qbrainai/agent-context/hv-requests/{hvRequestId}`) with its items: every agent response whose `RequestId` lies in the range, in turn order.
+- Review contract: the brief for an HV request asks the reviewer to emit in its `=== VERDICT JSON ===` the `hvRequestId` and `grades`, one entry per item `{ responseId, contentSha256, correctness, completeness, findings [{ claimId, check, outcome }] }` naming every claim of the response, and to store its entire result on its own session-log turn; RecordModelGradeCommand accepts a grade only when it equals that entry and that turn (section 6.3).
 - Errors: 400 `validation_error` (blank fields), `agent_context_hv_request_invalid` (unknown session, an endpoint turn not in the session, from after to, a range longer than `HvRequest:MaxTurns`, or a range with no agent response); 404 workspace; 409 `agent_context_disabled`.
 
 ```mermaid
@@ -1082,10 +1104,13 @@ sequenceDiagram
             API-->>Caller: 404 not_found package
         else package Overflow
             API-->>Caller: 409 agent_context_package_overflow
-        else recorded commit unreadable
-            API-->>Caller: 409 agent_context_commit_unavailable
+        else no input snapshot stored
+            API-->>Caller: 409 agent_context_replay_snapshot_unavailable
+        else built by another builder version
+            API-->>Caller: 409 agent_context_replay_builder_changed with recorded and current
+            Caller->>Caller: report both versions, because replay is defined only for the same builder
         else replayed
-            SVC->>B: rebuild in memory at the recorded commit
+            SVC->>B: rebuild in memory from the stored input snapshot and options
             B-->>SVC: replay hashes and items
             API-->>Caller: 200 AgentContextReplayResult
             alt identical
@@ -1230,9 +1255,9 @@ sequenceDiagram
     participant DB as Store
     AG->>API: CreateAgentContextHvRequestCommand (CreateAgentContextHvRequestCommand) for a turn range
     API-->>AG: 201 hvRequestId with its response items
-    HV->>HV: review the turns and responses of the HV request, write request and response jsonl
+    HV->>HV: review the turns and responses, write request and response jsonl, emit the VERDICT JSON with a grades entry per response, store the entire result on its own session-log turn
     loop each response item of the HV request
-        HV->>API: POST /responses/{responseId}/grades/model (hvRequestId, scores, findings, receipt paths)
+        HV->>API: POST /responses/{responseId}/grades/model (hvRequestId, scores and findings copied from its grades entry, receipt paths, reviewer turn ids)
         API->>SVC: SendAsync(RecordModelGradeCommand)
         alt workspace not resolved
             API-->>HV: 404 Workspace required
@@ -1240,7 +1265,7 @@ sequenceDiagram
             API-->>HV: 409 agent_context_disabled
         else score lexeme invalid
             API-->>HV: 400 review_score_format, review_score_precision, or review_score_out_of_range
-        else hvRequestId or a jsonl path missing
+        else hvRequestId, a jsonl path, or a reviewer turn id missing
             API-->>HV: 400 agent_context_receipt_paths_required
         else invalid findings
             API-->>HV: 400 validation_error
@@ -1254,9 +1279,9 @@ sequenceDiagram
             API-->>HV: 409 agent_context_hv_request_closed
         else response not an item of the HV request
             API-->>HV: 409 agent_context_grade_not_in_hv_request
-        else receipts do not verify
+        else a receipt or reviewer check fails
             API-->>HV: 422 agent_context_receipt_unverified with the failed check
-            HV->>HV: fix the receipt paths or rerun the HV on the configured grader
+            HV->>HV: make the submission equal its own verdict entry and turn, or rerun the HV on the configured grader
         else recorded
             SVC->>DB: save grade, findings, receipt hashes, mark item graded
             SVC->>T: SendAsync(DecideAgentResponseTrustCommand)
@@ -1756,7 +1781,7 @@ Each arrow is crossed only after that phase's gates are green with zero failures
 
 - Prerequisites: every pre-existing failure fixed under its own TODO (P0.1, including the Windows findings), the REPL `generateDocument` validator fix, the Nuke targets every later gate runs through (`Test --test-projects --test-filter`, `TestPluginCore`, `TestAgentPlugins`), and the port of every bats case to Pester (P0.1b; Pester is the only plugin test runner, operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell.").
 - Phase 1, requirements: the whole catalog of Phases A, B, and C created in the requirement store from the plan text, the use cases, the feature matrix rows, and the phase and domain TODOs (`REQ-MERGEDPLAN-001`, `DESIGN-MERGEDPLAN-001`, `TEST-MERGEDPLAN-001`, one `IMPL-<CONTEXT>-001` per bounded context, `VERIFY-MERGEDPLAN-001`).
-- Phase 2, interfaces and code stubs: every command and query record with a handler stub, every policy and seam interface with a stub, every entity with `McpDbContext` configuration and the three migrations (generated in order so the model snapshots stay linear), every DTO and client mirror with JSON context registration, every controller route, MCP tool, client method, and REPL method (they only dispatch), every plugin function and tool signature, the options classes and `appsettings.yaml` sections, DI, and the golden contract files. Stubs return neutral values and never throw, so Phase 3 tests fail on assertions.
+- Phase 2, interfaces and code stubs: every command and query record with a handler stub, every policy and seam interface with a stub, every entity with its `McpDbContext` configuration as compiling model seams (the three migrations and the S3 backfill belong to the Phase 4 context StorageSchema), every DTO and client mirror with JSON context registration, every controller route, MCP tool, client method, and REPL method (they only dispatch), every plugin function and tool signature, the options classes and `appsettings.yaml` sections, DI, and the golden contract files. Stubs return neutral values and never throw, so Phase 3 tests fail on assertions.
 - Phase 3, unit tests with mocks: every unit test the catalog names, written from the acceptance criteria, recorded RED against the stubs, then green against mocks with the oracle and mutant pattern and a recorded negative check each.
 - Phase 4, implementation: each bounded context replaces its stubs with the real implementation until its Phase 3 tests pass unchanged, adds its integration tests, and runs its gates; then the contexts merge in the rollout order and the integration gates, live checks, and phase-wide HV run.
 
@@ -1764,6 +1789,7 @@ Each arrow is crossed only after that phase's gates are green with zero failures
 
 ```mermaid
 flowchart TB
+    SS["StorageSchema (serialized, first): migrations for three providers, S3 backfill"]
     subgraph Server["Server (parallel)"]
         STL["SessionTurnLogging: turn handlers, minter, outcome guard, SessionLogService"]
         TR["TurnReviews: review handlers, classification, verdict mapping, completion gate, thresholds"]
@@ -1787,11 +1813,16 @@ flowchart TB
     CG --> DOC
     RA --> DOC
     HPA --> DOC
+    SS --> STL
+    SS --> TR
+    SS --> CP
+    SS --> RT
+    SS --> CG
     CP -. "calls the retrieval seam" .- CG
     RT -. "reads packages through the query handler" .- CP
 ```
 
-Ownership rule: Phase 2 completes every shared file (`McpDbContext`, migrations, `McpClientJsonContext`, DTOs, REPL allow-lists and validators, `ClientMutationPolicy`, DI, configuration, controllers, MCP tools, client methods, golden contracts), so each context edits only its own files: SessionTurnLogging owns `SessionLogService.cs` and the turn handler bodies; TurnReviews owns the review seams' implementations and the review handler bodies; the three agent-context server contexts own `src/QBrainAi.Services/AgentContext/Packages`, `Responses`, and `Graph`; PluginCorePowerShell owns `plugins/core/lib-ps`; BuildTooling owns `build/`; HostPluginAdoption owns the nine plugin repos; Documentation owns `docs/` and `templates/`. A context that needs a change outside its files stops and raises a Phase 2 amendment instead of editing another context's files.
+Ownership rule: Phase 2 completes every shared file except the migrations (`McpDbContext`, `McpClientJsonContext`, DTOs, REPL allow-lists and validators, `ClientMutationPolicy`, DI, configuration, controllers, MCP tools, client methods, golden contracts), so each context edits only its own files: StorageSchema owns the migrations and the S3 backfill; SessionTurnLogging owns `SessionLogService.cs` and the turn handler bodies; TurnReviews owns the review seams' implementations and the review handler bodies; the three agent-context server contexts own `src/QBrainAi.Services/AgentContext/Packages`, `Responses`, and `Graph`; PluginCorePowerShell owns `plugins/core/lib-ps`; BuildTooling owns `build/`; HostPluginAdoption owns the nine plugin repos; Documentation owns `docs/` and `templates/`. A context that needs a change outside its files stops and raises a Phase 2 amendment instead of editing another context's files.
 
 #### Process RunPlanPhases: run the four phases
 
@@ -1847,7 +1878,7 @@ flowchart TD
 
 ### 8.5 Rollout and rollback
 
-- Merge and deploy order: SessionTurnLogging, TurnReviews without the CompletionGate enforcement change set, ContextPackages, ResponsesAndTrust, ContextGraph, ReplAndAgents; deploy the server (agent context Mode `Off`); merge PluginCorePowerShell, BuildTooling; sync all nine plugins; merge HostPluginAdoption (then `MAINT-LIBSHRETIRE-001`, and on the operator's disposition of QB-AGENT-001's Node work `MAINT-LIBNODERETIRE-001`); merge and deploy the CompletionGate enforcement change set; Documentation; then the integration checks.
+- Merge and deploy order: StorageSchema, SessionTurnLogging, TurnReviews without the CompletionGate enforcement change set, ContextPackages, ResponsesAndTrust, ContextGraph, ReplAndAgents; deploy the server (agent context Mode `Off`); merge PluginCorePowerShell, BuildTooling; sync all nine plugins; merge HostPluginAdoption (then `MAINT-LIBSHRETIRE-001`, and once Codex ACKs the 2026-10-12 PowerShell-only CONTRACT entry or the operator resolves it `MAINT-LIBNODERETIRE-001`); merge and deploy the CompletionGate enforcement change set; Documentation; then the integration checks.
 - Mode `Pilot` only on the operator's instruction; the pilot report goes to the operator; `Stateless` as a default is a later operator decision.
 - Server deploys run through the Nuke `UpdateService` target with operator approval; releases use Octopus only. Rollback: Mode `Off` stops agent-context behavior without a deploy; migrations roll back only through their tested Down.
 
