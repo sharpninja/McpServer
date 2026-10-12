@@ -34,7 +34,7 @@ public sealed class EfNavigationCollectionContractTests : IDisposable
     /// TEST-MCP-AIUNIT-002: Ensures EF can populate each remediated navigation collection.
     /// </summary>
     [Fact]
-    public async Task NavigationCollections_ArePopulatedAfterRelationalMaterialization()
+    public async Task NavigationCollectionsArePopulatedAfterRelationalMaterialization()
     {
         using (var seed = CreateContext())
         {

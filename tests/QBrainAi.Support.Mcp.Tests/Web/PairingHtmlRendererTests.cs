@@ -15,7 +15,7 @@ public sealed class PairingHtmlRendererTests
     private readonly ILogger<PairingHtmlRenderer> _logger = Substitute.For<ILogger<PairingHtmlRenderer>>();
 
     [Fact]
-    public async Task RenderLoginPageAsync_TemplateInStore_SubstitutesErrorBanner()
+    public async Task RenderLoginPageAsyncTemplateInStoreSubstitutesErrorBanner()
     {
         var template = "<html>{errorBanner}<form></form></html>";
         _templateService.GetByIdAsync(PairingHtmlRenderer.LoginPageId, Arg.Any<CancellationToken>())
@@ -28,7 +28,7 @@ public sealed class PairingHtmlRendererTests
     }
 
     [Fact]
-    public async Task RenderLoginPageAsync_WithError_InsertsErrorBanner()
+    public async Task RenderLoginPageAsyncWithErrorInsertsErrorBanner()
     {
         var template = "<html>{errorBanner}<form></form></html>";
         _templateService.GetByIdAsync(PairingHtmlRenderer.LoginPageId, Arg.Any<CancellationToken>())
@@ -41,7 +41,7 @@ public sealed class PairingHtmlRendererTests
     }
 
     [Fact]
-    public async Task RenderLoginPageAsync_TemplateMissing_ReturnsFallback()
+    public async Task RenderLoginPageAsyncTemplateMissingReturnsFallback()
     {
         _templateService.GetByIdAsync(PairingHtmlRenderer.LoginPageId, Arg.Any<CancellationToken>())
             .Returns((PromptTemplate?)null);
@@ -54,7 +54,7 @@ public sealed class PairingHtmlRendererTests
     }
 
     [Fact]
-    public async Task RenderKeyPageAsync_TemplateInStore_SubstitutesTokens()
+    public async Task RenderKeyPageAsyncTemplateInStoreSubstitutesTokens()
     {
         var template = "<html><span>{apiKey}</span><a href=\"{serverUrl}/mcp\">{serverUrl}</a></html>";
         _templateService.GetByIdAsync(PairingHtmlRenderer.KeyPageId, Arg.Any<CancellationToken>())
@@ -68,7 +68,7 @@ public sealed class PairingHtmlRendererTests
     }
 
     [Fact]
-    public async Task RenderKeyPageAsync_TemplateMissing_ReturnsFallback()
+    public async Task RenderKeyPageAsyncTemplateMissingReturnsFallback()
     {
         _templateService.GetByIdAsync(PairingHtmlRenderer.KeyPageId, Arg.Any<CancellationToken>())
             .Returns((PromptTemplate?)null);
@@ -81,7 +81,7 @@ public sealed class PairingHtmlRendererTests
     }
 
     [Fact]
-    public async Task RenderNotConfiguredPageAsync_TemplateInStore_ReturnsCustomContent()
+    public async Task RenderNotConfiguredPageAsyncTemplateInStoreReturnsCustomContent()
     {
         var template = "<html><h1>Custom Not Configured</h1></html>";
         _templateService.GetByIdAsync(PairingHtmlRenderer.NotConfiguredPageId, Arg.Any<CancellationToken>())
@@ -94,7 +94,7 @@ public sealed class PairingHtmlRendererTests
     }
 
     [Fact]
-    public async Task RenderNotConfiguredPageAsync_TemplateMissing_ReturnsFallback()
+    public async Task RenderNotConfiguredPageAsyncTemplateMissingReturnsFallback()
     {
         _templateService.GetByIdAsync(PairingHtmlRenderer.NotConfiguredPageId, Arg.Any<CancellationToken>())
             .Returns((PromptTemplate?)null);
@@ -106,7 +106,7 @@ public sealed class PairingHtmlRendererTests
     }
 
     [Fact]
-    public async Task RenderLoginPageAsync_ServiceThrows_ReturnsFallback()
+    public async Task RenderLoginPageAsyncServiceThrowsReturnsFallback()
     {
         _templateService.GetByIdAsync(PairingHtmlRenderer.LoginPageId, Arg.Any<CancellationToken>())
             .ThrowsAsync(new IOException("disk error"));

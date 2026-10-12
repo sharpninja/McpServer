@@ -16,7 +16,7 @@ public sealed class HandoffIngestionStorageMigrationTests
 {
     /// <summary>SQLite: apply head, round-trip, downgrade to previous, re-upgrade.</summary>
     [Fact]
-    public async Task Sqlite_HandoffMigration_DowngradeAndReupgrade()
+    public async Task SqliteHandoffMigrationDowngradeAndReupgrade()
     {
         var path = Path.Combine(Path.GetTempPath(), $"handoff-mig-{Guid.NewGuid():N}.db");
         var connection = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={path}");
@@ -42,7 +42,7 @@ public sealed class HandoffIngestionStorageMigrationTests
 
     /// <summary>SQL Server LocalDB private instance: apply head, round-trip, downgrade, re-upgrade.</summary>
     [Fact]
-    public async Task SqlServer_HandoffMigration_DowngradeAndReupgrade()
+    public async Task SqlServerHandoffMigrationDowngradeAndReupgrade()
     {
         await using var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
         var databaseName = $"mcp_handoff_mig_{Guid.NewGuid():N}";
@@ -59,7 +59,7 @@ public sealed class HandoffIngestionStorageMigrationTests
 
     /// <summary>PostgreSQL ephemeral/external cluster: apply head, round-trip, downgrade, re-upgrade.</summary>
     [Fact]
-    public async Task PostgreSql_HandoffMigration_DowngradeAndReupgrade()
+    public async Task PostgreSqlHandoffMigrationDowngradeAndReupgrade()
     {
         await using var postgres = new EphemeralPostgresSandbox();
         var databaseName = $"mcp_handoff_mig_{Guid.NewGuid():N}";

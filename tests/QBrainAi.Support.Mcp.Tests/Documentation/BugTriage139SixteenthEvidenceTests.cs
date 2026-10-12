@@ -25,7 +25,7 @@ public sealed class BugTriage139SixteenthEvidenceTests
     /// append-only current index carries its rejection and supersession.
     /// </summary>
     [Fact]
-    public void FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection()
+    public void FifteenthReceiptIsImmutableAndCurrentIndexDeclaresRejection()
     {
         var root = GetRepositoryRoot();
         var receiptBytes = File.ReadAllBytes(
@@ -65,7 +65,7 @@ public sealed class BugTriage139SixteenthEvidenceTests
     /// preserved its tree.
     /// </summary>
     [Fact]
-    public async Task IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries()
+    public async Task IndirectCellsHaveCompleteExecutableLedgerWithVerifiedBoundaries()
     {
         var root = GetRepositoryRoot();
         var ledgerPath = Path.Combine(

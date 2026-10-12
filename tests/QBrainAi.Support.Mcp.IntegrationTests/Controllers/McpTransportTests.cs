@@ -20,7 +20,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_PostInitialize_ReturnsOk()
+    public async Task McpTransportPostInitializeReturnsOk()
     {
         var initRequest = new
         {
@@ -52,7 +52,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_PostWithoutAcceptHeader_ReturnsNotAcceptable()
+    public async Task McpTransportPostWithoutAcceptHeaderReturnsNotAcceptable()
     {
         var initRequest = new { jsonrpc = "2.0", id = 1, method = "initialize", @params = new { protocolVersion = "2025-03-26", capabilities = new { }, clientInfo = new { name = "t", version = "1" } } };
         var content = new StringContent(JsonSerializer.Serialize(initRequest), Encoding.UTF8, "application/json");
@@ -64,14 +64,14 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_ExistingRestEndpoints_StillWork()
+    public async Task McpTransportExistingRestEndpointsStillWork()
     {
         var response = await _client.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
-    public async Task McpTransport_GraphRagStatusTool_ReturnsResultPayload()
+    public async Task McpTransportGraphRagStatusToolReturnsResultPayload()
     {
         await InitializeMcpAsync().ConfigureAwait(true);
 
@@ -96,7 +96,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_GraphRagIndexAndQueryTools_ReturnExpectedFields()
+    public async Task McpTransportGraphRagIndexAndQueryToolsReturnExpectedFields()
     {
         await InitializeMcpAsync().ConfigureAwait(true);
 
@@ -141,7 +141,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_ContextIngestWebsiteTool_ReturnsStructuredResult()
+    public async Task McpTransportContextIngestWebsiteToolReturnsStructuredResult()
     {
         await InitializeMcpAsync().ConfigureAwait(true);
 
@@ -170,7 +170,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_ContextIngestWebsiteTool_MissingUrl_ReturnsErrorPayload()
+    public async Task McpTransportContextIngestWebsiteToolMissingUrlReturnsErrorPayload()
     {
         await InitializeMcpAsync().ConfigureAwait(true);
 
@@ -194,7 +194,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_ToolsList_IncludesTranscriptTools()
+    public async Task McpTransportToolsListIncludesTranscriptTools()
     {
         await InitializeMcpAsync().ConfigureAwait(true);
 
@@ -210,7 +210,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_SessionLogIngestPathTool_PersistsRealFixture()
+    public async Task McpTransportSessionLogIngestPathToolPersistsRealFixture()
     {
         await InitializeMcpAsync().ConfigureAwait(true);
         var relativePath = Path.Combine("transcripts", Guid.NewGuid().ToString("N"), "codex", "session.jsonl");
@@ -243,7 +243,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     }
 
     [Fact]
-    public async Task McpTransport_SessionLogNormalizePathTool_WritesArtifactsWithoutPersistence()
+    public async Task McpTransportSessionLogNormalizePathToolWritesArtifactsWithoutPersistence()
     {
         await InitializeMcpAsync().ConfigureAwait(true);
         var relativePath = Path.Combine("transcripts", Guid.NewGuid().ToString("N"), "codex", "session.jsonl");

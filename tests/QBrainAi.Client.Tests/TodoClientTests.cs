@@ -14,7 +14,7 @@ public sealed class TodoClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task QueryAsync_SendsCorrectRequest()
+    public async System.Threading.Tasks.Task QueryAsyncSendsCorrectRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -30,7 +30,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAsync_SendsCorrectUrl()
+    public async System.Threading.Tasks.Task GetAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"MVP-001","title":"test","section":"s","priority":"high","done":false}""");
         using var http = new HttpClient(handler);
@@ -43,7 +43,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAuditAsync_SendsCorrectUrl()
+    public async System.Threading.Tasks.Task GetAuditAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -95,7 +95,7 @@ public sealed class TodoClientTests
     /// TEST-MCP-TODO-CLOSE-001: Verifies that the typed TODO client calls the dedicated close-by-id endpoint.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task CloseAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task CloseAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -126,7 +126,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetProjectionStatusAsync_SendsCorrectUrl()
+    public async System.Threading.Tasks.Task GetProjectionStatusAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -156,7 +156,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RepairProjectionAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task RepairProjectionAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -189,7 +189,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateAsync_PostsJsonBody()
+    public async System.Threading.Tasks.Task CreateAsyncPostsJsonBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -213,7 +213,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateAsync_PutsJsonBody()
+    public async System.Threading.Tasks.Task UpdateAsyncPutsJsonBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -226,7 +226,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteAsync_SendsDeleteRequest()
+    public async System.Threading.Tasks.Task DeleteAsyncSendsDeleteRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -239,7 +239,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ApiKeyHeader_IsSent()
+    public async System.Threading.Tasks.Task ApiKeyHeaderIsSent()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -253,7 +253,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AnalyzeRequirementsAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task AnalyzeRequirementsAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"copilotResponse":"analysis"}""");
         using var http = new HttpClient(handler);
@@ -267,7 +267,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateIterationPhaseAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task CreateIterationPhaseAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"phaseId":"PHASE-001","status":"Planning"}""");
         using var http = new HttpClient(handler);
@@ -285,7 +285,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateTodosFromPlanAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task CreateTodosFromPlanAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -317,7 +317,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetActiveTodoAsync_SendsCorrectUrl()
+    public async System.Threading.Tasks.Task GetActiveTodoAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -334,7 +334,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetNextReadyTodoAsync_SendsCorrectUrl()
+    public async System.Threading.Tasks.Task GetNextReadyTodoAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -351,7 +351,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetExecutionContextAsync_SendsCorrectQuery()
+    public async System.Threading.Tasks.Task GetExecutionContextAsyncSendsCorrectQuery()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -389,7 +389,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetDeltaContextAsync_SendsCorrectQuery()
+    public async System.Threading.Tasks.Task GetDeltaContextAsyncSendsCorrectQuery()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -417,7 +417,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SetTestPlanAsync_PutsCorrectUrl()
+    public async System.Threading.Tasks.Task SetTestPlanAsyncPutsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -441,7 +441,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateExecutionStatusAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task UpdateExecutionStatusAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -463,7 +463,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AppendCheckpointAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task AppendCheckpointAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -486,7 +486,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RecordValidationResultAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task RecordValidationResultAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -510,7 +510,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task LinkSessionTurnsAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task LinkSessionTurnsAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -532,7 +532,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AdbStepAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task AdbStepAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -553,7 +553,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamStatusAsync_YieldsDataLines()
+    public async System.Threading.Tasks.Task StreamStatusAsyncYieldsDataLines()
     {
         var sse = "data: Line one\n\ndata: Line two\n\nevent: done\ndata: \n\n";
         var handler = new MockHttpHandler(HttpStatusCode.OK, sse, "text/event-stream");
@@ -571,7 +571,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamImplementAsync_YieldsDataLines()
+    public async System.Threading.Tasks.Task StreamImplementAsyncYieldsDataLines()
     {
         var sse = "data: impl line\n\nevent: done\ndata: \n\n";
         var handler = new MockHttpHandler(HttpStatusCode.OK, sse, "text/event-stream");
@@ -588,7 +588,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamPlanAsync_YieldsDataLines()
+    public async System.Threading.Tasks.Task StreamPlanAsyncYieldsDataLines()
     {
         var sse = "data: plan step 1\n\ndata: plan step 2\n\ndata: plan step 3\n\nevent: done\ndata: \n\n";
         var handler = new MockHttpHandler(HttpStatusCode.OK, sse, "text/event-stream");
@@ -605,7 +605,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task QueueStatusPromptAsync_PostsQueueEndpoint()
+    public async System.Threading.Tasks.Task QueueStatusPromptAsyncPostsQueueEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"jobId":"job-status","agentName":"triage","renderedPrompt":"status"}""");
         using var http = new HttpClient(handler);
@@ -623,7 +623,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task QueueImplementPromptAsync_PostsQueueEndpoint()
+    public async System.Threading.Tasks.Task QueueImplementPromptAsyncPostsQueueEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"jobId":"job-implement","agentName":"builder","renderedPrompt":"implement"}""");
         using var http = new HttpClient(handler);
@@ -638,7 +638,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task QueuePlanPromptAsync_PostsQueueEndpoint()
+    public async System.Threading.Tasks.Task QueuePlanPromptAsyncPostsQueueEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"jobId":"job-plan","agentName":"planner","renderedPrompt":"plan"}""");
         using var http = new HttpClient(handler);
@@ -653,7 +653,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamSse_WithoutApiKey_ThrowsInvalidOperation()
+    public async System.Threading.Tasks.Task StreamSseWithoutApiKeyThrowsInvalidOperation()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "", "text/event-stream");
         using var http = new HttpClient(handler);
@@ -666,7 +666,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamSse_ServerError_ThrowsQBrainAiException()
+    public async System.Threading.Tasks.Task StreamSseServerErrorThrowsQBrainAiException()
     {
         var handler = new MockHttpHandler(HttpStatusCode.InternalServerError, """{"error":"fail"}""", "text/event-stream");
         using var http = new HttpClient(handler);
@@ -679,7 +679,7 @@ public sealed class TodoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamSse_ApiKeyHeader_IsSent()
+    public async System.Threading.Tasks.Task StreamSseApiKeyHeaderIsSent()
     {
         var sse = "event: done\ndata: \n\n";
         var handler = new MockHttpHandler(HttpStatusCode.OK, sse, "text/event-stream");

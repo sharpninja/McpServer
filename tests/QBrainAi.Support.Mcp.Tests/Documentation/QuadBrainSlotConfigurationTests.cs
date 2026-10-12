@@ -7,7 +7,7 @@ public sealed class QuadBrainSlotConfigurationTests
 {
     /// <summary>The prepared assignment file contains all four requested brain-slot mappings.</summary>
     [Fact]
-    public void QuadBrainSlotAssignments_ContainRequestedRuntimeAndModelMappings()
+    public void QuadBrainSlotAssignmentsContainRequestedRuntimeAndModelMappings()
     {
         var document = LoadAssignmentDocument();
         var slots = GetSequence(document, "slots")
@@ -57,7 +57,7 @@ public sealed class QuadBrainSlotConfigurationTests
 
     /// <summary>The generator script builds the YAML artifact through PowerShell object serialization.</summary>
     [Fact]
-    public void QuadBrainSlotGenerator_UsesConvertToYaml()
+    public void QuadBrainSlotGeneratorUsesConvertToYaml()
     {
         var scriptPath = Path.Combine(FindRepoRoot(), "scripts", "New-QuadBrainSlotConfiguration.ps1");
         var script = File.ReadAllText(scriptPath);

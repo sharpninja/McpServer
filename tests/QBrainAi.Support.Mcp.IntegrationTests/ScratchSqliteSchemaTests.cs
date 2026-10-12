@@ -17,7 +17,7 @@ public sealed class ScratchSqliteSchemaTests
     /// when the scratch database was created without that column.
     /// </summary>
     [Fact]
-    public async Task Backfill_LegacySessionLogsMissingAgentExecutablePath_Throws()
+    public async Task BackfillLegacySessionLogsMissingAgentExecutablePathThrows()
     {
         var path = CreateDbPath();
         try
@@ -41,7 +41,7 @@ public sealed class ScratchSqliteSchemaTests
 
     /// <summary>Current contract: coordinator migrate plus verify creates the required column.</summary>
     [Fact]
-    public async Task ApplyAndVerify_EmptyDatabase_CreatesAgentExecutablePath()
+    public async Task ApplyAndVerifyEmptyDatabaseCreatesAgentExecutablePath()
     {
         var path = CreateDbPath();
         try
@@ -71,7 +71,7 @@ public sealed class ScratchSqliteSchemaTests
 
     /// <summary>Legacy leftover tables without the column fail closed instead of starting the host.</summary>
     [Fact]
-    public async Task EnsureAgentExecutablePath_LegacySchema_ThrowsBeforeHostStart()
+    public async Task EnsureAgentExecutablePathLegacySchemaThrowsBeforeHostStart()
     {
         var path = CreateDbPath();
         try

@@ -29,7 +29,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-078: POST documents/ingest returns 200 on success.</summary>
     [Fact]
-    public async Task IngestText_ValidRequest_Returns200()
+    public async Task IngestTextValidRequestReturns200()
     {
         var request = new GraphRagIngestTextRequest { Content = "hello world" };
         var expected = new GraphRagIngestTextResponse { DocumentId = "doc-1", SourceType = "adhoc-text", SourceKey = "test" };
@@ -43,7 +43,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-078: POST documents/ingest returns 400 when content is empty.</summary>
     [Fact]
-    public async Task IngestText_EmptyContent_Returns400()
+    public async Task IngestTextEmptyContentReturns400()
     {
         var request = new GraphRagIngestTextRequest { Content = "" };
 
@@ -55,7 +55,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-078: POST documents/ingest returns 400 when request is null.</summary>
     [Fact]
-    public async Task IngestText_NullRequest_Returns400()
+    public async Task IngestTextNullRequestReturns400()
     {
         var result = await _controller.IngestTextAsync(null, CancellationToken.None).ConfigureAwait(true);
 
@@ -66,7 +66,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-080: GET documents returns 200.</summary>
     [Fact]
-    public async Task ListDocuments_Returns200()
+    public async Task ListDocumentsReturns200()
     {
         var expected = new GraphRagDocumentListResponse { Documents = [], TotalCount = 0 };
         _service.ListDocumentsAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -81,7 +81,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-080: GET documents/{id}/chunks returns 200 when found.</summary>
     [Fact]
-    public async Task GetDocumentChunks_Found_Returns200()
+    public async Task GetDocumentChunksFoundReturns200()
     {
         var expected = new GraphRagDocumentChunksResponse { DocumentId = "doc-1", Chunks = [], TotalChunks = 0 };
         _service.GetDocumentChunksAsync("doc-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -94,7 +94,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-080: GET documents/{id}/chunks returns 404 when not found.</summary>
     [Fact]
-    public async Task GetDocumentChunks_NotFound_Returns404()
+    public async Task GetDocumentChunksNotFoundReturns404()
     {
         _service.GetDocumentChunksAsync("doc-99", Arg.Any<CancellationToken>()).Returns((GraphRagDocumentChunksResponse?)null);
 
@@ -108,7 +108,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-080: DELETE documents/{id} returns 200 on success.</summary>
     [Fact]
-    public async Task DeleteDocument_Success_Returns200()
+    public async Task DeleteDocumentSuccessReturns200()
     {
         var expected = new GraphRagDocumentDeleteResponse { DocumentId = "doc-1", ChunksRemoved = 3, Success = true };
         _service.DeleteDocumentAsync("doc-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -121,7 +121,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-080: DELETE documents/{id} returns 404 when not found.</summary>
     [Fact]
-    public async Task DeleteDocument_NotFound_Returns404()
+    public async Task DeleteDocumentNotFoundReturns404()
     {
         var expected = new GraphRagDocumentDeleteResponse { DocumentId = "doc-99", ChunksRemoved = 0, Success = false };
         _service.DeleteDocumentAsync("doc-99", Arg.Any<CancellationToken>()).Returns(expected);
@@ -136,7 +136,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: POST entities returns 201.</summary>
     [Fact]
-    public async Task CreateEntity_ValidRequest_Returns201()
+    public async Task CreateEntityValidRequestReturns201()
     {
         var request = new GraphEntityRequest { Name = "Alice", EntityType = "person" };
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Alice", EntityType = "person" };
@@ -150,7 +150,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: POST entities returns 400 when name is missing.</summary>
     [Fact]
-    public async Task CreateEntity_MissingName_Returns400()
+    public async Task CreateEntityMissingNameReturns400()
     {
         var request = new GraphEntityRequest { Name = "", EntityType = "person" };
 
@@ -163,7 +163,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: GET entities returns 200.</summary>
     [Fact]
-    public async Task ListEntities_Returns200()
+    public async Task ListEntitiesReturns200()
     {
         var expected = new GraphEntityListResponse { Entities = [], TotalCount = 0 };
         _service.ListEntitiesAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -178,7 +178,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: GET entities/{id} returns 200 when found.</summary>
     [Fact]
-    public async Task GetEntity_Found_Returns200()
+    public async Task GetEntityFoundReturns200()
     {
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Alice", EntityType = "person" };
         _service.GetEntityAsync("ge-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -191,7 +191,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: GET entities/{id} returns 404 when not found.</summary>
     [Fact]
-    public async Task GetEntity_NotFound_Returns404()
+    public async Task GetEntityNotFoundReturns404()
     {
         _service.GetEntityAsync("ge-99", Arg.Any<CancellationToken>()).Returns((GraphEntityResponse?)null);
 
@@ -204,7 +204,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: PUT entities/{id} returns 200 when found.</summary>
     [Fact]
-    public async Task UpdateEntity_Found_Returns200()
+    public async Task UpdateEntityFoundReturns200()
     {
         var request = new GraphEntityRequest { Name = "Bob", EntityType = "person" };
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Bob", EntityType = "person" };
@@ -218,7 +218,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: PUT entities/{id} returns 404 when not found.</summary>
     [Fact]
-    public async Task UpdateEntity_NotFound_Returns404()
+    public async Task UpdateEntityNotFoundReturns404()
     {
         var request = new GraphEntityRequest { Name = "Bob", EntityType = "person" };
         _service.UpdateEntityAsync("ge-99", request, Arg.Any<CancellationToken>()).Returns((GraphEntityResponse?)null);
@@ -232,7 +232,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: DELETE entities/{id} returns 204 when found.</summary>
     [Fact]
-    public async Task DeleteEntity_Found_Returns204()
+    public async Task DeleteEntityFoundReturns204()
     {
         _service.DeleteEntityAsync("ge-1", Arg.Any<CancellationToken>()).Returns(true);
 
@@ -243,7 +243,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: DELETE entities/{id} returns 404 when not found.</summary>
     [Fact]
-    public async Task DeleteEntity_NotFound_Returns404()
+    public async Task DeleteEntityNotFoundReturns404()
     {
         _service.DeleteEntityAsync("ge-99", Arg.Any<CancellationToken>()).Returns(false);
 
@@ -256,7 +256,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: POST relationships returns 201.</summary>
     [Fact]
-    public async Task CreateRelationship_ValidRequest_Returns201()
+    public async Task CreateRelationshipValidRequestReturns201()
     {
         var request = new GraphRelationshipRequest { SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
@@ -270,7 +270,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: POST relationships returns 400 when required fields missing.</summary>
     [Fact]
-    public async Task CreateRelationship_MissingFields_Returns400()
+    public async Task CreateRelationshipMissingFieldsReturns400()
     {
         var request = new GraphRelationshipRequest { SourceEntityId = "", TargetEntityId = "ge-2", RelationshipType = "knows" };
 
@@ -283,7 +283,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: GET relationships returns 200.</summary>
     [Fact]
-    public async Task ListRelationships_Returns200()
+    public async Task ListRelationshipsReturns200()
     {
         var expected = new GraphRelationshipListResponse { Relationships = [], TotalCount = 0 };
         _service.ListRelationshipsAsync(0, 50, null, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -298,7 +298,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: GET relationships/{id} returns 200 when found.</summary>
     [Fact]
-    public async Task GetRelationship_Found_Returns200()
+    public async Task GetRelationshipFoundReturns200()
     {
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         _service.GetRelationshipAsync("gr-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -311,7 +311,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: GET relationships/{id} returns 404 when not found.</summary>
     [Fact]
-    public async Task GetRelationship_NotFound_Returns404()
+    public async Task GetRelationshipNotFoundReturns404()
     {
         _service.GetRelationshipAsync("gr-99", Arg.Any<CancellationToken>()).Returns((GraphRelationshipResponse?)null);
 
@@ -324,7 +324,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: PUT relationships/{id} returns 200 when found.</summary>
     [Fact]
-    public async Task UpdateRelationship_Found_Returns200()
+    public async Task UpdateRelationshipFoundReturns200()
     {
         var request = new GraphRelationshipRequest { SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "works-with" };
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "works-with" };
@@ -338,7 +338,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: PUT relationships/{id} returns 404 when not found.</summary>
     [Fact]
-    public async Task UpdateRelationship_NotFound_Returns404()
+    public async Task UpdateRelationshipNotFoundReturns404()
     {
         var request = new GraphRelationshipRequest { SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "works-with" };
         _service.UpdateRelationshipAsync("gr-99", request, Arg.Any<CancellationToken>()).Returns((GraphRelationshipResponse?)null);
@@ -352,7 +352,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: DELETE relationships/{id} returns 204 when found.</summary>
     [Fact]
-    public async Task DeleteRelationship_Found_Returns204()
+    public async Task DeleteRelationshipFoundReturns204()
     {
         _service.DeleteRelationshipAsync("gr-1", Arg.Any<CancellationToken>()).Returns(true);
 
@@ -363,7 +363,7 @@ public sealed class GraphRagControllerAdHocTests
 
     /// <summary>FR-MCP-079: DELETE relationships/{id} returns 404 when not found.</summary>
     [Fact]
-    public async Task DeleteRelationship_NotFound_Returns404()
+    public async Task DeleteRelationshipNotFoundReturns404()
     {
         _service.DeleteRelationshipAsync("gr-99", Arg.Any<CancellationToken>()).Returns(false);
 

@@ -156,7 +156,7 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
         return Deserialize(run);
     }
 
-    private RequirementsRecoveryResult ResolveExisting(RequirementsRecoveryRunEntity run, string hash)
+    private static RequirementsRecoveryResult ResolveExisting(RequirementsRecoveryRunEntity run, string hash)
     {
         if (!string.Equals(run.PayloadHash, hash, StringComparison.Ordinal))
         {

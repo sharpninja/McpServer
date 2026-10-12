@@ -15,7 +15,7 @@ namespace QBrainAi.Support.Mcp.Tests.Controllers;
 public sealed class AgentControllerRuntimeTests
 {
     [Fact]
-    public async Task LaunchAgent_WhenWorkspaceMissing_ReturnsBadRequest()
+    public async Task LaunchAgentWhenWorkspaceMissingReturnsBadRequest()
     {
         var service = Substitute.For<IAgentService>();
         var controller = CreateController(service);
@@ -27,7 +27,7 @@ public sealed class AgentControllerRuntimeTests
     }
 
     [Fact]
-    public async Task LaunchAgent_WhenServiceReturnsInfo_ReturnsOk()
+    public async Task LaunchAgentWhenServiceReturnsInfoReturnsOk()
     {
         var service = Substitute.For<IAgentService>();
         service.LaunchAgentAsync("C:/ws", "planner", Arg.Any<CancellationToken>())
@@ -48,7 +48,7 @@ public sealed class AgentControllerRuntimeTests
     }
 
     [Fact]
-    public async Task StopAgent_WhenNotRunning_ReturnsConflict()
+    public async Task StopAgentWhenNotRunningReturnsConflict()
     {
         var service = Substitute.For<IAgentService>();
         service.StopAgentAsync("C:/ws", "planner", Arg.Any<CancellationToken>())
@@ -62,7 +62,7 @@ public sealed class AgentControllerRuntimeTests
     }
 
     [Fact]
-    public async Task GetProcessStatus_WhenMissing_ReturnsNotFound()
+    public async Task GetProcessStatusWhenMissingReturnsNotFound()
     {
         var service = Substitute.For<IAgentService>();
         service.GetAgentProcessStatusAsync("C:/ws", "planner", Arg.Any<CancellationToken>())
@@ -76,7 +76,7 @@ public sealed class AgentControllerRuntimeTests
     }
 
     [Fact]
-    public async Task ListRunningAgents_ReturnsWrappedPayload()
+    public async Task ListRunningAgentsReturnsWrappedPayload()
     {
         var service = Substitute.For<IAgentService>();
         service.ListRunningAgentsAsync("C:/ws", Arg.Any<CancellationToken>())

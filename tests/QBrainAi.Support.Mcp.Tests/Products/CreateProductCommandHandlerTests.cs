@@ -17,7 +17,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
     /// <summary>Valid key PROD-MCPSERVER succeeds and returns owner workspace.</summary>
     [Fact]
-    public async Task HandleAsync_ValidProdMcpserverKey_ReturnsOwnerAndKey()
+    public async Task HandleAsyncValidProdMcpserverKeyReturnsOwnerAndKey()
     {
         await using var db = _fx.CreateDb();
         var result = await ProductHandlerTestContext.Create(db).HandleAsync(
@@ -41,7 +41,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
     [InlineData("mcpserver")]
     [InlineData("prod-mcpserver")]
     [InlineData("MCP-SERVER")]
-    public async Task HandleAsync_InvalidKey_Fails(string key)
+    public async Task HandleAsyncInvalidKeyFails(string key)
     {
         await using var db = _fx.CreateDb();
         var result = await ProductHandlerTestContext.Create(db).HandleAsync(
@@ -58,7 +58,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
     /// <summary>Soft-delete hides the product from a subsequent get.</summary>
     [Fact]
-    public async Task HandleAsync_SoftDelete_HidesFromGet()
+    public async Task HandleAsyncSoftDeleteHidesFromGet()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -76,7 +76,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
     /// <summary>Outsider get does not leak product existence.</summary>
     [Fact]
-    public async Task HandleAsync_OutsiderGet_IsNotFound()
+    public async Task HandleAsyncOutsiderGetIsNotFound()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -90,7 +90,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
     /// <summary>FR-MCP-PRODUCT-001 ac-4: non-owner update is 403.</summary>
     [Fact]
-    public async Task HandleAsync_NonOwnerUpdate_FailsForbidden()
+    public async Task HandleAsyncNonOwnerUpdateFailsForbidden()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -108,7 +108,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
     /// <summary>FR-MCP-PRODUCT-001 ac-4: non-owner delete is 403.</summary>
     [Fact]
-    public async Task HandleAsync_NonOwnerDelete_FailsForbidden()
+    public async Task HandleAsyncNonOwnerDeleteFailsForbidden()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -123,7 +123,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
     /// <summary>Owner update changes name.</summary>
     [Fact]
-    public async Task HandleAsync_OwnerUpdate_ChangesName()
+    public async Task HandleAsyncOwnerUpdateChangesName()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -142,7 +142,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
     /// <summary>FR-MCP-PRODUCT-001 ac-5: soft-delete hides the product from the default list.</summary>
     [Fact]
-    public async Task HandleAsync_SoftDelete_HidesFromDefaultList()
+    public async Task HandleAsyncSoftDeleteHidesFromDefaultList()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -160,7 +160,7 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
     /// <summary>Soft-delete stops membership reads.</summary>
     [Fact]
-    public async Task HandleAsync_SoftDelete_StopsMembershipReads()
+    public async Task HandleAsyncSoftDeleteStopsMembershipReads()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);

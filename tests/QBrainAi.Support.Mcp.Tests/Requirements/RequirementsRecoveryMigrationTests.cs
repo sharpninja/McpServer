@@ -14,7 +14,7 @@ public sealed class RequirementsRecoveryMigrationTests
 {
     /// <summary>The three provider assemblies discover the same recovery migration id.</summary>
     [Fact]
-    public void Discovers_AddRequirementsRecoveryRuns_OnAllProviders()
+    public void DiscoversAddRequirementsRecoveryRunsOnAllProviders()
     {
         const string id = "20260929020000_AddRequirementsRecoveryRuns";
         foreach (var type in new[] { typeof(SqliteRecovery), typeof(SqlServerRecovery), typeof(PostgreSqlRecovery) })

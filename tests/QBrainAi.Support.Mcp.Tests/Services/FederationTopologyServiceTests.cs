@@ -30,7 +30,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
     }
     /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
     [Fact]
-    public async Task EnrollAsync_PersistsProxyAndWorkspaceInventory()
+    public async Task EnrollAsyncPersistsProxyAndWorkspaceInventory()
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
@@ -68,7 +68,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
     /// <summary>Cached topology status is refreshed from durable storage when status is requested.</summary>
     [Fact]
-    public async Task GetSnapshot_RefreshesFromDurableStorage()
+    public async Task GetSnapshotRefreshesFromDurableStorage()
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
@@ -107,7 +107,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
     /// <summary>Operation intake is idempotent and only fans out to other proxies.</summary>
     [Fact]
-    public async Task RecordOperationAsync_IsIdempotentAndFansOutToOtherProxies()
+    public async Task RecordOperationAsyncIsIdempotentAndFansOutToOtherProxies()
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
@@ -158,7 +158,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
     /// <summary>Operation-level acknowledgements do not clear recipient-specific fanout rows.</summary>
     [Fact]
-    public async Task AcknowledgeOperationAsync_DoesNotDrainRecipientFanoutRows()
+    public async Task AcknowledgeOperationAsyncDoesNotDrainRecipientFanoutRows()
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
@@ -192,7 +192,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
     /// <summary>Terminal failed apply acknowledgements clear undeliverable fanout rows for the operation.</summary>
     [Fact]
-    public async Task AcknowledgeOperationAsync_ConflictDrainsFanoutRows()
+    public async Task AcknowledgeOperationAsyncConflictDrainsFanoutRows()
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
@@ -221,7 +221,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
     /// <summary>Local proxy queue rows are durable replay candidates and track failed attempts.</summary>
     [Fact]
-    public async Task QueueLocalOperationAsync_PersistsReplayCandidateAndFailureState()
+    public async Task QueueLocalOperationAsyncPersistsReplayCandidateAndFailureState()
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
@@ -255,7 +255,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
     /// <summary>SQLite-backed pending operation listing avoids provider-side DateTimeOffset ordering translation.</summary>
     [Fact]
-    public async Task ListPendingOperationsAsync_WithSqliteProvider_ReturnsQueuedRows()
+    public async Task ListPendingOperationsAsyncWithSqliteProviderReturnsQueuedRows()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
         await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -288,7 +288,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
     /// <summary>Hub operation intake records a conflict when the proxy base version is stale.</summary>
     [Fact]
-    public async Task RecordOperationAsync_StaleBaseVersionCreatesConflict()
+    public async Task RecordOperationAsyncStaleBaseVersionCreatesConflict()
     {
         using var provider = CreateProvider(new StaticVersionAdapter("todo", "hub-v2"));
         var sut = provider.GetRequiredService<IFederationTopologyService>();

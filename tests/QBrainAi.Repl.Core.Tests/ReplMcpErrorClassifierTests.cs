@@ -21,7 +21,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>DbUpdateException with UNIQUE inner text is conflict, not dispatch_error.</summary>
     [Fact]
-    public void FromException_DbUpdateUnique_IsConflictWithInner()
+    public void FromExceptionDbUpdateUniqueIsConflictWithInner()
     {
         var inner = new Exception("UNIQUE constraint failed: SessionLogs.SessionId");
         var classified = ReplMcpErrorClassifier.FromException(new DbUpdateException(
@@ -36,7 +36,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>ArgumentException is validation_error, not retryable.</summary>
     [Fact]
-    public void FromException_ArgumentException_IsValidationError()
+    public void FromExceptionArgumentExceptionIsValidationError()
     {
         var classified = ReplMcpErrorClassifier.FromException(new ArgumentException("sourceType is required."));
         Assert.Equal("validation_error", classified.Code);
@@ -45,7 +45,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>KeyNotFoundException is not_found, not retryable.</summary>
     [Fact]
-    public void FromException_KeyNotFound_IsNotFound()
+    public void FromExceptionKeyNotFoundIsNotFound()
     {
         var classified = ReplMcpErrorClassifier.FromException(new KeyNotFoundException("Turn not found."));
         Assert.Equal("not_found", classified.Code);
@@ -54,7 +54,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>Storage budget expiry is backend_unavailable and retryable.</summary>
     [Fact]
-    public void FromException_StorageBudgetExceeded_IsBackendUnavailable()
+    public void FromExceptionStorageBudgetExceededIsBackendUnavailable()
     {
         var classified = ReplMcpErrorClassifier.FromException(
             new InvalidOperationException("The storage backend did not respond within the 5 second intake budget."));
@@ -64,7 +64,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>TR-MCP-TRIAGESTORE-002: a longer Submit storage command budget is still backend_unavailable.</summary>
     [Fact]
-    public void FromException_SubmitStorageCommandBudget_IsBackendUnavailable()
+    public void FromExceptionSubmitStorageCommandBudgetIsBackendUnavailable()
     {
         var classified = ReplMcpErrorClassifier.FromException(
             new InvalidOperationException("The storage backend did not respond within the 30 second storage command budget."));
@@ -74,7 +74,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>TR-MCP-TRIAGESTORE-002: a deadlocked session-graph load is retryable backend_unavailable.</summary>
     [Fact]
-    public void FromException_GraphMaterializationDeadlock_IsBackendUnavailable()
+    public void FromExceptionGraphMaterializationDeadlockIsBackendUnavailable()
     {
         var classified = ReplMcpErrorClassifier.FromException(
             new StorageGraphMaterializationException(
@@ -96,7 +96,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>HTTP 503 with persistence_error envelope stays non-retryable (schema pending migration).</summary>
     [Fact]
-    public void FromException_503PersistenceErrorEnvelope_IsNonRetryablePersistenceError()
+    public void FromException503PersistenceErrorEnvelopeIsNonRetryablePersistenceError()
     {
         var classified = ReplMcpErrorClassifier.FromException(new QBrainAi.Client.QBrainAiException(
             "SessionLogs schema is pending migration.",
@@ -111,7 +111,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>HTTP 503 with backend_unavailable envelope stays retryable.</summary>
     [Fact]
-    public void FromException_503BackendUnavailableEnvelope_IsRetryable()
+    public void FromException503BackendUnavailableEnvelopeIsRetryable()
     {
         var classified = ReplMcpErrorClassifier.FromException(new QBrainAi.Client.QBrainAiException(
             "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
@@ -125,7 +125,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>HTTP 503 without an envelope code defaults to retryable backend_unavailable.</summary>
     [Fact]
-    public void FromException_503Unknown_DefaultsBackendUnavailableRetryable()
+    public void FromException503UnknownDefaultsBackendUnavailableRetryable()
     {
         var classified = ReplMcpErrorClassifier.FromException(new QBrainAi.Client.QBrainAiException(
             "HTTP 503: unavailable",
@@ -137,7 +137,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>TimeoutException is retryable timeout.</summary>
     [Fact]
-    public void FromException_Timeout_IsRetryableTimeout()
+    public void FromExceptionTimeoutIsRetryableTimeout()
     {
         var classified = ReplMcpErrorClassifier.FromException(new TimeoutException("command timed out"));
         Assert.Equal("timeout", classified.Code);
@@ -146,7 +146,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>SQLITE_BUSY is retryable persistence_error.</summary>
     [Fact]
-    public void FromException_SqliteBusy_IsRetryablePersistenceError()
+    public void FromExceptionSqliteBusyIsRetryablePersistenceError()
     {
         var classified = ReplMcpErrorClassifier.FromException(
             new Exception("database is locked SQLITE_BUSY"));
@@ -157,7 +157,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>Agent-stdio ArgumentException is type:error validation_error with retryable false.</summary>
     [Fact]
-    public async Task AgentStdioProtocol_DispatchThrowsArgumentException_WritesValidationEnvelope()
+    public async Task AgentStdioProtocolDispatchThrowsArgumentExceptionWritesValidationEnvelope()
     {
         await AssertTypeErrorAsync(
             new ArgumentException("sourceType is required."),
@@ -167,7 +167,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>Agent-stdio KeyNotFoundException is type:error not_found with retryable false.</summary>
     [Fact]
-    public async Task AgentStdioProtocol_DispatchThrowsKeyNotFound_WritesNotFoundEnvelope()
+    public async Task AgentStdioProtocolDispatchThrowsKeyNotFoundWritesNotFoundEnvelope()
     {
         await AssertTypeErrorAsync(
             new KeyNotFoundException("Turn not found."),
@@ -177,7 +177,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>Agent-stdio storage budget is type:error backend_unavailable with retryable true.</summary>
     [Fact]
-    public async Task AgentStdioProtocol_DispatchThrowsStorageBudget_WritesBackendUnavailableEnvelope()
+    public async Task AgentStdioProtocolDispatchThrowsStorageBudgetWritesBackendUnavailableEnvelope()
     {
         await AssertTypeErrorAsync(
             new InvalidOperationException("The storage backend did not respond within the 5 second intake budget."),
@@ -187,7 +187,7 @@ public sealed class ReplMcpErrorClassifierTests
 
     /// <summary>Agent-stdio dispatch catch emits the four-field envelope.</summary>
     [Fact]
-    public async Task AgentStdioProtocol_DispatchThrowsDbUpdateException_WritesClassifiedEnvelope()
+    public async Task AgentStdioProtocolDispatchThrowsDbUpdateExceptionWritesClassifiedEnvelope()
     {
         var dispatcher = Substitute.For<IReplCommandDispatcher>();
         dispatcher.DispatchAsync(Arg.Any<IYamlEnvelope>(), Arg.Any<CancellationToken>())

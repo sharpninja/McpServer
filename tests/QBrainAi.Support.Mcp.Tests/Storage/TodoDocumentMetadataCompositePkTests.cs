@@ -15,13 +15,13 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// new composite key to preserve the TR-MCP-TODO-007 SQL Server
 /// <c>IDENTITY_INSERT</c> guarantee.
 /// </summary>
-public sealed class TodoDocumentMetadata_CompositePkTests
+public sealed class TodoDocumentMetadataCompositePkTests
 {
     /// <summary>
     /// The primary key MUST be the composite <c>(WorkspaceId, SingletonId)</c>.
     /// </summary>
     [Fact]
-    public void TodoDocumentMetadata_PrimaryKey_IsCompositeWorkspaceIdAndSingletonId()
+    public void TodoDocumentMetadataPrimaryKeyIsCompositeWorkspaceIdAndSingletonId()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"todo-meta-pk-{System.Guid.NewGuid():N}")
@@ -45,7 +45,7 @@ public sealed class TodoDocumentMetadata_CompositePkTests
     /// per-workspace singleton seed must stay explicitly caller-assigned.
     /// </summary>
     [Fact]
-    public void TodoDocumentMetadata_SingletonId_StaysValueGeneratedNever_UnderCompositeKey()
+    public void TodoDocumentMetadataSingletonIdStaysValueGeneratedNeverUnderCompositeKey()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"todo-meta-valuegen-{System.Guid.NewGuid():N}")
@@ -63,7 +63,7 @@ public sealed class TodoDocumentMetadata_CompositePkTests
     /// <c>SingletonId = 1</c> without violating the primary key constraint.
     /// </summary>
     [Fact]
-    public void TwoWorkspaces_CanEachOwnSingletonRow()
+    public void TwoWorkspacesCanEachOwnSingletonRow()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"todo-meta-dual-{System.Guid.NewGuid():N}")

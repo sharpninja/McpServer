@@ -47,7 +47,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-08: Empty Content (and empty legacy text) returns 400 validation.</summary>
     [Fact]
-    public async Task EmptyContent_Returns400()
+    public async Task EmptyContentReturns400()
     {
         var remember = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -67,7 +67,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-09: Whitespace-only Content returns 400 validation.</summary>
     [Fact]
-    public async Task WhitespaceOnlyContent_Returns400()
+    public async Task WhitespaceOnlyContentReturns400()
     {
         var remember = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -81,7 +81,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-10: Content with internal newlines and punctuation round-trips exactly.</summary>
     [Fact]
-    public async Task NewlinesPunctuation_RoundTripExact()
+    public async Task NewlinesPunctuationRoundTripExact()
     {
         const string content = "Line one.\nLine two: yes, \"quoted\" -- keep punctuation!";
         var remembered = await RememberOrAddAsync(new MemoryRememberRequest
@@ -98,7 +98,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-11: Unicode BMP + supplementary-plane emoji in Title/Content round-trip exactly.</summary>
     [Fact]
-    public async Task Unicode_RoundTripExact()
+    public async Task UnicodeRoundTripExact()
     {
         const string title = "Cafe\u0301 notes";
         const string content = "Prefer neovim \U0001F431 and native Postgres.";
@@ -118,7 +118,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-12: Invalid Type enum value returns 400.</summary>
     [Fact]
-    public async Task InvalidType_Returns400()
+    public async Task InvalidTypeReturns400()
     {
         var result = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -132,7 +132,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-13: Confidence less than 0 returns 400.</summary>
     [Fact]
-    public async Task ConfidenceBelowZero_Returns400()
+    public async Task ConfidenceBelowZeroReturns400()
     {
         var result = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -147,7 +147,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-14: Confidence greater than 1 returns 400.</summary>
     [Fact]
-    public async Task ConfidenceAboveOne_Returns400()
+    public async Task ConfidenceAboveOneReturns400()
     {
         var result = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -162,7 +162,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-15: Omitted confidence defaults to a documented value in [0,1].</summary>
     [Fact]
-    public async Task ConfidenceOmitted_UsesDefault()
+    public async Task ConfidenceOmittedUsesDefault()
     {
         var remembered = await RememberOrAddAsync(new MemoryRememberRequest
         {
@@ -180,7 +180,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-16: Empty tags are accepted; null tags are treated as empty.</summary>
     [Fact]
-    public async Task NullOrEmptyTags_Accepted()
+    public async Task NullOrEmptyTagsAccepted()
     {
         var empty = await RememberOrAddAsync(new MemoryRememberRequest
         {
@@ -205,7 +205,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-17: Duplicate tags are de-duplicated or rejected consistently.</summary>
     [Fact]
-    public async Task DuplicateTags_StableBehavior()
+    public async Task DuplicateTagsStableBehavior()
     {
         var first = await RememberOrAddAsync(new MemoryRememberRequest
         {
@@ -228,7 +228,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-18: Tag longer than configured max returns 400.</summary>
     [Fact]
-    public async Task TagTooLong_Returns400()
+    public async Task TagTooLongReturns400()
     {
         var result = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -243,7 +243,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-19: Title longer than configured max returns 400.</summary>
     [Fact]
-    public async Task TitleTooLong_Returns400()
+    public async Task TitleTooLongReturns400()
     {
         var result = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -258,7 +258,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-20: Content longer than configured max returns 400.</summary>
     [Fact]
-    public async Task ContentTooLong_Returns400()
+    public async Task ContentTooLongReturns400()
     {
         var result = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -272,7 +272,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-23: Default scope when omitted is Workspace.</summary>
     [Fact]
-    public async Task DefaultScope_IsWorkspace()
+    public async Task DefaultScopeIsWorkspace()
     {
         var remembered = await RememberOrAddAsync(new MemoryRememberRequest
         {
@@ -288,7 +288,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-24: Scope=Global stores without owning workspace stamp and is visible everywhere.</summary>
     [Fact]
-    public async Task GlobalScope_VisibleEverywhere()
+    public async Task GlobalScopeVisibleEverywhere()
     {
         var remembered = await RememberOrAddAsync(new MemoryRememberRequest
         {
@@ -308,7 +308,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-33: Scope Global to Workspace transitions are validated; invalid transitions return 400.</summary>
     [Fact]
-    public async Task ScopeTransition_Validated()
+    public async Task ScopeTransitionValidated()
     {
         var created = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -334,7 +334,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-35: CreatedAt/UpdatedAt set on create; UpdatedAt advances; CreatedAt is stable.</summary>
     [Fact]
-    public async Task Timestamps_CreateAndUpdate()
+    public async Task TimestampsCreateAndUpdate()
     {
         var created = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -360,7 +360,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-36: Author/updatedBy attribution is recorded on create and update.</summary>
     [Fact]
-    public async Task Attribution_Recorded()
+    public async Task AttributionRecorded()
     {
         var created = await RememberOrAddAsync(new MemoryRememberRequest
         {
@@ -386,7 +386,7 @@ public sealed class MemoryModelTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-39: Partial update does not clear Summary when omitted.</summary>
     [Fact]
-    public async Task PartialUpdate_DoesNotClearSummary()
+    public async Task PartialUpdateDoesNotClearSummary()
     {
         var created = await RememberOrAddAsync(new MemoryRememberRequest
         {

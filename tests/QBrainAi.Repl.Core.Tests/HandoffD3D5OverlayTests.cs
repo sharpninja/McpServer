@@ -17,7 +17,7 @@ public sealed class HandoffD3D5OverlayTests
     /// D3: markdown FR generateDocument hits the shipped generate endpoint with doc=functional.
     /// </summary>
     [Fact]
-    public async Task D3_GenerateDocumentAsync_ShippedRequirementsWorkflow_GetsFunctionalMarkdown()
+    public async Task D3GenerateDocumentAsyncShippedRequirementsWorkflowGetsFunctionalMarkdown()
     {
         var handler = new CapturingHandler();
         var workflow = BuildWorkflow(handler);
@@ -41,7 +41,7 @@ public sealed class HandoffD3D5OverlayTests
     /// D3: wiki generateDocument with docType=all hits format=wiki and doc=all.
     /// </summary>
     [Fact]
-    public async Task D3_GenerateDocumentAsync_ShippedRequirementsWorkflow_GetsWikiAll()
+    public async Task D3GenerateDocumentAsyncShippedRequirementsWorkflowGetsWikiAll()
     {
         var handler = new CapturingHandler
         {

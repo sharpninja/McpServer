@@ -49,7 +49,7 @@ public sealed class TriageWorkflowTests
 
     /// <summary>TEST-MCP-REPL-TRIAGE-001: the route table covers the complete triage wrapper surface.</summary>
     [Fact]
-    public void TriageRouteCases_CoverAllCommandShapes()
+    public void TriageRouteCasesCoverAllCommandShapes()
     {
         Assert.Equal(14, TriageRouteCases().Count());
     }
@@ -62,7 +62,7 @@ public sealed class TriageWorkflowTests
     /// <param name="parameters">Representative YAML-bound parameters.</param>
     [Theory]
     [MemberData(nameof(TriageRouteCases))]
-    public async Task Dispatcher_TriageWorkflowMethod_RoutesToRegisteredWorkflow(
+    public async Task DispatcherTriageWorkflowMethodRoutesToRegisteredWorkflow(
         string method,
         Dictionary<string, object?> parameters)
     {
@@ -84,7 +84,7 @@ public sealed class TriageWorkflowTests
     /// TEST-MCP-REPL-TRIAGE-001: YAML validation rejects malformed triage reports before dispatch.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_TriageReportMissingSummary_ReturnsSchemaValidationError()
+    public async Task DispatcherTriageReportMissingSummaryReturnsSchemaValidationError()
     {
         var workflow = Substitute.For<ITriageWorkflow>();
         var sut = new ReplCommandDispatcher(
@@ -106,7 +106,7 @@ public sealed class TriageWorkflowTests
     /// TEST-MCP-REPL-TRIAGE-001: canonical client.triage.* remains available through generic passthrough.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_ClientTriageSubmitReport_UsesGenericPassthrough()
+    public async Task DispatcherClientTriageSubmitReportUsesGenericPassthrough()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough.InvokeAsync(

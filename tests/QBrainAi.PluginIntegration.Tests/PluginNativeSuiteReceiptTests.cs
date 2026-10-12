@@ -15,7 +15,7 @@ public sealed class PluginNativeSuiteReceiptTests
     /// P19 red: each official catalog plugin has a native-suite receipt with Failed 0 and Skipped 0.
     /// </summary>
     [Fact]
-    public void PluginNativeSuite_EachOfficialPlugin_FailedZeroSkippedZero()
+    public void PluginNativeSuiteEachOfficialPluginFailedZeroSkippedZero()
     {
         var repoRoot = FindRepositoryRoot();
         var catalog = PluginSessionLogCatalog.LoadAndValidate(repoRoot);
@@ -40,7 +40,7 @@ public sealed class PluginNativeSuiteReceiptTests
     /// P19 red: after SyncAgentPlugins, each official plugin native suite still Failed 0 Skipped 0.
     /// </summary>
     [Fact]
-    public void PluginNativeSuite_AfterSyncAgentPlugins_FailedZeroSkippedZero()
+    public void PluginNativeSuiteAfterSyncAgentPluginsFailedZeroSkippedZero()
     {
         var repoRoot = FindRepositoryRoot();
         var catalog = PluginSessionLogCatalog.LoadAndValidate(repoRoot);
@@ -63,7 +63,7 @@ public sealed class PluginNativeSuiteReceiptTests
     /// P19 red: receipt records git branch and SHA on current history, unrelated commit count is zero.
     /// </summary>
     [Fact]
-    public void PluginInt_P19_RecordsBranchAndSha_NoUnrelatedCommit()
+    public void PluginIntP19RecordsBranchAndShaNoUnrelatedCommit()
     {
         var receipt = PluginNativeSuiteReceipt.LoadLatest(PluginSessionLogCatalog.PrimaryRepositoryRoot(FindRepositoryRoot()));
         Assert.False(string.IsNullOrWhiteSpace(receipt.Branch));

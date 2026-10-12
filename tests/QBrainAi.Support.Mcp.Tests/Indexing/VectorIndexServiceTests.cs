@@ -54,7 +54,7 @@ public sealed class VectorIndexServiceTests : IDisposable
     }
 
     [Fact]
-    public void Count_ReflectsAddedVectors()
+    public void CountReflectsAddedVectors()
     {
         Assert.Equal(0, _sut.Count);
 
@@ -67,7 +67,7 @@ public sealed class VectorIndexServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task RebuildAsync_ClearsIndex()
+    public async Task RebuildAsyncClearsIndex()
     {
         var v = new float[384]; v[0] = 1f;
         _sut.AddVector("chunk1", v);
@@ -79,7 +79,7 @@ public sealed class VectorIndexServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task SaveAsync_LoadAsync_PersistsAndRestoresIndex()
+    public async Task SaveAsyncLoadAsyncPersistsAndRestoresIndex()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), $"hnsw_test_{Guid.NewGuid():N}");
         Directory.CreateDirectory(tempDir);
@@ -112,7 +112,7 @@ public sealed class VectorIndexServiceTests : IDisposable
     }
 
     [Fact]
-    public void Search_KLargerThanIndex_ReturnsAll()
+    public void SearchKLargerThanIndexReturnsAll()
     {
         var v1 = new float[384]; v1[0] = 1f;
         var v2 = new float[384]; v2[1] = 1f;

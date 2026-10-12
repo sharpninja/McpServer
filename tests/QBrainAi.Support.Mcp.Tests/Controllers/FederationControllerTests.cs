@@ -68,7 +68,7 @@ public sealed class FederationControllerTests
 
     /// <summary>GetStatus returns disabled state when federation is not enabled.</summary>
     [Fact]
-    public void GetStatus_Default_ReturnsDisabled()
+    public void GetStatusDefaultReturnsDisabled()
     {
         var controller = CreateController();
         var result = controller.GetStatus();
@@ -81,7 +81,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Adapter diagnostics expose the registered coverage rows through the controller.</summary>
     [Fact]
-    public void GetAdapterCoverage_ReturnsRegistryCoverage()
+    public void GetAdapterCoverageReturnsRegistryCoverage()
     {
         var registry = new FederationStateAdapterRegistry(
         [
@@ -104,7 +104,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Adapter diagnostics return an explicit not-configured response when no registry is available.</summary>
     [Fact]
-    public void GetAdapterCoverage_WithoutRegistry_Returns501()
+    public void GetAdapterCoverageWithoutRegistryReturns501()
     {
         var controller = CreateController();
 
@@ -116,7 +116,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Signed envelope intake applies newly accepted operations on the hub.</summary>
     [Fact]
-    public async Task RecordEnvelope_AppliesAcceptedOperation()
+    public async Task RecordEnvelopeAppliesAcceptedOperation()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         var apply = Substitute.For<IFederationOperationApplyService>();
@@ -166,7 +166,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Signed envelope intake applies existing non-terminal operation rows instead of returning accepted.</summary>
     [Fact]
-    public async Task RecordEnvelope_AppliesExistingAcceptedOperation()
+    public async Task RecordEnvelopeAppliesExistingAcceptedOperation()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         var apply = Substitute.For<IFederationOperationApplyService>();
@@ -205,7 +205,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Signed envelope intake waits for transactional apply completion before acknowledging applied.</summary>
     [Fact]
-    public async Task RecordEnvelope_WaitsForTransactionalApplyBeforeAcknowledgingApplied()
+    public async Task RecordEnvelopeWaitsForTransactionalApplyBeforeAcknowledgingApplied()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         var apply = new BlockingOperationApplyService(new FederationApplyResult { Applied = true, Version = "v2" });
@@ -262,7 +262,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Signed envelope intake records a conflict acknowledgement when transactional apply reports degraded.</summary>
     [Fact]
-    public async Task RecordEnvelope_WhenTransactionalApplyReportsDegraded_AcknowledgesConflict()
+    public async Task RecordEnvelopeWhenTransactionalApplyReportsDegradedAcknowledgesConflict()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         var apply = Substitute.For<IFederationOperationApplyService>();
@@ -314,7 +314,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Hub sync signs local-execution outbox rows with local-execution apply mode.</summary>
     [Fact]
-    public async Task Sync_LocalExecutionItemSignsEnvelopeWithLocalExecutionApplyMode()
+    public async Task SyncLocalExecutionItemSignsEnvelopeWithLocalExecutionApplyMode()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         var signer = CreateSigner();
@@ -348,7 +348,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Enable sets federation to enabled.</summary>
     [Fact]
-    public void Enable_SetsEnabledTrue()
+    public void EnableSetsEnabledTrue()
     {
         var controller = CreateController();
         var result = controller.Enable();
@@ -360,7 +360,7 @@ public sealed class FederationControllerTests
 
     /// <summary>TEST-MCP-161: Enable fails closed before mutating registry state when required turn transactions are active.</summary>
     [Fact]
-    public void Enable_WhenTransactionsRequired_ReturnsConflictWithoutChangingRegistry()
+    public void EnableWhenTransactionsRequiredReturnsConflictWithoutChangingRegistry()
     {
         var registry = CreateRegistry();
         var controller = CreateController(registry, transactionCoordinator: new CapturingCoordinator(enabled: true));
@@ -373,7 +373,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Disable sets federation to disabled.</summary>
     [Fact]
-    public void Disable_SetsEnabledFalse()
+    public void DisableSetsEnabledFalse()
     {
         var registry = CreateRegistry(o => o.Enabled = true);
         var controller = CreateController(registry);
@@ -387,7 +387,7 @@ public sealed class FederationControllerTests
 
     /// <summary>TEST-MCP-161: Degraded transaction state blocks federation control-plane mutations before registry writes.</summary>
     [Fact]
-    public void Disable_WhenCoordinatorDegraded_ReturnsConflictWithoutChangingRegistry()
+    public void DisableWhenCoordinatorDegradedReturnsConflictWithoutChangingRegistry()
     {
         var registry = CreateRegistry(o => o.Enabled = true);
         var controller = CreateController(
@@ -404,7 +404,7 @@ public sealed class FederationControllerTests
 
     /// <summary>ListTargets returns empty list when no targets are configured.</summary>
     [Fact]
-    public void ListTargets_NoTargets_ReturnsEmpty()
+    public void ListTargetsNoTargetsReturnsEmpty()
     {
         var result = CreateController().ListTargets();
 
@@ -417,7 +417,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Adding a valid target returns 201 Created with the new target info.</summary>
     [Fact]
-    public void AddTarget_ValidOptions_Returns201()
+    public void AddTargetValidOptionsReturns201()
     {
         var controller = CreateController();
         var opts = new FederationTargetOptions { Name = "remote", BaseUrl = "https://x.ngrok.io" };
@@ -431,7 +431,7 @@ public sealed class FederationControllerTests
 
     /// <summary>TEST-MCP-161: Target registration fails closed before adding a federation target.</summary>
     [Fact]
-    public void AddTarget_WhenTransactionsRequired_ReturnsConflictWithoutAddingTarget()
+    public void AddTargetWhenTransactionsRequiredReturnsConflictWithoutAddingTarget()
     {
         var registry = CreateRegistry();
         var controller = CreateController(registry, transactionCoordinator: new CapturingCoordinator(enabled: true));
@@ -444,7 +444,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Adding a duplicate target name returns 409 Conflict.</summary>
     [Fact]
-    public void AddTarget_DuplicateName_Returns409()
+    public void AddTargetDuplicateNameReturns409()
     {
         var controller = CreateController();
         var opts = new FederationTargetOptions { Name = "remote", BaseUrl = "https://x.ngrok.io" };
@@ -459,7 +459,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Removing an existing target returns 204 No Content.</summary>
     [Fact]
-    public void RemoveTarget_Existing_Returns204()
+    public void RemoveTargetExistingReturns204()
     {
         var registry = CreateRegistry(o =>
             o.Targets.Add(new FederationTargetOptions { Name = "remote", BaseUrl = "https://x.ngrok.io" }));
@@ -472,7 +472,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Removing a non-existent target returns 404.</summary>
     [Fact]
-    public void RemoveTarget_NonExistent_Returns404()
+    public void RemoveTargetNonExistentReturns404()
     {
         var result = CreateController().RemoveTarget("ghost");
         Assert.IsType<NotFoundObjectResult>(result);
@@ -482,7 +482,7 @@ public sealed class FederationControllerTests
 
     /// <summary>SetDefault with a valid name returns updated status with new default.</summary>
     [Fact]
-    public void SetDefault_ValidTarget_UpdatesStatus()
+    public void SetDefaultValidTargetUpdatesStatus()
     {
         var registry = CreateRegistry(o =>
         {
@@ -500,7 +500,7 @@ public sealed class FederationControllerTests
 
     /// <summary>SetDefault with a non-existent target returns 404.</summary>
     [Fact]
-    public void SetDefault_UnknownTarget_Returns404()
+    public void SetDefaultUnknownTargetReturns404()
     {
         var result = CreateController().SetDefault("ghost");
         Assert.IsType<NotFoundObjectResult>(result.Result);
@@ -508,7 +508,7 @@ public sealed class FederationControllerTests
 
     /// <summary>ClearDefault removes the default target and returns updated status.</summary>
     [Fact]
-    public void ClearDefault_ReturnsStatusWithNoDefault()
+    public void ClearDefaultReturnsStatusWithNoDefault()
     {
         var registry = CreateRegistry(o =>
         {
@@ -530,7 +530,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Adding a valid route returns 200 with updated route list.</summary>
     [Fact]
-    public void AddRoute_ValidTargetName_Returns200()
+    public void AddRouteValidTargetNameReturns200()
     {
         var registry = CreateRegistry(o =>
             o.Targets.Add(new FederationTargetOptions { Name = "t1", BaseUrl = "http://localhost:7148" }));
@@ -549,7 +549,7 @@ public sealed class FederationControllerTests
 
     /// <summary>TEST-MCP-161: Workspace route writes fail closed before mutating route state.</summary>
     [Fact]
-    public void AddRoute_WhenTransactionsRequired_ReturnsConflictWithoutAddingRoute()
+    public void AddRouteWhenTransactionsRequiredReturnsConflictWithoutAddingRoute()
     {
         var registry = CreateRegistry(o =>
             o.Targets.Add(new FederationTargetOptions { Name = "t1", BaseUrl = "http://localhost:7148" }));
@@ -567,7 +567,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Adding a route with an unknown target returns 404.</summary>
     [Fact]
-    public void AddRoute_UnknownTarget_Returns404()
+    public void AddRouteUnknownTargetReturns404()
     {
         var result = CreateController().AddRoute(new WorkspaceRouteOptions
         {
@@ -580,7 +580,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Removing an existing route returns 204.</summary>
     [Fact]
-    public void RemoveRoute_Existing_Returns204()
+    public void RemoveRouteExistingReturns204()
     {
         var registry = CreateRegistry(o =>
         {
@@ -596,7 +596,7 @@ public sealed class FederationControllerTests
 
     /// <summary>Removing a non-existent route returns 404.</summary>
     [Fact]
-    public void RemoveRoute_NonExistent_Returns404()
+    public void RemoveRouteNonExistentReturns404()
     {
         var result = CreateController().RemoveRoute(new WorkspaceRouteOptions { WorkspacePath = @"C:\ghost" });
         Assert.IsType<NotFoundObjectResult>(result);
@@ -606,7 +606,7 @@ public sealed class FederationControllerTests
 
     /// <summary>DiscoverFromTunnels returns 0 discovered when no tunnels are running.</summary>
     [Fact]
-    public async Task DiscoverFromTunnels_NoRunningTunnels_Returns0Discovered()
+    public async Task DiscoverFromTunnelsNoRunningTunnelsReturns0Discovered()
     {
         var controller = CreateController();
         var result = await controller.DiscoverFromTunnels(CancellationToken.None).ConfigureAwait(true);
@@ -618,7 +618,7 @@ public sealed class FederationControllerTests
 
     /// <summary>TEST-MCP-161: Direct topology operation recording fails closed before topology mutation.</summary>
     [Fact]
-    public async Task RecordOperation_WhenTransactionsRequired_ReturnsConflictWithoutCallingTopology()
+    public async Task RecordOperationWhenTransactionsRequiredReturnsConflictWithoutCallingTopology()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         var controller = new FederationController(
@@ -642,7 +642,7 @@ public sealed class FederationControllerTests
 
     /// <summary>TEST-MCP-161: Signed federation envelope intake remains protocol-internal and reaches transactional apply.</summary>
     [Fact]
-    public async Task RecordEnvelope_WhenTransactionsRequired_StillReachesTransactionalApply()
+    public async Task RecordEnvelopeWhenTransactionsRequiredStillReachesTransactionalApply()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         var apply = Substitute.For<IFederationOperationApplyService>();

@@ -17,7 +17,7 @@ public sealed class DbFkContractTests
     /// entity because configured appsettings workspaces are only a projection.
     /// </summary>
     [Fact]
-    public void DBFK_WorkspacesEntity_IsCanonicalModelRoot()
+    public void DBFKWorkspacesEntityIsCanonicalModelRoot()
     {
         using var db = CreateContext();
 
@@ -35,7 +35,7 @@ public sealed class DbFkContractTests
     /// non-cascading delete behavior.
     /// </summary>
     [Fact]
-    public void DBFK_WorkspaceIdEntities_HaveRequiredWorkspacesForeignKeys()
+    public void DBFKWorkspaceIdEntitiesHaveRequiredWorkspacesForeignKeys()
     {
         using var db = CreateContext();
 
@@ -69,7 +69,7 @@ public sealed class DbFkContractTests
     /// so delete operations preserve rows for recovery and audit.
     /// </summary>
     [Fact]
-    public void DBFK_DurableEntities_ExposeSoftDeleteMetadata()
+    public void DBFKDurableEntitiesExposeSoftDeleteMetadata()
     {
         using var db = CreateContext();
 
@@ -92,7 +92,7 @@ public sealed class DbFkContractTests
     /// hidden with a parent.
     /// </summary>
     [Fact]
-    public void DBFK_DurableRelationships_DoNotCascadeDelete()
+    public void DBFKDurableRelationshipsDoNotCascadeDelete()
     {
         using var db = CreateContext();
 
@@ -114,7 +114,7 @@ public sealed class DbFkContractTests
     /// enough metadata for every mutable database entity mutation.
     /// </summary>
     [Fact]
-    public void DBFK_GenericAuditLedger_ExistsWithRequiredColumns()
+    public void DBFKGenericAuditLedgerExistsWithRequiredColumns()
     {
         using var db = CreateContext();
 
@@ -159,7 +159,7 @@ public sealed class DbFkContractTests
     /// only compatibility projections.
     /// </summary>
     [Fact]
-    public void DBFK_TodoRequirementLinks_AreRelationalAndForeignKeyed()
+    public void DBFKTodoRequirementLinksAreRelationalAndForeignKeyed()
     {
         using var db = CreateContext();
 
@@ -175,7 +175,7 @@ public sealed class DbFkContractTests
     /// TEST references by using FKs to the requirements table.
     /// </summary>
     [Fact]
-    public void DBFK_RequirementTraceabilityLinks_AreForeignKeyedToRequirements()
+    public void DBFKRequirementTraceabilityLinksAreForeignKeyedToRequirements()
     {
         using var db = CreateContext();
 
@@ -197,7 +197,7 @@ public sealed class DbFkContractTests
     /// while also linking to the canonical workspace registry.
     /// </summary>
     [Fact]
-    public void DBFK_FederationWorkspaces_LinkToCanonicalWorkspaces()
+    public void DBFKFederationWorkspacesLinkToCanonicalWorkspaces()
     {
         using var db = CreateContext();
 

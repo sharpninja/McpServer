@@ -25,7 +25,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
     /// or tag row from being persisted.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotPersistTool()
+    public async Task CreateAsyncWhenCoordinatorRejectsBeforeMutationDoesNotPersistTool()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator
@@ -53,7 +53,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
     /// restores it visible with the same generated database identity.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenCommitFailsAfterCreatedTool_RestoresCreatedToolRecord()
+    public async Task CreateAsyncWhenCommitFailsAfterCreatedToolRestoresCreatedToolRecord()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator
@@ -82,7 +82,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
     /// and leaves tags introduced by the failed update soft-deleted.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags()
+    public async Task UpdateAsyncWhenCommitFailsAfterMutationRestoresPriorToolAndTags()
     {
         using var connection = OpenConnection();
         var toolId = await SeedToolAsync(connection).ConfigureAwait(true);
@@ -122,7 +122,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
     /// and its existing tag rows instead of recreating different rows.
     /// </summary>
     [Fact]
-    public async Task DeleteAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags()
+    public async Task DeleteAsyncWhenCommitFailsAfterMutationRestoresPriorToolAndTags()
     {
         using var connection = OpenConnection();
         var toolId = await SeedToolAsync(connection).ConfigureAwait(true);
@@ -151,7 +151,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
     /// allocate coordinator transactions.
     /// </summary>
     [Fact]
-    public async Task SearchListAndGetAsync_DelegateWithoutCoordinatorTransaction()
+    public async Task SearchListAndGetAsyncDelegateWithoutCoordinatorTransaction()
     {
         using var connection = OpenConnection();
         var toolId = await SeedToolAsync(connection).ConfigureAwait(true);

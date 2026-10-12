@@ -12,7 +12,7 @@ public sealed class AtomicBrainSlotInvocationRecorderTests
 {
     /// <summary>Prior race: overlapping completions pair the second output with the first role.</summary>
     [Fact]
-    public async Task SplitRecord_OverlappingCompletions_ZipsMismatchedPairs()
+    public async Task SplitRecordOverlappingCompletionsZipsMismatchedPairs()
     {
         var recorder = new AtomicBrainSlotInvocationRecorder();
         var firstRelease = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -33,7 +33,7 @@ public sealed class AtomicBrainSlotInvocationRecorderTests
 
     /// <summary>Current contract: role and output are written together after CompleteAsync.</summary>
     [Fact]
-    public async Task AtomicRecord_OverlappingCompletions_KeepsRoleOutputPairs()
+    public async Task AtomicRecordOverlappingCompletionsKeepsRoleOutputPairs()
     {
         var recorder = new AtomicBrainSlotInvocationRecorder();
         var firstRelease = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);

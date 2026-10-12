@@ -22,7 +22,7 @@ public sealed class AgentRuntimeScaffoldingTests
     /// Tests MVP-MCP-005: no-op isolation passes the workspace through as-is.
     /// </summary>
     [Fact]
-    public async Task NoneIsolationStrategy_ReturnsOriginalWorkspacePath()
+    public async Task NoneIsolationStrategyReturnsOriginalWorkspacePath()
     {
         var strategy = new NoneAgentIsolationStrategy();
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "mcp-agent-runtime-none"));
@@ -37,7 +37,7 @@ public sealed class AgentRuntimeScaffoldingTests
     /// path as the working directory. Tests MVP-MCP-005: worktree isolation invokes git in the workspace root.
     /// </summary>
     [Fact]
-    public async Task WorktreeIsolationStrategy_UsesWorkspaceAsWorkingDirectoryForGit()
+    public async Task WorktreeIsolationStrategyUsesWorkspaceAsWorkingDirectoryForGit()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
@@ -76,7 +76,7 @@ public sealed class AgentRuntimeScaffoldingTests
     /// as the working directory. Tests MVP-MCP-005: clone isolation invokes git clone in the workspace root.
     /// </summary>
     [Fact]
-    public async Task CloneIsolationStrategy_UsesWorkspaceAsWorkingDirectoryForGit()
+    public async Task CloneIsolationStrategyUsesWorkspaceAsWorkingDirectoryForGit()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
@@ -116,7 +116,7 @@ public sealed class AgentRuntimeScaffoldingTests
     /// Tests MVP-MCP-005 runtime cleanup using a clone layout that matches the live stop-path failure.
     /// </summary>
     [Fact]
-    public async Task CloneIsolationStrategy_CleanupAsync_RemovesReadOnlyGitArtifacts()
+    public async Task CloneIsolationStrategyCleanupAsyncRemovesReadOnlyGitArtifacts()
     {
         var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-clone-cleanup-{Guid.NewGuid():N}");
         var clonePath = Path.Combine(workspacePath, ".agents", "planner-clone");
@@ -149,7 +149,7 @@ public sealed class AgentRuntimeScaffoldingTests
     /// directory and returns the branch name from stdout. Tests MVP-MCP-005: direct strategy reads the current branch.
     /// </summary>
     [Fact]
-    public async Task DirectBranchStrategy_UsesSuppliedWorkingDirectory()
+    public async Task DirectBranchStrategyUsesSuppliedWorkingDirectory()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
@@ -175,7 +175,7 @@ public sealed class AgentRuntimeScaffoldingTests
     /// and restores the original branch on finalize. Tests MVP-MCP-005: feature strategy checkout/restore lifecycle.
     /// </summary>
     [Fact]
-    public async Task FeatureBranchStrategy_CreatesAndRestoresBranchInSuppliedWorkingDirectory()
+    public async Task FeatureBranchStrategyCreatesAndRestoresBranchInSuppliedWorkingDirectory()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner.RunAsync(
@@ -209,7 +209,7 @@ public sealed class AgentRuntimeScaffoldingTests
     /// when a list of additions is provided. Tests MVP-MCP-005: template context carries per-agent content.
     /// </summary>
     [Fact]
-    public void MarkerFileService_BuildTemplateContext_IncludesAgentAdditions()
+    public void MarkerFileServiceBuildTemplateContextIncludesAgentAdditions()
     {
         var temporaryPort = IntegrationTestPortAllocator.AllocateTemporaryPort();
         var additions = new List<(string AgentId, string Content)>

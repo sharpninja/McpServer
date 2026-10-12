@@ -21,7 +21,7 @@ public sealed class MemoryBenchReportTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-38: Summary table includes the required token columns.</summary>
     [Fact]
-    public void SummaryTable_TokenColumns()
+    public void SummaryTableTokenColumns()
     {
         var markdown = MemoryBenchCatalog.StubGrok().SummaryMarkdown;
         foreach (var column in new[]
@@ -36,7 +36,7 @@ public sealed class MemoryBenchReportTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-40: Headline numbers are macro mean tokens_total.</summary>
     [Fact]
-    public void Headline_MacroMeanTokens()
+    public void HeadlineMacroMeanTokens()
     {
         var result = MemoryBenchCatalog.StubGrok();
         Assert.True(result.MacroMeanTokensWithMemory > 0);

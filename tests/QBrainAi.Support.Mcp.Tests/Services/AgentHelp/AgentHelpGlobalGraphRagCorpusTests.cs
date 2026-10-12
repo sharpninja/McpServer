@@ -15,7 +15,7 @@ public sealed class AgentHelpGlobalGraphRagCorpusTests
     /// TEST-MCP-GRAPHRAG-GLOBAL-001: BootstrapAsync merges global GraphRAG excerpts ahead of workspace pinned docs.
     /// </summary>
     [Fact]
-    public async Task BootstrapAsync_PrefersGlobalGraphRagExcerpts()
+    public async Task BootstrapAsyncPrefersGlobalGraphRagExcerpts()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         File.WriteAllText(Path.Combine(workspaceRoot, "AGENTS.md"), "# Agents\nLocal workspace guidance only.");

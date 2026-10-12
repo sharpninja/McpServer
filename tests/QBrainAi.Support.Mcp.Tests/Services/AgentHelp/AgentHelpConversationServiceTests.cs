@@ -19,7 +19,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services.AgentHelp;
 public sealed class AgentHelpConversationServiceTests
 {
     [Fact]
-    public async Task SubmitTurnAsync_InjectionMessage_TerminatesSessionAndPersistsGuardrailViolation()
+    public async Task SubmitTurnAsyncInjectionMessageTerminatesSessionAndPersistsGuardrailViolation()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService();
@@ -66,7 +66,7 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnStreamingAsync_InjectionMessage_YieldsSessionTerminatedWithIncidentId()
+    public async Task SubmitTurnStreamingAsyncInjectionMessageYieldsSessionTerminatedWithIncidentId()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService();
@@ -94,7 +94,7 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnStreamingAsync_BenignMessage_YieldsChunkAndDone()
+    public async Task SubmitTurnStreamingAsyncBenignMessageYieldsChunkAndDone()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService(
@@ -131,7 +131,7 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnAsync_StrategyProgressOnlyOutput_ReturnsIncompleteAndDoesNotPersistFinalAssistantTranscript()
+    public async Task SubmitTurnAsyncStrategyProgressOnlyOutputReturnsIncompleteAndDoesNotPersistFinalAssistantTranscript()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService(
@@ -182,7 +182,7 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnAsync_StrategyPlanOnlyOutput_ReturnsIncompleteAndRetainsProgressOnly()
+    public async Task SubmitTurnAsyncStrategyPlanOnlyOutputReturnsIncompleteAndRetainsProgressOnly()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService(
@@ -227,7 +227,7 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnAsync_StrategyEmptyFinalAnswerMarker_ReturnsIncomplete()
+    public async Task SubmitTurnAsyncStrategyEmptyFinalAnswerMarkerReturnsIncomplete()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService(
@@ -259,7 +259,7 @@ public sealed class AgentHelpConversationServiceTests
 
     /// <summary>TEST-MCP-TRIAGEHELP-001: echo fallback never completes a diagnosis.</summary>
     [Fact]
-    public async Task SubmitTurnAsync_StrategyFailureWithEchoFallback_IsNotCompleted()
+    public async Task SubmitTurnAsyncStrategyFailureWithEchoFallbackIsNotCompleted()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService(
@@ -290,7 +290,7 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnAsync_StrategyFailure_PersistsErrorTranscript()
+    public async Task SubmitTurnAsyncStrategyFailurePersistsErrorTranscript()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService(
@@ -329,7 +329,7 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnAsync_StrategyReceivesFiniteHelperTimeout()
+    public async Task SubmitTurnAsyncStrategyReceivesFiniteHelperTimeout()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var strategy = new CapturingAgentExecutionStrategy(
@@ -362,7 +362,7 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnAsync_StrategyFinalAnswerMarker_PersistsFinalAnswerOnly()
+    public async Task SubmitTurnAsyncStrategyFinalAnswerMarkerPersistsFinalAnswerOnly()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var service = CreateService(

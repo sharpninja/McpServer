@@ -37,7 +37,7 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Update_ChangeName_Returns200()
+    public async Task UpdateChangeNameReturns200()
     {
         var body = new { Name = "AuditUpdateRenamed" };
         var response = await _fixture.Client.PutAsJsonAsync(
@@ -54,7 +54,7 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Update_ChangeTodoPath_Returns200()
+    public async Task UpdateChangeTodoPathReturns200()
     {
         var body = new { TodoPath = "custom/todo.yaml" };
         var response = await _fixture.Client.PutAsJsonAsync(
@@ -71,7 +71,7 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Update_NonExistentKey_Returns404()
+    public async Task UpdateNonExistentKeyReturns404()
     {
         var fakeKey = WorkspaceEndpointFixture.EncodeKey(@"C:\NonExistent\Path_" + Guid.NewGuid().ToString("N"));
         var body = new { Name = "Ghost" };

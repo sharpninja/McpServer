@@ -43,7 +43,7 @@ public sealed class FederationPushServiceTests
 
     /// <summary>PushTodosAsync queries local TODOs and pushes them to the remote target.</summary>
     [Fact]
-    public async Task PushTodosAsync_SendsItemsToRemote()
+    public async Task PushTodosAsyncSendsItemsToRemote()
     {
         var items = new[] { MakeItem("A-001"), MakeItem("A-002") };
         _todoService.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
@@ -60,7 +60,7 @@ public sealed class FederationPushServiceTests
 
     /// <summary>When remote push fails, returns error details.</summary>
     [Fact]
-    public async Task PushTodosAsync_RemoteFails_ReturnsErrors()
+    public async Task PushTodosAsyncRemoteFailsReturnsErrors()
     {
         _todoService.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoQueryResult([MakeItem("A-001")], 1));
@@ -77,7 +77,7 @@ public sealed class FederationPushServiceTests
 
     /// <summary>PushSessionLogsAsync queries local session logs and pushes them.</summary>
     [Fact]
-    public async Task PushSessionLogsAsync_SendsItemsToRemote()
+    public async Task PushSessionLogsAsyncSendsItemsToRemote()
     {
         var logs = new[] { MakeLog("ClaudeCode", "S-001") };
         _sessionLogService.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>())
@@ -94,7 +94,7 @@ public sealed class FederationPushServiceTests
 
     /// <summary>PushAllAsync pushes both TODOs and session logs.</summary>
     [Fact]
-    public async Task PushAllAsync_QueriesLocalAndPushes()
+    public async Task PushAllAsyncQueriesLocalAndPushes()
     {
         _todoService.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoQueryResult([MakeItem("A-001")], 1));
@@ -114,7 +114,7 @@ public sealed class FederationPushServiceTests
 
     /// <summary>PushAllAsync returns error when federation is disabled.</summary>
     [Fact]
-    public async Task PushAllAsync_FederationDisabled_ReturnsError()
+    public async Task PushAllAsyncFederationDisabledReturnsError()
     {
         var sut = CreateSut(CreateRegistry(enabled: false));
         var result = await sut.PushAllAsync(ct: TestContext.Current.CancellationToken);
@@ -126,7 +126,7 @@ public sealed class FederationPushServiceTests
 
     /// <summary>PushAllAsync returns error when no target is resolved.</summary>
     [Fact]
-    public async Task PushAllAsync_NoTarget_ReturnsError()
+    public async Task PushAllAsyncNoTargetReturnsError()
     {
         var sut = CreateSut(CreateRegistry(enabled: true)); // no targets
         var result = await sut.PushAllAsync(ct: TestContext.Current.CancellationToken);

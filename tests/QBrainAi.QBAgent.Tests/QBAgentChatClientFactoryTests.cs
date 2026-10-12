@@ -12,17 +12,17 @@ public sealed class QBAgentChatClientFactoryTests
 {
     /// <summary>The endpoint appends <c>/v1</c> to the workspace base URL.</summary>
     [Fact]
-    public void BuildEndpoint_AppendsV1()
+    public void BuildEndpointAppendsV1()
         => Assert.Equal(new Uri("http://server:7147/v1"), QBAgentChatClientFactory.BuildEndpoint(new Uri("http://server:7147")));
 
     /// <summary>An already-<c>/v1</c> base URL is not doubled.</summary>
     [Fact]
-    public void BuildEndpoint_AlreadyV1_NotDoubled()
+    public void BuildEndpointAlreadyV1NotDoubled()
         => Assert.Equal(new Uri("http://server:7147/v1"), QBAgentChatClientFactory.BuildEndpoint(new Uri("http://server:7147/v1")));
 
     /// <summary>A chat client is built from marker-bound options without throwing.</summary>
     [Fact]
-    public void Create_BuildsChatClient()
+    public void CreateBuildsChatClient()
     {
         using var client = QBAgentChatClientFactory.Create(new McpAgentOptions
         {
@@ -35,12 +35,12 @@ public sealed class QBAgentChatClientFactoryTests
 
     /// <summary>QBAgent reports the public QuadBrain model, not an internal brain-slot provider model.</summary>
     [Fact]
-    public void ModelId_IsPublicQuadBrainModel()
+    public void ModelIdIsPublicQuadBrainModel()
         => Assert.Equal("QuadBrain", QBAgentChatClientFactory.ModelId);
 
     /// <summary>Live CLI QuadBrain turns exceed the OpenAI SDK 100s default; floor the client timeout at 10 minutes.</summary>
     [Fact]
-    public void ResolveNetworkTimeout_DefaultOptions_IsAtLeastTenMinutes()
+    public void ResolveNetworkTimeoutDefaultOptionsIsAtLeastTenMinutes()
     {
         var timeout = QBAgentChatClientFactory.ResolveNetworkTimeout(new McpAgentOptions());
         Assert.True(timeout >= TimeSpan.FromMinutes(10), timeout.ToString());
@@ -48,7 +48,7 @@ public sealed class QBAgentChatClientFactoryTests
 
     /// <summary>A host that configures a longer timeout keeps that value.</summary>
     [Fact]
-    public void ResolveNetworkTimeout_HonorsLargerConfiguredTimeout()
+    public void ResolveNetworkTimeoutHonorsLargerConfiguredTimeout()
     {
         var timeout = QBAgentChatClientFactory.ResolveNetworkTimeout(
             new McpAgentOptions { Timeout = TimeSpan.FromMinutes(15) });
@@ -57,7 +57,7 @@ public sealed class QBAgentChatClientFactoryTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-014): an unreachable QuadBrain endpoint propagates a clear transport failure without hanging QBAgent.</summary>
     [Fact]
-    public async Task Create_UnreachableEndpoint_PropagatesTransportFailure()
+    public async Task CreateUnreachableEndpointPropagatesTransportFailure()
     {
         using var httpClient = new HttpClient(new ThrowingHandler());
         using var client = QBAgentChatClientFactory.Create(
@@ -71,7 +71,7 @@ public sealed class QBAgentChatClientFactoryTests
     }
 
     [Fact]
-    public async Task ProgressChatClient_EmitsProgressAroundInnerCall_WithoutNetwork()
+    public async Task ProgressChatClientEmitsProgressAroundInnerCallWithoutNetwork()
     {
         var events = new List<string>();
         var inner = new StubChatClient("ok");

@@ -13,7 +13,7 @@ public sealed class MemoryS3PortMockTests
 {
     /// <summary>AC-FR-MCP-MEMORY-012-01: mock explore returns an explicit neighbor with weight and EdgeType.</summary>
     [Fact]
-    public async Task PortMock_ExplicitEdge_ReturnedWithWeight()
+    public async Task PortMockExplicitEdgeReturnedWithWeight()
     {
         var port = Substitute.For<IMemoryS3Port>();
         port.ExploreAsync(Arg.Any<MemoryExploreRequest>(), Arg.Any<CancellationToken>())
@@ -34,7 +34,7 @@ public sealed class MemoryS3PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-012-02: mock explore with Hebbian off omits co-retrieved-only edges.</summary>
     [Fact]
-    public async Task PortMock_HebbianOff_NoCoRetrievedOnlyEdges()
+    public async Task PortMockHebbianOffNoCoRetrievedOnlyEdges()
     {
         Assert.False(MemoryExploreLimits.DefaultHebbianEnabled);
         var port = Substitute.For<IMemoryS3Port>();
@@ -55,7 +55,7 @@ public sealed class MemoryS3PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-012-09 / AC-FR-MCP-MEMORY-012-10: mock explore rejects non-positive and above-max depth with 400.</summary>
     [Fact]
-    public async Task PortMock_DepthBounds_Return400()
+    public async Task PortMockDepthBoundsReturn400()
     {
         var port = Substitute.For<IMemoryS3Port>();
         port.ExploreAsync(Arg.Any<MemoryExploreRequest>(), Arg.Any<CancellationToken>())
@@ -75,7 +75,7 @@ public sealed class MemoryS3PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-012-11: mock create-edge rejects a self-loop with 400.</summary>
     [Fact]
-    public async Task PortMock_SelfLoop_Rejected()
+    public async Task PortMockSelfLoopRejected()
     {
         var port = Substitute.For<IMemoryS3Port>();
         port.CreateEdgeAsync(Arg.Any<MemoryCreateEdgeRequest>(), Arg.Any<CancellationToken>())
@@ -99,7 +99,7 @@ public sealed class MemoryS3PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-012-18: mock explore is directed and does not imply a reverse edge.</summary>
     [Fact]
-    public async Task PortMock_Directed_NoImpliedReverse()
+    public async Task PortMockDirectedNoImpliedReverse()
     {
         var port = Substitute.For<IMemoryS3Port>();
         port.ExploreAsync(Arg.Is<MemoryExploreRequest>(request => request != null && request.SeedId == "MEMORY-S3-A"), Arg.Any<CancellationToken>())
@@ -122,7 +122,7 @@ public sealed class MemoryS3PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-012-20: mock create-edge fails closed for a foreign target.</summary>
     [Fact]
-    public async Task PortMock_ForeignTarget_FailsClosed()
+    public async Task PortMockForeignTargetFailsClosed()
     {
         var port = Substitute.For<IMemoryS3Port>();
         port.CreateEdgeAsync(Arg.Any<MemoryCreateEdgeRequest>(), Arg.Any<CancellationToken>())

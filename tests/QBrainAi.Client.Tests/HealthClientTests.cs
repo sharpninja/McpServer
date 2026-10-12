@@ -13,7 +13,7 @@ public sealed class HealthClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAsync_GetsHealthWithoutApiKey()
+    public async System.Threading.Tasks.Task GetAsyncGetsHealthWithoutApiKey()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"status":"Healthy","version":"1.0.0","checks":[]}""");
         using var http = new HttpClient(handler);
@@ -28,7 +28,7 @@ public sealed class HealthClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAliveAndReadyAsync_GetExpectedEndpoints()
+    public async System.Threading.Tasks.Task GetAliveAndReadyAsyncGetExpectedEndpoints()
     {
         var aliveHandler = new MockHttpHandler(HttpStatusCode.OK, """{"status":"Healthy","checks":[]}""");
         using var aliveHttp = new HttpClient(aliveHandler);
@@ -51,7 +51,7 @@ public sealed class HealthClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetServerStartupAsync_GetsStartupEndpoint()
+    public async System.Threading.Tasks.Task GetServerStartupAsyncGetsStartupEndpoint()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -68,7 +68,7 @@ public sealed class HealthClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetMarkerFileTimestampAsync_EncodesRepoPath()
+    public async System.Threading.Tasks.Task GetMarkerFileTimestampAsyncEncodesRepoPath()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,

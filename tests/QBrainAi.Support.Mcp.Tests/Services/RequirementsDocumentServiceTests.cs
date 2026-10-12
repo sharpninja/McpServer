@@ -23,7 +23,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task Constructor_ParsesCanonicalDocs_AndGeneratesMarkdown()
+    public async Task ConstructorParsesCanonicalDocsAndGeneratesMarkdown()
     {
         SeedCanonicalDocs();
         var service = CreateService();
@@ -65,7 +65,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GenerateAllAsync_WritesCanonicalFilesToWorkspace()
+    public async Task GenerateAllAsyncWritesCanonicalFilesToWorkspace()
     {
         SeedCanonicalDocs();
         var service = CreateService();
@@ -98,7 +98,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     /// marked read-only so agents do not accidentally edit them as the source of truth.
     /// </summary>
     [Fact]
-    public async Task GenerateAllAsync_MarksExportedMarkdownFilesReadOnly()
+    public async Task GenerateAllAsyncMarksExportedMarkdownFilesReadOnly()
     {
         SeedCanonicalDocs();
         var service = CreateService();
@@ -116,7 +116,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds()
+    public async Task GenerateAllAsyncPreservesExistingMatrixRowsAndAppendsMissingIds()
     {
         SeedCanonicalDocs();
         var projectMatrixPath = Path.Combine(_tempRoot, "docs", "Project", RequirementsDocumentRenderer.MatrixFileName);
@@ -141,7 +141,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata()
+    public async Task GenerateWikiAsyncWritesAzureAndGitHubFoldersWithMetadata()
     {
         SeedCanonicalDocs();
         var service = CreateService();
@@ -190,7 +190,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     /// then leaves exported files read-only after generation completes.
     /// </summary>
     [Fact]
-    public async Task GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly()
+    public async Task GenerateWikiAsyncReplacesExistingReadOnlyFilesAndRestoresReadOnly()
     {
         SeedCanonicalDocs();
         var service = CreateService();
@@ -215,7 +215,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria()
+    public async Task GenerateWikiAsyncRendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria()
     {
         SeedGroupedTestingDocs();
         var service = CreateService();
@@ -247,7 +247,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ConcurrentMutations_ProduceValidTestingDocument()
+    public async Task ConcurrentMutationsProduceValidTestingDocument()
     {
         SeedEmptyDocs();
         var service = CreateService();
@@ -267,7 +267,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task DeleteTrAsync_RemovesTrFromMappingRows()
+    public async Task DeleteTrAsyncRemovesTrFromMappingRows()
     {
         SeedCanonicalDocs();
         var service = CreateService();
@@ -281,7 +281,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public void ParseMapping_AcceptsLegacyTwoColumnRows()
+    public void ParseMappingAcceptsLegacyTwoColumnRows()
     {
         var parsed = RequirementsDocumentParser.ParseMapping("""
             # TR per FR Mapping (QBrain.AI)
@@ -298,7 +298,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public void ParseTechnical_StripsGeneratedStatusMetadataFromBody()
+    public void ParseTechnicalStripsGeneratedStatusMetadataFromBody()
     {
         var parsed = RequirementsDocumentParser.ParseTechnical("""
             # Technical Requirements (QBrain.AI)
@@ -326,7 +326,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public void ParseTesting_AcceptsWikiGroupedTableRows()
+    public void ParseTestingAcceptsWikiGroupedTableRows()
     {
         var parsed = RequirementsDocumentParser.ParseTesting("""
             # Testing Requirements (QBrain.AI)
@@ -351,7 +351,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public void ParseTesting_AcceptsWikiGroupedSectionsWithAcceptanceCriteria()
+    public void ParseTestingAcceptsWikiGroupedSectionsWithAcceptanceCriteria()
     {
         var parsed = RequirementsDocumentParser.ParseTesting("""
             # Testing Requirements (QBrain.AI)

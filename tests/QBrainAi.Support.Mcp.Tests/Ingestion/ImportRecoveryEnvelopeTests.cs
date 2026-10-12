@@ -13,7 +13,7 @@ public sealed class ImportRecoveryEnvelopeTests
     /// The persister receives the normalized session, not the envelope document.
     /// </summary>
     [Fact]
-    public async Task IngestPath_ReplaysPendingEnvelopeThroughPersister_DeletesOnlyEnvelope()
+    public async Task IngestPathReplaysPendingEnvelopeThroughPersisterDeletesOnlyEnvelope()
     {
         var root = Path.Combine(Path.GetTempPath(), "import-envelope-" + Guid.NewGuid().ToString("N"));
         var input = Path.Combine(root, "inbox");

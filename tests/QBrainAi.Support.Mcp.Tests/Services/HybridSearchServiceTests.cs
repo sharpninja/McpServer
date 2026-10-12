@@ -68,7 +68,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task SearchAsync_BothModes_ReturnsRRFBlendedResults()
+    public async Task SearchAsyncBothModesReturnsRRFBlendedResults()
     {
         var fts5Result = new ContextSearchResult(
             [new ScoredChunk { ChunkId = "chunk1", DocumentId = "doc1", Content = "hello world", Score = -1.0, Snippet = "<b>hello</b>" }],
@@ -90,7 +90,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task SearchAsync_Fts5Fails_ReturnsVectorOnly()
+    public async Task SearchAsyncFts5FailsReturnsVectorOnly()
     {
         _fts5.SearchAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .ThrowsAsync(new InvalidOperationException("FTS5 failed"));
@@ -108,7 +108,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task SearchAsync_VectorUnavailable_ReturnsFts5Only()
+    public async Task SearchAsyncVectorUnavailableReturnsFts5Only()
     {
         var fts5Result = new ContextSearchResult(
             [new ScoredChunk { ChunkId = "chunk1", DocumentId = "doc1", Content = "hello", Score = -1.0 }],
@@ -126,7 +126,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task SearchAsync_BothFail_FallsBackToLinq()
+    public async Task SearchAsyncBothFailFallsBackToLinq()
     {
         _fts5.SearchAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .ThrowsAsync(new InvalidOperationException("FTS5 failed"));
@@ -140,7 +140,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task SearchAsync_PreservesFts5Snippets()
+    public async Task SearchAsyncPreservesFts5Snippets()
     {
         var fts5Result = new ContextSearchResult(
             [new ScoredChunk { ChunkId = "chunk1", DocumentId = "doc1", Content = "hello world", Score = -1.0, Snippet = "<b>hello</b> world" }],
@@ -157,7 +157,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task RebuildAsync_CallsBothServices()
+    public async Task RebuildAsyncCallsBothServices()
     {
         var sut = new HybridSearchService(_fts5, _vectorIndex, _embedding, _db, NullLogger<HybridSearchService>.Instance);
 

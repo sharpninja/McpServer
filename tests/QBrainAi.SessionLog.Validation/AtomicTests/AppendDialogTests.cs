@@ -31,7 +31,7 @@ public sealed class AppendDialogTests
     public AppendDialogTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
     /// <summary>
-    /// Validates the <c>AppendDialog_ToExistingTurn_Returns200WithCount</c> scenario.
+    /// Validates the <c>AppendDialogToExistingTurnReturns200WithCount</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -39,7 +39,7 @@ public sealed class AppendDialogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task AppendDialog_ToExistingTurn_Returns200WithCount()
+    public async Task AppendDialogToExistingTurnReturns200WithCount()
     {
         // First create a session with a turn
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("DialogTest");
@@ -91,7 +91,7 @@ public sealed class AppendDialogTests
     }
 
     /// <summary>
-    /// Validates the <c>AppendDialog_MultipleAppends_AccumulatesCount</c> scenario.
+    /// Validates the <c>AppendDialogMultipleAppendsAccumulatesCount</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -99,7 +99,7 @@ public sealed class AppendDialogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task AppendDialog_MultipleAppends_AccumulatesCount()
+    public async Task AppendDialogMultipleAppendsAccumulatesCount()
     {
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("DialogAccumTest");
         var requestId = SessionLogEndpointFixture.GenerateRequestId("append-dialog-accumulates");
@@ -144,7 +144,7 @@ public sealed class AppendDialogTests
     }
 
     /// <summary>
-    /// Validates the <c>AppendDialog_NonExistentSession_Returns404</c> scenario.
+    /// Validates the <c>AppendDialogNonExistentSessionReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -152,7 +152,7 @@ public sealed class AppendDialogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task AppendDialog_NonExistentSession_Returns404()
+    public async Task AppendDialogNonExistentSessionReturns404()
     {
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("NoSuchAgent", "missing-session");
         var requestId = SessionLogEndpointFixture.GenerateRequestId("missing-request");

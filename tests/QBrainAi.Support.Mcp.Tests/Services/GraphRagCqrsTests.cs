@@ -25,7 +25,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-078: IngestText handler returns Success on normal path.</summary>
     [Fact]
-    public async Task IngestTextHandler_Success_ReturnsResult()
+    public async Task IngestTextHandlerSuccessReturnsResult()
     {
         var request = new GraphRagIngestTextRequest { Content = "hello" };
         var expected = new GraphRagIngestTextResponse { DocumentId = "doc-1", SourceType = "adhoc-text", SourceKey = "test" };
@@ -40,7 +40,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-078: IngestText handler returns Failure on exception.</summary>
     [Fact]
-    public async Task IngestTextHandler_Exception_ReturnsFailure()
+    public async Task IngestTextHandlerExceptionReturnsFailure()
     {
         var request = new GraphRagIngestTextRequest { Content = "hello" };
         _service.IngestTextAsync(request, Arg.Any<CancellationToken>()).Throws(new InvalidOperationException("boom"));
@@ -56,7 +56,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-080: DeleteDocument handler returns Success.</summary>
     [Fact]
-    public async Task DeleteDocumentHandler_Success_ReturnsResult()
+    public async Task DeleteDocumentHandlerSuccessReturnsResult()
     {
         var expected = new GraphRagDocumentDeleteResponse { DocumentId = "doc-1", ChunksRemoved = 3, Success = true };
         _service.DeleteDocumentAsync("doc-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -70,7 +70,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-080: DeleteDocument handler returns Failure on exception.</summary>
     [Fact]
-    public async Task DeleteDocumentHandler_Exception_ReturnsFailure()
+    public async Task DeleteDocumentHandlerExceptionReturnsFailure()
     {
         _service.DeleteDocumentAsync("doc-1", Arg.Any<CancellationToken>()).Throws(new Exception("fail"));
 
@@ -84,7 +84,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: CreateEntity handler returns Success.</summary>
     [Fact]
-    public async Task CreateEntityHandler_Success_ReturnsResult()
+    public async Task CreateEntityHandlerSuccessReturnsResult()
     {
         var request = new GraphEntityRequest { Name = "Alice", EntityType = "person" };
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Alice", EntityType = "person" };
@@ -99,7 +99,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: CreateEntity handler returns Failure on exception.</summary>
     [Fact]
-    public async Task CreateEntityHandler_Exception_ReturnsFailure()
+    public async Task CreateEntityHandlerExceptionReturnsFailure()
     {
         var request = new GraphEntityRequest { Name = "Alice", EntityType = "person" };
         _service.CreateEntityAsync(request, Arg.Any<CancellationToken>()).Throws(new Exception("fail"));
@@ -114,7 +114,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: UpdateEntity handler returns Success when entity found.</summary>
     [Fact]
-    public async Task UpdateEntityHandler_Success_ReturnsResult()
+    public async Task UpdateEntityHandlerSuccessReturnsResult()
     {
         var request = new GraphEntityRequest { Name = "Bob", EntityType = "person" };
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Bob", EntityType = "person" };
@@ -129,7 +129,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: UpdateEntity handler returns Failure when entity not found.</summary>
     [Fact]
-    public async Task UpdateEntityHandler_NotFound_ReturnsFailure()
+    public async Task UpdateEntityHandlerNotFoundReturnsFailure()
     {
         var request = new GraphEntityRequest { Name = "Bob", EntityType = "person" };
         _service.UpdateEntityAsync("ge-99", request, Arg.Any<CancellationToken>()).Returns((GraphEntityResponse?)null);
@@ -145,7 +145,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: DeleteEntity handler returns Success with true when deleted.</summary>
     [Fact]
-    public async Task DeleteEntityHandler_Success_ReturnsTrue()
+    public async Task DeleteEntityHandlerSuccessReturnsTrue()
     {
         _service.DeleteEntityAsync("ge-1", Arg.Any<CancellationToken>()).Returns(true);
 
@@ -158,7 +158,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: DeleteEntity handler returns Success with false when not found.</summary>
     [Fact]
-    public async Task DeleteEntityHandler_NotFound_ReturnsFalse()
+    public async Task DeleteEntityHandlerNotFoundReturnsFalse()
     {
         _service.DeleteEntityAsync("ge-99", Arg.Any<CancellationToken>()).Returns(false);
 
@@ -173,7 +173,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: CreateRelationship handler returns Success.</summary>
     [Fact]
-    public async Task CreateRelationshipHandler_Success_ReturnsResult()
+    public async Task CreateRelationshipHandlerSuccessReturnsResult()
     {
         var request = new GraphRelationshipRequest { SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
@@ -188,7 +188,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: CreateRelationship handler returns Failure on exception.</summary>
     [Fact]
-    public async Task CreateRelationshipHandler_Exception_ReturnsFailure()
+    public async Task CreateRelationshipHandlerExceptionReturnsFailure()
     {
         var request = new GraphRelationshipRequest { SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         _service.CreateRelationshipAsync(request, Arg.Any<CancellationToken>()).Throws(new Exception("fail"));
@@ -203,7 +203,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: UpdateRelationship handler returns Success when found.</summary>
     [Fact]
-    public async Task UpdateRelationshipHandler_Success_ReturnsResult()
+    public async Task UpdateRelationshipHandlerSuccessReturnsResult()
     {
         var request = new GraphRelationshipRequest { SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "works-with" };
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "works-with" };
@@ -218,7 +218,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: UpdateRelationship handler returns Failure when not found.</summary>
     [Fact]
-    public async Task UpdateRelationshipHandler_NotFound_ReturnsFailure()
+    public async Task UpdateRelationshipHandlerNotFoundReturnsFailure()
     {
         var request = new GraphRelationshipRequest { SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "works-with" };
         _service.UpdateRelationshipAsync("gr-99", request, Arg.Any<CancellationToken>()).Returns((GraphRelationshipResponse?)null);
@@ -234,7 +234,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: DeleteRelationship handler returns Success with true.</summary>
     [Fact]
-    public async Task DeleteRelationshipHandler_Success_ReturnsTrue()
+    public async Task DeleteRelationshipHandlerSuccessReturnsTrue()
     {
         _service.DeleteRelationshipAsync("gr-1", Arg.Any<CancellationToken>()).Returns(true);
 
@@ -249,7 +249,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-080: ListDocuments handler returns Success.</summary>
     [Fact]
-    public async Task ListDocumentsHandler_Success_ReturnsResult()
+    public async Task ListDocumentsHandlerSuccessReturnsResult()
     {
         var expected = new GraphRagDocumentListResponse { Documents = [], TotalCount = 0 };
         _service.ListDocumentsAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -263,7 +263,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-080: ListDocuments handler returns Failure on exception.</summary>
     [Fact]
-    public async Task ListDocumentsHandler_Exception_ReturnsFailure()
+    public async Task ListDocumentsHandlerExceptionReturnsFailure()
     {
         _service.ListDocumentsAsync(0, 50, null, Arg.Any<CancellationToken>()).Throws(new Exception("fail"));
 
@@ -277,7 +277,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-080: GetDocumentChunks handler returns Success when document exists.</summary>
     [Fact]
-    public async Task GetDocumentChunksHandler_Success_ReturnsResult()
+    public async Task GetDocumentChunksHandlerSuccessReturnsResult()
     {
         var expected = new GraphRagDocumentChunksResponse { DocumentId = "doc-1", Chunks = [], TotalChunks = 0 };
         _service.GetDocumentChunksAsync("doc-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -291,7 +291,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-080: GetDocumentChunks handler returns Failure when document not found.</summary>
     [Fact]
-    public async Task GetDocumentChunksHandler_NotFound_ReturnsFailure()
+    public async Task GetDocumentChunksHandlerNotFoundReturnsFailure()
     {
         _service.GetDocumentChunksAsync("doc-99", Arg.Any<CancellationToken>()).Returns((GraphRagDocumentChunksResponse?)null);
 
@@ -306,7 +306,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: GetEntity handler returns Success when entity exists.</summary>
     [Fact]
-    public async Task GetEntityHandler_Success_ReturnsResult()
+    public async Task GetEntityHandlerSuccessReturnsResult()
     {
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Alice", EntityType = "person" };
         _service.GetEntityAsync("ge-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -320,7 +320,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: GetEntity handler returns Failure when entity not found.</summary>
     [Fact]
-    public async Task GetEntityHandler_NotFound_ReturnsFailure()
+    public async Task GetEntityHandlerNotFoundReturnsFailure()
     {
         _service.GetEntityAsync("ge-99", Arg.Any<CancellationToken>()).Returns((GraphEntityResponse?)null);
 
@@ -334,7 +334,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: ListEntities handler returns Success.</summary>
     [Fact]
-    public async Task ListEntitiesHandler_Success_ReturnsResult()
+    public async Task ListEntitiesHandlerSuccessReturnsResult()
     {
         var expected = new GraphEntityListResponse { Entities = [], TotalCount = 0 };
         _service.ListEntitiesAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -349,7 +349,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: GetRelationship handler returns Success when found.</summary>
     [Fact]
-    public async Task GetRelationshipHandler_Success_ReturnsResult()
+    public async Task GetRelationshipHandlerSuccessReturnsResult()
     {
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         _service.GetRelationshipAsync("gr-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -363,7 +363,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: GetRelationship handler returns Failure when not found.</summary>
     [Fact]
-    public async Task GetRelationshipHandler_NotFound_ReturnsFailure()
+    public async Task GetRelationshipHandlerNotFoundReturnsFailure()
     {
         _service.GetRelationshipAsync("gr-99", Arg.Any<CancellationToken>()).Returns((GraphRelationshipResponse?)null);
 
@@ -377,7 +377,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: ListRelationships handler returns Success.</summary>
     [Fact]
-    public async Task ListRelationshipsHandler_Success_ReturnsResult()
+    public async Task ListRelationshipsHandlerSuccessReturnsResult()
     {
         var expected = new GraphRelationshipListResponse { Relationships = [], TotalCount = 0 };
         _service.ListRelationshipsAsync(0, 50, null, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -390,7 +390,7 @@ public sealed class GraphRagCqrsTests
 
     /// <summary>FR-MCP-079: ListRelationships handler returns Failure on exception.</summary>
     [Fact]
-    public async Task ListRelationshipsHandler_Exception_ReturnsFailure()
+    public async Task ListRelationshipsHandlerExceptionReturnsFailure()
     {
         _service.ListRelationshipsAsync(0, 50, null, null, Arg.Any<CancellationToken>()).Throws(new Exception("fail"));
 

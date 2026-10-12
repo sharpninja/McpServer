@@ -40,7 +40,7 @@ public sealed class WorkspaceProcessManagerStartupTests : IDisposable
     /// Requirement: TR-MCP-WS-003.
     /// </summary>
     [Fact]
-    public async Task StartAsync_EmptyWorkspacePathInMiddle_SkipsItAndRegistersSubsequentWorkspaces()
+    public async Task StartAsyncEmptyWorkspacePathInMiddleSkipsItAndRegistersSubsequentWorkspaces()
     {
         var workspaceA = Path.Combine(_tempRoot, "workspace-a");
         var workspaceB = Path.Combine(_tempRoot, "workspace-b");
@@ -68,7 +68,7 @@ public sealed class WorkspaceProcessManagerStartupTests : IDisposable
     /// Requirement: TR-MCP-WS-003.
     /// </summary>
     [Fact]
-    public async Task StartAsync_NullWorkspacePathEntry_SkipsWithoutThrowing()
+    public async Task StartAsyncNullWorkspacePathEntrySkipsWithoutThrowing()
     {
         var workspaceA = Path.Combine(_tempRoot, "workspace-only");
         Directory.CreateDirectory(workspaceA);
@@ -87,7 +87,7 @@ public sealed class WorkspaceProcessManagerStartupTests : IDisposable
         Assert.NotNull(tokenService.GetToken(workspaceA));
     }
 
-    private WorkspaceProcessManager BuildSut(
+    private static WorkspaceProcessManager BuildSut(
         WorkspaceTokenService tokenService,
         IReadOnlyList<WorkspaceDto> workspaces)
     {

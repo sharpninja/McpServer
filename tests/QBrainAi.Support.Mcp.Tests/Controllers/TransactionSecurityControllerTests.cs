@@ -19,7 +19,7 @@ public sealed class TransactionSecurityControllerTests
 {
     /// <summary>Party registration generates usable signing and encryption key descriptors.</summary>
     [Fact]
-    public async Task RegisterParty_ThenGetKey_ReturnsGeneratedPublicKey()
+    public async Task RegisterPartyThenGetKeyReturnsGeneratedPublicKey()
     {
         using var services = CreateServices();
         var controller = new KeyServerController(services.KeyServer, services.KeyServer);
@@ -43,7 +43,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Signed manifests verify successfully and return a canonical manifest hash.</summary>
     [Fact]
-    public async Task SignManifest_ThenVerifyManifest_ReturnsValidManifestHash()
+    public async Task SignManifestThenVerifyManifestReturnsValidManifestHash()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -75,7 +75,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Signed manifests can be read back as trace records for transaction diagnostics.</summary>
     [Fact]
-    public async Task GetManifest_AfterSign_ReturnsPersistedTraceRecord()
+    public async Task GetManifestAfterSignReturnsPersistedTraceRecord()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -100,7 +100,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Manifest trace reports expose filtered ledger records without private key material.</summary>
     [Fact]
-    public async Task GetManifestReport_AfterSign_ReturnsFilteredTraceReport()
+    public async Task GetManifestReportAfterSignReturnsFilteredTraceReport()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -135,7 +135,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Keyserver signing rejects a nonce that was already signed for the publisher/subscriber pair.</summary>
     [Fact]
-    public async Task SignManifest_WithReplayNonce_ReturnsBadRequest()
+    public async Task SignManifestWithReplayNonceReturnsBadRequest()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -154,7 +154,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Keyserver signing rejects stale sequence numbers for a publisher/subscriber pair.</summary>
     [Fact]
-    public async Task SignManifest_WithStaleSequence_ReturnsBadRequest()
+    public async Task SignManifestWithStaleSequenceReturnsBadRequest()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -173,7 +173,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Manifest verification rejects tampered signed content.</summary>
     [Fact]
-    public async Task VerifyManifest_WithTamperedHash_ReturnsBadRequest()
+    public async Task VerifyManifestWithTamperedHashReturnsBadRequest()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -193,7 +193,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Keyserver verification rejects an already verified manifest nonce as replay.</summary>
     [Fact]
-    public async Task VerifyManifest_WithReplayNonce_ReturnsBadRequest()
+    public async Task VerifyManifestWithReplayNonceReturnsBadRequest()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -220,7 +220,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Keyserver verification rejects an older signed manifest after a newer sequence verifies.</summary>
     [Fact]
-    public async Task VerifyManifest_WithStaleSequence_ReturnsBadRequest()
+    public async Task VerifyManifestWithStaleSequenceReturnsBadRequest()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -252,7 +252,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Keyserver signing rejects disabled publisher parties with a deterministic reason.</summary>
     [Fact]
-    public async Task SignManifest_WithDisabledPublisher_ReturnsDisabledParty()
+    public async Task SignManifestWithDisabledPublisherReturnsDisabledParty()
     {
         using var services = CreateServices();
         await services.KeyServer.RegisterPartyAsync(
@@ -272,7 +272,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Keyserver verification rejects disabled publisher parties with a deterministic reason.</summary>
     [Fact]
-    public async Task VerifyManifest_WithDisabledPublisher_ReturnsDisabledParty()
+    public async Task VerifyManifestWithDisabledPublisherReturnsDisabledParty()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -295,7 +295,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Keyserver verification rejects manifests that reference unknown subscriber encryption keys.</summary>
     [Fact]
-    public async Task VerifyManifest_WithUnknownSubscriberEncryptionKey_ReturnsUnknownKey()
+    public async Task VerifyManifestWithUnknownSubscriberEncryptionKeyReturnsUnknownKey()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -316,7 +316,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber commit accepts a signed manifest and exposes committed status.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithValidManifest_CommitsAndStatusReturnsCommitted()
+    public async Task CommitDiffgramWithValidManifestCommitsAndStatusReturnsCommitted()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -340,7 +340,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber status reports pending while manifest verification is in flight.</summary>
     [Fact]
-    public async Task CommitDiffgram_WhileVerificationInFlight_StatusReturnsPendingThenCommitted()
+    public async Task CommitDiffgramWhileVerificationInFlightStatusReturnsPendingThenCommitted()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -389,7 +389,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber commit is idempotent for the same transaction and manifest payload.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithDuplicatePayload_ReturnsCommitted()
+    public async Task CommitDiffgramWithDuplicatePayloadReturnsCommitted()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -407,7 +407,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber commit rejects encrypted body hash mismatches.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithEncryptedHashMismatch_ReturnsBadRequest()
+    public async Task CommitDiffgramWithEncryptedHashMismatchReturnsBadRequest()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -426,7 +426,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber commit rejects a tampered encrypted body even when caller hash fields copy the manifest.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithTamperedEncryptedBody_ReturnsBadRequest()
+    public async Task CommitDiffgramWithTamperedEncryptedBodyReturnsBadRequest()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -445,7 +445,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber rejects legacy placeholder bodies when real encrypted envelopes are required.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithPlaceholderBodyWhenEncryptionRequired_ReturnsBadRequest()
+    public async Task CommitDiffgramWithPlaceholderBodyWhenEncryptionRequiredReturnsBadRequest()
     {
         using var services = CreateServices(new SubscriberOptions
         {
@@ -468,7 +468,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber abort stores aborted status for an uncommitted transaction.</summary>
     [Fact]
-    public async Task AbortTransaction_BeforeCommit_ReturnsAbortedStatus()
+    public async Task AbortTransactionBeforeCommitReturnsAbortedStatus()
     {
         using var services = CreateServices();
         var controller = new SubscriberController(services.Subscriber);
@@ -490,7 +490,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber commit refuses a transaction after abort and reports the abort reason.</summary>
     [Fact]
-    public async Task CommitDiffgram_AfterAbort_ReturnsAbortedReason()
+    public async Task CommitDiffgramAfterAbortReturnsAbortedReason()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);

@@ -8,7 +8,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
 {
     /// <summary>Default sanitizer options are valid so deployments can enable safe defaults without custom regex rules.</summary>
     [Fact]
-    public void Validate_ReturnsSuccess_ForDefaultOptions()
+    public void ValidateReturnsSuccessForDefaultOptions()
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions();
@@ -20,7 +20,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
 
     /// <summary>Duplicate rule IDs are rejected ignoring case so replacement tokens remain deterministic.</summary>
     [Fact]
-    public void Validate_Fails_WhenRuleIdsAreDuplicateIgnoringCase()
+    public void ValidateFailsWhenRuleIdsAreDuplicateIgnoringCase()
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions
@@ -40,7 +40,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
 
     /// <summary>Rules must name their redaction token ID.</summary>
     [Fact]
-    public void Validate_Fails_WhenRuleIdIsMissing()
+    public void ValidateFailsWhenRuleIdIsMissing()
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions
@@ -56,7 +56,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
 
     /// <summary>Rules must provide a regex pattern before the sanitizer can compile them.</summary>
     [Fact]
-    public void Validate_Fails_WhenPatternIsMissing()
+    public void ValidateFailsWhenPatternIsMissing()
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions
@@ -72,7 +72,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
 
     /// <summary>Configured rule counts are bounded so startup cannot allocate an unbounded regex catalog.</summary>
     [Fact]
-    public void Validate_Fails_WhenRuleCountExceedsMaximum()
+    public void ValidateFailsWhenRuleCountExceedsMaximum()
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions
@@ -94,7 +94,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
 
     /// <summary>Regex pattern text is bounded so configuration cannot load extremely large expressions.</summary>
     [Fact]
-    public void Validate_Fails_WhenPatternLengthExceedsMaximum()
+    public void ValidateFailsWhenPatternLengthExceedsMaximum()
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions
@@ -113,7 +113,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
     [Theory]
     [InlineData(0)]
     [InlineData(60001)]
-    public void Validate_Fails_WhenTimeoutIsOutsideBounds(int timeoutMilliseconds)
+    public void ValidateFailsWhenTimeoutIsOutsideBounds(int timeoutMilliseconds)
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions
@@ -129,7 +129,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
 
     /// <summary>Invalid regex syntax is rejected during startup validation and identified by rule ID only.</summary>
     [Fact]
-    public void Validate_Fails_WhenPatternSyntaxIsInvalid()
+    public void ValidateFailsWhenPatternSyntaxIsInvalid()
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions
@@ -148,7 +148,7 @@ public sealed class SessionLogSanitizationOptionsValidatorTests
     [Theory]
     [InlineData("$1")]
     [InlineData("${secret}")]
-    public void Validate_Fails_WhenReplacementUsesRegexGroupExpansion(string replacement)
+    public void ValidateFailsWhenReplacementUsesRegexGroupExpansion(string replacement)
     {
         var validator = new SessionLogSanitizationOptionsValidator();
         var options = new SessionLogSanitizationOptions

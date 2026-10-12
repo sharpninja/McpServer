@@ -10,7 +10,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: without_memory has no injection/tools and may replay history.</summary>
     [Fact]
-    public void WithoutMemory_ReplaysHistory_NoInjectionOrTools()
+    public void WithoutMemoryReplaysHistoryNoInjectionOrTools()
     {
         var result = MemoryBenchMultiTurnCatalog.StubGrok();
         var without = result.Turns.Where(turn => turn.Condition == "without_memory").ToList();
@@ -31,7 +31,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-019: with_memory query turns inject memories and do not replay establish text.</summary>
     [Fact]
-    public void WithMemory_InjectsCompactRecall_DoesNotReplayEstablishTranscript()
+    public void WithMemoryInjectsCompactRecallDoesNotReplayEstablishTranscript()
     {
         var result = MemoryBenchMultiTurnCatalog.StubGrok();
         var query = result.Turns.Single(turn =>
@@ -80,7 +80,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-019: A job succeeds only when every required query turn passes.</summary>
     [Fact]
-    public void JobSuccess_RequiresAllRequiredQueryTurns()
+    public void JobSuccessRequiresAllRequiredQueryTurns()
     {
         var result = MemoryBenchMultiTurnCatalog.StubGrok();
         Assert.All(result.Jobs, job => Assert.True(job.Pass, job.JobId + " " + job.Condition + " should pass in stub mode."));
@@ -93,7 +93,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-019: Default path is Grok first; others stay opt-in until H7a.</summary>
     [Fact]
-    public void GrokFirst_OthersOptInUntilValueGate()
+    public void GrokFirstOthersOptInUntilValueGate()
     {
         var result = MemoryBenchMultiTurnCatalog.StubGrok();
         Assert.Equal(["grok"], result.Plugins);
@@ -108,7 +108,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-019 / H7b: Stub -Plugin all writes success-gated multiturn tokens for eight plugins.</summary>
     [Fact]
-    public void AllEight_WritesMultiTurnStubArtifacts()
+    public void AllEightWritesMultiTurnStubArtifacts()
     {
         var directory = Path.Combine(MemoryBenchMultiTurnCatalog.FindRepoRoot(), "docs", "benchmarks", "results");
         Directory.CreateDirectory(directory);
@@ -141,7 +141,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-019: Stub re-run is deterministic for scores and tokens.</summary>
     [Fact]
-    public void Rerun_DeterministicStub()
+    public void RerunDeterministicStub()
     {
         var first = MemoryBenchMultiTurnCatalog.RunGrokStub();
         var second = MemoryBenchMultiTurnCatalog.RunGrokStub();
@@ -155,7 +155,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-019: MULTI without_memory query is more expensive than with_memory query.</summary>
     [Fact]
-    public void MultiFact_WithoutMemoryQuery_CostsMoreThanWithMemoryQuery()
+    public void MultiFactWithoutMemoryQueryCostsMoreThanWithMemoryQuery()
     {
         var result = MemoryBenchMultiTurnCatalog.StubGrok();
         var withMemory = result.Turns.Single(turn =>

@@ -53,7 +53,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>A live in-flight reservation is not mapped as a completed replay.</summary>
     [Fact]
-    public async Task IngestAsync_ConcurrentReplayOfLiveLease_ReturnsInProgressNotReplay()
+    public async Task IngestAsyncConcurrentReplayOfLiveLeaseReturnsInProgressNotReplay()
     {
         var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -84,7 +84,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>A stale processing lease is taken over by a second service instance.</summary>
     [Fact]
-    public async Task IngestAsync_StaleLease_IsTakenOverBySecondInstance()
+    public async Task IngestAsyncStaleLeaseIsTakenOverBySecondInstance()
     {
         using (var db = CreateDb())
         {
@@ -108,7 +108,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>Cancellation persists a terminal failed run and then still throws.</summary>
     [Fact]
-    public async Task IngestAsync_CancelledAfterReserve_PersistsFailureThenThrows()
+    public async Task IngestAsyncCancelledAfterReservePersistsFailureThenThrows()
     {
         using var cts = new CancellationTokenSource();
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
@@ -133,7 +133,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>A crashed Approving claim with an expired lease can be recovered by another instance.</summary>
     [Fact]
-    public async Task ApproveAsync_StaleApprovalLease_IsRecoveredBySecondInstance()
+    public async Task ApproveAsyncStaleApprovalLeaseIsRecoveredBySecondInstance()
     {
         var todo = TrackingTodo();
         var ingest = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-104", 0.9)), todo);
@@ -157,7 +157,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>Concurrent approvals create exactly one TODO.</summary>
     [Fact]
-    public async Task ApproveAsync_TwoInstances_CreateExactlyOneTodo()
+    public async Task ApproveAsyncTwoInstancesCreateExactlyOneTodo()
     {
         var todo = TrackingTodo();
         var ingest = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-105", 0.9)), todo);
@@ -175,7 +175,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>Rejection does not create a TODO and persists Rejected.</summary>
     [Fact]
-    public async Task ApproveAsync_Rejection_DoesNotCreateTodo()
+    public async Task ApproveAsyncRejectionDoesNotCreateTodo()
     {
         var todo = TrackingTodo();
         var sut = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-106", 0.9)), todo);
@@ -189,7 +189,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>A TODO created by this run is healed instead of reported as a caller-owned collision.</summary>
     [Fact]
-    public async Task IngestAsync_ExistingTodoFromThisRun_HealsInsteadOfColliding()
+    public async Task IngestAsyncExistingTodoFromThisRunHealsInsteadOfColliding()
     {
         var todo = TrackingTodo();
         var first = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-107", 0.9)), todo);
@@ -217,7 +217,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>A caller-owned TODO id is a recoverable non-success collision with a stable ErrorCode.</summary>
     [Fact]
-    public async Task IngestAsync_CallerOwnedTodoId_IsNonSuccessCollision()
+    public async Task IngestAsyncCallerOwnedTodoIdIsNonSuccessCollision()
     {
         var todo = TrackingTodo();
         todo.SeedExisting("MCP-HANDOFFDEMO-108", idempotencyKey: "caller-owned");
@@ -237,7 +237,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>Invalid RequireReview drafts are Failed and non-approvable, never Success=true.</summary>
     [Fact]
-    public async Task IngestAsync_InvalidRequireReviewDraft_IsFailedAndNotSuccess()
+    public async Task IngestAsyncInvalidRequireReviewDraftIsFailedAndNotSuccess()
     {
         const string json =
             """{"id":"MCP-HANDOFFDEMO-109","title":"Demo","section":"QBrain.AI","priority":"high","estimate":"2h","description":[" "],"technicalDetails":["   "],"implementationTasks":[{"task":"Write tests","done":false}],"dependsOn":[],"functionalRequirements":["FR-HANDOFF-001"],"technicalRequirements":["TR-HANDOFF-CONTRACT-001"],"confidence":0.9,"unknownSourceNotes":[]}""";
@@ -252,7 +252,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>GET preserves persisted Success and ErrorCode after a failed collision.</summary>
     [Fact]
-    public async Task GetRunAsync_AfterCollision_PreservesPersistedSuccessAndErrorCode()
+    public async Task GetRunAsyncAfterCollisionPreservesPersistedSuccessAndErrorCode()
     {
         var todo = TrackingTodo();
         todo.SeedExisting("MCP-HANDOFFDEMO-110", idempotencyKey: "other");
@@ -268,7 +268,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>Save failure after TODO creation heals the run from a fresh context without clearing unrelated tracked entities.</summary>
     [Fact]
-    public async Task SaveRunAfterTodo_CommitFailure_HealsAndPreservesUnrelatedTrackedEntities()
+    public async Task SaveRunAfterTodoCommitFailureHealsAndPreservesUnrelatedTrackedEntities()
     {
         var todo = TrackingTodo();
         var sut = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-111", 0.9)), todo);
@@ -303,7 +303,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>Cancellation after TODO creation still persists the Created receipt and then throws.</summary>
     [Fact]
-    public async Task SaveRunAfterTodo_CancellationAfterTodo_PersistsCreatedThenThrows()
+    public async Task SaveRunAfterTodoCancellationAfterTodoPersistsCreatedThenThrows()
     {
         var todo = TrackingTodo();
         using var cts = new CancellationTokenSource();
@@ -322,7 +322,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P1-1: lease expiry during a live blocked extraction is taken over; the stale owner cannot create or clobber the Created receipt.</summary>
     [Fact]
-    public async Task IngestAsync_LeaseExpiresDuringLiveExtraction_TakeoverWinsAndFirstCannotCreate()
+    public async Task IngestAsyncLeaseExpiresDuringLiveExtractionTakeoverWinsAndFirstCannotCreate()
     {
         var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -372,7 +372,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P1-2: an approval lease that expires during a live create is recovered by the second instance; the stale claimant cannot mark Created.</summary>
     [Fact]
-    public async Task ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins()
+    public async Task ApproveAsyncLeaseExpiresDuringLiveCreateSecondInstanceWins()
     {
         var lease = ShortLease();
         var todo = TrackingTodo();
@@ -411,7 +411,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P1-2: a live approval claimant is not overwritten by a stale second claim.</summary>
     [Fact]
-    public async Task ApproveAsync_LiveClaimant_RejectsStaleSecondClaim()
+    public async Task ApproveAsyncLiveClaimantRejectsStaleSecondClaim()
     {
         var todo = TrackingTodo();
         todo.CreateGate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -438,7 +438,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P1-3: same idempotency key with a changed payload is a collision, not a heal.</summary>
     [Fact]
-    public async Task IngestAsync_SameKeyChangedPayload_IsCollisionNotHeal()
+    public async Task IngestAsyncSameKeyChangedPayloadIsCollisionNotHeal()
     {
         var todo = TrackingTodo();
         var first = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-204", 0.9)), todo);
@@ -467,7 +467,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P1-4: compensation does not report Created when the TODO is absent after an ambiguous save.</summary>
     [Fact]
-    public async Task SaveRunAfterTodo_TodoAbsent_DoesNotReportCreatedFromMemory()
+    public async Task SaveRunAfterTodoTodoAbsentDoesNotReportCreatedFromMemory()
     {
         var todo = TrackingTodo();
         todo.HideFromGet = true;
@@ -481,7 +481,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P1-4: caller cancellation after create persists a Created receipt then throws.</summary>
     [Fact]
-    public async Task SaveRunAfterTodo_CallerCancellation_PersistsCreatedReceipt()
+    public async Task SaveRunAfterTodoCallerCancellationPersistsCreatedReceipt()
     {
         var todo = TrackingTodo();
         using var cts = new CancellationTokenSource();
@@ -498,7 +498,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P1-4: GetById timeout during compensation is a stable failure, not a Created memory report.</summary>
     [Fact]
-    public async Task SaveRunAfterTodo_CompensationTimeout_DoesNotReportCreatedFromMemory()
+    public async Task SaveRunAfterTodoCompensationTimeoutDoesNotReportCreatedFromMemory()
     {
         var todo = TrackingTodo();
         todo.GetDelay = TimeSpan.FromSeconds(3);
@@ -516,7 +516,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P1-7: undefined mode never creates and returns a stable validation code.</summary>
     [Fact]
-    public async Task IngestAsync_UndefinedMode_DoesNotCreate()
+    public async Task IngestAsyncUndefinedModeDoesNotCreate()
     {
         var todo = TrackingTodo();
         var sut = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-208", 0.9)), todo);
@@ -535,7 +535,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P2-2: a caller-selected prompt template is rejected so replay identity stays truthful.</summary>
     [Fact]
-    public async Task IngestAsync_CustomPromptTemplate_IsRejected()
+    public async Task IngestAsyncCustomPromptTemplateIsRejected()
     {
         var sut = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-209")), Substitute.For<ITodoService>());
         var result = await sut.IngestAsync(new HandoffIngestionRequest
@@ -552,7 +552,7 @@ public sealed class HandoffDurabilityTests : IDisposable
 
     /// <summary>P2-3: credential-bearing locator, model, and review notes are sanitized in the persisted run.</summary>
     [Fact]
-    public async Task IngestAndApprove_CredentialBearingProvenance_IsSanitized()
+    public async Task IngestAndApproveCredentialBearingProvenanceIsSanitized()
     {
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
         extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
@@ -599,7 +599,7 @@ public sealed class HandoffDurabilityTests : IDisposable
     /// deterministic replay instead of a unique-index collision.
     /// </summary>
     [Fact]
-    public async Task D5_ShippedExtractor_RepeatedIngest_ReplaysDeterministicallyWithEffectiveIdentity()
+    public async Task D5ShippedExtractorRepeatedIngestReplaysDeterministicallyWithEffectiveIdentity()
     {
         const string effectivePrompt = "handoff-todo-draft/v1-effective";
         const string effectiveTemplate = "handoff-todo-draft-effective";
@@ -652,7 +652,7 @@ public sealed class HandoffDurabilityTests : IDisposable
     /// Fixtures: in-memory SQLite, blocked extractor, lease/clock fakes. Takeover names stay reuse.
     /// </summary>
     [Fact]
-    public async Task ProcessingLease_RenewsAndFencesTerminalUpdates()
+    public async Task ProcessingLeaseRenewsAndFencesTerminalUpdates()
     {
         var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -760,7 +760,7 @@ public sealed class HandoffDurabilityTests : IDisposable
     /// and a stub extractor that reports a custom identity. Rejecting <c>PromptTemplateId</c> is reuse.
     /// </summary>
     [Fact]
-    public async Task Provenance_IncludesEffectiveCustomPromptIdentityAndVersion()
+    public async Task ProvenanceIncludesEffectiveCustomPromptIdentityAndVersion()
     {
         const string content = "effective-custom-prompt";
         const string effectiveIdentity = "operator-handoff-custom";
@@ -805,7 +805,7 @@ public sealed class HandoffDurabilityTests : IDisposable
             CompensationTimeout = TimeSpan.FromSeconds(5),
         };
 
-    private async Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout)
+    private static async Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout)
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         cts.CancelAfter(timeout);
@@ -885,7 +885,7 @@ public sealed class HandoffDurabilityTests : IDisposable
             ProcessingLeaseExpiresAtUtc = _time.GetUtcNow(),
         };
 
-    private HandoffIngestionRequest ContentRequest(string content, HandoffIngestionMode mode = HandoffIngestionMode.DraftOnly)
+    private static HandoffIngestionRequest ContentRequest(string content, HandoffIngestionMode mode = HandoffIngestionMode.DraftOnly)
         => new()
         {
             SourceKind = HandoffSourceKind.Content,

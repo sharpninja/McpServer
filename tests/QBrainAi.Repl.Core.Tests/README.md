@@ -4,7 +4,7 @@ Unit test project for iteration 1 of the REPL Core component.
 
 ## Test Coverage - Iteration 1 (Mock-Based)
 
-### Iteration1_IntegrationTests
+### Iteration1IntegrationTests
 End-to-end orchestration tests using mocks:
 - Trust bootstrap orchestration (new workspace, cached trust)
 - Auth rotation orchestration (marker file changes, 401 response)

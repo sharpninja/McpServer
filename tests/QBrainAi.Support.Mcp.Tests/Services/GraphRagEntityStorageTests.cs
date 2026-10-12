@@ -90,7 +90,7 @@ public sealed class GraphRagEntityStorageTests : IDisposable
     /// when the context is switched to workspace B.
     /// </summary>
     [Fact]
-    public async Task WorkspaceIsolation_EntitiesNotVisibleAcrossWorkspaces()
+    public async Task WorkspaceIsolationEntitiesNotVisibleAcrossWorkspaces()
     {
         var entity = new GraphEntityEntity
         {
@@ -120,7 +120,7 @@ public sealed class GraphRagEntityStorageTests : IDisposable
     /// its source and target relationships.
     /// </summary>
     [Fact]
-    public async Task CascadeDelete_RemovesSourceAndTargetRelationships()
+    public async Task CascadeDeleteRemovesSourceAndTargetRelationships()
     {
         var entityA = new GraphEntityEntity
         {

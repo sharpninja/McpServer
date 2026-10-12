@@ -28,7 +28,7 @@ public sealed class SessionLogTranscriptIngestionControllerTests : IClassFixture
 
     /// <summary>Verifies HTTP path ingestion accepts workspace-relative paths and persists through session-log storage.</summary>
     [Fact]
-    public async Task IngestPathAsync_WorkspaceRelativeCodexFixturePersistsAndDeletesFailsafe()
+    public async Task IngestPathAsyncWorkspaceRelativeCodexFixturePersistsAndDeletesFailsafe()
     {
         CopyRealFixtureToWorkspace("codex/session.jsonl", "transcripts/codex/session.jsonl");
         var request = new TranscriptIngestPathRequest
@@ -74,7 +74,7 @@ public sealed class SessionLogTranscriptIngestionControllerTests : IClassFixture
     [InlineData("Cline", TranscriptSourceKind.Cline, "cline", "cline-real-fixture-session")]
     [InlineData("Copilot", TranscriptSourceKind.Copilot, "copilot/events.jsonl", "copilot-derived")]
     [InlineData("OpenCode", TranscriptSourceKind.OpenCode, "opencode/export.json", "ses_opencode_real_fixture")]
-    public async Task IngestPathAsync_RealFixtureForEachAgentNormalizesThroughHttp(
+    public async Task IngestPathAsyncRealFixtureForEachAgentNormalizesThroughHttp(
         string agent,
         TranscriptSourceKind source,
         string fixtureRelativePath,
@@ -118,7 +118,7 @@ public sealed class SessionLogTranscriptIngestionControllerTests : IClassFixture
 
     /// <summary>Verifies multipart ZIP upload ingestion persists and removes the per-run staging directory.</summary>
     [Fact]
-    public async Task IngestUploadAsync_ZipClaudeFixturePersistsAndDeletesStagingRun()
+    public async Task IngestUploadAsyncZipClaudeFixturePersistsAndDeletesStagingRun()
     {
         var zipBytes = CreateZip(("claude/session.jsonl", File.ReadAllText(ResolveRealFixturePath("claude/session.jsonl"))));
         using var form = new MultipartFormDataContent
@@ -154,7 +154,7 @@ public sealed class SessionLogTranscriptIngestionControllerTests : IClassFixture
 
     /// <summary>Verifies mixed upload bundles continue after a bundle failure and return HTTP 207.</summary>
     [Fact]
-    public async Task IngestUploadAsync_MixedZipBundleReturnsMultiStatusWhenStrictFalse()
+    public async Task IngestUploadAsyncMixedZipBundleReturnsMultiStatusWhenStrictFalse()
     {
         var invalidCodex = "{\"timestamp\":\"2026-07-10T08:31:17.000Z\",\"type\":\"session_meta\",\"payload\":{\"id\":\"codex-bad-fixture-session\"}}" + Environment.NewLine + "{not-json";
         var zipBytes = CreateZip(
@@ -188,7 +188,7 @@ public sealed class SessionLogTranscriptIngestionControllerTests : IClassFixture
 
     /// <summary>Verifies ZIP uploads reject duplicate canonical paths before ingestion starts.</summary>
     [Fact]
-    public async Task IngestUploadAsync_RejectsDuplicateZipPaths()
+    public async Task IngestUploadAsyncRejectsDuplicateZipPaths()
     {
         var zipBytes = CreateZip(("session.jsonl", "{}"), ("session.jsonl", "{}"));
         using var form = new MultipartFormDataContent

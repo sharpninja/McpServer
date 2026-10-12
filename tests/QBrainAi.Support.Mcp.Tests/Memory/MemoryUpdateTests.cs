@@ -16,7 +16,7 @@ public sealed class MemoryUpdateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-30: Update unknown id returns 404.</summary>
     [Fact]
-    public async Task UnknownId_Returns404()
+    public async Task UnknownIdReturns404()
     {
         await using var db = _harness.CreateContext(_harness.WorkspaceA);
         var controller = MemoryS1Harness.CreateController(MemoryS1Harness.CreateService(db));

@@ -11,6 +11,6 @@ public sealed class BugTriage139FifteenthSharedTests
     /// the no-follow containment boundary.
     /// </summary>
     [Fact]
-    public Task ContainedRestoration_NestedDirectoriesRestoreContentsModeAndContainment() =>
+    public Task ContainedRestorationNestedDirectoriesRestoreContentsModeAndContainment() =>
         BugTriage139FifteenthNativeScenarios.AssertContainedRestorationAsync();
 }

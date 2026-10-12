@@ -97,14 +97,14 @@ public sealed partial class McpAgentOptionsValidator : IValidateOptions<McpAgent
             if (string.IsNullOrWhiteSpace(options.WorkspacePath))
                 failures.Add("WorkspacePath is required for the ACID tightly coupled hosted-agent profile.");
 
-            if (!string.Equals(options.AgentId, definition.AgentId, StringComparison.Ordinal))
-                failures.Add($"AgentId must be {definition.AgentId} for the ACID tightly coupled hosted-agent profile.");
+            if (!string.Equals(options.AgentId, QBAgentDefinition.AgentId, StringComparison.Ordinal))
+                failures.Add($"AgentId must be {QBAgentDefinition.AgentId} for the ACID tightly coupled hosted-agent profile.");
 
-            if (!string.Equals(options.AgentName, definition.AgentName, StringComparison.Ordinal))
-                failures.Add($"AgentName must be {definition.AgentName} for the ACID tightly coupled hosted-agent profile.");
+            if (!string.Equals(options.AgentName, QBAgentDefinition.AgentName, StringComparison.Ordinal))
+                failures.Add($"AgentName must be {QBAgentDefinition.AgentName} for the ACID tightly coupled hosted-agent profile.");
 
-            if (!string.Equals(options.SourceType, definition.SourceType, StringComparison.Ordinal))
-                failures.Add($"SourceType must be {definition.SourceType} for the ACID tightly coupled hosted-agent profile.");
+            if (!string.Equals(options.SourceType, QBAgentDefinition.SourceType, StringComparison.Ordinal))
+                failures.Add($"SourceType must be {QBAgentDefinition.SourceType} for the ACID tightly coupled hosted-agent profile.");
 
             if (!options.RequireAuthentication)
                 failures.Add("RequireAuthentication must be true for the ACID tightly coupled hosted-agent profile.");

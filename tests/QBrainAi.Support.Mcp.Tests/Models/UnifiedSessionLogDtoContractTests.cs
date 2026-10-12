@@ -15,7 +15,7 @@ public sealed class UnifiedSessionLogDtoContractTests
     /// to prove W8 removes public <c>List&lt;T&gt;</c> properties from JSON models.
     /// </summary>
     [Fact]
-    public void UnifiedSessionLogModels_DoNotExposePublicListProperties()
+    public void UnifiedSessionLogModelsDoNotExposePublicListProperties()
     {
         Type[] modelTypes =
         [
@@ -39,7 +39,7 @@ public sealed class UnifiedSessionLogDtoContractTests
     /// session-log DTO so contract remediation preserves API/schema compatibility.
     /// </summary>
     [Fact]
-    public void UnifiedSessionLogDto_RoundTripsJsonArrayProperties()
+    public void UnifiedSessionLogDtoRoundTripsJsonArrayProperties()
     {
         const string json = """
             {
@@ -92,7 +92,7 @@ public sealed class UnifiedSessionLogDtoContractTests
     /// Session headers include agent runtime identity fields required by MCP session consumers.
     /// </summary>
     [Fact]
-    public void UnifiedSessionLogDto_RoundTripsAgentRuntimeHeaderFields()
+    public void UnifiedSessionLogDtoRoundTripsAgentRuntimeHeaderFields()
     {
         const string json = """
             {

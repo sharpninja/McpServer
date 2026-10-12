@@ -16,7 +16,7 @@ public sealed class MemoryCompatCrudTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-04: Compat add/list/update/remove still works; legacy text maps to Content.</summary>
     [Fact]
-    public async Task LegacyRows_ListUpdateRemove_StillWork()
+    public async Task LegacyRowsListUpdateRemoveStillWork()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -48,7 +48,7 @@ public sealed class MemoryCompatCrudTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-40: Legacy Category still accepted and round-trips; maps into Type or a preserved field.</summary>
     [Fact]
-    public async Task LegacyCategory_RoundTrips()
+    public async Task LegacyCategoryRoundTrips()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {

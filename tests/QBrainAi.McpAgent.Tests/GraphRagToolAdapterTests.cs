@@ -52,7 +52,7 @@ public sealed class GraphRagToolAdapterTests
     /// pre-Phase-7 baseline of 28.
     /// </summary>
     [Fact]
-    public void Registration_Contains_All_GraphRag_Tools()
+    public void RegistrationContainsAllGraphRagTools()
     {
         var (hostedAgent, _) = CreateHostedAgent();
         var allFunctions = hostedAgent.Registration.Functions;
@@ -71,7 +71,7 @@ public sealed class GraphRagToolAdapterTests
     /// (28 pre-existing + 14 GraphRAG tools). The shared catalog carries no QuadBrain tool.
     /// </summary>
     [Fact]
-    public void Registration_TotalToolCount_Is_42()
+    public void RegistrationTotalToolCountIs42()
     {
         var (hostedAgent, _) = CreateHostedAgent();
         Assert.Equal(42, hostedAgent.Registration.Functions.Count);
@@ -81,7 +81,7 @@ public sealed class GraphRagToolAdapterTests
     /// TEST-MCP-090: Verifies each GraphRAG tool name starts with the <c>mcp_graphrag_</c> prefix.
     /// </summary>
     [Fact]
-    public void Registration_AllGraphRagTools_HaveCorrectPrefix()
+    public void RegistrationAllGraphRagToolsHaveCorrectPrefix()
     {
         var (hostedAgent, _) = CreateHostedAgent();
         var allFunctions = hostedAgent.Registration.Functions;
@@ -99,7 +99,7 @@ public sealed class GraphRagToolAdapterTests
     /// underlying ContextClient.GraphRagIngestTextAsync endpoint and returns the ingested document metadata.
     /// </summary>
     [Fact]
-    public async Task IngestText_DelegatesToContextClient()
+    public async Task IngestTextDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -129,7 +129,7 @@ public sealed class GraphRagToolAdapterTests
     /// ContextClient.GraphRagListDocumentsAsync and returns the document list.
     /// </summary>
     [Fact]
-    public async Task ListDocuments_DelegatesToContextClient()
+    public async Task ListDocumentsDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -155,7 +155,7 @@ public sealed class GraphRagToolAdapterTests
     /// to the document chunks endpoint.
     /// </summary>
     [Fact]
-    public async Task GetDocumentChunks_DelegatesToContextClient()
+    public async Task GetDocumentChunksDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -176,7 +176,7 @@ public sealed class GraphRagToolAdapterTests
     /// to the DELETE documents endpoint.
     /// </summary>
     [Fact]
-    public async Task DeleteDocument_DelegatesToContextClient()
+    public async Task DeleteDocumentDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -198,7 +198,7 @@ public sealed class GraphRagToolAdapterTests
     /// to the POST entities endpoint.
     /// </summary>
     [Fact]
-    public async Task CreateEntity_DelegatesToContextClient()
+    public async Task CreateEntityDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -227,7 +227,7 @@ public sealed class GraphRagToolAdapterTests
     /// to the GET entities endpoint.
     /// </summary>
     [Fact]
-    public async Task ListEntities_DelegatesToContextClient()
+    public async Task ListEntitiesDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -248,7 +248,7 @@ public sealed class GraphRagToolAdapterTests
     /// TEST-MCP-090: Verifies that the <c>mcp_graphrag_get_entity</c> tool delegates to GET entities/{id}.
     /// </summary>
     [Fact]
-    public async Task GetEntity_DelegatesToContextClient()
+    public async Task GetEntityDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -268,7 +268,7 @@ public sealed class GraphRagToolAdapterTests
     /// TEST-MCP-090: Verifies that the <c>mcp_graphrag_update_entity</c> tool delegates to PUT entities/{id}.
     /// </summary>
     [Fact]
-    public async Task UpdateEntity_DelegatesToContextClient()
+    public async Task UpdateEntityDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -297,7 +297,7 @@ public sealed class GraphRagToolAdapterTests
     /// TEST-MCP-090: Verifies that the <c>mcp_graphrag_delete_entity</c> tool delegates to DELETE entities/{id}.
     /// </summary>
     [Fact]
-    public async Task DeleteEntity_DelegatesToContextClient()
+    public async Task DeleteEntityDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -317,7 +317,7 @@ public sealed class GraphRagToolAdapterTests
     /// to the POST relationships endpoint.
     /// </summary>
     [Fact]
-    public async Task CreateRelationship_DelegatesToContextClient()
+    public async Task CreateRelationshipDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -347,7 +347,7 @@ public sealed class GraphRagToolAdapterTests
     /// to the GET relationships endpoint.
     /// </summary>
     [Fact]
-    public async Task ListRelationships_DelegatesToContextClient()
+    public async Task ListRelationshipsDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -369,7 +369,7 @@ public sealed class GraphRagToolAdapterTests
     /// to GET relationships/{id}.
     /// </summary>
     [Fact]
-    public async Task GetRelationship_DelegatesToContextClient()
+    public async Task GetRelationshipDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -390,7 +390,7 @@ public sealed class GraphRagToolAdapterTests
     /// to PUT relationships/{id}.
     /// </summary>
     [Fact]
-    public async Task UpdateRelationship_DelegatesToContextClient()
+    public async Task UpdateRelationshipDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(
@@ -421,7 +421,7 @@ public sealed class GraphRagToolAdapterTests
     /// to DELETE relationships/{id}.
     /// </summary>
     [Fact]
-    public async Task DeleteRelationship_DelegatesToContextClient()
+    public async Task DeleteRelationshipDelegatesToContextClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var fn = hostedAgent.Registration.Functions.Single(

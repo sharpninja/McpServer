@@ -17,7 +17,7 @@ public sealed class FederationQueuedOperationReplayServiceTests
 {
     /// <summary>Replay uses signed envelopes but keeps the local queue when the hub returns a non-terminal status.</summary>
     [Fact]
-    public async Task ReplayOnceAsync_SendsSignedEnvelopeAndKeepsQueueForAcceptedHubStatus()
+    public async Task ReplayOnceAsyncSendsSignedEnvelopeAndKeepsQueueForAcceptedHubStatus()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         topology.ListPendingOperationsAsync("PAYTON-LEGION2", 25, 3, Arg.Any<CancellationToken>())
@@ -55,7 +55,7 @@ public sealed class FederationQueuedOperationReplayServiceTests
 
     /// <summary>Terminal applied hub responses acknowledge the local queued operation.</summary>
     [Fact]
-    public async Task ReplayOnceAsync_AppliedHubStatusAcknowledgesQueuedOperation()
+    public async Task ReplayOnceAsyncAppliedHubStatusAcknowledgesQueuedOperation()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         topology.ListPendingOperationsAsync("PAYTON-LEGION2", 25, 3, Arg.Any<CancellationToken>())
@@ -88,7 +88,7 @@ public sealed class FederationQueuedOperationReplayServiceTests
 
     /// <summary>Hub conflict responses mark the queued operation conflicted.</summary>
     [Fact]
-    public async Task ReplayOnceAsync_HubConflictMarksQueuedOperationConflict()
+    public async Task ReplayOnceAsyncHubConflictMarksQueuedOperationConflict()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         topology.ListPendingOperationsAsync("PAYTON-LEGION2", 25, 3, Arg.Any<CancellationToken>())
@@ -118,7 +118,7 @@ public sealed class FederationQueuedOperationReplayServiceTests
 
     /// <summary>Hub failures increment replay failure state.</summary>
     [Fact]
-    public async Task ReplayOnceAsync_HubUnavailableRecordsFailure()
+    public async Task ReplayOnceAsyncHubUnavailableRecordsFailure()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         topology.ListPendingOperationsAsync("PAYTON-LEGION2", 25, 3, Arg.Any<CancellationToken>())
@@ -141,7 +141,7 @@ public sealed class FederationQueuedOperationReplayServiceTests
 
     /// <summary>Malformed hub JSON is persisted as a replay failure instead of escaping the replay cycle.</summary>
     [Fact]
-    public async Task ReplayOnceAsync_MalformedHubJsonRecordsFailure()
+    public async Task ReplayOnceAsyncMalformedHubJsonRecordsFailure()
     {
         var topology = Substitute.For<IFederationTopologyService>();
         topology.ListPendingOperationsAsync("PAYTON-LEGION2", 25, 3, Arg.Any<CancellationToken>())
@@ -168,7 +168,7 @@ public sealed class FederationQueuedOperationReplayServiceTests
 
     /// <summary>Queued writes survive a topology service restart and replay to acknowledgement on reconnect.</summary>
     [Fact]
-    public async Task ReplayOnceAsync_DurableQueuedOperationSurvivesRestartAndAcknowledges()
+    public async Task ReplayOnceAsyncDurableQueuedOperationSurvivesRestartAndAcknowledges()
     {
         var databaseRoot = new InMemoryDatabaseRoot();
         var databaseName = $"fed-replay-{Guid.NewGuid():N}";

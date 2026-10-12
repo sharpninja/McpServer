@@ -8,7 +8,7 @@ public sealed class ProcessRunnerTypeForwardingTests
 {
     /// <summary>Checks every relocated public type against the old assembly without running external processes.</summary>
     [Fact]
-    public void ServicesAssembly_ForwardsAllPublicProcessTypes()
+    public void ServicesAssemblyForwardsAllPublicProcessTypes()
     {
         var assembly = typeof(SessionLogService).Assembly;
         var types = new[]

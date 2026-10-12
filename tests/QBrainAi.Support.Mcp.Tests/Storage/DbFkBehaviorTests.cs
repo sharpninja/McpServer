@@ -15,7 +15,7 @@ public sealed class DbFkBehaviorTests
     /// entities write generic audit ledger rows and convert delete to soft delete.
     /// </summary>
     [Fact]
-    public async Task DataAuditLog_SaveChanges_CreateUpdateSoftDelete_WritesRows()
+    public async Task DataAuditLogSaveChangesCreateUpdateSoftDeleteWritesRows()
     {
         await using var db = CreateContext();
         db.OverrideWorkspaceId("F:\\Workspaces\\DbFkAudit");
@@ -60,7 +60,7 @@ public sealed class DbFkBehaviorTests
     /// recursively audit themselves.
     /// </summary>
     [Fact]
-    public async Task DataAuditLog_SaveChanges_DoesNotAuditDataAuditLogRows()
+    public async Task DataAuditLogSaveChangesDoesNotAuditDataAuditLogRows()
     {
         await using var db = CreateContext();
 
@@ -86,7 +86,7 @@ public sealed class DbFkBehaviorTests
     /// removing audit evidence.
     /// </summary>
     [Fact]
-    public async Task DataAuditLog_SaveChanges_DeleteAuditRow_Throws()
+    public async Task DataAuditLogSaveChangesDeleteAuditRowThrows()
     {
         await using var db = CreateContext();
 
@@ -111,7 +111,7 @@ public sealed class DbFkBehaviorTests
     }
 
     [Fact]
-    public async Task DataAuditLog_SaveChanges_UpdateAuditRow_Throws()
+    public async Task DataAuditLogSaveChangesUpdateAuditRowThrows()
     {
         await using var db = CreateContext();
         var audit = NewAudit("manual-update");
@@ -125,7 +125,7 @@ public sealed class DbFkBehaviorTests
     }
 
     [Fact]
-    public async Task DataAuditLog_NewPayload_UsesVersionedGzipAndRoundTrips()
+    public async Task DataAuditLogNewPayloadUsesVersionedGzipAndRoundTrips()
     {
         await using var db = CreateContext();
         var audit = NewAudit("compressed");
@@ -140,7 +140,7 @@ public sealed class DbFkBehaviorTests
     }
 
     [Fact]
-    public async Task TodoAuditHistory_SaveChanges_UpdateAuditRow_Throws()
+    public async Task TodoAuditHistorySaveChangesUpdateAuditRowThrows()
     {
         await using var db = CreateContext();
         var audit = new TodoAuditHistoryEntity

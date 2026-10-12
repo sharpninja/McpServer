@@ -14,7 +14,7 @@ public sealed class TranscriptSessionLogPersisterTests
 {
     /// <summary>Verifies normalized transcript sessions are submitted through ISessionLogService with source artifact evidence.</summary>
     [Fact]
-    public async Task PersistAsync_SubmitsUnifiedSessionLogThroughSessionLogService()
+    public async Task PersistAsyncSubmitsUnifiedSessionLogThroughSessionLogService()
     {
         var sessionLogService = Substitute.For<ISessionLogService>();
         UnifiedSessionLogDto? capturedDto = null;
@@ -92,7 +92,7 @@ public sealed class TranscriptSessionLogPersisterTests
     /// through the real SessionLogService import path.
     /// </summary>
     [Fact]
-    public async Task Import_OmittedFields_PersistsExtractorResultOrNone()
+    public async Task ImportOmittedFieldsPersistsExtractorResultOrNone()
     {
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<QBrainAi.Support.Mcp.Storage.McpDbContext>()
             .UseInMemoryDatabase("import-omit-" + Guid.NewGuid().ToString("N"))

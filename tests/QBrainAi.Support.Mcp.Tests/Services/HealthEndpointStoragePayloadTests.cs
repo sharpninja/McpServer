@@ -47,7 +47,7 @@ public sealed class HealthEndpointStoragePayloadTests
     /// (plain Healthy), which this test quotes in its failure message.
     /// </summary>
     [Fact]
-    public async Task HealthPayload_UnreachableStorage_ReportsStorageField_KeepsLivenessHealthy_AndEchoesNonce()
+    public async Task HealthPayloadUnreachableStorageReportsStorageFieldKeepsLivenessHealthyAndEchoesNonce()
     {
         var services = new ServiceCollection();
         services.AddLogging();
@@ -76,7 +76,7 @@ public sealed class HealthEndpointStoragePayloadTests
     /// <c>storage: reachable</c> and the top-level status stays Healthy.
     /// </summary>
     [Fact]
-    public async Task HealthPayload_ReachableStorage_ReportsStorageReachable()
+    public async Task HealthPayloadReachableStorageReportsStorageReachable()
     {
         var services = new ServiceCollection();
         services.AddLogging();
@@ -105,7 +105,7 @@ public sealed class HealthEndpointStoragePayloadTests
     /// both before and after the fix by design (it pins the backward-compatible shape).
     /// </summary>
     [Fact]
-    public async Task HealthPayload_NoStorageCheckRegistered_OmitsStorageField()
+    public async Task HealthPayloadNoStorageCheckRegisteredOmitsStorageField()
     {
         var services = new ServiceCollection();
         services.AddLogging();

@@ -10,7 +10,7 @@ public sealed class UseCaseUiAssetTests
 {
     /// <summary>HTML UI page is present under wwwroot/usecases and references REST.</summary>
     [Fact]
-    public void UseCaseUi_IndexHtml_ExistsAndReferencesRestApi()
+    public void UseCaseUiIndexHtmlExistsAndReferencesRestApi()
     {
         var path = FindWwwrootFile("usecases", "index.html");
         Assert.True(File.Exists(path), "Expected wwwroot/usecases/index.html");
@@ -21,7 +21,7 @@ public sealed class UseCaseUiAssetTests
 
     /// <summary>app.js drives list/create/diagram/coverage via REST only.</summary>
     [Fact]
-    public void UseCaseUi_AppJs_CallsLiveRestEndpoints()
+    public void UseCaseUiAppJsCallsLiveRestEndpoints()
     {
         var path = FindWwwrootFile("usecases", "app.js");
         Assert.True(File.Exists(path), "Expected wwwroot/usecases/app.js");
@@ -38,7 +38,7 @@ public sealed class UseCaseUiAssetTests
     /// and EDIT path (structure editor that mutates via REST and refreshes diagram).
     /// </summary>
     [Fact]
-    public void UseCaseUi_HasBuiltInDiagramViewAndEditSurface()
+    public void UseCaseUiHasBuiltInDiagramViewAndEditSurface()
     {
         var htmlPath = FindWwwrootFile("usecases", "index.html");
         var jsPath = FindWwwrootFile("usecases", "app.js");
@@ -74,7 +74,7 @@ public sealed class UseCaseUiAssetTests
 
     /// <summary>Structure panels exist so diagram edit is model-driven, not freehand-only.</summary>
     [Fact]
-    public void UseCaseUi_ExposesStructurePanelsForActorsFlowsStepsLinks()
+    public void UseCaseUiExposesStructurePanelsForActorsFlowsStepsLinks()
     {
         var html = File.ReadAllText(FindWwwrootFile("usecases", "index.html"));
         Assert.Contains("id=\"actorsPanel\"", html, StringComparison.Ordinal);

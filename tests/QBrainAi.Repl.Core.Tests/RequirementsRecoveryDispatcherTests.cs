@@ -17,7 +17,7 @@ public sealed class RequirementsRecoveryDispatcherTests
 {
     /// <summary>applyRecovery 409 surfaces code conflict (not method_invocation_error).</summary>
     [Fact]
-    public async Task ApplyRecovery_Conflict_ReturnsClassifiedConflict()
+    public async Task ApplyRecoveryConflictReturnsClassifiedConflict()
     {
         var workflow = Substitute.For<IRequirementsWorkflow>();
         workflow.ApplyRecoveryAsync(Arg.Any<RequirementsRecoveryRequest>(), Arg.Any<CancellationToken>())
@@ -39,7 +39,7 @@ public sealed class RequirementsRecoveryDispatcherTests
 
     /// <summary>applyRecovery 503 surfaces retryable backend_unavailable.</summary>
     [Fact]
-    public async Task ApplyRecovery_ServiceUnavailable_ReturnsRetryableBackendUnavailable()
+    public async Task ApplyRecoveryServiceUnavailableReturnsRetryableBackendUnavailable()
     {
         var workflow = Substitute.For<IRequirementsWorkflow>();
         workflow.ApplyRecoveryAsync(Arg.Any<RequirementsRecoveryRequest>(), Arg.Any<CancellationToken>())
@@ -61,7 +61,7 @@ public sealed class RequirementsRecoveryDispatcherTests
 
     /// <summary>getRecovery 404 surfaces not_found (KeyNotFoundException from workflow).</summary>
     [Fact]
-    public async Task GetRecovery_NotFound_ReturnsClassifiedNotFound()
+    public async Task GetRecoveryNotFoundReturnsClassifiedNotFound()
     {
         var workflow = Substitute.For<IRequirementsWorkflow>();
         workflow.GetRecoveryAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -79,7 +79,7 @@ public sealed class RequirementsRecoveryDispatcherTests
 
     /// <summary>Unclassified exceptions still map to method_invocation_error.</summary>
     [Fact]
-    public async Task ApplyRecovery_UnclassifiedException_KeepsMethodInvocationError()
+    public async Task ApplyRecoveryUnclassifiedExceptionKeepsMethodInvocationError()
     {
         var workflow = Substitute.For<IRequirementsWorkflow>();
         workflow.ApplyRecoveryAsync(Arg.Any<RequirementsRecoveryRequest>(), Arg.Any<CancellationToken>())

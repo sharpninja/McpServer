@@ -15,7 +15,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class AgentHealthMonitorServiceTests
 {
     [Fact]
-    public async Task ExecuteAsync_OnFailurePolicy_RestartsFailedAgent()
+    public async Task ExecuteAsyncOnFailurePolicyRestartsFailedAgent()
     {
         var processManager = Substitute.For<IAgentProcessManager>();
         var agentService = Substitute.For<IAgentService>();
@@ -63,7 +63,7 @@ public sealed class AgentHealthMonitorServiceTests
     }
 
     [Fact]
-    public async Task ExecuteAsync_NeverPolicy_DoesNotRestartFailedAgent()
+    public async Task ExecuteAsyncNeverPolicyDoesNotRestartFailedAgent()
     {
         var processManager = Substitute.For<IAgentProcessManager>();
         var agentService = Substitute.For<IAgentService>();

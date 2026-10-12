@@ -16,7 +16,7 @@ public sealed class ApiKeyEndpointTests : IClassFixture<CustomWebApplicationFact
 
     /// <summary>GET /api-key returns 429 after the fixed window issuance limit is exhausted.</summary>
     [Fact]
-    public async Task GetApiKey_AfterPermitLimit_ReturnsTooManyRequests()
+    public async Task GetApiKeyAfterPermitLimitReturnsTooManyRequests()
     {
         using var client = _factory.CreateClient();
 

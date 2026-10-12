@@ -10,7 +10,7 @@ public sealed class FederationEnvelopeSignerTests
 {
     /// <summary>Signed envelopes verify successfully before expiry.</summary>
     [Fact]
-    public void Sign_ProducesVerifiableEnvelope()
+    public void SignProducesVerifiableEnvelope()
     {
         var sut = CreateSigner();
 
@@ -32,7 +32,7 @@ public sealed class FederationEnvelopeSignerTests
 
     /// <summary>Body tampering is rejected through the body hash check.</summary>
     [Fact]
-    public void Verify_RejectsBodyTampering()
+    public void VerifyRejectsBodyTampering()
     {
         var sut = CreateSigner();
         var envelope = sut.Sign(new FederationOperationRequest
@@ -52,7 +52,7 @@ public sealed class FederationEnvelopeSignerTests
 
     /// <summary>Malformed Base64 operation bodies are rejected without throwing.</summary>
     [Fact]
-    public void Verify_RejectsMalformedBodyBase64()
+    public void VerifyRejectsMalformedBodyBase64()
     {
         var sut = CreateSigner();
         var envelope = sut.Sign(new FederationOperationRequest
@@ -72,7 +72,7 @@ public sealed class FederationEnvelopeSignerTests
 
     /// <summary>Target mismatches are rejected before local apply.</summary>
     [Fact]
-    public void Verify_RejectsWrongTarget()
+    public void VerifyRejectsWrongTarget()
     {
         var sut = CreateSigner();
         var envelope = sut.Sign(new FederationOperationRequest
@@ -90,7 +90,7 @@ public sealed class FederationEnvelopeSignerTests
 
     /// <summary>Expired envelopes are rejected.</summary>
     [Fact]
-    public void Verify_RejectsExpiredEnvelope()
+    public void VerifyRejectsExpiredEnvelope()
     {
         var sut = CreateSigner();
         var envelope = sut.Sign(new FederationOperationRequest
@@ -109,7 +109,7 @@ public sealed class FederationEnvelopeSignerTests
 
     /// <summary>Signing options can disable envelope signing even when a key exists.</summary>
     [Fact]
-    public void IsConfigured_ReturnsFalseWhenSigningDisabled()
+    public void IsConfiguredReturnsFalseWhenSigningDisabled()
     {
         var monitor = Substitute.For<IOptionsMonitor<FederationOptions>>();
         monitor.CurrentValue.Returns(new FederationOptions

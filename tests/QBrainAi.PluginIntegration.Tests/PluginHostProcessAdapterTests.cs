@@ -26,7 +26,7 @@ public sealed class PluginHostProcessAdapterTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Adapter_CapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)
+    public async Task AdapterCapturesExecutableArgsStdinEnvCwdTimeoutExitStdoutStderr(PluginHostKind hostKind)
     {
         var repoRoot = FindRepositoryRoot();
         var scenario = PluginSessionLogCatalog.LoadAndValidate(repoRoot)
@@ -90,7 +90,7 @@ public sealed class PluginHostProcessAdapterTests
     [InlineData(PluginHostKind.ClaudeCowork)]
     [InlineData(PluginHostKind.Copilot)]
     [InlineData(PluginHostKind.Grok)]
-    public async Task Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(PluginHostKind hostKind)
+    public async Task AdapterCodexAndPowerShellHookUseDeclaredEntrypoint(PluginHostKind hostKind)
     {
         var (scenario, fake, _, pluginRoot) = await LaunchWithFakeAsync(hostKind);
         Assert.Equal("pwsh.exe", fake.LastRequest!.Executable, StringComparer.OrdinalIgnoreCase);
@@ -112,7 +112,7 @@ public sealed class PluginHostProcessAdapterTests
     /// P9 green: Cline v1 starts catalog dist/index.js through node for session-log stdin, not repl-invoke.ps1.
     /// </summary>
     [Fact]
-    public async Task Adapter_ClineV1_StdioSessionLogTools()
+    public async Task AdapterClineV1StdioSessionLogTools()
     {
         var stdin = "{\"method\":\"sessionlog_begin_turn\",\"jsonrpc\":\"2.0\",\"id\":1}";
         var (scenario, fake, _, pluginRoot) = await LaunchWithFakeAsync(PluginHostKind.Cline, stdin);
@@ -134,7 +134,7 @@ public sealed class PluginHostProcessAdapterTests
     [Theory]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Adapter_ClineV2AndOpenCode_UseProductionExport(PluginHostKind hostKind)
+    public async Task AdapterClineV2AndOpenCodeUseProductionExport(PluginHostKind hostKind)
     {
         var (scenario, fake, _, pluginRoot) = await LaunchWithFakeAsync(hostKind);
         Assert.Equal("node", fake.LastRequest!.Executable, StringComparer.OrdinalIgnoreCase);
@@ -146,7 +146,7 @@ public sealed class PluginHostProcessAdapterTests
         Assert.Equal(pluginRoot, fake.LastRequest.WorkingDirectory, StringComparer.OrdinalIgnoreCase);
     }
 
-    private async Task<(PluginSessionLogScenario Scenario, FakePluginProcessRunner Fake, PluginProcessLaunchResult Result, string PluginRoot)> LaunchWithFakeAsync(
+    private static async Task<(PluginSessionLogScenario Scenario, FakePluginProcessRunner Fake, PluginProcessLaunchResult Result, string PluginRoot)> LaunchWithFakeAsync(
         PluginHostKind hostKind,
         string? stdin = null)
     {

@@ -13,7 +13,7 @@ public sealed class HandoffStrictEnumAndHttpTests
 {
     /// <summary>P1-7: numeric JSON 999 is rejected by the string-only converter.</summary>
     [Fact]
-    public void StrictEnumConverter_Numeric999_Throws()
+    public void StrictEnumConverterNumeric999Throws()
     {
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var ex = Assert.Throws<JsonException>(() =>
@@ -23,7 +23,7 @@ public sealed class HandoffStrictEnumAndHttpTests
 
     /// <summary>P1-7: an undefined name is rejected.</summary>
     [Fact]
-    public void StrictEnumConverter_UndefinedName_Throws()
+    public void StrictEnumConverterUndefinedNameThrows()
     {
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         Assert.Throws<JsonException>(() =>
@@ -40,12 +40,12 @@ public sealed class HandoffStrictEnumAndHttpTests
     [InlineData(HandoffErrorCodes.ProcessingFailed, 500)]
     [InlineData(HandoffErrorCodes.CompensationFailed, 500)]
     [InlineData(HandoffErrorCodes.InvalidMode, 400)]
-    public void FromErrorCode_MapsStableStatuses(string code, int status)
+    public void FromErrorCodeMapsStableStatuses(string code, int status)
         => Assert.Equal(status, HandoffHttpStatus.FromErrorCode(code));
 
     /// <summary>P2-4: ingest/get/approve use the same ErrorCode mapping and 5xx does not leak provider text.</summary>
     [Fact]
-    public async Task Controller_MapsErrorCodesAndRedactsInternalErrors()
+    public async Task ControllerMapsErrorCodesAndRedactsInternalErrors()
     {
         var service = Substitute.For<IHandoffIngestionService>();
         service.IngestAsync(Arg.Any<HandoffIngestionRequest>(), Arg.Any<CancellationToken>())

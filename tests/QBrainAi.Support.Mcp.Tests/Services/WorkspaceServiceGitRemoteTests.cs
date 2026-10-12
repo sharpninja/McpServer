@@ -64,7 +64,7 @@ public sealed class WorkspaceServiceGitRemoteTests : IDisposable
     /// intentionally skip git execution by design.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenGitRemoteCommandSucceeds_PopulatesGitRemoteUrl()
+    public async Task CreateAsyncWhenGitRemoteCommandSucceedsPopulatesGitRemoteUrl()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner
@@ -99,7 +99,7 @@ public sealed class WorkspaceServiceGitRemoteTests : IDisposable
     /// Uses a workspace directory fixture to ensure the git path executes.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenGitRemoteCommandFails_ReturnsNullGitRemoteUrl()
+    public async Task CreateAsyncWhenGitRemoteCommandFailsReturnsNullGitRemoteUrl()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner
@@ -127,7 +127,7 @@ public sealed class WorkspaceServiceGitRemoteTests : IDisposable
     /// This verifies directory existence is used as a guard before invoking git.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenWorkspaceDirectoryMissing_DoesNotInvokeGitRunner()
+    public async Task CreateAsyncWhenWorkspaceDirectoryMissingDoesNotInvokeGitRunner()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         var sut = CreateSut(processRunner);

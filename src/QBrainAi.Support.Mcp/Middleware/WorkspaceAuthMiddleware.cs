@@ -264,7 +264,7 @@ public sealed class WorkspaceAuthMiddleware
     /// Attempts JWT Bearer authentication. Returns a tuple of (success, failureReason).
     /// Only called when a Bearer header is known to be present.
     /// </summary>
-    private async Task<(bool Authenticated, string? FailureReason)> TryAuthenticateJwtAsync(HttpContext context)
+    private static async Task<(bool Authenticated, string? FailureReason)> TryAuthenticateJwtAsync(HttpContext context)
     {
         if (context.User.Identity?.IsAuthenticated == true)
             return (true, null);

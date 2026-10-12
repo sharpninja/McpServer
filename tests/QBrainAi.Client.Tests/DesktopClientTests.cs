@@ -30,7 +30,7 @@ public sealed class DesktopClientTests
     /// hosted-agent desktop-launch calls can rely on the same client contract.
     /// </summary>
     [Fact]
-    public async Task LaunchAsync_PostsStructuredDesktopLaunchRequest()
+    public async Task LaunchAsyncPostsStructuredDesktopLaunchRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"processId":4242,"exitCode":0}""");
         using var http = new HttpClient(handler);
@@ -68,7 +68,7 @@ public sealed class DesktopClientTests
     /// inspected without contacting a live MCP server.
     /// </summary>
     [Fact]
-    public async Task LaunchAsync_WhenDesktopLaunchTokenConfigured_AddsDesktopLaunchHeader()
+    public async Task LaunchAsyncWhenDesktopLaunchTokenConfiguredAddsDesktopLaunchHeader()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"processId":4242,"exitCode":0}""");
         using var http = new HttpClient(handler);

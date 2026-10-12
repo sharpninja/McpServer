@@ -84,52 +84,52 @@ public sealed class QBAgentDefinition
     /// <summary>
     /// Gets the stable Agent Framework metadata identifier.
     /// </summary>
-    public string AgentId => McpHostedAgentDefaults.QBAgentId;
+    public static string AgentId => McpHostedAgentDefaults.QBAgentId;
 
     /// <summary>
     /// Gets the stable host-facing agent name.
     /// </summary>
-    public string AgentName => McpHostedAgentDefaults.QBAgentName;
+    public static string AgentName => McpHostedAgentDefaults.QBAgentName;
 
     /// <summary>
     /// Gets the stable source type used for session-log and audit records.
     /// </summary>
-    public string SourceType => McpHostedAgentDefaults.QBAgentSourceType;
+    public static string SourceType => McpHostedAgentDefaults.QBAgentSourceType;
 
     /// <summary>
     /// Gets the public description projected into Microsoft Agent Framework metadata.
     /// </summary>
-    public string Description => McpHostedAgentDefaults.QBAgentDescription;
+    public static string Description => McpHostedAgentDefaults.QBAgentDescription;
 
     /// <summary>
     /// Gets the declared consistency model for this hosted-agent profile.
     /// </summary>
-    public string ConsistencyModel => "ACID";
+    public static string ConsistencyModel => "ACID";
 
     /// <summary>
     /// Gets the declared coupling model for this hosted-agent profile.
     /// </summary>
-    public string CouplingMode => "TightlyCoupled";
+    public static string CouplingMode => "TightlyCoupled";
 
     /// <summary>
     /// Gets the Microsoft Agent Framework agent type extended by this profile.
     /// </summary>
-    public string FrameworkAgentType => "Microsoft.Agents.AI.ChatClientAgent";
+    public static string FrameworkAgentType => "Microsoft.Agents.AI.ChatClientAgent";
 
     /// <summary>
     /// Gets the built-in MCP tool names exposed to the model by default in ACID mode.
     /// </summary>
-    public IReadOnlyList<string> AllowedToolNames => AllowedTools;
+    public static IReadOnlyList<string> AllowedToolNames => AllowedTools;
 
     /// <summary>
     /// Gets the built-in MCP tool names intentionally hidden by default in ACID mode.
     /// </summary>
-    public IReadOnlyList<string> BlockedToolNames => BlockedTools;
+    public static IReadOnlyList<string> BlockedToolNames => BlockedTools;
 
     /// <summary>
     /// Gets the invariants required before a host can claim the ACID profile.
     /// </summary>
-    public IReadOnlyList<string> Invariants => RequiredInvariants;
+    public static IReadOnlyList<string> Invariants => RequiredInvariants;
 
     /// <summary>
     /// Determines whether a built-in MCP tool is allowed in the ACID model-visible tool surface.

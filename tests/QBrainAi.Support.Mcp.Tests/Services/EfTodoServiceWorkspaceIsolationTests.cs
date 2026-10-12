@@ -29,7 +29,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// a plan-TODO with that id, so the implementation must accept them as two
 /// logically independent rows keyed on <c>(WorkspaceId, Id)</c>.
 /// </remarks>
-public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
+public sealed class EfTodoServiceWorkspaceIsolationTests : IDisposable
 {
     private const string SharedId = "PLAN-BITNETINTEGRATION-001";
 
@@ -42,7 +42,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
     private readonly EfTodoService _sut;
 
     /// <summary>Builds an isolated EF TODO stack with switchable workspace context.</summary>
-    public EfTodoService_WorkspaceIsolationTests()
+    public EfTodoServiceWorkspaceIsolationTests()
     {
         _tempRoot = Path.Combine(Path.GetTempPath(), $"ef_todo_workspace_{Guid.NewGuid():N}");
         _workspaceA = Path.Combine(_tempRoot, "workspace-a");
@@ -99,7 +99,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
     /// rows even when B owns rows with overlapping or disjoint ids.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_WorkspaceA_DoesNotReturnWorkspaceBRows()
+    public async Task QueryAsyncWorkspaceADoesNotReturnWorkspaceBRows()
     {
         UseWorkspaceA();
         await CreateRequiredAsync(SharedId, "workspace A shared").ConfigureAwait(true);
@@ -123,7 +123,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
     /// same canonical id that lives in workspace B.
     /// </summary>
     [Fact]
-    public async Task DeleteAsync_WorkspaceA_LeavesMatchingIdInWorkspaceBIntact()
+    public async Task DeleteAsyncWorkspaceALeavesMatchingIdInWorkspaceBIntact()
     {
         UseWorkspaceA();
         await CreateRequiredAsync(SharedId, "workspace A shared").ConfigureAwait(true);
@@ -147,7 +147,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
     /// active workspace so the same id can be created in two workspaces.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_SameIdInTwoWorkspaces_BothSucceed_PlanBitNetIntegrationCase()
+    public async Task CreateAsyncSameIdInTwoWorkspacesBothSucceedPlanBitNetIntegrationCase()
     {
         UseWorkspaceA();
         var first = await _sut.CreateAsync(CreateRequest(SharedId, "bitnet plan"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -177,7 +177,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
     /// <c>(TodoId, Version)</c> pair collides.
     /// </summary>
     [Fact]
-    public async Task GetAuditAsync_WorkspaceA_DoesNotLeakWorkspaceBAuditRows()
+    public async Task GetAuditAsyncWorkspaceADoesNotLeakWorkspaceBAuditRows()
     {
         UseWorkspaceA();
         await CreateRequiredAsync(SharedId, "workspace A initial").ConfigureAwait(true);
@@ -208,7 +208,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
     /// workspace scopes.
     /// </summary>
     [Fact]
-    public async Task LegacyMigrator_StampsWorkspaceIdOnImportedRows()
+    public async Task LegacyMigratorStampsWorkspaceIdOnImportedRows()
     {
         var legacyPath = Path.Combine(_tempRoot, "legacy-mcp.db");
         SeedLegacy(legacyPath);

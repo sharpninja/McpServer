@@ -55,7 +55,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Update_ChangeTitle_Returns200</c> scenario.
+    /// Validates the <c>UpdateChangeTitleReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -63,7 +63,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Update_ChangeTitle_Returns200()
+    public async Task UpdateChangeTitleReturns200()
     {
         var body = new { Title = "AuditUpdateRenamed" };
         var response = await _fixture.Client.PutAsJsonAsync(
@@ -79,7 +79,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Update_ToggleDone_Returns200</c> scenario.
+    /// Validates the <c>UpdateToggleDoneReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -87,7 +87,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Update_ToggleDone_Returns200()
+    public async Task UpdateToggleDoneReturns200()
     {
         var body = new { Done = true, CompletedDate = "2026-02-21", DoneSummary = "Completed by audit" };
         var response = await _fixture.Client.PutAsJsonAsync(
@@ -103,7 +103,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Update_ChangePriority_Returns200</c> scenario.
+    /// Validates the <c>UpdateChangePriorityReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -111,7 +111,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Update_ChangePriority_Returns200()
+    public async Task UpdateChangePriorityReturns200()
     {
         var body = new { Priority = "high" };
         var response = await _fixture.Client.PutAsJsonAsync(
@@ -127,7 +127,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Update_NonExistentId_Returns404</c> scenario.
+    /// Validates the <c>UpdateNonExistentIdReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -135,7 +135,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Update_NonExistentId_Returns404()
+    public async Task UpdateNonExistentIdReturns404()
     {
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var body = new { Title = "Ghost" };
@@ -146,7 +146,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Update_NullBody_Returns400</c> scenario.
+    /// Validates the <c>UpdateNullBodyReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -154,7 +154,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Update_NullBody_Returns400()
+    public async Task UpdateNullBodyReturns400()
     {
         var response = await _fixture.Client.PutAsync(
             $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}",

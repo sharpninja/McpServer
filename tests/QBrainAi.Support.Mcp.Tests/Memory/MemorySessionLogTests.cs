@@ -17,7 +17,7 @@ public sealed class MemorySessionLogTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-37: remember/add/update/remove append a sessionlog action when a turn is open.</summary>
     [Fact]
-    public async Task Mutations_AppendActionWhenTurnOpen()
+    public async Task MutationsAppendActionWhenTurnOpen()
     {
         long turnId;
         await using (var db = _harness.CreateContext(_harness.WorkspaceA))

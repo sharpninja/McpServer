@@ -10,47 +10,47 @@ public sealed class MemoryBenchPluginTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-16: Grok completes every prompt × both conditions with tokens_*.</summary>
     [Fact]
-    public void Grok_CompletesFullPack_Required()
+    public void GrokCompletesFullPackRequired()
         => AssertPluginCompletesFullPack("grok", MemoryBenchCatalog.StubGrok());
 
     /// <summary>AC-FR-MCP-MEMORY-018-17: Claude Code completes the full pack after H7a AGREE.</summary>
     [Fact]
-    public void ClaudeCode_CompletesFullPack_AfterGrokValueGate()
+    public void ClaudeCodeCompletesFullPackAfterGrokValueGate()
         => AssertPluginCompletesFullPack("claude-code", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-18: Claude Cowork completes the full pack after H7a AGREE.</summary>
     [Fact]
-    public void ClaudeCowork_CompletesFullPack_AfterGrokValueGate()
+    public void ClaudeCoworkCompletesFullPackAfterGrokValueGate()
         => AssertPluginCompletesFullPack("claude-cowork", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-19: Cline completes the full pack after H7a AGREE.</summary>
     [Fact]
-    public void Cline_CompletesFullPack_AfterGrokValueGate()
+    public void ClineCompletesFullPackAfterGrokValueGate()
         => AssertPluginCompletesFullPack("cline", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-20: Cline v2 completes the full pack after H7a AGREE.</summary>
     [Fact]
-    public void ClineV2_CompletesFullPack_AfterGrokValueGate()
+    public void ClineV2CompletesFullPackAfterGrokValueGate()
         => AssertPluginCompletesFullPack("cline-v2", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-21: Codex completes the full pack after H7a AGREE.</summary>
     [Fact]
-    public void Codex_CompletesFullPack_AfterGrokValueGate()
+    public void CodexCompletesFullPackAfterGrokValueGate()
         => AssertPluginCompletesFullPack("codex", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-22: Copilot completes the full pack after H7a AGREE.</summary>
     [Fact]
-    public void Copilot_CompletesFullPack_AfterGrokValueGate()
+    public void CopilotCompletesFullPackAfterGrokValueGate()
         => AssertPluginCompletesFullPack("copilot", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-23: OpenCode completes the full pack after H7a AGREE.</summary>
     [Fact]
-    public void Opencode_CompletesFullPack_AfterGrokValueGate()
+    public void OpencodeCompletesFullPackAfterGrokValueGate()
         => AssertPluginCompletesFullPack("opencode", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-09 / H7b: Stub -Plugin all writes per-cell tokens for all eight plugins.</summary>
     [Fact]
-    public void AllEight_WritesStubArtifacts()
+    public void AllEightWritesStubArtifacts()
     {
         var directory = Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "results");
         Directory.CreateDirectory(directory);

@@ -14,7 +14,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class AgentPoolServiceTests
 {
     [Fact]
-    public async Task EnqueueOneShotAsync_DispatchesAndCompletes()
+    public async Task EnqueueOneShotAsyncDispatchesAndCompletes()
     {
         using var service = CreateService(out var voiceService);
 
@@ -38,7 +38,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task CancelQueueItemAsync_QueuedItem_TransitionsToCanceled()
+    public async Task CancelQueueItemAsyncQueuedItemTransitionsToCanceled()
     {
         using var service = CreateService(out var voiceService);
         var firstTurnGate = new TaskCompletionSource<VoiceTurnResponse?>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -81,7 +81,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task MoveQueueItemUpAsync_ReordersQueuedItems()
+    public async Task MoveQueueItemUpAsyncReordersQueuedItems()
     {
         using var service = CreateService(out var voiceService);
         var firstTurnGate = new TaskCompletionSource<VoiceTurnResponse?>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -137,7 +137,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task StartAgentAsync_WithWorkspacePath_CreatesWorkspaceScopedInstance()
+    public async Task StartAgentAsyncWithWorkspacePathCreatesWorkspaceScopedInstance()
     {
         using var service = CreateService(out _);
 
@@ -151,7 +151,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task GetAgentsAsync_FiltersByWorkspace()
+    public async Task GetAgentsAsyncFiltersByWorkspace()
     {
         using var service = CreateService(out _);
 
@@ -171,7 +171,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task StopAgentAsync_StopsOnlyInSpecifiedWorkspace()
+    public async Task StopAgentAsyncStopsOnlyInSpecifiedWorkspace()
     {
         using var service = CreateService(out _);
 
@@ -191,7 +191,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task SeedWorkspaceAgentsAsync_CreatesInstancesForAllDefinitions()
+    public async Task SeedWorkspaceAgentsAsyncCreatesInstancesForAllDefinitions()
     {
         using var service = CreateService(out _);
 
@@ -205,7 +205,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task ConnectInteractiveAsync_RejectsWrongWorkspace()
+    public async Task ConnectInteractiveAsyncRejectsWrongWorkspace()
     {
         using var service = CreateService(out _);
 
@@ -220,7 +220,7 @@ public sealed class AgentPoolServiceTests
 
     /// <summary>P1-5: HandoffTodoDraft executor receives the raw prompt while queue/DTOs/notifications stay redacted.</summary>
     [Fact]
-    public async Task EnqueueOneShotAsync_HandoffContext_ExecutorGetsRawPromptAndSurfacesStayRedacted()
+    public async Task EnqueueOneShotAsyncHandoffContextExecutorGetsRawPromptAndSurfacesStayRedacted()
     {
         using var service = CreateService(out var voiceService);
         const string raw = "RAW-HANDOFF-SOURCE-SHOULD-NOT-LEAK";
@@ -259,7 +259,7 @@ public sealed class AgentPoolServiceTests
     /// the raw Handoff ExecutionPrompt. Executor still received it; public DTOs stay redacted.
     /// </summary>
     [Fact]
-    public async Task D5_AgentPool_DoesNotRetainRawHandoffSourceAfterDispatch()
+    public async Task D5AgentPoolDoesNotRetainRawHandoffSourceAfterDispatch()
     {
         using var service = CreateService(out var voiceService);
         const string raw = "RAW-HANDOFF-SOURCE-SHOULD-NOT-BE-RETAINED";
@@ -290,7 +290,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task EnqueueOneShotAsync_IncludesWorkspaceInQueueItem()
+    public async Task EnqueueOneShotAsyncIncludesWorkspaceInQueueItem()
     {
         using var service = CreateService(out _);
 
@@ -308,7 +308,7 @@ public sealed class AgentPoolServiceTests
     }
 
     [Fact]
-    public async Task StartAgentAsync_ForwardsExecutionStrategyToVoiceSession()
+    public async Task StartAgentAsyncForwardsExecutionStrategyToVoiceSession()
     {
         using var service = CreateService(out var voiceService, AgentExecutionStrategyNames.HostedMcpAgent);
 

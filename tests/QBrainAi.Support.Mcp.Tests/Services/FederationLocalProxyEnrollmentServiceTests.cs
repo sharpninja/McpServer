@@ -15,7 +15,7 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
 {
     /// <summary>Disabled federation does not contact the hub, validating TR-MCP-FED-001 role gating.</summary>
     [Fact]
-    public async Task EnrollOrHeartbeatOnceAsync_DisabledFederationSkipsHubCall()
+    public async Task EnrollOrHeartbeatOnceAsyncDisabledFederationSkipsHubCall()
     {
         var handler = new CapturingHandler(_ => JsonResponse(new { accepted = true }));
         var sut = CreateSut(new FederationOptions(), handler);
@@ -27,7 +27,7 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
 
     /// <summary>A LocalProxy without a configured hub URL does not attempt enrollment.</summary>
     [Fact]
-    public async Task EnrollOrHeartbeatOnceAsync_MissingHubUrlSkipsHubCall()
+    public async Task EnrollOrHeartbeatOnceAsyncMissingHubUrlSkipsHubCall()
     {
         var handler = new CapturingHandler(_ => JsonResponse(new { accepted = true }));
         var sut = CreateSut(new FederationOptions
@@ -44,7 +44,7 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
 
     /// <summary>Initial LocalProxy cycle enrolls with proxy id, token, callback URL, metadata, and workspace inventory.</summary>
     [Fact]
-    public async Task EnrollOrHeartbeatOnceAsync_FirstCycleEnrollsWithWorkspaceInventory()
+    public async Task EnrollOrHeartbeatOnceAsyncFirstCycleEnrollsWithWorkspaceInventory()
     {
         var handler = new CapturingHandler(_ => JsonResponse(new
         {
@@ -71,7 +71,7 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
 
     /// <summary>After successful enrollment, the next LocalProxy cycle sends a heartbeat with fresh inventory.</summary>
     [Fact]
-    public async Task EnrollOrHeartbeatOnceAsync_SecondCycleSendsHeartbeat()
+    public async Task EnrollOrHeartbeatOnceAsyncSecondCycleSendsHeartbeat()
     {
         var handler = new CapturingHandler(request => request.RequestUri!.AbsolutePath.EndsWith("/enroll", StringComparison.Ordinal)
             ? JsonResponse(new
@@ -104,7 +104,7 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
 
     /// <summary>Hub outages are logged and leave the next cycle ready to retry enrollment.</summary>
     [Fact]
-    public async Task EnrollOrHeartbeatOnceAsync_HubOutageRetriesEnrollmentNextCycle()
+    public async Task EnrollOrHeartbeatOnceAsyncHubOutageRetriesEnrollmentNextCycle()
     {
         var attempts = 0;
         var handler = new CapturingHandler(_ =>

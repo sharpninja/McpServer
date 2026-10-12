@@ -16,7 +16,7 @@ public sealed class MemoryIsolationTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-25: Workspace-scoped memory is invisible to a different workspace get/list/recall.</summary>
     [Fact]
-    public async Task WorkspaceMemory_HiddenFromOtherWorkspace()
+    public async Task WorkspaceMemoryHiddenFromOtherWorkspace()
     {
         var created = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -41,7 +41,7 @@ public sealed class MemoryIsolationTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-46: Product membership does not auto-share memories across member workspaces.</summary>
     [Fact]
-    public async Task ProductMembership_DoesNotShareMemories()
+    public async Task ProductMembershipDoesNotShareMemories()
     {
         await using (var db = _harness.CreateContext(_harness.WorkspaceA))
         {

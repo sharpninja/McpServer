@@ -47,7 +47,7 @@ public sealed class UseCaseComponentUpdateMcpToolTests : IDisposable
 
     /// <summary>Actor, flow, and step tools preserve route identities and every editable field.</summary>
     [Fact]
-    public async Task UseCaseComponentUpdateTools_DispatchFullReplacementCommands()
+    public async Task UseCaseComponentUpdateToolsDispatchFullReplacementCommands()
     {
         var actor = new UseCaseActorDto
         {
@@ -168,7 +168,7 @@ public sealed class UseCaseComponentUpdateMcpToolTests : IDisposable
 
     /// <summary>Classified handler failures remain classified on the MCP surface.</summary>
     [Fact]
-    public async Task UseCaseComponentUpdateTools_ReturnClassifiedFailureEnvelopes()
+    public async Task UseCaseComponentUpdateToolsReturnClassifiedFailureEnvelopes()
     {
         _dispatcher.SendAsync(Arg.Any<UpdateUseCaseActorCommand>(), Arg.Any<CancellationToken>())
             .Returns(Result<UseCaseActorDto>.Failure(

@@ -23,7 +23,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void HelloEnvelope_SerializesAndDeserializes_Correctly()
+    public void HelloEnvelopeSerializesAndDeserializesCorrectly()
     {
         var helloEnvelope = YamlEnvelopeBuilder.CreateHelloEnvelope(
             protocolVersion: "1.0",
@@ -47,7 +47,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void RequestEnvelope_SerializesAndDeserializes_Correctly()
+    public void RequestEnvelopeSerializesAndDeserializesCorrectly()
     {
         var requestEnvelope = YamlEnvelopeBuilder.CreateRequestEnvelope(
             requestId: "req-001",
@@ -65,7 +65,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void ResultEnvelope_SerializesAndDeserializes_Correctly()
+    public void ResultEnvelopeSerializesAndDeserializesCorrectly()
     {
         var resultEnvelope = YamlEnvelopeBuilder.CreateResultEnvelope(
             requestId: "req-001",
@@ -81,7 +81,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void ErrorEnvelope_SerializesAndDeserializes_Correctly()
+    public void ErrorEnvelopeSerializesAndDeserializesCorrectly()
     {
         var errorEnvelope = YamlEnvelopeBuilder.CreateErrorEnvelope(
             requestId: "req-001",
@@ -100,7 +100,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void EventEnvelope_SerializesAndDeserializes_Correctly()
+    public void EventEnvelopeSerializesAndDeserializesCorrectly()
     {
         var eventEnvelope = YamlEnvelopeBuilder.CreateEventEnvelope(
             eventName: "workspace.changed",
@@ -116,7 +116,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void TrustBootstrapRequest_HasCorrectShape()
+    public void TrustBootstrapRequestHasCorrectShape()
     {
         var bootstrapRequest = YamlEnvelopeBuilder.CreateTrustBootstrapRequest(
             requestId: "trust-001",
@@ -133,7 +133,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void WorkspaceSelectRequest_HasCorrectShape()
+    public void WorkspaceSelectRequestHasCorrectShape()
     {
         var selectRequest = YamlEnvelopeBuilder.CreateWorkspaceSelectRequest(
             requestId: "ws-001",
@@ -147,7 +147,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void NonceRequest_HasCorrectShape()
+    public void NonceRequestHasCorrectShape()
     {
         var nonceRequest = YamlEnvelopeBuilder.CreateNonceRequest(
             requestId: "nonce-001",
@@ -161,7 +161,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void AllEnvelopeTypes_HaveTypeDiscriminator()
+    public void AllEnvelopeTypesHaveTypeDiscriminator()
     {
         var envelopes = new[]
         {
@@ -186,7 +186,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void EnvelopePayload_IsProperlyNested()
+    public void EnvelopePayloadIsProperlyNested()
     {
         var requestEnvelope = YamlEnvelopeBuilder.CreateRequestEnvelope(
             "req-001",
@@ -203,7 +203,7 @@ public sealed class YamlEnvelopeShapeTests
     }
 
     [Fact]
-    public void YamlSerialization_RoundTrip_PreservesData()
+    public void YamlSerializationRoundTripPreservesData()
     {
         var originalEnvelope = YamlEnvelopeBuilder.CreateRequestEnvelope(
             "req-roundtrip-001",

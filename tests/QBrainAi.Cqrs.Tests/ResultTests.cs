@@ -6,7 +6,7 @@ namespace QBrainAi.Cqrs.Tests;
 public class ResultTests
 {
     [Fact]
-    public void Success_HasValue_And_IsSuccess()
+    public void SuccessHasValueAndIsSuccess()
     {
         var result = Result<int>.Success(42);
         Assert.True(result.IsSuccess);
@@ -17,7 +17,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Failure_WithMessage_HasError()
+    public void FailureWithMessageHasError()
     {
         var result = Result<int>.Failure("bad input");
         Assert.True(result.IsFailure);
@@ -27,7 +27,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Failure_WithException_HasBoth()
+    public void FailureWithExceptionHasBoth()
     {
         var ex = new InvalidOperationException("boom");
         var result = Result<int>.Failure(ex);
@@ -37,7 +37,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Failure_WithMessageAndException()
+    public void FailureWithMessageAndException()
     {
         var ex = new InvalidOperationException("inner");
         var result = Result<int>.Failure("outer", ex);
@@ -46,7 +46,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Bind_Success_Chains()
+    public void BindSuccessChains()
     {
         var result = Result<int>.Success(10)
             .Bind(v => Result<string>.Success($"value={v}"));
@@ -55,7 +55,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Bind_Failure_Propagates()
+    public void BindFailurePropagates()
     {
         var result = Result<int>.Failure("err")
             .Bind(v => Result<string>.Success($"value={v}"));
@@ -64,7 +64,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Map_Success_Transforms()
+    public void MapSuccessTransforms()
     {
         var result = Result<int>.Success(5).Map(v => v * 2);
         Assert.True(result.IsSuccess);
@@ -72,7 +72,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Map_Failure_Propagates()
+    public void MapFailurePropagates()
     {
         var result = Result<int>.Failure("err").Map(v => v * 2);
         Assert.True(result.IsFailure);
@@ -80,21 +80,21 @@ public class ResultTests
     }
 
     [Fact]
-    public void GetValueOrDefault_Success_ReturnsValue()
+    public void GetValueOrDefaultSuccessReturnsValue()
     {
         var result = Result<int>.Success(42);
         Assert.Equal(42, result.GetValueOrDefault(0));
     }
 
     [Fact]
-    public void GetValueOrDefault_Failure_ReturnsFallback()
+    public void GetValueOrDefaultFailureReturnsFallback()
     {
         var result = Result<int>.Failure("err");
         Assert.Equal(-1, result.GetValueOrDefault(-1));
     }
 
     [Fact]
-    public void ToString_Success_Format()
+    public void ToStringSuccessFormat()
     {
         var result = Result<int>.Success(42);
         var text = result.ToString();
@@ -103,7 +103,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void ToString_Failure_Format()
+    public void ToStringFailureFormat()
     {
         var result = Result<int>.Failure("oops");
         var text = result.ToString();
@@ -113,7 +113,7 @@ public class ResultTests
 
     // Non-generic Result tests
     [Fact]
-    public void NonGeneric_Success()
+    public void NonGenericSuccess()
     {
         var result = Result.Success();
         Assert.True(result.IsSuccess);
@@ -122,7 +122,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void NonGeneric_Failure()
+    public void NonGenericFailure()
     {
         var result = Result.Failure("err");
         Assert.True(result.IsFailure);

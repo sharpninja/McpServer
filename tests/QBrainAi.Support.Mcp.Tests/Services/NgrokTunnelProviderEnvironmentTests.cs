@@ -40,7 +40,7 @@ public sealed class NgrokTunnelProviderEnvironmentTests
     /// lookups, plus default <see cref="TunnelOptions"/> on port 7147.
     /// </summary>
     [Fact]
-    public void BuildNgrokStartInfo_AppliesInteractiveUserEnvironment()
+    public void BuildNgrokStartInfoAppliesInteractiveUserEnvironment()
     {
         var env = new StubProcessEnvironmentService();
         using var sut = new NgrokTunnelProvider(
@@ -64,7 +64,7 @@ public sealed class NgrokTunnelProviderEnvironmentTests
     /// <c>Ngrok.AuthToken = "token-123"</c> and the stub environment service.
     /// </summary>
     [Fact]
-    public void BuildNgrokStartInfo_StillInjectsAuthTokenViaEnvironment()
+    public void BuildNgrokStartInfoStillInjectsAuthTokenViaEnvironment()
     {
         var env = new StubProcessEnvironmentService();
         using var sut = new NgrokTunnelProvider(
@@ -86,7 +86,7 @@ public sealed class NgrokTunnelProviderEnvironmentTests
     /// <c>C:\Users\interactive\tools\ngrok</c> on PATH and resolves <c>ngrok</c> from it.
     /// </summary>
     [Fact]
-    public void ResolveExecutablePath_WithoutConfiguredPath_ResolvesAgainstEnrichedPath()
+    public void ResolveExecutablePathWithoutConfiguredPathResolvesAgainstEnrichedPath()
     {
         var env = new StubProcessEnvironmentService();
         using var sut = new NgrokTunnelProvider(
@@ -108,7 +108,7 @@ public sealed class NgrokTunnelProviderEnvironmentTests
     /// <c>Ngrok.ExecutablePath = @"D:\portable\ngrok.exe"</c>.
     /// </summary>
     [Fact]
-    public void ResolveExecutablePath_WithConfiguredPath_UsesConfiguredValue()
+    public void ResolveExecutablePathWithConfiguredPathUsesConfiguredValue()
     {
         var env = new StubProcessEnvironmentService();
         using var sut = new NgrokTunnelProvider(
@@ -131,7 +131,7 @@ public sealed class NgrokTunnelProviderEnvironmentTests
     /// the stub environment service, and a capturing <see cref="TestLogger{T}"/>.
     /// </summary>
     [Fact]
-    public async Task StartAsync_WhenNgrokMissing_LogsWarningNamingServiceAndStoreCauses()
+    public async Task StartAsyncWhenNgrokMissingLogsWarningNamingServiceAndStoreCauses()
     {
         var env = new StubProcessEnvironmentService { ResolvedExecutable = "ngrok" };
         var runner = Substitute.For<IProcessRunner>();
@@ -163,7 +163,7 @@ public sealed class NgrokTunnelProviderEnvironmentTests
     /// Fixture: <c>Ngrok.ExecutablePath = @"D:\missing\ngrok.exe"</c> and a runner returning exit code 1.
     /// </summary>
     [Fact]
-    public async Task StartAsync_WhenConfiguredNgrokPathMissing_WarnsAboutConfiguredPath()
+    public async Task StartAsyncWhenConfiguredNgrokPathMissingWarnsAboutConfiguredPath()
     {
         var env = new StubProcessEnvironmentService();
         var runner = Substitute.For<IProcessRunner>();

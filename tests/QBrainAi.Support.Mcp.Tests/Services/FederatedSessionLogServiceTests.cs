@@ -46,7 +46,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>When federation is disabled, delegates directly to the inner service.</summary>
     [Fact]
-    public async Task QueryAsync_FederationDisabled_DelegatesToLocal()
+    public async Task QueryAsyncFederationDisabledDelegatesToLocal()
     {
         var expected = new SessionLogQueryResult { TotalCount = 1, Limit = 100, Offset = 0, Items = [MakeLog("ClaudeCode", "S-001")] };
         _inner.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -60,7 +60,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>When no federation target resolves, delegates to the inner service.</summary>
     [Fact]
-    public async Task QueryAsync_NoTargetResolved_DelegatesToLocal()
+    public async Task QueryAsyncNoTargetResolvedDelegatesToLocal()
     {
         var expected = new SessionLogQueryResult { TotalCount = 1, Limit = 100, Offset = 0, Items = [MakeLog("ClaudeCode", "S-001")] };
         _inner.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -73,7 +73,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>Merges local and remote with local winning on (SourceType, SessionId) collision.</summary>
     [Fact]
-    public async Task QueryAsync_BothReturn_MergesLocalWins()
+    public async Task QueryAsyncBothReturnMergesLocalWins()
     {
         var localLog = MakeLog("ClaudeCode", "S-001", "Local Title");
         var remoteLog1 = MakeLog("ClaudeCode", "S-001", "Remote Title"); // collision
@@ -95,7 +95,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>When remote call throws, returns local-only results gracefully.</summary>
     [Fact]
-    public async Task QueryAsync_RemoteFails_ReturnsLocalOnly()
+    public async Task QueryAsyncRemoteFailsReturnsLocalOnly()
     {
         var localLog = MakeLog("ClaudeCode", "S-001");
         _inner.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>())
@@ -112,7 +112,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>When local is empty but remote has data, returns remote data.</summary>
     [Fact]
-    public async Task QueryAsync_RemoteOnly_ReturnsRemote()
+    public async Task QueryAsyncRemoteOnlyReturnsRemote()
     {
         _inner.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>())
             .Returns(new SessionLogQueryResult { TotalCount = 0, Limit = 100, Offset = 0, Items = [] });
@@ -128,7 +128,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>When federation is wrapped by the sanitizer decorator, local and remote merged items are both redacted.</summary>
     [Fact]
-    public async Task QueryAsync_WhenWrappedBySanitizer_RedactsLocalAndRemoteMergedItems()
+    public async Task QueryAsyncWhenWrappedBySanitizerRedactsLocalAndRemoteMergedItems()
     {
         var localLog = MakeLog("Codex", "S-LOCAL", "local password=hunter2");
         var remoteLog = MakeLog("Claude", "S-REMOTE", "remote password=hunter2");
@@ -157,7 +157,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>SubmitAsync always delegates to the inner service.</summary>
     [Fact]
-    public async Task SubmitAsync_AlwaysDelegatesToLocal()
+    public async Task SubmitAsyncAlwaysDelegatesToLocal()
     {
         _inner.SubmitAsync(Arg.Any<UnifiedSessionLogDto>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns(42L);
@@ -170,7 +170,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>IsUnchangedAsync always delegates to the inner service.</summary>
     [Fact]
-    public async Task IsUnchangedAsync_AlwaysDelegatesToLocal()
+    public async Task IsUnchangedAsyncAlwaysDelegatesToLocal()
     {
         _inner.IsUnchangedAsync("ClaudeCode", "S-001", "hash123", Arg.Any<CancellationToken>()).Returns(true);
 
@@ -182,7 +182,7 @@ public sealed class FederatedSessionLogServiceTests
 
     /// <summary>AppendProcessingDialogAsync always delegates to the inner service.</summary>
     [Fact]
-    public async Task AppendProcessingDialogAsync_AlwaysDelegatesToLocal()
+    public async Task AppendProcessingDialogAsyncAlwaysDelegatesToLocal()
     {
         _inner.AppendProcessingDialogAsync("ClaudeCode", "S-001", "req-1", Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(), Arg.Any<CancellationToken>())
             .Returns(5);
@@ -198,7 +198,7 @@ public sealed class FederatedSessionLogServiceTests
     /// persists a validated pair (None if extraction finds nothing).
     /// </summary>
     [Fact]
-    public async Task Apply_OmittedFields_PersistsProperValue()
+    public async Task ApplyOmittedFieldsPersistsProperValue()
     {
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<QBrainAi.Support.Mcp.Storage.McpDbContext>()
             .UseInMemoryDatabase("fed-omit-" + Guid.NewGuid().ToString("N"))

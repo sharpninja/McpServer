@@ -41,7 +41,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: missing planFile inserts no turn.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert()
+    public async Task UpsertTurnAsyncNewTurnWithoutPlanFileThrowsAndDoesNotInsert()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-miss";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -61,7 +61,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-003: import with omitted fields extracts then persists.</summary>
     [Fact]
-    public async Task SubmitAsync_ImportMissingFields_ExtractsFromTurnText()
+    public async Task SubmitAsyncImportMissingFieldsExtractsFromTurnText()
     {
         var dto = CreateSession("Cursor-20260304T113901Z-ctx-imp");
         dto.Turns!.First().PlanFile = null;
@@ -76,7 +76,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: interactive submit without fields throws.</summary>
     [Fact]
-    public async Task SubmitAsync_NewTurnMissingFields_Throws()
+    public async Task SubmitAsyncNewTurnMissingFieldsThrows()
     {
         var dto = CreateSession("Cursor-20260304T113901Z-ctx-sub");
         dto.Turns!.First().PlanFile = null;
@@ -87,7 +87,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: empty-string planFile inserts no turn row.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert()
+    public async Task UpsertTurnAsyncNewTurnEmptyPlanFileThrowsAndDoesNotInsert()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-emptyplan";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -108,7 +108,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: omitted todoId with a valid planFile inserts no turn row.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert()
+    public async Task UpsertTurnAsyncNewTurnNullTodoIdThrowsAndDoesNotInsert()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-nulltodo";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -129,7 +129,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: empty-string todoId with a valid planFile inserts no turn row.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert()
+    public async Task UpsertTurnAsyncNewTurnEmptyTodoIdThrowsAndDoesNotInsert()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-emptytodo";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -150,7 +150,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: whitespace todoId with a valid planFile inserts no turn row.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert()
+    public async Task UpsertTurnAsyncNewTurnWhitespaceTodoIdThrowsAndDoesNotInsert()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-wstodo";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -171,7 +171,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: canceled supersession may omit the pair and stores exact None.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_CanceledOmission_StoresExactNone()
+    public async Task UpsertTurnAsyncCanceledOmissionStoresExactNone()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-canceled";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -189,7 +189,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: cancelled supersession may omit the pair and stores exact None.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_CancelledOmission_StoresExactNone()
+    public async Task UpsertTurnAsyncCancelledOmissionStoresExactNone()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-cancelled";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -207,7 +207,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: interactive submit with an empty planFile and a valid todoId inserts no turn.</summary>
     [Fact]
-    public async Task SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn()
+    public async Task SubmitAsyncEmptyPlanFileWithValidTodoThrowsAndInsertsNoTurn()
     {
         var dto = CreateSession("Cursor-20260304T113901Z-ctx-subempty");
         dto.Turns!.First().PlanFile = string.Empty;
@@ -219,7 +219,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-003: interactive submit with a valid planFile and omitted todoId inserts no turn.</summary>
     [Fact]
-    public async Task SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn()
+    public async Task SubmitAsyncValidPlanOmittedTodoThrowsAndInsertsNoTurn()
     {
         var dto = CreateSession("Cursor-20260304T113901Z-ctx-subtodo");
         dto.Turns!.First().PlanFile = "docs/plans/foo.md";
@@ -231,7 +231,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-002: None/None persists as None.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone()
+    public async Task UpsertTurnAsyncNewTurnWithNoneNonePersistsNone()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-none";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -249,7 +249,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-001: valid pair round-trips on get.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurnWithValidValues_RoundTripsOnGet()
+    public async Task UpsertTurnAsyncNewTurnWithValidValuesRoundTripsOnGet()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-rt";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -268,7 +268,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-002: additive omit preserves stored values.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues()
+    public async Task UpsertTurnAsyncExistingTurnOmittingFieldsPreservesStoredValues()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-omit";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -287,7 +287,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-002: supplied todoId updates.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_ExistingTurnSupplyingNewTodo_UpdatesTodoId()
+    public async Task UpsertTurnAsyncExistingTurnSupplyingNewTodoUpdatesTodoId()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-upd";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -304,7 +304,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-002: replace omit throws.</summary>
     [Fact]
-    public async Task ReplaceTurnAsync_OmittingFields_Throws()
+    public async Task ReplaceTurnAsyncOmittingFieldsThrows()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-rep";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -317,7 +317,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-005: text search hits planFile.</summary>
     [Fact]
-    public async Task QueryAsync_TextMatchesPlanFileOnly_ReturnsSession()
+    public async Task QueryAsyncTextMatchesPlanFileOnlyReturnsSession()
     {
         await _sut.SubmitAsync(CreateSession("Cursor-20260304T113901Z-ctx-txt"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = await _sut.QueryAsync(new SessionLogQueryRequest { Text = "docs/plans/seed.md" }, TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -326,7 +326,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-005: todoId filter is exact.</summary>
     [Fact]
-    public async Task QueryAsync_FilterByTodoId_ReturnsOnlyMatches()
+    public async Task QueryAsyncFilterByTodoIdReturnsOnlyMatches()
     {
         await _sut.SubmitAsync(CreateSession("Cursor-20260304T113901Z-ctx-f1"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = await _sut.QueryAsync(new SessionLogQueryRequest { TodoId = "MCP-SESSIONLOG-002" }, TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -337,7 +337,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-005: exact planFile filter.</summary>
     [Fact]
-    public async Task QueryAsync_FilterByExactPlanFile_ReturnsOnlyMatches()
+    public async Task QueryAsyncFilterByExactPlanFileReturnsOnlyMatches()
     {
         await _sut.SubmitAsync(CreateSession("Cursor-20260304T113901Z-ctx-pf"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = await _sut.QueryAsync(new SessionLogQueryRequest { PlanFile = "docs/plans/seed.md" }, TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -346,7 +346,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-005: ~/ query expands then exact-matches.</summary>
     [Fact]
-    public async Task QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches()
+    public async Task QueryAsyncHomeRelativeFilterExpandsThenExactMatches()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-home";
         var dto = CreateSession(sessionId);

@@ -24,7 +24,7 @@ public sealed class EventStreamIntegrationTests : IClassFixture<CustomWebApplica
     public void Dispose() => _client.Dispose();
 
     [Fact]
-    public async Task StreamEndpoint_ReturnsEventStreamContentType()
+    public async Task StreamEndpointReturnsEventStreamContentType()
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, "/qbrainai/events");
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
@@ -37,7 +37,7 @@ public sealed class EventStreamIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task StreamEndpoint_WithCategoryFilter_EmitsFilteredEvent()
+    public async Task StreamEndpointWithCategoryFilterEmitsFilteredEvent()
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, "/qbrainai/events?category=todo");
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
@@ -86,7 +86,7 @@ public sealed class EventStreamIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task StreamEndpoint_WithCategoryFilter_DoesNotEmitNonMatchingEvents()
+    public async Task StreamEndpointWithCategoryFilterDoesNotEmitNonMatchingEvents()
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, "/qbrainai/events?category=todo");
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));

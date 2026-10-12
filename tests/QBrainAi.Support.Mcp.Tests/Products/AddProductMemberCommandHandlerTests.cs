@@ -16,7 +16,7 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
 
     /// <summary>Owner can add a registered enabled workspace as a member.</summary>
     [Fact]
-    public async Task HandleAsync_OwnerAddsRegisteredWorkspace_IncludesMember()
+    public async Task HandleAsyncOwnerAddsRegisteredWorkspaceIncludesMember()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -31,7 +31,7 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
 
     /// <summary>Unknown workspace ids are rejected.</summary>
     [Fact]
-    public async Task HandleAsync_UnknownWorkspace_Fails()
+    public async Task HandleAsyncUnknownWorkspaceFails()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -45,7 +45,7 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
 
     /// <summary>Non-owner cannot add members (403).</summary>
     [Fact]
-    public async Task HandleAsync_NonOwner_FailsForbidden()
+    public async Task HandleAsyncNonOwnerFailsForbidden()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -60,7 +60,7 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
 
     /// <summary>Owner can remove a member.</summary>
     [Fact]
-    public async Task HandleAsync_OwnerRemovesMember_DropsMember()
+    public async Task HandleAsyncOwnerRemovesMemberDropsMember()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -76,7 +76,7 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
 
     /// <summary>A member may leave itself.</summary>
     [Fact]
-    public async Task HandleAsync_MemberLeavesSelf_RemovesOnlyCaller()
+    public async Task HandleAsyncMemberLeavesSelfRemovesOnlyCaller()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -91,7 +91,7 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
 
     /// <summary>A member cannot remove another workspace.</summary>
     [Fact]
-    public async Task HandleAsync_MemberRemovesOther_FailsForbidden()
+    public async Task HandleAsyncMemberRemovesOtherFailsForbidden()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);
@@ -106,7 +106,7 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
 
     /// <summary>Removed member loses product reads (get is 404).</summary>
     [Fact]
-    public async Task HandleAsync_RemovedMember_LosesProductReads()
+    public async Task HandleAsyncRemovedMemberLosesProductReads()
     {
         await using var db = _fx.CreateDb();
         await _fx.CreateDefaultProductAsync(db);

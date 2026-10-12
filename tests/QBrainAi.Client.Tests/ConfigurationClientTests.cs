@@ -15,7 +15,7 @@ public sealed class ConfigurationClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task GetValuesAsync_GetsConfigurationEndpoint()
+    public async System.Threading.Tasks.Task GetValuesAsyncGetsConfigurationEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"VoiceConversation:CopilotModel":"gpt-5.4"}""");
         using var http = new HttpClient(handler);
@@ -29,7 +29,7 @@ public sealed class ConfigurationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task PatchValuesAsync_PreservesNullValuesInRequestBody()
+    public async System.Threading.Tasks.Task PatchValuesAsyncPreservesNullValuesInRequestBody()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,

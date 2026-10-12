@@ -55,7 +55,7 @@ public sealed class UseCaseExpandedScopeTests : IDisposable
 
     /// <summary>TR-MCP-USECASE-004: PlantUML format is supported via diagram service Generate.</summary>
     [Fact]
-    public void DiagramService_Generate_PlantUml_ContainsStartUml()
+    public void DiagramServiceGeneratePlantUmlContainsStartUml()
     {
         var svc = new MermaidUseCaseDiagramService();
         var dto = new UseCaseDetailDto
@@ -86,7 +86,7 @@ public sealed class UseCaseExpandedScopeTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-008: Approving increments version number.</summary>
     [Fact]
-    public async Task Approval_Approve_IncrementsVersion()
+    public async Task ApprovalApproveIncrementsVersion()
     {
         using var scope = _provider.CreateScope();
         var ws = scope.ServiceProvider.GetRequiredService<WorkspaceContext>();
@@ -115,7 +115,7 @@ public sealed class UseCaseExpandedScopeTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-009: Product key assignment and list-by-product hook.</summary>
     [Fact]
-    public async Task ProductKey_AssignAndListByProduct()
+    public async Task ProductKeyAssignAndListByProduct()
     {
         using var scope = _provider.CreateScope();
         var ws = scope.ServiceProvider.GetRequiredService<WorkspaceContext>();
@@ -144,7 +144,7 @@ public sealed class UseCaseExpandedScopeTests : IDisposable
     /// FR-MCP-USECASE-010: Shared evaluator reports FR without Realizes UC link for traceability tooling.
     /// </summary>
     [Fact]
-    public async Task CoverageEvaluator_ReportsFrWithoutUseCaseLink()
+    public async Task CoverageEvaluatorReportsFrWithoutUseCaseLink()
     {
         using var scope = _provider.CreateScope();
         var ws = scope.ServiceProvider.GetRequiredService<WorkspaceContext>();
@@ -173,7 +173,7 @@ public sealed class UseCaseExpandedScopeTests : IDisposable
     /// FR-MCP-USECASE-010: Traceability gate reports FR/UC without Realizes link; clears UC finding after link.
     /// </summary>
     [Fact]
-    public async Task TraceabilityGate_ValidateRealizesCoverage_ClearsAfterLink()
+    public async Task TraceabilityGateValidateRealizesCoverageClearsAfterLink()
     {
         using var scope = _provider.CreateScope();
         var ws = scope.ServiceProvider.GetRequiredService<WorkspaceContext>();

@@ -27,7 +27,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 
     /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Creativity, Logic, and Arbiter in order.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WithRealServicesAndFakeBrains_CommitsArbiterDecision()
+    public async Task ExecuteFullOrchestrationAsyncWithRealServicesAndFakeBrainsCommitsArbiterDecision()
     {
         using var harness = await LiveQuadHarness.CreateAsync(executionEnabled: true, arbiterOutput: "final decision").ConfigureAwait(true);
 
@@ -58,7 +58,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 
     /// <summary>A tool_calls payload from the Arbiter is returned verbatim as the orchestration output.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenArbiterEmitsToolCalls_ReturnsToolCallJsonAsOutput()
+    public async Task ExecuteFullOrchestrationAsyncWhenArbiterEmitsToolCallsReturnsToolCallJsonAsOutput()
     {
         const string toolCalls = "{\"tool_calls\":[{\"name\":\"write_file\",\"arguments\":{\"path\":\"a.cs\"}}]}";
         using var harness = await LiveQuadHarness.CreateAsync(executionEnabled: true, arbiterOutput: toolCalls).ConfigureAwait(true);
@@ -75,7 +75,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 
     /// <summary>TEST-MCP-QBLIVE-001: When both hemispheres produce no usable output, Curiosity gathers context but does not answer.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenBothHemispheresProduceNoOutput_InvokesCuriosityWithoutReturningIt()
+    public async Task ExecuteFullOrchestrationAsyncWhenBothHemispheresProduceNoOutputInvokesCuriosityWithoutReturningIt()
     {
         using var harness = await LiveQuadHarness.CreateAsync(
             executionEnabled: true,
@@ -99,7 +99,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 
     /// <summary>TEST-MCP-QBLIVE-001: Arbiter rejection triggers a Creativity/Logic voting round before final response.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenArbiterRejectsInitialEvidence_RunsVotingRound()
+    public async Task ExecuteFullOrchestrationAsyncWhenArbiterRejectsInitialEvidenceRunsVotingRound()
     {
         using var harness = await LiveQuadHarness.CreateAsync(
             executionEnabled: true,
@@ -124,7 +124,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 
     /// <summary>With only three roles enabled the loop rejects without producing a decision.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenOnlyThreeRolesSeeded_RejectsQuadNotReady()
+    public async Task ExecuteFullOrchestrationAsyncWhenOnlyThreeRolesSeededRejectsQuadNotReady()
     {
         using var harness = await LiveQuadHarness.CreateAsync(
             executionEnabled: true,
@@ -144,7 +144,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 
     /// <summary>When execution is disabled no brain is called and the loop rejects.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenExecutionDisabled_RejectsWithoutCallingBrains()
+    public async Task ExecuteFullOrchestrationAsyncWhenExecutionDisabledRejectsWithoutCallingBrains()
     {
         using var harness = await LiveQuadHarness.CreateAsync(executionEnabled: false, arbiterOutput: "final decision").ConfigureAwait(true);
 

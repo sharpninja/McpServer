@@ -17,7 +17,7 @@ public sealed class SqlServerProviderResiliencyTests
 {
     /// <summary>Connect retry settings are added when the operator connection string omits them.</summary>
     [Fact]
-    public void Configure_DefaultConnectionString_AddsConnectRetrySettings()
+    public void ConfigureDefaultConnectionStringAddsConnectRetrySettings()
     {
         var connectionString = ConfigureAndGetConnectionString(
             "Server=localhost;Database=mcp;Integrated Security=true;TrustServerCertificate=true");
@@ -29,7 +29,7 @@ public sealed class SqlServerProviderResiliencyTests
 
     /// <summary>Operator-specified retry settings are preserved.</summary>
     [Fact]
-    public void Configure_ExplicitRetrySettings_ArePreserved()
+    public void ConfigureExplicitRetrySettingsArePreserved()
     {
         var connectionString = ConfigureAndGetConnectionString(
             "Server=localhost;Database=mcp;Integrated Security=true;ConnectRetryCount=2;ConnectRetryInterval=3");

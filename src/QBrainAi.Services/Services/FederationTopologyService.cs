@@ -719,7 +719,7 @@ public sealed class FederationTopologyService : IFederationTopologyService
         db.Entry(workspace).Property("DeleteReason").CurrentValue = null;
     }
 
-    private async Task EnsureProxyAsync(McpDbContext db, string proxyId, DateTimeOffset now, CancellationToken cancellationToken)
+    private static async Task EnsureProxyAsync(McpDbContext db, string proxyId, DateTimeOffset now, CancellationToken cancellationToken)
     {
         var proxy = await db.FederationProxies.FindAsync([proxyId], cancellationToken).ConfigureAwait(false);
         if (proxy is not null)

@@ -38,7 +38,7 @@ public sealed class HandoffMcpToolTests : IDisposable
 
     /// <summary>TEST-HANDOFF-006: handoff_ingest maps sourceKind/mode and calls IHandoffIngestionService.</summary>
     [Fact]
-    public async Task HandoffIngest_DelegatesToSharedService()
+    public async Task HandoffIngestDelegatesToSharedService()
     {
         var service = Substitute.For<IHandoffIngestionService>();
         service.IngestAsync(Arg.Any<HandoffIngestionRequest>(), Arg.Any<CancellationToken>())
@@ -62,7 +62,7 @@ public sealed class HandoffMcpToolTests : IDisposable
 
     /// <summary>P1-7: native MCP rejects numeric mode 999 and never calls the service.</summary>
     [Fact]
-    public async Task HandoffIngest_NumericMode999_ReturnsInvalidMode()
+    public async Task HandoffIngestNumericMode999ReturnsInvalidMode()
     {
         var service = Substitute.For<IHandoffIngestionService>();
         var tools = CreateTools(_db, service);
@@ -80,7 +80,7 @@ public sealed class HandoffMcpToolTests : IDisposable
 
     /// <summary>TEST-HANDOFF-006: native tools, Director aliases, and plugin skill exist.</summary>
     [Fact]
-    public void PublicSurfaces_ExposeIngestGetAndApprove()
+    public void PublicSurfacesExposeIngestGetAndApprove()
     {
         var toolNames = typeof(FwhMcpTools)
             .GetMethods()
@@ -114,7 +114,7 @@ public sealed class HandoffMcpToolTests : IDisposable
 
     /// <summary>P2-6: plugin-sync artifact matches the canonical core handoff skill bytes.</summary>
     [Fact]
-    public void PluginSync_HandoffSkill_MatchesCoreArtifact()
+    public void PluginSyncHandoffSkillMatchesCoreArtifact()
     {
         var root = FindRepoRoot();
         var primary = FindPrimaryRepoRoot(root);
@@ -129,7 +129,7 @@ public sealed class HandoffMcpToolTests : IDisposable
 
     /// <summary>TEST-HANDOFF-006: invalid mode is rejected instead of coerced to DraftOnly.</summary>
     [Fact]
-    public async Task HandoffIngest_InvalidMode_ReturnsError()
+    public async Task HandoffIngestInvalidModeReturnsError()
     {
         var service = Substitute.For<IHandoffIngestionService>();
         var tools = CreateTools(_db, service);

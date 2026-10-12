@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class AuthRotationTests
 {
     [Fact]
-    public async Task UpdateAuthStateAsync_NewMarkerData_UpdatesCurrentAuthState()
+    public async Task UpdateAuthStateAsyncNewMarkerDataUpdatesCurrentAuthState()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var markerData = Substitute.For<IMarkerFileData>();
@@ -26,7 +26,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task UpdateAuthStateAsync_NullMarkerData_ThrowsArgumentNullException()
+    public async Task UpdateAuthStateAsyncNullMarkerDataThrowsArgumentNullException()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -39,7 +39,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public void RegisterAuthChangeCallback_AddsCallback()
+    public void RegisterAuthChangeCallbackAddsCallback()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -54,7 +54,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public void UnregisterAuthChangeCallback_RemovesCallback()
+    public void UnregisterAuthChangeCallbackRemovesCallback()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -66,7 +66,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task AuthChangeCallback_OnAuthUpdate_InvokesAllRegisteredCallbacks()
+    public async Task AuthChangeCallbackOnAuthUpdateInvokesAllRegisteredCallbacks()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var callback1Invoked = false;
@@ -104,7 +104,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task RefreshAuthStateAsync_ReReadsMarkerFile_ReturnsUpdatedState()
+    public async Task RefreshAuthStateAsyncReReadsMarkerFileReturnsUpdatedState()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var refreshedState = Substitute.For<IAuthState>();
@@ -121,7 +121,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task RefreshAuthStateAsync_MarkerFileDeleted_ThrowsFileNotFoundException()
+    public async Task RefreshAuthStateAsyncMarkerFileDeletedThrowsFileNotFoundException()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -134,7 +134,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task RefreshAuthStateAsync_MalformedMarkerFile_ThrowsFormatException()
+    public async Task RefreshAuthStateAsyncMalformedMarkerFileThrowsFormatException()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -147,7 +147,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task ValidateAuthStateAsync_ValidToken_ReturnsTrue()
+    public async Task ValidateAuthStateAsyncValidTokenReturnsTrue()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -159,7 +159,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task ValidateAuthStateAsync_ExpiredToken_ReturnsFalse()
+    public async Task ValidateAuthStateAsyncExpiredTokenReturnsFalse()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -171,7 +171,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task ValidateAuthStateAsync_ServerUnreachable_ReturnsFalse()
+    public async Task ValidateAuthStateAsyncServerUnreachableReturnsFalse()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -183,7 +183,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public void ClearAuthState_ResetsCurrentAuthState()
+    public void ClearAuthStateResetsCurrentAuthState()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -199,7 +199,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task AuthState_IsValid_IndicatesCurrentValidity()
+    public async Task AuthStateIsValidIndicatesCurrentValidity()
     {
         var authState = Substitute.For<IAuthState>();
         authState.IsValid.Returns(true);
@@ -212,7 +212,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task AuthState_LastUpdated_TracksRotationTime()
+    public async Task AuthStateLastUpdatedTracksRotationTime()
     {
         var authState = Substitute.For<IAuthState>();
         var updateTime = DateTimeOffset.UtcNow;
@@ -224,7 +224,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task Handle401Response_TriggersAuthRefresh()
+    public async Task Handle401ResponseTriggersAuthRefresh()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var refreshedState = Substitute.For<IAuthState>();
@@ -240,7 +240,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task AuthRotation_AfterServerRestart_DetectsKeyChange()
+    public async Task AuthRotationAfterServerRestartDetectsKeyChange()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -263,7 +263,7 @@ public class AuthRotationTests
     }
 
     [Fact]
-    public async Task MultipleAuthRotations_MaintainsStateConsistency()
+    public async Task MultipleAuthRotationsMaintainsStateConsistency()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var markerData1 = Substitute.For<IMarkerFileData>();

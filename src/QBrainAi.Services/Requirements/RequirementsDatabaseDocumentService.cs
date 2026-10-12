@@ -1312,7 +1312,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private async Task ValidateMappingTargetsAsync(
+    private static async Task ValidateMappingTargetsAsync(
         McpDbContext ctx,
         string frId,
         IReadOnlyList<string> trIds,
@@ -1338,7 +1338,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private async Task<RequirementEntity?> FindRequirementAsync(McpDbContext ctx, string kind, string id, bool asTracking, CancellationToken ct)
+    private static async Task<RequirementEntity?> FindRequirementAsync(McpDbContext ctx, string kind, string id, bool asTracking, CancellationToken ct)
     {
         var query = asTracking ? ctx.Requirements : ctx.Requirements.AsNoTracking();
         var row = await query.FirstOrDefaultAsync(x => x.Kind == kind && x.Id == id, ct).ConfigureAwait(false);

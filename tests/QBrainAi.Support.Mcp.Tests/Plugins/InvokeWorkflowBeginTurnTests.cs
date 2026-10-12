@@ -43,7 +43,7 @@ public sealed class InvokeWorkflowBeginTurnTests : IDisposable
 
     /// <summary>Missing first persist of a new requestId is rejected and inserts no turn.</summary>
     [Fact]
-    public async Task Invoke_WorkflowBeginTurn_MissingFields_FailsValidation()
+    public async Task InvokeWorkflowBeginTurnMissingFieldsFailsValidation()
     {
         var sessionId = "Cursor-20260304T113901Z-plugin-miss";
         await _sut.OpenSessionAsync(Agent, sessionId, "t", "m", TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -63,7 +63,7 @@ public sealed class InvokeWorkflowBeginTurnTests : IDisposable
 
     /// <summary>First persist with no plan-map values stores the None sentinel pair.</summary>
     [Fact]
-    public async Task Invoke_WorkflowBeginTurn_FirstTurn_SendsNoneWhenNoPlanMap()
+    public async Task InvokeWorkflowBeginTurnFirstTurnSendsNoneWhenNoPlanMap()
     {
         var sessionId = "Cursor-20260304T113901Z-plugin-none";
         await _sut.OpenSessionAsync(Agent, sessionId, "t", "m", TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -86,7 +86,7 @@ public sealed class InvokeWorkflowBeginTurnTests : IDisposable
 
     /// <summary>First persist with mapped plan/todo stores those exact values.</summary>
     [Fact]
-    public async Task Invoke_WorkflowBeginTurn_FirstTurn_SendsMappedPlanAndTodo()
+    public async Task InvokeWorkflowBeginTurnFirstTurnSendsMappedPlanAndTodo()
     {
         var sessionId = "Cursor-20260304T113901Z-plugin-map";
         await _sut.OpenSessionAsync(Agent, sessionId, "t", "m", TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -109,7 +109,7 @@ public sealed class InvokeWorkflowBeginTurnTests : IDisposable
 
     /// <summary>Reopen omit does not overwrite stored planFile/todoId.</summary>
     [Fact]
-    public async Task Invoke_WorkflowBeginTurn_Reopen_OmitsFieldsAndDoesNotOverwrite()
+    public async Task InvokeWorkflowBeginTurnReopenOmitsFieldsAndDoesNotOverwrite()
     {
         var sessionId = "Cursor-20260304T113901Z-plugin-reopen";
         var requestId = "req-20260304T113901Z-plugin-reopen";

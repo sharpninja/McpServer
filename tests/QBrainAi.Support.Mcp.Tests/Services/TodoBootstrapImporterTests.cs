@@ -42,7 +42,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
     /// every item with <c>WorkspaceId</c> set to the caller's workspace path.
     /// </summary>
     [Fact]
-    public async Task Bootstrap_EmptyWorkspace_ImportsAllYamlItemsWithStampedWorkspaceId()
+    public async Task BootstrapEmptyWorkspaceImportsAllYamlItemsWithStampedWorkspaceId()
     {
         var ws = CreateWorkspaceDir("alpha");
         WriteYaml(ws, """
@@ -72,7 +72,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
     /// file is present; the row count MUST be unchanged.
     /// </summary>
     [Fact]
-    public async Task Bootstrap_IsIdempotent_WhenMarkerFilePresent()
+    public async Task BootstrapIsIdempotentWhenMarkerFilePresent()
     {
         var ws = CreateWorkspaceDir("beta");
         WriteYaml(ws, """
@@ -109,7 +109,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
     /// write no marker, and leave zero rows for that workspace.
     /// </summary>
     [Fact]
-    public async Task Bootstrap_MissingYaml_IsNoop_NoMarkerWritten()
+    public async Task BootstrapMissingYamlIsNoopNoMarkerWritten()
     {
         var ws = CreateWorkspaceDir("gamma");
         // No YAML file at all.
@@ -128,7 +128,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
     /// canonical TODO id; verifies TR-MCP-TODO-008 composite-PK guarantee.
     /// </summary>
     [Fact]
-    public async Task Bootstrap_TwoWorkspacesSameId_BothInsert_PlanBitNetIntegrationCase()
+    public async Task BootstrapTwoWorkspacesSameIdBothInsertPlanBitNetIntegrationCase()
     {
         var bitnetWs = CreateWorkspaceDir("bitnet");
         var truckMateWs = CreateWorkspaceDir("truckmate");
@@ -163,7 +163,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
     /// top-level notes, and projection metadata; it is a mirror, not a merge.
     /// </summary>
     [Fact]
-    public async Task Bootstrap_PreservesOrderedSectionsCompletedItemsAndNotes()
+    public async Task BootstrapPreservesOrderedSectionsCompletedItemsAndNotes()
     {
         var ws = CreateWorkspaceDir("delta");
         WriteYaml(ws, """

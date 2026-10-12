@@ -37,7 +37,7 @@ public sealed class QueryIndexCoverageTests : IDisposable
     }
 
     [Fact]
-    public void Model_defines_slice1_query_indexes()
+    public void ModelDefinesSlice1QueryIndexes()
     {
         // SessionLogService.QueryAsync sort/date predicates + ordered child fetch
         AssertIndex<SessionLogTurnEntity>(nameof(SessionLogTurnEntity.Timestamp));

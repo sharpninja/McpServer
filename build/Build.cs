@@ -33,22 +33,22 @@ partial class Build : NukeBuild
     readonly Solution Solution = null!;
 
     /// <summary>Root directory of the repository.</summary>
-    public AbsolutePath SourceDirectory => RootDirectory / "src";
+    public static AbsolutePath SourceDirectory => RootDirectory / "src";
 
     /// <summary>Test projects directory.</summary>
-    public AbsolutePath TestsDirectory => RootDirectory / "tests";
+    public static AbsolutePath TestsDirectory => RootDirectory / "tests";
 
     /// <summary>Build artifacts output directory.</summary>
-    public AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
+    public static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
     /// <summary>Local NuGet packages output directory.</summary>
-    public AbsolutePath LocalPackagesDirectory => RootDirectory / "local-packages";
+    public static AbsolutePath LocalPackagesDirectory => RootDirectory / "local-packages";
 
     /// <summary>
     /// Writes the combined markdown (prompt + results/findings) for an aiUnit review to docs/reviews,
     /// similar to the logic in PlanTransactionReviewTests. Looks for the latest runlog in the given artifact subdir.
     /// </summary>
-    public void WriteAiUnitReviewMarkdown(string reviewType, string artifactSubDir, string reviewNameForLog)
+    public static void WriteAiUnitReviewMarkdown(string reviewType, string artifactSubDir, string reviewNameForLog)
     {
         var root = RootDirectory;
         var artifactDir = root / "artifacts" / artifactSubDir;
@@ -107,7 +107,7 @@ partial class Build : NukeBuild
     /// <summary>
     /// Writes the markdown directly from prompt and response data (used when the review is triggered inside the target).
     /// </summary>
-    public void WriteAiUnitReviewMarkdownFromData(string reviewType, string prompt, string responseJson, string runLogPath)
+    public static void WriteAiUnitReviewMarkdownFromData(string reviewType, string prompt, string responseJson, string runLogPath)
     {
         var reviewsDir = RootDirectory / "docs" / "reviews";
         Directory.CreateDirectory(reviewsDir);

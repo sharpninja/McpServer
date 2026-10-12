@@ -16,7 +16,7 @@ public sealed class AgentPoolClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAgentsAsync_SendsCorrectRequest()
+    public async System.Threading.Tasks.Task GetAgentsAsyncSendsCorrectRequest()
     {
         var json = """[{"agentName":"planner","lifecycle":"idle"}]""";
         var handler = new MockHttpHandler(HttpStatusCode.OK, json);
@@ -32,7 +32,7 @@ public sealed class AgentPoolClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StartAgentAsync_SendsCorrectRequest()
+    public async System.Threading.Tasks.Task StartAgentAsyncSendsCorrectRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -46,7 +46,7 @@ public sealed class AgentPoolClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task EnqueueOneShotAsync_PostsJsonBody()
+    public async System.Threading.Tasks.Task EnqueueOneShotAsyncPostsJsonBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"jobId":"job-1","agentName":"planner"}""");
         using var http = new HttpClient(handler);
@@ -66,7 +66,7 @@ public sealed class AgentPoolClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ResolvePromptAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task ResolvePromptAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"promptText":"resolved"}""");
         using var http = new HttpClient(handler);
@@ -85,7 +85,7 @@ public sealed class AgentPoolClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamNotificationsAsync_ParsesSseEvents()
+    public async System.Threading.Tasks.Task StreamNotificationsAsyncParsesSseEvents()
     {
         var sse = """
 data: {"eventType":"queued","jobId":"job-1","agentName":"planner"}
@@ -111,7 +111,7 @@ data:
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamJobAsync_ParsesJobEvents()
+    public async System.Threading.Tasks.Task StreamJobAsyncParsesJobEvents()
     {
         var sse = """
 data: {"jobId":"job-42","eventType":"snapshot","status":"queued"}

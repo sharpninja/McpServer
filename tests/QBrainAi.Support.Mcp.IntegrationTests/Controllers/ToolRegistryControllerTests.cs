@@ -20,7 +20,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     public void Dispose() => _client.Dispose();
 
     [Fact]
-    public async Task ListTools_Returns200()
+    public async Task ListToolsReturns200()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/tools", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -31,7 +31,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task CreateTool_ValidRequest_Returns201()
+    public async Task CreateToolValidRequestReturns201()
     {
         var request = new
         {
@@ -54,7 +54,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task CreateTool_DuplicateName_Returns409()
+    public async Task CreateToolDuplicateNameReturns409()
     {
         var name = $"duptool_{Guid.NewGuid():N}";
         var request = new { name, description = "Test", tags = new[] { "test" } };
@@ -65,7 +65,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task SearchByKeyword_MatchesTag_ReturnsResults()
+    public async Task SearchByKeywordMatchesTagReturnsResults()
     {
         var unique = Guid.NewGuid().ToString("N");
         var request = new
@@ -86,7 +86,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task SearchByKeyword_MatchesName_ReturnsResults()
+    public async Task SearchByKeywordMatchesNameReturnsResults()
     {
         var unique = Guid.NewGuid().ToString("N");
         var request = new
@@ -103,7 +103,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task SearchByKeyword_MatchesDescription_ReturnsResults()
+    public async Task SearchByKeywordMatchesDescriptionReturnsResults()
     {
         var unique = Guid.NewGuid().ToString("N");
         var request = new
@@ -120,7 +120,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task SearchByKeyword_NoMatch_ReturnsEmptyList()
+    public async Task SearchByKeywordNoMatchReturnsEmptyList()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/tools/search?keyword=zzz_nonexistent_zzz", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -130,7 +130,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task GetTool_Exists_Returns200()
+    public async Task GetToolExistsReturns200()
     {
         var name = $"gettool_{Guid.NewGuid():N}";
         var createResp = await _client.PostAsJsonAsync(new Uri("/qbrainai/tools", UriKind.Relative),
@@ -142,14 +142,14 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task GetTool_NotFound_Returns404()
+    public async Task GetToolNotFoundReturns404()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/tools/99999", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
     [Fact]
-    public async Task UpdateTool_ChangeDescription_Returns200()
+    public async Task UpdateToolChangeDescriptionReturns200()
     {
         var name = $"uptool_{Guid.NewGuid():N}";
         var createResp = await _client.PostAsJsonAsync(new Uri("/qbrainai/tools", UriKind.Relative),
@@ -165,7 +165,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task UpdateTool_ReplaceTags_Returns200()
+    public async Task UpdateToolReplaceTagsReturns200()
     {
         var name = $"tagtool_{Guid.NewGuid():N}";
         var createResp = await _client.PostAsJsonAsync(new Uri("/qbrainai/tools", UriKind.Relative),
@@ -184,7 +184,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task DeleteTool_Exists_Returns200()
+    public async Task DeleteToolExistsReturns200()
     {
         var name = $"deltool_{Guid.NewGuid():N}";
         var createResp = await _client.PostAsJsonAsync(new Uri("/qbrainai/tools", UriKind.Relative),
@@ -197,14 +197,14 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task DeleteTool_NotFound_Returns404()
+    public async Task DeleteToolNotFoundReturns404()
     {
         var response = await _client.DeleteAsync(new Uri("/qbrainai/tools/99999", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
     [Fact]
-    public async Task WorkspaceScopedTool_NotVisibleInGlobalSearch()
+    public async Task WorkspaceScopedToolNotVisibleInGlobalSearch()
     {
         var unique = Guid.NewGuid().ToString("N");
         var request = new
@@ -223,7 +223,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task WorkspaceScopedTool_VisibleWhenWorkspaceSpecified()
+    public async Task WorkspaceScopedToolVisibleWhenWorkspaceSpecified()
     {
         var unique = Guid.NewGuid().ToString("N");
         var wsPath = Path.Combine(Path.GetTempPath(), $"ws_{unique}");
@@ -244,7 +244,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task GlobalTool_VisibleInWorkspaceSearch()
+    public async Task GlobalToolVisibleInWorkspaceSearch()
     {
         var unique = Guid.NewGuid().ToString("N");
         // Create a global tool.
@@ -266,7 +266,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     // ── Bucket endpoints ───────────────────────────────────────────────
 
     [Fact]
-    public async Task ListBuckets_Returns200()
+    public async Task ListBucketsReturns200()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/tools/buckets", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -277,7 +277,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task AddBucket_ValidRequest_Returns201()
+    public async Task AddBucketValidRequestReturns201()
     {
         var request = new
         {
@@ -295,7 +295,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task AddBucket_DuplicateName_Returns409()
+    public async Task AddBucketDuplicateNameReturns409()
     {
         var name = $"dup_bucket_{Guid.NewGuid():N}";
         var request = new { name, owner = "test", repo = "repo" };
@@ -306,7 +306,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task RemoveBucket_Exists_Returns200()
+    public async Task RemoveBucketExistsReturns200()
     {
         var name = $"rmbucket_{Guid.NewGuid():N}";
         await _client.PostAsJsonAsync(new Uri("/qbrainai/tools/buckets", UriKind.Relative),
@@ -317,7 +317,7 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task RemoveBucket_NotFound_Returns404()
+    public async Task RemoveBucketNotFoundReturns404()
     {
         var response = await _client.DeleteAsync(new Uri("/qbrainai/tools/buckets/nonexistent_bucket", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

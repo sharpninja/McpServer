@@ -80,7 +80,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC2, AC3, AC4, AC5, AC7: valid docs/wiki.yaml drives documents, home, platforms, and navigation.</summary>
     [Fact]
-    public async Task GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure()
+    public async Task GenerateWikiAsyncWithWikiYamlExportsConfiguredTreeForGitHubAndAzure()
     {
         File.WriteAllText(Path.Combine(_workspaceRoot, "docs", "Architecture.md"), "# Architecture\n\nSystem overview.\n");
         File.WriteAllText(Path.Combine(_workspaceRoot, "docs", "wiki", "Home.template.md"), "# Custom Home\n\n{{navigation}}\n\n{{documents}}\n\n{{generatedAtUtc}}\n");
@@ -132,7 +132,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC5: generated home content falls back to the navigation tree when no home template is configured.</summary>
     [Fact]
-    public async Task GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome()
+    public async Task GenerateWikiAsyncWithWikiYamlWithoutHomeTemplateUsesDefaultGeneratedHome()
     {
         WriteWikiYamlObject(CreateConfig(
             [
@@ -157,7 +157,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC2: absence of docs/wiki.yaml preserves canonical wiki output.</summary>
     [Fact]
-    public async Task GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput()
+    public async Task GenerateWikiAsyncWithoutWikiYamlPreservesCanonicalOutput()
     {
         var service = CreateService();
         var exportRoot = Path.Combine(_workspaceRoot, "docs", "Project", "wiki");
@@ -174,7 +174,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC1, AC6: invalid config reports actionable errors and does not modify existing exports.</summary>
     [Fact]
-    public async Task GenerateWikiAsync_InvalidWikiYaml_FailsBeforeWriting()
+    public async Task GenerateWikiAsyncInvalidWikiYamlFailsBeforeWriting()
     {
         var service = CreateService();
         var exportRoot = Path.Combine(_workspaceRoot, "docs", "Project", "wiki");
@@ -199,7 +199,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC1: validation covers bad schema, paths, platforms, sources, and navigation.</summary>
     [Theory]
     [MemberData(nameof(InvalidWikiYamlCases))]
-    public void Load_InvalidWikiYaml_ThrowsActionableValidation(Dictionary<string, object?> document, string expectedMessage)
+    public void LoadInvalidWikiYamlThrowsActionableValidation(Dictionary<string, object?> document, string expectedMessage)
     {
         WriteWikiYamlObject(document);
 
@@ -210,7 +210,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: omitted DocFX configuration is backward compatible.</summary>
     [Fact]
-    public void Load_WithoutDocFxSection_ReturnsEmptyDocFxWorkflows()
+    public void LoadWithoutDocFxSectionReturnsEmptyDocFxWorkflows()
     {
         WriteWikiYamlObject(CreateConfig([CreateDocument("home", "Home", "generated:home", "Home.md")], [CreateNavigationDocument("home")]));
 
@@ -222,7 +222,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: valid DocFX workflow config is normalized and retained.</summary>
     [Fact]
-    public void Load_WithValidDocFxWorkflow_ReturnsNormalizedWorkflow()
+    public void LoadWithValidDocFxWorkflowReturnsNormalizedWorkflow()
     {
         Directory.CreateDirectory(Path.Combine(_workspaceRoot, "docs", "docfx"));
         WriteWikiYamlObject(CreateConfigWithDocFx([CreateDocFxWorkflow(platforms: ["GitHub"])]));
@@ -245,7 +245,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     /// <summary>TEST-MCP-DOCFXWIKI-001: invalid DocFX workflow config reports actionable validation messages.</summary>
     [Theory]
     [MemberData(nameof(InvalidDocFxWorkflowCases))]
-    public void Load_InvalidDocFxWorkflow_ThrowsActionableValidation(Dictionary<string, object?> document, string expectedMessage)
+    public void LoadInvalidDocFxWorkflowThrowsActionableValidation(Dictionary<string, object?> document, string expectedMessage)
     {
         WriteWikiYamlObject(document);
 
@@ -256,7 +256,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: DocFX workflow paths cannot escape the workspace through reparse points.</summary>
     [Fact]
-    public void Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation()
+    public void LoadDocFxWorkflowThroughReparsePointThrowsActionableValidation()
     {
         var outsideRoot = Path.Combine(Path.GetTempPath(), "mcp-docfx-outside-" + Guid.NewGuid().ToString("N"));
         var linkPath = Path.Combine(_workspaceRoot, "docs", "docfx-link");

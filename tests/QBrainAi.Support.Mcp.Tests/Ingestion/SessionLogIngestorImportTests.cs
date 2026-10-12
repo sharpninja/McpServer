@@ -221,7 +221,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
     /// ingest of omitted planFile/todoId persists extractor result or None, never null.
     /// </summary>
     [Fact]
-    public async Task Ingest_OmittedFields_PersistsExtractorResultOrNone()
+    public async Task IngestOmittedFieldsPersistsExtractorResultOrNone()
     {
         WriteSessionFile("omit-fields.json", new UnifiedSessionLogDto
         {

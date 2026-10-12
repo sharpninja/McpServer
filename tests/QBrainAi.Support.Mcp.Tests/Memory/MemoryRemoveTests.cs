@@ -16,7 +16,7 @@ public sealed class MemoryRemoveTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-31: Remove unknown id returns 404.</summary>
     [Fact]
-    public async Task UnknownId_Returns404()
+    public async Task UnknownIdReturns404()
     {
         await using var db = _harness.CreateContext(_harness.WorkspaceA);
         var controller = MemoryS1Harness.CreateController(MemoryS1Harness.CreateService(db));
@@ -29,7 +29,7 @@ public sealed class MemoryRemoveTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-32: Second remove of an already soft-deleted id is 404 or a documented no-op.</summary>
     [Fact]
-    public async Task SecondRemove_StableBehavior()
+    public async Task SecondRemoveStableBehavior()
     {
         var created = await _harness.AddCompatAsync(new MemoryAddRequest
         {

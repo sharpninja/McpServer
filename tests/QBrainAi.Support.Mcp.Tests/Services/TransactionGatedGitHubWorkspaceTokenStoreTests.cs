@@ -19,7 +19,7 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
     /// external GitHub auth state is not transaction compensated.
     /// </summary>
     [Fact]
-    public async Task Mutations_WhenTransactionsRequired_DelegateToInner()
+    public async Task MutationsWhenTransactionsRequiredDelegateToInner()
     {
         var inner = Substitute.For<IGitHubWorkspaceTokenStore>();
         inner.DeleteAsync(@"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
@@ -37,7 +37,7 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
     /// TEST-MCP-161: Token reads delegate and do not allocate turn transactions.
     /// </summary>
     [Fact]
-    public async Task GetAsync_DelegatesWithoutCoordinatorTransaction()
+    public async Task GetAsyncDelegatesWithoutCoordinatorTransaction()
     {
         var inner = Substitute.For<IGitHubWorkspaceTokenStore>();
         inner.GetAsync(@"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
@@ -57,7 +57,7 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
     /// coordinator message.
     /// </summary>
     [Fact]
-    public async Task UpsertAsync_WhenCoordinatorDegraded_DelegatesToInner()
+    public async Task UpsertAsyncWhenCoordinatorDegradedDelegatesToInner()
     {
         var inner = Substitute.For<IGitHubWorkspaceTokenStore>();
         var sut = CreateSut(inner, new CapturingCoordinator(degraded: true, message: "txn degraded"));
@@ -72,7 +72,7 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
     /// mutation behavior.
     /// </summary>
     [Fact]
-    public async Task DeleteAsync_WhenTransactionsNotRequired_DelegatesToInner()
+    public async Task DeleteAsyncWhenTransactionsNotRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IGitHubWorkspaceTokenStore>();
         inner.DeleteAsync(@"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>()).Returns(true);

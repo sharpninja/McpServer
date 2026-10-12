@@ -37,7 +37,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Get_ValidKey_Returns200WithWorkspace()
+    public async Task GetValidKeyReturns200WithWorkspace()
     {
         var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}", cancellationToken: TestContext.Current.CancellationToken);
 
@@ -51,7 +51,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Get_NonExistentKey_Returns404()
+    public async Task GetNonExistentKeyReturns404()
     {
         var fakeKey = WorkspaceEndpointFixture.EncodeKey(@"C:\NonExistent\Path_" + Guid.NewGuid().ToString("N"));
         var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{fakeKey}", cancellationToken: TestContext.Current.CancellationToken);
@@ -61,7 +61,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Get_InvalidBase64Key_Returns400()
+    public async Task GetInvalidBase64KeyReturns400()
     {
         var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!", cancellationToken: TestContext.Current.CancellationToken);
 

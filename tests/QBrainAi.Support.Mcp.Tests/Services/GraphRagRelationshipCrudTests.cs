@@ -53,7 +53,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     /// FR-MCP-079: Verifies that CreateRelationshipAsync generates an ID with "gr-" prefix.
     /// </summary>
     [Fact]
-    public async Task CreateRelationship_GeneratesIdWithPrefix()
+    public async Task CreateRelationshipGeneratesIdWithPrefix()
     {
         var sut = CreateSut();
         var entityA = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -76,7 +76,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     /// FR-MCP-079: Verifies that CreateRelationshipAsync throws when source entity does not exist.
     /// </summary>
     [Fact]
-    public async Task CreateRelationship_ValidatesSourceEntityExists()
+    public async Task CreateRelationshipValidatesSourceEntityExists()
     {
         var sut = CreateSut();
         var entityB = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -94,7 +94,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     /// FR-MCP-079: Verifies that CreateRelationshipAsync throws when target entity does not exist.
     /// </summary>
     [Fact]
-    public async Task CreateRelationship_ValidatesTargetEntityExists()
+    public async Task CreateRelationshipValidatesTargetEntityExists()
     {
         var sut = CreateSut();
         var entityA = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -112,7 +112,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     /// FR-MCP-079: Verifies that ListRelationshipsAsync filters by entity ID (source or target).
     /// </summary>
     [Fact]
-    public async Task ListRelationships_FiltersByEntityId()
+    public async Task ListRelationshipsFiltersByEntityId()
     {
         var sut = CreateSut();
         var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -133,7 +133,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     /// FR-MCP-079: Verifies that ListRelationshipsAsync filters by relationship type.
     /// </summary>
     [Fact]
-    public async Task ListRelationships_FiltersByRelationshipType()
+    public async Task ListRelationshipsFiltersByRelationshipType()
     {
         var sut = CreateSut();
         var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -152,7 +152,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     /// FR-MCP-079: Verifies that UpdateRelationshipAsync modifies fields.
     /// </summary>
     [Fact]
-    public async Task UpdateRelationship_ModifiesFields()
+    public async Task UpdateRelationshipModifiesFields()
     {
         var sut = CreateSut();
         var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -187,7 +187,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     /// FR-MCP-079: Verifies that DeleteRelationshipAsync returns true when found, false when not found.
     /// </summary>
     [Fact]
-    public async Task DeleteRelationship_ReturnsTrueOrFalse()
+    public async Task DeleteRelationshipReturnsTrueOrFalse()
     {
         var sut = CreateSut();
         var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);

@@ -39,7 +39,7 @@ public sealed class StartWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Start_RegisteredWorkspace_ReturnsProcessStatus()
+    public async Task StartRegisteredWorkspaceReturnsProcessStatus()
     {
         var response = await _fixture.Client.PostAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/start", null, cancellationToken: TestContext.Current.CancellationToken);
@@ -53,7 +53,7 @@ public sealed class StartWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Start_NonExistentWorkspace_Returns404()
+    public async Task StartNonExistentWorkspaceReturns404()
     {
         var fakeKey = WorkspaceEndpointFixture.EncodeKey(@"C:\NonExistent\Path_" + Guid.NewGuid().ToString("N"));
 
@@ -65,7 +65,7 @@ public sealed class StartWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Start_InvalidKey_Returns400()
+    public async Task StartInvalidKeyReturns400()
     {
         var response = await _fixture.Client.PostAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/start", null, cancellationToken: TestContext.Current.CancellationToken);

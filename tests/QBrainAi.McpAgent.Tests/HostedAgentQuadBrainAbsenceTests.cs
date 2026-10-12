@@ -31,7 +31,7 @@ public sealed class HostedAgentQuadBrainAbsenceTests
     /// HTTP handler because building the tool catalog must not require any transport call.
     /// </summary>
     [Fact]
-    public void Registration_Functions_ContainNoQuadBrainToolName()
+    public void RegistrationFunctionsContainNoQuadBrainToolName()
     {
         var hostedAgent = CreateHostedAgent();
 
@@ -49,7 +49,7 @@ public sealed class HostedAgentQuadBrainAbsenceTests
     /// QuadBrain-named tool for the default execution profile used by general hosted agents.
     /// </summary>
     [Fact]
-    public void CreateRunOptions_AttachedTools_ContainNoQuadBrainToolName()
+    public void CreateRunOptionsAttachedToolsContainNoQuadBrainToolName()
     {
         var hostedAgent = CreateHostedAgent();
 
@@ -70,15 +70,15 @@ public sealed class HostedAgentQuadBrainAbsenceTests
     /// the shared catalog contract rather than merely filtered out of it.
     /// </summary>
     [Fact]
-    public void QBAgentDefinition_ToolNameLists_ContainNoQuadBrainToolName()
+    public void QBAgentDefinitionToolNameListsContainNoQuadBrainToolName()
     {
         var definition = QBAgentDefinition.Instance;
 
         Assert.DoesNotContain(
-            definition.AllowedToolNames,
+            QBAgentDefinition.AllowedToolNames,
             static name => name.Contains("quadbrain", StringComparison.OrdinalIgnoreCase));
         Assert.DoesNotContain(
-            definition.BlockedToolNames,
+            QBAgentDefinition.BlockedToolNames,
             static name => name.Contains("quadbrain", StringComparison.OrdinalIgnoreCase));
     }
 

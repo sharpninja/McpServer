@@ -30,7 +30,7 @@ public sealed class TodoLifecycleSequenceTests
     }
 
     /// <summary>
-    /// Validates the <c>FullLifecycle_CreateThroughDelete</c> scenario.
+    /// Validates the <c>FullLifecycleCreateThroughDelete</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -38,7 +38,7 @@ public sealed class TodoLifecycleSequenceTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task FullLifecycle_CreateThroughDelete()
+    public async Task FullLifecycleCreateThroughDelete()
     {
         var testId = TodoEndpointFixture.GenerateTestId();
         var client = _fixture.Client;

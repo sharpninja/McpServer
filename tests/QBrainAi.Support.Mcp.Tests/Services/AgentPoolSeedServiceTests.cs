@@ -11,7 +11,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class AgentPoolSeedServiceTests
 {
     [Fact]
-    public async Task StartAsync_SeedsEachEnabledWorkspace()
+    public async Task StartAsyncSeedsEachEnabledWorkspace()
     {
         var pool = Substitute.For<IAgentPoolService>();
         var workspaceService = Substitute.For<IWorkspaceService>();
@@ -43,7 +43,7 @@ public sealed class AgentPoolSeedServiceTests
     }
 
     [Fact]
-    public async Task StartAsync_WhenPoolDisabled_DoesNotSeed()
+    public async Task StartAsyncWhenPoolDisabledDoesNotSeed()
     {
         var pool = Substitute.For<IAgentPoolService>();
         var workspaceService = Substitute.For<IWorkspaceService>();

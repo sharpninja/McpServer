@@ -66,7 +66,7 @@ public sealed class ProductRequirementContextTests : IDisposable
 
     /// <summary>Member pack includes sibling FR body plus origin workspace tag.</summary>
     [Fact]
-    public async Task HandleAsync_Member_IncludesSiblingFrBodyAndOrigin()
+    public async Task HandleAsyncMemberIncludesSiblingFrBodyAndOrigin()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -82,7 +82,7 @@ public sealed class ProductRequirementContextTests : IDisposable
 
     /// <summary>Member pack does not include sibling .cs source chunks.</summary>
     [Fact]
-    public async Task HandleAsync_Member_DoesNotIncludeSiblingSourceFiles()
+    public async Task HandleAsyncMemberDoesNotIncludeSiblingSourceFiles()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -97,7 +97,7 @@ public sealed class ProductRequirementContextTests : IDisposable
 
     /// <summary>Non-member pack does not contain sibling FR.</summary>
     [Fact]
-    public async Task HandleAsync_Outsider_DoesNotIncludeSiblingFr()
+    public async Task HandleAsyncOutsiderDoesNotIncludeSiblingFr()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -111,7 +111,7 @@ public sealed class ProductRequirementContextTests : IDisposable
 
     /// <summary>Source type product-requirements returns only requirement chunks.</summary>
     [Fact]
-    public async Task HandleAsync_ProductRequirementsSource_ReturnsOnlyRequirementChunks()
+    public async Task HandleAsyncProductRequirementsSourceReturnsOnlyRequirementChunks()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);

@@ -15,7 +15,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 {
     /// <summary>repo.write signs and commits before returning the write result.</summary>
     [Fact]
-    public async Task WriteAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult()
+    public async Task WriteAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsResult()
     {
         var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
         var coordinator = new CapturingCoordinator();
@@ -32,7 +32,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>Pre-mutation repo.write transaction rejection does not write the file.</summary>
     [Fact]
-    public async Task WriteAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotWriteFile()
+    public async Task WriteAsyncWhenCoordinatorRejectsBeforeMutationDoesNotWriteFile()
     {
         var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
         var coordinator = new CapturingCoordinator
@@ -55,7 +55,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>Post-mutation commit failure restores the previous file contents.</summary>
     [Fact]
-    public async Task WriteAsync_WhenCommitFailsAfterExistingFileWrite_RestoresPriorContent()
+    public async Task WriteAsyncWhenCommitFailsAfterExistingFileWriteRestoresPriorContent()
     {
         var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
         var coordinator = new CapturingCoordinator
@@ -77,7 +77,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>Post-mutation commit failure removes a file created only by the rejected transaction.</summary>
     [Fact]
-    public async Task WriteAsync_WhenCommitFailsAfterCreate_DeletesCreatedFile()
+    public async Task WriteAsyncWhenCommitFailsAfterCreateDeletesCreatedFile()
     {
         var inner = new RecordingRepoFileService { Exists = false, Content = null };
         var coordinator = new CapturingCoordinator
@@ -99,7 +99,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>Rollback refuses to overwrite a file that changed after the transaction write.</summary>
     [Fact]
-    public async Task WriteAsync_WhenRollbackSeesConcurrentEdit_ReportsRollbackFailureWithoutOverwriting()
+    public async Task WriteAsyncWhenRollbackSeesConcurrentEditReportsRollbackFailureWithoutOverwriting()
     {
         var inner = new RecordingRepoFileService
         {
@@ -125,7 +125,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>Required transaction mode fails closed when the repo provider cannot compensate writes.</summary>
     [Fact]
-    public async Task WriteAsync_WhenCompensationMissingAndTransactionsRequired_FailsWithoutWriting()
+    public async Task WriteAsyncWhenCompensationMissingAndTransactionsRequiredFailsWithoutWriting()
     {
         var inner = new NonCompensatingRepoFileService();
         var coordinator = new CapturingCoordinator();
@@ -144,7 +144,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>repo.write uses the inner service directly when no coordinator is registered.</summary>
     [Fact]
-    public async Task WriteAsync_WhenCoordinatorAbsent_WritesDirectly()
+    public async Task WriteAsyncWhenCoordinatorAbsentWritesDirectly()
     {
         var inner = new RecordingRepoFileService { Exists = false, Content = null };
         var sut = new TransactionGatedRepoFileService(inner, inner);
@@ -160,7 +160,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>Read and list operations remain pass-through and do not require coordinator transactions.</summary>
     [Fact]
-    public async Task ReadAndListAsync_DelegateWithoutCoordinatorTransaction()
+    public async Task ReadAndListAsyncDelegateWithoutCoordinatorTransaction()
     {
         var inner = new RecordingRepoFileService { Exists = true, Content = "content" };
         var coordinator = new CapturingCoordinator();
@@ -179,7 +179,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>FR-MCP-QBTOOLS-006: repo.edit signs and commits, applying the edit and building the transaction.</summary>
     [Fact]
-    public async Task EditAsync_WhenCoordinatorCommits_AppliesEditAndBuildsTransaction()
+    public async Task EditAsyncWhenCoordinatorCommitsAppliesEditAndBuildsTransaction()
     {
         var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
         var coordinator = new CapturingCoordinator();
@@ -196,7 +196,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>FR-MCP-QBTOOLS-006: a rejected repo.edit transaction rolls back to the prior content.</summary>
     [Fact]
-    public async Task EditAsync_WhenCommitFails_RestoresPriorContent()
+    public async Task EditAsyncWhenCommitFailsRestoresPriorContent()
     {
         var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
         var coordinator = new CapturingCoordinator
@@ -218,7 +218,7 @@ public sealed class TransactionGatedRepoFileServiceTests
 
     /// <summary>repo.edit uses the inner service directly when no coordinator is registered.</summary>
     [Fact]
-    public async Task EditAsync_WhenCoordinatorAbsent_EditsDirectly()
+    public async Task EditAsyncWhenCoordinatorAbsentEditsDirectly()
     {
         var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
         var sut = new TransactionGatedRepoFileService(inner, inner);

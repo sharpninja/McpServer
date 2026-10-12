@@ -29,7 +29,7 @@ public sealed class WorkspaceErrorTests
     [InlineData("!!!invalid!!!")]
     [InlineData("not-valid-base64-@#$")]
     [InlineData("")]
-    public async Task Get_InvalidKey_Returns400(string badKey)
+    public async Task GetInvalidKeyReturns400(string badKey)
     {
         // Empty key will hit the List endpoint (GET /qbrainai/workspace) returning 200,
         // so only test non-empty invalid keys.
@@ -45,7 +45,7 @@ public sealed class WorkspaceErrorTests
     [Theory]
     [InlineData("!!!invalid!!!")]
     [InlineData("not-valid-base64-@#$")]
-    public async Task Put_InvalidKey_Returns400(string badKey)
+    public async Task PutInvalidKeyReturns400(string badKey)
     {
         var body = new { Name = "Test" };
         var response = await _fixture.Client.PutAsJsonAsync(
@@ -58,7 +58,7 @@ public sealed class WorkspaceErrorTests
     [Theory]
     [InlineData("!!!invalid!!!")]
     [InlineData("not-valid-base64-@#$")]
-    public async Task Delete_InvalidKey_Returns400(string badKey)
+    public async Task DeleteInvalidKeyReturns400(string badKey)
     {
         var response = await _fixture.Client.DeleteAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/{badKey}", cancellationToken: TestContext.Current.CancellationToken);
@@ -70,7 +70,7 @@ public sealed class WorkspaceErrorTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Get_NonExistent_Returns404()
+    public async Task GetNonExistentReturns404()
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\DoesNotExist_" + Guid.NewGuid().ToString("N"));
         var response = await _fixture.Client.GetAsync(
@@ -80,7 +80,7 @@ public sealed class WorkspaceErrorTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Update_NonExistent_Returns404()
+    public async Task UpdateNonExistentReturns404()
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\DoesNotExist_" + Guid.NewGuid().ToString("N"));
         var body = new { Name = "Ghost" };
@@ -91,7 +91,7 @@ public sealed class WorkspaceErrorTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Delete_NonExistent_Returns404()
+    public async Task DeleteNonExistentReturns404()
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\DoesNotExist_" + Guid.NewGuid().ToString("N"));
         var response = await _fixture.Client.DeleteAsync(
@@ -101,7 +101,7 @@ public sealed class WorkspaceErrorTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Start_NonExistent_Returns404()
+    public async Task StartNonExistentReturns404()
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\DoesNotExist_" + Guid.NewGuid().ToString("N"));
         var response = await _fixture.Client.PostAsync(
@@ -113,7 +113,7 @@ public sealed class WorkspaceErrorTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Create_Duplicate_Returns409()
+    public async Task CreateDuplicateReturns409()
     {
         var testPath = WorkspaceEndpointFixture.GenerateTestWorkspacePath();
         var testKey = WorkspaceEndpointFixture.EncodeKey(testPath);
@@ -142,7 +142,7 @@ public sealed class WorkspaceErrorTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Create_EmptyBody_ReturnsBadRequest()
+    public async Task CreateEmptyBodyReturnsBadRequest()
     {
         var response = await _fixture.Client.PostAsync(
             WorkspaceEndpointFixture.WorkspaceRoute,
@@ -157,7 +157,7 @@ public sealed class WorkspaceErrorTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Update_NullBody_ReturnsBadRequest()
+    public async Task UpdateNullBodyReturnsBadRequest()
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\SomePath");
         var response = await _fixture.Client.PutAsync(
@@ -176,7 +176,7 @@ public sealed class WorkspaceErrorTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Patch_NotSupported_Returns405()
+    public async Task PatchNotSupportedReturns405()
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\SomePath");
         var request = new HttpRequestMessage(HttpMethod.Patch, $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}")

@@ -13,7 +13,7 @@ public sealed class ProcessRunnerTests
 {
     /// <summary>ArgumentList preserves spaces, quotes, and shell metacharacters without shell execution.</summary>
     [Fact]
-    public async Task RunAsync_WithArgumentList_PopulatesStartInfoArgumentListAndDisablesShellExecution()
+    public async Task RunAsyncWithArgumentListPopulatesStartInfoArgumentListAndDisablesShellExecution()
     {
         var processEnvironment = new CapturingProcessEnvironmentService();
         var runner = new ProcessRunner(

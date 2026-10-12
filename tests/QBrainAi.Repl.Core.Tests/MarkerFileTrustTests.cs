@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class MarkerFileTrustTests
 {
     [Fact]
-    public async Task ReadAsync_ValidMarkerFile_ReturnsMarkerData()
+    public async Task ReadAsyncValidMarkerFileReturnsMarkerData()
     {
         var reader = Substitute.For<IMarkerFileReader>();
         var markerData = Substitute.For<IMarkerFileData>();
@@ -26,7 +26,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task ReadAsync_MarkerFileNotFound_ThrowsFileNotFoundException()
+    public async Task ReadAsyncMarkerFileNotFoundThrowsFileNotFoundException()
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
@@ -39,7 +39,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task ReadAsync_MalformedYaml_ThrowsFormatException()
+    public async Task ReadAsyncMalformedYamlThrowsFormatException()
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
@@ -52,7 +52,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task ReadAsync_MissingRequiredFields_ThrowsFormatException()
+    public async Task ReadAsyncMissingRequiredFieldsThrowsFormatException()
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
@@ -65,7 +65,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task TryReadAsync_ValidMarkerFile_ReturnsSuccessWithData()
+    public async Task TryReadAsyncValidMarkerFileReturnsSuccessWithData()
     {
         var reader = Substitute.For<IMarkerFileReader>();
         var markerData = Substitute.For<IMarkerFileData>();
@@ -82,7 +82,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task TryReadAsync_MarkerFileNotFound_ReturnsFailureWithNull()
+    public async Task TryReadAsyncMarkerFileNotFoundReturnsFailureWithNull()
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
@@ -96,7 +96,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task VerifyTrustAsync_TrustedWorkspace_ReturnsTrustedResult()
+    public async Task VerifyTrustAsyncTrustedWorkspaceReturnsTrustedResult()
     {
         var reader = Substitute.For<IMarkerFileReader>();
         var trustResult = Substitute.For<ITrustVerificationResult>();
@@ -114,7 +114,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task VerifyTrustAsync_UntrustedWorkspace_RequiresUserConfirmation()
+    public async Task VerifyTrustAsyncUntrustedWorkspaceRequiresUserConfirmation()
     {
         var reader = Substitute.For<IMarkerFileReader>();
         var trustResult = Substitute.For<ITrustVerificationResult>();
@@ -133,7 +133,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task VerifyTrustAsync_SignatureVerified_ReturnsTrustedWithMethod()
+    public async Task VerifyTrustAsyncSignatureVerifiedReturnsTrustedWithMethod()
     {
         var reader = Substitute.For<IMarkerFileReader>();
         var trustResult = Substitute.For<ITrustVerificationResult>();
@@ -151,7 +151,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task VerifyTrustAsync_WithoutUserConfirmation_ChecksExistingTrustOnly()
+    public async Task VerifyTrustAsyncWithoutUserConfirmationChecksExistingTrustOnly()
     {
         var reader = Substitute.For<IMarkerFileReader>();
         var trustResult = Substitute.For<ITrustVerificationResult>();
@@ -168,7 +168,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task WatchAsync_MarkerFileChanges_InvokesCallback()
+    public async Task WatchAsyncMarkerFileChangesInvokesCallback()
     {
         var reader = Substitute.For<IMarkerFileReader>();
         var callbackInvoked = false;
@@ -196,7 +196,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task WatchAsync_Cancellation_StopsWatching()
+    public async Task WatchAsyncCancellationStopsWatching()
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
@@ -212,7 +212,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task MarkerFileData_ContainsAllRequiredFields()
+    public async Task MarkerFileDataContainsAllRequiredFields()
     {
         var markerData = Substitute.For<IMarkerFileData>();
         markerData.WorkspacePath.Returns("/home/user/project");
@@ -231,7 +231,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task TrustBootstrapService_PromptUserTrust_ReturnsUserDecision()
+    public async Task TrustBootstrapServicePromptUserTrustReturnsUserDecision()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var markerData = Substitute.For<IMarkerFileData>();
@@ -245,7 +245,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task TrustBootstrapService_RecordTrustDecision_PersistsDecision()
+    public async Task TrustBootstrapServiceRecordTrustDecisionPersistsDecision()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
@@ -255,7 +255,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task TrustBootstrapService_GetTrustDecision_ReturnsExistingDecision()
+    public async Task TrustBootstrapServiceGetTrustDecisionReturnsExistingDecision()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
@@ -269,7 +269,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task TrustBootstrapService_RevokeTrust_RemovesFromRegistry()
+    public async Task TrustBootstrapServiceRevokeTrustRemovesFromRegistry()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
@@ -279,7 +279,7 @@ public class MarkerFileTrustTests
     }
 
     [Fact]
-    public async Task TrustBootstrapService_ListTrustedWorkspaces_ReturnsAllTrusted()
+    public async Task TrustBootstrapServiceListTrustedWorkspacesReturnsAllTrusted()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 

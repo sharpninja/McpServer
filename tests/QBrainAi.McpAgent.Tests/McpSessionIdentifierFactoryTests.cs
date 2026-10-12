@@ -13,7 +13,7 @@ public sealed class McpSessionIdentifierFactoryTests
     /// TEST-MCP-089: Verifies that the factory creates canonical session identifiers using the configured source type, UTC timestamp format, and normalized suffix slug.
     /// </summary>
     [Fact]
-    public void CreateSessionId_ReturnsCanonicalSessionIdentifier()
+    public void CreateSessionIdReturnsCanonicalSessionIdentifier()
     {
         var factory = CreateFactory("Copilot", new DateTimeOffset(2026, 03, 04, 11, 39, 01, TimeSpan.Zero));
 
@@ -26,7 +26,7 @@ public sealed class McpSessionIdentifierFactoryTests
     /// TEST-MCP-089: Verifies that the factory creates canonical request identifiers using the shared request prefix, UTC timestamp format, and normalized slug token.
     /// </summary>
     [Fact]
-    public void CreateRequestId_ReturnsCanonicalRequestIdentifier()
+    public void CreateRequestIdReturnsCanonicalRequestIdentifier()
     {
         var factory = CreateFactory("Copilot", new DateTimeOffset(2026, 03, 04, 11, 39, 01, TimeSpan.Zero));
 
@@ -39,7 +39,7 @@ public sealed class McpSessionIdentifierFactoryTests
     /// TEST-MCP-089: Verifies that the static helper normalizes slug tokens using the canonical lowercase-and-hyphen rules shared with the PowerShell session helpers.
     /// </summary>
     [Fact]
-    public void SanitizeSlugToken_NormalizesCanonicalSlug()
+    public void SanitizeSlugTokenNormalizesCanonicalSlug()
     {
         var slug = McpSessionIdentifiers.SanitizeSlugToken("  Claude.Sonnet 4/20250514  ");
 
@@ -50,7 +50,7 @@ public sealed class McpSessionIdentifierFactoryTests
     /// TEST-MCP-089: Verifies that canonical session validation succeeds only when the identifier matches both the required format and the exact configured source-type prefix.
     /// </summary>
     [Fact]
-    public void TryValidateSessionId_ReturnsExpectedResults()
+    public void TryValidateSessionIdReturnsExpectedResults()
     {
         var factory = CreateFactory("Copilot", new DateTimeOffset(2026, 03, 04, 11, 39, 01, TimeSpan.Zero));
 
@@ -72,7 +72,7 @@ public sealed class McpSessionIdentifierFactoryTests
     /// TEST-MCP-089: Verifies that canonical request validation accepts the shared request format and rejects malformed request identifiers.
     /// </summary>
     [Fact]
-    public void TryValidateRequestId_ReturnsExpectedResults()
+    public void TryValidateRequestIdReturnsExpectedResults()
     {
         var factory = CreateFactory("Copilot", new DateTimeOffset(2026, 03, 04, 11, 39, 01, TimeSpan.Zero));
 
@@ -91,7 +91,7 @@ public sealed class McpSessionIdentifierFactoryTests
     /// TEST-MCP-089: Verifies that DI registration exposes the identifier factory as a singleton dependency and through the hosted-agent surface.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_RegistersIdentifierFactory()
+    public void AddQBrainAiMcpAgentRegistersIdentifierFactory()
     {
         var services = new ServiceCollection();
         services.AddSingleton<TimeProvider>(new FixedTimeProvider(new DateTimeOffset(2026, 03, 04, 11, 39, 01, TimeSpan.Zero)));

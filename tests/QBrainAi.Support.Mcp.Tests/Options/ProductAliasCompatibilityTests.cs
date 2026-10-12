@@ -19,7 +19,7 @@ public sealed class ProductAliasCompatibilityTests
     /// TR-MCP-QBRAIN-004: both HTTP prefixes match the same resource paths.
     /// </summary>
     [Fact]
-    public void ProductApiPaths_AcceptCanonicalAndLegacyPrefixes()
+    public void ProductApiPathsAcceptCanonicalAndLegacyPrefixes()
     {
         Assert.True(ProductApiPaths.IsProductApi("/qbrainai/todo"));
         Assert.True(ProductApiPaths.IsProductApi("/mcpserver/todo"));
@@ -38,7 +38,7 @@ public sealed class ProductAliasCompatibilityTests
     /// TR-MCP-QBRAIN-005: QBrainAi keys are projected onto Mcp, and Mcp-only keys remain.
     /// </summary>
     [Fact]
-    public void ProjectCanonicalSection_QBrainAiWinsAndLegacyOnlyKeysRemain()
+    public void ProjectCanonicalSectionQBrainAiWinsAndLegacyOnlyKeysRemain()
     {
         using var configuration = new ConfigurationManager();
         configuration.AddInMemoryCollection(new Dictionary<string, string?>
@@ -64,7 +64,7 @@ public sealed class ProductAliasCompatibilityTests
     /// TR-MCP-QBRAIN-005: operator Mcp environment and command-line values beat file and image QBrainAi values.
     /// </summary>
     [Fact]
-    public void ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi()
+    public void ProjectCanonicalSectionEnvironmentAndCommandLineBeatFileQBrainAi()
     {
         var envName = "Mcp__ProjectionProbe";
         var cliName = "QBrainAi__ProjectionCliProbe";
@@ -103,7 +103,7 @@ public sealed class ProductAliasCompatibilityTests
     /// TR-MCP-QBRAIN-005: projected Mcp values follow provider reload and IOptionsMonitor refresh.
     /// </summary>
     [Fact]
-    public void ProjectCanonicalSection_ReloadRefreshesProjectedMcpValue()
+    public void ProjectCanonicalSectionReloadRefreshesProjectedMcpValue()
     {
         using var configuration = new ConfigurationManager();
         var file = new ReloadableFileStandInSource();
@@ -138,7 +138,7 @@ public sealed class ProductAliasCompatibilityTests
     /// Removing an entry is visible on the next read after the source reloads.
     /// </summary>
     [Fact]
-    public void ProjectCanonicalSection_WorkspaceListDoesNotMixAndRefreshesOnReload()
+    public void ProjectCanonicalSectionWorkspaceListDoesNotMixAndRefreshesOnReload()
     {
         using var configuration = new ConfigurationManager();
         var file = new ReloadableFileStandInSource();
@@ -180,7 +180,7 @@ public sealed class ProductAliasCompatibilityTests
     /// TR-MCP-QBRAIN-005: workspace projection updates QBrainAi and leaves no second Mcp section.
     /// </summary>
     [Fact]
-    public async Task WorkspaceProjection_WritesCanonicalSectionAndReloads()
+    public async Task WorkspaceProjectionWritesCanonicalSectionAndReloads()
     {
         var root = Path.Combine(Path.GetTempPath(), "qbrain-workspaces-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
@@ -275,7 +275,7 @@ public sealed class ProductAliasCompatibilityTests
     [InlineData("notes", @"E:\github\McpServer", true)]
     [InlineData("notes", @"E:\github\QBrainAi", true)]
     [InlineData("notes", @"E:\github\Other", false)]
-    public void ProductWorkspace_AcceptsCanonicalAndLegacyNames(string name, string path, bool expected)
+    public void ProductWorkspaceAcceptsCanonicalAndLegacyNames(string name, string path, bool expected)
     {
         Assert.Equal(expected, ProductWorkspaceIdentity.IsProductWorkspace(name, path));
     }

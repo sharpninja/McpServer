@@ -9,7 +9,7 @@ public sealed class MemoryS6PortMockTests
 {
     /// <summary>H6-red: search is confined to the active workspace Effective set.</summary>
     [Fact]
-    public void PortMock_Search_OnlyActiveWorkspace()
+    public void PortMockSearchOnlyActiveWorkspace()
     {
         var port = Substitute.For<IMemoryS6Port>();
         port.Search(Arg.Any<string>(), "active-ws")
@@ -22,7 +22,7 @@ public sealed class MemoryS6PortMockTests
 
     /// <summary>H6-red: edit goes through the same public REST update path.</summary>
     [Fact]
-    public void PortMock_Edit_UsesSameCqrsPath()
+    public void PortMockEditUsesSameCqrsPath()
     {
         var port = Substitute.For<IMemoryS6Port>();
         port.EditPath.Returns("/qbrainai/memory/{id}");
@@ -31,7 +31,7 @@ public sealed class MemoryS6PortMockTests
 
     /// <summary>H6-red: revert is three UI actions and foreign opens fail closed.</summary>
     [Fact]
-    public void PortMock_RevertAndForeign()
+    public void PortMockRevertAndForeign()
     {
         var port = Substitute.For<IMemoryS6Port>();
         port.RevertActionCount.Returns(3);

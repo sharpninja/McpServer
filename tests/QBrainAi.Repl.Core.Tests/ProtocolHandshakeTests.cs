@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class ProtocolHandshakeTests
 {
     [Fact]
-    public async Task ConnectAsync_SendsHelloEnvelope_ReturnsServerHello()
+    public async Task ConnectAsyncSendsHelloEnvelopeReturnsServerHello()
     {
         var protocol = Substitute.For<IReplProtocol>();
         var serverHello = Substitute.For<IHelloPayload>();
@@ -36,7 +36,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task ConnectAsync_WithCapabilities_DeclaresClientCapabilities()
+    public async Task ConnectAsyncWithCapabilitiesDeclaresClientCapabilities()
     {
         var protocol = Substitute.For<IReplProtocol>();
         var serverHello = Substitute.For<IHelloPayload>();
@@ -53,7 +53,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task ConnectAsync_WithMetadata_SendsClientMetadata()
+    public async Task ConnectAsyncWithMetadataSendsClientMetadata()
     {
         var protocol = Substitute.For<IReplProtocol>();
         var serverHello = Substitute.For<IHelloPayload>();
@@ -74,7 +74,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task ConnectAsync_AlreadyConnected_ThrowsInvalidOperationException()
+    public async Task ConnectAsyncAlreadyConnectedThrowsInvalidOperationException()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
@@ -88,7 +88,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task ConnectAsync_ServerVersionMismatch_CompletesButLogsWarning()
+    public async Task ConnectAsyncServerVersionMismatchCompletesButLogsWarning()
     {
         var protocol = Substitute.For<IReplProtocol>();
         var serverHello = Substitute.For<IHelloPayload>();
@@ -104,7 +104,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public void IsConnected_BeforeConnect_ReturnsFalse()
+    public void IsConnectedBeforeConnectReturnsFalse()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(false);
@@ -113,7 +113,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task IsConnected_AfterConnect_ReturnsTrue()
+    public async Task IsConnectedAfterConnectReturnsTrue()
     {
         var protocol = Substitute.For<IReplProtocol>();
         var serverHello = Substitute.For<IHelloPayload>();
@@ -128,7 +128,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task DisconnectAsync_WhenConnected_ClearsPendingRequests()
+    public async Task DisconnectAsyncWhenConnectedClearsPendingRequests()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
@@ -139,7 +139,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task DisconnectAsync_AfterDisconnect_IsConnectedReturnsFalse()
+    public async Task DisconnectAsyncAfterDisconnectIsConnectedReturnsFalse()
     {
         var protocol = Substitute.For<IReplProtocol>();
 
@@ -152,7 +152,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task ProtocolVersion_ReturnsExpectedVersion()
+    public async Task ProtocolVersionReturnsExpectedVersion()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.ProtocolVersion.Returns("1.0");
@@ -162,7 +162,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task ConnectAsync_Timeout_ThrowsTaskCanceledException()
+    public async Task ConnectAsyncTimeoutThrowsTaskCanceledException()
     {
         var protocol = Substitute.For<IReplProtocol>();
 
@@ -178,7 +178,7 @@ public class ProtocolHandshakeTests
     }
 
     [Fact]
-    public async Task ConnectAsync_NetworkFailure_ThrowsException()
+    public async Task ConnectAsyncNetworkFailureThrowsException()
     {
         var protocol = Substitute.For<IReplProtocol>();
 

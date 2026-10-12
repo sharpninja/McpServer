@@ -38,18 +38,18 @@ public sealed class SkillRegistryTests : IDisposable
 
     /// <summary>Discovery finds both the flat and nested valid skills and returns name+description.</summary>
     [Fact]
-    public void Discover_FindsValidSkillsAcrossLayouts()
+    public void DiscoverFindsValidSkillsAcrossLayouts()
     {
         var summaries = CreateSut().Discover();
 
         Assert.Contains(summaries, s => s.Name == "alpha" && s.Description == "Alpha does A.");
         Assert.Contains(summaries, s => s.Name == "beta" && s.Description == "Beta does B.");
-        Assert.DoesNotContain(summaries, s => s.Name == string.Empty);
+        Assert.DoesNotContain(summaries, s => string.IsNullOrEmpty(s.Name));
     }
 
     /// <summary>Load returns the full body for a known skill and null for an unknown one.</summary>
     [Fact]
-    public void Load_ReturnsBody_OrNull()
+    public void LoadReturnsBodyOrNull()
     {
         var sut = CreateSut();
 
@@ -59,7 +59,7 @@ public sealed class SkillRegistryTests : IDisposable
 
     /// <summary>A nonexistent root contributes nothing rather than throwing.</summary>
     [Fact]
-    public void Discover_NonexistentRoot_NoThrow()
+    public void DiscoverNonexistentRootNoThrow()
     {
         var sut = new SkillRegistry([Path.Combine(_root, "missing")], new SkillManifestParser());
 

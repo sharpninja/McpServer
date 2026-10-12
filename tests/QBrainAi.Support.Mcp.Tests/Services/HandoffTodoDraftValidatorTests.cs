@@ -11,7 +11,7 @@ public sealed class HandoffTodoDraftValidatorTests
 {
     /// <summary>TEST-HANDOFF-004: invalid id, priority, and requirement links produce field-specific errors.</summary>
     [Fact]
-    public void Validate_InvalidFields_ProduceFieldDiagnostics()
+    public void ValidateInvalidFieldsProduceFieldDiagnostics()
     {
         var sut = new HandoffTodoDraftValidator();
 
@@ -44,7 +44,7 @@ public sealed class HandoffTodoDraftValidatorTests
 
     /// <summary>TEST-HANDOFF-004: blank description and technicalDetails produce field-specific diagnostics.</summary>
     [Fact]
-    public void Validate_BlankDescriptionAndTechnicalDetails_ProduceFieldDiagnostics()
+    public void ValidateBlankDescriptionAndTechnicalDetailsProduceFieldDiagnostics()
     {
         var sut = new HandoffTodoDraftValidator();
 
@@ -66,7 +66,7 @@ public sealed class HandoffTodoDraftValidatorTests
 
     /// <summary>TEST-HANDOFF-004: a valid draft normalizes priority and keeps unknown source notes.</summary>
     [Fact]
-    public void Validate_ValidDraft_NormalizesValues()
+    public void ValidateValidDraftNormalizesValues()
     {
         var sut = new HandoffTodoDraftValidator();
 
@@ -88,7 +88,7 @@ public sealed class HandoffTodoDraftValidatorTests
 
     /// <summary>TEST-HANDOFF-004: live multi-segment requirement IDs are accepted.</summary>
     [Fact]
-    public void Validate_MultiSegmentRequirementIds_AreAccepted()
+    public void ValidateMultiSegmentRequirementIdsAreAccepted()
     {
         var sut = new HandoffTodoDraftValidator();
 

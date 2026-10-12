@@ -12,7 +12,7 @@ public sealed class QBAgentRoleStreamChatClientTests
 {
     /// <summary>Creativity started is reported as soon as that SSE event arrives, before [DONE].</summary>
     [Fact]
-    public async Task ReadSseAsync_ReportsRoleStartedBeforeDone()
+    public async Task ReadSseAsyncReportsRoleStartedBeforeDone()
     {
         var pipe = new Pipe();
         var progress = new List<string>();
@@ -48,7 +48,7 @@ public sealed class QBAgentRoleStreamChatClientTests
     }
 
     [Fact]
-    public void MapMessages_FunctionResult_UsesToolRoleAndCallId()
+    public void MapMessagesFunctionResultUsesToolRoleAndCallId()
     {
         var mapped = QBAgentRoleStreamChatClient.MapMessages(
         [

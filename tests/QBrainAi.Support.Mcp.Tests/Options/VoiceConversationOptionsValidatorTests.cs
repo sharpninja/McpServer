@@ -7,7 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Options;
 public sealed class VoiceConversationOptionsValidatorTests
 {
     [Fact]
-    public void Validate_ReturnsSuccess_WhenVoiceIsDisabled()
+    public void ValidateReturnsSuccessWhenVoiceIsDisabled()
     {
         var validator = new VoiceConversationOptionsValidator();
         var options = new VoiceConversationOptions { Enabled = false };
@@ -18,7 +18,7 @@ public sealed class VoiceConversationOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenDefaultExecutionStrategyIsUnknown()
+    public void ValidateFailsWhenDefaultExecutionStrategyIsUnknown()
     {
         var validator = new VoiceConversationOptionsValidator();
         var options = new VoiceConversationOptions
@@ -33,7 +33,7 @@ public sealed class VoiceConversationOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsHostedMcpAgent()
+    public void ValidateReturnsSuccessWhenDefaultExecutionStrategyIsHostedMcpAgent()
     {
         var validator = new VoiceConversationOptionsValidator();
         var options = new VoiceConversationOptions
@@ -47,7 +47,7 @@ public sealed class VoiceConversationOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsOneShotCli()
+    public void ValidateReturnsSuccessWhenDefaultExecutionStrategyIsOneShotCli()
     {
         var validator = new VoiceConversationOptionsValidator();
         var options = new VoiceConversationOptions
@@ -61,7 +61,7 @@ public sealed class VoiceConversationOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyUsesLegacyHostedAgentFrameworkAlias()
+    public void ValidateReturnsSuccessWhenDefaultExecutionStrategyUsesLegacyHostedAgentFrameworkAlias()
     {
         var validator = new VoiceConversationOptionsValidator();
         var options = new VoiceConversationOptions
@@ -75,7 +75,7 @@ public sealed class VoiceConversationOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenModelApiKeyConfiguredWithoutEnvironmentVariableName()
+    public void ValidateFailsWhenModelApiKeyConfiguredWithoutEnvironmentVariableName()
     {
         var validator = new VoiceConversationOptionsValidator();
         var options = new VoiceConversationOptions

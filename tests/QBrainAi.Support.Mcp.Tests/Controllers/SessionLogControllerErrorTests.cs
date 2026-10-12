@@ -20,7 +20,7 @@ public sealed class SessionLogControllerErrorTests
 {
     /// <summary>DbUpdateException on submit returns persistence/conflict fields, not a bare EF message.</summary>
     [Fact]
-    public async Task SubmitAsync_DbUpdateException_ReturnsPersistenceProblem()
+    public async Task SubmitAsyncDbUpdateExceptionReturnsPersistenceProblem()
     {
         var service = Substitute.For<ISessionLogService>();
         var inner = new SqliteException("UNIQUE constraint failed: SessionLogs.SessionId", 19);
@@ -50,7 +50,7 @@ public sealed class SessionLogControllerErrorTests
 
     /// <summary>TEST-MCP-SESSIONLIFE-004: dialog DbUpdateException is classified, not a bare 500.</summary>
     [Fact]
-    public async Task AppendDialogAsync_DbUpdateException_ReturnsClassifiedEnvelope()
+    public async Task AppendDialogAsyncDbUpdateExceptionReturnsClassifiedEnvelope()
     {
         var service = Substitute.For<ISessionLogService>();
         var inner = new SqliteException("UNIQUE constraint failed: SessionLogTurns.RequestId", 19);
@@ -88,7 +88,7 @@ public sealed class SessionLogControllerErrorTests
 
     /// <summary>REST validation returns the four-field envelope, not ProblemDetails-only.</summary>
     [Fact]
-    public async Task SubmitAsync_MissingSourceType_ReturnsValidationEnvelope()
+    public async Task SubmitAsyncMissingSourceTypeReturnsValidationEnvelope()
     {
         var service = Substitute.For<ISessionLogService>();
         var controller = new SessionLogController(service, NullLogger<SessionLogController>.Instance);
@@ -111,7 +111,7 @@ public sealed class SessionLogControllerErrorTests
 
     /// <summary>TEST-MCP-TRIAGESTORE-001: GET serializes session tags from GetAsync.</summary>
     [Fact]
-    public async Task GetByIdAsync_SessionTags_SerializeInOkBody()
+    public async Task GetByIdAsyncSessionTagsSerializeInOkBody()
     {
         var service = Substitute.For<ISessionLogService>();
         service.GetAsync("GrokCode", "GrokCode-20260820T071556Z-hv113tags", Arg.Any<CancellationToken>())
@@ -136,7 +136,7 @@ public sealed class SessionLogControllerErrorTests
 
     /// <summary>REST storage budget expiry returns backend_unavailable retryable true.</summary>
     [Fact]
-    public async Task SubmitAsync_StorageBudgetExceeded_ReturnsBackendUnavailableEnvelope()
+    public async Task SubmitAsyncStorageBudgetExceededReturnsBackendUnavailableEnvelope()
     {
         var service = Substitute.For<ISessionLogService>();
         service.SubmitAsync(Arg.Any<UnifiedSessionLogDto>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
@@ -162,7 +162,7 @@ public sealed class SessionLogControllerErrorTests
 
     /// <summary>REST missing session/turn returns classified not_found with code/retryable.</summary>
     [Fact]
-    public async Task DeleteSessionAsync_MissingSession_ReturnsNotFoundEnvelope()
+    public async Task DeleteSessionAsyncMissingSessionReturnsNotFoundEnvelope()
     {
         var service = Substitute.For<ISessionLogService>();
         service.DeleteSessionAsync("Cursor", "Cursor-20260818T220000Z-missing", Arg.Any<CancellationToken>())
@@ -188,7 +188,7 @@ public sealed class SessionLogControllerErrorTests
     /// with retryable true so Streamable HTTP clients can retry.
     /// </summary>
     [Fact]
-    public async Task ReplaceTurnSectionAsync_StorageUnreachable_Returns503Retryable()
+    public async Task ReplaceTurnSectionAsyncStorageUnreachableReturns503Retryable()
     {
         var service = Substitute.For<ISessionLogService>();
         service.ReplaceTurnSectionAsync(
@@ -221,7 +221,7 @@ public sealed class SessionLogControllerErrorTests
     /// TEST-MCP-196 / FR-MCP-170: POST dialog for a missing turn is not_found, HTTP 404, retryable false.
     /// </summary>
     [Fact]
-    public async Task AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse()
+    public async Task AppendDialogAsyncMissingTurnReturnsNotFoundRetryableFalse()
     {
         var service = Substitute.For<ISessionLogService>();
         service.AppendProcessingDialogAsync(

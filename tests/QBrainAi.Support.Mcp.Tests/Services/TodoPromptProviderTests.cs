@@ -14,7 +14,7 @@ public sealed class TodoPromptProviderTests
     private readonly ILogger<TodoPromptProvider> _logger = Substitute.For<ILogger<TodoPromptProvider>>();
 
     [Fact]
-    public async Task GetStatusPromptAsync_TemplateInStore_ReturnsStoreContent()
+    public async Task GetStatusPromptAsyncTemplateInStoreReturnsStoreContent()
     {
         var customContent = "Custom status prompt for {id}";
         _templateService.GetByIdAsync(TodoPromptProvider.StatusPromptId, Arg.Any<CancellationToken>())
@@ -27,7 +27,7 @@ public sealed class TodoPromptProviderTests
     }
 
     [Fact]
-    public async Task GetStatusPromptAsync_TemplateMissing_ReturnsFallback()
+    public async Task GetStatusPromptAsyncTemplateMissingReturnsFallback()
     {
         _templateService.GetByIdAsync(TodoPromptProvider.StatusPromptId, Arg.Any<CancellationToken>())
             .Returns((PromptTemplate?)null);
@@ -39,7 +39,7 @@ public sealed class TodoPromptProviderTests
     }
 
     [Fact]
-    public async Task GetImplementPromptAsync_TemplateInStore_ReturnsStoreContent()
+    public async Task GetImplementPromptAsyncTemplateInStoreReturnsStoreContent()
     {
         var customContent = "Custom implement prompt for {id}: {title}";
         _templateService.GetByIdAsync(TodoPromptProvider.ImplementPromptId, Arg.Any<CancellationToken>())
@@ -52,7 +52,7 @@ public sealed class TodoPromptProviderTests
     }
 
     [Fact]
-    public async Task GetImplementPromptAsync_TemplateMissing_ReturnsFallback()
+    public async Task GetImplementPromptAsyncTemplateMissingReturnsFallback()
     {
         _templateService.GetByIdAsync(TodoPromptProvider.ImplementPromptId, Arg.Any<CancellationToken>())
             .Returns((PromptTemplate?)null);
@@ -64,7 +64,7 @@ public sealed class TodoPromptProviderTests
     }
 
     [Fact]
-    public async Task GetPlanPromptAsync_TemplateInStore_ReturnsStoreContent()
+    public async Task GetPlanPromptAsyncTemplateInStoreReturnsStoreContent()
     {
         var customContent = "Custom plan prompt for {id}";
         _templateService.GetByIdAsync(TodoPromptProvider.PlanPromptId, Arg.Any<CancellationToken>())
@@ -77,7 +77,7 @@ public sealed class TodoPromptProviderTests
     }
 
     [Fact]
-    public async Task GetPlanPromptAsync_TemplateMissing_ReturnsFallback()
+    public async Task GetPlanPromptAsyncTemplateMissingReturnsFallback()
     {
         _templateService.GetByIdAsync(TodoPromptProvider.PlanPromptId, Arg.Any<CancellationToken>())
             .Returns((PromptTemplate?)null);
@@ -89,7 +89,7 @@ public sealed class TodoPromptProviderTests
     }
 
     [Fact]
-    public async Task GetStatusPromptAsync_EmptyContent_ReturnsFallback()
+    public async Task GetStatusPromptAsyncEmptyContentReturnsFallback()
     {
         _templateService.GetByIdAsync(TodoPromptProvider.StatusPromptId, Arg.Any<CancellationToken>())
             .Returns(new PromptTemplate { Id = TodoPromptProvider.StatusPromptId, Title = "test", Category = "system", Content = "   " });
@@ -101,7 +101,7 @@ public sealed class TodoPromptProviderTests
     }
 
     [Fact]
-    public async Task GetStatusPromptAsync_ServiceThrows_ReturnsFallback()
+    public async Task GetStatusPromptAsyncServiceThrowsReturnsFallback()
     {
         _templateService.GetByIdAsync(TodoPromptProvider.StatusPromptId, Arg.Any<CancellationToken>())
             .ThrowsAsync(new IOException("disk error"));

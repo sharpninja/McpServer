@@ -6,7 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Identity;
 public sealed class IdentityServerExtensionsTests
 {
     [Fact]
-    public void ResolveIdentityConnectionString_UsesExplicitIdentityConnectionString()
+    public void ResolveIdentityConnectionStringUsesExplicitIdentityConnectionString()
     {
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
@@ -26,7 +26,7 @@ public sealed class IdentityServerExtensionsTests
     }
 
     [Fact]
-    public void ResolveIdentityConnectionString_UsesMcpSqlServerConnectionWhenIdentityIsBlank()
+    public void ResolveIdentityConnectionStringUsesMcpSqlServerConnectionWhenIdentityIsBlank()
     {
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
@@ -47,7 +47,7 @@ public sealed class IdentityServerExtensionsTests
     }
 
     [Fact]
-    public void ResolveIdentityConnectionString_FallsBackToLocalDbWhenMcpSqlServerIsUnavailable()
+    public void ResolveIdentityConnectionStringFallsBackToLocalDbWhenMcpSqlServerIsUnavailable()
     {
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>

@@ -14,7 +14,7 @@ public sealed class HandoffControllerTests
 {
     /// <summary>TEST-HANDOFF-006: ingest posts through IHandoffIngestionService.</summary>
     [Fact]
-    public async Task IngestAsync_DelegatesToSharedService()
+    public async Task IngestAsyncDelegatesToSharedService()
     {
         var service = Substitute.For<IHandoffIngestionService>();
         service.IngestAsync(Arg.Any<HandoffIngestionRequest>(), Arg.Any<CancellationToken>())
@@ -32,7 +32,7 @@ public sealed class HandoffControllerTests
 
     /// <summary>TEST-HANDOFF-006: get and approve use the same service contract.</summary>
     [Fact]
-    public async Task GetAndApprove_DelegateToSharedService()
+    public async Task GetAndApproveDelegateToSharedService()
     {
         var service = Substitute.For<IHandoffIngestionService>();
         service.GetRunAsync("handoff-run-001", Arg.Any<CancellationToken>())
@@ -55,7 +55,7 @@ public sealed class HandoffControllerTests
 
     /// <summary>TEST-HANDOFF-006: 404 mapping uses ErrorCode, not English text.</summary>
     [Fact]
-    public async Task GetRunAsync_MissingRun_UsesErrorCodeForNotFound()
+    public async Task GetRunAsyncMissingRunUsesErrorCodeForNotFound()
     {
         var service = Substitute.For<IHandoffIngestionService>();
         service.GetRunAsync("missing", Arg.Any<CancellationToken>())

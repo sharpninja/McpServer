@@ -22,7 +22,7 @@ public sealed class QueryTodoTests
     public QueryTodoTests(TodoEndpointFixture fixture) => _fixture = fixture;
 
     /// <summary>
-    /// Validates the <c>Query_NoFilters_Returns200WithValidStructure</c> scenario.
+    /// Validates the <c>QueryNoFiltersReturns200WithValidStructure</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -30,7 +30,7 @@ public sealed class QueryTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_NoFilters_Returns200WithValidStructure()
+    public async Task QueryNoFiltersReturns200WithValidStructure()
     {
         var response = await _fixture.Client.GetAsync(TodoEndpointFixture.TodoRoute, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -44,7 +44,7 @@ public sealed class QueryTodoTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_ResponseIsJson</c> scenario.
+    /// Validates the <c>QueryResponseIsJson</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -52,7 +52,7 @@ public sealed class QueryTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_ResponseIsJson()
+    public async Task QueryResponseIsJson()
     {
         var response = await _fixture.Client.GetAsync(TodoEndpointFixture.TodoRoute, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -61,7 +61,7 @@ public sealed class QueryTodoTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_ByPriority_Returns200</c> scenario.
+    /// Validates the <c>QueryByPriorityReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -69,7 +69,7 @@ public sealed class QueryTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_ByPriority_Returns200()
+    public async Task QueryByPriorityReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{TodoEndpointFixture.TodoRoute}?priority=high", cancellationToken: TestContext.Current.CancellationToken);
 
@@ -84,7 +84,7 @@ public sealed class QueryTodoTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_ByDoneStatus_Returns200</c> scenario.
+    /// Validates the <c>QueryByDoneStatusReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -92,7 +92,7 @@ public sealed class QueryTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_ByDoneStatus_Returns200()
+    public async Task QueryByDoneStatusReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{TodoEndpointFixture.TodoRoute}?done=false", cancellationToken: TestContext.Current.CancellationToken);
 
@@ -106,7 +106,7 @@ public sealed class QueryTodoTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_ByKeyword_Returns200</c> scenario.
+    /// Validates the <c>QueryByKeywordReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -114,7 +114,7 @@ public sealed class QueryTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_ByKeyword_Returns200()
+    public async Task QueryByKeywordReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{TodoEndpointFixture.TodoRoute}?keyword=test", cancellationToken: TestContext.Current.CancellationToken);
 
@@ -126,7 +126,7 @@ public sealed class QueryTodoTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_BySection_Returns200</c> scenario.
+    /// Validates the <c>QueryBySectionReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -134,7 +134,7 @@ public sealed class QueryTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_BySection_Returns200()
+    public async Task QueryBySectionReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{TodoEndpointFixture.TodoRoute}?section=mvp-app", cancellationToken: TestContext.Current.CancellationToken);
 
@@ -148,7 +148,7 @@ public sealed class QueryTodoTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_ById_Returns200</c> scenario.
+    /// Validates the <c>QueryByIdReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -156,7 +156,7 @@ public sealed class QueryTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_ById_Returns200()
+    public async Task QueryByIdReturns200()
     {
         // First get any existing item to use its ID.
         var listResponse = await _fixture.Client.GetAsync(TodoEndpointFixture.TodoRoute, cancellationToken: TestContext.Current.CancellationToken);
@@ -175,7 +175,7 @@ public sealed class QueryTodoTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_NonMatchingKeyword_ReturnsEmptyList</c> scenario.
+    /// Validates the <c>QueryNonMatchingKeywordReturnsEmptyList</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -183,7 +183,7 @@ public sealed class QueryTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_NonMatchingKeyword_ReturnsEmptyList()
+    public async Task QueryNonMatchingKeywordReturnsEmptyList()
     {
         var response = await _fixture.Client.GetAsync(
             $"{TodoEndpointFixture.TodoRoute}?keyword=zzz_nonexistent_keyword_zzz_{Guid.NewGuid():N}", cancellationToken: TestContext.Current.CancellationToken);

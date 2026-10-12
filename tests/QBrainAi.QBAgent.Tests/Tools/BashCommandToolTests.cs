@@ -13,7 +13,7 @@ public sealed class BashCommandToolTests
 
     /// <summary>When bash.exe is missing, the runner returns -1/"not found" and the tool reports available=false.</summary>
     [Fact]
-    public async Task Run_WhenBashMissing_ReturnsUnavailable()
+    public async Task RunWhenBashMissingReturnsUnavailable()
     {
         var runner = new FakeProcessRunner(new ProcessRunResult(-1, null, "bash not found."));
         var tool = new BashCommandTool(runner, Workspace);
@@ -27,7 +27,7 @@ public sealed class BashCommandToolTests
 
     /// <summary>When bash runs, the tool reports available=true and surfaces stdout and exit code.</summary>
     [Fact]
-    public async Task Run_WhenBashPresent_ReturnsOutput()
+    public async Task RunWhenBashPresentReturnsOutput()
     {
         var runner = new FakeProcessRunner(new ProcessRunResult(0, "hi", null));
         var tool = new BashCommandTool(runner, Workspace);
@@ -44,7 +44,7 @@ public sealed class BashCommandToolTests
 
     /// <summary>A non-zero bash exit is available but not successful.</summary>
     [Fact]
-    public async Task Run_WhenBashFails_AvailableButNotSuccess()
+    public async Task RunWhenBashFailsAvailableButNotSuccess()
     {
         var runner = new FakeProcessRunner(new ProcessRunResult(2, null, "boom"));
         var tool = new BashCommandTool(runner, Workspace);

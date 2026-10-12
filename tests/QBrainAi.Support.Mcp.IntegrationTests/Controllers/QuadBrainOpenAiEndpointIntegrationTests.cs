@@ -24,7 +24,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>A request without a token is rejected with 401.</summary>
     [Fact]
-    public async Task ChatCompletions_NoToken_Returns401()
+    public async Task ChatCompletionsNoTokenReturns401()
     {
         var orchestration = new FakeOrchestration { Output = "hi" };
         using var factory = BuildFactory(orchestration, new FakeExecutor());
@@ -37,7 +37,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>A plain Arbiter decision is returned as the assistant message.</summary>
     [Fact]
-    public async Task ChatCompletions_Authorized_ReturnsArbiterContent()
+    public async Task ChatCompletionsAuthorizedReturnsArbiterContent()
     {
         var orchestration = new FakeOrchestration { Output = "the arbiter decision" };
         using var factory = BuildFactory(orchestration, new FakeExecutor());
@@ -52,7 +52,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>An external tool elected by QuadBrain is returned to the agent as a tool call.</summary>
     [Fact]
-    public async Task ChatCompletions_ExternalTool_ReturnedAsToolCall()
+    public async Task ChatCompletionsExternalToolReturnedAsToolCall()
     {
         var orchestration = new FakeOrchestration
         {
@@ -70,7 +70,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>An MCP-internal tool that executes server-side is stripped from the response.</summary>
     [Fact]
-    public async Task ChatCompletions_InternalToolExecuted_IsStripped()
+    public async Task ChatCompletionsInternalToolExecutedIsStripped()
     {
         var orchestration = new FakeOrchestration
         {
@@ -88,7 +88,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>An internal tool failure is surfaced as a note, not a tool call.</summary>
     [Fact]
-    public async Task ChatCompletions_InternalToolFailure_BecomesNote()
+    public async Task ChatCompletionsInternalToolFailureBecomesNote()
     {
         var orchestration = new FakeOrchestration
         {
@@ -107,7 +107,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-016): an orchestration failure maps to an OpenAI-compatible 500 error envelope.</summary>
     [Fact]
-    public async Task ChatCompletions_OrchestrationThrows_ReturnsOpenAiErrorEnvelope()
+    public async Task ChatCompletionsOrchestrationThrowsReturnsOpenAiErrorEnvelope()
     {
         using var factory = BuildFactory(new ThrowingOrchestration(), new FakeExecutor());
         using var client = Authorized(factory);
@@ -122,7 +122,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>FR-MCP-QUAD-SESSION-001: the X-Session-Id header attaches the run to its session (reaches orchestration).</summary>
     [Fact]
-    public async Task ChatCompletions_WithSessionHeader_AttachesSessionToOrchestration()
+    public async Task ChatCompletionsWithSessionHeaderAttachesSessionToOrchestration()
     {
         var orchestration = new CapturingOrchestration { Output = "ok" };
         using var factory = BuildFactory(orchestration, new FakeExecutor());
@@ -137,7 +137,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-015): <c>stream:true</c> returns OpenAI-style SSE chunks and a terminal DONE event.</summary>
     [Fact]
-    public async Task ChatCompletions_StreamTrue_ReturnsServerSentEvents()
+    public async Task ChatCompletionsStreamTrueReturnsServerSentEvents()
     {
         var orchestration = new FakeOrchestration { Output = "streamed arbiter answer" };
         using var factory = BuildFactory(orchestration, new FakeExecutor());
@@ -158,7 +158,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-050): <c>/v1</c> requests resolve workspace context from the presented token and do not leak across workspaces.</summary>
     [Fact]
-    public async Task ChatCompletions_TokenScopedWorkspaces_DoNotLeakWorkspaceContext()
+    public async Task ChatCompletionsTokenScopedWorkspacesDoNotLeakWorkspaceContext()
     {
         var secondaryWorkspacePath = Path.Combine(
             Path.GetTempPath(),

@@ -84,6 +84,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly IHostileReviewWorkflow? _hostileReviewWorkflow;
     private readonly IWorkspaceValidationWorkflow? _workspaceValidationWorkflow;
     private readonly IClientMutationPolicy? _clientMutationPolicy;
+    private static readonly string[] stringArray = new[] { "hello", "request" };
 
     /// <summary>
     /// Initializes a new <see cref="ReplCommandDispatcher"/>.
@@ -3236,7 +3237,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             details: new Dictionary<string, object?>
             {
                 ["unsupportedType"] = "batch",
-                ["supportedEnvelopeTypes"] = new[] { "hello", "request" },
+                ["supportedEnvelopeTypes"] = stringArray,
                 ["supportedMultiRequestShape"] = "YAML stream with one envelope per document separated by '---'.",
             });
     }

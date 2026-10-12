@@ -12,7 +12,7 @@ public sealed class QuadBrainOpenAiStreamTests
 {
     /// <summary>Role SSE events appear in the body before the final assistant content.</summary>
     [Fact]
-    public async Task ChatCompletions_StreamTrue_WritesRoleEventsBeforeArbiterChunk()
+    public async Task ChatCompletionsStreamTrueWritesRoleEventsBeforeArbiterChunk()
     {
         var tokenService = new WorkspaceTokenService();
         var token = tokenService.GenerateToken(@"F:\ws");

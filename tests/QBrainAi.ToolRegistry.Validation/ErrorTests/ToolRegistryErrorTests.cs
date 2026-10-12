@@ -21,7 +21,7 @@ public sealed class ToolRegistryErrorTests
     public ToolRegistryErrorTests(ToolRegistryFixture f) => _f = f;
 
     /// <summary>
-    /// Validates the <c>Get_NonExistentTool_Returns404</c> scenario.
+    /// Validates the <c>GetNonExistentToolReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -29,14 +29,14 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Get_NonExistentTool_Returns404()
+    public async Task GetNonExistentToolReturns404()
     {
         var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/999999", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
     /// <summary>
-    /// Validates the <c>Update_NonExistentTool_Returns404</c> scenario.
+    /// Validates the <c>UpdateNonExistentToolReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -44,14 +44,14 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Update_NonExistentTool_Returns404()
+    public async Task UpdateNonExistentToolReturns404()
     {
         var r = await _f.Client.PutAsJsonAsync($"{ToolRegistryFixture.ToolRoute}/999999", new { Name = "ghost" }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
     /// <summary>
-    /// Validates the <c>Delete_NonExistentTool_Returns404</c> scenario.
+    /// Validates the <c>DeleteNonExistentToolReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -59,14 +59,14 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Delete_NonExistentTool_Returns404()
+    public async Task DeleteNonExistentToolReturns404()
     {
         var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/999999", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
     /// <summary>
-    /// Validates the <c>RemoveBucket_NonExistent_Returns404</c> scenario.
+    /// Validates the <c>RemoveBucketNonExistentReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -74,14 +74,14 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task RemoveBucket_NonExistent_Returns404()
+    public async Task RemoveBucketNonExistentReturns404()
     {
         var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
     /// <summary>
-    /// Validates the <c>BrowseBucket_NonExistent_Returns404</c> scenario.
+    /// Validates the <c>BrowseBucketNonExistentReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -89,14 +89,14 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task BrowseBucket_NonExistent_Returns404()
+    public async Task BrowseBucketNonExistentReturns404()
     {
         var r = await _f.Client.GetAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/browse", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
     /// <summary>
-    /// Validates the <c>SyncBucket_NonExistent_Returns404</c> scenario.
+    /// Validates the <c>SyncBucketNonExistentReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -104,14 +104,14 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task SyncBucket_NonExistent_Returns404()
+    public async Task SyncBucketNonExistentReturns404()
     {
         var r = await _f.Client.PostAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/sync", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
     /// <summary>
-    /// Validates the <c>InstallFromBucket_NonExistent_Returns404</c> scenario.
+    /// Validates the <c>InstallFromBucketNonExistentReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -119,7 +119,7 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task InstallFromBucket_NonExistent_Returns404()
+    public async Task InstallFromBucketNonExistentReturns404()
     {
         var r = await _f.Client.PostAsync(
             $"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/install?toolName=foo", null, cancellationToken: TestContext.Current.CancellationToken);
@@ -127,7 +127,7 @@ public sealed class ToolRegistryErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Patch_NotSupported_Returns405</c> scenario.
+    /// Validates the <c>PatchNotSupportedReturns405</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -135,7 +135,7 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Patch_NotSupported_Returns405()
+    public async Task PatchNotSupportedReturns405()
     {
         var req = new HttpRequestMessage(HttpMethod.Patch, $"{ToolRegistryFixture.ToolRoute}/1")
         {
@@ -146,7 +146,7 @@ public sealed class ToolRegistryErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Get_InvalidIdFormat_Returns404Or400</c> scenario.
+    /// Validates the <c>GetInvalidIdFormatReturns404Or400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -154,7 +154,7 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Get_InvalidIdFormat_Returns404Or400()
+    public async Task GetInvalidIdFormatReturns404Or400()
     {
         // {id:int} constraint should reject non-numeric — returns 404 (no matching route).
         var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/not-a-number", cancellationToken: TestContext.Current.CancellationToken);
@@ -164,7 +164,7 @@ public sealed class ToolRegistryErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Create_DuplicateName_Returns409</c> scenario.
+    /// Validates the <c>CreateDuplicateNameReturns409</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -172,7 +172,7 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Create_DuplicateName_Returns409()
+    public async Task CreateDuplicateNameReturns409()
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "Dup", Tags = new[] { "dup" } };
@@ -196,7 +196,7 @@ public sealed class ToolRegistryErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>AddBucket_Duplicate_Returns409</c> scenario.
+    /// Validates the <c>AddBucketDuplicateReturns409</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -204,7 +204,7 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task AddBucket_Duplicate_Returns409()
+    public async Task AddBucketDuplicateReturns409()
     {
         var name = ToolRegistryFixture.GenerateBucketName();
         var body = new { Name = name, Owner = "sharpninja", Repo = "QBrainAi" };
@@ -223,7 +223,7 @@ public sealed class ToolRegistryErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Search_WithWorkspace_Returns200</c> scenario.
+    /// Validates the <c>SearchWithWorkspaceReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -231,7 +231,7 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Search_WithWorkspace_Returns200()
+    public async Task SearchWithWorkspaceReturns200()
     {
         var r = await _f.Client.GetAsync(
             $"{ToolRegistryFixture.ToolRoute}/search?keyword=test&workspace=E%3A%5Cgithub%5CQBrainAi", cancellationToken: TestContext.Current.CancellationToken);
@@ -239,7 +239,7 @@ public sealed class ToolRegistryErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>List_WithWorkspace_Returns200</c> scenario.
+    /// Validates the <c>ListWithWorkspaceReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -247,7 +247,7 @@ public sealed class ToolRegistryErrorTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task List_WithWorkspace_Returns200()
+    public async Task ListWithWorkspaceReturns200()
     {
         var r = await _f.Client.GetAsync(
             $"{ToolRegistryFixture.ToolRoute}?workspace=E%3A%5Cgithub%5CQBrainAi", cancellationToken: TestContext.Current.CancellationToken);

@@ -22,7 +22,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-14: After revert, recall/index refresh reflects reverted Content.</summary>
     [Fact]
-    public async Task AfterRevert_IndexReflectsContent()
+    public async Task AfterRevertIndexReflectsContent()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -53,7 +53,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-01: Empty query returns 400.</summary>
     [Fact]
-    public async Task EmptyQuery_Returns400()
+    public async Task EmptyQueryReturns400()
     {
         var recall = await _harness.RecallAsync(string.Empty, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -63,7 +63,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-02: Whitespace-only query returns 400.</summary>
     [Fact]
-    public async Task WhitespaceQuery_Returns400()
+    public async Task WhitespaceQueryReturns400()
     {
         var recall = await _harness.RecallAsync("   \n\t  ", TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -73,7 +73,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-03: Null query returns 400.</summary>
     [Fact]
-    public async Task NullQuery_Returns400()
+    public async Task NullQueryReturns400()
     {
         var recall = await _harness.RecallAsync((string?)null, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -83,7 +83,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-04: Seeded exact token query returns the target in top-N with score &gt;= minScore.</summary>
     [Fact]
-    public async Task ExactToken_ReturnsTargetInTopN()
+    public async Task ExactTokenReturnsTargetInTopN()
     {
         var seeded = await SeedAsync(ExactContent, type: "preference", tags: ["editor"]).ConfigureAwait(true);
 
@@ -96,7 +96,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-05: Seeded paraphrase/semantic query returns the target in top-N with score &gt;= minScore.</summary>
     [Fact]
-    public async Task Paraphrase_ReturnsTargetInTopN()
+    public async Task ParaphraseReturnsTargetInTopN()
     {
         var seeded = await SeedAsync(SemanticContent, type: "preference", tags: ["editor"]).ConfigureAwait(true);
 
@@ -109,7 +109,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-06: Tag filter excludes non-matching tags.</summary>
     [Fact]
-    public async Task TagFilter_ExcludesOthers()
+    public async Task TagFilterExcludesOthers()
     {
         var keep = await SeedAsync($"{ExactToken} keep-tag", type: "fact", tags: ["keep"]).ConfigureAwait(true);
         var drop = await SeedAsync($"{ExactToken} drop-tag", type: "fact", tags: ["drop"]).ConfigureAwait(true);
@@ -125,7 +125,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-07: Type filter excludes non-matching types.</summary>
     [Fact]
-    public async Task TypeFilter_ExcludesOthers()
+    public async Task TypeFilterExcludesOthers()
     {
         var keep = await SeedAsync($"{ExactToken} type-fact", type: "fact").ConfigureAwait(true);
         var drop = await SeedAsync($"{ExactToken} type-pref", type: "preference").ConfigureAwait(true);
@@ -141,7 +141,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-08: Scope filter honors Global vs Workspace visibility.</summary>
     [Fact]
-    public async Task ScopeFilter_HonorsVisibility()
+    public async Task ScopeFilterHonorsVisibility()
     {
         var global = await SeedAsync($"{ExactToken} global-row", type: "fact", scope: MemoryScope.Global).ConfigureAwait(true);
         var local = await SeedAsync($"{ExactToken} workspace-row", type: "fact", scope: MemoryScope.Workspace).ConfigureAwait(true);
@@ -161,7 +161,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-09: No matches returns 200 with empty items (not 404).</summary>
     [Fact]
-    public async Task NoMatches_ReturnsEmpty200()
+    public async Task NoMatchesReturnsEmpty200()
     {
         await SeedAsync(ExactContent).ConfigureAwait(true);
 
@@ -177,7 +177,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-10: Soft-deleted memories never appear in recall results.</summary>
     [Fact]
-    public async Task SoftDeleted_NeverReturned()
+    public async Task SoftDeletedNeverReturned()
     {
         var live = await SeedAsync($"{ExactToken} live-row").ConfigureAwait(true);
         var doomed = await SeedAsync($"{ExactToken} doomed-row").ConfigureAwait(true);
@@ -195,7 +195,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-11: Other-workspace Workspace memories never appear in recall.</summary>
     [Fact]
-    public async Task ForeignWorkspace_NeverReturned()
+    public async Task ForeignWorkspaceNeverReturned()
     {
         var local = await SeedAsync($"{ExactToken} local-a").ConfigureAwait(true);
         var foreign = await SeedAsync($"{ExactToken} foreign-b", workspacePath: _harness.WorkspaceB).ConfigureAwait(true);
@@ -211,7 +211,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-12: Global memories can appear in recall for any workspace.</summary>
     [Fact]
-    public async Task Global_VisibleToAllWorkspaces()
+    public async Task GlobalVisibleToAllWorkspaces()
     {
         var global = await SeedAsync($"{ExactToken} global-shared", scope: MemoryScope.Global).ConfigureAwait(true);
 
@@ -229,7 +229,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-13: minScore=0 includes all scored hits up to topN.</summary>
     [Fact]
-    public async Task MinScoreZero_IncludesAllHits()
+    public async Task MinScoreZeroIncludesAllHits()
     {
         var first = await SeedAsync($"{ExactToken} score-zero-a").ConfigureAwait(true);
         var second = await SeedAsync($"{ExactToken} score-zero-b").ConfigureAwait(true);
@@ -247,7 +247,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-14: minScore=1 returns only perfect-score hits (or empty).</summary>
     [Fact]
-    public async Task MinScoreOne_OnlyPerfect()
+    public async Task MinScoreOneOnlyPerfect()
     {
         await SeedAsync($"{ExactToken} imperfect").ConfigureAwait(true);
 
@@ -262,7 +262,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-15: minScore &lt; 0 or &gt; 1 returns 400.</summary>
     [Fact]
-    public async Task MinScoreOutOfRange_Returns400()
+    public async Task MinScoreOutOfRangeReturns400()
     {
         var low = await _harness.RecallAsync(
             new MemoryRecallRequest { Query = ExactToken, MinScore = -0.1 },
@@ -279,7 +279,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-16: topN omitted uses the documented default.</summary>
     [Fact]
-    public async Task TopNOmitted_UsesDefault()
+    public async Task TopNOmittedUsesDefault()
     {
         for (var i = 0; i < MemorySearchLimits.DefaultTopN + 3; i++)
         {
@@ -298,7 +298,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-17: topN=0 or negative returns 400.</summary>
     [Fact]
-    public async Task TopNNonPositive_Returns400()
+    public async Task TopNNonPositiveReturns400()
     {
         var zero = await _harness.RecallAsync(
             new MemoryRecallRequest { Query = ExactToken, TopN = 0 },
@@ -315,7 +315,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-18: topN above configured max is clamped or 400 (documented) and stable.</summary>
     [Fact]
-    public async Task TopNAboveMax_StableBehavior()
+    public async Task TopNAboveMaxStableBehavior()
     {
         for (var i = 0; i < MemorySearchLimits.MaxTopN + 5; i++)
         {
@@ -382,7 +382,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-21: Query longer than configured max returns 400.</summary>
     [Fact]
-    public async Task QueryTooLong_Returns400()
+    public async Task QueryTooLongReturns400()
     {
         var recall = await _harness.RecallAsync(
             new MemoryRecallRequest { Query = new string('q', MemorySearchLimits.MaxQueryLength + 1) },
@@ -394,7 +394,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-22: Combined tag+type+scope filters AND together.</summary>
     [Fact]
-    public async Task CombinedFilters_AndSemantics()
+    public async Task CombinedFiltersAndSemantics()
     {
         var keep = await SeedAsync(
             $"{ExactToken} and-keep",
@@ -436,7 +436,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-23: Unindexed pending/failed memories are excluded from the vector path but may BM25-match.</summary>
     [Fact]
-    public async Task Unindexed_DocumentedBehavior()
+    public async Task UnindexedDocumentedBehavior()
     {
         var pending = await SeedAsync($"{ExactToken} pending-embed").ConfigureAwait(true);
         await _harness.SetEmbeddingStatusAsync(pending.Id, "pending").ConfigureAwait(true);
@@ -469,7 +469,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-24: After content update, recall reflects new content (index refresh).</summary>
     [Fact]
-    public async Task AfterUpdate_IndexReflectsNewContent()
+    public async Task AfterUpdateIndexReflectsNewContent()
     {
         var seeded = await SeedAsync("old-s2-token-alpha").ConfigureAwait(true);
         await _harness.UpdateCompatAsync(
@@ -524,7 +524,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-27: Unicode query tokens match unicode Content.</summary>
     [Fact]
-    public async Task UnicodeQuery_MatchesContent()
+    public async Task UnicodeQueryMatchesContent()
     {
         var seeded = await SeedAsync("日本語ガイド supplementary 🧠").ConfigureAwait(true);
 
@@ -537,7 +537,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-28: Identical scores produce deterministic ordering across two consecutive recalls.</summary>
     [Fact]
-    public async Task TieBreak_Deterministic()
+    public async Task TieBreakDeterministic()
     {
         await SeedAsync($"{ExactToken} tie-a", id: "MEMORY-S2TIE-002").ConfigureAwait(true);
         await SeedAsync($"{ExactToken} tie-b", id: "MEMORY-S2TIE-001").ConfigureAwait(true);
@@ -558,7 +558,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-03: Fusion weights from config change fixture ordering in a documented way.</summary>
     [Fact]
-    public async Task FusionWeights_AffectOrdering()
+    public async Task FusionWeightsAffectOrdering()
     {
         var lexical = await SeedAsync($"{ExactToken} unique-lexical-anchor-zzzz").ConfigureAwait(true);
         var semantic = await SeedAsync(SemanticContent).ConfigureAwait(true);
@@ -596,7 +596,7 @@ public sealed class MemoryRecallTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-04: Rerank remains off unless Mcp:Memory:Rerank:Enabled=true.</summary>
     [Fact]
-    public async Task Rerank_DefaultOff()
+    public async Task RerankDefaultOff()
     {
         await SeedAsync(ExactContent).ConfigureAwait(true);
 

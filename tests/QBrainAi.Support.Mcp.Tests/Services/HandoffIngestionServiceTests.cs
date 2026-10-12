@@ -56,7 +56,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
     [InlineData("notes.txt", "plain text")]
     [InlineData("notes.json", "{\"title\":\"x\"}")]
     [InlineData("notes.yaml", "title: x")]
-    public async Task IngestAsync_SupportedFormats_AreAccepted(string fileName, string body)
+    public async Task IngestAsyncSupportedFormatsAreAccepted(string fileName, string body)
     {
         File.WriteAllText(Path.Combine(_workspace, fileName), body);
         var extractor = SuccessfulExtractor(ValidDraftJson("MCP-HANDOFFDEMO-001"));
@@ -76,7 +76,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-002: missing, unsupported, oversized, traversal, and external paths fail closed.</summary>
     [Fact]
-    public async Task IngestAsync_UnsafeSources_ProduceDiagnosticsAndNoTodo()
+    public async Task IngestAsyncUnsafeSourcesProduceDiagnosticsAndNoTodo()
     {
         var todo = Substitute.For<ITodoService>();
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
@@ -105,7 +105,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-003: malformed extractor JSON never creates a TODO.</summary>
     [Fact]
-    public async Task IngestAsync_MalformedExtractorJson_DoesNotCreateTodo()
+    public async Task IngestAsyncMalformedExtractorJsonDoesNotCreateTodo()
     {
         var todo = Substitute.For<ITodoService>();
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
@@ -131,7 +131,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-003: unknown source notes are preserved.</summary>
     [Fact]
-    public async Task IngestAsync_UnknownSourceNotes_AreNotDiscarded()
+    public async Task IngestAsyncUnknownSourceNotesAreNotDiscarded()
     {
         var extractor = SuccessfulExtractor(ValidDraftJson("MCP-HANDOFFDEMO-002", unknownNotes: "author missing"));
         var sut = CreateService(extractor, Substitute.For<ITodoService>());
@@ -147,7 +147,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-004: DraftOnly never mutates TODO state.</summary>
     [Fact]
-    public async Task IngestAsync_DraftOnly_DoesNotCreateTodo()
+    public async Task IngestAsyncDraftOnlyDoesNotCreateTodo()
     {
         var todo = Substitute.For<ITodoService>();
         var sut = CreateService(SuccessfulExtractor(ValidDraftJson("MCP-HANDOFFDEMO-003", confidence: 0.99)), todo);
@@ -166,7 +166,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-004: low confidence CreateWhenConfident requires review.</summary>
     [Fact]
-    public async Task IngestAsync_LowConfidence_RequiresReview()
+    public async Task IngestAsyncLowConfidenceRequiresReview()
     {
         var todo = Substitute.For<ITodoService>();
         var sut = CreateService(SuccessfulExtractor(ValidDraftJson("MCP-HANDOFFDEMO-004", confidence: 0.4)), todo);
@@ -186,7 +186,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-005: confident creation produces exactly one TODO through ITodoService.</summary>
     [Fact]
-    public async Task IngestAsync_CreateWhenConfident_CreatesExactlyOneTodo()
+    public async Task IngestAsyncCreateWhenConfidentCreatesExactlyOneTodo()
     {
         var todo = Substitute.For<ITodoService>();
         todo.GetByIdAsync("MCP-HANDOFFDEMO-005", Arg.Any<CancellationToken>()).Returns((TodoFlatItem?)null);
@@ -219,7 +219,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-005: replay of the same workspace, hash, and prompt version returns the existing receipt.</summary>
     [Fact]
-    public async Task IngestAsync_SameHashAndPrompt_ReplaysExistingRun()
+    public async Task IngestAsyncSameHashAndPromptReplaysExistingRun()
     {
         var extractor = SuccessfulExtractor(ValidDraftJson("MCP-HANDOFFDEMO-006"));
         var sut = CreateService(extractor, Substitute.For<ITodoService>());
@@ -241,7 +241,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-005: ID collisions require review and are never renamed.</summary>
     [Fact]
-    public async Task IngestAsync_DuplicateTodoId_RequiresReview()
+    public async Task IngestAsyncDuplicateTodoIdRequiresReview()
     {
         var todo = Substitute.For<ITodoService>();
         todo.GetByIdAsync("MCP-HANDOFFDEMO-007", Arg.Any<CancellationToken>())
@@ -262,7 +262,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-007: persisted runs keep provenance and omit raw source content.</summary>
     [Fact]
-    public async Task IngestAsync_PersistsProvenanceWithoutSourceContent()
+    public async Task IngestAsyncPersistsProvenanceWithoutSourceContent()
     {
         var secret = "super-secret-handoff-body";
         var sut = CreateService(SuccessfulExtractor(ValidDraftJson("MCP-HANDOFFDEMO-008")), Substitute.For<ITodoService>());
@@ -284,7 +284,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-004: approval revalidates and then creates through the TODO service.</summary>
     [Fact]
-    public async Task ApproveAsync_RevalidatesThenCreates()
+    public async Task ApproveAsyncRevalidatesThenCreates()
     {
         var todo = Substitute.For<ITodoService>();
         todo.GetByIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns((TodoFlatItem?)null);
@@ -322,7 +322,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-004: extractor cancellation propagates and never creates a TODO.</summary>
     [Fact]
-    public async Task IngestAsync_ExtractorCancelled_DoesNotCreateTodo()
+    public async Task IngestAsyncExtractorCancelledDoesNotCreateTodo()
     {
         var todo = Substitute.For<ITodoService>();
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
@@ -341,7 +341,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-003: missing required extractor fields never create a TODO.</summary>
     [Fact]
-    public async Task IngestAsync_MissingExtractorFields_DoesNotCreateTodo()
+    public async Task IngestAsyncMissingExtractorFieldsDoesNotCreateTodo()
     {
         var todo = Substitute.For<ITodoService>();
         var extractor = SuccessfulExtractor("""{"id":"MCP-HANDOFFDEMO-011","section":"QBrain.AI","priority":"high","confidence":0.9}""");
@@ -361,7 +361,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-004: ambiguous unknown-source notes require review instead of creating.</summary>
     [Fact]
-    public async Task IngestAsync_AmbiguousHandoff_RequiresReview()
+    public async Task IngestAsyncAmbiguousHandoffRequiresReview()
     {
         var todo = Substitute.For<ITodoService>();
         var sut = CreateService(
@@ -383,7 +383,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-005: TODO-service failure is recorded and does not invent a TODO.</summary>
     [Fact]
-    public async Task IngestAsync_TodoServiceFailure_RequiresReview()
+    public async Task IngestAsyncTodoServiceFailureRequiresReview()
     {
         var todo = Substitute.For<ITodoService>();
         todo.GetByIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns((TodoFlatItem?)null);
@@ -405,7 +405,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-005: force=true extracts again instead of replaying.</summary>
     [Fact]
-    public async Task IngestAsync_ForceTrue_ExtractsAgain()
+    public async Task IngestAsyncForceTrueExtractsAgain()
     {
         var extractor = SuccessfulExtractor(ValidDraftJson("MCP-HANDOFFDEMO-014"));
         var sut = CreateService(extractor, Substitute.For<ITodoService>());
@@ -428,7 +428,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-002: artifact sources resolve contained document chunks.</summary>
     [Fact]
-    public async Task IngestAsync_ArtifactSource_UsesDocumentChunks()
+    public async Task IngestAsyncArtifactSourceUsesDocumentChunks()
     {
         using (var seed = CreateDb(_workspace))
         {
@@ -467,7 +467,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-002: reparse-point escapes fail closed.</summary>
     [Fact]
-    public async Task IngestAsync_ReparseEscape_IsRejected()
+    public async Task IngestAsyncReparseEscapeIsRejected()
     {
         var outsideRoot = Path.Combine(Path.GetTempPath(), "handoff-outside-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(outsideRoot);
@@ -500,7 +500,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-007: runs from another workspace are not replayed.</summary>
     [Fact]
-    public async Task IngestAsync_DifferentWorkspace_DoesNotReplay()
+    public async Task IngestAsyncDifferentWorkspaceDoesNotReplay()
     {
         var otherWorkspace = Path.Combine(Path.GetTempPath(), "handoff-tests", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(otherWorkspace);
@@ -532,7 +532,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
 
     /// <summary>TEST-HANDOFF-004: concurrent approvals create at most one TODO.</summary>
     [Fact]
-    public async Task ApproveAsync_ConcurrentApprovals_CreateOnce()
+    public async Task ApproveAsyncConcurrentApprovalsCreateOnce()
     {
         var created = 0;
         var todo = Substitute.For<ITodoService>();
@@ -580,7 +580,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
     /// are only blank lines produces field-specific diagnostics and never creates a TODO.
     /// </summary>
     [Fact]
-    public async Task IngestAsync_BlankDescriptionAndTechnicalDetails_ReturnFieldDiagnosticsAndDoNotCreateTodo()
+    public async Task IngestAsyncBlankDescriptionAndTechnicalDetailsReturnFieldDiagnosticsAndDoNotCreateTodo()
     {
         var todo = Substitute.For<ITodoService>();
         const string json =

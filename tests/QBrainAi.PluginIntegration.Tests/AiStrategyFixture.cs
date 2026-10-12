@@ -87,7 +87,7 @@ public static class AiStrategyFixture
 
         try
         {
-            var response = await client.SendAsync(new FrontierRequest(SystemPrompt, redactedReceipt))
+            var response = await client.SendAsync(new FrontierRequest(SystemPrompt, redactedReceipt), cancellationToken)
                 .WaitAsync(TimeSpan.FromSeconds(60), cancellationToken)
                 .ConfigureAwait(false);
             if (response.Error is not null || string.IsNullOrWhiteSpace(response.Text))

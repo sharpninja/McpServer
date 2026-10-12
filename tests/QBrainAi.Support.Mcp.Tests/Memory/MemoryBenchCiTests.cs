@@ -10,7 +10,7 @@ public sealed class MemoryBenchCiTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-29: Gate mode is off by default and fails when enabled on a miss.</summary>
     [Fact]
-    public void GateMode_Configurable()
+    public void GateModeConfigurable()
     {
         var reportOnly = MemoryBenchCatalog.RunGrokStub(gateEnabled: false);
         Assert.False(reportOnly.GateEnabled);
@@ -44,7 +44,7 @@ public sealed class MemoryBenchCiTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-48: Non-Grok bench cells are optional until H7a AGREE.</summary>
     [Fact]
-    public void NonGrok_OptionalUntilH7a()
+    public void NonGrokOptionalUntilH7a()
     {
         var gate = MemoryBenchValueGate.Load(MemoryBenchCatalog.FindRepoRoot());
         Assert.True(gate.Agree);

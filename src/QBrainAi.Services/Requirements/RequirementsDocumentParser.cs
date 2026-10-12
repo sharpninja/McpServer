@@ -212,7 +212,7 @@ internal static class RequirementsDocumentParser
     private static string CleanHeadingTitle(string raw)
     {
         var title = (raw ?? string.Empty).Trim().Trim('*').Trim();
-        if (title.StartsWith("—", StringComparison.Ordinal) || title.StartsWith("-", StringComparison.Ordinal))
+        if (title.StartsWith('—') || title.StartsWith('-'))
             title = title[1..].Trim();
         return title.TrimEnd('*').Trim();
     }

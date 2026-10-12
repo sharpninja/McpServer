@@ -22,7 +22,7 @@ public sealed class DeleteTodoTests
     public DeleteTodoTests(TodoEndpointFixture fixture) => _fixture = fixture;
 
     /// <summary>
-    /// Validates the <c>Delete_ExistingItem_Returns200</c> scenario.
+    /// Validates the <c>DeleteExistingItemReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -30,7 +30,7 @@ public sealed class DeleteTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Delete_ExistingItem_Returns200()
+    public async Task DeleteExistingItemReturns200()
     {
         var testId = TodoEndpointFixture.GenerateTestId();
         var createBody = new { Id = testId, Title = "AuditDeleteTest", Section = "mvp-support", Priority = "low" };
@@ -53,7 +53,7 @@ public sealed class DeleteTodoTests
     }
 
     /// <summary>
-    /// Validates the <c>Delete_NonExistentItem_Returns404</c> scenario.
+    /// Validates the <c>DeleteNonExistentItemReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -61,7 +61,7 @@ public sealed class DeleteTodoTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Delete_NonExistentItem_Returns404()
+    public async Task DeleteNonExistentItemReturns404()
     {
         var fakeId = TodoEndpointFixture.GenerateMissingId();
         var response = await _fixture.Client.DeleteAsync(

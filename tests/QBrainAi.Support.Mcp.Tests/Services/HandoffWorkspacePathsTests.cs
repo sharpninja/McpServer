@@ -19,7 +19,7 @@ public sealed class HandoffWorkspacePathsTests
 {
     /// <summary>P1-8: relative and nested paths canonicalize to the same absolute value.</summary>
     [Fact]
-    public void Canonicalize_RelativeAndNested_MatchGetFullPath()
+    public void CanonicalizeRelativeAndNestedMatchGetFullPath()
     {
         var relative = Path.Combine(".", "nested", "..", "workspace");
         var canonical = HandoffWorkspacePaths.Canonicalize(relative);
@@ -29,7 +29,7 @@ public sealed class HandoffWorkspacePathsTests
 
     /// <summary>P1-8: blank paths are rejected.</summary>
     [Fact]
-    public void TryCanonicalize_Blank_Fails()
+    public void TryCanonicalizeBlankFails()
     {
         Assert.False(HandoffWorkspacePaths.TryCanonicalize("  ", out _, out var error));
         Assert.False(string.IsNullOrWhiteSpace(error));
@@ -37,7 +37,7 @@ public sealed class HandoffWorkspacePathsTests
 
     /// <summary>P1-8: two workspaces cannot see each other's handoff runs.</summary>
     [Fact]
-    public async Task IngestAsync_CrossWorkspace_DoesNotLeakRuns()
+    public async Task IngestAsyncCrossWorkspaceDoesNotLeakRuns()
     {
         var leftRoot = Path.Combine(Path.GetTempPath(), "handoff-ws-left", Guid.NewGuid().ToString("N"));
         var rightRoot = Path.Combine(Path.GetTempPath(), "handoff-ws-right", Guid.NewGuid().ToString("N"));
@@ -95,7 +95,7 @@ public sealed class HandoffWorkspacePathsTests
             new TodoServiceResolver(Substitute.For<ITodoService>(), ingestionOptions, Substitute.For<ITodoServiceFactory>()),
             Substitute.For<IHttpContextAccessor>(),
             ingestionOptions);
-        accessor.PushWorkspace(workspace);
+        WorkspaceServiceAccessor.PushWorkspace(workspace);
         return new HandoffIngestionService(
             new HandoffSourceResolver(db),
             extractor,

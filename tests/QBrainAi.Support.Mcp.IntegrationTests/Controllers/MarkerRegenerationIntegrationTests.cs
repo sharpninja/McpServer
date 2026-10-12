@@ -120,7 +120,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task GlobalPromptUpdate_RegeneratesMarkerFile()
+    public async Task GlobalPromptUpdateRegeneratesMarkerFile()
     {
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
         await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
@@ -155,7 +155,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task WorkspacePromptUpdate_RegeneratesMarkerFile()
+    public async Task WorkspacePromptUpdateRegeneratesMarkerFile()
     {
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
         await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
@@ -181,7 +181,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     /// TEST-MCP-MARKER-REFRESH-001: the explicit marker regeneration endpoint rewrites running workspace markers.
     /// </summary>
     [Fact]
-    public async Task MarkerRegenerationEndpoint_RewritesMarkerFile()
+    public async Task MarkerRegenerationEndpointRewritesMarkerFile()
     {
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
         await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
@@ -206,7 +206,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task GlobalAndWorkspacePrompts_CombineInMarkerFile()
+    public async Task GlobalAndWorkspacePromptsCombineInMarkerFile()
     {
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
         await EnsureWorkspaceSeededAsync().ConfigureAwait(true);

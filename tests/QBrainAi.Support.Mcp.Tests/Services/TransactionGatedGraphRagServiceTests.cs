@@ -19,7 +19,7 @@ public sealed class TransactionGatedGraphRagServiceTests
 {
     /// <summary>GraphRAG indexing delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task IndexAsync_WhenRequiredTransactionsActive_DelegatesToInner()
+    public async Task IndexAsyncWhenRequiredTransactionsActiveDelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         inner.IndexAsync(Arg.Any<GraphRagIndexRequest>(), Arg.Any<CancellationToken>())
@@ -35,7 +35,7 @@ public sealed class TransactionGatedGraphRagServiceTests
 
     /// <summary>GraphRAG text ingestion delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task IngestTextAsync_WhenRequiredTransactionsActive_DelegatesToInner()
+    public async Task IngestTextAsyncWhenRequiredTransactionsActiveDelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
@@ -49,7 +49,7 @@ public sealed class TransactionGatedGraphRagServiceTests
 
     /// <summary>GraphRAG document deletion delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task DeleteDocumentAsync_WhenRequiredTransactionsActive_DelegatesToInner()
+    public async Task DeleteDocumentAsyncWhenRequiredTransactionsActiveDelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
@@ -63,7 +63,7 @@ public sealed class TransactionGatedGraphRagServiceTests
 
     /// <summary>GraphRAG entity CRUD delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task EntityMutations_WhenRequiredTransactionsActive_DelegateToInner()
+    public async Task EntityMutationsWhenRequiredTransactionsActiveDelegateToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
@@ -86,7 +86,7 @@ public sealed class TransactionGatedGraphRagServiceTests
 
     /// <summary>GraphRAG relationship CRUD delegates to the inner service while required transactions are active.</summary>
     [Fact]
-    public async Task RelationshipMutations_WhenRequiredTransactionsActive_DelegateToInner()
+    public async Task RelationshipMutationsWhenRequiredTransactionsActiveDelegateToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
@@ -114,7 +114,7 @@ public sealed class TransactionGatedGraphRagServiceTests
 
     /// <summary>GraphRAG initialize still delegates when the coordinator is degraded.</summary>
     [Fact]
-    public async Task InitializeAsync_WhenCoordinatorDegraded_DelegatesToInner()
+    public async Task InitializeAsyncWhenCoordinatorDegradedDelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         inner.InitializeAsync(Arg.Any<GraphRagStorageScope>(), Arg.Any<CancellationToken>())
@@ -137,7 +137,7 @@ public sealed class TransactionGatedGraphRagServiceTests
 
     /// <summary>GraphRAG read methods continue to delegate while required transactions are active.</summary>
     [Fact]
-    public async Task ReadMethods_WhenRequiredTransactionsActive_DelegateToInner()
+    public async Task ReadMethodsWhenRequiredTransactionsActiveDelegateToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         inner.GetStatusAsync(Arg.Any<GraphRagStorageScope>(), Arg.Any<CancellationToken>())
@@ -176,7 +176,7 @@ public sealed class TransactionGatedGraphRagServiceTests
 
     /// <summary>GraphRAG mutations delegate when mutation transactions are not required.</summary>
     [Fact]
-    public async Task IndexAsync_WhenTransactionsNotRequired_DelegatesToInner()
+    public async Task IndexAsyncWhenTransactionsNotRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
         inner.IndexAsync(Arg.Any<GraphRagIndexRequest>(), Arg.Any<CancellationToken>())

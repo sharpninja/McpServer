@@ -10,7 +10,7 @@ public sealed class MemorySchemaContractTests
 {
     /// <summary>The canonical schema contains memory workflow rules, scopes, and ID validation.</summary>
     [Fact]
-    public void CanonicalYamlSchema_ContainsMemoryWorkflowRules()
+    public void CanonicalYamlSchemaContainsMemoryWorkflowRules()
     {
         var schemaPath = Path.Combine(FindRepoRoot(), "docs", "context", "repl-yaml-message.schema.json");
         using var document = JsonDocument.Parse(File.ReadAllText(schemaPath));

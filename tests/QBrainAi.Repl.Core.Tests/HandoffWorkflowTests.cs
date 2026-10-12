@@ -12,7 +12,7 @@ public sealed class HandoffWorkflowTests
 {
     /// <summary>TEST-HANDOFF-006: ingest, get, and approve are routed on the dispatcher.</summary>
     [Fact]
-    public async Task Dispatcher_RoutesHandoffWorkflowMethods()
+    public async Task DispatcherRoutesHandoffWorkflowMethods()
     {
         var workflow = Substitute.For<IHandoffWorkflow>();
         workflow.IngestAsync(Arg.Any<HandoffIngestionRequest>(), Arg.Any<CancellationToken>())
@@ -50,7 +50,7 @@ public sealed class HandoffWorkflowTests
 
     /// <summary>P1-7: REPL rejects numeric mode 999 before calling the workflow.</summary>
     [Fact]
-    public async Task Dispatcher_NumericMode999_ReturnsInvocationError()
+    public async Task DispatcherNumericMode999ReturnsInvocationError()
     {
         var workflow = Substitute.For<IHandoffWorkflow>();
         var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), handoffWorkflow: workflow);

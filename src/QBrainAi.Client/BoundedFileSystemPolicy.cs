@@ -172,9 +172,9 @@ internal static class BoundedFileSystemPolicy
         if (string.Equals(path, mountPoint, StringComparison.Ordinal))
             return true;
         if (string.Equals(mountPoint, "/", StringComparison.Ordinal))
-            return path.StartsWith("/", StringComparison.Ordinal);
+            return path.StartsWith('/');
 
-        var prefix = mountPoint.EndsWith("/", StringComparison.Ordinal)
+        var prefix = mountPoint.EndsWith('/')
             ? mountPoint
             : mountPoint + "/";
         return path.StartsWith(prefix, StringComparison.Ordinal);

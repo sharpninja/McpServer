@@ -140,10 +140,10 @@ public sealed class McpAgentOptions
         var definition = QBAgentDefinition.Instance;
 
         ExecutionProfile = McpAgentExecutionProfile.AcidTightlyCoupled;
-        AgentId = definition.AgentId;
-        AgentName = definition.AgentName;
-        Description = definition.Description;
-        SourceType = definition.SourceType;
+        AgentId = QBAgentDefinition.AgentId;
+        AgentName = QBAgentDefinition.AgentName;
+        Description = QBAgentDefinition.Description;
+        SourceType = QBAgentDefinition.SourceType;
         RequireAuthentication = true;
         RequireSessionTurnBoundary = true;
         RequireDurableAudit = true;

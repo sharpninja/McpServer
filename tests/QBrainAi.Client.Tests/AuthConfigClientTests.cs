@@ -14,7 +14,7 @@ public sealed class AuthConfigClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task RequestDeviceAuthorizationAsync_PostsFormBodyWithoutApiKey()
+    public async System.Threading.Tasks.Task RequestDeviceAuthorizationAsyncPostsFormBodyWithoutApiKey()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -38,7 +38,7 @@ public sealed class AuthConfigClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RequestTokenAsync_PostsFormBodyWithoutApiKey()
+    public async System.Threading.Tasks.Task RequestTokenAsyncPostsFormBodyWithoutApiKey()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,

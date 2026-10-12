@@ -15,7 +15,7 @@ public sealed class TodoWorkflowIdentifierTests
     [Theory]
     [InlineData("PHASE0-REMOTE-001")]
     [InlineData("MCP-TODO-CREATE-001")]
-    public async Task GetAsync_ValidImportCompatibleId_DelegatesToClient(string id)
+    public async Task GetAsyncValidImportCompatibleIdDelegatesToClient(string id)
     {
         var handler = new JsonHandler($$"""
             {"id":"{{id}}","title":"Import-compatible TODO","section":"Backlog","priority":"high","done":false}
@@ -39,7 +39,7 @@ public sealed class TodoWorkflowIdentifierTests
     /// Verifies that missing descriptive segments still fail before transport.
     /// </summary>
     [Fact]
-    public async Task GetAsync_TwoSegmentId_ThrowsBeforeHttp()
+    public async Task GetAsyncTwoSegmentIdThrowsBeforeHttp()
     {
         var handler = new JsonHandler("""{"id":"MCP-001","title":"Invalid","section":"Backlog","priority":"high","done":false}""");
         using var http = new HttpClient(handler);

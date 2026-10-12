@@ -15,7 +15,7 @@ public sealed class StartupStorageBootstrapTests
 {
     /// <summary>AC: SSL pre-login handshake during initialize does not throw; returns false.</summary>
     [Fact]
-    public async Task TryInitializeAsync_SqlPreLoginHandshake_ReturnsFalse()
+    public async Task TryInitializeAsyncSqlPreLoginHandshakeReturnsFalse()
     {
         var result = await StartupStorageBootstrap.TryInitializeAsync(
             _ => throw SqlExceptionFactory.Create(
@@ -29,7 +29,7 @@ public sealed class StartupStorageBootstrapTests
 
     /// <summary>AC: a successful initialize returns true.</summary>
     [Fact]
-    public async Task TryInitializeAsync_Success_ReturnsTrue()
+    public async Task TryInitializeAsyncSuccessReturnsTrue()
     {
         var result = await StartupStorageBootstrap.TryInitializeAsync(
             _ => Task.CompletedTask,
@@ -41,7 +41,7 @@ public sealed class StartupStorageBootstrapTests
 
     /// <summary>AC: non-storage failures still abort startup.</summary>
     [Fact]
-    public async Task TryInitializeAsync_OrdinaryException_Rethrows()
+    public async Task TryInitializeAsyncOrdinaryExceptionRethrows()
     {
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             StartupStorageBootstrap.TryInitializeAsync(

@@ -19,7 +19,7 @@ public sealed class TransactionGatedMemoryServiceTests
 {
     /// <summary>The stdio host can resolve the gated memory service even when no transaction coordinator is registered.</summary>
     [Fact]
-    public void ServiceProvider_WhenCoordinatorIsAbsent_ResolvesDirectFallback()
+    public void ServiceProviderWhenCoordinatorIsAbsentResolvesDirectFallback()
     {
         var services = new ServiceCollection();
         services.AddLogging();
@@ -37,7 +37,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
     /// <summary>memory.add signs and commits before returning the created memory result.</summary>
     [Fact]
-    public async Task AddAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsCreatedMemory()
+    public async Task AddAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsCreatedMemory()
     {
         var service = Substitute.For<IMemoryService>();
         var created = CreateMemory("MEMORY-OPERATOR-001", "created");
@@ -65,7 +65,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
     /// <summary>Pre-mutation memory.add transaction rejection does not call the memory service.</summary>
     [Fact]
-    public async Task AddAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotMutateAndReturnsConflict()
+    public async Task AddAsyncWhenCoordinatorRejectsBeforeMutationDoesNotMutateAndReturnsConflict()
     {
         var service = Substitute.For<IMemoryService>();
         var created = CreateMemory("MEMORY-OPERATOR-REJECT", "created");
@@ -96,7 +96,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
     /// <summary>memory.add rollback restores the created memory record when a subscriber rejects after mutation.</summary>
     [Fact]
-    public async Task AddAsync_WhenCommitFailsAfterMutation_RestoresCreatedMemory()
+    public async Task AddAsyncWhenCommitFailsAfterMutationRestoresCreatedMemory()
     {
         using var db = CreateDb();
         var service = CreateService(db);
@@ -146,7 +146,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
     /// <summary>memory.add reports rollback failure when the created memory cannot be restored after subscriber rejection.</summary>
     [Fact]
-    public async Task AddAsync_WhenRollbackFails_ReportsRollbackFailure()
+    public async Task AddAsyncWhenRollbackFailsReportsRollbackFailure()
     {
         var service = Substitute.For<IMemoryService>();
         service.AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
@@ -179,7 +179,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
     /// <summary>memory.update signs and commits before returning the updated memory result.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsUpdatedMemory()
+    public async Task UpdateAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsUpdatedMemory()
     {
         var service = Substitute.For<IMemoryService>();
         var updated = CreateMemory("MEMORY-OPERATOR-001", "updated");
@@ -203,7 +203,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
     /// <summary>Pre-mutation transaction rejection does not call the memory service.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotMutateAndReturnsConflict()
+    public async Task UpdateAsyncWhenCoordinatorRejectsBeforeMutationDoesNotMutateAndReturnsConflict()
     {
         var service = Substitute.For<IMemoryService>();
         service.GetAsync("MEMORY-OPERATOR-001", Arg.Any<CancellationToken>())
@@ -231,7 +231,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
     /// <summary>memory.update rollback restores the prior visible memory fields and version.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorMemoryExactly()
+    public async Task UpdateAsyncWhenCommitFailsAfterMutationRestoresPriorMemoryExactly()
     {
         using var db = CreateDb();
         var service = CreateService(db);
@@ -267,7 +267,7 @@ public sealed class TransactionGatedMemoryServiceTests
 
     /// <summary>memory.remove rollback makes the soft-deleted memory visible again.</summary>
     [Fact]
-    public async Task RemoveAsync_WhenCommitFailsAfterMutation_RestoresSoftDeletedMemoryExactly()
+    public async Task RemoveAsyncWhenCommitFailsAfterMutationRestoresSoftDeletedMemoryExactly()
     {
         using var db = CreateDb();
         var service = CreateService(db);

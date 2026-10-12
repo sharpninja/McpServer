@@ -36,7 +36,7 @@ public sealed class PostgresDecompose4nfBackfillMigrationTests : IClassFixture<E
     /// asserts each list landed as ordered 4NF child rows with the source columns dropped.
     /// </summary>
     [Fact]
-    public void Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables()
+    public void MigrateDecompose4nfBackfillsJsonListColumnsIntoChildTables()
     {
         EnsureScratchDatabase();
 
@@ -146,7 +146,7 @@ public sealed class PostgresDecompose4nfBackfillMigrationTests : IClassFixture<E
     /// reconstructs the decomposed JSON columns from the child rows.
     /// </summary>
     [Fact]
-    public void Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows()
+    public void MigrateDownToPreSliceReconstructsJsonColumnsFromChildRows()
     {
         EnsureScratchDatabase();
 

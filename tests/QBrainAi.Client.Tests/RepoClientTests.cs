@@ -14,7 +14,7 @@ public sealed class RepoClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task ReadFileAsync_EncodesPath()
+    public async System.Threading.Tasks.Task ReadFileAsyncEncodesPath()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"path":"src/main.cs","content":"code","exists":true}""");
         using var http = new HttpClient(handler);
@@ -27,7 +27,7 @@ public sealed class RepoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task WriteFileAsync_PostsContent()
+    public async System.Threading.Tasks.Task WriteFileAsyncPostsContent()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"path":"test.txt","written":true}""");
         using var http = new HttpClient(handler);
@@ -40,7 +40,7 @@ public sealed class RepoClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListAsync_WithoutPath_OmitsQueryString()
+    public async System.Threading.Tasks.Task ListAsyncWithoutPathOmitsQueryString()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"path":null,"entries":[]}""");
         using var http = new HttpClient(handler);

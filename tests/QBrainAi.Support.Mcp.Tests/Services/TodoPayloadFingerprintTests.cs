@@ -8,7 +8,7 @@ public sealed class TodoPayloadFingerprintTests
 {
     /// <summary>P1-3: equivalent payloads produce the same fingerprint.</summary>
     [Fact]
-    public void AreEquivalent_ExactNormalizedPayload_IsTrue()
+    public void AreEquivalentExactNormalizedPayloadIsTrue()
     {
         var request = Sample("MCP-FINGERPRINT-001", "Title");
         var item = ToItem(request);
@@ -28,7 +28,7 @@ public sealed class TodoPayloadFingerprintTests
     [InlineData("depends")]
     [InlineData("fr")]
     [InlineData("tr")]
-    public void AreEquivalent_AnySemanticMismatch_IsFalse(string field)
+    public void AreEquivalentAnySemanticMismatchIsFalse(string field)
     {
         var request = Sample("MCP-FINGERPRINT-002", "Title");
         var mutated = field switch

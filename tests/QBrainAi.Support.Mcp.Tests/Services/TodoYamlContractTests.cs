@@ -15,7 +15,7 @@ public sealed class TodoYamlContractTests
     /// W8 removes public <c>List&lt;T&gt;</c> properties from the compatibility models.
     /// </summary>
     [Fact]
-    public void TodoYamlModels_DoNotExposePublicListProperties()
+    public void TodoYamlModelsDoNotExposePublicListProperties()
     {
         Type[] modelTypes =
         [
@@ -43,7 +43,7 @@ public sealed class TodoYamlContractTests
     /// so contract remediation cannot break agent-visible TODO projection compatibility.
     /// </summary>
     [Fact]
-    public async Task TodoYamlFileSerializer_RoundTripsCurrentAndLegacyLists()
+    public async Task TodoYamlFileSerializerRoundTripsCurrentAndLegacyLists()
     {
         var root = Path.Combine(Path.GetTempPath(), $"mcpserver-todo-yaml-contract-{Guid.NewGuid():N}");
         Directory.CreateDirectory(root);

@@ -16,7 +16,7 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     /// methods. Direct QBrainAi.Client session writes do not satisfy plugin invocation.
     /// </summary>
     [Fact]
-    public void WorkflowAdapter_CanonicalTurn_DoesNotCallQBrainAiClient()
+    public void WorkflowAdapterCanonicalTurnDoesNotCallQBrainAiClient()
     {
         var path = Path.Combine(
             FindRepositoryRoot(),
@@ -47,7 +47,7 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Theory_EachScenario_FailsUntilAdapterOperational(PluginHostKind hostKind)
+    public async Task TheoryEachScenarioFailsUntilAdapterOperational(PluginHostKind hostKind)
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
@@ -87,7 +87,7 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Theory_Agent_BootstrapBeginAppendComplete_CapturesIdsCacheShaReceipt(PluginHostKind hostKind)
+    public async Task TheoryAgentBootstrapBeginAppendCompleteCapturesIdsCacheShaReceipt(PluginHostKind hostKind)
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
@@ -122,7 +122,7 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Theory_Agent_ServerQuery_SourceTypeIdsActionDialogCompletedWorkspace(PluginHostKind hostKind)
+    public async Task TheoryAgentServerQuerySourceTypeIdsActionDialogCompletedWorkspace(PluginHostKind hostKind)
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
@@ -185,7 +185,7 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Theory_Agent_PluginRootOverride_WritesOnlyWorkspaceQBrainAiAgent_PoisonEmpty(PluginHostKind hostKind)
+    public async Task TheoryAgentPluginRootOverrideWritesOnlyWorkspaceQBrainAiAgentPoisonEmpty(PluginHostKind hostKind)
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
@@ -234,7 +234,7 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Theory_Agent_Success_NoPendingFailsafe(PluginHostKind hostKind)
+    public async Task TheoryAgentSuccessNoPendingFailsafe(PluginHostKind hostKind)
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
@@ -265,7 +265,7 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Theory_Agent_FailedSubmit_RetainsRootIdPending(PluginHostKind hostKind)
+    public async Task TheoryAgentFailedSubmitRetainsRootIdPending(PluginHostKind hostKind)
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
@@ -297,7 +297,7 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task Theory_Agent_RetrySuccess_DeletesOnlyMatchingPending(PluginHostKind hostKind)
+    public async Task TheoryAgentRetrySuccessDeletesOnlyMatchingPending(PluginHostKind hostKind)
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);

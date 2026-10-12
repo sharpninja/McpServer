@@ -21,7 +21,7 @@ public sealed class BrainSlotToolAbsenceTests
     /// <c>brain_slot</c> and no declaring method is named after a brain slot.
     /// </summary>
     [Fact]
-    public void SupportMcpAssembly_RegistersNoBrainSlotMcpTools()
+    public void SupportMcpAssemblyRegistersNoBrainSlotMcpTools()
     {
         var assembly = typeof(global::QBrainAi.Support.Mcp.McpStdio.FwhMcpTools).Assembly;
 
@@ -49,7 +49,7 @@ public sealed class BrainSlotToolAbsenceTests
     /// so agent tooling generated from the manifest cannot discover the surface.
     /// </summary>
     [Fact]
-    public void StdioToolContract_ContainsNoBrainSlotTools()
+    public void StdioToolContractContainsNoBrainSlotTools()
     {
         var contractPath = Path.Combine(FindRepoRoot(), "docs", "stdio-tool-contract.json");
         using var document = JsonDocument.Parse(File.ReadAllText(contractPath));

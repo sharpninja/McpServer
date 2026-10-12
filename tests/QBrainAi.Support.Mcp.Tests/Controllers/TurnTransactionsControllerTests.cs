@@ -11,7 +11,7 @@ public sealed class TurnTransactionsControllerTests
 {
     /// <summary>Pub-sub status endpoint returns pending messages and forwards the normalized limit.</summary>
     [Fact]
-    public async Task GetPubSubStatus_ReturnsPendingMessagesAndPassesLimit()
+    public async Task GetPubSubStatusReturnsPendingMessagesAndPassesLimit()
     {
         var replay = Substitute.For<ITransactionPubSubReplayService>();
         replay.GetPendingMessagesAsync(25, Arg.Any<CancellationToken>())
@@ -39,7 +39,7 @@ public sealed class TurnTransactionsControllerTests
 
     /// <summary>Pub-sub replay endpoint returns replay counts and forwards the normalized limit.</summary>
     [Fact]
-    public async Task ReplayPubSub_ReturnsReplayCountsAndPassesLimit()
+    public async Task ReplayPubSubReturnsReplayCountsAndPassesLimit()
     {
         var replay = Substitute.For<ITransactionPubSubReplayService>();
         replay.ReplayPendingAsync(12, Arg.Any<CancellationToken>())
@@ -63,7 +63,7 @@ public sealed class TurnTransactionsControllerTests
 
     /// <summary>Pub-sub retention endpoint returns purge counts and forwards the cutoff and normalized limit.</summary>
     [Fact]
-    public async Task PurgePubSubRetention_ReturnsRetentionCountsAndPassesCutoff()
+    public async Task PurgePubSubRetentionReturnsRetentionCountsAndPassesCutoff()
     {
         var cutoff = DateTimeOffset.UtcNow.AddMinutes(-10);
         var replay = Substitute.For<ITransactionPubSubReplayService>();

@@ -7,21 +7,21 @@ namespace QBrainAi.Support.Mcp.Tests.Options;
 public sealed class McpInstanceResolverTests
 {
     [Fact]
-    public void GetRequestedInstanceName_ReadsFromArgs_EqualsSyntax()
+    public void GetRequestedInstanceNameReadsFromArgsEqualsSyntax()
     {
         var value = McpInstanceResolver.GetRequestedInstanceName(["--instance=alpha"]);
         Assert.Equal("alpha", value);
     }
 
     [Fact]
-    public void GetRequestedInstanceName_ReadsFromArgs_SeparatedSyntax()
+    public void GetRequestedInstanceNameReadsFromArgsSeparatedSyntax()
     {
         var value = McpInstanceResolver.GetRequestedInstanceName(["--instance", "beta"]);
         Assert.Equal("beta", value);
     }
 
     [Fact]
-    public void GetEffectiveMcpValue_PrefersInstanceOverride()
+    public void GetEffectiveMcpValuePrefersInstanceOverride()
     {
         var data = new Dictionary<string, string?>
         {
@@ -35,7 +35,7 @@ public sealed class McpInstanceResolverTests
     }
 
     [Fact]
-    public void ValidateInstances_ThrowsOnDuplicatePorts()
+    public void ValidateInstancesThrowsOnDuplicatePorts()
     {
         var data = new Dictionary<string, string?>
         {
@@ -50,7 +50,7 @@ public sealed class McpInstanceResolverTests
     }
 
     [Fact]
-    public void ValidateInstances_ThrowsWhenRepoRootMissingOnDisk()
+    public void ValidateInstancesThrowsWhenRepoRootMissingOnDisk()
     {
         var missingRoot = Path.Combine(Path.GetTempPath(), $"mcp-missing-{Guid.NewGuid():N}");
         var data = new Dictionary<string, string?>
@@ -65,7 +65,7 @@ public sealed class McpInstanceResolverTests
     }
 
     [Fact]
-    public void ValidateTodoStorage_RejectsUnknownProvider()
+    public void ValidateTodoStorageRejectsUnknownProvider()
     {
         var data = new Dictionary<string, string?>
         {
@@ -78,7 +78,7 @@ public sealed class McpInstanceResolverTests
     }
 
     [Fact]
-    public void ValidateTodoStorage_AcceptsDatabaseProvider_WhenDatabaseConfigured()
+    public void ValidateTodoStorageAcceptsDatabaseProviderWhenDatabaseConfigured()
     {
         var data = new Dictionary<string, string?>
         {
@@ -96,7 +96,7 @@ public sealed class McpInstanceResolverTests
     /// <c>Mcp:TodoStorage:Provider=yaml</c>.
     /// </summary>
     [Fact]
-    public void ValidateTodoStorage_RejectsRemovedYamlProvider()
+    public void ValidateTodoStorageRejectsRemovedYamlProvider()
     {
         var data = new Dictionary<string, string?>
         {
@@ -111,7 +111,7 @@ public sealed class McpInstanceResolverTests
     }
 
     [Fact]
-    public void ValidateTodoStorage_AliasesLegacySqliteToDatabase_WhenDatabaseConfigured()
+    public void ValidateTodoStorageAliasesLegacySqliteToDatabaseWhenDatabaseConfigured()
     {
         var data = new Dictionary<string, string?>
         {
@@ -124,7 +124,7 @@ public sealed class McpInstanceResolverTests
     }
 
     [Fact]
-    public void ValidateTodoStorage_RequiresMcpDatabaseProvider_WhenProviderIsDatabase()
+    public void ValidateTodoStorageRequiresMcpDatabaseProviderWhenProviderIsDatabase()
     {
         var data = new Dictionary<string, string?>
         {
@@ -137,7 +137,7 @@ public sealed class McpInstanceResolverTests
     }
 
     [Fact]
-    public void ValidateTodoStorage_LegacySqliteAlias_FailsWhenDatabaseProviderMissing()
+    public void ValidateTodoStorageLegacySqliteAliasFailsWhenDatabaseProviderMissing()
     {
         var data = new Dictionary<string, string?>
         {
@@ -153,7 +153,7 @@ public sealed class McpInstanceResolverTests
     /// Uses an in-memory configuration with Mcp:RepoRoot=legacy and QBrainAi:RepoRoot=canonical.
     /// </summary>
     [Fact]
-    public void GetEffectiveMcpValue_PrefersQBrainAiSectionWhenBothPresent()
+    public void GetEffectiveMcpValuePrefersQBrainAiSectionWhenBothPresent()
     {
         var data = new Dictionary<string, string?>
         {
@@ -172,7 +172,7 @@ public sealed class McpInstanceResolverTests
     /// Uses an in-memory configuration with Mcp:RepoRoot and no QBrainAi section.
     /// </summary>
     [Fact]
-    public void GetEffectiveMcpValue_ReadsLegacySectionWhenCanonicalAbsent()
+    public void GetEffectiveMcpValueReadsLegacySectionWhenCanonicalAbsent()
     {
         var data = new Dictionary<string, string?>
         {
@@ -190,7 +190,7 @@ public sealed class McpInstanceResolverTests
     /// Restores both variables after the assertion.
     /// </summary>
     [Fact]
-    public void GetRequestedInstanceName_PrefersQBrainAiEnvironmentVariable()
+    public void GetRequestedInstanceNamePrefersQBrainAiEnvironmentVariable()
     {
         var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
         var previousLegacy = Environment.GetEnvironmentVariable("MCP_INSTANCE");
@@ -215,7 +215,7 @@ public sealed class McpInstanceResolverTests
     /// Restores both variables after the assertion.
     /// </summary>
     [Fact]
-    public void GetRequestedInstanceName_FallsBackToLegacyEnvironmentVariable()
+    public void GetRequestedInstanceNameFallsBackToLegacyEnvironmentVariable()
     {
         var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
         var previousLegacy = Environment.GetEnvironmentVariable("MCP_INSTANCE");

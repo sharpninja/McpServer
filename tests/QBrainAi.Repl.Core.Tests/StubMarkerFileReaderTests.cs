@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class StubMarkerFileReaderTests
 {
     [Fact]
-    public async Task ReadAsync_PreCannedTrustBootstrapPayload_ReturnsExpectedData()
+    public async Task ReadAsyncPreCannedTrustBootstrapPayloadReturnsExpectedData()
     {
         var stub = new StubMarkerFileReader();
 
@@ -23,7 +23,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task ReadAsync_UntrustedWorkspace_ReturnsDataWithoutTrustMetadata()
+    public async Task ReadAsyncUntrustedWorkspaceReturnsDataWithoutTrustMetadata()
     {
         var stub = new StubMarkerFileReader();
 
@@ -36,7 +36,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task ReadAsync_NonexistentPath_ThrowsFileNotFoundException()
+    public async Task ReadAsyncNonexistentPathThrowsFileNotFoundException()
     {
         var stub = new StubMarkerFileReader();
 
@@ -46,7 +46,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task TryReadAsync_ValidWorkspace_ReturnsSuccessWithData()
+    public async Task TryReadAsyncValidWorkspaceReturnsSuccessWithData()
     {
         var stub = new StubMarkerFileReader();
 
@@ -58,7 +58,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task TryReadAsync_NonexistentPath_ReturnsFailureWithNull()
+    public async Task TryReadAsyncNonexistentPathReturnsFailureWithNull()
     {
         var stub = new StubMarkerFileReader();
 
@@ -69,7 +69,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task VerifyTrustAsync_TrustedWorkspaceWithoutPrompt_ReturnsCachedTrust()
+    public async Task VerifyTrustAsyncTrustedWorkspaceWithoutPromptReturnsCachedTrust()
     {
         var stub = new StubMarkerFileReader();
 
@@ -81,7 +81,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task VerifyTrustAsync_TrustedWorkspaceWithPrompt_ReturnsUserConfirmed()
+    public async Task VerifyTrustAsyncTrustedWorkspaceWithPromptReturnsUserConfirmed()
     {
         var stub = new StubMarkerFileReader();
 
@@ -93,7 +93,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task VerifyTrustAsync_UntrustedWorkspaceWithoutPrompt_ReturnsNotTrusted()
+    public async Task VerifyTrustAsyncUntrustedWorkspaceWithoutPromptReturnsNotTrusted()
     {
         var stub = new StubMarkerFileReader();
 
@@ -106,7 +106,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task VerifyTrustAsync_SignatureVerifiedWorkspace_ReturnsSignatureVerified()
+    public async Task VerifyTrustAsyncSignatureVerifiedWorkspaceReturnsSignatureVerified()
     {
         var stub = new StubMarkerFileReader();
 
@@ -120,7 +120,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task WatchAsync_SimulatesMarkerFileChange_InvokesCallback()
+    public async Task WatchAsyncSimulatesMarkerFileChangeInvokesCallback()
     {
         var stub = new StubMarkerFileReader();
         var callback = new TaskCompletionSource<IMarkerFileData>(
@@ -147,7 +147,7 @@ public class StubMarkerFileReaderTests
     }
 
     [Fact]
-    public async Task PreCannedPayloads_CoverMultipleScenarios()
+    public async Task PreCannedPayloadsCoverMultipleScenarios()
     {
         var stub = new StubMarkerFileReader();
 

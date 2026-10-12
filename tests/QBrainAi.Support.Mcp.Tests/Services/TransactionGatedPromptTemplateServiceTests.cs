@@ -16,7 +16,7 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 {
     /// <summary>prompt_template_create signs and commits before returning the create result.</summary>
     [Fact]
-    public async Task CreateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult()
+    public async Task CreateAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsResult()
     {
         var inner = new RecordingPromptTemplateService { FileContent = "before" };
         var coordinator = new CapturingCoordinator();
@@ -33,7 +33,7 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 
     /// <summary>Pre-mutation coordinator rejection prevents prompt-template creation.</summary>
     [Fact]
-    public async Task CreateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotCreateTemplate()
+    public async Task CreateAsyncWhenCoordinatorRejectsBeforeMutationDoesNotCreateTemplate()
     {
         var inner = new RecordingPromptTemplateService { FileContent = "before" };
         var coordinator = new CapturingCoordinator
@@ -55,7 +55,7 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 
     /// <summary>Post-mutation commit failure restores the captured prompt-template file snapshot.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorSnapshot()
+    public async Task UpdateAsyncWhenCommitFailsAfterMutationRestoresPriorSnapshot()
     {
         var inner = new RecordingPromptTemplateService { FileContent = "before" };
         var coordinator = new CapturingCoordinator
@@ -78,7 +78,7 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 
     /// <summary>Rollback refuses to overwrite prompt-template files changed after the transaction write.</summary>
     [Fact]
-    public async Task DeleteAsync_WhenRollbackSeesConcurrentEdit_ReportsRollbackFailureWithoutOverwriting()
+    public async Task DeleteAsyncWhenRollbackSeesConcurrentEditReportsRollbackFailureWithoutOverwriting()
     {
         var inner = new RecordingPromptTemplateService
         {
@@ -104,7 +104,7 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 
     /// <summary>Required transaction mode fails closed when template storage cannot compensate writes.</summary>
     [Fact]
-    public async Task CreateAsync_WhenCompensationMissingAndTransactionsRequired_FailsWithoutCreating()
+    public async Task CreateAsyncWhenCompensationMissingAndTransactionsRequiredFailsWithoutCreating()
     {
         var inner = new NonCompensatingPromptTemplateService();
         var coordinator = new CapturingCoordinator();
@@ -123,7 +123,7 @@ public sealed class TransactionGatedPromptTemplateServiceTests
 
     /// <summary>Read and render operations remain pass-through and do not require coordinator transactions.</summary>
     [Fact]
-    public async Task QueryGetAndTestAsync_DelegateWithoutCoordinatorTransaction()
+    public async Task QueryGetAndTestAsyncDelegateWithoutCoordinatorTransaction()
     {
         var inner = new RecordingPromptTemplateService { FileContent = "before" };
         var coordinator = new CapturingCoordinator();

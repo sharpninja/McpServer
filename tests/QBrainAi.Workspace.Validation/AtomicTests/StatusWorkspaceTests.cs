@@ -37,7 +37,7 @@ public sealed class StatusWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Status_AfterCreate_ReturnsProcessStatus()
+    public async Task StatusAfterCreateReturnsProcessStatus()
     {
         var response = await _fixture.Client.GetAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/status", cancellationToken: TestContext.Current.CancellationToken);
@@ -50,7 +50,7 @@ public sealed class StatusWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Status_InvalidKey_Returns400()
+    public async Task StatusInvalidKeyReturns400()
     {
         var response = await _fixture.Client.GetAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/status", cancellationToken: TestContext.Current.CancellationToken);

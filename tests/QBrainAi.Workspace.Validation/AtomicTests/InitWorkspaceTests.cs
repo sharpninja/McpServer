@@ -37,7 +37,7 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Init_RegisteredWorkspace_ReturnsResult()
+    public async Task InitRegisteredWorkspaceReturnsResult()
     {
         var response = await _fixture.Client.PostAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/init", null, cancellationToken: TestContext.Current.CancellationToken);
@@ -64,7 +64,7 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Init_InvalidKey_Returns400()
+    public async Task InitInvalidKeyReturns400()
     {
         var response = await _fixture.Client.PostAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/init", null, cancellationToken: TestContext.Current.CancellationToken);

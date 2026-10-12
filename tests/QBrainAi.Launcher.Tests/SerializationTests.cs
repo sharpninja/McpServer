@@ -16,7 +16,7 @@ public sealed class SerializationTests
     };
 
     [Fact]
-    public void ProcessLaunchRequest_RoundTrip_PreservesAllFields()
+    public void ProcessLaunchRequestRoundTripPreservesAllFields()
     {
         var request = new ProcessLaunchRequest
         {
@@ -46,7 +46,7 @@ public sealed class SerializationTests
     }
 
     [Fact]
-    public void ProcessLaunchRequest_CamelCase_PropertyNames()
+    public void ProcessLaunchRequestCamelCasePropertyNames()
     {
         var request = new ProcessLaunchRequest { ExecutablePath = "test.exe" };
         var json = JsonSerializer.Serialize(request, s_jsonOptions);
@@ -58,7 +58,7 @@ public sealed class SerializationTests
     }
 
     [Fact]
-    public void ProcessLaunchRequest_Defaults_Correct()
+    public void ProcessLaunchRequestDefaultsCorrect()
     {
         var json = """{"executablePath":"test.exe"}""";
         var request = JsonSerializer.Deserialize<ProcessLaunchRequest>(json, s_jsonOptions);
@@ -75,7 +75,7 @@ public sealed class SerializationTests
     }
 
     [Fact]
-    public void ProcessLaunchResult_RoundTrip_PreservesAllFields()
+    public void ProcessLaunchResultRoundTripPreservesAllFields()
     {
         var result = new ProcessLaunchResult
         {
@@ -98,7 +98,7 @@ public sealed class SerializationTests
     }
 
     [Fact]
-    public void ProcessLaunchResult_FailureCase_PreservesErrorInfo()
+    public void ProcessLaunchResultFailureCasePreservesErrorInfo()
     {
         var result = new ProcessLaunchResult
         {

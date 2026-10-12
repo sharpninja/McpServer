@@ -46,7 +46,7 @@ public sealed class PromptTemplateServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task QueryAsync_WithBooleanKeyword_CanMatchAcrossFields()
+    public async Task QueryAsyncWithBooleanKeywordCanMatchAcrossFields()
     {
         var result = await _sut.QueryAsync(keyword: "alpha && beta", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -55,7 +55,7 @@ public sealed class PromptTemplateServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task QueryAsync_WithQuotedBooleanKeyword_MatchesExactPhrase()
+    public async Task QueryAsyncWithQuotedBooleanKeywordMatchesExactPhrase()
     {
         var result = await _sut.QueryAsync(keyword: "\"Alpha Release\" && !gamma", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -64,7 +64,7 @@ public sealed class PromptTemplateServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task CaptureFileAsync_WhenFileExists_ReturnsRawSnapshot()
+    public async Task CaptureFileAsyncWhenFileExistsReturnsRawSnapshot()
     {
         var snapshot = await _sut.CaptureFileAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -74,7 +74,7 @@ public sealed class PromptTemplateServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task RestoreFileAsync_WhenSnapshotExists_RestoresPriorContent()
+    public async Task RestoreFileAsyncWhenSnapshotExistsRestoresPriorContent()
     {
         var snapshot = await _sut.CaptureFileAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var update = await _sut.UpdateAsync("alpha-template", new PromptTemplateUpdateRequest { Title = "Changed" }, cancellationToken: TestContext.Current.CancellationToken)
@@ -89,7 +89,7 @@ public sealed class PromptTemplateServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task RestoreFileAsync_WhenSnapshotDidNotExist_DeletesCreatedFile()
+    public async Task RestoreFileAsyncWhenSnapshotDidNotExistDeletesCreatedFile()
     {
         File.Delete(_tempFilePath);
         var snapshot = await _sut.CaptureFileAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -109,7 +109,7 @@ public sealed class PromptTemplateServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task RestoreFileAsync_WhenFileChangedAfterMutation_RefusesOverwrite()
+    public async Task RestoreFileAsyncWhenFileChangedAfterMutationRefusesOverwrite()
     {
         var snapshot = await _sut.CaptureFileAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var update = await _sut.UpdateAsync("alpha-template", new PromptTemplateUpdateRequest { Title = "Changed" }, cancellationToken: TestContext.Current.CancellationToken)

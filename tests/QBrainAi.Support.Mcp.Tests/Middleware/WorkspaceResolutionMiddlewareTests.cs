@@ -66,7 +66,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task XWorkspacePath_Header_ResolvesWorkspace()
+    public async Task XWorkspacePathHeaderResolvesWorkspace()
     {
         var wsDto = MakeDto(WorkspaceA);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -89,7 +89,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     /// DbContext workspace discriminator used by global query filters.
     /// </summary>
     [Fact]
-    public async Task XWorkspacePath_Header_OverridesDbContextWorkspaceId()
+    public async Task XWorkspacePathHeaderOverridesDbContextWorkspaceId()
     {
         var wsDto = MakeDto(WorkspaceA);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -108,7 +108,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task XWorkspacePath_Header_InvalidPath_Returns400()
+    public async Task XWorkspacePathHeaderInvalidPathReturns400()
     {
         var workspaceService = CreateWorkspaceService(); // no workspaces registered
         var tokenService = new WorkspaceTokenService();
@@ -124,7 +124,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task ApiKey_ResolvesWorkspace_WhenNoHeader()
+    public async Task ApiKeyResolvesWorkspaceWhenNoHeader()
     {
         var wsDto = MakeDto(WorkspaceA);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -143,7 +143,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task NoHeaderNoKey_PassesThroughWithoutResolution()
+    public async Task NoHeaderNoKeyPassesThroughWithoutResolution()
     {
         var wsDto = MakeDto(WorkspaceA, isPrimary: true);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -160,7 +160,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task ApiKey_UnknownToken_PassesThroughWithoutResolution()
+    public async Task ApiKeyUnknownTokenPassesThroughWithoutResolution()
     {
         var wsDto = MakeDto(WorkspaceA, isPrimary: true);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -177,7 +177,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task HeaderTakesPriority_OverApiKey()
+    public async Task HeaderTakesPriorityOverApiKey()
     {
         var wsDtoA = MakeDto(WorkspaceA);
         var wsDtoB = MakeDto(WorkspaceB);
@@ -197,7 +197,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task NonMcpRoute_SkipsResolution()
+    public async Task NonMcpRouteSkipsResolution()
     {
         var workspaceService = Substitute.For<IWorkspaceService>();
         var tokenService = new WorkspaceTokenService();
@@ -214,7 +214,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task McpTransport_GetsResolution()
+    public async Task McpTransportGetsResolution()
     {
         var wsDto = MakeDto(WorkspaceA);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -231,7 +231,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task EmptyHeader_SkipsToApiKeyFallback()
+    public async Task EmptyHeaderSkipsToApiKeyFallback()
     {
         var wsDto = MakeDto(WorkspaceA);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -250,7 +250,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task DefaultToken_SetsIsDefaultKey()
+    public async Task DefaultTokenSetsIsDefaultKey()
     {
         var wsDto = MakeDto(WorkspaceA);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -267,7 +267,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task BearerToken_WithoutWorkspaceHeader_RejectsTenantRoute()
+    public async Task BearerTokenWithoutWorkspaceHeaderRejectsTenantRoute()
     {
         var wsDto = MakeDto(WorkspaceA, isPrimary: true);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -296,7 +296,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     [InlineData("PUT", "/qbrainai/memory/MEMORY-FACT-001", false)]
     [InlineData("DELETE", "/qbrainai/memory/MEMORY-FACT-001", false)]
     [InlineData("POST", "/qbrainai/memory/recall", false)]
-    public async Task BearerToken_WithoutWorkspaceHeader_MemoryRoutes(string method, string path, bool allowed)
+    public async Task BearerTokenWithoutWorkspaceHeaderMemoryRoutes(string method, string path, bool allowed)
     {
         var wsDto = MakeDto(WorkspaceA, isPrimary: true);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -314,7 +314,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task BearerToken_WithoutWorkspaceHeader_AllowsWorkspaceRegistryRoute()
+    public async Task BearerTokenWithoutWorkspaceHeaderAllowsWorkspaceRegistryRoute()
     {
         var wsDto = MakeDto(WorkspaceA, isPrimary: true);
         var workspaceService = CreateWorkspaceService(wsDto);

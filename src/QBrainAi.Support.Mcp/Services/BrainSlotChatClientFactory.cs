@@ -206,7 +206,7 @@ public sealed class BrainSlotChatClientFactory : IBrainSlotChatClientFactory
             Timeout = TimeSpan.FromSeconds(slot.TimeoutSeconds <= 0 ? 30 : slot.TimeoutSeconds),
         };
 
-        var baseEndpoint = slot.Endpoint.EndsWith("/", StringComparison.Ordinal) ? slot.Endpoint : slot.Endpoint + "/";
+        var baseEndpoint = slot.Endpoint.EndsWith('/') ? slot.Endpoint : slot.Endpoint + "/";
         using var request = new HttpRequestMessage(HttpMethod.Post, new Uri(new Uri(baseEndpoint), "chat/completions"))
         {
             Content = new StringContent(requestJson, Encoding.UTF8, "application/json"),

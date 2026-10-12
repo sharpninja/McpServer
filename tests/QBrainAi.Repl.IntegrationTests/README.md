@@ -106,7 +106,7 @@ dotnet test --filter "ClassName~Iteration2IntegrationTests"
 dotnet test --filter "ClassName~Iteration3IntegrationTests"
 
 # Run specific test
-dotnet test --filter "FullyQualifiedName~TodoWorkflow_FullCrudWorkflow_CompletesSuccessfully"
+dotnet test --filter "FullyQualifiedName~TodoWorkflowFullCrudWorkflowCompletesSuccessfully"
 
 # Run with verbose output
 dotnet test --logger "console;verbosity=detailed"

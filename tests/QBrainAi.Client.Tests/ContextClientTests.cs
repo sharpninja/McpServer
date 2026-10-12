@@ -14,7 +14,7 @@ public sealed class ContextClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task SearchAsync_PostsSearchRequest()
+    public async System.Threading.Tasks.Task SearchAsyncPostsSearchRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"query":"auth","chunks":[],"sourceKeys":[]}""");
         using var http = new HttpClient(handler);
@@ -29,7 +29,7 @@ public sealed class ContextClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task PackAsync_PostsPackRequest()
+    public async System.Threading.Tasks.Task PackAsyncPostsPackRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"queryId":"q1","chunks":[],"sourceKeys":[]}""");
         using var http = new HttpClient(handler);
@@ -42,7 +42,7 @@ public sealed class ContextClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListSourcesAsync_GetsSourcesList()
+    public async System.Threading.Tasks.Task ListSourcesAsyncGetsSourcesList()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"sources":[{"sourceKey":"k","sourceType":"repo"}]}""");
         using var http = new HttpClient(handler);
@@ -55,7 +55,7 @@ public sealed class ContextClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RebuildIndexAsync_PostsCorrectly()
+    public async System.Threading.Tasks.Task RebuildIndexAsyncPostsCorrectly()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"status":"completed"}""");
         using var http = new HttpClient(handler);
@@ -69,7 +69,7 @@ public sealed class ContextClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GraphRagStatusAsync_GetsStatus()
+    public async System.Threading.Tasks.Task GraphRagStatusAsyncGetsStatus()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"enabled":true,"workspacePath":"E:/repo","graphRoot":"E:/repo/mcp-data/graphrag","state":"ready","isInitialized":true,"isIndexed":true,"artifactVersion":"v1","backend":"internal-fallback"}""");
         using var http = new HttpClient(handler);
@@ -86,7 +86,7 @@ public sealed class ContextClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GraphRagIndexAsync_PostsRequest()
+    public async System.Threading.Tasks.Task GraphRagIndexAsyncPostsRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"enabled":true,"isInitialized":true,"isIndexed":true,"backend":"internal-fallback"}""");
         using var http = new HttpClient(handler);
@@ -101,7 +101,7 @@ public sealed class ContextClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GraphRagQueryAsync_PostsQueryRequest()
+    public async System.Threading.Tasks.Task GraphRagQueryAsyncPostsQueryRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"query":"auth","mode":"local","answer":"ok","citations":[],"chunks":[],"sourceKeys":[],"entities":["AuthService"],"relationships":["AuthService -> TokenStore"],"communities":["auth (1)"],"fallbackUsed":true,"fallbackReason":"graphrag_not_indexed","backend":"internal-fallback"}""");
         using var http = new HttpClient(handler);
@@ -123,7 +123,7 @@ public sealed class ContextClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task IngestWebsiteAsync_PostsTypedRequest()
+    public async System.Threading.Tasks.Task IngestWebsiteAsyncPostsTypedRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"runId":"r1","status":"completed","documentsIngested":1,"chunksWritten":2,"urlResults":[{"url":"https://example.com","status":"ingested","chunksWritten":2}],"graphRagIndexed":false}""");
         using var http = new HttpClient(handler);
@@ -140,7 +140,7 @@ public sealed class ContextClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StreamIngestWebsiteAsync_PostsRequestAndYieldsDataLines()
+    public async System.Threading.Tasks.Task StreamIngestWebsiteAsyncPostsRequestAndYieldsDataLines()
     {
         var sse = "data: {\"event\":\"started\"}\n\ndata: {\"event\":\"completed\"}\n\nevent: done\ndata: \n\n";
         var handler = new MockHttpHandler(HttpStatusCode.OK, sse, "text/event-stream");

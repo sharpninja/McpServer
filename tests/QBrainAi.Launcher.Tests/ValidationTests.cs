@@ -9,7 +9,7 @@ namespace QBrainAi.Launcher.Tests;
 public sealed class ValidationTests
 {
     [Fact]
-    public void Validate_ValidRequest_ReturnsNoErrors()
+    public void ValidateValidRequestReturnsNoErrors()
     {
         var request = new ProcessLaunchRequest
         {
@@ -24,7 +24,7 @@ public sealed class ValidationTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Validate_MissingExecutablePath_ReturnsError(string? path)
+    public void ValidateMissingExecutablePathReturnsError(string? path)
     {
         var request = new ProcessLaunchRequest
         {
@@ -36,7 +36,7 @@ public sealed class ValidationTests
     }
 
     [Fact]
-    public void Validate_InvalidWorkingDirectory_ReturnsError()
+    public void ValidateInvalidWorkingDirectoryReturnsError()
     {
         var request = new ProcessLaunchRequest
         {
@@ -49,7 +49,7 @@ public sealed class ValidationTests
     }
 
     [Fact]
-    public void Validate_NegativeTimeout_ReturnsError()
+    public void ValidateNegativeTimeoutReturnsError()
     {
         var request = new ProcessLaunchRequest
         {
@@ -63,7 +63,7 @@ public sealed class ValidationTests
     }
 
     [Fact]
-    public void Validate_TimeoutWithoutWaitForExit_ReturnsError()
+    public void ValidateTimeoutWithoutWaitForExitReturnsError()
     {
         var request = new ProcessLaunchRequest
         {
@@ -77,7 +77,7 @@ public sealed class ValidationTests
     }
 
     [Fact]
-    public void Validate_ValidTimeout_ReturnsNoErrors()
+    public void ValidateValidTimeoutReturnsNoErrors()
     {
         var request = new ProcessLaunchRequest
         {
@@ -91,7 +91,7 @@ public sealed class ValidationTests
     }
 
     [Fact]
-    public void Validate_InvalidWindowStyle_ReturnsError()
+    public void ValidateInvalidWindowStyleReturnsError()
     {
         var request = new ProcessLaunchRequest
         {

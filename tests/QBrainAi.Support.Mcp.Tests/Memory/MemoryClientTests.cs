@@ -21,7 +21,7 @@ public sealed class MemoryClientTests
 
     /// <summary>AC-TR-MCP-MEMORY-API-002-05: MemoryClient methods mirror REST 1:1.</summary>
     [Fact]
-    public async Task Methods_MirrorRest()
+    public async Task MethodsMirrorRest()
     {
         var type = typeof(QBrainAi.Client.MemoryClient);
         var names = type.GetMethods().Select(method => method.Name).ToHashSet(StringComparer.Ordinal);

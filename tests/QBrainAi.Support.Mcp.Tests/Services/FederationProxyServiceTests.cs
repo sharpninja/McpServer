@@ -18,7 +18,7 @@ public sealed class FederationProxyServiceTests
 {
     /// <summary>Failed LocalProxy mutating requests are durably queued and return operation metadata.</summary>
     [Fact]
-    public async Task ProxyAsync_LocalProxyWriteQueuesWhenHubUnavailable()
+    public async Task ProxyAsyncLocalProxyWriteQueuesWhenHubUnavailable()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();
@@ -69,7 +69,7 @@ public sealed class FederationProxyServiceTests
 
     /// <summary>Hub 5xx responses are treated as outage signals and queued when possible.</summary>
     [Fact]
-    public async Task ProxyAsync_LocalProxyWriteQueuesWhenHubReturnsServerError()
+    public async Task ProxyAsyncLocalProxyWriteQueuesWhenHubReturnsServerError()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();
@@ -115,7 +115,7 @@ public sealed class FederationProxyServiceTests
 
     /// <summary>MCP transport posts are forwarded live but are not accepted into the offline replay queue.</summary>
     [Fact]
-    public async Task ProxyAsync_McpTransportPostDoesNotQueueWhenHubUnavailable()
+    public async Task ProxyAsyncMcpTransportPostDoesNotQueueWhenHubUnavailable()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();
@@ -161,7 +161,7 @@ public sealed class FederationProxyServiceTests
 
     /// <summary>Unsupported TODO subroutes are not accepted into durable replay as fake TODO creates.</summary>
     [Fact]
-    public async Task ProxyAsync_UnsupportedTodoSubrouteDoesNotQueueWhenHubUnavailable()
+    public async Task ProxyAsyncUnsupportedTodoSubrouteDoesNotQueueWhenHubUnavailable()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();
@@ -207,7 +207,7 @@ public sealed class FederationProxyServiceTests
 
     /// <summary>Local proxy writes are not queued when no adapter can apply the domain later.</summary>
     [Fact]
-    public async Task ProxyAsync_DoesNotQueueDomainWithoutApplyAdapter()
+    public async Task ProxyAsyncDoesNotQueueDomainWithoutApplyAdapter()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();
@@ -254,7 +254,7 @@ public sealed class FederationProxyServiceTests
 
     /// <summary>TEST-MCP-MEMORY-FED-001: memory creates with explicit ids are accepted into the offline replay queue.</summary>
     [Fact]
-    public async Task ProxyAsync_MemoryCreateWithExplicitIdQueuesWhenHubUnavailable()
+    public async Task ProxyAsyncMemoryCreateWithExplicitIdQueuesWhenHubUnavailable()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();
@@ -305,7 +305,7 @@ public sealed class FederationProxyServiceTests
 
     /// <summary>TEST-MCP-MEMORY-FED-001: memory creates without explicit ids are not queued for offline replay.</summary>
     [Fact]
-    public async Task ProxyAsync_MemoryCreateWithoutExplicitIdDoesNotQueueWhenHubUnavailable()
+    public async Task ProxyAsyncMemoryCreateWithoutExplicitIdDoesNotQueueWhenHubUnavailable()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();
@@ -352,7 +352,7 @@ public sealed class FederationProxyServiceTests
 
     /// <summary>TEST-MCP-MEMORY-FED-001: memory update and delete requests queue with the memory domain and path id.</summary>
     [Fact]
-    public async Task ProxyAsync_MemoryUpdateAndDeleteQueueWithResourceIdWhenHubUnavailable()
+    public async Task ProxyAsyncMemoryUpdateAndDeleteQueueWithResourceIdWhenHubUnavailable()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();

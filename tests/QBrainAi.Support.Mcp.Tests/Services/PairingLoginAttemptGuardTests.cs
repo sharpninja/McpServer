@@ -15,7 +15,7 @@ public sealed class PairingLoginAttemptGuardTests
     /// lockout and that the lockout clears after the reported retry interval elapses.
     /// </summary>
     [Fact]
-    public void TryAcquire_AfterThresholdFailures_BlocksUntilRetryAfterExpires()
+    public void TryAcquireAfterThresholdFailuresBlocksUntilRetryAfterExpires()
     {
         var now = DateTimeOffset.Parse("2026-03-21T00:00:00Z");
         var guard = new PairingLoginAttemptGuard(() => now);
@@ -38,7 +38,7 @@ public sealed class PairingLoginAttemptGuardTests
     /// earlier mistakes do not cause a later lockout for the same username and remote IP.
     /// </summary>
     [Fact]
-    public void RecordSuccess_ClearsPrincipalFailureHistory()
+    public void RecordSuccessClearsPrincipalFailureHistory()
     {
         var now = DateTimeOffset.Parse("2026-03-21T00:00:00Z");
         var guard = new PairingLoginAttemptGuard(() => now);
@@ -61,7 +61,7 @@ public sealed class PairingLoginAttemptGuardTests
     /// because the IP-level failure window starts rejecting new attempts until the fixed window expires.
     /// </summary>
     [Fact]
-    public void TryAcquire_AfterIpFailureWindowExceeded_ReturnsFalseUntilWindowResets()
+    public void TryAcquireAfterIpFailureWindowExceededReturnsFalseUntilWindowResets()
     {
         var now = DateTimeOffset.Parse("2026-03-21T00:00:00Z");
         var guard = new PairingLoginAttemptGuard(() => now);

@@ -53,7 +53,7 @@ public sealed class FederationControllerPushTests
 
     /// <summary>Valid push request returns 200 with push result.</summary>
     [Fact]
-    public async Task Push_ValidRequest_Returns200WithResult()
+    public async Task PushValidRequestReturns200WithResult()
     {
         var expected = new FederationPushResult(3, 0, []);
         _pushService.PushAllAsync(Arg.Any<CancellationToken>()).Returns(expected);
@@ -69,7 +69,7 @@ public sealed class FederationControllerPushTests
 
     /// <summary>TEST-MCP-161: Federation push fails closed before invoking remote push side effects.</summary>
     [Fact]
-    public async Task Push_WhenTransactionsRequired_ReturnsConflictWithoutCallingPushService()
+    public async Task PushWhenTransactionsRequiredReturnsConflictWithoutCallingPushService()
     {
         var controller = CreateController(
             CreateRegistry(enabled: true, defaultTarget: "remote"),
@@ -84,7 +84,7 @@ public sealed class FederationControllerPushTests
 
     /// <summary>When federation is disabled, push returns 409 Conflict.</summary>
     [Fact]
-    public async Task Push_FederationDisabled_Returns409()
+    public async Task PushFederationDisabledReturns409()
     {
         var controller = CreateController(CreateRegistry(enabled: false));
         var result = await controller.Push(new FederationPushRequest(), CancellationToken.None);
@@ -94,7 +94,7 @@ public sealed class FederationControllerPushTests
 
     /// <summary>When no federation target exists, push returns 404.</summary>
     [Fact]
-    public async Task Push_NoTarget_Returns404()
+    public async Task PushNoTargetReturns404()
     {
         var controller = CreateController(CreateRegistry(enabled: true)); // no targets
         var result = await controller.Push(new FederationPushRequest(), CancellationToken.None);
@@ -104,7 +104,7 @@ public sealed class FederationControllerPushTests
 
     /// <summary>Push with specific types filters correctly.</summary>
     [Fact]
-    public async Task Push_SpecificTypes_FiltersCorrectly()
+    public async Task PushSpecificTypesFiltersCorrectly()
     {
         var expected = new FederationPushResult(1, 0, []);
         _pushService.PushTodosAsync(Arg.Any<CancellationToken>()).Returns(expected);

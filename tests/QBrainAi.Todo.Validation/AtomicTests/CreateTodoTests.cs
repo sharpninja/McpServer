@@ -50,7 +50,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Create_ValidRequest_Returns201</c> scenario.
+    /// Validates the <c>CreateValidRequestReturns201</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -58,7 +58,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Create_ValidRequest_Returns201()
+    public async Task CreateValidRequestReturns201()
     {
         var body = new
         {
@@ -91,7 +91,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Create_DuplicateId_Returns409</c> scenario.
+    /// Validates the <c>CreateDuplicateIdReturns409</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -99,7 +99,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Create_DuplicateId_Returns409()
+    public async Task CreateDuplicateIdReturns409()
     {
         var body = new { Id = _testId, Title = "First", Section = "mvp-support", Priority = "low" };
         var first = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body, cancellationToken: TestContext.Current.CancellationToken);
@@ -114,7 +114,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Create_NullBody_Returns400</c> scenario.
+    /// Validates the <c>CreateNullBodyReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -122,7 +122,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Create_NullBody_Returns400()
+    public async Task CreateNullBodyReturns400()
     {
         var response = await _fixture.Client.PostAsync(
             TodoEndpointFixture.TodoRoute,
@@ -136,7 +136,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Create_WithImplementationTasks_Returns201</c> scenario.
+    /// Validates the <c>CreateWithImplementationTasksReturns201</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -144,7 +144,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Create_WithImplementationTasks_Returns201()
+    public async Task CreateWithImplementationTasksReturns201()
     {
         var body = new
         {

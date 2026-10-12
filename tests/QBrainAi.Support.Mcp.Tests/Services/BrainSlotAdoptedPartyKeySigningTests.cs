@@ -52,7 +52,7 @@ public sealed class BrainSlotAdoptedPartyKeySigningTests
     /// reconciler provisions a party holding a usable private key rather than a public-only descriptor.
     /// </summary>
     [Fact]
-    public async Task RenamedPartyAfterReconciliation_ReportsReadyAndSignsTurnTransaction()
+    public async Task RenamedPartyAfterReconciliationReportsReadyAndSignsTurnTransaction()
     {
         using var fixture = SigningFixture.Create();
         await fixture.RegisterLegacyPartyAsync(LegacyCreativityPartyId).ConfigureAwait(true);
@@ -80,7 +80,7 @@ public sealed class BrainSlotAdoptedPartyKeySigningTests
     /// deletes nothing: historical verification resolves the public key from the manifest's own PublisherPartyId.
     /// </summary>
     [Fact]
-    public async Task LegacyPartyKey_StillVerifiesHistoricalManifestsAfterTheRename()
+    public async Task LegacyPartyKeyStillVerifiesHistoricalManifestsAfterTheRename()
     {
         using var fixture = SigningFixture.Create();
         await fixture.RegisterLegacyPartyAsync(LegacyCreativityPartyId).ConfigureAwait(true);
@@ -124,7 +124,7 @@ public sealed class BrainSlotAdoptedPartyKeySigningTests
     /// public-only row suppressing that self-heal.
     /// </summary>
     [Fact]
-    public async Task PartyWithNoAdoptedKeyRow_SelfHealsAndCommitsTurnTransaction()
+    public async Task PartyWithNoAdoptedKeyRowSelfHealsAndCommitsTurnTransaction()
     {
         using var fixture = SigningFixture.Create();
         Assert.Null(await fixture.GetSigningKeyAsync(CreativityPartyId).ConfigureAwait(true));

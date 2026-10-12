@@ -14,7 +14,7 @@ public sealed class MemoryPluginSyncTests
 {
     /// <summary>AC-FR-MCP-MEMORY-017-03: Plugin sync order is grok first; others after the value gate.</summary>
     [Fact]
-    public void GrokFirst_ThenOthersAfterValueGate()
+    public void GrokFirstThenOthersAfterValueGate()
     {
         var checklist = ReadChecklist();
         Assert.Equal("grok", checklist.RequiredNow[0]);
@@ -26,7 +26,7 @@ public sealed class MemoryPluginSyncTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-08: Plugin validation fails when a synced skill omits a required new verb.</summary>
     [Fact]
-    public void MissingVerb_FailsValidation()
+    public void MissingVerbFailsValidation()
     {
         var validatorType = typeof(QBrainAi.Support.Mcp.Memory.Models.MemoryLimits).Assembly.GetTypes()
             .FirstOrDefault(type => type.Name == "MemoryPluginVerbChecklist");
@@ -46,7 +46,7 @@ public sealed class MemoryPluginSyncTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-12: S5 checklist has an explicit grok pass/fail row before other plugins.</summary>
     [Fact]
-    public void ChecklistReceipt_GrokBeforeOthers()
+    public void ChecklistReceiptGrokBeforeOthers()
     {
         var checklist = ReadChecklist();
         Assert.Equal("S7b", checklist.Slice);
@@ -65,7 +65,7 @@ public sealed class MemoryPluginSyncTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-13: Grok plugin skill/descriptor/shim for new verbs exists before other plugin sync.</summary>
     [Fact]
-    public void ImplementGrokPlugin_BeforeOthers()
+    public void ImplementGrokPluginBeforeOthers()
     {
         var root = MemoryS5Catalog.FindRepoRoot();
         var skill = GrokSkillPath();
@@ -109,7 +109,7 @@ public sealed class MemoryPluginSyncTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-14: Non-Grok plugin sync is documented as blocked until H7a.</summary>
     [Fact]
-    public void NonGrok_BlockedUntilH7a()
+    public void NonGrokBlockedUntilH7a()
     {
         var checklist = ReadChecklist();
         Assert.Contains("H7a", checklist.DeferralNote, StringComparison.OrdinalIgnoreCase);

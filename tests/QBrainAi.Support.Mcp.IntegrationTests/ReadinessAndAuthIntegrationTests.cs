@@ -21,7 +21,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
 
     /// <summary>Pure X-Api-Key agent flow without X-Workspace-Path succeeds with the current full token.</summary>
     [Fact]
-    public async Task Todo_ValidToken_NoWorkspaceHeader_Returns200()
+    public async Task TodoValidTokenNoWorkspaceHeaderReturns200()
     {
         using var scope = _factory.Services.CreateScope();
         var tokens = scope.ServiceProvider.GetRequiredService<WorkspaceTokenService>();
@@ -37,7 +37,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
 
     /// <summary>Unknown API key on the agent flow returns 401, not blanket 503.</summary>
     [Fact]
-    public async Task Todo_UnknownKey_NoWorkspaceHeader_Returns401()
+    public async Task TodoUnknownKeyNoWorkspaceHeaderReturns401()
     {
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Api-Key", "stale-or-wrong-key");
@@ -49,7 +49,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
 
     /// <summary>Missing API key on the agent flow returns 401 after token initialization.</summary>
     [Fact]
-    public async Task Todo_MissingKey_NoWorkspaceHeader_Returns401()
+    public async Task TodoMissingKeyNoWorkspaceHeaderReturns401()
     {
         var client = _factory.CreateClient();
 
@@ -60,7 +60,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
 
     /// <summary><c>/ready</c> is healthy and lists the workspace readiness check when the data layer is up.</summary>
     [Fact]
-    public async Task Ready_WhenUp_Healthy_IncludesWorkspaceReadinessCheck()
+    public async Task ReadyWhenUpHealthyIncludesWorkspaceReadinessCheck()
     {
         var client = _factory.CreateClient();
 

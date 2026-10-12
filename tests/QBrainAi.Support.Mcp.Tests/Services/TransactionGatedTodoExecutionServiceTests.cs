@@ -19,7 +19,7 @@ public sealed class TransactionGatedTodoExecutionServiceTests
 
     /// <summary>File-state TODO execution mutations execute inside the coordinator and return after commit.</summary>
     [Fact]
-    public async Task UpdateStatusAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult()
+    public async Task UpdateStatusAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsResult()
     {
         var inner = new RecordingTodoExecutionService();
         var coordinator = new CapturingCoordinator();
@@ -41,7 +41,7 @@ public sealed class TransactionGatedTodoExecutionServiceTests
 
     /// <summary>A pre-mutation coordinator rejection prevents TODO execution state mutation.</summary>
     [Fact]
-    public async Task UpdateStatusAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotMutate()
+    public async Task UpdateStatusAsyncWhenCoordinatorRejectsBeforeMutationDoesNotMutate()
     {
         var inner = new RecordingTodoExecutionService();
         var coordinator = new CapturingCoordinator
@@ -67,7 +67,7 @@ public sealed class TransactionGatedTodoExecutionServiceTests
 
     /// <summary>A post-mutation commit failure restores the pre-mutation TODO execution state snapshot.</summary>
     [Fact]
-    public async Task AppendCheckpointAsync_WhenCommitFailsAfterMutation_RestoresStateSnapshot()
+    public async Task AppendCheckpointAsyncWhenCommitFailsAfterMutationRestoresStateSnapshot()
     {
         var snapshot = new TodoExecutionStateSnapshot(WorkspacePath, Exists: true, ContentJson: "{\"before\":true}");
         var inner = new RecordingTodoExecutionService { Snapshot = snapshot };
@@ -97,7 +97,7 @@ public sealed class TransactionGatedTodoExecutionServiceTests
 
     /// <summary>Rollback restore failures are surfaced as coordinator rollback failures.</summary>
     [Fact]
-    public async Task SetTestPlanAsync_WhenRollbackFails_ReportsRollbackFailure()
+    public async Task SetTestPlanAsyncWhenRollbackFailsReportsRollbackFailure()
     {
         var inner = new RecordingTodoExecutionService
         {
@@ -129,7 +129,7 @@ public sealed class TransactionGatedTodoExecutionServiceTests
 
     /// <summary>CreateTodosFromPlan signs and commits the cross-store plan expansion before returning created TODO ids.</summary>
     [Fact]
-    public async Task CreateTodosFromPlanAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsCreatedTodos()
+    public async Task CreateTodosFromPlanAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsCreatedTodos()
     {
         var inner = new RecordingTodoExecutionService();
         var coordinator = new CapturingCoordinator();
@@ -163,7 +163,7 @@ public sealed class TransactionGatedTodoExecutionServiceTests
 
     /// <summary>CreateTodosFromPlan rollback deletes created legacy TODOs and restores the execution state snapshot.</summary>
     [Fact]
-    public async Task CreateTodosFromPlanAsync_WhenCommitFailsAfterMutation_RollsBackCreatedTodosAndState()
+    public async Task CreateTodosFromPlanAsyncWhenCommitFailsAfterMutationRollsBackCreatedTodosAndState()
     {
         var snapshot = new TodoExecutionStateSnapshot(WorkspacePath, Exists: true, ContentJson: "{\"before\":true}");
         var inner = new RecordingTodoExecutionService { Snapshot = snapshot };
@@ -202,7 +202,7 @@ public sealed class TransactionGatedTodoExecutionServiceTests
 
     /// <summary>Required transaction mode fails closed before plan expansion when legacy TODO compensation is unavailable.</summary>
     [Fact]
-    public async Task CreateTodosFromPlanAsync_WhenPlanCompensationMissingAndRequired_DoesNotMutate()
+    public async Task CreateTodosFromPlanAsyncWhenPlanCompensationMissingAndRequiredDoesNotMutate()
     {
         var inner = new StateOnlyTodoExecutionService();
         var coordinator = new CapturingCoordinator();

@@ -24,7 +24,7 @@ public sealed class SessionLogControllerReceiptTests
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(2)]
-    public async Task SubmitAsync_AcknowledgesOnlyAfterPersistence(int turnCount)
+    public async Task SubmitAsyncAcknowledgesOnlyAfterPersistence(int turnCount)
     {
         var service = Substitute.For<ISessionLogService>();
         var persisted = new TaskCompletionSource<long>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -50,7 +50,7 @@ public sealed class SessionLogControllerReceiptTests
 
     /// <summary>A database failure remains an error and never returns a positive persistence receipt.</summary>
     [Fact]
-    public async Task SubmitAsync_FailedPersistence_DoesNotAcknowledge()
+    public async Task SubmitAsyncFailedPersistenceDoesNotAcknowledge()
     {
         var service = Substitute.For<ISessionLogService>();
         var dto = CreateRequest(1);
@@ -69,7 +69,7 @@ public sealed class SessionLogControllerReceiptTests
 
     /// <summary>Cancellation before persistence propagates instead of producing a success receipt.</summary>
     [Fact]
-    public async Task SubmitAsync_CanceledPersistence_DoesNotAcknowledge()
+    public async Task SubmitAsyncCanceledPersistenceDoesNotAcknowledge()
     {
         var service = Substitute.For<ISessionLogService>();
         var dto = CreateRequest(1);
@@ -83,7 +83,7 @@ public sealed class SessionLogControllerReceiptTests
 
     /// <summary>A real service write must be readable from storage before its controller acknowledges persistence.</summary>
     [Fact]
-    public async Task SubmitAsync_RealService_AcknowledgesReadableSession()
+    public async Task SubmitAsyncRealServiceAcknowledgesReadableSession()
     {
         var workspace = new WorkspaceContext { WorkspacePath = "receipt-test-workspace" };
         var options = new DbContextOptionsBuilder<McpDbContext>()
@@ -104,7 +104,7 @@ public sealed class SessionLogControllerReceiptTests
 
     /// <summary>A caller-owned transaction cannot receive a durable receipt before an outer rollback.</summary>
     [Fact]
-    public async Task SubmitAsync_OuterRollback_NeverReturnsDurableReceipt()
+    public async Task SubmitAsyncOuterRollbackNeverReturnsDurableReceipt()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
         await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);

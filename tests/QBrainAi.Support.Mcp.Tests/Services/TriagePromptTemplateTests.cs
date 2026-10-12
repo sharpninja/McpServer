@@ -43,7 +43,7 @@ public sealed class TriagePromptTemplateTests : IDisposable
     /// and stop when triage submission fails.
     /// </summary>
     [Fact]
-    public async Task DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance()
+    public async Task DefaultMarkerPromptTemplateRendersMcpAndPluginFailureTriageGuidance()
     {
         using var sut = new PromptTemplateService(
             Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions
@@ -86,7 +86,7 @@ public sealed class TriagePromptTemplateTests : IDisposable
     /// deprecated workflow metadata and empty history are not reasons to bypass the plugin.
     /// </summary>
     [Fact]
-    public async Task DefaultMarkerPromptTemplate_RendersSessionLogWrapperRecoveryGuidance()
+    public async Task DefaultMarkerPromptTemplateRendersSessionLogWrapperRecoveryGuidance()
     {
         using var sut = new PromptTemplateService(
             Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions
@@ -121,7 +121,7 @@ public sealed class TriagePromptTemplateTests : IDisposable
     /// template file and renders with the required group JSON variable.
     /// </summary>
     [Fact]
-    public async Task TriageResearchBugReportTemplate_RendersGroupJsonContract()
+    public async Task TriageResearchBugReportTemplateRendersGroupJsonContract()
     {
         using var sut = new PromptTemplateService(
             Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions

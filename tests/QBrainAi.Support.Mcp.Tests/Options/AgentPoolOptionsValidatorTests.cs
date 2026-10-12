@@ -7,7 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Options;
 public sealed class AgentPoolOptionsValidatorTests
 {
     [Fact]
-    public void Validate_ReturnsSuccess_WhenPoolDisabled()
+    public void ValidateReturnsSuccessWhenPoolDisabled()
     {
         var validator = new AgentPoolOptionsValidator();
         var options = new AgentPoolOptions { Enabled = false };
@@ -18,7 +18,7 @@ public sealed class AgentPoolOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenEnabledWithNoAgents()
+    public void ValidateFailsWhenEnabledWithNoAgents()
     {
         var validator = new AgentPoolOptionsValidator();
         var options = new AgentPoolOptions { Enabled = true };
@@ -30,7 +30,7 @@ public sealed class AgentPoolOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenAgentNamesAreDuplicateIgnoringCase()
+    public void ValidateFailsWhenAgentNamesAreDuplicateIgnoringCase()
     {
         var validator = new AgentPoolOptionsValidator();
         var options = new AgentPoolOptions
@@ -50,7 +50,7 @@ public sealed class AgentPoolOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenMoreThanOnePlanDefaultAgentExists()
+    public void ValidateFailsWhenMoreThanOnePlanDefaultAgentExists()
     {
         var validator = new AgentPoolOptionsValidator();
         var options = new AgentPoolOptions
@@ -70,7 +70,7 @@ public sealed class AgentPoolOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenExecutionStrategyIsUnknown()
+    public void ValidateFailsWhenExecutionStrategyIsUnknown()
     {
         var validator = new AgentPoolOptionsValidator();
         var options = new AgentPoolOptions
@@ -89,7 +89,7 @@ public sealed class AgentPoolOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_ReturnsSuccess_WhenConfigurationIsValid()
+    public void ValidateReturnsSuccessWhenConfigurationIsValid()
     {
         var validator = new AgentPoolOptionsValidator();
         var options = new AgentPoolOptions
@@ -110,7 +110,7 @@ public sealed class AgentPoolOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_ReturnsSuccess_WhenExecutionStrategyUsesLegacyHostedAgentFrameworkAlias()
+    public void ValidateReturnsSuccessWhenExecutionStrategyUsesLegacyHostedAgentFrameworkAlias()
     {
         var validator = new AgentPoolOptionsValidator();
         var options = new AgentPoolOptions

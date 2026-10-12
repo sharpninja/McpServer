@@ -12,7 +12,7 @@ namespace QBrainAi.Client.Tests;
 public sealed class McpClientExceptionCtorCompatTests
 {
     [Fact]
-    public void LegacyOverloads_ExistAsDistinctClrSignatures()
+    public void LegacyOverloadsExistAsDistinctClrSignatures()
     {
         AssertHasCtor(typeof(McpClientException), [typeof(string), typeof(int)]);
         AssertHasCtor(typeof(McpClientException), [typeof(string), typeof(int), typeof(Exception)]);
@@ -32,7 +32,7 @@ public sealed class McpClientExceptionCtorCompatTests
     }
 
     [Fact]
-    public void LegacyOneArgValidationCtor_LeavesEnvelopeMetadataNull()
+    public void LegacyOneArgValidationCtorLeavesEnvelopeMetadataNull()
     {
         var ex = new McpValidationException("bad");
         Assert.Equal(400, ex.StatusCode);
@@ -41,7 +41,7 @@ public sealed class McpClientExceptionCtorCompatTests
     }
 
     [Fact]
-    public void MetadataCtor_PreservesEnvelopeFields()
+    public void MetadataCtorPreservesEnvelopeFields()
     {
         var ex = new McpValidationException("bad", "validation_error", retryable: false);
         Assert.Equal(400, ex.StatusCode);

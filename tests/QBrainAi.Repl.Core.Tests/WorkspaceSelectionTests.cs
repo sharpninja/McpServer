@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class WorkspaceSelectionTests
 {
     [Fact]
-    public async Task DiscoverWorkspacesAsync_FindsMarkerFiles_ReturnsWorkspaceCandidates()
+    public async Task DiscoverWorkspacesAsyncFindsMarkerFilesReturnsWorkspaceCandidates()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
@@ -29,7 +29,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task DiscoverWorkspacesAsync_WithSearchPaths_SearchesSpecifiedPaths()
+    public async Task DiscoverWorkspacesAsyncWithSearchPathsSearchesSpecifiedPaths()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         var searchPaths = new[] { "/custom/path1", "/custom/path2" };
@@ -47,7 +47,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task SelectWorkspaceAsync_ValidWorkspace_ReturnsSuccessResult()
+    public async Task SelectWorkspaceAsyncValidWorkspaceReturnsSuccessResult()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
@@ -76,7 +76,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task SelectWorkspaceAsync_UntrustedWorkspace_ThrowsUnauthorizedAccessException()
+    public async Task SelectWorkspaceAsyncUntrustedWorkspaceThrowsUnauthorizedAccessException()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
@@ -89,7 +89,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task SelectWorkspaceAsync_WorkspaceNotFound_ThrowsFileNotFoundException()
+    public async Task SelectWorkspaceAsyncWorkspaceNotFoundThrowsFileNotFoundException()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
@@ -102,7 +102,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task SelectWorkspaceAsync_AlreadyActive_ThrowsInvalidOperationException()
+    public async Task SelectWorkspaceAsyncAlreadyActiveThrowsInvalidOperationException()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns("/home/user/project");
@@ -116,7 +116,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task SelectWorkspaceAsync_ForceReselect_AllowsReselectingSameWorkspace()
+    public async Task SelectWorkspaceAsyncForceReselectAllowsReselectingSameWorkspace()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns("/home/user/project");
@@ -135,7 +135,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task SwitchWorkspaceAsync_DisconnectsAndConnects_ReturnsNewWorkspaceResult()
+    public async Task SwitchWorkspaceAsyncDisconnectsAndConnectsReturnsNewWorkspaceResult()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns("/home/user/old-project");
@@ -154,7 +154,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task DeselectWorkspaceAsync_WhenWorkspaceActive_DisconnectsSuccessfully()
+    public async Task DeselectWorkspaceAsyncWhenWorkspaceActiveDisconnectsSuccessfully()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns("/home/user/project");
@@ -165,7 +165,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task DeselectWorkspaceAsync_NoActiveWorkspace_ThrowsInvalidOperationException()
+    public async Task DeselectWorkspaceAsyncNoActiveWorkspaceThrowsInvalidOperationException()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns((string?)null);
@@ -179,7 +179,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public void GetActiveMarkerData_WhenWorkspaceActive_ReturnsMarkerData()
+    public void GetActiveMarkerDataWhenWorkspaceActiveReturnsMarkerData()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns("/home/user/project");
@@ -196,7 +196,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public void GetActiveMarkerData_NoActiveWorkspace_ThrowsInvalidOperationException()
+    public void GetActiveMarkerDataNoActiveWorkspaceThrowsInvalidOperationException()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns((string?)null);
@@ -208,7 +208,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task ValidateWorkspacePathAsync_ValidPath_ReturnsTrue()
+    public async Task ValidateWorkspacePathAsyncValidPathReturnsTrue()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
@@ -221,7 +221,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task ValidateWorkspacePathAsync_InvalidPath_ReturnsFalse()
+    public async Task ValidateWorkspacePathAsyncInvalidPathReturnsFalse()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
@@ -234,7 +234,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public void ActiveWorkspace_BeforeSelection_ReturnsNull()
+    public void ActiveWorkspaceBeforeSelectionReturnsNull()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns((string?)null);
@@ -243,7 +243,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task ActiveWorkspace_AfterSelection_ReturnsWorkspacePath()
+    public async Task ActiveWorkspaceAfterSelectionReturnsWorkspacePath()
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
@@ -262,7 +262,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task WorkspaceCandidate_ContainsMarkerDataAndTrustStatus()
+    public async Task WorkspaceCandidateContainsMarkerDataAndTrustStatus()
     {
         var candidate = Substitute.For<IWorkspaceCandidate>();
         var markerData = Substitute.For<IMarkerFileData>();
@@ -282,7 +282,7 @@ public class WorkspaceSelectionTests
     }
 
     [Fact]
-    public async Task WorkspaceSelectionResult_ContainsAuthState()
+    public async Task WorkspaceSelectionResultContainsAuthState()
     {
         var result = Substitute.For<IWorkspaceSelectionResult>();
         var authState = Substitute.For<IAuthState>();

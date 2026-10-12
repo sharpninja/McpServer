@@ -23,7 +23,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_Bootstrap_CompletesSuccessfully()
+    public async Task SessionLogBootstrapCompletesSuccessfully()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -45,7 +45,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_OpenSession_CreatesNewSession()
+    public async Task SessionLogOpenSessionCreatesNewSession()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -73,7 +73,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_CurrentSession_ReturnsActiveSession()
+    public async Task SessionLogCurrentSessionReturnsActiveSession()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -98,7 +98,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_BeginTurn_StartsNewTurn()
+    public async Task SessionLogBeginTurnStartsNewTurn()
     {
         await SetupSessionAsync();
 
@@ -119,7 +119,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_AppendDialog_AddsDialogItems()
+    public async Task SessionLogAppendDialogAddsDialogItems()
     {
         await SetupSessionWithTurnAsync();
 
@@ -148,7 +148,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_AppendActions_AddsActionItems()
+    public async Task SessionLogAppendActionsAddsActionItems()
     {
         await SetupSessionWithTurnAsync();
 
@@ -179,7 +179,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_UpdateTurn_ModifiesTurnMetadata()
+    public async Task SessionLogUpdateTurnModifiesTurnMetadata()
     {
         await SetupSessionWithTurnAsync();
 
@@ -198,7 +198,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_CompleteTurn_FinalizesToCompleted()
+    public async Task SessionLogCompleteTurnFinalizesToCompleted()
     {
         await SetupSessionWithTurnAsync();
 
@@ -213,7 +213,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_FailTurn_FinalizesToFailed()
+    public async Task SessionLogFailTurnFinalizesToFailed()
     {
         await SetupSessionWithTurnAsync();
 
@@ -229,7 +229,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_QueryHistory_ReturnsSessionList()
+    public async Task SessionLogQueryHistoryReturnsSessionList()
     {
         await SetupSessionAsync();
 
@@ -246,7 +246,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_FullWorkflow_BootstrapToComplete()
+    public async Task SessionLogFullWorkflowBootstrapToComplete()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -313,7 +313,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_StatePersistence_AcrossCommands()
+    public async Task SessionLogStatePersistenceAcrossCommands()
     {
         await SetupSessionWithTurnAsync();
 
@@ -340,7 +340,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_ReconnectScenario_SessionPersists()
+    public async Task SessionLogReconnectScenarioSessionPersists()
     {
         await SetupSessionAsync();
 
@@ -356,7 +356,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_InvalidSessionId_ReturnsError()
+    public async Task SessionLogInvalidSessionIdReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -379,7 +379,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_InvalidRequestId_ReturnsError()
+    public async Task SessionLogInvalidRequestIdReturnsError()
     {
         await SetupSessionAsync();
 
@@ -397,7 +397,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_NoActiveSession_ReturnsError()
+    public async Task SessionLogNoActiveSessionReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -418,7 +418,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_NoActiveTurn_AppendDialog_ReturnsError()
+    public async Task SessionLogNoActiveTurnAppendDialogReturnsError()
     {
         await SetupSessionAsync();
 
@@ -442,7 +442,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_ImmutableTurn_UpdateAttempt_ReturnsError()
+    public async Task SessionLogImmutableTurnUpdateAttemptReturnsError()
     {
         await SetupSessionWithTurnAsync();
 
@@ -461,7 +461,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_MultipleDialogAppends_Accumulate()
+    public async Task SessionLogMultipleDialogAppendsAccumulate()
     {
         await SetupSessionWithTurnAsync();
 
@@ -486,7 +486,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_MultipleActionAppends_Accumulate()
+    public async Task SessionLogMultipleActionAppendsAccumulate()
     {
         await SetupSessionWithTurnAsync();
 
@@ -512,7 +512,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_CompleteTurn_BeginNewTurn_Succeeds()
+    public async Task SessionLogCompleteTurnBeginNewTurnSucceeds()
     {
         await SetupSessionWithTurnAsync();
 
@@ -533,7 +533,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_DialogCategories_AllSupported()
+    public async Task SessionLogDialogCategoriesAllSupported()
     {
         await SetupSessionWithTurnAsync();
 
@@ -559,7 +559,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task SessionLog_ActionTypes_AllSupported()
+    public async Task SessionLogActionTypesAllSupported()
     {
         await SetupSessionWithTurnAsync();
 

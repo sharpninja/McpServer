@@ -18,7 +18,7 @@ public sealed class TurnTransactionCoordinatorTests
 {
     /// <summary>Disabled coordinator bypasses transaction dependencies and preserves existing mutation behavior.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenDisabled_BypassesAndRunsMutation()
+    public async Task ExecuteAsyncWhenDisabledBypassesAndRunsMutation()
     {
         var audit = new InMemoryTransactionAuditWriter();
         var coordinator = CreateCoordinator(new TurnTransactionOptions { Enabled = false }, auditWriter: audit);
@@ -36,7 +36,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Enabled coordinator bypasses mutation gating when mutation transactions are not required.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenRequiredForMutationsFalse_BypassesAndRunsMutation()
+    public async Task ExecuteAsyncWhenRequiredForMutationsFalseBypassesAndRunsMutation()
     {
         var keyServer = Substitute.For<IKeyServerManifestService>();
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
@@ -64,7 +64,7 @@ public sealed class TurnTransactionCoordinatorTests
     /// call keyserver even when turn transactions are enabled and required.
     /// </summary>
     [Fact]
-    public async Task ExecuteAsync_WhenEnabledForGeneralAgentMutation_BypassesKeyserver()
+    public async Task ExecuteAsyncWhenEnabledForGeneralAgentMutationBypassesKeyserver()
     {
         var keyServer = Substitute.For<IKeyServerManifestService>();
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
@@ -89,7 +89,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Enabled coordinator returns committed only after subscriber commit confirms the diffgram.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenEnabled_CommitsAfterSubscriberConfirmation()
+    public async Task ExecuteAsyncWhenEnabledCommitsAfterSubscriberConfirmation()
     {
         var registry = Substitute.For<IKeyServerPartyRegistry>();
         registry.GetPartyKeyAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -139,7 +139,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Enabled coordinator sends a protected envelope when subscriber encryption is required.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenProtectDiffgramsEnabled_SendsProtectedEnvelopeToSubscriber()
+    public async Task ExecuteAsyncWhenProtectDiffgramsEnabledSendsProtectedEnvelopeToSubscriber()
     {
         using var encryptionKey = EncryptionKeyPair.Create();
         var canonicalizer = new TransactionManifestCanonicalizer();
@@ -197,7 +197,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Keyserver signing failure prevents mutation execution.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenSigningFails_DoesNotRunMutation()
+    public async Task ExecuteAsyncWhenSigningFailsDoesNotRunMutation()
     {
         var keyServer = Substitute.For<IKeyServerManifestService>();
         keyServer.SignManifestAsync(Arg.Any<TransactionManifestSignRequest>(), Arg.Any<CancellationToken>())
@@ -228,7 +228,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Keyserver exceptions are mapped to dependency failure without running the mutation.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenKeyServerThrows_EntersDegradedModeWithoutMutation()
+    public async Task ExecuteAsyncWhenKeyServerThrowsEntersDegradedModeWithoutMutation()
     {
         var keyServer = Substitute.For<IKeyServerManifestService>();
         keyServer.SignManifestAsync(Arg.Any<TransactionManifestSignRequest>(), Arg.Any<CancellationToken>())
@@ -255,7 +255,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Mutation failure aborts the subscriber transaction and records final status plus audit.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenMutationFails_RecordsAbortStatusAndAudit()
+    public async Task ExecuteAsyncWhenMutationFailsRecordsAbortStatusAndAudit()
     {
         var audit = new InMemoryTransactionAuditWriter();
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
@@ -302,7 +302,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Subscriber duplicate acknowledgement is treated as committed by the coordinator.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenPubSubReturnsDuplicate_TreatsAsCommitted()
+    public async Task ExecuteAsyncWhenPubSubReturnsDuplicateTreatsAsCommitted()
     {
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
@@ -329,7 +329,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Pub-sub transport exceptions map to subscriber-unavailable degraded mode.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenPubSubThrows_EntersDegradedModeWithSubscriberUnavailable()
+    public async Task ExecuteAsyncWhenPubSubThrowsEntersDegradedModeWithSubscriberUnavailable()
     {
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
@@ -351,7 +351,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Subscriber dependency failure enters degraded mode when configured.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenSubscriberUnavailable_EntersDegradedMode()
+    public async Task ExecuteAsyncWhenSubscriberUnavailableEntersDegradedMode()
     {
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
@@ -381,7 +381,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Degraded subscriber failure invokes mutation rollback compensation while preserving audit rows.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenSubscriberUnavailableAndRollbackProvided_RunsRollbackCompensation()
+    public async Task ExecuteAsyncWhenSubscriberUnavailableAndRollbackProvidedRunsRollbackCompensation()
     {
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
@@ -432,7 +432,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Rollback failure is reported without hiding the original subscriber commit reason.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenRollbackCompensationFails_PreservesOriginalTransactionReason()
+    public async Task ExecuteAsyncWhenRollbackCompensationFailsPreservesOriginalTransactionReason()
     {
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
@@ -471,7 +471,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Subscriber timeout is mapped to degraded mode when configured.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenSubscriberCommitTimesOut_EntersDegradedMode()
+    public async Task ExecuteAsyncWhenSubscriberCommitTimesOutEntersDegradedMode()
     {
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
@@ -496,7 +496,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Concurrent subscriber timeouts all return structured degraded results without skipped work.</summary>
     [Fact]
-    public async Task ExecuteAsync_WhenConcurrentSubscriberCommitsTimeOut_AllReturnCommitTimeout()
+    public async Task ExecuteAsyncWhenConcurrentSubscriberCommitsTimeOutAllReturnCommitTimeout()
     {
         const int WorkerCount = 12;
         var registry = Substitute.For<IKeyServerPartyRegistry>();
@@ -564,7 +564,7 @@ public sealed class TurnTransactionCoordinatorTests
 
     /// <summary>Status controller exposes degraded mode state after a coordinator failure.</summary>
     [Fact]
-    public async Task GetStatus_AfterDegradedFailure_ReturnsCurrentState()
+    public async Task GetStatusAfterDegradedFailureReturnsCurrentState()
     {
         var transactionPubSub = Substitute.For<ITransactionPubSub>();
         transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())

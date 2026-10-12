@@ -142,7 +142,7 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
             throw new InvalidOperationException("TODO execution plan rollback compensation failed: " + string.Join(" ", errors));
     }
 
-    private async Task RollbackCreatedPlanTodosUnderStateLockAsync(
+    private static async Task RollbackCreatedPlanTodosUnderStateLockAsync(
         ITodoService todoService,
         IReadOnlyList<string> createdTodoIds,
         string statePath,
@@ -1290,7 +1290,7 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
         ReplacePhase(state, phase with { Status = status, UpdatedAtUtc = UtcNow() });
     }
 
-    private async Task<TodoExecutionStateDocument> LoadWorkspaceStateAsync(string workspacePath, CancellationToken cancellationToken)
+    private static async Task<TodoExecutionStateDocument> LoadWorkspaceStateAsync(string workspacePath, CancellationToken cancellationToken)
     {
         var statePath = GetStatePath(workspacePath);
         var gate = GetStateLock(statePath);

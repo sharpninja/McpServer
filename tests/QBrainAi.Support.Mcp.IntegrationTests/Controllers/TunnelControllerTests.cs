@@ -37,7 +37,7 @@ public sealed class TunnelControllerTests
         });
 
     [Fact]
-    public async Task List_EmptyRegistry_ReturnsEmptyArray()
+    public async Task ListEmptyRegistryReturnsEmptyArray()
     {
         await using var factory = CreateFactory("");
         using var client = factory.CreateClient();
@@ -51,7 +51,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Status_UnknownProvider_Returns404()
+    public async Task StatusUnknownProviderReturns404()
     {
         await using var factory = CreateFactory("");
         using var client = factory.CreateClient();
@@ -62,7 +62,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Enable_UnknownProvider_Returns404()
+    public async Task EnableUnknownProviderReturns404()
     {
         await using var factory = CreateFactory("");
         using var client = factory.CreateClient();
@@ -73,7 +73,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task List_WithMockProvider_ReturnsProviderInfo()
+    public async Task ListWithMockProviderReturnsProviderInfo()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("ngrok");
@@ -93,7 +93,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Status_WithProvider_ReturnsTunnelStatus()
+    public async Task StatusWithProviderReturnsTunnelStatus()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("ngrok");
@@ -112,7 +112,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Enable_Disable_TogglesState()
+    public async Task EnableDisableTogglesState()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("cloudflare");
@@ -143,7 +143,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Start_Disabled_ReturnsError()
+    public async Task StartDisabledReturnsError()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("ngrok");
@@ -164,7 +164,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Start_Enabled_CallsStartOnProvider()
+    public async Task StartEnabledCallsStartOnProvider()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("ngrok");
@@ -184,7 +184,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Stop_CallsStopOnProvider()
+    public async Task StopCallsStopOnProvider()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("ngrok");
@@ -202,7 +202,7 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Restart_CallsStopThenStart()
+    public async Task RestartCallsStopThenStart()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("ngrok");

@@ -22,7 +22,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// physical resolver before database work and propagates caller cancellation end to end.
     /// </summary>
     [Fact]
-    public async Task ResolveWorkspaceAsync_CallerCancellationFlowsToPhysicalResolver()
+    public async Task ResolveWorkspaceAsyncCallerCancellationFlowsToPhysicalResolver()
     {
         var resolverField = typeof(WorkspaceIdentityPath).GetField(
             "s_physicalPathResolverOverride",
@@ -100,7 +100,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// that could bypass the bounded resolver contract.
     /// </summary>
     [Fact]
-    public void WorkspaceIdentityPath_LegacyUnboundedTraversalImplementations_AreAbsent()
+    public void WorkspaceIdentityPathLegacyUnboundedTraversalImplementationsAreAbsent()
     {
         var privateStaticMethods = typeof(WorkspaceIdentityPath)
             .GetMethods(BindingFlags.NonPublic | BindingFlags.Static)
@@ -118,7 +118,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// enters the physical resolver, including comparer and containment entry points.
     /// </summary>
     [Fact]
-    public void SynchronousIdentitySurface_DoesNotInvokePhysicalResolver()
+    public void SynchronousIdentitySurfaceDoesNotInvokePhysicalResolver()
     {
         var resolverField = typeof(WorkspaceIdentityPath).GetField(
             "s_physicalPathResolverOverride",
@@ -164,7 +164,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// of triggering uncancellable physical traversal.
     /// </summary>
     [Fact]
-    public void SynchronousIdentitySurface_LocalSymbolicLink_RemainsLexical()
+    public void SynchronousIdentitySurfaceLocalSymbolicLinkRemainsLexical()
     {
         var root = Path.Combine(
             Path.GetTempPath(),
@@ -202,7 +202,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// compatibility resolver and propagates its call-context cancellation to physical identity.
     /// </summary>
     [Fact]
-    public async Task ListUseCasesQuery_CallerCancellationFlowsToPhysicalResolver()
+    public async Task ListUseCasesQueryCallerCancellationFlowsToPhysicalResolver()
     {
         var resolverField = typeof(WorkspaceIdentityPath).GetField(
             "s_physicalPathResolverOverride",
@@ -291,7 +291,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// enter the physical filesystem resolver.
     /// </summary>
     [Fact]
-    public async Task PersistedOpaqueWorkspaceId_UsesLexicalIdentityWithoutPhysicalResolver()
+    public async Task PersistedOpaqueWorkspaceIdUsesLexicalIdentityWithoutPhysicalResolver()
     {
         const string workspaceId = "ws:test";
         var resolverField = typeof(WorkspaceIdentityPath).GetField(
@@ -336,7 +336,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// boundary while a genuinely rooted path still uses the asynchronous physical resolver.
     /// </summary>
     [Fact]
-    public async Task OpaqueWorkspaceIdentity_DoesNotEnterNativeBoundary()
+    public async Task OpaqueWorkspaceIdentityDoesNotEnterNativeBoundary()
     {
         const string logicalIdentity = @"ws:\test";
         var resolverField = typeof(WorkspaceIdentityPath).GetField(

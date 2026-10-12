@@ -4,10 +4,10 @@ using YamlDotNet.Serialization;
 
 namespace QBrainAi.Repl.Core.Tests;
 
-public class Iteration1_IntegrationTests
+public class Iteration1IntegrationTests
 {
     [Fact]
-    public async Task TrustBootstrapOrchestration_NewWorkspace_RequiresUserPrompt()
+    public async Task TrustBootstrapOrchestrationNewWorkspaceRequiresUserPrompt()
     {
         var yamlSerializer = CreateFakeYamlSerializer();
         var markerReader = Substitute.For<IMarkerFileReader>();
@@ -50,7 +50,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public async Task TrustBootstrapOrchestration_CachedTrust_SkipsPrompt()
+    public async Task TrustBootstrapOrchestrationCachedTrustSkipsPrompt()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var markerReader = Substitute.For<IMarkerFileReader>();
@@ -81,7 +81,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public async Task AuthRotationOrchestration_MarkerFileChanged_UpdatesAuthState()
+    public async Task AuthRotationOrchestrationMarkerFileChangedUpdatesAuthState()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var authHandler = Substitute.For<IAuthRotationHandler>();
@@ -113,7 +113,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public async Task AuthRotationOrchestration_401Response_TriggersRefresh()
+    public async Task AuthRotationOrchestration401ResponseTriggersRefresh()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var markerReader = Substitute.For<IMarkerFileReader>();
@@ -147,7 +147,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public async Task MarkerFileWatchOrchestration_FileChanged_InvokesCallback()
+    public async Task MarkerFileWatchOrchestrationFileChangedInvokesCallback()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var authHandler = Substitute.For<IAuthRotationHandler>();
@@ -182,7 +182,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public void YamlSerializationOrchestration_TrustBootstrapPayload_RoundTrips()
+    public void YamlSerializationOrchestrationTrustBootstrapPayloadRoundTrips()
     {
         var yamlSerializer = CreateFakeYamlSerializer();
 
@@ -205,7 +205,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public async Task TrustBootstrapService_MockNonceValidation_AcceptsValidNonce()
+    public async Task TrustBootstrapServiceMockNonceValidationAcceptsValidNonce()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -238,7 +238,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public async Task AuthRotationHandler_StubTransitions_FollowsStateLifecycle()
+    public async Task AuthRotationHandlerStubTransitionsFollowsStateLifecycle()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var workspacePath = "/home/user/project";
@@ -265,7 +265,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public void ContractCorrectness_AllInterfaces_HaveRequiredMembers()
+    public void ContractCorrectnessAllInterfacesHaveRequiredMembers()
     {
         var yamlSerializer = Substitute.For<IYamlSerializer>();
         Assert.NotNull(yamlSerializer);
@@ -286,7 +286,7 @@ public class Iteration1_IntegrationTests
     }
 
     [Fact]
-    public async Task FullTrustBootstrapFlow_EndToEnd_WithMocks()
+    public async Task FullTrustBootstrapFlowEndToEndWithMocks()
     {
         var yamlSerializer = CreateFakeYamlSerializer();
         var markerReader = Substitute.For<IMarkerFileReader>();
@@ -379,7 +379,7 @@ public class Iteration1_IntegrationTests
 
                 var envelope = Substitute.For<IYamlEnvelope>();
                 envelope.Type.Returns(dict["type"]?.ToString() ?? "unknown");
-                envelope.Payload.Returns(dict.ContainsKey("payload") ? dict["payload"] : null);
+                envelope.Payload.Returns(dict.TryGetValue("payload", out object? value) ? value : null);
 
                 return envelope;
             });

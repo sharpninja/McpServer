@@ -999,7 +999,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             .ToList(),
     };
 
-    private async Task AppendAuditAsync(
+    private static async Task AppendAuditAsync(
         McpDbContext ctx,
         string todoId,
         string action,
@@ -1026,7 +1026,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         });
     }
 
-    private async Task SyncTodoRequirementLinksAsync(
+    private static async Task SyncTodoRequirementLinksAsync(
         McpDbContext ctx,
         TodoItemEntity entity,
         TodoFlatItem flat,
@@ -1207,7 +1207,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         entry.Property("DeleteReason").CurrentValue = state.DeleteReason;
     }
 
-    private async Task RestoreDocumentMetadataAsync(
+    private static async Task RestoreDocumentMetadataAsync(
         McpDbContext ctx,
         EfTodoDocumentMetadataState? state,
         CancellationToken cancellationToken)
@@ -1362,7 +1362,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         target.LastProjectionFailureMessage = source.LastProjectionFailureMessage;
     }
 
-    private async Task<int> ResolveSectionOrderAsync(McpDbContext ctx, string section, CancellationToken cancellationToken)
+    private static async Task<int> ResolveSectionOrderAsync(McpDbContext ctx, string section, CancellationToken cancellationToken)
     {
         var existing = await ctx.TodoItems
             .Where(i => i.Section == section)
@@ -1379,7 +1379,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         return maxOrder + 1;
     }
 
-    private async Task<int> GetNextItemOrderAsync(McpDbContext ctx, string section, string priority, string itemKind, CancellationToken cancellationToken)
+    private static async Task<int> GetNextItemOrderAsync(McpDbContext ctx, string section, string priority, string itemKind, CancellationToken cancellationToken)
     {
         var maxOrder = await ctx.TodoItems
             .Where(i => i.Section == section && i.Priority == priority && i.ItemKind == itemKind)

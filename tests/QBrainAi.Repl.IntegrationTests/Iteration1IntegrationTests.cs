@@ -32,7 +32,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies that qbrain-ai-repl --agent-stdio can be launched as a child process.
     /// </summary>
     [Fact]
-    public async Task ChildProcess_LaunchesSuccessfully()
+    public async Task ChildProcessLaunchesSuccessfully()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         
@@ -46,7 +46,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies that the REPL accepts a YAML hello handshake and responds appropriately.
     /// </summary>
     [Fact]
-    public async Task HelloHandshake_SendsAndReceivesYaml()
+    public async Task HelloHandshakeSendsAndReceivesYaml()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -80,7 +80,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies that YAML responses parse correctly and match expected envelope structure.
     /// </summary>
     [Fact]
-    public async Task YamlEnvelope_ParsesCorrectly()
+    public async Task YamlEnvelopeParsesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -112,7 +112,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies trust bootstrap flow with health check validation.
     /// </summary>
     [Fact]
-    public async Task TrustBootstrap_HealthCheck_ReturnsExpectedResponse()
+    public async Task TrustBootstrapHealthCheckReturnsExpectedResponse()
     {
         var serverUrl = "http://localhost:5177";
         
@@ -138,7 +138,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies that workspace selection via X-Workspace-Path header is validated.
     /// </summary>
     [Fact]
-    public async Task WorkspaceSelection_XWorkspacePathHeader_IsRecognized()
+    public async Task WorkspaceSelectionXWorkspacePathHeaderIsRecognized()
     {
         var serverUrl = "http://localhost:5177";
         var testWorkspacePath = "/test/workspace";
@@ -168,7 +168,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies auth key acceptance in request headers.
     /// </summary>
     [Fact]
-    public async Task AuthKey_InHeader_IsValidated()
+    public async Task AuthKeyInHeaderIsValidated()
     {
         var serverUrl = "http://localhost:5177";
         var testApiKey = "test-api-key-456";
@@ -195,7 +195,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies signature validation in trust bootstrap flow.
     /// </summary>
     [Fact]
-    public async Task TrustBootstrap_SignatureValidation_ChallengeResponseFlow()
+    public async Task TrustBootstrapSignatureValidationChallengeResponseFlow()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -230,7 +230,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies nonce challenge flow in trust bootstrap.
     /// </summary>
     [Fact]
-    public async Task TrustBootstrap_NonceChallengeFlow_ValidatesCorrectly()
+    public async Task TrustBootstrapNonceChallengeFlowValidatesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -260,7 +260,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies multiple workspace selection requests handle X-Workspace-Path correctly.
     /// </summary>
     [Fact]
-    public async Task WorkspaceSelection_MultipleWorkspaces_SwitchesContext()
+    public async Task WorkspaceSelectionMultipleWorkspacesSwitchesContext()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -306,7 +306,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies envelope type discrimination (hello, request, result, error, event).
     /// </summary>
     [Fact]
-    public void EnvelopeShapes_AllTypes_ParseCorrectly()
+    public void EnvelopeShapesAllTypesParseCorrectly()
     {
         var helloYaml = _yamlSerializer.Serialize(new
         {
@@ -371,7 +371,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
     /// Verifies full trust bootstrap flow: health check -> signature validation -> nonce challenge -> auth acceptance.
     /// </summary>
     [Fact]
-    public async Task FullTrustBootstrapFlow_EndToEnd_CompletesSuccessfully()
+    public async Task FullTrustBootstrapFlowEndToEndCompletesSuccessfully()
     {
         var serverUrl = "http://localhost:5177";
         using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };

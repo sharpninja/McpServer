@@ -47,7 +47,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
     [InlineData("completed", "canceled")]
     [InlineData("failed", "cancelled")]
     [InlineData("closed", "CANCELED")]
-    public async Task SubmitAsync_StaleCancellation_PreservesTerminalTurn(string terminalStatus, string cancellationStatus)
+    public async Task SubmitAsyncStaleCancellationPreservesTerminalTurn(string terminalStatus, string cancellationStatus)
     {
         await SubmitAsync(CreateTurn(terminalStatus, "Verified terminal response")).ConfigureAwait(true);
         var before = JsonSerializer.Serialize(await ReadTurnAsync().ConfigureAwait(true));
@@ -69,7 +69,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
     [InlineData("closed")]
     [InlineData("canceled")]
     [InlineData("cancelled")]
-    public async Task SubmitAsync_StaleActiveSnapshot_PreservesTerminalTurn(string status)
+    public async Task SubmitAsyncStaleActiveSnapshotPreservesTerminalTurn(string status)
     {
         await SubmitAsync(CreateTurn(status, "Verified terminal response")).ConfigureAwait(true);
         var before = JsonSerializer.Serialize(await ReadTurnAsync().ConfigureAwait(true));
@@ -81,7 +81,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
 
     /// <summary>Omitted status remains an additive update rather than a request to reopen.</summary>
     [Fact]
-    public async Task SubmitAsync_OmittedStatus_EnrichesTerminalTurn()
+    public async Task SubmitAsyncOmittedStatusEnrichesTerminalTurn()
     {
         await SubmitAsync(CreateTurn("completed", "Verified terminal response")).ConfigureAwait(true);
         await SubmitAsync(new UnifiedRequestEntryDto
@@ -97,7 +97,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
 
     /// <summary>A completed failsafe restores a response previously replaced by cancellation.</summary>
     [Fact]
-    public async Task SubmitAsync_CompletedRecovery_ReplacesCanceledSnapshot()
+    public async Task SubmitAsyncCompletedRecoveryReplacesCanceledSnapshot()
     {
         await SubmitAsync(CreateTurn("canceled", "Superseded")).ConfigureAwait(true);
         await SubmitAsync(CreateTurn("completed", "Recovered completed response")).ConfigureAwait(true);
@@ -111,7 +111,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
     [Theory]
     [InlineData("canceled")]
     [InlineData("cancelled")]
-    public async Task SubmitAsync_ActiveTurn_CanBeCanceled(string cancellationStatus)
+    public async Task SubmitAsyncActiveTurnCanBeCanceled(string cancellationStatus)
     {
         await SubmitAsync(CreateTurn("in_progress", "Working")).ConfigureAwait(true);
         await SubmitAsync(CreateTurn(cancellationStatus, "Superseded active turn")).ConfigureAwait(true);
@@ -123,7 +123,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
     [Theory]
     [InlineData("canceled")]
     [InlineData("in_progress")]
-    public async Task UpsertTurnAsync_ExplicitStatus_CanCorrectTerminalTurn(string status)
+    public async Task UpsertTurnAsyncExplicitStatusCanCorrectTerminalTurn(string status)
     {
         await SubmitAsync(CreateTurn("completed", "Original response")).ConfigureAwait(true);
         await _service.UpsertTurnAsync("Codex", SessionId, CreateTurn(status, "Explicit correction"),
@@ -138,7 +138,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
     [Theory]
     [InlineData("completed")]
     [InlineData("canceled")]
-    public async Task SubmitAsync_SameTerminalStatus_CanUpdateResponse(string status)
+    public async Task SubmitAsyncSameTerminalStatusCanUpdateResponse(string status)
     {
         await SubmitAsync(CreateTurn(status, "Original response")).ConfigureAwait(true);
         await SubmitAsync(CreateTurn(status, "Recovered response")).ConfigureAwait(true);
@@ -153,7 +153,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
 
     /// <summary>A reused context refreshes stale session history while preserving unrelated pending entities.</summary>
     [Fact]
-    public async Task SubmitAsync_ReusedContext_PreservesConcurrentCompletionAndUnrelatedChanges()
+    public async Task SubmitAsyncReusedContextPreservesConcurrentCompletionAndUnrelatedChanges()
     {
         await SubmitAsync(CreateTurn("in_progress", "Working")).ConfigureAwait(true);
         var workspace = new WorkspaceContext { WorkspacePath = "supersession-test-workspace" };
@@ -176,7 +176,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
 
     /// <summary>Pending edits to the same tracked graph are rejected rather than silently discarded.</summary>
     [Fact]
-    public async Task SubmitAsync_PendingTrackedEdit_RejectsWithoutDiscardingEdit()
+    public async Task SubmitAsyncPendingTrackedEditRejectsWithoutDiscardingEdit()
     {
         await SubmitAsync(CreateTurn("in_progress", "Working")).ConfigureAwait(true);
         var tracked = Assert.Single(_db.ChangeTracker.Entries<SessionLogTurnEntity>()).Entity;
@@ -190,7 +190,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
 
     /// <summary>Submission never acknowledges a write inside a caller-owned transaction that can roll back.</summary>
     [Fact]
-    public async Task SubmitAsync_CallerTransaction_RejectsBeforeMutation()
+    public async Task SubmitAsyncCallerTransactionRejectsBeforeMutation()
     {
         await using var transaction = await _db.Database.BeginTransactionAsync(
             System.Data.IsolationLevel.Serializable, TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -202,7 +202,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
 
     /// <summary>An ambient transaction is rejected explicitly before any session write.</summary>
     [Fact]
-    public async Task SubmitAsync_AmbientTransaction_RejectsBeforeMutation()
+    public async Task SubmitAsyncAmbientTransactionRejectsBeforeMutation()
     {
         using var transaction = new System.Transactions.TransactionScope(System.Transactions.TransactionScopeAsyncFlowOption.Enabled);
         var error = await Assert.ThrowsAsync<InvalidOperationException>(() => SubmitAsync(CreateTurn("completed", "Not durable")));
@@ -214,7 +214,7 @@ public sealed class SessionLogSupersessionTests : IDisposable
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task SubmitAsync_ConcurrentCompletion_PreservesCompletedResponse(bool explicitTurnWriter)
+    public async Task SubmitAsyncConcurrentCompletionPreservesCompletedResponse(bool explicitTurnWriter)
     {
         var path = Path.Combine(Path.GetTempPath(), $"sessionack-race-{Guid.NewGuid():N}.db");
         var connectionString = $"Data Source={path};Default Timeout=1;Pooling=False";

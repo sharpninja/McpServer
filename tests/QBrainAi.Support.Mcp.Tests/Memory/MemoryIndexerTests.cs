@@ -35,7 +35,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-02: Startup/consolidate reconcile repairs stale EmbeddingStatus vs row hash.</summary>
     [Fact]
-    public async Task Reconcile_RepairsStale()
+    public async Task ReconcileRepairsStale()
     {
         var memory = await SeedAsync("stale-hash original").ConfigureAwait(true);
         await _harness.SetEmbeddingStatusAsync(memory.Id, "ready").ConfigureAwait(true);
@@ -57,7 +57,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-05: Failed embedding does not crash the host; memory remains listable via CRUD.</summary>
     [Fact]
-    public async Task FailedEmbed_StillListable()
+    public async Task FailedEmbedStillListable()
     {
         var memory = await SeedAsync("failed-embed still listable").ConfigureAwait(true);
         var indexed = await _harness.IndexAsync(
@@ -79,7 +79,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-06: Re-index after Content change updates vector/FTS; old vector is not exclusive.</summary>
     [Fact]
-    public async Task Reindex_AfterContentChange()
+    public async Task ReindexAfterContentChange()
     {
         var memory = await SeedAsync("obsolete-vector-token").ConfigureAwait(true);
         await _harness.IndexAsync(memory.Id, cancellationToken: TestContext.Current.CancellationToken)
@@ -107,7 +107,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-07: HNSW/FTS side tables are workspace-safe (no cross-workspace ANN leakage).</summary>
     [Fact]
-    public async Task Ann_NoCrossWorkspaceLeak()
+    public async Task AnnNoCrossWorkspaceLeak()
     {
         var local = await SeedAsync("ann-local-token workspace A").ConfigureAwait(true);
         var foreign = await SeedAsync("ann-local-token workspace B", workspacePath: _harness.WorkspaceB)
@@ -131,7 +131,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-08: Indexer respects CancellationToken and leaves status failed/pending, not half-ready.</summary>
     [Fact]
-    public async Task Cancel_LeavesSafeStatus()
+    public async Task CancelLeavesSafeStatus()
     {
         var memory = await SeedAsync("cancel-index body").ConfigureAwait(true);
         using var cts = new CancellationTokenSource();
@@ -147,7 +147,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host.</summary>
     [Fact]
-    public async Task OnnxLocal_NoCloudRequired()
+    public async Task OnnxLocalNoCloudRequired()
     {
         Environment.SetEnvironmentVariable("OPENAI_API_KEY", null);
         Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", null);
@@ -167,7 +167,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-10: Cloud embedding path is opt-in and fails closed when disabled.</summary>
     [Fact]
-    public async Task CloudOptIn_FailsClosedWhenOff()
+    public async Task CloudOptInFailsClosedWhenOff()
     {
         var memory = await SeedAsync("cloud opt-in disabled").ConfigureAwait(true);
 
@@ -188,7 +188,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-11: Empty Content cannot reach ready status (validation precedes index).</summary>
     [Fact]
-    public async Task EmptyContent_NeverReady()
+    public async Task EmptyContentNeverReady()
     {
         await using (var db = _harness.CreateContext(_harness.WorkspaceA))
         {
@@ -219,7 +219,7 @@ public sealed class MemoryIndexerTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-12: Batch index of N fixtures completes with all ready or explicit failures counted.</summary>
     [Fact]
-    public async Task BatchIndex_AllTerminal()
+    public async Task BatchIndexAllTerminal()
     {
         var first = await SeedAsync("batch-index-one").ConfigureAwait(true);
         var second = await SeedAsync("batch-index-two").ConfigureAwait(true);

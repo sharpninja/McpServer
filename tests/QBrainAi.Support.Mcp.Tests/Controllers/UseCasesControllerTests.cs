@@ -27,7 +27,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: POST creates via CreateUseCaseCommand and returns 201 with location.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenSuccess_ReturnsCreated()
+    public async Task CreateAsyncWhenSuccessReturnsCreated()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         var detail = new UseCaseDetailDto { UseCaseId = 42, Title = "Login", WorkspaceId = Workspace };
@@ -57,7 +57,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: GET list dispatches ListUseCasesQuery.
     /// </summary>
     [Fact]
-    public async Task ListAsync_WhenSuccess_ReturnsOk()
+    public async Task ListAsyncWhenSuccessReturnsOk()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         IReadOnlyList<UseCaseSummaryDto> items =
@@ -84,7 +84,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: NotFound Result maps to HTTP 404.
     /// </summary>
     [Fact]
-    public async Task GetAsync_WhenNotFound_Returns404()
+    public async Task GetAsyncWhenNotFoundReturns404()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.QueryAsync(Arg.Any<GetUseCaseQuery>(), Arg.Any<CancellationToken>())
@@ -100,7 +100,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: Validation Result maps to HTTP 400.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenValidationFails_Returns400()
+    public async Task CreateAsyncWhenValidationFailsReturns400()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.SendAsync(Arg.Any<CreateUseCaseCommand>(), Arg.Any<CancellationToken>())
@@ -118,7 +118,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: Conflict Result maps to HTTP 409 for link endpoint.
     /// </summary>
     [Fact]
-    public async Task LinkFrAsync_WhenConflict_Returns409()
+    public async Task LinkFrAsyncWhenConflictReturns409()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.SendAsync(Arg.Any<LinkUseCaseToFrCommand>(), Arg.Any<CancellationToken>())
@@ -137,7 +137,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: DELETE returns 204 on success.
     /// </summary>
     [Fact]
-    public async Task DeleteAsync_WhenSuccess_ReturnsNoContent()
+    public async Task DeleteAsyncWhenSuccessReturnsNoContent()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.SendAsync(Arg.Any<DeleteUseCaseCommand>(), Arg.Any<CancellationToken>())
@@ -153,7 +153,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: Diagram query dispatches GetUseCaseDiagramQuery.
     /// </summary>
     [Fact]
-    public async Task DiagramAsync_WhenSuccess_ReturnsOk()
+    public async Task DiagramAsyncWhenSuccessReturnsOk()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         var diagram = new UseCaseDiagramDto
@@ -182,7 +182,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: Coverage endpoint dispatches GetUseCaseFrCoverageQuery.
     /// </summary>
     [Fact]
-    public async Task CoverageAsync_WhenSuccess_ReturnsOk()
+    public async Task CoverageAsyncWhenSuccessReturnsOk()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         var coverage = new UseCaseFrCoverageDto
@@ -204,7 +204,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: from-fr endpoint dispatches CreateUseCaseFromFrCommand.
     /// </summary>
     [Fact]
-    public async Task CreateFromFrAsync_WhenSuccess_ReturnsCreated()
+    public async Task CreateFromFrAsyncWhenSuccessReturnsCreated()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         var detail = new UseCaseDetailDto { UseCaseId = 11, Title = "From FR" };
@@ -230,7 +230,7 @@ public sealed class UseCasesControllerTests
     /// BUG-TRIAGE-139 AC3/AC4: REST create maps a typed DbUpdateException to code/retryable/details.inner.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_DbUpdateException_ReturnsClassifiedEnvelope()
+    public async Task CreateAsyncDbUpdateExceptionReturnsClassifiedEnvelope()
     {
         var inner = new SqliteException("FOREIGN KEY constraint failed", 19);
         var dispatcher = Substitute.For<IDispatcher>();
@@ -260,7 +260,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-002: Null create body short-circuits to 400 without dispatch.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenBodyNull_ReturnsBadRequestWithoutDispatch()
+    public async Task CreateAsyncWhenBodyNullReturnsBadRequestWithoutDispatch()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         var controller = CreateController(dispatcher);
@@ -275,7 +275,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-021: PUT component routes preserve route identities and dispatch full replacements.
     /// </summary>
     [Fact]
-    public async Task UseCaseComponentUpdateRoutes_DispatchIdentityPreservingCommands()
+    public async Task UseCaseComponentUpdateRoutesDispatchIdentityPreservingCommands()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         var actor = new UseCaseActorDto { UseCaseId = 125, ActorId = 20, Name = "Tentacle", Type = "System" };
@@ -334,7 +334,7 @@ public sealed class UseCasesControllerTests
     /// TEST-MCP-USECASE-021: PUT component routes preserve classified 400 and 404 failures.
     /// </summary>
     [Fact]
-    public async Task UseCaseComponentUpdateRoutes_MapClassifiedFailures()
+    public async Task UseCaseComponentUpdateRoutesMapClassifiedFailures()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.SendAsync(Arg.Any<UpdateUseCaseActorCommand>(), Arg.Any<CancellationToken>())

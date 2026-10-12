@@ -15,7 +15,7 @@ public sealed class MemoryConcurrencyTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-42: Concurrent updates are last-write-wins or 409 on stale version.</summary>
     [Fact]
-    public async Task ConcurrentUpdate_DocumentedSemantics()
+    public async Task ConcurrentUpdateDocumentedSemantics()
     {
         var created = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -46,7 +46,7 @@ public sealed class MemoryConcurrencyTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-43: Cancel mid-write does not leave a half-written active row visible.</summary>
     [Fact]
-    public async Task CancelMidWrite_NoPartialVisible()
+    public async Task CancelMidWriteNoPartialVisible()
     {
         using var cts = new CancellationTokenSource();
         await cts.CancelAsync().ConfigureAwait(true);

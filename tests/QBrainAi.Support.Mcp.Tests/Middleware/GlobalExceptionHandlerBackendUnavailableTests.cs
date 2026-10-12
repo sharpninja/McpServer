@@ -49,7 +49,7 @@ public sealed class GlobalExceptionHandlerBackendUnavailableTests
     /// stable <c>backend_unavailable</c> error code and no raw provider text anywhere in the body.
     /// </summary>
     [Fact]
-    public async Task StorageFailure_Returns503_WithTypedBackendUnavailableBody()
+    public async Task StorageFailureReturns503WithTypedBackendUnavailableBody()
     {
         var (statusCode, document) = await InvokeAsync(
             new SqliteException("unable to open database file", 14),
@@ -74,7 +74,7 @@ public sealed class GlobalExceptionHandlerBackendUnavailableTests
     /// mapping so the typed 503 stays scoped to storage-connectivity failures.
     /// </summary>
     [Fact]
-    public async Task OrdinaryFailure_Keeps500InternalServerError()
+    public async Task OrdinaryFailureKeeps500InternalServerError()
     {
         var (statusCode, document) = await InvokeAsync(
             new InvalidOperationException("turn validation failed"),

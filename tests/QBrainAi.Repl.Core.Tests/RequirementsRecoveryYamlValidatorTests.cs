@@ -7,7 +7,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public sealed class RequirementsRecoveryYamlValidatorTests
 {
     [Fact]
-    public void PlanRecovery_TitlelessTest_IsValid()
+    public void PlanRecoveryTitlelessTestIsValid()
     {
         var request = new RequestPayload
         {
@@ -34,7 +34,7 @@ public sealed class RequirementsRecoveryYamlValidatorTests
     }
 
     [Fact]
-    public void PlanRecovery_TitlelessFr_IsInvalid()
+    public void PlanRecoveryTitlelessFrIsInvalid()
     {
         var request = new RequestPayload
         {

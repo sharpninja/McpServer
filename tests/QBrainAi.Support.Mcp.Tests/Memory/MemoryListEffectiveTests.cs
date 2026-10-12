@@ -81,7 +81,7 @@ public sealed class MemoryListEffectiveTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-34: Within each scope group, list sorts by Id ascending (ordinal).</summary>
     [Fact]
-    public async Task WithinScope_SortsByIdOrdinal()
+    public async Task WithinScopeSortsByIdOrdinal()
     {
         await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -108,7 +108,7 @@ public sealed class MemoryListEffectiveTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-41: Keyword list filter is case-insensitive substring over Content/Title.</summary>
     [Fact]
-    public async Task KeywordFilter_CaseInsensitive()
+    public async Task KeywordFilterCaseInsensitive()
     {
         await _harness.AddCompatAsync(new MemoryAddRequest
         {

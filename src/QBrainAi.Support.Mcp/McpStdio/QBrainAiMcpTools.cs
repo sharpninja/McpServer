@@ -177,7 +177,7 @@ public sealed partial class FwhMcpTools
             httpCtx.ExternalDocsPath = _workspaceContext.ExternalDocsPath;
         }
 
-        var accessorScope = _workspaceAccessor.PushWorkspace(canonical);
+        var accessorScope = WorkspaceServiceAccessor.PushWorkspace(canonical);
         var dbScope = _db.PushWorkspaceId(canonical);
         return new WorkspaceCallScope(() =>
         {

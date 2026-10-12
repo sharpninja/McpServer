@@ -16,7 +16,7 @@ namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 public sealed class WebsiteIngestorTests
 {
     [Fact]
-    public async Task IngestAsync_HtmlExtraction_PreservesTitleAndHeadingText()
+    public async Task IngestAsyncHtmlExtractionPreservesTitleAndHeadingText()
     {
         const string html = "<html><head><title>Docs Home</title></head><body><nav>skip</nav><h1>Welcome</h1><p>GraphRAG content.</p></body></html>";
         var sut = CreateSut(new StubHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
@@ -34,7 +34,7 @@ public sealed class WebsiteIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_RespectsMaxPages_WhenSubpagesEnabled()
+    public async Task IngestAsyncRespectsMaxPagesWhenSubpagesEnabled()
     {
         var rootHtml = "<html><body><a href=\"/a\">A</a><a href=\"/b\">B</a></body></html>";
         var sut = CreateSut(new StubHandler(request =>
@@ -58,7 +58,7 @@ public sealed class WebsiteIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_UsesConfiguredMaxWebsitePagesCap_WhenRequestExceedsLimit()
+    public async Task IngestAsyncUsesConfiguredMaxWebsitePagesCapWhenRequestExceedsLimit()
     {
         var rootHtml = "<html><body><a href=\"/a\">A</a><a href=\"/b\">B</a><a href=\"/c\">C</a><a href=\"/d\">D</a></body></html>";
         var sut = CreateSut(new StubHandler(request =>
@@ -82,7 +82,7 @@ public sealed class WebsiteIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_PrioritizesAndFiltersContentLinks_WhenSubpagesEnabled()
+    public async Task IngestAsyncPrioritizesAndFiltersContentLinksWhenSubpagesEnabled()
     {
         var rootHtml = "<html><body><a href=\"/load.php?modules=site.styles&only=styles\">Styles</a><a href=\"/rest.php/v1/search\">Api</a><a href=\"/wiki/C64\">Article</a></body></html>";
         var handler = new StubHandler(request =>
@@ -131,7 +131,7 @@ public sealed class WebsiteIngestorTests
     [InlineData("http://127.0.0.1/")]
     [InlineData("http://192.168.1.10/")]
     [InlineData("http://169.254.1.10/")]
-    public async Task IngestAsync_BlocksSsrfTargets(string url)
+    public async Task IngestAsyncBlocksSsrfTargets(string url)
     {
         var sut = CreateSut(new StubHandler(_ => throw new InvalidOperationException("request should not execute")));
 
@@ -143,7 +143,7 @@ public sealed class WebsiteIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_BlocksRedirectToPrivateIp()
+    public async Task IngestAsyncBlocksRedirectToPrivateIp()
     {
         var handler = new StubHandler(_ =>
         {
@@ -161,7 +161,7 @@ public sealed class WebsiteIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_CanonicalSourceKey_IsDeterministic()
+    public async Task IngestAsyncCanonicalSourceKeyIsDeterministic()
     {
         var handler = new StubHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
         {
@@ -176,7 +176,7 @@ public sealed class WebsiteIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_WhenPageExceedsMaxBytes_ReturnsError()
+    public async Task IngestAsyncWhenPageExceedsMaxBytesReturnsError()
     {
         var handler = new StubHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
         {

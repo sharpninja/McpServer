@@ -9,7 +9,7 @@ public sealed class AgentHelpPinnedPathResolverTests
     /// TEST-MCP-HELP-009: workspace: and data: tokens resolve against the expected roots.
     /// </summary>
     [Fact]
-    public void TryResolve_ScopedTokens_UseExpectedRoots()
+    public void TryResolveScopedTokensUseExpectedRoots()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var dataRoot = Path.Combine(workspaceRoot, "data-root");

@@ -21,7 +21,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>ListAsync builds the expected query string and deserializes summaries.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task ListAsync_SendsExpectedQuery()
+    public async System.Threading.Tasks.Task ListAsyncSendsExpectedQuery()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -40,7 +40,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>GetAsync uses the id route segment and binds version/approval/product from server DTO.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task GetAsync_SendsCorrectUrl_AndBindsExpandedFields()
+    public async System.Threading.Tasks.Task GetAsyncSendsCorrectUrlAndBindsExpandedFields()
     {
         // Live server UseCaseDetailDto shape (versionNumber/approvalStatus/productKey).
         var handler = new MockHttpHandler(
@@ -60,7 +60,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>CreateAsync posts the create body and deserializes detail.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task CreateAsync_PostsRequestBody()
+    public async System.Threading.Tasks.Task CreateAsyncPostsRequestBody()
     {
         var response = new UseCaseDetail
         {
@@ -90,7 +90,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>UpdateAsync uses the id route segment with PUT.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task UpdateAsync_UsesIdRoute()
+    public async System.Threading.Tasks.Task UpdateAsyncUsesIdRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -107,7 +107,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>DeleteAsync uses the id route segment with DELETE.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task DeleteAsync_UsesIdRoute()
+    public async System.Threading.Tasks.Task DeleteAsyncUsesIdRoute()
     {
         var handler = new MockHttpHandler(HttpStatusCode.NoContent, string.Empty);
         using var http = new HttpClient(handler);
@@ -120,7 +120,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>LinkFrAsync posts to links route with string frId.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task LinkFrAsync_PostsToLinksRoute()
+    public async System.Threading.Tasks.Task LinkFrAsyncPostsToLinksRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.Created,
@@ -142,7 +142,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>GetDiagramAsync requests mermaid format.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task GetDiagramAsync_SendsFormatQuery()
+    public async System.Threading.Tasks.Task GetDiagramAsyncSendsFormatQuery()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -160,7 +160,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>CreateFromFrAsync posts to from-fr route with string frId.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task CreateFromFrAsync_PostsToFromFrRoute()
+    public async System.Threading.Tasks.Task CreateFromFrAsyncPostsToFromFrRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.Created,
@@ -182,7 +182,7 @@ public sealed class UseCaseClientTests
     /// (not a client-only fictional shape).
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task GetCoverageAsync_BindsLiveServerCoveragePayload()
+    public async System.Threading.Tasks.Task GetCoverageAsyncBindsLiveServerCoveragePayload()
     {
         // Exact property names from usecase-rest-smoke.log COVERAGE payload / UseCaseFrCoverageDto.
         var handler = new MockHttpHandler(
@@ -205,7 +205,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>SetApprovalAsync posts to the approval route and returns detail with status/version.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task SetApprovalAsync_PostsToApprovalRoute()
+    public async System.Threading.Tasks.Task SetApprovalAsyncPostsToApprovalRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -227,7 +227,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>SetProductAsync posts to the product route.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task SetProductAsync_PostsToProductRoute()
+    public async System.Threading.Tasks.Task SetProductAsyncPostsToProductRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -247,7 +247,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>ListByProductAsync hits by-product route.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task ListByProductAsync_SendsByProductUrl()
+    public async System.Threading.Tasks.Task ListByProductAsyncSendsByProductUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -263,7 +263,7 @@ public sealed class UseCaseClientTests
     }
     /// <summary>TEST-MCP-USECASE-021: Component update methods use stable ids and full replacement payloads.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task UseCaseComponentUpdateMethods_SendStableRoutesAndFullPayloads()
+    public async System.Threading.Tasks.Task UseCaseComponentUpdateMethodsSendStableRoutesAndFullPayloads()
     {
         var actorHandler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -354,7 +354,7 @@ public sealed class UseCaseClientTests
 
     /// <summary>TEST-MCP-USECASE-021: Every component update method propagates caller cancellation.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task UseCaseComponentUpdateMethods_PropagateCancellation()
+    public async System.Threading.Tasks.Task UseCaseComponentUpdateMethodsPropagateCancellation()
     {
         await AssertCancellationAsync(
             (client, token) => client.UpdateActorAsync(

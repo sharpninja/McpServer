@@ -23,7 +23,7 @@ public sealed class ToolCrudTests
     // ── List ─────────────────────────────────────────────────────────────
 
     /// <summary>
-    /// Validates the <c>List_Returns200WithValidStructure</c> scenario.
+    /// Validates the <c>ListReturns200WithValidStructure</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -31,7 +31,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task List_Returns200WithValidStructure()
+    public async Task ListReturns200WithValidStructure()
     {
         var r = await _f.Client.GetAsync(ToolRegistryFixture.ToolRoute, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
@@ -42,7 +42,7 @@ public sealed class ToolCrudTests
     }
 
     /// <summary>
-    /// Validates the <c>List_ResponseIsJson</c> scenario.
+    /// Validates the <c>ListResponseIsJson</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -50,7 +50,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task List_ResponseIsJson()
+    public async Task ListResponseIsJson()
     {
         var r = await _f.Client.GetAsync(ToolRegistryFixture.ToolRoute, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("application/json", r.Content.Headers.ContentType?.MediaType);
@@ -59,7 +59,7 @@ public sealed class ToolCrudTests
     // ── Search ───────────────────────────────────────────────────────────
 
     /// <summary>
-    /// Validates the <c>Search_WithKeyword_Returns200</c> scenario.
+    /// Validates the <c>SearchWithKeywordReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -67,7 +67,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Search_WithKeyword_Returns200()
+    public async Task SearchWithKeywordReturns200()
     {
         var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/search?keyword=test", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
@@ -76,7 +76,7 @@ public sealed class ToolCrudTests
     }
 
     /// <summary>
-    /// Validates the <c>Search_NonMatchingKeyword_ReturnsEmpty</c> scenario.
+    /// Validates the <c>SearchNonMatchingKeywordReturnsEmpty</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -84,7 +84,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Search_NonMatchingKeyword_ReturnsEmpty()
+    public async Task SearchNonMatchingKeywordReturnsEmpty()
     {
         var r = await _f.Client.GetAsync(
             $"{ToolRegistryFixture.ToolRoute}/search?keyword=zzz_nonexistent_{Guid.NewGuid():N}", cancellationToken: TestContext.Current.CancellationToken);
@@ -97,7 +97,7 @@ public sealed class ToolCrudTests
     // ── Create + Get + Update + Delete (full mini-cycle) ─────────────────
 
     /// <summary>
-    /// Validates the <c>Create_ValidTool_Returns201</c> scenario.
+    /// Validates the <c>CreateValidToolReturns201</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -105,7 +105,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Create_ValidTool_Returns201()
+    public async Task CreateValidToolReturns201()
     {
         var name = ToolRegistryFixture.GenerateToolName();
         try
@@ -137,7 +137,7 @@ public sealed class ToolCrudTests
     }
 
     /// <summary>
-    /// Validates the <c>Create_DuplicateName_Returns409</c> scenario.
+    /// Validates the <c>CreateDuplicateNameReturns409</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -145,7 +145,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Create_DuplicateName_Returns409()
+    public async Task CreateDuplicateNameReturns409()
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "First", Tags = new[] { "dup" } };
@@ -166,7 +166,7 @@ public sealed class ToolCrudTests
     }
 
     /// <summary>
-    /// Validates the <c>Get_ExistingTool_Returns200</c> scenario.
+    /// Validates the <c>GetExistingToolReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -174,7 +174,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Get_ExistingTool_Returns200()
+    public async Task GetExistingToolReturns200()
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "GetTest", Tags = new[] { "get" } };
@@ -197,7 +197,7 @@ public sealed class ToolCrudTests
     }
 
     /// <summary>
-    /// Validates the <c>Get_NonExistentId_Returns404</c> scenario.
+    /// Validates the <c>GetNonExistentIdReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -205,14 +205,14 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Get_NonExistentId_Returns404()
+    public async Task GetNonExistentIdReturns404()
     {
         var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/999999", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
     /// <summary>
-    /// Validates the <c>Update_ChangeName_Returns200</c> scenario.
+    /// Validates the <c>UpdateChangeNameReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -220,7 +220,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Update_ChangeName_Returns200()
+    public async Task UpdateChangeNameReturns200()
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "UpdateTest", Tags = new[] { "upd" } };
@@ -247,7 +247,7 @@ public sealed class ToolCrudTests
     }
 
     /// <summary>
-    /// Validates the <c>Update_NonExistentId_Returns404</c> scenario.
+    /// Validates the <c>UpdateNonExistentIdReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -255,7 +255,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Update_NonExistentId_Returns404()
+    public async Task UpdateNonExistentIdReturns404()
     {
         var update = new { Name = "ghost" };
         var r = await _f.Client.PutAsJsonAsync($"{ToolRegistryFixture.ToolRoute}/999999", update, cancellationToken: TestContext.Current.CancellationToken);
@@ -263,7 +263,7 @@ public sealed class ToolCrudTests
     }
 
     /// <summary>
-    /// Validates the <c>Delete_ExistingTool_Returns200</c> scenario.
+    /// Validates the <c>DeleteExistingToolReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -271,7 +271,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Delete_ExistingTool_Returns200()
+    public async Task DeleteExistingToolReturns200()
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "DeleteTest", Tags = new[] { "del" } };
@@ -291,7 +291,7 @@ public sealed class ToolCrudTests
     }
 
     /// <summary>
-    /// Validates the <c>Delete_NonExistentId_Returns404</c> scenario.
+    /// Validates the <c>DeleteNonExistentIdReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -299,7 +299,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Delete_NonExistentId_Returns404()
+    public async Task DeleteNonExistentIdReturns404()
     {
         var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/999999", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
@@ -308,7 +308,7 @@ public sealed class ToolCrudTests
     // ── Search by created tool tag ───────────────────────────────────────
 
     /// <summary>
-    /// Validates the <c>Search_ByTag_FindsCreatedTool</c> scenario.
+    /// Validates the <c>SearchByTagFindsCreatedTool</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -316,7 +316,7 @@ public sealed class ToolCrudTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task Search_ByTag_FindsCreatedTool()
+    public async Task SearchByTagFindsCreatedTool()
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var uniqueTag = $"audittag{Guid.NewGuid().ToString("N")[..6]}";

@@ -33,7 +33,7 @@ public sealed class QBAgentSendingIntegrationTests
 
     /// <summary>ac-1: a prompt with no tool action returns the plain assistant text to the agent.</summary>
     [Fact]
-    public async Task QBAgent_NoToolAction_ReturnsPlainResponse()
+    public async Task QBAgentNoToolActionReturnsPlainResponse()
     {
         var orchestration = new ScriptedOrchestration("the plain arbiter answer");
         using var factory = BuildFactory(orchestration, new RecordingExecutor());
@@ -47,7 +47,7 @@ public sealed class QBAgentSendingIntegrationTests
 
     /// <summary>ac-2: an external tool call is executed by the agent loop, then the turn continues to a final answer.</summary>
     [Fact]
-    public async Task QBAgent_ExternalToolCall_AgentExecutesAndContinues()
+    public async Task QBAgentExternalToolCallAgentExecutesAndContinues()
     {
         var orchestration = new ScriptedOrchestration(
             "{\"tool_calls\":[{\"name\":\"apply_patch\",\"arguments\":{\"path\":\"src/x.cs\"}}]}",
@@ -73,7 +73,7 @@ public sealed class QBAgentSendingIntegrationTests
     /// execute that external action, continue the turn, and write a JSONL transcript of the interaction.
     /// </summary>
     [Fact]
-    public async Task QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript()
+    public async Task QBAgentCreateHelloWorldCppPromptExecutesWriteFileActionAndWritesTranscript()
     {
         const string prompt = "Create Hello World in C++";
         const string relativePath = "examples/hello.cpp";
@@ -121,7 +121,7 @@ public sealed class QBAgentSendingIntegrationTests
         Assert.Contains("g++ examples/hello.cpp -o hello", text, StringComparison.Ordinal);
 
         var transcriptPath = WriteQBAgentActionTranscript(
-            nameof(QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript),
+            nameof(QBAgentCreateHelloWorldCppPromptExecutesWriteFileActionAndWritesTranscript),
             prompt,
             relativePath,
             absolutePath,
@@ -141,7 +141,7 @@ public sealed class QBAgentSendingIntegrationTests
     /// TEST-MCP-QBAGENTINT-002: A failed required external tool must stop the agent from fabricating completion.
     /// </summary>
     [Fact]
-    public async Task QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction()
+    public async Task QBAgentExternalToolFailureDoesNotFabricateCompletedAction()
     {
         const string prompt = "Create Hello World in C++";
         const string relativePath = "blocked/hello.cpp";
@@ -180,7 +180,7 @@ public sealed class QBAgentSendingIntegrationTests
         Assert.DoesNotContain("wrote blocked/hello.cpp", text, StringComparison.Ordinal);
 
         var transcriptPath = WriteQBAgentToolFailureTranscript(
-            nameof(QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction),
+            nameof(QBAgentExternalToolFailureDoesNotFabricateCompletedAction),
             prompt,
             relativePath,
             absolutePath,
@@ -196,7 +196,7 @@ public sealed class QBAgentSendingIntegrationTests
 
     /// <summary>ac-3: an MCP-internal tool runs server-side and is stripped, so no tool call reaches the agent loop.</summary>
     [Fact]
-    public async Task QBAgent_InternalTool_ExecutedServerSide_NeverReachesAgent()
+    public async Task QBAgentInternalToolExecutedServerSideNeverReachesAgent()
     {
         var orchestration = new ScriptedOrchestration(
             "{\"tool_calls\":[{\"name\":\"mcp_todo_update\",\"arguments\":{\"id\":\"X\"}}]}");

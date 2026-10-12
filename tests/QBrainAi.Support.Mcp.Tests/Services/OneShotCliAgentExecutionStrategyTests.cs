@@ -11,7 +11,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class OneShotCliAgentExecutionStrategyTests
 {
     [Fact]
-    public async Task ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape()
+    public async Task ReadInitialResponseAsyncWithCodexAgentUsesCodexOneShotCommandShape()
     {
         CapturingProcessSpawner spawner = new(outputBody: "codex final");
         OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
@@ -33,7 +33,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     }
 
     [Fact]
-    public async Task ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape()
+    public async Task ReadInitialResponseAsyncWithClaudeAgentUsesClaudePlanModeCommandShape()
     {
         CapturingProcessSpawner spawner = new(stdout: "claude final");
         OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
@@ -54,7 +54,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     }
 
     [Fact]
-    public async Task ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape()
+    public async Task ReadInitialResponseAsyncWithGrokAgentUsesGrokPromptFileCommandShape()
     {
         CapturingProcessSpawner spawner = new(stdout: "grok final");
         OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
@@ -77,7 +77,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     }
 
     [Fact]
-    public async Task ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape()
+    public async Task ReadInitialResponseAsyncWithClineAgentUsesClineParameterizedPromptCommandShape()
     {
         CapturingProcessSpawner spawner = new(stdout: "cline final");
         OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
@@ -97,7 +97,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     }
 
     [Fact]
-    public void AgentExecutionStrategyNames_SupportsOneShotCliAndDefaultsAwayFromCopilot()
+    public void AgentExecutionStrategyNamesSupportsOneShotCliAndDefaultsAwayFromCopilot()
     {
         Assert.Contains(AgentExecutionStrategyNames.OneShotCli, AgentExecutionStrategyNames.SupportedNames);
         Assert.True(AgentExecutionStrategyNames.IsSupported(AgentExecutionStrategyNames.OneShotCli));

@@ -14,7 +14,7 @@ public sealed class MemoryS2PortMockTests
 {
     /// <summary>AC-FR-MCP-MEMORY-011-01: mock recall rejects an empty query with 400.</summary>
     [Fact]
-    public async Task PortMock_EmptyQuery_Returns400()
+    public async Task PortMockEmptyQueryReturns400()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.RecallAsync(Arg.Any<MemoryRecallRequest>(), Arg.Any<CancellationToken>())
@@ -30,7 +30,7 @@ public sealed class MemoryS2PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-011-03: mock recall rejects a null query with 400.</summary>
     [Fact]
-    public async Task PortMock_NullQuery_Returns400()
+    public async Task PortMockNullQueryReturns400()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.RecallAsync(Arg.Any<MemoryRecallRequest>(), Arg.Any<CancellationToken>())
@@ -46,7 +46,7 @@ public sealed class MemoryS2PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-011-04 / AC-FR-MCP-MEMORY-011-05: mock recall returns scored exact and paraphrase hits.</summary>
     [Fact]
-    public async Task PortMock_ExactAndParaphrase_ReturnScoredHits()
+    public async Task PortMockExactAndParaphraseReturnScoredHits()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.RecallAsync(Arg.Any<MemoryRecallRequest>(), Arg.Any<CancellationToken>())
@@ -74,7 +74,7 @@ public sealed class MemoryS2PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-011-15 / AC-FR-MCP-MEMORY-011-17: mock recall rejects out-of-range minScore and non-positive topN.</summary>
     [Fact]
-    public async Task PortMock_MinScoreAndTopNBounds_Return400()
+    public async Task PortMockMinScoreAndTopNBoundsReturn400()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.RecallAsync(Arg.Any<MemoryRecallRequest>(), Arg.Any<CancellationToken>())
@@ -93,7 +93,7 @@ public sealed class MemoryS2PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-011-22: mock recall applies combined filters with AND semantics.</summary>
     [Fact]
-    public async Task PortMock_CombinedFilters_AndSemantics()
+    public async Task PortMockCombinedFiltersAndSemantics()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.RecallAsync(Arg.Any<MemoryRecallRequest>(), Arg.Any<CancellationToken>())
@@ -125,7 +125,7 @@ public sealed class MemoryS2PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-011-10 / AC-FR-MCP-MEMORY-011-11: mock recall excludes soft-deleted and foreign hits.</summary>
     [Fact]
-    public async Task PortMock_SoftDeletedAndForeign_Excluded()
+    public async Task PortMockSoftDeletedAndForeignExcluded()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.RecallAsync(Arg.Any<MemoryRecallRequest>(), Arg.Any<CancellationToken>())
@@ -144,7 +144,7 @@ public sealed class MemoryS2PortMockTests
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-01: mock index flips EmbeddingStatus to ready.</summary>
     [Fact]
-    public async Task PortMock_Index_ReadyOrFailedStatus()
+    public async Task PortMockIndexReadyOrFailedStatus()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.IndexAsync("MEMORY-S2-001", Arg.Any<CancellationToken>())
@@ -159,7 +159,7 @@ public sealed class MemoryS2PortMockTests
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-02: mock reconcile repairs stale status.</summary>
     [Fact]
-    public async Task PortMock_Reconcile_RepairsStale()
+    public async Task PortMockReconcileRepairsStale()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.ReconcileAsync(Arg.Any<CancellationToken>())
@@ -173,7 +173,7 @@ public sealed class MemoryS2PortMockTests
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-12: mock batch index counts terminal outcomes.</summary>
     [Fact]
-    public async Task PortMock_BatchIndex_AllTerminal()
+    public async Task PortMockBatchIndexAllTerminal()
     {
         var port = Substitute.For<IMemoryS2Port>();
         port.BatchIndexAsync(Arg.Any<IReadOnlyList<string>>(), Arg.Any<CancellationToken>())

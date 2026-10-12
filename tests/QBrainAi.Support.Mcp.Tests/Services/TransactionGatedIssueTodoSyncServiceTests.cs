@@ -20,7 +20,7 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
     /// underlying sync implementation.
     /// </summary>
     [Fact]
-    public async Task Mutations_WhenTransactionsRequired_DelegateToInner()
+    public async Task MutationsWhenTransactionsRequiredDelegateToInner()
     {
         var inner = Substitute.For<IIssueTodoSyncService>();
         inner.SyncIssueToTodoAsync(Arg.Any<GitHubIssueDetail>(), Arg.Any<CancellationToken>())
@@ -60,7 +60,7 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
     /// coordinator message.
     /// </summary>
     [Fact]
-    public async Task SyncTodoToIssueAsync_WhenCoordinatorDegraded_DelegatesToInner()
+    public async Task SyncTodoToIssueAsyncWhenCoordinatorDegradedDelegatesToInner()
     {
         var inner = Substitute.For<IIssueTodoSyncService>();
         inner.SyncTodoToIssueAsync("ISSUE-42", Arg.Any<CancellationToken>())
@@ -78,7 +78,7 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
     /// behavior.
     /// </summary>
     [Fact]
-    public async Task SyncAllTodosToIssuesAsync_WhenTransactionsNotRequired_DelegatesToInner()
+    public async Task SyncAllTodosToIssuesAsyncWhenTransactionsNotRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IIssueTodoSyncService>();
         inner.SyncAllTodosToIssuesAsync(Arg.Any<CancellationToken>())

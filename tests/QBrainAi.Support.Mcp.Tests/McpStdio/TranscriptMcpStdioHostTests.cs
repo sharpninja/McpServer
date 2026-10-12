@@ -12,7 +12,7 @@ public sealed class TranscriptMcpStdioHostTests
 {
     /// <summary>Runs a JSON-RPC stdio session through the built host and normalizes a real Codex fixture.</summary>
     [Fact]
-    public async Task SessionLogNormalizePath_ThroughStdioHost_ResolvesToolGraphAndWritesArtifacts()
+    public async Task SessionLogNormalizePathThroughStdioHostResolvesToolGraphAndWritesArtifacts()
     {
         var executablePath = FindStdioExecutable();
         var fixturePath = Path.Combine(

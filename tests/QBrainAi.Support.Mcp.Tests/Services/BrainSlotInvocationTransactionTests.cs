@@ -18,7 +18,7 @@ public sealed class BrainSlotInvocationTransactionTests
 {
     /// <summary>Execution is fail-closed when Mcp:BrainSlots:ExecutionEnabled is false.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenExecutionDisabled_DoesNotCallProvider()
+    public async Task InvokeAsyncWhenExecutionDisabledDoesNotCallProvider()
     {
         using var fixture = InvocationFixture.Create(executionEnabled: false, Slot(BrainSlotRoles.CuriosityEngine));
 
@@ -36,7 +36,7 @@ public sealed class BrainSlotInvocationTransactionTests
 
     /// <summary>Non-Curiosity roles cannot request GraphRAG admission and do not call the provider.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenNonCuriosityRequestsGraphRag_ReturnsDeferredFeatureDisabled()
+    public async Task InvokeAsyncWhenNonCuriosityRequestsGraphRagReturnsDeferredFeatureDisabled()
     {
         using var fixture = InvocationFixture.Create(executionEnabled: true, Slot(BrainSlotRoles.Creativity));
 
@@ -55,7 +55,7 @@ public sealed class BrainSlotInvocationTransactionTests
 
     /// <summary>Provider output is discarded from the response when subscriber commit fails.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenCommitFails_DiscardsProviderOutput()
+    public async Task InvokeAsyncWhenCommitFailsDiscardsProviderOutput()
     {
         var coordinator = new FakeTurnTransactionCoordinator
         {
@@ -89,7 +89,7 @@ public sealed class BrainSlotInvocationTransactionTests
 
     /// <summary>Committed Curiosity output is returned and admitted only after the transaction commit succeeds.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenCommittedCuriosityAdmissionRequested_AdmitsAfterCommit()
+    public async Task InvokeAsyncWhenCommittedCuriosityAdmissionRequestedAdmitsAfterCommit()
     {
         var coordinator = new FakeTurnTransactionCoordinator
         {
@@ -133,7 +133,7 @@ public sealed class BrainSlotInvocationTransactionTests
 
     /// <summary>FR-MCP-LLMSTRATEGY-001: invocation passes the same TurnContext instance into the strategy.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenTurnContextSupplied_PassesSameInstanceToStrategy()
+    public async Task InvokeAsyncWhenTurnContextSuppliedPassesSameInstanceToStrategy()
     {
         var context = new BrainSlotTurnContext
         {
@@ -162,7 +162,7 @@ public sealed class BrainSlotInvocationTransactionTests
 
     /// <summary>Provider timeout becomes ProviderFailed and does not admit.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenStrategyTimesOut_ReturnsProviderFailedWithoutAdmission()
+    public async Task InvokeAsyncWhenStrategyTimesOutReturnsProviderFailedWithoutAdmission()
     {
         var slot = Slot(BrainSlotRoles.CuriosityEngine);
         slot.TimeoutSeconds = 1;
@@ -187,7 +187,7 @@ public sealed class BrainSlotInvocationTransactionTests
 
     /// <summary>Caller cancellation propagates and does not admit.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenCallerCancels_DoesNotAdmit()
+    public async Task InvokeAsyncWhenCallerCancelsDoesNotAdmit()
     {
         var hanging = new HangingCompletionStrategy();
         using var fixture = InvocationFixture.Create(
@@ -212,7 +212,7 @@ public sealed class BrainSlotInvocationTransactionTests
 
     /// <summary>Null TurnContext falls back to OriginalInput from the invoke request.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenTurnContextMissing_BuildsFallbackFromRequest()
+    public async Task InvokeAsyncWhenTurnContextMissingBuildsFallbackFromRequest()
     {
         var recorder = new RecordingCompletionStrategy();
         using var fixture = InvocationFixture.Create(

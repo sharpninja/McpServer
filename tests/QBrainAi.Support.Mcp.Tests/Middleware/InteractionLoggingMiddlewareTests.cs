@@ -26,7 +26,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync calls next and enqueues entry when LoggingServiceUrl is set and channel is provided.</summary>
     [Fact]
-    public async Task InvokeAsync_CallsNext_AndEnqueuesWhenUrlConfigured()
+    public async Task InvokeAsyncCallsNextAndEnqueuesWhenUrlConfigured()
     {
         var nextCalled = false;
         RequestDelegate next = _ =>
@@ -65,7 +65,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync does not enqueue when LoggingServiceUrl is empty.</summary>
     [Fact]
-    public async Task InvokeAsync_DoesNotEnqueue_WhenLoggingServiceUrlEmpty()
+    public async Task InvokeAsyncDoesNotEnqueueWhenLoggingServiceUrlEmpty()
     {
         RequestDelegate next = _ => Task.CompletedTask;
         var logger = CreateLogger();
@@ -88,7 +88,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync throws when context is null.</summary>
     [Fact]
-    public async Task InvokeAsync_Throws_WhenContextNull()
+    public async Task InvokeAsyncThrowsWhenContextNull()
     {
         RequestDelegate next = _ => Task.CompletedTask;
         var logger = CreateLogger();
@@ -100,7 +100,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync captures request body when IncludeRequestBody is true.</summary>
     [Fact]
-    public async Task InvokeAsync_CapturesRequestBody_WhenEnabled()
+    public async Task InvokeAsyncCapturesRequestBodyWhenEnabled()
     {
         InteractionLogEntry? captured = null;
         RequestDelegate next = _ => Task.CompletedTask;
@@ -130,7 +130,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync captures response body when IncludeResponseBody is true.</summary>
     [Fact]
-    public async Task InvokeAsync_CapturesResponseBody_WhenEnabled()
+    public async Task InvokeAsyncCapturesResponseBodyWhenEnabled()
     {
         InteractionLogEntry? captured = null;
         var responseJson = "{\"chunks\":[],\"sourceKeys\":[]}";
@@ -162,7 +162,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync captures both request and response bodies.</summary>
     [Fact]
-    public async Task InvokeAsync_CapturesBothBodies_WhenEnabled()
+    public async Task InvokeAsyncCapturesBothBodiesWhenEnabled()
     {
         InteractionLogEntry? captured = null;
         var responseJson = "{\"result\":\"ok\"}";
@@ -197,7 +197,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync does not capture bodies when disabled.</summary>
     [Fact]
-    public async Task InvokeAsync_DoesNotCaptureBodies_WhenDisabled()
+    public async Task InvokeAsyncDoesNotCaptureBodiesWhenDisabled()
     {
         InteractionLogEntry? captured = null;
         RequestDelegate next = async ctx =>
@@ -230,7 +230,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync truncates large bodies at MaxBodyCaptureSize.</summary>
     [Fact]
-    public async Task InvokeAsync_TruncatesLargeBody_AtMaxCaptureSize()
+    public async Task InvokeAsyncTruncatesLargeBodyAtMaxCaptureSize()
     {
         InteractionLogEntry? captured = null;
         var largePayload = new string('x', 200);
@@ -263,7 +263,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>Response body is still written to the original stream even when captured.</summary>
     [Fact]
-    public async Task InvokeAsync_ResponseBody_StillWrittenToOriginalStream()
+    public async Task InvokeAsyncResponseBodyStillWrittenToOriginalStream()
     {
         var responseJson = "{\"data\":\"value\"}";
         RequestDelegate next = async ctx =>
@@ -295,7 +295,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>InvokeAsync logs a warning when the submission queue rejects an interaction log entry because the buffer is full.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenQueueRejectsEntry_LogsWarning()
+    public async Task InvokeAsyncWhenQueueRejectsEntryLogsWarning()
     {
         RequestDelegate next = _ => Task.CompletedTask;
         var logger = new TestLogger<QBrainAi.Support.Mcp.Middleware.InteractionLoggingMiddleware>();
@@ -323,7 +323,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
     /// <summary>X-Api-Key and Authorization header values never appear in interaction log messages.</summary>
     [Fact]
-    public async Task InvokeAsync_RedactsApiKeyHeaders_FromLogMessages()
+    public async Task InvokeAsyncRedactsApiKeyHeadersFromLogMessages()
     {
         const string sampleKey = "synth-fixture-key-CCCC3333DDDD4444";
         RequestDelegate next = _ => Task.CompletedTask;

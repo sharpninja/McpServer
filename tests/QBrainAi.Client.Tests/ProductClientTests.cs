@@ -22,7 +22,7 @@ public sealed class ProductClientTests
 
     /// <summary>CreateAsync posts the key and deserializes ownerWorkspaceId.</summary>
     [Fact]
-    public async Task CreateAsync_PostsProductsEndpoint()
+    public async Task CreateAsyncPostsProductsEndpoint()
     {
         var handler = new StubHandler(CallerWorkspaceId);
         using var http = new HttpClient(handler) { BaseAddress = new Uri("http://localhost:7147/") };
@@ -47,7 +47,7 @@ public sealed class ProductClientTests
     /// A follow-up GET after self-leave is 404 and is not the shipped contract.
     /// </summary>
     [Fact]
-    public async Task RemoveMemberAsync_DeserializesDeleteBody_DoesNotGetAfterLeave()
+    public async Task RemoveMemberAsyncDeserializesDeleteBodyDoesNotGetAfterLeave()
     {
         var handler = new LeaveHandler(OwnerWorkspaceId);
         using var http = new HttpClient(handler) { BaseAddress = new Uri("http://localhost:7147/") };

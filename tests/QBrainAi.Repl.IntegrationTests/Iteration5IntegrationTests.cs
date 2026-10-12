@@ -23,7 +23,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_ContextQuery_ReturnsResults()
+    public async Task GenericClientPassthroughContextQueryReturnsResults()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -44,7 +44,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_RepoGetBranches_ReturnsResults()
+    public async Task GenericClientPassthroughRepoGetBranchesReturnsResults()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -63,7 +63,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_DesktopOpenFolder_ValidatesArguments()
+    public async Task GenericClientPassthroughDesktopOpenFolderValidatesArguments()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -83,7 +83,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_NestedObjectArgument_CoercesCorrectly()
+    public async Task GenericClientPassthroughNestedObjectArgumentCoercesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -114,7 +114,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_ArrayArgument_CoercesCorrectly()
+    public async Task GenericClientPassthroughArrayArgumentCoercesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -138,7 +138,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_ComplexNestedStructure_CoercesCorrectly()
+    public async Task GenericClientPassthroughComplexNestedStructureCoercesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -174,7 +174,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_YamlResponseShape_ValidStructure()
+    public async Task GenericClientPassthroughYamlResponseShapeValidStructure()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -193,14 +193,14 @@ public sealed class Iteration5IntegrationTests : IDisposable
         
         Assert.True(responseDict.ContainsKey("type") || responseDict.ContainsKey("Type"));
         
-        var typeValue = responseDict.ContainsKey("type") ? responseDict["type"] : responseDict["Type"];
+        var typeValue = responseDict.TryGetValue("type", out object? value) ? value : responseDict["Type"];
         Assert.True(typeValue?.ToString() == "result" || typeValue?.ToString() == "error");
         
         Assert.True(responseDict.ContainsKey("payload") || responseDict.ContainsKey("Payload"));
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_UnknownClient_ReturnsError()
+    public async Task GenericClientPassthroughUnknownClientReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -219,12 +219,12 @@ public sealed class Iteration5IntegrationTests : IDisposable
         var responseDict = _yamlDeserializer.Deserialize<Dictionary<string, object>>(response!);
         Assert.NotNull(responseDict);
         
-        var typeValue = responseDict.ContainsKey("type") ? responseDict["type"] : responseDict["Type"];
+        var typeValue = responseDict.TryGetValue("type", out object? value) ? value : responseDict["Type"];
         Assert.Equal("error", typeValue?.ToString()?.ToLower());
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_UnknownMethod_ReturnsError()
+    public async Task GenericClientPassthroughUnknownMethodReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -243,12 +243,12 @@ public sealed class Iteration5IntegrationTests : IDisposable
         var responseDict = _yamlDeserializer.Deserialize<Dictionary<string, object>>(response!);
         Assert.NotNull(responseDict);
         
-        var typeValue = responseDict.ContainsKey("type") ? responseDict["type"] : responseDict["Type"];
+        var typeValue = responseDict.TryGetValue("type", out object? value) ? value : responseDict["Type"];
         Assert.Equal("error", typeValue?.ToString()?.ToLower());
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_MissingRequiredParameter_ReturnsError()
+    public async Task GenericClientPassthroughMissingRequiredParameterReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -267,12 +267,12 @@ public sealed class Iteration5IntegrationTests : IDisposable
         var responseDict = _yamlDeserializer.Deserialize<Dictionary<string, object>>(response!);
         Assert.NotNull(responseDict);
         
-        var typeValue = responseDict.ContainsKey("type") ? responseDict["type"] : responseDict["Type"];
+        var typeValue = responseDict.TryGetValue("type", out object? value) ? value : responseDict["Type"];
         Assert.Equal("error", typeValue?.ToString()?.ToLower());
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_InvalidArgumentType_ReturnsError()
+    public async Task GenericClientPassthroughInvalidArgumentTypeReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -295,12 +295,12 @@ public sealed class Iteration5IntegrationTests : IDisposable
         var responseDict = _yamlDeserializer.Deserialize<Dictionary<string, object>>(response!);
         Assert.NotNull(responseDict);
         
-        var typeValue = responseDict.ContainsKey("type") ? responseDict["type"] : responseDict["Type"];
+        var typeValue = responseDict.TryGetValue("type", out object? value) ? value : responseDict["Type"];
         Assert.Equal("error", typeValue?.ToString()?.ToLower());
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_NullForNonNullableParameter_ReturnsError()
+    public async Task GenericClientPassthroughNullForNonNullableParameterReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -322,12 +322,12 @@ public sealed class Iteration5IntegrationTests : IDisposable
         var responseDict = _yamlDeserializer.Deserialize<Dictionary<string, object>>(response!);
         Assert.NotNull(responseDict);
         
-        var typeValue = responseDict.ContainsKey("type") ? responseDict["type"] : responseDict["Type"];
+        var typeValue = responseDict.TryGetValue("type", out object? value) ? value : responseDict["Type"];
         Assert.Equal("error", typeValue?.ToString()?.ToLower());
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_MultipleClients_Sequential()
+    public async Task GenericClientPassthroughMultipleClientsSequential()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -354,7 +354,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_OptionalParameters_UsesDefaults()
+    public async Task GenericClientPassthroughOptionalParametersUsesDefaults()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -380,7 +380,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_BooleanArguments_CoercesCorrectly()
+    public async Task GenericClientPassthroughBooleanArgumentsCoercesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -405,7 +405,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_NumericArguments_CoercesCorrectly()
+    public async Task GenericClientPassthroughNumericArgumentsCoercesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -431,7 +431,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_EmptyArrayArgument_HandlesCorrectly()
+    public async Task GenericClientPassthroughEmptyArrayArgumentHandlesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -455,7 +455,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_MixedTypeArray_CoercesElements()
+    public async Task GenericClientPassthroughMixedTypeArrayCoercesElements()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -478,7 +478,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_CaseInsensitiveClientName_Resolves()
+    public async Task GenericClientPassthroughCaseInsensitiveClientNameResolves()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -499,7 +499,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_CaseInsensitiveParameterName_Matches()
+    public async Task GenericClientPassthroughCaseInsensitiveParameterNameMatches()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -520,7 +520,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_MultipleValidRequests_AllSucceed()
+    public async Task GenericClientPassthroughMultipleValidRequestsAllSucceed()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -539,7 +539,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_ResponseContainsRequestId_Correlation()
+    public async Task GenericClientPassthroughResponseContainsRequestIdCorrelation()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -558,7 +558,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_SuccessResultShape_HasCorrectFields()
+    public async Task GenericClientPassthroughSuccessResultShapeHasCorrectFields()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -589,7 +589,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_ErrorResultShape_HasCorrectFields()
+    public async Task GenericClientPassthroughErrorResultShapeHasCorrectFields()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -608,7 +608,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
         var responseDict = _yamlDeserializer.Deserialize<Dictionary<string, object>>(response!);
         Assert.NotNull(responseDict);
         
-        var typeValue = responseDict.ContainsKey("type") ? responseDict["type"] : responseDict["Type"];
+        var typeValue = responseDict.TryGetValue("type", out object? value) ? value : responseDict["Type"];
         Assert.Equal("error", typeValue?.ToString()?.ToLower());
         
         Assert.True(responseDict.ContainsKey("payload") || responseDict.ContainsKey("Payload"));
@@ -626,7 +626,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task GenericClientPassthrough_CompleteWorkflow_VariousClientTypes()
+    public async Task GenericClientPassthroughCompleteWorkflowVariousClientTypes()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -654,7 +654,7 @@ public sealed class Iteration5IntegrationTests : IDisposable
         Assert.NotNull(errorResponse);
         
         var errorDict = _yamlDeserializer.Deserialize<Dictionary<string, object>>(errorResponse!);
-        var typeValue = errorDict.ContainsKey("type") ? errorDict["type"] : errorDict["Type"];
+        var typeValue = errorDict.TryGetValue("type", out object? value) ? value : errorDict["Type"];
         Assert.Equal("error", typeValue?.ToString()?.ToLower());
     }
 

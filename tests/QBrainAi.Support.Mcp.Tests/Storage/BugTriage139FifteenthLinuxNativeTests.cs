@@ -11,14 +11,14 @@ public sealed class BugTriage139FifteenthLinuxNativeTests
     /// worker accounting.
     /// </summary>
     [Fact]
-    public Task WorkspaceIdentity_NativeCancellationWindow_CompletesWithoutWorkerLeak() =>
+    public Task WorkspaceIdentityNativeCancellationWindowCompletesWithoutWorkerLeak() =>
         BugTriage139FifteenthNativeScenarios.AssertLinuxIdentityFuseCancellationAsync();
 
     /// <summary>
     /// A real non-root FUSE SQLite data source is rejected before a worker or handle is created.
     /// </summary>
     [Fact]
-    public Task SqliteOpen_PlatformNativePreHandleWait_IsBoundedWithoutLeaks() =>
+    public Task SqliteOpenPlatformNativePreHandleWaitIsBoundedWithoutLeaks() =>
         BugTriage139FifteenthNativeScenarios.AssertLinuxSqliteFuseOpenAsync();
 
     /// <summary>
@@ -26,6 +26,6 @@ public sealed class BugTriage139FifteenthLinuxNativeTests
     /// Linux worker boundary.
     /// </summary>
     [Fact]
-    public Task SqliteOpen_KernelWaitThenIndependentDisposalFailure_PreservesExactException() =>
+    public Task SqliteOpenKernelWaitThenIndependentDisposalFailurePreservesExactException() =>
         BugTriage139FifteenthNativeScenarios.AssertLinuxSqliteIndependentFailureAsync();
 }

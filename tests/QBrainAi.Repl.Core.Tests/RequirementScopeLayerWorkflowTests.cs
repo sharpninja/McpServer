@@ -26,7 +26,7 @@ public sealed class RequirementScopeLayerWorkflowTests
     /// the typed client and preserve layer sunset fields.
     /// </summary>
     [Fact]
-    public async Task RequirementLayerWorkflow_RoutesListCreateAndUpdateThroughClient()
+    public async Task RequirementLayerWorkflowRoutesListCreateAndUpdateThroughClient()
     {
         var listHandler = new CapturingHandler(
             HttpStatusCode.OK,
@@ -77,7 +77,7 @@ public sealed class RequirementScopeLayerWorkflowTests
     /// workflow wrappers expose current-layer results and scoped requirement metadata.
     /// </summary>
     [Fact]
-    public async Task EffectiveRequirementsWorkflow_ReturnsCurrentLayerAndScopedRequirementMetadata()
+    public async Task EffectiveRequirementsWorkflowReturnsCurrentLayerAndScopedRequirementMetadata()
     {
         var handler = new CapturingHandler(
             HttpStatusCode.OK,
@@ -100,7 +100,7 @@ public sealed class RequirementScopeLayerWorkflowTests
     /// and query effective requirements before and after the new layer.
     /// </summary>
     [Fact]
-    public async Task RequirementScopeLayer_ReplYamlWorkflow_ExercisesBeforeAndAfterEffectiveQueries()
+    public async Task RequirementScopeLayerReplYamlWorkflowExercisesBeforeAndAfterEffectiveQueries()
     {
         var handler = new StatefulRequirementScopeHandler();
         using var http = new HttpClient(handler);

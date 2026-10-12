@@ -11,7 +11,7 @@ public sealed class SessionLogTranscriptDispatcherTests
 {
     /// <summary>repl.sessionlog.ingestTranscripts delegates to the transcript workflow with HTTP-compatible defaults.</summary>
     [Fact]
-    public async Task DispatchAsync_IngestTranscripts_DelegatesToTranscriptWorkflow()
+    public async Task DispatchAsyncIngestTranscriptsDelegatesToTranscriptWorkflow()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var workflow = Substitute.For<ITranscriptIngestionWorkflow>();
@@ -59,7 +59,7 @@ public sealed class SessionLogTranscriptDispatcherTests
 
     /// <summary>repl.sessionlog.normalizeTranscripts requires a target profile and does not persist by default.</summary>
     [Fact]
-    public async Task DispatchAsync_NormalizeTranscripts_RequiresProfileAndDisablesPersistenceByDefault()
+    public async Task DispatchAsyncNormalizeTranscriptsRequiresProfileAndDisablesPersistenceByDefault()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var workflow = Substitute.For<ITranscriptIngestionWorkflow>();

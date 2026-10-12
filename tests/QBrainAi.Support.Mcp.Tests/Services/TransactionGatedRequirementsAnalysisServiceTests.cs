@@ -19,7 +19,7 @@ public sealed class TransactionGatedRequirementsAnalysisServiceTests
     /// analysis before Copilot or requirements document side effects run.
     /// </summary>
     [Fact]
-    public async Task AnalyzeAsync_WhenRequiredTransactionsActive_DelegatesToInner()
+    public async Task AnalyzeAsyncWhenRequiredTransactionsActiveDelegatesToInner()
     {
         var expected = new RequirementsAnalysisResult(
             true,
@@ -52,7 +52,7 @@ public sealed class TransactionGatedRequirementsAnalysisServiceTests
     /// before checking the required-for-mutations option.
     /// </summary>
     [Fact]
-    public async Task AnalyzeAsync_WhenCoordinatorDegraded_FailsClosedWithoutCallingInner()
+    public async Task AnalyzeAsyncWhenCoordinatorDegradedFailsClosedWithoutCallingInner()
     {
         var inner = Substitute.For<IRequirementsService>();
         var coordinator = new StatusCoordinator
@@ -82,7 +82,7 @@ public sealed class TransactionGatedRequirementsAnalysisServiceTests
     /// behavior remains delegated to the existing service.
     /// </summary>
     [Fact]
-    public async Task AnalyzeAsync_WhenTransactionsAreNotRequired_DelegatesToInner()
+    public async Task AnalyzeAsyncWhenTransactionsAreNotRequiredDelegatesToInner()
     {
         var expected = new RequirementsAnalysisResult(
             true,

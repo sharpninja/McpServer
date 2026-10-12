@@ -13,17 +13,17 @@ namespace QBrainAi.Repl.Core.Tests;
 /// Ensures all mock components work together correctly and all test scenarios pass.
 /// This file serves as the final validation checkpoint for iteration 2 completion.
 /// </summary>
-public class Iteration2_AllTestsValidation
+public class Iteration2AllTestsValidation
 {
     [Fact]
-    public void Validation_FakeSessionLogState_ImplementsInterface()
+    public void ValidationFakeSessionLogStateImplementsInterface()
     {
         var fakeState = new FakeSessionLogState();
         Assert.IsAssignableFrom<ISessionLogState>(fakeState);
     }
 
     [Fact]
-    public void Validation_FakeSessionLogState_AllPropertiesAccessible()
+    public void ValidationFakeSessionLogStateAllPropertiesAccessible()
     {
         var fakeState = new FakeSessionLogState();
         fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
@@ -41,7 +41,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public async Task Validation_StubSessionLogClient_SubmitReturnsValidResult()
+    public async Task ValidationStubSessionLogClientSubmitReturnsValidResult()
     {
         var stubClient = new StubSessionLogClient();
         var sessionLog = new UnifiedSessionLogDto
@@ -61,7 +61,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public async Task Validation_StubSessionLogClient_QueryReturnsValidResult()
+    public async Task ValidationStubSessionLogClientQueryReturnsValidResult()
     {
         var stubClient = new StubSessionLogClient();
 
@@ -75,7 +75,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public async Task Validation_StubSessionLogClient_AppendDialogReturnsValidResult()
+    public async Task ValidationStubSessionLogClientAppendDialogReturnsValidResult()
     {
         var stubClient = new StubSessionLogClient();
         var items = new List<ProcessingDialogItemDto>
@@ -93,7 +93,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_AllSessionLogErrorCodes_AreDefined()
+    public void ValidationAllSessionLogErrorCodesAreDefined()
     {
         Assert.NotNull(SessionLogErrorCodes.BootstrapFailed);
         Assert.NotNull(SessionLogErrorCodes.SessionNotFound);
@@ -110,7 +110,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_AllCommandShapes_AreDefined()
+    public void ValidationAllCommandShapesAreDefined()
     {
         Assert.Equal("workflow.sessionlog", SessionLogCommandShapes.MethodNamespace);
         Assert.NotNull(SessionLogCommandShapes.BootstrapMethod);
@@ -132,7 +132,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_ISessionLogWorkflow_InterfaceExists()
+    public void ValidationISessionLogWorkflowInterfaceExists()
     {
         var interfaceType = typeof(ISessionLogWorkflow);
 
@@ -150,7 +150,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_IMemoryWorkflow_InterfaceExists()
+    public void ValidationIMemoryWorkflowInterfaceExists()
     {
         var interfaceType = typeof(IMemoryWorkflow);
 
@@ -163,7 +163,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_ISessionLogState_InterfaceExists()
+    public void ValidationISessionLogStateInterfaceExists()
     {
         var interfaceType = typeof(ISessionLogState);
 
@@ -181,7 +181,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_IDialogItem_InterfaceExists()
+    public void ValidationIDialogItemInterfaceExists()
     {
         var interfaceType = typeof(IDialogItem);
 
@@ -193,7 +193,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_ISessionAction_InterfaceExists()
+    public void ValidationISessionActionInterfaceExists()
     {
         var interfaceType = typeof(ISessionAction);
 
@@ -206,7 +206,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_ISessionLogSummary_InterfaceExists()
+    public void ValidationISessionLogSummaryInterfaceExists()
     {
         var interfaceType = typeof(ISessionLogSummary);
 
@@ -224,7 +224,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public async Task Validation_CompleteWorkflowScenario_ExecutesSuccessfully()
+    public async Task ValidationCompleteWorkflowScenarioExecutesSuccessfully()
     {
         var stubClient = new StubSessionLogClient();
         var fakeState = new FakeSessionLogState();
@@ -263,7 +263,7 @@ public class Iteration2_AllTestsValidation
     }
 
     [Fact]
-    public void Validation_FakeYamlSerializer_CanSerializeAndDeserialize()
+    public void ValidationFakeYamlSerializerCanSerializeAndDeserialize()
     {
         var serializer = new FakeYamlSerializer();
 

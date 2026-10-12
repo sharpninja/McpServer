@@ -62,7 +62,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
     /// FR-MCP-078: Verifies that valid content produces a document and chunks in the DB.
     /// </summary>
     [Fact]
-    public async Task IngestTextAsync_ValidContent_CreatesDocumentAndChunks()
+    public async Task IngestTextAsyncValidContentCreatesDocumentAndChunks()
     {
         var sut = CreateSut();
         var request = new GraphRagIngestTextRequest { Content = "Hello world. This is a test document with enough content." };
@@ -83,7 +83,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
     /// FR-MCP-078: Verifies that empty content throws <see cref="ArgumentException"/>.
     /// </summary>
     [Fact]
-    public async Task IngestTextAsync_EmptyContent_ThrowsArgumentException()
+    public async Task IngestTextAsyncEmptyContentThrowsArgumentException()
     {
         var sut = CreateSut();
         var request = new GraphRagIngestTextRequest { Content = "" };
@@ -95,7 +95,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
     /// FR-MCP-078: Verifies that when SourceType is not set, it defaults to "adhoc-text".
     /// </summary>
     [Fact]
-    public async Task IngestTextAsync_DefaultsSourceType_ToAdhocText()
+    public async Task IngestTextAsyncDefaultsSourceTypeToAdhocText()
     {
         var sut = CreateSut();
         var request = new GraphRagIngestTextRequest { Content = "Some ad-hoc content for testing defaults." };
@@ -109,7 +109,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
     /// FR-MCP-078: Verifies that when SourceKey is not set, it defaults to Title if provided, otherwise to the document ID.
     /// </summary>
     [Fact]
-    public async Task IngestTextAsync_DefaultsSourceKey_ToTitleOrDocId()
+    public async Task IngestTextAsyncDefaultsSourceKeyToTitleOrDocId()
     {
         var sut = CreateSut();
 
@@ -128,7 +128,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
     /// FR-MCP-078: Verifies that the chunk count matches Chunker output for known content.
     /// </summary>
     [Fact]
-    public async Task IngestTextAsync_ChunkCount_MatchesExpected()
+    public async Task IngestTextAsyncChunkCountMatchesExpected()
     {
         var sut = CreateSut();
         var content = new string('A', 4096); // Should produce multiple chunks at 512 tokens * 4 chars = 2048 chars per chunk
@@ -145,7 +145,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
     /// FR-MCP-078: Verifies that TriggerReindex=true causes IndexAsync to be called.
     /// </summary>
     [Fact]
-    public async Task IngestTextAsync_TriggerReindex_CallsIndexAsync()
+    public async Task IngestTextAsyncTriggerReindexCallsIndexAsync()
     {
         // We test this indirectly — IndexAsync creates the ready artifact.
         var sut = CreateSut();
@@ -164,7 +164,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
     /// FR-MCP-078: Verifies that TriggerReindex=false does not trigger reindexing.
     /// </summary>
     [Fact]
-    public async Task IngestTextAsync_NoTriggerReindex_DoesNotCallIndexAsync()
+    public async Task IngestTextAsyncNoTriggerReindexDoesNotCallIndexAsync()
     {
         var sut = CreateSut();
         var request = new GraphRagIngestTextRequest

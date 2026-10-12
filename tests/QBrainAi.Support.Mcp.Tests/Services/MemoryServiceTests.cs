@@ -45,7 +45,7 @@ public sealed class MemoryServiceTests : IDisposable
     /// workspace's rows.
     /// </summary>
     [Fact]
-    public async Task ListAsync_ReturnsGlobalThenWorkspace_WithoutCrossWorkspaceLeak()
+    public async Task ListAsyncReturnsGlobalThenWorkspaceWithoutCrossWorkspaceLeak()
     {
         await using (var db = CreateContext(_workspaceA))
         {
@@ -121,7 +121,7 @@ public sealed class MemoryServiceTests : IDisposable
     /// monotonic across Global and Workspace scopes.
     /// </summary>
     [Fact]
-    public async Task AddAsync_GeneratesStableCategoryIdsAcrossScopes()
+    public async Task AddAsyncGeneratesStableCategoryIdsAcrossScopes()
     {
         await using var db = CreateContext(_workspaceA);
         var svc = CreateService(db);
@@ -149,7 +149,7 @@ public sealed class MemoryServiceTests : IDisposable
     /// Updating memory text records a new version and preserves the stable id.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_ChangesTextAndIncrementsVersion()
+    public async Task UpdateAsyncChangesTextAndIncrementsVersion()
     {
         await using var db = CreateContext(_workspaceA);
         var svc = CreateService(db);
@@ -177,7 +177,7 @@ public sealed class MemoryServiceTests : IDisposable
     /// workspace.
     /// </summary>
     [Fact]
-    public async Task AddAsync_DuplicateExplicitId_ReturnsConflict()
+    public async Task AddAsyncDuplicateExplicitIdReturnsConflict()
     {
         await using (var db = CreateContext(_workspaceA))
         {
@@ -211,7 +211,7 @@ public sealed class MemoryServiceTests : IDisposable
     /// shape so callers cannot persist arbitrary identifiers.
     /// </summary>
     [Fact]
-    public async Task AddUpdateAndRemoveAsync_InvalidId_ReturnValidation()
+    public async Task AddUpdateAndRemoveAsyncInvalidIdReturnValidation()
     {
         await using var db = CreateContext(_workspaceA);
         var svc = CreateService(db);
@@ -239,7 +239,7 @@ public sealed class MemoryServiceTests : IDisposable
     /// subsequent effective reads.
     /// </summary>
     [Fact]
-    public async Task RemoveAsync_SoftDeletesMemory()
+    public async Task RemoveAsyncSoftDeletesMemory()
     {
         string id;
         await using (var db = CreateContext(_workspaceA))

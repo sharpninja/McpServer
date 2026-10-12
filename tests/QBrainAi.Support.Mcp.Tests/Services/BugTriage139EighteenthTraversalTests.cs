@@ -17,7 +17,7 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// physically pinned until the isolated traversal worker actually exits.
     /// </summary>
     [Fact]
-    public async Task EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting()
+    public async Task EnumerateFilesBoundedAsyncBlockingMetadataTimesOutWithTruthfulWorkerAccounting()
     {
         using var fixture = new TraversalFixture();
         var method = ResolveBoundedEnumeration();
@@ -74,7 +74,7 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// treating a detached worker as completed.
     /// </summary>
     [Fact]
-    public async Task EnumerateFilesBoundedAsync_BlockingMetadata_ObservesExactCallerCancellation()
+    public async Task EnumerateFilesBoundedAsyncBlockingMetadataObservesExactCallerCancellation()
     {
         using var fixture = new TraversalFixture();
         var method = ResolveBoundedEnumeration();
@@ -129,7 +129,7 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// before any external file is opened.
     /// </summary>
     [Fact]
-    public async Task EnumerateFilesBoundedAsync_DirectorySwap_DoesNotTraverseExternalJunction()
+    public async Task EnumerateFilesBoundedAsyncDirectorySwapDoesNotTraverseExternalJunction()
     {
         using var fixture = new TraversalFixture();
         var method = ResolveBoundedEnumeration();

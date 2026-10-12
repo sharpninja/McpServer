@@ -45,7 +45,7 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a rate-limited primary advances to the secondary (grok) which succeeds.</summary>
     [Fact]
-    public async Task RunAsync_WhenPrimaryRateLimited_FallsBackToSecondary()
+    public async Task RunAsyncWhenPrimaryRateLimitedFallsBackToSecondary()
     {
         var strategy = new ScriptedAgentExecutionStrategy(new()
         {
@@ -63,7 +63,7 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a rate-limited primary and secondary advance to the tertiary (claude) which succeeds.</summary>
     [Fact]
-    public async Task RunAsync_WhenPrimaryAndSecondaryRateLimited_FallsBackToTertiary()
+    public async Task RunAsyncWhenPrimaryAndSecondaryRateLimitedFallsBackToTertiary()
     {
         var strategy = new ScriptedAgentExecutionStrategy(new()
         {
@@ -82,7 +82,7 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
 
     /// <summary>TEST-MCP-TRIAGE-008: when every tier is rate-limited the run fails after trying all three, preserving the last tier's stderr.</summary>
     [Fact]
-    public async Task RunAsync_WhenAllTiersRateLimited_FailsAfterTryingAll()
+    public async Task RunAsyncWhenAllTiersRateLimitedFailsAfterTryingAll()
     {
         var strategy = new ScriptedAgentExecutionStrategy(new()
         {
@@ -101,7 +101,7 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a non-retryable primary failure returns immediately without touching the fallback tiers.</summary>
     [Fact]
-    public async Task RunAsync_WhenPrimaryFailsNonRetryable_DoesNotFallBack()
+    public async Task RunAsyncWhenPrimaryFailsNonRetryableDoesNotFallBack()
     {
         var strategy = new ScriptedAgentExecutionStrategy(new()
         {
@@ -118,7 +118,7 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a successful primary never invokes the fallback tiers.</summary>
     [Fact]
-    public async Task RunAsync_WhenPrimarySucceeds_DoesNotFallBack()
+    public async Task RunAsyncWhenPrimarySucceedsDoesNotFallBack()
     {
         var strategy = new ScriptedAgentExecutionStrategy(new()
         {
@@ -135,7 +135,7 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
 
     /// <summary>TEST-MCP-TRIAGE-008: each tier is invoked with its own configured agent path and model.</summary>
     [Fact]
-    public async Task RunAsync_PassesPerTierAgentPathAndModel()
+    public async Task RunAsyncPassesPerTierAgentPathAndModel()
     {
         var strategy = new ScriptedAgentExecutionStrategy(new()
         {
@@ -155,7 +155,7 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a primary timeout (marker text, FallbackOnTimeout default) advances to the secondary.</summary>
     [Fact]
-    public async Task RunAsync_WhenPrimaryTimesOut_FallsBackToSecondary()
+    public async Task RunAsyncWhenPrimaryTimesOutFallsBackToSecondary()
     {
         var strategy = new ScriptedAgentExecutionStrategy(new()
         {
@@ -172,7 +172,7 @@ public sealed class ConfiguredTriageResearchRunnerFallbackTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a disabled secondary tier (blank agent path) is skipped, advancing straight to the tertiary.</summary>
     [Fact]
-    public async Task RunAsync_WhenSecondaryTierDisabled_SkipsToTertiary()
+    public async Task RunAsyncWhenSecondaryTierDisabledSkipsToTertiary()
     {
         var options = ThreeTierOptions();
         options.Secondary = new TriageFallbackAgent { AgentPath = string.Empty, ExecutionStrategy = "fake-triage" };

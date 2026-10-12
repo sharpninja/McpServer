@@ -44,7 +44,7 @@ public sealed class SessionLogTriageStoreTests : IDisposable
 
     /// <summary>TEST-MCP-TRIAGESTORE-001: identical actions[] resubmit does not duplicate rows.</summary>
     [Fact]
-    public async Task SubmitAsync_IdenticalActions_DoesNotDuplicate()
+    public async Task SubmitAsyncIdenticalActionsDoesNotDuplicate()
     {
         var sessionId = "Cursor-20260818T200000Z-identical-actions";
         var dto = CreateSession(sessionId);
@@ -73,7 +73,7 @@ public sealed class SessionLogTriageStoreTests : IDisposable
 
     /// <summary>TEST-MCP-TRIAGESTORE-001: session-level tags persist and return on query.</summary>
     [Fact]
-    public async Task SubmitAsync_SessionTags_RoundTrip()
+    public async Task SubmitAsyncSessionTagsRoundTrip()
     {
         var sessionId = "Cursor-20260818T200000Z-session-tags";
         var dto = CreateSession(sessionId);
@@ -92,7 +92,7 @@ public sealed class SessionLogTriageStoreTests : IDisposable
 
     /// <summary>TEST-MCP-TRIAGESTORE-001: replace of a missing requestId is not-found, not upsert.</summary>
     [Fact]
-    public async Task ReplaceTurnAsync_MissingRequestId_ThrowsNotFound()
+    public async Task ReplaceTurnAsyncMissingRequestIdThrowsNotFound()
     {
         var sessionId = "Cursor-20260818T200000Z-replace-missing";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -113,7 +113,7 @@ public sealed class SessionLogTriageStoreTests : IDisposable
     [Theory]
     [InlineData("canceled")]
     [InlineData("cancelled")]
-    public async Task SubmitAsync_CanceledStatus_RoundTrips(string status)
+    public async Task SubmitAsyncCanceledStatusRoundTrips(string status)
     {
         var sessionId = $"Cursor-20260818T200000Z-{status}-status";
         var dto = CreateSession(sessionId);
@@ -132,7 +132,7 @@ public sealed class SessionLogTriageStoreTests : IDisposable
     /// so the test does not wait for the 30 second default.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable()
+    public async Task SubmitAsyncHungSaveChangesFailsFastWithStorageUnavailable()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"SessionLogHungSave_{Guid.NewGuid():N}")
@@ -167,7 +167,7 @@ public sealed class SessionLogTriageStoreTests : IDisposable
     /// sessions with stale in-progress turns and does not mass-close them.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_TurnStatusInProgressAndStaleOlderThanHours_ReturnsOnlyStaleOpenTurns()
+    public async Task QueryAsyncTurnStatusInProgressAndStaleOlderThanHoursReturnsOnlyStaleOpenTurns()
     {
         var now = DateTimeOffset.UtcNow;
         var staleStamp = now.AddHours(-30).UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
@@ -204,7 +204,7 @@ public sealed class SessionLogTriageStoreTests : IDisposable
 
     /// <summary>TEST-MCP-TRIAGESTORE-001: superseded persist with omitted context writes None sentinels and canceled.</summary>
     [Fact]
-    public async Task UpsertTurnAsync_OmittedPlanFileTodoId_WritesNoneAndCanceled()
+    public async Task UpsertTurnAsyncOmittedPlanFileTodoIdWritesNoneAndCanceled()
     {
         var sessionId = "Cursor-20260818T200000Z-supersede-none";
         await _sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);

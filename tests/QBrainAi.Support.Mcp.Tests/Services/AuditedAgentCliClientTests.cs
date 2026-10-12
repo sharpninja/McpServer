@@ -19,7 +19,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class AuditedAgentCliClientTests
 {
     [Fact]
-    public async Task InvokeAsync_WritesCopilotInvocationAuditEntry()
+    public async Task InvokeAsyncWritesCopilotInvocationAuditEntry()
     {
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"audit-ws-{Guid.NewGuid():N}"));
         var sessionLogService = Substitute.For<ISessionLogService>();
@@ -56,7 +56,7 @@ public sealed class AuditedAgentCliClientTests
     }
 
     [Fact]
-    public async Task InvokeStreamingAsync_CompletionIsAudited()
+    public async Task InvokeStreamingAsyncCompletionIsAudited()
     {
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"audit-stream-ws-{Guid.NewGuid():N}"));
         var sessionLogService = Substitute.For<ISessionLogService>();

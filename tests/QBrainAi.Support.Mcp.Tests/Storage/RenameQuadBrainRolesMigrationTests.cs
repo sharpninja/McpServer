@@ -36,7 +36,7 @@ public sealed class RenameQuadBrainRolesMigrationTests : IDisposable
     /// leaves CuriosityEngine/ArbiterOfTruth unchanged, and leaves no legacy role values.
     /// </summary>
     [Fact]
-    public void Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows()
+    public void MigrateRenameQuadBrainRolesRenamesLegacyHemisphereRows()
     {
         var now = new DateTimeOffset(2026, 7, 1, 0, 0, 0, TimeSpan.Zero);
         using (var db = CreateContext())
@@ -85,7 +85,7 @@ public sealed class RenameQuadBrainRolesMigrationTests : IDisposable
     /// CuriosityEngine/ArbiterOfTruth rows untouched and no Creativity/Logic rows behind.
     /// </summary>
     [Fact]
-    public void MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows()
+    public void MigrateDownRenameQuadBrainRolesRestoresLegacyHemisphereRows()
     {
         var now = new DateTime(2026, 7, 20, 0, 0, 0, DateTimeKind.Utc);
         using (var db = CreateContext())

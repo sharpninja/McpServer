@@ -26,7 +26,7 @@ public sealed class DesktopLaunchServiceTests
     /// substituted runner so the denial path can prove no launcher invocation occurs.
     /// </summary>
     [Fact]
-    public async Task LaunchAsync_WhenDesktopLaunchDisabled_ReturnsFailureWithoutInvokingRunner()
+    public async Task LaunchAsyncWhenDesktopLaunchDisabledReturnsFailureWithoutInvokingRunner()
     {
         var executablePath = GetExistingExecutablePath();
         var processRunner = Substitute.For<IProcessRunner>();
@@ -54,7 +54,7 @@ public sealed class DesktopLaunchServiceTests
     /// allowlist check proves the runner stays untouched on denied launches.
     /// </summary>
     [Fact]
-    public async Task LaunchAsync_WhenExecutableDoesNotMatchAllowlist_ReturnsFailureWithoutInvokingRunner()
+    public async Task LaunchAsyncWhenExecutableDoesNotMatchAllowlistReturnsFailureWithoutInvokingRunner()
     {
         var executablePath = GetExistingExecutablePath();
         var processRunner = Substitute.For<IProcessRunner>();
@@ -82,7 +82,7 @@ public sealed class DesktopLaunchServiceTests
     /// fixture so the runner can return a deterministic JSON success payload without external files.
     /// </summary>
     [Fact]
-    public async Task LaunchAsync_WhenExecutableMatchesAllowlist_InvokesRunner()
+    public async Task LaunchAsyncWhenExecutableMatchesAllowlistInvokesRunner()
     {
         var executablePath = GetExistingExecutablePath();
         var processRunner = Substitute.For<IProcessRunner>();

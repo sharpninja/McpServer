@@ -7,7 +7,7 @@ public sealed class MemoryBenchSafetyTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-12: NEG-001 forbids invented favorites in both conditions.</summary>
     [Fact]
-    public void NegativePrompts_NoHallucinatedMemory()
+    public void NegativePromptsNoHallucinatedMemory()
     {
         var cells = MemoryBenchCatalog.StubGrok().Cells.Where(cell => cell.PromptId == "NEG-001").ToList();
         Assert.Equal(2, cells.Count);

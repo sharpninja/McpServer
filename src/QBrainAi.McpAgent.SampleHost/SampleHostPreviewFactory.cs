@@ -229,7 +229,7 @@ internal sealed class SampleHostConsoleApplication : IDisposable
     {
         shouldExit = false;
         commandAction = static _ => Task.CompletedTask;
-        if (!input.StartsWith("/", StringComparison.Ordinal))
+        if (!input.StartsWith('/'))
             return false;
 
         var command = input.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)[0];
@@ -741,7 +741,7 @@ internal sealed class SampleHostConsoleApplication : IDisposable
         Console.WriteLine();
     }
 
-    private void WriteHelp()
+    private static void WriteHelp()
     {
         Console.WriteLine("Commands:");
         Console.WriteLine("  /help    Show this help text.");

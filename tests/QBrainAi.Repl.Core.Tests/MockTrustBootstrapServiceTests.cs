@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class MockTrustBootstrapServiceTests
 {
     [Fact]
-    public async Task PromptUserTrust_ValidNonce_ReturnsTrue()
+    public async Task PromptUserTrustValidNonceReturnsTrue()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -32,7 +32,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task PromptUserTrust_InvalidNonce_ReturnsFalse()
+    public async Task PromptUserTrustInvalidNonceReturnsFalse()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -58,7 +58,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task PromptUserTrust_MissingNonce_ReturnsFalse()
+    public async Task PromptUserTrustMissingNonceReturnsFalse()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -74,7 +74,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task RecordTrustDecision_TrustedWorkspace_PersistsDecision()
+    public async Task RecordTrustDecisionTrustedWorkspacePersistsDecision()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -85,7 +85,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task RecordTrustDecision_DeniedWorkspace_PersistsNegativeDecision()
+    public async Task RecordTrustDecisionDeniedWorkspacePersistsNegativeDecision()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -96,7 +96,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task GetTrustDecision_TrustedWorkspace_ReturnsDecision()
+    public async Task GetTrustDecisionTrustedWorkspaceReturnsDecision()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -111,7 +111,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task GetTrustDecision_DeniedWorkspace_ReturnsNegativeDecision()
+    public async Task GetTrustDecisionDeniedWorkspaceReturnsNegativeDecision()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/denied-project";
@@ -126,7 +126,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task GetTrustDecision_NewWorkspace_ReturnsNoDecision()
+    public async Task GetTrustDecisionNewWorkspaceReturnsNoDecision()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/new-project";
@@ -141,7 +141,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task RevokeTrust_TrustedWorkspace_RemovesFromRegistry()
+    public async Task RevokeTrustTrustedWorkspaceRemovesFromRegistry()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -158,7 +158,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task ListTrustedWorkspaces_MultipleWorkspaces_ReturnsAll()
+    public async Task ListTrustedWorkspacesMultipleWorkspacesReturnsAll()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
@@ -179,7 +179,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task ListTrustedWorkspaces_EmptyRegistry_ReturnsEmpty()
+    public async Task ListTrustedWorkspacesEmptyRegistryReturnsEmpty()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
@@ -193,7 +193,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task ClearAllTrust_RemovesAllDecisions()
+    public async Task ClearAllTrustRemovesAllDecisions()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
@@ -209,7 +209,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task NonceValidation_MultipleAttempts_OnlyAcceptsValidNonce()
+    public async Task NonceValidationMultipleAttemptsOnlyAcceptsValidNonce()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -247,7 +247,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task TrustWorkflow_RecordAfterPrompt_MaintainsState()
+    public async Task TrustWorkflowRecordAfterPromptMaintainsState()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -276,7 +276,7 @@ public class MockTrustBootstrapServiceTests
     }
 
     [Fact]
-    public async Task TrustedWorkspace_IncludesMetadata()
+    public async Task TrustedWorkspaceIncludesMetadata()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 

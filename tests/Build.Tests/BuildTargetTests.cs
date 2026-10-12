@@ -6,8 +6,7 @@ namespace NukeBuild.Tests;
 /// <summary>
 /// TEST-NUKE-001: Verifies that the Nuke _build project compiles and the Build class
 /// is defined with the expected targets. Since NukeBuild requires specific runtime
-/// initialization (assembly name = "_build"), we verify via reflection rather than
-/// direct instantiation.
+/// initialization, we verify via reflection rather than direct instantiation.
 /// </summary>
 public sealed class BuildTargetTests
 {

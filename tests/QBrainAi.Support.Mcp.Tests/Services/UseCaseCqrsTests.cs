@@ -48,7 +48,7 @@ public sealed class UseCaseCqrsTests : IDisposable
     /// and returns a positive useCaseId that list can see.
     /// </summary>
     [Fact]
-    public async Task CreateUseCase_WithoutPreSeededWorkspace_AutoCreatesParentAndPersists()
+    public async Task CreateUseCaseWithoutPreSeededWorkspaceAutoCreatesParentAndPersists()
     {
         var isolated = Path.Combine(Path.GetTempPath(), "mcp-uc-noseed-" + Guid.NewGuid().ToString("N"));
         await using var db = new McpDbContext(_options, new WorkspaceContext
@@ -86,7 +86,7 @@ public sealed class UseCaseCqrsTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-001: CreateUseCaseCommand persists header and returns detail DTO.</summary>
     [Fact]
-    public async Task CreateUseCase_PersistsHeader_AndReturnsDetail()
+    public async Task CreateUseCasePersistsHeaderAndReturnsDetail()
     {
         await using var db = CreateContext();
         var handler = new CreateUseCaseCommandHandler(db, CreateWorkspaceContext());
@@ -123,7 +123,7 @@ public sealed class UseCaseCqrsTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-003: LinkUseCaseToFrCommand validates Kind=fr string id and defaults Realizes.</summary>
     [Fact]
-    public async Task LinkUseCaseToFr_WithStringFrId_DefaultsRealizes()
+    public async Task LinkUseCaseToFrWithStringFrIdDefaultsRealizes()
     {
         await using var db = CreateContext();
         await SeedFrAsync(db, "FR-MCP-USECASE-001", "CRUD use cases").ConfigureAwait(true);
@@ -159,7 +159,7 @@ public sealed class UseCaseCqrsTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-003: Linking a missing FR fails validation.</summary>
     [Fact]
-    public async Task LinkUseCaseToFr_MissingFr_Fails()
+    public async Task LinkUseCaseToFrMissingFrFails()
     {
         await using var db = CreateContext();
         var create = await new CreateUseCaseCommandHandler(db, CreateWorkspaceContext())
@@ -179,7 +179,7 @@ public sealed class UseCaseCqrsTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-003: Duplicate active UC-FR link returns conflict failure.</summary>
     [Fact]
-    public async Task LinkUseCaseToFr_Duplicate_FailsWithConflict()
+    public async Task LinkUseCaseToFrDuplicateFailsWithConflict()
     {
         await using var db = CreateContext();
         await SeedFrAsync(db, "FR-MCP-USECASE-003", "Links").ConfigureAwait(true);
@@ -202,7 +202,7 @@ public sealed class UseCaseCqrsTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-001: Soft-delete hides use case from get/list queries.</summary>
     [Fact]
-    public async Task DeleteUseCase_SoftDeletes_HidesFromGetAndList()
+    public async Task DeleteUseCaseSoftDeletesHidesFromGetAndList()
     {
         await using var db = CreateContext();
         var create = await new CreateUseCaseCommandHandler(db, CreateWorkspaceContext())
@@ -237,7 +237,7 @@ public sealed class UseCaseCqrsTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-003 / TR-MCP-USECASE-006: Coverage reports Realizes gaps for UC and FR.</summary>
     [Fact]
-    public async Task Coverage_ReportsUseCasesAndFrsWithoutRealizes()
+    public async Task CoverageReportsUseCasesAndFrsWithoutRealizes()
     {
         await using var db = CreateContext();
         await SeedFrAsync(db, "FR-A", "A").ConfigureAwait(true);
@@ -277,7 +277,7 @@ public sealed class UseCaseCqrsTests : IDisposable
 
     /// <summary>FR-MCP-USECASE-004: CreateUseCaseFromFrCommand builds shell UC with Realizes link.</summary>
     [Fact]
-    public async Task CreateUseCaseFromFr_CreatesShellWithRealizesLink()
+    public async Task CreateUseCaseFromFrCreatesShellWithRealizesLink()
     {
         await using var db = CreateContext();
         await SeedFrAsync(db, "FR-MCP-USECASE-004", "From FR title").ConfigureAwait(true);
@@ -295,7 +295,7 @@ public sealed class UseCaseCqrsTests : IDisposable
 
     /// <summary>TR-MCP-USECASE-004: Diagram query returns scoped Mermaid UML use-case content.</summary>
     [Fact]
-    public async Task GetUseCaseDiagram_ReturnsScopedMermaidUml()
+    public async Task GetUseCaseDiagramReturnsScopedMermaidUml()
     {
         await using var db = CreateContext();
         var create = await new CreateUseCaseCommandHandler(db, CreateWorkspaceContext())

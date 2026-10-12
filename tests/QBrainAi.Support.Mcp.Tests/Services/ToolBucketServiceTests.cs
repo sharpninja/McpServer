@@ -42,7 +42,7 @@ public sealed class ToolBucketServiceTests : IDisposable
     /// Validates FR-MCP-022 and TR-MCP-MT-003.
     /// </summary>
     [Fact]
-    public async Task AddBucketAsync_WhenGlobalBucketExistsOutsideWorkspaceScope_ReturnsConflict()
+    public async Task AddBucketAsyncWhenGlobalBucketExistsOutsideWorkspaceScopeReturnsConflict()
     {
         using (var seed = CreateContext(null))
         {
@@ -65,7 +65,7 @@ public sealed class ToolBucketServiceTests : IDisposable
     /// FR-MCP-022 and TR-MCP-MT-003.
     /// </summary>
     [Fact]
-    public async Task BrowseAsync_WhenGlobalBucketExistsOutsideWorkspaceScope_ReturnsManifests()
+    public async Task BrowseAsyncWhenGlobalBucketExistsOutsideWorkspaceScopeReturnsManifests()
     {
         using (var seed = CreateContext(null))
         {
@@ -109,7 +109,7 @@ public sealed class ToolBucketServiceTests : IDisposable
     /// credential profile.
     /// </summary>
     [Fact]
-    public async Task BrowseAsync_WhenGitHubCliFails_UsesHttpFallback()
+    public async Task BrowseAsyncWhenGitHubCliFailsUsesHttpFallback()
     {
         using (var seed = CreateContext(null))
         {
@@ -141,7 +141,7 @@ public sealed class ToolBucketServiceTests : IDisposable
     /// Validates FR-MCP-022 and TR-MCP-MT-003.
     /// </summary>
     [Fact]
-    public async Task ListBucketsAsync_WithoutWorkspaceScope_ReturnsOnlyGlobalBuckets()
+    public async Task ListBucketsAsyncWithoutWorkspaceScopeReturnsOnlyGlobalBuckets()
     {
         using (var seed = CreateContext(null))
         {

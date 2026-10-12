@@ -7,7 +7,7 @@ public sealed class MemoryBenchDocsTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-32: README documents one-plugin and all-eight runs.</summary>
     [Fact]
-    public void Readme_RunInstructions()
+    public void ReadmeRunInstructions()
     {
         var readme = Readme();
         Assert.Contains("./build.ps1 BenchMemory", readme, StringComparison.Ordinal);
@@ -19,7 +19,7 @@ public sealed class MemoryBenchDocsTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-33: USER-GUIDE or MCP-SERVER links the pack.</summary>
     [Fact]
-    public void UserGuide_LinksPack()
+    public void UserGuideLinksPack()
     {
         var root = MemoryBenchCatalog.FindRepoRoot();
         var docs = File.ReadAllText(Path.Combine(root, "docs", "USER-GUIDE.md"))
@@ -30,7 +30,7 @@ public sealed class MemoryBenchDocsTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-45: README states tokens are primary; pass/fail is correctness/safety.</summary>
     [Fact]
-    public void Readme_TokensArePrimaryMetric()
+    public void ReadmeTokensArePrimaryMetric()
     {
         var readme = Readme();
         Assert.Contains("Primary metric: tokens used", readme, StringComparison.Ordinal);
@@ -39,7 +39,7 @@ public sealed class MemoryBenchDocsTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-14: README documents Grok as the pilot validation path.</summary>
     [Fact]
-    public void Readme_GrokIsPilot()
+    public void ReadmeGrokIsPilot()
     {
         var readme = Readme();
         Assert.Contains("Grok", readme, StringComparison.Ordinal);

@@ -19,7 +19,7 @@ public sealed class MemoryIntegrationTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-018-46: Integration tests use the Grok lane as the pilot host.</summary>
     [Fact]
-    public void UseGrokLane_AsPilot()
+    public void UseGrokLaneAsPilot()
     {
         IMemoryBenchPluginAdapter adapter = new MemoryBenchGrokAdapter();
         Assert.Equal("grok", adapter.PluginId);
@@ -32,7 +32,7 @@ public sealed class MemoryIntegrationTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-018-49: Grok remember→recall/injection path records tokens as primary.</summary>
     [Fact]
-    public async Task Grok_RememberRecall_EndToEnd()
+    public async Task GrokRememberRecallEndToEnd()
     {
         var remembered = await _harness.RememberAsync(new MemoryRememberRequest
         {

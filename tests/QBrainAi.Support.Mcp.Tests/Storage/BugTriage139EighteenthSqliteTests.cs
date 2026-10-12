@@ -17,7 +17,7 @@ public sealed class BugTriage139EighteenthSqliteTests
     /// caller is inspected, reused, and disposed before the deliberately blocked worker is released.
     /// </summary>
     [Fact]
-    public async Task OpenAsync_Timeout_CallerIsRestoredReusableAndDisposableBeforeWorkerRelease()
+    public async Task OpenAsyncTimeoutCallerIsRestoredReusableAndDisposableBeforeWorkerRelease()
     {
         var connection = new SqliteConnection("Data Source=:memory:;Pooling=False");
         connection.DefaultTimeout = 37;

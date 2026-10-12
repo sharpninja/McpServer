@@ -24,7 +24,7 @@ public sealed class TurnTransactionPlanArtifactTests
     /// repo annotations.
     /// </summary>
     [Fact]
-    public void ImportedPlan_PreservesAllSixMermaidDiagramIds()
+    public void ImportedPlanPreservesAllSixMermaidDiagramIds()
     {
         var text = ReadTransactionPlan();
 
@@ -47,7 +47,7 @@ public sealed class TurnTransactionPlanArtifactTests
     /// transaction slice.
     /// </summary>
     [Fact]
-    public void ImportedPlan_ReferencesImplementedTransactionComponentsAndTests()
+    public void ImportedPlanReferencesImplementedTransactionComponentsAndTests()
     {
         var repoRoot = FindRepoRoot();
         var text = ReadTransactionPlan();
@@ -82,7 +82,7 @@ public sealed class TurnTransactionPlanArtifactTests
     /// are concrete traceability artifacts rather than placeholder backfills.
     /// </summary>
     [Fact]
-    public void TransactionPlanRequirements_AreConcreteAndMapped()
+    public void TransactionPlanRequirementsAreConcreteAndMapped()
     {
         var functional = ReadProjectFile("Functional-Requirements.md");
         var technical = ReadProjectFile("Technical-Requirements.md");
@@ -142,7 +142,7 @@ public sealed class TurnTransactionPlanArtifactTests
     /// validates the implemented/deferred split and the two architecture/design rounds remain explicit local artifacts.
     /// </summary>
     [Fact]
-    public void PlanArtifacts_PreserveDeferredScopeAndDesignRounds()
+    public void PlanArtifactsPreserveDeferredScopeAndDesignRounds()
     {
         var plan = ReadTransactionPlan();
         var round1 = ReadProjectFile("TurnTransactions-Architecture-Round1.md");

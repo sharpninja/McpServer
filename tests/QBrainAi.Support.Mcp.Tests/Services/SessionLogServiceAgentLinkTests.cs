@@ -35,7 +35,7 @@ public sealed class SessionLogServiceAgentLinkTests : IDisposable
     }
 
     [Fact]
-    public async Task SubmitAsync_WhenSourceTypeMatchesAgentDefinition_LinksAgentDefinitionId()
+    public async Task SubmitAsyncWhenSourceTypeMatchesAgentDefinitionLinksAgentDefinitionId()
     {
         _db.AgentDefinitions.Add(new AgentDefinitionEntity
         {
@@ -60,7 +60,7 @@ public sealed class SessionLogServiceAgentLinkTests : IDisposable
     }
 
     [Fact]
-    public async Task QueryAsync_WhenFilteringByAgentDefinitionId_ReturnsOnlyMatchingSessions()
+    public async Task QueryAsyncWhenFilteringByAgentDefinitionIdReturnsOnlyMatchingSessions()
     {
         _db.AgentDefinitions.AddRange(
             new AgentDefinitionEntity

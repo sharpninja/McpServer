@@ -14,7 +14,7 @@ public sealed class ProviderDatabaseIntegrationTests
     /// Verifies that the SQLite provider can migrate and persist data against a clean on-disk database file.
     /// </summary>
     [Fact]
-    public async Task Sqlite_CleanDatabase_AppliesMigrationsAndPersistsEntity()
+    public async Task SqliteCleanDatabaseAppliesMigrationsAndPersistsEntity()
     {
         await using var workspace = ProviderIntegrationTestSupport.CreateWorkspace();
         var databasePath = workspace.GetDatabasePath("sqlite-provider-clean.db");
@@ -47,7 +47,7 @@ public sealed class ProviderDatabaseIntegrationTests
     /// instance created by the test harness.
     /// </summary>
     [Fact]
-    public async Task SqlServer_LocalDb_CleanDatabase_AppliesMigrationsAndPersistsEntity()
+    public async Task SqlServerLocalDbCleanDatabaseAppliesMigrationsAndPersistsEntity()
     {
         await using var workspace = ProviderIntegrationTestSupport.CreateWorkspace();
         await using var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
@@ -80,7 +80,7 @@ public sealed class ProviderDatabaseIntegrationTests
     /// or MCP_TEST_POSTGRES_CONNECTION. No skip.
     /// </summary>
     [Fact]
-    public async Task PostgreSql_CleanDatabase_AppliesHandoffMigrationAndPersistsEntity()
+    public async Task PostgreSqlCleanDatabaseAppliesHandoffMigrationAndPersistsEntity()
     {
         await using var workspace = ProviderIntegrationTestSupport.CreateWorkspace();
         await using var postgres = new EphemeralPostgresSandbox();

@@ -16,7 +16,7 @@ public sealed class ListWorkspacesTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task List_Returns200_WithValidStructure()
+    public async Task ListReturns200WithValidStructure()
     {
         var response = await _fixture.Client.GetAsync(WorkspaceEndpointFixture.WorkspaceRoute, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -31,7 +31,7 @@ public sealed class ListWorkspacesTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task List_ResponseIsJson()
+    public async Task ListResponseIsJson()
     {
         var response = await _fixture.Client.GetAsync(WorkspaceEndpointFixture.WorkspaceRoute, cancellationToken: TestContext.Current.CancellationToken);
 

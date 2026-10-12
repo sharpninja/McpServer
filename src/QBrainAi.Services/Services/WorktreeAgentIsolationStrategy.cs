@@ -94,7 +94,7 @@ public sealed class WorktreeAgentIsolationStrategy : IAgentIsolationStrategy
         _logger.LogInformation("Removed agent worktree at {WorktreePath}", worktreePath);
     }
 
-    private async Task CopyMarkerFileIfPresentAsync(string workspacePath, string worktreePath, CancellationToken ct)
+    private static async Task CopyMarkerFileIfPresentAsync(string workspacePath, string worktreePath, CancellationToken ct)
     {
         var markerSourcePath = Path.Combine(workspacePath, MarkerFileService.MarkerFileName);
         if (!File.Exists(markerSourcePath))

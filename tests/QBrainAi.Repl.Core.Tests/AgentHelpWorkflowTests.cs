@@ -19,7 +19,7 @@ public sealed class AgentHelpWorkflowTests
 
     /// <summary>Verifies that create session posts through the typed Agent Help client.</summary>
     [Fact]
-    public async Task CreateSessionAsync_PostsAgentHelpSessionRequest()
+    public async Task CreateSessionAsyncPostsAgentHelpSessionRequest()
     {
         var handler = new JsonHandler("""
             {"sessionId":"help-001","status":"created","executionStrategy":"stub"}
@@ -45,7 +45,7 @@ public sealed class AgentHelpWorkflowTests
 
     /// <summary>Verifies that submit turn posts to the expected REST path.</summary>
     [Fact]
-    public async Task SubmitTurnAsync_PostsTurnRequest()
+    public async Task SubmitTurnAsyncPostsTurnRequest()
     {
         var handler = new JsonHandler("""
             {"sessionId":"help-001","turnId":"turn-001","status":"completed","latencyMs":1}
@@ -66,7 +66,7 @@ public sealed class AgentHelpWorkflowTests
 
     /// <summary>Verifies that get status reads from the expected REST path.</summary>
     [Fact]
-    public async Task GetStatusAsync_GetsSessionStatus()
+    public async Task GetStatusAsyncGetsSessionStatus()
     {
         var handler = new JsonHandler("""
             {"sessionId":"help-001","status":"created","createdUtc":"2026-07-08T00:00:00Z","lastUpdatedUtc":"2026-07-08T00:00:00Z","executionStrategy":"stub"}

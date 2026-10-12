@@ -22,7 +22,7 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
     /// This data is used to prove that the command parser can separate maintenance-only switches from configuration overrides safely.
     /// </remarks>
     [Fact]
-    public void TryParse_EnableCommand_ReturnsExpectedOptions()
+    public void TryParseEnableCommandReturnsExpectedOptions()
     {
         var parsed = McpDatabaseEncryptionTransitionCommand.TryParse(
             [
@@ -60,7 +60,7 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
     /// This data is used to prove that the documented environment-variable override resolves the same effective instance selector as the explicit CLI option.
     /// </remarks>
     [Fact]
-    public void TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted()
+    public void TryParseUsesEnvironmentInstanceWhenCliInstanceIsOmitted()
     {
         var previous = Environment.GetEnvironmentVariable("MCP_INSTANCE");
         try
@@ -95,7 +95,7 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
     /// This data is used to ensure the maintenance command reports invalid CLI usage clearly and prevents accidental execution against the wrong settings.
     /// </remarks>
     [Fact]
-    public void TryParse_MissingOptionValue_ReturnsError()
+    public void TryParseMissingOptionValueReturnsError()
     {
         var parsed = McpDatabaseEncryptionTransitionCommand.TryParse(
             [
@@ -121,7 +121,7 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
     /// This data is used to validate the no-data-loss copy-and-verify workflow that will later be executed against a real SEE-enabled runtime.
     /// </remarks>
     [Fact]
-    public async Task RunAsync_DryRunSqliteEnable_BuildsSeeWorkflow()
+    public async Task RunAsyncDryRunSqliteEnableBuildsSeeWorkflow()
     {
         var runtimeOptions = CreateRuntimeOptions(
             "sqlite",
@@ -157,7 +157,7 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
     /// This data is used to confirm the transition plan captures both rollback material and pg_tde table rewrite steps without requiring a live PostgreSQL server.
     /// </remarks>
     [Fact]
-    public async Task RunAsync_DryRunPostgreSqlDisable_BuildsRewritePlan()
+    public async Task RunAsyncDryRunPostgreSqlDisableBuildsRewritePlan()
     {
         var runtimeOptions = CreateRuntimeOptions(
             "postgresql",
@@ -191,7 +191,7 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
     /// This data is used to validate the maintenance command’s TDE transition plan without requiring a non-LocalDB SQL Server target during unit testing.
     /// </remarks>
     [Fact]
-    public async Task RunAsync_DryRunSqlServerEnable_BuildsTdePlan()
+    public async Task RunAsyncDryRunSqlServerEnableBuildsTdePlan()
     {
         var runtimeOptions = CreateRuntimeOptions(
             "sqlserver",

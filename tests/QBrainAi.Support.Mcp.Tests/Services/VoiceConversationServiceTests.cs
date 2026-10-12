@@ -17,7 +17,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class VoiceConversationServiceTests
 {
     [Fact]
-    public async Task CreateSessionAsync_SameAgentAndWorkspace_ReusesExistingIdleSession()
+    public async Task CreateSessionAsyncSameAgentAndWorkspaceReusesExistingIdleSession()
     {
         using var service = CreateService();
 
@@ -41,7 +41,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task CreateSessionAsync_SameAgentDifferentWorkspace_DoesNotReuseSession()
+    public async Task CreateSessionAsyncSameAgentDifferentWorkspaceDoesNotReuseSession()
     {
         using var service = CreateService();
 
@@ -65,7 +65,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task SendSessionMessageAsync_OneShotSession_ReturnsFalse()
+    public async Task SendSessionMessageAsyncOneShotSessionReturnsFalse()
     {
         using var service = CreateService();
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
@@ -80,7 +80,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task CreateSessionAsync_UsesConfiguredDefaultExecutionStrategy_WhenRequestOmitsOne()
+    public async Task CreateSessionAsyncUsesConfiguredDefaultExecutionStrategyWhenRequestOmitsOne()
     {
         using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedMcpAgent);
 
@@ -93,7 +93,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task CreateSessionAsync_ExplicitExecutionStrategy_OverridesConfiguredDefault()
+    public async Task CreateSessionAsyncExplicitExecutionStrategyOverridesConfiguredDefault()
     {
         using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedMcpAgent);
 
@@ -107,7 +107,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnAsync_IncludesConfiguredModelApiKeyInExecutionOptions()
+    public async Task SubmitTurnAsyncIncludesConfiguredModelApiKeyInExecutionOptions()
     {
         var hostedStrategy = new CapturingAgentExecutionStrategy(AgentExecutionStrategyNames.HostedMcpAgent);
         using var service = CreateService(
@@ -134,7 +134,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnAsync_UsesInfiniteCopilotTimeoutInExecutionOptions()
+    public async Task SubmitTurnAsyncUsesInfiniteCopilotTimeoutInExecutionOptions()
     {
         var hostedStrategy = new CapturingAgentExecutionStrategy(AgentExecutionStrategyNames.HostedMcpAgent);
         using var service = CreateService(
@@ -156,7 +156,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task SubmitTurnStreamingAsync_EmptyRuntimeStream_EmitsErrorAndRecordsAssistantError()
+    public async Task SubmitTurnStreamingAsyncEmptyRuntimeStreamEmitsErrorAndRecordsAssistantError()
     {
         using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedMcpAgent);
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
@@ -191,7 +191,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task AgentCliInteractiveSession_ReadInitialResponseStreamingAsync_StdoutClosesAfterNonzeroExit_ThrowsDiagnostic()
+    public async Task AgentCliInteractiveSessionReadInitialResponseStreamingAsyncStdoutClosesAfterNonzeroExitThrowsDiagnostic()
     {
         const string stderr = "GitHub Copilot CLI requires Node.js v24 or higher.";
         var process = new FakeSpawnedProcess(stdout: string.Empty, stderr: stderr, exitCode: 1);

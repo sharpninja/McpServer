@@ -18,7 +18,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test uses an in-memory service collection with a local workspace path and API key so the scaffold proves registration behavior without requiring a live MCP workflow runtime.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_RegistersScaffoldedHostedAgent()
+    public void AddQBrainAiMcpAgentRegistersScaffoldedHostedAgent()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -68,7 +68,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// strict invariants through normal dependency injection without changing default registration.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_RegistersAcidTightlyCoupledProfile()
+    public void AddQBrainAiMcpAgentRegistersAcidTightlyCoupledProfile()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -85,11 +85,11 @@ public sealed class ServiceCollectionExtensionsTests
         var definition = QBAgentDefinition.Instance;
 
         Assert.Equal(McpAgentExecutionProfile.AcidTightlyCoupled, hostedAgent.ExecutionProfile);
-        Assert.Equal(definition.AgentId, hostedAgent.AgentOptions.Id);
-        Assert.Equal(definition.AgentName, hostedAgent.AgentOptions.Name);
-        Assert.Equal(definition.Description, hostedAgent.AgentOptions.Description);
-        Assert.Equal(definition.SourceType, hostedAgent.SourceType);
-        Assert.Equal(definition.AgentId, agentOptions.Id);
+        Assert.Equal(QBAgentDefinition.AgentId, hostedAgent.AgentOptions.Id);
+        Assert.Equal(QBAgentDefinition.AgentName, hostedAgent.AgentOptions.Name);
+        Assert.Equal(QBAgentDefinition.Description, hostedAgent.AgentOptions.Description);
+        Assert.Equal(QBAgentDefinition.SourceType, hostedAgent.SourceType);
+        Assert.Equal(QBAgentDefinition.AgentId, agentOptions.Id);
         Assert.Equal("acid-token", hostedAgent.Client.ApiKey);
     }
 
@@ -98,7 +98,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test resolves validators from a local service provider because this todo only covers registration wiring, not runtime workflow execution.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_RegistersOptionsValidator()
+    public void AddQBrainAiMcpAgentRegistersOptionsValidator()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -118,7 +118,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// stateful wrappers instead of reusing a single session-log workflow context across runs.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_RegistersHostedAgentFactory()
+    public void AddQBrainAiMcpAgentRegistersHostedAgentFactory()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -143,7 +143,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test intentionally omits both ApiKey and BearerToken while keeping a valid localhost base URL and fully qualified workspace path to isolate the auth validation path.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_ThrowsWhenAuthenticationIsMissing()
+    public void AddQBrainAiMcpAgentThrowsWhenAuthenticationIsMissing()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -165,7 +165,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test uses a localhost HTTPS endpoint and a fake bearer token because no live MCP transport is needed to confirm DI registration behavior.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_AllowsBearerTokenAuthentication()
+    public void AddQBrainAiMcpAgentAllowsBearerTokenAuthentication()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -186,7 +186,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test uses a hyphenated source type because later session-log workflows require canonical Pascal-case agent prefixes that match the shared naming rules.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_ThrowsWhenSourceTypeIsInvalid()
+    public void AddQBrainAiMcpAgentThrowsWhenSourceTypeIsInvalid()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -209,7 +209,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test uses a relative path string to isolate the workspace-header validation behavior without involving any filesystem access.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_ThrowsWhenWorkspacePathIsNotFullyQualified()
+    public void AddQBrainAiMcpAgentThrowsWhenWorkspacePathIsNotFullyQualified()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -231,7 +231,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// workspace binding used for audit and transaction scope.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_ThrowsWhenAcidProfileWorkspacePathIsMissing()
+    public void AddQBrainAiMcpAgentThrowsWhenAcidProfileWorkspacePathIsMissing()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -253,7 +253,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test uses an FTP URI to prove only the HTTP/S schemes accepted by the MCP client surface are allowed during options validation.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_ThrowsWhenBaseUrlSchemeIsInvalid()
+    public void AddQBrainAiMcpAgentThrowsWhenBaseUrlSchemeIsInvalid()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -276,7 +276,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test leaves credentials unset but supplies a valid localhost base URL and workspace path so only the opt-out authentication flag controls the result.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_AllowsMissingAuthenticationWhenDisabled()
+    public void AddQBrainAiMcpAgentAllowsMissingAuthenticationWhenDisabled()
     {
         var services = new ServiceCollection();
         services.AddQBrainAiMcpAgent(options =>
@@ -297,7 +297,7 @@ public sealed class ServiceCollectionExtensionsTests
     /// The test uses a locally configured options instance to prove the parameterless registration overload remains DI-friendly for hosts that bind configuration outside the extension method.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_UsesPreconfiguredOptions()
+    public void AddQBrainAiMcpAgentUsesPreconfiguredOptions()
     {
         var services = new ServiceCollection();
         services.AddOptions<McpAgentOptions>()

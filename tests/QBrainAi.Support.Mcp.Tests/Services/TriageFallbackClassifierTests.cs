@@ -25,7 +25,7 @@ public sealed class TriageFallbackClassifierTests
     [InlineData("openai: insufficient_quota for this key")]
     [InlineData("status 401 unauthorized")]
     [InlineData("The service is temporarily unavailable, try again later")]
-    public void ShouldFallback_WhenRetryableSignalInStderr_ReturnsTrue(string stderr)
+    public void ShouldFallbackWhenRetryableSignalInStderrReturnsTrue(string stderr)
     {
         var result = new AgentCliResult { State = AgentCliResultState.Error, Stderr = stderr, ExitCode = 1 };
 
@@ -34,7 +34,7 @@ public sealed class TriageFallbackClassifierTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a retryable signal in the body (not stderr) still classifies as fallback-eligible.</summary>
     [Fact]
-    public void ShouldFallback_WhenSignalInBody_ReturnsTrue()
+    public void ShouldFallbackWhenSignalInBodyReturnsTrue()
     {
         var result = new AgentCliResult { State = AgentCliResultState.Error, Body = "grok CLI: 429 rate-limit", ExitCode = 1 };
 
@@ -46,7 +46,7 @@ public sealed class TriageFallbackClassifierTests
     [Theory]
     [InlineData("request failed with HTTP 452")]
     [InlineData("status: 418 returned by gateway")]
-    public void ShouldFallback_WhenHttp4xxWithContext_ReturnsTrue(string stderr)
+    public void ShouldFallbackWhenHttp4xxWithContextReturnsTrue(string stderr)
     {
         var result = new AgentCliResult { State = AgentCliResultState.Error, Stderr = stderr, ExitCode = 1 };
 
@@ -55,7 +55,7 @@ public sealed class TriageFallbackClassifierTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a successful result never falls back even when the output contains a signal token.</summary>
     [Fact]
-    public void ShouldFallback_WhenSuccess_ReturnsFalse()
+    public void ShouldFallbackWhenSuccessReturnsFalse()
     {
         var result = new AgentCliResult { State = AgentCliResultState.Success, Body = "429 appeared in normal output", ExitCode = 0 };
 
@@ -64,7 +64,7 @@ public sealed class TriageFallbackClassifierTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a generic non-API failure with no trigger signal does not fall back.</summary>
     [Fact]
-    public void ShouldFallback_WhenGenericErrorWithoutSignal_ReturnsFalse()
+    public void ShouldFallbackWhenGenericErrorWithoutSignalReturnsFalse()
     {
         var result = new AgentCliResult { State = AgentCliResultState.Error, Stderr = "System.NullReferenceException: object reference not set", ExitCode = 1 };
 
@@ -73,7 +73,7 @@ public sealed class TriageFallbackClassifierTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a bare 3-digit code embedded in a larger number does not false-trigger (word-boundary match).</summary>
     [Fact]
-    public void ShouldFallback_WhenNumericCodeIsSubstringOfLargerNumber_ReturnsFalse()
+    public void ShouldFallbackWhenNumericCodeIsSubstringOfLargerNumberReturnsFalse()
     {
         var result = new AgentCliResult { State = AgentCliResultState.Error, Stderr = "processed 4013 tokens in 5290 ms", ExitCode = 1 };
 
@@ -82,7 +82,7 @@ public sealed class TriageFallbackClassifierTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a run timeout falls back when FallbackOnTimeout is enabled (default).</summary>
     [Fact]
-    public void ShouldFallback_WhenTimedOutAndTimeoutFallbackEnabled_ReturnsTrue()
+    public void ShouldFallbackWhenTimedOutAndTimeoutFallbackEnabledReturnsTrue()
     {
         var result = new AgentCliResult { State = AgentCliResultState.Error, Stderr = string.Empty, ExitCode = null };
 
@@ -91,7 +91,7 @@ public sealed class TriageFallbackClassifierTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a timeout-marker in stderr falls back when FallbackOnTimeout is enabled even without the runner flag.</summary>
     [Fact]
-    public void ShouldFallback_WhenTimeoutMarkerInStderrAndTimeoutFallbackEnabled_ReturnsTrue()
+    public void ShouldFallbackWhenTimeoutMarkerInStderrAndTimeoutFallbackEnabledReturnsTrue()
     {
         var result = new AgentCliResult { State = AgentCliResultState.Error, Stderr = "error: One-shot CLI agent run was cancelled or timed out.", ExitCode = null };
 
@@ -100,7 +100,7 @@ public sealed class TriageFallbackClassifierTests
 
     /// <summary>TEST-MCP-TRIAGE-008: a run timeout does NOT fall back when FallbackOnTimeout is disabled.</summary>
     [Fact]
-    public void ShouldFallback_WhenTimedOutButTimeoutFallbackDisabled_ReturnsFalse()
+    public void ShouldFallbackWhenTimedOutButTimeoutFallbackDisabledReturnsFalse()
     {
         var result = new AgentCliResult { State = AgentCliResultState.Error, Stderr = "error: run was cancelled or timed out.", ExitCode = null };
 

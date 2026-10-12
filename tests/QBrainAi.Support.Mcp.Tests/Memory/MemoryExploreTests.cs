@@ -17,7 +17,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-01: Given explicit edge A to B, explore(A) includes B with weight and EdgeType.</summary>
     [Fact]
-    public async Task ExplicitEdge_ReturnedWithWeight()
+    public async Task ExplicitEdgeReturnedWithWeight()
     {
         var seed = await SeedAsync("explore seed A").ConfigureAwait(true);
         var neighbor = await SeedAsync("explore neighbor B").ConfigureAwait(true);
@@ -36,7 +36,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-02: With Hebbian Enabled=false (default), explore never returns co-retrieved-only edges.</summary>
     [Fact]
-    public async Task HebbianOff_NoCoRetrievedOnlyEdges()
+    public async Task HebbianOffNoCoRetrievedOnlyEdges()
     {
         Assert.False(MemoryExploreLimits.DefaultHebbianEnabled);
 
@@ -60,7 +60,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-03: With Hebbian enabled, co-retrieval strengthens co-retrieved edges without changing recall ranking.</summary>
     [Fact]
-    public async Task HebbianOn_StrengthensCoRetrieved()
+    public async Task HebbianOnStrengthensCoRetrieved()
     {
         var first = await SeedAsync("hebbian-on shared token alpha").ConfigureAwait(true);
         var second = await SeedAsync("hebbian-on shared token beta").ConfigureAwait(true);
@@ -94,7 +94,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-04: Unknown seed memory id returns 404.</summary>
     [Fact]
-    public async Task UnknownSeed_Returns404()
+    public async Task UnknownSeedReturns404()
     {
         var explore = await _harness.ExploreAsync(
             new MemoryExploreRequest { SeedId = "MEMORY-NO-SUCH-SEED" },
@@ -128,7 +128,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-06: Soft-deleted seed returns 404.</summary>
     [Fact]
-    public async Task SoftDeletedSeed_Returns404()
+    public async Task SoftDeletedSeedReturns404()
     {
         var seed = await SeedAsync("soft-deleted seed").ConfigureAwait(true);
         var neighbor = await SeedAsync("soft-deleted seed neighbor").ConfigureAwait(true);
@@ -147,7 +147,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-07: Soft-deleted neighbor is omitted from explore results.</summary>
     [Fact]
-    public async Task SoftDeletedNeighbor_Omitted()
+    public async Task SoftDeletedNeighborOmitted()
     {
         var seed = await SeedAsync("live seed for deleted neighbor").ConfigureAwait(true);
         var live = await SeedAsync("live neighbor").ConfigureAwait(true);
@@ -170,7 +170,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-08: depth=1 returns only direct neighbors; depth&gt;1 returns transitive hops.</summary>
     [Fact]
-    public async Task Depth_ControlsHops()
+    public async Task DepthControlsHops()
     {
         var seed = await SeedAsync("depth seed").ConfigureAwait(true);
         var hop1 = await SeedAsync("depth hop-1").ConfigureAwait(true);
@@ -197,7 +197,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-09: depth=0 or negative returns 400.</summary>
     [Fact]
-    public async Task DepthNonPositive_Returns400()
+    public async Task DepthNonPositiveReturns400()
     {
         var seed = await SeedAsync("depth bounds seed").ConfigureAwait(true);
 
@@ -216,7 +216,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-10: depth above max returns 400 (documented).</summary>
     [Fact]
-    public async Task DepthAboveMax_StableBehavior()
+    public async Task DepthAboveMaxStableBehavior()
     {
         var seed = await SeedAsync("depth max seed").ConfigureAwait(true);
 
@@ -231,7 +231,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-11: Self-loop edges are rejected on create (400) or never returned.</summary>
     [Fact]
-    public async Task SelfLoop_RejectedOrAbsent()
+    public async Task SelfLoopRejectedOrAbsent()
     {
         var seed = await SeedAsync("self-loop seed").ConfigureAwait(true);
 
@@ -260,7 +260,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-13: Explore with query seed (no id) returns the neighborhood around the top recall hit or empty.</summary>
     [Fact]
-    public async Task QuerySeed_UsesTopRecallOrEmpty()
+    public async Task QuerySeedUsesTopRecallOrEmpty()
     {
         var top = await SeedAsync("query-seed unique-token-alpha").ConfigureAwait(true);
         var neighbor = await SeedAsync("query-seed neighbor").ConfigureAwait(true);
@@ -285,7 +285,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-16: While Hebbian is off, explore ignores previously created co-retrieved edges unless explicitly kept.</summary>
     [Fact]
-    public async Task HebbianToggle_DocumentedVisibility()
+    public async Task HebbianToggleDocumentedVisibility()
     {
         var seed = await SeedAsync("hebbian-toggle seed").ConfigureAwait(true);
         var neighbor = await SeedAsync("hebbian-toggle neighbor").ConfigureAwait(true);
@@ -335,7 +335,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-18: A to B does not imply B to A unless a reverse edge exists.</summary>
     [Fact]
-    public async Task Directed_NoImpliedReverse()
+    public async Task DirectedNoImpliedReverse()
     {
         var from = await SeedAsync("directed from").ConfigureAwait(true);
         var to = await SeedAsync("directed to").ConfigureAwait(true);
@@ -357,7 +357,7 @@ public sealed class MemoryExploreTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-19: maxNeighbors truncates; stable order is weight desc then id.</summary>
     [Fact]
-    public async Task MaxNeighbors_TruncatesStable()
+    public async Task MaxNeighborsTruncatesStable()
     {
         var seed = await SeedAsync("max-neighbors seed").ConfigureAwait(true);
         var heavy = await SeedAsync("max-neighbors heavy", id: "MEMORY-S3NBR-003").ConfigureAwait(true);

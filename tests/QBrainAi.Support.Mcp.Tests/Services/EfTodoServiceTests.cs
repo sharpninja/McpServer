@@ -101,7 +101,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// change event.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_PersistsAndRoundTrips()
+    public async Task CreateAsyncPersistsAndRoundTrips()
     {
         var result = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -123,7 +123,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// <c>(TodoId, Version)</c>.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_AppendsAuditRow_MonotonicVersion()
+    public async Task UpdateAsyncAppendsAuditRowMonotonicVersion()
     {
         await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -144,7 +144,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// exactly enough to clear values that public update DTOs cannot clear.
     /// </summary>
     [Fact]
-    public async Task RestoreAsync_AfterUpdate_RestoresCapturedEntityState()
+    public async Task RestoreAsyncAfterUpdateRestoresCapturedEntityState()
     {
         var create = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -192,7 +192,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// TEST-MCP-161: Store-level compensation restores a soft-deleted EF TODO row.
     /// </summary>
     [Fact]
-    public async Task RestoreAsync_AfterDelete_RestoresSoftDeletedTodo()
+    public async Task RestoreAsyncAfterDeleteRestoresSoftDeletedTodo()
     {
         var create = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -225,7 +225,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// and keyword filters applied through the relational layer.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_FiltersByPriorityAndKeyword()
+    public async Task QueryAsyncFiltersByPriorityAndKeyword()
     {
         var createA = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-ALPHA-001", Title = "alpha widget", Section = "s", Priority = "high" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(createA.Success, createA.Error);
@@ -246,7 +246,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// revives the row instead of returning an opaque UNIQUE/already-exists error.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_SoftDeletedId_RevivesOrSkips()
+    public async Task CreateAsyncSoftDeletedIdRevivesOrSkips()
     {
         var first = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -285,7 +285,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// and appends a <c>deleted</c> audit entry, making the TODO unfindable.
     /// </summary>
     [Fact]
-    public async Task DeleteAsync_RemovesAndAppendsAudit()
+    public async Task DeleteAsyncRemovesAndAppendsAudit()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-DEL-001", Title = "doomed", Section = "s", Priority = "low" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
@@ -302,7 +302,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// and report a consistent projection after create, update, and delete.
     /// </summary>
     [Fact]
-    public async Task CreateUpdateDelete_ProjectsYamlAndReportsConsistentStatus()
+    public async Task CreateUpdateDeleteProjectsYamlAndReportsConsistentStatus()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -343,7 +343,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// TR-MCP-TODO-006: EF projection status detects missing projected YAML and asks for repair.
     /// </summary>
     [Fact]
-    public async Task GetProjectionStatusAsync_WhenProjectedYamlIsMissing_RequiresRepair()
+    public async Task GetProjectionStatusAsyncWhenProjectedYamlIsMissingRequiresRepair()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -367,7 +367,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// TR-MCP-TODO-006: EF repair rebuilds a drifted TODO.yaml projection from authoritative DB rows.
     /// </summary>
     [Fact]
-    public async Task RepairProjectionAsync_AfterProjectionDrift_RebuildsYaml()
+    public async Task RepairProjectionAsyncAfterProjectionDriftRebuildsYaml()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -396,7 +396,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// but TODO.yaml cannot be written, and operator repair later rebuilds the projection.
     /// </summary>
     [Fact]
-    public async Task Create_WhenYamlProjectionFails_ReturnsProjectionFailureButKeepsAuthoritativeState()
+    public async Task CreateWhenYamlProjectionFailsReturnsProjectionFailureButKeepsAuthoritativeState()
     {
         Directory.CreateDirectory(_tempYamlPath);
 
@@ -429,7 +429,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// metadata row so the projected YAML preserves the source TODO shape.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_CodeReviewPhaseReference_ProjectsCodeReviewSectionReference()
+    public async Task UpdateAsyncCodeReviewPhaseReferenceProjectsCodeReviewSectionReference()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -482,7 +482,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// indentation, and trailing whitespace. JSON storage of the description must not normalize it.
     /// </summary>
     [Fact]
-    public async Task CreateThenGetById_PreservesMarkdownDescriptionExactly()
+    public async Task CreateThenGetByIdPreservesMarkdownDescriptionExactly()
     {
         var create = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -505,7 +505,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// Markdown description exactly, so audit history remains a faithful record of formatted content.
     /// </summary>
     [Fact]
-    public async Task Audit_PreservesMarkdownDescriptionSnapshot()
+    public async Task AuditPreservesMarkdownDescriptionSnapshot()
     {
         await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -533,7 +533,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// own tests.)
     /// </summary>
     [Fact]
-    public async Task YamlProjection_PreservesMarkdownBlankLinesAndIndentation()
+    public async Task YamlProjectionPreservesMarkdownBlankLinesAndIndentation()
     {
         var create = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -559,7 +559,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// one completed item share a section so the done filter isolates only the completed row.
     /// </summary>
     [Fact]
-    public async Task Query_FiltersBySectionAndDone()
+    public async Task QueryFiltersBySectionAndDone()
     {
         await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -591,7 +591,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// TEST-MCP-096: A boolean keyword query matches across an item's searchable fields in the EF store.
     /// </summary>
     [Fact]
-    public async Task Query_WithBooleanKeyword_CanMatchAcrossFields()
+    public async Task QueryWithBooleanKeywordCanMatchAcrossFields()
     {
         await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -615,7 +615,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// mutation occurs. The lowercase id violates the canonical TODO identifier convention.
     /// </summary>
     [Fact]
-    public async Task Create_InvalidTodoId_ReturnsValidationError()
+    public async Task CreateInvalidTodoIdReturnsValidationError()
     {
         var result = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -634,7 +634,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// TEST-MCP-096: Canonical `ISSUE-{number}` identifiers remain valid in the EF store.
     /// </summary>
     [Fact]
-    public async Task Create_ValidIssueNumberId_ReturnsSuccess()
+    public async Task CreateValidIssueNumberIdReturnsSuccess()
     {
         var result = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -657,7 +657,7 @@ public sealed class EfTodoServiceTests : IDisposable
     [Theory]
     [InlineData("PHASE0-REMOTE-001")]
     [InlineData("MCP-TODO-CREATE-001")]
-    public async Task Create_ValidUppercaseKebabIdWithDigitsAndExtraSegments_ReturnsSuccess(string id)
+    public async Task CreateValidUppercaseKebabIdWithDigitsAndExtraSegmentsReturnsSuccess(string id)
     {
         var result = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -678,7 +678,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// mutation commits. An invalid dependency id fails the update with a validation classification.
     /// </summary>
     [Fact]
-    public async Task Update_InvalidDependsOnId_ReturnsValidationError()
+    public async Task UpdateInvalidDependsOnIdReturnsValidationError()
     {
         await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -700,7 +700,7 @@ public sealed class EfTodoServiceTests : IDisposable
 
     /// <summary>P1-3: same idempotency key and exact normalized payload heals.</summary>
     [Fact]
-    public async Task CreateAsync_SameKeyExactPayload_Heals()
+    public async Task CreateAsyncSameKeyExactPayloadHeals()
     {
         var request = new TodoCreateRequest
         {
@@ -727,7 +727,7 @@ public sealed class EfTodoServiceTests : IDisposable
 
     /// <summary>P1-3: same idempotency key with a changed payload is a conflict.</summary>
     [Fact]
-    public async Task CreateAsync_SameKeyChangedPayload_Conflicts()
+    public async Task CreateAsyncSameKeyChangedPayloadConflicts()
     {
         var first = await _sut.CreateAsync(new TodoCreateRequest
         {

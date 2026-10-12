@@ -55,7 +55,7 @@ public sealed class RequirementsTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Requirements_RegisteredItem_ReturnsResult</c> scenario.
+    /// Validates the <c>RequirementsRegisteredItemReturnsResult</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -63,7 +63,7 @@ public sealed class RequirementsTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Requirements_RegisteredItem_ReturnsResult()
+    public async Task RequirementsRegisteredItemReturnsResult()
     {
         using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
@@ -103,7 +103,7 @@ public sealed class RequirementsTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Requirements_NonExistentItem_Returns422</c> scenario.
+    /// Validates the <c>RequirementsNonExistentItemReturns422</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -111,7 +111,7 @@ public sealed class RequirementsTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Requirements_NonExistentItem_Returns422()
+    public async Task RequirementsNonExistentItemReturns422()
     {
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var response = await _fixture.Client.PostAsync(

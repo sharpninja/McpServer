@@ -38,14 +38,14 @@ public sealed class TunnelProviderTests
     // --- NgrokTunnelProvider ---
 
     [Fact]
-    public void NgrokProvider_ProviderName_IsNgrok()
+    public void NgrokProviderProviderNameIsNgrok()
     {
         var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, _processEnvironment, NullLogger<NgrokTunnelProvider>.Instance);
         Assert.Equal("ngrok", sut.ProviderName);
     }
 
     [Fact]
-    public async Task NgrokProvider_StartAsync_WhenCliMissing_SetsError()
+    public async Task NgrokProviderStartAsyncWhenCliMissingSetsError()
     {
         _processRunner.RunAsync("ngrok", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not found"));
@@ -59,7 +59,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public async Task NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
+    public async Task NgrokProviderGetStatusAsyncBeforeStartReturnsNotRunning()
     {
         var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, _processEnvironment, NullLogger<NgrokTunnelProvider>.Instance);
         var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -67,7 +67,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public async Task NgrokProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError()
+    public async Task NgrokProviderGetStatusAsyncWhenTrackedProcessExitedReturnsDetailedExitError()
     {
         var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, _processEnvironment, NullLogger<NgrokTunnelProvider>.Instance);
         using var exitedProcess = StartExitedDotnetProcess();
@@ -86,7 +86,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public async Task NgrokProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError()
+    public async Task NgrokProviderGetStatusAsyncWhenRunningWithStartupTimeoutErrorPreservesDiagnosticError()
     {
         _processRunner.RunAsync("curl", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(-1, null, "curl not found"));
@@ -103,7 +103,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public void NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext()
+    public void NgrokProviderBuildStartupTimeoutErrorIncludesApiAndOutputContext()
     {
         var message = Assert.IsType<string>(InvokePrivateStatic(
             typeof(NgrokTunnelProvider),
@@ -123,14 +123,14 @@ public sealed class TunnelProviderTests
     // --- CloudflareTunnelProvider ---
 
     [Fact]
-    public void CloudflareProvider_ProviderName_IsCloudflare()
+    public void CloudflareProviderProviderNameIsCloudflare()
     {
         var sut = new CloudflareTunnelProvider(CreateOptions(), _processRunner, NullLogger<CloudflareTunnelProvider>.Instance);
         Assert.Equal("cloudflare", sut.ProviderName);
     }
 
     [Fact]
-    public async Task CloudflareProvider_StartAsync_WhenCliMissing_SetsError()
+    public async Task CloudflareProviderStartAsyncWhenCliMissingSetsError()
     {
         _processRunner.RunAsync("cloudflared", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not found"));
@@ -144,7 +144,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public async Task CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
+    public async Task CloudflareProviderGetStatusAsyncBeforeStartReturnsNotRunning()
     {
         var sut = new CloudflareTunnelProvider(CreateOptions(), _processRunner, NullLogger<CloudflareTunnelProvider>.Instance);
         var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -152,7 +152,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public async Task CloudflareProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError()
+    public async Task CloudflareProviderGetStatusAsyncWhenTrackedProcessExitedReturnsDetailedExitError()
     {
         var sut = new CloudflareTunnelProvider(CreateOptions(), _processRunner, NullLogger<CloudflareTunnelProvider>.Instance);
         using var exitedProcess = StartExitedDotnetProcess();
@@ -171,7 +171,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public async Task CloudflareProvider_GetStatusAsync_WhenRunningWithStartupTimeoutError_PreservesDiagnosticError()
+    public async Task CloudflareProviderGetStatusAsyncWhenRunningWithStartupTimeoutErrorPreservesDiagnosticError()
     {
         var sut = new CloudflareTunnelProvider(CreateOptions(), _processRunner, NullLogger<CloudflareTunnelProvider>.Instance);
         SetPrivateField(sut, "_process", Process.GetCurrentProcess());
@@ -185,7 +185,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public void CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext()
+    public void CloudflareProviderBuildStartupTimeoutErrorIncludesOutputContext()
     {
         var message = Assert.IsType<string>(InvokePrivateStatic(
             typeof(CloudflareTunnelProvider),
@@ -202,14 +202,14 @@ public sealed class TunnelProviderTests
     // --- FrpTunnelProvider ---
 
     [Fact]
-    public void FrpProvider_ProviderName_IsFrp()
+    public void FrpProviderProviderNameIsFrp()
     {
         var sut = new FrpTunnelProvider(CreateOptions(), _processRunner, NullLogger<FrpTunnelProvider>.Instance);
         Assert.Equal("frp", sut.ProviderName);
     }
 
     [Fact]
-    public async Task FrpProvider_StartAsync_WhenCliMissing_SetsError()
+    public async Task FrpProviderStartAsyncWhenCliMissingSetsError()
     {
         _processRunner.RunAsync("frpc", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not found"));
@@ -223,7 +223,7 @@ public sealed class TunnelProviderTests
     }
 
     [Fact]
-    public async Task FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
+    public async Task FrpProviderGetStatusAsyncBeforeStartReturnsNotRunning()
     {
         var sut = new FrpTunnelProvider(CreateOptions(), _processRunner, NullLogger<FrpTunnelProvider>.Instance);
         var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);

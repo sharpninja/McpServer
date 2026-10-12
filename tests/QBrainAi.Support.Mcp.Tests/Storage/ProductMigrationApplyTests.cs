@@ -31,7 +31,7 @@ public sealed class ProductMigrationApplyTests : IDisposable
 
     /// <summary>Full migrate from empty creates Products and ProductWorkspaceMemberships.</summary>
     [Fact]
-    public void Migrate_FromEmpty_CreatesProductTables()
+    public void MigrateFromEmptyCreatesProductTables()
     {
         using var db = new McpDbContext(_options);
         db.Database.Migrate();
@@ -47,7 +47,7 @@ public sealed class ProductMigrationApplyTests : IDisposable
     /// still creates Products and does not drop agent columns.
     /// </summary>
     [Fact]
-    public void Migrate_FromPredecessor_WithSessionLogsAgentColumns_CreatesProductTables()
+    public void MigrateFromPredecessorWithSessionLogsAgentColumnsCreatesProductTables()
     {
         using (var db = new McpDbContext(_options))
         {
@@ -72,7 +72,7 @@ public sealed class ProductMigrationApplyTests : IDisposable
     /// and do not alter SessionLogs.
     /// </summary>
     [Fact]
-    public void AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps()
+    public void AddProductsStorageMigrationSourceExistsForAllProvidersAndHasNoSessionLogsTableOps()
     {
         var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
         var roots = new[]

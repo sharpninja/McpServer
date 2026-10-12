@@ -185,7 +185,7 @@ public sealed class AppSettingsFileService
         }
     }
 
-    private async Task<Dictionary<object, object>> LoadYamlCoreAsync(string resolvedPath, CancellationToken ct)
+    private static async Task<Dictionary<object, object>> LoadYamlCoreAsync(string resolvedPath, CancellationToken ct)
     {
         if (!File.Exists(resolvedPath))
             return [];
@@ -257,7 +257,7 @@ public sealed class AppSettingsFileService
             root.Reload();
     }
 
-    private async Task<JsonObject> LoadJsonCoreAsync(string resolvedPath, CancellationToken ct)
+    private static async Task<JsonObject> LoadJsonCoreAsync(string resolvedPath, CancellationToken ct)
     {
         if (!File.Exists(resolvedPath))
             return new JsonObject();

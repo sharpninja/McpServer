@@ -47,7 +47,7 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
 
     /// <summary>AC1: a malformed turnJson yields a structured {error} result rather than a thrown exception.</summary>
     [Fact]
-    public async Task SessionLogCompleteTurn_MalformedTurnJson_ReturnsStructuredError()
+    public async Task SessionLogCompleteTurnMalformedTurnJsonReturnsStructuredError()
     {
         var json = await _tools.SessionLogCompleteTurn(
             "ClaudeCode",
@@ -65,7 +65,7 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
 
     /// <summary>AC1 (fail-turn parity): sessionlog_fail_turn also returns a structured {error} for malformed turnJson.</summary>
     [Fact]
-    public async Task SessionLogFailTurn_MalformedTurnJson_ReturnsStructuredError()
+    public async Task SessionLogFailTurnMalformedTurnJsonReturnsStructuredError()
     {
         var json = await _tools.SessionLogFailTurn(
             "ClaudeCode",
@@ -81,7 +81,7 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-006 / FR-MCP-SESSIONLOGCTX-001 AC-003: empty planFile on begin returns structured error.</summary>
     [Fact]
-    public async Task SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError()
+    public async Task SessionLogBeginTurnMissingPlanFileReturnsStructuredError()
     {
         using var real = CreateRealServiceTools();
         await real.Service.OpenSessionAsync(
@@ -110,7 +110,7 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-006: None/None begin succeeds through the real persist path.</summary>
     [Fact]
-    public async Task SessionLogBeginTurn_NoneNone_ReturnsSuccess()
+    public async Task SessionLogBeginTurnNoneNoneReturnsSuccess()
     {
         using var real = CreateRealServiceTools();
         await real.Service.OpenSessionAsync(
@@ -144,7 +144,7 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
 
     /// <summary>AC3: a null turnJson (no payload) still completes successfully through the service.</summary>
     [Fact]
-    public async Task SessionLogCompleteTurn_NullTurnJson_ReturnsSuccess()
+    public async Task SessionLogCompleteTurnNullTurnJsonReturnsSuccess()
     {
         _sessionLogService
             .UpsertTurnAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<UnifiedRequestEntryDto>(), Arg.Any<CancellationToken>())

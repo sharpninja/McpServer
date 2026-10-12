@@ -60,7 +60,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-001: SQLite round-trip of HostileReviewRequestEntity.</summary>
     [Fact]
-    public async Task HostileReviewEntity_RoundTrip_SqlitePgSqlServer()
+    public async Task HostileReviewEntityRoundTripSqlitePgSqlServer()
     {
         var sut = CreateService();
         var created = await sut.SubmitAsync(ValidRequest(), TestContext.Current.CancellationToken);
@@ -75,7 +75,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-001: valid submit creates a queued item.</summary>
     [Fact]
-    public async Task HostileReviewSubmit_ValidRequest_CreatesQueueItem()
+    public async Task HostileReviewSubmitValidRequestCreatesQueueItem()
     {
         var result = await CreateService().SubmitAsync(ValidRequest(), TestContext.Current.CancellationToken);
         Assert.True(result.Success, result.Error);
@@ -86,7 +86,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-001: serialized payload over 1 MiB is rejected with no queue row.</summary>
     [Fact]
-    public async Task HostileReviewSubmit_OversizedPayload_Rejected()
+    public async Task HostileReviewSubmitOversizedPayloadRejected()
     {
         var request = ValidRequest();
         request.SerializedPayload = new string('x', 1_048_577);
@@ -99,7 +99,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-001: foreign workspace is 403 and creates no row.</summary>
     [Fact]
-    public async Task HostileReviewSubmit_ForeignWorkspace_403()
+    public async Task HostileReviewSubmitForeignWorkspace403()
     {
         var request = ValidRequest();
         request.WorkspacePath = Path.Combine(Path.GetTempPath(), "other-workspace");
@@ -112,7 +112,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-002: missing artifact is a diagnostic, not a silent omit.</summary>
     [Fact]
-    public async Task HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit()
+    public async Task HostileReviewSubmitMissingArtifactReturnsDiagnosticNotSilentOmit()
     {
         var request = ValidRequest();
         request.Links.Add(new HostileReviewArtifactLink { ArtifactType = "todo", ArtifactId = "todo-does-not-exist" });
@@ -124,7 +124,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-002: unauthorized links produce diagnostics from the TODO store.</summary>
     [Fact]
-    public async Task HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic()
+    public async Task HostileReviewSubmitStaleOrUnauthorizedLinkDiagnostic()
     {
         using (var db = CreateDb())
         {
@@ -140,7 +140,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-002: ambiguous TODO title matches produce diagnostics.</summary>
     [Fact]
-    public async Task HostileReviewSubmit_AmbiguousLink_Diagnostic()
+    public async Task HostileReviewSubmitAmbiguousLinkDiagnostic()
     {
         using (var db = CreateDb())
         {
@@ -157,7 +157,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-003: execution records model, effort, agent, template, run id.</summary>
     [Fact]
-    public async Task HostileReviewExecution_RecordsModelEffortAgentTemplateRunId()
+    public async Task HostileReviewExecutionRecordsModelEffortAgentTemplateRunId()
     {
         var sut = CreateService();
         var submitted = await sut.SubmitAsync(ValidRequest(), TestContext.Current.CancellationToken);
@@ -173,7 +173,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-003: token counts are omitted when the reviewer did not supply them.</summary>
     [Fact]
-    public async Task HostileReviewExecution_OmitsFabricatedTokenCounts()
+    public async Task HostileReviewExecutionOmitsFabricatedTokenCounts()
     {
         var sut = CreateService();
         var submitted = await sut.SubmitAsync(ValidRequest(), TestContext.Current.CancellationToken);
@@ -188,7 +188,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-004: findings taxonomy is complete.</summary>
     [Fact]
-    public async Task HostileReviewGet_NormalizedFindings_TaxonomyComplete()
+    public async Task HostileReviewGetNormalizedFindingsTaxonomyComplete()
     {
         var sut = CreateService();
         var submitted = await sut.SubmitAsync(ValidRequest(), TestContext.Current.CancellationToken);
@@ -213,7 +213,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-004: request-quality scores are explicit fields.</summary>
     [Fact]
-    public async Task HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext()
+    public async Task HostileReviewRequestQualityScoresDisclosureScopeObjectiveConfidenceContext()
     {
         var sut = CreateService();
         var submitted = await sut.SubmitAsync(ValidRequest(), TestContext.Current.CancellationToken);
@@ -237,7 +237,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-005: model and effort AND-filter.</summary>
     [Fact]
-    public async Task HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns()
+    public async Task HostileReviewQueryByModelAndEffortReturnsOnlyMatchingRuns()
     {
         var sut = CreateService();
         var first = await sut.SubmitAsync(ValidRequest("code", "agent-a"), TestContext.Current.CancellationToken);
@@ -256,7 +256,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-005: requester and target type AND-filter.</summary>
     [Fact]
-    public async Task HostileReviewQuery_ByRequesterAndTargetType_AndFilters()
+    public async Task HostileReviewQueryByRequesterAndTargetTypeAndFilters()
     {
         var sut = CreateService();
         await sut.SubmitAsync(ValidRequest("code", "agent-a"), TestContext.Current.CancellationToken);
@@ -268,7 +268,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-005: no match is an empty list, not an error.</summary>
     [Fact]
-    public async Task HostileReviewQuery_NoMatch_EmptyList()
+    public async Task HostileReviewQueryNoMatchEmptyList()
     {
         var matched = await CreateService().QueryAsync(new HostileReviewQueryRequest { RequestingAgent = "nobody" }, TestContext.Current.CancellationToken);
         Assert.Empty(matched);
@@ -276,7 +276,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-006: completing a review does not mutate product files.</summary>
     [Fact]
-    public async Task HostileReview_Default_DoesNotMutateProductFiles()
+    public async Task HostileReviewDefaultDoesNotMutateProductFiles()
     {
         var marker = Path.Combine(_workspace, "product.txt");
         await File.WriteAllTextAsync(marker, "unchanged", TestContext.Current.CancellationToken);
@@ -290,7 +290,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-006: REST, REPL, Director, and plugin expose submit/status/get/query only.</summary>
     [Fact]
-    public async Task HostileReview_SurfaceParity_RestReplDirectorPlugin()
+    public async Task HostileReviewSurfaceParityRestReplDirectorPlugin()
     {
         var rest = typeof(HostileReviewController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
             .Select(method => method.Name)
@@ -413,7 +413,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TR-MCP-HOSTILEREVIEW-002: HostileReview one-shot context is protected through AgentPoolService.</summary>
     [Fact]
-    public async Task HostileReviewProtectedContext_NoRawPromptInPublishedSurface()
+    public async Task HostileReviewProtectedContextNoRawPromptInPublishedSurface()
     {
         using var service = AgentPoolServiceTests.CreateService(out var voiceService);
         const string raw = "RAW-HOSTILE-REVIEW-PROMPT";
@@ -459,7 +459,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
 
     /// <summary>TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation.</summary>
     [Fact]
-    public async Task HostileReviewWorker_InvalidOptions_FailStartup()
+    public async Task HostileReviewWorkerInvalidOptionsFailStartup()
     {
         var builder = Host.CreateApplicationBuilder();
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>

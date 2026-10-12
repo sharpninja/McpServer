@@ -55,7 +55,7 @@ public sealed class GetTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Get_ValidId_Returns200WithItem</c> scenario.
+    /// Validates the <c>GetValidIdReturns200WithItem</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -63,7 +63,7 @@ public sealed class GetTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Get_ValidId_Returns200WithItem()
+    public async Task GetValidIdReturns200WithItem()
     {
         var response = await _fixture.Client.GetAsync(
             $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}", cancellationToken: TestContext.Current.CancellationToken);
@@ -80,7 +80,7 @@ public sealed class GetTodoTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// Validates the <c>Get_NonExistentId_Returns404</c> scenario.
+    /// Validates the <c>GetNonExistentIdReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -88,7 +88,7 @@ public sealed class GetTodoTests : IAsyncLifetime
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Get_NonExistentId_Returns404()
+    public async Task GetNonExistentIdReturns404()
     {
         var fakeId = TodoEndpointFixture.GenerateMissingId();
         var response = await _fixture.Client.GetAsync(

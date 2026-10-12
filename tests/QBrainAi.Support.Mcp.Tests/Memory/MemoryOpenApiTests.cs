@@ -13,7 +13,7 @@ public sealed class MemoryOpenApiTests
 {
     /// <summary>AC-TR-MCP-MEMORY-API-002-04: New routes are listed under /qbrainai/memory.</summary>
     [Fact]
-    public void NewRoutes_Listed()
+    public void NewRoutesListed()
     {
         var routes = typeof(MemoryController).GetCustomAttributes<RouteAttribute>()
             .Select(attribute => attribute.Template)

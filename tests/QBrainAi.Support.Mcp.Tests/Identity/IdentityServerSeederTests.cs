@@ -9,7 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.Identity;
 public sealed class IdentityServerSeederTests
 {
     [Fact]
-    public async Task SeedAsync_CreatesIdentityTablesWhenDatabaseAlreadyContainsOtherTables()
+    public async Task SeedAsyncCreatesIdentityTablesWhenDatabaseAlreadyContainsOtherTables()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
         await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);

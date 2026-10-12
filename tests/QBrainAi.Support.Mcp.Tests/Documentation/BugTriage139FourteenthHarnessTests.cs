@@ -14,7 +14,7 @@ public sealed class BugTriage139FourteenthHarnessTests
     /// environment override.
     /// </summary>
     [Fact]
-    public void RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout()
+    public void RepositoryRootExternalBinaryDirectoryWithoutOverrideResolvesCheckout()
     {
         var previousRoot = Environment.GetEnvironmentVariable("MCP_REPOSITORY_ROOT");
         var previousDirectory = Environment.CurrentDirectory;
@@ -39,7 +39,7 @@ public sealed class BugTriage139FourteenthHarnessTests
     /// unsupported platform cases, so discovery cannot turn an unsupported source branch into a pass.
     /// </summary>
     [Fact]
-    public void PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform()
+    public void PlatformNativeTestsAreCompiledAndDiscoverableOnlyForCurrentPlatform()
     {
         Assert.True(
             OperatingSystem.IsWindows() || OperatingSystem.IsLinux(),
@@ -93,7 +93,7 @@ public sealed class BugTriage139FourteenthHarnessTests
     /// after its direct parent exits.
     /// </summary>
     [Fact]
-    public void ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound()
+    public void ProcessRunnerExitedParentWithPipeHoldingDescendantKillsTreeWithinBound()
     {
         string executable;
         IReadOnlyList<string> arguments;
@@ -150,7 +150,7 @@ public sealed class BugTriage139FourteenthHarnessTests
     /// and Windows job assignment without turning a successful command into a harness failure.
     /// </summary>
     [Fact]
-    public void ProcessRunner_RepeatedQuickProcessesDoNotRaceJobAttachment()
+    public void ProcessRunnerRepeatedQuickProcessesDoNotRaceJobAttachment()
     {
         for (var attempt = 0; attempt < 128; attempt++)
         {

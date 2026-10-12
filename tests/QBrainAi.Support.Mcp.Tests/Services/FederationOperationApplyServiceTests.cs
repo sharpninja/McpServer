@@ -10,7 +10,7 @@ public sealed class FederationOperationApplyServiceTests
 {
     /// <summary>Transactional apply gates adapter mutations through the turn transaction coordinator.</summary>
     [Fact]
-    public async Task TransactionalApplyAsync_CommitsAdapterApplyThroughTurnCoordinator()
+    public async Task TransactionalApplyAsyncCommitsAdapterApplyThroughTurnCoordinator()
     {
         var adapter = new CapturingAdapter("todo");
         var inner = new FederationOperationApplyService(new FederationStateAdapterRegistry([adapter]));
@@ -37,7 +37,7 @@ public sealed class FederationOperationApplyServiceTests
 
     /// <summary>Transactional apply does not run the adapter when the coordinator rejects before mutation.</summary>
     [Fact]
-    public async Task TransactionalApplyAsync_WhenCoordinatorRejects_DoesNotApplyAdapter()
+    public async Task TransactionalApplyAsyncWhenCoordinatorRejectsDoesNotApplyAdapter()
     {
         var adapter = new CapturingAdapter("todo");
         var inner = new FederationOperationApplyService(new FederationStateAdapterRegistry([adapter]));
@@ -68,7 +68,7 @@ public sealed class FederationOperationApplyServiceTests
 
     /// <summary>Transactional apply does not return an applied result while the coordinator commit remains pending.</summary>
     [Fact]
-    public async Task TransactionalApplyAsync_WhenCoordinatorCommitIsPending_DoesNotReturnApplyResult()
+    public async Task TransactionalApplyAsyncWhenCoordinatorCommitIsPendingDoesNotReturnApplyResult()
     {
         var adapter = new CapturingAdapter("todo");
         var inner = new FederationOperationApplyService(new FederationStateAdapterRegistry([adapter]));
@@ -95,7 +95,7 @@ public sealed class FederationOperationApplyServiceTests
 
     /// <summary>Transactional apply blocks federation mutations when the coordinator is already degraded.</summary>
     [Fact]
-    public async Task TransactionalApplyAsync_WhenCoordinatorIsDegraded_DoesNotApplyAdapter()
+    public async Task TransactionalApplyAsyncWhenCoordinatorIsDegradedDoesNotApplyAdapter()
     {
         var adapter = new CapturingAdapter("todo");
         var inner = new FederationOperationApplyService(new FederationStateAdapterRegistry([adapter]));
@@ -125,7 +125,7 @@ public sealed class FederationOperationApplyServiceTests
 
     /// <summary>Apply decodes BodyBase64 before passing payload JSON to the adapter.</summary>
     [Fact]
-    public async Task ApplyAsync_DecodesBodyBase64BeforeAdapterApply()
+    public async Task ApplyAsyncDecodesBodyBase64BeforeAdapterApply()
     {
         var adapter = new CapturingAdapter("todo");
         var sut = new FederationOperationApplyService(new FederationStateAdapterRegistry([adapter]));
@@ -149,7 +149,7 @@ public sealed class FederationOperationApplyServiceTests
 
     /// <summary>Invalid base64 bodies return a conflict result instead of calling the adapter.</summary>
     [Fact]
-    public async Task ApplyAsync_InvalidBodyBase64DoesNotCallAdapter()
+    public async Task ApplyAsyncInvalidBodyBase64DoesNotCallAdapter()
     {
         var adapter = new CapturingAdapter("todo");
         var sut = new FederationOperationApplyService(new FederationStateAdapterRegistry([adapter]));
@@ -169,7 +169,7 @@ public sealed class FederationOperationApplyServiceTests
 
     /// <summary>Local-only domains are rejected before adapter apply is attempted.</summary>
     [Fact]
-    public async Task ApplyAsync_LocalOnlyDomainReturnsConflict()
+    public async Task ApplyAsyncLocalOnlyDomainReturnsConflict()
     {
         var sut = new FederationOperationApplyService(new FederationStateAdapterRegistry(
             [new LocalOnlyFederationStateAdapter("marker_state", "host-specific trust material")]));
@@ -189,7 +189,7 @@ public sealed class FederationOperationApplyServiceTests
 
     /// <summary>Echo operations are acknowledged as already applied and do not call adapter apply.</summary>
     [Fact]
-    public async Task ApplyAsync_EchoOperationSuppressesApply()
+    public async Task ApplyAsyncEchoOperationSuppressesApply()
     {
         var adapter = new CapturingAdapter("todo") { Echo = true, Version = "v3" };
         var sut = new FederationOperationApplyService(new FederationStateAdapterRegistry([adapter]));
@@ -212,7 +212,7 @@ public sealed class FederationOperationApplyServiceTests
 
     /// <summary>Snapshot-only replicated domains return an explicit conflict instead of silent success.</summary>
     [Fact]
-    public async Task ApplyAsync_SnapshotOnlyDomainReturnsConflict()
+    public async Task ApplyAsyncSnapshotOnlyDomainReturnsConflict()
     {
         var adapter = new SnapshotOnlyAdapter("session_log");
         var sut = new FederationOperationApplyService(new FederationStateAdapterRegistry([adapter]));

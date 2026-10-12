@@ -9,7 +9,7 @@ public sealed class FederationEntityModelTests
 {
     /// <summary>Federation proxy records use ProxyId as the durable key.</summary>
     [Fact]
-    public void FederationProxy_PrimaryKey_IsProxyId()
+    public void FederationProxyPrimaryKeyIsProxyId()
     {
         using var ctx = CreateContext();
         var entity = ctx.Model.FindEntityType(typeof(FederationProxyEntity));
@@ -22,7 +22,7 @@ public sealed class FederationEntityModelTests
 
     /// <summary>Federation operation records use OperationId for idempotent replay.</summary>
     [Fact]
-    public void FederationOperation_PrimaryKey_IsOperationId()
+    public void FederationOperationPrimaryKeyIsOperationId()
     {
         using var ctx = CreateContext();
         var entity = ctx.Model.FindEntityType(typeof(FederationOperationEntity));
@@ -35,7 +35,7 @@ public sealed class FederationEntityModelTests
 
     /// <summary>Federation entities are global hub state and are not workspace-filtered.</summary>
     [Fact]
-    public void FederationEntities_DoNotHaveWorkspaceQueryFilters()
+    public void FederationEntitiesDoNotHaveWorkspaceQueryFilters()
     {
         using var ctx = CreateContext();
 

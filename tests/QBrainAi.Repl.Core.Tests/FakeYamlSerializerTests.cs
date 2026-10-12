@@ -14,7 +14,7 @@ public class FakeYamlSerializerTests
     }
 
     [Fact]
-    public void Serialize_HelloEnvelope_ProducesValidYaml()
+    public void SerializeHelloEnvelopeProducesValidYaml()
     {
         var helloPayload = Substitute.For<IHelloPayload>();
         helloPayload.ProtocolVersion.Returns("1.0");
@@ -31,7 +31,7 @@ public class FakeYamlSerializerTests
     }
 
     [Fact]
-    public void Serialize_RequestEnvelope_IncludesMethodAndParams()
+    public void SerializeRequestEnvelopeIncludesMethodAndParams()
     {
         var requestPayload = Substitute.For<IRequestPayload>();
         requestPayload.RequestId.Returns("req-001");
@@ -52,7 +52,7 @@ public class FakeYamlSerializerTests
     }
 
     [Fact]
-    public void Deserialize_HelloYaml_ReturnsTypedEnvelope()
+    public void DeserializeHelloYamlReturnsTypedEnvelope()
     {
         var yaml = @"
 type: hello
@@ -71,7 +71,7 @@ payload:
     }
 
     [Fact]
-    public void Deserialize_RequestYaml_ReturnsTypedEnvelope()
+    public void DeserializeRequestYamlReturnsTypedEnvelope()
     {
         var yaml = @"
 type: request
@@ -90,7 +90,7 @@ payload:
     }
 
     [Fact]
-    public void Deserialize_ErrorEnvelope_ParsesErrorPayload()
+    public void DeserializeErrorEnvelopeParsesErrorPayload()
     {
         var yaml = @"
 type: error
@@ -107,7 +107,7 @@ payload:
     }
 
     [Fact]
-    public void Deserialize_MalformedYaml_ThrowsFormatException()
+    public void DeserializeMalformedYamlThrowsFormatException()
     {
         var invalidYaml = "type: hello\npayload: [unmatched";
 
@@ -115,7 +115,7 @@ payload:
     }
 
     [Fact]
-    public void Deserialize_MissingType_ThrowsInvalidOperationException()
+    public void DeserializeMissingTypeThrowsInvalidOperationException()
     {
         var yamlWithoutType = "payload:\n  test: value";
 
@@ -123,7 +123,7 @@ payload:
     }
 
     [Fact]
-    public void TryDeserialize_ValidYaml_ReturnsTrueWithEnvelope()
+    public void TryDeserializeValidYamlReturnsTrueWithEnvelope()
     {
         var yaml = "type: hello\npayload:\n  protocolVersion: \"1.0\"";
 
@@ -135,7 +135,7 @@ payload:
     }
 
     [Fact]
-    public void TryDeserialize_InvalidYaml_ReturnsFalseWithNull()
+    public void TryDeserializeInvalidYamlReturnsFalseWithNull()
     {
         var invalidYaml = "type: [invalid";
 
@@ -146,7 +146,7 @@ payload:
     }
 
     [Fact]
-    public void SerializeStream_MultipleEnvelopes_ProducesDocumentStream()
+    public void SerializeStreamMultipleEnvelopesProducesDocumentStream()
     {
         var envelope1 = Substitute.For<IYamlEnvelope>();
         envelope1.Type.Returns("hello");
@@ -167,7 +167,7 @@ payload:
     }
 
     [Fact]
-    public void DeserializeStream_TwoDocuments_ReturnsTwoEnvelopes()
+    public void DeserializeStreamTwoDocumentsReturnsTwoEnvelopes()
     {
         var yamlStream = @"---
 type: hello
@@ -189,7 +189,7 @@ payload:
     }
 
     [Fact]
-    public void SerializeDeserialize_RoundTrip_PreservesData()
+    public void SerializeDeserializeRoundTripPreservesData()
     {
         var originalPayload = new Dictionary<string, object?>
         {
@@ -211,31 +211,31 @@ payload:
     }
 
     [Fact]
-    public void Serialize_NullEnvelope_ThrowsArgumentNullException()
+    public void SerializeNullEnvelopeThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => _sut.Serialize(null!));
     }
 
     [Fact]
-    public void Deserialize_NullYaml_ThrowsArgumentNullException()
+    public void DeserializeNullYamlThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => _sut.Deserialize(null!));
     }
 
     [Fact]
-    public void Deserialize_EmptyYaml_ThrowsArgumentException()
+    public void DeserializeEmptyYamlThrowsArgumentException()
     {
         Assert.Throws<ArgumentException>(() => _sut.Deserialize(""));
     }
 
     [Fact]
-    public void SerializeStream_NullEnvelopes_ThrowsArgumentNullException()
+    public void SerializeStreamNullEnvelopesThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => _sut.SerializeStream(null!));
     }
 
     [Fact]
-    public void DeserializeStream_NullYaml_ThrowsArgumentNullException()
+    public void DeserializeStreamNullYamlThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => _sut.DeserializeStream(null!));
     }
@@ -277,14 +277,14 @@ internal sealed class FakeYamlSerializer : IYamlSerializer
         {
             var dict = _deserializer.Deserialize<Dictionary<string, object>>(yaml);
 
-            if (!dict.ContainsKey("type"))
+            if (!dict.TryGetValue("type", out object? type))
             {
                 throw new InvalidOperationException("Missing 'type' field in envelope");
             }
 
             var envelope = Substitute.For<IYamlEnvelope>();
-            envelope.Type.Returns(dict["type"]?.ToString() ?? throw new InvalidOperationException("Invalid type field"));
-            envelope.Payload.Returns(dict.ContainsKey("payload") ? dict["payload"] : null);
+            envelope.Type.Returns(type?.ToString() ?? throw new InvalidOperationException("Invalid type field"));
+            envelope.Payload.Returns(dict.TryGetValue("payload", out object? payload) ? payload : null);
 
             return envelope;
         }

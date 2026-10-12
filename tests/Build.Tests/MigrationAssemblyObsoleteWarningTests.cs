@@ -12,9 +12,9 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
 {
     private const string PragmaToken = "#pragma";
 
-    private static readonly string GeneratedObsoleteDisablePragma = PragmaToken + " warning disable " + "612, 618";
+    private const string GeneratedObsoleteDisablePragma = PragmaToken + " warning disable " + "612, 618";
 
-    private static readonly string GeneratedObsoleteRestorePragma = PragmaToken + " warning restore " + "612, 618";
+    private const string GeneratedObsoleteRestorePragma = PragmaToken + " warning restore " + "612, 618";
 
     private static readonly MigrationProject[] MigrationProjects =
     [

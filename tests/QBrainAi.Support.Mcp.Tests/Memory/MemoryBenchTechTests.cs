@@ -34,7 +34,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-03: Result JSON is schema-validated before write.</summary>
     [Fact]
-    public void ResultSchema_Validated()
+    public void ResultSchemaValidated()
     {
         var directory = Path.Combine(Path.GetTempPath(), "memory-bench-schema-" + Guid.NewGuid().ToString("N"));
         MemoryBenchCatalog.RunGrokStub(directory);
@@ -45,7 +45,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-04: Pack schema is validated in CI via the loader.</summary>
     [Fact]
-    public void PackSchema_Validated()
+    public void PackSchemaValidated()
     {
         MemoryBenchPackLoader.Validate(MemoryBenchCatalog.LoadPack(), File.ReadAllText(MemoryBenchCatalog.PackPath()));
         Assert.True(File.Exists(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), MemoryBenchResultSchema.PackSchemaRelativePath)));
@@ -78,7 +78,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-06: Latency is captured but is not the sole pass/fail.</summary>
     [Fact]
-    public void Latency_OptionalBudget()
+    public void LatencyOptionalBudget()
     {
         var pack = MemoryBenchCatalog.LoadPack();
         Assert.All(pack.Prompts, prompt => Assert.Null(prompt.LatencyBudgetMs));
@@ -91,7 +91,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-07: Nuke target BenchMemory exists and defaults to Grok stub.</summary>
     [Fact]
-    public void CiTarget_BenchMemory()
+    public void CiTargetBenchMemory()
     {
         var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
         Assert.Contains("public Target BenchMemory", source, StringComparison.Ordinal);
@@ -101,7 +101,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-08: results/* is gitignored except baselines.</summary>
     [Fact]
-    public void Results_GitignorePolicy()
+    public void ResultsGitignorePolicy()
     {
         var gitignore = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), ".gitignore"));
         Assert.Contains("docs/benchmarks/results/*", gitignore, StringComparison.Ordinal);
@@ -111,7 +111,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-09: Schema requires tokens_* integers and token_source enum.</summary>
     [Fact]
-    public void ResultSchema_RequiresTokenFields()
+    public void ResultSchemaRequiresTokenFields()
     {
         var schema = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), MemoryBenchResultSchema.RelativePath));
         Assert.Contains("tokens_in", schema, StringComparison.Ordinal);
@@ -126,7 +126,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-10: Missing token fields hard-fail finalize.</summary>
     [Fact]
-    public void MissingTokens_HardFail()
+    public void MissingTokensHardFail()
     {
         var incomplete = new MemoryBenchRunResult
         {
@@ -147,7 +147,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-11: Estimator is pure and versioned.</summary>
     [Fact]
-    public void Estimator_VersionedDeterministic()
+    public void EstimatorVersionedDeterministic()
     {
         Assert.Equal("memory-bench-whitespace", MemoryBenchTokenEstimator.EstimatorId);
         Assert.Equal("1.0.0", MemoryBenchTokenEstimator.EstimatorVersion);
@@ -157,7 +157,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-12: CI summary prints token means first.</summary>
     [Fact]
-    public void CiSummary_TokensFirst()
+    public void CiSummaryTokensFirst()
     {
         var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
         var tokenIndex = source.IndexOf("TOKEN MEANS", StringComparison.Ordinal);
@@ -167,7 +167,7 @@ public sealed class MemoryBenchTechTests
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-13: Default plugin is grok; all is explicit and post-H7a.</summary>
     [Fact]
-    public void DefaultPlugin_IsGrok()
+    public void DefaultPluginIsGrok()
     {
         var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
         Assert.Contains("readonly string Plugin = \"grok\"", source, StringComparison.Ordinal);

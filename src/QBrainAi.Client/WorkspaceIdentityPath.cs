@@ -590,7 +590,7 @@ public static class WorkspaceIdentityPath
         CancellationToken cancellationToken)
     {
         while (thread.IsAlive)
-            await Task.Delay(TimeSpan.FromMilliseconds(5)).ConfigureAwait(false);
+            await Task.Delay(TimeSpan.FromMilliseconds(5), cancellationToken).ConfigureAwait(false);
 
         var outcome = await workerOutcome.ConfigureAwait(false);
         Interlocked.Decrement(ref s_activeNativeResolverWorkers);
@@ -763,14 +763,14 @@ public static class WorkspaceIdentityPath
         if (ReferenceEquals(winner, completion))
             return;
 
-        var cleanupDeadline = Task.Delay(s_nativeCleanupTimeout);
+        var cleanupDeadline = Task.Delay(s_nativeCleanupTimeout, cancellationToken);
         while (!completion.IsCompleted && !cleanupDeadline.IsCompleted)
         {
             CancelWindowsSynchronousIo(threadId);
             await Task.WhenAny(
                     completion,
                     cleanupDeadline,
-                    Task.Delay(TimeSpan.FromMilliseconds(5)))
+                    Task.Delay(TimeSpan.FromMilliseconds(5), cancellationToken))
                 .ConfigureAwait(false);
         }
     }
@@ -931,7 +931,7 @@ public static class WorkspaceIdentityPath
     /// </summary>
     private static bool IsOpaqueWorkspaceIdentifier(string value)
     {
-        if (value.StartsWith("/", StringComparison.Ordinal) ||
+        if (value.StartsWith('/') ||
             value.StartsWith(((char)92).ToString(), StringComparison.Ordinal))
         {
             return false;
@@ -970,7 +970,7 @@ public static class WorkspaceIdentityPath
             return WorkspacePathPlatform.Windows;
         }
 
-        if (path.StartsWith("/", StringComparison.Ordinal))
+        if (path.StartsWith('/'))
             return WorkspacePathPlatform.CaseSensitive;
 
         return OperatingSystem.IsWindows()
@@ -1005,7 +1005,7 @@ public static class WorkspaceIdentityPath
 
     private static string NormalizeCaseSensitiveLexicalPath(string path)
     {
-        var rooted = path.StartsWith("/", StringComparison.Ordinal);
+        var rooted = path.StartsWith('/');
         var segments = CollapseSegments(
             path.Split('/', StringSplitOptions.RemoveEmptyEntries),
             rooted);

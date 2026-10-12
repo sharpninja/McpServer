@@ -14,7 +14,7 @@ public sealed class GitHubClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task ListIssuesAsync_SendsCorrectQueryParams()
+    public async System.Threading.Tasks.Task ListIssuesAsyncSendsCorrectQueryParams()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"issues":[]}""");
         using var http = new HttpClient(handler);
@@ -27,7 +27,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetIssueAsync_GetsCorrectUrl()
+    public async System.Threading.Tasks.Task GetIssueAsyncGetsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"number":42,"title":"Bug"}""");
         using var http = new HttpClient(handler);
@@ -40,7 +40,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CloseIssueAsync_IncludesReason()
+    public async System.Threading.Tasks.Task CloseIssueAsyncIncludesReason()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -53,7 +53,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SyncFromGitHubAsync_PostsCorrectly()
+    public async System.Threading.Tasks.Task SyncFromGitHubAsyncPostsCorrectly()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"synced":5,"skipped":0,"failed":0,"errors":[]}""");
         using var http = new HttpClient(handler);
@@ -66,7 +66,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateIssueAsync_PostsJsonBody()
+    public async System.Threading.Tasks.Task CreateIssueAsyncPostsJsonBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"number":99,"url":"https://github.com/x/y/issues/99"}""");
         using var http = new HttpClient(handler);
@@ -80,7 +80,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateIssueAsync_PutsCorrectUrl()
+    public async System.Threading.Tasks.Task UpdateIssueAsyncPutsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -94,7 +94,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ReopenIssueAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task ReopenIssueAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -107,7 +107,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CommentOnIssueAsync_PostsBody()
+    public async System.Threading.Tasks.Task CommentOnIssueAsyncPostsBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -121,7 +121,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListLabelsAsync_GetsLabels()
+    public async System.Threading.Tasks.Task ListLabelsAsyncGetsLabels()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"labels":[{"name":"bug","color":"d73a4a"}]}""");
         using var http = new HttpClient(handler);
@@ -135,7 +135,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListPullsAsync_GetsPulls()
+    public async System.Threading.Tasks.Task ListPullsAsyncGetsPulls()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"pulls":[{"number":1,"title":"PR","state":"open"}]}""");
         using var http = new HttpClient(handler);
@@ -148,7 +148,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CommentOnPullAsync_PostsBody()
+    public async System.Threading.Tasks.Task CommentOnPullAsyncPostsBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -162,7 +162,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SyncToGitHubAsync_PostsCorrectly()
+    public async System.Threading.Tasks.Task SyncToGitHubAsyncPostsCorrectly()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"synced":2,"skipped":0,"failed":0,"errors":[]}""");
         using var http = new HttpClient(handler);
@@ -176,7 +176,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SyncIssueAsync_PostsWithDirection()
+    public async System.Threading.Tasks.Task SyncIssueAsyncPostsWithDirection()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"todoId":"GH-10"}""");
         using var http = new HttpClient(handler);
@@ -191,7 +191,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAuthStatusAsync_GetsCorrectPath()
+    public async System.Threading.Tasks.Task GetAuthStatusAsyncGetsCorrectPath()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"workspacePath":"x","authMode":"stored_token","hasStoredToken":true}""");
         using var http = new HttpClient(handler);
@@ -204,7 +204,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SetAuthTokenAsync_PutsJsonBody()
+    public async System.Threading.Tasks.Task SetAuthTokenAsyncPutsJsonBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -218,7 +218,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListWorkflowRunsAsync_SendsQueryParams()
+    public async System.Threading.Tasks.Task ListWorkflowRunsAsyncSendsQueryParams()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"runs":[]}""");
         using var http = new HttpClient(handler);
@@ -235,7 +235,7 @@ public sealed class GitHubClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RerunWorkflowRunAsync_PostsCorrectPath()
+    public async System.Threading.Tasks.Task RerunWorkflowRunAsyncPostsCorrectPath()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);

@@ -44,7 +44,7 @@ public sealed class SessionLogTurnContextBackfill : ISessionLogTurnContextBackfi
         foreach (var turn in turns)
         {
             var workspace = string.IsNullOrWhiteSpace(turn.WorkspaceId) ? null : turn.WorkspaceId;
-            var extracted = _extractor.Extract(
+            var extracted = SessionLogTurnContextExtractor.Extract(
                 turn,
                 workspace,
                 userProfilePath,

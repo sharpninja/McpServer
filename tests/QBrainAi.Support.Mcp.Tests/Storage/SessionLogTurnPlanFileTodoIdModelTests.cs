@@ -12,7 +12,7 @@ public sealed class SessionLogTurnPlanFileTodoIdModelTests
 {
     /// <summary>AC-TR-MCP-SESSIONLOG-006-004: required strings with expected max lengths and None default.</summary>
     [Fact]
-    public void SessionLogTurnEntity_PlanFileAndTodoId_RequiredWithExpectedMaxLengths()
+    public void SessionLogTurnEntityPlanFileAndTodoIdRequiredWithExpectedMaxLengths()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase("model-" + Guid.NewGuid().ToString("N"))

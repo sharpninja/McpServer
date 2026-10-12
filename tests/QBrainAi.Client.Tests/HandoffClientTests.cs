@@ -23,7 +23,7 @@ public sealed class HandoffClientTests
     /// TEST-HANDOFF-001: IngestHandoffAsync posts the shared ingest contract to /qbrainai/handoff/ingest.
     /// </summary>
     [Fact]
-    public async Task IngestHandoffAsync_PostsIngestContract()
+    public async Task IngestHandoffAsyncPostsIngestContract()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -49,7 +49,7 @@ public sealed class HandoffClientTests
     /// TEST-HANDOFF-001: GetHandoffRunAsync reads /qbrainai/handoff/runs/{runId}.
     /// </summary>
     [Fact]
-    public async Task GetHandoffRunAsync_SendsCorrectUrl()
+    public async Task GetHandoffRunAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -68,7 +68,7 @@ public sealed class HandoffClientTests
     /// TEST-HANDOFF-001: ApproveHandoffAsync posts the approval contract.
     /// </summary>
     [Fact]
-    public async Task ApproveHandoffAsync_PostsApprovalContract()
+    public async Task ApproveHandoffAsyncPostsApprovalContract()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -92,7 +92,7 @@ public sealed class HandoffClientTests
     /// TEST-HANDOFF-001: public contract types round-trip through the typed client JSON context.
     /// </summary>
     [Fact]
-    public void HandoffContracts_RoundTripThroughClientJsonContext()
+    public void HandoffContractsRoundTripThroughClientJsonContext()
     {
         var original = new HandoffIngestionResult
         {
@@ -162,7 +162,7 @@ public sealed class HandoffClientTests
     /// TEST-HANDOFF-001: documented enum values exist on the public contract.
     /// </summary>
     [Fact]
-    public void HandoffEnums_ExposeDocumentedValues()
+    public void HandoffEnumsExposeDocumentedValues()
     {
         Assert.Equal(new[] { HandoffSourceKind.Path, HandoffSourceKind.Content, HandoffSourceKind.Artifact }, Enum.GetValues<HandoffSourceKind>());
         Assert.Equal(new[] { HandoffIngestionMode.DraftOnly, HandoffIngestionMode.RequireReview, HandoffIngestionMode.CreateWhenConfident }, Enum.GetValues<HandoffIngestionMode>());

@@ -13,7 +13,7 @@ public sealed class BrainSlotChatClientFactoryTests
 {
     /// <summary>TEST-MCP-QBOLLAMA-001: content is preferred over provider-specific thinking fields.</summary>
     [Fact]
-    public void ExtractOpenAiCompatibleMessageText_WhenContentPresent_ReturnsContent()
+    public void ExtractOpenAiCompatibleMessageTextWhenContentPresentReturnsContent()
     {
         var json = """
                    {
@@ -36,7 +36,7 @@ public sealed class BrainSlotChatClientFactoryTests
 
     /// <summary>TEST-MCP-QBOLLAMA-001: reasoning is used when Ollama returns empty content.</summary>
     [Fact]
-    public void ExtractOpenAiCompatibleMessageText_WhenContentEmptyAndReasoningPresent_ReturnsReasoning()
+    public void ExtractOpenAiCompatibleMessageTextWhenContentEmptyAndReasoningPresentReturnsReasoning()
     {
         var json = """
                    {
@@ -59,7 +59,7 @@ public sealed class BrainSlotChatClientFactoryTests
 
     /// <summary>TEST-MCP-QBOLLAMA-001: reasoning_content is used when content and reasoning are empty.</summary>
     [Fact]
-    public void ExtractOpenAiCompatibleMessageText_WhenReasoningContentPresent_ReturnsReasoningContent()
+    public void ExtractOpenAiCompatibleMessageTextWhenReasoningContentPresentReturnsReasoningContent()
     {
         var json = """
                    {
@@ -82,7 +82,7 @@ public sealed class BrainSlotChatClientFactoryTests
 
     /// <summary>TEST-MCP-QBLIVE-001: OpenAI-compatible brain-slot requests include temperature only when supplied by orchestration.</summary>
     [Fact]
-    public void BuildOpenAiCompatibleRequestJson_WhenTemperatureSupplied_IncludesTemperature()
+    public void BuildOpenAiCompatibleRequestJsonWhenTemperatureSuppliedIncludesTemperature()
     {
         var slot = Slot();
 

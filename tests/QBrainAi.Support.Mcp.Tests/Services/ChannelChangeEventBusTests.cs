@@ -9,7 +9,7 @@ public sealed class ChannelChangeEventBusTests
 {
     /// <summary>PublishAsync does not throw when no subscribers are registered for the event bus.</summary>
     [Fact]
-    public async Task PublishAsync_NoSubscribers_DoesNotThrow()
+    public async Task PublishAsyncNoSubscribersDoesNotThrow()
     {
         var sut = new ChannelChangeEventBus(new TestLogger<ChannelChangeEventBus>());
         var evt = new ChangeEvent
@@ -27,7 +27,7 @@ public sealed class ChannelChangeEventBusTests
 
     /// <summary>PublishAsync fans a change event out to all active subscribers.</summary>
     [Fact]
-    public async Task PublishAsync_MultipleSubscribers_AllReceiveEvent()
+    public async Task PublishAsyncMultipleSubscribersAllReceiveEvent()
     {
         var sut = new ChannelChangeEventBus(new TestLogger<ChannelChangeEventBus>());
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
@@ -54,7 +54,7 @@ public sealed class ChannelChangeEventBusTests
 
     /// <summary>SubscribeAsync stops enumeration when the subscriber cancellation token is cancelled.</summary>
     [Fact]
-    public async Task SubscribeAsync_Cancellation_StopsEnumeration()
+    public async Task SubscribeAsyncCancellationStopsEnumeration()
     {
         var sut = new ChannelChangeEventBus(new TestLogger<ChannelChangeEventBus>());
         using var cts = new CancellationTokenSource();
@@ -70,7 +70,7 @@ public sealed class ChannelChangeEventBusTests
 
     /// <summary>PublishAsync logs overflow and preserves queued events when a subscriber buffer is full.</summary>
     [Fact]
-    public async Task PublishAsync_WhenSubscriberBufferIsFull_LogsWarningAndRejectsNewEvent()
+    public async Task PublishAsyncWhenSubscriberBufferIsFullLogsWarningAndRejectsNewEvent()
     {
         var logger = new TestLogger<ChannelChangeEventBus>();
         var sut = new ChannelChangeEventBus(logger);

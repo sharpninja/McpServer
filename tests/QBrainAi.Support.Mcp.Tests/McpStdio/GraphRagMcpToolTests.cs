@@ -115,7 +115,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-078: graphrag_ingest_text calls IngestTextAsync and returns JSON.</summary>
     [Fact]
-    public async Task GraphRagIngestText_CallsService_ReturnsJson()
+    public async Task GraphRagIngestTextCallsServiceReturnsJson()
     {
         var expected = new GraphRagIngestTextResponse { DocumentId = "doc-1", SourceType = "adhoc-text", SourceKey = "test" };
         _graphRagService.IngestTextAsync(Arg.Any<GraphRagIngestTextRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -129,7 +129,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-078: graphrag_ingest_text returns error when content empty.</summary>
     [Fact]
-    public async Task GraphRagIngestText_EmptyContent_ReturnsError()
+    public async Task GraphRagIngestTextEmptyContentReturnsError()
     {
         var json = await _tools.GraphRagIngestText("", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -140,7 +140,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-080: graphrag_list_documents calls ListDocumentsAsync and returns JSON.</summary>
     [Fact]
-    public async Task GraphRagListDocuments_CallsService_ReturnsJson()
+    public async Task GraphRagListDocumentsCallsServiceReturnsJson()
     {
         var expected = new GraphRagDocumentListResponse { Documents = [], TotalCount = 0 };
         _graphRagService.ListDocumentsAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -155,7 +155,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-080: graphrag_get_document_chunks returns JSON when found.</summary>
     [Fact]
-    public async Task GraphRagGetDocumentChunks_Found_ReturnsJson()
+    public async Task GraphRagGetDocumentChunksFoundReturnsJson()
     {
         var expected = new GraphRagDocumentChunksResponse { DocumentId = "doc-1", Chunks = [], TotalChunks = 0 };
         _graphRagService.GetDocumentChunksAsync("doc-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -167,7 +167,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-080: graphrag_get_document_chunks returns error when not found.</summary>
     [Fact]
-    public async Task GraphRagGetDocumentChunks_NotFound_ReturnsError()
+    public async Task GraphRagGetDocumentChunksNotFoundReturnsError()
     {
         _graphRagService.GetDocumentChunksAsync("doc-99", Arg.Any<CancellationToken>()).Returns((GraphRagDocumentChunksResponse?)null);
 
@@ -180,7 +180,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-080: graphrag_delete_document calls DeleteDocumentAsync.</summary>
     [Fact]
-    public async Task GraphRagDeleteDocument_CallsService_ReturnsJson()
+    public async Task GraphRagDeleteDocumentCallsServiceReturnsJson()
     {
         var expected = new GraphRagDocumentDeleteResponse { DocumentId = "doc-1", ChunksRemoved = 2, Success = true };
         _graphRagService.DeleteDocumentAsync("doc-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -195,7 +195,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_create_entity calls CreateEntityAsync.</summary>
     [Fact]
-    public async Task GraphRagCreateEntity_CallsService_ReturnsJson()
+    public async Task GraphRagCreateEntityCallsServiceReturnsJson()
     {
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Alice", EntityType = "person" };
         _graphRagService.CreateEntityAsync(Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -209,7 +209,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_list_entities calls ListEntitiesAsync.</summary>
     [Fact]
-    public async Task GraphRagListEntities_CallsService_ReturnsJson()
+    public async Task GraphRagListEntitiesCallsServiceReturnsJson()
     {
         var expected = new GraphEntityListResponse { Entities = [], TotalCount = 0 };
         _graphRagService.ListEntitiesAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -223,7 +223,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_get_entity returns JSON when found.</summary>
     [Fact]
-    public async Task GraphRagGetEntity_Found_ReturnsJson()
+    public async Task GraphRagGetEntityFoundReturnsJson()
     {
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Alice", EntityType = "person" };
         _graphRagService.GetEntityAsync("ge-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -235,7 +235,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_get_entity returns error when not found.</summary>
     [Fact]
-    public async Task GraphRagGetEntity_NotFound_ReturnsError()
+    public async Task GraphRagGetEntityNotFoundReturnsError()
     {
         _graphRagService.GetEntityAsync("ge-99", Arg.Any<CancellationToken>()).Returns((GraphEntityResponse?)null);
 
@@ -248,7 +248,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_update_entity calls UpdateEntityAsync.</summary>
     [Fact]
-    public async Task GraphRagUpdateEntity_Found_ReturnsJson()
+    public async Task GraphRagUpdateEntityFoundReturnsJson()
     {
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Bob", EntityType = "person" };
         _graphRagService.UpdateEntityAsync("ge-1", Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -260,7 +260,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_update_entity returns error when not found.</summary>
     [Fact]
-    public async Task GraphRagUpdateEntity_NotFound_ReturnsError()
+    public async Task GraphRagUpdateEntityNotFoundReturnsError()
     {
         _graphRagService.UpdateEntityAsync("ge-99", Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>()).Returns((GraphEntityResponse?)null);
 
@@ -273,7 +273,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_delete_entity calls DeleteEntityAsync.</summary>
     [Fact]
-    public async Task GraphRagDeleteEntity_CallsService_ReturnsJson()
+    public async Task GraphRagDeleteEntityCallsServiceReturnsJson()
     {
         _graphRagService.DeleteEntityAsync("ge-1", Arg.Any<CancellationToken>()).Returns(true);
 
@@ -286,7 +286,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_create_relationship calls CreateRelationshipAsync.</summary>
     [Fact]
-    public async Task GraphRagCreateRelationship_CallsService_ReturnsJson()
+    public async Task GraphRagCreateRelationshipCallsServiceReturnsJson()
     {
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         _graphRagService.CreateRelationshipAsync(Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -300,7 +300,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_list_relationships calls ListRelationshipsAsync.</summary>
     [Fact]
-    public async Task GraphRagListRelationships_CallsService_ReturnsJson()
+    public async Task GraphRagListRelationshipsCallsServiceReturnsJson()
     {
         var expected = new GraphRelationshipListResponse { Relationships = [], TotalCount = 0 };
         _graphRagService.ListRelationshipsAsync(0, 50, null, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -314,7 +314,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_get_relationship returns JSON when found.</summary>
     [Fact]
-    public async Task GraphRagGetRelationship_Found_ReturnsJson()
+    public async Task GraphRagGetRelationshipFoundReturnsJson()
     {
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         _graphRagService.GetRelationshipAsync("gr-1", Arg.Any<CancellationToken>()).Returns(expected);
@@ -326,7 +326,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_get_relationship returns error when not found.</summary>
     [Fact]
-    public async Task GraphRagGetRelationship_NotFound_ReturnsError()
+    public async Task GraphRagGetRelationshipNotFoundReturnsError()
     {
         _graphRagService.GetRelationshipAsync("gr-99", Arg.Any<CancellationToken>()).Returns((GraphRelationshipResponse?)null);
 
@@ -339,7 +339,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_update_relationship calls UpdateRelationshipAsync.</summary>
     [Fact]
-    public async Task GraphRagUpdateRelationship_Found_ReturnsJson()
+    public async Task GraphRagUpdateRelationshipFoundReturnsJson()
     {
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "works-with" };
         _graphRagService.UpdateRelationshipAsync("gr-1", Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -351,7 +351,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_update_relationship returns error when not found.</summary>
     [Fact]
-    public async Task GraphRagUpdateRelationship_NotFound_ReturnsError()
+    public async Task GraphRagUpdateRelationshipNotFoundReturnsError()
     {
         _graphRagService.UpdateRelationshipAsync("gr-99", Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>()).Returns((GraphRelationshipResponse?)null);
 
@@ -364,7 +364,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
 
     /// <summary>FR-MCP-079: graphrag_delete_relationship calls DeleteRelationshipAsync.</summary>
     [Fact]
-    public async Task GraphRagDeleteRelationship_CallsService_ReturnsJson()
+    public async Task GraphRagDeleteRelationshipCallsServiceReturnsJson()
     {
         _graphRagService.DeleteRelationshipAsync("gr-1", Arg.Any<CancellationToken>()).Returns(true);
 

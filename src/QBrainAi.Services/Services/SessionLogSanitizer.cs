@@ -165,7 +165,7 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
         };
     }
 
-    private CopilotStatisticsDto? SanitizeCopilotStatistics(CopilotStatisticsDto? statistics)
+    private static CopilotStatisticsDto? SanitizeCopilotStatistics(CopilotStatisticsDto? statistics)
     {
         if (statistics is null)
             return null;

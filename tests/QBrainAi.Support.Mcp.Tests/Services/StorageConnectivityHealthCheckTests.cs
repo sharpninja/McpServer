@@ -29,7 +29,7 @@ public sealed class StorageConnectivityHealthCheckTests
 
     /// <summary>AC: an unreachable store (missing database file) reports Unhealthy without throwing.</summary>
     [Fact]
-    public async Task CheckHealth_UnreachableStore_ReportsUnhealthy()
+    public async Task CheckHealthUnreachableStoreReportsUnhealthy()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), $"missing-{Guid.NewGuid():N}", "mcp.db");
         var check = Build($"Data Source={missingPath}");
@@ -41,7 +41,7 @@ public sealed class StorageConnectivityHealthCheckTests
 
     /// <summary>AC: a reachable store (existing database file) reports Healthy.</summary>
     [Fact]
-    public async Task CheckHealth_ReachableStore_ReportsHealthy()
+    public async Task CheckHealthReachableStoreReportsHealthy()
     {
         var path = Path.Combine(Path.GetTempPath(), $"storage-health-{Guid.NewGuid():N}.db");
         await using (File.Create(path))
@@ -64,7 +64,7 @@ public sealed class StorageConnectivityHealthCheckTests
 
     /// <summary>AC: a mis-registered scope (no McpDbContext) degrades to Unhealthy instead of throwing.</summary>
     [Fact]
-    public async Task CheckHealth_ContextResolutionFails_ReportsUnhealthy()
+    public async Task CheckHealthContextResolutionFailsReportsUnhealthy()
     {
         var provider = new ServiceCollection().BuildServiceProvider();
         var check = new StorageConnectivityHealthCheck(

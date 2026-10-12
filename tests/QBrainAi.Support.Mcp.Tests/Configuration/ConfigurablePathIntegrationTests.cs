@@ -15,7 +15,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
     private readonly List<string> _tempDirectories = [];
 
     [Fact]
-    public async Task RepoIngestor_ResolvesRelativeRepoRoot_AgainstCurrentDirectory()
+    public async Task RepoIngestorResolvesRelativeRepoRootAgainstCurrentDirectory()
     {
         var repoFolder = CreateTempDirectory();
         var relativeRepoRoot = Path.GetRelativePath(Directory.GetCurrentDirectory(), repoFolder);
@@ -30,7 +30,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task VectorIndexService_SaveAsync_UsesConfiguredRelativeIndexPath()
+    public async Task VectorIndexServiceSaveAsyncUsesConfiguredRelativeIndexPath()
     {
         var tempRoot = CreateTempDirectory();
         var relativeRoot = Path.GetRelativePath(Directory.GetCurrentDirectory(), tempRoot);
@@ -52,7 +52,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
     }
 
     [Fact]
-    public void McpInstanceResolver_ResolvesIsolatedSettings_ForTwoInstances()
+    public void McpInstanceResolverResolvesIsolatedSettingsForTwoInstances()
     {
         var tempRoot = CreateTempDirectory();
         var alphaRoot = Path.Combine(tempRoot, "alpha");

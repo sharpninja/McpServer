@@ -12,7 +12,7 @@ public sealed class AgentExecutionStrategyResolverTests
 {
     /// <summary>The resolver returns the grok strategy for the canonical grok-cli name.</summary>
     [Fact]
-    public void Resolve_GrokCli_ReturnsGrokStrategy()
+    public void ResolveGrokCliReturnsGrokStrategy()
     {
         var resolver = new AgentExecutionStrategyResolver([new FakeStrategy(AgentExecutionStrategyNames.GrokCli)]);
 
@@ -23,7 +23,7 @@ public sealed class AgentExecutionStrategyResolverTests
 
     /// <summary>The resolver maps the grok-build alias to the registered grok-cli strategy.</summary>
     [Fact]
-    public void Resolve_GrokBuildAlias_ReturnsGrokStrategy()
+    public void ResolveGrokBuildAliasReturnsGrokStrategy()
     {
         var resolver = new AgentExecutionStrategyResolver([new FakeStrategy(AgentExecutionStrategyNames.GrokCli)]);
 

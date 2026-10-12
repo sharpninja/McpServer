@@ -145,7 +145,7 @@ public sealed class AgentCliClient(
 
             try
             {
-                await proc.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(true);
+                await proc.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(true);
             }
             catch (TimeoutException ex)
             {

@@ -22,7 +22,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     }
 
     [Fact]
-    public async Task AuthKey_InXApiKeyHeader_IsValidated()
+    public async Task AuthKeyInXApiKeyHeaderIsValidated()
     {
         var serverUrl = "http://localhost:5177";
         var testApiKey = "test-api-key-integration-001";
@@ -45,7 +45,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     }
 
     [Fact]
-    public async Task WorkspacePath_InXWorkspacePathHeader_IsRecognized()
+    public async Task WorkspacePathInXWorkspacePathHeaderIsRecognized()
     {
         var serverUrl = "http://localhost:5177";
         var testWorkspacePath = "/test/integration/workspace";
@@ -69,7 +69,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     }
 
     [Fact]
-    public async Task WorkspaceSelection_ViaYamlRequest_CompletesSuccessfully()
+    public async Task WorkspaceSelectionViaYamlRequestCompletesSuccessfully()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -86,7 +86,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     }
 
     [Fact]
-    public async Task WorkspaceSelection_MultipleSwitches_HandlesCorrectly()
+    public async Task WorkspaceSelectionMultipleSwitchesHandlesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -107,7 +107,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     }
 
     [Fact]
-    public async Task AuthKeyAndWorkspace_BothHeaders_AreProcessedTogether()
+    public async Task AuthKeyAndWorkspaceBothHeadersAreProcessedTogether()
     {
         var serverUrl = "http://localhost:5177";
         var testApiKey = "test-api-key-002";
@@ -133,7 +133,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     }
 
     [Fact]
-    public async Task AuthKey_Missing_ReturnsAppropriateError()
+    public async Task AuthKeyMissingReturnsAppropriateError()
     {
         var serverUrl = "http://localhost:5177";
         var testWorkspacePath = "/test/workspace/auth-required";
@@ -156,7 +156,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     }
 
     [Fact]
-    public async Task WorkspaceSelection_InvalidPath_ReturnsError()
+    public async Task WorkspaceSelectionInvalidPathReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);

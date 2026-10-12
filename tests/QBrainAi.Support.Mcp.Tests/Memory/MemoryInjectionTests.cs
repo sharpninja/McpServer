@@ -15,7 +15,7 @@ public sealed class MemoryInjectionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-44: REQUIRED MEMORIES uses Content (or legacy text) raw; Summary/confidence/tags never appear.</summary>
     [Fact]
-    public async Task RequiredBlock_RawContentOnly()
+    public async Task RequiredBlockRawContentOnly()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -32,7 +32,7 @@ public sealed class MemoryInjectionTests : IDisposable
 
         var list = await _harness.ListCompatAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        var block = _harness.RenderRequiredMemories(list.Items);
+        var block = MemoryS1Harness.RenderRequiredMemories(list.Items);
 
         Assert.Contains("REQUIRED MEMORIES", block, StringComparison.Ordinal);
         Assert.Contains("RAW-CONTENT-ONLY", block, StringComparison.Ordinal);
@@ -44,9 +44,9 @@ public sealed class MemoryInjectionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-45: Empty Effective set still renders REQUIRED MEMORIES / - None.</summary>
     [Fact]
-    public void EmptySet_RendersNone()
+    public void EmptySetRendersNone()
     {
-        var block = _harness.RenderRequiredMemories([]);
+        var block = MemoryS1Harness.RenderRequiredMemories([]);
 
         Assert.Contains("REQUIRED MEMORIES", block, StringComparison.Ordinal);
         Assert.Contains("- None", block, StringComparison.Ordinal);

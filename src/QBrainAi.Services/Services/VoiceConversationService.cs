@@ -1675,7 +1675,7 @@ public sealed partial class VoiceConversationService
             if (firstNewline >= 0 && lastFence > firstNewline)
             {
                 var inside = trimmed.Substring(firstNewline + 1, lastFence - firstNewline - 1).Trim();
-                if (inside.StartsWith("{", StringComparison.Ordinal) && inside.EndsWith("}", StringComparison.Ordinal))
+                if (inside.StartsWith('{') && inside.EndsWith('}'))
                 {
                     json = inside;
                     return true;

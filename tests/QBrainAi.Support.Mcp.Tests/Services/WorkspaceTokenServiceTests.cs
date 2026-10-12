@@ -8,56 +8,56 @@ public sealed class WorkspaceTokenServiceTests
     private readonly WorkspaceTokenService _sut = new();
 
     [Fact]
-    public void GenerateToken_ReturnsNonEmptyToken()
+    public void GenerateTokenReturnsNonEmptyToken()
     {
         var token = _sut.GenerateToken(@"C:\projects\test");
         Assert.False(string.IsNullOrWhiteSpace(token));
     }
 
     [Fact]
-    public void ValidateToken_MatchesGenerated()
+    public void ValidateTokenMatchesGenerated()
     {
         var token = _sut.GenerateToken(@"C:\projects\test");
         Assert.True(_sut.ValidateToken(@"C:\projects\test", token));
     }
 
     [Fact]
-    public void ValidateToken_RejectsMismatch()
+    public void ValidateTokenRejectsMismatch()
     {
         _sut.GenerateToken(@"C:\projects\test");
         Assert.False(_sut.ValidateToken(@"C:\projects\test", "wrong-token"));
     }
 
     [Fact]
-    public void GenerateDefaultToken_ReturnsNonEmptyToken()
+    public void GenerateDefaultTokenReturnsNonEmptyToken()
     {
         var token = _sut.GenerateDefaultToken(@"C:\projects\test");
         Assert.False(string.IsNullOrWhiteSpace(token));
     }
 
     [Fact]
-    public void ValidateDefaultToken_MatchesGenerated()
+    public void ValidateDefaultTokenMatchesGenerated()
     {
         var token = _sut.GenerateDefaultToken(@"C:\projects\test");
         Assert.True(_sut.ValidateDefaultToken(@"C:\projects\test", token));
     }
 
     [Fact]
-    public void ValidateDefaultToken_RejectsMismatch()
+    public void ValidateDefaultTokenRejectsMismatch()
     {
         _sut.GenerateDefaultToken(@"C:\projects\test");
         Assert.False(_sut.ValidateDefaultToken(@"C:\projects\test", "wrong"));
     }
 
     [Fact]
-    public void IsDefaultToken_ReturnsTrueForDefaultToken()
+    public void IsDefaultTokenReturnsTrueForDefaultToken()
     {
         var token = _sut.GenerateDefaultToken(@"C:\projects\test");
         Assert.True(_sut.IsDefaultToken(@"C:\projects\test", token));
     }
 
     [Fact]
-    public void IsDefaultToken_ReturnsFalseForFullToken()
+    public void IsDefaultTokenReturnsFalseForFullToken()
     {
         var fullToken = _sut.GenerateToken(@"C:\projects\test");
         _sut.GenerateDefaultToken(@"C:\projects\test");
@@ -65,7 +65,7 @@ public sealed class WorkspaceTokenServiceTests
     }
 
     [Fact]
-    public void FullAndDefaultTokens_AreDifferent()
+    public void FullAndDefaultTokensAreDifferent()
     {
         var full = _sut.GenerateToken(@"C:\projects\test");
         var def = _sut.GenerateDefaultToken(@"C:\projects\test");
@@ -73,20 +73,20 @@ public sealed class WorkspaceTokenServiceTests
     }
 
     [Fact]
-    public void GetDefaultToken_ReturnsNullWhenNoneGenerated()
+    public void GetDefaultTokenReturnsNullWhenNoneGenerated()
     {
         Assert.Null(_sut.GetDefaultToken(@"C:\projects\nonexistent"));
     }
 
     [Fact]
-    public void FullToken_DoesNotValidateAsDefault()
+    public void FullTokenDoesNotValidateAsDefault()
     {
         var full = _sut.GenerateToken(@"C:\projects\test");
         Assert.False(_sut.ValidateDefaultToken(@"C:\projects\test", full));
     }
 
     [Fact]
-    public void DefaultToken_DoesNotValidateAsFull()
+    public void DefaultTokenDoesNotValidateAsFull()
     {
         var def = _sut.GenerateDefaultToken(@"C:\projects\test");
         Assert.False(_sut.ValidateToken(@"C:\projects\test", def));
@@ -95,7 +95,7 @@ public sealed class WorkspaceTokenServiceTests
     // --- Reverse lookup tests (TR-MCP-MT-002) ---
 
     [Fact]
-    public void ResolveWorkspaceByToken_ReturnsCorrectWorkspace()
+    public void ResolveWorkspaceByTokenReturnsCorrectWorkspace()
     {
         var token = _sut.GenerateToken(@"C:\projects\test");
         var result = _sut.ResolveWorkspaceByToken(token);
@@ -104,14 +104,14 @@ public sealed class WorkspaceTokenServiceTests
     }
 
     [Fact]
-    public void ResolveWorkspaceByToken_ReturnsNull_ForUnknownToken()
+    public void ResolveWorkspaceByTokenReturnsNullForUnknownToken()
     {
         _sut.GenerateToken(@"C:\projects\test");
         Assert.Null(_sut.ResolveWorkspaceByToken("unknown-token-xyz"));
     }
 
     [Fact]
-    public void ResolveWorkspaceByToken_ReturnsNull_ForNullOrEmpty()
+    public void ResolveWorkspaceByTokenReturnsNullForNullOrEmpty()
     {
         Assert.Null(_sut.ResolveWorkspaceByToken(null));
         Assert.Null(_sut.ResolveWorkspaceByToken(""));
@@ -119,7 +119,7 @@ public sealed class WorkspaceTokenServiceTests
     }
 
     [Fact]
-    public void ResolveWorkspaceByToken_DefaultToken_ReturnsCorrectWorkspace()
+    public void ResolveWorkspaceByTokenDefaultTokenReturnsCorrectWorkspace()
     {
         var token = _sut.GenerateDefaultToken(@"C:\projects\test");
         var result = _sut.ResolveWorkspaceByToken(token, out var isDefault);
@@ -128,7 +128,7 @@ public sealed class WorkspaceTokenServiceTests
     }
 
     [Fact]
-    public void ResolveWorkspaceByToken_FullToken_IsNotDefault()
+    public void ResolveWorkspaceByTokenFullTokenIsNotDefault()
     {
         var token = _sut.GenerateToken(@"C:\projects\test");
         var result = _sut.ResolveWorkspaceByToken(token, out var isDefault);
@@ -137,7 +137,7 @@ public sealed class WorkspaceTokenServiceTests
     }
 
     [Fact]
-    public void ResolveWorkspaceByToken_AfterTokenRotation_OldTokenReturnsNull()
+    public void ResolveWorkspaceByTokenAfterTokenRotationOldTokenReturnsNull()
     {
         var oldToken = _sut.GenerateToken(@"C:\projects\test");
         var newToken = _sut.GenerateToken(@"C:\projects\test");
@@ -147,7 +147,7 @@ public sealed class WorkspaceTokenServiceTests
     }
 
     [Fact]
-    public void ResolveWorkspaceByToken_MultipleWorkspaces_ReturnsCorrectOne()
+    public void ResolveWorkspaceByTokenMultipleWorkspacesReturnsCorrectOne()
     {
         var tokenA = _sut.GenerateToken(@"C:\projects\alpha");
         var tokenB = _sut.GenerateToken(@"C:\projects\beta");
@@ -165,14 +165,14 @@ public sealed class WorkspaceTokenServiceTests
 
     /// <summary>TEST-MCP-AUTH-012: IsInitialized is false before any full token is generated.</summary>
     [Fact]
-    public void IsInitialized_NoTokens_ReturnsFalse()
+    public void IsInitializedNoTokensReturnsFalse()
     {
         Assert.False(_sut.IsInitialized);
     }
 
     /// <summary>TEST-MCP-AUTH-012: IsInitialized becomes true once a full token is generated.</summary>
     [Fact]
-    public void IsInitialized_AfterGenerateToken_ReturnsTrue()
+    public void IsInitializedAfterGenerateTokenReturnsTrue()
     {
         _sut.GenerateToken(@"C:\projects\test");
         Assert.True(_sut.IsInitialized);
@@ -180,7 +180,7 @@ public sealed class WorkspaceTokenServiceTests
 
     /// <summary>TEST-MCP-AUTH-012: A default (anonymous) token alone does not mark the subsystem initialized.</summary>
     [Fact]
-    public void IsInitialized_DefaultTokenOnly_ReturnsFalse()
+    public void IsInitializedDefaultTokenOnlyReturnsFalse()
     {
         _sut.GenerateDefaultToken(@"C:\projects\test");
         Assert.False(_sut.IsInitialized);

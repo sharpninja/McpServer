@@ -25,7 +25,7 @@ public sealed class MemoryAuthTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-26: Read-only API key cannot remember/add/update/remove.</summary>
     [Fact]
-    public async Task ReadOnlyKey_CannotMutate()
+    public async Task ReadOnlyKeyCannotMutate()
     {
         var remember = await _harness.RememberAsync(
             new MemoryRememberRequest { Content = "nope", Type = "fact" },
@@ -45,7 +45,7 @@ public sealed class MemoryAuthTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-27: Full-access key can mutate; get after add returns the same id and Content.</summary>
     [Fact]
-    public async Task FullKey_MutateThenGet()
+    public async Task FullKeyMutateThenGet()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -63,7 +63,7 @@ public sealed class MemoryAuthTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-13: Read-only key can list versions but cannot revert.</summary>
     [Fact]
-    public async Task ReadOnlyKey_CanListVersionsNotRevert()
+    public async Task ReadOnlyKeyCanListVersionsNotRevert()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -98,7 +98,7 @@ public sealed class MemoryAuthTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-011-26: Read-only API key may recall/list.</summary>
     [Fact]
-    public async Task ReadOnlyKey_CanRecall()
+    public async Task ReadOnlyKeyCanRecall()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -159,7 +159,7 @@ public sealed class MemoryAuthTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-16: Read-only API key cannot run write-mode consolidate.</summary>
     [Fact]
-    public async Task ReadOnlyKey_CannotConsolidateWrite()
+    public async Task ReadOnlyKeyCannotConsolidateWrite()
     {
         var result = await _harness.ConsolidateAsync(
             new MemoryConsolidateRequest { DryRun = false },
@@ -171,7 +171,7 @@ public sealed class MemoryAuthTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-11: Read-only key cannot promote.</summary>
     [Fact]
-    public async Task ReadOnlyKey_CannotPromote()
+    public async Task ReadOnlyKeyCannotPromote()
     {
         var result = await _harness.PromoteAsync(
             new MemoryPromoteRequest

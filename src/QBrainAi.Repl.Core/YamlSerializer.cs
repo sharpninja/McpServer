@@ -19,6 +19,7 @@ public sealed class YamlSerializer : IYamlSerializer
 {
     private readonly ISerializer _serializer;
     private readonly IDeserializer _deserializer;
+    private static readonly string[] separator = new[] { "\n---\n", "\r\n---\r\n", "\n---\r\n", "\r\n---\n" };
 
     /// <summary>
     /// Initializes a new instance of the <see cref="YamlSerializer"/> class with a
@@ -115,7 +116,7 @@ public sealed class YamlSerializer : IYamlSerializer
         ArgumentException.ThrowIfNullOrWhiteSpace(yamlStream);
 
         var documents = yamlStream.Split(
-            new[] { "\n---\n", "\r\n---\r\n", "\n---\r\n", "\r\n---\n" },
+            separator,
             StringSplitOptions.RemoveEmptyEntries);
 
         var envelopes = new List<IYamlEnvelope>();

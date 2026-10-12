@@ -16,7 +16,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-01: Updating Content increments VersionNumber and stores a snapshot.</summary>
     [Fact]
-    public async Task Update_AppendsVersion()
+    public async Task UpdateAppendsVersion()
     {
         var id = await CreateAsync("v1").ConfigureAwait(true);
         await _harness.UpdateCompatAsync(
@@ -34,7 +34,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-02: GET versions returns versions ordered ascending by VersionNumber.</summary>
     [Fact]
-    public async Task List_OrderedAscending()
+    public async Task ListOrderedAscending()
     {
         var id = await CreateAsync("one").ConfigureAwait(true);
         await _harness.UpdateCompatAsync(id, new MemoryUpdateRequest { Text = "two", Content = "two" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -49,7 +49,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-03: Revert to N restores Content (and declared mutable fields) to snapshot N.</summary>
     [Fact]
-    public async Task Revert_RestoresSnapshot()
+    public async Task RevertRestoresSnapshot()
     {
         var id = await CreateAsync("original").ConfigureAwait(true);
         await _harness.UpdateCompatAsync(id, new MemoryUpdateRequest { Text = "changed", Content = "changed" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -62,7 +62,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-04: Revert itself appends a new version (history preserved).</summary>
     [Fact]
-    public async Task Revert_AppendsNewVersion()
+    public async Task RevertAppendsNewVersion()
     {
         var id = await CreateAsync("original").ConfigureAwait(true);
         await _harness.UpdateCompatAsync(id, new MemoryUpdateRequest { Text = "changed", Content = "changed" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -78,7 +78,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-05: Revert to missing N returns 400/404.</summary>
     [Fact]
-    public async Task RevertMissing_Returns400Or404()
+    public async Task RevertMissingReturns400Or404()
     {
         var id = await CreateAsync("only-one").ConfigureAwait(true);
         var result = await _harness.RevertAsync(id, 99, cancellationToken: TestContext.Current.CancellationToken)
@@ -89,7 +89,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-06: Initial create yields VersionNumber=1 (or documented initial).</summary>
     [Fact]
-    public async Task Create_InitialVersion()
+    public async Task CreateInitialVersion()
     {
         var id = await CreateAsync("initial").ConfigureAwait(true);
         var versions = await _harness.ListVersionsAsync(id, cancellationToken: TestContext.Current.CancellationToken)
@@ -101,7 +101,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-07: Update that does not change Content does not append a duplicate version (or appends a documented no-op).</summary>
     [Fact]
-    public async Task NoOpUpdate_VersionPolicy()
+    public async Task NoOpUpdateVersionPolicy()
     {
         var id = await CreateAsync("same").ConfigureAwait(true);
         var before = await _harness.ListVersionsAsync(id, cancellationToken: TestContext.Current.CancellationToken)
@@ -121,7 +121,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-08: Versions for soft-deleted memory are not listed to normal callers (404 on parent).</summary>
     [Fact]
-    public async Task SoftDeletedParent_VersionsHidden()
+    public async Task SoftDeletedParentVersionsHidden()
     {
         var id = await CreateAsync("doomed").ConfigureAwait(true);
         await _harness.RemoveCompatAsync(id, cancellationToken: TestContext.Current.CancellationToken)
@@ -134,7 +134,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-09: Foreign-workspace cannot list versions of a Workspace memory.</summary>
     [Fact]
-    public async Task ForeignWorkspace_CannotListVersions()
+    public async Task ForeignWorkspaceCannotListVersions()
     {
         var id = await CreateAsync("workspace-only").ConfigureAwait(true);
         var versions = await _harness.ListVersionsAsync(
@@ -147,7 +147,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-10: Revert to current N is idempotent content-wise and still appends or no-ops per docs.</summary>
     [Fact]
-    public async Task RevertToCurrent_Stable()
+    public async Task RevertToCurrentStable()
     {
         var id = await CreateAsync("current").ConfigureAwait(true);
         var before = await _harness.GetCompatAsync(id, cancellationToken: TestContext.Current.CancellationToken)
@@ -161,7 +161,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-11: Version snapshot includes Content and Title at minimum.</summary>
     [Fact]
-    public async Task Snapshot_IncludesContentAndTitle()
+    public async Task SnapshotIncludesContentAndTitle()
     {
         var remembered = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -190,7 +190,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-12: Version list pagination is stable; without pagination returns full history up to the cap.</summary>
     [Fact]
-    public async Task List_PaginationOrFullCap()
+    public async Task ListPaginationOrFullCap()
     {
         var id = await CreateAsync("p0").ConfigureAwait(true);
         for (var i = 1; i <= 5; i++)
@@ -209,7 +209,7 @@ public sealed class MemoryVersionTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-014-15: Version numbers are contiguous positive integers with no gaps after successful updates.</summary>
     [Fact]
-    public async Task VersionNumbers_Contiguous()
+    public async Task VersionNumbersContiguous()
     {
         var id = await CreateAsync("c0").ConfigureAwait(true);
         await _harness.UpdateCompatAsync(id, new MemoryUpdateRequest { Text = "c1", Content = "c1" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);

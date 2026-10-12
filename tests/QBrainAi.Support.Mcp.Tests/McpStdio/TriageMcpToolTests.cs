@@ -51,7 +51,7 @@ public sealed class TriageMcpToolTests : IDisposable
     /// accepted queue state immediately.
     /// </summary>
     [Fact]
-    public async Task TriageReport_DelegatesToTriageService()
+    public async Task TriageReportDelegatesToTriageService()
     {
         _triageService.SubmitReportAsync(Arg.Any<TriageReportRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TriageReportSubmitResult
@@ -92,7 +92,7 @@ public sealed class TriageMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-PLUGIN-TRIAGE-001: triage_status can inspect a single report.</summary>
     [Fact]
-    public async Task TriageStatus_WithReportId_ReturnsReport()
+    public async Task TriageStatusWithReportIdReturnsReport()
     {
         _triageService.GetReportAsync("triage-report-001", Arg.Any<CancellationToken>())
             .Returns(new TriageReportDetail
@@ -114,7 +114,7 @@ public sealed class TriageMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-PLUGIN-TRIAGE-001: triage_status without ids queries triage groups.</summary>
     [Fact]
-    public async Task TriageStatus_WithoutIds_ReturnsGroupQuery()
+    public async Task TriageStatusWithoutIdsReturnsGroupQuery()
     {
         _triageService.QueryGroupsAsync(null, null, Arg.Any<CancellationToken>())
             .Returns(new TriageGroupQueryResult

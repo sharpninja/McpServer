@@ -18,7 +18,7 @@ public sealed class TranscriptIngestionWorkflowTests
 
     /// <summary>Local normalization uses multipart upload so the server does not need to read the local path.</summary>
     [Fact]
-    public async Task NormalizeTranscriptsAsync_LocalFile_UsesMultipartUpload()
+    public async Task NormalizeTranscriptsAsyncLocalFileUsesMultipartUpload()
     {
         var tempRoot = CreateTempRoot();
         try
@@ -62,7 +62,7 @@ public sealed class TranscriptIngestionWorkflowTests
 
     /// <summary>Local folder ingestion uploads recursive files with stable relative names.</summary>
     [Fact]
-    public async Task IngestTranscriptsAsync_LocalFolder_UploadsRecursiveFilesWithRelativeNames()
+    public async Task IngestTranscriptsAsyncLocalFolderUploadsRecursiveFilesWithRelativeNames()
     {
         var tempRoot = CreateTempRoot();
         try

@@ -35,7 +35,7 @@ public sealed class UseCaseMigrationApplyTests : IDisposable
 
     /// <summary>Full migration chain from empty DB creates UseCases and related tables.</summary>
     [Fact]
-    public void Migrate_FromEmpty_CreatesUseCaseTables()
+    public void MigrateFromEmptyCreatesUseCaseTables()
     {
         using var db = new McpDbContext(_options);
         db.Database.Migrate();
@@ -55,7 +55,7 @@ public sealed class UseCaseMigrationApplyTests : IDisposable
     /// then apply remaining migrations including AddUseCaseSupport without failing.
     /// </summary>
     [Fact]
-    public void Migrate_FromPredecessor_WithSessionLogsAgentColumns_CreatesUseCaseTables()
+    public void MigrateFromPredecessorWithSessionLogsAgentColumnsCreatesUseCaseTables()
     {
         using (var db = new McpDbContext(_options))
         {
@@ -78,7 +78,7 @@ public sealed class UseCaseMigrationApplyTests : IDisposable
 
     /// <summary>AddUseCaseSupport migration sources must not alter SessionLogs.</summary>
     [Fact]
-    public void AddUseCaseSupportMigration_Source_HasNoSessionLogsTableOps()
+    public void AddUseCaseSupportMigrationSourceHasNoSessionLogsTableOps()
     {
         var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
         var roots = new[]

@@ -44,7 +44,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-078 lifecycle status retrieval via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_ReturnsStatus()
+    public async Task GetStatusAsyncReturnsStatus()
     {
         var expected = new GraphRagStatusResult
         {
@@ -73,7 +73,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-078 lifecycle indexing via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task IndexAsync_TriggersIndexing_ReturnsStatus()
+    public async Task IndexAsyncTriggersIndexingReturnsStatus()
     {
         var expected = new GraphRagStatusResult
         {
@@ -97,7 +97,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-078 lifecycle query via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_ReturnsQueryResult()
+    public async Task QueryAsyncReturnsQueryResult()
     {
         var expected = new GraphRagQueryResult
         {
@@ -134,7 +134,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-078, TR-GRAPHRAG-ADHOC-001 ad-hoc ingestion via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task IngestTextAsync_IngestsText_ReturnsResult()
+    public async Task IngestTextAsyncIngestsTextReturnsResult()
     {
         var request = new GraphRagIngestTextRequest
         {
@@ -173,7 +173,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-080, TR-GRAPHRAG-ADHOC-003 document listing via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task ListDocumentsAsync_ReturnsPaginatedDocuments()
+    public async Task ListDocumentsAsyncReturnsPaginatedDocuments()
     {
         var expected = new GraphRagDocumentListResult
         {
@@ -201,7 +201,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-080 document listing with filters via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task ListDocumentsAsync_WithSourceTypeFilter_ReturnsFilteredDocuments()
+    public async Task ListDocumentsAsyncWithSourceTypeFilterReturnsFilteredDocuments()
     {
         var expected = new GraphRagDocumentListResult
         {
@@ -227,7 +227,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-080, TR-GRAPHRAG-ADHOC-003 document chunk retrieval via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task GetDocumentChunksAsync_ReturnsDocumentChunks()
+    public async Task GetDocumentChunksAsyncReturnsDocumentChunks()
     {
         var expected = new GraphRagDocumentChunksResult
         {
@@ -257,7 +257,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-080, TR-GRAPHRAG-ADHOC-003 document deletion via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task DeleteDocumentAsync_DeletesDocument_ReturnsResult()
+    public async Task DeleteDocumentAsyncDeletesDocumentReturnsResult()
     {
         var expected = new GraphRagDocumentDeleteResult
         {
@@ -287,7 +287,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 entity creation via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task CreateEntityAsync_CreatesEntity_ReturnsResult()
+    public async Task CreateEntityAsyncCreatesEntityReturnsResult()
     {
         var request = new GraphEntityRequest
         {
@@ -321,7 +321,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 entity listing via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task ListEntitiesAsync_ReturnsPaginatedEntities()
+    public async Task ListEntitiesAsyncReturnsPaginatedEntities()
     {
         var expected = new GraphEntityListResult
         {
@@ -349,7 +349,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079 entity listing with type filter via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task ListEntitiesAsync_WithTypeFilter_ReturnsFilteredEntities()
+    public async Task ListEntitiesAsyncWithTypeFilterReturnsFilteredEntities()
     {
         var expected = new GraphEntityListResult
         {
@@ -375,7 +375,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 entity retrieval via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task GetEntityAsync_ReturnsEntity()
+    public async Task GetEntityAsyncReturnsEntity()
     {
         var expected = new GraphEntityResult
         {
@@ -401,7 +401,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 entity update via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task UpdateEntityAsync_UpdatesEntity_ReturnsResult()
+    public async Task UpdateEntityAsyncUpdatesEntityReturnsResult()
     {
         var request = new GraphEntityRequest
         {
@@ -434,7 +434,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 entity deletion via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task DeleteEntityAsync_DeletesEntity()
+    public async Task DeleteEntityAsyncDeletesEntity()
     {
         _workflow.DeleteEntityAsync("entity-001", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
@@ -453,7 +453,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 relationship creation via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task CreateRelationshipAsync_CreatesRelationship_ReturnsResult()
+    public async Task CreateRelationshipAsyncCreatesRelationshipReturnsResult()
     {
         var request = new GraphRelationshipRequest
         {
@@ -489,7 +489,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 relationship listing via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task ListRelationshipsAsync_ReturnsPaginatedRelationships()
+    public async Task ListRelationshipsAsyncReturnsPaginatedRelationships()
     {
         var expected = new GraphRelationshipListResult
         {
@@ -517,7 +517,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079 relationship listing with entity filter via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task ListRelationshipsAsync_WithEntityFilter_ReturnsFilteredRelationships()
+    public async Task ListRelationshipsAsyncWithEntityFilterReturnsFilteredRelationships()
     {
         var expected = new GraphRelationshipListResult
         {
@@ -542,7 +542,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 relationship retrieval via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task GetRelationshipAsync_ReturnsRelationship()
+    public async Task GetRelationshipAsyncReturnsRelationship()
     {
         var expected = new GraphRelationshipResult
         {
@@ -569,7 +569,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 relationship update via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task UpdateRelationshipAsync_UpdatesRelationship_ReturnsResult()
+    public async Task UpdateRelationshipAsyncUpdatesRelationshipReturnsResult()
     {
         var request = new GraphRelationshipRequest
         {
@@ -604,7 +604,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079, TR-GRAPHRAG-ADHOC-002 relationship deletion via REPL workflow.
     /// </summary>
     [Fact]
-    public async Task DeleteRelationshipAsync_DeletesRelationship()
+    public async Task DeleteRelationshipAsyncDeletesRelationship()
     {
         _workflow.DeleteRelationshipAsync("rel-001", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
@@ -623,7 +623,7 @@ public class GraphRagWorkflowTests
     /// Tests TR-MCP-REPL-005 command namespace organization for GraphRAG.
     /// </summary>
     [Fact]
-    public void CommandShapes_AllConstantsMatchExpectedValues()
+    public void CommandShapesAllConstantsMatchExpectedValues()
     {
         Assert.Equal("workflow.graphrag", GraphRagCommandShapes.MethodNamespace);
         Assert.Equal("workflow.graphrag.status", GraphRagCommandShapes.StatusMethod);
@@ -667,7 +667,7 @@ public class GraphRagWorkflowTests
     [InlineData(GraphRagCommandShapes.RelationshipsGetMethod)]
     [InlineData(GraphRagCommandShapes.RelationshipsUpdateMethod)]
     [InlineData(GraphRagCommandShapes.RelationshipsDeleteMethod)]
-    public void CommandShape_StartsWithNamespace(string method)
+    public void CommandShapeStartsWithNamespace(string method)
     {
         Assert.StartsWith(GraphRagCommandShapes.MethodNamespace + ".", method, StringComparison.Ordinal);
     }
@@ -681,7 +681,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-080 pagination semantics for document listing.
     /// </summary>
     [Fact]
-    public async Task ListDocumentsAsync_WithPagination_PassesCorrectParameters()
+    public async Task ListDocumentsAsyncWithPaginationPassesCorrectParameters()
     {
         var expected = new GraphRagDocumentListResult
         {
@@ -703,7 +703,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079 pagination semantics for entity listing.
     /// </summary>
     [Fact]
-    public async Task ListEntitiesAsync_WithPagination_PassesCorrectParameters()
+    public async Task ListEntitiesAsyncWithPaginationPassesCorrectParameters()
     {
         var expected = new GraphEntityListResult
         {
@@ -725,7 +725,7 @@ public class GraphRagWorkflowTests
     /// Tests FR-MCP-079 pagination semantics for relationship listing.
     /// </summary>
     [Fact]
-    public async Task ListRelationshipsAsync_WithPagination_PassesCorrectParameters()
+    public async Task ListRelationshipsAsyncWithPaginationPassesCorrectParameters()
     {
         var expected = new GraphRelationshipListResult
         {

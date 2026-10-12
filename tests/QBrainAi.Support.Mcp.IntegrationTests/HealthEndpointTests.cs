@@ -18,7 +18,7 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
 
     /// <summary>GET /health returns 200.</summary>
     [Fact]
-    public async Task Health_ReturnsOk()
+    public async Task HealthReturnsOk()
     {
         var client = _factory.CreateClient();
         var response = await client.GetAsync(new Uri("/health", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -27,7 +27,7 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
 
     /// <summary>GET / returns redirect to Swagger.</summary>
     [Fact]
-    public async Task Root_RedirectsToSwagger()
+    public async Task RootRedirectsToSwagger()
     {
         var options = new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions { AllowAutoRedirect = false };
         var client = _factory.CreateClient(options);
@@ -38,7 +38,7 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
 
     /// <summary>GET /health echoes a caller nonce when one is supplied.</summary>
     [Fact]
-    public async Task Health_WithNonce_EchoesNonce()
+    public async Task HealthWithNonceEchoesNonce()
     {
         var client = _factory.CreateClient();
         const string nonce = "test-nonce-123";
@@ -52,7 +52,7 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
 
     /// <summary>GET /swagger/v1/swagger.json returns a generated OpenAPI document.</summary>
     [Fact]
-    public async Task SwaggerJson_ReturnsOpenApiDocument()
+    public async Task SwaggerJsonReturnsOpenApiDocument()
     {
         var client = _factory.CreateClient();
 

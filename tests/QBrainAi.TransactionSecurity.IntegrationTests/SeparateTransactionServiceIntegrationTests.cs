@@ -32,7 +32,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Valid signed manifests commit through the subscriber after HTTP keyserver verification.</summary>
     [Fact]
-    public async Task SeparateHosts_CommitSignedDiffgram_UsesHttpKeyserverVerification()
+    public async Task SeparateHostsCommitSignedDiffgramUsesHttpKeyserverVerification()
     {
         using var harness = CreateHarness();
         await harness.RegisterStandardPartiesAsync().ConfigureAwait(true);
@@ -50,7 +50,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Tampered manifests are rejected by the subscriber through the separate keyserver verification path.</summary>
     [Fact]
-    public async Task SeparateHosts_RejectTamperedManifestThroughKeyserverHttpVerification()
+    public async Task SeparateHostsRejectTamperedManifestThroughKeyserverHttpVerification()
     {
         using var harness = CreateHarness();
         await harness.RegisterStandardPartiesAsync().ConfigureAwait(true);
@@ -71,7 +71,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Stale publisher/subscriber sequences are rejected across separate hosts after a previous valid commit.</summary>
     [Fact]
-    public async Task SeparateHosts_RejectStaleSequenceAfterPriorCommit()
+    public async Task SeparateHostsRejectStaleSequenceAfterPriorCommit()
     {
         using var harness = CreateHarness();
         await harness.RegisterStandardPartiesAsync().ConfigureAwait(true);
@@ -94,7 +94,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Separate keyserver host rejects reused manifest signing nonces.</summary>
     [Fact]
-    public async Task SeparateKeyServer_RejectsReplayNonceOnSign()
+    public async Task SeparateKeyServerRejectsReplayNonceOnSign()
     {
         using var harness = CreateHarness();
         await harness.RegisterStandardPartiesAsync().ConfigureAwait(true);
@@ -115,7 +115,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Separate keyserver host rejects non-monotonic manifest signing sequences.</summary>
     [Fact]
-    public async Task SeparateKeyServer_RejectsStaleSequenceOnSign()
+    public async Task SeparateKeyServerRejectsStaleSequenceOnSign()
     {
         using var harness = CreateHarness();
         await harness.RegisterStandardPartiesAsync().ConfigureAwait(true);
@@ -136,7 +136,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Separate keyserver host reports filtered signed manifest trace records.</summary>
     [Fact]
-    public async Task SeparateKeyServer_ManifestReport_ReturnsFilteredSignedTraceRecords()
+    public async Task SeparateKeyServerManifestReportReturnsFilteredSignedTraceRecords()
     {
         using var harness = CreateHarness();
         await harness.RegisterStandardPartiesAsync().ConfigureAwait(true);
@@ -163,7 +163,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Encrypted body mismatches are rejected by the separate subscriber host.</summary>
     [Fact]
-    public async Task SeparateHosts_RejectEncryptedBodyMismatch()
+    public async Task SeparateHostsRejectEncryptedBodyMismatch()
     {
         using var harness = CreateHarness();
         await harness.RegisterStandardPartiesAsync().ConfigureAwait(true);
@@ -185,7 +185,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Separate subscriber host binds an encryption key ring from configuration and commits old plus rotated protected envelopes.</summary>
     [Fact]
-    public async Task SeparateHosts_WithSubscriberEncryptionKeyRingConfiguration_CommitsOldAndRotatedProtectedEnvelopes()
+    public async Task SeparateHostsWithSubscriberEncryptionKeyRingConfigurationCommitsOldAndRotatedProtectedEnvelopes()
     {
         using var firstKeyPair = EncryptionKeyPair.Create();
         using var rotatedKeyPair = EncryptionKeyPair.Create();
@@ -242,7 +242,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Separate hosts can provision production key material from PEM file paths without manual registration.</summary>
     [Fact]
-    public async Task SeparateHosts_WithProvisionedKeyFiles_CommitsProtectedEnvelopeWithoutManualRegistration()
+    public async Task SeparateHostsWithProvisionedKeyFilesCommitsProtectedEnvelopeWithoutManualRegistration()
     {
         using var workspace = TempWorkspace.Create();
         using var publisherSigningKey = SigningKeyPair.Create();
@@ -300,7 +300,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>Turn coordinator can publish commit delivery through HTTP pub-sub to a separate subscriber host.</summary>
     [Fact]
-    public async Task SeparateSubscriberHost_TurnCoordinatorWithHttpPubSub_CommitsThroughExternalSubscriberHost()
+    public async Task SeparateSubscriberHostTurnCoordinatorWithHttpPubSubCommitsThroughExternalSubscriberHost()
     {
         var canonicalizer = new TransactionManifestCanonicalizer();
         using var keyServer = new InMemoryKeyServerService(
@@ -372,7 +372,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>HTTP pub-sub coordinator execution does not return committed before the subscriber host acknowledges commit.</summary>
     [Fact]
-    public async Task SeparateSubscriberHost_TurnCoordinatorWithHttpPubSub_WaitsForSubscriberAcknowledgementBeforeReturningCommitted()
+    public async Task SeparateSubscriberHostTurnCoordinatorWithHttpPubSubWaitsForSubscriberAcknowledgementBeforeReturningCommitted()
     {
         var canonicalizer = new TransactionManifestCanonicalizer();
         using var keyServer = new InMemoryKeyServerService(
@@ -460,7 +460,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
     /// <summary>HTTP pub-sub degraded subscriber rejection invokes coordinator rollback compensation while preserving audit.</summary>
     [Fact]
-    public async Task SeparateSubscriberHost_TurnCoordinatorWithHttpPubSub_RollsBackMutationWhenSubscriberRejects()
+    public async Task SeparateSubscriberHostTurnCoordinatorWithHttpPubSubRollsBackMutationWhenSubscriberRejects()
     {
         var canonicalizer = new TransactionManifestCanonicalizer();
         using var keyServer = new InMemoryKeyServerService(

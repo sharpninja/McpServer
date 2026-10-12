@@ -23,7 +23,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_CreateFr_GetFr_DeleteFr_Succeeds()
+    public async Task RequirementsWorkflowCreateFrGetFrDeleteFrSucceeds()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -64,7 +64,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_CreateTr_GetTr_DeleteTr_Succeeds()
+    public async Task RequirementsWorkflowCreateTrGetTrDeleteTrSucceeds()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -106,7 +106,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_CreateTest_GetTest_DeleteTest_Succeeds()
+    public async Task RequirementsWorkflowCreateTestGetTestDeleteTestSucceeds()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -148,7 +148,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_ListFr_ReturnsItems()
+    public async Task RequirementsWorkflowListFrReturnsItems()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -187,7 +187,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_ListTr_ReturnsItems()
+    public async Task RequirementsWorkflowListTrReturnsItems()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -229,7 +229,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_ListTest_ReturnsItems()
+    public async Task RequirementsWorkflowListTestReturnsItems()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -270,7 +270,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_UpdateFr_ModifiesRequirement()
+    public async Task RequirementsWorkflowUpdateFrModifiesRequirement()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -304,7 +304,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_UpdateTr_ModifiesRequirement()
+    public async Task RequirementsWorkflowUpdateTrModifiesRequirement()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -338,7 +338,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_UpdateTest_ModifiesRequirement()
+    public async Task RequirementsWorkflowUpdateTestModifiesRequirement()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -372,7 +372,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_CreateMapping_ListMapping_DeleteMapping_Succeeds()
+    public async Task RequirementsWorkflowCreateMappingListMappingDeleteMappingSucceeds()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -451,7 +451,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_GenerateDocument_Markdown_ReturnsFormattedDocument()
+    public async Task RequirementsWorkflowGenerateDocumentMarkdownReturnsFormattedDocument()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -486,7 +486,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_GenerateDocument_Yaml_ReturnsYamlDocument()
+    public async Task RequirementsWorkflowGenerateDocumentYamlReturnsYamlDocument()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -522,7 +522,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_GenerateDocument_Matrix_ReturnsTraceabilityMatrix()
+    public async Task RequirementsWorkflowGenerateDocumentMatrixReturnsTraceabilityMatrix()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -543,7 +543,7 @@ public sealed class Iteration4IntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_IngestDocument_Markdown_ParsesAndCreatesRequirements()
+    public async Task RequirementsWorkflowIngestDocumentMarkdownParsesAndCreatesRequirements()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -575,7 +575,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_IngestDocument_Yaml_ParsesAndCreatesRequirements()
+    public async Task RequirementsWorkflowIngestDocumentYamlParsesAndCreatesRequirements()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -608,7 +608,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_CurrentSelection_ReturnsSelectionState()
+    public async Task RequirementsWorkflowCurrentSelectionReturnsSelectionState()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -627,7 +627,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_InvalidFrId_ReturnsError()
+    public async Task RequirementsWorkflowInvalidFrIdReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -652,7 +652,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_InvalidTrId_ReturnsError()
+    public async Task RequirementsWorkflowInvalidTrIdReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -678,7 +678,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_InvalidTestId_ReturnsError()
+    public async Task RequirementsWorkflowInvalidTestIdReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -704,7 +704,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_GetNonExistentFr_ReturnsError()
+    public async Task RequirementsWorkflowGetNonExistentFrReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -725,7 +725,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_GetNonExistentTr_ReturnsError()
+    public async Task RequirementsWorkflowGetNonExistentTrReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -746,7 +746,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_GetNonExistentTest_ReturnsError()
+    public async Task RequirementsWorkflowGetNonExistentTestReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -767,7 +767,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_CreateDuplicateFr_ReturnsError()
+    public async Task RequirementsWorkflowCreateDuplicateFrReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -801,7 +801,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_CreateMappingWithNonExistentRequirements_ReturnsError()
+    public async Task RequirementsWorkflowCreateMappingWithNonExistentRequirementsReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -823,7 +823,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_DeleteNonExistentMapping_ReturnsError()
+    public async Task RequirementsWorkflowDeleteNonExistentMappingReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -844,7 +844,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_IngestInvalidMarkdown_ReturnsError()
+    public async Task RequirementsWorkflowIngestInvalidMarkdownReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -867,7 +867,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_IngestInvalidYaml_ReturnsError()
+    public async Task RequirementsWorkflowIngestInvalidYamlReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -890,7 +890,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_CompleteWorkflow_FrTrTestMappingGenerate()
+    public async Task RequirementsWorkflowCompleteWorkflowFrTrTestMappingGenerate()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -979,7 +979,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_ListWithFilters_ReturnsFilteredResults()
+    public async Task RequirementsWorkflowListWithFiltersReturnsFilteredResults()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -1033,7 +1033,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_MappingListFilters_ReturnCorrectResults()
+    public async Task RequirementsWorkflowMappingListFiltersReturnCorrectResults()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -1136,7 +1136,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_IngestMergeStrategy_OverwriteExisting()
+    public async Task RequirementsWorkflowIngestMergeStrategyOverwriteExisting()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -1186,7 +1186,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_GenerateAllDocTypes_ValidatesOutput()
+    public async Task RequirementsWorkflowGenerateAllDocTypesValidatesOutput()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -1211,7 +1211,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_GenerateBothFormats_ValidatesOutput()
+    public async Task RequirementsWorkflowGenerateBothFormatsValidatesOutput()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -1238,7 +1238,7 @@ Area: ING";
     }
 
     [Fact]
-    public async Task RequirementsWorkflow_SelectionStatePersistence_VerifyAcrossCommands()
+    public async Task RequirementsWorkflowSelectionStatePersistenceVerifyAcrossCommands()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);

@@ -1046,14 +1046,14 @@ public static partial class WorkspaceContainedFileSystem
             .ConfigureAwait(false);
         if (!ReferenceEquals(winner, completion.Task))
         {
-            var cleanupDeadline = Task.Delay(s_traversalCleanupTimeout);
+            var cleanupDeadline = Task.Delay(s_traversalCleanupTimeout, cancellationToken);
             while (!completion.Task.IsCompleted && !cleanupDeadline.IsCompleted)
             {
                 state.TryCancelNativeWork();
                 await Task.WhenAny(
                         completion.Task,
                         cleanupDeadline,
-                        Task.Delay(TimeSpan.FromMilliseconds(10)))
+                        Task.Delay(TimeSpan.FromMilliseconds(10), cancellationToken))
                     .ConfigureAwait(false);
             }
         }

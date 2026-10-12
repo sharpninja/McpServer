@@ -284,7 +284,7 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             using var reader = new StringReader(ReadResponseText(response));
             while (true)
             {
-                var line = await reader.ReadLineAsync().ConfigureAwait(false);
+                var line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
                 if (line is null)
                     yield break;
 

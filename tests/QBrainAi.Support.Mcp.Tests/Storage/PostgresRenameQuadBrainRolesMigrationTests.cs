@@ -37,7 +37,7 @@ public sealed class PostgresRenameQuadBrainRolesMigrationTests : IClassFixture<E
     /// unchanged, and that no legacy role value survives.
     /// </summary>
     [Fact]
-    public void Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows()
+    public void MigrateRenameQuadBrainRolesRenamesLegacyHemisphereRows()
     {
         EnsureScratchDatabase();
         var now = new DateTime(2026, 7, 20, 0, 0, 0, DateTimeKind.Utc);
@@ -65,7 +65,7 @@ public sealed class PostgresRenameQuadBrainRolesMigrationTests : IClassFixture<E
     /// are unchanged and no Creativity/Logic row survives.
     /// </summary>
     [Fact]
-    public void MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows()
+    public void MigrateDownRenameQuadBrainRolesRestoresLegacyHemisphereRows()
     {
         EnsureScratchDatabase();
         var now = new DateTime(2026, 7, 20, 0, 0, 0, DateTimeKind.Utc);

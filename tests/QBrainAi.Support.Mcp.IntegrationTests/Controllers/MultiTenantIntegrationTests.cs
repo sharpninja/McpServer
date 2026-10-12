@@ -22,7 +22,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task UnregisteredWorkspacePath_Returns400()
+    public async Task UnregisteredWorkspacePathReturns400()
     {
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, @"C:\nonexistent\workspace");
@@ -32,7 +32,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task InvalidApiKey_Returns401()
+    public async Task InvalidApiKeyReturns401()
     {
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, _factory.WorkspacePath);
@@ -43,7 +43,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task NonMcpRoute_SkipsWorkspaceResolution()
+    public async Task NonMcpRouteSkipsWorkspaceResolution()
     {
         var client = _factory.CreateClient();
 
@@ -53,7 +53,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task WorkspacePathHeader_UnregisteredPath_TakesPriorityOverApiKey()
+    public async Task WorkspacePathHeaderUnregisteredPathTakesPriorityOverApiKey()
     {
         using var scope = _factory.Services.CreateScope();
         var tokenService = scope.ServiceProvider.GetRequiredService<WorkspaceTokenService>();
@@ -72,7 +72,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task WorkspacePathHeaderWithoutApiKey_Returns401()
+    public async Task WorkspacePathHeaderWithoutApiKeyReturns401()
     {
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, _factory.WorkspacePath);
@@ -82,7 +82,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task BearerWithoutWorkspaceHeader_OnTenantRoute_Returns404()
+    public async Task BearerWithoutWorkspaceHeaderOnTenantRouteReturns404()
     {
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "synthetic-jwt");
@@ -93,7 +93,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task WorkspaceResolutionMiddleware_OnlyRunsForMcpRoutes()
+    public async Task WorkspaceResolutionMiddlewareOnlyRunsForMcpRoutes()
     {
         var client = _factory.CreateClient();
         // Send an X-Workspace-Path header with unregistered path on a non-mcp route

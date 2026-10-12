@@ -21,7 +21,7 @@ public sealed class VoiceControllerTests
     /// surfaced to the client as an SSE error payload rather than crashing the ASP.NET request pipeline.
     /// </summary>
     [Fact]
-    public async Task SubmitTurnStreamingAsync_SendSessionMessageThrows_WritesErrorEvent()
+    public async Task SubmitTurnStreamingAsyncSendSessionMessageThrowsWritesErrorEvent()
     {
         var voiceService = Substitute.For<IVoiceConversationService>();
         voiceService
@@ -58,7 +58,7 @@ public sealed class VoiceControllerTests
     /// unavailable response instead of starting an SSE stream.
     /// </summary>
     [Fact]
-    public async Task SubmitTurnStreamingAsync_SendSessionMessageTransactionGate_ReturnsServiceUnavailableJson()
+    public async Task SubmitTurnStreamingAsyncSendSessionMessageTransactionGateReturnsServiceUnavailableJson()
     {
         var voiceService = Substitute.For<IVoiceConversationService>();
         voiceService

@@ -59,7 +59,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
     }
 
     [Fact]
-    public async Task LaunchAgentAsync_EnabledConfig_DelegatesToProcessManager()
+    public async Task LaunchAgentAsyncEnabledConfigDelegatesToProcessManager()
     {
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-launch"));
         _db.OverrideWorkspaceId(workspacePath);
@@ -85,7 +85,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
     }
 
     [Fact]
-    public async Task LaunchAgentAsync_BannedAgent_ThrowsInvalidOperationException()
+    public async Task LaunchAgentAsyncBannedAgentThrowsInvalidOperationException()
     {
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-banned"));
         _db.OverrideWorkspaceId(workspacePath);
@@ -96,7 +96,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
     }
 
     [Fact]
-    public async Task LaunchAgentAsync_MissingWorkspaceConfig_ThrowsInvalidOperationException()
+    public async Task LaunchAgentAsyncMissingWorkspaceConfigThrowsInvalidOperationException()
     {
         _db.OverrideWorkspaceId(Path.GetFullPath("C:/missing-ws"));
         _db.AgentDefinitions.Add(new AgentDefinitionEntity
@@ -117,7 +117,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
     }
 
     [Fact]
-    public async Task StopAgentAsync_RunningAgent_DelegatesToProcessManager()
+    public async Task StopAgentAsyncRunningAgentDelegatesToProcessManager()
     {
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-stop"));
         _db.OverrideWorkspaceId(workspacePath);

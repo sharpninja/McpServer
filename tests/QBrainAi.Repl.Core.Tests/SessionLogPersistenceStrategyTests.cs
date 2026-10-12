@@ -17,7 +17,7 @@ public sealed class SessionLogPersistenceStrategyTests
     /// Primary persistence success remains the normal result and does not invoke failsafe storage.
     /// </summary>
     [Fact]
-    public async Task PersistAsync_PrimarySucceeds_DoesNotInvokeFailsafe()
+    public async Task PersistAsyncPrimarySucceedsDoesNotInvokeFailsafe()
     {
         var snapshot = CreateSessionLog();
         var primary = Substitute.For<ISessionLogPersistenceStrategy>();
@@ -45,7 +45,7 @@ public sealed class SessionLogPersistenceStrategyTests
     /// A primary service failure invokes the independent failsafe strategy with the same snapshot.
     /// </summary>
     [Fact]
-    public async Task PersistAsync_PrimaryFails_ReturnsFailsafeResult()
+    public async Task PersistAsyncPrimaryFailsReturnsFailsafeResult()
     {
         var snapshot = CreateSessionLog();
         var primary = Substitute.For<ISessionLogPersistenceStrategy>();
@@ -77,7 +77,7 @@ public sealed class SessionLogPersistenceStrategyTests
     /// Explicit caller cancellation is never converted into a failsafe write.
     /// </summary>
     [Fact]
-    public async Task PersistAsync_CallerCancels_DoesNotInvokeFailsafe()
+    public async Task PersistAsyncCallerCancelsDoesNotInvokeFailsafe()
     {
         var snapshot = CreateSessionLog();
         var primary = Substitute.For<ISessionLogPersistenceStrategy>();
@@ -101,7 +101,7 @@ public sealed class SessionLogPersistenceStrategyTests
     /// Failure of both strategies remains an error instead of claiming durable persistence.
     /// </summary>
     [Fact]
-    public async Task PersistAsync_BothStrategiesFail_ThrowsPersistenceException()
+    public async Task PersistAsyncBothStrategiesFailThrowsPersistenceException()
     {
         var snapshot = CreateSessionLog();
         var primary = Substitute.For<ISessionLogPersistenceStrategy>();
@@ -125,7 +125,7 @@ public sealed class SessionLogPersistenceStrategyTests
     /// Filesystem fallback writes an atomic, V4-scoped, replayable recovery envelope.
     /// </summary>
     [Fact]
-    public async Task FilesystemPersistAsync_WritesReplayableV4ScopedEnvelope()
+    public async Task FilesystemPersistAsyncWritesReplayableV4ScopedEnvelope()
     {
         var workspace = Path.Combine(Path.GetTempPath(), "mcp-repl-failsafe-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(workspace);

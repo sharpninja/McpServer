@@ -50,7 +50,7 @@ public sealed class AgentHelpEndpointTests : IDisposable
     }
 
     [Fact]
-    public async Task CreateSession_ReturnsSessionId()
+    public async Task CreateSessionReturnsSessionId()
     {
         using var response = await _client.PostAsJsonAsync(
             "/qbrainai/agent-help/session",
@@ -68,7 +68,7 @@ public sealed class AgentHelpEndpointTests : IDisposable
     }
 
     [Fact]
-    public async Task SubmitTurnStreaming_BenignMessage_EmitsChunkAndDone()
+    public async Task SubmitTurnStreamingBenignMessageEmitsChunkAndDone()
     {
         var sessionId = await CreateSessionAsync().ConfigureAwait(true);
         var benign = ReadFixture("bypass/normal-help-request.txt");
@@ -93,7 +93,7 @@ public sealed class AgentHelpEndpointTests : IDisposable
     }
 
     [Fact]
-    public async Task SubmitTurnStreaming_InjectionMessage_TerminatesSessionAndWritesGuardrailViolationEvidence()
+    public async Task SubmitTurnStreamingInjectionMessageTerminatesSessionAndWritesGuardrailViolationEvidence()
     {
         var sessionId = await CreateSessionAsync().ConfigureAwait(true);
         var injection = ReadFixture("injection/ignore-previous-instructions.txt");
@@ -137,7 +137,7 @@ public sealed class AgentHelpEndpointTests : IDisposable
     }
 
     [Fact]
-    public async Task GetTranscript_ReturnsPersistedEntries()
+    public async Task GetTranscriptReturnsPersistedEntries()
     {
         var sessionId = await CreateSessionAsync().ConfigureAwait(true);
         var benign = ReadFixture("bypass/normal-help-request.txt");

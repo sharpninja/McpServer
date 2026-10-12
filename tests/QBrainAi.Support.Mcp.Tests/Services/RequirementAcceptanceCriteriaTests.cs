@@ -20,7 +20,7 @@ public sealed class RequirementAcceptanceCriteriaTests
     /// requirement's <c>AcceptanceCriteria</c> holder is not an EF navigation (loaded explicitly).
     /// </summary>
     [Fact]
-    public void RequirementAcceptanceCriteria_ChildEntityMapped_AndLegacyJsonColumnRemoved()
+    public void RequirementAcceptanceCriteriaChildEntityMappedAndLegacyJsonColumnRemoved()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"reqac-meta-{Guid.NewGuid():N}")
@@ -39,7 +39,7 @@ public sealed class RequirementAcceptanceCriteriaTests
     /// (Id, Text, IsSatisfied, Evidence) and ordinal order on read.
     /// </summary>
     [Fact]
-    public async Task RequirementAcceptanceCriteria_ChildRows_RoundTripAllFieldsInOrder()
+    public async Task RequirementAcceptanceCriteriaChildRowsRoundTripAllFieldsInOrder()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"reqac-rt-{Guid.NewGuid():N}")
@@ -89,7 +89,7 @@ public sealed class RequirementAcceptanceCriteriaTests
     /// child rows.
     /// </summary>
     [Fact]
-    public async Task RequirementAcceptanceCriteria_NoCriteria_ReadsAsEmpty()
+    public async Task RequirementAcceptanceCriteriaNoCriteriaReadsAsEmpty()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"reqac-empty-{Guid.NewGuid():N}")

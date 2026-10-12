@@ -20,7 +20,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>GET /qbrainai/gh/issues returns 200 and body with issues array (or error when gh not available).</summary>
     [Fact]
-    public async Task ListIssues_ReturnsOk()
+    public async Task ListIssuesReturnsOk()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/gh/issues?limit=5", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -32,7 +32,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>GET /qbrainai/gh/pulls returns 200 and body with pulls array (or error when gh not available).</summary>
     [Fact]
-    public async Task ListPulls_ReturnsOk()
+    public async Task ListPullsReturnsOk()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/gh/pulls?limit=5", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -44,7 +44,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>POST /qbrainai/gh/issues without title returns 400.</summary>
     [Fact]
-    public async Task CreateIssue_WithoutTitle_ReturnsBadRequest()
+    public async Task CreateIssueWithoutTitleReturnsBadRequest()
     {
         var request = new { title = "", body = (string?)null };
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/gh/issues", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -53,7 +53,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>POST /qbrainai/gh/issues with null body (missing title) returns 400.</summary>
     [Fact]
-    public async Task CreateIssue_NullBody_ReturnsBadRequest()
+    public async Task CreateIssueNullBodyReturnsBadRequest()
     {
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/gh/issues", UriKind.Relative), (object?)null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -61,7 +61,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>POST /qbrainai/gh/issues/{id}/comments without body returns 400.</summary>
     [Fact]
-    public async Task CommentOnIssue_WithoutBody_ReturnsBadRequest()
+    public async Task CommentOnIssueWithoutBodyReturnsBadRequest()
     {
         var request = new { body = "" };
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/gh/issues/1/comments", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -70,7 +70,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>POST /qbrainai/gh/pulls/{id}/comments without body returns 400.</summary>
     [Fact]
-    public async Task CommentOnPull_WithoutBody_ReturnsBadRequest()
+    public async Task CommentOnPullWithoutBodyReturnsBadRequest()
     {
         var request = new { body = "" };
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/gh/pulls/1/comments", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -79,7 +79,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>GET /qbrainai/gh/labels returns 200 and body with labels array.</summary>
     [Fact]
-    public async Task ListLabels_ReturnsOk()
+    public async Task ListLabelsReturnsOk()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/gh/labels", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -91,7 +91,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>PUT /qbrainai/gh/issues/{number} with null body returns 400.</summary>
     [Fact]
-    public async Task UpdateIssue_NullBody_ReturnsBadRequest()
+    public async Task UpdateIssueNullBodyReturnsBadRequest()
     {
         var response = await _client.PutAsJsonAsync(new Uri("/qbrainai/gh/issues/1", UriKind.Relative), (object?)null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -99,7 +99,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>POST /qbrainai/gh/issues/sync/from-github returns 200.</summary>
     [Fact]
-    public async Task SyncFromGitHub_ReturnsOk()
+    public async Task SyncFromGitHubReturnsOk()
     {
         var response = await _client.PostAsync(new Uri("/qbrainai/gh/issues/sync/from-github?limit=5", UriKind.Relative), null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -107,7 +107,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>POST /qbrainai/gh/issues/sync/to-github returns 200.</summary>
     [Fact]
-    public async Task SyncToGitHub_ReturnsOk()
+    public async Task SyncToGitHubReturnsOk()
     {
         var response = await _client.PostAsync(new Uri("/qbrainai/gh/issues/sync/to-github", UriKind.Relative), null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -115,7 +115,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>GET /qbrainai/gh/actions/runs returns 200 and body with runs array.</summary>
     [Fact]
-    public async Task ListWorkflowRuns_ReturnsOk()
+    public async Task ListWorkflowRunsReturnsOk()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/gh/actions/runs?limit=5", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -127,7 +127,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>PUT/GET/DELETE auth token endpoints support round-trip token state.</summary>
     [Fact]
-    public async Task AuthTokenEndpoints_RoundTrip()
+    public async Task AuthTokenEndpointsRoundTrip()
     {
         var expiresAt = DateTimeOffset.UtcNow.AddHours(1);
         var setResponse = await _client.PutAsJsonAsync(
@@ -148,7 +148,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
 
     /// <summary>GET /qbrainai/gh/oauth/config returns bootstrap payload, and authorize URL requires full config.</summary>
     [Fact]
-    public async Task OAuthConfig_AndAuthorizeUrlBehavior()
+    public async Task OAuthConfigAndAuthorizeUrlBehavior()
     {
         var configResponse = await _client.GetAsync(new Uri("/qbrainai/gh/oauth/config", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, configResponse.StatusCode);

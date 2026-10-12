@@ -25,7 +25,7 @@ public sealed class WorkspaceLifecycleSequenceTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task FullLifecycle_CreateThroughDelete()
+    public async Task FullLifecycleCreateThroughDelete()
     {
         var testPath = WorkspaceEndpointFixture.GenerateTestWorkspacePath();
         var testKey = WorkspaceEndpointFixture.EncodeKey(testPath);

@@ -16,7 +16,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 {
     /// <summary>requirements.fr.add signs and commits before returning from the create call.</summary>
     [Fact]
-    public async Task AddFrAsync_WhenCoordinatorCommits_BuildsTransactionAndAddsRequirement()
+    public async Task AddFrAsyncWhenCoordinatorCommitsBuildsTransactionAndAddsRequirement()
     {
         var inner = new RecordingRequirementsDocumentService();
         var coordinator = new CapturingCoordinator();
@@ -32,7 +32,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
     /// <summary>Pre-mutation rejection prevents any requirements repository mutation.</summary>
     [Fact]
-    public async Task UpdateFrAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotMutate()
+    public async Task UpdateFrAsyncWhenCoordinatorRejectsBeforeMutationDoesNotMutate()
     {
         var inner = new RecordingRequirementsDocumentService();
         await inner.AddFrAsync(new FrEntry("FR-MCP-900", "FR", "old"), CancellationToken.None).ConfigureAwait(true);
@@ -55,7 +55,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
     /// <summary>Post-mutation commit failure restores the captured requirements snapshot.</summary>
     [Fact]
-    public async Task UpdateFrAsync_WhenCommitFailsAfterMutation_RestoresPriorSnapshot()
+    public async Task UpdateFrAsyncWhenCommitFailsAfterMutationRestoresPriorSnapshot()
     {
         var inner = new RecordingRequirementsDocumentService();
         await inner.AddFrAsync(new FrEntry("FR-MCP-900", "FR", "old"), CancellationToken.None).ConfigureAwait(true);
@@ -78,7 +78,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
     /// <summary>Required transaction mode fails closed when requirements storage cannot compensate writes.</summary>
     [Fact]
-    public async Task AddFrAsync_WhenCompensationMissingAndTransactionsRequired_FailsWithoutMutating()
+    public async Task AddFrAsyncWhenCompensationMissingAndTransactionsRequiredFailsWithoutMutating()
     {
         var inner = new NonCompensatingRequirementsDocumentService();
         var coordinator = new CapturingCoordinator();
@@ -96,7 +96,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
     /// <summary>Read-only operations pass through without opening coordinator transactions.</summary>
     [Fact]
-    public async Task ReadOperations_DelegateWithoutCoordinatorTransaction()
+    public async Task ReadOperationsDelegateWithoutCoordinatorTransaction()
     {
         var inner = new RecordingRequirementsDocumentService();
         await inner.AddFrAsync(new FrEntry("FR-MCP-900", "FR", "body"), CancellationToken.None).ConfigureAwait(true);
@@ -117,7 +117,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
     /// TEST-MCP-REP-001: Repair purge bypasses the transaction gate so polluted workspaces can be cleaned.
     /// </summary>
     [Fact]
-    public async Task PurgeInvalidPlaceholdersAsync_BypassesCoordinatorAndPurgesInvalidPlaceholders()
+    public async Task PurgeInvalidPlaceholdersAsyncBypassesCoordinatorAndPurgesInvalidPlaceholders()
     {
         var inner = new RecordingRequirementsDocumentService();
         // Seed some canonical + one bad placeholder
@@ -130,13 +130,13 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
         Assert.Equal(1, purged);
         Assert.Equal(1, inner.PurgeCalls);
-        Assert.Equal(0, (await sut.GetAllFrAsync(CancellationToken.None).ConfigureAwait(true)).Count(e => e.Id.Contains("*")));
+        Assert.Equal(0, (await sut.GetAllFrAsync(CancellationToken.None).ConfigureAwait(true)).Count(e => e.Id.Contains('*')));
         Assert.Null(coordinator.Request);
     }
 
     /// <summary>requirements.export.generateAll signs and commits before returning the export result.</summary>
     [Fact]
-    public async Task GenerateAllAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsExport()
+    public async Task GenerateAllAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsExport()
     {
         using var temp = new TempDirectory();
         var inner = new FileWritingRequirementsDocumentService();
@@ -152,7 +152,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
     /// <summary>Post-mutation export commit failure restores overwritten files and removes transaction-created files.</summary>
     [Fact]
-    public async Task GenerateWikiAsync_WhenCommitFailsAfterMutation_RestoresExportFiles()
+    public async Task GenerateWikiAsyncWhenCommitFailsAfterMutationRestoresExportFiles()
     {
         using var temp = new TempDirectory();
         var functionalPath = Path.Combine(temp.Path, "azure", "Functional-Requirements.md");
@@ -179,7 +179,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
     /// <summary>Export rollback refuses to overwrite files changed after the transaction write.</summary>
     [Fact]
-    public async Task GenerateAllAsync_WhenRollbackSeesConcurrentEdit_ReportsRollbackFailureWithoutOverwriting()
+    public async Task GenerateAllAsyncWhenRollbackSeesConcurrentEditReportsRollbackFailureWithoutOverwriting()
     {
         using var temp = new TempDirectory();
         var functionalPath = Path.Combine(temp.Path, "Functional-Requirements.md");

@@ -25,7 +25,7 @@ public sealed class SessionLogSubmitBudgetTests
 
     /// <summary>The options default and the recommended deploy value are 30 seconds.</summary>
     [Fact]
-    public void DefaultSubmitBudget_IsThirtySeconds()
+    public void DefaultSubmitBudgetIsThirtySeconds()
     {
         var options = new SessionLogSubmitOptions();
         Assert.Equal(30, options.SubmitCommandBudgetSeconds);
@@ -35,7 +35,7 @@ public sealed class SessionLogSubmitBudgetTests
 
     /// <summary>Missing configuration keeps the 30 second property default.</summary>
     [Fact]
-    public void Bind_MissingSection_KeepsThirtySecondDefault()
+    public void BindMissingSectionKeepsThirtySecondDefault()
     {
         var configuration = new ConfigurationBuilder().Build();
         var options = new SessionLogSubmitOptions();
@@ -46,7 +46,7 @@ public sealed class SessionLogSubmitBudgetTests
 
     /// <summary>Mcp:SessionLog:SubmitCommandBudgetSeconds binds onto the options object.</summary>
     [Fact]
-    public void Bind_SubmitCommandBudgetSeconds_OverridesDefault()
+    public void BindSubmitCommandBudgetSecondsOverridesDefault()
     {
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
@@ -66,7 +66,7 @@ public sealed class SessionLogSubmitBudgetTests
     [InlineData(0)]
     [InlineData(-1)]
     [InlineData(301)]
-    public void Validate_RejectsOutOfRangeBudget(int seconds)
+    public void ValidateRejectsOutOfRangeBudget(int seconds)
     {
         var validator = new SessionLogSubmitOptionsValidator();
         var result = validator.Validate(null, new SessionLogSubmitOptions { SubmitCommandBudgetSeconds = seconds });
@@ -77,7 +77,7 @@ public sealed class SessionLogSubmitBudgetTests
 
     /// <summary>The shipped appsettings knob and host registration use the 30 second Submit budget.</summary>
     [Fact]
-    public void ShippedAppSettings_AndHosts_RegisterThirtySecondSubmitBudget()
+    public void ShippedAppSettingsAndHostsRegisterThirtySecondSubmitBudget()
     {
         var root = RepositoryEvidenceTestSupport.ResolveRepositoryRoot();
         var appSettings = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "appsettings.yaml"));
@@ -96,7 +96,7 @@ public sealed class SessionLogSubmitBudgetTests
     /// service uses the 30 second default budget.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_SaveLongerThanFiveSeconds_CompletesUnderDefaultBudget()
+    public async Task SubmitAsyncSaveLongerThanFiveSecondsCompletesUnderDefaultBudget()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"SessionLogSubmitBudget_{Guid.NewGuid():N}")

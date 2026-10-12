@@ -12,7 +12,7 @@ public sealed class TransactionPubSubReplayWorkerTests
 {
     /// <summary>Replay worker does not call replay or retention services when durable pub-sub is disabled.</summary>
     [Fact]
-    public async Task ReplayOnceAsync_WhenDurableDisabled_DoesNotReplay()
+    public async Task ReplayOnceAsyncWhenDurableDisabledDoesNotReplay()
     {
         var replay = Substitute.For<ITransactionPubSubReplayService>();
         var worker = CreateWorker(replay, new TurnTransactionOptions
@@ -29,7 +29,7 @@ public sealed class TransactionPubSubReplayWorkerTests
 
     /// <summary>Replay worker calls replay and retention services with configured batch sizes when enabled.</summary>
     [Fact]
-    public async Task ReplayOnceAsync_WhenDurableEnabled_CallsReplayAndRetentionWithConfiguredBatches()
+    public async Task ReplayOnceAsyncWhenDurableEnabledCallsReplayAndRetentionWithConfiguredBatches()
     {
         var replay = Substitute.For<ITransactionPubSubReplayService>();
         replay.ReplayPendingAsync(7, Arg.Any<CancellationToken>())

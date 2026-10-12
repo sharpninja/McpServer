@@ -13,7 +13,7 @@ namespace QBrainAi.QBAgent.Tests;
 public sealed class QBAgentRunLoopTests
 {
     [Fact]
-    public async Task RunAsync_AppendsUserAndAssistantToSessionLog()
+    public async Task RunAsyncAppendsUserAndAssistantToSessionLog()
     {
         var root = Path.Combine(Path.GetTempPath(), "qbagent-loop-" + Guid.NewGuid().ToString("N"));
         var log = QBAgentSessionLog.CreateNew(root);
@@ -41,7 +41,7 @@ public sealed class QBAgentRunLoopTests
 
     /// <summary>A prompt is run through the agent and the assistant text is written.</summary>
     [Fact]
-    public async Task RunAsync_DispatchesPromptAndWritesResult()
+    public async Task RunAsyncDispatchesPromptAndWritesResult()
     {
         var prompts = new ConcurrentQueue<string>();
         QBAgentPromptRunner runner = (prompt, _) =>
@@ -63,7 +63,7 @@ public sealed class QBAgentRunLoopTests
     }
 
     [Fact]
-    public async Task RunAsync_PrefixesResponseWithLocalSortableTimestamp()
+    public async Task RunAsyncPrefixesResponseWithLocalSortableTimestamp()
     {
         var clock = new FixedUtcTimeProvider(new DateTimeOffset(2026, 9, 10, 20, 25, 17, TimeSpan.Zero));
         QBAgentPromptRunner runner = (_, _) => Task.FromResult("PONG");
@@ -83,7 +83,7 @@ public sealed class QBAgentRunLoopTests
     }
 
     [Fact]
-    public async Task RunAsync_ListOpenTodo_DoesNotCallQuadBrain()
+    public async Task RunAsyncListOpenTodoDoesNotCallQuadBrain()
     {
         var calls = 0;
         QBAgentPromptRunner runner = (_, _) => { calls++; return Task.FromResult("should-not-run"); };
@@ -115,17 +115,17 @@ public sealed class QBAgentRunLoopTests
     }
 
     [Fact]
-    public void FormatOpenTodos_Empty_SaysNone()
+    public void FormatOpenTodosEmptySaysNone()
         => Assert.Equal("No open TODOs (done: false).", QBAgentOpenTodoList.Format(new TodoQueryResult()));
 
     [Fact]
-    public void FormatOpenTodos_EmptyWithWorkspace_IncludesPath()
+    public void FormatOpenTodosEmptyWithWorkspaceIncludesPath()
         => Assert.Equal(
             "No open TODOs (done: false) in Q:\\__mcp_unit_test__\\McpServerManager.",
             QBAgentOpenTodoList.Format(new TodoQueryResult(), @"Q:\__mcp_unit_test__\McpServerManager"));
 
     [Fact]
-    public void FormatOpenTodos_IncludesIdPriorityTitle()
+    public void FormatOpenTodosIncludesIdPriorityTitle()
     {
         var result = new TodoQueryResult
         {
@@ -145,7 +145,7 @@ public sealed class QBAgentRunLoopTests
     [InlineData("/exit")]
     [InlineData("quit")]
     [InlineData("/quit")]
-    public async Task RunAsync_ExitAliases_DispatchNothing(string command)
+    public async Task RunAsyncExitAliasesDispatchNothing(string command)
     {
         var calls = 0;
         QBAgentPromptRunner runner = (_, _) => { calls++; return Task.FromResult("x"); };
@@ -163,7 +163,7 @@ public sealed class QBAgentRunLoopTests
     [InlineData("reset")]
     [InlineData("/new")]
     [InlineData("/reset")]
-    public async Task RunAsync_NewSession_DoesNotCallQuadBrain(string command)
+    public async Task RunAsyncNewSessionDoesNotCallQuadBrain(string command)
     {
         var calls = 0;
         QBAgentPromptRunner runner = (_, _) => { calls++; return Task.FromResult("should-not-run"); };
@@ -192,7 +192,7 @@ public sealed class QBAgentRunLoopTests
 
     /// <summary>Blank lines are skipped and an exit command ends the loop with nothing dispatched.</summary>
     [Fact]
-    public async Task RunAsync_BlankLinesThenExit_DispatchesNothing()
+    public async Task RunAsyncBlankLinesThenExitDispatchesNothing()
     {
         var calls = 0;
         QBAgentPromptRunner runner = (_, _) => { calls++; return Task.FromResult("x"); };
@@ -207,7 +207,7 @@ public sealed class QBAgentRunLoopTests
 
     /// <summary>End of input (no exit command) stops the loop.</summary>
     [Fact]
-    public async Task RunAsync_EndOfInput_Stops()
+    public async Task RunAsyncEndOfInputStops()
     {
         QBAgentPromptRunner runner = (_, _) => Task.FromResult("ok");
         using var input = new StringReader("only prompt\n");
@@ -220,7 +220,7 @@ public sealed class QBAgentRunLoopTests
 
     /// <summary>A runner failure is reported and the loop continues to the next prompt.</summary>
     [Fact]
-    public async Task RunAsync_RunnerThrows_ReportsErrorAndContinues()
+    public async Task RunAsyncRunnerThrowsReportsErrorAndContinues()
     {
         QBAgentPromptRunner runner = (prompt, _) =>
             prompt == "boom"

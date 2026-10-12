@@ -30,7 +30,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
     /// flattened key format accepted by the patch endpoint.
     /// </summary>
     [Fact]
-    public void GetConfigurationValues_ReturnsFlattenedKeys()
+    public void GetConfigurationValuesReturnsFlattenedKeys()
     {
         var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
         File.WriteAllText(
@@ -57,7 +57,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
     /// contract covers update and additive behaviors in one round-trip.
     /// </summary>
     [Fact]
-    public async Task PatchYamlConfigurationAsync_UpdatesYamlAndReloadsConfiguration()
+    public async Task PatchYamlConfigurationAsyncUpdatesYamlAndReloadsConfiguration()
     {
         var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
         await File.WriteAllTextAsync(
@@ -100,7 +100,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
     /// disturbing sibling settings in the same section.
     /// </summary>
     [Fact]
-    public async Task PatchYamlConfigurationAsync_NullValueRemovesDictionaryKey()
+    public async Task PatchYamlConfigurationAsyncNullValueRemovesDictionaryKey()
     {
         var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
         await File.WriteAllTextAsync(
@@ -134,7 +134,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
     /// the primary workspace repository.
     /// </summary>
     [Fact]
-    public async Task PatchYamlConfigurationAsync_UsesLoadedYamlProviderPathWhenContentRootDiffers()
+    public async Task PatchYamlConfigurationAsyncUsesLoadedYamlProviderPathWhenContentRootDiffers()
     {
         var loadedDirectory = Path.Combine(_tempDirectory, "loaded");
         var contentRootDirectory = Path.Combine(_tempDirectory, "workspace");
@@ -186,7 +186,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
     /// The test blocks the first temp-file write after load to force a true overlap opportunity.
     /// </summary>
     [Fact]
-    public async Task PatchYamlConfigurationAsync_ConcurrentPatchesSerializeWholeMutation()
+    public async Task PatchYamlConfigurationAsyncConcurrentPatchesSerializeWholeMutation()
     {
         var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
         await File.WriteAllTextAsync(
@@ -240,7 +240,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
     /// and cleans up the temporary artifact so interrupted writes cannot strand partial config files.
     /// </summary>
     [Fact]
-    public async Task PatchYamlConfigurationAsync_WhenAtomicWriteFails_LeavesOriginalFileAndCleansTempFile()
+    public async Task PatchYamlConfigurationAsyncWhenAtomicWriteFailsLeavesOriginalFileAndCleansTempFile()
     {
         var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
         await File.WriteAllTextAsync(
@@ -278,7 +278,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
     /// configuration file is JSON-backed, preserving reload behavior and consistent formatting.
     /// </summary>
     [Fact]
-    public async Task UpdateGlobalPromptTemplateAsync_WhenJsonBacked_UpdatesJsonAndReloadsConfiguration()
+    public async Task UpdateGlobalPromptTemplateAsyncWhenJsonBackedUpdatesJsonAndReloadsConfiguration()
     {
         var jsonPath = Path.Combine(_tempDirectory, "appsettings.json");
         await File.WriteAllTextAsync(
@@ -305,7 +305,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
     /// TR-MCP-QBRAIN-005: a canonical QBrainAi document receives the marker prompt and does not gain an Mcp section.
     /// </summary>
     [Fact]
-    public async Task UpdateGlobalPromptTemplateAsync_WhenCanonicalYaml_UpdatesQBrainAiOnly()
+    public async Task UpdateGlobalPromptTemplateAsyncWhenCanonicalYamlUpdatesQBrainAiOnly()
     {
         var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
         await File.WriteAllTextAsync(

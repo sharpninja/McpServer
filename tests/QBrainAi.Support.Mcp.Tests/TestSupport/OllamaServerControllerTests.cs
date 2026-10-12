@@ -17,7 +17,7 @@ public sealed class OllamaServerControllerTests
     /// Fixture: probe returns true on the first call; the launcher records any invocation.
     /// </summary>
     [Fact]
-    public async Task EnsureRunningAsync_WhenServerAlreadyRunning_AdoptsWithoutLaunching()
+    public async Task EnsureRunningAsyncWhenServerAlreadyRunningAdoptsWithoutLaunching()
     {
         var launcher = new RecordingLauncher();
         var controller = Build(probeResults: [true], launcher: launcher);
@@ -34,7 +34,7 @@ public sealed class OllamaServerControllerTests
     /// Fixture: probe succeeds immediately so nothing is owned, then StopAsync is called.
     /// </summary>
     [Fact]
-    public async Task StopAsync_WhenServerWasAlreadyRunning_LeavesItRunning()
+    public async Task StopAsyncWhenServerWasAlreadyRunningLeavesItRunning()
     {
         var launcher = new RecordingLauncher();
         var controller = Build(probeResults: [true], launcher: launcher);
@@ -51,7 +51,7 @@ public sealed class OllamaServerControllerTests
     /// Fixture: probe returns false, false, then true, so the controller must poll twice after launching.
     /// </summary>
     [Fact]
-    public async Task EnsureRunningAsync_WhenServerMissing_LaunchesOnceAndPollsUntilReady()
+    public async Task EnsureRunningAsyncWhenServerMissingLaunchesOnceAndPollsUntilReady()
     {
         var launcher = new RecordingLauncher();
         var controller = Build(probeResults: [false, false, true], launcher: launcher);
@@ -70,7 +70,7 @@ public sealed class OllamaServerControllerTests
     /// Fixture: probe returns false and the resolver returns null.
     /// </summary>
     [Fact]
-    public async Task EnsureRunningAsync_WhenExecutableMissing_ThrowsNamingInstallTarget()
+    public async Task EnsureRunningAsyncWhenExecutableMissingThrowsNamingInstallTarget()
     {
         var launcher = new RecordingLauncher();
         var controller = Build(probeResults: [false], launcher: launcher, executable: null);
@@ -87,7 +87,7 @@ public sealed class OllamaServerControllerTests
     /// Fixture: probe always returns false and the fake clock advances past the configured timeout.
     /// </summary>
     [Fact]
-    public async Task EnsureRunningAsync_WhenServerNeverAnswers_KillsStartedProcessAndThrows()
+    public async Task EnsureRunningAsyncWhenServerNeverAnswersKillsStartedProcessAndThrows()
     {
         var launcher = new RecordingLauncher();
         var controller = Build(probeResults: [], launcher: launcher);
@@ -104,7 +104,7 @@ public sealed class OllamaServerControllerTests
     /// Fixture: probe returns false then true so the controller owns the process, then StopAsync runs twice.
     /// </summary>
     [Fact]
-    public async Task StopAsync_WhenControllerStartedServer_KillsOnceAndIsIdempotent()
+    public async Task StopAsyncWhenControllerStartedServerKillsOnceAndIsIdempotent()
     {
         var launcher = new RecordingLauncher();
         var controller = Build(probeResults: [false, true], launcher: launcher);

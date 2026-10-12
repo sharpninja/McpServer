@@ -9,7 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class HostedMcpAgentExecutionStrategyTests
 {
     [Fact]
-    public void ResolveHostedTimeout_InfiniteTimeout_PreservesInfinity()
+    public void ResolveHostedTimeoutInfiniteTimeoutPreservesInfinity()
     {
         var timeout = HostedMcpAgentExecutionStrategy.ResolveHostedTimeout(Timeout.InfiniteTimeSpan);
 
@@ -17,7 +17,7 @@ public sealed class HostedMcpAgentExecutionStrategyTests
     }
 
     [Fact]
-    public void ResolveHostedTimeout_ZeroTimeout_UsesHostedDefault()
+    public void ResolveHostedTimeoutZeroTimeoutUsesHostedDefault()
     {
         var timeout = HostedMcpAgentExecutionStrategy.ResolveHostedTimeout(TimeSpan.Zero);
 

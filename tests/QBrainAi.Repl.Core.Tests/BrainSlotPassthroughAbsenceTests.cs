@@ -34,7 +34,7 @@ public sealed class BrainSlotPassthroughAbsenceTests
     [InlineData("BrainSlots")]
     [InlineData("BRAINSLOTS")]
     [InlineData("BrAiNsLoTs")]
-    public async Task InvokeAsync_BrainSlotsClientName_DoesNotResolveBrainSlotClient(string clientName)
+    public async Task InvokeAsyncBrainSlotsClientNameDoesNotResolveBrainSlotClient(string clientName)
     {
         var handler = new RecordingHttpHandler("[]");
         using var http = new HttpClient(handler);
@@ -58,7 +58,7 @@ public sealed class BrainSlotPassthroughAbsenceTests
     /// removed; the typed client remains for the workspace-token authorized REST callers.
     /// </summary>
     [Fact]
-    public void QBrainAiClient_BrainSlotsProperty_RemainsAvailableForTypedCallers()
+    public void QBrainAiClientBrainSlotsPropertyRemainsAvailableForTypedCallers()
     {
         var handler = new RecordingHttpHandler("[]");
         using var http = new HttpClient(handler);

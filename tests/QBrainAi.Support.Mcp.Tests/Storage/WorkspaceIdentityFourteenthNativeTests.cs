@@ -19,7 +19,7 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// finite physical identity APIs instead of invoking synchronous resolution.
     /// </summary>
     [Fact]
-    public void AsyncConsumers_AwaitBoundedPhysicalIdentityResolution()
+    public void AsyncConsumersAwaitBoundedPhysicalIdentityResolution()
     {
         var root = QBrainAi.Support.Mcp.Tests.Infrastructure.RepositoryEvidenceTestSupport
             .ResolveRepositoryRoot();
@@ -56,7 +56,7 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// even the native physical resolver from starting.
     /// </summary>
     [Fact]
-    public async Task SaveChangesAsync_PreCancelled_DoesNotStartNativeResolution()
+    public async Task SaveChangesAsyncPreCancelledDoesNotStartNativeResolution()
     {
         var invocationField = ResolveCounter("s_nativeResolverInvocationCount");
         var before = ReadCounter(invocationField);
@@ -89,7 +89,7 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// unavailable Windows UNC syntax, bound repeated calls, and leave no native worker behind.
     /// </summary>
     [Fact]
-    public async Task NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers()
+    public async Task NativeResolverRepeatedPlatformCallsLeaveNoActiveWorkers()
     {
         var stopwatch = Stopwatch.StartNew();
         var activeField = ResolveCounter("s_activeNativeResolverWorkers");
@@ -204,7 +204,7 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// used by global rows without dispatching native physical work.
     /// </summary>
     [Fact]
-    public async Task ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution()
+    public async Task ResolveAsyncEmptyWorkspaceIdPreservesGlobalIdentityWithoutNativeResolution()
     {
         var invocationField = ResolveCounter("s_nativeResolverInvocationCount");
         var before = ReadCounter(invocationField);
@@ -225,7 +225,7 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// workspace scope and must not start physical identity resolution.
     /// </summary>
     [Fact]
-    public async Task SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope()
+    public async Task SaveChangesAsyncGlobalEntityWithEmptyWorkspaceIdPreservesLegacyGlobalScope()
     {
         var invocationField = ResolveCounter("s_nativeResolverInvocationCount");
         var before = ReadCounter(invocationField);

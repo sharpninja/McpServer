@@ -25,7 +25,7 @@ public sealed class GitHubEndpointTests
     // --- GET /qbrainai/gh/issues ---
 
     /// <summary>
-    /// Validates the <c>ListIssues_Returns200</c> scenario.
+    /// Validates the <c>ListIssuesReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -33,7 +33,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task ListIssues_Returns200()
+    public async Task ListIssuesReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -43,7 +43,7 @@ public sealed class GitHubEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>ListIssues_WithState_Returns200</c> scenario.
+    /// Validates the <c>ListIssuesWithStateReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -51,7 +51,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task ListIssues_WithState_Returns200()
+    public async Task ListIssuesWithStateReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues?state=open&limit=5", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -60,7 +60,7 @@ public sealed class GitHubEndpointTests
     // --- GET /qbrainai/gh/issues/{number} ---
 
     /// <summary>
-    /// Validates the <c>GetIssue_ExistingNumber_Returns200Or404</c> scenario.
+    /// Validates the <c>GetIssueExistingNumberReturns200Or404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -68,7 +68,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task GetIssue_ExistingNumber_Returns200Or404()
+    public async Task GetIssueExistingNumberReturns200Or404()
     {
         var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues/1", cancellationToken: TestContext.Current.CancellationToken);
         // May be 200 (found) or 404 (not found) depending on repo state
@@ -79,7 +79,7 @@ public sealed class GitHubEndpointTests
     // --- POST /qbrainai/gh/issues (create) ---
 
     /// <summary>
-    /// Validates the <c>CreateIssue_MissingTitle_Returns400</c> scenario.
+    /// Validates the <c>CreateIssueMissingTitleReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -87,7 +87,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task CreateIssue_MissingTitle_Returns400()
+    public async Task CreateIssueMissingTitleReturns400()
     {
         var payload = new { body = "no title" };
         var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -97,7 +97,7 @@ public sealed class GitHubEndpointTests
     // --- PUT /qbrainai/gh/issues/{number} (update) ---
 
     /// <summary>
-    /// Validates the <c>UpdateIssue_NullBody_Returns400</c> scenario.
+    /// Validates the <c>UpdateIssueNullBodyReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -105,7 +105,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task UpdateIssue_NullBody_Returns400()
+    public async Task UpdateIssueNullBodyReturns400()
     {
         var response = await _fixture.Client.PutAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999", (object?)null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -114,7 +114,7 @@ public sealed class GitHubEndpointTests
     // --- POST /qbrainai/gh/issues/{id}/comments ---
 
     /// <summary>
-    /// Validates the <c>CommentOnIssue_MissingBody_Returns400</c> scenario.
+    /// Validates the <c>CommentOnIssueMissingBodyReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -122,7 +122,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task CommentOnIssue_MissingBody_Returns400()
+    public async Task CommentOnIssueMissingBodyReturns400()
     {
         var payload = new { body = "" };
         var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues/1/comments", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -132,7 +132,7 @@ public sealed class GitHubEndpointTests
     // --- GET /qbrainai/gh/labels ---
 
     /// <summary>
-    /// Validates the <c>ListLabels_Returns200</c> scenario.
+    /// Validates the <c>ListLabelsReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -140,7 +140,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task ListLabels_Returns200()
+    public async Task ListLabelsReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/labels", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -151,7 +151,7 @@ public sealed class GitHubEndpointTests
     // --- GET /qbrainai/gh/pulls ---
 
     /// <summary>
-    /// Validates the <c>ListPulls_Returns200</c> scenario.
+    /// Validates the <c>ListPullsReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -159,7 +159,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task ListPulls_Returns200()
+    public async Task ListPullsReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/pulls", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -169,7 +169,7 @@ public sealed class GitHubEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>ListPulls_WithState_Returns200</c> scenario.
+    /// Validates the <c>ListPullsWithStateReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -177,7 +177,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task ListPulls_WithState_Returns200()
+    public async Task ListPullsWithStateReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/pulls?state=closed&limit=5", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -186,7 +186,7 @@ public sealed class GitHubEndpointTests
     // --- POST /qbrainai/gh/pulls/{id}/comments ---
 
     /// <summary>
-    /// Validates the <c>CommentOnPull_MissingBody_Returns400</c> scenario.
+    /// Validates the <c>CommentOnPullMissingBodyReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -194,7 +194,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task CommentOnPull_MissingBody_Returns400()
+    public async Task CommentOnPullMissingBodyReturns400()
     {
         var payload = new { body = "" };
         var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/pulls/1/comments", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -204,7 +204,7 @@ public sealed class GitHubEndpointTests
     // --- POST /qbrainai/gh/issues/{number}/close ---
 
     /// <summary>
-    /// Validates the <c>CloseIssue_NonExistent_ReturnsBadRequestOr200</c> scenario.
+    /// Validates the <c>CloseIssueNonExistentReturnsBadRequestOr200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -212,7 +212,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task CloseIssue_NonExistent_ReturnsBadRequestOr200()
+    public async Task CloseIssueNonExistentReturnsBadRequestOr200()
     {
         var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999/close", null, cancellationToken: TestContext.Current.CancellationToken);
         // May be 200 (gh cli succeeds) or 400 (fails) depending on issue existence
@@ -223,7 +223,7 @@ public sealed class GitHubEndpointTests
     // --- POST /qbrainai/gh/issues/{number}/reopen ---
 
     /// <summary>
-    /// Validates the <c>ReopenIssue_NonExistent_ReturnsBadRequestOr200</c> scenario.
+    /// Validates the <c>ReopenIssueNonExistentReturnsBadRequestOr200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -231,7 +231,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task ReopenIssue_NonExistent_ReturnsBadRequestOr200()
+    public async Task ReopenIssueNonExistentReturnsBadRequestOr200()
     {
         var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999/reopen", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
@@ -241,7 +241,7 @@ public sealed class GitHubEndpointTests
     // --- POST /qbrainai/gh/issues/sync/from-github ---
 
     /// <summary>
-    /// Validates the <c>SyncFromGitHub_Returns200Or400</c> scenario.
+    /// Validates the <c>SyncFromGitHubReturns200Or400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -249,7 +249,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task SyncFromGitHub_Returns200Or400()
+    public async Task SyncFromGitHubReturns200Or400()
     {
         var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/sync/from-github", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
@@ -259,7 +259,7 @@ public sealed class GitHubEndpointTests
     // --- POST /qbrainai/gh/issues/sync/to-github ---
 
     /// <summary>
-    /// Validates the <c>SyncToGitHub_Returns200Or400</c> scenario.
+    /// Validates the <c>SyncToGitHubReturns200Or400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -267,7 +267,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task SyncToGitHub_Returns200Or400()
+    public async Task SyncToGitHubReturns200Or400()
     {
         var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/sync/to-github", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
@@ -277,7 +277,7 @@ public sealed class GitHubEndpointTests
     // --- POST /qbrainai/gh/issues/{number}/sync ---
 
     /// <summary>
-    /// Validates the <c>SyncSingleIssue_Returns200Or400Or404</c> scenario.
+    /// Validates the <c>SyncSingleIssueReturns200Or400Or404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
@@ -285,7 +285,7 @@ public sealed class GitHubEndpointTests
     /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
     /// </remarks>
     [Fact]
-    public async Task SyncSingleIssue_Returns200Or400Or404()
+    public async Task SyncSingleIssueReturns200Or400Or404()
     {
         var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/1/sync", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(

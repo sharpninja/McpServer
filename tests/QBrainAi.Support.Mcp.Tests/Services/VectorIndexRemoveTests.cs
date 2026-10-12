@@ -16,7 +16,7 @@ public sealed class VectorIndexRemoveTests
     /// and decrements the Count.
     /// </summary>
     [Fact]
-    public void RemoveVector_ExistingChunk_ReturnsTrueAndDecrementsCount()
+    public void RemoveVectorExistingChunkReturnsTrueAndDecrementsCount()
     {
         var sut = CreateService();
         sut.AddVector("chunk-1", CreateEmbedding(0.5f));
@@ -34,7 +34,7 @@ public sealed class VectorIndexRemoveTests
     /// does not exist in the index.
     /// </summary>
     [Fact]
-    public void RemoveVector_UnknownChunkId_ReturnsFalse()
+    public void RemoveVectorUnknownChunkIdReturnsFalse()
     {
         var sut = CreateService();
         sut.AddVector("chunk-1", CreateEmbedding(0.5f));
@@ -52,7 +52,7 @@ public sealed class VectorIndexRemoveTests
     /// after filtering out the stale removed entry.
     /// </summary>
     [Fact]
-    public void RemoveVector_RemovedChunkNotReturnedBySearch()
+    public void RemoveVectorRemovedChunkNotReturnedBySearch()
     {
         var sut = CreateService();
         sut.AddVector("chunk-a", CreateEmbedding(0.1f));
@@ -72,7 +72,7 @@ public sealed class VectorIndexRemoveTests
     /// empty and Search returns no results.
     /// </summary>
     [Fact]
-    public void RemoveVector_AllVectorsRemoved_SearchReturnsEmpty()
+    public void RemoveVectorAllVectorsRemovedSearchReturnsEmpty()
     {
         var sut = CreateService();
         sut.AddVector("chunk-1", CreateEmbedding(0.3f));

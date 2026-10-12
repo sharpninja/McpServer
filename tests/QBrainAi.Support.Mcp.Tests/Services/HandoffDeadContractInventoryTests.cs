@@ -19,7 +19,7 @@ public sealed class HandoffDeadContractInventoryTests
 
     /// <summary>P3: neither service nor client HandoffReviewState defines Approved.</summary>
     [Fact]
-    public void HandoffReviewState_DoesNotDefineApproved()
+    public void HandoffReviewStateDoesNotDefineApproved()
     {
         Assert.DoesNotContain(Enum.GetNames<HandoffReviewState>(), name => string.Equals(name, "Approved", StringComparison.Ordinal));
         Assert.DoesNotContain(Enum.GetNames<QBrainAi.Client.Models.HandoffReviewState>(), name => string.Equals(name, "Approved", StringComparison.Ordinal));
@@ -29,7 +29,7 @@ public sealed class HandoffDeadContractInventoryTests
 
     /// <summary>P3: the persisted run entity has no ReplayOfRunId column or property.</summary>
     [Fact]
-    public void HandoffIngestionRunEntity_DoesNotExposeReplayOfRunId()
+    public void HandoffIngestionRunEntityDoesNotExposeReplayOfRunId()
     {
         var names = typeof(HandoffIngestionRunEntity).GetProperties().Select(property => property.Name).ToArray();
         Assert.DoesNotContain(names, name => string.Equals(name, "ReplayOfRunId", StringComparison.Ordinal));
@@ -37,7 +37,7 @@ public sealed class HandoffDeadContractInventoryTests
 
     /// <summary>P3: source, snapshots, and migrations do not reintroduce the dead contracts.</summary>
     [Fact]
-    public void SourceAndSchema_DoNotReintroduceReplayOfRunIdOrApproved()
+    public void SourceAndSchemaDoNotReintroduceReplayOfRunIdOrApproved()
     {
         var root = FindRepoRoot();
         var hits = new List<string>();

@@ -1442,7 +1442,7 @@ public sealed class RequirementsController : ControllerBase
         }
     }
 
-    private string ReadMarkdownFile(string path)
+    private static string ReadMarkdownFile(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
             throw new IOException("A configured requirements file path is missing.");

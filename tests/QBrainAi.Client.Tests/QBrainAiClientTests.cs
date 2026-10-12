@@ -14,7 +14,7 @@ public sealed class QBrainAiClientTests
     };
 
     [Fact]
-    public void AllSubClients_AreInitialized()
+    public void AllSubClientsAreInitialized()
     {
         using var http = new HttpClient();
         var client = new QBrainAiClient(http, TestOptions);
@@ -43,7 +43,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public void Factory_CreateWithOptions_Works()
+    public void FactoryCreateWithOptionsWorks()
     {
         var client = QBrainAiClientFactory.Create(TestOptions);
 
@@ -52,7 +52,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public void Factory_CreateWithHttpClient_Works()
+    public void FactoryCreateWithHttpClientWorks()
     {
         using var http = new HttpClient();
         var client = QBrainAiClientFactory.Create(http, TestOptions);
@@ -62,13 +62,13 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public void Factory_NullOptions_Throws()
+    public void FactoryNullOptionsThrows()
     {
         Assert.Throws<ArgumentNullException>(() => QBrainAiClientFactory.Create(null!));
     }
 
     [Fact]
-    public void Constructor_NoApiKey_DoesNotThrow()
+    public void ConstructorNoApiKeyDoesNotThrow()
     {
         var options = new QBrainAiClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         using var http = new HttpClient();
@@ -77,7 +77,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RuntimeCall_WithoutApiKey_ThrowsInvalidOperation()
+    public async System.Threading.Tasks.Task RuntimeCallWithoutApiKeyThrowsInvalidOperation()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "{}");
         using var http = new HttpClient(handler);
@@ -88,7 +88,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public void Port_PropagatedToAllSubClients()
+    public void PortPropagatedToAllSubClients()
     {
         using var http = new HttpClient();
         var client = new QBrainAiClient(http, TestOptions);
@@ -119,7 +119,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task InitializeAsync_FetchesDefaultKeyAndSetsOnAllClients()
+    public async System.Threading.Tasks.Task InitializeAsyncFetchesDefaultKeyAndSetsOnAllClients()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"apiKey":"default-anon-key"}""");
         using var http = new HttpClient(handler);
@@ -151,7 +151,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task InitializeAsync_SkipsIfApiKeyAlreadySet()
+    public async System.Threading.Tasks.Task InitializeAsyncSkipsIfApiKeyAlreadySet()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"apiKey":"should-not-use"}""");
         using var http = new HttpClient(handler);
@@ -164,7 +164,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task InitializeAsync_ServerError_ThrowsQBrainAiException()
+    public async System.Threading.Tasks.Task InitializeAsyncServerErrorThrowsQBrainAiException()
     {
         var handler = new MockHttpHandler(HttpStatusCode.ServiceUnavailable, """{"error":"not ready"}""");
         using var http = new HttpClient(handler);
@@ -175,7 +175,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task InitializeAsync_MissingApiKeyInResponse_ThrowsInvalidOperation()
+    public async System.Threading.Tasks.Task InitializeAsyncMissingApiKeyInResponseThrowsInvalidOperation()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"other":"value"}""");
         using var http = new HttpClient(handler);
@@ -186,7 +186,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ApiKey_SetAfterBearerToken_UsesApiKeyHeader()
+    public async System.Threading.Tasks.Task ApiKeySetAfterBearerTokenUsesApiKeyHeader()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[]}""");
         using var http = new HttpClient(handler);
@@ -206,7 +206,7 @@ public sealed class QBrainAiClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ClearingBearerToken_AllowsLaterApiKeyFallback()
+    public async System.Threading.Tasks.Task ClearingBearerTokenAllowsLaterApiKeyFallback()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[]}""");
         using var http = new HttpClient(handler);

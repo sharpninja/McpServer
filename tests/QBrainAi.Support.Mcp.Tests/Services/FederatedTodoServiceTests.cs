@@ -42,7 +42,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>When federation is disabled, delegates directly to the inner service.</summary>
     [Fact]
-    public async Task QueryAsync_FederationDisabled_DelegatesToLocal()
+    public async Task QueryAsyncFederationDisabledDelegatesToLocal()
     {
         var expected = new TodoQueryResult([MakeItem("A-001")], 1);
         _inner.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -56,7 +56,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>When no federation target resolves, delegates directly to the inner service.</summary>
     [Fact]
-    public async Task QueryAsync_NoTargetResolved_DelegatesToLocal()
+    public async Task QueryAsyncNoTargetResolvedDelegatesToLocal()
     {
         var expected = new TodoQueryResult([MakeItem("A-001")], 1);
         _inner.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
@@ -72,7 +72,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>When both local and remote return results, merges with local winning on ID collision.</summary>
     [Fact]
-    public async Task QueryAsync_BothReturn_MergesLocalWins()
+    public async Task QueryAsyncBothReturnMergesLocalWins()
     {
         var localItem = MakeItem("A-001", "Local Title");
         var remoteItem1 = MakeItem("A-001", "Remote Title"); // collision — local wins
@@ -94,7 +94,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>When the remote call throws, returns local-only results gracefully.</summary>
     [Fact]
-    public async Task QueryAsync_RemoteFails_ReturnsLocalOnly()
+    public async Task QueryAsyncRemoteFailsReturnsLocalOnly()
     {
         var localItem = MakeItem("A-001");
         _inner.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
@@ -111,7 +111,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>When the remote returns null, returns local-only results.</summary>
     [Fact]
-    public async Task QueryAsync_RemoteReturnsNull_ReturnsLocalOnly()
+    public async Task QueryAsyncRemoteReturnsNullReturnsLocalOnly()
     {
         var localItem = MakeItem("A-001");
         _inner.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
@@ -130,7 +130,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>When found locally, returns the local item without calling remote.</summary>
     [Fact]
-    public async Task GetByIdAsync_FoundLocally_ReturnsLocal()
+    public async Task GetByIdAsyncFoundLocallyReturnsLocal()
     {
         var localItem = MakeItem("A-001", "Local");
         _inner.GetByIdAsync("A-001", Arg.Any<CancellationToken>()).Returns(localItem);
@@ -145,7 +145,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>When not found locally, falls back to remote.</summary>
     [Fact]
-    public async Task GetByIdAsync_NotLocalFoundRemote_ReturnsRemote()
+    public async Task GetByIdAsyncNotLocalFoundRemoteReturnsRemote()
     {
         var remoteItem = MakeItem("B-002", "Remote");
         _inner.GetByIdAsync("B-002", Arg.Any<CancellationToken>()).Returns((TodoFlatItem?)null);
@@ -161,7 +161,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>When not found in either, returns null.</summary>
     [Fact]
-    public async Task GetByIdAsync_NotFound_ReturnsNull()
+    public async Task GetByIdAsyncNotFoundReturnsNull()
     {
         _inner.GetByIdAsync("X-999", Arg.Any<CancellationToken>()).Returns((TodoFlatItem?)null);
         _client.GetTodoByIdAsync(Arg.Any<FederationTarget>(), "X-999", Arg.Any<CancellationToken>())
@@ -177,7 +177,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>CreateAsync always delegates to the inner (local) service.</summary>
     [Fact]
-    public async Task CreateAsync_AlwaysDelegatesToLocal()
+    public async Task CreateAsyncAlwaysDelegatesToLocal()
     {
         var request = new TodoCreateRequest { Id = "C-001", Title = "New", Section = "s", Priority = "high" };
         var expected = new TodoMutationResult(true, Item: MakeItem("C-001"));
@@ -191,7 +191,7 @@ public sealed class FederatedTodoServiceTests
 
     /// <summary>DeleteAsync always delegates to the inner (local) service.</summary>
     [Fact]
-    public async Task DeleteAsync_AlwaysDelegatesToLocal()
+    public async Task DeleteAsyncAlwaysDelegatesToLocal()
     {
         var expected = new TodoMutationResult(true);
         _inner.DeleteAsync("A-001", Arg.Any<CancellationToken>()).Returns(expected);

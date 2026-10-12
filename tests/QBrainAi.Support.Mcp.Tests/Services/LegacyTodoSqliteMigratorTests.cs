@@ -65,7 +65,7 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
     /// versions, and metadata preserved.
     /// </summary>
     [Fact]
-    public async Task Migrator_CopiesAllRowsPreservingIdsVersionsAndMetadata()
+    public async Task MigratorCopiesAllRowsPreservingIdsVersionsAndMetadata()
     {
         SeedLegacy(_legacyPath, seedRows: true);
 
@@ -103,7 +103,7 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
     /// a marker and leaves target data untouched.
     /// </summary>
     [Fact]
-    public async Task Migrator_IsIdempotent_WhenTargetTableNonempty()
+    public async Task MigratorIsIdempotentWhenTargetTableNonempty()
     {
         SeedLegacy(_legacyPath, seedRows: true);
         await SeedTargetWithSingleRowAsync().ConfigureAwait(true);
@@ -126,7 +126,7 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
     /// without creating a marker or touching the target database.
     /// </summary>
     [Fact]
-    public async Task Migrator_IsNoop_WhenLegacyDbMissing()
+    public async Task MigratorIsNoopWhenLegacyDbMissing()
     {
         Assert.False(File.Exists(_legacyPath));
 
@@ -141,7 +141,7 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
     /// Flag disabled: migrator must short-circuit even when a legacy file is present.
     /// </summary>
     [Fact]
-    public async Task Migrator_IsNoop_WhenFlagFalse()
+    public async Task MigratorIsNoopWhenFlagFalse()
     {
         SeedLegacy(_legacyPath, seedRows: true);
 
@@ -161,7 +161,7 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
     /// and exits without touching either database.
     /// </summary>
     [Fact]
-    public async Task Migrator_WritesMarkerFile_ToPreventRerun()
+    public async Task MigratorWritesMarkerFileToPreventRerun()
     {
         SeedLegacy(_legacyPath, seedRows: true);
 

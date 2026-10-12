@@ -14,7 +14,7 @@ public sealed class McpDatabaseConfigurationResolverTests
     /// Verifies PostgreSQL URI configuration is converted without using the obsolete resolver.
     /// </summary>
     [Fact]
-    public void ResolveProviderOptions_PostgreSqlUri_ConvertsToNpgsqlConnectionString()
+    public void ResolveProviderOptionsPostgreSqlUriConvertsToNpgsqlConnectionString()
     {
         var configuration = BuildConfiguration(new Dictionary<string, string?>
         {
@@ -37,7 +37,7 @@ public sealed class McpDatabaseConfigurationResolverTests
     /// Verifies existing Npgsql key value connection strings pass through unchanged.
     /// </summary>
     [Fact]
-    public void ResolveProviderOptions_PostgreSqlKeyValueConnectionString_PreservesConfiguredValue()
+    public void ResolveProviderOptionsPostgreSqlKeyValueConnectionStringPreservesConfiguredValue()
     {
         const string connectionString = "Host=db.example;Port=5432;Database=mcp;Username=user;Password=pass";
         var configuration = BuildConfiguration(new Dictionary<string, string?>
@@ -55,7 +55,7 @@ public sealed class McpDatabaseConfigurationResolverTests
     [InlineData(null, true)]
     [InlineData("false", false)]
     [InlineData("true", true)]
-    public void ResolveRuntimeOptions_AutoMigrate_UsesExplicitSetting(string? raw, bool expected)
+    public void ResolveRuntimeOptionsAutoMigrateUsesExplicitSetting(string? raw, bool expected)
     {
         var values = new Dictionary<string, string?>
         {

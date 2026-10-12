@@ -21,7 +21,7 @@ public sealed class BrainInteractionSessionLoggerTests
 
     /// <summary>A brain interaction appends the full prompt and full output as two dialog items.</summary>
     [Fact]
-    public async Task Log_AppendsFullPromptAndOutput()
+    public async Task LogAppendsFullPromptAndOutput()
     {
         _sessionLog.AppendProcessingDialogAsync("QBAgent", "S", "T", Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(), Arg.Any<CancellationToken>())
             .Returns(2);
@@ -42,7 +42,7 @@ public sealed class BrainInteractionSessionLoggerTests
 
     /// <summary>FR-MCP-QBEXEC-001 AC-5: an internal-tool failure is appended through ISessionLogService.</summary>
     [Fact]
-    public async Task LogInternalToolFailure_AppendsDialogViaSessionLog()
+    public async Task LogInternalToolFailureAppendsDialogViaSessionLog()
     {
         _sessionLog.AppendProcessingDialogAsync("QBAgent", "S", "T", Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(), Arg.Any<CancellationToken>())
             .Returns(1);
@@ -63,7 +63,7 @@ public sealed class BrainInteractionSessionLoggerTests
 
     /// <summary>Without session/turn context, nothing is appended.</summary>
     [Fact]
-    public async Task Log_NoSessionContext_NoOps()
+    public async Task LogNoSessionContextNoOps()
     {
         var sut = CreateSut();
 
@@ -77,7 +77,7 @@ public sealed class BrainInteractionSessionLoggerTests
 
     /// <summary>Secrets in the prompt/output are redacted before logging.</summary>
     [Fact]
-    public async Task Log_RedactsSecrets()
+    public async Task LogRedactsSecrets()
     {
         _sessionLog.AppendProcessingDialogAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(), Arg.Any<CancellationToken>())
             .Returns(2);
@@ -96,7 +96,7 @@ public sealed class BrainInteractionSessionLoggerTests
 
     /// <summary>An append failure is swallowed so orchestration is never interrupted.</summary>
     [Fact]
-    public async Task Log_WhenAppendThrows_DoesNotPropagate()
+    public async Task LogWhenAppendThrowsDoesNotPropagate()
     {
         _sessionLog.AppendProcessingDialogAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IReadOnlyList<ProcessingDialogItemDto>>(), Arg.Any<CancellationToken>())
             .ThrowsAsync(new InvalidOperationException("turn not found"));
@@ -108,7 +108,7 @@ public sealed class BrainInteractionSessionLoggerTests
 
     /// <summary>Redact replaces bearer tokens and api keys.</summary>
     [Fact]
-    public void Redact_RemovesBearerAndApiKey()
+    public void RedactRemovesBearerAndApiKey()
     {
         Assert.Equal("Bearer [REDACTED]", BrainInteractionSessionLogger.Redact("Bearer abc.def-123"));
         Assert.DoesNotContain("secretvalue123", BrainInteractionSessionLogger.Redact("api_key: secretvalue123"), StringComparison.Ordinal);

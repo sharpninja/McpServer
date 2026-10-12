@@ -21,7 +21,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 {
     /// <summary>Overlapping requirement ids do not leak between workspaces.</summary>
     [Fact]
-    public async Task ListsAndExports_AreScopedToActiveWorkspace()
+    public async Task ListsAndExportsAreScopedToActiveWorkspace()
     {
         using var fixture = new RequirementsDbFixture();
         var workspaceA = fixture.CreateWorkspace("a");
@@ -65,7 +65,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Mapping validation rejects missing FR/TR/TEST ids before storing links.</summary>
     [Fact]
-    public async Task UpsertMapping_ValidatesFrTrAndTestIds()
+    public async Task UpsertMappingValidatesFrTrAndTestIds()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("validate"));
@@ -88,7 +88,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     /// FR-MCP-USECASE-003: GetFr returns linkedUseCases for Realizes (and other) links via UseCaseFrLinks.
     /// </summary>
     [Fact]
-    public async Task GetFrAsync_IncludesLinkedUseCases_FromUseCaseFrLinks()
+    public async Task GetFrAsyncIncludesLinkedUseCasesFromUseCaseFrLinks()
     {
         using var fixture = new RequirementsDbFixture();
         var workspace = fixture.CreateWorkspace("uc-fr-link");
@@ -142,7 +142,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Requirement metadata survives create, update, list, and get through DB storage.</summary>
     [Fact]
-    public async Task RequirementMetadata_RoundTripsThroughDatabaseStorage()
+    public async Task RequirementMetadataRoundTripsThroughDatabaseStorage()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("metadata"));
@@ -176,7 +176,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Filtered requirement queries apply area, subarea, and status filters in the repository layer.</summary>
     [Fact]
-    public async Task QueryRequirements_AppliesAreaSubareaAndStatusFilters()
+    public async Task QueryRequirementsAppliesAreaSubareaAndStatusFilters()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("query"));
@@ -196,7 +196,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Public mutations reject wildcard and free-text requirement IDs before they can become stored rows.</summary>
     [Fact]
-    public async Task RequirementMutations_RejectWildcardAndFreeTextIds()
+    public async Task RequirementMutationsRejectWildcardAndFreeTextIds()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("reject-bad-ids"));
@@ -216,7 +216,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Atomic batch creation persists all FR/TR/TEST rows when every record is valid.</summary>
     [Fact]
-    public async Task AddBatchAsync_ValidMixedRecords_PersistsAllRows()
+    public async Task AddBatchAsyncValidMixedRecordsPersistsAllRows()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("batch-create"));
@@ -236,7 +236,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Atomic batch updates preserve structured acceptance criteria through database storage.</summary>
     [Fact]
-    public async Task UpdateBatchAsync_PreservesAcceptanceCriteria()
+    public async Task UpdateBatchAsyncPreservesAcceptanceCriteria()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("batch-update-ac"));
@@ -280,7 +280,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     /// update operations and remain visible after a fresh service read.
     /// </summary>
     [Fact]
-    public async Task AcceptanceCriteria_RoundTripsAcrossSingleAndBatchFrTrTestWrites()
+    public async Task AcceptanceCriteriaRoundTripsAcrossSingleAndBatchFrTrTestWrites()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("acceptance-criteria-all-writes"));
@@ -355,7 +355,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Batch create is now idempotent: pre-existing records are skipped (no overwrite, no throw), other new records in the batch are created. This prevents client double-submit races from aborting successful prior creates.</summary>
     [Fact]
-    public async Task AddBatchAsync_ExistingConflict_SkipsExistingAndCreatesOthers()
+    public async Task AddBatchAsyncExistingConflictSkipsExistingAndCreatesOthers()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("batch-conflict"));
@@ -387,7 +387,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     /// batch check in one workspace must not skip the same ID in a different workspace.
     /// </summary>
     [Fact]
-    public async Task AddBatchAsync_SameIdInDifferentWorkspace_CreatesWorkspaceScopedRow()
+    public async Task AddBatchAsyncSameIdInDifferentWorkspaceCreatesWorkspaceScopedRow()
     {
         using var fixture = new RequirementsDbFixture();
         var firstWorkspace = fixture.CreateWorkspace("batch-workspace-one");
@@ -419,7 +419,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     /// when detecting existing rows.
     /// </summary>
     [Fact]
-    public async Task AddFrAsync_SameIdInDifferentWorkspace_DoesNotConflict()
+    public async Task AddFrAsyncSameIdInDifferentWorkspaceDoesNotConflict()
     {
         using var fixture = new RequirementsDbFixture();
         var firstWorkspace = fixture.CreateWorkspace("single-workspace-one");
@@ -439,7 +439,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Transaction compensation restores the prior requirements snapshot and allows retrying a rolled-back ID.</summary>
     [Fact]
-    public async Task RestoreRequirementsSnapshotAsync_SoftDeletesCreatedRowsAndAllowsRetry()
+    public async Task RestoreRequirementsSnapshotAsyncSoftDeletesCreatedRowsAndAllowsRetry()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("compensation-retry"));
@@ -466,7 +466,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Bootstrap accepts bold legacy headings and does not treat notes columns as TEST links.</summary>
     [Fact]
-    public async Task Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors()
+    public async Task BootstrapLegacyBoldHeadingsAndNotesMappingGeneratesWikiWithoutDbErrors()
     {
         using var fixture = new RequirementsDbFixture();
         var workspace = fixture.CreateWorkspace("legacy-bold");
@@ -516,7 +516,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
     /// <summary>Bootstrap rebuilds traceability when orphan links were left by a failed import.</summary>
     [Fact]
-    public async Task Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure()
+    public async Task BootstrapStaleTraceabilityLinksRebuildsWithoutUniqueConstraintFailure()
     {
         using var fixture = new RequirementsDbFixture();
         var workspace = fixture.CreateWorkspace("stale-link");
@@ -754,7 +754,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     /// must clean links, and listFr filters must continue to work; guards prevent bad backfills.
     /// </summary>
     [Fact]
-    public async Task PurgeInvalidPlaceholders_HandlesMalformedIdsAndLinks_CleansWithoutError()
+    public async Task PurgeInvalidPlaceholdersHandlesMalformedIdsAndLinksCleansWithoutError()
     {
         using var fixture = new RequirementsDbFixture();
         var ws = fixture.CreateWorkspace("purge-edge");
@@ -788,7 +788,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     /// Guards in EfTodoService + IsValid must prevent bad ID backfills (edge cases from pollution reports).
     /// </summary>
     [Fact]
-    public async Task BackfillGuards_RejectWildcardsAndWordIds_NeverCreatePlaceholders()
+    public async Task BackfillGuardsRejectWildcardsAndWordIdsNeverCreatePlaceholders()
     {
         using var fixture = new RequirementsDbFixture();
         var ws = fixture.CreateWorkspace("guard-edge");
@@ -805,6 +805,6 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         // Simulate what would have been a bad backfill insert (should not happen in real path)
         // We just confirm catalog stays clean of them.
         var all = await service.GetAllFrAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.DoesNotContain(all, f => f.Id.Contains("*") || f.Id.Length < 5 || !f.Id.StartsWith("FR-"));
+        Assert.DoesNotContain(all, f => f.Id.Contains('*') || f.Id.Length < 5 || !f.Id.StartsWith("FR-"));
     }
 }

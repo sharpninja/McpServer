@@ -7,7 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 public sealed class MarkdownSessionLogParserTests
 {
     [Fact]
-    public void WhenValidSessionLog_ThenParsesCorrectly()
+    public void WhenValidSessionLogThenParsesCorrectly()
     {
         var md = """
             # Copilot Session Log - FTS5 Implementation
@@ -37,7 +37,7 @@ public sealed class MarkdownSessionLogParserTests
     }
 
     [Fact]
-    public void WhenNotASessionLog_ThenReturnsNull()
+    public void WhenNotASessionLogThenReturnsNull()
     {
         var md = """
             # Regular Document
@@ -51,14 +51,14 @@ public sealed class MarkdownSessionLogParserTests
     }
 
     [Fact]
-    public void WhenEmptyContent_ThenReturnsNull()
+    public void WhenEmptyContentThenReturnsNull()
     {
         Assert.Null(MarkdownSessionLogParser.TryParse("", "test.md"));
         Assert.Null(MarkdownSessionLogParser.TryParse("  ", "test.md"));
     }
 
     [Fact]
-    public void WhenChangesExist_ThenExtractsActions()
+    public void WhenChangesExistThenExtractsActions()
     {
         var md = """
             # Session Log - Test Changes
@@ -85,7 +85,7 @@ public sealed class MarkdownSessionLogParserTests
     }
 
     [Fact]
-    public void WhenBranchProvided_ThenWorkspaceContainsBranch()
+    public void WhenBranchProvidedThenWorkspaceContainsBranch()
     {
         var md = """
             # Session Log - Branch Test
@@ -105,7 +105,7 @@ public sealed class MarkdownSessionLogParserTests
     }
 
     [Fact]
-    public void WhenDateProvided_ThenStartedIsPopulated()
+    public void WhenDateProvidedThenStartedIsPopulated()
     {
         var md = """
             # Session Log - Date Test
@@ -124,7 +124,7 @@ public sealed class MarkdownSessionLogParserTests
     // --- Phase 4b: Enhanced parser tests ---
 
     [Fact]
-    public void WhenModelProvided_ThenModelIsExtracted()
+    public void WhenModelProvidedThenModelIsExtracted()
     {
         var md = """
             # Session Log - Model Test
@@ -143,7 +143,7 @@ public sealed class MarkdownSessionLogParserTests
     }
 
     [Fact]
-    public void WhenDurationProvided_ThenDurationIsInResponse()
+    public void WhenDurationProvidedThenDurationIsInResponse()
     {
         var md = """
             # Session Log - Duration Test
@@ -164,7 +164,7 @@ public sealed class MarkdownSessionLogParserTests
     }
 
     [Fact]
-    public void WhenFilesSummaryProvided_ThenSectionIsInResponse()
+    public void WhenFilesSummaryProvidedThenSectionIsInResponse()
     {
         var md = """
             # Session Log - Files Summary Test
@@ -187,7 +187,7 @@ public sealed class MarkdownSessionLogParserTests
     }
 
     [Fact]
-    public void WhenMultipleRequestEntries_ThenAllAreExtracted()
+    public void WhenMultipleRequestEntriesThenAllAreExtracted()
     {
         var md = """
             # Session Log - Multi Request Test
@@ -223,7 +223,7 @@ public sealed class MarkdownSessionLogParserTests
     }
 
     [Fact]
-    public void WhenNumberedSections_ThenAllSectionsAreExtracted()
+    public void WhenNumberedSectionsThenAllSectionsAreExtracted()
     {
         var md = """
             # Session Log - Numbered Sections Test

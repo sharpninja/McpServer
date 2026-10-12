@@ -11,7 +11,7 @@ public sealed class BrainSlotsControllerTests
 {
     /// <summary>GET status returns the registry readiness projection.</summary>
     [Fact]
-    public async Task GetStatusAsync_ReturnsOkPayload()
+    public async Task GetStatusAsyncReturnsOkPayload()
     {
         var registry = Substitute.For<IBrainSlotRegistryService>();
         registry.GetStatusAsync(Arg.Any<CancellationToken>())
@@ -35,7 +35,7 @@ public sealed class BrainSlotsControllerTests
 
     /// <summary>PUT maps validation exceptions to BadRequest with the structured reason.</summary>
     [Fact]
-    public async Task UpsertAsync_WhenValidationFails_ReturnsBadRequest()
+    public async Task UpsertAsyncWhenValidationFailsReturnsBadRequest()
     {
         var registry = Substitute.For<IBrainSlotRegistryService>();
         registry.UpsertAsync(Arg.Any<string>(), Arg.Any<UpsertBrainSlotRequest>(), Arg.Any<CancellationToken>())
@@ -56,7 +56,7 @@ public sealed class BrainSlotsControllerTests
 
     /// <summary>PUT maps enabled-role conflicts to Conflict.</summary>
     [Fact]
-    public async Task UpsertAsync_WhenEnabledRoleConflicts_ReturnsConflict()
+    public async Task UpsertAsyncWhenEnabledRoleConflictsReturnsConflict()
     {
         var registry = Substitute.For<IBrainSlotRegistryService>();
         registry.UpsertAsync(Arg.Any<string>(), Arg.Any<UpsertBrainSlotRequest>(), Arg.Any<CancellationToken>())
@@ -77,7 +77,7 @@ public sealed class BrainSlotsControllerTests
 
     /// <summary>POST invoke forwards the slot id and invocation request to the invocation service.</summary>
     [Fact]
-    public async Task InvokeAsync_ForwardsRequest()
+    public async Task InvokeAsyncForwardsRequest()
     {
         var invocation = Substitute.For<IBrainSlotInvocationService>();
         invocation.InvokeAsync(Arg.Any<string>(), Arg.Any<BrainSlotInvokeRequest>(), Arg.Any<CancellationToken>())
@@ -110,7 +110,7 @@ public sealed class BrainSlotsControllerTests
 
     /// <summary>POST orchestrate forwards the full Quad-Brain request to the orchestration service. TEST-MCP-184.</summary>
     [Fact]
-    public async Task OrchestrateAsync_ForwardsRequest()
+    public async Task OrchestrateAsyncForwardsRequest()
     {
         var quad = Substitute.For<IQuadBrainOrchestrationService>();
         quad.ExecuteFullOrchestrationAsync(Arg.Any<QuadBrainOrchestrationRequest>(), Arg.Any<CancellationToken>())
@@ -139,7 +139,7 @@ public sealed class BrainSlotsControllerTests
 
     /// <summary>POST weights/update forwards approved weight updates to the orchestration service. TEST-MCP-184.</summary>
     [Fact]
-    public async Task UpdateWeightsAsync_ForwardsRequest()
+    public async Task UpdateWeightsAsyncForwardsRequest()
     {
         var quad = Substitute.For<IQuadBrainOrchestrationService>();
         quad.ExecuteWeightUpdateAsync(Arg.Any<QuadBrainWeightUpdateRequest>(), Arg.Any<CancellationToken>())

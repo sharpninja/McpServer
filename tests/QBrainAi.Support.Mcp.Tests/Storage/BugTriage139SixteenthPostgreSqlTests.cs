@@ -14,7 +14,7 @@ public sealed class BugTriage139SixteenthPostgreSqlContractTests
     /// concurrently cancelled.
     /// </summary>
     [Fact]
-    public async Task ProviderCancellation_ServerStatementTimeout_IsNotCallerCancellation()
+    public async Task ProviderCancellationServerStatementTimeoutIsNotCallerCancellation()
     {
         using var caller = new CancellationTokenSource();
         caller.Cancel();
@@ -35,7 +35,7 @@ public sealed class BugTriage139SixteenthPostgreSqlContractTests
     /// token is concurrently cancelled.
     /// </summary>
     [Fact]
-    public async Task ProviderCancellation_AdministrativeCancel_IsNotCallerCancellation()
+    public async Task ProviderCancellationAdministrativeCancelIsNotCallerCancellation()
     {
         using var caller = new CancellationTokenSource();
         caller.Cancel();
@@ -55,7 +55,7 @@ public sealed class BugTriage139SixteenthPostgreSqlContractTests
     /// An operation-cancel exception carrying the exact caller token remains caller cancellation.
     /// </summary>
     [Fact]
-    public async Task ProviderCancellation_ExactCallerToken_RemainsCancellation()
+    public async Task ProviderCancellationExactCallerTokenRemainsCancellation()
     {
         using var caller = new CancellationTokenSource();
         caller.Cancel();
@@ -113,7 +113,7 @@ public sealed class BugTriage139SixteenthPostgreSqlBoundaryTests
     /// <see cref="PostgresException"/> when caller cancellation races with propagation.
     /// </summary>
     [Fact]
-    public async Task FreshPostgreSql_StatementTimeoutConcurrentWithCallerCancellation_IsPreserved()
+    public async Task FreshPostgreSqlStatementTimeoutConcurrentWithCallerCancellationIsPreserved()
     {
         var testToken = TestContext.Current.CancellationToken;
         await using var connection = new NpgsqlConnection(_fixture.ServerConnectionString);
@@ -171,7 +171,7 @@ public sealed class BugTriage139SixteenthPostgreSqlBoundaryTests
     /// caller cancellation.
     /// </summary>
     [Fact]
-    public async Task FreshPostgreSql_ExactCallerTokenCancellation_RemainsCancellation()
+    public async Task FreshPostgreSqlExactCallerTokenCancellationRemainsCancellation()
     {
         var testToken = TestContext.Current.CancellationToken;
         await using var connection = new NpgsqlConnection(_fixture.ServerConnectionString);
@@ -205,7 +205,7 @@ public sealed class BugTriage139SixteenthPostgreSqlBoundaryTests
     /// original <see cref="PostgresException"/> when caller cancellation races with propagation.
     /// </summary>
     [Fact]
-    public async Task FreshPostgreSql_AdministrativeCancellationConcurrentWithCallerCancellation_IsPreserved()
+    public async Task FreshPostgreSqlAdministrativeCancellationConcurrentWithCallerCancellationIsPreserved()
     {
         var testToken = TestContext.Current.CancellationToken;
         await using var connection = new NpgsqlConnection(_fixture.ServerConnectionString);

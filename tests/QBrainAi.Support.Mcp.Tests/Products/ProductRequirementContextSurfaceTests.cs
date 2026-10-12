@@ -88,7 +88,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
 
     /// <summary>REST search with sourceType=product-requirements returns sibling FR and origin, not Secret.cs.</summary>
     [Fact]
-    public async Task RestSearch_ProductRequirements_IncludesSiblingFrNotCs()
+    public async Task RestSearchProductRequirementsIncludesSiblingFrNotCs()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -109,7 +109,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
 
     /// <summary>REST pack includes sibling FR body plus origin and excludes sibling source files.</summary>
     [Fact]
-    public async Task RestPack_IncludesSiblingFrNotCs()
+    public async Task RestPackIncludesSiblingFrNotCs()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -131,7 +131,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
 
     /// <summary>STDIO context_search with sourceType=product-requirements includes sibling FR, not .cs.</summary>
     [Fact]
-    public async Task McpContextSearch_ProductRequirements_IncludesSiblingFrNotCs()
+    public async Task McpContextSearchProductRequirementsIncludesSiblingFrNotCs()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -153,7 +153,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
 
     /// <summary>STDIO context_pack includes sibling FR body plus origin and excludes sibling .cs.</summary>
     [Fact]
-    public async Task McpContextPack_IncludesSiblingFrNotCs()
+    public async Task McpContextPackIncludesSiblingFrNotCs()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -174,7 +174,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
 
     /// <summary>Plan verification step 4: MCP exposes requirements_effective with productScope.</summary>
     [Fact]
-    public void McpRequirementsEffectiveTool_IsDeclared()
+    public void McpRequirementsEffectiveToolIsDeclared()
     {
         var names = typeof(FwhMcpTools)
             .GetMethods(BindingFlags.Instance | BindingFlags.Public)
@@ -186,7 +186,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
 
     /// <summary>requirements_effective dispatches the share query with the caller productScope.</summary>
     [Fact]
-    public async Task McpRequirementsEffective_DispatchesShareQueryWithProductScope()
+    public async Task McpRequirementsEffectiveDispatchesShareQueryWithProductScope()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -295,7 +295,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
             dispatcher: dispatcher);
     }
 
-    private IngestionCoordinator CreateCoordinator(McpDbContext db)
+    private static IngestionCoordinator CreateCoordinator(McpDbContext db)
     {
         var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
         var workspaceContext = new WorkspaceContext { WorkspacePath = Owner };

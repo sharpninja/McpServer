@@ -321,7 +321,7 @@ internal sealed class TodoBootstrapImporter : IHostedService
         }
     }
 
-    private TodoAuditHistoryEntity BuildAuditRow(TodoItemEntity entity, string importedAtUtc)
+    private static TodoAuditHistoryEntity BuildAuditRow(TodoItemEntity entity, string importedAtUtc)
         => new()
         {
             TodoId = entity.Id,

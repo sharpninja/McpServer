@@ -21,7 +21,7 @@ public sealed class TransactionalTodoWorkflowTests
 {
     /// <summary>workflow.todo.create executes inside the transaction coordinator and returns only after commit.</summary>
     [Fact]
-    public async Task CreateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult()
+    public async Task CreateAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsResult()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         var created = CreateItem("ISSUE-42", "Created");
@@ -44,7 +44,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.create rollback deletes the canonical server-returned TODO id, including ISSUE-NEW results.</summary>
     [Fact]
-    public async Task CreateAsync_WhenCommitFailsAfterMutation_DeletesReturnedCanonicalId()
+    public async Task CreateAsyncWhenCommitFailsAfterMutationDeletesReturnedCanonicalId()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         var mutation = CreateMutation(CreateItem("ISSUE-42", "Created"));
@@ -72,7 +72,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.update pre-mutation coordinator rejection avoids snapshot reads and inner mutation execution.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate()
+    public async Task UpdateAsyncWhenCoordinatorRejectsBeforeMutationDoesNotReadOrMutate()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         var mutation = CreateMutation(CreateItem("MCP-TODO-001", "New"));
@@ -99,7 +99,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.update restores the full typed-client snapshot when commit fails after mutation.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCommitFailsAfterMutation_RestoresSnapshot()
+    public async Task UpdateAsyncWhenCommitFailsAfterMutationRestoresSnapshot()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         var mutation = CreateMutation(CreateItem("MCP-TODO-001", "Updated"));
@@ -128,7 +128,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.updateSelected uses the selected id and reselects it after rollback.</summary>
     [Fact]
-    public async Task UpdateSelectedAsync_WhenCommitFailsAfterMutation_RestoresAndReselects()
+    public async Task UpdateSelectedAsyncWhenCommitFailsAfterMutationRestoresAndReselects()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         var selection = CreateSelection("MCP-TODO-001");
@@ -159,7 +159,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.delete pre-mutation coordinator rejection avoids snapshot reads and inner deletion.</summary>
     [Fact]
-    public async Task DeleteAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate()
+    public async Task DeleteAsyncWhenCoordinatorRejectsBeforeMutationDoesNotReadOrMutate()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         using var handler = new RecordingTodoHandler();
@@ -182,7 +182,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.delete recreates the typed-client snapshot when commit fails after deletion.</summary>
     [Fact]
-    public async Task DeleteAsync_WhenCommitFailsAfterMutation_RecreatesSnapshot()
+    public async Task DeleteAsyncWhenCommitFailsAfterMutationRecreatesSnapshot()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         inner.DeleteAsync("MCP-TODO-DELETE-001", Arg.Any<CancellationToken>())
@@ -209,7 +209,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.deleteSelected recreates and reselects the selected TODO when rollback succeeds.</summary>
     [Fact]
-    public async Task DeleteSelectedAsync_WhenCommitFailsAfterMutation_RecreatesAndReselects()
+    public async Task DeleteSelectedAsyncWhenCommitFailsAfterMutationRecreatesAndReselects()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         var selection = CreateSelection("MCP-TODO-DELETE-SEL-001");
@@ -239,7 +239,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.repairProjection fails closed before the inner workflow while required transactions are active.</summary>
     [Fact]
-    public async Task RepairProjectionAsync_WhenRequiredTransactionsActive_FailsClosedBeforeInnerWorkflow()
+    public async Task RepairProjectionAsyncWhenRequiredTransactionsActiveFailsClosedBeforeInnerWorkflow()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         using var handler = new RecordingTodoHandler();
@@ -262,7 +262,7 @@ public sealed class TransactionalTodoWorkflowTests
 
     /// <summary>workflow.todo.repairProjection delegates when mutation transactions are not required.</summary>
     [Fact]
-    public async Task RepairProjectionAsync_WhenTransactionsNotRequired_DelegatesToInnerWorkflow()
+    public async Task RepairProjectionAsyncWhenTransactionsNotRequiredDelegatesToInnerWorkflow()
     {
         var inner = Substitute.For<ITodoWorkflow>();
         using var handler = new RecordingTodoHandler();

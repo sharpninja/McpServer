@@ -15,7 +15,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
 {
     /// <summary>submit-turn delegates to the inner voice service while required transactions are active.</summary>
     [Fact]
-    public async Task SubmitTurnAsync_WhenTransactionsRequired_DelegatesToInner()
+    public async Task SubmitTurnAsyncWhenTransactionsRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IVoiceConversationService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
@@ -30,7 +30,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
 
     /// <summary>send-session-message delegates when the coordinator is degraded.</summary>
     [Fact]
-    public async Task SendSessionMessageAsync_WhenCoordinatorDegraded_DelegatesToInner()
+    public async Task SendSessionMessageAsyncWhenCoordinatorDegradedDelegatesToInner()
     {
         var inner = Substitute.For<IVoiceConversationService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
@@ -45,7 +45,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
 
     /// <summary>voice streaming delegates to the inner stream while required transactions are active.</summary>
     [Fact]
-    public async Task SubmitTurnStreamingAsync_WhenTransactionsRequired_DelegatesToInner()
+    public async Task SubmitTurnStreamingAsyncWhenTransactionsRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IVoiceConversationService>();
         inner.SubmitTurnStreamingAsync(Arg.Any<string>(), Arg.Any<VoiceTurnRequest>(), Arg.Any<CancellationToken>())
@@ -69,7 +69,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
 
     /// <summary>Status reads delegate even while mutation transactions are required.</summary>
     [Fact]
-    public async Task GetStatusAsync_WhenTransactionsRequired_Delegates()
+    public async Task GetStatusAsyncWhenTransactionsRequiredDelegates()
     {
         var inner = Substitute.For<IVoiceConversationService>();
         inner.GetStatusAsync("voice-1", Arg.Any<CancellationToken>())
@@ -87,7 +87,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
 
     /// <summary>voice session creation delegates when mutation transactions are not required.</summary>
     [Fact]
-    public async Task CreateSessionAsync_WhenTransactionsNotRequired_Delegates()
+    public async Task CreateSessionAsyncWhenTransactionsNotRequiredDelegates()
     {
         var inner = Substitute.For<IVoiceConversationService>();
         inner.CreateSessionAsync(Arg.Any<VoiceSessionCreateRequest?>(), Arg.Any<CancellationToken>())

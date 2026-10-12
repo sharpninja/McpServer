@@ -16,7 +16,7 @@ public sealed class TransactionPubSubTests
 {
     /// <summary>Direct pub-sub commit delivery delegates to the configured subscriber service.</summary>
     [Fact]
-    public async Task DirectSubscriberTransactionPubSub_PublishCommitAsync_DelegatesToSubscriberAndPreservesResponse()
+    public async Task DirectSubscriberTransactionPubSubPublishCommitAsyncDelegatesToSubscriberAndPreservesResponse()
     {
         var request = new DiffgramCommitRequest { Manifest = new TransactionManifestDto { TransactionId = "txn-pubsub-commit" } };
         var response = new DiffgramCommitResponse
@@ -39,7 +39,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>Direct pub-sub abort delivery delegates to the configured subscriber service.</summary>
     [Fact]
-    public async Task DirectSubscriberTransactionPubSub_PublishAbortAsync_DelegatesToSubscriberAndPreservesResponse()
+    public async Task DirectSubscriberTransactionPubSubPublishAbortAsyncDelegatesToSubscriberAndPreservesResponse()
     {
         var request = new TransactionAbortRequest
         {
@@ -65,7 +65,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>In-process transaction security registers the direct pub-sub seam for coordinator delivery.</summary>
     [Fact]
-    public void AddInProcessTransactionSecurity_RegistersDirectTransactionPubSub()
+    public void AddInProcessTransactionSecurityRegistersDirectTransactionPubSub()
     {
         var services = new ServiceCollection();
         var configuration = new ConfigurationBuilder().Build();
@@ -81,7 +81,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>Stdio host transaction registration resolves the coordinator required by stdio mutation gates.</summary>
     [Fact]
-    public void AddStdioTransactionSecurity_RegistersTurnTransactionCoordinator()
+    public void AddStdioTransactionSecurityRegistersTurnTransactionCoordinator()
     {
         var services = new ServiceCollection();
         var configuration = new ConfigurationBuilder().Build();
@@ -95,7 +95,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>HTTP pub-sub commit delivery posts to the subscriber endpoint and preserves acknowledgement bodies.</summary>
     [Fact]
-    public async Task HttpSubscriberTransactionPubSub_PublishCommitAsync_PostsCommitToSubscriberEndpointAndPreservesAcknowledgement()
+    public async Task HttpSubscriberTransactionPubSubPublishCommitAsyncPostsCommitToSubscriberEndpointAndPreservesAcknowledgement()
     {
         var request = CreateCommitRequest("txn-http-commit");
         var response = new DiffgramCommitResponse
@@ -125,7 +125,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>HTTP pub-sub commit delivery returns subscriber rejection bodies from HTTP 400 responses.</summary>
     [Fact]
-    public async Task HttpSubscriberTransactionPubSub_PublishCommitAsync_WhenSubscriberRejects_ReturnsRejectedResponse()
+    public async Task HttpSubscriberTransactionPubSubPublishCommitAsyncWhenSubscriberRejectsReturnsRejectedResponse()
     {
         var request = CreateCommitRequest("txn-http-rejected");
         var response = new DiffgramCommitResponse
@@ -149,7 +149,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>HTTP pub-sub commit delivery maps transport failures to subscriber-unavailable responses.</summary>
     [Fact]
-    public async Task HttpSubscriberTransactionPubSub_PublishCommitAsync_WhenTransportFails_ReturnsSubscriberUnavailable()
+    public async Task HttpSubscriberTransactionPubSubPublishCommitAsyncWhenTransportFailsReturnsSubscriberUnavailable()
     {
         var pubSub = new HttpSubscriberTransactionPubSub(new HttpClient(new ThrowingHandler())
         {
@@ -166,7 +166,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>HTTP pub-sub abort delivery posts to the encoded subscriber transaction route and preserves acknowledgement bodies.</summary>
     [Fact]
-    public async Task HttpSubscriberTransactionPubSub_PublishAbortAsync_PostsAbortToEncodedTransactionRouteAndPreservesAcknowledgement()
+    public async Task HttpSubscriberTransactionPubSubPublishAbortAsyncPostsAbortToEncodedTransactionRouteAndPreservesAcknowledgement()
     {
         var request = new TransactionAbortRequest
         {
@@ -195,7 +195,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>External broker pub-sub writes a commit envelope to the configured topic and preserves broker acknowledgements.</summary>
     [Fact]
-    public async Task ExternalBrokerTransactionPubSub_PublishCommitAsync_WritesCommitEnvelopeToConfiguredTopicAndReturnsBrokerAck()
+    public async Task ExternalBrokerTransactionPubSubPublishCommitAsyncWritesCommitEnvelopeToConfiguredTopicAndReturnsBrokerAck()
     {
         var request = CreateCommitRequest("txn-external-broker-commit");
         var broker = new CapturingBroker(envelope => new TransactionPubSubAcknowledgement
@@ -232,7 +232,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>Fan-out pub-sub delivers commits to all required subscribers before returning committed.</summary>
     [Fact]
-    public async Task FanOutTransactionPubSub_PublishCommitAsync_DeliversToAllRequiredSubscribersBeforeCommitted()
+    public async Task FanOutTransactionPubSubPublishCommitAsyncDeliversToAllRequiredSubscribersBeforeCommitted()
     {
         var request = CreateCommitRequest("txn-fanout-required");
         var first = Substitute.For<ITransactionPubSub>();
@@ -264,7 +264,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>In-process transaction security can select the HTTP pub-sub adapter through turn transaction options.</summary>
     [Fact]
-    public void AddInProcessTransactionSecurity_WhenHttpPubSubConfigured_RegistersHttpTransactionPubSub()
+    public void AddInProcessTransactionSecurityWhenHttpPubSubConfiguredRegistersHttpTransactionPubSub()
     {
         var services = new ServiceCollection();
         var configuration = new ConfigurationBuilder()
@@ -284,7 +284,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>In-process transaction security can select the external broker pub-sub adapter through turn transaction options.</summary>
     [Fact]
-    public void AddInProcessTransactionSecurity_WhenExternalBrokerConfigured_RegistersExternalBrokerTransactionPubSub()
+    public void AddInProcessTransactionSecurityWhenExternalBrokerConfiguredRegistersExternalBrokerTransactionPubSub()
     {
         var services = new ServiceCollection();
         var configuration = new ConfigurationBuilder()
@@ -303,7 +303,7 @@ public sealed class TransactionPubSubTests
 
     /// <summary>In-process transaction security can wrap the selected pub-sub adapter with durable replay semantics.</summary>
     [Fact]
-    public void AddInProcessTransactionSecurity_WhenDurablePubSubConfigured_RegistersReplayableTransactionPubSub()
+    public void AddInProcessTransactionSecurityWhenDurablePubSubConfiguredRegistersReplayableTransactionPubSub()
     {
         var services = new ServiceCollection();
         var configuration = new ConfigurationBuilder()

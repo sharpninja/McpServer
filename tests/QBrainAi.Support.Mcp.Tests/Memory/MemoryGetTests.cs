@@ -16,7 +16,7 @@ public sealed class MemoryGetTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-28: Get unknown id returns 404.</summary>
     [Fact]
-    public async Task UnknownId_Returns404()
+    public async Task UnknownIdReturns404()
     {
         await using var db = _harness.CreateContext(_harness.WorkspaceA);
         var controller = MemoryS1Harness.CreateController(MemoryS1Harness.CreateService(db));
@@ -29,7 +29,7 @@ public sealed class MemoryGetTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-29: Get soft-deleted id returns 404 (not the tombstone payload).</summary>
     [Fact]
-    public async Task SoftDeleted_Returns404()
+    public async Task SoftDeletedReturns404()
     {
         var created = await _harness.AddCompatAsync(new MemoryAddRequest
         {

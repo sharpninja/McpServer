@@ -14,14 +14,14 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// before the entity + <see cref="McpDbContext"/> Fluent configuration ship in
 /// Phase 1 of the workspace-scoped TODO plan.
 /// </summary>
-public sealed class TodoItemEntity_WorkspaceScopingTests
+public sealed class TodoItemEntityWorkspaceScopingTests
 {
     /// <summary>
     /// The EF model MUST declare the primary key as the composite
     /// <c>(WorkspaceId, Id)</c> rather than <c>Id</c> alone.
     /// </summary>
     [Fact]
-    public void TodoItem_PrimaryKey_IsCompositeWorkspaceIdAndId()
+    public void TodoItemPrimaryKeyIsCompositeWorkspaceIdAndId()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"todo-pk-{System.Guid.NewGuid():N}")
@@ -43,7 +43,7 @@ public sealed class TodoItemEntity_WorkspaceScopingTests
     /// so the TR-MCP-MT-003 global query filter has something to clamp on.
     /// </summary>
     [Fact]
-    public void TodoItem_HasWorkspaceIdProperty()
+    public void TodoItemHasWorkspaceIdProperty()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"todo-ws-{System.Guid.NewGuid():N}")
@@ -61,7 +61,7 @@ public sealed class TodoItemEntity_WorkspaceScopingTests
     /// under the global query filter never leak across workspaces.
     /// </summary>
     [Fact]
-    public void TodoAuditHistory_HasWorkspaceIdPropertyAndIndex()
+    public void TodoAuditHistoryHasWorkspaceIdPropertyAndIndex()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"todo-audit-ws-{System.Guid.NewGuid():N}")
@@ -83,7 +83,7 @@ public sealed class TodoItemEntity_WorkspaceScopingTests
     /// pattern installed on the other 12+ multi-tenant entities.
     /// </summary>
     [Fact]
-    public void TodoItem_HasGlobalQueryFilter()
+    public void TodoItemHasGlobalQueryFilter()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"todo-filter-{System.Guid.NewGuid():N}")

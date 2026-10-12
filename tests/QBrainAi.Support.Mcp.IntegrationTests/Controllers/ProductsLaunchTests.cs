@@ -35,7 +35,7 @@ public sealed class ProductsLaunchTests : IDisposable
 
     /// <summary>POST /qbrainai/products returns key and ownerWorkspaceId; effective local is a sane envelope.</summary>
     [Fact]
-    public async Task PostProduct_AndGetEffectiveLocal_Succeeds()
+    public async Task PostProductAndGetEffectiveLocalSucceeds()
     {
         var create = await _client.PostAsJsonAsync(
             "/qbrainai/products",
@@ -65,7 +65,7 @@ public sealed class ProductsLaunchTests : IDisposable
 
     /// <summary>Second independent host launch for verification step 6.</summary>
     [Fact]
-    public async Task PostProduct_AndGetEffectiveLocal_SecondLaunch_Succeeds()
+    public async Task PostProductAndGetEffectiveLocalSecondLaunchSucceeds()
     {
         using var factory = new CustomWebApplicationFactory();
         using var client = factory.CreateClient();

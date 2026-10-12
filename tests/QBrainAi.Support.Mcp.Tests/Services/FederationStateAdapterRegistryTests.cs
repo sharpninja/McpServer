@@ -19,7 +19,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>All required domains are covered and explicit exemptions are local-only.</summary>
     [Fact]
-    public void AddFederationStateAdapters_CoversRequiredDomains()
+    public void AddFederationStateAdaptersCoversRequiredDomains()
     {
         using var provider = CreateProvider();
         var registry = provider.GetRequiredService<FederationStateAdapterRegistry>();
@@ -64,7 +64,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Workspace adapter snapshots registration metadata and versions from modification time.</summary>
     [Fact]
-    public async Task WorkspaceAdapter_SnapshotsWorkspaceMetadata()
+    public async Task WorkspaceAdapterSnapshotsWorkspaceMetadata()
     {
         using var provider = CreateProvider();
         var adapter = ResolveAdapter(provider, "workspace");
@@ -78,7 +78,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Workspace adapter applies signed state payloads through the canonical workspace service.</summary>
     [Fact]
-    public async Task WorkspaceAdapter_AppliesWorkspacePayloadThroughWorkspaceService()
+    public async Task WorkspaceAdapterAppliesWorkspacePayloadThroughWorkspaceService()
     {
         var workspaceService = Substitute.For<IWorkspaceService>();
         workspaceService.GetAsync(WorkspacePath, Arg.Any<CancellationToken>())
@@ -127,7 +127,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>TODO adapter uses the latest audit version and includes item state.</summary>
     [Fact]
-    public async Task TodoAdapter_UsesAuditVersionAndSnapshotsItem()
+    public async Task TodoAdapterUsesAuditVersionAndSnapshotsItem()
     {
         using var provider = CreateProvider();
         await SeedAsync(provider, db =>
@@ -161,7 +161,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>TODO adapter applies signed HTTP create operations through the TODO service.</summary>
     [Fact]
-    public async Task TodoAdapter_AppliesHttpCreateThroughTodoService()
+    public async Task TodoAdapterAppliesHttpCreateThroughTodoService()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
@@ -202,7 +202,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>TODO adapter resolves path ids for signed HTTP update operations.</summary>
     [Fact]
-    public async Task TodoAdapter_AppliesHttpUpdateUsingPathId()
+    public async Task TodoAdapterAppliesHttpUpdateUsingPathId()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.UpdateAsync("PLAN-FEDERATION-003", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
@@ -243,7 +243,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>TODO adapter resolves path ids for signed HTTP delete operations.</summary>
     [Fact]
-    public async Task TodoAdapter_AppliesHttpDeleteUsingPathId()
+    public async Task TodoAdapterAppliesHttpDeleteUsingPathId()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.DeleteAsync("PLAN-FEDERATION-004", Arg.Any<CancellationToken>())
@@ -277,7 +277,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Requirements adapter snapshots requirement rows and their cross-links.</summary>
     [Fact]
-    public async Task RequirementsAdapter_SnapshotsRequirementAndTraceabilityLinks()
+    public async Task RequirementsAdapterSnapshotsRequirementAndTraceabilityLinks()
     {
         using var provider = CreateProvider();
         await SeedAsync(provider, db =>
@@ -309,7 +309,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Requirements adapter applies requirement rows and cross-links from signed state payloads.</summary>
     [Fact]
-    public async Task RequirementsAdapter_AppliesRequirementAndTraceabilityPayload()
+    public async Task RequirementsAdapterAppliesRequirementAndTraceabilityPayload()
     {
         using var provider = CreateProvider();
         var adapter = ResolveAdapter(provider, "requirements");
@@ -365,7 +365,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Tool and agent adapters snapshot persisted configuration without runtime process state.</summary>
     [Fact]
-    public async Task ToolsAndAgentsAdapters_SnapshotPersistedConfiguration()
+    public async Task ToolsAndAgentsAdaptersSnapshotPersistedConfiguration()
     {
         using var provider = CreateProvider();
         await SeedAsync(provider, db =>
@@ -413,7 +413,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Tools/buckets adapter applies bucket, tool definition, and tag rows from signed state payloads.</summary>
     [Fact]
-    public async Task ToolsBucketsAdapter_AppliesBucketToolAndTagPayload()
+    public async Task ToolsBucketsAdapterAppliesBucketToolAndTagPayload()
     {
         using var provider = CreateProvider();
         var adapter = ResolveAdapter(provider, "tools_buckets");
@@ -463,7 +463,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Agents adapter applies agent definitions and workspace configuration from signed state payloads.</summary>
     [Fact]
-    public async Task AgentsAdapter_AppliesDefinitionAndWorkspacePayload()
+    public async Task AgentsAdapterAppliesDefinitionAndWorkspacePayload()
     {
         using var provider = CreateProvider();
         var adapter = ResolveAdapter(provider, "agents");
@@ -518,7 +518,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Session log adapter applies unified session log payloads through the canonical session log service.</summary>
     [Fact]
-    public async Task SessionLogAdapter_AppliesPayloadThroughSessionLogService()
+    public async Task SessionLogAdapterAppliesPayloadThroughSessionLogService()
     {
         var sessionLogService = Substitute.For<ISessionLogService>();
         sessionLogService.SubmitAsync(Arg.Any<UnifiedSessionLogDto>(), null, Arg.Any<string?>(), Arg.Any<CancellationToken>())
@@ -552,7 +552,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Session log DELETE replay soft-deletes the retained session graph instead of physically removing rows.</summary>
     [Fact]
-    public async Task SessionLogAdapter_DeleteReplaySoftDeletesRetainedSessionGraph()
+    public async Task SessionLogAdapterDeleteReplaySoftDeletesRetainedSessionGraph()
     {
         const string sessionId = "Codex-20260522T000000Z-delete-replay";
         using var provider = CreateProvider();
@@ -627,7 +627,7 @@ public sealed class FederationStateAdapterRegistryTests
 
     /// <summary>Local-only adapters reject apply attempts and explain the exemption.</summary>
     [Fact]
-    public async Task LocalOnlyAdapter_RejectsApply()
+    public async Task LocalOnlyAdapterRejectsApply()
     {
         using var provider = CreateProvider();
         var adapter = ResolveAdapter(provider, "marker_state");

@@ -1433,7 +1433,7 @@ public sealed class SessionLogService : ISessionLogService
         if (isImport)
         {
             var temp = MapSingleEntryRaw(turn);
-            var extracted = _turnContextExtractor.Extract(
+            var extracted = SessionLogTurnContextExtractor.Extract(
                 temp,
                 ResolveWorkspaceId(),
                 userProfilePath: null,

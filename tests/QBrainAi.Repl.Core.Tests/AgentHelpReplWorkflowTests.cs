@@ -31,7 +31,7 @@ public sealed class AgentHelpReplWorkflowTests
 
     /// <summary>TEST-MCP-HELP-008: the route table covers the complete Agent Help wrapper surface.</summary>
     [Fact]
-    public void AgentHelpRouteCases_CoverAllCommandShapes()
+    public void AgentHelpRouteCasesCoverAllCommandShapes()
     {
         Assert.Equal(4, AgentHelpRouteCases().Count());
     }
@@ -44,7 +44,7 @@ public sealed class AgentHelpReplWorkflowTests
     /// <param name="parameters">Representative YAML-bound parameters.</param>
     [Theory]
     [MemberData(nameof(AgentHelpRouteCases))]
-    public async Task Dispatcher_AgentHelpWorkflowMethod_RoutesToRegisteredWorkflow(
+    public async Task DispatcherAgentHelpWorkflowMethodRoutesToRegisteredWorkflow(
         string method,
         Dictionary<string, object?> parameters)
     {
@@ -64,7 +64,7 @@ public sealed class AgentHelpReplWorkflowTests
 
     /// <summary>TEST-MCP-HELP-008: submit turn requires userMessage before dispatch.</summary>
     [Fact]
-    public async Task Dispatcher_AgentHelpSubmitTurnMissingMessage_ReturnsInvocationError()
+    public async Task DispatcherAgentHelpSubmitTurnMissingMessageReturnsInvocationError()
     {
         var workflow = Substitute.For<IAgentHelpWorkflow>();
         var sut = new ReplCommandDispatcher(
@@ -84,7 +84,7 @@ public sealed class AgentHelpReplWorkflowTests
 
     /// <summary>TEST-MCP-HELP-008: unknown workflow.agenthelp methods return method_not_found.</summary>
     [Fact]
-    public async Task Dispatcher_UnknownAgentHelpMethod_ReturnsMethodNotFound()
+    public async Task DispatcherUnknownAgentHelpMethodReturnsMethodNotFound()
     {
         var workflow = Substitute.For<IAgentHelpWorkflow>();
         var sut = new ReplCommandDispatcher(

@@ -31,7 +31,7 @@ public sealed class SessionLogReplaceSectionRetryableTests
     /// later dialog does not need to recreate it.
     /// </summary>
     [Fact]
-    public async Task ReplaceTurnSectionAsync_UnreachableStorage_IsRetryableAndTurnRemainsGettable()
+    public async Task ReplaceTurnSectionAsyncUnreachableStorageIsRetryableAndTurnRemainsGettable()
     {
         var dbName = $"SessionLogReplaceRetry_{Guid.NewGuid():N}";
         var sessionId = "Cursor-20260819T220000Z-replace-retryable";
@@ -121,7 +121,7 @@ public sealed class SessionLogReplaceSectionRetryableTests
     /// and classifies as backend_unavailable retryable true.
     /// </summary>
     [Fact]
-    public async Task ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable()
+    public async Task ReplaceTurnSectionAsyncHungSaveChangesFailsFastWithRetryableUnavailable()
     {
         var dbName = $"SessionLogReplaceHung_{Guid.NewGuid():N}";
         var sessionId = "Cursor-20260819T220000Z-replace-hung";

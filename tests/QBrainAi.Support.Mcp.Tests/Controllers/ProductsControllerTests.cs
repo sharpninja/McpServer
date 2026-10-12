@@ -22,7 +22,7 @@ public sealed class ProductsControllerTests
 
     /// <summary>POST create dispatches CreateProductCommand and returns 201.</summary>
     [Fact]
-    public async Task CreateAsync_WhenSuccess_ReturnsCreated()
+    public async Task CreateAsyncWhenSuccessReturnsCreated()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         var dto = new ProductDto
@@ -55,7 +55,7 @@ public sealed class ProductsControllerTests
 
     /// <summary>Invalid key Result maps to HTTP 400.</summary>
     [Fact]
-    public async Task CreateAsync_WhenInvalidKey_ReturnsBadRequest()
+    public async Task CreateAsyncWhenInvalidKeyReturnsBadRequest()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.SendAsync(Arg.Any<CreateProductCommand>(), Arg.Any<CancellationToken>())
@@ -71,7 +71,7 @@ public sealed class ProductsControllerTests
 
     /// <summary>Duplicate key Result maps to HTTP 409.</summary>
     [Fact]
-    public async Task CreateAsync_WhenConflict_ReturnsConflict()
+    public async Task CreateAsyncWhenConflictReturnsConflict()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.SendAsync(Arg.Any<CreateProductCommand>(), Arg.Any<CancellationToken>())
@@ -87,7 +87,7 @@ public sealed class ProductsControllerTests
 
     /// <summary>Outsider get maps to HTTP 404.</summary>
     [Fact]
-    public async Task GetAsync_WhenNotFound_ReturnsNotFound()
+    public async Task GetAsyncWhenNotFoundReturnsNotFound()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.QueryAsync(Arg.Any<GetProductQuery>(), Arg.Any<CancellationToken>())
@@ -101,7 +101,7 @@ public sealed class ProductsControllerTests
 
     /// <summary>Non-owner mutate maps to HTTP 403.</summary>
     [Fact]
-    public async Task DeleteAsync_WhenForbidden_ReturnsForbid()
+    public async Task DeleteAsyncWhenForbiddenReturnsForbid()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.SendAsync(Arg.Any<DeleteProductCommand>(), Arg.Any<CancellationToken>())
@@ -116,7 +116,7 @@ public sealed class ProductsControllerTests
 
     /// <summary>Effective productScope is accepted on the requirements controller in Phase 3.</summary>
     [Fact]
-    public async Task RequirementsEffective_AcceptsProductScopeQuery()
+    public async Task RequirementsEffectiveAcceptsProductScopeQuery()
     {
         var dispatcher = Substitute.For<IDispatcher>();
         dispatcher.QueryAsync(Arg.Any<GetProductEffectiveRequirementsQuery>(), Arg.Any<CancellationToken>())

@@ -9,7 +9,7 @@ public sealed class SessionLogSanitizerRegistrationTests
     /// HTTP session logging must sanitize after local transaction gating, federation merge, and pagination.
     /// </summary>
     [Fact]
-    public void Program_RegistersSessionLogSanitizerAsOutermostHttpDecorator()
+    public void ProgramRegistersSessionLogSanitizerAsOutermostHttpDecorator()
     {
         var source = ReadRepoFile(Path.Combine("src", "QBrainAi.Support.Mcp", "Program.cs"));
         var sanitizerRegistration = source.IndexOf(
@@ -31,7 +31,7 @@ public sealed class SessionLogSanitizerRegistrationTests
     /// Stdio session logging must sanitize after the transaction gate so all read transports share one behavior.
     /// </summary>
     [Fact]
-    public void McpStdioHost_RegistersSessionLogSanitizerAsOutermostStdioDecorator()
+    public void McpStdioHostRegistersSessionLogSanitizerAsOutermostStdioDecorator()
     {
         var source = ReadRepoFile(Path.Combine("src", "QBrainAi.Support.Mcp", "McpStdio", "McpStdioHost.cs"));
         var sanitizerRegistration = source.IndexOf(

@@ -31,7 +31,7 @@ public sealed class RequirementsControllerTransactionGateTests
     /// TEST-MCP-221: Required transaction mode still ingests into the requirements repository.
     /// </summary>
     [Fact]
-    public async Task IngestAsync_WhenTransactionsRequired_DelegatesToRepository()
+    public async Task IngestAsyncWhenTransactionsRequiredDelegatesToRepository()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
         requirements.GetAllFrAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<FrEntry>());
@@ -52,7 +52,7 @@ public sealed class RequirementsControllerTransactionGateTests
     /// TEST-MCP-221: Degraded transaction security does not block requirements ingest.
     /// </summary>
     [Fact]
-    public async Task IngestAsync_WhenCoordinatorDegraded_DelegatesToRepository()
+    public async Task IngestAsyncWhenCoordinatorDegradedDelegatesToRepository()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
         requirements.GetAllFrAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<FrEntry>());
@@ -74,7 +74,7 @@ public sealed class RequirementsControllerTransactionGateTests
     /// requirements ingest behavior.
     /// </summary>
     [Fact]
-    public async Task IngestAsync_WhenTransactionsNotRequired_DelegatesToExistingIngestPath()
+    public async Task IngestAsyncWhenTransactionsNotRequiredDelegatesToExistingIngestPath()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
         requirements.GetAllFrAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<FrEntry>());
@@ -105,7 +105,7 @@ public sealed class RequirementsControllerTransactionGateTests
     /// (gated) requirements service and returns the purged count. Mocks validate the call.
     /// </summary>
     [Fact]
-    public async Task RepairFrPlaceholdersAsync_CallsPurgeOnServiceAndReturnsPurgedCount()
+    public async Task RepairFrPlaceholdersAsyncCallsPurgeOnServiceAndReturnsPurgedCount()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
         requirements.PurgeInvalidPlaceholdersAsync(Arg.Any<CancellationToken>()).Returns(5);

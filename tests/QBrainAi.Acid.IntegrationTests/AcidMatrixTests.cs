@@ -13,7 +13,7 @@ public sealed class KeyServerSignMatrixTests
 {
     /// <summary>A registered publisher/subscriber pair signs successfully.</summary>
     [Fact]
-    public async Task Sign_ValidRequest_Succeeds()
+    public async Task SignValidRequestSucceeds()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -28,7 +28,7 @@ public sealed class KeyServerSignMatrixTests
 
     /// <summary>Signing for an unregistered publisher is rejected as an unknown party.</summary>
     [Fact]
-    public async Task Sign_UnregisteredPublisher_UnknownParty()
+    public async Task SignUnregisteredPublisherUnknownParty()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -43,7 +43,7 @@ public sealed class KeyServerSignMatrixTests
 
     /// <summary>Signing with a non-existent signing key id is rejected as an unknown key.</summary>
     [Fact]
-    public async Task Sign_NonexistentSigningKey_UnknownKey()
+    public async Task SignNonexistentSigningKeyUnknownKey()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -58,7 +58,7 @@ public sealed class KeyServerSignMatrixTests
 
     /// <summary>A reused signing nonce for the same party pair is rejected as a replay.</summary>
     [Fact]
-    public async Task Sign_ReusedNonce_ReplayNonce()
+    public async Task SignReusedNonceReplayNonce()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -73,7 +73,7 @@ public sealed class KeyServerSignMatrixTests
 
     /// <summary>A non-monotonic signing sequence for the same party pair is rejected as stale.</summary>
     [Fact]
-    public async Task Sign_DecreasingSequence_StaleSequence()
+    public async Task SignDecreasingSequenceStaleSequence()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -96,7 +96,7 @@ public sealed class KeyServerVerifyMatrixTests
 {
     /// <summary>A genuine signed manifest verifies as valid for its intended subscriber.</summary>
     [Fact]
-    public async Task Verify_ValidManifest_IsValid()
+    public async Task VerifyValidManifestIsValid()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -114,7 +114,7 @@ public sealed class KeyServerVerifyMatrixTests
 
     /// <summary>A manifest mutated after signing fails signature verification.</summary>
     [Fact]
-    public async Task Verify_TamperedManifest_SignatureMismatch()
+    public async Task VerifyTamperedManifestSignatureMismatch()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -133,7 +133,7 @@ public sealed class KeyServerVerifyMatrixTests
 
     /// <summary>Verification for a different expected subscriber than the manifest names is rejected.</summary>
     [Fact]
-    public async Task Verify_WrongExpectedSubscriber_WrongSubscriber()
+    public async Task VerifyWrongExpectedSubscriberWrongSubscriber()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -161,7 +161,7 @@ public sealed class SubscriberCommitMatrixTests
 {
     /// <summary>A valid signed diffgram commits.</summary>
     [Fact]
-    public async Task Commit_Valid_Committed()
+    public async Task CommitValidCommitted()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -175,7 +175,7 @@ public sealed class SubscriberCommitMatrixTests
 
     /// <summary>Re-committing the same transaction is idempotent and still reports committed.</summary>
     [Fact]
-    public async Task Commit_Duplicate_IsIdempotent()
+    public async Task CommitDuplicateIsIdempotent()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -189,7 +189,7 @@ public sealed class SubscriberCommitMatrixTests
 
     /// <summary>A tampered manifest is rejected at the subscriber via key-server verification.</summary>
     [Fact]
-    public async Task Commit_TamperedManifest_SignatureMismatch()
+    public async Task CommitTamperedManifestSignatureMismatch()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -204,7 +204,7 @@ public sealed class SubscriberCommitMatrixTests
 
     /// <summary>An encrypted-body hash that disagrees with the manifest is rejected.</summary>
     [Fact]
-    public async Task Commit_EncryptedBodyMismatch_Rejected()
+    public async Task CommitEncryptedBodyMismatchRejected()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -220,7 +220,7 @@ public sealed class SubscriberCommitMatrixTests
 
     /// <summary>A plaintext diffgram hash that disagrees with the manifest is rejected.</summary>
     [Fact]
-    public async Task Commit_PlaintextMismatch_Rejected()
+    public async Task CommitPlaintextMismatchRejected()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -236,7 +236,7 @@ public sealed class SubscriberCommitMatrixTests
 
     /// <summary>A non-monotonic commit sequence for the party pair is rejected as stale.</summary>
     [Fact]
-    public async Task Commit_StaleSequence_Rejected()
+    public async Task CommitStaleSequenceRejected()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -252,7 +252,7 @@ public sealed class SubscriberCommitMatrixTests
 
     /// <summary>A subscriber whose configured party id differs from the manifest target rejects with wrong subscriber.</summary>
     [Fact]
-    public async Task Commit_WrongConfiguredSubscriber_WrongSubscriber()
+    public async Task CommitWrongConfiguredSubscriberWrongSubscriber()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -271,7 +271,7 @@ public sealed class SubscriberCommitMatrixTests
 
     /// <summary>A subscriber that requires encrypted diffgrams rejects a plaintext body as a decrypt failure.</summary>
     [Fact]
-    public async Task Commit_RequireEncryptedWithPlaintext_DecryptFailed()
+    public async Task CommitRequireEncryptedWithPlaintextDecryptFailed()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -303,7 +303,7 @@ public sealed class CoordinatorOutcomeMatrixTests
 {
     /// <summary>A mutating turn with healthy collaborators commits.</summary>
     [Fact]
-    public async Task Coordinator_HappyPath_Committed()
+    public async Task CoordinatorHappyPathCommitted()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -319,7 +319,7 @@ public sealed class CoordinatorOutcomeMatrixTests
 
     /// <summary>When transactions are disabled the mutation runs and the turn is bypassed.</summary>
     [Fact]
-    public async Task Coordinator_TransactionsDisabled_Bypassed()
+    public async Task CoordinatorTransactionsDisabledBypassed()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock, enabled: false);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -337,7 +337,7 @@ public sealed class CoordinatorOutcomeMatrixTests
 
     /// <summary>A non-mutating (read-only) turn is bypassed without transaction gating.</summary>
     [Fact]
-    public async Task Coordinator_NonMutating_Bypassed()
+    public async Task CoordinatorNonMutatingBypassed()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -352,7 +352,7 @@ public sealed class CoordinatorOutcomeMatrixTests
 
     /// <summary>A failed mutation aborts and rolls back.</summary>
     [Fact]
-    public async Task Coordinator_MutationFails_Aborted()
+    public async Task CoordinatorMutationFailsAborted()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -369,7 +369,7 @@ public sealed class CoordinatorOutcomeMatrixTests
 
     /// <summary>The coordinator validates the key server's sign result: a stale sequence fails closed before the mutation runs.</summary>
     [Fact]
-    public async Task Coordinator_KeyServerRejectsSign_RejectedWithoutMutation()
+    public async Task CoordinatorKeyServerRejectsSignRejectedWithoutMutation()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -394,7 +394,7 @@ public sealed class CoordinatorOutcomeMatrixTests
 
     /// <summary>The coordinator validates the subscriber commit result: a non-degraded rejection rolls back and reports rejected.</summary>
     [Fact]
-    public async Task Coordinator_SubscriberRejectsCommit_RejectedAndRolledBack()
+    public async Task CoordinatorSubscriberRejectsCommitRejectedAndRolledBack()
     {
         using var harness = AcidTransactionHarness.Create(
             AcidParticipants.AllMock,
@@ -420,7 +420,7 @@ public sealed class CoordinatorOutcomeMatrixTests
 
     /// <summary>An unavailable subscriber drives degraded mode and rolls back, fail-closed.</summary>
     [Fact]
-    public async Task Coordinator_SubscriberUnavailable_Degraded()
+    public async Task CoordinatorSubscriberUnavailableDegraded()
     {
         using var harness = AcidTransactionHarness.Create(
             AcidParticipants.AllMock,

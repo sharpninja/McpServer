@@ -12,7 +12,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class ProcessEnvironmentServiceTests
 {
     [Fact]
-    public void ApplyRunAsEnvironment_IncludesGrokBinWhenProfileContainsGrokInstall()
+    public void ApplyRunAsEnvironmentIncludesGrokBinWhenProfileContainsGrokInstall()
     {
         if (!OperatingSystem.IsWindows())
             return;
@@ -52,7 +52,7 @@ public sealed class ProcessEnvironmentServiceTests
     }
 
     [Fact]
-    public void ResolveExecutable_FindsGrokFromInjectedUserPath()
+    public void ResolveExecutableFindsGrokFromInjectedUserPath()
     {
         if (!OperatingSystem.IsWindows())
             return;
@@ -93,7 +93,7 @@ public sealed class ProcessEnvironmentServiceTests
     /// The alias stub is the shape that raises Win32Exception 1920 under a service account.
     /// </summary>
     [Fact]
-    public void ResolveExecutable_SkipsMicrosoftWindowsAppsAliasDirectory()
+    public void ResolveExecutableSkipsMicrosoftWindowsAppsAliasDirectory()
     {
         if (!OperatingSystem.IsWindows())
             return;
@@ -134,7 +134,7 @@ public sealed class ProcessEnvironmentServiceTests
     /// containing a real <c>ngrok.exe</c>.
     /// </summary>
     [Fact]
-    public void ResolveExecutable_DoesNotSkipProgramFilesWindowsAppsPackageRoot()
+    public void ResolveExecutableDoesNotSkipProgramFilesWindowsAppsPackageRoot()
     {
         if (!OperatingSystem.IsWindows())
             return;

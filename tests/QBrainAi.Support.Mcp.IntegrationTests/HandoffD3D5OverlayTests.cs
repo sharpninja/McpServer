@@ -14,7 +14,7 @@ public sealed class HandoffD3D5OverlayTests
     /// HandoffIngestionRuns / HandoffDiagnostics through the shipped helper.
     /// </summary>
     [Fact]
-    public async Task D4_Sqlite_HandoffIngestionStorage_RoundTripViaShippedAssert()
+    public async Task D4SqliteHandoffIngestionStorageRoundTripViaShippedAssert()
     {
         await using var workspace = ProviderIntegrationTestSupport.CreateWorkspace();
         var databasePath = workspace.GetDatabasePath("g3-handoff-d4-sqlite.db");

@@ -27,7 +27,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_ValidDocs_ReturnsDocumentsAndChunks()
+    public async Task IngestAsyncValidDocsReturnsDocumentsAndChunks()
     {
         File.WriteAllText(Path.Combine(_externalDir, "api-guide.md"), "# API Guide\nSome content here.");
         File.WriteAllText(Path.Combine(_externalDir, "tutorial.txt"), "Step 1: do something");
@@ -46,7 +46,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_SkipsOversizedFiles()
+    public async Task IngestAsyncSkipsOversizedFiles()
     {
         File.WriteAllText(Path.Combine(_externalDir, "huge.txt"), new string('x', 2 * 1024 * 1024));
         File.WriteAllText(Path.Combine(_externalDir, "normal.txt"), "normal content");
@@ -66,7 +66,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_EmptyDirectory_ReturnsEmpty()
+    public async Task IngestAsyncEmptyDirectoryReturnsEmpty()
     {
         var emptyDir = Path.Combine(_tempDir, "empty_ext");
         Directory.CreateDirectory(emptyDir);
@@ -80,7 +80,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_NonexistentDirectory_ReturnsEmpty()
+    public async Task IngestAsyncNonexistentDirectoryReturnsEmpty()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, ExternalDocsPath = "nonexistent" });
         var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);

@@ -43,7 +43,7 @@ public sealed class WorkspaceReadinessHealthCheckTests
 
     /// <summary>Healthy when an enabled primary workspace is registered and has a seeded token.</summary>
     [Fact]
-    public async Task Healthy_WhenPrimaryRegisteredAndTokenSeeded()
+    public async Task HealthyWhenPrimaryRegisteredAndTokenSeeded()
     {
         var tokens = new WorkspaceTokenService();
         tokens.GenerateToken(Primary);
@@ -56,7 +56,7 @@ public sealed class WorkspaceReadinessHealthCheckTests
 
     /// <summary>Unhealthy when the token subsystem has not been initialized.</summary>
     [Fact]
-    public async Task Unhealthy_WhenSubsystemNotInitialized()
+    public async Task UnhealthyWhenSubsystemNotInitialized()
     {
         var check = Build(new WorkspaceTokenService(), Ws(Primary));
 
@@ -67,7 +67,7 @@ public sealed class WorkspaceReadinessHealthCheckTests
 
     /// <summary>Unhealthy when no enabled workspace is registered, even if some token exists.</summary>
     [Fact]
-    public async Task Unhealthy_WhenNoEnabledWorkspace()
+    public async Task UnhealthyWhenNoEnabledWorkspace()
     {
         var tokens = new WorkspaceTokenService();
         tokens.GenerateToken(@"C:\some\other");
@@ -80,7 +80,7 @@ public sealed class WorkspaceReadinessHealthCheckTests
 
     /// <summary>Unhealthy when the primary workspace is missing its seeded full-access token.</summary>
     [Fact]
-    public async Task Unhealthy_WhenPrimaryWorkspaceTokenMissing()
+    public async Task UnhealthyWhenPrimaryWorkspaceTokenMissing()
     {
         var tokens = new WorkspaceTokenService();
         tokens.GenerateToken(@"C:\some\other");

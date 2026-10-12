@@ -14,7 +14,7 @@ public sealed class MemoryToolsDiscoveryTests
 {
     /// <summary>AC-FR-MCP-MEMORY-017-01: New memory verbs appear in /qbrainai/tools search.</summary>
     [Fact]
-    public async Task NewVerbs_AppearInToolsSearch()
+    public async Task NewVerbsAppearInToolsSearch()
     {
         var mcpNames = MemoryS5Catalog.DiscoverMcpToolNames();
         foreach (var verb in MemoryS5Catalog.NewVerbs)
@@ -40,7 +40,7 @@ public sealed class MemoryToolsDiscoveryTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-05: Tool descriptions say when to remember vs recall vs promote.</summary>
     [Fact]
-    public void Descriptions_AgentOriented()
+    public void DescriptionsAgentOriented()
     {
         var toolsType = typeof(QBrainAi.Support.Mcp.McpStdio.FwhMcpTools);
         var descriptions = toolsType.GetMethods()
@@ -68,7 +68,7 @@ public sealed class MemoryToolsDiscoveryTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-06: Compat verbs remain listed alongside new verbs.</summary>
     [Fact]
-    public void CompatVerbs_StillListed()
+    public void CompatVerbsStillListed()
     {
         var names = MemoryS5Catalog.DiscoverMcpToolNames();
         foreach (var verb in MemoryS5Catalog.CompatVerbs)
@@ -79,7 +79,7 @@ public sealed class MemoryToolsDiscoveryTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-09: STDIO and Streamable HTTP advertise the same memory verb set.</summary>
     [Fact]
-    public void StdioAndHttp_SameVerbSet()
+    public void StdioAndHttpSameVerbSet()
     {
         var httpNames = MemoryS5Catalog.DiscoverMcpToolNames()
             .Where(name => name.StartsWith("memory_", StringComparison.Ordinal))

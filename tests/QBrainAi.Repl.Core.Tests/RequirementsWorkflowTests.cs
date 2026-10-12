@@ -35,7 +35,7 @@ public class RequirementsWorkflowTests
     #region FR Query Tests
 
     [Fact]
-    public async Task ListFrAsync_NoFilters_ReturnsAllFRs()
+    public async Task ListFrAsyncNoFiltersReturnsAllFRs()
     {
         var expectedResult = new FrQueryResultAdapter(new List<FrEntry>
         {
@@ -55,7 +55,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ListFrAsync_WithAreaFilter_ReturnsMatchingFRs()
+    public async Task ListFrAsyncWithAreaFilterReturnsMatchingFRs()
     {
         var expectedResult = new FrQueryResultAdapter(new List<FrEntry>
         {
@@ -73,7 +73,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ListFrAsync_WithStatusFilter_ReturnsMatchingFRs()
+    public async Task ListFrAsyncWithStatusFilterReturnsMatchingFRs()
     {
         var expectedResult = new FrQueryResultAdapter(new List<FrEntry>
         {
@@ -95,7 +95,7 @@ public class RequirementsWorkflowTests
     #region FR Get/Create/Update/Delete Tests
 
     [Fact]
-    public async Task GetFrAsync_ValidId_ReturnsFrItem()
+    public async Task GetFrAsyncValidIdReturnsFrItem()
     {
         var expectedItem = CreateFrItem("FR-MCP-001", "API Authentication", "API auth design");
 
@@ -111,7 +111,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GetFrAsync_InvalidId_ThrowsArgumentException()
+    public async Task GetFrAsyncInvalidIdThrowsArgumentException()
     {
         _workflow.GetFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid FR ID format: invalid-id"));
@@ -121,7 +121,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GetFrAsync_FrNotFound_ThrowsInvalidOperationException()
+    public async Task GetFrAsyncFrNotFoundThrowsInvalidOperationException()
     {
         _workflow.GetFrAsync("FR-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("FR item not found: FR-NONEXISTENT-999"));
@@ -131,7 +131,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task CreateFrAsync_ValidRequest_CreatesFrItem()
+    public async Task CreateFrAsyncValidRequestCreatesFrItem()
     {
         var request = CreateFrCreateRequest();
         var createdItem = CreateFrItem("FR-MCP-001", "New FR", "New FR description");
@@ -150,7 +150,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task CreateFrAsync_DuplicateId_ThrowsInvalidOperationException()
+    public async Task CreateFrAsyncDuplicateIdThrowsInvalidOperationException()
     {
         var request = CreateFrCreateRequest();
 
@@ -162,7 +162,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task UpdateFrAsync_WithSelection_UpdatesFrItem()
+    public async Task UpdateFrAsyncWithSelectionUpdatesFrItem()
     {
         var request = CreateFrUpdateRequest();
         var updatedItem = CreateFrItem("FR-MCP-001", "Updated FR", "Updated description");
@@ -182,7 +182,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task UpdateFrAsync_NoSelection_ThrowsInvalidOperationException()
+    public async Task UpdateFrAsyncNoSelectionThrowsInvalidOperationException()
     {
         var request = CreateFrUpdateRequest();
 
@@ -195,7 +195,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task DeleteFrAsync_ValidId_DeletesFrItem()
+    public async Task DeleteFrAsyncValidIdDeletesFrItem()
     {
         _workflow.DeleteFrAsync("FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.CompletedTask);
@@ -206,7 +206,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task DeleteFrAsync_InvalidId_ThrowsArgumentException()
+    public async Task DeleteFrAsyncInvalidIdThrowsArgumentException()
     {
         _workflow.DeleteFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid FR ID format: invalid-id"));
@@ -220,7 +220,7 @@ public class RequirementsWorkflowTests
     #region TR Query Tests
 
     [Fact]
-    public async Task ListTrAsync_NoFilters_ReturnsAllTRs()
+    public async Task ListTrAsyncNoFiltersReturnsAllTRs()
     {
         var expectedResult = new TrQueryResultAdapter(new List<TrEntry>
         {
@@ -240,7 +240,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ListTrAsync_WithAreaAndSubareaFilters_ReturnsMatchingTRs()
+    public async Task ListTrAsyncWithAreaAndSubareaFiltersReturnsMatchingTRs()
     {
         var expectedResult = new TrQueryResultAdapter(new List<TrEntry>
         {
@@ -262,7 +262,7 @@ public class RequirementsWorkflowTests
     #region TR Get/Create/Update/Delete Tests
 
     [Fact]
-    public async Task GetTrAsync_ValidId_ReturnsTrItem()
+    public async Task GetTrAsyncValidIdReturnsTrItem()
     {
         var expectedItem = CreateTrItem("TR-MCP-ARCH-001", "Architecture", "Architecture design");
 
@@ -278,7 +278,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GetTrAsync_InvalidId_ThrowsArgumentException()
+    public async Task GetTrAsyncInvalidIdThrowsArgumentException()
     {
         _workflow.GetTrAsync("TR-MCP-001", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid TR ID format: TR-MCP-001"));
@@ -288,7 +288,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task CreateTrAsync_ValidRequest_CreatesTrItem()
+    public async Task CreateTrAsyncValidRequestCreatesTrItem()
     {
         var request = CreateTrCreateRequest();
         var createdItem = CreateTrItem("TR-MCP-ARCH-001", "New TR", "New TR description");
@@ -307,7 +307,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task UpdateTrAsync_WithSelection_UpdatesTrItem()
+    public async Task UpdateTrAsyncWithSelectionUpdatesTrItem()
     {
         var request = CreateTrUpdateRequest();
         var updatedItem = CreateTrItem("TR-MCP-ARCH-001", "Updated TR", "Updated description");
@@ -327,7 +327,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task DeleteTrAsync_ValidId_DeletesTrItem()
+    public async Task DeleteTrAsyncValidIdDeletesTrItem()
     {
         _workflow.DeleteTrAsync("TR-MCP-ARCH-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.CompletedTask);
@@ -342,7 +342,7 @@ public class RequirementsWorkflowTests
     #region TEST Query Tests
 
     [Fact]
-    public async Task ListTestAsync_NoFilters_ReturnsAllTests()
+    public async Task ListTestAsyncNoFiltersReturnsAllTests()
     {
         var expectedResult = new TestQueryResultAdapter(new List<TestEntry>
         {
@@ -362,7 +362,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ListTestAsync_WithAreaFilter_ReturnsMatchingTests()
+    public async Task ListTestAsyncWithAreaFilterReturnsMatchingTests()
     {
         var expectedResult = new TestQueryResultAdapter(new List<TestEntry>
         {
@@ -384,7 +384,7 @@ public class RequirementsWorkflowTests
     #region TEST Get/Create/Update/Delete Tests
 
     [Fact]
-    public async Task GetTestAsync_ValidId_ReturnsTestItem()
+    public async Task GetTestAsyncValidIdReturnsTestItem()
     {
         var expectedItem = CreateTestItem("TEST-MCP-001", "Test condition");
 
@@ -399,7 +399,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GetTestAsync_InvalidId_ThrowsArgumentException()
+    public async Task GetTestAsyncInvalidIdThrowsArgumentException()
     {
         _workflow.GetTestAsync("TEST-001", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid TEST ID format: TEST-001"));
@@ -409,7 +409,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task CreateTestAsync_ValidRequest_CreatesTestItem()
+    public async Task CreateTestAsyncValidRequestCreatesTestItem()
     {
         var request = CreateTestCreateRequest();
         var createdItem = CreateTestItem("TEST-MCP-001", "New test condition");
@@ -428,7 +428,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task UpdateTestAsync_WithSelection_UpdatesTestItem()
+    public async Task UpdateTestAsyncWithSelectionUpdatesTestItem()
     {
         var request = CreateTestUpdateRequest();
         var updatedItem = CreateTestItem("TEST-MCP-001", "Updated test condition");
@@ -448,7 +448,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task DeleteTestAsync_ValidId_DeletesTestItem()
+    public async Task DeleteTestAsyncValidIdDeletesTestItem()
     {
         _workflow.DeleteTestAsync("TEST-MCP-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.CompletedTask);
@@ -463,7 +463,7 @@ public class RequirementsWorkflowTests
     #region Mapping CRUD Tests
 
     [Fact]
-    public async Task ListMappingsAsync_NoFilters_ReturnsAllMappings()
+    public async Task ListMappingsAsyncNoFiltersReturnsAllMappings()
     {
         var expectedResult = new MappingQueryResultAdapter(new List<IMappingItem>
         {
@@ -483,7 +483,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ListMappingsAsync_WithFrIdFilter_ReturnsMatchingMappings()
+    public async Task ListMappingsAsyncWithFrIdFilterReturnsMatchingMappings()
     {
         var expectedResult = new MappingQueryResultAdapter(new List<IMappingItem>
         {
@@ -501,7 +501,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task CreateMappingAsync_ValidRequest_CreatesMapping()
+    public async Task CreateMappingAsyncValidRequestCreatesMapping()
     {
         var request = CreateMappingCreateRequest("FR-MCP-001", "TR-MCP-ARCH-001", null);
         var createdMapping = CreateMappingItem("FR-MCP-001", "TR-MCP-ARCH-001", null);
@@ -521,7 +521,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task CreateMappingAsync_InvalidFrReference_ThrowsInvalidOperationException()
+    public async Task CreateMappingAsyncInvalidFrReferenceThrowsInvalidOperationException()
     {
         var request = CreateMappingCreateRequest("FR-NONEXISTENT-999", "TR-MCP-ARCH-001", null);
 
@@ -533,7 +533,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task CreateMappingAsync_InvalidTrReference_ThrowsInvalidOperationException()
+    public async Task CreateMappingAsyncInvalidTrReferenceThrowsInvalidOperationException()
     {
         var request = CreateMappingCreateRequest("FR-MCP-001", "TR-NONEXISTENT-999", null);
 
@@ -545,7 +545,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task CreateMappingAsync_NoRequirementIds_ThrowsArgumentException()
+    public async Task CreateMappingAsyncNoRequirementIdsThrowsArgumentException()
     {
         var request = CreateMappingCreateRequest(null, null, null);
 
@@ -557,7 +557,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task DeleteMappingAsync_ValidIds_DeletesMapping()
+    public async Task DeleteMappingAsyncValidIdsDeletesMapping()
     {
         _workflow.DeleteMappingAsync("FR-MCP-001", "TR-MCP-ARCH-001", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.CompletedTask);
@@ -568,7 +568,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task DeleteMappingAsync_NoIds_ThrowsArgumentException()
+    public async Task DeleteMappingAsyncNoIdsThrowsArgumentException()
     {
         _workflow.DeleteMappingAsync(null, null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("At least one requirement ID must be provided"));
@@ -578,7 +578,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task DeleteMappingAsync_MappingNotFound_ThrowsInvalidOperationException()
+    public async Task DeleteMappingAsyncMappingNotFoundThrowsInvalidOperationException()
     {
         _workflow.DeleteMappingAsync("FR-MCP-001", "TR-NONEXISTENT-999", null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Mapping not found"));
@@ -592,7 +592,7 @@ public class RequirementsWorkflowTests
     #region Document Generation Tests
 
     [Fact]
-    public async Task GenerateDocumentAsync_MarkdownFormat_ReturnsMarkdownContent()
+    public async Task GenerateDocumentAsyncMarkdownFormatReturnsMarkdownContent()
     {
         var expectedResult = CreateDocumentGenerationResult("markdown", "fr", "# Functional Requirements\n\n## FR-MCP-001...");
 
@@ -610,7 +610,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GenerateDocumentAsync_YamlFormat_ReturnsYamlContent()
+    public async Task GenerateDocumentAsyncYamlFormatReturnsYamlContent()
     {
         var expectedResult = CreateDocumentGenerationResult("yaml", "tr", "---\nrequirements:\n  - id: TR-MCP-ARCH-001");
 
@@ -628,7 +628,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GenerateDocumentAsync_MatrixDocType_ReturnsMatrixDocument()
+    public async Task GenerateDocumentAsyncMatrixDocTypeReturnsMatrixDocument()
     {
         var expectedResult = CreateDocumentGenerationResult("markdown", "matrix", "# Requirements Traceability Matrix");
 
@@ -644,7 +644,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GenerateDocumentAsync_AllDocType_ReturnsCompleteDocument()
+    public async Task GenerateDocumentAsyncAllDocTypeReturnsCompleteDocument()
     {
         var expectedResult = CreateDocumentGenerationResult("markdown", "all", "# Complete Requirements Package");
 
@@ -659,7 +659,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GenerateDocumentAsync_InvalidFormat_ThrowsArgumentException()
+    public async Task GenerateDocumentAsyncInvalidFormatThrowsArgumentException()
     {
         _workflow.GenerateDocumentAsync("invalid", "fr", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid format: invalid. Valid values: markdown, yaml"));
@@ -669,7 +669,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task GenerateDocumentAsync_InvalidDocType_ThrowsArgumentException()
+    public async Task GenerateDocumentAsyncInvalidDocTypeThrowsArgumentException()
     {
         _workflow.GenerateDocumentAsync("markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid docType: invalid. Valid values: fr, tr, test, matrix, all"));
@@ -683,7 +683,7 @@ public class RequirementsWorkflowTests
     #region Document Ingestion Tests
 
     [Fact]
-    public async Task IngestDocumentAsync_MarkdownContent_IngestsRequirements()
+    public async Task IngestDocumentAsyncMarkdownContentIngestsRequirements()
     {
         var content = "# Functional Requirements\n\n## FR-MCP-001 API Auth\n\nDescription...";
         var expectedResult = CreateDocumentIngestionResult(1, 0, 0, 0, 0, 0, 0);
@@ -701,7 +701,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task IngestDocumentAsync_YamlContent_IngestsRequirements()
+    public async Task IngestDocumentAsyncYamlContentIngestsRequirements()
     {
         var content = "---\nrequirements:\n  - id: TR-MCP-ARCH-001\n    title: Architecture";
         var expectedResult = CreateDocumentIngestionResult(0, 0, 1, 0, 0, 0, 0);
@@ -718,7 +718,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task IngestDocumentAsync_OverwriteStrategy_ReplacesExistingRequirements()
+    public async Task IngestDocumentAsyncOverwriteStrategyReplacesExistingRequirements()
     {
         var content = "# FR-MCP-001 Updated";
         var expectedResult = CreateDocumentIngestionResult(0, 1, 0, 0, 0, 0, 0);
@@ -733,7 +733,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task IngestDocumentAsync_SkipStrategy_SkipsConflicts()
+    public async Task IngestDocumentAsyncSkipStrategySkipsConflicts()
     {
         var content = "# FR-MCP-001 Existing";
         var conflicts = new List<IIngestionConflict>
@@ -754,7 +754,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task IngestDocumentAsync_InvalidFormat_ThrowsArgumentException()
+    public async Task IngestDocumentAsyncInvalidFormatThrowsArgumentException()
     {
         _workflow.IngestDocumentAsync("content", "invalid", "overwrite", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid format: invalid. Valid values: markdown, yaml"));
@@ -764,7 +764,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task IngestDocumentAsync_InvalidMergeStrategy_ThrowsArgumentException()
+    public async Task IngestDocumentAsyncInvalidMergeStrategyThrowsArgumentException()
     {
         _workflow.IngestDocumentAsync("content", "markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid mergeStrategy: invalid. Valid values: overwrite, merge, skip"));
@@ -774,7 +774,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task IngestDocumentAsync_EmptyContent_ThrowsArgumentException()
+    public async Task IngestDocumentAsyncEmptyContentThrowsArgumentException()
     {
         _workflow.IngestDocumentAsync("", "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Content cannot be null or empty"));
@@ -784,7 +784,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task IngestDocumentAsync_WithConflicts_ReportsConflicts()
+    public async Task IngestDocumentAsyncWithConflictsReportsConflicts()
     {
         var content = "# FR-INVALID-X Invalid ID";
         var conflicts = new List<IIngestionConflict>
@@ -809,7 +809,7 @@ public class RequirementsWorkflowTests
     #region Selection State Tests
 
     [Fact]
-    public void CurrentSelection_NoSelection_ReturnsNull()
+    public void CurrentSelectionNoSelectionReturnsNull()
     {
         _workflow.CurrentSelection().Returns((IRequirementsSelectionState?)null);
 
@@ -819,7 +819,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public void CurrentSelection_WithFrSelection_ReturnsSelectionState()
+    public void CurrentSelectionWithFrSelectionReturnsSelectionState()
     {
         var mockSelectionState = CreateMockSelectionState("FR-MCP-001", null, null);
 
@@ -834,7 +834,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public void CurrentSelection_WithMultipleSelections_ReturnsAllSelected()
+    public void CurrentSelectionWithMultipleSelectionsReturnsAllSelected()
     {
         var mockSelectionState = CreateMockSelectionState("FR-MCP-001", "TR-MCP-ARCH-001", "TEST-MCP-001");
 
@@ -849,7 +849,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public void CurrentSelection_HasTimestamp_ReturnsRecentTimestamp()
+    public void CurrentSelectionHasTimestampReturnsRecentTimestamp()
     {
         var mockSelectionState = CreateMockSelectionState("FR-MCP-001", null, null);
 
@@ -867,7 +867,7 @@ public class RequirementsWorkflowTests
     #region YAML Shaping Tests
 
     [Fact]
-    public void YamlShaping_FrCreateRequest_MatchesExpectedStructure()
+    public void YamlShapingFrCreateRequestMatchesExpectedStructure()
     {
         var request = new
         {
@@ -887,7 +887,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public void YamlShaping_TrQueryResponse_MatchesExpectedStructure()
+    public void YamlShapingTrQueryResponseMatchesExpectedStructure()
     {
         var response = new
         {
@@ -906,7 +906,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public void YamlShaping_MappingItem_MatchesExpectedStructure()
+    public void YamlShapingMappingItemMatchesExpectedStructure()
     {
         var mapping = new
         {
@@ -924,7 +924,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public void YamlShaping_DocumentGenerationResult_MatchesExpectedStructure()
+    public void YamlShapingDocumentGenerationResultMatchesExpectedStructure()
     {
         var result = new
         {
@@ -943,7 +943,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public void YamlShaping_IngestionResult_MatchesExpectedStructure()
+    public void YamlShapingIngestionResultMatchesExpectedStructure()
     {
         var result = new
         {
@@ -969,7 +969,7 @@ public class RequirementsWorkflowTests
     #region Validation Error Tests
 
     [Fact]
-    public async Task ValidationError_DuplicateFrId_ReturnsStructuredError()
+    public async Task ValidationErrorDuplicateFrIdReturnsStructuredError()
     {
         var request = CreateFrCreateRequest();
 
@@ -984,7 +984,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ValidationError_InvalidTrIdFormat_ReturnsStructuredError()
+    public async Task ValidationErrorInvalidTrIdFormatReturnsStructuredError()
     {
         _workflow.GetTrAsync("TR-INVALID", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid TR ID format: TR-INVALID. Expected format: TR-<AREA>-<SUBAREA>-###"));
@@ -996,7 +996,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ValidationError_InvalidTestIdFormat_ReturnsStructuredError()
+    public async Task ValidationErrorInvalidTestIdFormatReturnsStructuredError()
     {
         _workflow.GetTestAsync("test-001", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid TEST ID format: test-001. Expected format: TEST-<AREA>-###"));
@@ -1008,7 +1008,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ValidationError_MissingMappingReference_ReturnsStructuredError()
+    public async Task ValidationErrorMissingMappingReferenceReturnsStructuredError()
     {
         var request = CreateMappingCreateRequest("FR-MCP-001", "TR-NONEXISTENT-999", null);
 
@@ -1023,7 +1023,7 @@ public class RequirementsWorkflowTests
     }
 
     [Fact]
-    public async Task ValidationError_StorageError_ReturnsStructuredError()
+    public async Task ValidationErrorStorageErrorReturnsStructuredError()
     {
         _workflow.ListFrAsync(null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Storage connection failed"));
@@ -1274,7 +1274,7 @@ public class RequirementsWorkflowTests
         return state;
     }
 
-    private IYamlEnvelope CreateEnvelope(string type, object payload)
+    private static IYamlEnvelope CreateEnvelope(string type, object payload)
     {
         var envelope = Substitute.For<IYamlEnvelope>();
         envelope.Type.Returns(type);

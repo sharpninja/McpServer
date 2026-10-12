@@ -13,7 +13,7 @@ public sealed class StorageCommandBudgetTests
 {
     /// <summary>A hung storage call is canceled within about 5 seconds.</summary>
     [Fact]
-    public async Task ExecuteAsync_HungWork_FailsWithinEightSeconds()
+    public async Task ExecuteAsyncHungWorkFailsWithinEightSeconds()
     {
         var clock = Stopwatch.StartNew();
         await Assert.ThrowsAsync<StorageCommandBudgetExceededException>(() =>
@@ -27,7 +27,7 @@ public sealed class StorageCommandBudgetTests
 
     /// <summary>Budget expiry is classified as backend_unavailable and retryable.</summary>
     [Fact]
-    public void Classify_BudgetExceeded_IsBackendUnavailable()
+    public void ClassifyBudgetExceededIsBackendUnavailable()
     {
         var classified = McpErrorClassifier.Classify(new StorageCommandBudgetExceededException());
         Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);
@@ -36,7 +36,7 @@ public sealed class StorageCommandBudgetTests
 
     /// <summary>TEST-MCP-TRIAGESTORE-007: the shared intake default stays at 5 seconds.</summary>
     [Fact]
-    public void Default_RemainsFiveSeconds()
+    public void DefaultRemainsFiveSeconds()
     {
         Assert.Equal(TimeSpan.FromSeconds(5), StorageCommandBudget.Default);
     }
@@ -46,7 +46,7 @@ public sealed class StorageCommandBudgetTests
     /// and a longer budget does not use the 5 second intake message.
     /// </summary>
     [Fact]
-    public async Task ExecuteAsync_ExplicitBudget_ExpiresAtThatBudget()
+    public async Task ExecuteAsyncExplicitBudgetExpiresAtThatBudget()
     {
         var clock = Stopwatch.StartNew();
         var ex = await Assert.ThrowsAsync<StorageCommandBudgetExceededException>(() =>
@@ -65,7 +65,7 @@ public sealed class StorageCommandBudgetTests
 
     /// <summary>TEST-MCP-TRIAGESTORE-007: graph materialization deadlock is retryable backend_unavailable.</summary>
     [Fact]
-    public void Classify_GraphMaterializationDeadlock_IsBackendUnavailable()
+    public void ClassifyGraphMaterializationDeadlockIsBackendUnavailable()
     {
         var classified = McpErrorClassifier.Classify(
             new StorageGraphMaterializationException(

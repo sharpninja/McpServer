@@ -30,7 +30,7 @@ public sealed partial class ProcessRunner
     /// Runs the resolved Windows process inside a job assigned before the initial thread resumes.
     /// </summary>
     [SupportedOSPlatform("windows")]
-    private async Task<ProcessRunResult> RunWindowsJobContainedAsync(
+    private static async Task<ProcessRunResult> RunWindowsJobContainedAsync(
         ProcessStartInfo startInfo,
         CancellationToken cancellationToken)
     {
@@ -56,7 +56,7 @@ public sealed partial class ProcessRunner
                 process.Terminate();
                 _ = await process
                     .WaitForEmptyJobAsync(CancellationToken.None)
-                    .WaitAsync(TimeSpan.FromSeconds(2))
+                    .WaitAsync(TimeSpan.FromSeconds(2), cancellationToken)
                     .ConfigureAwait(false);
                 throw new TimeoutException(
                     $"Process '{startInfo.FileName}' exceeded the caller cancellation timeout.");
@@ -75,7 +75,7 @@ public sealed partial class ProcessRunner
             {
                 _ = await process
                     .WaitForEmptyJobAsync(CancellationToken.None)
-                    .WaitAsync(TimeSpan.FromSeconds(2))
+                    .WaitAsync(TimeSpan.FromSeconds(2), cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (TimeoutException)

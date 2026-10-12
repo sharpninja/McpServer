@@ -9,7 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 public sealed class AuditPayloadMigrationTests
 {
     [Fact]
-    public async Task SqliteMigration_PreservesLegacyText_AndPersistsCompressedBytes()
+    public async Task SqliteMigrationPreservesLegacyTextAndPersistsCompressedBytes()
     {
         await using var database = ProviderTestDatabase.CreateSqlite();
         await using (var db = database.CreateContext())
@@ -51,7 +51,7 @@ public sealed class AuditPayloadMigrationTests
     }
 
     [Fact]
-    public async Task RuntimeWithoutAutoMigrate_RejectsPendingSchema_ThenAcceptsMigratedSchema()
+    public async Task RuntimeWithoutAutoMigrateRejectsPendingSchemaThenAcceptsMigratedSchema()
     {
         await using var database = ProviderTestDatabase.CreateSqlite();
         var runtime = new McpDatabaseRuntimeOptions(

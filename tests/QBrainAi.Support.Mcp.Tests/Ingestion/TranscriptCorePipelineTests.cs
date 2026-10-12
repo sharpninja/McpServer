@@ -11,7 +11,7 @@ public sealed class TranscriptCorePipelineTests
 {
     /// <summary>Verifies recursive discovery detects every supported real transcript source kind.</summary>
     [Fact]
-    public async Task Detector_DiscoversEverySupportedRealTranscriptSource()
+    public async Task DetectorDiscoversEverySupportedRealTranscriptSource()
     {
         var root = ResolveRealFixtureRoot();
         ITranscriptBundleDetector detector = new TranscriptBundleDetector();
@@ -35,7 +35,7 @@ public sealed class TranscriptCorePipelineTests
     [InlineData(TranscriptSourceKind.Cline, "cline", "cline-real-fixture-session", "user", "diagnostic")]
     [InlineData(TranscriptSourceKind.Copilot, "copilot/events.jsonl", "copilot-derived", "user", "assistant")]
     [InlineData(TranscriptSourceKind.OpenCode, "opencode/export.json", "ses_opencode_real_fixture", "user", "assistant")]
-    public async Task IngestionService_NormalizesRealTranscriptFixtures(
+    public async Task IngestionServiceNormalizesRealTranscriptFixtures(
         TranscriptSourceKind sourceKind,
         string relativePath,
         string expectedSessionIdPrefix,
@@ -69,7 +69,7 @@ public sealed class TranscriptCorePipelineTests
     [InlineData(TranscriptCompatibilityProfile.Claude)]
     [InlineData(TranscriptCompatibilityProfile.Codex)]
     [InlineData(TranscriptCompatibilityProfile.Grok)]
-    public async Task IngestionService_EmitsCompatibilityJsonlWhenProfileRequested(TranscriptCompatibilityProfile profile)
+    public async Task IngestionServiceEmitsCompatibilityJsonlWhenProfileRequested(TranscriptCompatibilityProfile profile)
     {
         var inputPath = Path.Combine(ResolveRealFixtureRoot(), "codex", "session.jsonl");
         var service = TranscriptIngestionService.CreateDefault();
@@ -100,7 +100,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies manual normalization writes canonical and compatibility artifacts without primary session persistence.</summary>
     [Fact]
-    public async Task IngestionService_NormalizationWritesArtifactsWithoutSessionPersistence()
+    public async Task IngestionServiceNormalizationWritesArtifactsWithoutSessionPersistence()
     {
         var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-normalize", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempWorkspace);
@@ -143,7 +143,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies unsupported Codex JSONL records are diagnosed instead of silently discarded.</summary>
     [Fact]
-    public async Task IngestionService_CodexUnsupportedRecordsEmitDiagnostics()
+    public async Task IngestionServiceCodexUnsupportedRecordsEmitDiagnostics()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-diagnostics", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -179,7 +179,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies unsupported Claude JSONL records are diagnosed instead of silently discarded.</summary>
     [Fact]
-    public async Task IngestionService_ClaudeUnsupportedRecordsEmitDiagnostics()
+    public async Task IngestionServiceClaudeUnsupportedRecordsEmitDiagnostics()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-claude-diagnostics", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -214,7 +214,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies unsupported Grok JSONL records are diagnosed instead of silently discarded.</summary>
     [Fact]
-    public async Task IngestionService_GrokUnsupportedRecordsEmitDiagnostics()
+    public async Task IngestionServiceGrokUnsupportedRecordsEmitDiagnostics()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-grok-diagnostics", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -248,7 +248,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies unsupported Copilot event records are diagnosed instead of silently discarded.</summary>
     [Fact]
-    public async Task IngestionService_CopilotUnsupportedRecordsEmitDiagnostics()
+    public async Task IngestionServiceCopilotUnsupportedRecordsEmitDiagnostics()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-copilot-diagnostics", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -282,7 +282,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies malformed Cline paired JSON is diagnosed instead of silently discarded.</summary>
     [Fact]
-    public async Task IngestionService_ClineMalformedMessagesEmitDiagnostics()
+    public async Task IngestionServiceClineMalformedMessagesEmitDiagnostics()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-cline-diagnostics", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -313,7 +313,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies unsupported OpenCode JSONL records are diagnosed instead of silently discarded.</summary>
     [Fact]
-    public async Task IngestionService_OpenCodeJsonlUnsupportedRecordsEmitDiagnostics()
+    public async Task IngestionServiceOpenCodeJsonlUnsupportedRecordsEmitDiagnostics()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-opencode-diagnostics", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -347,7 +347,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies OpenCode JSONL step starts without finishes are diagnosed as incomplete turns.</summary>
     [Fact]
-    public async Task IngestionService_OpenCodeJsonlIncompleteStepEmitsDiagnostic()
+    public async Task IngestionServiceOpenCodeJsonlIncompleteStepEmitsDiagnostic()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-opencode-incomplete-step", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -379,7 +379,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies persisted transcript runs require workspace-owned cache identity.</summary>
     [Fact]
-    public async Task IngestionService_PersistRequiresAgentAndWorkspacePath()
+    public async Task IngestionServicePersistRequiresAgentAndWorkspacePath()
     {
         var inputPath = Path.Combine(ResolveRealFixtureRoot(), "codex", "session.jsonl");
         var service = TranscriptIngestionService.CreateDefault();
@@ -397,7 +397,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies persisted runs write canonical artifacts and retain pending recovery until real import succeeds.</summary>
     [Fact]
-    public async Task IngestionService_PersistWritesRunArtifactsAndPendingFailsafeEnvelope()
+    public async Task IngestionServicePersistWritesRunArtifactsAndPendingFailsafeEnvelope()
     {
         var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempWorkspace);
@@ -450,7 +450,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies multi-root folder ingestion writes distinct pending failsafe documents.</summary>
     [Fact]
-    public async Task IngestionService_PersistNamesFailsafeDocumentsByRootIdWithoutOverwrite()
+    public async Task IngestionServicePersistNamesFailsafeDocumentsByRootIdWithoutOverwrite()
     {
         var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempWorkspace);
@@ -486,7 +486,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies persisted path ingestion accepts workspace-contained transcript paths.</summary>
     [Fact]
-    public async Task IngestionService_PersistAllowsWorkspaceContainedPath()
+    public async Task IngestionServicePersistAllowsWorkspaceContainedPath()
     {
         var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempWorkspace);
@@ -516,7 +516,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies persisted path ingestion resolves workspace-relative transcript paths beneath the active workspace.</summary>
     [Fact]
-    public async Task IngestionService_PersistAllowsWorkspaceRelativePath()
+    public async Task IngestionServicePersistAllowsWorkspaceRelativePath()
     {
         var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempWorkspace);
@@ -548,7 +548,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies configured provider transcript roots are allowed even when outside the workspace.</summary>
     [Fact]
-    public async Task IngestionService_PersistAllowsConfiguredProviderTranscriptRoot()
+    public async Task IngestionServicePersistAllowsConfiguredProviderTranscriptRoot()
     {
         var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
         var providerRoot = Path.Combine(Path.GetTempPath(), "mcp-transcript-provider", Guid.NewGuid().ToString("N"));
@@ -583,7 +583,7 @@ public sealed class TranscriptCorePipelineTests
 
     /// <summary>Verifies traversal or external paths are rejected before any transcript read occurs.</summary>
     [Fact]
-    public async Task IngestionService_PersistRejectsTraversalOutsideWorkspaceAndProviderRoots()
+    public async Task IngestionServicePersistRejectsTraversalOutsideWorkspaceAndProviderRoots()
     {
         var tempParent = Path.Combine(Path.GetTempPath(), "mcp-transcript-security", Guid.NewGuid().ToString("N"));
         var tempWorkspace = Path.Combine(tempParent, "workspace");
@@ -623,7 +623,7 @@ public sealed class TranscriptCorePipelineTests
     /// Validates FR-MCP-TRANSCRIPT-009, TR-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-013.
     /// </summary>
     [Fact]
-    public async Task IngestionService_AcceptsJsonlLineAboveFormerCeiling()
+    public async Task IngestionServiceAcceptsJsonlLineAboveFormerCeiling()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-tests", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -659,7 +659,7 @@ public sealed class TranscriptCorePipelineTests
     /// Validates TR-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-013.
     /// </summary>
     [Fact]
-    public async Task IngestionService_StreamingReaderPreservesAllRecords()
+    public async Task IngestionServiceStreamingReaderPreservesAllRecords()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-tests", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);

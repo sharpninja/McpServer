@@ -35,7 +35,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// submit from creating a parent session row or any child rows.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotPersistSession()
+    public async Task SubmitAsyncWhenCoordinatorRejectsBeforeMutationDoesNotPersistSession()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator
@@ -65,7 +65,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// rejects afterward, rollback preserves the created session-log record.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_WhenCommitFailsAfterCreatedSession_RestoresCreatedSessionRecord()
+    public async Task SubmitAsyncWhenCommitFailsAfterCreatedSessionRestoresCreatedSessionRecord()
     {
         using var connection = OpenConnection();
         var sessionId = BuildSessionId("submit-created-restore");
@@ -96,7 +96,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// scalars and all child sections from the pre-image graph.
     /// </summary>
     [Fact]
-    public async Task ReplaceTurnAsync_WhenCommitFailsAfterMutation_RestoresPriorTurnGraph()
+    public async Task ReplaceTurnAsyncWhenCommitFailsAfterMutationRestoresPriorTurnGraph()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -146,7 +146,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// session, its turn, and every child row from the pre-delete graph.
     /// </summary>
     [Fact]
-    public async Task DeleteSessionAsync_WhenCommitFailsAfterMutation_RestoresPriorSessionGraph()
+    public async Task DeleteSessionAsyncWhenCommitFailsAfterMutationRestoresPriorSessionGraph()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -174,7 +174,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// bulk physical delete operations.
     /// </summary>
     [Fact]
-    public void TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes()
+    public void TransactionGatedSessionLogServiceSourceDoesNotUseBulkPhysicalDeletes()
     {
         var sourcePath = Path.Combine(
             FindRepositoryRoot(),
@@ -193,7 +193,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// even when required turn transactions would reject keyserver signing.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_WhenNonQuadBrainAndCoordinatorWouldReject_PersistsWithoutCallingCoordinator()
+    public async Task SubmitAsyncWhenNonQuadBrainAndCoordinatorWouldRejectPersistsWithoutCallingCoordinator()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator
@@ -225,7 +225,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// when required turn transactions would reject keyserver signing.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_WhenNonQuadBrainAndCoordinatorWouldReject_PersistsWithoutCallingCoordinator()
+    public async Task UpsertTurnAsyncWhenNonQuadBrainAndCoordinatorWouldRejectPersistsWithoutCallingCoordinator()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection, NonQuadBrainAgent);
@@ -264,7 +264,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// TEST-MCP-221 ac-3: a degraded coordinator does not block GrokCode session-log writes.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_WhenNonQuadBrainAndCoordinatorDegraded_PersistsWithoutCallingCoordinator()
+    public async Task SubmitAsyncWhenNonQuadBrainAndCoordinatorDegradedPersistsWithoutCallingCoordinator()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator
@@ -296,7 +296,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// when required turn transactions would reject keyserver signing.
     /// </summary>
     [Fact]
-    public async Task OpenSessionAsync_WhenNonQuadBrainAndCoordinatorWouldReject_PersistsWithoutCallingCoordinator()
+    public async Task OpenSessionAsyncWhenNonQuadBrainAndCoordinatorWouldRejectPersistsWithoutCallingCoordinator()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator
@@ -329,7 +329,7 @@ public sealed class TransactionGatedSessionLogServiceTests
     /// TEST-MCP-161: Workspace-stamp repair dry-run remains a direct pass-through.
     /// </summary>
     [Fact]
-    public async Task RepairWorkspaceStampsAsync_DryRunDoesNotUseCoordinator()
+    public async Task RepairWorkspaceStampsAsyncDryRunDoesNotUseCoordinator()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator();
@@ -343,7 +343,7 @@ public sealed class TransactionGatedSessionLogServiceTests
 
     /// <summary>Applied workspace-stamp repair fails closed while required transactions are active.</summary>
     [Fact]
-    public async Task RepairWorkspaceStampsAsync_WhenTransactionsRequired_FailsClosedWithoutCoordinatorExecute()
+    public async Task RepairWorkspaceStampsAsyncWhenTransactionsRequiredFailsClosedWithoutCoordinatorExecute()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator();
@@ -362,7 +362,7 @@ public sealed class TransactionGatedSessionLogServiceTests
 
     /// <summary>Applied workspace-stamp repair fails closed when the transaction coordinator is degraded.</summary>
     [Fact]
-    public async Task RepairWorkspaceStampsAsync_WhenCoordinatorDegraded_FailsClosedWithoutCoordinatorExecute()
+    public async Task RepairWorkspaceStampsAsyncWhenCoordinatorDegradedFailsClosedWithoutCoordinatorExecute()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator { StatusDegraded = true, StatusMessage = "txn degraded" };
@@ -381,7 +381,7 @@ public sealed class TransactionGatedSessionLogServiceTests
 
     /// <summary>Applied workspace-stamp repair delegates when transaction gating is not required for mutations.</summary>
     [Fact]
-    public async Task RepairWorkspaceStampsAsync_WhenTransactionsNotRequired_Delegates()
+    public async Task RepairWorkspaceStampsAsyncWhenTransactionsNotRequiredDelegates()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator();

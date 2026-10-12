@@ -10,7 +10,7 @@ public sealed class MemoryBenchHarnessTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-05: without_memory has no injection and no successful recall tools.</summary>
     [Fact]
-    public void WithoutMemory_NoEffectiveInjectionOrTools()
+    public void WithoutMemoryNoEffectiveInjectionOrTools()
     {
         var cells = MemoryBenchCatalog.StubGrok().Cells.Where(cell => cell.Condition == "without_memory").ToList();
         Assert.NotEmpty(cells);
@@ -24,7 +24,7 @@ public sealed class MemoryBenchHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-06: with_memory seeds, injects, and exposes recall tools.</summary>
     [Fact]
-    public void WithMemory_SeededAndToolsAvailable()
+    public void WithMemorySeededAndToolsAvailable()
     {
         var pref = MemoryBenchCatalog.StubGrok().Cells
             .Single(cell => cell.PromptId == "PREF-001" && cell.Condition == "with_memory");
@@ -36,7 +36,7 @@ public sealed class MemoryBenchHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-07: Default path is Grok first; others stay opt-in until H7a.</summary>
     [Fact]
-    public void GrokFirst_OthersOptInUntilValueGate()
+    public void GrokFirstOthersOptInUntilValueGate()
     {
         var result = MemoryBenchCatalog.StubGrok();
         Assert.Equal(["grok"], result.Plugins);
@@ -52,7 +52,7 @@ public sealed class MemoryBenchHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-08: Each cell records transcript, tools, injection, tokens, latency, score, pass.</summary>
     [Fact]
-    public void RecordsPerCellMetrics_IncludingTokens()
+    public void RecordsPerCellMetricsIncludingTokens()
     {
         foreach (var cell in MemoryBenchCatalog.StubGrok().Cells)
         {
@@ -69,7 +69,7 @@ public sealed class MemoryBenchHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-09: Result artifacts include per-cell tokens and a token summary table.</summary>
     [Fact]
-    public void WritesResultArtifacts_WithTokenSummary()
+    public void WritesResultArtifactsWithTokenSummary()
     {
         var directory = Path.Combine(Path.GetTempPath(), "memory-bench-" + Guid.NewGuid().ToString("N"));
         var result = MemoryBenchCatalog.RunGrokStub(directory);
@@ -88,7 +88,7 @@ public sealed class MemoryBenchHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-25: Stub/recorded mode does not require cloud credentials.</summary>
     [Fact]
-    public void StubMode_NoCloudRequired()
+    public void StubModeNoCloudRequired()
     {
         var previous = Environment.GetEnvironmentVariable("XAI_API_KEY");
         Environment.SetEnvironmentVariable("XAI_API_KEY", null);
@@ -106,7 +106,7 @@ public sealed class MemoryBenchHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-26: Live/stub/recorded modes are tagged on the result.</summary>
     [Fact]
-    public void LiveMode_Tagged()
+    public void LiveModeTagged()
     {
         Assert.Equal(MemoryBenchModes.Stub, MemoryBenchCatalog.StubGrok().Mode);
         var recorded = new MemoryBenchHarness().Run(MemoryBenchCatalog.FindRepoRoot(), new MemoryBenchRunOptions
@@ -138,7 +138,7 @@ public sealed class MemoryBenchHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-27: Seeds are Workspace-scoped in a disposable bench workspace and cleaned up.</summary>
     [Fact]
-    public void Seeds_WorkspaceScopedCleanup()
+    public void SeedsWorkspaceScopedCleanup()
     {
         var result = MemoryBenchCatalog.StubGrok();
         Assert.StartsWith("bench-", result.BenchWorkspaceId, StringComparison.Ordinal);
@@ -152,7 +152,7 @@ public sealed class MemoryBenchHarnessTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-31: Stub re-run on the same pack is byte-stable for scores and tokens.</summary>
     [Fact]
-    public void Rerun_DeterministicStub()
+    public void RerunDeterministicStub()
     {
         var first = MemoryBenchCatalog.RunGrokStub();
         var second = MemoryBenchCatalog.RunGrokStub();

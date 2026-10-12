@@ -46,7 +46,7 @@ public sealed class TranscriptMcpToolTests : IDisposable
 
     /// <summary>Native MCP assembly discovery exposes the exact transcript tool names.</summary>
     [Fact]
-    public void FwhMcpTools_ExposesTranscriptToolNames()
+    public void FwhMcpToolsExposesTranscriptToolNames()
     {
         var toolNames = typeof(FwhMcpTools)
             .GetMethods()
@@ -62,7 +62,7 @@ public sealed class TranscriptMcpToolTests : IDisposable
 
     /// <summary>sessionlog_ingest_path delegates a workspace-bound request to the shared ingestion service.</summary>
     [Fact]
-    public async Task SessionLogIngestPath_DelegatesWorkspaceBoundRequest()
+    public async Task SessionLogIngestPathDelegatesWorkspaceBoundRequest()
     {
         var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-tool", Guid.NewGuid().ToString("N"));
         var result = CreateResult(workspacePath, "run-tool-ingest");
@@ -99,7 +99,7 @@ public sealed class TranscriptMcpToolTests : IDisposable
 
     /// <summary>sessionlog_normalize_path requires a target profile and disables persistence by default.</summary>
     [Fact]
-    public async Task SessionLogNormalizePath_DelegatesProfileProjectionWithoutPersistenceByDefault()
+    public async Task SessionLogNormalizePathDelegatesProfileProjectionWithoutPersistenceByDefault()
     {
         var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-tool", Guid.NewGuid().ToString("N"));
         var result = CreateResult(workspacePath, "run-tool-normalize");

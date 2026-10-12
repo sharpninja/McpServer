@@ -126,7 +126,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     /// client but has no <see cref="TryGetPreservedClientType"/> entry is treated as unknown here rather
     /// than being accepted and then rejected one step later.
     /// </summary>
-    private PropertyInfo ResolveClientProperty(string clientName)
+    private static PropertyInfo ResolveClientProperty(string clientName)
     {
         var clientType = typeof(QBrainAiClient);
         var properties = clientType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -208,7 +208,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     /// <summary>
     /// Resolves a public async method on the client by name.
     /// </summary>
-    private MethodInfo ResolveMethod(
+    private static MethodInfo ResolveMethod(
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type clientType,
         string methodName)
     {
@@ -795,7 +795,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     /// <summary>
     /// Coerces a value to a collection type.
     /// </summary>
-    private object? CoerceCollection(object? value, Type targetType, string? parameterName)
+    private static object? CoerceCollection(object? value, Type targetType, string? parameterName)
     {
         var json = SerializeWithConfiguredMetadata(NormalizeForJson(value));
         return JsonSerializer.Deserialize(json, _jsonOptions.GetTypeInfo(targetType));

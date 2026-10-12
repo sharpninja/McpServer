@@ -31,7 +31,7 @@ public sealed class ConfigurationAuthorizationPolicyTests : IClassFixture<Custom
     /// JWT path before any workspace-token fallback can permit access.
     /// </summary>
     [Fact]
-    public async Task ConfigurationEndpoint_WhenOidcDisabledAndBearerProvided_ReturnsUnauthorized()
+    public async Task ConfigurationEndpointWhenOidcDisabledAndBearerProvidedReturnsUnauthorized()
     {
         using var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(

@@ -12,7 +12,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
 {
     /// <summary>The strategy reports the canonical <c>grok-cli</c> name.</summary>
     [Fact]
-    public void Name_IsGrokCli()
+    public void NameIsGrokCli()
     {
         var strategy = new GrokCliAgentExecutionStrategy(
             processEnvironment: null!,
@@ -24,7 +24,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
 
     /// <summary>An empty AgentPath resolves to the bare <c>grok</c> executable.</summary>
     [Fact]
-    public void ResolveGrokExecutable_EmptyAgentPath_ReturnsGrok()
+    public void ResolveGrokExecutableEmptyAgentPathReturnsGrok()
     {
         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable(""));
         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable(null));
@@ -32,14 +32,14 @@ public sealed class GrokCliAgentExecutionStrategyTests
 
     /// <summary>A non-grok AgentPath (e.g. the default <c>cline</c>) is overridden to <c>grok</c>.</summary>
     [Fact]
-    public void ResolveGrokExecutable_NonGrokAgentPath_ReturnsGrok()
+    public void ResolveGrokExecutableNonGrokAgentPathReturnsGrok()
     {
         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable("cline"));
     }
 
     /// <summary>An explicit grok binary path (bare name or full path) is preserved.</summary>
     [Fact]
-    public void ResolveGrokExecutable_ExplicitGrokPath_IsPreserved()
+    public void ResolveGrokExecutableExplicitGrokPathIsPreserved()
     {
         Assert.Equal("grok", GrokCliAgentExecutionStrategy.ResolveGrokExecutable("grok"));
         Assert.Equal(
@@ -49,7 +49,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
 
     /// <summary>TEST-MCP-BUGTRIAGE-042: Grok one-shot forwards the configured model argument.</summary>
     [Fact]
-    public void BuildGrokArgumentList_ConfiguredModel_IncludesModelFlag()
+    public void BuildGrokArgumentListConfiguredModelIncludesModelFlag()
     {
         var args = GrokCliAgentExecutionStrategy.BuildGrokArgumentList(
             workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
@@ -74,7 +74,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
     [InlineData("  auto  ")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(string? model)
+    public void BuildGrokArgumentListAutoOrEmptyModelOmitsModelFlag(string? model)
     {
         var args = GrokCliAgentExecutionStrategy.BuildGrokArgumentList(
             workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
@@ -87,7 +87,7 @@ public sealed class GrokCliAgentExecutionStrategyTests
 
     /// <summary>The one-shot command line carries the prompt file, working directory, and plan/effort flags in order.</summary>
     [Fact]
-    public void BuildGrokArgumentList_ContainsExpectedFlagsInOrder()
+    public void BuildGrokArgumentListContainsExpectedFlagsInOrder()
     {
         var args = GrokCliAgentExecutionStrategy.BuildGrokArgumentList(
             workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",

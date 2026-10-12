@@ -10,7 +10,7 @@ public sealed class MemoryBenchPackTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-01: Pack file lives at the canonical path and is versioned.</summary>
     [Fact]
-    public void PackFile_ExistsAndVersioned()
+    public void PackFileExistsAndVersioned()
     {
         var path = MemoryBenchCatalog.PackPath();
         Assert.True(File.Exists(path), "docs/benchmarks/memory-prompt-pack-v1.yaml must exist.");
@@ -32,7 +32,7 @@ public sealed class MemoryBenchPackTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-03: Each prompt has the required entry fields.</summary>
     [Fact]
-    public void EntrySchema_Complete()
+    public void EntrySchemaComplete()
     {
         foreach (var prompt in MemoryBenchCatalog.LoadPack().Prompts)
         {

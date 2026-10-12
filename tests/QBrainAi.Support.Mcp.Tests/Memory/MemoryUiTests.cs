@@ -9,7 +9,7 @@ public sealed class MemoryUiTests
 {
     /// <summary>AC-FR-MCP-MEMORY-016-01: Search UI lists only active-workspace Effective memories.</summary>
     [Fact]
-    public void Search_OnlyActiveWorkspace()
+    public void SearchOnlyActiveWorkspace()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("X-Workspace-Path", ui, StringComparison.Ordinal);
@@ -22,7 +22,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-02: Edit persists via the same CQRS update path as REST.</summary>
     [Fact]
-    public void Edit_UsesSameCqrsPath()
+    public void EditUsesSameCqrsPath()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("PUT", ui, StringComparison.Ordinal);
@@ -34,7 +34,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-03: Version view lists ordered versions; revert completes in ≤3 UI actions.</summary>
     [Fact]
-    public void Revert_WithinThreeActions()
+    public void RevertWithinThreeActions()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("/versions", ui, StringComparison.Ordinal);
@@ -47,7 +47,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-04: Opening another workspace's memory id fails closed.</summary>
     [Fact]
-    public void ForeignMemory_FailClosed()
+    public void ForeignMemoryFailClosed()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("fail-closed", ui, StringComparison.OrdinalIgnoreCase);
@@ -59,7 +59,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-05: Empty state shows a clear no-memories message (not a blank crash).</summary>
     [Fact]
-    public void EmptyState_Message()
+    public void EmptyStateMessage()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("id=\"empty-state\"", ui, StringComparison.Ordinal);
@@ -69,7 +69,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-06: Search with no hits shows empty results, not a server-failure toast.</summary>
     [Fact]
-    public void NoHits_EmptyNotError()
+    public void NoHitsEmptyNotError()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("id=\"empty-results\"", ui, StringComparison.Ordinal);
@@ -79,7 +79,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-07: Soft-deleted memories are not listed in the default UI view.</summary>
     [Fact]
-    public void SoftDeleted_NotListed()
+    public void SoftDeletedNotListed()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.DoesNotContain("includeDeleted=true", ui, StringComparison.OrdinalIgnoreCase);
@@ -89,7 +89,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-08: Creating via UI requires non-empty Content.</summary>
     [Fact]
-    public void CreateEmpty_Blocked()
+    public void CreateEmptyBlocked()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("id=\"content\"", ui, StringComparison.Ordinal);
@@ -116,7 +116,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-10: Recall/search from UI respects tag chips/filters.</summary>
     [Fact]
-    public void Filters_Respected()
+    public void FiltersRespected()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("tag-chip", ui, StringComparison.Ordinal);
@@ -127,7 +127,7 @@ public sealed class MemoryUiTests
 
     /// <summary>AC-FR-MCP-MEMORY-016-11: Escape closes the detail/version panel.</summary>
     [Fact]
-    public void Escape_ClosesPanel()
+    public void EscapeClosesPanel()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         Assert.Contains("Escape", ui, StringComparison.Ordinal);

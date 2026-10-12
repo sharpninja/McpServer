@@ -17,7 +17,7 @@ public sealed class MemoryPolicyTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-05: Existing secrets/policy rejection behavior is unchanged (no weaker policy).</summary>
     [Fact]
-    public async Task SecretsPolicy_Unchanged()
+    public async Task SecretsPolicyUnchanged()
     {
         var remember = await _harness.RememberAsync(new MemoryRememberRequest
         {

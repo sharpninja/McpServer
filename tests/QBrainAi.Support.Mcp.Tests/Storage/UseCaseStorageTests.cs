@@ -42,7 +42,7 @@ public sealed class UseCaseStorageTests : IDisposable
     /// Persist a use case with a basic flow and step; reload returns the graph.
     /// </summary>
     [Fact]
-    public async Task PersistUseCase_WithFlowAndStep_RoundTrips()
+    public async Task PersistUseCaseWithFlowAndStepRoundTrips()
     {
         await using (var db = CreateContext(_workspaceA))
         {
@@ -99,7 +99,7 @@ public sealed class UseCaseStorageTests : IDisposable
     /// Workspace query filter prevents cross-workspace leak of use cases.
     /// </summary>
     [Fact]
-    public async Task UseCases_AreIsolated_ByWorkspaceFilter()
+    public async Task UseCasesAreIsolatedByWorkspaceFilter()
     {
         await using (var db = CreateContext(_workspaceA))
         {
@@ -125,7 +125,7 @@ public sealed class UseCaseStorageTests : IDisposable
     /// Soft-delete via Remove hides the use case from default queries (TR-MCP-DB-003).
     /// </summary>
     [Fact]
-    public async Task SoftDelete_HidesUseCase_FromDefaultQuery()
+    public async Task SoftDeleteHidesUseCaseFromDefaultQuery()
     {
         long id;
         await using (var db = CreateContext(_workspaceA))
@@ -162,7 +162,7 @@ public sealed class UseCaseStorageTests : IDisposable
     /// UseCaseFrLink requires an existing FR string id on RequirementEntity (kind fr).
     /// </summary>
     [Fact]
-    public async Task FrLink_RequiresExistingStringFrId()
+    public async Task FrLinkRequiresExistingStringFrId()
     {
         await using var db = CreateContext(_workspaceA);
         var now = DateTimeOffset.UtcNow;
@@ -214,7 +214,7 @@ public sealed class UseCaseStorageTests : IDisposable
     /// Duplicate active (workspace, use case, FR) link violates unique index.
     /// </summary>
     [Fact]
-    public async Task FrLink_Duplicate_Throws()
+    public async Task FrLinkDuplicateThrows()
     {
         await using var db = CreateContext(_workspaceA);
         var now = DateTimeOffset.UtcNow;

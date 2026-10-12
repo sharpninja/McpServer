@@ -19,7 +19,7 @@ public sealed class MemoryClientTests
 
     /// <summary>ListAsync builds the expected query string and deserializes memory results.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task ListAsync_SendsExpectedQuery()
+    public async System.Threading.Tasks.Task ListAsyncSendsExpectedQuery()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -39,7 +39,7 @@ public sealed class MemoryClientTests
 
     /// <summary>AddAsync posts the structured memory add request and returns the mutation result.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task AddAsync_PostsRequestBody()
+    public async System.Threading.Tasks.Task AddAsyncPostsRequestBody()
     {
         var response = new MemoryMutationResult
         {
@@ -75,7 +75,7 @@ public sealed class MemoryClientTests
 
     /// <summary>UpdateAsync and RemoveAsync use the id route segment.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task UpdateAndRemoveAsync_UseIdRoutes()
+    public async System.Threading.Tasks.Task UpdateAndRemoveAsyncUseIdRoutes()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -97,7 +97,7 @@ public sealed class MemoryClientTests
     /// dropping them on <see cref="MemorySurfaceResult"/>.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task RecallAsync_LiveItemsJson_SurfacesHits()
+    public async System.Threading.Tasks.Task RecallAsyncLiveItemsJsonSurfacesHits()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, LiveRecallItemsJson);
         using var http = new HttpClient(handler);
@@ -136,7 +136,7 @@ public sealed class MemoryClientTests
     /// TEST-MCP-MEMORY-004: A <c>hits</c> array on the wire also deserializes and stays non-empty.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task RecallAsync_HitsJson_SurfacesItems()
+    public async System.Threading.Tasks.Task RecallAsyncHitsJsonSurfacesItems()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, LiveRecallHitsJson);
         using var http = new HttpClient(handler);
@@ -156,7 +156,7 @@ public sealed class MemoryClientTests
     /// still drops ranked rows, which is why recall must use <see cref="MemoryRecallResult"/>.
     /// </summary>
     [Fact]
-    public void MemorySurfaceResult_LiveItemsJson_DropsHits()
+    public void MemorySurfaceResultLiveItemsJsonDropsHits()
     {
         var dropped = JsonSerializer.Deserialize(LiveRecallItemsJson, McpClientJsonContext.Default.MemorySurfaceResult);
         Assert.NotNull(dropped);
@@ -172,7 +172,7 @@ public sealed class MemoryClientTests
     /// keep those rows on <c>items</c>, <c>neighbors</c>, and plugin-facing <c>hits</c>.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task ExploreAsync_LiveItemsJson_SurfacesHits()
+    public async System.Threading.Tasks.Task ExploreAsyncLiveItemsJsonSurfacesHits()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, LiveExploreItemsJson);
         using var http = new HttpClient(handler);
@@ -201,7 +201,7 @@ public sealed class MemoryClientTests
     /// that list as non-empty <c>plan</c>, <c>items</c>, and <c>hits</c>.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task ConsolidateAsync_LivePlanJson_SurfacesHits()
+    public async System.Threading.Tasks.Task ConsolidateAsyncLivePlanJsonSurfacesHits()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, LiveConsolidatePlanJson);
         using var http = new HttpClient(handler);
@@ -223,7 +223,7 @@ public sealed class MemoryClientTests
     /// keep those rows on <c>items</c> and plugin-facing <c>hits</c>.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task ListVersionsAsync_LiveItemsJson_SurfacesHits()
+    public async System.Threading.Tasks.Task ListVersionsAsyncLiveItemsJsonSurfacesHits()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, LiveVersionsItemsJson);
         using var http = new HttpClient(handler);
@@ -244,7 +244,7 @@ public sealed class MemoryClientTests
     /// DTO must keep <c>memory</c> instead of collapsing to <see cref="MemorySurfaceResult"/>.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task RememberAsync_LiveMemoryJson_KeepsMemory()
+    public async System.Threading.Tasks.Task RememberAsyncLiveMemoryJsonKeepsMemory()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, LiveRememberJson);
         using var http = new HttpClient(handler);
@@ -267,7 +267,7 @@ public sealed class MemoryClientTests
     /// TEST-MCP-MEMORY-004: Promote keeps the created memory row from live HTTP.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task PromoteAsync_LiveMemoryJson_KeepsMemory()
+    public async System.Threading.Tasks.Task PromoteAsyncLiveMemoryJsonKeepsMemory()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, LivePromoteJson);
         using var http = new HttpClient(handler);
@@ -289,7 +289,7 @@ public sealed class MemoryClientTests
     /// TEST-MCP-MEMORY-004: Revert keeps the restored memory row from live HTTP.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task RevertAsync_LiveMemoryJson_KeepsMemory()
+    public async System.Threading.Tasks.Task RevertAsyncLiveMemoryJsonKeepsMemory()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, LiveRevertJson);
         using var http = new HttpClient(handler);
@@ -311,7 +311,7 @@ public sealed class MemoryClientTests
     /// <see cref="MemorySurfaceResult"/> alone.
     /// </summary>
     [Fact]
-    public void MemoryClient_AdditiveMethods_DoNotReturnMemorySurfaceResult()
+    public void MemoryClientAdditiveMethodsDoNotReturnMemorySurfaceResult()
     {
         foreach (var name in new[]
         {

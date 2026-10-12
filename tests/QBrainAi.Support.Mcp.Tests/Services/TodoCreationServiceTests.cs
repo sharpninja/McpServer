@@ -34,7 +34,7 @@ public sealed class TodoCreationServiceTests
     /// local TODO with the newly created GitHub issue.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_IssueNew_PersistsCanonicalIssueTodo()
+    public async Task CreateAsyncIssueNewPersistsCanonicalIssueTodo()
     {
         _gitHubCliService.CreateIssueAsync(
                 "GraphRAG diagnostic follow-up",
@@ -100,7 +100,7 @@ public sealed class TodoCreationServiceTests
     /// reconcile the partially completed operation without guessing which issue was created.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_IssueNew_LocalPersistenceFailure_IncludesIssueUrl()
+    public async Task CreateAsyncIssueNewLocalPersistenceFailureIncludesIssueUrl()
     {
         _gitHubCliService.CreateIssueAsync(
                 "Persist canonical issue todo",

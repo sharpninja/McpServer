@@ -1187,7 +1187,7 @@ public class InteractiveHandler
         }
     }
 
-    private void DisplayFunctionalRequirements(IReadOnlyList<FrEntry> frs)
+    private static void DisplayFunctionalRequirements(IReadOnlyList<FrEntry> frs)
     {
         if (frs == null || frs.Count == 0)
         {
@@ -1207,14 +1207,14 @@ public class InteractiveHandler
             table.AddRow(
                 Markup.Escape(fr.Id ?? ""),
                 Markup.Escape(fr.Title ?? ""),
-                Markup.Escape(body.Length > 50 ? body.Substring(0, 50) + "..." : body));
+                Markup.Escape(body.Length > 50 ? string.Concat(body.AsSpan(0, 50), "...") : body));
         }
 
         AnsiConsole.Write(table);
         AnsiConsole.MarkupLine($"\n[dim]Total: {frs.Count} functional requirements[/]");
     }
 
-    private void DisplayTechnicalRequirements(IReadOnlyList<TrEntry> trs)
+    private static void DisplayTechnicalRequirements(IReadOnlyList<TrEntry> trs)
     {
         if (trs == null || trs.Count == 0)
         {
@@ -1234,14 +1234,14 @@ public class InteractiveHandler
             table.AddRow(
                 Markup.Escape(tr.Id ?? ""),
                 Markup.Escape(tr.Title ?? ""),
-                Markup.Escape(body.Length > 50 ? body.Substring(0, 50) + "..." : body));
+                Markup.Escape(body.Length > 50 ? string.Concat(body.AsSpan(0, 50), "...") : body));
         }
 
         AnsiConsole.Write(table);
         AnsiConsole.MarkupLine($"\n[dim]Total: {trs.Count} technical requirements[/]");
     }
 
-    private void DisplayTestingRequirements(IReadOnlyList<TestEntry> tests)
+    private static void DisplayTestingRequirements(IReadOnlyList<TestEntry> tests)
     {
         if (tests == null || tests.Count == 0)
         {
@@ -1259,7 +1259,7 @@ public class InteractiveHandler
             var condition = test.Condition ?? "";
             table.AddRow(
                 Markup.Escape(test.Id ?? ""),
-                Markup.Escape(condition.Length > 80 ? condition.Substring(0, 80) + "..." : condition));
+                Markup.Escape(condition.Length > 80 ? string.Concat(condition.AsSpan(0, 80), "...") : condition));
         }
 
         AnsiConsole.Write(table);

@@ -17,7 +17,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 public sealed class TodoDocumentMetadataModelTests
 {
     [Fact]
-    public void SingletonId_IsConfiguredAsValueGeneratedNever()
+    public void SingletonIdIsConfiguredAsValueGeneratedNever()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"todo-meta-model-{Guid.NewGuid():N}")

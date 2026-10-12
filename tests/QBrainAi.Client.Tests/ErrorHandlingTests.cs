@@ -14,7 +14,7 @@ public sealed class ErrorHandlingTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task BadRequest_ThrowsMcpValidationException()
+    public async System.Threading.Tasks.Task BadRequestThrowsMcpValidationException()
     {
         var handler = new MockHttpHandler(HttpStatusCode.BadRequest, """{"error":"Invalid request"}""");
         using var http = new HttpClient(handler);
@@ -26,7 +26,7 @@ public sealed class ErrorHandlingTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task Unauthorized_ThrowsMcpUnauthorizedException()
+    public async System.Threading.Tasks.Task UnauthorizedThrowsMcpUnauthorizedException()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Unauthorized, """{"error":"Invalid or missing API key."}""");
         using var http = new HttpClient(handler);
@@ -37,7 +37,7 @@ public sealed class ErrorHandlingTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task NotFound_ThrowsMcpNotFoundException()
+    public async System.Threading.Tasks.Task NotFoundThrowsMcpNotFoundException()
     {
         var handler = new MockHttpHandler(HttpStatusCode.NotFound, """{"error":"Item not found"}""");
         using var http = new HttpClient(handler);
@@ -48,7 +48,7 @@ public sealed class ErrorHandlingTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task Conflict_ThrowsMcpConflictException()
+    public async System.Threading.Tasks.Task ConflictThrowsMcpConflictException()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Conflict, """{"error":"Already exists"}""");
         using var http = new HttpClient(handler);
@@ -60,7 +60,7 @@ public sealed class ErrorHandlingTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ServerError_ThrowsQBrainAiException()
+    public async System.Threading.Tasks.Task ServerErrorThrowsQBrainAiException()
     {
         var handler = new MockHttpHandler(HttpStatusCode.InternalServerError, "Internal error");
         using var http = new HttpClient(handler);

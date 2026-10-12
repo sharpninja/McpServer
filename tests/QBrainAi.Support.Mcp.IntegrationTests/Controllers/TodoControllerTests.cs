@@ -33,7 +33,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo returns 200 with items from seed YAML.</summary>
     [Fact]
-    public async Task Query_ReturnsOkWithItems()
+    public async Task QueryReturnsOkWithItems()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -45,7 +45,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo?keyword=Blazor filters by keyword.</summary>
     [Fact]
-    public async Task Query_ByKeyword_FiltersResults()
+    public async Task QueryByKeywordFiltersResults()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo?keyword=Blazor", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -63,7 +63,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo?priority=high filters by priority.</summary>
     [Fact]
-    public async Task Query_ByPriority_FiltersResults()
+    public async Task QueryByPriorityFiltersResults()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo?priority=high", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -76,7 +76,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo?id=TEST-001 filters by id.</summary>
     [Fact]
-    public async Task Query_ById_FiltersResults()
+    public async Task QueryByIdFiltersResults()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo?id=TEST-001", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -89,7 +89,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo?section=mvp-app filters by section.</summary>
     [Fact]
-    public async Task Query_BySection_FiltersResults()
+    public async Task QueryBySectionFiltersResults()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo?section=mvp-app", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -102,7 +102,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo?done=false filters by done status.</summary>
     [Fact]
-    public async Task Query_ByDoneStatus_FiltersResults()
+    public async Task QueryByDoneStatusFiltersResults()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo?done=false", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -114,7 +114,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo/{id} returns 200 for existing item.</summary>
     [Fact]
-    public async Task GetById_ExistingItem_ReturnsOk()
+    public async Task GetByIdExistingItemReturnsOk()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo/TEST-001", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -126,7 +126,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo/{id} returns 404 for missing item.</summary>
     [Fact]
-    public async Task GetById_MissingItem_ReturnsNotFound()
+    public async Task GetByIdMissingItemReturnsNotFound()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo/NONEXISTENT-999", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -134,7 +134,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo creates a new item and GET retrieves it.</summary>
     [Fact]
-    public async Task Create_ThenGetById_ReturnsCreatedItem()
+    public async Task CreateThenGetByIdReturnsCreatedItem()
     {
         var createRequest = new
         {
@@ -166,7 +166,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo with the default /api-key token returns 403 Forbidden.</summary>
     [Fact]
-    public async Task Create_WithDefaultApiKey_ReturnsForbidden()
+    public async Task CreateWithDefaultApiKeyReturnsForbidden()
     {
         using var client = _factory.CreateClient();
         var tokenService = _factory.Services.GetRequiredService<WorkspaceTokenService>();
@@ -189,7 +189,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo with duplicate id returns 400 Bad Request.</summary>
     [Fact]
-    public async Task Create_DuplicateId_ReturnsConflict()
+    public async Task CreateDuplicateIdReturnsConflict()
     {
         var createRequest = new
         {
@@ -205,7 +205,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>PUT /qbrainai/todo/{id} updates the item fields.</summary>
     [Fact]
-    public async Task Update_ExistingItem_ReturnsOk()
+    public async Task UpdateExistingItemReturnsOk()
     {
         var updateRequest = new { title = "Updated Title", done = true };
 
@@ -221,7 +221,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>PUT /qbrainai/todo/{id} for missing item returns 404.</summary>
     [Fact]
-    public async Task Update_MissingItem_ReturnsNotFound()
+    public async Task UpdateMissingItemReturnsNotFound()
     {
         var updateRequest = new { title = "Does not matter" };
         var response = await _client.PutAsJsonAsync(new Uri("/qbrainai/todo/NONEXISTENT-999", UriKind.Relative), updateRequest, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -230,7 +230,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>DELETE /qbrainai/todo/{id} removes the item.</summary>
     [Fact]
-    public async Task Delete_ExistingItem_ReturnsOkAndRemoves()
+    public async Task DeleteExistingItemReturnsOkAndRemoves()
     {
         // First create an item to delete
         var createRequest = new
@@ -255,7 +255,7 @@ public sealed class TodoControllerTests : IDisposable
     /// The fixture uses one isolated TODO id so create, update, and delete actions can be asserted by version.
     /// </summary>
     [Fact]
-    public async Task AuditEndpoint_AfterCreateUpdateDelete_ReturnsOrderedHistory()
+    public async Task AuditEndpointAfterCreateUpdateDeleteReturnsOrderedHistory()
     {
         var createRequest = new
         {
@@ -308,7 +308,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>DELETE /qbrainai/todo/{id} for missing item returns 404.</summary>
     [Fact]
-    public async Task Delete_MissingItem_ReturnsNotFound()
+    public async Task DeleteMissingItemReturnsNotFound()
     {
         var response = await _client.DeleteAsync(new Uri("/qbrainai/todo/NONEXISTENT-999", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -316,7 +316,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo with any section creates item (sections are now arbitrary).</summary>
     [Fact]
-    public async Task Create_UnknownSection_ReturnsConflict()
+    public async Task CreateUnknownSectionReturnsConflict()
     {
         var request = new
         {
@@ -332,7 +332,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo with FR/TR creates item with requirement IDs.</summary>
     [Fact]
-    public async Task Create_WithFrTr_ReturnsCreatedItemWithRequirements()
+    public async Task CreateWithFrTrReturnsCreatedItemWithRequirements()
     {
         var request = new
         {
@@ -361,7 +361,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>PUT /qbrainai/todo/{id} updates FR/TR fields.</summary>
     [Fact]
-    public async Task Update_WithFrTr_UpdatesRequirements()
+    public async Task UpdateWithFrTrUpdatesRequirements()
     {
         // Create item first
         var createRequest = new
@@ -394,7 +394,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo with unknown priority returns 400.</summary>
     [Fact]
-    public async Task Create_UnknownPriority_ReturnsConflict()
+    public async Task CreateUnknownPriorityReturnsConflict()
     {
         var request = new
         {
@@ -410,7 +410,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo/{id} returns FR/TR for item with requirements in seed YAML.</summary>
     [Fact]
-    public async Task GetById_ItemWithFrTr_ReturnsRequirements()
+    public async Task GetByIdItemWithFrTrReturnsRequirements()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo/TEST-001", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -428,7 +428,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>GET /qbrainai/todo/{id} returns DependsOn for item with dependencies.</summary>
     [Fact]
-    public async Task GetById_ItemWithDependsOn_ReturnsDeps()
+    public async Task GetByIdItemWithDependsOnReturnsDeps()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/todo/TEST-002", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -441,7 +441,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo with valid depends-on succeeds.</summary>
     [Fact]
-    public async Task Create_WithValidDependsOn_Succeeds()
+    public async Task CreateWithValidDependsOnSucceeds()
     {
         var request = new
         {
@@ -463,7 +463,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo with self-dependency returns 400.</summary>
     [Fact]
-    public async Task Create_WithSelfDependency_ReturnsConflict()
+    public async Task CreateWithSelfDependencyReturnsConflict()
     {
         var request = new
         {
@@ -480,7 +480,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>POST /qbrainai/todo with nonexistent dependency returns 400.</summary>
     [Fact]
-    public async Task Create_WithNonexistentDependency_ReturnsConflict()
+    public async Task CreateWithNonexistentDependencyReturnsConflict()
     {
         var request = new
         {
@@ -497,7 +497,7 @@ public sealed class TodoControllerTests : IDisposable
 
     /// <summary>PUT /qbrainai/todo/{id} with circular dependency returns 400 (rejected).</summary>
     [Fact]
-    public async Task Update_WithCircularDependency_ReturnsNotFound()
+    public async Task UpdateWithCircularDependencyReturnsNotFound()
     {
         // TEST-002 depends on TEST-001. If we make TEST-001 depend on TEST-002, that's circular.
         var request = new { dependsOn = new[] { "TEST-002" } };

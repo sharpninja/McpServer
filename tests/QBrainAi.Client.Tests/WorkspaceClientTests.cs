@@ -15,7 +15,7 @@ public sealed class WorkspaceClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task ListAsync_GetsWorkspaces()
+    public async System.Threading.Tasks.Task ListAsyncGetsWorkspaces()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -28,7 +28,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StartAsync_PostsToCorrectUrl()
+    public async System.Threading.Tasks.Task StartAsyncPostsToCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"isRunning":true,"port":7149}""");
         using var http = new HttpClient(handler);
@@ -41,7 +41,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetGlobalPromptAsync_GetsPrompt()
+    public async System.Threading.Tasks.Task GetGlobalPromptAsyncGetsPrompt()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"template":"Hello {baseUrl}","isDefault":false}""");
         using var http = new HttpClient(handler);
@@ -56,7 +56,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateGlobalPromptAsync_PutsPrompt()
+    public async System.Threading.Tasks.Task UpdateGlobalPromptAsyncPutsPrompt()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"template":"Custom prompt","isDefault":false}""");
         using var http = new HttpClient(handler);
@@ -71,7 +71,7 @@ public sealed class WorkspaceClientTests
 
     /// <summary>TEST-MCP-MARKER-REFRESH-001: marker regeneration uses the typed workspace client endpoint.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task RegenerateMarkersAsync_PostsToMarkerRegenerationEndpoint()
+    public async System.Threading.Tasks.Task RegenerateMarkersAsyncPostsToMarkerRegenerationEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"regenerated":true,"workspaceCount":2}""");
         using var http = new HttpClient(handler);
@@ -86,7 +86,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAsync_GetsWorkspaceByKey()
+    public async System.Threading.Tasks.Task GetAsyncGetsWorkspaceByKey()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"workspacePath":"/tmp","name":"test","todoPath":"t","workspacePort":7149,"isPrimary":false,"isEnabled":true,"statusPrompt":"s","implementPrompt":"i","planPrompt":"p"}""");
         using var http = new HttpClient(handler);
@@ -100,7 +100,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateAsync_PostsWorkspace()
+    public async System.Threading.Tasks.Task CreateAsyncPostsWorkspace()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -114,7 +114,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateAsync_PutsWorkspace()
+    public async System.Threading.Tasks.Task UpdateAsyncPutsWorkspace()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -128,7 +128,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ApplyPolicyAsync_PostsPolicyDirective()
+    public async System.Threading.Tasks.Task ApplyPolicyAsyncPostsPolicyDirective()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"workspaceResults":[]}""");
         using var http = new HttpClient(handler);
@@ -145,7 +145,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteAsync_DeletesWorkspace()
+    public async System.Threading.Tasks.Task DeleteAsyncDeletesWorkspace()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -159,7 +159,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task InitAsync_PostsInit()
+    public async System.Threading.Tasks.Task InitAsyncPostsInit()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"filesCreated":["todo.yaml"]}""");
         using var http = new HttpClient(handler);
@@ -173,7 +173,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StopAsync_PostsStop()
+    public async System.Threading.Tasks.Task StopAsyncPostsStop()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"isRunning":false}""");
         using var http = new HttpClient(handler);
@@ -187,7 +187,7 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetStatusAsync_GetsProcessStatus()
+    public async System.Threading.Tasks.Task GetStatusAsyncGetsProcessStatus()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"isRunning":true,"pid":1234,"port":7149}""");
         using var http = new HttpClient(handler);
@@ -206,7 +206,7 @@ public sealed class WorkspaceClientTests
     /// requirement layer client methods use the workspace endpoints and typed DTOs.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task CurrentRequirementLayerAsync_UsesWorkspaceEndpoints()
+    public async System.Threading.Tasks.Task CurrentRequirementLayerAsyncUsesWorkspaceEndpoints()
     {
         var getHandler = new MockHttpHandler(
             HttpStatusCode.OK,

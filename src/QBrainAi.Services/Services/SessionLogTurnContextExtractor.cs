@@ -30,7 +30,7 @@ public sealed class SessionLogTurnContextExtractor
     /// <param name="agentSessionId">Optional session AgentSessionId for history matching.</param>
     /// <param name="agentSessionTranscriptFile">Optional exact transcript path.</param>
     /// <returns>Normalized planFile and todoId.</returns>
-    public (string PlanFile, string TodoId) Extract(
+    public static (string PlanFile, string TodoId) Extract(
         SessionLogTurnEntity turn,
         string? workspacePath,
         string? userProfilePath = null,

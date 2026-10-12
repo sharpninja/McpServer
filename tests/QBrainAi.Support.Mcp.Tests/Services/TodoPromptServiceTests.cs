@@ -14,7 +14,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class TodoPromptServiceTests
 {
     [Fact]
-    public async Task StreamImplementAsync_UsesInfiniteCopilotTimeout()
+    public async Task StreamImplementAsyncUsesInfiniteCopilotTimeout()
     {
         var todo = new TodoFlatItem
         {

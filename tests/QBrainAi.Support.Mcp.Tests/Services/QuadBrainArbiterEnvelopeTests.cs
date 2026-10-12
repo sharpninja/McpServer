@@ -5,7 +5,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class QuadBrainArbiterEnvelopeTests
 {
     [Fact]
-    public void TryParse_FinalIntent_ReadsContent()
+    public void TryParseFinalIntentReadsContent()
     {
         var envelope = QuadBrainArbiterEnvelope.TryParse(
             """{"intent":"final","content":"Voice chat should call QuadBrain."}""");
@@ -17,7 +17,7 @@ public sealed class QuadBrainArbiterEnvelopeTests
     }
 
     [Fact]
-    public void TryParse_ContinueIntent_RequiresAnotherRound()
+    public void TryParseContinueIntentRequiresAnotherRound()
     {
         var envelope = QuadBrainArbiterEnvelope.TryParse(
             """{"intent":"continue","content":"Locating Common Voice Chat before reconciling."}""");
@@ -28,7 +28,7 @@ public sealed class QuadBrainArbiterEnvelopeTests
     }
 
     [Fact]
-    public void TryParse_ToolCallsIntent_ReadsTools()
+    public void TryParseToolCallsIntentReadsTools()
     {
         var envelope = QuadBrainArbiterEnvelope.TryParse(
             """{"intent":"tool_calls","tool_calls":[{"name":"read_file","arguments":{"path":"a.yaml"}}]}""");
@@ -40,7 +40,7 @@ public sealed class QuadBrainArbiterEnvelopeTests
     }
 
     [Fact]
-    public void TryParse_LegacyToolCallsObject_MapsToToolCallsIntent()
+    public void TryParseLegacyToolCallsObjectMapsToToolCallsIntent()
     {
         var envelope = QuadBrainArbiterEnvelope.TryParse(
             """{"tool_calls":[{"name":"read_file","arguments":{"path":"a.yaml"}}]}""");
@@ -51,16 +51,16 @@ public sealed class QuadBrainArbiterEnvelopeTests
     }
 
     [Fact]
-    public void TryParse_LiveProseWithoutEnvelope_ReturnsNull()
+    public void TryParseLiveProseWithoutEnvelopeReturnsNull()
         => Assert.Null(QuadBrainArbiterEnvelope.TryParse(
             "Neither role inspected the repo, so I am loading the required MCP skills and locating Common Voice Chat and QuadBrain before reconciling a decision."));
 
     [Fact]
-    public void RequiresAnotherRound_NullEnvelope_IsTrue()
+    public void RequiresAnotherRoundNullEnvelopeIsTrue()
         => Assert.True(QuadBrainArbiterEnvelope.RequiresAnotherRound(null));
 
     [Fact]
-    public void FormatForDisplay_HidesEnvelope_ShowsContent()
+    public void FormatForDisplayHidesEnvelopeShowsContent()
     {
         var json = """{"intent":"final","content":"Only this should print."}""";
         Assert.Equal("Only this should print.", QuadBrainArbiterEnvelope.FormatForDisplay(json, showIntent: false));
@@ -68,7 +68,7 @@ public sealed class QuadBrainArbiterEnvelopeTests
     }
 
     [Fact]
-    public void FormatForDisplay_UnparsedProse_Unchanged()
+    public void FormatForDisplayUnparsedProseUnchanged()
     {
         const string prose = "plain arbiter sentence";
         Assert.Equal(prose, QuadBrainArbiterEnvelope.FormatForDisplay(prose, showIntent: false));

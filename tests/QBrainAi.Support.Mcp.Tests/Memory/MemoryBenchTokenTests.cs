@@ -10,7 +10,7 @@ public sealed class MemoryBenchTokenTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-11: Mean/median tokens are reported per plugin × condition.</summary>
     [Fact]
-    public void ReportsMeanMedianTokens_ByPluginAndCondition()
+    public void ReportsMeanMedianTokensByPluginAndCondition()
     {
         var result = MemoryBenchCatalog.StubGrok();
         Assert.Contains(result.Summary, row => row.Plugin == "grok" && row.Condition == "with_memory" && row.TokensTotalMean > 0);
@@ -19,7 +19,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-34: Token source is host-reported or a named estimator.</summary>
     [Fact]
-    public void Source_HostReportedOrDocumentedEstimator()
+    public void SourceHostReportedOrDocumentedEstimator()
     {
         foreach (var cell in MemoryBenchCatalog.StubGrok().Cells)
         {
@@ -34,7 +34,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-35: tokens_total equals tokens_in + tokens_out.</summary>
     [Fact]
-    public void Defines_InOutTotal()
+    public void DefinesInOutTotal()
     {
         var (tokensIn, tokensOut, tokensTotal) = MemoryBenchTokenEstimator.EstimateTurn(
             "system prompt",
@@ -49,7 +49,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-36: Injection tokens are charged only on with_memory cells.</summary>
     [Fact]
-    public void Injection_CountedOnlyWithMemory()
+    public void InjectionCountedOnlyWithMemory()
     {
         var result = MemoryBenchCatalog.StubGrok();
         var withMemory = result.Cells.Single(cell => cell.PromptId == "PREF-001" && cell.Condition == "with_memory");
@@ -61,7 +61,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-37: Tool payloads are counted with the same rule on both conditions.</summary>
     [Fact]
-    public void ToolPayloads_CountedConsistently()
+    public void ToolPayloadsCountedConsistently()
     {
         var result = MemoryBenchCatalog.StubGrok();
         var withMemory = result.Cells.Single(cell => cell.PromptId == "PREF-001" && cell.Condition == "with_memory");
@@ -73,7 +73,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-39: Per-prompt token delta is with_memory minus without_memory.</summary>
     [Fact]
-    public void PerPrompt_TokenDelta()
+    public void PerPromptTokenDelta()
     {
         var result = MemoryBenchCatalog.StubGrok();
         var pref = result.Deltas.Single(delta => delta.PromptId == "PREF-001" && delta.Plugin == "grok");
@@ -85,7 +85,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-41: Failed correctness still records tokens and drops efficiency use.</summary>
     [Fact]
-    public void CorrectnessGate_TokensStillRecorded()
+    public void CorrectnessGateTokensStillRecorded()
     {
         var pack = MemoryBenchCatalog.LoadPack();
         var pref = pack.Prompts.Single(prompt => prompt.Id == "PREF-001");
@@ -110,7 +110,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-42: Efficiency ratio is labeled secondary and does not replace tokens.</summary>
     [Fact]
-    public void EfficiencyRatio_SecondaryOnly()
+    public void EfficiencyRatioSecondaryOnly()
     {
         var result = MemoryBenchCatalog.StubGrok();
         Assert.True(result.EfficiencyTokensPerPass is > 0);
@@ -123,7 +123,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-43: Stub/recorded cells still emit token fields.</summary>
     [Fact]
-    public void StubMode_RequiresTokenFields()
+    public void StubModeRequiresTokenFields()
     {
         Assert.All(MemoryBenchCatalog.StubGrok().Cells, cell =>
         {
@@ -136,7 +136,7 @@ public sealed class MemoryBenchTokenTests
 
     /// <summary>AC-FR-MCP-MEMORY-018-44: NEG/SAFE record tokens and mandatory pass/fail under both conditions.</summary>
     [Fact]
-    public void SafetyPrompts_TokensAndPassFail()
+    public void SafetyPromptsTokensAndPassFail()
     {
         var result = MemoryBenchCatalog.StubGrok();
         foreach (var id in new[] { "NEG-001", "SAFE-001" })

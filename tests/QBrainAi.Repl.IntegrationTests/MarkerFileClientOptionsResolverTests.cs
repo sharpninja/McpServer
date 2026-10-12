@@ -10,7 +10,7 @@ namespace QBrainAi.Repl.IntegrationTests;
 public sealed class MarkerFileClientOptionsResolverTests
 {
     [Fact]
-    public void ResolveWorkspacePath_FindsMarkerByWalkingParents()
+    public void ResolveWorkspacePathFindsMarkerByWalkingParents()
     {
         var root = CreateTemporaryWorkspace();
         try
@@ -30,7 +30,7 @@ public sealed class MarkerFileClientOptionsResolverTests
     }
 
     [Fact]
-    public void TryLoadTrustedMarker_ReturnsMarkerSettingsWhenSignatureMatches()
+    public void TryLoadTrustedMarkerReturnsMarkerSettingsWhenSignatureMatches()
     {
         var root = CreateTemporaryWorkspace();
         try
@@ -56,7 +56,7 @@ public sealed class MarkerFileClientOptionsResolverTests
     /// path or marker location.
     /// </summary>
     [Fact]
-    public void TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths()
+    public void TryResolveWithDiagnosticsWhenMarkerMissingEnumeratesSearchedPaths()
     {
         var root = CreateTemporaryWorkspace();
         try
@@ -86,7 +86,7 @@ public sealed class MarkerFileClientOptionsResolverTests
     /// instead of walking from <see cref="Environment.CurrentDirectory"/>.
     /// </summary>
     [Fact]
-    public void TryResolveWithDiagnostics_AcceptsExplicitWorkspaceArgument()
+    public void TryResolveWithDiagnosticsAcceptsExplicitWorkspaceArgument()
     {
         var root = CreateTemporaryWorkspace();
         try
@@ -122,7 +122,7 @@ public sealed class MarkerFileClientOptionsResolverTests
     /// <see cref="Environment.NewLine"/>.
     /// </summary>
     [Fact]
-    public void TryResolveWithDiagnostics_VerifiesSignatureBuiltWithLfLineEndings()
+    public void TryResolveWithDiagnosticsVerifiesSignatureBuiltWithLfLineEndings()
     {
         var root = CreateTemporaryWorkspace();
         try
@@ -154,7 +154,7 @@ public sealed class MarkerFileClientOptionsResolverTests
     /// (rather than the generic "not found" message).
     /// </summary>
     [Fact]
-    public void TryResolveWithDiagnostics_WhenSignatureFails_ReportsReason()
+    public void TryResolveWithDiagnosticsWhenSignatureFailsReportsReason()
     {
         var root = CreateTemporaryWorkspace();
         try
@@ -189,7 +189,7 @@ public sealed class MarkerFileClientOptionsResolverTests
     [InlineData("ClaudeCode", "claude")]
     [InlineData("GrokCode", "grok")]
     [InlineData("open-code", "opencode")]
-    public void ResolveAgentKey_CanonicalizesSharedAgentInputs(string input, string expected)
+    public void ResolveAgentKeyCanonicalizesSharedAgentInputs(string input, string expected)
     {
         Assert.Equal(expected, MarkerFileClientOptionsResolver.ResolveAgentKey(input));
     }
@@ -199,7 +199,7 @@ public sealed class MarkerFileClientOptionsResolverTests
     /// agent argument without leaking it through the mutable test hook.
     /// </summary>
     [Fact]
-    public void TryResolveWithDiagnostics_WritesCanonicalAgentCacheWithoutGlobalOverride()
+    public void TryResolveWithDiagnosticsWritesCanonicalAgentCacheWithoutGlobalOverride()
     {
         var root = CreateTemporaryWorkspace();
         var cacheRoot = Path.Combine(Path.GetTempPath(), $"repl-marker-cache-{Guid.NewGuid():N}");
@@ -244,7 +244,7 @@ public sealed class MarkerFileClientOptionsResolverTests
     /// named-agent REPL invocation rather than relying on a markerless default.
     /// </summary>
     [Fact]
-    public async Task ReplChildProcessHelper_WithNamedAgent_StartsWithExplicitAgentArgument()
+    public async Task ReplChildProcessHelperWithNamedAgentStartsWithExplicitAgentArgument()
     {
         using var helper = new ReplChildProcessHelper("GrokCode");
 
@@ -481,7 +481,7 @@ signature:
     // --- Verified marker cache tests (24h TTL, apiKey change invalidation) ---
 
     [Fact]
-    public void TryResolveWithDiagnostics_UsesVerifiedCacheOnSubsequentCallWithinTtl()
+    public void TryResolveWithDiagnosticsUsesVerifiedCacheOnSubsequentCallWithinTtl()
     {
         var root = CreateTemporaryWorkspace();
         var cacheDir = Path.Combine(Path.GetTempPath(), $"mcp-cache-{Guid.NewGuid():N}");
@@ -518,7 +518,7 @@ signature:
     }
 
     [Fact]
-    public void TryResolveWithDiagnostics_InvalidatesCacheOnApiKeyChange()
+    public void TryResolveWithDiagnosticsInvalidatesCacheOnApiKeyChange()
     {
         var root = CreateTemporaryWorkspace();
         var cacheDir = Path.Combine(Path.GetTempPath(), $"mcp-cache-{Guid.NewGuid():N}");
@@ -555,7 +555,7 @@ signature:
     }
 
     [Fact]
-    public void TryResolveWithDiagnostics_SucceedsWithManuallyExpiredCacheEntry()
+    public void TryResolveWithDiagnosticsSucceedsWithManuallyExpiredCacheEntry()
     {
         // Manually plant an expired entry; resolver should fall through to full verify.
         var root = CreateTemporaryWorkspace();

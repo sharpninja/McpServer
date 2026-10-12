@@ -81,7 +81,7 @@ public sealed class GraphRagRelationshipStorageTests : IDisposable
     /// entities exist and are loaded via Include, the navigation properties are populated.
     /// </summary>
     [Fact]
-    public async Task ForeignKeyNavigation_LoadsSourceAndTargetEntities()
+    public async Task ForeignKeyNavigationLoadsSourceAndTargetEntities()
     {
         var source = CreateEntity("FKSource");
         var target = CreateEntity("FKTarget");
@@ -116,7 +116,7 @@ public sealed class GraphRagRelationshipStorageTests : IDisposable
     /// relationships by soft delete rather than physically cascading rows.
     /// </summary>
     [Fact]
-    public async Task CascadeFromEntityDelete_RemovesRelationship()
+    public async Task CascadeFromEntityDeleteRemovesRelationship()
     {
         var source = CreateEntity("CascadeSource");
         var target = CreateEntity("CascadeTarget");

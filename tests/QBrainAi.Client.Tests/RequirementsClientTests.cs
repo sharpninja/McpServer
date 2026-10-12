@@ -15,7 +15,7 @@ public sealed class RequirementsClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task ListFrAsync_GetsFrCollection()
+    public async System.Threading.Tasks.Task ListFrAsyncGetsFrCollection()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """[{"id":"FR-MCP-001","title":"Title","body":"Body"}]""");
         using var http = new HttpClient(handler);
@@ -30,7 +30,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListRequirementsAsync_EncodesFilters()
+    public async System.Threading.Tasks.Task ListRequirementsAsyncEncodesFilters()
     {
         var frHandler = new MockHttpHandler(HttpStatusCode.OK, """[]""");
         using var frHttp = new HttpClient(frHandler);
@@ -64,7 +64,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetFrAsync_EncodesIdAndDeserializes()
+    public async System.Threading.Tasks.Task GetFrAsyncEncodesIdAndDeserializes()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"FR/MCP/001","title":"Title","body":"Body"}""");
         using var http = new HttpClient(handler);
@@ -82,7 +82,7 @@ public sealed class RequirementsClientTests
     /// session-bound workspace (triage-report-f77331f9a33e4bd0ae4f55f0470743ed).
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task GenerateAsync_WorkspacePathOverride_ReplacesWorkspaceHeader()
+    public async System.Threading.Tasks.Task GenerateAsyncWorkspacePathOverrideReplacesWorkspaceHeader()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "# doc", "text/markdown");
         using var http = new HttpClient(handler);
@@ -101,7 +101,7 @@ public sealed class RequirementsClientTests
 
     /// <summary>Without an override the client-bound workspace header is preserved on generate.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task GenerateAsync_NoOverride_KeepsBoundWorkspaceHeader()
+    public async System.Threading.Tasks.Task GenerateAsyncNoOverrideKeepsBoundWorkspaceHeader()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "# doc", "text/markdown");
         using var http = new HttpClient(handler);
@@ -118,7 +118,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateTrAsync_PostsBody()
+    public async System.Threading.Tasks.Task CreateTrAsyncPostsBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"id":"TR-MCP-001","title":"TR","body":"Body"}""");
         using var http = new HttpClient(handler);
@@ -141,7 +141,7 @@ public sealed class RequirementsClientTests
     /// Verifies FR batch creation posts the records array to the atomic FR batch endpoint and deserializes the batch result.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task CreateFrBatchAsync_PostsRecordsArray()
+    public async System.Threading.Tasks.Task CreateFrBatchAsyncPostsRecordsArray()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -175,7 +175,7 @@ public sealed class RequirementsClientTests
     /// Verifies mixed batch updates post to the atomic mixed batch endpoint with kind-tagged records.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task UpdateBatchAsync_PostsMixedRecordsArray()
+    public async System.Threading.Tasks.Task UpdateBatchAsyncPostsMixedRecordsArray()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -208,7 +208,7 @@ public sealed class RequirementsClientTests
     /// Verifies batch update requests preserve structured acceptance criteria in all update record shapes.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task UpdateBatchRequests_PostAcceptanceCriteriaArrays()
+    public async System.Threading.Tasks.Task UpdateBatchRequestsPostAcceptanceCriteriaArrays()
     {
         async System.Threading.Tasks.Task AssertRequestAsync(
             Func<RequirementsClient, System.Threading.Tasks.Task<RequirementsBatchResult>> send,
@@ -331,7 +331,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateTestAsync_PutsBody()
+    public async System.Threading.Tasks.Task UpdateTestAsyncPutsBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"TEST-MCP-001","condition":"Updated condition"}""");
         using var http = new HttpClient(handler);
@@ -346,7 +346,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateFrAsync_PutsMetadataBody()
+    public async System.Threading.Tasks.Task UpdateFrAsyncPutsMetadataBody()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -373,7 +373,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateTrAndTestAsync_PutMetadataBody()
+    public async System.Threading.Tasks.Task UpdateTrAndTestAsyncPutMetadataBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"TR-MCP-REQ-001","title":"TR","body":"Body","priority":"high","status":"completed","notes":"TR notes"}""");
         using var http = new HttpClient(handler);
@@ -416,7 +416,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteTestAsync_UsesDeleteEndpoint()
+    public async System.Threading.Tasks.Task DeleteTestAsyncUsesDeleteEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -430,7 +430,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CopyFrAcceptanceCriteriaFromTodoAsync_PostsCopyEndpoint()
+    public async System.Threading.Tasks.Task CopyFrAcceptanceCriteriaFromTodoAsyncPostsCopyEndpoint()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -449,7 +449,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CopyTrAndTestAcceptanceCriteriaFromTodoAsync_PostExpectedKindRoutes()
+    public async System.Threading.Tasks.Task CopyTrAndTestAcceptanceCriteriaFromTodoAsyncPostExpectedKindRoutes()
     {
         var trHandler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -479,7 +479,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpsertMappingAsync_PutsMappingPayload()
+    public async System.Threading.Tasks.Task UpsertMappingAsyncPutsMappingPayload()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"frId":"FR-MCP-001","trIds":["TR-MCP-001","TR-MCP-002"]}""");
         using var http = new HttpClient(handler);
@@ -497,7 +497,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GenerateAsync_ReturnsWorkspaceExportMetadata()
+    public async System.Threading.Tasks.Task GenerateAsyncReturnsWorkspaceExportMetadata()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -521,7 +521,7 @@ public sealed class RequirementsClientTests
 
 
     [Fact]
-    public async System.Threading.Tasks.Task GenerateAsync_WikiError_IncludesStructuredStage()
+    public async System.Threading.Tasks.Task GenerateAsyncWikiErrorIncludesStructuredStage()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.Conflict,
@@ -536,7 +536,7 @@ public sealed class RequirementsClientTests
         Assert.Contains("stage: transaction", ex.Message, StringComparison.Ordinal);
     }
     [Fact]
-    public async System.Threading.Tasks.Task IngestAsync_PostsMarkdownPayload()
+    public async System.Threading.Tasks.Task IngestAsyncPostsMarkdownPayload()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -557,7 +557,7 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task IngestAsync_PostsWikiDocumentMap()
+    public async System.Threading.Tasks.Task IngestAsyncPostsWikiDocumentMap()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -590,7 +590,7 @@ public sealed class RequirementsClientTests
     /// Verifies RepairFrPlaceholdersAsync posts to the fr/repair endpoint and parses the purged count.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task RepairFrPlaceholdersAsync_PostsToRepairEndpointAndReturnsPurgedCount()
+    public async System.Threading.Tasks.Task RepairFrPlaceholdersAsyncPostsToRepairEndpointAndReturnsPurgedCount()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"purged":3}""");
         using var http = new HttpClient(handler);
@@ -608,7 +608,7 @@ public sealed class RequirementsClientTests
     /// endpoints and preserve layer sunset DTO fields.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task RequirementLayersAsync_UseTypedEndpointsAndScopeDtoFields()
+    public async System.Threading.Tasks.Task RequirementLayersAsyncUseTypedEndpointsAndScopeDtoFields()
     {
         var listHandler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -663,7 +663,7 @@ public sealed class RequirementsClientTests
     /// preview layer key and deserialize scoped requirement metadata.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task GetEffectiveRequirementsAsync_UsesLayerPreviewAndDeserializesScopeFields()
+    public async System.Threading.Tasks.Task GetEffectiveRequirementsAsyncUsesLayerPreviewAndDeserializesScopeFields()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,

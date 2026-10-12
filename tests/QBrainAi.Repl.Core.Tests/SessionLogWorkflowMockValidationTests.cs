@@ -33,7 +33,7 @@ public class SessionLogWorkflowMockValidationTests
     #region Stub SessionLogClient Response Tests
 
     [Fact]
-    public async Task StubClient_SubmitAsync_ReturnsSessionLogSubmitResult()
+    public async Task StubClientSubmitAsyncReturnsSessionLogSubmitResult()
     {
         var sessionLog = new UnifiedSessionLogDto
         {
@@ -51,7 +51,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public async Task StubClient_QueryAsync_ReturnsSessionLogQueryResult()
+    public async Task StubClientQueryAsyncReturnsSessionLogQueryResult()
     {
         var result = await _stubClient.QueryAsync(agent: "Copilot", limit: 10, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -62,7 +62,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public async Task StubClient_AppendDialogAsync_ReturnsDialogAppendResult()
+    public async Task StubClientAppendDialogAsyncReturnsDialogAppendResult()
     {
         var items = new List<ProcessingDialogItemDto>
         {
@@ -82,7 +82,7 @@ public class SessionLogWorkflowMockValidationTests
     #region Workflow Command Routing Tests
 
     [Fact]
-    public async Task WorkflowRouting_OpenSession_CallsSubmitAsync()
+    public async Task WorkflowRoutingOpenSessionCallsSubmitAsync()
     {
         var sessionLog = new UnifiedSessionLogDto
         {
@@ -99,7 +99,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void WorkflowRouting_BeginTurn_CreatesNewTurn()
+    public void WorkflowRoutingBeginTurnCreatesNewTurn()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
 
@@ -111,7 +111,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void WorkflowRouting_UpdateTurn_ModifiesTurnState()
+    public void WorkflowRoutingUpdateTurnModifiesTurnState()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -122,7 +122,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void WorkflowRouting_CompleteTurn_TransitionsToCompleted()
+    public void WorkflowRoutingCompleteTurnTransitionsToCompleted()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -135,7 +135,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void WorkflowRouting_FailTurn_TransitionsToFailed()
+    public void WorkflowRoutingFailTurnTransitionsToFailed()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -148,7 +148,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public async Task WorkflowRouting_AppendDialog_CallsAppendDialogAsync()
+    public async Task WorkflowRoutingAppendDialogCallsAppendDialogAsync()
     {
         var items = new List<ProcessingDialogItemDto>
         {
@@ -163,7 +163,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public async Task WorkflowRouting_QueryHistory_CallsQueryAsync()
+    public async Task WorkflowRoutingQueryHistoryCallsQueryAsync()
     {
         var result = await _stubClient.QueryAsync(agent: "Copilot", limit: 5, offset: 0, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -177,7 +177,7 @@ public class SessionLogWorkflowMockValidationTests
     #region Turn Lifecycle Guard Tests
 
     [Fact]
-    public void TurnLifecycleGuard_DuplicateTurn_ThrowsInvalidOperationException()
+    public void TurnLifecycleGuardDuplicateTurnThrowsInvalidOperationException()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -190,7 +190,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void TurnLifecycleGuard_UpdateCompletedTurn_ThrowsInvalidOperationException()
+    public void TurnLifecycleGuardUpdateCompletedTurnThrowsInvalidOperationException()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -203,7 +203,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void TurnLifecycleGuard_UpdateFailedTurn_ThrowsInvalidOperationException()
+    public void TurnLifecycleGuardUpdateFailedTurnThrowsInvalidOperationException()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -216,7 +216,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void TurnLifecycleGuard_ProperStatusTransitions_InProgressToCompleted()
+    public void TurnLifecycleGuardProperStatusTransitionsInProgressToCompleted()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -230,7 +230,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void TurnLifecycleGuard_ProperStatusTransitions_InProgressToFailed()
+    public void TurnLifecycleGuardProperStatusTransitionsInProgressToFailed()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -244,7 +244,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void TurnLifecycleGuard_MultipleTurns_TracksSeparately()
+    public void TurnLifecycleGuardMultipleTurnsTracksSeparately()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
 
@@ -267,7 +267,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void TurnLifecycleGuard_CompletedTurnNotReusable_NewTurnRequired()
+    public void TurnLifecycleGuardCompletedTurnNotReusableNewTurnRequired()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -286,7 +286,7 @@ public class SessionLogWorkflowMockValidationTests
     #region Canonical Identifier Validation Tests
 
     [Fact]
-    public void CanonicalIdentifier_ValidSessionId_AcceptsCorrectFormat()
+    public void CanonicalIdentifierValidSessionIdAcceptsCorrectFormat()
     {
         var validSessionIds = new[]
         {
@@ -305,7 +305,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void CanonicalIdentifier_ValidRequestId_AcceptsCorrectFormat()
+    public void CanonicalIdentifierValidRequestIdAcceptsCorrectFormat()
     {
         var validRequestIds = new[]
         {
@@ -331,7 +331,7 @@ public class SessionLogWorkflowMockValidationTests
     #region Session State Management Tests
 
     [Fact]
-    public void SessionState_AfterOpenSession_ContainsCorrectMetadata()
+    public void SessionStateAfterOpenSessionContainsCorrectMetadata()
     {
         var agent = "Copilot";
         var sessionId = "Copilot-20260304T113901Z-feature";
@@ -351,7 +351,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void SessionState_AfterBeginTurn_TracksActiveTurn()
+    public void SessionStateAfterBeginTurnTracksActiveTurn()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
 
@@ -364,7 +364,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void SessionState_AfterCompleteTurn_ClearsActiveTurnTracking()
+    public void SessionStateAfterCompleteTurnClearsActiveTurnTracking()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -377,7 +377,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public void SessionState_LastUpdatedTimestamp_UpdatesOnChanges()
+    public void SessionStateLastUpdatedTimestampUpdatesOnChanges()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         var initialTimestamp = _fakeState.LastUpdated;
@@ -400,7 +400,7 @@ public class SessionLogWorkflowMockValidationTests
     #region Stub Client Configuration Tests
 
     [Fact]
-    public async Task StubClient_Configuration_ReturnsConsistentResults()
+    public async Task StubClientConfigurationReturnsConsistentResults()
     {
         var sessionLog = new UnifiedSessionLogDto
         {
@@ -418,7 +418,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public async Task StubClient_QueryWithFilters_AppliesParameters()
+    public async Task StubClientQueryWithFiltersAppliesParameters()
     {
         var result = await _stubClient.QueryAsync(
             agent: "Copilot",
@@ -432,7 +432,7 @@ public class SessionLogWorkflowMockValidationTests
     }
 
     [Fact]
-    public async Task StubClient_AppendDialog_IncrementsTotalDialogCount()
+    public async Task StubClientAppendDialogIncrementsTotalDialogCount()
     {
         var items1 = new List<ProcessingDialogItemDto>
         {

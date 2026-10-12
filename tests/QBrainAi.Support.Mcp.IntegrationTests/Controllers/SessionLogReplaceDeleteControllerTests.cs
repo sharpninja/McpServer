@@ -24,7 +24,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     public void Dispose() => _client.Dispose();
 
     [Fact]
-    public async Task PutTurn_ReplacesTurn_ClearsOmittedSections()
+    public async Task PutTurnReplacesTurnClearsOmittedSections()
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
@@ -45,7 +45,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     }
 
     [Fact]
-    public async Task PatchTurn_IsAdditive_AppendsWithoutClobber()
+    public async Task PatchTurnIsAdditiveAppendsWithoutClobber()
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
@@ -63,7 +63,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     }
 
     [Fact]
-    public async Task PutSection_ReplacesNamedSectionOnly()
+    public async Task PutSectionReplacesNamedSectionOnly()
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
@@ -80,7 +80,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     }
 
     [Fact]
-    public async Task PutSection_UnknownSection_Returns400()
+    public async Task PutSectionUnknownSectionReturns400()
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
@@ -89,7 +89,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     }
 
     [Fact]
-    public async Task DeleteSection_ClearsSection()
+    public async Task DeleteSectionClearsSection()
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
@@ -101,7 +101,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     }
 
     [Fact]
-    public async Task DeleteItem_RemovesSingleTagByValue()
+    public async Task DeleteItemRemovesSingleTagByValue()
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
@@ -113,7 +113,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     }
 
     [Fact]
-    public async Task DeleteTurn_RemovesTurn()
+    public async Task DeleteTurnRemovesTurn()
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
@@ -126,7 +126,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     }
 
     [Fact]
-    public async Task DeleteSession_RemovesSession_GetReturns404()
+    public async Task DeleteSessionRemovesSessionGetReturns404()
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
@@ -138,7 +138,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     }
 
     [Fact]
-    public async Task DeleteSession_Missing_Returns404()
+    public async Task DeleteSessionMissingReturns404()
     {
         var del = await _client.DeleteAsync(SessionUri(BuildSessionId($"absent-{Guid.NewGuid():N}")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, del.StatusCode);

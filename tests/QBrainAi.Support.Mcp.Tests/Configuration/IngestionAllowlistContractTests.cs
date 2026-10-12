@@ -21,7 +21,7 @@ public sealed class IngestionAllowlistContractTests
     /// This data is used to ensure configuration defaults preserve indexing coverage for CQRS source trees.
     /// </remarks>
     [Fact]
-    public void AppSettingsYaml_ContainsRequiredRepoAllowlistPatterns()
+    public void AppSettingsYamlContainsRequiredRepoAllowlistPatterns()
     {
         var path = FindFileFromRepoRoot("src", "QBrainAi.Support.Mcp", "appsettings.yaml");
         var yaml = File.ReadAllText(path);
@@ -39,7 +39,7 @@ public sealed class IngestionAllowlistContractTests
     /// This data is used to confirm marker prompt output advertises indexed libraries that still live in this repository.
     /// </remarks>
     [Fact]
-    public void MarkerPromptTemplate_ContainsAvailableCapabilitiesSection()
+    public void MarkerPromptTemplateContainsAvailableCapabilitiesSection()
     {
         var path = FindFileFromRepoRoot("templates", "prompt-templates.yaml");
         var content = File.ReadAllText(path);
@@ -62,7 +62,7 @@ public sealed class IngestionAllowlistContractTests
     /// and no skips.
     /// </remarks>
     [Fact]
-    public void MarkerPromptTemplate_ContainsByrdV4HundredPercentTestGate()
+    public void MarkerPromptTemplateContainsByrdV4HundredPercentTestGate()
     {
         var path = FindFileFromRepoRoot("templates", "prompt-templates.yaml");
         var content = File.ReadAllText(path);
@@ -84,7 +84,7 @@ public sealed class IngestionAllowlistContractTests
     /// implementation agents can execute without resolving unstated decisions.
     /// </remarks>
     [Fact]
-    public void MarkerPromptTemplate_ContainsDecisionCompletePlanHandoffGuidance()
+    public void MarkerPromptTemplateContainsDecisionCompletePlanHandoffGuidance()
     {
         var path = FindFileFromRepoRoot("templates", "prompt-templates.yaml");
         var content = File.ReadAllText(path);
@@ -106,7 +106,7 @@ public sealed class IngestionAllowlistContractTests
     /// Requirement coverage: FR-MCP-HELP-008, TEST-MCP-HELP-SEC-007.
     /// </remarks>
     [Fact]
-    public void MarkerPromptTemplate_ContainsAgentHelpSection()
+    public void MarkerPromptTemplateContainsAgentHelpSection()
     {
         var path = FindFileFromRepoRoot("templates", "prompt-templates.yaml");
         var content = File.ReadAllText(path);
@@ -124,7 +124,7 @@ public sealed class IngestionAllowlistContractTests
     /// Requirement coverage: FR-MCP-103, PLAN-FEDERATION-001 agent/operator surface.
     /// </remarks>
     [Fact]
-    public void MarkerPromptTemplate_ContainsFederationTopologyDiagnostics()
+    public void MarkerPromptTemplateContainsFederationTopologyDiagnostics()
     {
         var path = FindFileFromRepoRoot("templates", "prompt-templates.yaml");
         var content = File.ReadAllText(path);
@@ -156,7 +156,7 @@ public sealed class IngestionAllowlistContractTests
     /// needed to configure Hub and LocalProxy machines without hand-inventing YAML.
     /// </remarks>
     [Fact]
-    public void AppSettingsTemplate_ContainsHubSpokeFederationShape()
+    public void AppSettingsTemplateContainsHubSpokeFederationShape()
     {
         var path = FindFileFromRepoRoot("src", "QBrainAi.Support.Mcp", "appsettings.yaml");
         var content = File.ReadAllText(path);
@@ -193,7 +193,7 @@ public sealed class IngestionAllowlistContractTests
     /// pass or fail directly instead of silently skipping unfinished behavior.
     /// </remarks>
     [Fact]
-    public void TestSources_DoNotDeclareSkippedXunitTests()
+    public void TestSourcesDoNotDeclareSkippedXunitTests()
     {
         var testsRoot = FindDirectoryFromRepoRoot("tests");
         var skipPattern = new Regex(

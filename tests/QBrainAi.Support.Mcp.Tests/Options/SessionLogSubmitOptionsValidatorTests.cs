@@ -10,7 +10,7 @@ public sealed class SessionLogSubmitOptionsValidatorTests
 {
     /// <summary>The shipped 30 second default is valid.</summary>
     [Fact]
-    public void Validate_ReturnsSuccess_ForDefaultOptions()
+    public void ValidateReturnsSuccessForDefaultOptions()
     {
         var result = new SessionLogSubmitOptionsValidator().Validate(null, new SessionLogSubmitOptions());
 
@@ -19,7 +19,7 @@ public sealed class SessionLogSubmitOptionsValidatorTests
 
     /// <summary>A raised deploy value inside the cap is valid.</summary>
     [Fact]
-    public void Validate_ReturnsSuccess_ForOneHundredTwentySeconds()
+    public void ValidateReturnsSuccessForOneHundredTwentySeconds()
     {
         var options = new SessionLogSubmitOptions { SubmitCommandBudgetSeconds = 120 };
         var result = new SessionLogSubmitOptionsValidator().Validate(null, options);

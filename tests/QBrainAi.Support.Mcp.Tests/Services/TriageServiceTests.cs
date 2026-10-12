@@ -48,7 +48,7 @@ public sealed class TriageServiceTests : IDisposable
     /// storage-unavailable instead of hanging until the REPL timeout.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable()
+    public async Task SubmitReportAsyncUnreachableSqlFailsFastWithStorageUnavailable()
     {
         var clock = System.Diagnostics.Stopwatch.StartNew();
         var unreachableOptions = new DbContextOptionsBuilder<McpDbContext>()
@@ -94,7 +94,7 @@ public sealed class TriageServiceTests : IDisposable
     /// and does not invoke research or TODO creation synchronously.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch()
+    public async Task SubmitReportAsyncValidReportPersistsAcceptedStateWithoutRunningResearch()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         var todo = Substitute.For<ITodoService>();
@@ -127,7 +127,7 @@ public sealed class TriageServiceTests : IDisposable
     /// resets the fifteen minute quiet deadline.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline()
+    public async Task SubmitReportAsyncMatchingDedupeKeyReusesGroupAndResetsQuietDeadline()
     {
         var sut = CreateService(PrimaryWorkspace);
 
@@ -149,7 +149,7 @@ public sealed class TriageServiceTests : IDisposable
     /// report without inserting a duplicate report or extending the group's quiet window.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate()
+    public async Task SubmitReportAsyncSameIdempotencyKeyReturnsOriginalReportWithoutDuplicate()
     {
         var sut = CreateService(PrimaryWorkspace);
         var request = CreateReport("idempotent-wrapper-bug") with { IdempotencyKey = "triage-idempotency-001" };
@@ -173,7 +173,7 @@ public sealed class TriageServiceTests : IDisposable
     /// longer appear in queries, while the underlying rows remain in storage marked deleted.
     /// </summary>
     [Fact]
-    public async Task DeleteGroupAsync_ExistingGroup_SoftDeletesGroupAndReports()
+    public async Task DeleteGroupAsyncExistingGroupSoftDeletesGroupAndReports()
     {
         var sut = CreateService(PrimaryWorkspace);
         var submit = await sut.SubmitReportAsync(CreateReport("delete-me"), cancellationToken: TestContext.Current.CancellationToken);
@@ -197,7 +197,7 @@ public sealed class TriageServiceTests : IDisposable
 
     /// <summary>TEST-MCP-TRIAGE-007: deleting a missing triage group throws KeyNotFoundException.</summary>
     [Fact]
-    public async Task DeleteGroupAsync_MissingGroup_ThrowsKeyNotFound()
+    public async Task DeleteGroupAsyncMissingGroupThrowsKeyNotFound()
     {
         var sut = CreateService(PrimaryWorkspace);
         await Assert.ThrowsAsync<KeyNotFoundException>(() =>
@@ -209,7 +209,7 @@ public sealed class TriageServiceTests : IDisposable
     /// groups and does not leak status across workspace filters.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups()
+    public async Task SubmitReportAsyncSameSignatureAcrossWorkspacesCreatesIsolatedGroups()
     {
         var first = await CreateService(PrimaryWorkspace).SubmitReportAsync(CreateReport("shared-bug"), cancellationToken: TestContext.Current.CancellationToken);
         var second = await CreateService(AlternateWorkspace).SubmitReportAsync(CreateReport("shared-bug"), cancellationToken: TestContext.Current.CancellationToken);
@@ -227,7 +227,7 @@ public sealed class TriageServiceTests : IDisposable
     /// QBrainAi workspace so triage is grouped with the owning product.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_QBrainAiPluginBug_RoutesToRegisteredQBrainAiWorkspace()
+    public async Task SubmitReportAsyncQBrainAiPluginBugRoutesToRegisteredQBrainAiWorkspace()
     {
         var sut = CreateService(
             PrimaryWorkspace,
@@ -257,7 +257,7 @@ public sealed class TriageServiceTests : IDisposable
     /// no registered workspace named QBrainAi exists.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_QBrainAiPluginBugWithoutQBrainAiWorkspace_StaysInSubmittingWorkspace()
+    public async Task SubmitReportAsyncQBrainAiPluginBugWithoutQBrainAiWorkspaceStaysInSubmittingWorkspace()
     {
         var sut = CreateService(
             PrimaryWorkspace,
@@ -280,7 +280,7 @@ public sealed class TriageServiceTests : IDisposable
     /// BUG-TRIAGE-### TODO and marks the group completed.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo()
+    public async Task ProcessDueGroupsAsyncValidResearchOutputCreatesExactlyOneBugTriageTodo()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         TriageResearchRequest? researchRequest = null;
@@ -338,7 +338,7 @@ public sealed class TriageServiceTests : IDisposable
     /// schema-valid JSON object used to create the BUG-TRIAGE TODO.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_ResearchOutputWithPreamble_ExtractsJsonAndCreatesTodo()
+    public async Task ProcessDueGroupsAsyncResearchOutputWithPreambleExtractsJsonAndCreatesTodo()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
@@ -388,7 +388,7 @@ public sealed class TriageServiceTests : IDisposable
     /// that were created before a triage group recorded CreatedTodoId.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_ExistingUnownedBugTriageTodo_UsesNextId()
+    public async Task ProcessDueGroupsAsyncExistingUnownedBugTriageTodoUsesNextId()
     {
         using (var db = CreateDb(PrimaryWorkspace))
         {
@@ -440,7 +440,7 @@ public sealed class TriageServiceTests : IDisposable
     /// BUG-TRIAGE id instead of wedging the group in failed state.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_WhenGeneratedTodoIdAlreadyExists_RetriesWithNextBugTriageId()
+    public async Task ProcessDueGroupsAsyncWhenGeneratedTodoIdAlreadyExistsRetriesWithNextBugTriageId()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
@@ -500,7 +500,7 @@ public sealed class TriageServiceTests : IDisposable
     /// TODO from the grouped report data and records diagnostics instead of wedging triage.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics()
+    public async Task ProcessDueGroupsAsyncResearchOutputWithoutJsonCreatesFallbackTodoWithDiagnostics()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
@@ -560,7 +560,7 @@ public sealed class TriageServiceTests : IDisposable
     /// triage TODO creator instead of directly mutating the read/query TODO service.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_ValidResearchOutput_UsesTriageTodoCreatorForMutation()
+    public async Task ProcessDueGroupsAsyncValidResearchOutputUsesTriageTodoCreatorForMutation()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
@@ -615,7 +615,7 @@ public sealed class TriageServiceTests : IDisposable
     /// the created item cannot be read back, triage records failure instead of a phantom TODO id.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_ProjectionFailureWithUnreadableCreatedItem_FailsWithoutCreatedTodoId()
+    public async Task ProcessDueGroupsAsyncProjectionFailureWithUnreadableCreatedItemFailsWithoutCreatedTodoId()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
@@ -665,7 +665,7 @@ public sealed class TriageServiceTests : IDisposable
     /// created item is readable, triage records the TODO id and preserves the warning.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning()
+    public async Task ProcessDueGroupsAsyncProjectionFailureWithReadableCreatedItemRecordsCreatedTodoWithWarning()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
@@ -722,7 +722,7 @@ public sealed class TriageServiceTests : IDisposable
     /// but due workspace triage groups must still run and create one backlog TODO.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup()
+    public async Task ProcessDueGroupsAsyncBackgroundScopeWithoutWorkspaceProcessesDueWorkspaceGroup()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         TriageResearchRequest? researchRequest = null;
@@ -776,7 +776,7 @@ public sealed class TriageServiceTests : IDisposable
     /// failure state on the group and research run.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_InvalidResearchOutput_CreatesNoTodoAndPreservesFailure()
+    public async Task ProcessDueGroupsAsyncInvalidResearchOutputCreatesNoTodoAndPreservesFailure()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
@@ -800,7 +800,7 @@ public sealed class TriageServiceTests : IDisposable
     /// the durable research-run record before the final runner result is applied.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun()
+    public async Task ProcessDueGroupsAsyncWhenRunnerStreamsOutputAppendsOutputToResearchRun()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
@@ -831,7 +831,7 @@ public sealed class TriageServiceTests : IDisposable
     /// group can be inspected and resubmitted instead of remaining wedged.
     /// </summary>
     [Fact]
-    public async Task ProcessDueGroupsAsync_WhenProcessingRunExceedsMaxRunTime_MarksRunAndGroupFailedForRetry()
+    public async Task ProcessDueGroupsAsyncWhenProcessingRunExceedsMaxRunTimeMarksRunAndGroupFailedForRetry()
     {
         var runner = Substitute.For<ITriageResearchRunner>();
         var now = _time.GetUtcNow();
@@ -866,7 +866,7 @@ public sealed class TriageServiceTests : IDisposable
     /// abandoned run, then makes the group immediately due for a fresh run.
     /// </summary>
     [Fact]
-    public async Task RetryGroupAsync_WhenProcessingRunIsStale_FailsPreviousRunAndRequeuesGroup()
+    public async Task RetryGroupAsyncWhenProcessingRunIsStaleFailsPreviousRunAndRequeuesGroup()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))
@@ -898,7 +898,7 @@ public sealed class TriageServiceTests : IDisposable
     /// requeues the group immediately without waiting for max run time.
     /// </summary>
     [Fact]
-    public async Task RetryGroupAsync_WhenForceTrueAndRunIsProcessing_FailsRunAndRequeuesGroup()
+    public async Task RetryGroupAsyncWhenForceTrueAndRunIsProcessingFailsRunAndRequeuesGroup()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))
@@ -930,7 +930,7 @@ public sealed class TriageServiceTests : IDisposable
     /// unreadable TODO reference so the next sweep can run instead of skipping it.
     /// </summary>
     [Fact]
-    public async Task RetryGroupAsync_WhenCreatedTodoIdIsUnreadable_ClearsReferenceAndRequeuesGroup()
+    public async Task RetryGroupAsyncWhenCreatedTodoIdIsUnreadableClearsReferenceAndRequeuesGroup()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))
@@ -977,7 +977,7 @@ public sealed class TriageServiceTests : IDisposable
     /// linked reports, and AI run history with result/status fields for the active workspace.
     /// </summary>
     [Fact]
-    public async Task GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory()
+    public async Task GetDashboardAsyncWithGroupsReportsAndRunsReturnsQueueBucketsAndRunHistory()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))
@@ -1019,7 +1019,7 @@ public sealed class TriageServiceTests : IDisposable
 
     /// <summary>TEST-TRIAGE-001: dashboard reads return explicit empty collections when no triage rows exist.</summary>
     [Fact]
-    public async Task GetDashboardAsync_NoRows_ReturnsEmptyCollections()
+    public async Task GetDashboardAsyncNoRowsReturnsEmptyCollections()
     {
         var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -1032,7 +1032,7 @@ public sealed class TriageServiceTests : IDisposable
 
     /// <summary>TEST-TRIAGE-001: run-history queries preserve workspace, status, and group filters.</summary>
     [Fact]
-    public async Task QueryRunsAsync_WithFilters_ReturnsWorkspaceScopedRuns()
+    public async Task QueryRunsAsyncWithFiltersReturnsWorkspaceScopedRuns()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))
@@ -1082,7 +1082,7 @@ public sealed class TriageServiceTests : IDisposable
     /// timestamps while preserving group/run context and workspace isolation.
     /// </summary>
     [Fact]
-    public async Task QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext()
+    public async Task QueryCreatedTodosAsyncReturnsTodoIdsCreatedAtUtcAndTriageContext()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))
@@ -1135,7 +1135,7 @@ public sealed class TriageServiceTests : IDisposable
 
     /// <summary>TEST-TRIAGE-003: selected reports can be moved into a new editable triage group.</summary>
     [Fact]
-    public async Task CreateGroupFromSelectionAsync_MovesSelectedReportsToNewGroup()
+    public async Task CreateGroupFromSelectionAsyncMovesSelectedReportsToNewGroup()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))
@@ -1174,7 +1174,7 @@ public sealed class TriageServiceTests : IDisposable
 
     /// <summary>TEST-TRIAGE-003: selected groups can be merged into an existing editable target group.</summary>
     [Fact]
-    public async Task MergeGroupsAsync_MovesSourceGroupReportsIntoTargetGroup()
+    public async Task MergeGroupsAsyncMovesSourceGroupReportsIntoTargetGroup()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))
@@ -1207,7 +1207,7 @@ public sealed class TriageServiceTests : IDisposable
 
     /// <summary>TEST-TRIAGE-003: groups with run history cannot be regrouped.</summary>
     [Fact]
-    public async Task MergeGroupsAsync_WhenSourceGroupHasRunHistory_Throws()
+    public async Task MergeGroupsAsyncWhenSourceGroupHasRunHistoryThrows()
     {
         var now = _time.GetUtcNow();
         using (var db = CreateDb(PrimaryWorkspace))

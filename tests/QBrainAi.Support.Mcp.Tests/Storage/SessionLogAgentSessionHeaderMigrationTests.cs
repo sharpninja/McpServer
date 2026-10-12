@@ -76,7 +76,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task SqliteMigrateAsync_LegacySessionLogsMissingHeaderColumns_AddsColumnsAndQuerySucceeds(
+    public async Task SqliteMigrateAsyncLegacySessionLogsMissingHeaderColumnsAddsColumnsAndQuerySucceeds(
         bool sessionLogTagsAlreadyExist)
     {
         const string workspace = @"E:\tests\triageschema-legacy-sqlite";
@@ -128,7 +128,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// header columns and SessionLogTags already exists (hotfix / RepairLegacy shape).
     /// </summary>
     [Fact]
-    public async Task SqliteMigrateAsync_SessionLogsAlreadyHasHeaderColumnsAndTags_Succeeds()
+    public async Task SqliteMigrateAsyncSessionLogsAlreadyHasHeaderColumnsAndTagsSucceeds()
     {
         const string workspace = @"E:\tests\triageschema-legacy-sqlite-present";
 
@@ -167,7 +167,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
 
     /// <summary>Sqlite 20260818205751 compiled Up() probes pragma_table_info and skips ADD when the column exists.</summary>
     [Fact]
-    public void SqliteUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate()
+    public void SqliteUpMigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate()
     {
         var sql = CaptureUpSql(new SqliteHeaderMigration(), "Microsoft.EntityFrameworkCore.Sqlite");
         Assert.Contains("pragma_table_info", sql, StringComparison.OrdinalIgnoreCase);
@@ -185,7 +185,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// use unguarded CreateTable for SessionLogTags.
     /// </summary>
     [Fact]
-    public void SqlServerUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate()
+    public void SqlServerUpMigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate()
     {
         var sql = CaptureUpSql(new SqlServerHeaderMigration(), "Microsoft.EntityFrameworkCore.SqlServer");
         AssertSqlServerGuardedHeaderAndTagsSql(sql);
@@ -196,7 +196,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// and CREATE TABLE IF NOT EXISTS for SessionLogTags.
     /// </summary>
     [Fact]
-    public void PostgreSqlUp_MigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate()
+    public void PostgreSqlUpMigrationBuilderSqlGuardsHeaderColumnsAndSessionLogTagsCreate()
     {
         var sql = CaptureUpSql(new PostgreSqlHeaderMigration(), "Npgsql.EntityFrameworkCore.PostgreSQL");
         AssertPostgreSqlGuardedHeaderAndTagsSql(sql);
@@ -208,7 +208,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// reapplies without error (idempotent). Does not run the full migration chain.
     /// </summary>
     [Fact]
-    public void SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()
+    public void SqlServerUpSqlLegacySessionLogsAddsHeaderColumnsAndTagsIdempotently()
     {
         var sql = CaptureUpSql(new SqlServerHeaderMigration(), "Microsoft.EntityFrameworkCore.SqlServer");
         AssertSqlServerGuardedHeaderAndTagsSql(sql);
@@ -298,7 +298,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// (Program Files PostgreSQL or MCP_TEST_POSTGRES_CONNECTION). Does not Skip.
     /// </summary>
     [Fact]
-    public void PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()
+    public void PostgreSqlUpSqlLegacySessionLogsAddsHeaderColumnsAndTagsIdempotently()
     {
         var sql = CaptureUpSql(new PostgreSqlHeaderMigration(), "Npgsql.EntityFrameworkCore.PostgreSQL");
         AssertPostgreSqlGuardedHeaderAndTagsSql(sql);

@@ -12,7 +12,7 @@ public sealed class InteractionLogSubmissionChannelTests
 {
     /// <summary>TryEnqueue accepts entry and TryDequeueAsync returns it.</summary>
     [Fact]
-    public async Task TryEnqueue_ThenTryDequeue_ReturnsEntry()
+    public async Task TryEnqueueThenTryDequeueReturnsEntry()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new McpInteractionLoggingOptions { QueueCapacity = 10 });
         var channel = new InteractionLogSubmissionChannel(options, NullLogger<InteractionLogSubmissionChannel>.Instance);
@@ -41,7 +41,7 @@ public sealed class InteractionLogSubmissionChannelTests
 
     /// <summary>TryDequeueAsync with empty channel returns (false, null) after WaitToReadAsync when cancelled.</summary>
     [Fact]
-    public async Task TryDequeueAsync_WhenEmpty_CanBeCancelled()
+    public async Task TryDequeueAsyncWhenEmptyCanBeCancelled()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new McpInteractionLoggingOptions { QueueCapacity = 10 });
         var channel = new InteractionLogSubmissionChannel(options, NullLogger<InteractionLogSubmissionChannel>.Instance);
@@ -54,7 +54,7 @@ public sealed class InteractionLogSubmissionChannelTests
 
     /// <summary>TryEnqueue rejects a new entry when the bounded queue is full and preserves the already queued entry.</summary>
     [Fact]
-    public async Task TryEnqueue_WhenQueueFull_ReturnsFalseAndPreservesQueuedEntry()
+    public async Task TryEnqueueWhenQueueFullReturnsFalseAndPreservesQueuedEntry()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new McpInteractionLoggingOptions { QueueCapacity = 1 });
         var channel = new InteractionLogSubmissionChannel(options, NullLogger<InteractionLogSubmissionChannel>.Instance);

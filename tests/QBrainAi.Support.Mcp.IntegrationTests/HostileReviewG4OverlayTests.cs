@@ -18,7 +18,7 @@ public sealed class HostileReviewG4OverlayTests
 {
     /// <summary>Sqlite, SQL Server, and PostgreSQL persist and reload a queued hostile-review request.</summary>
     [Fact]
-    public async Task HostileReviewEntity_RoundTrip_SqlitePgSqlServer()
+    public async Task HostileReviewEntityRoundTripSqlitePgSqlServer()
     {
         await RoundTripSqliteAsync().ConfigureAwait(true);
         await RoundTripSqlServerAsync().ConfigureAwait(true);

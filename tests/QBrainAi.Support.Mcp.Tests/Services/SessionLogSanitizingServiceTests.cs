@@ -10,7 +10,7 @@ public sealed class SessionLogSanitizingServiceTests
 {
     /// <summary>QueryAsync sanitizes the completed inner result and preserves the returned sanitized clone.</summary>
     [Fact]
-    public async Task QueryAsync_SanitizesInnerResultAfterInnerCompletes()
+    public async Task QueryAsyncSanitizesInnerResultAfterInnerCompletes()
     {
         var inner = Substitute.For<ISessionLogService>();
         var sanitizer = Substitute.For<ISessionLogSanitizer>();
@@ -33,7 +33,7 @@ public sealed class SessionLogSanitizingServiceTests
 
     /// <summary>GetAsync sanitizes the completed inner result and returns null unchanged.</summary>
     [Fact]
-    public async Task GetAsync_SanitizesInnerResultAfterInnerCompletes()
+    public async Task GetAsyncSanitizesInnerResultAfterInnerCompletes()
     {
         var inner = Substitute.For<ISessionLogService>();
         var sanitizer = Substitute.For<ISessionLogSanitizer>();
@@ -55,7 +55,7 @@ public sealed class SessionLogSanitizingServiceTests
 
     /// <summary>Mutation and scalar methods pass through unchanged and never call the sanitizer.</summary>
     [Fact]
-    public async Task MutationMethods_DelegateWithoutSanitizingInputs()
+    public async Task MutationMethodsDelegateWithoutSanitizingInputs()
     {
         var inner = Substitute.For<ISessionLogService>();
         var sanitizer = Substitute.For<ISessionLogSanitizer>();

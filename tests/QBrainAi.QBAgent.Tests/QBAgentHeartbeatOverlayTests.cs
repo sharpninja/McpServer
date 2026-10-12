@@ -9,7 +9,7 @@ namespace QBrainAi.QBAgent.Tests;
 public sealed class QBAgentHeartbeatOverlayTests
 {
     [Fact]
-    public void Paint_DoesNotContainNewline()
+    public void PaintDoesNotContainNewline()
     {
         var text = QBAgentHeartbeatOverlay.Paint(80, '|');
         Assert.DoesNotContain('\n', text);
@@ -19,7 +19,7 @@ public sealed class QBAgentHeartbeatOverlayTests
     }
 
     [Fact]
-    public void Hide_OverwritesGlyphWithSpace_SameCell()
+    public void HideOverwritesGlyphWithSpaceSameCell()
     {
         var text = QBAgentHeartbeatOverlay.Hide(80);
         Assert.DoesNotContain('\n', text);
@@ -27,14 +27,14 @@ public sealed class QBAgentHeartbeatOverlayTests
     }
 
     [Fact]
-    public void Frames_Rotate()
+    public void FramesRotate()
     {
         Assert.NotEqual(QBAgentHeartbeatOverlay.FrameAt(0), QBAgentHeartbeatOverlay.FrameAt(1));
         Assert.Equal(QBAgentHeartbeatOverlay.FrameAt(0), QBAgentHeartbeatOverlay.FrameAt(QBAgentHeartbeatOverlay.Frames.Length));
     }
 
     [Fact]
-    public async Task RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines()
+    public async Task RunAsyncHeartbeatRotatesGlyphWithoutStillWorkingLines()
     {
         var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -73,7 +73,7 @@ public sealed class QBAgentHeartbeatOverlayTests
     }
 
     [Fact]
-    public async Task RunAsync_RunnerThrows_HidesGlyph()
+    public async Task RunAsyncRunnerThrowsHidesGlyph()
     {
         var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         QBAgentPromptRunner runner = async (_, cancellationToken) =>

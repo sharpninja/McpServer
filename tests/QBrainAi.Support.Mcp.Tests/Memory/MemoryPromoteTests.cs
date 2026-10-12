@@ -20,7 +20,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-01: promote from sessionlog sets SourceKind/SourceRef provenance.</summary>
     [Fact]
-    public async Task FromSessionLog_SetsProvenance()
+    public async Task FromSessionLogSetsProvenance()
     {
         var (sourceRef, raw) = await SeedSessionSourceAsync("promote sessionlog body").ConfigureAwait(true);
 
@@ -42,7 +42,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-02: promote from context sets SourceKind/SourceRef provenance.</summary>
     [Fact]
-    public async Task FromContext_SetsProvenance()
+    public async Task FromContextSetsProvenance()
     {
         var sourceRef = "context://chunk/promote-1";
         var result = await _harness.PromoteAsync(
@@ -62,7 +62,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-03: after promote, sessionlog rows are byte-identical.</summary>
     [Fact]
-    public async Task SessionLogRows_Unchanged()
+    public async Task SessionLogRowsUnchanged()
     {
         var (sourceRef, raw) = await SeedSessionSourceAsync("byte identical promote").ConfigureAwait(true);
         var before = await ReadSessionActionBytesAsync(sourceRef).ConfigureAwait(true);
@@ -83,7 +83,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-04: missing/invalid source ref returns 400.</summary>
     [Fact]
-    public async Task InvalidRef_Returns400()
+    public async Task InvalidRefReturns400()
     {
         var result = await _harness.PromoteAsync(
             new MemoryPromoteRequest
@@ -98,7 +98,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-05: promoting a source from another workspace is forbidden.</summary>
     [Fact]
-    public async Task CrossWorkspace_Forbidden()
+    public async Task CrossWorkspaceForbidden()
     {
         var (sourceRef, _) = await SeedSessionSourceAsync("foreign promote", workspacePath: _harness.WorkspaceB)
             .ConfigureAwait(true);
@@ -116,7 +116,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-06: null body returns 400.</summary>
     [Fact]
-    public async Task NullBody_Returns400()
+    public async Task NullBodyReturns400()
     {
         var result = await _harness.PromoteAsync(
             null,
@@ -127,7 +127,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-07: unsupported SourceKind returns 400.</summary>
     [Fact]
-    public async Task UnsupportedSourceKind_Returns400()
+    public async Task UnsupportedSourceKindReturns400()
     {
         var result = await _harness.PromoteAsync(
             new MemoryPromoteRequest { SourceKind = "email", SourceRef = "x" },
@@ -138,7 +138,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-08: promote does not auto-run on sessionlog complete.</summary>
     [Fact]
-    public async Task NoAutoPromote_OnTurnComplete()
+    public async Task NoAutoPromoteOnTurnComplete()
     {
         var before = await CountMemoriesAsync().ConfigureAwait(true);
         var (sourceRef, _) = await SeedSessionSourceAsync("no auto promote").ConfigureAwait(true);
@@ -159,7 +159,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-09: promoted Content is taken from source raw text.</summary>
     [Fact]
-    public async Task Content_FromSourceRaw()
+    public async Task ContentFromSourceRaw()
     {
         var (sourceRef, raw) = await SeedSessionSourceAsync("raw source content exact").ConfigureAwait(true);
 
@@ -177,7 +177,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-10: double promote is stable (two memories or idempotent same id).</summary>
     [Fact]
-    public async Task DoublePromote_Stable()
+    public async Task DoublePromoteStable()
     {
         var (sourceRef, _) = await SeedSessionSourceAsync("double promote").ConfigureAwait(true);
         var first = await _harness.PromoteAsync(
@@ -196,7 +196,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-12: promote result includes new MEMORY-* id and provenance fields.</summary>
     [Fact]
-    public async Task Result_IncludesIdAndProvenance()
+    public async Task ResultIncludesIdAndProvenance()
     {
         var (sourceRef, _) = await SeedSessionSourceAsync("result provenance").ConfigureAwait(true);
 
@@ -212,7 +212,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-13: promote of missing session turn returns 404.</summary>
     [Fact]
-    public async Task MissingTurn_Returns404()
+    public async Task MissingTurnReturns404()
     {
         var result = await _harness.PromoteAsync(
             new MemoryPromoteRequest
@@ -227,7 +227,7 @@ public sealed class MemoryPromoteTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-015-14: context promote does not copy sibling product-requirement chunks from other workspaces.</summary>
     [Fact]
-    public async Task ContextPromote_NoSiblingLeak()
+    public async Task ContextPromoteNoSiblingLeak()
     {
         var result = await _harness.PromoteAsync(
             new MemoryPromoteRequest

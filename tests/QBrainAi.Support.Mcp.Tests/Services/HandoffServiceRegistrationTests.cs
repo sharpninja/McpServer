@@ -17,7 +17,7 @@ public sealed class HandoffServiceRegistrationTests
     /// TEST-HANDOFF-003: AddHandoffServices does not require IAgentPoolService to resolve the extractor.
     /// </summary>
     [Fact]
-    public async Task AddHandoffServices_WithoutAgentPool_ResolvesUnavailableExtractor()
+    public async Task AddHandoffServicesWithoutAgentPoolResolvesUnavailableExtractor()
     {
         var services = new ServiceCollection();
         services.AddHandoffServices();
@@ -38,7 +38,7 @@ public sealed class HandoffServiceRegistrationTests
 
     /// <summary>TEST-HANDOFF-006: Director ingest command executes through IHandoffDirectorExecutor.</summary>
     [Fact]
-    public async Task HandoffIngestDirectorCommand_PrimaryCommand_DelegatesToExecutor()
+    public async Task HandoffIngestDirectorCommandPrimaryCommandDelegatesToExecutor()
     {
         var executor = Substitute.For<IHandoffDirectorExecutor>();
         executor.IngestAsync("Content", null, "handoff", null, "DraftOnly", false, null, null, Arg.Any<CancellationToken>())

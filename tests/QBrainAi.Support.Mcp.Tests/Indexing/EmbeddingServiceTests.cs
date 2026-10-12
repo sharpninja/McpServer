@@ -12,19 +12,19 @@ public sealed class EmbeddingServiceTests : IDisposable
     public void Dispose() => _sut.Dispose();
 
     [Fact]
-    public void Dimensions_Returns384()
+    public void DimensionsReturns384()
     {
         Assert.Equal(384, _sut.Dimensions);
     }
 
     [Fact]
-    public void IsAvailable_ReturnsFalseWhenModelMissing()
+    public void IsAvailableReturnsFalseWhenModelMissing()
     {
         Assert.False(_sut.IsAvailable);
     }
 
     [Fact]
-    public void GenerateEmbedding_ReturnsCorrectDimensions()
+    public void GenerateEmbeddingReturnsCorrectDimensions()
     {
         var embedding = _sut.GenerateEmbedding("test input");
 
@@ -32,7 +32,7 @@ public sealed class EmbeddingServiceTests : IDisposable
     }
 
     [Fact]
-    public void GenerateEmbeddings_ReturnsCorrectCount()
+    public void GenerateEmbeddingsReturnsCorrectCount()
     {
         var texts = new[] { "text1", "text2", "text3" };
         var embeddings = _sut.GenerateEmbeddings(texts);
@@ -42,7 +42,7 @@ public sealed class EmbeddingServiceTests : IDisposable
     }
 
     [Fact]
-    public void GenerateEmbedding_EmptyInput_HandlesGracefully()
+    public void GenerateEmbeddingEmptyInputHandlesGracefully()
     {
         var embedding = _sut.GenerateEmbedding(string.Empty);
 
@@ -50,7 +50,7 @@ public sealed class EmbeddingServiceTests : IDisposable
     }
 
     [Fact]
-    public void GenerateEmbedding_StubMode_ReturnsZeroVector()
+    public void GenerateEmbeddingStubModeReturnsZeroVector()
     {
         var embedding = _sut.GenerateEmbedding("test");
 
@@ -58,7 +58,7 @@ public sealed class EmbeddingServiceTests : IDisposable
     }
 
     [Fact]
-    public void WordPieceTokenizer_UsesCaseInsensitiveVocabularyLookup()
+    public void WordPieceTokenizerUsesCaseInsensitiveVocabularyLookup()
     {
         var vocabPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.vocab.txt");
         File.WriteAllLines(vocabPath, ["[PAD]", "[UNK]", "[CLS]", "[SEP]", "hello", "world"]);
@@ -79,7 +79,7 @@ public sealed class EmbeddingServiceTests : IDisposable
 
     [Trait("Category", "Integration")]
     [Fact]
-    public void GenerateEmbedding_WithModel_ReturnsNonZeroVector()
+    public void GenerateEmbeddingWithModelReturnsNonZeroVector()
     {
         // This test requires the ONNX model to be downloaded
         if (!_sut.IsAvailable)
@@ -91,7 +91,7 @@ public sealed class EmbeddingServiceTests : IDisposable
 
     [Trait("Category", "Integration")]
     [Fact]
-    public void GenerateEmbedding_SameInput_ReturnsDeterministicOutput()
+    public void GenerateEmbeddingSameInputReturnsDeterministicOutput()
     {
         if (!_sut.IsAvailable)
             return;
@@ -103,7 +103,7 @@ public sealed class EmbeddingServiceTests : IDisposable
 
     [Trait("Category", "Integration")]
     [Fact]
-    public void GenerateEmbedding_DifferentInput_ReturnsDifferentVectors()
+    public void GenerateEmbeddingDifferentInputReturnsDifferentVectors()
     {
         if (!_sut.IsAvailable)
             return;
@@ -115,7 +115,7 @@ public sealed class EmbeddingServiceTests : IDisposable
 
     [Trait("Category", "Integration")]
     [Fact]
-    public void GenerateEmbedding_LongInput_TruncatesCorrectly()
+    public void GenerateEmbeddingLongInputTruncatesCorrectly()
     {
         if (!_sut.IsAvailable)
             return;

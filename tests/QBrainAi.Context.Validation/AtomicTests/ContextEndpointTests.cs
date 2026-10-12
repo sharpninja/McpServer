@@ -32,7 +32,7 @@ public sealed class ContextEndpointTests
     // --- GET /qbrainai/context/sources ---
 
     /// <summary>
-    /// Validates the <c>Sources_Returns200WithSourcesArray</c> scenario.
+    /// Validates the <c>SourcesReturns200WithSourcesArray</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -40,7 +40,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task Sources_Returns200WithSourcesArray()
+    public async Task SourcesReturns200WithSourcesArray()
     {
         var response = await _fixture.Client.GetAsync($"{ContextEndpointFixture.ContextRoute}/sources", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -52,7 +52,7 @@ public sealed class ContextEndpointTests
     // --- POST /qbrainai/context/search ---
 
     /// <summary>
-    /// Validates the <c>Search_EmptyQuery_Returns200</c> scenario.
+    /// Validates the <c>SearchEmptyQueryReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -60,7 +60,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task Search_EmptyQuery_Returns200()
+    public async Task SearchEmptyQueryReturns200()
     {
         var payload = new { query = "", limit = 5 };
         var response = await _fixture.Client.PostAsJsonAsync($"{ContextEndpointFixture.ContextRoute}/search", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -71,7 +71,7 @@ public sealed class ContextEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>Search_WithQuery_Returns200WithResults</c> scenario.
+    /// Validates the <c>SearchWithQueryReturns200WithResults</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -79,7 +79,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task Search_WithQuery_Returns200WithResults()
+    public async Task SearchWithQueryReturns200WithResults()
     {
         var payload = new { query = "workspace", limit = 5 };
         var response = await _fixture.Client.PostAsJsonAsync($"{ContextEndpointFixture.ContextRoute}/search", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -91,7 +91,7 @@ public sealed class ContextEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>Search_WithSourceTypeFilter_Returns200</c> scenario.
+    /// Validates the <c>SearchWithSourceTypeFilterReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -99,7 +99,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task Search_WithSourceTypeFilter_Returns200()
+    public async Task SearchWithSourceTypeFilterReturns200()
     {
         var payload = new { query = "test", sourceType = "repo", limit = 3 };
         var response = await _fixture.Client.PostAsJsonAsync($"{ContextEndpointFixture.ContextRoute}/search", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -107,7 +107,7 @@ public sealed class ContextEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>Search_LimitClamped_Returns200</c> scenario.
+    /// Validates the <c>SearchLimitClampedReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -115,7 +115,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task Search_LimitClamped_Returns200()
+    public async Task SearchLimitClampedReturns200()
     {
         var payload = new { query = "test", limit = 200 }; // exceeds max of 100
         var response = await _fixture.Client.PostAsJsonAsync($"{ContextEndpointFixture.ContextRoute}/search", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -125,7 +125,7 @@ public sealed class ContextEndpointTests
     // --- POST /qbrainai/context/pack ---
 
     /// <summary>
-    /// Validates the <c>Pack_EmptyQuery_Returns200WithPack</c> scenario.
+    /// Validates the <c>PackEmptyQueryReturns200WithPack</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -133,7 +133,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task Pack_EmptyQuery_Returns200WithPack()
+    public async Task PackEmptyQueryReturns200WithPack()
     {
         var payload = new { query = "", limit = 5 };
         var response = await _fixture.Client.PostAsJsonAsync($"{ContextEndpointFixture.ContextRoute}/pack", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -145,7 +145,7 @@ public sealed class ContextEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>Pack_WithQueryId_Returns200WithSameQueryId</c> scenario.
+    /// Validates the <c>PackWithQueryIdReturns200WithSameQueryId</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -153,7 +153,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task Pack_WithQueryId_Returns200WithSameQueryId()
+    public async Task PackWithQueryIdReturns200WithSameQueryId()
     {
         var queryId = $"audit-{Guid.NewGuid():N}";
         var payload = new { queryId, query = "controller", limit = 3 };
@@ -164,7 +164,7 @@ public sealed class ContextEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>Pack_WithQuery_ReturnsFilteredChunks</c> scenario.
+    /// Validates the <c>PackWithQueryReturnsFilteredChunks</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -172,7 +172,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task Pack_WithQuery_ReturnsFilteredChunks()
+    public async Task PackWithQueryReturnsFilteredChunks()
     {
         var payload = new { query = "workspace", limit = 10 };
         var response = await _fixture.Client.PostAsJsonAsync($"{ContextEndpointFixture.ContextRoute}/pack", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -182,7 +182,7 @@ public sealed class ContextEndpointTests
     // --- POST /qbrainai/context/rebuild-index ---
 
     /// <summary>
-    /// Validates the <c>RebuildIndex_Returns200Or500</c> scenario.
+    /// Validates the <c>RebuildIndexReturns200Or500</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
@@ -190,7 +190,7 @@ public sealed class ContextEndpointTests
     /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
     /// </remarks>
     [Fact]
-    public async Task RebuildIndex_Returns200Or500()
+    public async Task RebuildIndexReturns200Or500()
     {
         var response = await _fixture.Client.PostAsync($"{ContextEndpointFixture.ContextRoute}/rebuild-index", null, cancellationToken: TestContext.Current.CancellationToken);
         // 200 when FTS5 index exists and rebuild succeeds; 500 when index not initialized

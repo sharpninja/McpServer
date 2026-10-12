@@ -31,7 +31,7 @@ public sealed class DesktopControllerTests
     /// returns a deterministic success payload so the HTTP contract stays stable and safe.
     /// </summary>
     [Fact]
-    public async Task Launch_ReturnsOkAndNormalizedResult()
+    public async Task LaunchReturnsOkAndNormalizedResult()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner
@@ -99,7 +99,7 @@ public sealed class DesktopControllerTests
     /// validation behavior matters for this failure path.
     /// </summary>
     [Fact]
-    public async Task Launch_WithoutBody_ReturnsBadRequest()
+    public async Task LaunchWithoutBodyReturnsBadRequest()
     {
         using var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
@@ -118,7 +118,7 @@ public sealed class DesktopControllerTests
     /// authorization tier can be asserted without starting any local desktop program.
     /// </summary>
     [Fact]
-    public async Task Launch_WithoutDesktopLaunchToken_ReturnsForbidden()
+    public async Task LaunchWithoutDesktopLaunchTokenReturnsForbidden()
     {
         var launcherPath = Environment.ProcessPath
             ?? throw new InvalidOperationException("Expected the integration test host to expose an executable path.");

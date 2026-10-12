@@ -15,7 +15,7 @@ public sealed class BugTriage139FifteenthHarnessTests
     /// copy Agent Help fixtures beside the external test assembly without an environment override.
     /// </summary>
     [Fact]
-    public void DeterministicBuild_EmbedsRepositoryRootAndCopiesAgentHelpFixtures()
+    public void DeterministicBuildEmbedsRepositoryRootAndCopiesAgentHelpFixtures()
     {
         var metadata = typeof(BugTriage139FifteenthHarnessTests).Assembly
             .GetCustomAttributes<AssemblyMetadataAttribute>()
@@ -44,15 +44,15 @@ public sealed class BugTriage139FifteenthHarnessTests
     /// native boundary tests, with an exact count rather than source-text substitutes.
     /// </summary>
     [Fact]
-    public void PlatformNativeTests_CompiledInventoryMatchesHost()
+    public void PlatformNativeTestsCompiledInventoryMatchesHost()
     {
         var expected = OperatingSystem.IsWindows()
             ? new[]
             {
-                "BugTriage139FifteenthSharedTests.ContainedRestoration_NestedDirectoriesRestoreContentsModeAndContainment",
-                "BugTriage139FifteenthWindowsNativeTests.WorkspaceIdentity_NativeCancellationWindow_CompletesWithoutWorkerLeak",
-                "BugTriage139FifteenthWindowsNativeTests.SqliteOpen_PlatformNativePreHandleWait_IsBoundedWithoutLeaks",
-                "BugTriage139FifteenthWindowsNativeTests.SqliteOpen_KernelWaitThenIndependentDisposalFailure_PreservesExactException",
+                "BugTriage139FifteenthSharedTests.ContainedRestorationNestedDirectoriesRestoreContentsModeAndContainment",
+                "BugTriage139FifteenthWindowsNativeTests.WorkspaceIdentityNativeCancellationWindowCompletesWithoutWorkerLeak",
+                "BugTriage139FifteenthWindowsNativeTests.SqliteOpenPlatformNativePreHandleWaitIsBoundedWithoutLeaks",
+                "BugTriage139FifteenthWindowsNativeTests.SqliteOpenKernelWaitThenIndependentDisposalFailurePreservesExactException",
                 "BugTriage139SixteenthIdentityWindowsTests.ResolveAsync_UnstoppableWindowsWorker_CompletesPubliclyAndRemainsObservable",
                 "BugTriage139SixteenthIdentityWindowsTests.ResolveAsync_ResultWithheldUntilThreadExit_WorkerRemainsObservable",
                 "BugTriage139SixteenthIdentityWindowsTests.ResolveAsync_RemoteUnc_IsRejectedBeforeNativeOpen",
@@ -65,37 +65,37 @@ public sealed class BugTriage139FifteenthHarnessTests
             : OperatingSystem.IsLinux()
                 ? new[]
                 {
-                    "BugTriage139FifteenthSharedTests.ContainedRestoration_NestedDirectoriesRestoreContentsModeAndContainment",
-                    "BugTriage139FifteenthLinuxNativeTests.WorkspaceIdentity_NativeCancellationWindow_CompletesWithoutWorkerLeak",
-                    "BugTriage139FifteenthLinuxNativeTests.SqliteOpen_PlatformNativePreHandleWait_IsBoundedWithoutLeaks",
-                    "BugTriage139FifteenthLinuxNativeTests.SqliteOpen_KernelWaitThenIndependentDisposalFailure_PreservesExactException",
+                    "BugTriage139FifteenthSharedTests.ContainedRestorationNestedDirectoriesRestoreContentsModeAndContainment",
+                    "BugTriage139FifteenthLinuxNativeTests.WorkspaceIdentityNativeCancellationWindowCompletesWithoutWorkerLeak",
+                    "BugTriage139FifteenthLinuxNativeTests.SqliteOpenPlatformNativePreHandleWaitIsBoundedWithoutLeaks",
+                    "BugTriage139FifteenthLinuxNativeTests.SqliteOpenKernelWaitThenIndependentDisposalFailurePreservesExactException",
                     "RequirementsFourteenthLinuxNativeTests.OpenFileForRead_LinuxFifoWithoutWriter_IsRejectedWithinBound",
-                    "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_SafeSymlinkIntoFuse_IsRejectedByAtomicNoCrossDeviceResolver",
-                    "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_AliasReplacement_IsRejectedByAtomicNoCrossDeviceResolver",
-                    "BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker",
-                    "BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementBeforePhysicalResolution_IsRejected",
-                    "BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected",
-                    "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_UnstoppableUnixHelper_RemainsObservableAfterPublicTimeout",
-                    "BugTriage139SixteenthLinuxTests.SqlitePinnedDataSource_SupportsTransactionsAndReopen",
-                    "BugTriage139EighteenthLinuxTests.NativeLinuxGate_EffectiveUserId_IsNonRoot",
-                    "BugTriage139EighteenthLinuxTests.OpenFileForWrite_ParentRenamedOutsideRoot_RejectsWithoutExternalArtifact",
-                    "BugTriage139EighteenthLinuxTests.EnsureDirectory_MissingNestedDirectory_FailsClosedBeforeMutation",
-                    "BugTriage139EighteenthLinuxTests.RestoreFileAsync_RollsBackUnixPermissionsThroughPinnedAuthority",
-                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_Fifo_IsIgnoredWithoutBlocking",
-                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_DelayedFuseChildMount_IsRejectedBeforeTraversal",
-                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly",
-                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission",
-                    "BugTriage139EighteenthLinuxTests.RequirementsExport_ParentMovedAfterResolution_RejectsWithoutExternalArtifact",
-                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding",
-                    "BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly",
-                    "BugTriage139EighteenthLinuxTests.RequirementsExport_CaseDistinctHomeFiles_RemovesOnlyStaleName",
-                    "BugTriage139EighteenthLinuxTests.RequirementsExport_NestedStaleCleanup_IsRejectedBeforeGeneratedWrite",
-                    "BugTriage139EighteenthLinuxTests.WorkspaceIdentity_SeparateApprovedLocalMount_IsAccepted",
-                    "BugTriage139EighteenthLinuxTests.SqliteOpen_SeparateApprovedLocalMount_IsAccepted",
+                    "BugTriage139SixteenthLinuxTests.WorkspaceIdentitySafeSymlinkIntoFuseIsRejectedByAtomicNoCrossDeviceResolver",
+                    "BugTriage139SixteenthLinuxTests.WorkspaceIdentityAliasReplacementIsRejectedByAtomicNoCrossDeviceResolver",
+                    "BugTriage139SixteenthLinuxTests.SqliteOpenSafeSymlinkIntoFuseIsRejectedBeforeWorker",
+                    "BugTriage139SixteenthLinuxTests.SqliteOpenAliasReplacementBeforePhysicalResolutionIsRejected",
+                    "BugTriage139SixteenthLinuxTests.SqliteOpenAliasReplacementAtNativeOpenIsAtomicallyRejected",
+                    "BugTriage139SixteenthLinuxTests.WorkspaceIdentityUnstoppableUnixHelperRemainsObservableAfterPublicTimeout",
+                    "BugTriage139SixteenthLinuxTests.SqlitePinnedDataSourceSupportsTransactionsAndReopen",
+                    "BugTriage139EighteenthLinuxTests.NativeLinuxGateEffectiveUserIdIsNonRoot",
+                    "BugTriage139EighteenthLinuxTests.OpenFileForWriteParentRenamedOutsideRootRejectsWithoutExternalArtifact",
+                    "BugTriage139EighteenthLinuxTests.EnsureDirectoryMissingNestedDirectoryFailsClosedBeforeMutation",
+                    "BugTriage139EighteenthLinuxTests.RestoreFileAsyncRollsBackUnixPermissionsThroughPinnedAuthority",
+                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsyncFifoIsIgnoredWithoutBlocking",
+                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsyncDelayedFuseChildMountIsRejectedBeforeTraversal",
+                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsyncRootReplacedByDelayedFuseMountAfterPinUsesPinnedRootOnly",
+                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsyncRepeatedRootReplacementDoesNotConsumeWorkerAdmission",
+                    "BugTriage139EighteenthLinuxTests.RequirementsExportParentMovedAfterResolutionRejectsWithoutExternalArtifact",
+                    "BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsyncRootReplacedBeforeAuthorityCaptureRejectsWithoutWorkerStranding",
+                    "BugTriage139EighteenthLinuxTests.RequirementsExportRootReplacedByDelayedFuseMountBeforeCreateUsesPinnedRootOnly",
+                    "BugTriage139EighteenthLinuxTests.RequirementsExportCaseDistinctHomeFilesRemovesOnlyStaleName",
+                    "BugTriage139EighteenthLinuxTests.RequirementsExportNestedStaleCleanupIsRejectedBeforeGeneratedWrite",
+                    "BugTriage139EighteenthLinuxTests.WorkspaceIdentitySeparateApprovedLocalMountIsAccepted",
+                    "BugTriage139EighteenthLinuxTests.SqliteOpenSeparateApprovedLocalMountIsAccepted",
                 }
                 : new[]
                 {
-                    "BugTriage139FifteenthSharedTests.ContainedRestoration_NestedDirectoriesRestoreContentsModeAndContainment",
+                    "BugTriage139FifteenthSharedTests.ContainedRestorationNestedDirectoriesRestoreContentsModeAndContainment",
                 };
         var governedTypes = new HashSet<string>(
             StringComparer.Ordinal)

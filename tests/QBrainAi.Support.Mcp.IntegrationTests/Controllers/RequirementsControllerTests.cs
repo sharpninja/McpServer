@@ -42,7 +42,7 @@ public sealed class RequirementsControllerTests : IDisposable
     }
 
     [Fact]
-    public async Task FunctionalCrud_AndGenerateEndpoint_WorkEndToEnd()
+    public async Task FunctionalCrudAndGenerateEndpointWorkEndToEnd()
     {
         var createBody = new
         {
@@ -78,7 +78,7 @@ public sealed class RequirementsControllerTests : IDisposable
 
     /// <summary>Batch creation accepts a YAML-equivalent records array shape and persists mixed requirement kinds atomically.</summary>
     [Fact]
-    public async Task BatchCreateEndpoint_AcceptsMixedRecordsArray()
+    public async Task BatchCreateEndpointAcceptsMixedRecordsArray()
     {
         var payload = new
         {
@@ -126,7 +126,7 @@ public sealed class RequirementsControllerTests : IDisposable
 
     /// <summary>BUG-TRIAGE-010: single FR/TR/TEST create and update endpoints persist structured acceptance criteria after a fresh read.</summary>
     [Fact]
-    public async Task SingleRequirementEndpoints_PersistAcceptanceCriteriaAfterFreshRead()
+    public async Task SingleRequirementEndpointsPersistAcceptanceCriteriaAfterFreshRead()
     {
         const string frId = "FR-MCP-AC-991";
         const string trId = "TR-MCP-AC-991";
@@ -193,7 +193,7 @@ public sealed class RequirementsControllerTests : IDisposable
 
     /// <summary>BUG-TRIAGE-010: FR/TR/TEST batch endpoints persist structured acceptance criteria after create and update.</summary>
     [Fact]
-    public async Task BatchRequirementEndpoints_PersistAcceptanceCriteriaAfterFreshRead()
+    public async Task BatchRequirementEndpointsPersistAcceptanceCriteriaAfterFreshRead()
     {
         const string frId = "FR-MCP-ACB-991";
         const string trId = "TR-MCP-ACB-991";
@@ -275,7 +275,7 @@ public sealed class RequirementsControllerTests : IDisposable
 
     /// <summary>Batch creation rejects duplicate incoming IDs before writing any record.</summary>
     [Fact]
-    public async Task BatchCreateEndpoint_DuplicateIncomingIdsRejectsWholeBatch()
+    public async Task BatchCreateEndpointDuplicateIncomingIdsRejectsWholeBatch()
     {
         var payload = new
         {
@@ -310,7 +310,7 @@ public sealed class RequirementsControllerTests : IDisposable
     }
 
     [Fact]
-    public async Task GenerateAll_WritesCanonicalDocumentsToWorkspace()
+    public async Task GenerateAllWritesCanonicalDocumentsToWorkspace()
     {
         var response = await _client.GetAsync("/qbrainai/requirements/generate?doc=all", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -333,7 +333,7 @@ public sealed class RequirementsControllerTests : IDisposable
     }
 
     [Fact]
-    public async Task GenerateWiki_WritesAzureAndGitHubWikiFiles()
+    public async Task GenerateWikiWritesAzureAndGitHubWikiFiles()
     {
         var response = await _client.GetAsync("/qbrainai/requirements/generate?doc=all&format=wiki", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -362,7 +362,7 @@ public sealed class RequirementsControllerTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestEndpoint_ParsesAndUpsertsMarkdownPayload()
+    public async Task IngestEndpointParsesAndUpsertsMarkdownPayload()
     {
         var payload = new
         {
@@ -423,7 +423,7 @@ public sealed class RequirementsControllerTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestEndpoint_SelectsNewerWikiSourceAndAuthoritativelySyncs()
+    public async Task IngestEndpointSelectsNewerWikiSourceAndAuthoritativelySyncs()
     {
         var older = new DateTimeOffset(2026, 5, 7, 12, 0, 0, TimeSpan.Zero);
         var newer = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero);

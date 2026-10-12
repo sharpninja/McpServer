@@ -12,7 +12,7 @@ public sealed class PairingOptionsBindingTests
     /// TEST-MCP-AIUNIT-002: Proves configuration binding populates the pairing-user collection.
     /// </summary>
     [Fact]
-    public void ConfigurationBinder_PopulatesPairingUsersCollection()
+    public void ConfigurationBinderPopulatesPairingUsersCollection()
     {
         Dictionary<string, string?> values = new(StringComparer.OrdinalIgnoreCase)
         {

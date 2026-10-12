@@ -20,7 +20,7 @@ public sealed class CliBrainSlotStrategyTests
     [Theory]
     [InlineData("Cli")]
     [InlineData("cli")]
-    public void NormalizeProviderKind_AcceptsCli(string kind)
+    public void NormalizeProviderKindAcceptsCli(string kind)
     {
         Assert.Equal("Cli", BrainSlotValidation.NormalizeProviderKind(kind));
     }
@@ -29,7 +29,7 @@ public sealed class CliBrainSlotStrategyTests
     [InlineData("cli://grok-cli", "grok-cli")]
     [InlineData("cli://grok-build", "grok-cli")]
     [InlineData("cli://codex-cli", "codex-cli")]
-    public void TryParseCliEndpoint_KnownStrategies_Succeed(string endpoint, string expected)
+    public void TryParseCliEndpointKnownStrategiesSucceed(string endpoint, string expected)
     {
         Assert.True(CliBrainSlotEndpoint.TryParse(endpoint, out var strategy));
         Assert.Equal(expected, strategy);
@@ -39,13 +39,13 @@ public sealed class CliBrainSlotStrategyTests
     [InlineData("http://127.0.0.1:8311/v1")]
     [InlineData("cli://unknown")]
     [InlineData("")]
-    public void TryParseCliEndpoint_Unknown_Fails(string endpoint)
+    public void TryParseCliEndpointUnknownFails(string endpoint)
     {
         Assert.False(CliBrainSlotEndpoint.TryParse(endpoint, out _));
     }
 
     [Fact]
-    public void ValidateEndpoint_CliKnownStrategy_DoesNotRequireHttpHostAllowlist()
+    public void ValidateEndpointCliKnownStrategyDoesNotRequireHttpHostAllowlist()
     {
         var options = new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
         {
@@ -60,7 +60,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void ValidateEndpoint_CliUnknownStrategy_Throws()
+    public void ValidateEndpointCliUnknownStrategyThrows()
     {
         var options = new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions());
 
@@ -71,7 +71,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void BuildPersistentGrokArgumentList_FirstTurn_UsesSessionIdAndXhigh()
+    public void BuildPersistentGrokArgumentListFirstTurnUsesSessionIdAndXhigh()
     {
         var sessionId = Guid.Parse("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").ToString();
         var args = GrokCliAgentExecutionStrategy.BuildPersistentGrokArgumentList(
@@ -100,7 +100,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void BuildPersistentGrokArgumentList_Resume_UsesResumeFlag()
+    public void BuildPersistentGrokArgumentListResumeUsesResumeFlag()
     {
         var sessionId = Guid.Parse("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").ToString();
         var args = GrokCliAgentExecutionStrategy.BuildPersistentGrokArgumentList(
@@ -116,7 +116,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot()
+    public async Task CompleteAsyncGrokUsesIsolatedCwdNotConfiguredRepoRoot()
     {
         await WithIsolatedQuadbrainTemp(async _ =>
         {
@@ -148,7 +148,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing()
+    public async Task CompleteAsyncGrokMaxTurnsReachedReturnsStdoutInsteadOfThrowing()
     {
         var spawner = new RecordingSpawner(
             stdout: "Creativity analysis for ArbiterOfTruth",
@@ -168,7 +168,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow()
+    public async Task CompleteAsyncGrokMaxTurnsReachedEmptyStdoutDoesNotThrow()
     {
         var spawner = new RecordingSpawner(stdout: "", stderr: "Error: Max turns reached", exitCode: 1);
         var client = new CliBrainSlotChatClient(
@@ -185,7 +185,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Grok_NonZeroExit_StillThrows()
+    public async Task CompleteAsyncGrokNonZeroExitStillThrows()
     {
         var spawner = new RecordingSpawner(stdout: "", stderr: "Access is denied. (os error 5)", exitCode: 1);
         var client = new CliBrainSlotChatClient(
@@ -203,7 +203,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume()
+    public async Task CompleteAsyncGrokResumeSessionMissingRetriesWithoutResume()
     {
         var spawner = new RecordingSpawner(stdout: "first-ok")
         {
@@ -236,7 +236,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void BuildPersistentCodexArgumentList_FirstTurn_UsesExecStdinAndXhigh()
+    public void BuildPersistentCodexArgumentListFirstTurnUsesExecStdinAndXhigh()
     {
         var args = CodexCliAgentExecutionStrategy.BuildPersistentCodexArgumentList(
             workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
@@ -254,7 +254,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void BuildPersistentCodexArgumentList_Resume_PlacesExecOptionsBeforeResume()
+    public void BuildPersistentCodexArgumentListResumePlacesExecOptionsBeforeResume()
     {
         var args = CodexCliAgentExecutionStrategy.BuildPersistentCodexArgumentList(
             workingDirectory: @"Q:\__mcp_unit_test__\QBrainAi",
@@ -273,7 +273,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void ExtractCodexSessionId_FromJsonlThreadStarted_ReturnsId()
+    public void ExtractCodexSessionIdFromJsonlThreadStartedReturnsId()
     {
         var jsonl = """
             {"type":"thread.started","thread_id":"thr_abc"}
@@ -284,7 +284,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void ExtractCodexAssistantText_FromItemCompletedAgentMessage_ReturnsText()
+    public void ExtractCodexAssistantTextFromItemCompletedAgentMessageReturnsText()
     {
         var jsonl = """
             {"type":"thread.started","thread_id":"thr_logic"}
@@ -298,7 +298,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void ExtractCodexAssistantText_FromEventMsg_ReturnsMessage()
+    public void ExtractCodexAssistantTextFromEventMsgReturnsMessage()
     {
         var jsonl = """
             {"type":"event_msg","payload":{"type":"agent_message","message":"working on it"}}
@@ -308,7 +308,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents()
+    public async Task CompleteAsyncCodexReturnsAssistantTextFromJsonlNotRawEvents()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
         {
@@ -341,7 +341,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson()
+    public async Task CompleteAsyncCodexPrefersJsonlAssistantTextOverOutputFileToolCallJson()
     {
         await WithIsolatedQuadbrainTemp(async _ =>
         {
@@ -371,7 +371,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void DefaultSharedTempDirectory_Windows_IsUnderCommonApplicationData()
+    public void DefaultSharedTempDirectoryWindowsIsUnderCommonApplicationData()
     {
         if (!OperatingSystem.IsWindows())
             return;
@@ -383,7 +383,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl()
+    public async Task ResolveTempDirectoryHonorsConfiguredEnvVarWithoutWindowsServiceAcl()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
         {
@@ -395,7 +395,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv()
+    public async Task CompleteAsyncGrokWritesPromptFileUnderConfiguredTempAndSetsTempEnv()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
         {
@@ -428,7 +428,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp()
+    public async Task CompleteAsyncCodexWritesOutputFileUnderConfiguredTemp()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
         {
@@ -459,7 +459,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_GrokSecondCall_ResumesSameSession()
+    public async Task CompleteAsyncGrokSecondCallResumesSameSession()
     {
         var spawner = new RecordingSpawner(stdout: "ok");
         var store = new CliBrainSlotSessionStore();
@@ -490,7 +490,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task CompleteAsync_CodexSecondCall_ResumesExtractedThread()
+    public async Task CompleteAsyncCodexSecondCallResumesExtractedThread()
     {
         var jsonl = """{"type":"thread.started","thread_id":"thr_logic"}""" + Environment.NewLine;
         var spawner = new RecordingSpawner(stdout: jsonl, outputBody: "logic-out");
@@ -516,7 +516,7 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public async Task Factory_Create_CliSlot_ReturnsCliClient()
+    public async Task FactoryCreateCliSlotReturnsCliClient()
     {
         var factory = new BrainSlotChatClientFactory(
             new RecordingSpawner(stdout: "ok"),
@@ -536,14 +536,14 @@ public sealed class CliBrainSlotStrategyTests
     [InlineData("cli:interactive", true)]
     [InlineData("cli:session", true)]
     [InlineData("vault:future", false)]
-    public void CredentialResolver_SupportsCliScheme(string reference, bool expected)
+    public void CredentialResolverSupportsCliScheme(string reference, bool expected)
     {
         var resolver = new BrainSlotCredentialResolver(new ConfigurationBuilder().Build());
         Assert.Equal(expected, resolver.IsSupportedReference(reference));
     }
 
     [Fact]
-    public async Task CredentialResolver_CliInteractive_ReturnsPlaceholder()
+    public async Task CredentialResolverCliInteractiveReturnsPlaceholder()
     {
         var resolver = new BrainSlotCredentialResolver(new ConfigurationBuilder().Build());
         var value = await resolver.ResolveAsync("cli:interactive", TestContext.Current.CancellationToken).ConfigureAwait(true);

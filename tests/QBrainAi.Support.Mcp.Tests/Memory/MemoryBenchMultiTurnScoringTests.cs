@@ -10,7 +10,7 @@ public sealed class MemoryBenchMultiTurnScoringTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: without_memory query turns can pass from conversation history.</summary>
     [Fact]
-    public void QueryScoring_SameGoldForBothConditions()
+    public void QueryScoringSameGoldForBothConditions()
     {
         var pack = MemoryBenchMultiTurnCatalog.LoadPack();
         var job = pack.Jobs.Single(item => item.Id == "JOB-PREF-001");
@@ -25,7 +25,7 @@ public sealed class MemoryBenchMultiTurnScoringTests
 
     /// <summary>AC-FR-MCP-MEMORY-019: Negative/refuse turns fail if the model invents.</summary>
     [Fact]
-    public void NegativeRefuse_FailsOnInvention()
+    public void NegativeRefuseFailsOnInvention()
     {
         var pack = MemoryBenchMultiTurnCatalog.LoadPack();
         var job = pack.Jobs.Single(item => item.Id == "JOB-NEG-001");

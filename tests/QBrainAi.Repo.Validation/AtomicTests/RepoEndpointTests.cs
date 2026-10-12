@@ -25,7 +25,7 @@ public sealed class RepoEndpointTests
     // --- GET /qbrainai/repo/list ---
 
     /// <summary>
-    /// Validates the <c>List_RootPath_Returns200WithEntries</c> scenario.
+    /// Validates the <c>ListRootPathReturns200WithEntries</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
@@ -33,7 +33,7 @@ public sealed class RepoEndpointTests
     /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
     /// </remarks>
     [Fact]
-    public async Task List_RootPath_Returns200WithEntries()
+    public async Task ListRootPathReturns200WithEntries()
     {
         var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/list", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -43,7 +43,7 @@ public sealed class RepoEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>List_WithPath_Returns200</c> scenario.
+    /// Validates the <c>ListWithPathReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
@@ -51,7 +51,7 @@ public sealed class RepoEndpointTests
     /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
     /// </remarks>
     [Fact]
-    public async Task List_WithPath_Returns200()
+    public async Task ListWithPathReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/list?path=docs", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -63,7 +63,7 @@ public sealed class RepoEndpointTests
     // --- GET /qbrainai/repo/file ---
 
     /// <summary>
-    /// Validates the <c>ReadFile_MissingPath_Returns400</c> scenario.
+    /// Validates the <c>ReadFileMissingPathReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
@@ -71,7 +71,7 @@ public sealed class RepoEndpointTests
     /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
     /// </remarks>
     [Fact]
-    public async Task ReadFile_MissingPath_Returns400()
+    public async Task ReadFileMissingPathReturns400()
     {
         var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/file", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -80,7 +80,7 @@ public sealed class RepoEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>ReadFile_ExistingFile_Returns200</c> scenario.
+    /// Validates the <c>ReadFileExistingFileReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
@@ -88,7 +88,7 @@ public sealed class RepoEndpointTests
     /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
     /// </remarks>
     [Fact]
-    public async Task ReadFile_ExistingFile_Returns200()
+    public async Task ReadFileExistingFileReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/file?path=index.md", cancellationToken: TestContext.Current.CancellationToken);
         // 200 if allowed and exists, 400 if path not allowed
@@ -97,7 +97,7 @@ public sealed class RepoEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>ReadFile_NonExistentFile_Returns200Or400</c> scenario.
+    /// Validates the <c>ReadFileNonExistentFileReturns200Or400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
@@ -105,7 +105,7 @@ public sealed class RepoEndpointTests
     /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
     /// </remarks>
     [Fact]
-    public async Task ReadFile_NonExistentFile_Returns200Or400()
+    public async Task ReadFileNonExistentFileReturns200Or400()
     {
         var response = await _fixture.Client.GetAsync(
             $"{RepoEndpointFixture.RepoRoute}/file?path=nonexistent-{Guid.NewGuid():N}.txt", cancellationToken: TestContext.Current.CancellationToken);
@@ -116,7 +116,7 @@ public sealed class RepoEndpointTests
     // --- POST /qbrainai/repo/file ---
 
     /// <summary>
-    /// Validates the <c>WriteFile_MissingPath_Returns400</c> scenario.
+    /// Validates the <c>WriteFileMissingPathReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
@@ -124,7 +124,7 @@ public sealed class RepoEndpointTests
     /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
     /// </remarks>
     [Fact]
-    public async Task WriteFile_MissingPath_Returns400()
+    public async Task WriteFileMissingPathReturns400()
     {
         var payload = new { content = "test" };
         var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", payload, cancellationToken: TestContext.Current.CancellationToken);
@@ -132,7 +132,7 @@ public sealed class RepoEndpointTests
     }
 
     /// <summary>
-    /// Validates the <c>WriteFile_NullBody_Returns400</c> scenario.
+    /// Validates the <c>WriteFileNullBodyReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
@@ -140,14 +140,14 @@ public sealed class RepoEndpointTests
     /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
     /// </remarks>
     [Fact]
-    public async Task WriteFile_NullBody_Returns400()
+    public async Task WriteFileNullBodyReturns400()
     {
         var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", (object?)null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     /// <summary>
-    /// Validates the <c>WriteFile_ValidPath_Returns200Or400</c> scenario.
+    /// Validates the <c>WriteFileValidPathReturns200Or400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
@@ -155,7 +155,7 @@ public sealed class RepoEndpointTests
     /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
     /// </remarks>
     [Fact]
-    public async Task WriteFile_ValidPath_Returns200Or400()
+    public async Task WriteFileValidPathReturns200Or400()
     {
         var payload = new { path = "_tmp_audit_test.txt", content = "audit test" };
         var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", payload, cancellationToken: TestContext.Current.CancellationToken);

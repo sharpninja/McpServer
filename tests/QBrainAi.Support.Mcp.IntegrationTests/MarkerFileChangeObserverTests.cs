@@ -14,7 +14,7 @@ public sealed class MarkerFileChangeObserverTests
     /// Changed/Created-only never completes.
     /// </summary>
     [Fact]
-    public async Task ChangedCreatedOnly_DroppedEvents_TimesOut()
+    public async Task ChangedCreatedOnlyDroppedEventsTimesOut()
     {
         var root = CreateRoot();
         try
@@ -44,7 +44,7 @@ public sealed class MarkerFileChangeObserverTests
     /// Current contract: timestamp/length poll observes the rewrite even when the watcher is silent.
     /// </summary>
     [Fact]
-    public async Task RenamedAndPoll_DroppedEvents_ObservesAtomicReplace()
+    public async Task RenamedAndPollDroppedEventsObservesAtomicReplace()
     {
         var root = CreateRoot();
         try
@@ -75,7 +75,7 @@ public sealed class MarkerFileChangeObserverTests
     /// LastWriteTime is not a reliable signal under suite load.
     /// </summary>
     [Fact]
-    public async Task RenamedAndPoll_SameLengthInPlaceRewrite_ObservesContentChange()
+    public async Task RenamedAndPollSameLengthInPlaceRewriteObservesContentChange()
     {
         var root = CreateRoot();
         try

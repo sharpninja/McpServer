@@ -21,7 +21,7 @@ public sealed class TodoExecutionControllerTests
     /// execution service does not report an active TODO for the resolved workspace.
     /// </summary>
     [Fact]
-    public async Task GetActiveTodoAsync_WhenNoTodoExists_ReturnsNotFound()
+    public async Task GetActiveTodoAsyncWhenNoTodoExistsReturnsNotFound()
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.GetActiveTodoAsync(@"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
@@ -39,7 +39,7 @@ public sealed class TodoExecutionControllerTests
     /// body with HTTP 400 before it reaches the execution service.
     /// </summary>
     [Fact]
-    public async Task CreateIterationPhaseAsync_WithNullBody_ReturnsBadRequest()
+    public async Task CreateIterationPhaseAsyncWithNullBodyReturnsBadRequest()
     {
         var controller = CreateController(Substitute.For<ITodoExecutionService>());
         var actionResult = await controller.CreateIterationPhaseAsync(null, CancellationToken.None).ConfigureAwait(true);
@@ -53,7 +53,7 @@ public sealed class TodoExecutionControllerTests
     /// with the structured active TODO payload when the execution service reports a ready item.
     /// </summary>
     [Fact]
-    public async Task GetNextReadyTodoAsync_WhenTodoExists_ReturnsOk()
+    public async Task GetNextReadyTodoAsyncWhenTodoExistsReturnsOk()
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.GetNextReadyTodoAsync(@"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
@@ -79,7 +79,7 @@ public sealed class TodoExecutionControllerTests
     /// with the bounded execution context when the TODO exists.
     /// </summary>
     [Fact]
-    public async Task GetExecutionContextAsync_WhenTodoExists_ReturnsOk()
+    public async Task GetExecutionContextAsyncWhenTodoExistsReturnsOk()
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.GetExecutionContextAsync(@"Q:\__mcp_unit_test__\QBrainAi", "TODO-201", 3, 2, Arg.Any<CancellationToken>())
@@ -105,7 +105,7 @@ public sealed class TodoExecutionControllerTests
     /// the route phase identifier and returns the structured created TODO payload.
     /// </summary>
     [Fact]
-    public async Task CreateTodosFromPlanAsync_WhenRequestValid_ReturnsOkAndUsesRoutePhaseId()
+    public async Task CreateTodosFromPlanAsyncWhenRequestValidReturnsOkAndUsesRoutePhaseId()
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.CreateTodosFromPlanAsync(
@@ -151,7 +151,7 @@ public sealed class TodoExecutionControllerTests
     /// invalid execution transitions to HTTP 422 while preserving the error payload.
     /// </summary>
     [Fact]
-    public async Task UpdateStatusAsync_WhenTransitionRejected_ReturnsUnprocessableEntity()
+    public async Task UpdateStatusAsyncWhenTransitionRejectedReturnsUnprocessableEntity()
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.UpdateStatusAsync(
@@ -180,7 +180,7 @@ public sealed class TodoExecutionControllerTests
     /// unsuccessful ADB result into HTTP 422 while preserving the structured failure payload.
     /// </summary>
     [Fact]
-    public async Task AdbStepAsync_WhenAdbFails_ReturnsUnprocessableEntity()
+    public async Task AdbStepAsyncWhenAdbFailsReturnsUnprocessableEntity()
     {
         var service = Substitute.For<ITodoExecutionService>();
         service.AdbStepAsync(

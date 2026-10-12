@@ -10,7 +10,7 @@ public sealed class AgentHelpMcpToolTests
 {
     /// <summary>Native MCP assembly discovery exposes create, submit, status, and transcript tool names.</summary>
     [Fact]
-    public void FwhMcpTools_ExposesAgentHelpToolNames()
+    public void FwhMcpToolsExposesAgentHelpToolNames()
     {
         var toolNames = typeof(FwhMcpTools)
             .GetMethods()

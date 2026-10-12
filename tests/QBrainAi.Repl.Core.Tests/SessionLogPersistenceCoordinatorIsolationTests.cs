@@ -14,42 +14,42 @@ public sealed class SessionLogPersistenceCoordinatorIsolationTests
 {
     /// <summary>FR-MCP-REPL-009 AC1: open remains successful on primary fail + failsafe ok.</summary>
     [Fact]
-    public async Task Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess()
+    public async Task CoordinatorOpenPrimaryFailFailsafeOkPluginSeesSuccess()
     {
         await AssertNonTerminalSucceedsWhenPrimaryFailsAsync(SessionLogCommandShapes.OpenSessionMethod).ConfigureAwait(true);
     }
 
     /// <summary>FR-MCP-REPL-009 AC1: begin remains successful on primary fail + failsafe ok.</summary>
     [Fact]
-    public async Task Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess()
+    public async Task CoordinatorBeginPrimaryFailFailsafeOkPluginSeesSuccess()
     {
         await AssertNonTerminalSucceedsWhenPrimaryFailsAsync(SessionLogCommandShapes.BeginTurnMethod).ConfigureAwait(true);
     }
 
     /// <summary>FR-MCP-REPL-009 AC1: update remains successful on primary fail + failsafe ok.</summary>
     [Fact]
-    public async Task Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess()
+    public async Task CoordinatorUpdatePrimaryFailFailsafeOkPluginSeesSuccess()
     {
         await AssertNonTerminalSucceedsWhenPrimaryFailsAsync(SessionLogCommandShapes.UpdateTurnMethod).ConfigureAwait(true);
     }
 
     /// <summary>FR-MCP-REPL-009 AC1: appendDialog remains successful on primary fail + failsafe ok.</summary>
     [Fact]
-    public async Task Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess()
+    public async Task CoordinatorAppendDialogPrimaryFailFailsafeOkPluginSeesSuccess()
     {
         await AssertNonTerminalSucceedsWhenPrimaryFailsAsync(SessionLogCommandShapes.AppendDialogMethod).ConfigureAwait(true);
     }
 
     /// <summary>FR-MCP-REPL-009 AC1: appendActions remains successful on primary fail + failsafe ok.</summary>
     [Fact]
-    public async Task Coordinator_AppendActions_PrimaryFailFailsafeOk_PluginSeesSuccess()
+    public async Task CoordinatorAppendActionsPrimaryFailFailsafeOkPluginSeesSuccess()
     {
         await AssertNonTerminalSucceedsWhenPrimaryFailsAsync(SessionLogCommandShapes.AppendActionsMethod).ConfigureAwait(true);
     }
 
     /// <summary>FR-MCP-REPL-009 AC3: completeTurn and failTurn report degraded strategy and absolute path.</summary>
     [Fact]
-    public async Task Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath()
+    public async Task CoordinatorCompleteTurnAndFailTurnPrimaryFailReportsDegradedStrategyNameAndAbsolutePath()
     {
         var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "coord-complete-failsafe.yaml"));
         foreach (var method in new[] { SessionLogCommandShapes.CompleteTurnMethod, SessionLogCommandShapes.FailTurnMethod })
@@ -71,7 +71,7 @@ public sealed class SessionLogPersistenceCoordinatorIsolationTests
 
     /// <summary>FR-MCP-REPL-009 AC4: primary success produces no pending failsafe artifact.</summary>
     [Fact]
-    public async Task Coordinator_PrimarySuccess_NoPendingFailsafeArtifact()
+    public async Task CoordinatorPrimarySuccessNoPendingFailsafeArtifact()
     {
         var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "coord-should-not-write.yaml"));
         var harness = CreateCoordinator(path, primaryThrows: false);

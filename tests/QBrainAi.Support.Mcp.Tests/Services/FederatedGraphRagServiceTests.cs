@@ -46,7 +46,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>Merges local and remote entities with local winning on ID collision.</summary>
     [Fact]
-    public async Task ListEntitiesAsync_BothReturn_MergesLocalWins()
+    public async Task ListEntitiesAsyncBothReturnMergesLocalWins()
     {
         var localEntity = MakeEntity("E-001", "Local Entity");
         var remoteEntity1 = MakeEntity("E-001", "Remote Entity"); // collision
@@ -68,7 +68,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>When remote call throws, returns local-only entities gracefully.</summary>
     [Fact]
-    public async Task ListEntitiesAsync_RemoteFails_ReturnsLocalOnly()
+    public async Task ListEntitiesAsyncRemoteFailsReturnsLocalOnly()
     {
         _inner.ListEntitiesAsync(0, 50, null, Arg.Any<CancellationToken>())
             .Returns(new GraphEntityListResponse { Entities = [MakeEntity("E-001")], TotalCount = 1 });
@@ -84,7 +84,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>When federation is disabled, delegates directly to the inner service.</summary>
     [Fact]
-    public async Task ListEntitiesAsync_FederationDisabled_DelegatesToLocal()
+    public async Task ListEntitiesAsyncFederationDisabledDelegatesToLocal()
     {
         var expected = new GraphEntityListResponse { Entities = [MakeEntity("E-001")], TotalCount = 1 };
         _inner.ListEntitiesAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
@@ -100,7 +100,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>Merges local and remote relationships with local winning on ID collision.</summary>
     [Fact]
-    public async Task ListRelationshipsAsync_BothReturn_MergesLocalWins()
+    public async Task ListRelationshipsAsyncBothReturnMergesLocalWins()
     {
         var localRel = MakeRelationship("R-001", "Local Rel");
         var remoteRel1 = MakeRelationship("R-001", "Remote Rel"); // collision
@@ -123,7 +123,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>Merges local and remote documents with local winning on ID collision.</summary>
     [Fact]
-    public async Task ListDocumentsAsync_BothReturn_MergesLocalWins()
+    public async Task ListDocumentsAsyncBothReturnMergesLocalWins()
     {
         var localDoc = MakeDocument("D-001", "local-key");
         var remoteDoc1 = MakeDocument("D-001", "remote-key"); // collision
@@ -146,7 +146,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>When both return, local answer takes priority and remote supplements citations.</summary>
     [Fact]
-    public async Task QueryAsync_BothReturn_LocalAnswerPriority()
+    public async Task QueryAsyncBothReturnLocalAnswerPriority()
     {
         var localResponse = new GraphRagQueryResponse { Query = "test", Answer = "Local answer", Mode = "local" };
         var remoteResponse = new GraphRagQueryResponse { Query = "test", Answer = "Remote answer", Mode = "global" };
@@ -163,7 +163,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>When remote query throws, returns local-only answer gracefully.</summary>
     [Fact]
-    public async Task QueryAsync_RemoteFails_ReturnsLocalOnly()
+    public async Task QueryAsyncRemoteFailsReturnsLocalOnly()
     {
         var localResponse = new GraphRagQueryResponse { Query = "test", Answer = "Local answer" };
         _inner.QueryAsync(Arg.Any<GraphRagQueryRequest>(), Arg.Any<CancellationToken>()).Returns(localResponse);
@@ -180,7 +180,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>CreateEntityAsync always delegates to the inner service.</summary>
     [Fact]
-    public async Task CreateEntityAsync_AlwaysDelegatesToLocal()
+    public async Task CreateEntityAsyncAlwaysDelegatesToLocal()
     {
         var request = new GraphEntityRequest { Name = "Entity", EntityType = "test" };
         var expected = MakeEntity("E-003");
@@ -194,7 +194,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>DeleteEntityAsync always delegates to the inner service.</summary>
     [Fact]
-    public async Task DeleteEntityAsync_AlwaysDelegatesToLocal()
+    public async Task DeleteEntityAsyncAlwaysDelegatesToLocal()
     {
         _inner.DeleteEntityAsync("E-001", Arg.Any<CancellationToken>()).Returns(true);
 
@@ -206,7 +206,7 @@ public sealed class FederatedGraphRagServiceTests
 
     /// <summary>GetStatusAsync always delegates to the inner service.</summary>
     [Fact]
-    public async Task GetStatusAsync_AlwaysDelegatesToLocal()
+    public async Task GetStatusAsyncAlwaysDelegatesToLocal()
     {
         var expected = new GraphRagStatusResponse();
         _inner.GetStatusAsync(Arg.Any<GraphRagStorageScope>(), Arg.Any<CancellationToken>()).Returns(expected);

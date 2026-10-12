@@ -117,7 +117,7 @@ public sealed class TodoExecutionServiceSqliteTests : IDisposable
     /// The regression protects the live deployment path from regressing onto InMemory-only tests.
     /// </summary>
     [Fact]
-    public async Task GetExecutionContextAsync_WithLinkedSessionTurns_OrdersByTimestampOnSqlite()
+    public async Task GetExecutionContextAsyncWithLinkedSessionTurnsOrdersByTimestampOnSqlite()
     {
         var todoId = await CreateExecutionTodoAsync(
             requirementIds: ["FR-BYRD-001"],

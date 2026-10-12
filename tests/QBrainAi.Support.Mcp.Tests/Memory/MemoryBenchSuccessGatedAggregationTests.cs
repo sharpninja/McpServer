@@ -14,7 +14,7 @@ public sealed class MemoryBenchSuccessGatedAggregationTests
     /// Failed jobs stay visible with pass=false and are dropped from the means.
     /// </summary>
     [Fact]
-    public void SuccessGatedMeans_ExcludeFailedJobs()
+    public void SuccessGatedMeansExcludeFailedJobs()
     {
         var jobs = new[]
         {
@@ -49,7 +49,7 @@ public sealed class MemoryBenchSuccessGatedAggregationTests
     /// AC-FR-MCP-MEMORY-019: Cheap failed without_memory jobs must not pull the without_memory mean down.
     /// </summary>
     [Fact]
-    public void MustNotClaimEfficiencyWin_FromFailedWithoutMemory()
+    public void MustNotClaimEfficiencyWinFromFailedWithoutMemory()
     {
         var jobs = new[]
         {
@@ -74,7 +74,7 @@ public sealed class MemoryBenchSuccessGatedAggregationTests
     /// AC-FR-MCP-MEMORY-019: Empty success sets yield null means rather than a fabricated zero win.
     /// </summary>
     [Fact]
-    public void NoSuccesses_YieldsNullMeans()
+    public void NoSuccessesYieldsNullMeans()
     {
         var jobs = new[]
         {
@@ -95,7 +95,7 @@ public sealed class MemoryBenchSuccessGatedAggregationTests
     /// AC-FR-MCP-MEMORY-019: Report markdown highlights success-gated means and names the exclusion rule.
     /// </summary>
     [Fact]
-    public void Report_HighlightsSuccessGatedMeans_AndNamesFailedJobExclusion()
+    public void ReportHighlightsSuccessGatedMeansAndNamesFailedJobExclusion()
     {
         var result = new MemoryBenchMultiTurnRunResult
         {

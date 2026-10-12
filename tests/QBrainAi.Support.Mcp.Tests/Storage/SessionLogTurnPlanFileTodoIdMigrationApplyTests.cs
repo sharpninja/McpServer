@@ -35,7 +35,7 @@ public sealed class SessionLogTurnPlanFileTodoIdMigrationApplyTests : IDisposabl
 
     /// <summary>Full migration chain from empty DB creates PlanFile and TodoId columns.</summary>
     [Fact]
-    public void Migrate_FromEmpty_AddsPlanFileAndTodoIdColumns()
+    public void MigrateFromEmptyAddsPlanFileAndTodoIdColumns()
     {
         using var db = new McpDbContext(_options);
         db.Database.Migrate();
@@ -46,7 +46,7 @@ public sealed class SessionLogTurnPlanFileTodoIdMigrationApplyTests : IDisposabl
 
     /// <summary>Upgrade from the predecessor migration adds the two columns.</summary>
     [Fact]
-    public void Migrate_FromPredecessor_AddsPlanFileAndTodoIdColumns()
+    public void MigrateFromPredecessorAddsPlanFileAndTodoIdColumns()
     {
         using (var db = new McpDbContext(_options))
         {
@@ -65,7 +65,7 @@ public sealed class SessionLogTurnPlanFileTodoIdMigrationApplyTests : IDisposabl
 
     /// <summary>All three provider migration sources add both columns with default None.</summary>
     [Fact]
-    public void ProviderMigrations_AddBothColumnsWithNoneDefault()
+    public void ProviderMigrationsAddBothColumnsWithNoneDefault()
     {
         var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
         var roots = new[]

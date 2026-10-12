@@ -18,7 +18,7 @@ public sealed class TransactionGatedToolBucketServiceTests
     /// bucket service when transaction enforcement is required.
     /// </summary>
     [Fact]
-    public async Task Mutations_WhenTransactionsRequired_DelegateToInner()
+    public async Task MutationsWhenTransactionsRequiredDelegateToInner()
     {
         var inner = Substitute.For<IToolBucketService>();
         inner.AddBucketAsync(Arg.Any<BucketAddRequest>(), Arg.Any<CancellationToken>())
@@ -53,7 +53,7 @@ public sealed class TransactionGatedToolBucketServiceTests
     /// coordinator transactions.
     /// </summary>
     [Fact]
-    public async Task ListAndBrowseAsync_DelegateWithoutCoordinatorTransaction()
+    public async Task ListAndBrowseAsyncDelegateWithoutCoordinatorTransaction()
     {
         var inner = Substitute.For<IToolBucketService>();
         inner.ListBucketsAsync(Arg.Any<CancellationToken>())
@@ -80,7 +80,7 @@ public sealed class TransactionGatedToolBucketServiceTests
     /// bucket mutation behavior.
     /// </summary>
     [Fact]
-    public async Task AddBucketAsync_WhenTransactionsNotRequired_DelegatesToInner()
+    public async Task AddBucketAsyncWhenTransactionsNotRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IToolBucketService>();
         inner.AddBucketAsync(Arg.Any<BucketAddRequest>(), Arg.Any<CancellationToken>())

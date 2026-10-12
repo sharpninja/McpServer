@@ -11,7 +11,7 @@ public sealed class AgentHelpPromptBuilderTests
     /// TEST-MCP-HELP-008: BuildSystemPrompt includes caller linkage, topic, issue summary, and context excerpts.
     /// </summary>
     [Fact]
-    public void BuildSystemPrompt_IncludesCallerTopicAndContext()
+    public void BuildSystemPromptIncludesCallerTopicAndContext()
     {
         var context = new AgentHelpPromptContext
         {
@@ -39,7 +39,7 @@ public sealed class AgentHelpPromptBuilderTests
     /// TEST-MCP-HELP-008: BuildTurnPrompt composes system prompt and user message without duplication.
     /// </summary>
     [Fact]
-    public void BuildTurnPrompt_CombinesSystemAndUserMessage()
+    public void BuildTurnPromptCombinesSystemAndUserMessage()
     {
         var context = new AgentHelpPromptContext
         {
@@ -61,7 +61,7 @@ public sealed class AgentHelpPromptBuilderTests
     /// TEST-MCP-HELP-008: SynthesizeEchoResponse returns actionable guidance from loaded context.
     /// </summary>
     [Fact]
-    public void SynthesizeEchoResponse_UsesContextPackForGuidance()
+    public void SynthesizeEchoResponseUsesContextPackForGuidance()
     {
         var context = new AgentHelpPromptContext
         {

@@ -14,7 +14,7 @@ public sealed class ToolRegistryClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task SearchAsync_IncludesKeyword()
+    public async System.Threading.Tasks.Task SearchAsyncIncludesKeyword()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"tools":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -26,7 +26,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task InstallFromBucketAsync_IncludesToolName()
+    public async System.Threading.Tasks.Task InstallFromBucketAsyncIncludesToolName()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -40,7 +40,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SyncBucketAsync_PostsCorrectly()
+    public async System.Threading.Tasks.Task SyncBucketAsyncPostsCorrectly()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"updated":2,"added":1,"unchanged":5}""");
         using var http = new HttpClient(handler);
@@ -54,7 +54,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListAsync_GetsTools()
+    public async System.Threading.Tasks.Task ListAsyncGetsTools()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"tools":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -67,7 +67,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListAsync_WithWorkspace_IncludesQueryParam()
+    public async System.Threading.Tasks.Task ListAsyncWithWorkspaceIncludesQueryParam()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"tools":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -79,7 +79,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAsync_GetsToolById()
+    public async System.Threading.Tasks.Task GetAsyncGetsToolById()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":5,"name":"lint","description":"Linter","tags":[]}""");
         using var http = new HttpClient(handler);
@@ -92,7 +92,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateAsync_PostsTool()
+    public async System.Threading.Tasks.Task CreateAsyncPostsTool()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -106,7 +106,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpdateAsync_PutsTool()
+    public async System.Threading.Tasks.Task UpdateAsyncPutsTool()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -120,7 +120,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteAsync_DeletesTool()
+    public async System.Threading.Tasks.Task DeleteAsyncDeletesTool()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -134,7 +134,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListBucketsAsync_GetsBuckets()
+    public async System.Threading.Tasks.Task ListBucketsAsyncGetsBuckets()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"buckets":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -148,7 +148,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AddBucketAsync_PostsBucket()
+    public async System.Threading.Tasks.Task AddBucketAsyncPostsBucket()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -161,7 +161,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteBucketAsync_DeletesCorrectUrl()
+    public async System.Threading.Tasks.Task DeleteBucketAsyncDeletesCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -176,7 +176,7 @@ public sealed class ToolRegistryClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task BrowseBucketAsync_GetsTools()
+    public async System.Threading.Tasks.Task BrowseBucketAsyncGetsTools()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"tools":[{"name":"t","description":"d","tags":[],"manifestFile":"m"}]}""");
         using var http = new HttpClient(handler);

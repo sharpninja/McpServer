@@ -30,7 +30,7 @@ public sealed class GenericClientPassthroughValidClientNamesTests
     /// </summary>
     /// <returns>A task that completes when the assertion has run.</returns>
     [Fact]
-    public async Task InvokeAsync_UnknownClient_ErrorTextDoesNotAdvertiseBrainSlots()
+    public async Task InvokeAsyncUnknownClientErrorTextDoesNotAdvertiseBrainSlots()
     {
         var message = await GetUnknownClientMessageAsync("NoSuchClientName");
 
@@ -45,7 +45,7 @@ public sealed class GenericClientPassthroughValidClientNamesTests
     /// </summary>
     /// <returns>A task that completes when the assertion has run.</returns>
     [Fact]
-    public async Task InvokeAsync_UnknownClient_ErrorTextStillListsResolvableClients()
+    public async Task InvokeAsyncUnknownClientErrorTextStillListsResolvableClients()
     {
         var names = await GetAdvertisedClientNamesAsync();
 
@@ -66,7 +66,7 @@ public sealed class GenericClientPassthroughValidClientNamesTests
     /// </summary>
     /// <returns>A task that completes when the assertion has run.</returns>
     [Fact]
-    public async Task InvokeAsync_EveryAdvertisedClientName_ResolvesThroughThePassthrough()
+    public async Task InvokeAsyncEveryAdvertisedClientNameResolvesThroughThePassthrough()
     {
         var names = await GetAdvertisedClientNamesAsync();
         Assert.NotEmpty(names);
@@ -105,7 +105,7 @@ public sealed class GenericClientPassthroughValidClientNamesTests
     [InlineData("brainslots")]
     [InlineData("BrainSlots")]
     [InlineData("BRAINSLOTS")]
-    public async Task InvokeAsync_BrainSlotsClientName_ReportsUnknownClientWithoutNamingIt(string clientName)
+    public async Task InvokeAsyncBrainSlotsClientNameReportsUnknownClientWithoutNamingIt(string clientName)
     {
         var message = await GetUnknownClientMessageAsync(clientName);
 

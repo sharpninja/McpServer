@@ -12,7 +12,7 @@ public sealed class PluginGitHistoryTests
     /// Current HEAD is an ancestor of itself, so the helper must pass.
     /// </summary>
     [Fact]
-    public void AssertShaIsAncestorOfHead_CurrentHead_Passes()
+    public void AssertShaIsAncestorOfHeadCurrentHeadPasses()
     {
         var repoRoot = FindRepositoryRoot();
         var head = PluginGitHistory.ReadHead(repoRoot);
@@ -23,7 +23,7 @@ public sealed class PluginGitHistoryTests
     /// A 40-character hex string that is not a commit object must fail the helper.
     /// </summary>
     [Fact]
-    public void AssertShaIsAncestorOfHead_NonCommitSha_Fails()
+    public void AssertShaIsAncestorOfHeadNonCommitShaFails()
     {
         var exception = Record.Exception(() =>
             PluginGitHistory.AssertShaIsAncestorOfHead(

@@ -27,7 +27,7 @@ public class AgentStdioFramingTests
     /// invalid_envelope error - the root cause of the broken Node ReplBridge.
     /// </summary>
     [Fact]
-    public async Task RunAsync_BackToBackSingleLineJsonEnvelopes_EachDispatched()
+    public async Task RunAsyncBackToBackSingleLineJsonEnvelopesEachDispatched()
     {
         var (sut, passthrough) = BuildSut();
 
@@ -54,7 +54,7 @@ public class AgentStdioFramingTests
     /// same process are both dispatched - mixed framing is first-class.
     /// </summary>
     [Fact]
-    public async Task RunAsync_MixedJsonAndYamlEnvelopes_EachDispatched()
+    public async Task RunAsyncMixedJsonAndYamlEnvelopesEachDispatched()
     {
         var (sut, passthrough) = BuildSut();
 
@@ -84,7 +84,7 @@ public class AgentStdioFramingTests
     /// response (regression guard for the existing multi-document loop).
     /// </summary>
     [Fact]
-    public async Task RunAsync_DashSeparatedYamlEnvelopes_EachDispatched()
+    public async Task RunAsyncDashSeparatedYamlEnvelopesEachDispatched()
     {
         var (sut, passthrough) = BuildSut();
 
@@ -119,7 +119,7 @@ public class AgentStdioFramingTests
     /// the Node ReplBridge response parser has always waited for).
     /// </summary>
     [Fact]
-    public async Task RunAsync_Responses_TerminatedByBlankLineAndDocumentSeparator()
+    public async Task RunAsyncResponsesTerminatedByBlankLineAndDocumentSeparator()
     {
         var (sut, _) = BuildSut();
 

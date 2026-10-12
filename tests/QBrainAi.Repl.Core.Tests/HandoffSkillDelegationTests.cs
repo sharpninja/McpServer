@@ -22,7 +22,7 @@ public sealed class HandoffSkillDelegationTests
     /// receive ingest, get, and approve calls on /qbrainai/handoff/*.
     /// </summary>
     [Fact]
-    public async Task SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient()
+    public async Task SkillDocumentedMethodsDispatchThroughWorkflowToHandoffClient()
     {
         var skillPath = Path.Combine(FindRepoRoot(), "plugins", "core", "skills", "handoff", "SKILL.md");
         Assert.True(File.Exists(skillPath), skillPath);
@@ -64,7 +64,7 @@ public sealed class HandoffSkillDelegationTests
     /// not just parse the skill inventory.
     /// </summary>
     [Fact]
-    public async Task PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints()
+    public async Task PluginSkillWorkflowInvokesTypedClientHandoffEndpoints()
     {
         var handler = new RecordingHandler();
         using var http = new HttpClient(handler);

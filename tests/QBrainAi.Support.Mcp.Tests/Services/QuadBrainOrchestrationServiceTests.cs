@@ -22,7 +22,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Creativity, Logic, then Arbiter and returns the committed final output.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision()
+    public async Task ExecuteFullOrchestrationAsyncWhenQuadReadyReturnsCommittedAotDecision()
     {
         using var db = CreateDbContext();
         var registry = Substitute.For<IBrainSlotRegistryService>();
@@ -82,7 +82,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>TEST-MCP-QBPROGRESS-001: orchestration reports started/completed for each role as it runs.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_ReportsRoleProgressAsRolesRun()
+    public async Task ExecuteFullOrchestrationAsyncReportsRoleProgressAsRolesRun()
     {
         using var db = CreateDbContext();
         var registry = Substitute.For<IBrainSlotRegistryService>();
@@ -146,7 +146,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>TEST-MCP-QBLIVE-001: Creativity and Logic roles run in parallel, and AoT waits for both responses.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_StartsLogicBeforeCreativityCompletesAndGatesAotOnBoth()
+    public async Task ExecuteFullOrchestrationAsyncStartsLogicBeforeCreativityCompletesAndGatesAotOnBoth()
     {
         using var db = CreateDbContext();
         var registry = Substitute.For<IBrainSlotRegistryService>();
@@ -244,7 +244,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>TEST-MCP-QBLIVE-001: Quad roles carry role-specific descriptions and Logic uses provider temperature.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_BuildsRoleSpecificPromptInstructions()
+    public async Task ExecuteFullOrchestrationAsyncBuildsRoleSpecificPromptInstructions()
     {
         using var db = CreateDbContext();
         var registry = Substitute.For<IBrainSlotRegistryService>();
@@ -309,7 +309,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>TEST-MCP-QBLIVE-001: Curiosity is invoked only when both roles fail to produce valid committed output.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenBothHemispheresProduceNoValidOutput_InvokesCuriosityWithoutReturningIt()
+    public async Task ExecuteFullOrchestrationAsyncWhenBothHemispheresProduceNoValidOutputInvokesCuriosityWithoutReturningIt()
     {
         using var db = CreateDbContext();
         var registry = Substitute.For<IBrainSlotRegistryService>();
@@ -371,7 +371,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>TEST-MCP-QBLIVE-001: Arbiter semantic rejection triggers a bounded voting/reconciliation round.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenArbiterRejectsInitialEvidence_RunsVotingRound()
+    public async Task ExecuteFullOrchestrationAsyncWhenArbiterRejectsInitialEvidenceRunsVotingRound()
     {
         using var db = CreateDbContext();
         var registry = Substitute.For<IBrainSlotRegistryService>();
@@ -443,7 +443,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>Full orchestration rejects before provider calls when the workspace is not quad-ready.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenNotQuadReady_DoesNotInvokeAnySlot()
+    public async Task ExecuteFullOrchestrationAsyncWhenNotQuadReadyDoesNotInvokeAnySlot()
     {
         using var db = CreateDbContext();
         var registry = Substitute.For<IBrainSlotRegistryService>();
@@ -470,7 +470,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>Approved weight updates persist role weights, increment versions, and write audit rows.</summary>
     [Fact]
-    public async Task ExecuteWeightUpdateAsync_WhenApproved_PersistsWeightsAndAudits()
+    public async Task ExecuteWeightUpdateAsyncWhenApprovedPersistsWeightsAndAudits()
     {
         using var db = CreateDbContext();
         var slot = Slot(BrainSlotRoles.Creativity);
@@ -504,7 +504,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 
     /// <summary>Weight updates without all required approvals are rejected without mutation.</summary>
     [Fact]
-    public async Task ExecuteWeightUpdateAsync_WhenApprovalMissing_DoesNotMutate()
+    public async Task ExecuteWeightUpdateAsyncWhenApprovalMissingDoesNotMutate()
     {
         using var db = CreateDbContext();
         var slot = Slot(BrainSlotRoles.Creativity);

@@ -21,7 +21,7 @@ public sealed class Fts5SearchServiceTests
     /// FTS search before and after an FTS rebuild.
     /// </summary>
     [Fact]
-    public async Task SearchAsync_ExcludesSoftDeletedDocumentsBeforeAndAfterRebuild()
+    public async Task SearchAsyncExcludesSoftDeletedDocumentsBeforeAndAfterRebuild()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
         await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);

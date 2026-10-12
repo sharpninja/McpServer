@@ -32,7 +32,7 @@ public sealed class BugTriage139EighteenthEvidenceTests
     [InlineData(
         "BUG-TRIAGE-139-sixteenth-remediation.md",
         "CB3D04D459ED657F7DB579F712C72552638233C9695888E2FC206C12FA828DEB")]
-    public void HistoricalReceipt_MatchesImmutablePublishedHash(
+    public void HistoricalReceiptMatchesImmutablePublishedHash(
         string fileName,
         string expectedSha256)
     {
@@ -51,7 +51,7 @@ public sealed class BugTriage139EighteenthEvidenceTests
     /// and matches the operator-provided SHA-256.
     /// </summary>
     [Fact]
-    public void EighteenthInputReview_IsDurableAndByteExact()
+    public void EighteenthInputReviewIsDurableAndByteExact()
     {
         var path = Path.Combine(
             RepositoryEvidenceTestSupport.ResolveRepositoryRoot(),
@@ -73,7 +73,7 @@ public sealed class BugTriage139EighteenthEvidenceTests
     /// declared only by the current append-only index.
     /// </summary>
     [Fact]
-    public void CurrentEvidenceIndex_RecordsSupersessionOwnershipAndExactLedgerPath()
+    public void CurrentEvidenceIndexRecordsSupersessionOwnershipAndExactLedgerPath()
     {
         var path = Path.Combine(
             RepositoryEvidenceTestSupport.ResolveRepositoryRoot(),

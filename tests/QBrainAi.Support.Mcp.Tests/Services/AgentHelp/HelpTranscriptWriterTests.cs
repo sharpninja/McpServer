@@ -12,7 +12,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services.AgentHelp;
 public sealed class HelpTranscriptWriterTests
 {
     [Fact]
-    public async Task AppendAsync_WritesSingleJsonLinePerEntry()
+    public async Task AppendAsyncWritesSingleJsonLinePerEntry()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var dataRoot = Path.Combine(workspaceRoot, ".mcpServer");
@@ -40,7 +40,7 @@ public sealed class HelpTranscriptWriterTests
     }
 
     [Fact]
-    public async Task AppendAsync_AppendsMultipleEntriesWithoutOverwriting()
+    public async Task AppendAsyncAppendsMultipleEntriesWithoutOverwriting()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var dataRoot = Path.Combine(workspaceRoot, ".mcpServer");
@@ -80,7 +80,7 @@ public sealed class HelpTranscriptWriterTests
     }
 
     [Fact]
-    public async Task ReadAllAsync_ReturnsEmpty_WhenTranscriptFileDoesNotExist()
+    public async Task ReadAllAsyncReturnsEmptyWhenTranscriptFileDoesNotExist()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var dataRoot = Path.Combine(workspaceRoot, ".mcpServer");

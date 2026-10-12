@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class StubAuthRotationHandlerTests
 {
     [Fact]
-    public async Task UpdateAuthState_NewMarkerData_TransitionsToNewState()
+    public async Task UpdateAuthStateNewMarkerDataTransitionsToNewState()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
@@ -23,7 +23,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task UpdateAuthState_NullMarkerData_ThrowsArgumentNullException()
+    public async Task UpdateAuthStateNullMarkerDataThrowsArgumentNullException()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
@@ -33,7 +33,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task RegisterAuthChangeCallback_InvokesOnUpdate()
+    public async Task RegisterAuthChangeCallbackInvokesOnUpdate()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
@@ -58,7 +58,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task RegisterAuthChangeCallback_MultipleCallbacks_AllInvoked()
+    public async Task RegisterAuthChangeCallbackMultipleCallbacksAllInvoked()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
@@ -79,7 +79,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task UnregisterAuthChangeCallback_RemovesCallback()
+    public async Task UnregisterAuthChangeCallbackRemovesCallback()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
@@ -102,7 +102,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task RefreshAuthState_ReReadsMarkerFile_ReturnsUpdatedState()
+    public async Task RefreshAuthStateReReadsMarkerFileReturnsUpdatedState()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
@@ -115,7 +115,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task RefreshAuthState_NonexistentWorkspace_ThrowsFileNotFoundException()
+    public async Task RefreshAuthStateNonexistentWorkspaceThrowsFileNotFoundException()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
@@ -125,7 +125,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task ValidateAuthState_ValidToken_ReturnsTrue()
+    public async Task ValidateAuthStateValidTokenReturnsTrue()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "valid-key");
 
@@ -136,7 +136,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task ValidateAuthState_ExpiredToken_ReturnsFalse()
+    public async Task ValidateAuthStateExpiredTokenReturnsFalse()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "expired-key");
 
@@ -146,7 +146,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public void ClearAuthState_InvalidatesCurrentState()
+    public void ClearAuthStateInvalidatesCurrentState()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
@@ -159,7 +159,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task AuthStateTransitions_FollowLifecycle()
+    public async Task AuthStateTransitionsFollowLifecycle()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "key-v1");
 
@@ -187,7 +187,7 @@ public class StubAuthRotationHandlerTests
     }
 
     [Fact]
-    public async Task SimulateServerRestart_DetectsKeyChange()
+    public async Task SimulateServerRestartDetectsKeyChange()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "pre-restart-key");
 

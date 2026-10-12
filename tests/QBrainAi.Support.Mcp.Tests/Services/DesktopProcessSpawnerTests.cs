@@ -16,7 +16,7 @@ public sealed class DesktopProcessSpawnerTests
     /// instead of the Windows service desktop-token launcher.
     /// </summary>
     [Fact]
-    public async Task Spawn_WhenHostIsInteractive_CanRunCmdThroughDefaultSpawner()
+    public async Task SpawnWhenHostIsInteractiveCanRunCmdThroughDefaultSpawner()
     {
         if (!OperatingSystem.IsWindows() || !Environment.UserInteractive)
             return;
@@ -53,7 +53,7 @@ public sealed class DesktopProcessSpawnerTests
     /// authoritative for auth caches and temp folders.
     /// </summary>
     [Fact]
-    public void ExtractEnvironment_RemovesServiceDefaultsAndKeepsExplicitDeltas()
+    public void ExtractEnvironmentRemovesServiceDefaultsAndKeepsExplicitDeltas()
     {
         var startInfo = new ProcessStartInfo
         {

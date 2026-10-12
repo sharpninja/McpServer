@@ -16,7 +16,7 @@ public sealed class DeleteWorkspaceTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Delete_ExistingWorkspace_Returns200()
+    public async Task DeleteExistingWorkspaceReturns200()
     {
         // Create a workspace to delete.
         var testPath = WorkspaceEndpointFixture.GenerateTestWorkspacePath();
@@ -44,7 +44,7 @@ public sealed class DeleteWorkspaceTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Delete_NonExistentWorkspace_Returns404()
+    public async Task DeleteNonExistentWorkspaceReturns404()
     {
         var fakeKey = WorkspaceEndpointFixture.EncodeKey(@"C:\NonExistent\Path_" + Guid.NewGuid().ToString("N"));
 
@@ -60,7 +60,7 @@ public sealed class DeleteWorkspaceTests
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Delete_InvalidKey_Returns400()
+    public async Task DeleteInvalidKeyReturns400()
     {
         var response = await _fixture.Client.DeleteAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!", cancellationToken: TestContext.Current.CancellationToken);

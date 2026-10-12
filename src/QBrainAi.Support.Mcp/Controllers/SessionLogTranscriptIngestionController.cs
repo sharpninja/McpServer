@@ -277,7 +277,7 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
     private static string ResolveUploadDestination(string stagingRoot, string relativeName, HashSet<string> stagedPaths)
     {
         var normalized = (relativeName ?? string.Empty).Replace('\\', '/');
-        if (string.IsNullOrWhiteSpace(normalized) || normalized.StartsWith("/", StringComparison.Ordinal) || Path.IsPathRooted(normalized))
+        if (string.IsNullOrWhiteSpace(normalized) || normalized.StartsWith('/') || Path.IsPathRooted(normalized))
             throw new InvalidDataException("Transcript upload file names must be relative paths.");
 
         var segments = normalized.Split('/', StringSplitOptions.RemoveEmptyEntries);

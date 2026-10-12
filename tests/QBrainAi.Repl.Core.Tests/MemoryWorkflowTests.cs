@@ -20,7 +20,7 @@ public sealed class MemoryWorkflowTests
 
     /// <summary>Verifies that list filters are forwarded to the typed memory client.</summary>
     [Fact]
-    public async Task ListAsync_ForwardsFiltersToMemoryClient()
+    public async Task ListAsyncForwardsFiltersToMemoryClient()
     {
         var handler = new JsonHandler("""{"items":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -36,7 +36,7 @@ public sealed class MemoryWorkflowTests
 
     /// <summary>Verifies that add requests are posted through the typed memory client.</summary>
     [Fact]
-    public async Task AddAsync_PostsMemoryRequest()
+    public async Task AddAsyncPostsMemoryRequest()
     {
         var handler = new JsonHandler("""
             {"success":true,"memory":{"id":"MEMORY-AGENT-001","category":"AGENT","scope":"Workspace","workspacePath":"Q:\\__mcp_unit_test__\\QBrainAi","text":"Use wrappers.","version":1,"createdAtUtc":"2026-06-08T07:00:00Z","updatedAtUtc":"2026-06-08T07:00:00Z","updatedBy":"Codex"},"failureKind":"None"}
@@ -69,7 +69,7 @@ public sealed class MemoryWorkflowTests
     /// and must keep <c>rankingMode</c>.
     /// </summary>
     [Fact]
-    public async Task RecallAsync_LiveItemsJson_PreservesHitsInPluginYaml()
+    public async Task RecallAsyncLiveItemsJsonPreservesHitsInPluginYaml()
     {
         var handler = new JsonHandler(
             """
@@ -117,7 +117,7 @@ public sealed class MemoryWorkflowTests
     /// workflow.memory.explore must keep live-API neighbor <c>items</c> as plugin-facing <c>hits</c>.
     /// </summary>
     [Fact]
-    public async Task ExploreAsync_LiveItemsJson_PreservesHitsInPluginYaml()
+    public async Task ExploreAsyncLiveItemsJsonPreservesHitsInPluginYaml()
     {
         var handler = new JsonHandler(
             """
@@ -161,7 +161,7 @@ public sealed class MemoryWorkflowTests
     /// workflow.memory.consolidate must keep live-API <c>plan</c> as plugin-facing <c>items</c>/<c>hits</c>.
     /// </summary>
     [Fact]
-    public async Task ConsolidateAsync_LivePlanJson_PreservesHitsInPluginYaml()
+    public async Task ConsolidateAsyncLivePlanJsonPreservesHitsInPluginYaml()
     {
         var handler = new JsonHandler(
             """

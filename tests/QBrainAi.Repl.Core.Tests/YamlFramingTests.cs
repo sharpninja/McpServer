@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class YamlFramingTests
 {
     [Fact]
-    public void ParseHelloEnvelope_ValidYaml_ReturnsTypedEnvelope()
+    public void ParseHelloEnvelopeValidYamlReturnsTypedEnvelope()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -40,7 +40,7 @@ payload:
     }
 
     [Fact]
-    public void ParseRequestEnvelope_ValidYaml_ReturnsRequestPayload()
+    public void ParseRequestEnvelopeValidYamlReturnsRequestPayload()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -73,7 +73,7 @@ payload:
     }
 
     [Fact]
-    public void ParseEventEnvelope_ValidYaml_ReturnsEventPayload()
+    public void ParseEventEnvelopeValidYamlReturnsEventPayload()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -105,7 +105,7 @@ payload:
     }
 
     [Fact]
-    public void ParseResultEnvelope_ValidYaml_ReturnsResultPayload()
+    public void ParseResultEnvelopeValidYamlReturnsResultPayload()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -135,7 +135,7 @@ payload:
     }
 
     [Fact]
-    public void ParseErrorEnvelope_ValidYaml_ReturnsErrorPayload()
+    public void ParseErrorEnvelopeValidYamlReturnsErrorPayload()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -171,7 +171,7 @@ payload:
     }
 
     [Fact]
-    public void SerializeEnvelope_HelloType_ProducesValidYaml()
+    public void SerializeEnvelopeHelloTypeProducesValidYaml()
     {
         var serializer = Substitute.For<IYamlSerializer>();
         var envelope = Substitute.For<IYamlEnvelope>();
@@ -188,7 +188,7 @@ payload:
     }
 
     [Fact]
-    public void Deserialize_MalformedYaml_ThrowsFormatException()
+    public void DeserializeMalformedYamlThrowsFormatException()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -201,7 +201,7 @@ payload:
     }
 
     [Fact]
-    public void Deserialize_MissingTypeField_ThrowsInvalidOperationException()
+    public void DeserializeMissingTypeFieldThrowsInvalidOperationException()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -214,7 +214,7 @@ payload:
     }
 
     [Fact]
-    public void Deserialize_UnknownEnvelopeType_ThrowsInvalidOperationException()
+    public void DeserializeUnknownEnvelopeTypeThrowsInvalidOperationException()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -227,7 +227,7 @@ payload:
     }
 
     [Fact]
-    public void TryDeserialize_ValidYaml_ReturnsTrueWithEnvelope()
+    public void TryDeserializeValidYamlReturnsTrueWithEnvelope()
     {
         var serializer = Substitute.For<IYamlSerializer>();
         var yamlInput = "type: hello\npayload:\n  protocolVersion: \"1.0\"";
@@ -251,7 +251,7 @@ payload:
     }
 
     [Fact]
-    public void TryDeserialize_InvalidYaml_ReturnsFalse()
+    public void TryDeserializeInvalidYamlReturnsFalse()
     {
         var serializer = Substitute.For<IYamlSerializer>();
         var invalidYaml = "invalid: [yaml";
@@ -271,7 +271,7 @@ payload:
     }
 
     [Fact]
-    public void SerializeStream_MultipleEnvelopes_ProducesYamlDocumentStream()
+    public void SerializeStreamMultipleEnvelopesProducesYamlDocumentStream()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -294,7 +294,7 @@ payload:
     }
 
     [Fact]
-    public void DeserializeStream_MultipleDocuments_ReturnsEnvelopeList()
+    public void DeserializeStreamMultipleDocumentsReturnsEnvelopeList()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -317,7 +317,7 @@ payload:
     }
 
     [Fact]
-    public void ValidateEnvelope_MissingPayload_ThrowsInvalidOperationException()
+    public void ValidateEnvelopeMissingPayloadThrowsInvalidOperationException()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 

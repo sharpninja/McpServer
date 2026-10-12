@@ -390,7 +390,7 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
         Category = item.Category,
     };
 
-    private SessionLogTurnContext FindTurnOrThrow(SessionLogWorkflowContext context, string requestId) =>
+    private static SessionLogTurnContext FindTurnOrThrow(SessionLogWorkflowContext context, string requestId) =>
         context.FindTurn(requestId)
         ?? throw new InvalidOperationException(
             $"Request turn '{requestId}' was not found in the current session-log workflow context.");

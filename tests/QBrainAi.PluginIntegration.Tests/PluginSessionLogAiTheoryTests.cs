@@ -20,7 +20,7 @@ public sealed class PluginSessionLogAiTheoryTests
     /// not a local JsonDocument success parser.
     /// </summary>
     [Fact]
-    public void AiStrategyFixture_InvokesSharpNinjaAiUnitNotLocalJsonParser()
+    public void AiStrategyFixtureInvokesSharpNinjaAiUnitNotLocalJsonParser()
     {
         var path = Path.Combine(
             FindRepositoryRoot(),
@@ -46,7 +46,7 @@ public sealed class PluginSessionLogAiTheoryTests
     [InlineData(PluginHostKind.Cline)]
     [InlineData(PluginHostKind.ClineV2)]
     [InlineData(PluginHostKind.OpenCode)]
-    public async Task AiTheory_Agent_RequiresValidJsonFields(PluginHostKind hostKind)
+    public async Task AiTheoryAgentRequiresValidJsonFields(PluginHostKind hostKind)
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
@@ -84,7 +84,7 @@ public sealed class PluginSessionLogAiTheoryTests
     /// P17 green: the required model <c>valid</c> field is false even when arrays are empty.
     /// </summary>
     [Fact]
-    public void AiTheory_ParseAiUnitPayload_ValidFalseEmptyArrays_IsInvalid()
+    public void AiTheoryParseAiUnitPayloadValidFalseEmptyArraysIsInvalid()
     {
         var evaluation = AiStrategyFixture.ParseAiUnitPayload(
             "{\"valid\":false,\"missingFields\":[],\"contradictions\":[]}");
@@ -97,7 +97,7 @@ public sealed class PluginSessionLogAiTheoryTests
     /// P17 green: invalid JSON and deterministicFailure=true stay Valid=false. AI output never overrides deterministic failure.
     /// </summary>
     [Fact]
-    public async Task AiTheory_RejectsInvalidJson_DoesNotOverrideDeterministicFailure()
+    public async Task AiTheoryRejectsInvalidJsonDoesNotOverrideDeterministicFailure()
     {
         var invalid = await AiStrategyFixture.EvaluateAsync("{not-json", TestContext.Current.CancellationToken);
         Assert.False(invalid.Valid);

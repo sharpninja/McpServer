@@ -20,7 +20,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 {
     /// <summary>TODO update executes inside the coordinator and returns after commit.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult()
+    public async Task UpdateAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsResult()
     {
         var todo = new RecordingTodoService
         {
@@ -45,7 +45,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>A pre-mutation coordinator rejection prevents TODO update execution.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotUpdate()
+    public async Task UpdateAsyncWhenCoordinatorRejectsBeforeMutationDoesNotUpdate()
     {
         var todo = new RecordingTodoService { Existing = Item("TODO-TXN-002", "Before") };
         var coordinator = new CapturingCoordinator
@@ -70,7 +70,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>A post-mutation commit failure invokes TODO store compensation.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenCommitFailsAfterMutation_RestoresSnapshot()
+    public async Task UpdateAsyncWhenCommitFailsAfterMutationRestoresSnapshot()
     {
         var before = Item("TODO-TXN-003", "Before");
         var todo = new RecordingTodoService
@@ -100,7 +100,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>Rollback compensation failures are surfaced as failed rollback results instead of success.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenRollbackReturnsFailure_ReportsRollbackFailure()
+    public async Task UpdateAsyncWhenRollbackReturnsFailureReportsRollbackFailure()
     {
         var before = Item("TODO-TXN-004", "Before");
         var todo = new RecordingTodoService
@@ -130,7 +130,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>External-sync/projection failures with a mutated item are rolled back during abort.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenLocalFailureMayHaveAppliedMutation_RestoresSnapshot()
+    public async Task UpdateAsyncWhenLocalFailureMayHaveAppliedMutationRestoresSnapshot()
     {
         var before = Item("TODO-TXN-005", "Before");
         var todo = new RecordingTodoService
@@ -160,7 +160,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>Projection failures keep authoritative local state and do not rollback projection repair state.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenProjectionFailureHasItem_CommitsWithoutRollback()
+    public async Task UpdateAsyncWhenProjectionFailureHasItemCommitsWithoutRollback()
     {
         var before = Item("TODO-TXN-006", "Before");
         var after = Item("TODO-TXN-006", "After");
@@ -192,7 +192,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>ISSUE-backed updates are rejected while transaction gating is required because GitHub side effects are not compensated yet.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenIssueBackedTodoAndGatingRequired_RejectsBeforeMutation()
+    public async Task UpdateAsyncWhenIssueBackedTodoAndGatingRequiredRejectsBeforeMutation()
     {
         var todo = new RecordingTodoService { Existing = Item("ISSUE-42", "Before") };
         var coordinator = new CapturingCoordinator();
@@ -211,7 +211,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO create executes inside the coordinator and returns only after commit.</summary>
     [Fact]
-    public async Task CreateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult()
+    public async Task CreateAsyncWhenCoordinatorCommitsBuildsTransactionAndReturnsResult()
     {
         var created = Item("TODO-TXN-CREATE-001", "Created");
         var todo = new RecordingTodoService
@@ -241,7 +241,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>A pre-mutation coordinator rejection prevents TODO create execution.</summary>
     [Fact]
-    public async Task CreateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotCreate()
+    public async Task CreateAsyncWhenCoordinatorRejectsBeforeMutationDoesNotCreate()
     {
         var todo = new RecordingTodoService();
         var coordinator = new CapturingCoordinator
@@ -270,7 +270,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>A post-mutation commit failure removes the locally-created TODO item.</summary>
     [Fact]
-    public async Task CreateAsync_WhenCommitFailsAfterMutation_DeletesCreatedItem()
+    public async Task CreateAsyncWhenCommitFailsAfterMutationDeletesCreatedItem()
     {
         var created = Item("TODO-TXN-CREATE-003", "Created");
         var todo = new RecordingTodoService
@@ -304,7 +304,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO create projection failures keep the locally-created authoritative item for later projection repair.</summary>
     [Fact]
-    public async Task CreateAsync_WhenProjectionFailureHasCreatedItem_CommitsWithoutDeletingCreatedItem()
+    public async Task CreateAsyncWhenProjectionFailureHasCreatedItemCommitsWithoutDeletingCreatedItem()
     {
         var created = Item("TODO-TXN-CREATE-004", "Created");
         var todo = new RecordingTodoService
@@ -342,7 +342,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
     /// TEST-MCP-TRIAGE-004: triage-created TODOs use the transaction-gated TODO mutation service.
     /// </summary>
     [Fact]
-    public async Task TransactionGatedTriageTodoCreator_CreateAsync_ForwardsToTransactionGatedTodoMutations()
+    public async Task TransactionGatedTriageTodoCreatorCreateAsyncForwardsToTransactionGatedTodoMutations()
     {
         var gated = Substitute.For<ITransactionGatedTodoMutationService>();
         var expected = new TodoMutationResult(
@@ -376,7 +376,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
     /// TEST-MCP-TRIAGE-004: background triage creates use the scoped workspace context instead of the default workspace.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenScopedWorkspaceContextIsResolved_CreatesInScopedWorkspaceService()
+    public async Task CreateAsyncWhenScopedWorkspaceContextIsResolvedCreatesInScopedWorkspaceService()
     {
         var primary = new RecordingTodoService();
         var scoped = new RecordingTodoService
@@ -428,7 +428,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>ISSUE-backed creates are rejected while required transaction gating lacks GitHub side-effect compensation.</summary>
     [Fact]
-    public async Task CreateAsync_WhenIssueBackedTodoAndGatingRequired_RejectsBeforeMutation()
+    public async Task CreateAsyncWhenIssueBackedTodoAndGatingRequiredRejectsBeforeMutation()
     {
         var todo = new RecordingTodoService();
         var coordinator = new CapturingCoordinator();
@@ -452,7 +452,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>A federated decorator over a non-compensating provider is rejected before required-gated create mutation.</summary>
     [Fact]
-    public async Task CreateAsync_WhenFederatedProviderWrapsUnsupportedInnerAndGatingRequired_RejectsBeforeMutation()
+    public async Task CreateAsyncWhenFederatedProviderWrapsUnsupportedInnerAndGatingRequiredRejectsBeforeMutation()
     {
         var inner = Substitute.For<ITodoService>();
         inner.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
@@ -483,7 +483,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>A post-mutation commit failure restores the TODO deleted by the local provider.</summary>
     [Fact]
-    public async Task DeleteAsync_WhenCommitFailsAfterMutation_RestoresSnapshot()
+    public async Task DeleteAsyncWhenCommitFailsAfterMutationRestoresSnapshot()
     {
         var before = Item("TODO-TXN-DELETE-001", "Before");
         var todo = new RecordingTodoService
@@ -509,7 +509,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>ISSUE-backed deletes are rejected while required transaction gating lacks GitHub side-effect compensation.</summary>
     [Fact]
-    public async Task DeleteAsync_WhenIssueBackedTodoAndGatingRequired_RejectsBeforeMutation()
+    public async Task DeleteAsyncWhenIssueBackedTodoAndGatingRequiredRejectsBeforeMutation()
     {
         var todo = new RecordingTodoService { Existing = Item("ISSUE-42", "Before") };
         var coordinator = new CapturingCoordinator();
@@ -524,7 +524,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>A pre-mutation coordinator rejection prevents TODO move source and target mutations.</summary>
     [Fact]
-    public async Task MoveAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotCreateTargetOrDeleteSource()
+    public async Task MoveAsyncWhenCoordinatorRejectsBeforeMutationDoesNotCreateTargetOrDeleteSource()
     {
         var source = new RecordingTodoService { Existing = Item("TODO-TXN-MOVE-001", "Move me") };
         var target = new RecordingTodoService();
@@ -550,7 +550,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO move creates the target item and deletes the source only after transaction commit approval.</summary>
     [Fact]
-    public async Task MoveAsync_WhenCoordinatorCommits_CreatesTargetDeletesSourceAndReturnsMovedItem()
+    public async Task MoveAsyncWhenCoordinatorCommitsCreatesTargetDeletesSourceAndReturnsMovedItem()
     {
         var sourceItem = Item("TODO-TXN-MOVE-002", "Move me");
         var movedItem = sourceItem with { Title = "Move me" };
@@ -583,7 +583,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO move rollback removes the target item and restores the source snapshot.</summary>
     [Fact]
-    public async Task MoveAsync_WhenCommitFailsAfterMutation_RemovesTargetAndRestoresSource()
+    public async Task MoveAsyncWhenCommitFailsAfterMutationRemovesTargetAndRestoresSource()
     {
         var sourceItem = Item("TODO-TXN-MOVE-003", "Move me");
         var movedItem = sourceItem with { Title = "Move me" };
@@ -619,7 +619,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO move reports rollback failure when either target cleanup or source restore fails.</summary>
     [Fact]
-    public async Task MoveAsync_WhenRollbackFails_ReturnsConflictWithRollbackFailure()
+    public async Task MoveAsyncWhenRollbackFailsReturnsConflictWithRollbackFailure()
     {
         var sourceItem = Item("TODO-TXN-MOVE-004", "Move me");
         var movedItem = sourceItem with { Title = "Move me" };
@@ -656,7 +656,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>ISSUE-backed TODO moves are rejected while GitHub side-effect compensation is deferred.</summary>
     [Fact]
-    public async Task MoveAsync_WhenIssueBackedTodoAndGatingRequired_RejectsBeforeMutation()
+    public async Task MoveAsyncWhenIssueBackedTodoAndGatingRequiredRejectsBeforeMutation()
     {
         var source = new RecordingTodoService { Existing = Item("ISSUE-42", "Move me") };
         var target = new RecordingTodoService();
@@ -677,7 +677,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO move rejects unsupported target providers before mutating when mutation gating is required.</summary>
     [Fact]
-    public async Task MoveAsync_WhenTargetProviderUnsupportedAndGatingRequired_ReturnsConflictBeforeMutation()
+    public async Task MoveAsyncWhenTargetProviderUnsupportedAndGatingRequiredReturnsConflictBeforeMutation()
     {
         var source = new RecordingTodoService { Existing = Item("TODO-TXN-MOVE-005", "Move me") };
         var target = Substitute.For<ITodoService>();
@@ -699,7 +699,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO projection repair fails closed while required transaction gating is active.</summary>
     [Fact]
-    public async Task RepairProjectionAsync_WhenRequiredTransactionsActive_FailsClosedWithoutRepair()
+    public async Task RepairProjectionAsyncWhenRequiredTransactionsActiveFailsClosedWithoutRepair()
     {
         var todo = new RecordingTodoService();
         var coordinator = new CapturingCoordinator();
@@ -713,7 +713,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO projection repair fails closed when the coordinator is degraded.</summary>
     [Fact]
-    public async Task RepairProjectionAsync_WhenCoordinatorDegraded_FailsClosedWithoutRepair()
+    public async Task RepairProjectionAsyncWhenCoordinatorDegradedFailsClosedWithoutRepair()
     {
         var todo = new RecordingTodoService();
         var coordinator = new CapturingCoordinator
@@ -735,7 +735,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>TODO projection repair delegates when mutation transactions are not required.</summary>
     [Fact]
-    public async Task RepairProjectionAsync_WhenTransactionsNotRequired_DelegatesToTodoService()
+    public async Task RepairProjectionAsyncWhenTransactionsNotRequiredDelegatesToTodoService()
     {
         var todo = new RecordingTodoService
         {
@@ -752,7 +752,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
 
     /// <summary>DI resolution selects the constructor that has TODO move workspace resolution dependencies.</summary>
     [Fact]
-    public async Task MoveAsync_WhenResolvedFromServiceProvider_UsesMoveCapableConstructor()
+    public async Task MoveAsyncWhenResolvedFromServiceProviderUsesMoveCapableConstructor()
     {
         var source = new RecordingTodoService();
         var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new QBrainAi.Support.Mcp.Ingestion.IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });

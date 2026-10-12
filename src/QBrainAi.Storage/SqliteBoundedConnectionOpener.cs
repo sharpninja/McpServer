@@ -194,14 +194,14 @@ internal static class SqliteBoundedConnectionOpener
             .ConfigureAwait(false);
         if (!ReferenceEquals(winner, completion.Task))
         {
-            var cleanupDeadline = Task.Delay(s_nativeCleanupTimeout);
+            var cleanupDeadline = Task.Delay(s_nativeCleanupTimeout, cancellationToken);
             while (!completion.Task.IsCompleted && !cleanupDeadline.IsCompleted)
             {
                 cancellationState.TryCancelNativeWork();
                 await Task.WhenAny(
                         completion.Task,
                         cleanupDeadline,
-                        Task.Delay(TimeSpan.FromMilliseconds(10)))
+                        Task.Delay(TimeSpan.FromMilliseconds(10), cancellationToken))
                     .ConfigureAwait(false);
             }
         }

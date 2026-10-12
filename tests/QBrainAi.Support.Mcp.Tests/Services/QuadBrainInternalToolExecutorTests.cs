@@ -132,7 +132,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_todo_create routes through the transaction-gated create and reports success.</summary>
     [Fact]
-    public async Task Execute_McpTodoCreate_RoutesThroughGatedCreate()
+    public async Task ExecuteMcpTodoCreateRoutesThroughGatedCreate()
     {
         _todo.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
@@ -151,7 +151,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_todo_update routes through the transaction-gated update with the parsed id.</summary>
     [Fact]
-    public async Task Execute_McpTodoUpdate_RoutesThroughGatedUpdate()
+    public async Task ExecuteMcpTodoUpdateRoutesThroughGatedUpdate()
     {
         _todo.UpdateAsync("X", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
@@ -166,7 +166,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_todo_update without an id fails without calling the service.</summary>
     [Fact]
-    public async Task Execute_McpTodoUpdate_MissingId_Fails()
+    public async Task ExecuteMcpTodoUpdateMissingIdFails()
     {
         var sut = CreateSut();
 
@@ -180,7 +180,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_repo_edit routes through the transaction-gated repo edit.</summary>
     [Fact]
-    public async Task Execute_McpRepoEdit_RoutesThroughRepoService()
+    public async Task ExecuteMcpRepoEditRoutesThroughRepoService()
     {
         _repo.EditAsync("a.cs", "x", "y", false, null, Arg.Any<CancellationToken>())
             .Returns(new RepoEditResult(true, 1, null));
@@ -195,7 +195,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_repo_write routes through the transaction-gated repo write.</summary>
     [Fact]
-    public async Task Execute_McpRepoWrite_RoutesThroughRepoService()
+    public async Task ExecuteMcpRepoWriteRoutesThroughRepoService()
     {
         _repo.WriteAsync("a.txt", "hello", Arg.Any<CancellationToken>())
             .Returns(new RepoWriteResult(true, null));
@@ -210,7 +210,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>A failed mutation maps to a Fail outcome carrying the error.</summary>
     [Fact]
-    public async Task Execute_MutationFails_ReturnsFail()
+    public async Task ExecuteMutationFailsReturnsFail()
     {
         _repo.WriteAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new RepoWriteResult(false, "transaction rejected"));
@@ -226,7 +226,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_requirements_create_fr routes through the transaction-gated FR add (FR-MCP-QBEXEC-001 AC-4).</summary>
     [Fact]
-    public async Task Execute_McpRequirementsCreateFr_RoutesThroughGatedAdd()
+    public async Task ExecuteMcpRequirementsCreateFrRoutesThroughGatedAdd()
     {
         var sut = CreateSut();
 
@@ -242,7 +242,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_requirements_update_tr routes through the transaction-gated TR update.</summary>
     [Fact]
-    public async Task Execute_McpRequirementsUpdateTr_RoutesThroughGatedUpdate()
+    public async Task ExecuteMcpRequirementsUpdateTrRoutesThroughGatedUpdate()
     {
         var sut = CreateSut();
 
@@ -257,7 +257,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_requirements_create_test routes the condition through the transaction-gated TEST add.</summary>
     [Fact]
-    public async Task Execute_McpRequirementsCreateTest_RoutesThroughGatedAdd()
+    public async Task ExecuteMcpRequirementsCreateTestRoutesThroughGatedAdd()
     {
         var sut = CreateSut();
 
@@ -273,7 +273,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>A requirements mutation without an id fails without calling the service.</summary>
     [Fact]
-    public async Task Execute_McpRequirementsCreateFr_MissingId_Fails()
+    public async Task ExecuteMcpRequirementsCreateFrMissingIdFails()
     {
         var sut = CreateSut();
 
@@ -288,7 +288,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>A requirements service failure maps to a Fail outcome rather than throwing.</summary>
     [Fact]
-    public async Task Execute_McpRequirementsCreateFr_WhenServiceThrows_ReturnsFail()
+    public async Task ExecuteMcpRequirementsCreateFrWhenServiceThrowsReturnsFail()
     {
         _requirements.AddFrAsync(Arg.Any<FrEntry>(), Arg.Any<CancellationToken>())
             .Returns(_ => Task.FromException(new InvalidOperationException("duplicate id")));
@@ -305,7 +305,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>FR-MCP-QBEXEC-002 AC-2: mcp_requirements_list_fr is handled through QueryFrAsync, not Unhandled.</summary>
     [Fact]
-    public async Task Execute_McpRequirementsListFr_RoutesThroughQuery()
+    public async Task ExecuteMcpRequirementsListFrRoutesThroughQuery()
     {
         _requirements.QueryFrAsync(Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns([new FrEntry("FR-MCP-X-001", "t", "b")]);
@@ -321,7 +321,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>FR-MCP-QBEXEC-002: mcp_todo_query runs through ITodoService (CQRS app service), not HTTP.</summary>
     [Fact]
-    public async Task Execute_McpTodoQuery_RoutesThroughTodoService()
+    public async Task ExecuteMcpTodoQueryRoutesThroughTodoService()
     {
         _todoQueries.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoQueryResult(
@@ -345,7 +345,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>FR-MCP-QBEXEC-002: mcp_todo_get runs through ITodoService.GetByIdAsync.</summary>
     [Fact]
-    public async Task Execute_McpTodoGet_RoutesThroughTodoService()
+    public async Task ExecuteMcpTodoGetRoutesThroughTodoService()
     {
         _todoQueries.GetByIdAsync("PLAN-X-001", Arg.Any<CancellationToken>())
             .Returns(new TodoFlatItem { Id = "PLAN-X-001", Title = "Do it", Section = "Planning", Priority = "high", Done = false });
@@ -363,7 +363,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>An unknown mcp_ tool returns Unhandled.</summary>
     [Fact]
-    public async Task Execute_UnknownTool_ReturnsUnhandled()
+    public async Task ExecuteUnknownToolReturnsUnhandled()
     {
         var sut = CreateSut();
 
@@ -375,7 +375,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>Malformed arguments fail gracefully rather than throwing.</summary>
     [Fact]
-    public async Task Execute_MalformedArguments_FailsGracefully()
+    public async Task ExecuteMalformedArgumentsFailsGracefully()
     {
         var sut = CreateSut();
 
@@ -388,7 +388,7 @@ public sealed class QuadBrainInternalToolExecutorTests
     /// <summary>TEST-MCP-QBEXEC-002: every catalog mcp_* name is Handled through mocked in-process services.</summary>
     [Theory]
     [MemberData(nameof(CatalogToolNames))]
-    public async Task Execute_CatalogName_IsHandled(string name)
+    public async Task ExecuteCatalogNameIsHandled(string name)
     {
         var sut = CreateSut();
         var arguments = await CatalogArgumentsAsync(sut, name).ConfigureAwait(true);
@@ -406,7 +406,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>TEST-MCP-QBEXEC-002: hosted-agent published mcp_* names are a subset of the executor catalog.</summary>
     [Fact]
-    public void Catalog_ContainsEveryHostedAgentPublishedName()
+    public void CatalogContainsEveryHostedAgentPublishedName()
     {
         foreach (var name in QuadBrainMcpToolCatalog.HostedAgentPublishedNames)
             Assert.Contains(name, QuadBrainMcpToolCatalog.All);
@@ -414,12 +414,12 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>FR-MCP-QBEXEC-002 AC-8 / TR-MCP-QBEXEC-002 AC-2: executor does not take HttpClient.</summary>
     [Fact]
-    public void Executor_DoesNotDependOnHttpClient()
+    public void ExecutorDoesNotDependOnHttpClient()
         => QuadBrainExecutorTestFixture.AssertNoHttpClientDependency();
 
     /// <summary>mcp_client_invoke unknown HTTP clients stay Handled Fail, never Unhandled and never HttpClient.</summary>
     [Fact]
-    public async Task Execute_McpClientInvoke_UnknownExternalClient_IsHandledFailure()
+    public async Task ExecuteMcpClientInvokeUnknownExternalClientIsHandledFailure()
     {
         var sut = CreateSut();
 
@@ -436,7 +436,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>mcp_client_invoke session.query routes through ISessionLogService, not HTTP.</summary>
     [Fact]
-    public async Task Execute_McpClientInvoke_SessionQuery_RoutesThroughSessionLog()
+    public async Task ExecuteMcpClientInvokeSessionQueryRoutesThroughSessionLog()
     {
         var sut = CreateSut();
 
@@ -451,7 +451,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
     /// <summary>TEST-MCP-QBEXEC-002: catalog-absent mcp_* names stay Unhandled.</summary>
     [Fact]
-    public async Task Execute_UnknownCatalogAbsentMcpName_ReturnsUnhandled()
+    public async Task ExecuteUnknownCatalogAbsentMcpNameReturnsUnhandled()
     {
         var sut = CreateSut();
 

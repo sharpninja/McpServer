@@ -9,7 +9,7 @@ public sealed class RequirementsDocumentRendererTests
 {
     /// <summary>Verifies technical requirement exports preserve the requirement status field as metadata.</summary>
     [Fact]
-    public void RenderTechnical_EmitsDedicatedStatusMetadata()
+    public void RenderTechnicalEmitsDedicatedStatusMetadata()
     {
         var entry = new TrEntry(
             "TR-MCP-QUAD-001",
@@ -26,7 +26,7 @@ public sealed class RequirementsDocumentRendererTests
 
     /// <summary>Verifies technical requirement exports derive coverage from FR/TR/TEST mappings.</summary>
     [Fact]
-    public void RenderTechnical_EmitsMappingDerivedCoverageMetadata()
+    public void RenderTechnicalEmitsMappingDerivedCoverageMetadata()
     {
         var entry = new TrEntry(
             "TR-MCP-QUAD-001",

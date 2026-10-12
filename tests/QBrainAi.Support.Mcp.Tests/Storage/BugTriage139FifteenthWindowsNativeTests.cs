@@ -11,7 +11,7 @@ public sealed class BugTriage139FifteenthWindowsNativeTests
     /// lifecycle truthfully.
     /// </summary>
     [Fact]
-    public Task WorkspaceIdentity_NativeCancellationWindow_CompletesWithoutWorkerLeak() =>
+    public Task WorkspaceIdentityNativeCancellationWindowCompletesWithoutWorkerLeak() =>
         BugTriage139FifteenthNativeScenarios
             .AssertWindowsIdentityCreateFileCancellationGapAsync();
 
@@ -19,7 +19,7 @@ public sealed class BugTriage139FifteenthWindowsNativeTests
     /// A real Windows pre-handle kernel wait remains bounded and leaves no SQLite handle.
     /// </summary>
     [Fact]
-    public Task SqliteOpen_PlatformNativePreHandleWait_IsBoundedWithoutLeaks() =>
+    public Task SqliteOpenPlatformNativePreHandleWaitIsBoundedWithoutLeaks() =>
         BugTriage139FifteenthNativeScenarios.AssertWindowsSqliteKernelWaitAsync();
 
     /// <summary>
@@ -27,6 +27,6 @@ public sealed class BugTriage139FifteenthWindowsNativeTests
     /// kernel wait.
     /// </summary>
     [Fact]
-    public Task SqliteOpen_KernelWaitThenIndependentDisposalFailure_PreservesExactException() =>
+    public Task SqliteOpenKernelWaitThenIndependentDisposalFailurePreservesExactException() =>
         BugTriage139FifteenthNativeScenarios.AssertWindowsSqliteIndependentFailureAsync();
 }

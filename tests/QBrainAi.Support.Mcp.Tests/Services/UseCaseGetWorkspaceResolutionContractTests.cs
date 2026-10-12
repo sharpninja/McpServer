@@ -22,7 +22,7 @@ public sealed class UseCaseGetWorkspaceResolutionContractTests
 
     /// <summary>Correct canonical workspace output satisfies every contract assertion.</summary>
     [Fact]
-    public async Task MockGate_CanonicalWorkspaceResult_PassesContract()
+    public async Task MockGateCanonicalWorkspaceResultPassesContract()
     {
         await AssertCanonicalWorkspaceContractAsync(
             () => Task.FromResult(Result<UseCaseDetailDto>.Success(new UseCaseDetailDto
@@ -35,7 +35,7 @@ public sealed class UseCaseGetWorkspaceResolutionContractTests
 
     /// <summary>Raw-path lookup failure is a deliberate negative control rejected by the same assertions.</summary>
     [Fact]
-    public async Task MockGate_RawWorkspaceLookupFailure_IsRejected()
+    public async Task MockGateRawWorkspaceLookupFailureIsRejected()
     {
         var rejection = await Assert.ThrowsAsync<TrueException>(
             () => AssertCanonicalWorkspaceContractAsync(
@@ -47,7 +47,7 @@ public sealed class UseCaseGetWorkspaceResolutionContractTests
 
     /// <summary>Production binding resolves an equivalent raw path to the canonical workspace before get-by-id.</summary>
     [Fact]
-    public async Task ProductionGate_EquivalentRawPath_UsesCanonicalWorkspace()
+    public async Task ProductionGateEquivalentRawPathUsesCanonicalWorkspace()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
         await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);

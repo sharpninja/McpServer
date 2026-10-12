@@ -25,7 +25,7 @@ public sealed class TodoControllerTests
     /// echoing the create-time ISSUE-NEW sentinel back to the caller.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_IssueNew_UsesCanonicalCreatedLocation()
+    public async Task CreateAsyncIssueNewUsesCanonicalCreatedLocation()
     {
         var todoService = Substitute.For<ITodoService>();
         var gitHubCliService = Substitute.For<IGitHubCliService>();
@@ -73,7 +73,7 @@ public sealed class TodoControllerTests
     /// involving the database implementation details.
     /// </summary>
     [Fact]
-    public async Task GetAuditAsync_WhenHistoryExists_ReturnsOk()
+    public async Task GetAuditAsyncWhenHistoryExistsReturnsOk()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.GetAuditAsync("MCP-TODO-097", 25, 5, Arg.Any<CancellationToken>())
@@ -123,7 +123,7 @@ public sealed class TodoControllerTests
     /// to exercise the controller's not-found response path.
     /// </summary>
     [Fact]
-    public async Task GetAuditAsync_WhenHistoryMissing_ReturnsNotFound()
+    public async Task GetAuditAsyncWhenHistoryMissingReturnsNotFound()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.GetAuditAsync("MISSING-097", 50, 0, Arg.Any<CancellationToken>())
@@ -142,7 +142,7 @@ public sealed class TodoControllerTests
     /// result because delete goes directly through <see cref="ITodoService"/> without extra orchestration.
     /// </summary>
     [Fact]
-    public async Task DeleteAsync_WhenProjectionFails_ReturnsInternalServerError()
+    public async Task DeleteAsyncWhenProjectionFailsReturnsInternalServerError()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.DeleteAsync("MCP-TODO-500", Arg.Any<CancellationToken>())
@@ -173,7 +173,7 @@ public sealed class TodoControllerTests
     /// fail-closed response when the analyzer gate rejects uncompensated side effects.
     /// </summary>
     [Fact]
-    public async Task AnalyzeRequirementsAsync_WhenTransactionGateRejects_ReturnsUnprocessableEntity()
+    public async Task AnalyzeRequirementsAsyncWhenTransactionGateRejectsReturnsUnprocessableEntity()
     {
         var todoService = Substitute.For<ITodoService>();
         var requirementsService = Substitute.For<IRequirementsService>();
@@ -201,7 +201,7 @@ public sealed class TodoControllerTests
     /// TEST-MCP-161: Verifies that HTTP TODO update uses the transaction-gated update service when registered.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_WhenTransactionGateRegistered_UsesGatedUpdateService()
+    public async Task UpdateAsyncWhenTransactionGateRegisteredUsesGatedUpdateService()
     {
         var todoService = Substitute.For<ITodoService>();
         var gated = Substitute.For<ITransactionGatedTodoMutationService>();
@@ -240,7 +240,7 @@ public sealed class TodoControllerTests
     /// TEST-MCP-TODO-CLOSE-001: Verifies that close-by-id sets DONE state and a server UTC completion timestamp.
     /// </summary>
     [Fact]
-    public async Task CloseAsync_WhenItemExists_SetsDoneAndCompletedDate()
+    public async Task CloseAsyncWhenItemExistsSetsDoneAndCompletedDate()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.GetByIdAsync("TODO-CLOSE-001", Arg.Any<CancellationToken>())
@@ -296,7 +296,7 @@ public sealed class TodoControllerTests
     /// TEST-MCP-TODO-CLOSE-001: Verifies that close-by-id preserves existing not-found mutation behavior.
     /// </summary>
     [Fact]
-    public async Task CloseAsync_WhenItemMissing_ReturnsNotFound()
+    public async Task CloseAsyncWhenItemMissingReturnsNotFound()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.GetByIdAsync("TODO-CLOSE-MISSING", Arg.Any<CancellationToken>())
@@ -315,7 +315,7 @@ public sealed class TodoControllerTests
     /// TEST-MCP-TODO-CLOSE-001: Verifies that close-by-id uses the transaction-gated update service when registered.
     /// </summary>
     [Fact]
-    public async Task CloseAsync_WhenTransactionGateRegistered_UsesGatedUpdateService()
+    public async Task CloseAsyncWhenTransactionGateRegisteredUsesGatedUpdateService()
     {
         var todoService = Substitute.For<ITodoService>();
         var gated = Substitute.For<ITransactionGatedTodoMutationService>();
@@ -361,7 +361,7 @@ public sealed class TodoControllerTests
     /// TEST-MCP-161: Verifies that HTTP TODO create uses the transaction-gated mutation service when registered.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WhenTransactionGateRegistered_UsesGatedCreateService()
+    public async Task CreateAsyncWhenTransactionGateRegisteredUsesGatedCreateService()
     {
         var todoService = Substitute.For<ITodoService>();
         var gated = Substitute.For<ITransactionGatedTodoMutationService>();
@@ -405,7 +405,7 @@ public sealed class TodoControllerTests
     /// TEST-MCP-161: Verifies that HTTP TODO delete uses the transaction-gated mutation service when registered.
     /// </summary>
     [Fact]
-    public async Task DeleteAsync_WhenTransactionGateRegistered_UsesGatedDeleteService()
+    public async Task DeleteAsyncWhenTransactionGateRegisteredUsesGatedDeleteService()
     {
         var todoService = Substitute.For<ITodoService>();
         var gated = Substitute.For<ITransactionGatedTodoMutationService>();
@@ -430,7 +430,7 @@ public sealed class TodoControllerTests
     /// TEST-MCP-161: Verifies that HTTP TODO move uses the transaction-gated mutation service when registered.
     /// </summary>
     [Fact]
-    public async Task MoveAsync_WhenTransactionGateRegistered_UsesGatedMoveService()
+    public async Task MoveAsyncWhenTransactionGateRegisteredUsesGatedMoveService()
     {
         var todoService = Substitute.For<ITodoService>();
         var gated = Substitute.For<ITransactionGatedTodoMutationService>();
@@ -469,7 +469,7 @@ public sealed class TodoControllerTests
     /// TEST-MCP-161: Verifies that HTTP TODO move maps gated failures through the standard mutation failure mapper.
     /// </summary>
     [Fact]
-    public async Task MoveAsync_WhenGatedMoveFails_ReturnsMappedFailureResult()
+    public async Task MoveAsyncWhenGatedMoveFailsReturnsMappedFailureResult()
     {
         var todoService = Substitute.For<ITodoService>();
         var gated = Substitute.For<ITransactionGatedTodoMutationService>();
@@ -497,7 +497,7 @@ public sealed class TodoControllerTests
     /// The fixture supplies a fully-populated status result so the controller's success shaping can be asserted.
     /// </summary>
     [Fact]
-    public async Task GetProjectionStatusAsync_WhenSupported_ReturnsOk()
+    public async Task GetProjectionStatusAsyncWhenSupportedReturnsOk()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.GetProjectionStatusAsync(Arg.Any<CancellationToken>())
@@ -527,7 +527,7 @@ public sealed class TodoControllerTests
     /// <see cref="NotSupportedException"/> to exercise the controller's compatibility path.
     /// </summary>
     [Fact]
-    public async Task GetProjectionStatusAsync_WhenNotSupported_ReturnsNotImplemented()
+    public async Task GetProjectionStatusAsyncWhenNotSupportedReturnsNotImplemented()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.GetProjectionStatusAsync(Arg.Any<CancellationToken>())
@@ -547,7 +547,7 @@ public sealed class TodoControllerTests
     /// controller can preserve the service's operator-visible error details.
     /// </summary>
     [Fact]
-    public async Task RepairProjectionAsync_WhenRepairFails_ReturnsInternalServerError()
+    public async Task RepairProjectionAsyncWhenRepairFailsReturnsInternalServerError()
     {
         var todoService = Substitute.For<ITodoService>();
         todoService.RepairProjectionAsync(Arg.Any<CancellationToken>())
@@ -580,7 +580,7 @@ public sealed class TodoControllerTests
     /// and returns a conflict when repair is fail-closed by mutation gating.
     /// </summary>
     [Fact]
-    public async Task RepairProjectionAsync_WhenTransactionGateRejects_ReturnsConflict()
+    public async Task RepairProjectionAsyncWhenTransactionGateRejectsReturnsConflict()
     {
         var todoService = Substitute.For<ITodoService>();
         var gated = Substitute.For<ITransactionGatedTodoMutationService>();

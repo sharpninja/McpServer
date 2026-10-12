@@ -13,7 +13,7 @@ public sealed class MemoryS4PortMockTests
 {
     /// <summary>H4-red: dry-run default / no mutations.</summary>
     [Fact]
-    public async Task PortMock_DryRunDefault_NoMutations()
+    public async Task PortMockDryRunDefaultNoMutations()
     {
         Assert.True(MemoryConsolidateLimits.DefaultDryRun);
         var port = Substitute.For<IMemoryS4Port>();
@@ -34,7 +34,7 @@ public sealed class MemoryS4PortMockTests
 
     /// <summary>H4-red: write merge survivor + lineage.</summary>
     [Fact]
-    public async Task PortMock_WriteMode_SurvivorAndLineage()
+    public async Task PortMockWriteModeSurvivorAndLineage()
     {
         var port = Substitute.For<IMemoryS4Port>();
         port.ConsolidateAsync(Arg.Any<MemoryConsolidateRequest?>(), Arg.Any<CancellationToken>())
@@ -56,7 +56,7 @@ public sealed class MemoryS4PortMockTests
 
     /// <summary>H4-red: lock busy.</summary>
     [Fact]
-    public async Task PortMock_LockBusy()
+    public async Task PortMockLockBusy()
     {
         var port = Substitute.For<IMemoryS4Port>();
         port.ConsolidateAsync(Arg.Any<MemoryConsolidateRequest?>(), Arg.Any<CancellationToken>())
@@ -72,7 +72,7 @@ public sealed class MemoryS4PortMockTests
 
     /// <summary>H4-red: no cross-workspace merge.</summary>
     [Fact]
-    public async Task PortMock_NoCrossWorkspaceMerge()
+    public async Task PortMockNoCrossWorkspaceMerge()
     {
         var port = Substitute.For<IMemoryS4Port>();
         port.ConsolidateAsync(Arg.Any<MemoryConsolidateRequest?>(), Arg.Any<CancellationToken>())
@@ -92,7 +92,7 @@ public sealed class MemoryS4PortMockTests
 
     /// <summary>H4-red: promote provenance.</summary>
     [Fact]
-    public async Task PortMock_PromoteProvenance()
+    public async Task PortMockPromoteProvenance()
     {
         var port = Substitute.For<IMemoryS4Port>();
         port.PromoteAsync(Arg.Any<MemoryPromoteRequest?>(), Arg.Any<CancellationToken>())
@@ -114,7 +114,7 @@ public sealed class MemoryS4PortMockTests
 
     /// <summary>H4-red: sessionlog byte-identical after promote (contract signal).</summary>
     [Fact]
-    public async Task PortMock_SessionLogByteIdentical()
+    public async Task PortMockSessionLogByteIdentical()
     {
         var port = Substitute.For<IMemoryS4Port>();
         port.PromoteAsync(Arg.Any<MemoryPromoteRequest?>(), Arg.Any<CancellationToken>())
@@ -134,7 +134,7 @@ public sealed class MemoryS4PortMockTests
 
     /// <summary>H4-red: no auto-promote (explicit API only) — mock proves promote is an explicit port call.</summary>
     [Fact]
-    public async Task PortMock_NoAutoPromote_ExplicitOnly()
+    public async Task PortMockNoAutoPromoteExplicitOnly()
     {
         var port = Substitute.For<IMemoryS4Port>();
         // Never called until explicit PromoteAsync — contract is that callers must invoke the port.

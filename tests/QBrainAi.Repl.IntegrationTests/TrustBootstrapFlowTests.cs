@@ -26,7 +26,7 @@ public sealed class TrustBootstrapFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task HealthCheck_WithNonce_ReturnsNonceInResponse()
+    public async Task HealthCheckWithNonceReturnsNonceInResponse()
     {
         var serverUrl = "http://localhost:5177";
         var testNonce = "test-nonce-bootstrap-123";
@@ -49,7 +49,7 @@ public sealed class TrustBootstrapFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task TrustBootstrap_SendsNonceRequest_ReceivesResponse()
+    public async Task TrustBootstrapSendsNonceRequestReceivesResponse()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -66,7 +66,7 @@ public sealed class TrustBootstrapFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task TrustBootstrap_SubmitsSignature_ValidatesCorrectly()
+    public async Task TrustBootstrapSubmitsSignatureValidatesCorrectly()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -85,7 +85,7 @@ public sealed class TrustBootstrapFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task TrustBootstrap_FullFlow_CompletesSuccessfully()
+    public async Task TrustBootstrapFullFlowCompletesSuccessfully()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -108,7 +108,7 @@ public sealed class TrustBootstrapFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task SignatureValidation_InvalidSignature_ReturnsError()
+    public async Task SignatureValidationInvalidSignatureReturnsError()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -134,7 +134,7 @@ public sealed class TrustBootstrapFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task NonceChallengeFlow_GeneratesUniqueChallenges()
+    public async Task NonceChallengeFlowGeneratesUniqueChallenges()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);

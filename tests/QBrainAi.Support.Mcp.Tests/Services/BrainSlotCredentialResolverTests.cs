@@ -9,7 +9,7 @@ public sealed class BrainSlotCredentialResolverTests
 {
     /// <summary>Environment references resolve through the named variable and trim whitespace.</summary>
     [Fact]
-    public async Task ResolveAsync_WithEnvironmentReference_ReturnsTrimmedSecret()
+    public async Task ResolveAsyncWithEnvironmentReferenceReturnsTrimmedSecret()
     {
         var variableName = "MCP_BRAIN_SLOT_TEST_KEY_" + Guid.NewGuid().ToString("N");
         Environment.SetEnvironmentVariable(variableName, "  test-secret  ");
@@ -29,7 +29,7 @@ public sealed class BrainSlotCredentialResolverTests
 
     /// <summary>Config references resolve from IConfiguration without exposing raw secrets in storage rows.</summary>
     [Fact]
-    public async Task ResolveAsync_WithConfigReference_ReturnsConfiguredSecret()
+    public async Task ResolveAsyncWithConfigReferenceReturnsConfiguredSecret()
     {
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
@@ -52,7 +52,7 @@ public sealed class BrainSlotCredentialResolverTests
     [InlineData("sk-raw-secret", false)]
     [InlineData("vault:future", false)]
     [InlineData("", false)]
-    public void IsSupportedReference_RejectsRawOrUnknownReferences(string reference, bool expected)
+    public void IsSupportedReferenceRejectsRawOrUnknownReferences(string reference, bool expected)
     {
         var resolver = new BrainSlotCredentialResolver(new ConfigurationBuilder().Build());
 

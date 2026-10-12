@@ -3,8 +3,8 @@
 # TEST-HANDOFF-006 / FR-HANDOFF-007 / TR-HANDOFF-SURFACE-001
 #
 # Remaining D1 gap: skill-file invoke of workflow.handoff.ingest/get/approve.
-# PluginSync_HandoffSkill_MatchesCoreArtifact is checksum-only.
-# PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints is C# dispatcher invoke.
+# PluginSyncHandoffSkillMatchesCoreArtifact is checksum-only.
+# PluginSkillWorkflowInvokesTypedClientHandoffEndpoints is C# dispatcher invoke.
 # This Pester drives the core and Grok plugin SKILL.md files through a skill-local
 # invoke script (hermetic MCP_PLUGIN_REPL_LOG seam; no live :7147).
 

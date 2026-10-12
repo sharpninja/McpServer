@@ -96,7 +96,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task SendAsync_Command_ReturnsSuccess()
+    public async Task SendAsyncCommandReturnsSuccess()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -107,7 +107,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task QueryAsync_Query_ReturnsSuccess()
+    public async Task QueryAsyncQueryReturnsSuccess()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -118,7 +118,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task SendAsync_FailingHandler_ReturnsFailure()
+    public async Task SendAsyncFailingHandlerReturnsFailure()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -129,7 +129,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task SendAsync_WithTimeout_TimesOut()
+    public async Task SendAsyncWithTimeoutTimesOut()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -140,7 +140,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task SendAsync_WithBehavior_BehaviorExecutes()
+    public async Task SendAsyncWithBehaviorBehaviorExecutes()
     {
         using var sp = BuildProvider(s => s.AddCqrsBehavior<PrefixBehavior>());
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -153,7 +153,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task SendAsync_Cancellation_ReturnsFailure()
+    public async Task SendAsyncCancellationReturnsFailure()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -168,7 +168,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task SendAsync_RecentDispatches_HasEntryAfterDispatch()
+    public async Task SendAsyncRecentDispatchesHasEntryAfterDispatch()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -183,7 +183,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task SendAsync_RecentDispatches_CaptureLogEntries()
+    public async Task SendAsyncRecentDispatchesCaptureLogEntries()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -197,7 +197,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public async Task SendAsync_MultipleConcurrentDispatches_AllComplete()
+    public async Task SendAsyncMultipleConcurrentDispatchesAllComplete()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
@@ -212,7 +212,7 @@ public class DispatcherTests
     }
 
     [Fact]
-    public void Dispatcher_Implements_ILoggerProvider()
+    public void DispatcherImplementsILoggerProvider()
     {
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();

@@ -25,7 +25,7 @@ public sealed class PlanTransactionReviewTests
     /// fails when aiUnit reports critical or high findings.
     /// </summary>
     [Fact]
-    public void PLAN_TURNTRANSACTIONS_001_HasNoCriticalOrHighPlanFindings()
+    public void PLANTURNTRANSACTIONS001HasNoCriticalOrHighPlanFindings()
     {
         var runLogPath = Path.Combine(FindRepositoryRoot(), ReviewArtifactRelativePath);
         Assert.True(File.Exists(runLogPath), "aiUnit run-log file must exist: " + runLogPath);

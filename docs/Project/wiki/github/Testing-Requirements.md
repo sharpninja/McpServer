@@ -642,7 +642,7 @@ Author resolution precedence (body > API key > JWT > anonymous-rejected).
 
 ### TEST-MCP-119
 
-Workspace isolation (mirror `EfTodoService_WorkspaceIsolationTests`).
+Workspace isolation (mirror `EfTodoServiceWorkspaceIsolationTests`).
 
 
 ### TEST-MCP-120
@@ -909,14 +909,14 @@ MCP transaction gating tests SHALL verify coordinator commit, degraded, rollback
 Transaction traceability/import tests SHALL prove FR-MCP-118 through FR-MCP-128, transaction TR records, TEST-MCP-158 through TEST-MCP-173, and live TODO references resolve without placeholder transaction-plan entries.
 
 **Acceptance Criteria:**
-- [x] `TurnTransactionPlanArtifactTests.TransactionPlanRequirements_AreConcreteAndMapped` fails if transaction FR/TR/TEST records regress to placeholder backfills or lose matrix/mapping rows.
+- [x] `TurnTransactionPlanArtifactTests.TransactionPlanRequirementsAreConcreteAndMapped` fails if transaction FR/TR/TEST records regress to placeholder backfills or lose matrix/mapping rows.
 
 ### TEST-MCP-163
 
 Deferred-scope documentation tests SHALL prove remaining future autonomous Quad-Model branches, direct agent execution, desktop launch, tunnels, workspace/auth/server configuration, full remote/runtime compensation, complete delayed-rollback isolation, bucket/GitHub compensation, quarantine/fine-tuning automation, implicit fallback behavior, and full key-rotation lifecycle automation remain explicit future work rather than silently reported as complete.
 
 **Acceptance Criteria:**
-- [x] TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds validates deferred scope and design artifacts while distinguishing authorized Quad-Brain branches from remaining future scope. (evidence: tests/McpServer.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs)
+- [x] TurnTransactionPlanArtifactTests.PlanArtifactsPreserveDeferredScopeAndDesignRounds validates deferred scope and design artifacts while distinguishing authorized Quad-Brain branches from remaining future scope. (evidence: tests/McpServer.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs)
 
 ### TEST-MCP-164
 
@@ -930,7 +930,7 @@ aiUnit plan review tests SHALL validate committed aiUnit run-log evidence for PL
 Imported diagram preservation tests SHALL validate all six imported Mermaid diagrams, stable IDs, imported source references, and repo annotations.
 
 **Acceptance Criteria:**
-- [x] `TurnTransactionPlanArtifactTests.ImportedPlan_PreservesAllSixMermaidDiagramIds` covers AD-TXN-001, AD-CURIOSITY-001, SD-DIFFGRAM-001, AD-AOT-001, AD-WEIGHT-001, and ARCH-QUAD-001.
+- [x] `TurnTransactionPlanArtifactTests.ImportedPlanPreservesAllSixMermaidDiagramIds` covers AD-TXN-001, AD-CURIOSITY-001, SD-DIFFGRAM-001, AD-AOT-001, AD-WEIGHT-001, and ARCH-QUAD-001.
 
 ### TEST-MCP-166
 
@@ -965,14 +965,14 @@ Degraded rollback reconciliation tests SHALL validate AD-TXN-001 and AD-AOT-001 
 Quad scope enforcement tests SHALL prove Curiosity admission, weight updates, AoT execution, and quad orchestration execute only through FR-MCP-129 through FR-MCP-135 authorization gates, while unrelated autonomous branches remain fail-closed.
 
 **Acceptance Criteria:**
-- [x] Plan artifact tests validate the implemented/deferred split and reject stale claims that authorized AoT, weight update, or full orchestration branches remain disabled. (evidence: TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds)
+- [x] Plan artifact tests validate the implemented/deferred split and reject stale claims that authorized AoT, weight update, or full orchestration branches remain disabled. (evidence: TurnTransactionPlanArtifactTests.PlanArtifactsPreserveDeferredScopeAndDesignRounds)
 
 ### TEST-MCP-171
 
 Quad architecture conformance tests SHALL validate ARCH-QUAD-001 component mapping, trust boundaries, authorized quad branches, and remaining future branches.
 
 **Acceptance Criteria:**
-- [x] Plan artifact tests validate architecture/design artifacts, repo component references, authorized branch routing, and remaining future branch documentation. (evidence: TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds)
+- [x] Plan artifact tests validate architecture/design artifacts, repo component references, authorized branch routing, and remaining future branch documentation. (evidence: TurnTransactionPlanArtifactTests.PlanArtifactsPreserveDeferredScopeAndDesignRounds)
 
 ### TEST-MCP-172
 
@@ -1084,7 +1084,7 @@ Tests SHALL verify the ACID tightly coupled Microsoft Agent Framework profile me
 
 ### TEST-MCP-187
 
-RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This test covered the hosted coding agent reaching QuadBrain orchestration through the mcp_quadbrain_coding_execute tool. That tool has been removed from the shared hosted-agent catalog because it exposed a QuadBrain capability to every McpServer.McpAgent host rather than to QBAgent alone, and it was already dead for QBAgent since QuadBrainInternalToolExecutor had no case for it. Its coverage is replaced by absence assertions under TEST-MCP-193: McpHostedAgentAdapterTests.AcidRuntime_ExposesNoQuadBrainSurface, HostedAgentQuadBrainAbsenceTests (registration functions, attached run-option tools, and QBAgentDefinition tool-name lists), and HostedAgentWorkflowIntegrationTests.AddMcpServerMcpAgent_SharedToolCatalog_ContainsNoQuadBrainTool. QuadBrain coding work continues to run server-side through POST /v1/chat/completions, which QBAgent invokes as an OpenAI-compatible model; that path keeps its own integration coverage.
+RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This test covered the hosted coding agent reaching QuadBrain orchestration through the mcp_quadbrain_coding_execute tool. That tool has been removed from the shared hosted-agent catalog because it exposed a QuadBrain capability to every McpServer.McpAgent host rather than to QBAgent alone, and it was already dead for QBAgent since QuadBrainInternalToolExecutor had no case for it. Its coverage is replaced by absence assertions under TEST-MCP-193: McpHostedAgentAdapterTests.AcidRuntimeExposesNoQuadBrainSurface, HostedAgentQuadBrainAbsenceTests (registration functions, attached run-option tools, and QBAgentDefinition tool-name lists), and HostedAgentWorkflowIntegrationTests.AddMcpServerMcpAgent_SharedToolCatalog_ContainsNoQuadBrainTool. QuadBrain coding work continues to run server-side through POST /v1/chat/completions, which QBAgent invokes as an OpenAI-compatible model; that path keeps its own integration coverage.
 
 **Acceptance Criteria:**
 - [x] A prompt-array integration test invokes `mcp_quadbrain_coding_execute` for multiple coding-task prompts and asserts the request path, payload, metadata, and committed response shape.
@@ -1249,12 +1249,12 @@ Regression tests SHALL verify all plugin batch requirement methods accept uninde
 
 ### TEST-MCP-BUGTRIAGE-042
 
-Grok CLI one-shot argument construction forwards an explicitly configured model. GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_ConfiguredModel_IncludesModelFlag verifies a real model name (for example grok-4.3) emits --model before --output-format in the one-shot argument list (validates TR-MCP-TRIAGE-003 runner invocation construction).
+Grok CLI one-shot argument construction forwards an explicitly configured model. GrokCliAgentExecutionStrategyTests.BuildGrokArgumentListConfiguredModelIncludesModelFlag verifies a real model name (for example grok-4.3) emits --model before --output-format in the one-shot argument list (validates TR-MCP-TRIAGE-003 runner invocation construction).
 
 
 ### TEST-MCP-BUGTRIAGE-043
 
-Grok CLI startup-rejection guards for the triage research runner (validates TR-MCP-TRIAGE-003). GrokCliAgentExecutionStrategyTests verify: the sentinel model value auto (any casing) or an empty model omits --model entirely so the CLI picks its default, because current Grok CLIs reject --model auto with "unknown model id" and the runner substitutes auto for unset tier models (BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag, 5 cases); effort flags are pinned to high because current Grok CLIs reject max with "unknown effort level" (BuildGrokArgumentList_ContainsExpectedFlagsInOrder). Evidence 2026-07-14: both rejections reproduced from captured run stderr; fixes deployed in 1.4.15/1.4.16; live research run for triage-group-27f5ecfe4c926fde completed exit 0 at 20:08Z, first successful run since 2026-07-07.
+Grok CLI startup-rejection guards for the triage research runner (validates TR-MCP-TRIAGE-003). GrokCliAgentExecutionStrategyTests verify: the sentinel model value auto (any casing) or an empty model omits --model entirely so the CLI picks its default, because current Grok CLIs reject --model auto with "unknown model id" and the runner substitutes auto for unset tier models (BuildGrokArgumentListAutoOrEmptyModelOmitsModelFlag, 5 cases); effort flags are pinned to high because current Grok CLIs reject max with "unknown effort level" (BuildGrokArgumentListContainsExpectedFlagsInOrder). Evidence 2026-07-14: both rejections reproduced from captured run stderr; fixes deployed in 1.4.15/1.4.16; live research run for triage-group-27f5ecfe4c926fde completed exit 0 at 20:08Z, first successful run since 2026-07-07.
 
 
 
@@ -1270,7 +1270,7 @@ Skills.Tests.ps1 (mcpserver-claude-code-plugin) asserts the clear-session SKILL.
 
 ### TEST-MCP-DB-006
 
-Validates TR-MCP-DB-006. tests/McpServer.Support.Mcp.Tests/Services/KeyedAsyncLockTests.cs: AcquireAsync_SameKey_BlocksUntilReleased asserts a second same-key acquire stays pending (Task.WhenAny vs a 250ms delay) until the first is disposed, then completes; AcquireAsync_DifferentKeys_DoNotBlockEachOther asserts a different-key acquire completes while the first key is held. The pair discriminates a correct keyed lock from a no-op (fails SameKey) and a global lock (fails DifferentKeys) - red-verified against a no-op stub, green after implementing per-key reference-counted SemaphoreSlim. SessionLogServiceReplaceDeleteTests confirm DeleteTurnAsync correctness is preserved under the lock (AC2).
+Validates TR-MCP-DB-006. tests/McpServer.Support.Mcp.Tests/Services/KeyedAsyncLockTests.cs: AcquireAsyncSameKeyBlocksUntilReleased asserts a second same-key acquire stays pending (Task.WhenAny vs a 250ms delay) until the first is disposed, then completes; AcquireAsyncDifferentKeysDoNotBlockEachOther asserts a different-key acquire completes while the first key is held. The pair discriminates a correct keyed lock from a no-op (fails SameKey) and a global lock (fails DifferentKeys) - red-verified against a no-op stub, green after implementing per-key reference-counted SemaphoreSlim. SessionLogServiceReplaceDeleteTests confirm DeleteTurnAsync correctness is preserved under the lock (AC2).
 
 
 
@@ -1427,47 +1427,47 @@ Marker prompt template contains the Agent Help (MCP Server issues) section and r
 
 ### TEST-MCP-HOSTILEREVIEW-001
 
-HostileReviewEntity_RoundTrip_SqlitePgSqlServer; HostileReviewSubmit_ValidRequest_CreatesQueueItem; HostileReviewSubmit_OversizedPayload_Rejected; HostileReviewSubmit_ForeignWorkspace_403.
+HostileReviewEntityRoundTripSqlitePgSqlServer; HostileReviewSubmitValidRequestCreatesQueueItem; HostileReviewSubmitOversizedPayloadRejected; HostileReviewSubmitForeignWorkspace403.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: HostileReviewEntity_RoundTrip_SqlitePgSqlServer; HostileReviewSubmit_ValidRequest_CreatesQueueItem; HostileReviewSubmit_OversizedPayload_Rejected; HostileReviewSubmit_ForeignWorkspace_403. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Named tests exist: HostileReviewEntityRoundTripSqlitePgSqlServer; HostileReviewSubmitValidRequestCreatesQueueItem; HostileReviewSubmitOversizedPayloadRejected; HostileReviewSubmitForeignWorkspace403. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ### TEST-MCP-HOSTILEREVIEW-002
 
-HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit; HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic; HostileReviewSubmit_AmbiguousLink_Diagnostic; HostileReviewDispatch_ReauthorizesEveryArtifact; HostileReviewDispatch_ChangedHashOrRevokedAccess_FailsClosed; HostileReviewProtectedContext_NoRawPromptInQueueNotificationLogOrResult; HostileReviewResolvedInput_PerArtifactAndAggregateLimitsFailClosed; HostileReviewArtifact_SecretSentinelsNeverEcho; HostileReviewCrossWorkspaceArtifact_NeverResolves.
+HostileReviewSubmitMissingArtifactReturnsDiagnosticNotSilentOmit; HostileReviewSubmitStaleOrUnauthorizedLinkDiagnostic; HostileReviewSubmitAmbiguousLinkDiagnostic; HostileReviewDispatch_ReauthorizesEveryArtifact; HostileReviewDispatch_ChangedHashOrRevokedAccess_FailsClosed; HostileReviewProtectedContext_NoRawPromptInQueueNotificationLogOrResult; HostileReviewResolvedInput_PerArtifactAndAggregateLimitsFailClosed; HostileReviewArtifact_SecretSentinelsNeverEcho; HostileReviewCrossWorkspaceArtifact_NeverResolves.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit; HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic; HostileReviewSubmit_AmbiguousLink_Diagnostic. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
-- [x] Named tests exist: HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit; HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic; HostileReviewSubmit_AmbiguousLink_Diagnostic; HostileReviewDispatch_ReauthorizesEveryArtifact; HostileReviewDispatch_ChangedHashOrRevokedAccess_FailsClosed; HostileReviewProtectedContext_NoRawPromptInQueueNotificationLogOrResult; HostileReviewResolvedInput_PerArtifactAndAggregateLimitsFailClosed; HostileReviewArtifact_SecretSentinelsNeverEcho; HostileReviewCrossWorkspaceArtifact_NeverResolves. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Named tests exist: HostileReviewSubmitMissingArtifactReturnsDiagnosticNotSilentOmit; HostileReviewSubmitStaleOrUnauthorizedLinkDiagnostic; HostileReviewSubmitAmbiguousLinkDiagnostic. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Named tests exist: HostileReviewSubmitMissingArtifactReturnsDiagnosticNotSilentOmit; HostileReviewSubmitStaleOrUnauthorizedLinkDiagnostic; HostileReviewSubmitAmbiguousLinkDiagnostic; HostileReviewDispatch_ReauthorizesEveryArtifact; HostileReviewDispatch_ChangedHashOrRevokedAccess_FailsClosed; HostileReviewProtectedContext_NoRawPromptInQueueNotificationLogOrResult; HostileReviewResolvedInput_PerArtifactAndAggregateLimitsFailClosed; HostileReviewArtifact_SecretSentinelsNeverEcho; HostileReviewCrossWorkspaceArtifact_NeverResolves. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ### TEST-MCP-HOSTILEREVIEW-003
 
-HostileReviewExecution_RecordsModelEffortAgentTemplateRunId; HostileReviewExecution_OmitsFabricatedTokenCounts.
+HostileReviewExecutionRecordsModelEffortAgentTemplateRunId; HostileReviewExecutionOmitsFabricatedTokenCounts.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: HostileReviewExecution_RecordsModelEffortAgentTemplateRunId; HostileReviewExecution_OmitsFabricatedTokenCounts. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Named tests exist: HostileReviewExecutionRecordsModelEffortAgentTemplateRunId; HostileReviewExecutionOmitsFabricatedTokenCounts. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 - [x] Add worker lifecycle tests that distinguish restart recovery from live-pool retry, permit more than one model execution only at declared process-loss boundaries, require one accepted terminal result across restart, lease loss, stale completion, retry exhaustion, internal cancellation, and model unavailability, and verify process-lifetime correlation and pool-job cleanup. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ### TEST-MCP-HOSTILEREVIEW-004
 
-HostileReviewGet_NormalizedFindings_TaxonomyComplete; HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext.
+HostileReviewGetNormalizedFindingsTaxonomyComplete; HostileReviewRequestQualityScoresDisclosureScopeObjectiveConfidenceContext.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: HostileReviewGet_NormalizedFindings_TaxonomyComplete; HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Named tests exist: HostileReviewGetNormalizedFindingsTaxonomyComplete; HostileReviewRequestQualityScoresDisclosureScopeObjectiveConfidenceContext. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ### TEST-MCP-HOSTILEREVIEW-005
 
-HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns; HostileReviewQuery_ByRequesterAndTargetType_AndFilters; HostileReviewQuery_NoMatch_EmptyList.
+HostileReviewQueryByModelAndEffortReturnsOnlyMatchingRuns; HostileReviewQueryByRequesterAndTargetTypeAndFilters; HostileReviewQueryNoMatchEmptyList.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns; HostileReviewQuery_ByRequesterAndTargetType_AndFilters; HostileReviewQuery_NoMatch_EmptyList. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Named tests exist: HostileReviewQueryByModelAndEffortReturnsOnlyMatchingRuns; HostileReviewQueryByRequesterAndTargetTypeAndFilters; HostileReviewQueryNoMatchEmptyList. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 ### TEST-MCP-HOSTILEREVIEW-006
 
-HostileReview_Default_DoesNotMutateProductFiles; HostileReview_SurfaceParity_RestReplDirectorPlugin.
+HostileReviewDefaultDoesNotMutateProductFiles; HostileReviewSurfaceParityRestReplDirectorPlugin.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: HostileReview_Default_DoesNotMutateProductFiles; HostileReview_SurfaceParity_RestReplDirectorPlugin. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
+- [x] Named tests exist: HostileReviewDefaultDoesNotMutateProductFiles; HostileReviewSurfaceParityRestReplDirectorPlugin. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 - [x] Every status surface accepts only a request identity and performs no mutation. Mutation-shaped status input is rejected. The registered inventory remains exactly submit/status/get/query. Internal lifecycle cancellation creates no additional public operation. (evidence: tests/McpServer.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1)
 
 
@@ -1475,38 +1475,38 @@ HostileReview_Default_DoesNotMutateProductFiles; HostileReview_SurfaceParity_Res
 
 ### TEST-MCP-HYGIENE-001
 
-WorkspaceValidation_ResultContract_HasRequiredFields; WorkspaceValidation_CleanWorkspace_ZeroFindings; WorkspaceValidation_UnknownRuleCode_Diagnostic.
+WorkspaceValidationResultContractHasRequiredFields; WorkspaceValidationCleanWorkspaceZeroFindings; WorkspaceValidationUnknownRuleCodeDiagnostic.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: WorkspaceValidation_ResultContract_HasRequiredFields; WorkspaceValidation_CleanWorkspace_ZeroFindings; WorkspaceValidation_UnknownRuleCode_Diagnostic. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
+- [x] Named tests exist: WorkspaceValidationResultContractHasRequiredFields; WorkspaceValidationCleanWorkspaceZeroFindings; WorkspaceValidationUnknownRuleCodeDiagnostic. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
 
 ### TEST-MCP-HYGIENE-002
 
-Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord; Rule_TrWithNoFr_Orphan; Rule_FrMissingTrOrTest_Orphan; Rule_TestWithNoFr_Orphan; Rule_BrokenOrDuplicateMapping.
+RuleFrTrTestMissingAcceptanceCriteriaFindsRecord; RuleTrWithNoFrOrphan; RuleFrMissingTrOrTestOrphan; RuleTestWithNoFrOrphan; RuleBrokenOrDuplicateMapping.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord; Rule_TrWithNoFr_Orphan; Rule_FrMissingTrOrTest_Orphan; Rule_TestWithNoFr_Orphan; Rule_BrokenOrDuplicateMapping. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
+- [x] Named tests exist: RuleFrTrTestMissingAcceptanceCriteriaFindsRecord; RuleTrWithNoFrOrphan; RuleFrMissingTrOrTestOrphan; RuleTestWithNoFrOrphan; RuleBrokenOrDuplicateMapping. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
 
 ### TEST-MCP-HYGIENE-003
 
-Rule_DoneTrue_IncompleteTasks; Rule_DoneFalse_AllTasksComplete; Rule_DoneWithoutDoneSummary; Rule_RemainingContradictsCompletion; Rule_MissingDependencyTarget; Rule_MissingReferencedRequirementId.
+RuleDoneTrueIncompleteTasks; RuleDoneFalseAllTasksComplete; RuleDoneWithoutDoneSummary; RuleRemainingContradictsCompletion; RuleMissingDependencyTarget; RuleMissingReferencedRequirementId.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: Rule_DoneTrue_IncompleteTasks; Rule_DoneFalse_AllTasksComplete; Rule_DoneWithoutDoneSummary; Rule_RemainingContradictsCompletion; Rule_MissingDependencyTarget; Rule_MissingReferencedRequirementId. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
+- [x] Named tests exist: RuleDoneTrueIncompleteTasks; RuleDoneFalseAllTasksComplete; RuleDoneWithoutDoneSummary; RuleRemainingContradictsCompletion; RuleMissingDependencyTarget; RuleMissingReferencedRequirementId. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
 
 ### TEST-MCP-HYGIENE-004
 
-Rule_InProgressTurn_OlderThan48h_UtcClock; Rule_TriageNonTerminal_UsesLiveDomainEnum; Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded; Validation_AuthRequired; Validation_CancellationHonored; Validation_LargeWorkspace_Paginates.
+RuleInProgressTurnOlderThan48hUtcClock; RuleTriageNonTerminalUsesLiveDomainEnum; RuleStaleThresholdOverrideBoundedAuthenticatedRecorded; ValidationAuthRequired; ValidationCancellationHonored; ValidationLargeWorkspacePaginates.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: Rule_InProgressTurn_OlderThan48h_UtcClock; Rule_TriageNonTerminal_UsesLiveDomainEnum; Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded; Validation_AuthRequired; Validation_CancellationHonored; Validation_LargeWorkspace_Paginates. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
+- [x] Named tests exist: RuleInProgressTurnOlderThan48hUtcClock; RuleTriageNonTerminalUsesLiveDomainEnum; RuleStaleThresholdOverrideBoundedAuthenticatedRecorded; ValidationAuthRequired; ValidationCancellationHonored; ValidationLargeWorkspacePaginates. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
 
 ### TEST-MCP-HYGIENE-005
 
-Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts; Director_Exit1_WhenErrorSeverityPresent; Director_Exit0_WhenWarningOnly; Validation_NeverAutoRepairs.
+ParityRestDirectorReplPluginSameRuleCodesAndCounts; DirectorExit1WhenErrorSeverityPresent; DirectorExit0WhenWarningOnly; ValidationNeverAutoRepairs.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts; Director_Exit1_WhenErrorSeverityPresent; Director_Exit0_WhenWarningOnly; Validation_NeverAutoRepairs. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
+- [x] Named tests exist: ParityRestDirectorReplPluginSameRuleCodesAndCounts; DirectorExit1WhenErrorSeverityPresent; DirectorExit0WhenWarningOnly; ValidationNeverAutoRepairs. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs; G5 TRX SHA-256 7B3EA931BEDAE3D8D69A260BA9EAB516EDF8337BCF742712E4B4036DC30B7D16)
 
 
 ## TEST-MCP-LLMSTRATEGY
@@ -1516,10 +1516,10 @@ Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts; Director_Exit1_WhenErrorSe
 Focused xUnit tests under tests/McpServer.Support.Mcp.Tests call shipped factory/strategy types. They assert two roles resolve two strategies, a stub strategy sees the same turn-context object, HTTP flattening serializes context into chat messages, and no new third-party agent SDK is required. Tests do not start the Windows service.
 
 **Acceptance Criteria:**
-- [x] Two roles resolve two different provider strategies in one process via the shipped factory. (evidence: BrainSlotLlmStrategyTests.CreateStrategy_TwoRoles_ResolvesTwoDifferentStrategyTypes)
-- [x] Shared turn-context object identity is asserted (ReferenceEquals) on a stub strategy. (evidence: QuadBrainLiveOrchestrationTests ExecuteFullOrchestrationAsync_WithRealServicesAndFakeBrains_CommitsArbiterDecision)
-- [x] HTTP-strategy flatten includes original input and turn identifiers in chat messages; tests do not mock the types under test for flattening. (evidence: BrainSlotLlmStrategyTests BuildOpenAiCompatibleRequestJson_WhenTurnContextSupplied_IncludesOriginalInputAndTurnIds)
-- [x] Tests do not start the McpServer Windows service and do not require a new third-party agent SDK. (evidence: BrainSlotLlmStrategyTests.Factory_CreateStrategy_ExistsWithoutNewAgentSdk; in-memory/NSubstitute tests)
+- [x] Two roles resolve two different provider strategies in one process via the shipped factory. (evidence: BrainSlotLlmStrategyTests.CreateStrategyTwoRolesResolvesTwoDifferentStrategyTypes)
+- [x] Shared turn-context object identity is asserted (ReferenceEquals) on a stub strategy. (evidence: QuadBrainLiveOrchestrationTests ExecuteFullOrchestrationAsyncWithRealServicesAndFakeBrainsCommitsArbiterDecision)
+- [x] HTTP-strategy flatten includes original input and turn identifiers in chat messages; tests do not mock the types under test for flattening. (evidence: BrainSlotLlmStrategyTests BuildOpenAiCompatibleRequestJsonWhenTurnContextSuppliedIncludesOriginalInputAndTurnIds)
+- [x] Tests do not start the McpServer Windows service and do not require a new third-party agent SDK. (evidence: BrainSlotLlmStrategyTests.FactoryCreateStrategyExistsWithoutNewAgentSdk; in-memory/NSubstitute tests)
 
 
 ## TEST-MCP-MARKER
@@ -1563,7 +1563,7 @@ Marker-template contract tests SHALL prove default-marker-prompt contains the MC
 
 **Acceptance Criteria:**
 - [x] Contract tests fail if the marker prompt omits the MCP Memories section, REQUIRED MEMORIES header, memory tool names, ID format, scope guidance, or no-secrets guidance. (evidence: MemoryContractArtifactTests.GeneratedMarkerPrompt_IncludesMemoryInstructions.)
-- [x] Contract tests fail if memory context documentation omits agent-local import safeguards, updatedBy attribution, or session-log action guidance. (evidence: MemoryContractArtifactTests.MemoryContextDocumentation_IncludesImportAndAttributionRules.)
+- [x] Contract tests fail if memory context documentation omits agent-local import safeguards, updatedBy attribution, or session-log action guidance. (evidence: MemoryContractArtifactTests.MemoryContextDocumentationIncludesImportAndAttributionRules.)
 
 ### TEST-MCP-MEMORY-007
 
@@ -1752,9 +1752,9 @@ Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBr
 Integration tests for QBAgent sending a request to QuadBrain, receiving a response with or without tool actions, and executing the returned external tool calls via the Microsoft Agent Framework loop.
 
 **Acceptance Criteria:**
-- [x] QBAgent sends a prompt and receives a plain assistant response when no tool action is returned. (evidence: QBAgentSendingIntegrationTests.QBAgent_NoToolAction_ReturnsPlainResponse - real Agent Framework loop over OpenAI wire, 1 orchestration round, plain text returned.)
-- [x] When QuadBrain returns an external tool call, the Agent Framework loop executes the corresponding tool and continues the turn. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolCall_AgentExecutesAndContinues - external apply_patch executed by FunctionInvokingChatClient, 2 rounds, final answer returned.)
-- [x] Internal tools are not executed by the agent (they were executed server-side); only external tool calls reach the agent. (evidence: QBAgentSendingIntegrationTests.QBAgent_InternalTool_ExecutedServerSide_NeverReachesAgent - mcp_todo_update ran in the internal executor and was stripped; agent invoked no tool, single round.)
+- [x] QBAgent sends a prompt and receives a plain assistant response when no tool action is returned. (evidence: QBAgentSendingIntegrationTests.QBAgentNoToolActionReturnsPlainResponse - real Agent Framework loop over OpenAI wire, 1 orchestration round, plain text returned.)
+- [x] When QuadBrain returns an external tool call, the Agent Framework loop executes the corresponding tool and continues the turn. (evidence: QBAgentSendingIntegrationTests.QBAgentExternalToolCallAgentExecutesAndContinues - external apply_patch executed by FunctionInvokingChatClient, 2 rounds, final answer returned.)
+- [x] Internal tools are not executed by the agent (they were executed server-side); only external tool calls reach the agent. (evidence: QBAgentSendingIntegrationTests.QBAgentInternalToolExecutedServerSideNeverReachesAgent - mcp_todo_update ran in the internal executor and was stripped; agent invoked no tool, single round.)
 
 
 ## TEST-MCP-QBEXEC
@@ -1764,10 +1764,10 @@ Integration tests for QBAgent sending a request to QuadBrain, receiving a respon
 Classifier marks mcp_ tools internal. Interceptor executes every catalog mcp_* tool server-side and strips it. Only non-mcp_ calls remain as OpenAI tool_calls. Failed/unhandled internals are notes. All-internal success is finish_reason stop with result content. Tests use mocks or WebApplicationFactory and do not depend on the Windows service.
 
 **Acceptance Criteria:**
-- [x] Tools are classified internal (mcp_ prefix) vs external. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs Classifier_IdentifiesInternalTools)
-- [x] Internal tools execute server-side and are stripped; only non-mcp_ calls are emitted. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs Interceptor_CatalogName_IsNotEmittedToAgent)
-- [x] Internal-tool failures surface as a note, never as a tool command. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsync_InternalToolFailure_BecomesNoteNotToolCall)
-- [x] A theory or explicit list covering every mcp_* name from McpHostedAgentToolAdapter and QBAgentDefinition asserts RemainingToolCalls does not contain that name. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs Interceptor_CatalogName_IsNotEmittedToAgent)
+- [x] Tools are classified internal (mcp_ prefix) vs external. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs ClassifierIdentifiesInternalTools)
+- [x] Internal tools execute server-side and are stripped; only non-mcp_ calls are emitted. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs InterceptorCatalogNameIsNotEmittedToAgent)
+- [x] Internal-tool failures surface as a note, never as a tool command. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsyncInternalToolFailureBecomesNoteNotToolCall)
+- [x] A theory or explicit list covering every mcp_* name from McpHostedAgentToolAdapter and QBAgentDefinition asserts RemainingToolCalls does not contain that name. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs InterceptorCatalogNameIsNotEmittedToAgent)
 - [x] These tests do not require the McpServer Windows service. (evidence: unit tests with NSubstitute mocks)
 
 ### TEST-MCP-QBEXEC-002
@@ -1776,9 +1776,9 @@ Unit tests assert every catalog mcp_* name is handled by QuadBrainInternalToolEx
 
 **Acceptance Criteria:**
 - [x] Mutating todo/requirements/repo routes go through the transaction-gated services; a catalog-absent mcp_ name returns Unhandled. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs)
-- [x] A theory or explicit case exists for every mcp_* name from McpHostedAgentToolAdapter and QBAgentDefinition; each handled name verifies the matching mock service was invoked. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled)
-- [x] mcp_todo_query (and other reads) go through ITodoService/IRepoFileService/etc, not HttpClient. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_McpTodoQuery_RoutesThroughTodoService; Executor_DoesNotDependOnHttpClient)
-- [x] All-internal success (for example mcp_todo_query) returns finish_reason stop and assistant content containing the service result, with tool_calls null. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsync_CatalogName_StopsWithoutEmittingToolCall)
+- [x] A theory or explicit case exists for every mcp_* name from McpHostedAgentToolAdapter and QBAgentDefinition; each handled name verifies the matching mock service was invoked. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs ExecuteCatalogNameIsHandled)
+- [x] mcp_todo_query (and other reads) go through ITodoService/IRepoFileService/etc, not HttpClient. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs ExecuteMcpTodoQueryRoutesThroughTodoService; ExecutorDoesNotDependOnHttpClient)
+- [x] All-internal success (for example mcp_todo_query) returns finish_reason stop and assistant content containing the service result, with tool_calls null. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsyncCatalogNameStopsWithoutEmittingToolCall)
 - [x] These tests do not start, query, or depend on the McpServer Windows service. (evidence: unit tests with NSubstitute mocks)
 
 ### TEST-MCP-QBEXEC-003
@@ -1843,9 +1843,9 @@ Validates FR-MCP-QBOLLAMA-002 and TR-MCP-QBOLLAMA-002 through fake-driven unit t
 An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop.
 
 **Acceptance Criteria:**
-- [x] An OpenAI ChatCompletion request maps to QuadBrain orchestration and returns the Arbiter output as the assistant message. (evidence: QuadBrainOpenAiChatServiceTests + QuadBrainOpenAiEndpointIntegrationTests.ChatCompletions_Authorized_ReturnsArbiterContent.)
-- [x] Tool definitions flow through and assistant tool_calls are emitted for external tools. (evidence: QuadBrainOpenAiChatServiceTests tool-call parsing + endpoint test ChatCompletions_ExternalTool_ReturnedAsToolCall.)
-- [x] Bearer / X-Api-Key auth is enforced (401 on missing/invalid token). (evidence: QuadBrainOpenAiAuthTests + endpoint test ChatCompletions_NoToken_Returns401.)
+- [x] An OpenAI ChatCompletion request maps to QuadBrain orchestration and returns the Arbiter output as the assistant message. (evidence: QuadBrainOpenAiChatServiceTests + QuadBrainOpenAiEndpointIntegrationTests.ChatCompletionsAuthorizedReturnsArbiterContent.)
+- [x] Tool definitions flow through and assistant tool_calls are emitted for external tools. (evidence: QuadBrainOpenAiChatServiceTests tool-call parsing + endpoint test ChatCompletionsExternalToolReturnedAsToolCall.)
+- [x] Bearer / X-Api-Key auth is enforced (401 on missing/invalid token). (evidence: QuadBrainOpenAiAuthTests + endpoint test ChatCompletionsNoTokenReturns401.)
 
 
 ## TEST-MCP-QBPROGRESS
@@ -1974,7 +1974,7 @@ Per-session QuadBrain instance attachment over global brains with session metada
 
 ### TEST-MCP-REPL-001
 
-✅ **Complete** - Given a REPL host process, when a well-formed YAML command envelope is sent to stdin, then a YAML response envelope is emitted to stdout with `type: result` and the expected result payload. **Covered by:** `Iteration1_IntegrationTests`, `YamlFramingTests`, `YamlEnvelopeShapeTests`
+✅ **Complete** - Given a REPL host process, when a well-formed YAML command envelope is sent to stdin, then a YAML response envelope is emitted to stdout with `type: result` and the expected result payload. **Covered by:** `Iteration1IntegrationTests`, `YamlFramingTests`, `YamlEnvelopeShapeTests`
 
 
 ### TEST-MCP-REPL-002
@@ -2009,22 +2009,22 @@ Per-session QuadBrain instance attachment over global brains with session metada
 
 ### TEST-MCP-REPL-007-1
 
-Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked from the start path to its root. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths`
+Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked from the start path to its root. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnosticsWhenMarkerMissingEnumeratesSearchedPaths`
 
 
 ### TEST-MCP-REPL-007-2
 
-Given an explicit `workspacePathOverride` pointing to a workspace with a valid marker, when `TryResolveWithDiagnostics` is called, then resolution succeeds and the returned options carry the marker's API key. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_AcceptsExplicitWorkspaceArgument`
+Given an explicit `workspacePathOverride` pointing to a workspace with a valid marker, when `TryResolveWithDiagnostics` is called, then resolution succeeds and the returned options carry the marker's API key. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnosticsAcceptsExplicitWorkspaceArgument`
 
 
 ### TEST-MCP-REPL-007-3
 
-Given a marker file whose canonicalization is tampered, when `TryResolveWithDiagnostics` is called, then the error names the marker path and identifies "signature" failure. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenSignatureFails_ReportsReason`
+Given a marker file whose canonicalization is tampered, when `TryResolveWithDiagnostics` is called, then the error names the marker path and identifies "signature" failure. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnosticsWhenSignatureFailsReportsReason`
 
 
 ### TEST-MCP-REPL-007-4
 
-Given a marker whose HMAC payload is signed with LF-only (`\n`) line endings (matching the production server's `MarkerFileService.AppendPayloadLine`), when `TryResolveWithDiagnostics` is called on Windows or any platform where `Environment.NewLine` differs from `\n`, then signature verification succeeds. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_VerifiesSignatureBuiltWithLfLineEndings`
+Given a marker whose HMAC payload is signed with LF-only (`\n`) line endings (matching the production server's `MarkerFileService.AppendPayloadLine`), when `TryResolveWithDiagnostics` is called on Windows or any platform where `Environment.NewLine` differs from `\n`, then signature verification succeeds. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnosticsVerifiesSignatureBuiltWithLfLineEndings`
 
 
 ### TEST-MCP-REPL-008
@@ -2102,7 +2102,7 @@ When TryResolveWithDiagnostics is called on a workspace path containing no marke
 
 **Acceptance Criteria:**
 - [x] Error message enumerates all directories walked from start path to root
-- [x] Test passes with implementation in MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths
+- [x] Test passes with implementation in MarkerFileClientOptionsResolverTests.TryResolveWithDiagnosticsWhenMarkerMissingEnumeratesSearchedPaths
 
 ### TEST-MCP-REPL-022
 
@@ -2329,7 +2329,7 @@ In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) p
 
 ### TEST-MCP-REQEXPORT-002
 
-Validates TR-MCP-REQEXPORT-002. tests/McpServer.Support.Mcp.Tests/Controllers/RequirementsControllerGenerateTests.cs: GenerateAsync_WikiUnlistedException_ReturnsStructuredErrorNamingExceptionType substitutes IRequirementsDocumentService.GenerateWikiAsync to throw KeyNotFoundException and asserts the action returns an ObjectResult status 500 whose body contains the message and KeyNotFoundException (exceptionType). Red before the catch-all (the exception escaped/threw), green after adding catch(Exception)->BuildGenerateExportError to both wiki try blocks. Existing GenerateAsync_WikiConfigFailure/WikiConflictFailure/WikiZipAssemblyFailure tests remain green (AC3).
+Validates TR-MCP-REQEXPORT-002. tests/McpServer.Support.Mcp.Tests/Controllers/RequirementsControllerGenerateTests.cs: GenerateAsyncWikiUnlistedExceptionReturnsStructuredErrorNamingExceptionType substitutes IRequirementsDocumentService.GenerateWikiAsync to throw KeyNotFoundException and asserts the action returns an ObjectResult status 500 whose body contains the message and KeyNotFoundException (exceptionType). Red before the catch-all (the exception escaped/threw), green after adding catch(Exception)->BuildGenerateExportError to both wiki try blocks. Existing GenerateAsync_WikiConfigFailure/WikiConflictFailure/WikiZipAssemblyFailure tests remain green (AC3).
 
 
 ### TEST-MCP-REQEXPORT-003
@@ -2420,17 +2420,17 @@ Existing PluginPowerShellRuntime drain-timeout coverage and session_dialog metho
 
 ### TEST-MCP-SESSIONLOG-001
 
-Validates TR-MCP-SESSIONLOG-001. tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs: SessionLogCompleteTurn_MalformedTurnJson_ReturnsStructuredError and SessionLogFailTurn_MalformedTurnJson_ReturnsStructuredError assert a malformed turnJson yields a JSON {error} (with message, no success) instead of a thrown JsonException; SessionLogCompleteTurn_NullTurnJson_ReturnsSuccess asserts the happy path still returns {success:true}. Red before the fix (2 of 3 threw), green after moving the deserialize into a try/catch and ApplyWorkspaceOverride inside the service try.
+Validates TR-MCP-SESSIONLOG-001. tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs: SessionLogCompleteTurnMalformedTurnJsonReturnsStructuredError and SessionLogFailTurnMalformedTurnJsonReturnsStructuredError assert a malformed turnJson yields a JSON {error} (with message, no success) instead of a thrown JsonException; SessionLogCompleteTurnNullTurnJsonReturnsSuccess asserts the happy path still returns {success:true}. Red before the fix (2 of 3 threw), green after moving the deserialize into a try/catch and ApplyWorkspaceOverride inside the service try.
 
 
 ### TEST-MCP-SESSIONLOG-002
 
-Validates TR-MCP-SESSIONLOG-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: QueryAsync_TextMatchesProcessingDialogContent seeds a session whose unique token exists only in a ProcessingDialog item Content and asserts the text query returns it; QueryAsync_TextMatchesActionDescription does the same for an action Description. Red before widening BuildSearchText (both returned 0), green after. Existing QueryAsync scalar/boolean search tests (WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields et al.) remain green as the AC3 regression guard.
+Validates TR-MCP-SESSIONLOG-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: QueryAsyncTextMatchesProcessingDialogContent seeds a session whose unique token exists only in a ProcessingDialog item Content and asserts the text query returns it; QueryAsyncTextMatchesActionDescription does the same for an action Description. Red before widening BuildSearchText (both returned 0), green after. Existing QueryAsync scalar/boolean search tests (WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields et al.) remain green as the AC3 regression guard.
 
 
 ### TEST-MCP-SESSIONLOG-003
 
-Validates TR-MCP-SESSIONLOG-003. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: UpsertTurnAsync_CompletedEmptyTurn_AcceptedForClaudeCode_RejectedForQBAgent seeds a ClaudeCode session and a QBAgent session, then asserts a completed turn with zero decisions/actions/commits returns a turnId for ClaudeCode and throws ArgumentException for QBAgent. Regression guard locking the QBAgent-only scope so a future broadening of the gate to standard agents fails. Tool-description accuracy (AC2) applied in FwhMcpTools.SessionLog.cs.
+Validates TR-MCP-SESSIONLOG-003. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: UpsertTurnAsyncCompletedEmptyTurnAcceptedForClaudeCodeRejectedForQBAgent seeds a ClaudeCode session and a QBAgent session, then asserts a completed turn with zero decisions/actions/commits returns a turnId for ClaudeCode and throws ArgumentException for QBAgent. Regression guard locking the QBAgent-only scope so a future broadening of the gate to standard agents fails. Tool-description accuracy (AC2) applied in FwhMcpTools.SessionLog.cs.
 
 
 ### TEST-MCP-SESSIONLOG-005
@@ -2440,7 +2440,7 @@ Validates TR-MCP-SESSIONLOG-005. tests/McpServer.Support.Mcp.Tests/Services/Sess
 
 ### TEST-MCP-SESSIONLOG-006
 
-Validates AC-FR-MCP-SESSIONLOGCTX-001-001 through 007 and AC-TR-MCP-SESSIONLOG-006-001 through 008. Tests: SessionLogTurnContextValidatorTests, SessionLogServiceTurnContextTests, SessionLogTurnContextExtractorTests, SessionLogTurnContextBackfillTests, SessionLogTurnPlanFileTodoIdModelTests, AddSessionLogTurnPlanFileAndTodoIdMigrationTests, SessionLogControllerTests.BeginTurn_MissingFields_Returns400, BeginTurn_NoneNone_Returns201_AndGetReturnsNone, Query_FilterByTodoId_ReturnsOnlyMatches, SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError, SessionLogBeginTurn_NoneNone_ReturnsSuccess, BeginTurnAsync_SerializesPlanFileAndTodoId, BeginTurnAsync_PersistsPlanFileAndTodoId, BeginTurnAsync_ForwardsPlanFileAndTodoId, SanitizeTurn_CopiesPlanFileAndTodoId, SanitizeTurn_DoesNotMutateSource, SanitizeTurn_LeavesNoneUnchanged, Import_OmittedFields_PersistsExtractorResultOrNone, Ingest_OmittedFields_PersistsExtractorResultOrNone, Apply_OmittedFields_PersistsProperValue, SqliteMigration_UpAddsColumns_DownDropsThem, Invoke-WorkflowBeginTurn_* plugin contract tests.
+Validates AC-FR-MCP-SESSIONLOGCTX-001-001 through 007 and AC-TR-MCP-SESSIONLOG-006-001 through 008. Tests: SessionLogTurnContextValidatorTests, SessionLogServiceTurnContextTests, SessionLogTurnContextExtractorTests, SessionLogTurnContextBackfillTests, SessionLogTurnPlanFileTodoIdModelTests, AddSessionLogTurnPlanFileAndTodoIdMigrationTests, SessionLogControllerTests.BeginTurnMissingFieldsReturns400, BeginTurnNoneNoneReturns201AndGetReturnsNone, QueryFilterByTodoIdReturnsOnlyMatches, SessionLogBeginTurnMissingPlanFileReturnsStructuredError, SessionLogBeginTurnNoneNoneReturnsSuccess, BeginTurnAsyncSerializesPlanFileAndTodoId, BeginTurnAsyncPersistsPlanFileAndTodoId, BeginTurnAsyncForwardsPlanFileAndTodoId, SanitizeTurnCopiesPlanFileAndTodoId, SanitizeTurnDoesNotMutateSource, SanitizeTurnLeavesNoneUnchanged, ImportOmittedFieldsPersistsExtractorResultOrNone, IngestOmittedFieldsPersistsExtractorResultOrNone, ApplyOmittedFieldsPersistsProperValue, SqliteMigrationUpAddsColumnsDownDropsThem, Invoke-WorkflowBeginTurn_* plugin contract tests.
 
 **Acceptance Criteria:**
 - [ ] Round-trip planFile/todoId on persist and get.
@@ -2474,7 +2474,7 @@ Tests must prove default and configured redaction across the complete session-lo
 
 ### TEST-MCP-SESSIONLOGSAN-002
 
-Validates TR-MCP-SESSIONLOGSAN-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogSanitizerTimeoutTests.cs: CreateTimeoutSanitizer now constructs SessionLogSanitizer with an injected RegexReplaceInvoker that raises RegexMatchTimeoutException deterministically for the catastrophic rule on large input (length>10000 + pattern match, no wall-clock). SanitizeString_WhenConfiguredRuleTimesOut_ReturnsTimeoutTokenAndDoesNotLogInput and SanitizeSessionLog_WhenOneFieldTimesOut_ContinuesSanitizingOtherFields verified 10/10 green across repeated isolated runs (previously flaked pass/pass/fail). Production path uses the default Regex.Replace invoker.
+Validates TR-MCP-SESSIONLOGSAN-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogSanitizerTimeoutTests.cs: CreateTimeoutSanitizer now constructs SessionLogSanitizer with an injected RegexReplaceInvoker that raises RegexMatchTimeoutException deterministically for the catastrophic rule on large input (length>10000 + pattern match, no wall-clock). SanitizeStringWhenConfiguredRuleTimesOutReturnsTimeoutTokenAndDoesNotLogInput and SanitizeSessionLogWhenOneFieldTimesOutContinuesSanitizingOtherFields verified 10/10 green across repeated isolated runs (previously flaked pass/pass/fail). Production path uses the default Regex.Replace invoker.
 
 
 
@@ -2516,9 +2516,9 @@ Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volum
 Unit tests cover REST and typed client close-by-id behavior, including timestamp creation and missing item failure.
 
 **Acceptance Criteria:**
-- [x] Controller tests prove close-by-id sets done true and a completion timestamp. (evidence: TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate.)
-- [x] Controller tests prove close-by-id preserves not-found failure behavior. (evidence: TodoControllerTests.CloseAsync_WhenItemMissing_ReturnsNotFound.)
-- [x] Client tests prove the close method calls the dedicated endpoint and deserializes TodoMutationResult. (evidence: TodoClientTests.CloseAsync_PostsCorrectUrl.)
+- [x] Controller tests prove close-by-id sets done true and a completion timestamp. (evidence: TodoControllerTests.CloseAsyncWhenItemExistsSetsDoneAndCompletedDate.)
+- [x] Controller tests prove close-by-id preserves not-found failure behavior. (evidence: TodoControllerTests.CloseAsyncWhenItemMissingReturnsNotFound.)
+- [x] Client tests prove the close method calls the dedicated endpoint and deserializes TodoMutationResult. (evidence: TodoClientTests.CloseAsyncPostsCorrectUrl.)
 
 
 ## TEST-MCP-TRACE-LEGACY
@@ -2554,7 +2554,7 @@ Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-M
 Unit tests cover source detection and parser fixture coverage for Claude, Codex, Grok, Cline, Copilot, and OpenCode formats.
 
 **Acceptance Criteria:**
-- [x] Fixtures identify supported source kinds and reject ambiguous/unknown bundles. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: TranscriptFixtureInventoryTests; Detector_DiscoversEverySupportedRealTranscriptSource.)
+- [x] Fixtures identify supported source kinds and reject ambiguous/unknown bundles. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: TranscriptFixtureInventoryTests; DetectorDiscoversEverySupportedRealTranscriptSource.)
 
 ### TEST-MCP-TRANSCRIPT-002
 
@@ -3019,26 +3019,26 @@ Tests must prove marker generation creates a valid default docs/wiki.yaml, prese
 
 ### TEST-MCP-WIKIEXPORT-003
 
-WikiExport_WithoutDumpFlag_UnchangedBehavior; WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace; Dump_ContainsTodoRowsAndRequirementLinksMatchingStore; Dump_Sha256_MatchesCanonicalUtf8Json; DumpPolicyRegistry_CoversEveryCurrentDbSetExactlyOnce; Dump_SecretSentinels_RedactedAcrossScalarNestedAndEncodedPayloads; Dump_Diagnostics_NeverEchoSecretValue; Dump_ExcludesUnrelatedWorkspaceAndGlobalSecrets; Dump_FinalByteHash_VerifiesAfterRedaction; Dump_RelationshipsRemainLosslessExceptDeclaredRedactedText; Import_SourceOwnedProduct_RemapOwnerToDestination; Import_SharedProductMissing_RequiresSharedProductMapping; Import_SharedProductEquivalent_ReusesAuthorizedDestinationProduct; Dump_ForeignOwnedProduct_ExportsOnlySourceWorkspaceMembership.
+WikiExportWithoutDumpFlagUnchangedBehavior; WikiExportWithDumpFlagWritesVersionedJsonKeyedByWorkspace; DumpContainsTodoRowsAndRequirementLinksMatchingStore; DumpSha256MatchesCanonicalUtf8Json; DumpPolicyRegistryCoversEveryCurrentDbSetExactlyOnce; DumpSecretSentinelsRedactedAcrossScalarNestedAndEncodedPayloads; DumpDiagnosticsNeverEchoSecretValue; DumpExcludesUnrelatedWorkspaceAndGlobalSecrets; DumpFinalByteHashVerifiesAfterRedaction; Dump_RelationshipsRemainLosslessExceptDeclaredRedactedText; Import_SourceOwnedProduct_RemapOwnerToDestination; Import_SharedProductMissing_RequiresSharedProductMapping; Import_SharedProductEquivalent_ReusesAuthorizedDestinationProduct; Dump_ForeignOwnedProduct_ExportsOnlySourceWorkspaceMembership.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: WikiExport_WithoutDumpFlag_UnchangedBehavior; WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace; Dump_ContainsTodoRowsAndRequirementLinksMatchingStore; Dump_Sha256_MatchesCanonicalUtf8Json. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Named tests exist: WikiExport_WithoutDumpFlag_UnchangedBehavior; WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace; Dump_ContainsTodoRowsAndRequirementLinksMatchingStore; Dump_Sha256_MatchesCanonicalUtf8Json; DumpPolicyRegistry_CoversEveryCurrentDbSetExactlyOnce; Dump_SecretSentinels_RedactedAcrossScalarNestedAndEncodedPayloads; Dump_Diagnostics_NeverEchoSecretValue; Dump_ExcludesUnrelatedWorkspaceAndGlobalSecrets; Dump_FinalByteHash_VerifiesAfterRedaction; Dump_RelationshipsRemainLosslessExceptDeclaredRedactedText; Import_SourceOwnedProduct_RemapOwnerToDestination; Import_SharedProductMissing_RequiresSharedProductMapping; Import_SharedProductEquivalent_ReusesAuthorizedDestinationProduct; Dump_ForeignOwnedProduct_ExportsOnlySourceWorkspaceMembership. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Named tests exist: WikiExportWithoutDumpFlagUnchangedBehavior; WikiExportWithDumpFlagWritesVersionedJsonKeyedByWorkspace; DumpContainsTodoRowsAndRequirementLinksMatchingStore; DumpSha256MatchesCanonicalUtf8Json. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Named tests exist: WikiExportWithoutDumpFlagUnchangedBehavior; WikiExportWithDumpFlagWritesVersionedJsonKeyedByWorkspace; DumpContainsTodoRowsAndRequirementLinksMatchingStore; DumpSha256MatchesCanonicalUtf8Json; DumpPolicyRegistryCoversEveryCurrentDbSetExactlyOnce; DumpSecretSentinelsRedactedAcrossScalarNestedAndEncodedPayloads; DumpDiagnosticsNeverEchoSecretValue; DumpExcludesUnrelatedWorkspaceAndGlobalSecrets; DumpFinalByteHashVerifiesAfterRedaction; Dump_RelationshipsRemainLosslessExceptDeclaredRedactedText; Import_SourceOwnedProduct_RemapOwnerToDestination; Import_SharedProductMissing_RequiresSharedProductMapping; Import_SharedProductEquivalent_ReusesAuthorizedDestinationProduct; Dump_ForeignOwnedProduct_ExportsOnlySourceWorkspaceMembership. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ### TEST-MCP-WIKIEXPORT-004
 
-AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml; Import_OperationalColumnsContainOnlyDestinationIdsAndPaths; Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected; Import_IdempotentReimport_NoDuplicateTodos. Import_ImmutableSourceProvenancePreservesOriginalIdentity; Import_ReplayableFederationAgentTriageHandoffRows_AreInertAfterRestart; Import_CredentialedFeatures_RequireDestinationReconfiguration; Import_RelationshipsAndEntityMaps_AreComplete; AddWorkspace_DumpReplay_CheckedBeforeDuplicateRegistration; Import_RegistrationAndHydration_CommitInOneTransaction; Import_PreCommitFailureOrCancellation_RollsBackWorkspaceAndRows; Import_PostCommitProjectionInitOrStartFailure_IsRecoverable; Import_CancelAfterCommit_LeavesPendingActivation; Import_ExistingRepositoryCheckout_PreservesGitAndSourceFiles; Import_ActivatedReplay_DoesNotReapplyFreshFilesystemPreconditions; Import_ServiceOwnedPathConflict_PrecommitDiagnosticOrRecoverableActivationFailure; Import_UnknownExistingMarker_IsNeverReplaced; Import_ConcurrentSameDump_SingleCommitAndReplayReceipt; Import_ConflictingDump_RejectsWithoutPartialHydration.
+AddWorkspaceDumpParamHydratesTodosFromDumpNotTodoYaml; Import_OperationalColumnsContainOnlyDestinationIdsAndPaths; ImportMalformedDumpVersionMismatchMissingTablesUnsafePathRejected; ImportIdempotentReimportNoDuplicateTodos. Import_ImmutableSourceProvenancePreservesOriginalIdentity; Import_ReplayableFederationAgentTriageHandoffRows_AreInertAfterRestart; Import_CredentialedFeatures_RequireDestinationReconfiguration; Import_RelationshipsAndEntityMaps_AreComplete; AddWorkspace_DumpReplay_CheckedBeforeDuplicateRegistration; Import_RegistrationAndHydration_CommitInOneTransaction; Import_PreCommitFailureOrCancellation_RollsBackWorkspaceAndRows; Import_PostCommitProjectionInitOrStartFailure_IsRecoverable; Import_CancelAfterCommit_LeavesPendingActivation; Import_ExistingRepositoryCheckout_PreservesGitAndSourceFiles; Import_ActivatedReplay_DoesNotReapplyFreshFilesystemPreconditions; Import_ServiceOwnedPathConflict_PrecommitDiagnosticOrRecoverableActivationFailure; Import_UnknownExistingMarker_IsNeverReplaced; Import_ConcurrentSameDump_SingleCommitAndReplayReceipt; Import_ConflictingDump_RejectsWithoutPartialHydration.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml; Import_OperationalColumnsContainOnlyDestinationIdsAndPaths; Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected; Import_IdempotentReimport_NoDuplicateTodos. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Named tests exist: AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml; Import_OperationalColumnsContainOnlyDestinationIdsAndPaths; Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected; Import_IdempotentReimport_NoDuplicateTodos. Import_ImmutableSourceProvenancePreservesOriginalIdentity; Import_ReplayableFederationAgentTriageHandoffRows_AreInertAfterRestart; Import_CredentialedFeatures_RequireDestinationReconfiguration; Import_RelationshipsAndEntityMaps_AreComplete; AddWorkspace_DumpReplay_CheckedBeforeDuplicateRegistration; Import_RegistrationAndHydration_CommitInOneTransaction; Import_PreCommitFailureOrCancellation_RollsBackWorkspaceAndRows; Import_PostCommitProjectionInitOrStartFailure_IsRecoverable; Import_CancelAfterCommit_LeavesPendingActivation; Import_ExistingRepositoryCheckout_PreservesGitAndSourceFiles; Import_ActivatedReplay_DoesNotReapplyFreshFilesystemPreconditions; Import_ServiceOwnedPathConflict_PrecommitDiagnosticOrRecoverableActivationFailure; Import_UnknownExistingMarker_IsNeverReplaced; Import_ConcurrentSameDump_SingleCommitAndReplayReceipt; Import_ConflictingDump_RejectsWithoutPartialHydration. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Named tests exist: AddWorkspaceDumpParamHydratesTodosFromDumpNotTodoYaml; Import_OperationalColumnsContainOnlyDestinationIdsAndPaths; ImportMalformedDumpVersionMismatchMissingTablesUnsafePathRejected; ImportIdempotentReimportNoDuplicateTodos. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Named tests exist: AddWorkspaceDumpParamHydratesTodosFromDumpNotTodoYaml; Import_OperationalColumnsContainOnlyDestinationIdsAndPaths; ImportMalformedDumpVersionMismatchMissingTablesUnsafePathRejected; ImportIdempotentReimportNoDuplicateTodos. Import_ImmutableSourceProvenancePreservesOriginalIdentity; Import_ReplayableFederationAgentTriageHandoffRows_AreInertAfterRestart; Import_CredentialedFeatures_RequireDestinationReconfiguration; Import_RelationshipsAndEntityMaps_AreComplete; AddWorkspace_DumpReplay_CheckedBeforeDuplicateRegistration; Import_RegistrationAndHydration_CommitInOneTransaction; Import_PreCommitFailureOrCancellation_RollsBackWorkspaceAndRows; Import_PostCommitProjectionInitOrStartFailure_IsRecoverable; Import_CancelAfterCommit_LeavesPendingActivation; Import_ExistingRepositoryCheckout_PreservesGitAndSourceFiles; Import_ActivatedReplay_DoesNotReapplyFreshFilesystemPreconditions; Import_ServiceOwnedPathConflict_PrecommitDiagnosticOrRecoverableActivationFailure; Import_UnknownExistingMarker_IsNeverReplaced; Import_ConcurrentSameDump_SingleCommitAndReplayReceipt; Import_ConflictingDump_RejectsWithoutPartialHydration. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ### TEST-MCP-WIKIEXPORT-005
 
-TodoYaml_NotSourceOfTruth_WhenDumpPresent; TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete; DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth.
+TodoYamlNotSourceOfTruthWhenDumpPresent; TodoYamlCleanupArchivesWithEvidenceNoSilentDelete; DumpAndTodoYamlConflictDumpWinsDiagnosticNamesBoth.
 
 **Acceptance Criteria:**
-- [x] Named tests exist: TodoYaml_NotSourceOfTruth_WhenDumpPresent; TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete; DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Named tests exist: TodoYamlNotSourceOfTruthWhenDumpPresent; TodoYamlCleanupArchivesWithEvidenceNoSilentDelete; DumpAndTodoYamlConflictDumpWinsDiagnosticNamesBoth. (evidence: tests/McpServer.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs; G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 
 ## TEST-MCP-XAGENT
@@ -3071,12 +3071,12 @@ Traceability audit coverage for the original broad FR-SUPPORT-010 support surfac
 
 ### TEST-SUPPORT-010A-1
 
-Given a `SessionLogService` constructed with a non-null `WorkspaceContext`, when `SubmitAsync` persists a session, then `SessionLogEntity.WorkspaceId` and every child entity's `WorkspaceId` equal the context's `WorkspacePath`. **Covered by:** `SessionLogServiceTests.SubmitAsync_StampsWorkspaceIdOnSessionEntity`, `SessionLogServiceTests.SubmitAsync_StampsWorkspaceIdOnEveryChildEntity`
+Given a `SessionLogService` constructed with a non-null `WorkspaceContext`, when `SubmitAsync` persists a session, then `SessionLogEntity.WorkspaceId` and every child entity's `WorkspaceId` equal the context's `WorkspacePath`. **Covered by:** `SessionLogServiceTests.SubmitAsyncStampsWorkspaceIdOnSessionEntity`, `SessionLogServiceTests.SubmitAsyncStampsWorkspaceIdOnEveryChildEntity`
 
 
 ### TEST-SUPPORT-010A-2
 
-Given a `SessionLogService` constructed with `workspaceContext: null` and a DbContext without `_workspaceId`, when `SubmitAsync` persists a session, then `SessionLogEntity.WorkspaceId` remains empty string. **Covered by:** `SessionLogServiceTests.SubmitAsync_WithNullWorkspaceContext_KeepsWorkspaceIdEmpty`
+Given a `SessionLogService` constructed with `workspaceContext: null` and a DbContext without `_workspaceId`, when `SubmitAsync` persists a session, then `SessionLogEntity.WorkspaceId` remains empty string. **Covered by:** `SessionLogServiceTests.SubmitAsyncWithNullWorkspaceContextKeepsWorkspaceIdEmpty`
 
 
 ### TEST-SUPPORT-010B-1
@@ -3096,7 +3096,7 @@ Given a successful POST to `/mcpserver/sessionlog`, when `GET /mcpserver/session
 
 ### TEST-SUPPORT-010C-2
 
-Given a session exists, when `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` carries a `UnifiedRequestEntryDto`, then 201 is returned and the subsequent GET shows the appended turn. **Covered by:** `SessionLogControllerTests.WhenPostingTurnViaRestThenTurnIsRetrievable`, `SessionLogServiceTests.UpsertTurnAsync_NewTurn_AppendsWithoutDeletingSiblings`
+Given a session exists, when `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` carries a `UnifiedRequestEntryDto`, then 201 is returned and the subsequent GET shows the appended turn. **Covered by:** `SessionLogControllerTests.WhenPostingTurnViaRestThenTurnIsRetrievable`, `SessionLogServiceTests.UpsertTurnAsyncNewTurnAppendsWithoutDeletingSiblings`
 
 
 ### TEST-SUPPORT-010C-3
@@ -3207,9 +3207,9 @@ Unit and contract tests cover triage dashboard bucketing data, group/report/resu
 Unit and client tests cover triage-created TODO listing, workspace filtering, missing TODO anchors, group/run context mapping, and typed client dispatch.
 
 **Acceptance Criteria:**
-- [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
-- [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
-- [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+- [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsyncReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsyncReturnsCreatedTodoIndex)
+- [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsyncSendsWorkspaceFilter)
 
 
 ## TEST-WEB

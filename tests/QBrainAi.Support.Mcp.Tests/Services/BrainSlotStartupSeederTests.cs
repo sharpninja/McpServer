@@ -23,7 +23,7 @@ public sealed class BrainSlotStartupSeederTests
 
     /// <summary>With execution enabled and four roles configured, the seeder makes the quad ready.</summary>
     [Fact]
-    public async Task SeedAsync_WhenExecutionEnabledAndFourSlotsConfigured_SeedsQuadReady()
+    public async Task SeedAsyncWhenExecutionEnabledAndFourSlotsConfiguredSeedsQuadReady()
     {
         var slots = BrainSlotRoles.All.Select(Seed).ToList();
         await using var provider = BuildProvider(executionEnabled: true, slots);
@@ -38,7 +38,7 @@ public sealed class BrainSlotStartupSeederTests
 
     /// <summary>FR-MCP-QUAD-001: global slots are visible under any workspace context and stamped with the global id.</summary>
     [Fact]
-    public async Task SeedAsync_SlotsAreGlobal_VisibleUnderAnyWorkspaceAndStampedEmpty()
+    public async Task SeedAsyncSlotsAreGlobalVisibleUnderAnyWorkspaceAndStampedEmpty()
     {
         var slots = BrainSlotRoles.All.Select(Seed).ToList();
         await using var provider = BuildProvider(executionEnabled: true, slots);
@@ -58,7 +58,7 @@ public sealed class BrainSlotStartupSeederTests
 
     /// <summary>Running the seeder twice is idempotent: still exactly four enabled slots, no exception.</summary>
     [Fact]
-    public async Task SeedAsync_RunTwice_IsIdempotent()
+    public async Task SeedAsyncRunTwiceIsIdempotent()
     {
         var slots = BrainSlotRoles.All.Select(Seed).ToList();
         await using var provider = BuildProvider(executionEnabled: true, slots);
@@ -73,7 +73,7 @@ public sealed class BrainSlotStartupSeederTests
 
     /// <summary>When execution is disabled the seeder provisions nothing.</summary>
     [Fact]
-    public async Task SeedAsync_WhenExecutionDisabled_SeedsNothing()
+    public async Task SeedAsyncWhenExecutionDisabledSeedsNothing()
     {
         var slots = BrainSlotRoles.All.Select(Seed).ToList();
         await using var provider = BuildProvider(executionEnabled: false, slots);
@@ -86,7 +86,7 @@ public sealed class BrainSlotStartupSeederTests
 
     /// <summary>When no slots are configured the seeder provisions nothing.</summary>
     [Fact]
-    public async Task SeedAsync_WhenNoSlotsConfigured_SeedsNothing()
+    public async Task SeedAsyncWhenNoSlotsConfiguredSeedsNothing()
     {
         await using var provider = BuildProvider(executionEnabled: true, []);
 
@@ -98,7 +98,7 @@ public sealed class BrainSlotStartupSeederTests
 
     /// <summary>One invalid slot is skipped and logged; the remaining valid slots are still provisioned.</summary>
     [Fact]
-    public async Task SeedAsync_WhenOneSlotInvalid_SeedsRemainingAndDoesNotThrow()
+    public async Task SeedAsyncWhenOneSlotInvalidSeedsRemainingAndDoesNotThrow()
     {
         var slots = BrainSlotRoles.All.Select(Seed).ToList();
         slots[1].ModelId = string.Empty; // invalid: modelId is required.

@@ -121,7 +121,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// execution service and returns the compact JSON payload expected by Codex.
     /// </summary>
     [Fact]
-    public async Task GetActiveTodo_DelegatesToExecutionService()
+    public async Task GetActiveTodoDelegatesToExecutionService()
     {
         _todoExecutionService.GetActiveTodoAsync(@"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
             .Returns(new ActiveTodoResult
@@ -144,7 +144,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// TEST-MCP-161: Verifies that the <c>todo_update</c> STDIO MCP tool routes through the transaction gate.
     /// </summary>
     [Fact]
-    public async Task TodoUpdate_WhenTransactionGateRegistered_UsesGatedUpdateService()
+    public async Task TodoUpdateWhenTransactionGateRegisteredUsesGatedUpdateService()
     {
         _todoMutations.UpdateAsync("TODO-TXN-STDIO-001", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(
@@ -172,7 +172,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// TEST-MCP-161: Verifies that the <c>todo_create</c> STDIO MCP tool routes through the transaction gate.
     /// </summary>
     [Fact]
-    public async Task TodoCreate_WhenTransactionGateRegistered_UsesGatedCreateService()
+    public async Task TodoCreateWhenTransactionGateRegisteredUsesGatedCreateService()
     {
         _todoMutations.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(
@@ -200,7 +200,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// TEST-MCP-161: Verifies that the <c>todo_delete</c> STDIO MCP tool routes through the transaction gate.
     /// </summary>
     [Fact]
-    public async Task TodoDelete_WhenTransactionGateRegistered_UsesGatedDeleteService()
+    public async Task TodoDeleteWhenTransactionGateRegisteredUsesGatedDeleteService()
     {
         _todoMutations.DeleteAsync("TODO-TXN-STDIO-DELETE-001", Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
@@ -218,7 +218,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// TEST-MCP-161: Verifies that the <c>todo_move</c> STDIO MCP tool routes through the transaction gate.
     /// </summary>
     [Fact]
-    public async Task TodoMove_WhenTransactionGateRegistered_UsesGatedMoveService()
+    public async Task TodoMoveWhenTransactionGateRegisteredUsesGatedMoveService()
     {
         _todoMutations.MoveAsync("TODO-TXN-STDIO-MOVE-001", Arg.Any<TodoMoveRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(
@@ -253,7 +253,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// TEST-MCP-161: Verifies that gated <c>todo_move</c> failures return the standard error JSON.
     /// </summary>
     [Fact]
-    public async Task TodoMove_WhenGatedMoveFails_ReturnsErrorJson()
+    public async Task TodoMoveWhenGatedMoveFailsReturnsErrorJson()
     {
         _todoMutations.MoveAsync("TODO-TXN-STDIO-MOVE-002", Arg.Any<TodoMoveRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(
@@ -279,7 +279,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// phase and plan payload to the execution service and returns the created TODO identifiers.
     /// </summary>
     [Fact]
-    public async Task CreateTodosFromPlan_DelegatesToExecutionService()
+    public async Task CreateTodosFromPlanDelegatesToExecutionService()
     {
         _todoExecutionService.CreateTodosFromPlanAsync(
                 @"Q:\__mcp_unit_test__\QBrainAi",
@@ -322,7 +322,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// to the execution service and preserves the bounded context payload returned to Codex.
     /// </summary>
     [Fact]
-    public async Task GetTodoExecutionContext_DelegatesToExecutionService()
+    public async Task GetTodoExecutionContextDelegatesToExecutionService()
     {
         _todoExecutionService.GetExecutionContextAsync(
                 @"Q:\__mcp_unit_test__\QBrainAi",
@@ -354,7 +354,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// plan before implementation and surfaces the structured status response.
     /// </summary>
     [Fact]
-    public async Task SetTodoTestPlan_DelegatesToExecutionService()
+    public async Task SetTodoTestPlanDelegatesToExecutionService()
     {
         _todoExecutionService.SetTestPlanAsync(
                 @"Q:\__mcp_unit_test__\QBrainAi",
@@ -392,7 +392,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// state transition and returns the structured execution-status result.
     /// </summary>
     [Fact]
-    public async Task UpdateTodoStatus_DelegatesToExecutionService()
+    public async Task UpdateTodoStatusDelegatesToExecutionService()
     {
         _todoExecutionService.UpdateStatusAsync(
                 @"Q:\__mcp_unit_test__\QBrainAi",
@@ -422,7 +422,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// structured checkpoint payload used to resume work from compact deltas.
     /// </summary>
     [Fact]
-    public async Task AppendTodoCheckpoint_DelegatesToExecutionService()
+    public async Task AppendTodoCheckpointDelegatesToExecutionService()
     {
         _todoExecutionService.AppendCheckpointAsync(
                 @"Q:\__mcp_unit_test__\QBrainAi",
@@ -454,7 +454,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// validation evidence and returns the structured validation state without lossy translation.
     /// </summary>
     [Fact]
-    public async Task RecordTodoValidationResult_DelegatesToExecutionService()
+    public async Task RecordTodoValidationResultDelegatesToExecutionService()
     {
         _todoExecutionService.RecordValidationResultAsync(
                 @"Q:\__mcp_unit_test__\QBrainAi",
@@ -491,7 +491,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// execution service and returns the next bounded TODO instead of broad plan history.
     /// </summary>
     [Fact]
-    public async Task GetNextReadyTodo_DelegatesToExecutionService()
+    public async Task GetNextReadyTodoDelegatesToExecutionService()
     {
         _todoExecutionService.GetNextReadyTodoAsync(@"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
             .Returns(new ActiveTodoResult
@@ -515,7 +515,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
     /// request to the execution service and returns the structured ADB response unmodified.
     /// </summary>
     [Fact]
-    public async Task AdbStep_DelegatesToExecutionService()
+    public async Task AdbStepDelegatesToExecutionService()
     {
         _todoExecutionService.AdbStepAsync(
                 @"Q:\__mcp_unit_test__\QBrainAi",

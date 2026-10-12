@@ -13,7 +13,7 @@ public sealed class FederationFanoutSyncServiceTests
 {
     /// <summary>Valid hub envelopes are verified, applied, and acknowledged by recipient sequence.</summary>
     [Fact]
-    public async Task SyncOnceAsync_VerifiesEnvelopeAppliesAndAcknowledgesRecipientSequence()
+    public async Task SyncOnceAsyncVerifiesEnvelopeAppliesAndAcknowledgesRecipientSequence()
     {
         var options = CreateOptions();
         var signer = new FederationEnvelopeSigner(options);
@@ -52,7 +52,7 @@ public sealed class FederationFanoutSyncServiceTests
 
     /// <summary>Invalid envelopes are rejected and not applied locally.</summary>
     [Fact]
-    public async Task SyncOnceAsync_InvalidEnvelopeAcksRejectedAndDoesNotApply()
+    public async Task SyncOnceAsyncInvalidEnvelopeAcksRejectedAndDoesNotApply()
     {
         var options = CreateOptions();
         var signer = new FederationEnvelopeSigner(options);
@@ -85,7 +85,7 @@ public sealed class FederationFanoutSyncServiceTests
 
     /// <summary>When signing is enabled, bare sync rows without envelopes are rejected before apply.</summary>
     [Fact]
-    public async Task SyncOnceAsync_SigningEnabledRejectsUnsignedSyncItem()
+    public async Task SyncOnceAsyncSigningEnabledRejectsUnsignedSyncItem()
     {
         var options = CreateOptions();
         var signer = new FederationEnvelopeSigner(options);
@@ -111,7 +111,7 @@ public sealed class FederationFanoutSyncServiceTests
 
     /// <summary>Signed local execution envelopes run through the local executor after signature verification.</summary>
     [Fact]
-    public async Task SyncOnceAsync_LocalExecutionEnvelopeExecutesAndAcknowledges()
+    public async Task SyncOnceAsyncLocalExecutionEnvelopeExecutesAndAcknowledges()
     {
         var options = CreateOptions(localExecutionEnabled: true);
         var signer = new FederationEnvelopeSigner(options);
@@ -157,7 +157,7 @@ public sealed class FederationFanoutSyncServiceTests
 
     /// <summary>Local execution envelopes are rejected when proxy policy disables local execution.</summary>
     [Fact]
-    public async Task SyncOnceAsync_LocalExecutionDisabledRejectsEnvelope()
+    public async Task SyncOnceAsyncLocalExecutionDisabledRejectsEnvelope()
     {
         var options = CreateOptions(localExecutionEnabled: false);
         var signer = new FederationEnvelopeSigner(options);

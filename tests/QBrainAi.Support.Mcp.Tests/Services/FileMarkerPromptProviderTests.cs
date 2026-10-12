@@ -28,7 +28,7 @@ public sealed class FileMarkerPromptProviderTests
     /// This data is used to validate fail-fast behavior when required external template content is unavailable.
     /// </remarks>
     [Fact]
-    public async Task GetGlobalPromptTemplateAsync_TemplateNotFound_Throws()
+    public async Task GetGlobalPromptTemplateAsyncTemplateNotFoundThrows()
     {
         _templateService.GetByIdAsync(FileMarkerPromptProvider.TemplateId, Arg.Any<CancellationToken>())
             .Returns((PromptTemplate?)null);
@@ -47,7 +47,7 @@ public sealed class FileMarkerPromptProviderTests
     /// This data is used to confirm pass-through of persisted template text used by marker rendering.
     /// </remarks>
     [Fact]
-    public async Task GetGlobalPromptTemplateAsync_TemplateFound_ReturnsContent()
+    public async Task GetGlobalPromptTemplateAsyncTemplateFoundReturnsContent()
     {
         var template = new PromptTemplate
         {
@@ -77,7 +77,7 @@ public sealed class FileMarkerPromptProviderTests
     /// This data is used to prove marker regeneration observes live prompt-template updates instead of reusing stale cached text.
     /// </remarks>
     [Fact]
-    public async Task GetGlobalPromptTemplateAsync_ReloadsUpdatedTemplate()
+    public async Task GetGlobalPromptTemplateAsyncReloadsUpdatedTemplate()
     {
         _templateService.GetByIdAsync(FileMarkerPromptProvider.TemplateId, Arg.Any<CancellationToken>())
             .Returns(

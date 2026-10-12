@@ -15,7 +15,7 @@ public sealed class PluginUpdateServiceHarnessTests
     /// P20 red: Session Log harness against development UpdateService with sanitized fixtures is Failed 0 Skipped 0.
     /// </summary>
     [Fact]
-    public void PluginSessionLogHarness_AgainstUpdateService_SanitizedFixtures_FailedZeroSkippedZero()
+    public void PluginSessionLogHarnessAgainstUpdateServiceSanitizedFixturesFailedZeroSkippedZero()
     {
         var repoRoot = FindRepositoryRoot();
         var receipt = PluginUpdateServiceHarnessReceipt.LoadLatest(PluginSessionLogCatalog.PrimaryRepositoryRoot(repoRoot));
@@ -42,7 +42,7 @@ public sealed class PluginUpdateServiceHarnessTests
     /// P20 red: Staging and Production plugin promotion is blocked without an operator approval artifact.
     /// </summary>
     [Fact]
-    public void PluginPromotion_StagingOrProduction_RequiresOperatorApprovalFlag()
+    public void PluginPromotionStagingOrProductionRequiresOperatorApprovalFlag()
     {
         var repoRoot = FindRepositoryRoot();
         var gate = PluginPromotionGate.Load(repoRoot);

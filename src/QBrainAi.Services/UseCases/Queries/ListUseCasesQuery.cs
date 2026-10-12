@@ -43,7 +43,7 @@ public sealed class ListUseCasesQueryHandler(
             {
                 // EF translates ToLower comparisons for SQLite/providers used in tests.
                 var lower = filter.ToLowerInvariant();
-                q = q.Where(u => u.Title.ToLower().Contains(lower));
+                q = q.Where(u => u.Title.Contains(lower, StringComparison.CurrentCultureIgnoreCase));
             }
 
             var rows = await q

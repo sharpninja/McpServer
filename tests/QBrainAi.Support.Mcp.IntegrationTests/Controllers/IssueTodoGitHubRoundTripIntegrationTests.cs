@@ -61,7 +61,7 @@ public sealed class IssueTodoGitHubRoundTripIntegrationTests
     /// Validates FR-MCP-071 and TR-MCP-GH-007.
     /// </summary>
     [Fact]
-    public async Task IssueNew_RoundTripsGitHubCommentsPriorityAndClosure()
+    public async Task IssueNewRoundTripsGitHubCommentsPriorityAndClosure()
     {
         var createResponse = await _client.PostAsJsonAsync(
             new Uri("/qbrainai/todo", UriKind.Relative),

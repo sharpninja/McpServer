@@ -27,7 +27,7 @@ public sealed class MemoryBenchMultiTurnHarness
     }
 
     /// <summary>Runs the multi-turn pack under stub/recorded/live mode.</summary>
-    public MemoryBenchMultiTurnRunResult Run(MemoryBenchMultiTurnPackDocument pack, MemoryBenchRunOptions options)
+    public static MemoryBenchMultiTurnRunResult Run(MemoryBenchMultiTurnPackDocument pack, MemoryBenchRunOptions options)
     {
         ArgumentNullException.ThrowIfNull(pack);
         ArgumentNullException.ThrowIfNull(options);

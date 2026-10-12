@@ -11,42 +11,42 @@ public sealed class AgentExecutionStrategyNamesTests
 {
     /// <summary>The Grok CLI canonical name is <c>grok-cli</c>.</summary>
     [Fact]
-    public void GrokCli_CanonicalName_IsGrokCli()
+    public void GrokCliCanonicalNameIsGrokCli()
     {
         Assert.Equal("grok-cli", AgentExecutionStrategyNames.GrokCli);
     }
 
     /// <summary>The supported-name catalog includes the Grok CLI strategy.</summary>
     [Fact]
-    public void SupportedNames_IncludesGrokCli()
+    public void SupportedNamesIncludesGrokCli()
     {
         Assert.Contains(AgentExecutionStrategyNames.GrokCli, AgentExecutionStrategyNames.SupportedNames);
     }
 
     /// <summary><see cref="AgentExecutionStrategyNames.IsSupported"/> accepts the canonical grok-cli name.</summary>
     [Fact]
-    public void IsSupported_GrokCli_ReturnsTrue()
+    public void IsSupportedGrokCliReturnsTrue()
     {
         Assert.True(AgentExecutionStrategyNames.IsSupported("grok-cli"));
     }
 
     /// <summary><see cref="AgentExecutionStrategyNames.IsSupported"/> accepts the grok-build alias.</summary>
     [Fact]
-    public void IsSupported_GrokBuildAlias_ReturnsTrue()
+    public void IsSupportedGrokBuildAliasReturnsTrue()
     {
         Assert.True(AgentExecutionStrategyNames.IsSupported("grok-build"));
     }
 
     /// <summary>The grok-build alias normalizes to the canonical grok-cli name.</summary>
     [Fact]
-    public void NormalizeOrDefault_GrokBuildAlias_NormalizesToGrokCli()
+    public void NormalizeOrDefaultGrokBuildAliasNormalizesToGrokCli()
     {
         Assert.Equal("grok-cli", AgentExecutionStrategyNames.NormalizeOrDefault("grok-build"));
     }
 
     /// <summary>The canonical grok-cli name normalizes to itself.</summary>
     [Fact]
-    public void NormalizeOrDefault_GrokCli_ReturnsGrokCli()
+    public void NormalizeOrDefaultGrokCliReturnsGrokCli()
     {
         Assert.Equal("grok-cli", AgentExecutionStrategyNames.NormalizeOrDefault("grok-cli"));
     }

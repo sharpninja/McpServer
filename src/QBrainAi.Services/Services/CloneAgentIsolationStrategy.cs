@@ -83,7 +83,7 @@ public sealed class CloneAgentIsolationStrategy : IAgentIsolationStrategy
         return Task.CompletedTask;
     }
 
-    private async Task CopyMarkerFileIfPresentAsync(string workspacePath, string clonePath, CancellationToken ct)
+    private static async Task CopyMarkerFileIfPresentAsync(string workspacePath, string clonePath, CancellationToken ct)
     {
         var markerSourcePath = Path.Combine(workspacePath, MarkerFileService.MarkerFileName);
         if (!File.Exists(markerSourcePath))

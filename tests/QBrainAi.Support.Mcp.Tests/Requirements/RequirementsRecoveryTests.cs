@@ -26,7 +26,7 @@ public sealed class RequirementsRecoveryTests
 
     /// <summary>Dry-run reports create and update and does not store a run. GET is 404.</summary>
     [Fact]
-    public async Task PlanAsync_DoesNotWrite_AndGetIsNotFound()
+    public async Task PlanAsyncDoesNotWriteAndGetIsNotFound()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -51,7 +51,7 @@ public sealed class RequirementsRecoveryTests
 
     /// <summary>Apply creates and updates in one commit, then replay does not write again.</summary>
     [Fact]
-    public async Task ApplyAsync_CommitsBothRows_AndReplayDoesNotRewrite()
+    public async Task ApplyAsyncCommitsBothRowsAndReplayDoesNotRewrite()
     {
         await using var connection = OpenConnection();
         var capture = new IsolationCaptureInterceptor();
@@ -87,7 +87,7 @@ public sealed class RequirementsRecoveryTests
 
     /// <summary>Newline-swapped title/body must not share a hash; same key yields 409 Conflict, not Replay.</summary>
     [Fact]
-    public async Task ApplyAsync_NewlineTitleBodySwap_IsConflictNotReplay()
+    public async Task ApplyAsyncNewlineTitleBodySwapIsConflictNotReplay()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -136,7 +136,7 @@ public sealed class RequirementsRecoveryTests
 
     /// <summary>Titles longer than RequirementEntity.Title (1024) are 400 before the transaction.</summary>
     [Fact]
-    public async Task ApplyAsync_TitleExceeds1024_IsArgumentExceptionWithoutWrite()
+    public async Task ApplyAsyncTitleExceeds1024IsArgumentExceptionWithoutWrite()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -170,7 +170,7 @@ public sealed class RequirementsRecoveryTests
 
     /// <summary>Canonical TEST rows may have empty Title; recovery must accept them (body required).</summary>
     [Fact]
-    public async Task ApplyAsync_TitlelessTest_IsAcceptedAndPersisted()
+    public async Task ApplyAsyncTitlelessTestIsAcceptedAndPersisted()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -205,7 +205,7 @@ public sealed class RequirementsRecoveryTests
 
     /// <summary>IDs longer than RequirementEntity.Id (128) are 400 before the transaction.</summary>
     [Fact]
-    public async Task ApplyAsync_IdExceeds128_IsArgumentExceptionWithoutWrite()
+    public async Task ApplyAsyncIdExceeds128IsArgumentExceptionWithoutWrite()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -241,7 +241,7 @@ public sealed class RequirementsRecoveryTests
 
     /// <summary>Priority and status are lowercased like RequirementsDatabaseDocumentService.</summary>
     [Fact]
-    public async Task ApplyAsync_PriorityAndStatus_AreNormalizedToLowercase()
+    public async Task ApplyAsyncPriorityAndStatusAreNormalizedToLowercase()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -277,7 +277,7 @@ public sealed class RequirementsRecoveryTests
 
     /// <summary>Soft-deleted rows are revived (IgnoreQueryFilters + clear deletion metadata), not 409.</summary>
     [Fact]
-    public async Task ApplyAsync_SoftDeletedRequirement_IsRevived()
+    public async Task ApplyAsyncSoftDeletedRequirementIsRevived()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -313,7 +313,7 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
 
     /// <summary>Priority >32 or status >64 is 400 before the transaction (column bounds).</summary>
     [Fact]
-    public async Task ApplyAsync_PriorityOrStatusExceedsColumn_IsArgumentExceptionWithoutWrite()
+    public async Task ApplyAsyncPriorityOrStatusExceedsColumnIsArgumentExceptionWithoutWrite()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -371,7 +371,7 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
     /// an idempotency-key payload conflict. Soft-delete revive covers the reload-as-upsert path.
     /// </summary>
     [Fact]
-    public async Task ApplyAsync_UniqueWithoutRun_RetriesThenSucceeds()
+    public async Task ApplyAsyncUniqueWithoutRunRetriesThenSucceeds()
     {
         await using var connection = OpenConnection();
         var race = new ThrowUniqueOnceInterceptor();
@@ -395,7 +395,7 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
 
     /// <summary>Exhausted unique retries rethrow DbUpdateException (not a fake idempotency conflict).</summary>
     [Fact]
-    public async Task ApplyAsync_UniqueWithoutRun_ExhaustedRetries_PreserveDbUpdateException()
+    public async Task ApplyAsyncUniqueWithoutRunExhaustedRetriesPreserveDbUpdateException()
     {
         await using var connection = OpenConnection();
         var race = new ThrowUniqueAlwaysInterceptor();
@@ -417,7 +417,7 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
 
     /// <summary>A different payload for a stored key is 409 and leaves the original rows.</summary>
     [Fact]
-    public async Task ApplyAsync_DifferentPayload_IsConflictWithoutMutation()
+    public async Task ApplyAsyncDifferentPayloadIsConflictWithoutMutation()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -438,7 +438,7 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
 
     /// <summary>An invalid second item is 400 and writes neither requirements nor a run.</summary>
     [Fact]
-    public async Task ApplyAsync_InvalidSecondItem_WritesNothing()
+    public async Task ApplyAsyncInvalidSecondItemWritesNothing()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection);
@@ -457,7 +457,7 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
 
     /// <summary>A SaveChanges failure rolls back. No requirement row and no run row remain.</summary>
     [Fact]
-    public async Task ApplyAsync_SaveFailure_RollsBackEveryRow()
+    public async Task ApplyAsyncSaveFailureRollsBackEveryRow()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection, new ThrowingSaveInterceptor());
@@ -475,7 +475,7 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
 
     /// <summary>A hung SaveChanges is retryable HTTP 503 and persists nothing.</summary>
     [Fact]
-    public async Task ApplyAsync_HungSave_IsRetryable503()
+    public async Task ApplyAsyncHungSaveIsRetryable503()
     {
         await using var connection = OpenConnection();
         var (sut, db) = Build(connection, new DelayedSaveInterceptor(TimeSpan.FromSeconds(4)), budget: TimeSpan.FromSeconds(1));
@@ -500,7 +500,7 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
 
     /// <summary>The model key is the workspace plus idempotency key.</summary>
     [Fact]
-    public void Model_PrimaryKey_IsWorkspaceAndIdempotencyKey()
+    public void ModelPrimaryKeyIsWorkspaceAndIdempotencyKey()
     {
         using var connection = OpenConnection();
         var (_, db) = Build(connection);
@@ -674,7 +674,7 @@ public sealed class RequirementsRecoveryControllerTests
 {
     /// <summary>dry-run, apply, invalid mode, conflict, not found, and budget exhaustion map to 200/400/409/404/503.</summary>
     [Fact]
-    public async Task PostAndGet_MapStatusContract()
+    public async Task PostAndGetMapStatusContract()
     {
         var fake = new FakeRecovery();
         var controller = new RequirementsRecoveryController(fake);

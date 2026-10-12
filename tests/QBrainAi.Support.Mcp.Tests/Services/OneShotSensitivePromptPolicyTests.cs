@@ -9,7 +9,7 @@ public sealed class OneShotSensitivePromptPolicyTests
 {
     /// <summary>P1-5: HandoffTodoDraft publishes a redacted hash placeholder, never the raw source.</summary>
     [Fact]
-    public void Publish_HandoffContext_RedactsRawSource()
+    public void PublishHandoffContextRedactsRawSource()
     {
         const string raw = "SECRET-HANDOFF-SOURCE-TEXT";
         var published = OneShotSensitivePromptPolicy.Publish(AgentPoolOneShotContext.HandoffTodoDraft, raw);
@@ -20,7 +20,7 @@ public sealed class OneShotSensitivePromptPolicyTests
 
     /// <summary>P1-5: non-handoff contexts still publish the raw prompt.</summary>
     [Fact]
-    public void Publish_AdHocContext_KeepsRawPrompt()
+    public void PublishAdHocContextKeepsRawPrompt()
     {
         const string raw = "ordinary prompt";
         var published = OneShotSensitivePromptPolicy.Publish(AgentPoolOneShotContext.AdHoc, raw);

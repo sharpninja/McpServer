@@ -21,7 +21,7 @@ public sealed class IssueSyncE2ETests
 
     /// <summary>Full cycle: Sync issue from GitHub -> modify TODO -> sync back to GitHub.</summary>
     [Fact]
-    public async Task FullBidirectionalSync_CreateThenSyncBack()
+    public async Task FullBidirectionalSyncCreateThenSyncBack()
     {
         // Step 1: Sync issue from GitHub to TODO
         var issue = new GitHubIssueDetail(
@@ -72,7 +72,7 @@ public sealed class IssueSyncE2ETests
 
     /// <summary>SyncAllIssuesToTodosAsync batch imports multiple issues.</summary>
     [Fact]
-    public async Task SyncAllIssuesToTodos_BatchImports()
+    public async Task SyncAllIssuesToTodosBatchImports()
     {
         var issues = new[]
         {
@@ -101,7 +101,7 @@ public sealed class IssueSyncE2ETests
 
     /// <summary>SyncAllTodosToIssuesAsync batch exports ISSUE-* TODOs.</summary>
     [Fact]
-    public async Task SyncAllTodosToIssues_BatchExports()
+    public async Task SyncAllTodosToIssuesBatchExports()
     {
         var items = new[]
         {

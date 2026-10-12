@@ -48,7 +48,7 @@ public sealed class SessionLogStdioSanitizationTests : IDisposable
     /// S17: sessionlog_query JSON-RPC payload omits the raw provider token after sanitizer projection.
     /// </summary>
     [Fact]
-    public async Task SessionLogQuery_StdioJson_OmitsRawSecret()
+    public async Task SessionLogQueryStdioJsonOmitsRawSecret()
     {
         var inner = Substitute.For<ISessionLogService>();
         inner.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>())

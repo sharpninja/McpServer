@@ -34,7 +34,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
     /// TodoItems before the TodoRecords table is dropped.
     /// </summary>
     [Fact]
-    public void Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos()
+    public void MigrateRemoveTodoRecordsBackfillsAnchorOnlyTriageTodos()
     {
         using (var db = CreateContext())
         {
@@ -66,7 +66,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
     /// service workspace get a non-destructive canonical copy in the triage workspace.
     /// </summary>
     [Fact]
-    public void Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace()
+    public void MigrateRepairTriageCreatedTodoWorkspaceCopiesWrongWorkspaceTodoToTriageWorkspace()
     {
         using (var db = CreateContext())
         {
@@ -100,7 +100,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
 
     private McpDbContext CreateContext() => new(_options);
 
-    private void SeedAnchorOnlyTriageTodo(McpDbContext db)
+    private static void SeedAnchorOnlyTriageTodo(McpDbContext db)
     {
         var now = new DateTimeOffset(2026, 6, 28, 12, 0, 0, TimeSpan.Zero);
         SeedWorkspace(db, StaleAnchorWorkspacePath, "Deployed service workspace", now);

@@ -10,7 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.Options;
 public sealed class AgentHelpOptionsValidationTests
 {
     [Fact]
-    public void Validate_ReturnsSuccess_WhenAgentHelpIsDisabled()
+    public void ValidateReturnsSuccessWhenAgentHelpIsDisabled()
     {
         var validator = new AgentHelpOptionsValidator();
         var options = new AgentHelpOptions { Enabled = false, TranscriptDirectory = "" };
@@ -21,7 +21,7 @@ public sealed class AgentHelpOptionsValidationTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenDefaultExecutionStrategyIsUnknown()
+    public void ValidateFailsWhenDefaultExecutionStrategyIsUnknown()
     {
         var validator = new AgentHelpOptionsValidator();
         var options = new AgentHelpOptions
@@ -36,7 +36,7 @@ public sealed class AgentHelpOptionsValidationTests
     }
 
     [Fact]
-    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsHostedMcpAgent()
+    public void ValidateReturnsSuccessWhenDefaultExecutionStrategyIsHostedMcpAgent()
     {
         var validator = new AgentHelpOptionsValidator();
         var options = new AgentHelpOptions
@@ -51,7 +51,7 @@ public sealed class AgentHelpOptionsValidationTests
 
     /// <summary>TEST-MCP-HELP-004: The grok-cli execution strategy passes options validation.</summary>
     [Fact]
-    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsGrokCli()
+    public void ValidateReturnsSuccessWhenDefaultExecutionStrategyIsGrokCli()
     {
         var validator = new AgentHelpOptionsValidator();
         var options = new AgentHelpOptions
@@ -66,7 +66,7 @@ public sealed class AgentHelpOptionsValidationTests
 
     /// <summary>FR-MCP-HELP-001: Agent Help defaults its execution strategy to grok-cli.</summary>
     [Fact]
-    public void AgentHelpOptions_DefaultExecutionStrategy_IsGrokCli()
+    public void AgentHelpOptionsDefaultExecutionStrategyIsGrokCli()
     {
         var options = new AgentHelpOptions();
 
@@ -74,7 +74,7 @@ public sealed class AgentHelpOptionsValidationTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenModelApiKeyConfiguredWithoutEnvironmentVariableName()
+    public void ValidateFailsWhenModelApiKeyConfiguredWithoutEnvironmentVariableName()
     {
         var validator = new AgentHelpOptionsValidator();
         var options = new AgentHelpOptions
@@ -90,7 +90,7 @@ public sealed class AgentHelpOptionsValidationTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenTranscriptDirectoryMissing()
+    public void ValidateFailsWhenTranscriptDirectoryMissing()
     {
         var validator = new AgentHelpOptionsValidator();
         var options = new AgentHelpOptions
@@ -105,7 +105,7 @@ public sealed class AgentHelpOptionsValidationTests
     }
 
     [Fact]
-    public void Validate_Fails_WhenMaxTurnsPerSessionIsZero()
+    public void ValidateFailsWhenMaxTurnsPerSessionIsZero()
     {
         var validator = new AgentHelpOptionsValidator();
         var options = new AgentHelpOptions

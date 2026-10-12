@@ -24,7 +24,7 @@ public sealed class SessionLogWorkflowTests
     /// the payload shape can be asserted without a live MCP server.
     /// </summary>
     [Fact]
-    public async Task BootstrapAsync_SubmitsCanonicalInitialSessionPayload()
+    public async Task BootstrapAsyncSubmitsCanonicalInitialSessionPayload()
     {
         var (_, workflow, handler) = CreateSut();
 
@@ -65,7 +65,7 @@ public sealed class SessionLogWorkflowTests
     /// in-memory continuation state and the underlying <see cref="SessionLogClient"/> request shapes.
     /// </summary>
     [Fact]
-    public async Task TurnLifecycle_AppendsDialogAndActionsThenCompletesAndPersists()
+    public async Task TurnLifecycleAppendsDialogAndActionsThenCompletesAndPersists()
     {
         var (_, workflow, handler) = CreateSut();
         await workflow.BootstrapAsync(new SessionLogBootstrapRequest
@@ -182,7 +182,7 @@ public sealed class SessionLogWorkflowTests
     /// BeginTurnAsync persists supplied planFile and todoId on the submitted turn.
     /// </summary>
     [Fact]
-    public async Task BeginTurnAsync_PersistsPlanFileAndTodoId()
+    public async Task BeginTurnAsyncPersistsPlanFileAndTodoId()
     {
         var (_, workflow, handler) = CreateSut();
         await workflow.BootstrapAsync(new SessionLogBootstrapRequest
@@ -212,7 +212,7 @@ public sealed class SessionLogWorkflowTests
     /// behavior can be asserted with stable IDs and payload ordering.
     /// </summary>
     [Fact]
-    public async Task FailTurnAsync_RecordsFailureStateInSubmittedSessionLog()
+    public async Task FailTurnAsyncRecordsFailureStateInSubmittedSessionLog()
     {
         var (_, workflow, handler) = CreateSut();
         await workflow.BootstrapAsync(new SessionLogBootstrapRequest

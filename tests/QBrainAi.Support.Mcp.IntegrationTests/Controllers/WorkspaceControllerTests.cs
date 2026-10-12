@@ -29,7 +29,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task ListWorkspaces_Returns200WithValidResult()
+    public async Task ListWorkspacesReturns200WithValidResult()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/workspace", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -40,7 +40,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task CreateWorkspace_ValidRequest_Returns201()
+    public async Task CreateWorkspaceValidRequestReturns201()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_test_{Guid.NewGuid():N}");
         var request = new { workspacePath = path, name = "test-ws" };
@@ -58,7 +58,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task CreateWorkspace_NoName_CreatesWorkspace()
+    public async Task CreateWorkspaceNoNameCreatesWorkspace()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_auto_{Guid.NewGuid():N}");
         var request = new { workspacePath = path };
@@ -74,7 +74,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task CreateWorkspace_NoName_DerivesFromPath()
+    public async Task CreateWorkspaceNoNameDerivesFromPath()
     {
         var folderName = $"MyProject_{Guid.NewGuid():N}";
         var path = Path.Combine(Path.GetTempPath(), folderName);
@@ -88,7 +88,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task CreateWorkspace_NoTodoPath_DefaultsToDocsTodoYaml()
+    public async Task CreateWorkspaceNoTodoPathDefaultsToDocsTodoYaml()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_todo_{Guid.NewGuid():N}");
         var request = new { workspacePath = path };
@@ -101,7 +101,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task CreateWorkspace_Duplicate_Returns409()
+    public async Task CreateWorkspaceDuplicateReturns409()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_dup_{Guid.NewGuid():N}");
         var request = new { workspacePath = path };
@@ -114,7 +114,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task GetWorkspace_ValidKey_Returns200()
+    public async Task GetWorkspaceValidKeyReturns200()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_get_{Guid.NewGuid():N}");
         await _client.PostAsJsonAsync(new Uri("/qbrainai/workspace", UriKind.Relative), new { workspacePath = path }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -127,7 +127,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task GetWorkspace_InvalidKey_Returns404()
+    public async Task GetWorkspaceInvalidKeyReturns404()
     {
         var key = EncodeKey("C:\\nonexistent\\path");
         var response = await _client.GetAsync(new Uri($"/qbrainai/workspace/{key}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -135,7 +135,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task UpdateWorkspace_ChangeName_Returns200()
+    public async Task UpdateWorkspaceChangeNameReturns200()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_upd_{Guid.NewGuid():N}");
         await _client.PostAsJsonAsync(new Uri("/qbrainai/workspace", UriKind.Relative), new { workspacePath = path }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -152,7 +152,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task DeleteWorkspace_Exists_Returns200()
+    public async Task DeleteWorkspaceExistsReturns200()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_del_{Guid.NewGuid():N}");
         await _client.PostAsJsonAsync(new Uri("/qbrainai/workspace", UriKind.Relative), new { workspacePath = path }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -163,7 +163,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task DeleteWorkspace_NotFound_Returns404()
+    public async Task DeleteWorkspaceNotFoundReturns404()
     {
         var key = EncodeKey("C:\\missing\\workspace");
         var response = await _client.DeleteAsync(new Uri($"/qbrainai/workspace/{key}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -171,7 +171,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task GetStatus_StoppedProcess_ReturnsNotRunning()
+    public async Task GetStatusStoppedProcessReturnsNotRunning()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_stat_{Guid.NewGuid():N}");
         await _client.PostAsJsonAsync(new Uri("/qbrainai/workspace", UriKind.Relative), new { workspacePath = path }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);

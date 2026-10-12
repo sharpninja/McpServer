@@ -31,7 +31,7 @@ public sealed class SessionLogLifecycleTests
     public SessionLogLifecycleTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
     /// <summary>
-    /// Validates the <c>FullLifecycle_Submit_Query_AppendDialog_Requery</c> scenario.
+    /// Validates the <c>FullLifecycleSubmitQueryAppendDialogRequery</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -39,7 +39,7 @@ public sealed class SessionLogLifecycleTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task FullLifecycle_Submit_Query_AppendDialog_Requery()
+    public async Task FullLifecycleSubmitQueryAppendDialogRequery()
     {
         // Step 1: Submit a session log with one entry
         var sourceType = "LifecycleTest";

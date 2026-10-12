@@ -66,14 +66,14 @@ public sealed class ChunkerTests
     }
 
     [Fact]
-    public void EstimateTokenCount_ReturnsApproximation()
+    public void EstimateTokenCountReturnsApproximation()
     {
         var count = Chunker.EstimateTokenCount("Hello World!");
         Assert.Equal(3, count);
     }
 
     [Fact]
-    public void EstimateTokenCount_EmptyString_ReturnsZero()
+    public void EstimateTokenCountEmptyStringReturnsZero()
     {
         Assert.Equal(0, Chunker.EstimateTokenCount(""));
     }

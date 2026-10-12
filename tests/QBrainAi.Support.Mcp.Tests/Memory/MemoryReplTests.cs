@@ -11,7 +11,7 @@ public sealed class MemoryReplTests
 {
     /// <summary>AC-FR-MCP-MEMORY-017-10: REPL exposes typed methods for remember/recall/explore/consolidate/promote/revert.</summary>
     [Fact]
-    public void TypedMethods_Present()
+    public void TypedMethodsPresent()
     {
         var names = typeof(IMemoryWorkflow).GetMethods().Select(method => method.Name).ToHashSet(StringComparer.Ordinal);
         Assert.Contains("RememberAsync", names);
@@ -32,7 +32,7 @@ public sealed class MemoryReplTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-11: Invalid REPL memory method returns method-not-found without crashing.</summary>
     [Fact]
-    public async Task InvalidMethod_NoCrash()
+    public async Task InvalidMethodNoCrash()
     {
         var workflow = Substitute.For<IMemoryWorkflow>();
         var passthrough = Substitute.For<IGenericClientPassthrough>();

@@ -18,7 +18,7 @@ public sealed class MemoryContextSourceTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-API-002-07: memories source is opt-in and caller-scoped.</summary>
     [Fact]
-    public async Task MemoriesSource_OptInAndScoped()
+    public async Task MemoriesSourceOptInAndScoped()
     {
         Assert.NotNull(typeof(ContextPackRequest).GetProperty("Sources"));
 

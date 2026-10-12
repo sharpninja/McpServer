@@ -7,7 +7,7 @@ public sealed class MemoryBenchMultiTurnDocsTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: README documents the v1/v2 split and success-gated means.</summary>
     [Fact]
-    public void Readme_DocumentsV2AsRealEfficiencyBench()
+    public void ReadmeDocumentsV2AsRealEfficiencyBench()
     {
         var readme = File.ReadAllText(Path.Combine(MemoryBenchMultiTurnCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md"));
         Assert.Contains("memory-prompt-pack-v1.yaml", readme, StringComparison.Ordinal);

@@ -15,7 +15,7 @@ public sealed class EventStreamClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task SubscribeAsync_ParsesSseDataPayloads()
+    public async System.Threading.Tasks.Task SubscribeAsyncParsesSseDataPayloads()
     {
         var sse = string.Join(
             "\n",
@@ -41,7 +41,7 @@ public sealed class EventStreamClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SubscribeAsync_WithCategory_AddsQueryParameter()
+    public async System.Threading.Tasks.Task SubscribeAsyncWithCategoryAddsQueryParameter()
     {
         var sse = string.Join(
             "\n",

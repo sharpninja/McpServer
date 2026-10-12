@@ -16,7 +16,7 @@ public sealed class SessionLogClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task SubmitAsync_PostsSessionLog()
+    public async System.Threading.Tasks.Task SubmitAsyncPostsSessionLog()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"id":1,"sourceType":"Copilot","sessionId":"s1"}""");
         using var http = new HttpClient(handler);
@@ -42,7 +42,7 @@ public sealed class SessionLogClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task QueryAsync_PassesFilters()
+    public async System.Threading.Tasks.Task QueryAsyncPassesFilters()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"totalCount":0,"limit":10,"offset":0,"items":[]}""");
         using var http = new HttpClient(handler);
@@ -55,7 +55,7 @@ public sealed class SessionLogClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task QueryAsync_RequestObjectPassesAgentDefinitionFilter()
+    public async System.Threading.Tasks.Task QueryAsyncRequestObjectPassesAgentDefinitionFilter()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"totalCount":0,"limit":25,"offset":5,"items":[]}""");
         using var http = new HttpClient(handler);
@@ -80,7 +80,7 @@ public sealed class SessionLogClientTests
     /// forwards turnStatus and staleOlderThanHours.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task QueryAsync_RequestObjectPassesTurnStatusAndStaleOlderThanHours()
+    public async System.Threading.Tasks.Task QueryAsyncRequestObjectPassesTurnStatusAndStaleOlderThanHours()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"totalCount":0,"limit":100,"offset":0,"items":[]}""");
         using var http = new HttpClient(handler);
@@ -96,7 +96,7 @@ public sealed class SessionLogClientTests
         Assert.Contains("staleOlderThanHours=24", handler.LastRequest.RequestUri.Query);
     }
     [Fact]
-    public async System.Threading.Tasks.Task RepairWorkspaceStampsAsync_PostsRepairEndpoint()
+    public async System.Threading.Tasks.Task RepairWorkspaceStampsAsyncPostsRepairEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"repaired":12,"dryRun":true}""");
         using var http = new HttpClient(handler);
@@ -112,7 +112,7 @@ public sealed class SessionLogClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AppendDialogAsync_PostsItems()
+    public async System.Threading.Tasks.Task AppendDialogAsyncPostsItems()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"agent":"Copilot","sessionId":"s1","requestId":"r1","totalDialogCount":2}""");
         using var http = new HttpClient(handler);
@@ -128,7 +128,7 @@ public sealed class SessionLogClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpsertTurnAsync_PostsTurn()
+    public async System.Threading.Tasks.Task UpsertTurnAsyncPostsTurn()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"turnId":5,"agent":"Copilot","sessionId":"s1","requestId":"r1"}""");
         using var http = new HttpClient(handler);
@@ -162,7 +162,7 @@ public sealed class SessionLogClientTests
         Assert.Equal("r1", result.RequestId);
     }
     [Fact]
-    public async System.Threading.Tasks.Task IngestTranscriptPathAsync_PostsPathContract()
+    public async System.Threading.Tasks.Task IngestTranscriptPathAsyncPostsPathContract()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"runId":"run-1","totalSessions":1,"persisted":false,"degraded":true,"receipts":[{"source":"Codex","rootId":"root","sessionId":"session-1","sourceHash":"hash","status":"pending","yamlArtifactPath":"F:/workspace/.mcpServer/Codex/transcripts/runs/run-1/session-1.hash.sessionlog.yaml","importRecoveryPath":"F:/workspace/.mcpServer/Codex/failsafe/pending/root.hash.importRecovery.yaml"}]}""");
         using var http = new HttpClient(handler);
@@ -193,7 +193,7 @@ public sealed class SessionLogClientTests
         Assert.Contains("root.hash.importRecovery.yaml", result.Receipts[0].ImportRecoveryPath, StringComparison.Ordinal);
     }
     [Fact]
-    public async System.Threading.Tasks.Task IngestTranscriptUploadAsync_PostsMultipartUploadContract()
+    public async System.Threading.Tasks.Task IngestTranscriptUploadAsyncPostsMultipartUploadContract()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"runId":"upload-1","totalSessions":1,"persisted":false,"degraded":true,"receipts":[{"source":"Codex","rootId":"root","sessionId":"session-1","sourceHash":"hash","status":"pending","yamlArtifactPath":"F:/workspace/.mcpServer/Codex/transcripts/runs/upload-1/session-1.hash.sessionlog.yaml","importRecoveryPath":"F:/workspace/.mcpServer/Codex/failsafe/pending/root.hash.importRecovery.yaml"}]}""");
         using var http = new HttpClient(handler);

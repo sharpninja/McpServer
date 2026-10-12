@@ -24,7 +24,7 @@ public sealed class TodoWorkflowSelectionStoreTests : IDisposable
 
     /// <summary>Selected TODO updates reload selection persisted by a previous workflow instance.</summary>
     [Fact]
-    public async Task UpdateSelectedAsync_LoadsSelectionSavedByPreviousWorkflowInstance()
+    public async Task UpdateSelectedAsyncLoadsSelectionSavedByPreviousWorkflowInstance()
     {
         var storePath = Path.Combine(_tempDirectory, "todo-selection.json");
         var handler = new StatefulTodoHandler();

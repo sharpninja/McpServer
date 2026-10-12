@@ -30,7 +30,7 @@ public sealed class SessionLogClientRequestBodyTests
     /// Fixture: <see cref="MockHttpHandler"/> returning a 200 open result.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task OpenSessionAsync_SerializesTitleAndModelBody()
+    public async System.Threading.Tasks.Task OpenSessionAsyncSerializesTitleAndModelBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"agent":"ClaudeCode","sessionId":"s1","created":true}""");
         using var http = new HttpClient(handler);
@@ -53,7 +53,7 @@ public sealed class SessionLogClientRequestBodyTests
     /// Fixture: <see cref="MockHttpHandler"/> returning a 201 turn-submit result.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task BeginTurnAsync_SerializesQueryTitleTextAndModelBody()
+    public async System.Threading.Tasks.Task BeginTurnAsyncSerializesQueryTitleTextAndModelBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"turnId":11,"agent":"ClaudeCode","sessionId":"s1","requestId":"r1"}""");
         using var http = new HttpClient(handler);
@@ -80,7 +80,7 @@ public sealed class SessionLogClientRequestBodyTests
     /// <see cref="SessionLogClient.BeginTurnAsync"/> serializes planFile and todoId.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task BeginTurnAsync_SerializesPlanFileAndTodoId()
+    public async System.Threading.Tasks.Task BeginTurnAsyncSerializesPlanFileAndTodoId()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"turnId":12,"agent":"ClaudeCode","sessionId":"s1","requestId":"r2"}""");
         using var http = new HttpClient(handler);
@@ -102,7 +102,7 @@ public sealed class SessionLogClientRequestBodyTests
     /// Fixture: <see cref="MockHttpHandler"/> returning a 200 retitle result.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task SetSessionTitleAsync_SerializesTitleBody()
+    public async System.Threading.Tasks.Task SetSessionTitleAsyncSerializesTitleBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"turnId":3,"agent":"ClaudeCode","sessionId":"s1","retitled":true}""");
         using var http = new HttpClient(handler);
@@ -125,7 +125,7 @@ public sealed class SessionLogClientRequestBodyTests
     /// Fixture: <see cref="MockHttpHandler"/> returning a 200 retitle result.
     /// </summary>
     [Fact]
-    public async System.Threading.Tasks.Task SetTurnTitleAsync_SerializesTitleBody()
+    public async System.Threading.Tasks.Task SetTurnTitleAsyncSerializesTitleBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"turnId":4,"agent":"ClaudeCode","sessionId":"s1","requestId":"r1","retitled":true}""");
         using var http = new HttpClient(handler);

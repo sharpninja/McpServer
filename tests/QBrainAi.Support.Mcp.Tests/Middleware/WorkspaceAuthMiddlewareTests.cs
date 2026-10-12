@@ -58,7 +58,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task FullToken_AllowsWriteOnNonTodoRoute()
+    public async Task FullTokenAllowsWriteOnNonTodoRoute()
     {
         var tokenService = CreateTokenService();
         var fullToken = tokenService.GetToken(WorkspacePath)!;
@@ -73,7 +73,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task DefaultToken_AllowsReadOnNonTodoRoute()
+    public async Task DefaultTokenAllowsReadOnNonTodoRoute()
     {
         var tokenService = CreateTokenService();
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
@@ -92,7 +92,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     /// when the request workspace context is empty. Default keys stay read-only.
     /// </summary>
     [Fact]
-    public async Task EmptyWorkspaceContext_FullKey_AllowsMemoryWrite_DefaultKeyStillDenied()
+    public async Task EmptyWorkspaceContextFullKeyAllowsMemoryWriteDefaultKeyStillDenied()
     {
         var tokenService = CreateTokenService();
         var fullToken = tokenService.GetToken(WorkspacePath)!;
@@ -124,7 +124,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task DefaultToken_DeniesWriteOnTodoRoute()
+    public async Task DefaultTokenDeniesWriteOnTodoRoute()
     {
         var tokenService = CreateTokenService();
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
@@ -138,7 +138,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task DefaultToken_DeniesWriteOnNonTodoRoute()
+    public async Task DefaultTokenDeniesWriteOnNonTodoRoute()
     {
         var tokenService = CreateTokenService();
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
@@ -153,7 +153,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task DefaultToken_DeniesDeleteOnNonTodoRoute()
+    public async Task DefaultTokenDeniesDeleteOnNonTodoRoute()
     {
         var tokenService = CreateTokenService();
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
@@ -168,7 +168,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task DefaultToken_DeniesDeleteOnTodoRoute()
+    public async Task DefaultTokenDeniesDeleteOnTodoRoute()
     {
         var tokenService = CreateTokenService();
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
@@ -183,7 +183,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task InvalidToken_Returns401()
+    public async Task InvalidTokenReturns401()
     {
         var tokenService = CreateTokenService();
         var nextCalled = false;
@@ -197,7 +197,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task HubAccessToken_AllowsFederationHubRequest()
+    public async Task HubAccessTokenAllowsFederationHubRequest()
     {
         var tokenService = new WorkspaceTokenService();
         var nextCalled = false;
@@ -221,7 +221,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task NonMcpRoute_PassesThroughWithoutAuth()
+    public async Task NonMcpRoutePassesThroughWithoutAuth()
     {
         var tokenService = CreateTokenService();
         var nextCalled = false;
@@ -234,7 +234,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task ReadsWorkspaceFromContext_InsteadOfConfig()
+    public async Task ReadsWorkspaceFromContextInsteadOfConfig()
     {
         // WorkspaceContext points to WorkspacePath, config points elsewhere.
         // Auth middleware should use the context workspace path.
@@ -255,7 +255,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task MissingWorkspaceToken_Returns503()
+    public async Task MissingWorkspaceTokenReturns503()
     {
         var tokenService = new WorkspaceTokenService();
         var config = new ConfigurationBuilder()
@@ -277,7 +277,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task EmptyWorkspaceContext_Returns503()
+    public async Task EmptyWorkspaceContextReturns503()
     {
         var tokenService = new WorkspaceTokenService();
         var config = new ConfigurationBuilder()
@@ -309,7 +309,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     /// the subsystem IS initialized, returns 401 - not the legacy "token not initialized" 503.
     /// </summary>
     [Fact]
-    public async Task UnknownApiKey_Unresolved_Initialized_Returns401()
+    public async Task UnknownApiKeyUnresolvedInitializedReturns401()
     {
         var tokenService = new WorkspaceTokenService();
         tokenService.GenerateToken(@"C:\real\workspace"); // initialized, but for a different path
@@ -332,7 +332,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     /// TEST-MCP-AUTH-010: A missing API key under the same unresolved/initialized condition returns 401.
     /// </summary>
     [Fact]
-    public async Task NoApiKey_Unresolved_Initialized_Returns401()
+    public async Task NoApiKeyUnresolvedInitializedReturns401()
     {
         var tokenService = new WorkspaceTokenService();
         tokenService.GenerateToken(@"C:\real\workspace");
@@ -356,7 +356,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     /// once the token subsystem is initialized.
     /// </summary>
     [Fact]
-    public async Task EmptyRepoRoot_Unresolved_Initialized_Returns401()
+    public async Task EmptyRepoRootUnresolvedInitializedReturns401()
     {
         var tokenService = new WorkspaceTokenService();
         tokenService.GenerateToken(@"C:\real\workspace");
@@ -380,7 +380,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     /// readiness response must carry a Retry-After header.
     /// </summary>
     [Fact]
-    public async Task SubsystemNotInitialized_Returns503WithRetryAfter()
+    public async Task SubsystemNotInitializedReturns503WithRetryAfter()
     {
         var tokenService = new WorkspaceTokenService(); // no tokens -> not initialized
         var nextCalled = false;

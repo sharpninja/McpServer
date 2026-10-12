@@ -99,7 +99,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to confirm guard-clause enforcement for required global prompt content.
     /// </remarks>
     [Fact]
-    public void ResolvePrompt_NullGlobal_Throws()
+    public void ResolvePromptNullGlobalThrows()
     {
         Assert.Throws<ArgumentException>(() => MarkerFileService.ResolvePrompt(MakeContext(), null, null));
     }
@@ -113,7 +113,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to ensure empty marker template content is rejected the same as null input.
     /// </remarks>
     [Fact]
-    public void ResolvePrompt_EmptyGlobal_Throws()
+    public void ResolvePromptEmptyGlobalThrows()
     {
         Assert.Throws<ArgumentException>(() => MarkerFileService.ResolvePrompt(MakeContext(), "   ", null));
     }
@@ -127,7 +127,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to validate expected placeholder replacement in global prompt rendering.
     /// </remarks>
     [Fact]
-    public void ResolvePrompt_CustomGlobal_ReplacesDefault()
+    public void ResolvePromptCustomGlobalReplacesDefault()
     {
         var template = "Custom prompt for {{baseUrl}} with special instructions.";
 
@@ -145,7 +145,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to confirm marker prompts preserve both global and workspace instruction blocks.
     /// </remarks>
     [Fact]
-    public void ResolvePrompt_WorkspaceAppends()
+    public void ResolvePromptWorkspaceAppends()
     {
         var globalTemplate = "Global prompt";
         var workspaceTemplate = "This workspace uses Python. Prefer pytest for testing.";
@@ -167,7 +167,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to ensure consistent replacement for multiple placeholder occurrences.
     /// </remarks>
     [Fact]
-    public void ResolvePrompt_WorkspaceBaseUrlSubstitution()
+    public void ResolvePromptWorkspaceBaseUrlSubstitution()
     {
         var globalTemplate = "Global";
         var workspaceTemplate = "Dev server at {{baseUrl}}/api. Use {{baseUrl}}/docs for API docs.";
@@ -187,7 +187,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to assert deterministic prompt structure used in marker files.
     /// </remarks>
     [Fact]
-    public void ResolvePrompt_BothCustom_CombinesWithNewlines()
+    public void ResolvePromptBothCustomCombinesWithNewlines()
     {
         var global = "Global: server at {{baseUrl}}";
         var workspace = "Workspace: extra config for {{baseUrl}}";
@@ -206,7 +206,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to ensure marker prompt composition avoids trailing separators for empty workspace overrides.
     /// </remarks>
     [Fact]
-    public void ResolvePrompt_EmptyWorkspace_NotAppended()
+    public void ResolvePromptEmptyWorkspaceNotAppended()
     {
         var global = "Global prompt";
         var result = MarkerFileService.ResolvePrompt(MakeContext(), global, "   ");
@@ -225,7 +225,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to validate serialized workspace context consumed by marker template rendering.
     /// </remarks>
     [Fact]
-    public void BuildTemplateContext_WithWorkspaceDto_IncludesAllProperties()
+    public void BuildTemplateContextWithWorkspaceDtoIncludesAllProperties()
     {
         var ws = new WorkspaceDto
         {
@@ -264,7 +264,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to ensure marker generation remains stable when workspace metadata is partially unavailable.
     /// </remarks>
     [Fact]
-    public void BuildTemplateContext_NullWorkspace_UsesFallbacks()
+    public void BuildTemplateContextNullWorkspaceUsesFallbacks()
     {
         var ctx = MarkerFileService.BuildTemplateContext("http://localhost:7147", null, null, @"C:\ws", "fallback");
 
@@ -284,7 +284,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to confirm nested context resolution during marker prompt rendering.
     /// </remarks>
     [Fact]
-    public void ResolvePrompt_HandlebarsRendersWorkspaceProperties()
+    public void ResolvePromptHandlebarsRendersWorkspaceProperties()
     {
         var ws = new WorkspaceDto
         {
@@ -320,7 +320,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to assert deterministic marker-file metadata and endpoint wiring in generated output.
     /// </remarks>
     [Fact]
-    public async Task WriteMarkerAsync_EmitsUtcTimestampsAndDiagnosticsEndpoints()
+    public async Task WriteMarkerAsyncEmitsUtcTimestampsAndDiagnosticsEndpoints()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -388,7 +388,7 @@ public sealed class MarkerFileServiceTests
     /// marker writing during workspace startup.
     /// </remarks>
     [Fact]
-    public async Task WriteMarkerAsync_AddsMarkerQBrainAiAndCacheEntriesToGitIgnoreWithoutDuplicates()
+    public async Task WriteMarkerAsyncAddsMarkerQBrainAiAndCacheEntriesToGitIgnoreWithoutDuplicates()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-gitignore-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -435,7 +435,7 @@ public sealed class MarkerFileServiceTests
     /// TEST-MCP-WIKIEXPORT-002: Verifies marker writing creates a default wiki export configuration when absent.
     /// </summary>
     [Fact]
-    public async Task WriteMarkerAsync_CreatesDefaultWikiYamlWhenMissing()
+    public async Task WriteMarkerAsyncCreatesDefaultWikiYamlWhenMissing()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-wiki-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -493,7 +493,7 @@ public sealed class MarkerFileServiceTests
     /// TEST-MCP-WIKIEXPORT-002: Verifies marker writing preserves user-authored wiki export configuration.
     /// </summary>
     [Fact]
-    public async Task WriteMarkerAsync_PreservesExistingWikiYaml()
+    public async Task WriteMarkerAsyncPreservesExistingWikiYaml()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-wiki-preserve-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(Path.Combine(tempDir, "docs"));
@@ -556,7 +556,7 @@ public sealed class MarkerFileServiceTests
     /// TR-MCP-DB-003 governs persistent MCP domain rows, not regenerated filesystem artifacts.
     /// </remarks>
     [Fact]
-    public async Task RemoveMarker_DeletesMarkerFileAndLeavesNoTombstone()
+    public async Task RemoveMarkerDeletesMarkerFileAndLeavesNoTombstone()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-remove-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -595,7 +595,7 @@ public sealed class MarkerFileServiceTests
     /// and .mcp-server.json markers, proving every removal path deletes rather than archives.
     /// </remarks>
     [Fact]
-    public async Task RemoveMarker_DeletesLegacyMarkersWithoutTombstones()
+    public async Task RemoveMarkerDeletesLegacyMarkersWithoutTombstones()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-legacy-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -636,7 +636,7 @@ public sealed class MarkerFileServiceTests
     /// Test data: an empty temp workspace directory, proving removal neither throws nor creates files.
     /// </remarks>
     [Fact]
-    public void RemoveMarker_WhenNoMarkerPresent_CreatesNothingAndDoesNotThrow()
+    public void RemoveMarkerWhenNoMarkerPresentCreatesNothingAndDoesNotThrow()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-absent-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -670,7 +670,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to prove that signature verification can be reproduced by bootstrap clients.
     /// </remarks>
     [Fact]
-    public void BuildSignaturePayload_WithSameMarkerValues_IsDeterministic()
+    public void BuildSignaturePayloadWithSameMarkerValuesIsDeterministic()
     {
         var marker = new MarkerFile
         {
@@ -778,7 +778,7 @@ public sealed class MarkerFileServiceTests
     /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version.
     /// </summary>
     [Fact]
-    public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()
+    public void BuildDefaultAgentPluginsUsesCurrentSyncedPluginVersion()
     {
         WithHermeticPluginVersionResolution(() =>
         {
@@ -794,7 +794,7 @@ public sealed class MarkerFileServiceTests
     /// TEST-MCP-MARKER-REFRESH-001: installed sibling plugin versions override the synced fallback in marker contracts.
     /// </summary>
     [Fact]
-    public void BuildDefaultAgentPlugins_UsesInstalledSiblingPluginVersionWhenPresent()
+    public void BuildDefaultAgentPluginsUsesInstalledSiblingPluginVersionWhenPresent()
     {
         var root = Path.Combine(Path.GetTempPath(), $"mcp-marker-version-{Guid.NewGuid():N}");
         var workspace = Path.Combine(root, "QBrainAi");
@@ -823,7 +823,7 @@ public sealed class MarkerFileServiceTests
     /// TEST-MCP-MARKER-REFRESH-001: resolved plugin versions affect the agent plugin contract digest.
     /// </summary>
     [Fact]
-    public void ComputeAgentPluginsDigest_ChangesWhenResolvedPluginVersionChanges()
+    public void ComputeAgentPluginsDigestChangesWhenResolvedPluginVersionChanges()
     {
         var root = Path.Combine(Path.GetTempPath(), $"mcp-marker-digest-{Guid.NewGuid():N}");
         var workspace = Path.Combine(root, "QBrainAi");
@@ -853,7 +853,7 @@ public sealed class MarkerFileServiceTests
 
     /// <summary>Verifies plugin contract data is part of the marker signature payload.</summary>
     [Fact]
-    public void BuildSignaturePayload_IncludesAgentPluginDigestWhenContractIsPresent()
+    public void BuildSignaturePayloadIncludesAgentPluginDigestWhenContractIsPresent()
     {
         var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
         plugins.ContractDigest = MarkerFileService.ComputeAgentPluginsDigest(plugins);
@@ -1089,7 +1089,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to prove the declared field list and the payload builder cannot diverge.
     /// </remarks>
     [Fact]
-    public void BuildSignaturePayload_DerivesFieldOrderFromSignaturePayloadFields()
+    public void BuildSignaturePayloadDerivesFieldOrderFromSignaturePayloadFields()
     {
         var marker = BuildPinnedSignatureMarker(includeAgentPlugins: true);
 
@@ -1113,7 +1113,7 @@ public sealed class MarkerFileServiceTests
     /// specific marker rather than the unconditional superset.
     /// </remarks>
     [Fact]
-    public void ResolveSignaturePayloadFields_WithoutAgentPlugins_DropsConditionalTail()
+    public void ResolveSignaturePayloadFieldsWithoutAgentPluginsDropsConditionalTail()
     {
         var marker = BuildPinnedSignatureMarker(includeAgentPlugins: false);
 
@@ -1142,7 +1142,7 @@ public sealed class MarkerFileServiceTests
     /// lib-node, mcp-repl-ts, mcpserver-agent-core, and MarkerFileClientOptionsResolver verifiers.
     /// </remarks>
     [Fact]
-    public void BuildSignaturePayload_MatchesPinnedMarkerV1Bytes()
+    public void BuildSignaturePayloadMatchesPinnedMarkerV1Bytes()
     {
         var withPlugins = BuildPinnedSignatureMarker(includeAgentPlugins: true);
         var withoutPlugins = BuildPinnedSignatureMarker(includeAgentPlugins: false);
@@ -1171,7 +1171,7 @@ public sealed class MarkerFileServiceTests
     /// This data is used to bind the published verifier contract to the authoritative field array.
     /// </remarks>
     [Fact]
-    public void SignaturePayloadFields_MatchesDocumentedCanonicalKeyOrder()
+    public void SignaturePayloadFieldsMatchesDocumentedCanonicalKeyOrder()
     {
         var documented = ReadDocumentedCanonicalKeyOrder();
 
@@ -1189,7 +1189,7 @@ public sealed class MarkerFileServiceTests
     /// signed payload without hard-coding the field list.
     /// </remarks>
     [Fact]
-    public async Task WriteMarkerAsync_EmitsSelfDescribingSignatureFieldsAndFormat()
+    public async Task WriteMarkerAsyncEmitsSelfDescribingSignatureFieldsAndFormat()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-signature-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);

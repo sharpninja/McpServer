@@ -62,7 +62,7 @@ public sealed partial class MemoryS1Harness
     }
 
     /// <summary>Renders REQUIRED MEMORIES from a production injector type when present.</summary>
-    public string RenderRequiredMemories(IReadOnlyList<MemoryItem> effective)
+    public static string RenderRequiredMemories(IReadOnlyList<MemoryItem> effective)
     {
         var rendererType = typeof(MemoryService).Assembly.GetTypes()
             .Concat(typeof(MemoryController).Assembly.GetTypes())

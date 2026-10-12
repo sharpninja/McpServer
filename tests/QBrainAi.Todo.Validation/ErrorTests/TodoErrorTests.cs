@@ -32,7 +32,7 @@ public sealed class TodoErrorTests
     // ── Missing resource tests ───────────────────────────────────────────
 
     /// <summary>
-    /// Validates the <c>Get_NonExistent_Returns404</c> scenario.
+    /// Validates the <c>GetNonExistentReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -40,7 +40,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Get_NonExistent_Returns404()
+    public async Task GetNonExistentReturns404()
     {
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var response = await _fixture.Client.GetAsync(
@@ -49,7 +49,7 @@ public sealed class TodoErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Update_NonExistent_Returns404</c> scenario.
+    /// Validates the <c>UpdateNonExistentReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -57,7 +57,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Update_NonExistent_Returns404()
+    public async Task UpdateNonExistentReturns404()
     {
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var body = new { Title = "Ghost" };
@@ -67,7 +67,7 @@ public sealed class TodoErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Delete_NonExistent_Returns404</c> scenario.
+    /// Validates the <c>DeleteNonExistentReturns404</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -75,7 +75,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Delete_NonExistent_Returns404()
+    public async Task DeleteNonExistentReturns404()
     {
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var response = await _fixture.Client.DeleteAsync(
@@ -86,7 +86,7 @@ public sealed class TodoErrorTests
     // ── Duplicate create test ────────────────────────────────────────────
 
     /// <summary>
-    /// Validates the <c>Create_Duplicate_Returns409</c> scenario.
+    /// Validates the <c>CreateDuplicateReturns409</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -94,7 +94,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Create_Duplicate_Returns409()
+    public async Task CreateDuplicateReturns409()
     {
         var testId = TodoEndpointFixture.GenerateTestId();
         try
@@ -121,7 +121,7 @@ public sealed class TodoErrorTests
     // ── Missing/empty body tests ─────────────────────────────────────────
 
     /// <summary>
-    /// Validates the <c>Create_EmptyBody_ReturnsBadRequest</c> scenario.
+    /// Validates the <c>CreateEmptyBodyReturnsBadRequest</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -129,7 +129,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Create_EmptyBody_ReturnsBadRequest()
+    public async Task CreateEmptyBodyReturnsBadRequest()
     {
         var response = await _fixture.Client.PostAsync(
             TodoEndpointFixture.TodoRoute,
@@ -142,7 +142,7 @@ public sealed class TodoErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Update_NullBody_Returns400OrUnsupportedMedia</c> scenario.
+    /// Validates the <c>UpdateNullBodyReturns400OrUnsupportedMedia</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -150,7 +150,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Update_NullBody_Returns400OrUnsupportedMedia()
+    public async Task UpdateNullBodyReturns400OrUnsupportedMedia()
     {
         var fakeId = $"FAKE-{Guid.NewGuid():N}";
         var response = await _fixture.Client.PutAsync(
@@ -167,7 +167,7 @@ public sealed class TodoErrorTests
     // ── Method not allowed ───────────────────────────────────────────────
 
     /// <summary>
-    /// Validates the <c>Patch_NotSupported_Returns405</c> scenario.
+    /// Validates the <c>PatchNotSupportedReturns405</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -175,7 +175,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Patch_NotSupported_Returns405()
+    public async Task PatchNotSupportedReturns405()
     {
         var request = new HttpRequestMessage(HttpMethod.Patch, $"{TodoEndpointFixture.TodoRoute}/some-id")
         {
@@ -189,7 +189,7 @@ public sealed class TodoErrorTests
     // ── Query with invalid filter combinations (should still return 200) ─
 
     /// <summary>
-    /// Validates the <c>Query_InvalidPriority_Returns200EmptyOrAll</c> scenario.
+    /// Validates the <c>QueryInvalidPriorityReturns200EmptyOrAll</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -197,7 +197,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_InvalidPriority_Returns200EmptyOrAll()
+    public async Task QueryInvalidPriorityReturns200EmptyOrAll()
     {
         var response = await _fixture.Client.GetAsync(
             $"{TodoEndpointFixture.TodoRoute}?priority=nonexistent_priority", cancellationToken: TestContext.Current.CancellationToken);
@@ -209,7 +209,7 @@ public sealed class TodoErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_MultipleFilters_Returns200</c> scenario.
+    /// Validates the <c>QueryMultipleFiltersReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
@@ -217,7 +217,7 @@ public sealed class TodoErrorTests
     /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
     /// </remarks>
     [Fact]
-    public async Task Query_MultipleFilters_Returns200()
+    public async Task QueryMultipleFiltersReturns200()
     {
         var response = await _fixture.Client.GetAsync(
             $"{TodoEndpointFixture.TodoRoute}?priority=high&done=false&section=audit", cancellationToken: TestContext.Current.CancellationToken);

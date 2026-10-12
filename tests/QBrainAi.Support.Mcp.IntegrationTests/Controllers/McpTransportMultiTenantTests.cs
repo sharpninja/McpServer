@@ -22,7 +22,7 @@ public sealed class McpTransportMultiTenantTests : IClassFixture<CustomWebApplic
     }
 
     [Fact]
-    public async Task McpTransport_WithWorkspaceHeader_StillInitializes()
+    public async Task McpTransportWithWorkspaceHeaderStillInitializes()
     {
         var initRequest = new
         {
@@ -53,7 +53,7 @@ public sealed class McpTransportMultiTenantTests : IClassFixture<CustomWebApplic
     }
 
     [Fact]
-    public async Task McpTransport_WithoutWorkspaceHeader_UsesDefaultWorkspace()
+    public async Task McpTransportWithoutWorkspaceHeaderUsesDefaultWorkspace()
     {
         var initRequest = new
         {
@@ -84,7 +84,7 @@ public sealed class McpTransportMultiTenantTests : IClassFixture<CustomWebApplic
     }
 
     [Fact]
-    public async Task McpTransport_BearerWithoutWorkspaceHeader_Returns404()
+    public async Task McpTransportBearerWithoutWorkspaceHeaderReturns404()
     {
         var initRequest = new
         {

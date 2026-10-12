@@ -23,7 +23,7 @@ public sealed class SkillToolTests
 
     /// <summary>list_skills and load_skill are exposed as non-mcp_ tools.</summary>
     [Fact]
-    public void CreateTools_ExposesListAndLoad_NonMcpPrefixed()
+    public void CreateToolsExposesListAndLoadNonMcpPrefixed()
     {
         var names = CreateSut().CreateTools().Select(t => t.Name).ToHashSet(StringComparer.Ordinal);
 
@@ -34,7 +34,7 @@ public sealed class SkillToolTests
 
     /// <summary>list_skills returns the discovery summaries.</summary>
     [Fact]
-    public void ListSkills_ReturnsDiscovery()
+    public void ListSkillsReturnsDiscovery()
     {
         var summaries = CreateSut().ListSkills();
 
@@ -44,7 +44,7 @@ public sealed class SkillToolTests
 
     /// <summary>load_skill returns the body for a known skill.</summary>
     [Fact]
-    public void LoadSkill_Known_ReturnsBody()
+    public void LoadSkillKnownReturnsBody()
     {
         var body = CreateSut().LoadSkill("byrd-tdd-process");
 
@@ -53,7 +53,7 @@ public sealed class SkillToolTests
 
     /// <summary>load_skill returns a not-found message for an unknown skill.</summary>
     [Fact]
-    public void LoadSkill_Unknown_ReturnsNotFound()
+    public void LoadSkillUnknownReturnsNotFound()
     {
         var body = CreateSut().LoadSkill("nope");
 

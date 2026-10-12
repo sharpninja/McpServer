@@ -10,7 +10,7 @@ public sealed class UseCaseCanvasUiAssetTests
 {
     /// <summary>AC-011-1 / AC-T15-1: Palette offers Actor, UseCase, SystemBoundary, Association, Include, Extend.</summary>
     [Fact]
-    public void Canvas_Palette_OffersRequiredTools()
+    public void CanvasPaletteOffersRequiredTools()
     {
         var html = Read("index.html");
         foreach (var tool in new[] { "palette-actor", "palette-usecase", "palette-boundary", "palette-association", "palette-include", "palette-extend" })
@@ -19,7 +19,7 @@ public sealed class UseCaseCanvasUiAssetTests
 
     /// <summary>AC-011-2 / AC-011-8: Free canvas element is primary diagram surface.</summary>
     [Fact]
-    public void Canvas_HasUmlCanvasElement()
+    public void CanvasHasUmlCanvasElement()
     {
         var html = Read("index.html");
         Assert.Contains("id=\"umlCanvas\"", html, StringComparison.Ordinal);
@@ -28,7 +28,7 @@ public sealed class UseCaseCanvasUiAssetTests
 
     /// <summary>AC-011-3..7: Editor module exposes place, connect, rename, move, boundary APIs.</summary>
     [Fact]
-    public void Canvas_EditorScript_ExposesInteractionApis()
+    public void CanvasEditorScriptExposesInteractionApis()
     {
         var js = Read("canvas-editor.js");
         Assert.Contains("placeNode", js, StringComparison.Ordinal);
@@ -44,7 +44,7 @@ public sealed class UseCaseCanvasUiAssetTests
 
     /// <summary>AC-011-6 / AC-012: Graph layout coordinates serialize to REST body.</summary>
     [Fact]
-    public void Canvas_Editor_SerializesGraphWithCoordinates()
+    public void CanvasEditorSerializesGraphWithCoordinates()
     {
         var js = Read("canvas-editor.js");
         Assert.Contains("toGraph", js, StringComparison.Ordinal);
@@ -55,7 +55,7 @@ public sealed class UseCaseCanvasUiAssetTests
 
     /// <summary>AC-011-9 / AC-T15-2: Save/load via diagram-graph REST only.</summary>
     [Fact]
-    public void Canvas_AppJs_WiresDiagramGraphRest()
+    public void CanvasAppJsWiresDiagramGraphRest()
     {
         var js = Read("app.js");
         Assert.Contains("/diagram-graph", js, StringComparison.Ordinal);
@@ -68,7 +68,7 @@ public sealed class UseCaseCanvasUiAssetTests
 
     /// <summary>AC-T15-1: Canvas editor script is referenced from index.</summary>
     [Fact]
-    public void Canvas_Index_ReferencesCanvasEditorScript()
+    public void CanvasIndexReferencesCanvasEditorScript()
     {
         var html = Read("index.html");
         Assert.Contains("canvas-editor.js", html, StringComparison.Ordinal);

@@ -52,7 +52,7 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
 
     /// <summary>rebuild-index delegates to the search index rebuild path while required transactions are active.</summary>
     [Fact]
-    public async Task RebuildIndexAsync_WhenTransactionsRequired_DelegatesToRebuild()
+    public async Task RebuildIndexAsyncWhenTransactionsRequiredDelegatesToRebuild()
     {
         _searchService.RebuildAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
         var controller = CreateController(new CapturingCoordinator(enabled: true));
@@ -67,7 +67,7 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
 
     /// <summary>ingest-website delegates to the website ingestor while required transactions are active.</summary>
     [Fact]
-    public async Task IngestWebsiteAsync_WhenTransactionsRequired_DelegatesToWebsiteIngestor()
+    public async Task IngestWebsiteAsyncWhenTransactionsRequiredDelegatesToWebsiteIngestor()
     {
         _websiteIngestor
             .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
@@ -87,7 +87,7 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
 
     /// <summary>streaming website ingest starts when the coordinator is degraded.</summary>
     [Fact]
-    public async Task IngestWebsiteStreamAsync_WhenCoordinatorDegraded_DelegatesToWebsiteIngestor()
+    public async Task IngestWebsiteStreamAsyncWhenCoordinatorDegradedDelegatesToWebsiteIngestor()
     {
         _websiteIngestor
             .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
@@ -109,7 +109,7 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
 
     /// <summary>ingest-website delegates to the existing ingestion path when transaction gating is not required.</summary>
     [Fact]
-    public async Task IngestWebsiteAsync_WhenTransactionsNotRequired_DelegatesToIngestionCoordinator()
+    public async Task IngestWebsiteAsyncWhenTransactionsNotRequiredDelegatesToIngestionCoordinator()
     {
         _websiteIngestor
             .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())

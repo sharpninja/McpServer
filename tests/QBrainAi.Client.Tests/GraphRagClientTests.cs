@@ -25,7 +25,7 @@ public sealed class GraphRagClientTests
     /// callers to route through <see cref="ContextClient"/>.
     /// </summary>
     [Fact]
-    public void GraphRagClient_ExposesAllControllerEquivalentMethods()
+    public void GraphRagClientExposesAllControllerEquivalentMethods()
     {
         var expected = new[]
         {
@@ -62,7 +62,7 @@ public sealed class GraphRagClientTests
     /// QueryAsync posts the typed query body to the GraphRAG query endpoint.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_PostsGraphRagQueryRequest()
+    public async Task QueryAsyncPostsGraphRagQueryRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"query":"auth","mode":"local","answer":"ok","citations":[],"chunks":[],"sourceKeys":[],"entities":[],"relationships":[],"communities":[]}""");
         using var http = new HttpClient(handler);
@@ -90,7 +90,7 @@ public sealed class GraphRagClientTests
     /// ListRelationshipsAsync builds the GraphRAG relationship filter query string.
     /// </summary>
     [Fact]
-    public async Task ListRelationshipsAsync_GetsFilteredRelationshipPage()
+    public async Task ListRelationshipsAsyncGetsFilteredRelationshipPage()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"relationships":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -111,7 +111,7 @@ public sealed class GraphRagClientTests
     /// CreateEntityAsync posts the typed entity request to the GraphRAG entity endpoint.
     /// </summary>
     [Fact]
-    public async Task CreateEntityAsync_PostsEntityRequest()
+    public async Task CreateEntityAsyncPostsEntityRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"entity-1","name":"Dispatcher","entityType":"component"}""");
         using var http = new HttpClient(handler);
@@ -135,7 +135,7 @@ public sealed class GraphRagClientTests
     /// DeleteEntityAsync sends a DELETE request and requires only a successful status response.
     /// </summary>
     [Fact]
-    public async Task DeleteEntityAsync_SendsDeleteRequest()
+    public async Task DeleteEntityAsyncSendsDeleteRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.NoContent, string.Empty);
         using var http = new HttpClient(handler);

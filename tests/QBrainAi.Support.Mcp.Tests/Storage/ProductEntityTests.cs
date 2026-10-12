@@ -20,7 +20,7 @@ public sealed class ProductEntityTests : IDisposable
 
     /// <summary>PROD-MCPSERVER is a valid key and must persist uniquely.</summary>
     [Fact]
-    public async Task Create_DuplicateProdMcpserverKey_FailsConflict()
+    public async Task CreateDuplicateProdMcpserverKeyFailsConflict()
     {
         await using var db = _fx.CreateDb();
         var request = new CreateProductRequest { Key = "PROD-MCPSERVER", Name = "QBrainAi" };
@@ -40,7 +40,7 @@ public sealed class ProductEntityTests : IDisposable
     /// are host-global and must not have a Workspace query filter.
     /// </summary>
     [Fact]
-    public void ProductEntities_DoNotHaveWorkspaceQueryFilters()
+    public void ProductEntitiesDoNotHaveWorkspaceQueryFilters()
     {
         using var ctx = new McpDbContext(new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"product-model-{Guid.NewGuid():N}")

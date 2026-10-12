@@ -14,7 +14,7 @@ public sealed class MemoryS1PortMockTests
 {
     /// <summary>AC-FR-MCP-MEMORY-010-01: mock remember returns a MEMORY-* id.</summary>
     [Fact]
-    public async Task PortMock_Remember_ValidPayload_ReturnsMemoryId()
+    public async Task PortMockRememberValidPayloadReturnsMemoryId()
     {
         var port = Substitute.For<IMemoryS1Port>();
         port.RememberAsync(Arg.Any<MemoryRememberRequest>(), Arg.Any<CancellationToken>())
@@ -30,7 +30,7 @@ public sealed class MemoryS1PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-010-08: mock remember rejects empty content with 400.</summary>
     [Fact]
-    public async Task PortMock_Remember_EmptyContent_Returns400()
+    public async Task PortMockRememberEmptyContentReturns400()
     {
         var port = Substitute.For<IMemoryS1Port>();
         port.RememberAsync(Arg.Any<MemoryRememberRequest>(), Arg.Any<CancellationToken>())
@@ -46,7 +46,7 @@ public sealed class MemoryS1PortMockTests
 
     /// <summary>AC-FR-MCP-MEMORY-014-03: mock revert restores snapshot content.</summary>
     [Fact]
-    public async Task PortMock_Revert_RestoresSnapshot()
+    public async Task PortMockRevertRestoresSnapshot()
     {
         var port = Substitute.For<IMemoryS1Port>();
         port.RevertAsync("MEMORY-FACT-001", 1, Arg.Any<CancellationToken>())

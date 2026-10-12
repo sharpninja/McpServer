@@ -21,7 +21,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
     /// appsettings projection writer is invoked.
     /// </summary>
     [Fact]
-    public async Task WorkspaceService_Create_CommitsWorkspaceBeforeProjection()
+    public async Task WorkspaceServiceCreateCommitsWorkspaceBeforeProjection()
     {
         var databaseName = $"workspace-authority-{Guid.NewGuid():N}";
         var options = CreateOptions(databaseName);
@@ -47,7 +47,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
     /// database and deleted rows are omitted from normal reads and projection.
     /// </summary>
     [Fact]
-    public async Task WorkspaceService_Delete_SoftDeletesWorkspaceAndProjectionOmitsDeleted()
+    public async Task WorkspaceServiceDeleteSoftDeletesWorkspaceAndProjectionOmitsDeleted()
     {
         var options = CreateOptions($"workspace-delete-{Guid.NewGuid():N}");
         await using var db = new McpDbContext(options);
@@ -83,7 +83,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
     /// that category's rows (orphan deletion) and leaves the other categories intact.
     /// </summary>
     [Fact]
-    public async Task WorkspaceService_BannedPolicyLists_RoundTripAndPartialUpdateReplacesOnlyThatCategory()
+    public async Task WorkspaceServiceBannedPolicyListsRoundTripAndPartialUpdateReplacesOnlyThatCategory()
     {
         var options = CreateOptions($"workspace-banned-{Guid.NewGuid():N}");
         await using var db = new McpDbContext(options);

@@ -21,7 +21,7 @@ public sealed class SkillManifestParserTests
 
     /// <summary>A valid SKILL.md parses into name, description, license, allowed-tools, and body.</summary>
     [Fact]
-    public void Parse_Valid_ExtractsAllFields()
+    public void ParseValidExtractsAllFields()
     {
         var ok = _parser.TryParse(Valid, "path/SKILL.md", out var manifest, out var error);
 
@@ -39,7 +39,7 @@ public sealed class SkillManifestParserTests
 
     /// <summary>Missing name is rejected with a descriptive error.</summary>
     [Fact]
-    public void Parse_MissingName_Fails()
+    public void ParseMissingNameFails()
     {
         var content = "---\ndescription: a thing\n---\nbody";
 
@@ -52,7 +52,7 @@ public sealed class SkillManifestParserTests
 
     /// <summary>Missing description is rejected.</summary>
     [Fact]
-    public void Parse_MissingDescription_Fails()
+    public void ParseMissingDescriptionFails()
     {
         var content = "---\nname: x\n---\nbody";
 
@@ -64,7 +64,7 @@ public sealed class SkillManifestParserTests
 
     /// <summary>A document with no frontmatter is rejected.</summary>
     [Fact]
-    public void Parse_NoFrontmatter_Fails()
+    public void ParseNoFrontmatterFails()
     {
         var ok = _parser.TryParse("# Just markdown\nno frontmatter", "p", out _, out var error);
 
@@ -74,7 +74,7 @@ public sealed class SkillManifestParserTests
 
     /// <summary>CRLF line endings are handled.</summary>
     [Fact]
-    public void Parse_CrlfLineEndings_Succeeds()
+    public void ParseCrlfLineEndingsSucceeds()
     {
         var content = "---\r\nname: crlf\r\ndescription: handles crlf\r\n---\r\nbody";
 

@@ -44,7 +44,7 @@ public sealed class HandoffD3D5OverlayTests : IDisposable
     /// that the shipped parser loaded from docs/Project.
     /// </summary>
     [Fact]
-    public async Task D3_GenerateDocument_ShippedFileBackedService_RendersLiveHandoffFamily()
+    public async Task D3GenerateDocumentShippedFileBackedServiceRendersLiveHandoffFamily()
     {
         var service = CreateLiveService();
         var frIds = (await service.GetAllFrAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true))
@@ -96,7 +96,7 @@ public sealed class HandoffD3D5OverlayTests : IDisposable
     /// exports using the shipped export writers. Does not mutate docs/Project.
     /// </summary>
     [Fact]
-    public async Task D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport()
+    public async Task D3GenerateAllAndWikiShippedServiceWritesHandoffFamilyToTempExport()
     {
         var service = CreateLiveService();
         var frIds = (await service.GetAllFrAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true))

@@ -35,7 +35,7 @@ public sealed class ConfigurationControllerTests : IDisposable
     /// than hierarchical JSON objects.
     /// </summary>
     [Fact]
-    public void GetConfigurationValues_ReturnsFlattenedDictionary()
+    public void GetConfigurationValuesReturnsFlattenedDictionary()
     {
         var controller = CreateController(
             """
@@ -59,7 +59,7 @@ public sealed class ConfigurationControllerTests : IDisposable
     /// replacement and additive patch semantics.
     /// </summary>
     [Fact]
-    public async Task PatchConfigurationValuesAsync_ValidValues_ReturnsUpdatedDictionary()
+    public async Task PatchConfigurationValuesAsyncValidValuesReturnsUpdatedDictionary()
     {
         var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
         await File.WriteAllTextAsync(
@@ -98,7 +98,7 @@ public sealed class ConfigurationControllerTests : IDisposable
     /// <c>admin</c> role even if action implementations are refactored later.
     /// </summary>
     [Fact]
-    public void ConfigurationController_RequiresJwtBearerAdminAuthorization()
+    public void ConfigurationControllerRequiresJwtBearerAdminAuthorization()
     {
         var attribute = typeof(ConfigurationController).GetCustomAttribute<AuthorizeAttribute>();
 

@@ -14,7 +14,7 @@ public sealed class McpAgentOptionsSectionTests
     /// An in-memory configuration supplies the legacy section only.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_BindsLegacyMcpServerSection()
+    public void AddQBrainAiMcpAgentBindsLegacyMcpServerSection()
     {
         var workspacePath = OperatingSystem.IsWindows() ? @"E:\github\McpServer" : "/var/lib/McpServer";
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
@@ -37,7 +37,7 @@ public sealed class McpAgentOptionsSectionTests
     /// TR-MCP-QBRAIN-005: QBrainAi:McpAgent wins over McpServer:McpAgent, and an explicit delegate wins over both.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_CanonicalSectionAndDelegateWin()
+    public void AddQBrainAiMcpAgentCanonicalSectionAndDelegateWin()
     {
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
         {

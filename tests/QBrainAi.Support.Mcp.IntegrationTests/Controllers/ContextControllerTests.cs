@@ -33,7 +33,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     /// Regression test for website ingest HttpClient registration.
     /// </summary>
     [Fact]
-    public void WebsiteIngestorHttpClient_CanBeCreated()
+    public void WebsiteIngestorHttpClientCanBeCreated()
     {
         using var scope = _factory.Services.CreateScope();
         var httpClientFactory = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>();
@@ -43,7 +43,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
     /// <summary>GET /qbrainai/context/sources returns 200 and array.</summary>
     [Fact]
-    public async Task GetSources_ReturnsOk()
+    public async Task GetSourcesReturnsOk()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/context/sources", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -55,7 +55,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
     /// <summary>POST /qbrainai/context/pack returns 200 and ContextPack with empty chunks when query matches no content.</summary>
     [Fact]
-    public async Task GetPack_ReturnsOk()
+    public async Task GetPackReturnsOk()
     {
         // Use a query that cannot match any chunk (avoids dependence on DB state / test order).
         var request = new { queryId = "test-1", query = "xyznonexistentquery123", limit = 10 };
@@ -72,7 +72,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
     /// <summary>POST /qbrainai/context/search returns 200.</summary>
     [Fact]
-    public async Task Search_ReturnsOk()
+    public async Task SearchReturnsOk()
     {
         var request = new { query = "test", limit = 5 };
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/context/search", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -80,7 +80,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     }
 
     [Fact]
-    public async Task Search_WhenGraphRagEnabled_ReturnsGraphMetadata()
+    public async Task SearchWhenGraphRagEnabledReturnsGraphMetadata()
     {
         using var factory = _factory.WithWebHostBuilder(builder =>
         {
@@ -106,7 +106,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     }
 
     [Fact]
-    public async Task Search_WhenGraphRagEnabledAndQueryEmpty_UsesLegacyPathReason()
+    public async Task SearchWhenGraphRagEnabledAndQueryEmptyUsesLegacyPathReason()
     {
         using var factory = _factory.WithWebHostBuilder(builder =>
         {
@@ -137,7 +137,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     }
 
     [Fact]
-    public async Task Search_WhenGraphRagEnabledAndSourceTypeProvided_UsesLegacyPathReason()
+    public async Task SearchWhenGraphRagEnabledAndSourceTypeProvidedUsesLegacyPathReason()
     {
         using var factory = _factory.WithWebHostBuilder(builder =>
         {
@@ -167,7 +167,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
     /// <summary>FR-SUPPORT-010: Same request produces identical chunk IDs and order (deterministic context pack).</summary>
     [Fact]
-    public async Task GetPack_CalledTwiceWithSameRequest_ReturnsIdenticalChunkIdsAndOrder()
+    public async Task GetPackCalledTwiceWithSameRequestReturnsIdenticalChunkIdsAndOrder()
     {
         var docId = "det-test-doc-" + Guid.NewGuid().ToString("N");
         var chunkIdA = "det-chunk-a-" + Guid.NewGuid().ToString("N");
@@ -219,14 +219,14 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     }
 
     [Fact]
-    public async Task IngestWebsite_MissingUrl_ReturnsBadRequest()
+    public async Task IngestWebsiteMissingUrlReturnsBadRequest()
     {
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/context/ingest-website", UriKind.Relative), new { includeSubpages = true }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
-    public async Task IngestWebsite_Success_UpsertsSourcesAndDeduplicatesBySourceKey()
+    public async Task IngestWebsiteSuccessUpsertsSourcesAndDeduplicatesBySourceKey()
     {
         var fakeIngestor = new StubWebsiteIngestor();
         using var factory = _factory.WithWebHostBuilder(builder =>
@@ -263,7 +263,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     }
 
     [Fact]
-    public async Task IngestWebsite_WhenFetcherReturnsErrors_ReturnsPartialFailureStatus()
+    public async Task IngestWebsiteWhenFetcherReturnsErrorsReturnsPartialFailureStatus()
     {
         var fakeIngestor = new ErrorWebsiteIngestor();
         using var factory = _factory.WithWebHostBuilder(builder =>
@@ -289,7 +289,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     }
 
     [Fact]
-    public async Task IngestWebsiteStream_ReturnsSsePayloadWithResultEvent()
+    public async Task IngestWebsiteStreamReturnsSsePayloadWithResultEvent()
     {
         var fakeIngestor = new StubWebsiteIngestor();
         using var factory = _factory.WithWebHostBuilder(builder =>

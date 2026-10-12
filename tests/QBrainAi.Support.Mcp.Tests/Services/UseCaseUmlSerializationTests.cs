@@ -15,7 +15,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-T14-1: Serializer is a pure service type (constructed without DbContext).</summary>
     [Fact]
-    public void Serializer_IsPureService_ConstructibleWithoutDbContext()
+    public void SerializerIsPureServiceConstructibleWithoutDbContext()
     {
         Assert.NotNull(_sut);
         Assert.IsNotType<Microsoft.EntityFrameworkCore.DbContext>(_sut);
@@ -23,7 +23,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-013-1: Mermaid export includes schema header.</summary>
     [Fact]
-    public void ToMermaid_IncludesSchemaHeader()
+    public void ToMermaidIncludesSchemaHeader()
     {
         var mermaid = _sut.ToMermaid(SampleGraph());
         Assert.Contains("%% mcp-usecase-diagram-schema:1", mermaid, StringComparison.Ordinal);
@@ -31,7 +31,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-013-2: Golden fixture contains actors, use cases, boundary, edges.</summary>
     [Fact]
-    public void ToMermaid_GoldenFixture_ContainsActorsUseCasesBoundaryAndEdges()
+    public void ToMermaidGoldenFixtureContainsActorsUseCasesBoundaryAndEdges()
     {
         var mermaid = _sut.ToMermaid(SampleGraph());
         Assert.Contains("Customer", mermaid, StringComparison.Ordinal);
@@ -48,7 +48,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-013-3: Same graph yields same Mermaid (deterministic).</summary>
     [Fact]
-    public void ToMermaid_IsDeterministic()
+    public void ToMermaidIsDeterministic()
     {
         var a = _sut.ToMermaid(SampleGraph());
         var b = _sut.ToMermaid(SampleGraph());
@@ -57,7 +57,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-013-4: Empty graph yields minimal valid Mermaid with schema header.</summary>
     [Fact]
-    public void ToMermaid_EmptyGraph_YieldsMinimalDocumentedForm()
+    public void ToMermaidEmptyGraphYieldsMinimalDocumentedForm()
     {
         var mermaid = _sut.ToMermaid(new UseCaseDiagramGraphDto { SchemaVersion = 1, Kind = "uml-usecase" });
         Assert.Contains("%% mcp-usecase-diagram-schema:1", mermaid, StringComparison.Ordinal);
@@ -66,7 +66,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-014-1: PlantUML contains start/end markers.</summary>
     [Fact]
-    public void ToPlantUml_ContainsStartAndEnd()
+    public void ToPlantUmlContainsStartAndEnd()
     {
         var puml = _sut.ToPlantUml(SampleGraph());
         Assert.Contains("@startuml", puml, StringComparison.Ordinal);
@@ -75,7 +75,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-014-2: Golden fixture actors, use cases, include/extend.</summary>
     [Fact]
-    public void ToPlantUml_GoldenFixture_ContainsActorsUseCasesAndRelationships()
+    public void ToPlantUmlGoldenFixtureContainsActorsUseCasesAndRelationships()
     {
         var puml = _sut.ToPlantUml(SampleGraph());
         Assert.Contains("Customer", puml, StringComparison.Ordinal);
@@ -94,7 +94,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-014-3: PlantUML export is deterministic.</summary>
     [Fact]
-    public void ToPlantUml_IsDeterministic()
+    public void ToPlantUmlIsDeterministic()
     {
         var a = _sut.ToPlantUml(SampleGraph());
         var b = _sut.ToPlantUml(SampleGraph());
@@ -103,7 +103,7 @@ public sealed class UseCaseUmlSerializationTests
 
     /// <summary>AC-T14-2: Both formats produced for same graph (non-empty).</summary>
     [Fact]
-    public void ToMermaid_And_ToPlantUml_BothNonEmptyForSampleGraph()
+    public void ToMermaidAndToPlantUmlBothNonEmptyForSampleGraph()
     {
         var g = SampleGraph();
         Assert.False(string.IsNullOrWhiteSpace(_sut.ToMermaid(g)));

@@ -82,7 +82,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>todo_projection_repair delegates to the transaction-gated TODO mutation service.</summary>
     [Fact]
-    public async Task TodoProjectionRepair_DelegatesToInjectedTodoMutationService()
+    public async Task TodoProjectionRepairDelegatesToInjectedTodoMutationService()
     {
         var todoMutations = Substitute.For<ITransactionGatedTodoMutationService>();
         todoMutations.RepairProjectionAsync(Arg.Any<CancellationToken>())
@@ -117,7 +117,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>repo_write delegates to the injected repo file service, which DI decorates for transaction gating.</summary>
     [Fact]
-    public async Task RepoWrite_DelegatesToInjectedRepoFileService()
+    public async Task RepoWriteDelegatesToInjectedRepoFileService()
     {
         _repoFileService.WriteAsync("docs/Project/txn.md", "content", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new RepoWriteResult(true, null)));
@@ -133,7 +133,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>prompt_template_create delegates to the injected prompt-template service.</summary>
     [Fact]
-    public async Task PromptTemplateCreate_DelegatesToInjectedPromptTemplateService()
+    public async Task PromptTemplateCreateDelegatesToInjectedPromptTemplateService()
     {
         _promptTemplateService.CreateAsync(Arg.Any<PromptTemplateCreateRequest>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new PromptTemplateMutationResult(true, Item: CreateTemplate("txn-stdio"))));
@@ -167,7 +167,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>prompt_template_update delegates to the injected prompt-template service.</summary>
     [Fact]
-    public async Task PromptTemplateUpdate_DelegatesToInjectedPromptTemplateService()
+    public async Task PromptTemplateUpdateDelegatesToInjectedPromptTemplateService()
     {
         _promptTemplateService.UpdateAsync("txn-stdio", Arg.Any<PromptTemplateUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new PromptTemplateMutationResult(true, Item: CreateTemplate("txn-stdio"))));
@@ -197,7 +197,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>prompt_template_delete delegates to the injected prompt-template service.</summary>
     [Fact]
-    public async Task PromptTemplateDelete_DelegatesToInjectedPromptTemplateService()
+    public async Task PromptTemplateDeleteDelegatesToInjectedPromptTemplateService()
     {
         _promptTemplateService.DeleteAsync("txn-stdio", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new PromptTemplateMutationResult(true, Item: CreateTemplate("txn-stdio"))));
@@ -214,7 +214,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>requirements_generate markdown export delegates to the injected requirements service.</summary>
     [Fact]
-    public async Task RequirementsGenerateAllMarkdown_DelegatesToInjectedRequirementsService()
+    public async Task RequirementsGenerateAllMarkdownDelegatesToInjectedRequirementsService()
     {
         _requirementsDocumentService.GenerateAllAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(CreateExport("markdown", "all")));
@@ -234,7 +234,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>requirements_generate wiki export delegates to the injected requirements service.</summary>
     [Fact]
-    public async Task RequirementsGenerateWiki_DelegatesToInjectedRequirementsService()
+    public async Task RequirementsGenerateWikiDelegatesToInjectedRequirementsService()
     {
         _requirementsDocumentService.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(CreateExport("wiki", "all")));
@@ -254,7 +254,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>requirements_create FR delegates to the injected requirements service.</summary>
     [Fact]
-    public async Task RequirementsCreateFunctional_DelegatesToInjectedRequirementsService()
+    public async Task RequirementsCreateFunctionalDelegatesToInjectedRequirementsService()
     {
         _requirementsDocumentService.AddFrAsync(Arg.Any<FrEntry>(), Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
@@ -281,7 +281,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>requirements_update FR reads and updates through the injected requirements service.</summary>
     [Fact]
-    public async Task RequirementsUpdateFunctional_DelegatesToInjectedRequirementsService()
+    public async Task RequirementsUpdateFunctionalDelegatesToInjectedRequirementsService()
     {
         _requirementsDocumentService.GetFrAsync("FR-MCP-TXNSTDIO-001", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<FrEntry?>(new FrEntry("FR-MCP-TXNSTDIO-001", "Old", "Old body")));
@@ -310,7 +310,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>requirements_update mapping delegates to the injected requirements service.</summary>
     [Fact]
-    public async Task RequirementsUpdateMapping_DelegatesToInjectedRequirementsService()
+    public async Task RequirementsUpdateMappingDelegatesToInjectedRequirementsService()
     {
         _requirementsDocumentService.GetMappingAsync("FR-MCP-TXNSTDIO-001", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<FrTrMapping?>(new FrTrMapping("FR-MCP-TXNSTDIO-001", ["TR-OLD-001"], ["TEST-OLD-001"])));
@@ -339,7 +339,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>requirements_delete FR delegates to the injected requirements service.</summary>
     [Fact]
-    public async Task RequirementsDeleteFunctional_DelegatesToInjectedRequirementsService()
+    public async Task RequirementsDeleteFunctionalDelegatesToInjectedRequirementsService()
     {
         _requirementsDocumentService.DeleteFrAsync("FR-MCP-TXNSTDIO-001", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
@@ -355,7 +355,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>sessionlog_replace_turn delegates to the injected session-log service.</summary>
     [Fact]
-    public async Task SessionLogReplaceTurn_DelegatesToInjectedSessionLogService()
+    public async Task SessionLogReplaceTurnDelegatesToInjectedSessionLogService()
     {
         _sessionLogService.ReplaceTurnAsync("Codex", "Codex-20260614T120000Z-stdio", Arg.Any<UnifiedRequestEntryDto>(), Arg.Any<CancellationToken>())
             .Returns(42L);
@@ -400,7 +400,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>sessionlog_delete_session delegates to the injected session-log service.</summary>
     [Fact]
-    public async Task SessionLogDeleteSession_DelegatesToInjectedSessionLogService()
+    public async Task SessionLogDeleteSessionDelegatesToInjectedSessionLogService()
     {
         _sessionLogService.DeleteSessionAsync("Codex", "Codex-20260614T120000Z-stdio", Arg.Any<CancellationToken>())
             .Returns(true);
@@ -421,7 +421,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>github_create_issue delegates to the injected GitHub CLI service.</summary>
     [Fact]
-    public async Task GitHubCreateIssue_DelegatesToInjectedGitHubCliService()
+    public async Task GitHubCreateIssueDelegatesToInjectedGitHubCliService()
     {
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         gitHubCliService.CreateIssueAsync("txn issue", "blocked", Arg.Any<CancellationToken>())
@@ -445,7 +445,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>context_ingest_website delegates to the website ingestor when required transactions are active.</summary>
     [Fact]
-    public async Task ContextIngestWebsite_WhenTransactionsRequired_DelegatesToWebsiteIngestor()
+    public async Task ContextIngestWebsiteWhenTransactionsRequiredDelegatesToWebsiteIngestor()
     {
         var websiteIngestor = Substitute.For<IWebsiteIngestor>();
         websiteIngestor
@@ -471,7 +471,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>The sync route fixture is a resource-backed workspace outside the checkout.</summary>
     [Fact]
-    public void WorkspaceFixture_UsesResourceOutsideCheckout()
+    public void WorkspaceFixtureUsesResourceOutsideCheckout()
     {
         var workspace = Path.GetFullPath(WorkspacePath);
         var temporaryRoot = Path.GetFullPath(Path.GetTempPath());
@@ -481,7 +481,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
 
     /// <summary>sync_run is not blocked by the turn-transaction gate when required transactions are active.</summary>
     [Fact]
-    public async Task SyncRun_WhenTransactionsRequired_DoesNotReturnTurnTransactionGate()
+    public async Task SyncRunWhenTransactionsRequiredDoesNotReturnTurnTransactionGate()
     {
         var tools = CreateTools(
             _db,

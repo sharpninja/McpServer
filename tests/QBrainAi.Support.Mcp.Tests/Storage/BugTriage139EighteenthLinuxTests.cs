@@ -21,7 +21,7 @@ public sealed class BugTriage139EighteenthLinuxTests
 {
     /// <summary>Proves the native Linux gate is executing as a non-root effective user.</summary>
     [Fact]
-    public void NativeLinuxGate_EffectiveUserId_IsNonRoot()
+    public void NativeLinuxGateEffectiveUserIdIsNonRoot()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.NotEqual(0U, GetEffectiveUserId());
@@ -32,7 +32,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// root-relative openat2 containment leaves no file in the external directory.
     /// </summary>
     [Fact]
-    public void OpenFileForWrite_ParentRenamedOutsideRoot_RejectsWithoutExternalArtifact()
+    public void OpenFileForWriteParentRenamedOutsideRootRejectsWithoutExternalArtifact()
     {
         using var fixture = new LinuxMutationFixture();
         var hook = ResolveWorkspaceFileSystemHook("s_beforeLinuxRootAnchoredFileCreate");
@@ -70,7 +70,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// export directory fails closed before it can create an externally visible child.
     /// </summary>
     [Fact]
-    public void EnsureDirectory_MissingNestedDirectory_FailsClosedBeforeMutation()
+    public void EnsureDirectoryMissingNestedDirectoryFailsClosedBeforeMutation()
     {
         using var fixture = new LinuxMutationFixture();
 
@@ -87,7 +87,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// through the retained root authority rather than by reopening an untrusted pathname.
     /// </summary>
     [Fact]
-    public async Task RestoreFileAsync_RollsBackUnixPermissionsThroughPinnedAuthority()
+    public async Task RestoreFileAsyncRollsBackUnixPermissionsThroughPinnedAuthority()
     {
         using var fixture = new LinuxMutationFixture();
         var path = Path.Combine(fixture.Root, "rollback.md");
@@ -133,7 +133,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// allowed to block bounded traversal.
     /// </summary>
     [Fact]
-    public async Task EnumerateFilesBoundedAsync_Fifo_IsIgnoredWithoutBlocking()
+    public async Task EnumerateFilesBoundedAsyncFifoIsIgnoredWithoutBlocking()
     {
         using var fixture = new LinuxMutationFixture();
         var ordinaryFile = Path.Combine(fixture.LiveParent, "ordinary.md");
@@ -165,7 +165,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// without entering its blocking metadata implementation.
     /// </summary>
     [Fact]
-    public async Task EnumerateFilesBoundedAsync_DelayedFuseChildMount_IsRejectedBeforeTraversal()
+    public async Task EnumerateFilesBoundedAsyncDelayedFuseChildMountIsRejectedBeforeTraversal()
     {
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
         await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
@@ -192,7 +192,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// replacement mount or consuming a bounded worker.
     /// </summary>
     [Fact]
-    public async Task EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly()
+    public async Task EnumerateFilesBoundedAsyncRootReplacedByDelayedFuseMountAfterPinUsesPinnedRootOnly()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -252,7 +252,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// provider may consume an admission slot for a later caller.
     /// </summary>
     [Fact]
-    public async Task EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission()
+    public async Task EnumerateFilesBoundedAsyncRepeatedRootReplacementDoesNotConsumeWorkerAdmission()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -319,7 +319,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// resolved it, without creating the generated file in that moved directory.
     /// </summary>
     [Fact]
-    public async Task RequirementsExport_ParentMovedAfterResolution_RejectsWithoutExternalArtifact()
+    public async Task RequirementsExportParentMovedAfterResolutionRejectsWithoutExternalArtifact()
     {
         using var fixture = new LinuxMutationFixture();
         var hook = ResolveWorkspaceFileSystemHook("s_beforeLinuxRootAnchoredFileCreate");
@@ -362,7 +362,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// a traversal worker, and a later caller of the original retained tree must still succeed.
     /// </summary>
     [Fact]
-    public async Task EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding()
+    public async Task EnumerateFilesBoundedAsyncRootReplacedBeforeAuthorityCaptureRejectsWithoutWorkerStranding()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -454,7 +454,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// write only through the pinned root descriptor, never through the replacement mount.
     /// </summary>
     [Fact]
-    public async Task RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly()
+    public async Task RequirementsExportRootReplacedByDelayedFuseMountBeforeCreateUsesPinnedRootOnly()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -504,7 +504,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// removes the stale spelling instead of treating it as the expected generated file.
     /// </summary>
     [Fact]
-    public async Task RequirementsExport_CaseDistinctHomeFiles_RemovesOnlyStaleName()
+    public async Task RequirementsExportCaseDistinctHomeFilesRemovesOnlyStaleName()
     {
         using var fixture = new LinuxMutationFixture();
         var stale = Path.Combine(fixture.Root, "home.md");
@@ -536,7 +536,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// primitive, so cleanup rejects the export before any generated file becomes visible.
     /// </summary>
     [Fact]
-    public async Task RequirementsExport_NestedStaleCleanup_IsRejectedBeforeGeneratedWrite()
+    public async Task RequirementsExportNestedStaleCleanupIsRejectedBeforeGeneratedWrite()
     {
         using var fixture = new LinuxMutationFixture();
         var stale = Path.Combine(fixture.LiveParent, "stale.md");
@@ -569,7 +569,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// policy-approved local Linux mount instead of rejecting the mount crossing from AT_FDCWD.
     /// </summary>
     [Fact]
-    public async Task WorkspaceIdentity_SeparateApprovedLocalMount_IsAccepted()
+    public async Task WorkspaceIdentitySeparateApprovedLocalMountIsAccepted()
     {
         using var fixture = SeparateLocalMountFixture.Create();
         var workspace = Path.Combine(fixture.TestRoot, "identity-workspace");
@@ -591,7 +591,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// policy-approved local Linux mount.
     /// </summary>
     [Fact]
-    public async Task SqliteOpen_SeparateApprovedLocalMount_IsAccepted()
+    public async Task SqliteOpenSeparateApprovedLocalMountIsAccepted()
     {
         using var fixture = SeparateLocalMountFixture.Create();
         var dataSource = Path.Combine(fixture.TestRoot, "separate-mount.db");

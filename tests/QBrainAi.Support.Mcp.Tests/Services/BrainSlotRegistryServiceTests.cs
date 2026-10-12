@@ -18,7 +18,7 @@ public sealed class BrainSlotRegistryServiceTests
 {
     /// <summary>Enabling a second slot for the same role requires replaceExisting=true.</summary>
     [Fact]
-    public async Task UpsertAsync_WhenEnabledRoleAlreadyExists_RequiresReplaceExisting()
+    public async Task UpsertAsyncWhenEnabledRoleAlreadyExistsRequiresReplaceExisting()
     {
         using var fixture = RegistryFixture.Create();
         await fixture.Service.UpsertAsync("left-a", SlotRequest(
@@ -37,7 +37,7 @@ public sealed class BrainSlotRegistryServiceTests
 
     /// <summary>replaceExisting=true disables the previous slot, disables its party, and audits the replacement.</summary>
     [Fact]
-    public async Task UpsertAsync_WithReplaceExisting_DisablesOldSlotAndParty()
+    public async Task UpsertAsyncWithReplaceExistingDisablesOldSlotAndParty()
     {
         using var fixture = RegistryFixture.Create();
         await fixture.Service.UpsertAsync("left-a", SlotRequest(
@@ -74,7 +74,7 @@ public sealed class BrainSlotRegistryServiceTests
 
     /// <summary>Upsert restores a soft-deleted slot row instead of leaving a tombstone collision.</summary>
     [Fact]
-    public async Task UpsertAsync_AfterSoftDelete_RestoresExistingRow()
+    public async Task UpsertAsyncAfterSoftDeleteRestoresExistingRow()
     {
         using var fixture = RegistryFixture.Create();
         await fixture.Service.UpsertAsync("curiosity-main", SlotRequest(BrainSlotRoles.CuriosityEngine, enabled: false, modelId: "old-model"), cancellationToken: TestContext.Current.CancellationToken)
@@ -99,7 +99,7 @@ public sealed class BrainSlotRegistryServiceTests
 
     /// <summary>A workspace is quad-ready only when all four roles are enabled and have active party keys.</summary>
     [Fact]
-    public async Task GetStatusAsync_WhenFourEnabledSlotsHaveActiveMappings_ReturnsQuadReady()
+    public async Task GetStatusAsyncWhenFourEnabledSlotsHaveActiveMappingsReturnsQuadReady()
     {
         using var fixture = RegistryFixture.Create();
         foreach (var role in BrainSlotRoles.All)
@@ -118,7 +118,7 @@ public sealed class BrainSlotRegistryServiceTests
 
     /// <summary>OpenAI-compatible custom endpoints require an explicit allowlist entry.</summary>
     [Fact]
-    public async Task UpsertAsync_WhenEndpointHostIsNotAllowlisted_RejectsSlot()
+    public async Task UpsertAsyncWhenEndpointHostIsNotAllowlistedRejectsSlot()
     {
         using var fixture = RegistryFixture.Create();
         var request = SlotRequest(BrainSlotRoles.Logic, enabled: false);

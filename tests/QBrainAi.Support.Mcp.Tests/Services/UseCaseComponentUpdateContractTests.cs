@@ -49,7 +49,7 @@ public sealed class UseCaseComponentUpdateContractTests
     /// preserve all fixed identities and fields, proving the positive contract before production edits.
     /// </summary>
     [Fact]
-    public async Task CorrectFakeResponses_SatisfyIdentityPreservingContract()
+    public async Task CorrectFakeResponsesSatisfyIdentityPreservingContract()
     {
         var fake = ScriptedEditor.CreateCorrect();
 
@@ -69,7 +69,7 @@ public sealed class UseCaseComponentUpdateContractTests
     /// assertions used by the independent fake while preserving aggregate state and row counts.
     /// </summary>
     [Fact]
-    public async Task CorrectRealHandlers_SatisfyIdentityPreservingContract()
+    public async Task CorrectRealHandlersSatisfyIdentityPreservingContract()
     {
         await using var editor = await RealHandlerEditor.CreateAsync().ConfigureAwait(true);
 
@@ -88,7 +88,7 @@ public sealed class UseCaseComponentUpdateContractTests
     /// soft-deleted records, and cross-workspace lookups fail without mutating durable rows.
     /// </summary>
     [Fact]
-    public async Task RealHandlers_RejectInvalidAndOutOfScopeTargetsWithoutMutation()
+    public async Task RealHandlersRejectInvalidAndOutOfScopeTargetsWithoutMutation()
     {
         await using var editor = await RealHandlerEditor.CreateAsync().ConfigureAwait(true);
 
@@ -103,7 +103,7 @@ public sealed class UseCaseComponentUpdateContractTests
     /// rows and incomplete writes while the test harness itself remains green.
     /// </summary>
     [Fact]
-    public async Task ActorNegativeControls_AreRejectedInsidePassingHarness()
+    public async Task ActorNegativeControlsAreRejectedInsidePassingHarness()
     {
         var wrongIdentity = ScriptedEditor.CreateCorrect() with
         {
@@ -158,7 +158,7 @@ public sealed class UseCaseComponentUpdateContractTests
     /// checks before the real CQRS handlers are introduced.
     /// </summary>
     [Fact]
-    public void FlowAndStepNegativeControls_AreRejectedInsidePassingHarness()
+    public void FlowAndStepNegativeControlsAreRejectedInsidePassingHarness()
     {
         var wrongFlow = new FlowUpdateResult(
             FlowInput.UseCaseId + 1,
@@ -204,7 +204,7 @@ public sealed class UseCaseComponentUpdateContractTests
     /// cancellation, proving the contract tests do not replace failure behavior with successful data.
     /// </summary>
     [Fact]
-    public async Task FailureAndCancellationControls_AreObservable()
+    public async Task FailureAndCancellationControlsAreObservable()
     {
         var expected = new InvalidOperationException("scripted editor failure");
         var failing = ScriptedEditor.CreateCorrect() with

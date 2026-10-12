@@ -38,7 +38,7 @@ public sealed class CanonicalToolBucketMigrationTests : IDisposable
     /// global workspace scope.
     /// </summary>
     [Fact]
-    public void Migrate_FromScratch_SeedsCanonicalOfficialBucket()
+    public void MigrateFromScratchSeedsCanonicalOfficialBucket()
     {
         using var db = CreateContext();
         db.Database.Migrate();
@@ -58,7 +58,7 @@ public sealed class CanonicalToolBucketMigrationTests : IDisposable
     /// new seed migration is applied.
     /// </summary>
     [Fact]
-    public void Migrate_WhenCanonicalOfficialBucketAlreadyExists_RemainsSingleRow()
+    public void MigrateWhenCanonicalOfficialBucketAlreadyExistsRemainsSingleRow()
     {
         using (var db = CreateContext())
         {
@@ -84,7 +84,7 @@ public sealed class CanonicalToolBucketMigrationTests : IDisposable
     /// the canonical <c>official</c> bucket and removes the alias row.
     /// </summary>
     [Fact]
-    public void Migrate_WhenLegacyAliasBucketExists_NormalizesBucketAndToolProvenance()
+    public void MigrateWhenLegacyAliasBucketExistsNormalizesBucketAndToolProvenance()
     {
         using (var db = CreateContext())
         {
@@ -116,7 +116,7 @@ public sealed class CanonicalToolBucketMigrationTests : IDisposable
     /// rows and their tag rows.
     /// </summary>
     [Fact]
-    public void Migrate_WhenToolWorkspaceScopeWasStampedIncorrectly_NormalizesToolsAndTags()
+    public void MigrateWhenToolWorkspaceScopeWasStampedIncorrectlyNormalizesToolsAndTags()
     {
         using (var db = CreateContext())
         {

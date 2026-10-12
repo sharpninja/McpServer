@@ -16,13 +16,13 @@ public sealed class WorkspaceServiceAccessorTests
 {
     /// <summary>Nested PushWorkspace restores the prior override when the inner scope disposes.</summary>
     [Fact]
-    public void PushWorkspace_NestedScopes_RestorePriorOverride()
+    public void PushWorkspaceNestedScopesRestorePriorOverride()
     {
         var accessor = CreateAccessor(@"F:\outer-default");
-        using (accessor.PushWorkspace(@"F:\first"))
+        using (WorkspaceServiceAccessor.PushWorkspace(@"F:\first"))
         {
             Assert.Equal(Path.GetFullPath(@"F:\first"), accessor.GetWorkspacePath());
-            using (accessor.PushWorkspace(@"F:\second"))
+            using (WorkspaceServiceAccessor.PushWorkspace(@"F:\second"))
             {
                 Assert.Equal(Path.GetFullPath(@"F:\second"), accessor.GetWorkspacePath());
             }
@@ -35,7 +35,7 @@ public sealed class WorkspaceServiceAccessorTests
 
     /// <summary>Parallel async flows must not observe each other's workspace override.</summary>
     [Fact]
-    public async Task PushWorkspace_ParallelCalls_DoNotLeakWorkspace()
+    public async Task PushWorkspaceParallelCallsDoNotLeakWorkspace()
     {
         var accessor = CreateAccessor(@"F:\default-ws");
         var observed = new string[2];
@@ -43,7 +43,7 @@ public sealed class WorkspaceServiceAccessorTests
         await Task.WhenAll(
             Task.Run(async () =>
             {
-                using (accessor.PushWorkspace(@"F:\alpha"))
+                using (WorkspaceServiceAccessor.PushWorkspace(@"F:\alpha"))
                 {
                     await Task.Yield();
                     observed[0] = accessor.GetWorkspacePath();
@@ -53,7 +53,7 @@ public sealed class WorkspaceServiceAccessorTests
             }, ct),
             Task.Run(async () =>
             {
-                using (accessor.PushWorkspace(@"F:\beta"))
+                using (WorkspaceServiceAccessor.PushWorkspace(@"F:\beta"))
                 {
                     await Task.Yield();
                     observed[1] = accessor.GetWorkspacePath();

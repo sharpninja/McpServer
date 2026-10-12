@@ -15,7 +15,7 @@ public sealed class SessionLogTurnContextBackfillTests
 {
     /// <summary>AC-TR-MCP-SESSIONLOG-006-005: extractable TODO upgrades None.</summary>
     [Fact]
-    public async Task RunAsync_NoneRowWithExtractableTodo_UpdatesTodoId()
+    public async Task RunAsyncNoneRowWithExtractableTodoUpdatesTodoId()
     {
         await using var db = CreateDb();
         var session = AddSession(db);
@@ -36,7 +36,7 @@ public sealed class SessionLogTurnContextBackfillTests
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-005: no signals stay None.</summary>
     [Fact]
-    public async Task RunAsync_NoneRowWithNoSignals_LeavesNone()
+    public async Task RunAsyncNoneRowWithNoSignalsLeavesNone()
     {
         await using var db = CreateDb();
         var session = AddSession(db);
@@ -51,7 +51,7 @@ public sealed class SessionLogTurnContextBackfillTests
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-005: non-None is not overwritten.</summary>
     [Fact]
-    public async Task RunAsync_NonNoneRow_NotOverwritten()
+    public async Task RunAsyncNonNoneRowNotOverwritten()
     {
         await using var db = CreateDb();
         var session = AddSession(db);
@@ -72,7 +72,7 @@ public sealed class SessionLogTurnContextBackfillTests
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-005: rerun is a no-op after upgrade.</summary>
     [Fact]
-    public async Task RunAsync_IsIdempotent()
+    public async Task RunAsyncIsIdempotent()
     {
         await using var db = CreateDb();
         var session = AddSession(db);
@@ -85,7 +85,7 @@ public sealed class SessionLogTurnContextBackfillTests
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-006: fake ~ history upgrades an empty turn.</summary>
     [Fact]
-    public async Task RunAsync_UsesAgentHistoryUnderFakeHome_WhenTurnTextHasNoTodo()
+    public async Task RunAsyncUsesAgentHistoryUnderFakeHomeWhenTurnTextHasNoTodo()
     {
         var home = Path.Combine(Path.GetTempPath(), "sesslog-bf-" + Guid.NewGuid().ToString("N"));
         var hist = Path.Combine(home, ".grok", "sessions", "sid-xyz");
@@ -112,7 +112,7 @@ public sealed class SessionLogTurnContextBackfillTests
     /// Startup helper uses the migrated <see cref="McpDbContext"/> instance and upgrades None rows.
     /// </summary>
     [Fact]
-    public async Task TryRunAsync_UsesProvidedDb_AndUpgradesNone()
+    public async Task TryRunAsyncUsesProvidedDbAndUpgradesNone()
     {
         await using var db = CreateDb();
         var session = AddSession(db);
@@ -140,7 +140,7 @@ public sealed class SessionLogTurnContextBackfillTests
     /// Startup helper swallows backfill failures so host startup can continue.
     /// </summary>
     [Fact]
-    public async Task TryRunAsync_DisposedDb_ReturnsZeroAndDoesNotThrow()
+    public async Task TryRunAsyncDisposedDbReturnsZeroAndDoesNotThrow()
     {
         var db = CreateDb();
         await db.DisposeAsync().ConfigureAwait(true);

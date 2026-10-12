@@ -14,7 +14,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 {
     /// <summary>The full role-tagged transcript is sent to orchestration and the Arbiter output is returned as the assistant message.</summary>
     [Fact]
-    public async Task CompleteAsync_MapsTranscriptToOrchestrationAndArbiterOutputToAssistant()
+    public async Task CompleteAsyncMapsTranscriptToOrchestrationAndArbiterOutputToAssistant()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -50,7 +50,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>When QuadBrain elects an EXTERNAL tool, the response carries it as an OpenAI tool call for the agent.</summary>
     [Fact]
-    public async Task CompleteAsync_OrchestrationEmitsToolCallJson_ReturnsToolCalls()
+    public async Task CompleteAsyncOrchestrationEmitsToolCallJsonReturnsToolCalls()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -81,7 +81,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_ToolCallsJsonEmbeddedInProse_ReturnsExternalToolCalls()
+    public async Task CompleteAsyncToolCallsJsonEmbeddedInProseReturnsExternalToolCalls()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -108,7 +108,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_McpTodoQuery_ReturnsNormalAssistantContent()
+    public async Task CompleteAsyncMcpTodoQueryReturnsNormalAssistantContent()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -131,7 +131,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_ArbiterDeferredProse_UsesLogicToolCalls()
+    public async Task CompleteAsyncArbiterDeferredProseUsesLogicToolCalls()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -163,7 +163,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_InternalTool_LoopsUntilProseAnswer()
+    public async Task CompleteAsyncInternalToolLoopsUntilProseAnswer()
     {
         var orchestration = new ScriptedOrchestrationService(
             new QuadBrainOrchestrationResponse
@@ -193,7 +193,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_ProviderFailed_UsesCreativityFinalInsteadOfLooping()
+    public async Task CompleteAsyncProviderFailedUsesCreativityFinalInsteadOfLooping()
     {
         var orchestration = new ScriptedOrchestrationService(
             new QuadBrainOrchestrationResponse
@@ -233,7 +233,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_ArbiterFinalIntent_ReturnsContentWithoutEnvelope()
+    public async Task CompleteAsyncArbiterFinalIntentReturnsContentWithoutEnvelope()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -253,7 +253,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_ArbiterContinueIntent_RePromptsThenTools()
+    public async Task CompleteAsyncArbiterContinueIntentRePromptsThenTools()
     {
         var orchestration = new ScriptedOrchestrationService(
             new QuadBrainOrchestrationResponse
@@ -283,7 +283,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_LiveArbiterDeferredProse_RePromptsInsteadOfStopping()
+    public async Task CompleteAsyncLiveArbiterDeferredProseRePromptsInsteadOfStopping()
     {
         var orchestration = new ScriptedOrchestrationService(
             new QuadBrainOrchestrationResponse
@@ -313,7 +313,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_DeferredWithoutTools_RePromptsThenReturnsAnswer()
+    public async Task CompleteAsyncDeferredWithoutToolsRePromptsThenReturnsAnswer()
     {
         var orchestration = new ScriptedOrchestrationService(
             new QuadBrainOrchestrationResponse
@@ -343,7 +343,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     }
 
     [Fact]
-    public async Task CompleteAsync_IncomingToolResult_IsFoldedIntoOrchestrationInput()
+    public async Task CompleteAsyncIncomingToolResultIsFoldedIntoOrchestrationInput()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -368,7 +368,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-018): multiple external tool calls are preserved for the agent loop.</summary>
     [Fact]
-    public async Task CompleteAsync_OrchestrationEmitsMultipleToolCalls_ReturnsAllToolCalls()
+    public async Task CompleteAsyncOrchestrationEmitsMultipleToolCallsReturnsAllToolCalls()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -391,7 +391,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-017): <c>tool_choice: none</c> suppresses tool calls and withholds tool definitions from orchestration.</summary>
     [Fact]
-    public async Task CompleteAsync_ToolChoiceNone_SuppressesToolCallsAndToolPrompt()
+    public async Task CompleteAsyncToolChoiceNoneSuppressesToolCallsAndToolPrompt()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -417,7 +417,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-017): <c>tool_choice: required</c> rejects requests that provide no callable tools.</summary>
     [Fact]
-    public async Task CompleteAsync_ToolChoiceRequiredWithoutTools_Throws()
+    public async Task CompleteAsyncToolChoiceRequiredWithoutToolsThrows()
     {
         var service = new QuadBrainOpenAiChatService(new CapturingOrchestrationService(new QuadBrainOrchestrationResponse()));
         var request = new OpenAiChatCompletionRequest
@@ -432,7 +432,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-017): a specific function choice must match a declared tool and is surfaced when selected.</summary>
     [Fact]
-    public async Task CompleteAsync_SpecificToolChoice_ReturnsMatchingToolCall()
+    public async Task CompleteAsyncSpecificToolChoiceReturnsMatchingToolCall()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -457,7 +457,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-017): a specific function choice cannot name a tool absent from the request.</summary>
     [Fact]
-    public async Task CompleteAsync_SpecificToolChoiceForUnknownTool_Throws()
+    public async Task CompleteAsyncSpecificToolChoiceForUnknownToolThrows()
     {
         var service = new QuadBrainOpenAiChatService(new CapturingOrchestrationService(new QuadBrainOrchestrationResponse()));
         var request = new OpenAiChatCompletionRequest
@@ -473,7 +473,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>Plain (non-JSON) output is returned as assistant content, not tool calls.</summary>
     [Fact]
-    public async Task CompleteAsync_PlainOutput_ReturnsContent()
+    public async Task CompleteAsyncPlainOutputReturnsContent()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -496,7 +496,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>External tool failures are fed back into QuadBrain so Arbiter can choose the next step.</summary>
     [Fact]
-    public async Task CompleteAsync_ExternalToolFailure_FeedsErrorIntoOrchestration()
+    public async Task CompleteAsyncExternalToolFailureFeedsErrorIntoOrchestration()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -525,7 +525,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>MCP-internal tool calls are executed server-side and stripped; external calls reach the agent.</summary>
     [Fact]
-    public async Task CompleteAsync_StripsInternalToolCalls_KeepsExternal()
+    public async Task CompleteAsyncStripsInternalToolCallsKeepsExternal()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -546,7 +546,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>When every elected tool is internal and executes, no tool calls are emitted to the agent.</summary>
     [Fact]
-    public async Task CompleteAsync_AllInternalExecuted_EmitsNoToolCalls()
+    public async Task CompleteAsyncAllInternalExecutedEmitsNoToolCalls()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -567,7 +567,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>A failed internal tool is surfaced as a note (assistant content), not emitted as a tool call.</summary>
     [Fact]
-    public async Task CompleteAsync_InternalToolFailure_BecomesNoteNotToolCall()
+    public async Task CompleteAsyncInternalToolFailureBecomesNoteNotToolCall()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -589,7 +589,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>FR-MCP-QBEXEC-001 (AC-5): a failed internal tool is recorded to the session log, not only noted.</summary>
     [Fact]
-    public async Task CompleteAsync_InternalToolFailure_RecordsFailureToSessionLog()
+    public async Task CompleteAsyncInternalToolFailureRecordsFailureToSessionLog()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -611,7 +611,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>A successfully executed internal tool is NOT recorded as a failure.</summary>
     [Fact]
-    public async Task CompleteAsync_InternalToolSuccess_RecordsNoFailure()
+    public async Task CompleteAsyncInternalToolSuccessRecordsNoFailure()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -631,7 +631,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>FR-MCP-QBOPENAI-001 (G-019): the response carries a best-effort non-zero usage estimate.</summary>
     [Fact]
-    public async Task CompleteAsync_PopulatesBestEffortUsageEstimate()
+    public async Task CompleteAsyncPopulatesBestEffortUsageEstimate()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -652,7 +652,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>FR-MCP-QUAD-SESSION-001: the session id (and turn id) attach the run to its session via metadata.</summary>
     [Fact]
-    public async Task CompleteAsync_WithSessionId_AttachesSessionAndTurnToOrchestration()
+    public async Task CompleteAsyncWithSessionIdAttachesSessionAndTurnToOrchestration()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -673,7 +673,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>Without a session header no session/turn metadata is attached (anonymous run).</summary>
     [Fact]
-    public async Task CompleteAsync_WithoutSessionId_AttachesNoSessionMetadata()
+    public async Task CompleteAsyncWithoutSessionIdAttachesNoSessionMetadata()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -692,7 +692,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>TEST-MCP-QBOLLAMA-001: A session-bound QuadBrain response completes the MCP session turn.</summary>
     [Fact]
-    public async Task CompleteAsync_WithSessionAndTurn_CompletesSessionTurnWithAssistantResponse()
+    public async Task CompleteAsyncWithSessionAndTurnCompletesSessionTurnWithAssistantResponse()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -724,7 +724,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>Rejected or empty orchestration must not look like a successful empty assistant turn.</summary>
     [Fact]
-    public async Task CompleteAsync_RejectedEmptyOutput_ReturnsVisibleNoDecisionMessage()
+    public async Task CompleteAsyncRejectedEmptyOutputReturnsVisibleNoDecisionMessage()
     {
         var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
         {
@@ -748,7 +748,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
     /// <summary>TEST-MCP-QBEXEC-001/002: every catalog mcp_* name is executed internally and is not emitted as a tool_call.</summary>
     [Theory]
     [MemberData(nameof(CatalogToolNames))]
-    public async Task CompleteAsync_CatalogName_StopsWithoutEmittingToolCall(string name)
+    public async Task CompleteAsyncCatalogNameStopsWithoutEmittingToolCall(string name)
     {
         var fixture = new QuadBrainExecutorTestFixture();
         var executor = fixture.CreateExecutor();
@@ -788,7 +788,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     /// <summary>An empty message list is rejected.</summary>
     [Fact]
-    public async Task CompleteAsync_NoMessages_Throws()
+    public async Task CompleteAsyncNoMessagesThrows()
     {
         var service = new QuadBrainOpenAiChatService(
             new CapturingOrchestrationService(new QuadBrainOrchestrationResponse { Status = "committed" }));

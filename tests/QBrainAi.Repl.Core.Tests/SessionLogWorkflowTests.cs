@@ -30,7 +30,7 @@ public class SessionLogWorkflowTests
     #region Bootstrap Tests
 
     [Fact]
-    public async Task BootstrapAsync_FirstCall_InitializesSubsystem()
+    public async Task BootstrapAsyncFirstCallInitializesSubsystem()
     {
         var initialized = false;
         _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken).Returns(callInfo =>
@@ -46,7 +46,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task BootstrapAsync_IdempotentCall_DoesNotThrow()
+    public async Task BootstrapAsyncIdempotentCallDoesNotThrow()
     {
         await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
         await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
@@ -56,7 +56,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task BootstrapAsync_ConfigurationError_ThrowsInvalidOperationException()
+    public async Task BootstrapAsyncConfigurationErrorThrowsInvalidOperationException()
     {
         _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Storage initialization failed"));
@@ -70,7 +70,7 @@ public class SessionLogWorkflowTests
     #region Session Creation Tests
 
     [Fact]
-    public async Task OpenSessionAsync_ValidParameters_CreatesSession()
+    public async Task OpenSessionAsyncValidParametersCreatesSession()
     {
         var agent = "Copilot";
         var sessionId = "Copilot-20260304T113901Z-feature-auth";
@@ -83,7 +83,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task OpenSessionAsync_ValidSessionId_MatchesCanonicalFormat()
+    public async Task OpenSessionAsyncValidSessionIdMatchesCanonicalFormat()
     {
         var validSessionIds = new[]
         {
@@ -103,7 +103,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task OpenSessionAsync_InvalidSessionId_ThrowsArgumentException()
+    public async Task OpenSessionAsyncInvalidSessionIdThrowsArgumentException()
     {
         var invalidSessionIds = new[]
         {
@@ -126,7 +126,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task OpenSessionAsync_NullOrEmptyParameters_ThrowsArgumentException()
+    public async Task OpenSessionAsyncNullOrEmptyParametersThrowsArgumentException()
     {
         var validSessionId = "Copilot-20260304T113901Z-test";
 
@@ -152,7 +152,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task OpenSessionAsync_DuplicateSessionId_ThrowsInvalidOperationException()
+    public async Task OpenSessionAsyncDuplicateSessionIdThrowsInvalidOperationException()
     {
         var sessionId = "Copilot-20260304T113901Z-duplicate";
 
@@ -166,7 +166,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task OpenSessionAsync_AgentPrefixMismatch_ThrowsArgumentException()
+    public async Task OpenSessionAsyncAgentPrefixMismatchThrowsArgumentException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var mismatchedAgent = "Cline";
@@ -183,7 +183,7 @@ public class SessionLogWorkflowTests
     #region Active Session State Tests
 
     [Fact]
-    public void CurrentSession_NoActiveSession_ReturnsNull()
+    public void CurrentSessionNoActiveSessionReturnsNull()
     {
         _workflow.CurrentSession().Returns((ISessionLogState?)null);
 
@@ -193,7 +193,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task CurrentSession_AfterOpenSession_ReturnsSessionState()
+    public async Task CurrentSessionAfterOpenSessionReturnsSessionState()
     {
         var agent = "Copilot";
         var sessionId = "Copilot-20260304T113901Z-test";
@@ -218,7 +218,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task CurrentSession_AfterBeginTurn_ReturnsActiveTurnInfo()
+    public async Task CurrentSessionAfterBeginTurnReturnsActiveTurnInfo()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -239,7 +239,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task CurrentSession_AfterCompleteTurn_ClearsActiveTurn()
+    public async Task CurrentSessionAfterCompleteTurnClearsActiveTurn()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -270,7 +270,7 @@ public class SessionLogWorkflowTests
     #region Turn Lifecycle Tests
 
     [Fact]
-    public async Task BeginTurnAsync_ValidRequestId_CreatesTurnInProgress()
+    public async Task BeginTurnAsyncValidRequestIdCreatesTurnInProgress()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -282,7 +282,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task BeginTurnAsync_InvalidRequestId_ThrowsArgumentException()
+    public async Task BeginTurnAsyncInvalidRequestIdThrowsArgumentException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
@@ -307,7 +307,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task BeginTurnAsync_NoActiveSession_ThrowsInvalidOperationException()
+    public async Task BeginTurnAsyncNoActiveSessionThrowsInvalidOperationException()
     {
         _workflow.CurrentSession().Returns((ISessionLogState?)null);
         _workflow.BeginTurnAsync("req-20260304T113901Z-task", "Title", "Query", cancellationToken: TestContext.Current.CancellationToken)
@@ -318,7 +318,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task BeginTurnAsync_DuplicateRequestId_ThrowsInvalidOperationException()
+    public async Task BeginTurnAsyncDuplicateRequestIdThrowsInvalidOperationException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-duplicate";
@@ -334,7 +334,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task UpdateTurnAsync_ActiveTurn_UpdatesFields()
+    public async Task UpdateTurnAsyncActiveTurnUpdatesFields()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -356,7 +356,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task UpdateTurnAsync_PartialUpdate_PreservesExistingValues()
+    public async Task UpdateTurnAsyncPartialUpdatePreservesExistingValues()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -375,7 +375,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task UpdateTurnAsync_NoActiveTurn_ThrowsInvalidOperationException()
+    public async Task UpdateTurnAsyncNoActiveTurnThrowsInvalidOperationException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
@@ -390,7 +390,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task UpdateTurnAsync_CompletedTurn_ThrowsInvalidOperationException()
+    public async Task UpdateTurnAsyncCompletedTurnThrowsInvalidOperationException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -407,7 +407,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task CompleteTurnAsync_ActiveTurn_MarksAsCompleted()
+    public async Task CompleteTurnAsyncActiveTurnMarksAsCompleted()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -422,7 +422,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task CompleteTurnAsync_NullOrEmptyResponse_ThrowsArgumentException()
+    public async Task CompleteTurnAsyncNullOrEmptyResponseThrowsArgumentException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -442,7 +442,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task CompleteTurnAsync_TurnImmutable_CannotModifyAfter()
+    public async Task CompleteTurnAsyncTurnImmutableCannotModifyAfter()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -468,7 +468,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task FailTurnAsync_ActiveTurn_MarksAsFailed()
+    public async Task FailTurnAsyncActiveTurnMarksAsFailed()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -485,7 +485,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task FailTurnAsync_NullOrEmptyErrorMessage_ThrowsArgumentException()
+    public async Task FailTurnAsyncNullOrEmptyErrorMessageThrowsArgumentException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -505,7 +505,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task FailTurnAsync_TurnImmutable_CannotModifyAfter()
+    public async Task FailTurnAsyncTurnImmutableCannotModifyAfter()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -530,7 +530,7 @@ public class SessionLogWorkflowTests
     #region Dialog and Action Append Tests
 
     [Fact]
-    public async Task AppendDialogAsync_ValidDialogItems_AppendsToTurn()
+    public async Task AppendDialogAsyncValidDialogItemsAppendsToTurn()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -551,7 +551,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task AppendDialogAsync_NullOrEmptyItems_ThrowsArgumentException()
+    public async Task AppendDialogAsyncNullOrEmptyItemsThrowsArgumentException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -571,7 +571,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task AppendActionsAsync_ValidActions_AppendsToTurn()
+    public async Task AppendActionsAsyncValidActionsAppendsToTurn()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -592,7 +592,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task AppendActionsAsync_NullOrEmptyActions_ThrowsArgumentException()
+    public async Task AppendActionsAsyncNullOrEmptyActionsThrowsArgumentException()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -616,7 +616,7 @@ public class SessionLogWorkflowTests
     #region Restart and Reconnect Behavior Tests
 
     [Fact]
-    public async Task RestartScenario_AfterRestart_NoActiveSession()
+    public async Task RestartScenarioAfterRestartNoActiveSession()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
@@ -631,7 +631,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task ReconnectScenario_CanQueryHistoryAfterRestart()
+    public async Task ReconnectScenarioCanQueryHistoryAfterRestart()
     {
         var sessionId = "Copilot-20260304T113901Z-old-session";
         await _workflow.OpenSessionAsync("Copilot", sessionId, "Old Session", "model", cancellationToken: TestContext.Current.CancellationToken);
@@ -656,7 +656,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task ReconnectScenario_CanOpenNewSessionAfterRestart()
+    public async Task ReconnectScenarioCanOpenNewSessionAfterRestart()
     {
         _workflow.CurrentSession().Returns((ISessionLogState?)null);
 
@@ -676,7 +676,7 @@ public class SessionLogWorkflowTests
     #region Query History Tests
 
     [Fact]
-    public async Task QueryHistoryAsync_NoFilter_ReturnsAllSessions()
+    public async Task QueryHistoryAsyncNoFilterReturnsAllSessions()
     {
         var mockSummaries = new List<ISessionLogSummary>
         {
@@ -694,7 +694,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task QueryHistoryAsync_FilterByAgent_ReturnsMatchingSessions()
+    public async Task QueryHistoryAsyncFilterByAgentReturnsMatchingSessions()
     {
         var mockSummaries = new List<ISessionLogSummary>
         {
@@ -712,7 +712,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task QueryHistoryAsync_Pagination_ReturnsCorrectSlice()
+    public async Task QueryHistoryAsyncPaginationReturnsCorrectSlice()
     {
         var page1 = new List<ISessionLogSummary>
         {
@@ -736,7 +736,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task QueryHistoryAsync_NegativeLimitOrOffset_ThrowsArgumentOutOfRangeException()
+    public async Task QueryHistoryAsyncNegativeLimitOrOffsetThrowsArgumentOutOfRangeException()
     {
         _workflow.QueryHistoryAsync(null, -1, 0, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentOutOfRangeException("limit"));
@@ -754,7 +754,7 @@ public class SessionLogWorkflowTests
     #region YAML Request/Response Shaping Tests
 
     [Fact]
-    public void YamlShaping_BootstrapRequest_MatchesExpectedStructure()
+    public void YamlShapingBootstrapRequestMatchesExpectedStructure()
     {
         var requestPayload = new
         {
@@ -770,7 +770,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public void YamlShaping_OpenSessionRequest_MatchesExpectedStructure()
+    public void YamlShapingOpenSessionRequestMatchesExpectedStructure()
     {
         var requestPayload = new
         {
@@ -794,7 +794,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public void YamlShaping_BeginTurnRequest_MatchesExpectedStructure()
+    public void YamlShapingBeginTurnRequestMatchesExpectedStructure()
     {
         var requestPayload = new
         {
@@ -816,7 +816,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public void YamlShaping_ErrorResponse_MatchesExpectedStructure()
+    public void YamlShapingErrorResponseMatchesExpectedStructure()
     {
         var errorPayload = new
         {
@@ -842,7 +842,7 @@ public class SessionLogWorkflowTests
     #region Structured Error Response Tests
 
     [Fact]
-    public async Task ErrorResponse_InvalidSessionId_ReturnsStructuredError()
+    public async Task ErrorResponseInvalidSessionIdReturnsStructuredError()
     {
         var invalidSessionId = "copilot-20260304T113901Z-test";
 
@@ -856,7 +856,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task ErrorResponse_SessionNotFound_ReturnsStructuredError()
+    public async Task ErrorResponseSessionNotFoundReturnsStructuredError()
     {
         _workflow.CurrentSession().Returns((ISessionLogState?)null);
         _workflow.BeginTurnAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), cancellationToken: TestContext.Current.CancellationToken)
@@ -869,7 +869,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public async Task ErrorResponse_TurnImmutable_ReturnsStructuredError()
+    public async Task ErrorResponseTurnImmutableReturnsStructuredError()
     {
         var sessionId = "Copilot-20260304T113901Z-test";
         var requestId = "req-20260304T113901Z-task-001";
@@ -888,7 +888,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public void ErrorCodes_AllCodesAreDefined()
+    public void ErrorCodesAllCodesAreDefined()
     {
         Assert.Equal("bootstrap_failed", SessionLogErrorCodes.BootstrapFailed);
         Assert.Equal("session_not_found", SessionLogErrorCodes.SessionNotFound);
@@ -909,7 +909,7 @@ public class SessionLogWorkflowTests
     #region Turn Lifecycle Guard Tests
 
     [Fact]
-    public void FakeSessionLogState_NoDuplicateTurns_EnforcesDuplicatePrevention()
+    public void FakeSessionLogStateNoDuplicateTurnsEnforcesDuplicatePrevention()
     {
         var state = new FakeSessionLogState();
 
@@ -924,7 +924,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public void FakeSessionLogState_ProperStatusTransitions_EnforcesStateMachine()
+    public void FakeSessionLogStateProperStatusTransitionsEnforcesStateMachine()
     {
         var state = new FakeSessionLogState();
 
@@ -946,7 +946,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public void FakeSessionLogState_CompletedTurnImmutable_ThrowsOnModify()
+    public void FakeSessionLogStateCompletedTurnImmutableThrowsOnModify()
     {
         var state = new FakeSessionLogState();
 
@@ -958,7 +958,7 @@ public class SessionLogWorkflowTests
     }
 
     [Fact]
-    public void FakeSessionLogState_FailedTurnImmutable_ThrowsOnModify()
+    public void FakeSessionLogStateFailedTurnImmutableThrowsOnModify()
     {
         var state = new FakeSessionLogState();
 
@@ -1038,7 +1038,7 @@ public class SessionLogWorkflowTests
         return summary;
     }
 
-    private IYamlEnvelope CreateEnvelope(string type, object payload)
+    private static IYamlEnvelope CreateEnvelope(string type, object payload)
     {
         var envelope = Substitute.For<IYamlEnvelope>();
         envelope.Type.Returns(type);

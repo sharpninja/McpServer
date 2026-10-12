@@ -11,14 +11,14 @@ public sealed class SyncStatusStoreMultiTenantTests
     private readonly SyncStatusStore _store = new();
 
     [Fact]
-    public void GetLast_WorkspaceId_ReturnsNull_ForUnknownWorkspace()
+    public void GetLastWorkspaceIdReturnsNullForUnknownWorkspace()
     {
         var result = _store.GetLast("C:\\unknown");
         Assert.Null(result);
     }
 
     [Fact]
-    public void SetLast_WorkspaceId_ThenGet_ReturnsSameResult()
+    public void SetLastWorkspaceIdThenGetReturnsSameResult()
     {
         var expected = new SyncRunResult
         {
@@ -37,7 +37,7 @@ public sealed class SyncStatusStoreMultiTenantTests
     }
 
     [Fact]
-    public void SetLast_WorkspaceA_DoesNotAffectWorkspaceB()
+    public void SetLastWorkspaceADoesNotAffectWorkspaceB()
     {
         var resultA = new SyncRunResult { RunId = "a1", Status = "Completed", StartedAt = DateTime.UtcNow };
         var resultB = new SyncRunResult { RunId = "b1", Status = "Failed", StartedAt = DateTime.UtcNow };
@@ -50,7 +50,7 @@ public sealed class SyncStatusStoreMultiTenantTests
     }
 
     [Fact]
-    public void SetLast_WorkspaceKeyed_DoesNotAffectGlobal()
+    public void SetLastWorkspaceKeyedDoesNotAffectGlobal()
     {
         var global = new SyncRunResult { RunId = "g1", Status = "Completed", StartedAt = DateTime.UtcNow };
         var ws = new SyncRunResult { RunId = "w1", Status = "Failed", StartedAt = DateTime.UtcNow };
@@ -63,7 +63,7 @@ public sealed class SyncStatusStoreMultiTenantTests
     }
 
     [Fact]
-    public void GetLast_WorkspaceId_CaseInsensitive()
+    public void GetLastWorkspaceIdCaseInsensitive()
     {
         var result = new SyncRunResult { RunId = "ci", Status = "Completed", StartedAt = DateTime.UtcNow };
         _store.SetLast("C:\\Workspace\\Test", result);
@@ -72,7 +72,7 @@ public sealed class SyncStatusStoreMultiTenantTests
     }
 
     [Fact]
-    public void SetLast_WorkspaceId_NullOrWhitespace_Throws()
+    public void SetLastWorkspaceIdNullOrWhitespaceThrows()
     {
         var result = new SyncRunResult { RunId = "x", Status = "Completed", StartedAt = DateTime.UtcNow };
 
@@ -81,7 +81,7 @@ public sealed class SyncStatusStoreMultiTenantTests
     }
 
     [Fact]
-    public void GetLast_WorkspaceId_NullOrWhitespace_Throws()
+    public void GetLastWorkspaceIdNullOrWhitespaceThrows()
     {
         Assert.Throws<ArgumentException>(() => _store.GetLast(""));
         Assert.Throws<ArgumentException>(() => _store.GetLast(" "));

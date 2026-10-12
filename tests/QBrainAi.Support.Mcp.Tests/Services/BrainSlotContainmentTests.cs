@@ -15,7 +15,7 @@ public sealed class BrainSlotContainmentTests
 {
     /// <summary>Direct context admission also rejects non-Curiosity slots.</summary>
     [Fact]
-    public async Task ContextAdmission_WhenRoleIsNotCuriosity_ThrowsDeferredFeatureDisabled()
+    public async Task ContextAdmissionWhenRoleIsNotCuriosityThrowsDeferredFeatureDisabled()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase("brain-slot-admission-" + Guid.NewGuid().ToString("N"))

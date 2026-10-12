@@ -25,7 +25,7 @@ public sealed class RepoIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_ValidFiles_ReturnsDocumentsAndChunks()
+    public async Task IngestAsyncValidFilesReturnsDocumentsAndChunks()
     {
         File.WriteAllText(Path.Combine(_tempDir, "readme.md"), "# Hello World\nThis is a test.");
         File.WriteAllText(Path.Combine(_tempDir, "code.cs"), "class Foo { }");
@@ -45,7 +45,7 @@ public sealed class RepoIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_SkipsBinObjDotfiles()
+    public async Task IngestAsyncSkipsBinObjDotfiles()
     {
         Directory.CreateDirectory(Path.Combine(_tempDir, "bin"));
         File.WriteAllText(Path.Combine(_tempDir, "bin", "app.dll"), "binary");
@@ -65,7 +65,7 @@ public sealed class RepoIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_EmptyDirectory_ReturnsEmpty()
+    public async Task IngestAsyncEmptyDirectoryReturnsEmpty()
     {
         var emptyDir = Path.Combine(_tempDir, "empty");
         Directory.CreateDirectory(emptyDir);
@@ -79,7 +79,7 @@ public sealed class RepoIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_ContentHash_DeterministicForSameContent()
+    public async Task IngestAsyncContentHashDeterministicForSameContent()
     {
         File.WriteAllText(Path.Combine(_tempDir, "file.txt"), "deterministic content");
 
@@ -95,7 +95,7 @@ public sealed class RepoIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_SkipsLargeFiles()
+    public async Task IngestAsyncSkipsLargeFiles()
     {
         var largeContent = new string('x', 2 * 1024 * 1024); // 2MB
         File.WriteAllText(Path.Combine(_tempDir, "large.txt"), largeContent);
@@ -111,7 +111,7 @@ public sealed class RepoIngestorTests : IDisposable
     }
 
     [Fact]
-    public async Task IngestAsync_DoesNotSkipPathsThatContainBinOrObjAsSubstring()
+    public async Task IngestAsyncDoesNotSkipPathsThatContainBinOrObjAsSubstring()
     {
         var folderWithSubstring = Path.Combine(_tempDir, "binary-assets");
         Directory.CreateDirectory(folderWithSubstring);

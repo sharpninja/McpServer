@@ -10,7 +10,7 @@ public sealed class MemoryMcpSchemaTests
 {
     /// <summary>AC-TR-MCP-MEMORY-API-002-06: Unknown required-breaking fields follow the documented additionalProperties policy.</summary>
     [Fact]
-    public void UnknownFields_Policy()
+    public void UnknownFieldsPolicy()
     {
         var root = MemoryS5Catalog.FindRepoRoot();
         var policyType = typeof(QBrainAi.Support.Mcp.Memory.Models.MemoryLimits).Assembly.GetTypes()

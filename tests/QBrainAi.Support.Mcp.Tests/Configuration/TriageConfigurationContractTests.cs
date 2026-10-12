@@ -10,7 +10,7 @@ public sealed class TriageConfigurationContractTests
     [InlineData("appsettings.Staging.yaml")]
     [InlineData("src", "QBrainAi.Support.Mcp", "appsettings.yaml")]
     [InlineData("src", "QBrainAi.Support.Mcp", "appsettings.Staging.yaml")]
-    public void AppSettings_PrimaryTriageAgentUsesGrokCli(params string[] segments)
+    public void AppSettingsPrimaryTriageAgentUsesGrokCli(params string[] segments)
     {
         var path = FindFileFromRepoRoot(segments);
         var primaryTriage = ExtractPrimaryTriageSection(File.ReadAllText(path));

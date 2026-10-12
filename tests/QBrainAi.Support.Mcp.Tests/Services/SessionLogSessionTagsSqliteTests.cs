@@ -28,7 +28,7 @@ public sealed class SessionLogSessionTagsSqliteTests
     /// new context GetAsync returns those session tags (not null).
     /// </summary>
     [Fact]
-    public async Task GetAsync_NewContext_ReturnsPersistedSessionTags()
+    public async Task GetAsyncNewContextReturnsPersistedSessionTags()
     {
         await using var connection = OpenConnection();
         var sessionId = "Cursor-20260820T071556Z-session-tags-sqlite";
@@ -73,7 +73,7 @@ public sealed class SessionLogSessionTagsSqliteTests
     /// TEST-MCP-TRIAGESTORE-001: QueryAsync on a fresh context also returns session tags.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_NewContext_ReturnsPersistedSessionTags()
+    public async Task QueryAsyncNewContextReturnsPersistedSessionTags()
     {
         await using var connection = OpenConnection();
         var sessionId = "Cursor-20260820T071600Z-session-tags-query";

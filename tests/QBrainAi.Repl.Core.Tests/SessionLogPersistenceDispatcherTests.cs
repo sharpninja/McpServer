@@ -13,7 +13,7 @@ public sealed class SessionLogPersistenceDispatcherTests
     /// A degraded persistence result is returned as structured terminal-notification data.
     /// </summary>
     [Fact]
-    public async Task DispatchAsync_PersistTurnDegraded_ReturnsFailsafeDetails()
+    public async Task DispatchAsyncPersistTurnDegradedReturnsFailsafeDetails()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var persistence = Substitute.For<ISessionLogPersistenceStrategy>();

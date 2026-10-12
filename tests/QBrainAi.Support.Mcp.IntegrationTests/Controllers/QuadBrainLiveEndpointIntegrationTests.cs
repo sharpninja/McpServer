@@ -28,7 +28,7 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
 
     /// <summary>A plain Arbiter decision from the real loop is returned as the assistant message.</summary>
     [Fact]
-    public async Task ChatCompletions_RealOrchestration_ReturnsArbiterContent()
+    public async Task ChatCompletionsRealOrchestrationReturnsArbiterContent()
     {
         var factory = new RecordingChatClientFactory("the live arbiter decision");
         using var app = BuildFactory(factory);
@@ -50,7 +50,7 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
 
     /// <summary>A tool_calls payload elected by the real Arbiter surfaces as an OpenAI tool call.</summary>
     [Fact]
-    public async Task ChatCompletions_RealOrchestration_ArbiterToolCall_ReturnedAsToolCall()
+    public async Task ChatCompletionsRealOrchestrationArbiterToolCallReturnedAsToolCall()
     {
         var factory = new RecordingChatClientFactory(
             "{\"tool_calls\":[{\"name\":\"write_file\",\"arguments\":{\"path\":\"a.cs\"}}]}");
@@ -68,7 +68,7 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
 
     /// <summary>With no slots seeded the real loop rejects (QuadNotReady); the endpoint returns no decision.</summary>
     [Fact]
-    public async Task ChatCompletions_RealOrchestration_QuadNotReady_ReturnsEmptyDecision()
+    public async Task ChatCompletionsRealOrchestrationQuadNotReadyReturnsEmptyDecision()
     {
         var factory = new RecordingChatClientFactory("unused");
         using var app = BuildFactory(factory);
@@ -85,7 +85,7 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
 
     /// <summary>TEST-MCP-QBLIVEINT-001: AoT completion survives a rejected session-log dialog transaction.</summary>
     [Fact]
-    public async Task ChatCompletions_RealOrchestration_AotLoggerTransactionRejected_ReturnsArbiterContent()
+    public async Task ChatCompletionsRealOrchestrationAotLoggerTransactionRejectedReturnsArbiterContent()
     {
         var chatFactory = new RecordingChatClientFactory("arbiter decision despite rejected logger transaction");
         var coordinator = new DialogRejectingTurnTransactionCoordinator();

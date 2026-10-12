@@ -16,7 +16,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>status builds `git status` in the workspace and reports success.</summary>
     [Fact]
-    public async Task Status_RunsGitStatus_InWorkspace()
+    public async Task StatusRunsGitStatusInWorkspace()
     {
         var runner = OkRunner("clean");
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
@@ -32,7 +32,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>An argument string is appended after the subcommand.</summary>
     [Fact]
-    public async Task Log_AppendsArguments()
+    public async Task LogAppendsArguments()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
@@ -44,7 +44,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>An unknown subcommand is rejected and git is never launched.</summary>
     [Fact]
-    public async Task UnknownSubcommand_Rejected_WithoutLaunchingGit()
+    public async Task UnknownSubcommandRejectedWithoutLaunchingGit()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
@@ -58,7 +58,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>push is refused when the opt-in is off and git is never launched.</summary>
     [Fact]
-    public async Task Push_Disabled_WhenAllowPushFalse()
+    public async Task PushDisabledWhenAllowPushFalse()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
@@ -72,7 +72,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>push to a non-origin remote is rejected even when push is enabled.</summary>
     [Fact]
-    public async Task Push_NonOriginRemote_Rejected()
+    public async Task PushNonOriginRemoteRejected()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
@@ -86,7 +86,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>push with no remote injects origin so it never relies on ambient defaults.</summary>
     [Fact]
-    public async Task Push_NoRemote_AppendsOrigin()
+    public async Task PushNoRemoteAppendsOrigin()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
@@ -99,7 +99,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>push to origin with a branch is allowed and passed through.</summary>
     [Fact]
-    public async Task Push_OriginBranch_Allowed()
+    public async Task PushOriginBranchAllowed()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
@@ -112,7 +112,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>GuardPush appends origin when only flags are present.</summary>
     [Fact]
-    public void GuardPush_FlagsOnly_AppendsOrigin()
+    public void GuardPushFlagsOnlyAppendsOrigin()
     {
         var (ok, args, error) = GitCommandTool.GuardPush("--set-upstream");
 
@@ -123,7 +123,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>push -u origin main is allowed (the short upstream flag precedes the origin remote).</summary>
     [Fact]
-    public async Task Push_UpstreamFlagOrigin_Allowed()
+    public async Task PushUpstreamFlagOriginAllowed()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
@@ -135,7 +135,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>push to a URL remote is rejected before git is launched.</summary>
     [Fact]
-    public async Task Push_UrlRemote_Rejected()
+    public async Task PushUrlRemoteRejected()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
@@ -149,7 +149,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>push to an scp-style remote (git@host:repo) is rejected.</summary>
     [Fact]
-    public async Task Push_ScpRemote_Rejected()
+    public async Task PushScpRemoteRejected()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
@@ -162,7 +162,7 @@ public sealed class GitCommandToolTests
 
     /// <summary>A mutating subcommand also runs in the workspace directory.</summary>
     [Fact]
-    public async Task Commit_RunsInWorkspaceDirectory()
+    public async Task CommitRunsInWorkspaceDirectory()
     {
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);

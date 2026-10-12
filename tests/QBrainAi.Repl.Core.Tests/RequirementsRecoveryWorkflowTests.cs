@@ -20,7 +20,7 @@ public sealed class RequirementsRecoveryWorkflowTests
 
     /// <summary>planRecovery posts mode dry-run and returns the planned body.</summary>
     [Fact]
-    public async Task PlanRecoveryAsync_PostsDryRun()
+    public async Task PlanRecoveryAsyncPostsDryRun()
     {
         var handler = new StatusHandler(HttpStatusCode.OK, """{"idempotencyKey":"recover-001","status":"planned","applied":false,"items":[]}""");
         using var http = new HttpClient(handler);
@@ -35,7 +35,7 @@ public sealed class RequirementsRecoveryWorkflowTests
 
     /// <summary>applyRecovery posts mode apply.</summary>
     [Fact]
-    public async Task ApplyRecoveryAsync_PostsApply()
+    public async Task ApplyRecoveryAsyncPostsApply()
     {
         var handler = new StatusHandler(HttpStatusCode.OK, """{"idempotencyKey":"recover-001","status":"applied","applied":true,"replay":false,"items":[]}""");
         using var http = new HttpClient(handler);
@@ -49,7 +49,7 @@ public sealed class RequirementsRecoveryWorkflowTests
 
     /// <summary>getRecovery uses the idempotency key route. 404, 409, and 503 stay typed.</summary>
     [Fact]
-    public async Task GetAndFailures_UseRecoveryContract()
+    public async Task GetAndFailuresUseRecoveryContract()
     {
         var ok = new StatusHandler(HttpStatusCode.OK, """{"idempotencyKey":"recover-001","status":"applied","applied":true,"items":[]}""");
         using var http = new HttpClient(ok);

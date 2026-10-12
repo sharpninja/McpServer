@@ -14,7 +14,7 @@ public sealed class KeyedAsyncLockTests
 {
     /// <summary>A second acquire of the same key blocks until the first is released.</summary>
     [Fact]
-    public async Task AcquireAsync_SameKey_BlocksUntilReleased()
+    public async Task AcquireAsyncSameKeyBlocksUntilReleased()
     {
         var ct = TestContext.Current.CancellationToken;
         var sut = new KeyedAsyncLock();
@@ -34,7 +34,7 @@ public sealed class KeyedAsyncLockTests
 
     /// <summary>A second acquire of a different key completes while the first key is still held.</summary>
     [Fact]
-    public async Task AcquireAsync_DifferentKeys_DoNotBlockEachOther()
+    public async Task AcquireAsyncDifferentKeysDoNotBlockEachOther()
     {
         var ct = TestContext.Current.CancellationToken;
         var sut = new KeyedAsyncLock();

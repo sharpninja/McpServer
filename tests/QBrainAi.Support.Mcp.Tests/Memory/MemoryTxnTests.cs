@@ -14,7 +14,7 @@ public sealed class MemoryTxnTests
 {
     /// <summary>FR-MCP-173: memory.add bypasses the coordinator and calls the inner service.</summary>
     [Fact]
-    public async Task MissingTurn_FailsClosed()
+    public async Task MissingTurnFailsClosed()
     {
         var inner = Substitute.For<IMemoryService>();
         inner.AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
@@ -44,7 +44,7 @@ public sealed class MemoryTxnTests
 
     /// <summary>FR-MCP-173: remember without a CQRS dispatcher fails before a memory write.</summary>
     [Fact]
-    public async Task NewMutations_HonorGating()
+    public async Task NewMutationsHonorGating()
     {
         var names = typeof(ITransactionGatedMemoryService).GetMethods()
             .Select(method => method.Name)

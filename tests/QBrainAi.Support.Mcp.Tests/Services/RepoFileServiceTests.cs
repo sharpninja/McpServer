@@ -39,7 +39,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ReadAsync_AllowedPath_ReturnsContent()
+    public async Task ReadAsyncAllowedPathReturnsContent()
     {
         var result = await _sut.ReadAsync("readme.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -49,7 +49,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ReadAsync_PathTraversal_ReturnsNull()
+    public async Task ReadAsyncPathTraversalReturnsNull()
     {
         var result = await _sut.ReadAsync("../../etc/passwd", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -61,7 +61,7 @@ public sealed class RepoFileServiceTests : IDisposable
     /// before any repository read, list, write, edit, or transactional capture.
     /// </summary>
     [Fact]
-    public async Task RootedExternalPath_AcrossRepoOperations_IsRejected()
+    public async Task RootedExternalPathAcrossRepoOperationsIsRejected()
     {
         var outsideDir = Path.Combine(Path.GetTempPath(), $"repo_external_{Guid.NewGuid():N}");
         Directory.CreateDirectory(outsideDir);
@@ -89,7 +89,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ReadAsync_DisallowedPath_ReturnsNull()
+    public async Task ReadAsyncDisallowedPathReturnsNull()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions
         {
@@ -104,7 +104,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ListAsync_ValidDirectory_ReturnsEntries()
+    public async Task ListAsyncValidDirectoryReturnsEntries()
     {
         var result = await _sut.ListAsync(".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -114,7 +114,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ListAsync_NonexistentPath_ReturnsEmpty()
+    public async Task ListAsyncNonexistentPathReturnsEmpty()
     {
         var result = await _sut.ListAsync("nonexistent_dir", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -122,7 +122,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task WriteAsync_AllowedPath_WritesAndAudits()
+    public async Task WriteAsyncAllowedPathWritesAndAudits()
     {
         var result = await _sut.WriteAsync("test_output.txt", "test content", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -138,7 +138,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task WriteAsync_DisallowedPath_ReturnsFailure()
+    public async Task WriteAsyncDisallowedPathReturnsFailure()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions
         {
@@ -153,7 +153,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task CaptureForWriteAsync_ExistingPath_ReturnsSnapshot()
+    public async Task CaptureForWriteAsyncExistingPathReturnsSnapshot()
     {
         var result = await _sut.CaptureForWriteAsync("readme.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -165,7 +165,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task RestoreWriteAsync_ExistingSnapshot_RestoresPriorContent()
+    public async Task RestoreWriteAsyncExistingSnapshotRestoresPriorContent()
     {
         var snapshot = await _sut.CaptureForWriteAsync("readme.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(snapshot);
@@ -178,7 +178,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task RestoreWriteAsync_NewFileSnapshot_DeletesCreatedFile()
+    public async Task RestoreWriteAsyncNewFileSnapshotDeletesCreatedFile()
     {
         var snapshot = await _sut.CaptureForWriteAsync("created.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(snapshot);
@@ -191,7 +191,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task RestoreWriteAsync_WhenFileChangedAfterWrite_RefusesOverwrite()
+    public async Task RestoreWriteAsyncWhenFileChangedAfterWriteRefusesOverwrite()
     {
         var snapshot = await _sut.CaptureForWriteAsync("readme.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(snapshot);
@@ -209,7 +209,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: A unique oldString is replaced and the file content updated.</summary>
     [Fact]
-    public async Task EditAsync_UniqueOccurrence_Replaces()
+    public async Task EditAsyncUniqueOccurrenceReplaces()
     {
         var result = await _sut.EditAsync("readme.md", "Hello", "World", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -220,7 +220,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: A missing oldString fails without changing the file.</summary>
     [Fact]
-    public async Task EditAsync_MissingOldString_Fails()
+    public async Task EditAsyncMissingOldStringFails()
     {
         var result = await _sut.EditAsync("readme.md", "absent", "x", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -231,7 +231,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: An ambiguous match fails unless replaceAll is set.</summary>
     [Fact]
-    public async Task EditAsync_Ambiguous_FailsWithoutReplaceAll()
+    public async Task EditAsyncAmbiguousFailsWithoutReplaceAll()
     {
         await _sut.WriteAsync("multi.txt", "a a a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -244,7 +244,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: replaceAll replaces every occurrence and reports the count.</summary>
     [Fact]
-    public async Task EditAsync_ReplaceAll_ReplacesEvery()
+    public async Task EditAsyncReplaceAllReplacesEvery()
     {
         await _sut.WriteAsync("multi.txt", "a a a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -257,7 +257,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: An expectedOccurrences mismatch fails.</summary>
     [Fact]
-    public async Task EditAsync_ExpectedOccurrencesMismatch_Fails()
+    public async Task EditAsyncExpectedOccurrencesMismatchFails()
     {
         await _sut.WriteAsync("multi.txt", "a a a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -269,7 +269,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: An empty oldString is rejected.</summary>
     [Fact]
-    public async Task EditAsync_EmptyOldString_Fails()
+    public async Task EditAsyncEmptyOldStringFails()
     {
         var result = await _sut.EditAsync("readme.md", string.Empty, "x", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -279,7 +279,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: Identical oldString and newString are rejected.</summary>
     [Fact]
-    public async Task EditAsync_SameOldAndNew_Fails()
+    public async Task EditAsyncSameOldAndNewFails()
     {
         var result = await _sut.EditAsync("readme.md", "Hello", "Hello", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -289,7 +289,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: Editing a nonexistent file fails.</summary>
     [Fact]
-    public async Task EditAsync_NonexistentFile_Fails()
+    public async Task EditAsyncNonexistentFileFails()
     {
         var result = await _sut.EditAsync("does-not-exist.txt", "a", "b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -299,7 +299,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: A path-traversal edit is rejected.</summary>
     [Fact]
-    public async Task EditAsync_PathTraversal_Rejected()
+    public async Task EditAsyncPathTraversalRejected()
     {
         var result = await _sut.EditAsync("../../etc/passwd", "a", "b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -309,7 +309,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: A disallowed path is rejected under an allowlist.</summary>
     [Fact]
-    public async Task EditAsync_DisallowedPath_Rejected()
+    public async Task EditAsyncDisallowedPathRejected()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions
         {
@@ -325,7 +325,7 @@ public sealed class RepoFileServiceTests : IDisposable
 
     /// <summary>FR-MCP-QBTOOLS-006: A successful edit records an audit entry and publishes an Updated event.</summary>
     [Fact]
-    public async Task EditAsync_Success_AuditsAndPublishesUpdated()
+    public async Task EditAsyncSuccessAuditsAndPublishesUpdated()
     {
         var result = await _sut.EditAsync("readme.md", "Hello", "World", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -340,7 +340,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ReadAsync_GlobAllowlist_RequiresActualPatternMatch()
+    public async Task ReadAsyncGlobAllowlistRequiresActualPatternMatch()
     {
         var allowedRoot = Path.Combine(_tempDir, "src", "QBrainAi.Cqrs");
         Directory.CreateDirectory(allowedRoot);
@@ -365,7 +365,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ReadAsync_GlobAllowlist_DeniesExtensionMismatchWithinAllowedTree()
+    public async Task ReadAsyncGlobAllowlistDeniesExtensionMismatchWithinAllowedTree()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions
         {
@@ -382,7 +382,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ListAsync_GlobAllowlist_RootIncludesRelevantAncestorDirectoriesOnly()
+    public async Task ListAsyncGlobAllowlistRootIncludesRelevantAncestorDirectoriesOnly()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions
         {
@@ -402,7 +402,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ReadAsync_PathThroughSymlinkOutsideRepo_ReturnsNull()
+    public async Task ReadAsyncPathThroughSymlinkOutsideRepoReturnsNull()
     {
         var outsideDir = Path.Combine(Path.GetTempPath(), $"repo_escape_{Guid.NewGuid():N}");
         Directory.CreateDirectory(outsideDir);

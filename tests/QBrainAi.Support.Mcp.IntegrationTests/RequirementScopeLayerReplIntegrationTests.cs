@@ -26,7 +26,7 @@ public sealed class RequirementScopeLayerReplIntegrationTests
     /// and after the new layer through a real marker-backed REPL process.
     /// </summary>
     [Fact]
-    public async Task RequirementScopeLayer_ReplWorkflow_ExercisesCurrentEffectiveRequirementsBeforeAndAfterLayer()
+    public async Task RequirementScopeLayerReplWorkflowExercisesCurrentEffectiveRequirementsBeforeAndAfterLayer()
     {
         await using var scratch = await ScratchQBrainAi.StartAsync().ConfigureAwait(true);
         await using var repl = await ReplProcess.StartAsync(
@@ -475,7 +475,7 @@ public sealed class RequirementScopeLayerReplIntegrationTests
                 foreach (var rawLine in File.ReadLines(MarkerPath))
                 {
                     var line = rawLine.Trim();
-                    if (line.Length == 0 || line.StartsWith("#", StringComparison.Ordinal))
+                    if (line.Length == 0 || line.StartsWith('#'))
                     {
                         continue;
                     }

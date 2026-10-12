@@ -16,7 +16,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
     /// direct execution strategy.
     /// </summary>
     [Fact]
-    public async Task RunAsync_WithConfiguredAgent_PassesDirectAgentOptionsToStrategy()
+    public async Task RunAsyncWithConfiguredAgentPassesDirectAgentOptionsToStrategy()
     {
         var maxRunTime = TimeSpan.FromSeconds(42);
         var strategy = new CapturingAgentExecutionStrategy();
@@ -73,7 +73,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
     /// callback through to the selected direct execution strategy.
     /// </summary>
     [Fact]
-    public async Task RunAsync_WithOutputCallback_PassesCallbackToStrategyOptions()
+    public async Task RunAsyncWithOutputCallbackPassesCallbackToStrategyOptions()
     {
         var streamed = new List<string>();
         var strategy = new CapturingAgentExecutionStrategy();
@@ -119,7 +119,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
     /// strategy as <c>auto</c> rather than reintroducing a Codex-specific fallback.
     /// </summary>
     [Fact]
-    public async Task RunAsync_WhenAgentModelBlank_UsesAutoModel()
+    public async Task RunAsyncWhenAgentModelBlankUsesAutoModel()
     {
         var strategy = new CapturingAgentExecutionStrategy();
         var resolver = new CapturingAgentExecutionStrategyResolver(strategy);
@@ -157,7 +157,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
     /// output but return a concise inspectable error summary.
     /// </summary>
     [Fact]
-    public async Task RunAsync_WhenAgentTimesOut_ReturnsConciseErrorAndPreservesCapturedStderr()
+    public async Task RunAsyncWhenAgentTimesOutReturnsConciseErrorAndPreservesCapturedStderr()
     {
         var largeStderr = string.Concat(
             "normal Codex trace",
@@ -209,7 +209,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
     /// to resolve or invoke an execution strategy.
     /// </summary>
     [Fact]
-    public async Task RunAsync_WhenAgentPathMissing_ReturnsConfigurationFailure()
+    public async Task RunAsyncWhenAgentPathMissingReturnsConfigurationFailure()
     {
         var resolver = new CapturingAgentExecutionStrategyResolver(new CapturingAgentExecutionStrategy());
         var runner = new ConfiguredTriageResearchRunner(
@@ -241,7 +241,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
     /// through the dedicated one-shot Grok CLI runner, then fall back to Claude.
     /// </summary>
     [Fact]
-    public void TriageOptions_DefaultsToAgentHelpGrokOneShotStrategy()
+    public void TriageOptionsDefaultsToAgentHelpGrokOneShotStrategy()
     {
         var options = new TriageOptions();
 
@@ -263,7 +263,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
     /// Grok strategy selected by Agent Help while still using a single initial-response run.
     /// </summary>
     [Fact]
-    public async Task RunAsync_WithDefaultOptions_UsesAgentHelpGrokStrategyAsOneShot()
+    public async Task RunAsyncWithDefaultOptionsUsesAgentHelpGrokStrategyAsOneShot()
     {
         var strategy = new CapturingAgentExecutionStrategy();
         var resolver = new CapturingAgentExecutionStrategyResolver(strategy);

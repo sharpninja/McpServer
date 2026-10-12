@@ -114,7 +114,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// TEST-MCP-TRIAGETODO-001: durable EXEC-TODO rehydrates when execution-state is missing.
     /// </summary>
     [Fact]
-    public async Task SetTestPlanAsync_DurableExecTodoMissingExecutionState_Rehydrates()
+    public async Task SetTestPlanAsyncDurableExecTodoMissingExecutionStateRehydrates()
     {
         _todoService.GetByIdAsync("EXEC-TODO-042", Arg.Any<CancellationToken>())
             .Returns(new TodoFlatItem
@@ -149,7 +149,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// EXEC-TODO-001 and allocates the next id.
     /// </summary>
     [Fact]
-    public async Task GenerateNextTodoIdAsync_SkipsSoftDeletedDurableId()
+    public async Task GenerateNextTodoIdAsyncSkipsSoftDeletedDurableId()
     {
         _db.TodoItems.Add(new TodoItemEntity
         {
@@ -198,7 +198,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// TEST-MCP-TRIAGETODO-002: invalid dependsOn fails before any durable insert.
     /// </summary>
     [Fact]
-    public async Task CreateTodosFromPlanAsync_InvalidDependsOn_FailsBeforeInsert()
+    public async Task CreateTodosFromPlanAsyncInvalidDependsOnFailsBeforeInsert()
     {
         var phase = await _sut.CreateIterationPhaseAsync(
             _workspacePath,
@@ -236,7 +236,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// with the shared TODO naming contract enforced by the legacy MCP TODO store.
     /// </summary>
     [Fact]
-    public async Task CreateTodosFromPlanAsync_GeneratesCanonicalTodoIds()
+    public async Task CreateTodosFromPlanAsyncGeneratesCanonicalTodoIds()
     {
         var phase = await _sut.CreateIterationPhaseAsync(
             _workspacePath,
@@ -278,7 +278,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// legacy create fails before the execution-state file can be saved.
     /// </summary>
     [Fact]
-    public async Task CreateTodosFromPlanAsync_WhenLaterLegacyCreateFails_DeletesAlreadyCreatedTodo()
+    public async Task CreateTodosFromPlanAsyncWhenLaterLegacyCreateFailsDeletesAlreadyCreatedTodo()
     {
         var phase = await _sut.CreateIterationPhaseAsync(
             _workspacePath,
@@ -350,7 +350,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// because the authoritative TODO row may already exist even though the mutation result failed.
     /// </summary>
     [Fact]
-    public async Task CreateTodosFromPlanAsync_WhenLegacyCreateProjectionFailsAfterDatabaseCommit_DeletesReturnedCreatedTodo()
+    public async Task CreateTodosFromPlanAsyncWhenLegacyCreateProjectionFailsAfterDatabaseCommitDeletesReturnedCreatedTodo()
     {
         var phase = await _sut.CreateIterationPhaseAsync(
             _workspacePath,
@@ -423,7 +423,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// when unit tests are defined, preserving the Byrd requirement that implementation begins only after tests exist.
     /// </summary>
     [Fact]
-    public async Task SetTestPlanAsync_WhenUnitTestsDefined_MarksTodoTestReady()
+    public async Task SetTestPlanAsyncWhenUnitTestsDefinedMarksTodoTestReady()
     {
         var todoId = await CreateExecutionTodoAsync().ConfigureAwait(true);
 
@@ -446,7 +446,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// until unit tests are defined, enforcing the Byrd TDD-first progression rule.
     /// </summary>
     [Fact]
-    public async Task UpdateStatusAsync_WhenTestsNotDefined_ThrowsForImplementing()
+    public async Task UpdateStatusAsyncWhenTestsNotDefinedThrowsForImplementing()
     {
         var todoId = await CreateExecutionTodoAsync().ConfigureAwait(true);
 
@@ -464,7 +464,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// requirement snippets, recent turn summaries, and linked modified files without depending on broad session history.
     /// </summary>
     [Fact]
-    public async Task GetExecutionContextAsync_ReturnsRequirementAndTurnEvidence()
+    public async Task GetExecutionContextAsyncReturnsRequirementAndTurnEvidence()
     {
         var todoId = await CreateExecutionTodoAsync(
             requirementIds: ["FR-BYRD-001"],
@@ -497,7 +497,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// checkpoint baseline, allowing the agent to resume from a compact change set instead of rereading history.
     /// </summary>
     [Fact]
-    public async Task GetDeltaContextAsync_WhenCheckpointProvided_ReturnsOnlyNewChanges()
+    public async Task GetDeltaContextAsyncWhenCheckpointProvidedReturnsOnlyNewChanges()
     {
         var todoId = await CreateExecutionTodoAsync().ConfigureAwait(true);
 
@@ -546,7 +546,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// acceptance criteria satisfied from the successful validation result.
     /// </summary>
     [Fact]
-    public async Task UpdateStatusAsync_WhenValidationPasses_AllowsCompletion()
+    public async Task UpdateStatusAsyncWhenValidationPassesAllowsCompletion()
     {
         var todoId = await CreateExecutionTodoAsync().ConfigureAwait(true);
         await _sut.SetTestPlanAsync(
@@ -611,7 +611,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     /// and returns a relative artifact path without exposing arbitrary shell passthrough.
     /// </summary>
     [Fact]
-    public async Task AdbStepAsync_WhenScreenshotRequested_ReturnsStructuredArtifact()
+    public async Task AdbStepAsyncWhenScreenshotRequestedReturnsStructuredArtifact()
     {
         _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
             .Returns(call =>

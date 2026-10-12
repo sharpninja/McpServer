@@ -18,7 +18,7 @@ public sealed class RequirementsWorkflowMetadataTests
 
     /// <summary>TEST-MCP-TRIAGEREQ-001: list-shaped legacy TR ids are get-able.</summary>
     [Fact]
-    public async Task GetTrAsync_LegacyId_DoesNotRejectCanonicalFormat()
+    public async Task GetTrAsyncLegacyIdDoesNotRejectCanonicalFormat()
     {
         var handler = new CapturingHttpHandler("""{"id":"TR-066","title":"Legacy","body":"Body"}""");
         using var http = new HttpClient(handler);
@@ -32,7 +32,7 @@ public sealed class RequirementsWorkflowMetadataTests
 
     /// <summary>TEST-MCP-TRIAGEREQ-001: update of a listed legacy TR id is accepted.</summary>
     [Fact]
-    public async Task UpdateTrAsync_LegacyId_DoesNotRejectCanonicalFormat()
+    public async Task UpdateTrAsyncLegacyIdDoesNotRejectCanonicalFormat()
     {
         var handler = new CapturingHttpHandler("""{"id":"TR-066","title":"Updated","body":"Body"}""");
         using var http = new HttpClient(handler);
@@ -50,7 +50,7 @@ public sealed class RequirementsWorkflowMetadataTests
 
     /// <summary>TEST-MCP-TRIAGEREQ-001: delete of a listed legacy TR id is accepted.</summary>
     [Fact]
-    public async Task DeleteTrAsync_LegacyId_DoesNotRejectCanonicalFormat()
+    public async Task DeleteTrAsyncLegacyIdDoesNotRejectCanonicalFormat()
     {
         var handler = new CapturingHttpHandler("""{"ok":true}""");
         using var http = new HttpClient(handler);
@@ -63,7 +63,7 @@ public sealed class RequirementsWorkflowMetadataTests
 
     /// <summary>TEST-MCP-TRIAGEREQ-001: create still rejects non-canonical TR ids.</summary>
     [Fact]
-    public async Task CreateTrAsync_LegacyId_StillRejected()
+    public async Task CreateTrAsyncLegacyIdStillRejected()
     {
         var handler = new CapturingHttpHandler("""{"id":"TR-066"}""");
         using var http = new HttpClient(handler);
@@ -78,7 +78,7 @@ public sealed class RequirementsWorkflowMetadataTests
     }
 
     [Fact]
-    public async Task UpdateFrAsync_SendsAndReturnsPriorityStatusAndNotes()
+    public async Task UpdateFrAsyncSendsAndReturnsPriorityStatusAndNotes()
     {
         var handler = new CapturingHttpHandler("""{"id":"FR-MCP-901","title":"FR","body":"Body","priority":"high","status":"in_progress","notes":"metadata"}""");
         using var http = new HttpClient(handler);
@@ -102,7 +102,7 @@ public sealed class RequirementsWorkflowMetadataTests
     }
 
     [Fact]
-    public async Task UpdateTrAndTestAsync_SendAndReturnPriorityStatusAndNotes()
+    public async Task UpdateTrAndTestAsyncSendAndReturnPriorityStatusAndNotes()
     {
         var trHandler = new CapturingHttpHandler("""{"id":"TR-MCP-REQ-901","title":"TR","body":"Body","priority":"high","status":"completed","notes":"tr metadata"}""");
         using var trHttp = new HttpClient(trHandler);
@@ -146,7 +146,7 @@ public sealed class RequirementsWorkflowMetadataTests
     }
 
     [Fact]
-    public async Task HierarchicalRequirementIds_AreAcceptedByWorkflowValidators()
+    public async Task HierarchicalRequirementIdsAreAcceptedByWorkflowValidators()
     {
         var frHandler = new CapturingHttpHandler("""{"id":"FR-MCP-MEMORY-001","title":"FR","body":"Body","priority":"high","status":"completed"}""");
         using var frHttp = new HttpClient(frHandler);
@@ -195,7 +195,7 @@ public sealed class RequirementsWorkflowMetadataTests
     }
 
     [Fact]
-    public async Task CreateMappingAsync_AllowsLegacyStoredIdsThroughMappingWorkflow()
+    public async Task CreateMappingAsyncAllowsLegacyStoredIdsThroughMappingWorkflow()
     {
         using var http = new HttpClient(new LegacyMappingHttpHandler());
         var workflow = new RequirementsWorkflow(new RequirementsClient(http, Options));

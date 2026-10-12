@@ -20,7 +20,7 @@ public sealed class RequirementsControllerGenerateTests
 {
     /// <summary>Invalid wiki configuration returns a structured 400 instead of an opaque 500.</summary>
     [Fact]
-    public async Task GenerateAsync_WikiConfigFailure_ReturnsStructuredBadRequest()
+    public async Task GenerateAsyncWikiConfigFailureReturnsStructuredBadRequest()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
         requirements.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
@@ -37,7 +37,7 @@ public sealed class RequirementsControllerGenerateTests
 
     /// <summary>Transaction-gated export conflicts return a structured 409.</summary>
     [Fact]
-    public async Task GenerateAsync_WikiConflictFailure_ReturnsStructuredConflict()
+    public async Task GenerateAsyncWikiConflictFailureReturnsStructuredConflict()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
         requirements.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
@@ -54,7 +54,7 @@ public sealed class RequirementsControllerGenerateTests
 
     /// <summary>ZIP assembly failures identify the ZIP stage instead of escaping as opaque 500s.</summary>
     [Fact]
-    public async Task GenerateAsync_WikiZipAssemblyFailure_ReturnsStructuredConflict()
+    public async Task GenerateAsyncWikiZipAssemblyFailureReturnsStructuredConflict()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), $"mcp-wiki-generate-{Guid.NewGuid():N}");
         Directory.CreateDirectory(tempRoot);
@@ -102,7 +102,7 @@ public sealed class RequirementsControllerGenerateTests
     /// exceptionType, never an opaque internal_server_error from the global middleware.
     /// </summary>
     [Fact]
-    public async Task GenerateAsync_WikiUnlistedException_ReturnsStructuredErrorNamingExceptionType()
+    public async Task GenerateAsyncWikiUnlistedExceptionReturnsStructuredErrorNamingExceptionType()
     {
         var requirements = Substitute.For<IRequirementsDocumentService>();
         requirements.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())

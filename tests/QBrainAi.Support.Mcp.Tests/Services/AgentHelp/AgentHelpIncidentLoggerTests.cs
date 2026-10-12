@@ -12,7 +12,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services.AgentHelp;
 public sealed class AgentHelpIncidentLoggerTests
 {
     [Fact]
-    public async Task WriteAsync_PersistsIncidentJsonFile()
+    public async Task WriteAsyncPersistsIncidentJsonFile()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var dataRoot = Path.Combine(workspaceRoot, ".mcpServer");
@@ -41,7 +41,7 @@ public sealed class AgentHelpIncidentLoggerTests
     }
 
     [Fact]
-    public async Task ReadBySessionAsync_ReturnsIncidentsForSession()
+    public async Task ReadBySessionAsyncReturnsIncidentsForSession()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         var dataRoot = Path.Combine(workspaceRoot, ".mcpServer");

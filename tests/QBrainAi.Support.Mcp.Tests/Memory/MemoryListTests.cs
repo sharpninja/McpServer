@@ -15,7 +15,7 @@ public sealed class MemoryListTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-47: memory_list with invalid scope query returns 400.</summary>
     [Fact]
-    public async Task InvalidScopeQuery_Returns400()
+    public async Task InvalidScopeQueryReturns400()
     {
         var controller = MemoryS1Harness.CreateController(
             NSubstitute.Substitute.For<IMemoryService>());

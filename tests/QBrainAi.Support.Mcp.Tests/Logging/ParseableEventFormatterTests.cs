@@ -12,7 +12,7 @@ public sealed class ParseableEventFormatterTests
 
     /// <summary>TR-PLANNED-CORE-013, TR-MCP-LOG-003, TEST-MCP-098: Verifies a log event with 300 scalar properties plus reserved-name collisions is capped at 250 total emitted fields so Parseable receives a compliant payload and reserved metadata fields keep their canonical values.</summary>
     [Fact]
-    public void ToParseableObject_WhenPropertiesExceedMaximumFieldCount_CapsOutputAndPreservesReservedFields()
+    public void ToParseableObjectWhenPropertiesExceedMaximumFieldCountCapsOutputAndPreservesReservedFields()
     {
         var exception = new InvalidOperationException("boom");
         var logEvent = CreateLogEvent(propertyCount: 300, includeReservedNameCollisions: true, exception: exception);
@@ -31,7 +31,7 @@ public sealed class ParseableEventFormatterTests
 
     /// <summary>TR-PLANNED-CORE-013, TR-MCP-LOG-003, TEST-MCP-098: Verifies formatter JSON output stays parseable and retains all available fields when the synthetic event uses only a small number of non-reserved properties, proving the cap does not truncate normal events.</summary>
     [Fact]
-    public void Format_WhenEventIsBelowFieldLimit_WritesAllNonReservedFieldsAsJson()
+    public void FormatWhenEventIsBelowFieldLimitWritesAllNonReservedFieldsAsJson()
     {
         var formatter = new ParseableEventFormatter();
         var logEvent = CreateLogEvent(propertyCount: 2, includeReservedNameCollisions: true, exception: null);

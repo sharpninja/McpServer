@@ -25,7 +25,7 @@ public sealed class SessionLogSchemaGuardTests : IDisposable
 
     /// <summary>A SessionLogs table without the four agent-header columns is pending-migration.</summary>
     [Fact]
-    public void EnsureAgentSessionHeaderColumns_MissingColumns_ThrowsPendingMigration()
+    public void EnsureAgentSessionHeaderColumnsMissingColumnsThrowsPendingMigration()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -55,7 +55,7 @@ public sealed class SessionLogSchemaGuardTests : IDisposable
 
     /// <summary>A ready :memory: database must not mark a different :memory: database migrated.</summary>
     [Fact]
-    public void EnsureAgentSessionHeaderColumns_ReadyMemoryDatabase_DoesNotSkipMissingDatabase()
+    public void EnsureAgentSessionHeaderColumnsReadyMemoryDatabaseDoesNotSkipMissingDatabase()
     {
         using var readyConnection = new SqliteConnection("Data Source=:memory:");
         readyConnection.Open();
@@ -94,7 +94,7 @@ public sealed class SessionLogSchemaGuardTests : IDisposable
 
     /// <summary>QueryAsync on a missing-column store fails closed without SQL Invalid column name.</summary>
     [Fact]
-    public async Task QueryAsync_MissingAgentSessionColumns_FailsClosedWithNamedError()
+    public async Task QueryAsyncMissingAgentSessionColumnsFailsClosedWithNamedError()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -129,7 +129,7 @@ public sealed class SessionLogSchemaGuardTests : IDisposable
 
     /// <summary>After the four columns exist, probe and query succeed.</summary>
     [Fact]
-    public async Task QueryAsync_AfterColumnsPresent_Succeeds()
+    public async Task QueryAsyncAfterColumnsPresentSucceeds()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -163,7 +163,7 @@ public sealed class SessionLogSchemaGuardTests : IDisposable
 
     /// <summary>The pending-migration exception classifies as persistence_error with reason.</summary>
     [Fact]
-    public void Classify_PendingMigration_IsPersistenceError()
+    public void ClassifyPendingMigrationIsPersistenceError()
     {
         var classified = McpErrorClassifier.Classify(new SessionLogSchemaPendingMigrationException());
         Assert.Equal(McpErrorClassifier.PersistenceError, classified.Code);
@@ -176,7 +176,7 @@ public sealed class SessionLogSchemaGuardTests : IDisposable
     /// not handwritten 20260722214500_AddAgentSessionHeaderFields.
     /// </summary>
     [Fact]
-    public void PendingMigrationMessage_CitesProviderMigrations_NotHandwrittenId()
+    public void PendingMigrationMessageCitesProviderMigrationsNotHandwrittenId()
     {
         Assert.Contains("pending-migration", SessionLogSchemaGuard.PendingMigrationMessage, StringComparison.Ordinal);
         Assert.Contains("20260818205751", SessionLogSchemaGuard.PendingMigrationMessage, StringComparison.Ordinal);

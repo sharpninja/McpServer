@@ -10,7 +10,7 @@ namespace QBrainAi.Client.Tests;
 public sealed class WorkspaceHeaderTests
 {
     [Fact]
-    public async System.Threading.Tasks.Task Client_SendsXWorkspacePath_WhenSet()
+    public async System.Threading.Tasks.Task ClientSendsXWorkspacePathWhenSet()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "{\"items\":[],\"totalCount\":0}");
         using var http = new HttpClient(handler);
@@ -32,7 +32,7 @@ public sealed class WorkspaceHeaderTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task Client_OmitsXWorkspacePath_WhenNull()
+    public async System.Threading.Tasks.Task ClientOmitsXWorkspacePathWhenNull()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "{\"items\":[],\"totalCount\":0}");
         using var http = new HttpClient(handler);
@@ -51,7 +51,7 @@ public sealed class WorkspaceHeaderTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task Client_SendsBothApiKeyAndWorkspacePath()
+    public async System.Threading.Tasks.Task ClientSendsBothApiKeyAndWorkspacePath()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "{\"items\":[],\"totalCount\":0}");
         using var http = new HttpClient(handler);
@@ -71,7 +71,7 @@ public sealed class WorkspaceHeaderTests
     }
 
     [Fact]
-    public void WorkspacePath_PropagatedToAllSubClients()
+    public void WorkspacePathPropagatedToAllSubClients()
     {
         using var http = new HttpClient();
         var options = new QBrainAiClientOptions
@@ -96,7 +96,7 @@ public sealed class WorkspaceHeaderTests
     }
 
     [Fact]
-    public void Options_WorkspacePath_DefaultsToNull()
+    public void OptionsWorkspacePathDefaultsToNull()
     {
         var options = new QBrainAiClientOptions();
         Assert.Null(options.WorkspacePath);

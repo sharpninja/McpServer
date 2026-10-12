@@ -35,7 +35,7 @@ public sealed class TodoUpdateServiceTests
     /// the change set.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_IssueTodo_SyncsAndCommentsAfterLocalUpdate()
+    public async Task UpdateAsyncIssueTodoSyncsAndCommentsAfterLocalUpdate()
     {
         var existing = new TodoFlatItem
         {
@@ -86,7 +86,7 @@ public sealed class TodoUpdateServiceTests
     /// TODO store nor GitHub sync path is invoked.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_IssueTodo_DescriptionOnly_IsNoOp()
+    public async Task UpdateAsyncIssueTodoDescriptionOnlyIsNoOp()
     {
         var existing = new TodoFlatItem
         {
@@ -119,7 +119,7 @@ public sealed class TodoUpdateServiceTests
     /// delegates to the underlying TODO store and does not invoke GitHub issue sync or change comments.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_NonIssueTodo_DoesNotCallGitHubSync()
+    public async Task UpdateAsyncNonIssueTodoDoesNotCallGitHubSync()
     {
         var existing = new TodoFlatItem
         {

@@ -20,7 +20,7 @@ public sealed class DiffgramEncryptionIntegrationTests
 
     /// <summary>Subscriber decrypts a protected diffgram addressed to its party/key and commits it.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithProtectedEnvelopeForSubscriber_DecryptsAndCommits()
+    public async Task CommitDiffgramWithProtectedEnvelopeForSubscriberDecryptsAndCommits()
     {
         using var keyPair = EncryptionKeyPair.Create();
         using var keyServer = CreateKeyServer();
@@ -49,7 +49,7 @@ public sealed class DiffgramEncryptionIntegrationTests
 
     /// <summary>Subscriber validates the decrypted plaintext hash, not only the caller-supplied hash fields.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithProtectedEnvelopePlaintextMismatch_RejectsAfterDecrypt()
+    public async Task CommitDiffgramWithProtectedEnvelopePlaintextMismatchRejectsAfterDecrypt()
     {
         using var keyPair = EncryptionKeyPair.Create();
         using var keyServer = CreateKeyServer();
@@ -83,7 +83,7 @@ public sealed class DiffgramEncryptionIntegrationTests
 
     /// <summary>Subscriber refuses protected envelopes addressed to a different subscriber party.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithProtectedEnvelopeForWrongSubscriber_Rejects()
+    public async Task CommitDiffgramWithProtectedEnvelopeForWrongSubscriberRejects()
     {
         using var keyPair = EncryptionKeyPair.Create();
         using var keyServer = CreateKeyServer();
@@ -118,7 +118,7 @@ public sealed class DiffgramEncryptionIntegrationTests
 
     /// <summary>Subscriber key-ring rotation keeps old and current protected envelopes decryptable.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithSubscriberEncryptionKeyRing_DecryptsOldAndRotatedKeys()
+    public async Task CommitDiffgramWithSubscriberEncryptionKeyRingDecryptsOldAndRotatedKeys()
     {
         using var firstKeyPair = EncryptionKeyPair.Create();
         using var rotatedKeyPair = EncryptionKeyPair.Create();

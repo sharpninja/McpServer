@@ -79,10 +79,10 @@ public static class QBAgentBootstrapper
             BaseUrl = baseUri,
             ApiKey = apiKey.Trim(),
             WorkspacePath = string.IsNullOrWhiteSpace(workspacePath) ? null : workspacePath.Trim(),
-            AgentId = definition.AgentId,
-            AgentName = definition.AgentName,
-            SourceType = definition.SourceType,
-            Description = definition.Description,
+            AgentId = QBAgentDefinition.AgentId,
+            AgentName = QBAgentDefinition.AgentName,
+            SourceType = QBAgentDefinition.SourceType,
+            Description = QBAgentDefinition.Description,
             RequireAuthentication = true,
         };
 

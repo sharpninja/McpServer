@@ -88,7 +88,7 @@ public sealed partial class MermaidUseCaseDiagramService : IUseCaseDiagramServic
     }
 
     /// <summary>TR-MCP-USECASE-004: PlantUML sequence diagram for the same aggregate.</summary>
-    public string GeneratePlantUml(UseCaseDetailDto useCase)
+    public static string GeneratePlantUml(UseCaseDetailDto useCase)
     {
         ArgumentNullException.ThrowIfNull(useCase);
         var sb = new StringBuilder();

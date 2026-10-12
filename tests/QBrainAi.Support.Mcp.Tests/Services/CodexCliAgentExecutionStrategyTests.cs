@@ -19,7 +19,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// invocation and never uses Copilot interactive flags or prompt arguments.
     /// </summary>
     [Fact]
-    public async Task ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags()
+    public async Task ReadInitialResponseAsyncUsesCodexExecWithoutCopilotInteractiveFlags()
     {
         var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
         var strategy = new CodexCliAgentExecutionStrategy(
@@ -76,7 +76,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// inspectable research-run failure reason.
     /// </summary>
     [Fact]
-    public async Task ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult()
+    public async Task ReadInitialResponseAsyncWhenCodexFailsReturnsErrorResult()
     {
         var spawner = new CapturingProcessSpawner(exitCode: 2, stderr: "not authenticated");
         var strategy = new CodexCliAgentExecutionStrategy(
@@ -97,7 +97,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// stdout and stderr instead of returning only the timeout message.
     /// </summary>
     [Fact]
-    public async Task ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams()
+    public async Task ReadInitialResponseAsyncWhenCodexTimesOutPreservesPartialStreams()
     {
         var spawner = new CapturingProcessSpawner(
             exitCode: 0,
@@ -125,7 +125,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// chunks to the configured output callback while the process is running.
     /// </summary>
     [Fact]
-    public async Task ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput()
+    public async Task ReadInitialResponseAsyncWithOutputCallbackStreamsAgentOutput()
     {
         var streamed = new List<string>();
         var spawner = new CapturingProcessSpawner(
@@ -158,7 +158,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// <c>cmd.exe</c> so desktop spawning does not execute <c>.cmd</c> directly.
     /// </summary>
     [Fact]
-    public async Task ReadInitialResponseAsync_WithWindowsNpmShim_UsesCmdWrapperAndStdinPrompt()
+    public async Task ReadInitialResponseAsyncWithWindowsNpmShimUsesCmdWrapperAndStdinPrompt()
     {
         if (!OperatingSystem.IsWindows())
             return;
@@ -210,7 +210,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// interactive-user codex process can write the final response file.
     /// </summary>
     [Fact]
-    public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath()
+    public async Task ReadInitialResponseAsyncWithConfiguredSharedTempRootUsesSharedOutputPath()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), $"codex-oneshot-shared-{Guid.NewGuid():N}");
         Directory.CreateDirectory(tempRoot);
@@ -246,7 +246,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// <c>codex-cli</c> strategy name.
     /// </summary>
     [Fact]
-    public void AgentExecutionStrategyNames_SupportsCodexCli()
+    public void AgentExecutionStrategyNamesSupportsCodexCli()
     {
         Assert.True(AgentExecutionStrategyNames.IsSupported("codex-cli"));
         Assert.Contains("codex-cli", AgentExecutionStrategyNames.SupportedNames);

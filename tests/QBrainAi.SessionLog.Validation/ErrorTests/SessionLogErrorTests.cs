@@ -32,7 +32,7 @@ public sealed class SessionLogErrorTests
     public SessionLogErrorTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
     /// <summary>
-    /// Validates the <c>Submit_MissingSourceType_Returns400</c> scenario.
+    /// Validates the <c>SubmitMissingSourceTypeReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -40,7 +40,7 @@ public sealed class SessionLogErrorTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_MissingSourceType_Returns400()
+    public async Task SubmitMissingSourceTypeReturns400()
     {
         var payload = new
         {
@@ -58,7 +58,7 @@ public sealed class SessionLogErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Submit_MissingSessionId_Returns400</c> scenario.
+    /// Validates the <c>SubmitMissingSessionIdReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -66,7 +66,7 @@ public sealed class SessionLogErrorTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_MissingSessionId_Returns400()
+    public async Task SubmitMissingSessionIdReturns400()
     {
         var payload = new
         {
@@ -84,7 +84,7 @@ public sealed class SessionLogErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Submit_EmptySourceType_Returns400</c> scenario.
+    /// Validates the <c>SubmitEmptySourceTypeReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -92,7 +92,7 @@ public sealed class SessionLogErrorTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_EmptySourceType_Returns400()
+    public async Task SubmitEmptySourceTypeReturns400()
     {
         var payload = new
         {
@@ -107,7 +107,7 @@ public sealed class SessionLogErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Submit_EmptySessionId_Returns400</c> scenario.
+    /// Validates the <c>SubmitEmptySessionIdReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -115,7 +115,7 @@ public sealed class SessionLogErrorTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_EmptySessionId_Returns400()
+    public async Task SubmitEmptySessionIdReturns400()
     {
         var payload = new
         {
@@ -130,7 +130,7 @@ public sealed class SessionLogErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>AppendDialog_EmptyItemsList_Returns400</c> scenario.
+    /// Validates the <c>AppendDialogEmptyItemsListReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -138,7 +138,7 @@ public sealed class SessionLogErrorTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task AppendDialog_EmptyItemsList_Returns400()
+    public async Task AppendDialogEmptyItemsListReturns400()
     {
         var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/AuditTest/some-session/some-request/dialog";
         var emptyItems = Array.Empty<object>();
@@ -147,7 +147,7 @@ public sealed class SessionLogErrorTests
     }
 
     /// <summary>
-    /// Validates the <c>Submit_InvalidJsonBody_Returns400</c> scenario.
+    /// Validates the <c>SubmitInvalidJsonBodyReturns400</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -155,7 +155,7 @@ public sealed class SessionLogErrorTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_InvalidJsonBody_Returns400()
+    public async Task SubmitInvalidJsonBodyReturns400()
     {
         var content = new StringContent("not valid json", Encoding.UTF8, "application/json");
         var response = await _fixture.Client.PostAsync(SessionLogEndpointFixture.SessionLogRoute, content, cancellationToken: TestContext.Current.CancellationToken);

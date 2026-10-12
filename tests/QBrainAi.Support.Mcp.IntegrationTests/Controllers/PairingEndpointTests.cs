@@ -28,7 +28,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     }
 
     [Fact]
-    public async Task PairGet_WhenConfigured_ReturnsLoginPage()
+    public async Task PairGetWhenConfiguredReturnsLoginPage()
     {
         var response = await _client.GetAsync("/pair", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -37,7 +37,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     }
 
     [Fact]
-    public async Task PairPost_WithBadCredentials_ShowsError()
+    public async Task PairPostWithBadCredentialsShowsError()
     {
         var form = new FormUrlEncodedContent(
         [
@@ -52,7 +52,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     }
 
     [Fact]
-    public async Task PairPost_AfterRepeatedFailures_ReturnsTooManyRequests()
+    public async Task PairPostAfterRepeatedFailuresReturnsTooManyRequests()
     {
         await using var factory = new PairingWebApplicationFactory();
         using var client = factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions
@@ -89,7 +89,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     }
 
     [Fact]
-    public async Task PairPost_WithGoodCredentials_RedirectsToKey()
+    public async Task PairPostWithGoodCredentialsRedirectsToKey()
     {
         var form = new FormUrlEncodedContent(
         [
@@ -105,7 +105,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     }
 
     [Fact]
-    public async Task PairKey_WithoutCookie_RedirectsToLogin()
+    public async Task PairKeyWithoutCookieRedirectsToLogin()
     {
         var response = await _client.GetAsync("/pair/key", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
@@ -113,7 +113,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     }
 
     [Fact]
-    public async Task PairKey_WithValidSession_ShowsApiKey()
+    public async Task PairKeyWithValidSessionShowsApiKey()
     {
         // First, authenticate to get the session cookie.
         var form = new FormUrlEncodedContent(
@@ -150,7 +150,7 @@ public sealed class PairingNotConfiguredTests : IClassFixture<CustomWebApplicati
     }
 
     [Fact]
-    public async Task PairGet_WhenNotConfigured_ShowsNotConfiguredPage()
+    public async Task PairGetWhenNotConfiguredShowsNotConfiguredPage()
     {
         var response = await _client.GetAsync("/pair", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

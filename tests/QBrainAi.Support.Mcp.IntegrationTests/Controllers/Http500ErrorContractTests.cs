@@ -36,7 +36,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
     public void Dispose() => _client.Dispose();
 
     [Fact]
-    public async Task TodoMove_WhenSourceDeleteFails_ReturnsStandardized500()
+    public async Task TodoMoveWhenSourceDeleteFailsReturnsStandardized500()
     {
         var response = await _client.PostAsJsonAsync("/qbrainai/todo/TEST-001/move", new
         {
@@ -55,7 +55,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
     }
 
     [Fact]
-    public async Task UnhandledException_ViaTodoQuery_ReturnsStandardized500WithSanitizedDetail()
+    public async Task UnhandledExceptionViaTodoQueryReturnsStandardized500WithSanitizedDetail()
     {
         var response = await _client.GetAsync("/qbrainai/todo?keyword=trigger-500", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -72,7 +72,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
     }
 
     [Fact]
-    public async Task VoiceStreaming_PreStreamFailure_ReturnsNon500TypedErrorBeforeStreamStarts()
+    public async Task VoiceStreamingPreStreamFailureReturnsNon500TypedErrorBeforeStreamStarts()
     {
         var response = await _client.PostAsJsonAsync("/qbrainai/voice/session/session-1/turn/stream", new
         {
@@ -85,7 +85,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
     }
 
     [Fact]
-    public async Task TodoPromptStream_PostStreamFailure_EmitsStructuredErrorEvent()
+    public async Task TodoPromptStreamPostStreamFailureEmitsStructuredErrorEvent()
     {
         var response = await _client.GetAsync("/qbrainai/todo/TEST-001/prompt/plan", HttpCompletionOption.ResponseHeadersRead, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

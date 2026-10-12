@@ -29,7 +29,7 @@ public sealed class MemoryMigrationDiscoveryTests
 
     /// <summary>SQLite, PostgreSQL, and SQL Server assemblies all publish the three memory migration ids.</summary>
     [Fact]
-    public void Discovers_RequiredMemoryMigrations_OnAllProviders()
+    public void DiscoversRequiredMemoryMigrationsOnAllProviders()
     {
         var assemblies = new[]
         {

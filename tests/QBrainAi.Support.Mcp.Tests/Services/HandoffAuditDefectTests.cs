@@ -46,7 +46,7 @@ public sealed class HandoffAuditDefectTests : IDisposable
 
     /// <summary>Concurrent same-hash ingest creates one run and extracts once.</summary>
     [Fact]
-    public async Task IngestAsync_ConcurrentSameHash_ReservesOnce()
+    public async Task IngestAsyncConcurrentSameHashReservesOnce()
     {
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
         extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
@@ -84,7 +84,7 @@ public sealed class HandoffAuditDefectTests : IDisposable
 
     /// <summary>Failed extraction is persisted as Success=false and GET returns that outcome.</summary>
     [Fact]
-    public async Task GetRunAsync_FailedExtraction_DoesNotReportSuccess()
+    public async Task GetRunAsyncFailedExtractionDoesNotReportSuccess()
     {
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
         extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
@@ -108,7 +108,7 @@ public sealed class HandoffAuditDefectTests : IDisposable
 
     /// <summary>RequireReview of a malformed draft is failed and not approvable.</summary>
     [Fact]
-    public async Task RequireReview_MalformedDraft_IsFailedAndNotApprovable()
+    public async Task RequireReviewMalformedDraftIsFailedAndNotApprovable()
     {
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
         extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
@@ -135,7 +135,7 @@ public sealed class HandoffAuditDefectTests : IDisposable
 
     /// <summary>Cancellation of ingest propagates and does not persist a success row.</summary>
     [Fact]
-    public async Task IngestAsync_Cancelled_ThrowsWithoutSuccessfulPersist()
+    public async Task IngestAsyncCancelledThrowsWithoutSuccessfulPersist()
     {
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
         extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
@@ -151,7 +151,7 @@ public sealed class HandoffAuditDefectTests : IDisposable
 
     /// <summary>Secrets in draft text are redacted before durable persist.</summary>
     [Fact]
-    public async Task IngestAsync_SecretInDraft_IsRedactedOnPersist()
+    public async Task IngestAsyncSecretInDraftIsRedactedOnPersist()
     {
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
         extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
@@ -177,7 +177,7 @@ public sealed class HandoffAuditDefectTests : IDisposable
 
     /// <summary>Parser rejects unknown fields and does not treat id-only as success.</summary>
     [Fact]
-    public void Parser_UnknownField_IsNotSuccess()
+    public void ParserUnknownFieldIsNotSuccess()
     {
         var parsed = new HandoffTodoDraftParser().Parse("""{"id":"MCP-HANDOFFDEMO-032","mystery":1}""");
         Assert.False(parsed.Success);
@@ -187,7 +187,7 @@ public sealed class HandoffAuditDefectTests : IDisposable
 
     /// <summary>Separate service instances cannot regress a Created approval to PendingReview.</summary>
     [Fact]
-    public async Task ApproveAsync_SeparateContexts_CreatedWins()
+    public async Task ApproveAsyncSeparateContextsCreatedWins()
     {
         var extractor = Substitute.For<IHandoffOneShotExtractor>();
         extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())

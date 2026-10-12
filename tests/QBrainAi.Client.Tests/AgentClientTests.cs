@@ -15,7 +15,7 @@ public sealed class AgentClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task ListDefinitionsAsync_SendsCorrectRequest()
+    public async System.Threading.Tasks.Task ListDefinitionsAsyncSendsCorrectRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[{"id":"cursor","displayName":"Cursor"}],"totalCount":1}""");
         using var http = new HttpClient(handler);
@@ -30,7 +30,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetDefinitionAsync_EncodesRouteSegment()
+    public async System.Threading.Tasks.Task GetDefinitionAsyncEncodesRouteSegment()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"copilot/manager","displayName":"Copilot Manager"}""");
         using var http = new HttpClient(handler);
@@ -44,7 +44,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpsertDefinitionAsync_PostsJsonBody()
+    public async System.Threading.Tasks.Task UpsertDefinitionAsyncPostsJsonBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -65,7 +65,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteDefinitionAsync_UsesDeleteVerb()
+    public async System.Threading.Tasks.Task DeleteDefinitionAsyncUsesDeleteVerb()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -79,7 +79,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SeedDefaultsAsync_PostsSeedEndpoint()
+    public async System.Threading.Tasks.Task SeedDefaultsAsyncPostsSeedEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"seeded":3}""");
         using var http = new HttpClient(handler);
@@ -93,7 +93,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListWorkspaceAgentsAsync_IncludesWorkspaceQuery()
+    public async System.Threading.Tasks.Task ListWorkspaceAgentsAsyncIncludesWorkspaceQuery()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -107,7 +107,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetWorkspaceAgentAsync_IncludesWorkspaceQuery()
+    public async System.Threading.Tasks.Task GetWorkspaceAgentAsyncIncludesWorkspaceQuery()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"agentId":"cursor","workspacePath":"/repo","enabled":true}""");
         using var http = new HttpClient(handler);
@@ -122,7 +122,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UpsertWorkspaceAgentAsync_PostsRouteAndBody()
+    public async System.Threading.Tasks.Task UpsertWorkspaceAgentAsyncPostsRouteAndBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -141,7 +141,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteWorkspaceAgentAsync_UsesDeleteVerb()
+    public async System.Threading.Tasks.Task DeleteWorkspaceAgentAsyncUsesDeleteVerb()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -156,7 +156,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task BanAgentAsync_PostsBanRequest()
+    public async System.Threading.Tasks.Task BanAgentAsyncPostsBanRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -175,7 +175,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task UnbanAgentAsync_UsesGlobalQueryFlag()
+    public async System.Threading.Tasks.Task UnbanAgentAsyncUsesGlobalQueryFlag()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -190,7 +190,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task LogEventAsync_PostsEventRequest()
+    public async System.Threading.Tasks.Task LogEventAsyncPostsEventRequest()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -214,7 +214,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetEventsAsync_IncludesWorkspaceAndLimitQuery()
+    public async System.Threading.Tasks.Task GetEventsAsyncIncludesWorkspaceAndLimitQuery()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[{"id":1,"agentId":"cursor","workspacePath":"/repo","eventType":7}],"totalCount":1}""");
         using var http = new HttpClient(handler);
@@ -231,7 +231,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ValidateAsync_UsesValidateEndpoint()
+    public async System.Threading.Tasks.Task ValidateAsyncUsesValidateEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"valid":true,"path":"/repo/agents.yaml"}""");
         using var http = new HttpClient(handler);
@@ -247,7 +247,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task LaunchAgentAsync_PostsLaunchEndpoint()
+    public async System.Threading.Tasks.Task LaunchAgentAsyncPostsLaunchEndpoint()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -265,7 +265,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task StopAgentAsync_PostsStopEndpoint()
+    public async System.Threading.Tasks.Task StopAgentAsyncPostsStopEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
         using var http = new HttpClient(handler);
@@ -280,7 +280,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetProcessStatusAsync_GetsProcessStatusEndpoint()
+    public async System.Threading.Tasks.Task GetProcessStatusAsyncGetsProcessStatusEndpoint()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -297,7 +297,7 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListRunningAgentsAsync_GetsRunningEndpoint()
+    public async System.Threading.Tasks.Task ListRunningAgentsAsyncGetsRunningEndpoint()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,

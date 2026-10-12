@@ -25,7 +25,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ListIssuesAsync_WhenGhSucceeds_ReturnsIssues()
+    public async Task ListIssuesAsyncWhenGhSucceedsReturnsIssues()
     {
         var json = """[{"number":1,"title":"Bug","url":"https://github.com/test/1","state":"open"}]""";
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -40,7 +40,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ListIssuesAsync_WhenGhFails_ReturnsError()
+    public async Task ListIssuesAsyncWhenGhFailsReturnsError()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not authenticated"));
@@ -53,7 +53,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ListPullsAsync_WhenGhSucceeds_ReturnsPulls()
+    public async Task ListPullsAsyncWhenGhSucceedsReturnsPulls()
     {
         var json = """[{"number":42,"title":"Feature","url":"https://github.com/test/pr/42","state":"open"}]""";
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -67,7 +67,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task CreateIssueAsync_WhenGhSucceeds_ReturnsUrl()
+    public async Task CreateIssueAsyncWhenGhSucceedsReturnsUrl()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "https://github.com/test/issues/5\n", null));
@@ -80,7 +80,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task CreateIssueAsync_WhenGhFails_ReturnsError()
+    public async Task CreateIssueAsyncWhenGhFailsReturnsError()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "auth required"));
@@ -92,7 +92,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task CommentOnIssueAsync_WhenGhSucceeds_ReturnsSuccess()
+    public async Task CommentOnIssueAsyncWhenGhSucceedsReturnsSuccess()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
@@ -107,7 +107,7 @@ public sealed class GitHubCliServiceTests
     /// marker so a flag-shaped identifier cannot be reinterpreted as an injected gh CLI option.
     /// </summary>
     [Fact]
-    public async Task CommentOnIssueAsync_WithFlagLikeIdentifier_UsesEndOfOptionsMarker()
+    public async Task CommentOnIssueAsyncWithFlagLikeIdentifierUsesEndOfOptionsMarker()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
@@ -121,7 +121,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task CommentOnPullAsync_VerifiesGhArgs()
+    public async Task CommentOnPullAsyncVerifiesGhArgs()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
@@ -135,7 +135,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task GetIssueAsync_WhenGhSucceeds_ReturnsIssueDetail()
+    public async Task GetIssueAsyncWhenGhSucceedsReturnsIssueDetail()
     {
         var json = """
             {
@@ -176,7 +176,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task GetIssueAsync_WhenGhFails_ReturnsError()
+    public async Task GetIssueAsyncWhenGhFailsReturnsError()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not found"));
@@ -188,7 +188,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task UpdateIssueAsync_AssemblesCorrectArgs()
+    public async Task UpdateIssueAsyncAssemblesCorrectArgs()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "https://github.com/test/issues/42", null));
@@ -211,7 +211,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task CloseIssueAsync_WithReason_IncludesReasonFlag()
+    public async Task CloseIssueAsyncWithReasonIncludesReasonFlag()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
@@ -230,7 +230,7 @@ public sealed class GitHubCliServiceTests
     /// attacker-controlled query strings cannot append extra flags through the close-issue reason parameter.
     /// </summary>
     [Fact]
-    public async Task CloseIssueAsync_WithInvalidReason_DoesNotInvokeGh()
+    public async Task CloseIssueAsyncWithInvalidReasonDoesNotInvokeGh()
     {
         var result = await _sut.CloseIssueAsync(42, "completed --repo other/repo", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -240,7 +240,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task CloseIssueAsync_WithoutReason_NoReasonFlag()
+    public async Task CloseIssueAsyncWithoutReasonNoReasonFlag()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
@@ -255,7 +255,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ReopenIssueAsync_WhenGhSucceeds_ReturnsSuccess()
+    public async Task ReopenIssueAsyncWhenGhSucceedsReturnsSuccess()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
@@ -273,7 +273,7 @@ public sealed class GitHubCliServiceTests
     /// query parameters cannot smuggle additional GitHub CLI flags into the issue-list command line.
     /// </summary>
     [Fact]
-    public async Task ListIssuesAsync_WithInvalidState_DoesNotInvokeGh()
+    public async Task ListIssuesAsyncWithInvalidStateDoesNotInvokeGh()
     {
         var result = await _sut.ListIssuesAsync("open --repo other/repo", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -283,7 +283,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ListIssueLabelsAsync_WhenGhSucceeds_ReturnsLabels()
+    public async Task ListIssueLabelsAsyncWhenGhSucceedsReturnsLabels()
     {
         var json = """[{"name":"bug","color":"d73a4a","description":"Something broken"},{"name":"enhancement","color":"a2eeef","description":"New feature"}]""";
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -299,7 +299,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ListIssueLabelsAsync_WhenGhFails_ReturnsError()
+    public async Task ListIssueLabelsAsyncWhenGhFailsReturnsError()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not authenticated"));
@@ -311,7 +311,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ListWorkflowRunsAsync_WhenGhSucceeds_ReturnsRuns()
+    public async Task ListWorkflowRunsAsyncWhenGhSucceedsReturnsRuns()
     {
         var json = """[{"databaseId":101,"workflowName":"CI","displayTitle":"build","headBranch":"main","status":"completed","conclusion":"success","event":"push","url":"https://github.com/x/actions/runs/101","createdAt":"2026-03-01T00:00:00Z","updatedAt":"2026-03-01T00:05:00Z"}]""";
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -326,7 +326,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task GetWorkflowRunAsync_WhenGhSucceeds_ReturnsRun()
+    public async Task GetWorkflowRunAsyncWhenGhSucceedsReturnsRun()
     {
         var json = """
             {
@@ -371,7 +371,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task RerunWorkflowRunAsync_UsesRerunCommand()
+    public async Task RerunWorkflowRunAsyncUsesRerunCommand()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
@@ -385,7 +385,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task CancelWorkflowRunAsync_UsesCancelCommand()
+    public async Task CancelWorkflowRunAsyncUsesCancelCommand()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
@@ -399,7 +399,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ListIssuesAsync_WithStoredWorkspaceToken_UsesProcessRunRequestOverride()
+    public async Task ListIssuesAsyncWithStoredWorkspaceTokenUsesProcessRunRequestOverride()
     {
         var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
         tokenStore.GetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -436,7 +436,7 @@ public sealed class GitHubCliServiceTests
     }
 
     [Fact]
-    public async Task ListIssuesAsync_WithWorkspaceAccessor_UsesWorkspaceWorkingDirectory()
+    public async Task ListIssuesAsyncWithWorkspaceAccessorUsesWorkspaceWorkingDirectory()
     {
         _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "[]", null));
@@ -460,7 +460,7 @@ public sealed class GitHubCliServiceTests
     /// global Git configuration mutation under the Windows service account.
     /// </summary>
     [Fact]
-    public async Task ListIssuesAsync_WithWorkspaceAccessor_AddsCommandScopedSafeDirectory()
+    public async Task ListIssuesAsyncWithWorkspaceAccessorAddsCommandScopedSafeDirectory()
     {
         _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "[]", null));
@@ -490,7 +490,7 @@ public sealed class GitHubCliServiceTests
     /// <c>gh --repo</c> and avoids local repository discovery entirely.
     /// </summary>
     [Fact]
-    public async Task CreateIssueAsync_WithConfiguredRepository_AddsRepoOptionAndAvoidsWorkspaceCwd()
+    public async Task CreateIssueAsyncWithConfiguredRepositoryAddsRepoOptionAndAvoidsWorkspaceCwd()
     {
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "https://github.com/sharpninja/McpServer/issues/123\n", null));

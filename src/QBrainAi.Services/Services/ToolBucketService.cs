@@ -378,10 +378,10 @@ public sealed class ToolBucketService : IToolBucketService
 
     private static void EnsureGitHubHeaders(HttpClient client)
     {
-        if (!client.DefaultRequestHeaders.UserAgent.Any())
+        if (client.DefaultRequestHeaders.UserAgent.Count == 0)
             client.DefaultRequestHeaders.UserAgent.ParseAdd("QBrainAi-ToolBucketService/1.0");
 
-        if (!client.DefaultRequestHeaders.Accept.Any())
+        if (client.DefaultRequestHeaders.Accept.Count == 0)
             client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
     }
 

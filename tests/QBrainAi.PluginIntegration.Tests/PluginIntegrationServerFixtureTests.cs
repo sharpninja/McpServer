@@ -12,7 +12,7 @@ public sealed class PluginIntegrationServerFixtureTests
 {
     /// <summary>P5: fixture selects a free loopback port, not 7147 by default.</summary>
     [Fact(Timeout = 120000)]
-    public async Task ServerFixture_SelectsFreePort()
+    public async Task ServerFixtureSelectsFreePort()
     {
         await using var fixture = new PluginIntegrationServerFixture();
         await fixture.StartAsync(TestContext.Current.CancellationToken);
@@ -22,7 +22,7 @@ public sealed class PluginIntegrationServerFixtureTests
 
     /// <summary>P5: fixture creates an isolated temp workspace and database.</summary>
     [Fact(Timeout = 120000)]
-    public async Task ServerFixture_CreatesIsolatedTempWorkspaceAndDatabase()
+    public async Task ServerFixtureCreatesIsolatedTempWorkspaceAndDatabase()
     {
         await using var fixture = new PluginIntegrationServerFixture();
         await fixture.StartAsync(TestContext.Current.CancellationToken);
@@ -34,7 +34,7 @@ public sealed class PluginIntegrationServerFixtureTests
 
     /// <summary>P5: fixture start respects a startup timeout.</summary>
     [Fact(Timeout = 30000)]
-    public async Task ServerFixture_StartupTimeout()
+    public async Task ServerFixtureStartupTimeout()
     {
         await using var fixture = new PluginIntegrationServerFixture();
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
@@ -52,7 +52,7 @@ public sealed class PluginIntegrationServerFixtureTests
 
     /// <summary>P5: fixture writes a workspace marker file.</summary>
     [Fact(Timeout = 120000)]
-    public async Task ServerFixture_CreatesMarker()
+    public async Task ServerFixtureCreatesMarker()
     {
         await using var fixture = new PluginIntegrationServerFixture();
         await fixture.StartAsync(TestContext.Current.CancellationToken);
@@ -62,7 +62,7 @@ public sealed class PluginIntegrationServerFixtureTests
 
     /// <summary>P5: marker signature and health nonce trust succeed for the isolated host.</summary>
     [Fact(Timeout = 120000)]
-    public async Task ServerFixture_SignatureAndNonceTrust()
+    public async Task ServerFixtureSignatureAndNonceTrust()
     {
         await using var fixture = new PluginIntegrationServerFixture();
         await fixture.StartAsync(TestContext.Current.CancellationToken);
@@ -78,7 +78,7 @@ public sealed class PluginIntegrationServerFixtureTests
 
     /// <summary>P5: dispose removes the isolated workspace and does not touch the developer database.</summary>
     [Fact(Timeout = 120000)]
-    public async Task ServerFixture_DeterministicCleanup()
+    public async Task ServerFixtureDeterministicCleanup()
     {
         var fixture = new PluginIntegrationServerFixture();
         await fixture.StartAsync(TestContext.Current.CancellationToken);
@@ -89,7 +89,7 @@ public sealed class PluginIntegrationServerFixtureTests
 
     /// <summary>P6: isolated host is healthy and exposes a trusted marker plus typed client.</summary>
     [Fact(Timeout = 120000)]
-    public async Task ServerFixture_HealthReady_ExposesTrustedMarkerAndClient()
+    public async Task ServerFixtureHealthReadyExposesTrustedMarkerAndClient()
     {
         await using var fixture = new PluginIntegrationServerFixture();
         await fixture.StartAsync(TestContext.Current.CancellationToken);

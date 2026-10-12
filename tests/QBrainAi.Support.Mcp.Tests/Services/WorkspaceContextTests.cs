@@ -8,7 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class WorkspaceContextTests
 {
     [Fact]
-    public void DefaultState_AllPropertiesNull()
+    public void DefaultStateAllPropertiesNull()
     {
         var ctx = new WorkspaceContext();
         Assert.Null(ctx.WorkspacePath);
@@ -20,28 +20,28 @@ public sealed class WorkspaceContextTests
     }
 
     [Fact]
-    public void IsResolved_ReturnsFalse_WhenPathNull()
+    public void IsResolvedReturnsFalseWhenPathNull()
     {
         var ctx = new WorkspaceContext();
         Assert.False(ctx.IsResolved);
     }
 
     [Fact]
-    public void IsResolved_ReturnsTrue_WhenPathSet()
+    public void IsResolvedReturnsTrueWhenPathSet()
     {
         var ctx = new WorkspaceContext { WorkspacePath = @"C:\projects\test" };
         Assert.True(ctx.IsResolved);
     }
 
     [Fact]
-    public void IsDefaultKey_DefaultsFalse()
+    public void IsDefaultKeyDefaultsFalse()
     {
         var ctx = new WorkspaceContext();
         Assert.False(ctx.IsDefaultKey);
     }
 
     [Fact]
-    public void SetWorkspace_AllPropertiesPopulated()
+    public void SetWorkspaceAllPropertiesPopulated()
     {
         var ctx = new WorkspaceContext
         {

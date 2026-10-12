@@ -6,7 +6,7 @@ namespace QBrainAi.Cqrs.Tests;
 public class CorrelationIdTests
 {
     [Fact]
-    public void New_HasEightDigitBaseId()
+    public void NewHasEightDigitBaseId()
     {
         var cid = new CorrelationId();
         Assert.InRange(cid.BaseId, 10000000, 99999999);
@@ -14,7 +14,7 @@ public class CorrelationIdTests
     }
 
     [Fact]
-    public void Current_Format()
+    public void CurrentFormat()
     {
         var cid = new CorrelationId(12345678, 0);
         Assert.Equal("12345678.0", cid.Current);
@@ -22,7 +22,7 @@ public class CorrelationIdTests
     }
 
     [Fact]
-    public void Next_Increments()
+    public void NextIncrements()
     {
         var cid = new CorrelationId(12345678, 0);
         Assert.Equal("12345678.1", cid.Next());
@@ -31,7 +31,7 @@ public class CorrelationIdTests
     }
 
     [Fact]
-    public void Parse_Valid()
+    public void ParseValid()
     {
         var cid = CorrelationId.Parse("48291735.3");
         Assert.Equal(48291735, cid.BaseId);
@@ -39,7 +39,7 @@ public class CorrelationIdTests
     }
 
     [Fact]
-    public void Parse_Invalid_Throws()
+    public void ParseInvalidThrows()
     {
         Assert.Throws<FormatException>(() => CorrelationId.Parse("invalid"));
         Assert.Throws<FormatException>(() => CorrelationId.Parse(".5"));
@@ -47,7 +47,7 @@ public class CorrelationIdTests
     }
 
     [Fact]
-    public void TryParse_Null_ReturnsNull()
+    public void TryParseNullReturnsNull()
     {
         Assert.Null(CorrelationId.TryParse(null));
         Assert.Null(CorrelationId.TryParse(""));
@@ -55,13 +55,13 @@ public class CorrelationIdTests
     }
 
     [Fact]
-    public void TryParse_Invalid_ReturnsNull()
+    public void TryParseInvalidReturnsNull()
     {
         Assert.Null(CorrelationId.TryParse("not-valid"));
     }
 
     [Fact]
-    public void TryParse_Valid_ReturnsInstance()
+    public void TryParseValidReturnsInstance()
     {
         var cid = CorrelationId.TryParse("11111111.7");
         Assert.NotNull(cid);
@@ -70,7 +70,7 @@ public class CorrelationIdTests
     }
 
     [Fact]
-    public async Task Next_IsThreadSafe()
+    public async Task NextIsThreadSafe()
     {
         var cid = new CorrelationId(10000000, 0);
         var tasks = Enumerable.Range(0, 100).Select(_ => Task.Run(() => cid.Next())).ToArray();

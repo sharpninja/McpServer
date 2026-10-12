@@ -33,7 +33,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Create_ValidRequest_Returns201()
+    public async Task CreateValidRequestReturns201()
     {
         var body = new { WorkspacePath = _testPath, Name = "AuditCreateTest" };
 
@@ -56,7 +56,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Create_DuplicatePath_Returns409()
+    public async Task CreateDuplicatePathReturns409()
     {
         var body = new { WorkspacePath = _testPath, Name = "First" };
         var first = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body, cancellationToken: TestContext.Current.CancellationToken);
@@ -73,7 +73,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Create_NoName_DerivesFromPath()
+    public async Task CreateNoNameDerivesFromPath()
     {
         var body = new { WorkspacePath = _testPath };
 
@@ -89,7 +89,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Create_NullBody_Returns400()
+    public async Task CreateNullBodyReturns400()
     {
         var response = await _fixture.Client.PostAsync(
             WorkspaceEndpointFixture.WorkspaceRoute,

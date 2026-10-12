@@ -11,7 +11,7 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
 {
     /// <summary>Runner uses structured process arguments, working directory, timeout cancellation, and cleans staged output.</summary>
     [Fact]
-    public async Task RunAsync_UsesStructuredProcessRequestAndCleansOutputRoot()
+    public async Task RunAsyncUsesStructuredProcessRequestAndCleansOutputRoot()
     {
         using var workspace = new TestWorkspace();
         string[] arguments = ["docfx", "metadata file.json", "literal\"quote", "a&b|c;d", "$(not-a-shell)"];
@@ -39,7 +39,7 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
 
     /// <summary>Runner reports bounded stdout and stderr when the DocFX process exits with a failure code.</summary>
     [Fact]
-    public async Task RunAsync_WhenProcessExitsNonZero_ThrowsBoundedDiagnostics()
+    public async Task RunAsyncWhenProcessExitsNonZeroThrowsBoundedDiagnostics()
     {
         using var workspace = new TestWorkspace();
         var workflow = CreateWorkflow(workspace.Path, id: "api-docs");
@@ -57,7 +57,7 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
 
     /// <summary>Runner fails when a successful workflow does not produce the configured output root.</summary>
     [Fact]
-    public async Task RunAsync_WhenOutputRootMissing_Throws()
+    public async Task RunAsyncWhenOutputRootMissingThrows()
     {
         using var workspace = new TestWorkspace();
         var workflow = CreateWorkflow(workspace.Path);
@@ -74,7 +74,7 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
 
     /// <summary>Runner rejects unsupported binary artifacts instead of publishing unreadable wiki documents.</summary>
     [Fact]
-    public async Task RunAsync_WhenOutputContainsUnsupportedFile_Throws()
+    public async Task RunAsyncWhenOutputContainsUnsupportedFileThrows()
     {
         using var workspace = new TestWorkspace();
         var workflow = CreateWorkflow(workspace.Path);
@@ -96,7 +96,7 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
 
     /// <summary>Runner rejects reparse points in staged output before they can escape the workspace.</summary>
     [Fact]
-    public async Task RunAsync_WhenOutputContainsReparsePointEscape_Throws()
+    public async Task RunAsyncWhenOutputContainsReparsePointEscapeThrows()
     {
         using var workspace = new TestWorkspace();
         using var external = new TestWorkspace();
@@ -119,7 +119,7 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
 
     /// <summary>Runner emits deterministic, platform-prefixed wiki artifacts with normalized separators and content types.</summary>
     [Fact]
-    public async Task RunAsync_ProjectsFilesInDeterministicOrder()
+    public async Task RunAsyncProjectsFilesInDeterministicOrder()
     {
         using var workspace = new TestWorkspace();
         var workflow = CreateWorkflow(workspace.Path);
@@ -151,7 +151,7 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
 
     /// <summary>Runner rejects duplicate canonical publication paths across configured workflows.</summary>
     [Fact]
-    public async Task RunAsync_WhenWorkflowsProduceDuplicatePublicationPaths_Throws()
+    public async Task RunAsyncWhenWorkflowsProduceDuplicatePublicationPathsThrows()
     {
         using var workspace = new TestWorkspace();
         var first = CreateWorkflow(workspace.Path, id: "first", outputRoot: "docs/first-site");

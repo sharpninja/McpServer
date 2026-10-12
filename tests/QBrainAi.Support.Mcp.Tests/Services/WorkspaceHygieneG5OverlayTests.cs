@@ -54,7 +54,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-001: result contract fields.</summary>
     [Fact]
-    public async Task WorkspaceValidation_ResultContract_HasRequiredFields()
+    public async Task WorkspaceValidationResultContractHasRequiredFields()
     {
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
         Assert.True(result.Success);
@@ -68,7 +68,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-001: clean workspace has zero findings.</summary>
     [Fact]
-    public async Task WorkspaceValidation_CleanWorkspace_ZeroFindings()
+    public async Task WorkspaceValidationCleanWorkspaceZeroFindings()
     {
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
         Assert.Empty(result.Findings);
@@ -78,7 +78,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-001: unknown rule codes are diagnostics, not silent skips.</summary>
     [Fact]
-    public async Task WorkspaceValidation_UnknownRuleCode_Diagnostic()
+    public async Task WorkspaceValidationUnknownRuleCodeDiagnostic()
     {
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest { RuleCodes = ["not-a-rule"] }, TestContext.Current.CancellationToken);
         Assert.Contains(result.Diagnostics, item => item.Contains("unknown_rule", StringComparison.Ordinal));
@@ -86,7 +86,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-002: missing AC is a finding.</summary>
     [Fact]
-    public async Task Rule_FrTrTest_MissingAcceptanceCriteria_FindsRecord()
+    public async Task RuleFrTrTestMissingAcceptanceCriteriaFindsRecord()
     {
         SeedRequirement("fr", "FR-HY-001");
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
@@ -95,7 +95,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-002: TR with no FR mapping.</summary>
     [Fact]
-    public async Task Rule_TrWithNoFr_Orphan()
+    public async Task RuleTrWithNoFrOrphan()
     {
         SeedRequirement("tr", "TR-HY-001");
         AddCriterion("tr", "TR-HY-001");
@@ -105,7 +105,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-002: FR missing TR or TEST.</summary>
     [Fact]
-    public async Task Rule_FrMissingTrOrTest_Orphan()
+    public async Task RuleFrMissingTrOrTestOrphan()
     {
         SeedRequirement("fr", "FR-HY-002");
         AddCriterion("fr", "FR-HY-002");
@@ -115,7 +115,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-002: TEST with no FR mapping.</summary>
     [Fact]
-    public async Task Rule_TestWithNoFr_Orphan()
+    public async Task RuleTestWithNoFrOrphan()
     {
         SeedRequirement("test", "TEST-HY-001");
         AddCriterion("test", "TEST-HY-001");
@@ -125,7 +125,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-002: broken or duplicate mappings.</summary>
     [Fact]
-    public async Task Rule_BrokenOrDuplicateMapping()
+    public async Task RuleBrokenOrDuplicateMapping()
     {
         SeedRequirement("fr", "FR-HY-003");
         AddCriterion("fr", "FR-HY-003");
@@ -142,7 +142,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-003: done=true with incomplete tasks.</summary>
     [Fact]
-    public async Task Rule_DoneTrue_IncompleteTasks()
+    public async Task RuleDoneTrueIncompleteTasks()
     {
         SeedTodo("TODO-HY-001", done: true, doneSummary: "done", remaining: null);
         SeedTask("TODO-HY-001", done: false);
@@ -152,7 +152,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-003: done=false with all tasks complete.</summary>
     [Fact]
-    public async Task Rule_DoneFalse_AllTasksComplete()
+    public async Task RuleDoneFalseAllTasksComplete()
     {
         SeedTodo("TODO-HY-002", done: false, doneSummary: null, remaining: null);
         SeedTask("TODO-HY-002", done: true);
@@ -162,7 +162,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-003: done without doneSummary.</summary>
     [Fact]
-    public async Task Rule_DoneWithoutDoneSummary()
+    public async Task RuleDoneWithoutDoneSummary()
     {
         SeedTodo("TODO-HY-003", done: true, doneSummary: null, remaining: null);
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
@@ -171,7 +171,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-003: remaining text contradicts completion.</summary>
     [Fact]
-    public async Task Rule_RemainingContradictsCompletion()
+    public async Task RuleRemainingContradictsCompletion()
     {
         SeedTodo("TODO-HY-004", done: true, doneSummary: "shipped", remaining: "still more work");
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
@@ -180,7 +180,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-003: missing dependency target.</summary>
     [Fact]
-    public async Task Rule_MissingDependencyTarget()
+    public async Task RuleMissingDependencyTarget()
     {
         SeedTodo("TODO-HY-005", done: false, doneSummary: null, remaining: null);
         using (var db = CreateDb())
@@ -201,7 +201,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-003: missing referenced requirement.</summary>
     [Fact]
-    public async Task Rule_MissingReferencedRequirementId()
+    public async Task RuleMissingReferencedRequirementId()
     {
         SeedTodo("TODO-HY-006", done: false, doneSummary: null, remaining: null);
         using (var db = CreateDb())
@@ -222,7 +222,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-004: stale in_progress turn using UTC timestamps.</summary>
     [Fact]
-    public async Task Rule_InProgressTurn_OlderThan48h_UtcClock()
+    public async Task RuleInProgressTurnOlderThan48hUtcClock()
     {
         SeedStaleTurn(DateTimeOffset.UtcNow.AddHours(-49));
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
@@ -231,7 +231,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-004: triage non-terminal uses live domain statuses; failed is distinct.</summary>
     [Fact]
-    public async Task Rule_TriageNonTerminal_UsesLiveDomainEnum()
+    public async Task RuleTriageNonTerminalUsesLiveDomainEnum()
     {
         SeedTriage("triage-pending", "collecting");
         SeedTriage("triage-failed", "failed");
@@ -243,7 +243,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-004: threshold override is bounded, authenticated, and recorded.</summary>
     [Fact]
-    public async Task Rule_StaleThresholdOverride_BoundedAuthenticatedRecorded()
+    public async Task RuleStaleThresholdOverrideBoundedAuthenticatedRecorded()
     {
         SeedStaleTurn(DateTimeOffset.UtcNow.AddHours(-10));
         var tooWide = await CreateService().ValidateAsync(new WorkspaceValidationRequest { StaleTurnThresholdHours = 200 }, TestContext.Current.CancellationToken);
@@ -256,7 +256,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-004: unauthenticated validate is rejected.</summary>
     [Fact]
-    public async Task Validation_AuthRequired()
+    public async Task ValidationAuthRequired()
     {
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest { Authenticated = false }, TestContext.Current.CancellationToken);
         Assert.False(result.Success);
@@ -266,7 +266,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-004: cancellation is honored.</summary>
     [Fact]
-    public async Task Validation_CancellationHonored()
+    public async Task ValidationCancellationHonored()
     {
         using var cts = new CancellationTokenSource();
         await cts.CancelAsync();
@@ -275,7 +275,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-004: large workspaces paginate.</summary>
     [Fact]
-    public async Task Validation_LargeWorkspace_Paginates()
+    public async Task ValidationLargeWorkspacePaginates()
     {
         SeedRequirement("fr", "FR-PAGE-1");
         SeedRequirement("fr", "FR-PAGE-2");
@@ -289,7 +289,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-005: REST, REPL, Director, plugin expose the same validation.</summary>
     [Fact]
-    public async Task Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts()
+    public async Task ParityRestDirectorReplPluginSameRuleCodesAndCounts()
     {
         Assert.Contains("ValidateAsync", typeof(WorkspaceValidationController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Select(method => method.Name));
         Assert.Equal("workspace.validate", WorkspaceValidationCommandShapes.ValidateMethod);
@@ -369,7 +369,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-005: Director exit 1 when Error findings exist.</summary>
     [Fact]
-    public async Task Director_Exit1_WhenErrorSeverityPresent()
+    public async Task DirectorExit1WhenErrorSeverityPresent()
     {
         SeedTodo("TODO-HY-ERR", done: true, doneSummary: null, remaining: null);
         var command = new WorkspaceValidationDirectorCommand(new WorkspaceValidationDirectorExecutor(CreateService()));
@@ -381,7 +381,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-005: Director exit 0 when Warning-only.</summary>
     [Fact]
-    public async Task Director_Exit0_WhenWarningOnly()
+    public async Task DirectorExit0WhenWarningOnly()
     {
         SeedTodo("TODO-HY-WARN", done: true, doneSummary: "done", remaining: "leftover");
         var command = new WorkspaceValidationDirectorCommand(new WorkspaceValidationDirectorExecutor(CreateService()));
@@ -394,7 +394,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-005: validation never auto-repairs.</summary>
     [Fact]
-    public async Task Validation_NeverAutoRepairs()
+    public async Task ValidationNeverAutoRepairs()
     {
         SeedTodo("TODO-HY-KEEP", done: true, doneSummary: null, remaining: null);
         await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
@@ -544,7 +544,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-HYGIENE-003: triage statuses come from the live triage domain, queries are batched.</summary>
     [Fact]
-    public void ValidationService_UsesLiveTriageDomainAndBatchedQueries()
+    public void ValidationServiceUsesLiveTriageDomainAndBatchedQueries()
     {
         var source = File.ReadAllText(Path.Combine(FindRepoRoot(), "src", "QBrainAi.Services", "Services", "WorkspaceValidationService.cs"));
         Assert.Contains("TriageService.IsNonTerminalStatus", source, StringComparison.Ordinal);

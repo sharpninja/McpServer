@@ -13,7 +13,7 @@ public sealed class SessionLogSanitizerProjectionTests
 
     /// <summary>Session DTO projection redacts every string-bearing DTO section and leaves the source object unchanged.</summary>
     [Fact]
-    public void SanitizeSessionLog_ClonesAndRedactsDtoGraphWithoutMutatingSource()
+    public void SanitizeSessionLogClonesAndRedactsDtoGraphWithoutMutatingSource()
     {
         ISessionLogSanitizer sanitizer = CreateSanitizer();
         var source = CreateSessionLog();
@@ -50,7 +50,7 @@ public sealed class SessionLogSanitizerProjectionTests
     /// while SessionLogService.GetAsync still returned the persisted rows.
     /// </summary>
     [Fact]
-    public void SanitizeSessionLog_CopiesSessionLevelTags()
+    public void SanitizeSessionLogCopiesSessionLevelTags()
     {
         ISessionLogSanitizer sanitizer = CreateSanitizer();
         var source = CreateSessionLog();
@@ -69,7 +69,7 @@ public sealed class SessionLogSanitizerProjectionTests
 
     /// <summary>Query result projection preserves paging metadata while cloning and sanitizing page items.</summary>
     [Fact]
-    public void SanitizeQueryResult_ClonesItemsAndPreservesPaginationMetadata()
+    public void SanitizeQueryResultClonesItemsAndPreservesPaginationMetadata()
     {
         ISessionLogSanitizer sanitizer = CreateSanitizer();
         var source = new SessionLogQueryResult
@@ -94,7 +94,7 @@ public sealed class SessionLogSanitizerProjectionTests
 
     /// <summary>Recursive payload projection handles JsonElement, dictionaries, arrays, lists, primitive values, and unsupported object references.</summary>
     [Fact]
-    public void SanitizeSessionLog_RecursivelySanitizesPayloadContainersAndPreservesPrimitiveValues()
+    public void SanitizeSessionLogRecursivelySanitizesPayloadContainersAndPreservesPrimitiveValues()
     {
         ISessionLogSanitizer sanitizer = CreateSanitizer();
         var unsupported = new UnsupportedPayload("leave-me-alone");
@@ -124,7 +124,7 @@ public sealed class SessionLogSanitizerProjectionTests
 
     /// <summary>Recursive payload projection fails closed for excessive nesting and cycles.</summary>
     [Fact]
-    public void SanitizeSessionLog_RedactsPayloadCyclesAndExcessiveDepth()
+    public void SanitizeSessionLogRedactsPayloadCyclesAndExcessiveDepth()
     {
         ISessionLogSanitizer sanitizer = CreateSanitizer();
         var cyclic = new Dictionary<string, object?> { ["secret"] = "password=hunter2" };

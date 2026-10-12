@@ -18,7 +18,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// synchronously unless the caller supplies an explicit bounded worker.
     /// </summary>
     [Fact]
-    public void SqliteOpenAsync_IsInheritedSynchronousImplementation()
+    public void SqliteOpenAsyncIsInheritedSynchronousImplementation()
     {
         var method = typeof(SqliteConnection).GetMethod(
             nameof(DbConnection.OpenAsync),
@@ -33,7 +33,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// to mutate the caller, while truthful accounting remains until that worker actually exits.
     /// </summary>
     [Fact]
-    public async Task OpenAsync_PreHandleNativeWait_CancelsWithoutMutatingCaller()
+    public async Task OpenAsyncPreHandleNativeWaitCancelsWithoutMutatingCaller()
     {
         using var connection = new SqliteConnection("Data Source=:memory:;Pooling=False");
         var originalConnectionString = connection.ConnectionString;
@@ -101,7 +101,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// close the partial handle, and leave no worker behind.
     /// </summary>
     [Fact]
-    public async Task OpenAsync_NativeLockAtOpen_TimesOutAndJoinsWorker()
+    public async Task OpenAsyncNativeLockAtOpenTimesOutAndJoinsWorker()
     {
         var connectionString = SharedMemoryConnectionString();
         await using var anchor = new SqliteConnection(connectionString);
@@ -160,7 +160,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// Close and disposal may race cancellation without invalid-handle access or a leaked worker.
     /// </summary>
     [Fact]
-    public async Task OpenAsync_CloseDisposeCancellationRaces_DoNotLeakWorkersOrHandles()
+    public async Task OpenAsyncCloseDisposeCancellationRacesDoNotLeakWorkersOrHandles()
     {
         var hookField = typeof(SqliteBoundedConnectionOpener).GetField(
             "s_beforePinnedDataSourceOpen",
@@ -239,7 +239,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task OpenAsync_RepeatedPoolingModes_PreserveStateAndInterruptLifetime(bool pooling)
+    public async Task OpenAsyncRepeatedPoolingModesPreserveStateAndInterruptLifetime(bool pooling)
     {
         var databasePath = Path.Combine(
             Path.GetTempPath(),

@@ -64,7 +64,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>Default product scope unions sibling in-scope FR/TR/TEST/mappings with origin ids.</summary>
     [Fact]
-    public async Task HandleAsync_ProductScope_UnionsSiblingRows()
+    public async Task HandleAsyncProductScopeUnionsSiblingRows()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -91,7 +91,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>productScope=local hides siblings.</summary>
     [Fact]
-    public async Task HandleAsync_LocalScope_HidesSiblings()
+    public async Task HandleAsyncLocalScopeHidesSiblings()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -110,7 +110,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>Zero-product productScope=product still attaches local acceptance criteria (AC4).</summary>
     [Fact]
-    public async Task HandleAsync_ZeroProductWorkspace_KeepsLocalAcceptanceCriteria()
+    public async Task HandleAsyncZeroProductWorkspaceKeepsLocalAcceptanceCriteria()
     {
         await using var db = new McpDbContext(_options);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
@@ -126,7 +126,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>Same id in two workspaces stays two rows with different originWorkspaceId.</summary>
     [Fact]
-    public async Task HandleAsync_Collision_ReturnsTwoOrigins()
+    public async Task HandleAsyncCollisionReturnsTwoOrigins()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -142,7 +142,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>Missing origin layer key excludes the sibling row.</summary>
     [Fact]
-    public async Task HandleAsync_OriginLayerMiss_ExcludesSiblingRow()
+    public async Task HandleAsyncOriginLayerMissExcludesSiblingRow()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -155,7 +155,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>After leave, the leaver no longer sees siblings.</summary>
     [Fact]
-    public async Task HandleAsync_AfterLeave_DropsSibling()
+    public async Task HandleAsyncAfterLeaveDropsSibling()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -174,7 +174,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>Outsider effective is local-only.</summary>
     [Fact]
-    public async Task HandleAsync_Outsider_IsLocalOnly()
+    public async Task HandleAsyncOutsiderIsLocalOnly()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -189,7 +189,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>Local delete of a sibling-only id does not change the sibling row.</summary>
     [Fact]
-    public async Task HandleAsync_LocalDeleteSiblingOnlyId_LeavesSiblingRow()
+    public async Task HandleAsyncLocalDeleteSiblingOnlyIdLeavesSiblingRow()
     {
         await using var db = new McpDbContext(_options);
         await CreateProductAsync(db);
@@ -208,7 +208,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
 
     /// <summary>Zero-product workspace stays local-only even with productScope=product.</summary>
     [Fact]
-    public async Task HandleAsync_ZeroProductWorkspace_StaysLocal()
+    public async Task HandleAsyncZeroProductWorkspaceStaysLocal()
     {
         await using var db = new McpDbContext(_options);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
@@ -226,7 +226,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     /// SetCurrentRequirementLayerAsync(layer-2)).
     /// </summary>
     [Fact]
-    public async Task HandleAsync_NullLayerKey_UsesPersistedCurrentLayerAfterExternalUpdate()
+    public async Task HandleAsyncNullLayerKeyUsesPersistedCurrentLayerAfterExternalUpdate()
     {
         await using var db = new McpDbContext(_options);
         SeedRequirement(db, Owner, "fr", "FR-LAYER2-LOCAL", "Layer 2 FR", "body", "layer-2");

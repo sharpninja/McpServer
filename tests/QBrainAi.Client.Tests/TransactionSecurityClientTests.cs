@@ -25,7 +25,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Registering a party posts the expected route and serializes the key metadata.</summary>
     [Fact]
-    public async Task KeyServerClient_RegisterPartyAsync_PostsExpectedRouteAndBody()
+    public async Task KeyServerClientRegisterPartyAsyncPostsExpectedRouteAndBody()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -57,7 +57,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Signing a manifest posts the canonical manifest request and deserializes the signed manifest.</summary>
     [Fact]
-    public async Task KeyServerClient_SignManifestAsync_PostsExpectedRouteAndDeserializes()
+    public async Task KeyServerClientSignManifestAsyncPostsExpectedRouteAndDeserializes()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -81,7 +81,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Verifying a manifest posts the signed manifest and returns the verification hash.</summary>
     [Fact]
-    public async Task KeyServerClient_VerifyManifestAsync_PostsExpectedRouteAndDeserializes()
+    public async Task KeyServerClientVerifyManifestAsyncPostsExpectedRouteAndDeserializes()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -105,7 +105,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Key lookups URL-encode party and key identifiers.</summary>
     [Fact]
-    public async Task KeyServerClient_GetPartyKeyAsync_EncodesPartyAndKey()
+    public async Task KeyServerClientGetPartyKeyAsyncEncodesPartyAndKey()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -124,7 +124,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Manifest trace lookups URL-encode transaction identifiers and deserialize audit metadata.</summary>
     [Fact]
-    public async Task KeyServerClient_GetManifestAsync_EncodesTransactionAndDeserializes()
+    public async Task KeyServerClientGetManifestAsyncEncodesTransactionAndDeserializes()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -146,7 +146,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Manifest trace reports include filter query values and deserialize ledger summaries.</summary>
     [Fact]
-    public async Task KeyServerClient_GetManifestReportAsync_AppendsFiltersAndDeserializes()
+    public async Task KeyServerClientGetManifestReportAsyncAppendsFiltersAndDeserializes()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -177,7 +177,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Committing a diffgram posts the signed manifest and encrypted payload.</summary>
     [Fact]
-    public async Task SubscriberClient_CommitDiffgramAsync_PostsExpectedRouteAndBody()
+    public async Task SubscriberClientCommitDiffgramAsyncPostsExpectedRouteAndBody()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -203,7 +203,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Status lookups URL-encode the transaction identifier.</summary>
     [Fact]
-    public async Task SubscriberClient_GetTransactionStatusAsync_EncodesTransaction()
+    public async Task SubscriberClientGetTransactionStatusAsyncEncodesTransaction()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -220,7 +220,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Abort requests post structured failure reasons and return abort metadata.</summary>
     [Fact]
-    public async Task SubscriberClient_AbortTransactionAsync_PostsExpectedRouteAndBody()
+    public async Task SubscriberClientAbortTransactionAsyncPostsExpectedRouteAndBody()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -245,7 +245,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>The facade exposes transaction clients and propagates retargeting settings.</summary>
     [Fact]
-    public async Task QBrainAiClient_ExposesTransactionClientsAndPropagatesSettings()
+    public async Task QBrainAiClientExposesTransactionClientsAndPropagatesSettings()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -275,7 +275,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Turn transaction status reads the gate-state endpoint and deserializes failure metadata.</summary>
     [Fact]
-    public async Task TurnTransactionsClient_GetStatusAsync_GetsStatusEndpoint()
+    public async Task TurnTransactionsClientGetStatusAsyncGetsStatusEndpoint()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -293,7 +293,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Pub/sub diagnostics append the maxMessages query value and deserialize message status rows.</summary>
     [Fact]
-    public async Task TurnTransactionsClient_GetPubSubStatusAsync_AppendsMaxMessages()
+    public async Task TurnTransactionsClientGetPubSubStatusAsyncAppendsMaxMessages()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -313,7 +313,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Pub/sub replay posts to the replay endpoint and deserializes replay counts.</summary>
     [Fact]
-    public async Task TurnTransactionsClient_ReplayPubSubAsync_PostsReplayEndpoint()
+    public async Task TurnTransactionsClientReplayPubSubAsyncPostsReplayEndpoint()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -331,7 +331,7 @@ public sealed class TransactionSecurityClientTests
 
     /// <summary>Pub/sub retention purge posts cutoff and limit query values.</summary>
     [Fact]
-    public async Task TurnTransactionsClient_PurgePubSubRetentionAsync_PostsRetentionEndpoint()
+    public async Task TurnTransactionsClientPurgePubSubRetentionAsyncPostsRetentionEndpoint()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,

@@ -6,7 +6,7 @@ namespace QBrainAi.QBAgent.Tests;
 public sealed class QBAgentCliOptionsTests
 {
     [Fact]
-    public void Parse_Default_HidesIntent()
+    public void ParseDefaultHidesIntent()
     {
         var options = QBAgentCliOptions.Parse([], environment: new Dictionary<string, string?>());
         Assert.False(options.ShowIntent);
@@ -14,7 +14,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void Parse_ShowIntentFlag_OverridesHideEnv()
+    public void ParseShowIntentFlagOverridesHideEnv()
     {
         var options = QBAgentCliOptions.Parse(
             [QBAgentCliOptions.ShowIntentFlag, @"Q:\__mcp_unit_test__\McpServerManager"],
@@ -27,7 +27,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void Parse_HideIntentFlag_OverridesShowEnv()
+    public void ParseHideIntentFlagOverridesShowEnv()
     {
         var options = QBAgentCliOptions.Parse(
             [QBAgentCliOptions.HideIntentFlag],
@@ -39,7 +39,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void Parse_ShowIntentEnv_WithoutFlags_ShowsIntent()
+    public void ParseShowIntentEnvWithoutFlagsShowsIntent()
     {
         var options = QBAgentCliOptions.Parse(
             [],
@@ -51,7 +51,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void Parse_ResumeWithoutValue_IsLatest()
+    public void ParseResumeWithoutValueIsLatest()
     {
         var options = QBAgentCliOptions.Parse(
             [QBAgentCliOptions.ResumeFlag],
@@ -60,7 +60,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void Parse_ResumeWithSessionId_AndDirectory()
+    public void ParseResumeWithSessionIdAndDirectory()
     {
         var options = QBAgentCliOptions.Parse(
             [QBAgentCliOptions.ResumeFlag, "qbagent-20260911T150405123Z", @"Q:\__mcp_unit_test__\McpServerManager"],
@@ -70,7 +70,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void Parse_ResumeThenShowIntent_DoesNotTreatFlagAsSessionId()
+    public void ParseResumeThenShowIntentDoesNotTreatFlagAsSessionId()
     {
         var options = QBAgentCliOptions.Parse(
             [QBAgentCliOptions.ResumeFlag, QBAgentCliOptions.ShowIntentFlag],
@@ -80,7 +80,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void IntentDisplay_HidesJsonEnvelope()
+    public void IntentDisplayHidesJsonEnvelope()
     {
         var json = """{"intent":"final","content":"visible"}""";
         Assert.Equal("visible", QBAgentIntentDisplay.FormatForDisplay(json, showIntent: false));
@@ -90,7 +90,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void HasPendingToolHandback_IgnoresHistoricalToolResultsAfterUserTurn()
+    public void HasPendingToolHandbackIgnoresHistoricalToolResultsAfterUserTurn()
     {
         var messages = new List<ChatMessage>
         {
@@ -104,7 +104,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void HasPendingToolHandback_TrueWhenNewestMessageIsToolResult()
+    public void HasPendingToolHandbackTrueWhenNewestMessageIsToolResult()
     {
         var messages = new List<ChatMessage>
         {
@@ -116,7 +116,7 @@ public sealed class QBAgentCliOptionsTests
     }
 
     [Fact]
-    public void IntentDisplay_ShowIntent_PrefixesMissingWhenNoEnvelope()
+    public void IntentDisplayShowIntentPrefixesMissingWhenNoEnvelope()
     {
         var shown = QBAgentIntentDisplay.FormatForDisplay("plain prose", showIntent: true);
         Assert.StartsWith("intent: missing", shown, StringComparison.Ordinal);

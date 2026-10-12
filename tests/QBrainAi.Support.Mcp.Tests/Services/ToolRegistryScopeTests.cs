@@ -45,7 +45,7 @@ public sealed class ToolRegistryScopeTests : IDisposable
     /// reported by the McpServerManager workspace.
     /// </summary>
     [Fact]
-    public async Task InstallAsync_WithoutWorkspaceParameter_PersistsGlobalToolVisibleAcrossWorkspaces()
+    public async Task InstallAsyncWithoutWorkspaceParameterPersistsGlobalToolVisibleAcrossWorkspaces()
     {
         using (var seed = CreateContext(null))
         {
@@ -120,7 +120,7 @@ public sealed class ToolRegistryScopeTests : IDisposable
     /// intentionally global tools discoverable.
     /// </summary>
     [Fact]
-    public async Task ListAsync_WithoutWorkspaceParameter_ReturnsOnlyGlobalTools()
+    public async Task ListAsyncWithoutWorkspaceParameterReturnsOnlyGlobalTools()
     {
         using (var seed = CreateContext(null))
         {

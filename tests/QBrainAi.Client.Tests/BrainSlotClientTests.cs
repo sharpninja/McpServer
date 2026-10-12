@@ -20,7 +20,7 @@ public sealed class BrainSlotClientTests
 
     /// <summary>ListAsync builds the expected route and deserializes brain-slot definitions.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task ListAsync_SendsExpectedRoute()
+    public async System.Threading.Tasks.Task ListAsyncSendsExpectedRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -41,7 +41,7 @@ public sealed class BrainSlotClientTests
 
     /// <summary>UpsertAsync sends mutable slot fields without requiring raw credentials.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task UpsertAsync_SerializesCredentialReferenceOnly()
+    public async System.Threading.Tasks.Task UpsertAsyncSerializesCredentialReferenceOnly()
     {
         var response = new BrainSlotDto
         {
@@ -82,7 +82,7 @@ public sealed class BrainSlotClientTests
 
     /// <summary>InvokeAsync posts the turn-bound invocation request and reads committed output.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task InvokeAsync_PostsInvocationBody()
+    public async System.Threading.Tasks.Task InvokeAsyncPostsInvocationBody()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -109,7 +109,7 @@ public sealed class BrainSlotClientTests
 
     /// <summary>OrchestrateAsync posts the full Quad-Brain request to the orchestration route.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task OrchestrateAsync_PostsExpectedRoute()
+    public async System.Threading.Tasks.Task OrchestrateAsyncPostsExpectedRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -134,7 +134,7 @@ public sealed class BrainSlotClientTests
 
     /// <summary>ReconcileAotAsync posts committed role evidence to the AoT reconciliation route.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task ReconcileAotAsync_PostsExpectedRoute()
+    public async System.Threading.Tasks.Task ReconcileAotAsyncPostsExpectedRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -159,7 +159,7 @@ public sealed class BrainSlotClientTests
 
     /// <summary>UpdateWeightsAsync posts safety-gated weight updates to the weight route.</summary>
     [Fact]
-    public async System.Threading.Tasks.Task UpdateWeightsAsync_PostsExpectedRoute()
+    public async System.Threading.Tasks.Task UpdateWeightsAsyncPostsExpectedRoute()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,

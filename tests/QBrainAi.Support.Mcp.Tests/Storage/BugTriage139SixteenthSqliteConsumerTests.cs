@@ -17,7 +17,7 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
     /// timeout completion and remains counted until the actual worker exits.
     /// </summary>
     [Fact]
-    public async Task OpenAsync_UnstoppablePreHandleWorker_IsBoundedAndTruthfullyCounted()
+    public async Task OpenAsyncUnstoppablePreHandleWorkerIsBoundedAndTruthfullyCounted()
     {
         using var connection = new SqliteConnection("Data Source=:memory:;Pooling=False");
         var originalDefaultTimeout = connection.DefaultTimeout;
@@ -122,7 +122,7 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
     /// while active-worker accounting remains asserted at the final thread boundary.
     /// </summary>
     [Fact]
-    public async Task OpenAsync_ResultWithheldUntilThreadExit_WorkerRemainsObservable()
+    public async Task OpenAsyncResultWithheldUntilThreadExitWorkerRemainsObservable()
     {
         using var connection = new SqliteConnection("Data Source=:memory:;Pooling=False");
         var exitHookField = typeof(SqliteBoundedConnectionOpener).GetField(
@@ -182,7 +182,7 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
     /// provider pool identity, so a later direct reopen targets the original data source.
     /// </summary>
     [Fact]
-    public void PinnedDataSourceLifecycle_DirectReopenUsesOriginalPoolIdentity()
+    public void PinnedDataSourceLifecycleDirectReopenUsesOriginalPoolIdentity()
     {
         var root = Path.Combine(
             Path.GetTempPath(),

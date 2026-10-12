@@ -513,7 +513,7 @@ public sealed partial class WebsiteIngestor : IWebsiteIngestor
         foreach (Match match in LinkRegex().Matches(html))
         {
             var href = match.Groups[1].Value;
-            if (href.StartsWith("#", StringComparison.Ordinal) || href.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+            if (href.StartsWith('#') || href.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }

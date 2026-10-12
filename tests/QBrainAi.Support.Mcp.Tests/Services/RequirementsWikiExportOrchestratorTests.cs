@@ -23,7 +23,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
 {
     /// <summary>File-backed wiki generation delegates rendering and writing to the shared orchestrator.</summary>
     [Fact]
-    public async Task FileBackedGenerateWikiAsync_DelegatesToSharedOrchestrator()
+    public async Task FileBackedGenerateWikiAsyncDelegatesToSharedOrchestrator()
     {
         using var workspace = new RequirementsWikiWorkspace();
         workspace.SeedCanonicalDocs();
@@ -51,7 +51,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
 
     /// <summary>DB-backed wiki generation delegates scoped requirements and workspace context to the shared orchestrator.</summary>
     [Fact]
-    public async Task DatabaseGenerateWikiAsync_DelegatesToSharedOrchestrator()
+    public async Task DatabaseGenerateWikiAsyncDelegatesToSharedOrchestrator()
     {
         using var fixture = new RequirementsDatabaseWikiFixture();
         var workspaceA = fixture.CreateWorkspace("a");
@@ -86,7 +86,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
 
     /// <summary>Omitted DocFX configuration does not run the external DocFX workflow runner.</summary>
     [Fact]
-    public async Task ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner()
+    public async Task ExportAsyncWhenDocFxSectionIsOmittedDoesNotRunDocFxRunner()
     {
         using var workspace = new RequirementsWikiWorkspace();
         workspace.SeedCanonicalDocs();
@@ -115,7 +115,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
 
     /// <summary>DocFX artifacts are included in the selected platform manifest and omitted from unselected platforms.</summary>
     [Fact]
-    public async Task ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly()
+    public async Task ExportAsyncWithDocFxArtifactsIncludesArtifactsInSelectedPlatformManifestOnly()
     {
         using var workspace = new RequirementsWikiWorkspace();
         workspace.SeedCanonicalDocs();
@@ -143,7 +143,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
 
     /// <summary>DocFX output cannot publish over a configured requirements wiki document target.</summary>
     [Fact]
-    public async Task ExportAsync_WhenDocFxArtifactCollidesWithConfiguredDocument_ThrowsBeforeWriting()
+    public async Task ExportAsyncWhenDocFxArtifactCollidesWithConfiguredDocumentThrowsBeforeWriting()
     {
         using var workspace = new RequirementsWikiWorkspace();
         workspace.SeedCanonicalDocs();
@@ -170,7 +170,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
 
     /// <summary>Stale DocFX artifacts from a previous wiki export are removed by the shared writer.</summary>
     [Fact]
-    public async Task ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup()
+    public async Task ExportAsyncRemovesStaleDocFxArtifactsThroughWriterCleanup()
     {
         using var workspace = new RequirementsWikiWorkspace();
         workspace.SeedCanonicalDocs();
@@ -196,7 +196,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
 
     /// <summary>A failing DocFX workflow leaves existing wiki output unchanged because the writer is not invoked.</summary>
     [Fact]
-    public async Task ExportAsync_WhenDocFxRunnerFails_LeavesPriorOutputUnchanged()
+    public async Task ExportAsyncWhenDocFxRunnerFailsLeavesPriorOutputUnchanged()
     {
         using var workspace = new RequirementsWikiWorkspace();
         workspace.SeedCanonicalDocs();
@@ -218,7 +218,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
 
     /// <summary>Real DocFX 2.78.3 local-tool output is published through both wiki roots and staging is deleted.</summary>
     [Fact]
-    public async Task ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging()
+    public async Task ExportAsyncWithRealDocFxScratchWorkspacePublishesArtifactsAndDeletesStaging()
     {
         using var workspace = new RequirementsWikiWorkspace();
         workspace.SeedCanonicalDocs();

@@ -33,7 +33,7 @@ public class GenericClientPassthroughTests
     #region Client Resolution Tests
 
     [Fact]
-    public async Task ResolveClient_ContextCaseInsensitive_ResolvesContextClient()
+    public async Task ResolveClientContextCaseInsensitiveResolvesContextClient()
     {
         var args = new Dictionary<string, object?>
         {
@@ -60,7 +60,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveClient_GitHubCaseInsensitive_ResolvesGitHubClient()
+    public async Task ResolveClientGitHubCaseInsensitiveResolvesGitHubClient()
     {
         var args = new Dictionary<string, object?>
         {
@@ -86,7 +86,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveClient_RepoCaseInsensitive_ResolvesRepoClient()
+    public async Task ResolveClientRepoCaseInsensitiveResolvesRepoClient()
     {
         var args = new Dictionary<string, object?>
         {
@@ -109,7 +109,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveClient_DesktopCaseInsensitive_ResolvesDesktopClient()
+    public async Task ResolveClientDesktopCaseInsensitiveResolvesDesktopClient()
     {
         var args = new Dictionary<string, object?>
         {
@@ -136,7 +136,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveClient_SessionLogCaseInsensitive_ResolvesSessionLogClient()
+    public async Task ResolveClientSessionLogCaseInsensitiveResolvesSessionLogClient()
     {
         var args = new Dictionary<string, object?>
         {
@@ -163,7 +163,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveClient_TodoCaseInsensitive_ResolvesTodoClient()
+    public async Task ResolveClientTodoCaseInsensitiveResolvesTodoClient()
     {
         var args = new Dictionary<string, object?>
         {
@@ -182,7 +182,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveClient_RequirementsCaseInsensitive_ResolvesRequirementsClient()
+    public async Task ResolveClientRequirementsCaseInsensitiveResolvesRequirementsClient()
     {
         var args = new Dictionary<string, object?>
         {
@@ -200,7 +200,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveClient_MixedCase_ResolvesCorrectly()
+    public async Task ResolveClientMixedCaseResolvesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -221,7 +221,7 @@ public class GenericClientPassthroughTests
     #region Method Resolution Tests
 
     [Fact]
-    public async Task ResolveMethod_SearchAsync_ResolvesCorrectMethod()
+    public async Task ResolveMethodSearchAsyncResolvesCorrectMethod()
     {
         var args = new Dictionary<string, object?>
         {
@@ -238,7 +238,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveMethod_RebuildIndexAsync_ResolvesCorrectMethod()
+    public async Task ResolveMethodRebuildIndexAsyncResolvesCorrectMethod()
     {
         var args = new Dictionary<string, object?>();
 
@@ -252,7 +252,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveMethod_PackAsync_ResolvesCorrectMethod()
+    public async Task ResolveMethodPackAsyncResolvesCorrectMethod()
     {
         var args = new Dictionary<string, object?>
         {
@@ -270,7 +270,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResolveMethod_ListSourcesAsync_ResolvesCorrectMethod()
+    public async Task ResolveMethodListSourcesAsyncResolvesCorrectMethod()
     {
         var args = new Dictionary<string, object?>();
 
@@ -288,7 +288,7 @@ public class GenericClientPassthroughTests
     #region Argument Coercion Tests
 
     [Fact]
-    public async Task ArgumentCoercion_StringParameter_CoercesCorrectly()
+    public async Task ArgumentCoercionStringParameterCoercesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -307,7 +307,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ArgumentCoercion_IntParameter_CoercesCorrectly()
+    public async Task ArgumentCoercionIntParameterCoercesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -325,7 +325,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ArgumentCoercion_BoolParameter_CoercesCorrectly()
+    public async Task ArgumentCoercionBoolParameterCoercesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -344,7 +344,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ArgumentCoercion_NullableParameter_CoercesNull()
+    public async Task ArgumentCoercionNullableParameterCoercesNull()
     {
         var args = new Dictionary<string, object?>
         {
@@ -363,7 +363,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ArgumentCoercion_OptionalParameter_UsesDefaultValue()
+    public async Task ArgumentCoercionOptionalParameterUsesDefaultValue()
     {
         var args = new Dictionary<string, object?>
         {
@@ -381,7 +381,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ArgumentCoercion_ComplexObject_DeserializesCorrectly()
+    public async Task ArgumentCoercionComplexObjectDeserializesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -403,7 +403,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ArgumentCoercion_NumberAsString_CoercesCorrectly()
+    public async Task ArgumentCoercionNumberAsStringCoercesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -425,7 +425,7 @@ public class GenericClientPassthroughTests
     #region Error Handling Tests
 
     [Fact]
-    public async Task ErrorHandling_UnknownClient_ThrowsInvalidOperationException()
+    public async Task ErrorHandlingUnknownClientThrowsInvalidOperationException()
     {
         var args = new Dictionary<string, object?>();
 
@@ -437,7 +437,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ErrorHandling_UnknownMethod_ThrowsInvalidOperationException()
+    public async Task ErrorHandlingUnknownMethodThrowsInvalidOperationException()
     {
         var args = new Dictionary<string, object?>();
 
@@ -449,7 +449,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ErrorHandling_MissingRequiredParameter_ThrowsArgumentException()
+    public async Task ErrorHandlingMissingRequiredParameterThrowsArgumentException()
     {
         var args = new Dictionary<string, object?>
         {
@@ -465,7 +465,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ErrorHandling_TypeConversionError_ThrowsArgumentException()
+    public async Task ErrorHandlingTypeConversionErrorThrowsArgumentException()
     {
         var args = new Dictionary<string, object?>
         {
@@ -481,7 +481,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ErrorHandling_NullForNonNullableParameter_ThrowsArgumentException()
+    public async Task ErrorHandlingNullForNonNullableParameterThrowsArgumentException()
     {
         var args = new Dictionary<string, object?>
         {
@@ -496,7 +496,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ErrorHandling_JsonDeserializationError_ThrowsArgumentException()
+    public async Task ErrorHandlingJsonDeserializationErrorThrowsArgumentException()
     {
         var args = new Dictionary<string, object?>
         {
@@ -515,7 +515,7 @@ public class GenericClientPassthroughTests
     #region Response Shaping Tests
 
     [Fact]
-    public async Task ResponseShaping_ContextSearchResult_ShapesCorrectly()
+    public async Task ResponseShapingContextSearchResultShapesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -545,7 +545,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResponseShaping_GitHubIssueListResult_ShapesCorrectly()
+    public async Task ResponseShapingGitHubIssueListResultShapesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -573,7 +573,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResponseShaping_RepoFileReadResult_ShapesCorrectly()
+    public async Task ResponseShapingRepoFileReadResultShapesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -600,7 +600,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResponseShaping_VoidResult_ReturnsEmptyObject()
+    public async Task ResponseShapingVoidResultReturnsEmptyObject()
     {
         var args = new Dictionary<string, object?>
         {
@@ -617,7 +617,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ResponseShaping_ComplexNestedObject_PreservesStructure()
+    public async Task ResponseShapingComplexNestedObjectPreservesStructure()
     {
         var args = new Dictionary<string, object?>
         {
@@ -654,7 +654,7 @@ public class GenericClientPassthroughTests
     #region Multi-Client Coverage Tests
 
     [Fact]
-    public async Task MultiClient_Context_AllMethods_Work()
+    public async Task MultiClientContextAllMethodsWork()
     {
         // SearchAsync
         _passthrough.InvokeAsync("context", "SearchAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
@@ -686,7 +686,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task MultiClient_GitHub_ListAndCreateIssues_Work()
+    public async Task MultiClientGitHubListAndCreateIssuesWork()
     {
         // ListIssuesAsync
         _passthrough.InvokeAsync("github", "ListIssuesAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
@@ -704,7 +704,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task MultiClient_Repo_ReadAndWrite_Work()
+    public async Task MultiClientRepoReadAndWriteWork()
     {
         // ReadFileAsync
         _passthrough.InvokeAsync("repo", "ReadFileAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
@@ -730,7 +730,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task MultiClient_Desktop_Launch_Works()
+    public async Task MultiClientDesktopLaunchWorks()
     {
         var args = new Dictionary<string, object?>
         {
@@ -748,7 +748,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task MultiClient_SessionLog_QueryAndAppend_Work()
+    public async Task MultiClientSessionLogQueryAndAppendWork()
     {
         // QueryAsync
         _passthrough.InvokeAsync("sessionlog", "QueryAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
@@ -772,7 +772,7 @@ public class GenericClientPassthroughTests
     #region Parameter Name Case Insensitivity Tests
 
     [Fact]
-    public async Task ParameterName_CaseInsensitive_MatchesCorrectly()
+    public async Task ParameterNameCaseInsensitiveMatchesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -788,7 +788,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task ParameterName_MixedCase_MatchesCorrectly()
+    public async Task ParameterNameMixedCaseMatchesCorrectly()
     {
         var args = new Dictionary<string, object?>
         {
@@ -809,7 +809,7 @@ public class GenericClientPassthroughTests
     #region CancellationToken Handling Tests
 
     [Fact]
-    public async Task CancellationToken_PassedToMethod_ProperlyCancels()
+    public async Task CancellationTokenPassedToMethodProperlyCancels()
     {
         var args = new Dictionary<string, object?>
         {
@@ -827,7 +827,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task CancellationToken_NotInArguments_StillPassedToMethod()
+    public async Task CancellationTokenNotInArgumentsStillPassedToMethod()
     {
         var args = new Dictionary<string, object?>
         {
@@ -848,7 +848,7 @@ public class GenericClientPassthroughTests
     #region Federation Client Passthrough Tests
 
     [Fact]
-    public async Task ResolveClient_FederationCaseInsensitive_ResolvesFederationClient()
+    public async Task ResolveClientFederationCaseInsensitiveResolvesFederationClient()
     {
         var args = new Dictionary<string, object?>();
 
@@ -871,7 +871,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task FederationClient_AddTarget_CoercesComplexRequest()
+    public async Task FederationClientAddTargetCoercesComplexRequest()
     {
         var args = new Dictionary<string, object?>
         {
@@ -903,7 +903,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task FederationClient_EnrollProxy_CoercesHubSpokeRequest()
+    public async Task FederationClientEnrollProxyCoercesHubSpokeRequest()
     {
         var args = new Dictionary<string, object?>
         {
@@ -942,7 +942,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task FederationClient_Push_CoercesTypeFilter()
+    public async Task FederationClientPushCoercesTypeFilter()
     {
         var args = new Dictionary<string, object?>
         {
@@ -968,7 +968,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task FederationClient_ListTargets_ReturnsCollection()
+    public async Task FederationClientListTargetsReturnsCollection()
     {
         var args = new Dictionary<string, object?>();
 
@@ -991,7 +991,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task FederationClient_DiscoverFromTunnels_ReturnsTunnelDiscoveryResult()
+    public async Task FederationClientDiscoverFromTunnelsReturnsTunnelDiscoveryResult()
     {
         var args = new Dictionary<string, object?>();
 
@@ -1016,7 +1016,7 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
-    public async Task FederationClient_GetConnection_ReturnsCredentials()
+    public async Task FederationClientGetConnectionReturnsCredentials()
     {
         var args = new Dictionary<string, object?>
         {

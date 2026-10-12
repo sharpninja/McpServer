@@ -18,7 +18,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// the target mount is traversed.
     /// </summary>
     [Fact]
-    public async Task WorkspaceIdentity_SafeSymlinkIntoFuse_IsRejectedByAtomicNoCrossDeviceResolver()
+    public async Task WorkspaceIdentitySafeSymlinkIntoFuseIsRejectedByAtomicNoCrossDeviceResolver()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -56,7 +56,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// classification and physical lookup is rejected by the atomic no-cross-device resolver.
     /// </summary>
     [Fact]
-    public async Task WorkspaceIdentity_AliasReplacement_IsRejectedByAtomicNoCrossDeviceResolver()
+    public async Task WorkspaceIdentityAliasReplacementIsRejectedByAtomicNoCrossDeviceResolver()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -107,7 +107,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// any SQLite worker or native handle is created.
     /// </summary>
     [Fact]
-    public async Task SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker()
+    public async Task SqliteOpenSafeSymlinkIntoFuseIsRejectedBeforeWorker()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -185,7 +185,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// reach the synchronous open worker.
     /// </summary>
     [Fact]
-    public async Task SqliteOpen_AliasReplacementBeforePhysicalResolution_IsRejected()
+    public async Task SqliteOpenAliasReplacementBeforePhysicalResolutionIsRejected()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -248,7 +248,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// SQLite opening: the actual file descriptor is acquired by one atomic no-cross-device open.
     /// </summary>
     [Fact]
-    public async Task SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected()
+    public async Task SqliteOpenAliasReplacementAtNativeOpenIsAtomicallyRejected()
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -329,7 +329,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// remains counted until the actual helper process exits.
     /// </summary>
     [Fact]
-    public async Task WorkspaceIdentity_UnstoppableUnixHelper_RemainsObservableAfterPublicTimeout()
+    public async Task WorkspaceIdentityUnstoppableUnixHelperRemainsObservableAfterPublicTimeout()
     {
         Assert.True(OperatingSystem.IsLinux());
 
@@ -440,7 +440,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// restore the original connection string on close, and reopen the same connection.
     /// </summary>
     [Fact]
-    public async Task SqlitePinnedDataSource_SupportsTransactionsAndReopen()
+    public async Task SqlitePinnedDataSourceSupportsTransactionsAndReopen()
     {
         Assert.True(OperatingSystem.IsLinux());
 

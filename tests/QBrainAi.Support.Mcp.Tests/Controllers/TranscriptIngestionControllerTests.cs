@@ -16,7 +16,7 @@ public sealed class TranscriptIngestionControllerTests
 {
     /// <summary>Verifies path ingestion delegates to the shared transcript service with the resolved workspace.</summary>
     [Fact]
-    public async Task IngestPathAsync_DelegatesWorkspaceBoundRequestAndReturnsRunReceipt()
+    public async Task IngestPathAsyncDelegatesWorkspaceBoundRequestAndReturnsRunReceipt()
     {
         var service = Substitute.For<ITranscriptIngestionService>();
         var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-controller", Guid.NewGuid().ToString("N"));
@@ -78,7 +78,7 @@ public sealed class TranscriptIngestionControllerTests
 
     /// <summary>Path ingestion returns 207 Multi-Status when a folder run continues after one bundle fails.</summary>
     [Fact]
-    public async Task IngestPathAsync_ReturnsMultiStatusForPartialBundleFailure()
+    public async Task IngestPathAsyncReturnsMultiStatusForPartialBundleFailure()
     {
         var service = Substitute.For<ITranscriptIngestionService>();
         var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-controller", Guid.NewGuid().ToString("N"));
@@ -128,7 +128,7 @@ public sealed class TranscriptIngestionControllerTests
 
     /// <summary>Verifies the endpoint requires a resolved workspace context.</summary>
     [Fact]
-    public async Task IngestPathAsync_ReturnsNotFoundWhenWorkspaceIsMissing()
+    public async Task IngestPathAsyncReturnsNotFoundWhenWorkspaceIsMissing()
     {
         var service = Substitute.For<ITranscriptIngestionService>();
         var controller = new SessionLogTranscriptIngestionController(
@@ -148,7 +148,7 @@ public sealed class TranscriptIngestionControllerTests
 
     /// <summary>Verifies path authorization failures are mapped to HTTP 403.</summary>
     [Fact]
-    public async Task IngestPathAsync_MapsUnauthorizedPathToForbidden()
+    public async Task IngestPathAsyncMapsUnauthorizedPathToForbidden()
     {
         var service = Substitute.For<ITranscriptIngestionService>();
         service.IngestPathAsync(Arg.Any<TranscriptIngestionRequest>(), Arg.Any<CancellationToken>())
@@ -169,7 +169,7 @@ public sealed class TranscriptIngestionControllerTests
     }
     /// <summary>Verifies multipart upload staging delegates into the shared transcript service and removes staging files.</summary>
     [Fact]
-    public async Task IngestUploadAsync_StagesFilesDelegatesAndDeletesStaging()
+    public async Task IngestUploadAsyncStagesFilesDelegatesAndDeletesStaging()
     {
         var service = Substitute.For<ITranscriptIngestionService>();
         var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-upload", Guid.NewGuid().ToString("N"));
@@ -232,7 +232,7 @@ public sealed class TranscriptIngestionControllerTests
 
     /// <summary>Upload ingestion returns 207 Multi-Status when a bundle failure is reported with successful receipts.</summary>
     [Fact]
-    public async Task IngestUploadAsync_ReturnsMultiStatusForPartialBundleFailure()
+    public async Task IngestUploadAsyncReturnsMultiStatusForPartialBundleFailure()
     {
         var service = Substitute.For<ITranscriptIngestionService>();
         var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-upload", Guid.NewGuid().ToString("N"));
@@ -285,7 +285,7 @@ public sealed class TranscriptIngestionControllerTests
 
     /// <summary>Verifies ZIP traversal entries are rejected before service delegation.</summary>
     [Fact]
-    public async Task IngestUploadAsync_RejectsZipTraversal()
+    public async Task IngestUploadAsyncRejectsZipTraversal()
     {
         var service = Substitute.For<ITranscriptIngestionService>();
         var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-upload", Guid.NewGuid().ToString("N"));

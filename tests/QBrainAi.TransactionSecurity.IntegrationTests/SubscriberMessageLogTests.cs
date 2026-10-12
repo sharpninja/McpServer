@@ -21,7 +21,7 @@ public sealed class SubscriberMessageLogTests
 
     /// <summary>The Parseable sink POSTs a flat JSON batch to /api/v1/ingest with X-P-Stream and basic auth.</summary>
     [Fact]
-    public async Task ParseableSink_PostsBatchWithStreamAndAuth()
+    public async Task ParseableSinkPostsBatchWithStreamAndAuth()
     {
         var handler = new CapturingHandler(HttpStatusCode.OK);
         using var http = new HttpClient(handler);
@@ -48,7 +48,7 @@ public sealed class SubscriberMessageLogTests
 
     /// <summary>A failing Parseable endpoint never throws out of the sink (best-effort).</summary>
     [Fact]
-    public async Task ParseableSink_SwallowsTransportErrors()
+    public async Task ParseableSinkSwallowsTransportErrors()
     {
         var handler = new CapturingHandler(throws: true);
         using var http = new HttpClient(handler);
@@ -66,7 +66,7 @@ public sealed class SubscriberMessageLogTests
 
     /// <summary>The subscriber emits a message-log entry for each received message (committed and rejected).</summary>
     [Fact]
-    public async Task Subscriber_EmitsMessageLog_PerReceivedMessage()
+    public async Task SubscriberEmitsMessageLogPerReceivedMessage()
     {
         var canonicalizer = new TransactionManifestCanonicalizer();
         using var keyServer = new InMemoryKeyServerService(

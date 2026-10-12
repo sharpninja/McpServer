@@ -11,7 +11,7 @@ public sealed class HandoffReplayKeysTests
 {
     /// <summary>Identity is always 64 hex characters even for a long workspace path.</summary>
     [Fact]
-    public void Create_LongWorkspace_ReturnsFixedLengthSha256()
+    public void CreateLongWorkspaceReturnsFixedLengthSha256()
     {
         var workspace = @"F:\" + new string('w', 800);
         var identity = HandoffReplayKeys.Create(workspace, new string('a', 64), "handoff-todo-draft/v1", force: false, runId: "handoff-run-1");
@@ -21,7 +21,7 @@ public sealed class HandoffReplayKeysTests
 
     /// <summary>Unicode workspace paths are encoded unambiguously and stay 64 hex characters.</summary>
     [Fact]
-    public void Create_UnicodeWorkspace_IsStableAndFixedLength()
+    public void CreateUnicodeWorkspaceIsStableAndFixedLength()
     {
         var first = HandoffReplayKeys.Create(@"F:\工作区\handoff", "abc", "handoff-todo-draft/v1", force: false, "r1");
         var second = HandoffReplayKeys.Create(@"F:\工作区\handoff", "abc", "handoff-todo-draft/v1", force: false, "r1");
@@ -31,7 +31,7 @@ public sealed class HandoffReplayKeysTests
 
     /// <summary>Length-prefixing prevents delimiter collisions between workspace and hash fragments.</summary>
     [Fact]
-    public void Create_DelimiterCollisionInputs_ProduceDistinctIdentities()
+    public void CreateDelimiterCollisionInputsProduceDistinctIdentities()
     {
         var left = HandoffReplayKeys.Create("ws\u001fsha", "rest", "v1", force: false, "r1");
         var right = HandoffReplayKeys.Create("ws", "sha\u001frest", "v1", force: false, "r1");
@@ -40,7 +40,7 @@ public sealed class HandoffReplayKeysTests
 
     /// <summary>Force includes the run id so a new durable row is allowed; non-force ignores run id.</summary>
     [Fact]
-    public void Create_ForceSemantics_PreserveDeterministicReplayAndUniqueForceRows()
+    public void CreateForceSemanticsPreserveDeterministicReplayAndUniqueForceRows()
     {
         var replayA = HandoffReplayKeys.Create("ws", "hash", "v1", force: false, "run-a");
         var replayB = HandoffReplayKeys.Create("ws", "hash", "v1", force: false, "run-b");

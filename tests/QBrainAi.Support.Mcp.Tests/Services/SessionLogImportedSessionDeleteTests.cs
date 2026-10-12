@@ -29,7 +29,7 @@ public sealed class SessionLogImportedSessionDeleteTests
 
     /// <summary>Session delete stays canonical-only: imported UUID session ids are rejected.</summary>
     [Fact]
-    public async Task DeleteSessionAsync_ImportedProviderNativeIds_IsRejected()
+    public async Task DeleteSessionAsyncImportedProviderNativeIdsIsRejected()
     {
         using var connection = OpenConnection();
         SeedImportedSession(connection);
@@ -45,7 +45,7 @@ public sealed class SessionLogImportedSessionDeleteTests
 
     /// <summary>Imported turns with provider-native request ids must be deletable.</summary>
     [Fact]
-    public async Task DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn()
+    public async Task DeleteTurnAsyncImportedProviderNativeIdsDeletesTurn()
     {
         using var connection = OpenConnection();
         SeedImportedSession(connection);
@@ -68,7 +68,7 @@ public sealed class SessionLogImportedSessionDeleteTests
 
     /// <summary>Imported turns must accept section-level replace operations.</summary>
     [Fact]
-    public async Task ReplaceTurnSectionAsync_ImportedProviderNativeIds_ReplacesSection()
+    public async Task ReplaceTurnSectionAsyncImportedProviderNativeIdsReplacesSection()
     {
         using var connection = OpenConnection();
         SeedImportedSession(connection);
@@ -95,7 +95,7 @@ public sealed class SessionLogImportedSessionDeleteTests
 
     /// <summary>Whitespace identifiers stay rejected on the delete path.</summary>
     [Fact]
-    public async Task DeleteSessionAsync_WhitespaceSessionId_Throws()
+    public async Task DeleteSessionAsyncWhitespaceSessionIdThrows()
     {
         using var connection = OpenConnection();
         var (sut, db) = BuildSut(connection);
@@ -105,7 +105,7 @@ public sealed class SessionLogImportedSessionDeleteTests
 
     /// <summary>Non-canonical ids are rejected by session delete before any lookup.</summary>
     [Fact]
-    public async Task DeleteSessionAsync_NonCanonicalId_IsRejected()
+    public async Task DeleteSessionAsyncNonCanonicalIdIsRejected()
     {
         using var connection = OpenConnection();
         var (sut, db) = BuildSut(connection);

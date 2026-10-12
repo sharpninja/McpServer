@@ -17,7 +17,7 @@ public sealed class MemoryEntityScopeTests
     /// <c>Id</c> alone rather than the workspace-composite key used by TODOs.
     /// </summary>
     [Fact]
-    public void Memory_PrimaryKey_IsIdOnly()
+    public void MemoryPrimaryKeyIsIdOnly()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"memory-pk-{Guid.NewGuid():N}")
@@ -37,7 +37,7 @@ public sealed class MemoryEntityScopeTests
     /// row; their workspace owner remains null by contract.
     /// </summary>
     [Fact]
-    public void Memory_WorkspaceId_IsNullable()
+    public void MemoryWorkspaceIdIsNullable()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"memory-null-workspace-{Guid.NewGuid():N}")
@@ -58,7 +58,7 @@ public sealed class MemoryEntityScopeTests
     /// remain visible.
     /// </summary>
     [Fact]
-    public void Memory_HasWorkspaceAndSoftDeleteQueryFilters()
+    public void MemoryHasWorkspaceAndSoftDeleteQueryFilters()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"memory-filter-{Guid.NewGuid():N}")

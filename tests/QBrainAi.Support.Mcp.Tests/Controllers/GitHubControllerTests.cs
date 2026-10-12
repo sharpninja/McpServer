@@ -23,7 +23,7 @@ public sealed class GitHubControllerTests
     /// the GitHub CLI service is invoked, preventing query-string flag injection in issue-close requests.
     /// </summary>
     [Fact]
-    public async Task CloseIssueAsync_WithInvalidReason_ReturnsBadRequest()
+    public async Task CloseIssueAsyncWithInvalidReasonReturnsBadRequest()
     {
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var controller = CreateController(gitHubCliService);
@@ -39,7 +39,7 @@ public sealed class GitHubControllerTests
     /// values before forwarding them to the GitHub CLI service, preventing raw user input from reaching gh.
     /// </summary>
     [Fact]
-    public async Task ListIssuesAsync_WithMixedCaseState_NormalizesBeforeCallingService()
+    public async Task ListIssuesAsyncWithMixedCaseStateNormalizesBeforeCallingService()
     {
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         gitHubCliService.ListIssuesAsync("open", 30, Arg.Any<CancellationToken>())
@@ -57,7 +57,7 @@ public sealed class GitHubControllerTests
     /// service is invoked, blocking raw multi-token input from being incorporated into gh list commands.
     /// </summary>
     [Fact]
-    public async Task ListPullsAsync_WithInvalidState_ReturnsBadRequest()
+    public async Task ListPullsAsyncWithInvalidStateReturnsBadRequest()
     {
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var controller = CreateController(gitHubCliService);
@@ -73,7 +73,7 @@ public sealed class GitHubControllerTests
     /// unhandled exception when the transaction gate rejects token storage.
     /// </summary>
     [Fact]
-    public async Task SetAuthTokenAsync_WhenTokenStoreRejects_ReturnsConflict()
+    public async Task SetAuthTokenAsyncWhenTokenStoreRejectsReturnsConflict()
     {
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
@@ -95,7 +95,7 @@ public sealed class GitHubControllerTests
     /// unhandled exception when the transaction gate rejects token deletion.
     /// </summary>
     [Fact]
-    public async Task DeleteAuthTokenAsync_WhenTokenStoreRejects_ReturnsConflict()
+    public async Task DeleteAuthTokenAsyncWhenTokenStoreRejectsReturnsConflict()
     {
         var gitHubCliService = Substitute.For<IGitHubCliService>();
         var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();

@@ -17,7 +17,7 @@ public sealed class TurnTransactionKeyserverScopeTests
     [InlineData("brain-slot:arbiter-of-truth")]
     [InlineData("brain-slot:creativity")]
     [InlineData("BRAIN-SLOT:logic")]
-    public void RequiresKeyserver_WhenBrainSlotPublisher_ReturnsTrue(string publisherPartyId)
+    public void RequiresKeyserverWhenBrainSlotPublisherReturnsTrue(string publisherPartyId)
         => Assert.True(TurnTransactionKeyserverScope.RequiresKeyserver(publisherPartyId, "todo.update"));
 
     /// <summary>Brain-slot and quadbrain operation names require keyserver signing.</summary>
@@ -25,7 +25,7 @@ public sealed class TurnTransactionKeyserverScopeTests
     [InlineData("brain-slot.invoke")]
     [InlineData("brain-slot.weight-update")]
     [InlineData("quadbrain.orchestrate")]
-    public void RequiresKeyserver_WhenQuadBrainOperation_ReturnsTrue(string operationName)
+    public void RequiresKeyserverWhenQuadBrainOperationReturnsTrue(string operationName)
         => Assert.True(TurnTransactionKeyserverScope.RequiresKeyserver("mcpserver", operationName));
 
     /// <summary>General-agent first-party mutations must not require keyserver signing.</summary>
@@ -42,12 +42,12 @@ public sealed class TurnTransactionKeyserverScopeTests
     [InlineData("federation.control")]
     [InlineData("context.mutate")]
     [InlineData("requirements.ingest")]
-    public void RequiresKeyserver_WhenGeneralAgentOperation_ReturnsFalse(string operationName)
+    public void RequiresKeyserverWhenGeneralAgentOperationReturnsFalse(string operationName)
         => Assert.False(TurnTransactionKeyserverScope.RequiresKeyserver("mcpserver", operationName));
 
     /// <summary>Adapters skip the coordinator when the operation is not QuadBrain.</summary>
     [Fact]
-    public void ShouldBypassCoordinator_WhenGeneralAgentOperation_ReturnsTrue()
+    public void ShouldBypassCoordinatorWhenGeneralAgentOperationReturnsTrue()
     {
         var coordinator = Substitute.For<ITurnTransactionCoordinator>();
         Assert.True(TurnTransactionKeyserverScope.ShouldBypassCoordinator(coordinator, "todo.update"));
@@ -57,7 +57,7 @@ public sealed class TurnTransactionKeyserverScopeTests
 
     /// <summary>Brain-slot operations still use the coordinator when one is registered.</summary>
     [Fact]
-    public void ShouldBypassCoordinator_WhenBrainSlotOperationAndCoordinatorPresent_ReturnsFalse()
+    public void ShouldBypassCoordinatorWhenBrainSlotOperationAndCoordinatorPresentReturnsFalse()
     {
         var coordinator = Substitute.For<ITurnTransactionCoordinator>();
         Assert.False(TurnTransactionKeyserverScope.ShouldBypassCoordinator(coordinator, "brain-slot.invoke"));
@@ -69,12 +69,12 @@ public sealed class TurnTransactionKeyserverScopeTests
 
     /// <summary>A missing coordinator always bypasses.</summary>
     [Fact]
-    public void ShouldBypassCoordinator_WhenCoordinatorNull_ReturnsTrue()
+    public void ShouldBypassCoordinatorWhenCoordinatorNullReturnsTrue()
         => Assert.True(TurnTransactionKeyserverScope.ShouldBypassCoordinator(null, "brain-slot.invoke"));
 
     /// <summary>Request overload matches publisher and operation prefixes.</summary>
     [Fact]
-    public void RequiresKeyserver_RequestOverload_UsesPublisherAndOperation()
+    public void RequiresKeyserverRequestOverloadUsesPublisherAndOperation()
     {
         var general = new TurnTransactionRequest
         {

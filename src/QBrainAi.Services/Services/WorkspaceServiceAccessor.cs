@@ -38,7 +38,7 @@ public sealed class WorkspaceServiceAccessor
     /// </summary>
     /// <param name="workspacePath">Workspace root to bind for the duration of the scope.</param>
     /// <returns>A scope that restores the prior override on dispose.</returns>
-    public IDisposable PushWorkspace(string workspacePath)
+    public static IDisposable PushWorkspace(string workspacePath)
     {
         if (string.IsNullOrWhiteSpace(workspacePath))
             throw new ArgumentException("Workspace path is required.", nameof(workspacePath));

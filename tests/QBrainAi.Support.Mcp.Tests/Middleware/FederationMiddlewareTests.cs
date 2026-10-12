@@ -80,7 +80,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>Management API path always calls next regardless of federation state.</summary>
     [Fact]
-    public async Task InvokeAsync_ManagementPath_CallsNext()
+    public async Task InvokeAsyncManagementPathCallsNext()
     {
         var registry = CreateRegistry(enabled: true, defaultTarget: "t1");
         var nextCalled = false;
@@ -93,7 +93,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>Sub-paths of the management prefix also pass through.</summary>
     [Fact]
-    public async Task InvokeAsync_ManagementSubPath_CallsNext()
+    public async Task InvokeAsyncManagementSubPathCallsNext()
     {
         var registry = CreateRegistry(enabled: true, defaultTarget: "t1");
         var nextCalled = false;
@@ -106,7 +106,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>When federation is disabled, all requests pass through.</summary>
     [Fact]
-    public async Task InvokeAsync_WhenDisabled_CallsNext()
+    public async Task InvokeAsyncWhenDisabledCallsNext()
     {
         var registry = CreateRegistry(enabled: false);
         var nextCalled = false;
@@ -119,7 +119,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>When enabled but no target resolves, the request passes through.</summary>
     [Fact]
-    public async Task InvokeAsync_NoTargetResolved_CallsNext()
+    public async Task InvokeAsyncNoTargetResolvedCallsNext()
     {
         var registry = CreateRegistry(enabled: true);  // no default, no routes
         var nextCalled = false;
@@ -134,7 +134,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>Request with hop count at MaxHops returns 508 and does not call next.</summary>
     [Fact]
-    public async Task InvokeAsync_HopAtMax_Returns508()
+    public async Task InvokeAsyncHopAtMaxReturns508()
     {
         var registry = CreateRegistry(enabled: true, defaultTarget: "t1");
         var nextCalled = false;
@@ -149,7 +149,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>Request with hop count below MaxHops is not treated as a loop (returns non-508).</summary>
     [Fact]
-    public async Task InvokeAsync_HopBelowMax_NotALoop()
+    public async Task InvokeAsyncHopBelowMaxNotALoop()
     {
         var registry = CreateRegistry(enabled: true, defaultTarget: "t1");
         // Use the real proxy service — it will fail to connect to the fake target but that is expected.
@@ -165,7 +165,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>Malformed hop header returns 508.</summary>
     [Fact]
-    public async Task InvokeAsync_MalformedHopHeader_Returns508()
+    public async Task InvokeAsyncMalformedHopHeaderReturns508()
     {
         var registry = CreateRegistry(enabled: true, defaultTarget: "t1");
         var nextCalled = false;
@@ -180,7 +180,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>No hop header is treated as hop 0 and is not a loop (returns non-508).</summary>
     [Fact]
-    public async Task InvokeAsync_NoHopHeader_NotALoop()
+    public async Task InvokeAsyncNoHopHeaderNotALoop()
     {
         var registry = CreateRegistry(enabled: true, defaultTarget: "t1");
         // Use the real proxy service — connection to fake target will fail but that is expected.
@@ -196,7 +196,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>LocalProxy mode forwards MCP transport requests to the configured hub.</summary>
     [Fact]
-    public async Task InvokeAsync_LocalProxy_ProxiesMcpTransportToHub()
+    public async Task InvokeAsyncLocalProxyProxiesMcpTransportToHub()
     {
         var registry = CreateLocalProxyRegistry();
         var nextCalled = false;
@@ -219,7 +219,7 @@ public sealed class FederationMiddlewareTests
 
     /// <summary>Standalone and DirectProxy modes keep MCP transport local for compatibility.</summary>
     [Fact]
-    public async Task InvokeAsync_DirectProxy_KeepsMcpTransportLocal()
+    public async Task InvokeAsyncDirectProxyKeepsMcpTransportLocal()
     {
         var registry = CreateRegistry(enabled: true, defaultTarget: "t1");
         var nextCalled = false;

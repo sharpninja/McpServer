@@ -33,7 +33,7 @@ public sealed class HostedAgentWorkflowIntegrationTests
     /// tool invocation while an in-memory HTTP handler stands in for the MCP server contracts.
     /// </summary>
     [Fact]
-    public async Task AddQBrainAiMcpAgent_FactoryCreatedHostedAgent_ExecutesBuiltInWorkflowTools()
+    public async Task AddQBrainAiMcpAgentFactoryCreatedHostedAgentExecutesBuiltInWorkflowTools()
     {
         using var serviceProvider = CreateServiceProvider(out var handler);
         var hostedAgentFactory = serviceProvider.GetRequiredService<IMcpHostedAgentFactory>();
@@ -285,7 +285,7 @@ public sealed class HostedAgentWorkflowIntegrationTests
     /// that each tool invocation produces an independent in-memory session context and submit payload.
     /// </summary>
     [Fact]
-    public async Task AddQBrainAiMcpAgent_HostedAgentFactory_CreatesIsolatedWorkflowContexts()
+    public async Task AddQBrainAiMcpAgentHostedAgentFactoryCreatesIsolatedWorkflowContexts()
     {
         using var serviceProvider = CreateServiceProvider(out var handler);
         var factory = serviceProvider.GetRequiredService<IMcpHostedAgentFactory>();
@@ -344,7 +344,7 @@ public sealed class HostedAgentWorkflowIntegrationTests
     /// the same factory every host uses and asserts no transport call is emitted.
     /// </summary>
     [Fact]
-    public void AddQBrainAiMcpAgent_SharedToolCatalog_ContainsNoQuadBrainTool()
+    public void AddQBrainAiMcpAgentSharedToolCatalogContainsNoQuadBrainTool()
     {
         using var serviceProvider = CreateServiceProvider(out var handler);
         var hostedAgentFactory = serviceProvider.GetRequiredService<IMcpHostedAgentFactory>();

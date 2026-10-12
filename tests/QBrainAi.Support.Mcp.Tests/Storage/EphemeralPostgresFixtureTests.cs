@@ -14,7 +14,7 @@ public sealed class EphemeralPostgresFixtureTests
     /// alone is not sufficient. TEST-MCP-AIUNIT-002 adjacent provider diagnosis.
     /// </summary>
     [Fact]
-    public void EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr()
+    public void EphemeralPostgresFixtureInitdbFailureCapturesSanitizedInvocationStdoutAndStderr()
     {
         var find = typeof(EphemeralPostgresFixture).GetMethod(
             "FindPostgresBinaries",

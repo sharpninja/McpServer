@@ -37,7 +37,7 @@ public sealed class EventPublishingServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ToolRegistryService_Create_PublishesToolRegistryCreated()
+    public async Task ToolRegistryServiceCreatePublishesToolRegistryCreated()
     {
         var db = CreateDbContext();
         var eventBus = Substitute.For<IChangeEventBus>();
@@ -58,7 +58,7 @@ public sealed class EventPublishingServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task WorkspaceService_Create_PublishesWorkspaceCreated()
+    public async Task WorkspaceServiceCreatePublishesWorkspaceCreated()
     {
         var eventBus = Substitute.For<IChangeEventBus>();
         var appsettingsPath = Path.Combine(_tempRoot, "appsettings.json");
@@ -98,7 +98,7 @@ public sealed class EventPublishingServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task AgentService_UpsertDefinition_PublishesCreatedThenUpdated()
+    public async Task AgentServiceUpsertDefinitionPublishesCreatedThenUpdated()
     {
         var db = CreateDbContext();
         var eventBus = Substitute.For<IChangeEventBus>();

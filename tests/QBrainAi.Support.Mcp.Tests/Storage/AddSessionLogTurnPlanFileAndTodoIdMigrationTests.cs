@@ -34,7 +34,7 @@ public sealed class AddSessionLogTurnPlanFileAndTodoIdMigrationTests : IDisposab
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-004: SQLite Up adds both columns; Down drops them.</summary>
     [Fact]
-    public void SqliteMigration_UpAddsColumns_DownDropsThem()
+    public void SqliteMigrationUpAddsColumnsDownDropsThem()
     {
         using (var db = new McpDbContext(_options))
         {
@@ -60,14 +60,14 @@ public sealed class AddSessionLogTurnPlanFileAndTodoIdMigrationTests : IDisposab
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-004: SQL Server migration source adds both columns with None default.</summary>
     [Fact]
-    public void SqlServerMigration_UpAddsColumns_DownDropsThem()
+    public void SqlServerMigrationUpAddsColumnsDownDropsThem()
     {
         AssertProviderMigrationContainsUpAndDown("QBrainAi.Storage.SqlServerMigrations");
     }
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-004: PostgreSQL migration source adds both columns with None default.</summary>
     [Fact]
-    public void PostgreSqlMigration_UpAddsColumns_DownDropsThem()
+    public void PostgreSqlMigrationUpAddsColumnsDownDropsThem()
     {
         AssertProviderMigrationContainsUpAndDown("QBrainAi.Storage.PostgreSqlMigrations");
     }

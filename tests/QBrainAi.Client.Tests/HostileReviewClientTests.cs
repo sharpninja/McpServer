@@ -20,7 +20,7 @@ public sealed class HostileReviewClientTests
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-006: SubmitAsync posts the shared submit contract.</summary>
     [Fact]
-    public async Task SubmitAsync_PostsSubmitContract()
+    public async Task SubmitAsyncPostsSubmitContract()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -47,7 +47,7 @@ public sealed class HostileReviewClientTests
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-006: StatusAsync and GetAsync are read-only GETs.</summary>
     [Fact]
-    public async Task StatusAndGetAsync_UseReadOnlyUrls()
+    public async Task StatusAndGetAsyncUseReadOnlyUrls()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -67,7 +67,7 @@ public sealed class HostileReviewClientTests
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-006: QueryAsync posts AND filters and never hits repair/apply.</summary>
     [Fact]
-    public async Task QueryAsync_PostsAndFilters()
+    public async Task QueryAsyncPostsAndFilters()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -91,7 +91,7 @@ public sealed class HostileReviewClientTests
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-006: public contract types round-trip through the client JSON context.</summary>
     [Fact]
-    public void HostileReviewContracts_RoundTripThroughClientJsonContext()
+    public void HostileReviewContractsRoundTripThroughClientJsonContext()
     {
         var original = new HostileReviewResult
         {

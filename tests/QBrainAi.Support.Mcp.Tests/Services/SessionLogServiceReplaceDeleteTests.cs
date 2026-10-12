@@ -24,7 +24,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     private const string RequestId = "req-20260613T120000Z-001-seed";
 
     [Fact]
-    public async Task ReplaceTurnAsync_ClearsOmittedScalarsAndCollections()
+    public async Task ReplaceTurnAsyncClearsOmittedScalarsAndCollections()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -59,7 +59,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task ReplaceTurnAsync_PreservesWorkspaceStampOnChildren()
+    public async Task ReplaceTurnAsyncPreservesWorkspaceStampOnChildren()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -81,7 +81,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task ReplaceTurnSectionAsync_ReplacesOnlyNamedSection()
+    public async Task ReplaceTurnSectionAsyncReplacesOnlyNamedSection()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -104,7 +104,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task ReplaceTurnSectionAsync_EmptyPayload_ClearsSection()
+    public async Task ReplaceTurnSectionAsyncEmptyPayloadClearsSection()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -123,7 +123,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task ClearTurnSectionAsync_RemovesAllItemsInSection()
+    public async Task ClearTurnSectionAsyncRemovesAllItemsInSection()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -138,7 +138,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task DeleteTurnItemAsync_StringSection_RemovesByValue()
+    public async Task DeleteTurnItemAsyncStringSectionRemovesByValue()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -152,7 +152,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task DeleteTurnItemAsync_Commit_RemovesBySha()
+    public async Task DeleteTurnItemAsyncCommitRemovesBySha()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -167,7 +167,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task DeleteTurnItemAsync_Action_RemovesByOrder()
+    public async Task DeleteTurnItemAsyncActionRemovesByOrder()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -182,7 +182,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task DeleteTurnItemAsync_UnknownKey_ReturnsFalse()
+    public async Task DeleteTurnItemAsyncUnknownKeyReturnsFalse()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -193,7 +193,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task DeleteTurnAsync_SoftDeletesTurnAndChildren()
+    public async Task DeleteTurnAsyncSoftDeletesTurnAndChildren()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -217,7 +217,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task DeleteSessionAsync_SoftDeletesSessionAndEverything()
+    public async Task DeleteSessionAsyncSoftDeletesSessionAndEverything()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -239,7 +239,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task DeleteSessionAsync_Missing_ReturnsFalse()
+    public async Task DeleteSessionAsyncMissingReturnsFalse()
     {
         using var connection = OpenConnection();
         SeedFullSession(connection);
@@ -250,7 +250,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task UpsertTurnAsync_StaysAdditive_DoesNotRemoveExistingItems()
+    public async Task UpsertTurnAsyncStaysAdditiveDoesNotRemoveExistingItems()
     {
         // Regression: PATCH/merge path must keep appending, never clobber.
         using var connection = OpenConnection();
@@ -270,7 +270,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task ReplaceTurnSectionAsync_UnknownSection_Throws()
+    public async Task ReplaceTurnSectionAsyncUnknownSectionThrows()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);

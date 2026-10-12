@@ -22,7 +22,7 @@ public sealed class QBAgentExternalToolSurfaceTests
 
     /// <summary>All seven external primitives are present by name.</summary>
     [Fact]
-    public void Create_IncludesAllExternalPrimitives()
+    public void CreateIncludesAllExternalPrimitives()
     {
         using var set = BuildSurface();
         var names = set.Tools.Select(t => t.Name).ToHashSet(StringComparer.Ordinal);
@@ -38,7 +38,7 @@ public sealed class QBAgentExternalToolSurfaceTests
 
     /// <summary>No external tool carries the mcp_ prefix (which would route it server-side and strip it).</summary>
     [Fact]
-    public void Create_NoToolIsMcpPrefixed()
+    public void CreateNoToolIsMcpPrefixed()
     {
         using var set = BuildSurface();
 
@@ -47,7 +47,7 @@ public sealed class QBAgentExternalToolSurfaceTests
 
     /// <summary>Disposing the tool set is idempotent and releases the PowerShell tool without throwing.</summary>
     [Fact]
-    public void Dispose_IsIdempotent()
+    public void DisposeIsIdempotent()
     {
         var set = BuildSurface();
 

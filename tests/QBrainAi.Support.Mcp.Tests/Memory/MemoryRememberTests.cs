@@ -17,7 +17,7 @@ public sealed class MemoryRememberTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-01: memory_remember with a valid payload returns 200/201 and a MEMORY-* id.</summary>
     [Fact]
-    public async Task Remember_ValidPayload_ReturnsMemoryId()
+    public async Task RememberValidPayloadReturnsMemoryId()
     {
         var result = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -35,7 +35,7 @@ public sealed class MemoryRememberTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-07: Null remember/add body returns 400 with validation FailureKind.</summary>
     [Fact]
-    public async Task NullBody_Returns400()
+    public async Task NullBodyReturns400()
     {
         var remember = await _harness.RememberAsync(null, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
@@ -52,7 +52,7 @@ public sealed class MemoryRememberTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-21: Client-supplied active MEMORY-* id returns 409 Conflict.</summary>
     [Fact]
-    public async Task DuplicateActiveId_Returns409()
+    public async Task DuplicateActiveIdReturns409()
     {
         var first = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -84,7 +84,7 @@ public sealed class MemoryRememberTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-22: Invalid client-supplied MEMORY-* id returns 400.</summary>
     [Fact]
-    public async Task InvalidIdFormat_Returns400()
+    public async Task InvalidIdFormatReturns400()
     {
         var result = await _harness.RememberAsync(new MemoryRememberRequest
         {

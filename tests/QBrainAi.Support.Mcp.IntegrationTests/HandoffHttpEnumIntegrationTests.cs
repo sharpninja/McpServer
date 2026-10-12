@@ -19,7 +19,7 @@ public sealed class HandoffHttpEnumIntegrationTests : IClassFixture<CustomWebApp
 
     /// <summary>P1-7: POST /qbrainai/handoff/ingest with mode 999 never creates and returns validation failure.</summary>
     [Fact]
-    public async Task Ingest_NumericMode999_DoesNotCreate()
+    public async Task IngestNumericMode999DoesNotCreate()
     {
         using var client = _factory.CreateAuthenticatedClient();
         using var content = new StringContent(

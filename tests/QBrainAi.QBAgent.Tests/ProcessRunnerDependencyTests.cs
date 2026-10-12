@@ -16,7 +16,7 @@ public sealed class ProcessRunnerDependencyTests
     /// <summary>Checks shared assembly ownership without launching a process or invoking an agent.</summary>
     [Theory]
     [MemberData(nameof(ProcessTypes))]
-    public void PublicProcessType_IsOwnedBySharedAgentCli(Type processType)
+    public void PublicProcessTypeIsOwnedBySharedAgentCli(Type processType)
     {
         Assert.Equal("QBrainAi.Common.AgentCli", processType.Assembly.GetName().Name);
         Assert.Equal("QBrainAi.Support.Mcp.Services", processType.Namespace);
@@ -24,7 +24,7 @@ public sealed class ProcessRunnerDependencyTests
 
     /// <summary>Inspects the built agent dependency manifest for transitive server and EF dependencies.</summary>
     [Fact]
-    public void AgentDependencyManifest_ExcludesServerStorage()
+    public void AgentDependencyManifestExcludesServerStorage()
     {
         using var dependencies = JsonDocument.Parse(File.ReadAllText(
             Path.Combine(AppContext.BaseDirectory, "QBrainAi.QBAgent.deps.json")));

@@ -34,7 +34,7 @@ public class YamlPipeExecutionTests
     /// docs/REPL-AGENT-GUIDE.md rather than echoing raw text.
     /// </summary>
     [Fact]
-    public void YamlSerializer_Deserialize_HelloEnvelope_ReturnsTypedPayload()
+    public void YamlSerializerDeserializeHelloEnvelopeReturnsTypedPayload()
     {
         var sut = new YamlSerializer();
         var yaml = "type: hello\npayload:\n  protocolVersion: \"1.0\"\n  capabilities:\n    - auth\n    - workspace-multi\n";
@@ -55,7 +55,7 @@ public class YamlPipeExecutionTests
     /// Validates that params are not dropped during parse.
     /// </summary>
     [Fact]
-    public void YamlSerializer_Deserialize_RequestEnvelope_ReturnsTypedPayload()
+    public void YamlSerializerDeserializeRequestEnvelopeReturnsTypedPayload()
     {
         var sut = new YamlSerializer();
         var yaml = "type: request\npayload:\n  requestId: req-001\n  method: client.todo.QueryAsync\n  params:\n    keyword: auth\n    done: false\n";
@@ -76,7 +76,7 @@ public class YamlPipeExecutionTests
     /// This is the shape emitted back to stdout after dispatch, replacing the bug's JSON echo.
     /// </summary>
     [Fact]
-    public void YamlSerializer_Serialize_ResultEnvelope_ProducesExpectedYaml()
+    public void YamlSerializerSerializeResultEnvelopeProducesExpectedYaml()
     {
         var sut = new YamlSerializer();
         var envelope = new YamlEnvelope
@@ -104,7 +104,7 @@ public class YamlPipeExecutionTests
     /// declared protocol version. Validates the handshake does not fall through to echo.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_HelloEnvelope_ReturnsHelloResult()
+    public async Task DispatcherHelloEnvelopeReturnsHelloResult()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var sut = new ReplCommandDispatcher(passthrough);
@@ -132,7 +132,7 @@ public class YamlPipeExecutionTests
     /// envelope's Result.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_ClientRequest_DelegatesToPassthrough()
+    public async Task DispatcherClientRequestDelegatesToPassthrough()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough
@@ -172,7 +172,7 @@ public class YamlPipeExecutionTests
     /// endpoint-backed workflow methods.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_InvalidRequirementsBatch_ReturnsSchemaValidationFailed()
+    public async Task DispatcherInvalidRequirementsBatchReturnsSchemaValidationFailed()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var requirements = Substitute.For<IRequirementsWorkflow>();
@@ -207,7 +207,7 @@ public class YamlPipeExecutionTests
     /// typed batch request DTO before the workflow is invoked.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_ValidRequirementsBatch_DelegatesToRequirementsWorkflow()
+    public async Task DispatcherValidRequirementsBatchDelegatesToRequirementsWorkflow()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var requirements = Substitute.For<IRequirementsWorkflow>();
@@ -261,7 +261,7 @@ public class YamlPipeExecutionTests
     /// TEST-MCP-REQAC-001: single FR create dispatch preserves structured acceptance criteria.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_CreateFr_PreservesAcceptanceCriteria()
+    public async Task DispatcherCreateFrPreservesAcceptanceCriteria()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var requirements = Substitute.For<IRequirementsWorkflow>();
@@ -312,7 +312,7 @@ public class YamlPipeExecutionTests
     /// TEST-MCP-REQAC-001: single FR update dispatch preserves structured acceptance criteria.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_UpdateFr_PreservesAcceptanceCriteria()
+    public async Task DispatcherUpdateFrPreservesAcceptanceCriteria()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var requirements = Substitute.For<IRequirementsWorkflow>();
@@ -360,7 +360,7 @@ public class YamlPipeExecutionTests
     [Theory]
     [InlineData(RequirementsCommandShapes.CreateTrMethod, "TR-MCP-REQAC-999")]
     [InlineData(RequirementsCommandShapes.CreateTestMethod, "TEST-MCP-REQAC-999")]
-    public async Task Dispatcher_CreateRequirement_PreservesAcceptanceCriteriaForTrAndTest(
+    public async Task DispatcherCreateRequirementPreservesAcceptanceCriteriaForTrAndTest(
         string method,
         string id)
     {
@@ -402,7 +402,7 @@ public class YamlPipeExecutionTests
     [Theory]
     [InlineData(RequirementsCommandShapes.UpdateTrMethod, "TR-MCP-REQAC-999")]
     [InlineData(RequirementsCommandShapes.UpdateTestMethod, "TEST-MCP-REQAC-999")]
-    public async Task Dispatcher_UpdateRequirement_PreservesAcceptanceCriteriaForTrAndTest(
+    public async Task DispatcherUpdateRequirementPreservesAcceptanceCriteriaForTrAndTest(
         string method,
         string id)
     {
@@ -442,7 +442,7 @@ public class YamlPipeExecutionTests
     /// TEST-MCP-REQAC-001: malformed single requirement acceptance criteria fail validation.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_CreateFr_WithMalformedAcceptanceCriteria_ReturnsSchemaValidationFailed()
+    public async Task DispatcherCreateFrWithMalformedAcceptanceCriteriaReturnsSchemaValidationFailed()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var requirements = Substitute.For<IRequirementsWorkflow>();
@@ -485,7 +485,7 @@ public class YamlPipeExecutionTests
     /// Verifies FR batch update dispatch preserves structured acceptance criteria.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_UpdateFrBatch_PreservesAcceptanceCriteria()
+    public async Task DispatcherUpdateFrBatchPreservesAcceptanceCriteria()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var requirements = Substitute.For<IRequirementsWorkflow>();
@@ -557,7 +557,7 @@ public class YamlPipeExecutionTests
     [InlineData(RequirementsCommandShapes.UpdateTrBatchMethod)]
     [InlineData(RequirementsCommandShapes.CreateTestBatchMethod)]
     [InlineData(RequirementsCommandShapes.UpdateTestBatchMethod)]
-    public async Task Dispatcher_TypedRequirementBatch_PreservesAcceptanceCriteriaForAllKinds(string method)
+    public async Task DispatcherTypedRequirementBatchPreservesAcceptanceCriteriaForAllKinds(string method)
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var requirements = Substitute.For<IRequirementsWorkflow>();
@@ -582,7 +582,7 @@ public class YamlPipeExecutionTests
     [InlineData(RequirementsCommandShapes.UpdateBatchMethod, "fr")]
     [InlineData(RequirementsCommandShapes.UpdateBatchMethod, "tr")]
     [InlineData(RequirementsCommandShapes.UpdateBatchMethod, "test")]
-    public async Task Dispatcher_MixedRequirementBatch_PreservesAcceptanceCriteriaForAllKinds(
+    public async Task DispatcherMixedRequirementBatchPreservesAcceptanceCriteriaForAllKinds(
         string method,
         string kind)
     {
@@ -615,7 +615,7 @@ public class YamlPipeExecutionTests
     /// Verifies YAML request envelopes preserve nested acceptance criteria booleans in typed batch dispatch.
     /// </summary>
     [Fact]
-    public async Task AgentStdioProtocol_UpdateFrBatchYaml_PreservesAcceptanceCriteriaBoolean()
+    public async Task AgentStdioProtocolUpdateFrBatchYamlPreservesAcceptanceCriteriaBoolean()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var requirements = Substitute.For<IRequirementsWorkflow>();
@@ -670,7 +670,7 @@ public class YamlPipeExecutionTests
     /// query-merge-submit behavior in the workflow layer.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_SessionLogImportRecovery_DelegatesToSessionLogWorkflow()
+    public async Task DispatcherSessionLogImportRecoveryDelegatesToSessionLogWorkflow()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var sessionLog = Substitute.For<ISessionLogWorkflow>();
@@ -732,7 +732,7 @@ public class YamlPipeExecutionTests
     /// TEST-MCP-BUGTRIAGE-019: session-log commands route queryTitle overrides before mutation.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_SessionLogCommands_RouteQueryTitleOverrides()
+    public async Task DispatcherSessionLogCommandsRouteQueryTitleOverrides()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var sessionLog = Substitute.For<ISessionLogWorkflow>();
@@ -809,7 +809,7 @@ public class YamlPipeExecutionTests
     /// same command-shape contract as in-process MCP tools.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_TodoQueryRequest_DelegatesToTodoWorkflow()
+    public async Task DispatcherTodoQueryRequestDelegatesToTodoWorkflow()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var todo = Substitute.For<ITodoWorkflow>();
@@ -851,7 +851,7 @@ public class YamlPipeExecutionTests
     /// schema-validated scope/category/keyword filters.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_MemoryListRequest_DelegatesToMemoryWorkflow()
+    public async Task DispatcherMemoryListRequestDelegatesToMemoryWorkflow()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var memory = Substitute.For<IMemoryWorkflow>();
@@ -888,7 +888,7 @@ public class YamlPipeExecutionTests
     /// effective Global + Workspace list.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_MemoryListRequest_EffectiveScopeForwardsNullScope()
+    public async Task DispatcherMemoryListRequestEffectiveScopeForwardsNullScope()
     {
         var memory = Substitute.For<IMemoryWorkflow>();
         memory.ListAsync(null, null, null, Arg.Any<CancellationToken>())
@@ -921,7 +921,7 @@ public class YamlPipeExecutionTests
     /// agent identity metadata intact.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_MemoryAddRequest_AcceptsFlatYamlShape()
+    public async Task DispatcherMemoryAddRequestAcceptsFlatYamlShape()
     {
         var memory = Substitute.For<IMemoryWorkflow>();
         memory.AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
@@ -964,7 +964,7 @@ public class YamlPipeExecutionTests
     /// workflow.memory.add requires memory text, so malformed YAML is rejected before transport.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_MemoryAddRequest_MissingText_ReturnsSchemaError()
+    public async Task DispatcherMemoryAddRequestMissingTextReturnsSchemaError()
     {
         var memory = Substitute.For<IMemoryWorkflow>();
         var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
@@ -996,7 +996,7 @@ public class YamlPipeExecutionTests
     /// MEMORY-{CATEGORY}-{NNN} format before invoking the workflow.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_MemoryAddRequest_InvalidId_ReturnsSchemaError()
+    public async Task DispatcherMemoryAddRequestInvalidIdReturnsSchemaError()
     {
         var memory = Substitute.For<IMemoryWorkflow>();
         var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
@@ -1033,7 +1033,7 @@ public class YamlPipeExecutionTests
     /// internal <c>request</c> parameter name.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_TodoCreateRequest_AcceptsFlatYamlShape()
+    public async Task DispatcherTodoCreateRequestAcceptsFlatYamlShape()
     {
         var todo = Substitute.For<ITodoWorkflow>();
         var mutation = CreateMutationResult();
@@ -1092,7 +1092,7 @@ public class YamlPipeExecutionTests
     /// strings and must stay that way.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_TodoUpdateRequest_AcceptsNestedRequestShape()
+    public async Task DispatcherTodoUpdateRequestAcceptsNestedRequestShape()
     {
         var todo = Substitute.For<ITodoWorkflow>();
         var mutation = CreateMutationResult();
@@ -1144,7 +1144,7 @@ public class YamlPipeExecutionTests
     /// TEST-MCP-BUGTRIAGE-015: sparse TODO updates must preserve omitted collection fields.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_TodoUpdateRequest_PreservesOmittedCollectionFields()
+    public async Task DispatcherTodoUpdateRequestPreservesOmittedCollectionFields()
     {
         var todo = Substitute.For<ITodoWorkflow>();
         var mutation = CreateMutationResult();
@@ -1193,7 +1193,7 @@ public class YamlPipeExecutionTests
     /// TEST-MCP-BUGTRIAGE-015: explicit empty TODO update collections must clear fields.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_TodoUpdateRequest_PreservesExplicitEmptyCollectionFields()
+    public async Task DispatcherTodoUpdateRequestPreservesExplicitEmptyCollectionFields()
     {
         var todo = Substitute.For<ITodoWorkflow>();
         var mutation = CreateMutationResult();
@@ -1249,7 +1249,7 @@ public class YamlPipeExecutionTests
     /// with the same data as block-style YAML so callers can use either representation.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_TodoCreateRequest_AcceptsJsonFlowStyleYaml()
+    public async Task DispatcherTodoCreateRequestAcceptsJsonFlowStyleYaml()
     {
         var todo = Substitute.For<ITodoWorkflow>();
         var mutation = CreateMutationResult();
@@ -1313,7 +1313,7 @@ public class YamlPipeExecutionTests
     /// so callers can correlate the failure.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_UnknownMethod_ReturnsMethodNotFoundError()
+    public async Task DispatcherUnknownMethodReturnsMethodNotFoundError()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var sut = new ReplCommandDispatcher(passthrough);
@@ -1343,7 +1343,7 @@ public class YamlPipeExecutionTests
     /// points callers at the supported YAML stream shape.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_BatchEnvelope_ReturnsActionableUnsupportedBatchError()
+    public async Task DispatcherBatchEnvelopeReturnsActionableUnsupportedBatchError()
     {
         var serializer = new YamlSerializer();
         var envelope = serializer.Deserialize("""
@@ -1375,7 +1375,7 @@ public class YamlPipeExecutionTests
     /// let the exception escape past the dispatch boundary, so the agent loop stays alive.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_ClientRequestThrows_ReturnsErrorEnvelope()
+    public async Task DispatcherClientRequestThrowsReturnsErrorEnvelope()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough
@@ -1415,7 +1415,7 @@ public class YamlPipeExecutionTests
     /// acceptance test for the bug described as "YAML pipe is being echoed back, not executed."
     /// </summary>
     [Fact]
-    public async Task AgentStdioProtocol_MultiLineRequestTerminatedByBlankLine_DispatchedOnce()
+    public async Task AgentStdioProtocolMultiLineRequestTerminatedByBlankLineDispatchedOnce()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough
@@ -1459,7 +1459,7 @@ public class YamlPipeExecutionTests
     /// matching request ids.
     /// </summary>
     [Fact]
-    public async Task AgentStdioProtocol_TwoEnvelopes_DispatchedIndependently()
+    public async Task AgentStdioProtocolTwoEnvelopesDispatchedIndependently()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough
@@ -1503,7 +1503,7 @@ public class YamlPipeExecutionTests
     /// and FakeYamlSerializer for SerializeStream / DeserializeStream.
     /// </summary>
     [Fact]
-    public async Task AgentStdioProtocol_DocumentSeparators_DispatchedIndependently()
+    public async Task AgentStdioProtocolDocumentSeparatorsDispatchedIndependently()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough
@@ -1540,7 +1540,7 @@ public class YamlPipeExecutionTests
     /// <c>invalid_envelope</c>; the loop must continue so the next envelope can be processed.
     /// </summary>
     [Fact]
-    public async Task AgentStdioProtocol_MalformedYaml_WritesErrorAndContinues()
+    public async Task AgentStdioProtocolMalformedYamlWritesErrorAndContinues()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough

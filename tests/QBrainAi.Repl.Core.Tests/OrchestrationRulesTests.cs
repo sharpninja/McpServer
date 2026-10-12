@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class OrchestrationRulesTests
 {
     [Fact]
-    public async Task Rule_TrustBeforeAuth_MustVerifyTrustBeforeEstablishingAuth()
+    public async Task RuleTrustBeforeAuthMustVerifyTrustBeforeEstablishingAuth()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var trustService = Substitute.For<ITrustBootstrapService>();
@@ -38,7 +38,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task Rule_NonceValidation_MustValidateBeforeTrustConfirmation()
+    public async Task RuleNonceValidationMustValidateBeforeTrustConfirmation()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
@@ -68,7 +68,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task Rule_CachedTrustBypass_SkipsUserPromptForKnownWorkspace()
+    public async Task RuleCachedTrustBypassSkipsUserPromptForKnownWorkspace()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var markerReader = Substitute.For<IMarkerFileReader>();
@@ -99,7 +99,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task Rule_401Recovery_MustRefreshAuthState()
+    public async Task Rule401RecoveryMustRefreshAuthState()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var workspacePath = "/home/user/project";
@@ -120,7 +120,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task Rule_MarkerFileWatch_TriggersAuthRotation()
+    public async Task RuleMarkerFileWatchTriggersAuthRotation()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var authHandler = Substitute.For<IAuthRotationHandler>();
@@ -155,7 +155,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task Rule_StateConsistency_AuthStateReflectsLatestMarkerData()
+    public async Task RuleStateConsistencyAuthStateReflectsLatestMarkerData()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var authHandler = Substitute.For<IAuthRotationHandler>();
@@ -186,7 +186,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task Rule_TrustRevocation_ClearsAuthState()
+    public async Task RuleTrustRevocationClearsAuthState()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var authHandler = Substitute.For<IAuthRotationHandler>();
@@ -213,7 +213,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task Rule_SignatureVerification_BypassesUserPrompt()
+    public async Task RuleSignatureVerificationBypassesUserPrompt()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var trustService = Substitute.For<ITrustBootstrapService>();
@@ -243,7 +243,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task Rule_AuthCallbacks_InvokedOnRotation()
+    public async Task RuleAuthCallbacksInvokedOnRotation()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var workspacePath = "/home/user/project";
@@ -272,7 +272,7 @@ public class OrchestrationRulesTests
     }
 
     [Fact]
-    public async Task FullOrchestration_NewWorkspaceToTrustedWithAuthRotation()
+    public async Task FullOrchestrationNewWorkspaceToTrustedWithAuthRotation()
     {
         var yamlSerializer = new FakeYamlSerializer();
         var markerReader = Substitute.For<IMarkerFileReader>();

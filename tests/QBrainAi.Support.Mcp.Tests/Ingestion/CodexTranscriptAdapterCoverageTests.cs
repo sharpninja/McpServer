@@ -19,7 +19,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// Fixture: session_meta + function_call (shell_command) + function_call_output pair.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexFunctionCallsBecomeAssistantAndToolEvents()
+    public async Task IngestionServiceCodexFunctionCallsBecomeAssistantAndToolEvents()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-03T01:03:38.075Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"function_call\",\"id\":\"fc-1\",\"name\":\"shell_command\",\"arguments\":\"{\\\"command\\\":\\\"git status\\\"}\",\"call_id\":\"call-1\"}}",
@@ -48,7 +48,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// Fixture: custom_tool_call (apply_patch) + custom_tool_call_output pair.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexCustomToolCallsBecomeAssistantAndToolEvents()
+    public async Task IngestionServiceCodexCustomToolCallsBecomeAssistantAndToolEvents()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-03T01:07:04.273Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"custom_tool_call\",\"id\":\"ctc-1\",\"status\":\"completed\",\"call_id\":\"call-2\",\"name\":\"apply_patch\",\"input\":\"*** Begin Patch\"}}",
@@ -75,7 +75,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// assistant reasoning events. Fixture: reasoning record with one summary_text block.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexReasoningSummaryBecomesAssistantEvent()
+    public async Task IngestionServiceCodexReasoningSummaryBecomesAssistantEvent()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-03T01:03:34.205Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"reasoning\",\"id\":\"rs-1\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"Weighing adapter options\"}]}}"
@@ -94,7 +94,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// Fixture: two reasoning records carrying only encrypted_content.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexEncryptedReasoningSkippedWithAggregateInfoDiagnostic()
+    public async Task IngestionServiceCodexEncryptedReasoningSkippedWithAggregateInfoDiagnostic()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-03T01:03:34.205Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"reasoning\",\"id\":\"rs-1\",\"summary\":[],\"encrypted_content\":\"gAAAAA\"}}",
@@ -114,7 +114,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// Fixture: user_message, agent_message, and token_count event_msg records.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexEventMsgRecordsSkippedWithoutWarnings()
+    public async Task IngestionServiceCodexEventMsgRecordsSkippedWithoutWarnings()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-03T01:03:25.238Z\",\"type\":\"event_msg\",\"payload\":{\"type\":\"user_message\",\"message\":\"hello\"}}",
@@ -136,7 +136,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// cwd and model.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexTurnContextContributesModelAndWorkspacePath()
+    public async Task IngestionServiceCodexTurnContextContributesModelAndWorkspacePath()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-03T01:03:25.211Z\",\"type\":\"turn_context\",\"payload\":{\"turn_id\":\"turn-1\",\"cwd\":\"Q:/__mcp_unit_test__/Sample\",\"model\":\"gpt-5.5\",\"effort\":\"xhigh\"}}",
@@ -154,7 +154,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// summarized in one aggregate info diagnostic. Fixture: one world_state + one compacted record.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexNonConversationRecordsSkippedWithInfoDiagnostic()
+    public async Task IngestionServiceCodexNonConversationRecordsSkippedWithInfoDiagnostic()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-13T19:45:32.849Z\",\"type\":\"world_state\",\"payload\":{\"full\":true,\"state\":{}}}",
@@ -175,7 +175,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// another_unknown record.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexUnknownRecordTypesAggregateOneWarningPerType()
+    public async Task IngestionServiceCodexUnknownRecordTypesAggregateOneWarningPerType()
     {
         var session = await NormalizeAsync([
             "{\"type\":\"unmapped_record\",\"payload\":{\"reason\":\"first\"}}",
@@ -199,7 +199,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// (payload is only trigger_turn).
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexInterAgentMetadataSkippedWithInfoDiagnostic()
+    public async Task IngestionServiceCodexInterAgentMetadataSkippedWithInfoDiagnostic()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-18T11:57:31.848Z\",\"type\":\"inter_agent_communication_metadata\",\"payload\":{\"trigger_turn\":false}}",
@@ -223,7 +223,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// object arguments.query plus a truncated tools array (real output records are large namespace dumps).
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexToolSearchCallsBecomePairedAssistantAndToolEvents()
+    public async Task IngestionServiceCodexToolSearchCallsBecomePairedAssistantAndToolEvents()
     {
         var session = await NormalizeAsync([
             "{\"timestamp\":\"2026-07-16T11:30:57.816Z\",\"type\":\"response_item\",\"payload\":{\"type\":\"tool_search_call\",\"id\":\"tsc-1\",\"call_id\":\"call-search-1\",\"status\":\"completed\",\"execution\":\"client\",\"arguments\":{\"query\":\"PowerShell.Mcp powershell execute command session\",\"limit\":10}}}",
@@ -256,7 +256,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// for those record classes.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexToolSearchAndInterAgentPersistDeletesImportRecovery()
+    public async Task IngestionServiceCodexToolSearchAndInterAgentPersistDeletesImportRecovery()
     {
         var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-search", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempWorkspace);
@@ -309,7 +309,7 @@ public sealed class CodexTranscriptAdapterCoverageTests
     /// type instead of per record. Fixture: two ghost_snapshot response_item records.
     /// </summary>
     [Fact]
-    public async Task IngestionService_CodexUnknownResponseItemTypesAggregateOneWarningPerType()
+    public async Task IngestionServiceCodexUnknownResponseItemTypesAggregateOneWarningPerType()
     {
         var session = await NormalizeAsync([
             "{\"type\":\"response_item\",\"payload\":{\"type\":\"ghost_snapshot\",\"id\":\"gs-1\"}}",

@@ -20,7 +20,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncIssueToTodo_NewIssue_CreatesTodoWithCorrectId()
+    public async Task SyncIssueToTodoNewIssueCreatesTodoWithCorrectId()
     {
         var issue = CreateTestIssue(42, "Test Bug", "OPEN");
         _todoService.GetByIdAsync("ISSUE-42", Arg.Any<CancellationToken>()).Returns((TodoFlatItem?)null);
@@ -36,7 +36,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncIssueToTodo_ExistingIssue_UpdatesTodo()
+    public async Task SyncIssueToTodoExistingIssueUpdatesTodo()
     {
         var issue = CreateTestIssue(42, "Updated Bug", "OPEN");
         _todoService.GetByIdAsync("ISSUE-42", Arg.Any<CancellationToken>())
@@ -53,7 +53,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncIssueToTodo_ExistingIssue_PreservesLocalPriorityAndDescription()
+    public async Task SyncIssueToTodoExistingIssuePreservesLocalPriorityAndDescription()
     {
         var issue = new GitHubIssueDetail(
             42,
@@ -101,7 +101,7 @@ public sealed class IssueTodoSyncServiceTests
     /// churn. Validates FR-MCP-071 and TR-MCP-GH-007.
     /// </summary>
     [Fact]
-    public async Task SyncIssueToTodo_ExistingIssue_MergesGitHubCommentsIntoNoteAndPreservesDescription()
+    public async Task SyncIssueToTodoExistingIssueMergesGitHubCommentsIntoNoteAndPreservesDescription()
     {
         var issue = new GitHubIssueDetail(
             42,
@@ -157,7 +157,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncIssueToTodo_ClosedIssue_SetsDoneTrue()
+    public async Task SyncIssueToTodoClosedIssueSetsDoneTrue()
     {
         var issue = CreateTestIssue(42, "Fixed Bug", "CLOSED");
         _todoService.GetByIdAsync("ISSUE-42", Arg.Any<CancellationToken>())
@@ -174,7 +174,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncTodoToIssue_DoneTodo_ClosesOpenIssue()
+    public async Task SyncTodoToIssueDoneTodoClosesOpenIssue()
     {
         _todoService.GetByIdAsync("ISSUE-42", Arg.Any<CancellationToken>())
             .Returns(new TodoFlatItem { Id = "ISSUE-42", Title = "Bug", Section = "mvp-support", Priority = "low", Done = true });
@@ -190,7 +190,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncTodoToIssue_UndoneTodo_ReopensClosedIssue()
+    public async Task SyncTodoToIssueUndoneTodoReopensClosedIssue()
     {
         _todoService.GetByIdAsync("ISSUE-42", Arg.Any<CancellationToken>())
             .Returns(new TodoFlatItem { Id = "ISSUE-42", Title = "Bug", Section = "mvp-support", Priority = "low", Done = false });
@@ -206,7 +206,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncTodoToIssue_TitleChange_UpdatesGitHub()
+    public async Task SyncTodoToIssueTitleChangeUpdatesGitHub()
     {
         _todoService.GetByIdAsync("ISSUE-42", Arg.Any<CancellationToken>())
             .Returns(new TodoFlatItem { Id = "ISSUE-42", Title = "New Title", Section = "mvp-support", Priority = "low", Done = false });
@@ -224,7 +224,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncTodoToIssue_PriorityChange_CanonicalizesGitHubPriorityLabel()
+    public async Task SyncTodoToIssuePriorityChangeCanonicalizesGitHubPriorityLabel()
     {
         _todoService.GetByIdAsync("ISSUE-42", Arg.Any<CancellationToken>())
             .Returns(new TodoFlatItem { Id = "ISSUE-42", Title = "Bug", Section = "mvp-support", Priority = "high", Done = false });
@@ -259,7 +259,7 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public async Task SyncTodoToIssue_NonIssueId_ReturnsError()
+    public async Task SyncTodoToIssueNonIssueIdReturnsError()
     {
         var result = await _sut.SyncTodoToIssueAsync("MVP-APP-001", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(result.Success);
@@ -267,40 +267,40 @@ public sealed class IssueTodoSyncServiceTests
     }
 
     [Fact]
-    public void MapPriority_PriorityHighLabel_ReturnsHigh()
+    public void MapPriorityPriorityHighLabelReturnsHigh()
     {
         var labels = new[] { new GitHubLabel("priority:high", null, null), new GitHubLabel("bug", null, null) };
         Assert.Equal("high", IssueTodoSyncService.MapPriority(labels));
     }
 
     [Fact]
-    public void MapPriority_CanonicalPriorityHighLabel_ReturnsHigh()
+    public void MapPriorityCanonicalPriorityHighLabelReturnsHigh()
     {
         var labels = new[] { new GitHubLabel("priority: HIGH", null, null) };
         Assert.Equal("high", IssueTodoSyncService.MapPriority(labels));
     }
 
     [Fact]
-    public void MapPriority_NoLabels_ReturnsLow()
+    public void MapPriorityNoLabelsReturnsLow()
     {
         Assert.Equal("low", IssueTodoSyncService.MapPriority(Array.Empty<GitHubLabel>()));
     }
 
     [Fact]
-    public void MapSection_AreaAppLabel_ReturnsMvpApp()
+    public void MapSectionAreaAppLabelReturnsMvpApp()
     {
         var labels = new[] { new GitHubLabel("area:app", null, null) };
         Assert.Equal("app", IssueTodoSyncService.MapSection(labels));
     }
 
     [Fact]
-    public void MapSection_NoLabels_ReturnsMvpSupport()
+    public void MapSectionNoLabelsReturnsMvpSupport()
     {
         Assert.Equal("issues", IssueTodoSyncService.MapSection(Array.Empty<GitHubLabel>()));
     }
 
     [Fact]
-    public async Task CommentOnTodoUpdateAsync_ChangedFields_PostsComment()
+    public async Task CommentOnTodoUpdateAsyncChangedFieldsPostsComment()
     {
         var previous = new TodoFlatItem
         {
@@ -337,7 +337,7 @@ public sealed class IssueTodoSyncServiceTests
     /// FR-MCP-071 and TR-MCP-GH-007.
     /// </summary>
     [Fact]
-    public async Task CommentOnTodoUpdateAsync_AppendedNote_PostsGitHubCommentWithCommentText()
+    public async Task CommentOnTodoUpdateAsyncAppendedNotePostsGitHubCommentWithCommentText()
     {
         var previous = new TodoFlatItem
         {

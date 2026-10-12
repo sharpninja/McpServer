@@ -23,7 +23,7 @@ public sealed class UseCaseDiagramUmlContractTests
 {
     /// <summary>Correct scoped UML output satisfies every diagram assertion.</summary>
     [Fact]
-    public void MockGate_ScopedUmlUseCaseDiagram_PassesContract()
+    public void MockGateScopedUmlUseCaseDiagramPassesContract()
     {
         AssertScopedUmlDiagram(new UseCaseDiagramDto
         {
@@ -43,7 +43,7 @@ public sealed class UseCaseDiagramUmlContractTests
 
     /// <summary>A sequence rendering is the deliberate wrong control rejected by the same assertions.</summary>
     [Fact]
-    public void MockGate_SequenceDiagram_IsRejected()
+    public void MockGateSequenceDiagramIsRejected()
     {
         var rejection = Assert.ThrowsAny<XunitException>(
             () => AssertScopedUmlDiagram(new UseCaseDiagramDto
@@ -58,7 +58,7 @@ public sealed class UseCaseDiagramUmlContractTests
 
     /// <summary>Production binding canonicalizes the workspace and returns scoped UML for UC-125.</summary>
     [Fact]
-    public async Task ProductionGate_EquivalentRawPath_ReturnsScopedUmlAndSupportsGraphAndApproval()
+    public async Task ProductionGateEquivalentRawPathReturnsScopedUmlAndSupportsGraphAndApproval()
     {
         const string canonicalWorkspace = @"F:\GitHub\TruckMate";
         await using var connection = new SqliteConnection("Data Source=:memory:");

@@ -107,7 +107,7 @@ public sealed class WorkspacePolicyServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task ApplyAsync_ValidDirective_UpdatesWorkspaceAndLogsPolicyChange()
+    public async Task ApplyAsyncValidDirectiveUpdatesWorkspaceAndLogsPolicyChange()
     {
         var workspacePath = _workspaces.Keys.Single();
         _parser.ParseAsync(Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())

@@ -681,7 +681,7 @@ public sealed class AuthConfigController : ControllerBase
                 var cookiePath = part.Substring("Path=".Length).Trim();
                 if (!cookiePath.StartsWith(proxyUiPrefix, StringComparison.OrdinalIgnoreCase))
                 {
-                    cookiePath = cookiePath.StartsWith("/", StringComparison.Ordinal)
+                    cookiePath = cookiePath.StartsWith('/')
                         ? $"{proxyUiPrefix}{cookiePath}"
                         : $"{proxyUiPrefix}/{cookiePath}";
                 }

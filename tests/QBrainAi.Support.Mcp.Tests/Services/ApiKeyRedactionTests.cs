@@ -14,7 +14,7 @@ public sealed class ApiKeyRedactionTests
 
     /// <summary>Header, assignment, JSON, and query-string key material is replaced by a fixed placeholder.</summary>
     [Fact]
-    public void Redact_StripsApiKeyMaterial_FromLogAndDiagnosticSamples()
+    public void RedactStripsApiKeyMaterialFromLogAndDiagnosticSamples()
     {
         var samples = new[]
         {
@@ -38,7 +38,7 @@ public sealed class ApiKeyRedactionTests
 
     /// <summary>Sensitive header names redact to the placeholder without echoing the value.</summary>
     [Fact]
-    public void RedactHeaderValue_ReplacesSensitiveHeaders()
+    public void RedactHeaderValueReplacesSensitiveHeaders()
     {
         Assert.Equal(ApiKeyRedaction.Placeholder, ApiKeyRedaction.RedactHeaderValue("X-Api-Key", SampleKey));
         Assert.Equal(ApiKeyRedaction.Placeholder, ApiKeyRedaction.RedactHeaderValue("Authorization", "Bearer " + SampleKey));
@@ -47,7 +47,7 @@ public sealed class ApiKeyRedactionTests
 
     /// <summary>Brain interaction logger delegates to the shared helper.</summary>
     [Fact]
-    public void BrainInteractionLogger_UsesSharedRedaction()
+    public void BrainInteractionLoggerUsesSharedRedaction()
     {
         var redacted = BrainInteractionSessionLogger.Redact($"X-Api-Key={SampleKey}");
         Assert.DoesNotContain(SampleKey, redacted, StringComparison.Ordinal);

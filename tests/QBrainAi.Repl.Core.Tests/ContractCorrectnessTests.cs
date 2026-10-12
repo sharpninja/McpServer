@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class ContractCorrectnessTests
 {
     [Fact]
-    public void IYamlSerializer_HasRequiredMethods()
+    public void IYamlSerializerHasRequiredMethods()
     {
         var serializer = Substitute.For<IYamlSerializer>();
 
@@ -22,7 +22,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void IMarkerFileReader_HasRequiredMethods()
+    public void IMarkerFileReaderHasRequiredMethods()
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
@@ -37,7 +37,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void ITrustBootstrapService_HasRequiredMethods()
+    public void ITrustBootstrapServiceHasRequiredMethods()
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
@@ -54,7 +54,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void IAuthRotationHandler_HasRequiredMethods()
+    public void IAuthRotationHandlerHasRequiredMethods()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
@@ -71,7 +71,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void IMarkerFileData_HasRequiredProperties()
+    public void IMarkerFileDataHasRequiredProperties()
     {
         var markerData = Substitute.For<IMarkerFileData>();
 
@@ -89,7 +89,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void ITrustVerificationResult_HasRequiredProperties()
+    public void ITrustVerificationResultHasRequiredProperties()
     {
         var trustResult = Substitute.For<ITrustVerificationResult>();
 
@@ -104,7 +104,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void IAuthState_HasRequiredProperties()
+    public void IAuthStateHasRequiredProperties()
     {
         var authState = Substitute.For<IAuthState>();
 
@@ -123,7 +123,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void ITrustedWorkspace_HasRequiredProperties()
+    public void ITrustedWorkspaceHasRequiredProperties()
     {
         var workspace = Substitute.For<ITrustedWorkspace>();
 
@@ -138,7 +138,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void IYamlEnvelope_HasRequiredProperties()
+    public void IYamlEnvelopeHasRequiredProperties()
     {
         var envelope = Substitute.For<IYamlEnvelope>();
 
@@ -151,7 +151,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void IHelloPayload_HasRequiredProperties()
+    public void IHelloPayloadHasRequiredProperties()
     {
         var payload = Substitute.For<IHelloPayload>();
 
@@ -165,7 +165,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void IRequestPayload_HasRequiredProperties()
+    public void IRequestPayloadHasRequiredProperties()
     {
         var payload = Substitute.For<IRequestPayload>();
 
@@ -179,7 +179,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void IErrorPayload_HasRequiredProperties()
+    public void IErrorPayloadHasRequiredProperties()
     {
         var payload = Substitute.For<IErrorPayload>();
 
@@ -195,7 +195,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public async Task AllInterfaces_AreReferenceTypes()
+    public async Task AllInterfacesAreReferenceTypes()
     {
         Assert.True(typeof(IYamlSerializer).IsInterface);
         Assert.True(typeof(IMarkerFileReader).IsInterface);
@@ -214,7 +214,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public async Task AllInterfaces_CanBeSubstituted()
+    public async Task AllInterfacesCanBeSubstituted()
     {
         var yamlSerializer = Substitute.For<IYamlSerializer>();
         Assert.NotNull(yamlSerializer);
@@ -247,7 +247,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public async Task AsyncMethods_ReturnTasks()
+    public async Task AsyncMethodsReturnTasks()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
 
@@ -267,7 +267,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public async Task CancellationTokenParameters_AreOptional()
+    public async Task CancellationTokenParametersAreOptional()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
 
@@ -284,7 +284,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public void NullableProperties_AreCorrectlyMarked()
+    public void NullablePropertiesAreCorrectlyMarked()
     {
         var markerDataProps = typeof(IMarkerFileData).GetProperties();
         var metadataProperty = markerDataProps.First(p => p.Name == nameof(IMarkerFileData.Metadata));
@@ -302,7 +302,7 @@ public class ContractCorrectnessTests
     }
 
     [Fact]
-    public async Task MarkerFileData_RequiredPropertiesNotNullable()
+    public async Task MarkerFileDataRequiredPropertiesNotNullable()
     {
         var properties = typeof(IMarkerFileData).GetProperties();
         var nullabilityContext = new System.Reflection.NullabilityInfoContext();

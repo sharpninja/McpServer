@@ -12,13 +12,13 @@ public sealed class ModelTests
     [InlineData(WindowStyleOption.Hidden, 1)]
     [InlineData(WindowStyleOption.Minimized, 2)]
     [InlineData(WindowStyleOption.Maximized, 3)]
-    public void WindowStyleOption_HasExpectedValues(WindowStyleOption style, int expectedValue)
+    public void WindowStyleOptionHasExpectedValues(WindowStyleOption style, int expectedValue)
     {
         Assert.Equal(expectedValue, (int)style);
     }
 
     [Fact]
-    public void ProcessLaunchResult_Defaults_SuccessIsFalse()
+    public void ProcessLaunchResultDefaultsSuccessIsFalse()
     {
         var result = new ProcessLaunchResult();
         Assert.False(result.Success);
@@ -29,7 +29,7 @@ public sealed class ModelTests
     }
 
     [Fact]
-    public void ProcessLaunchRequest_Defaults_AreCorrect()
+    public void ProcessLaunchRequestDefaultsAreCorrect()
     {
         var request = new ProcessLaunchRequest();
         Assert.Equal(string.Empty, request.ExecutablePath);

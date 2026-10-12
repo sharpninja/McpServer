@@ -31,7 +31,7 @@ public sealed class TemplateStorageOptionsPostConfigureTests : IDisposable
     /// The test proves the shared post-configurer converts the relative path into a stable absolute path.
     /// </remarks>
     [Fact]
-    public void PostConfigure_DefaultRelativePath_ResolvesAgainstEffectiveDataFolder()
+    public void PostConfigureDefaultRelativePathResolvesAgainstEffectiveDataFolder()
     {
         var dataFolder = CreateTempDirectory();
         var configuration = new ConfigurationBuilder()
@@ -59,7 +59,7 @@ public sealed class TemplateStorageOptionsPostConfigureTests : IDisposable
     /// This data is used to prove the shared post-configurer preserves the instance override behavior expected by STDIO and HTTP hosts.
     /// </remarks>
     [Fact]
-    public void PostConfigure_InstanceOverride_PrefersInstanceSpecificTemplatePath()
+    public void PostConfigureInstanceOverridePrefersInstanceSpecificTemplatePath()
     {
         var dataFolder = CreateTempDirectory();
         var configuration = new ConfigurationBuilder()
@@ -90,7 +90,7 @@ public sealed class TemplateStorageOptionsPostConfigureTests : IDisposable
     /// The test proves the fixed configuration path is sufficient for template listing to return real items instead of an empty result.
     /// </remarks>
     [Fact]
-    public async Task QueryAsync_WithResolvedTemplatePath_ReturnsTemplatesFromYaml()
+    public async Task QueryAsyncWithResolvedTemplatePathReturnsTemplatesFromYaml()
     {
         var dataFolder = CreateTempDirectory();
         var templatesDirectory = Path.Combine(dataFolder, "templates");

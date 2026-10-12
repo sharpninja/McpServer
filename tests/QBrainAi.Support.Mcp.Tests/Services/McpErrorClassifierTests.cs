@@ -13,7 +13,7 @@ public sealed class McpErrorClassifierTests
 {
     /// <summary>Sqlite CANTOPEN is backend_unavailable and retryable.</summary>
     [Fact]
-    public void Classify_SqliteCantOpen_IsBackendUnavailableRetryable()
+    public void ClassifySqliteCantOpenIsBackendUnavailableRetryable()
     {
         var result = McpErrorClassifier.Classify(new SqliteException("unable to open database file", 14));
 
@@ -26,7 +26,7 @@ public sealed class McpErrorClassifierTests
 
     /// <summary>DbUpdateException includes innermost provider text in details.inner.</summary>
     [Fact]
-    public void Classify_DbUpdateException_IncludesInnermostProviderText()
+    public void ClassifyDbUpdateExceptionIncludesInnermostProviderText()
     {
         var inner = new SqliteException("UNIQUE constraint failed: SessionLogTurns.RequestId", 19);
         var exception = new DbUpdateException(
@@ -44,7 +44,7 @@ public sealed class McpErrorClassifierTests
 
     /// <summary>TEST-MCP-TRIAGESTORE-005: SQLITE_BUSY is persistence_error and retryable.</summary>
     [Fact]
-    public void Classify_SqliteBusy_IsRetryablePersistenceError()
+    public void ClassifySqliteBusyIsRetryablePersistenceError()
     {
         var result = McpErrorClassifier.Classify(new SqliteException("database is locked", 5));
 
@@ -58,7 +58,7 @@ public sealed class McpErrorClassifierTests
     /// TEST-MCP-196 / TR-MCP-PERSIST-004: SQLITE_BUSY is persist contention, not storage-down.
     /// </summary>
     [Fact]
-    public void Classify_SqliteBusy_IsNotBackendUnavailable()
+    public void ClassifySqliteBusyIsNotBackendUnavailable()
     {
         var result = McpErrorClassifier.Classify(new SqliteException("database is locked", 5));
 
@@ -68,7 +68,7 @@ public sealed class McpErrorClassifierTests
 
     /// <summary>ArgumentException is validation_error and not retryable.</summary>
     [Fact]
-    public void Classify_ArgumentException_IsValidationError()
+    public void ClassifyArgumentExceptionIsValidationError()
     {
         var result = McpErrorClassifier.Classify(new ArgumentException("sourceType is required."));
 
@@ -80,7 +80,7 @@ public sealed class McpErrorClassifierTests
 
     /// <summary>KeyNotFoundException is not_found.</summary>
     [Fact]
-    public void Classify_KeyNotFound_IsNotFound()
+    public void ClassifyKeyNotFoundIsNotFound()
     {
         var result = McpErrorClassifier.Classify(new KeyNotFoundException("Turn not found."));
 

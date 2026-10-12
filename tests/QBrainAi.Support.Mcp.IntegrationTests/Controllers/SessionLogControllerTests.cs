@@ -24,7 +24,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     /// <summary>TEST-MCP-SESSIONLIFE-004: HTTP receipts survive typed binding, replay, and stale cancellation.</summary>
     [Fact]
-    public async Task SubmitReceipt_ConfirmsReadableSession_AndReplayPreservesTerminalHistory()
+    public async Task SubmitReceiptConfirmsReadableSessionAndReplayPreservesTerminalHistory()
     {
         var sessionId = BuildSessionId("Codex", $"receipt-{Guid.NewGuid():N}");
         var dto = CreateTestDto("Codex", sessionId);
@@ -577,7 +577,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     /// (agent, sessionId); calling it twice yields one session and 200 both times.
     /// </summary>
     [Fact]
-    public async Task OpenSession_Twice_IsIdempotent()
+    public async Task OpenSessionTwiceIsIdempotent()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"open-{Guid.NewGuid():N}");
         var body = new { title = "Lifecycle open", model = "claude-fable-5" };
@@ -598,7 +598,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     /// (agent, sessionId, requestId) with no in-process server state.
     /// </summary>
     [Fact]
-    public async Task BeginTurn_CreatesInProgressTurn()
+    public async Task BeginTurnCreatesInProgressTurn()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"begin-{Guid.NewGuid():N}");
         await OpenSessionAsync(sessionId).ConfigureAwait(true);
@@ -620,7 +620,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-002 / AC-TR-MCP-SESSIONLOG-006-006: None/None begin round-trips.</summary>
     [Fact]
-    public async Task BeginTurn_NoneNone_Returns201_AndGetReturnsNone()
+    public async Task BeginTurnNoneNoneReturns201AndGetReturnsNone()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"begin-none-{Guid.NewGuid():N}");
         await OpenSessionAsync(sessionId).ConfigureAwait(true);
@@ -640,7 +640,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-005: query todoId filter is exact.</summary>
     [Fact]
-    public async Task Query_FilterByTodoId_ReturnsOnlyMatches()
+    public async Task QueryFilterByTodoIdReturnsOnlyMatches()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"q-todo-{Guid.NewGuid():N}");
         var todoId = $"ISSUE-{Random.Shared.Next(100000, 999999)}";
@@ -670,7 +670,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     /// <summary>FR-MCP-SESSIONLOGCTX-001: begin without planFile/todoId is 400.</summary>
     [Fact]
-    public async Task BeginTurn_MissingFields_Returns400()
+    public async Task BeginTurnMissingFieldsReturns400()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"begin-miss-{Guid.NewGuid():N}");
         await OpenSessionAsync(sessionId).ConfigureAwait(true);
@@ -682,7 +682,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     /// <summary>FR-SUPPORT-014: begin on a missing session maps to 404.</summary>
     [Fact]
-    public async Task BeginTurn_SessionMissing_Returns404()
+    public async Task BeginTurnSessionMissingReturns404()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"missing-{Guid.NewGuid():N}");
         var response = await _client.PostAsJsonAsync(
@@ -698,7 +698,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     /// terminal-turn compliance gate, and omitted fields (queryText) survive.
     /// </summary>
     [Fact]
-    public async Task CompleteTurn_WithEvidence_FinalizesTurn()
+    public async Task CompleteTurnWithEvidenceFinalizesTurn()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"complete-{Guid.NewGuid():N}");
         await OpenSessionAsync(sessionId).ConfigureAwait(true);
@@ -730,7 +730,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     /// compliance gate must not leak into the standard lifecycle endpoints.
     /// </summary>
     [Fact]
-    public async Task CompleteTurn_StandardAgentWithoutEvidence_Succeeds()
+    public async Task CompleteTurnStandardAgentWithoutEvidenceSucceeds()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"completeok-{Guid.NewGuid():N}");
         await OpenSessionAsync(sessionId).ConfigureAwait(true);
@@ -752,7 +752,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     /// compliance gate with 400.
     /// </summary>
     [Fact]
-    public async Task CompleteTurn_AcidAgentWithoutEvidence_Returns400()
+    public async Task CompleteTurnAcidAgentWithoutEvidenceReturns400()
     {
         const string qbAgentSourceType = "QBAgent";
         var sessionId = BuildSessionId(qbAgentSourceType, $"complete400-{Guid.NewGuid():N}");
@@ -774,7 +774,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     /// note, and still honors the compliance gate via supplied evidence.
     /// </summary>
     [Fact]
-    public async Task FailTurn_SetsFailedStatusWithNote()
+    public async Task FailTurnSetsFailedStatusWithNote()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"fail-{Guid.NewGuid():N}");
         await OpenSessionAsync(sessionId).ConfigureAwait(true);

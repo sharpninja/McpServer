@@ -14,7 +14,7 @@ public sealed class AgentHelpCorpusServiceTests
     /// TEST-MCP-HELP-009: BootstrapAsync loads pinned docs and returns non-stub context for a real workspace fixture.
     /// </summary>
     [Fact]
-    public async Task BootstrapAsync_LoadsPinnedDocsAndBuildsContextPack()
+    public async Task BootstrapAsyncLoadsPinnedDocsAndBuildsContextPack()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
         Directory.CreateDirectory(Path.Combine(workspaceRoot, "docs", "context"));

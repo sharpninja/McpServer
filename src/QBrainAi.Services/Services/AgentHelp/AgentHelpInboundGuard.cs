@@ -35,7 +35,7 @@ public sealed partial class AgentHelpInboundGuard
     /// </summary>
     /// <param name="message">Raw user message text.</param>
     /// <returns>Guard evaluation result.</returns>
-    public AgentHelpGuardResult Evaluate(string? message)
+    public static AgentHelpGuardResult Evaluate(string? message)
     {
         var normalized = (message ?? string.Empty).Trim();
         if (string.IsNullOrWhiteSpace(normalized))

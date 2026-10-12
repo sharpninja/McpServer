@@ -18,7 +18,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-01: Migrations apply cleanly on SQLite, PostgreSQL, and SQL Server test hosts.</summary>
     [Fact]
-    public void Applies_OnAllProviders()
+    public void AppliesOnAllProviders()
     {
         var root = FindRepoRoot();
         var sqlite = Directory.GetFiles(Path.Combine(root, "src", "QBrainAi.Storage.SqliteMigrations"), "*MemoryVersion*", SearchOption.AllDirectories);
@@ -34,7 +34,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-02: Backfill sets Content from legacy text/guidance for all pre-existing rows.</summary>
     [Fact]
-    public async Task Backfill_ContentFromLegacyText()
+    public async Task BackfillContentFromLegacyText()
     {
         await using var db = _harness.CreateContext(_harness.WorkspaceA);
         db.Memories.Add(new MemoryEntity
@@ -57,7 +57,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-04: MemoryVersion FK to Memory forbids orphan versions.</summary>
     [Fact]
-    public void VersionFk_NoOrphans()
+    public void VersionFkNoOrphans()
     {
         var entity = _harness.FindMappedEntity(typeof(MemoryVersionEntity));
         Assert.NotNull(entity);
@@ -69,7 +69,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-05: Soft-delete column/filter remains enforced by default queries.</summary>
     [Fact]
-    public void SoftDeleteFilter_Default()
+    public void SoftDeleteFilterDefault()
     {
         var memory = _harness.FindMappedEntity(typeof(MemoryEntity));
         Assert.NotNull(memory);
@@ -80,7 +80,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-06: Down migration or forward-only policy is documented; test host can recreate schema.</summary>
     [Fact]
-    public void SchemaRecreate_Works()
+    public void SchemaRecreateWorks()
     {
         using var extra = new MemoryS1Harness();
         using var ctx = extra.CreateContext(extra.WorkspaceA);
@@ -92,7 +92,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-07: Indexes exist for (WorkspaceId, Scope), EmbeddingStatus, and side tables.</summary>
     [Fact]
-    public void Indexes_Present()
+    public void IndexesPresent()
     {
         var memory = _harness.FindMappedEntity(typeof(MemoryEntity));
         Assert.NotNull(memory);
@@ -106,7 +106,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-08: Column lengths match validated max lengths in API (no silent truncate).</summary>
     [Fact]
-    public void ColumnLengths_MatchValidation()
+    public void ColumnLengthsMatchValidation()
     {
         var memory = _harness.FindMappedEntity(typeof(MemoryEntity));
         Assert.NotNull(memory);
@@ -120,7 +120,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-09: Provider-specific types do not break Tags JSON/array round-trip.</summary>
     [Fact]
-    public async Task TagsRoundTrip_AllProviders()
+    public async Task TagsRoundTripAllProviders()
     {
         var remembered = await _harness.RememberAsync(new MemoryRememberRequest
         {
@@ -148,7 +148,7 @@ public sealed class MemoryMigrationTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-10: Audit/append-only versions hold under concurrent inserts.</summary>
     [Fact]
-    public async Task VersionInsert_ConcurrentSafe()
+    public async Task VersionInsertConcurrentSafe()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {

@@ -15,10 +15,10 @@ public sealed class AgentHelpInboundGuardTests
     [InlineData("injection/api-key-exfiltration.txt", "injection.api-key-exfiltration")]
     [InlineData("injection/write-todo-yaml.txt", "injection.write-todo-yaml")]
     [InlineData("injection/disable-guardrails.txt", "injection.disable-guardrails")]
-    public void Evaluate_BlocksInjectionFixtures(string fixturePath, string expectedRuleId)
+    public void EvaluateBlocksInjectionFixtures(string fixturePath, string expectedRuleId)
     {
         var message = ReadFixture(fixturePath);
-        var result = _guard.Evaluate(message);
+        var result = AgentHelpInboundGuard.Evaluate(message);
 
         Assert.False(result.Allowed);
         Assert.Equal(expectedRuleId, result.RuleId);
@@ -29,29 +29,29 @@ public sealed class AgentHelpInboundGuardTests
     [InlineData("bypass/mcp-tool-failure-description.txt")]
     [InlineData("bypass/benign-todo-yaml-question.txt")]
     [InlineData("bypass/normal-help-request.txt")]
-    public void Evaluate_AllowsBenignBypassFixtures(string fixturePath)
+    public void EvaluateAllowsBenignBypassFixtures(string fixturePath)
     {
         var message = ReadFixture(fixturePath);
-        var result = _guard.Evaluate(message);
+        var result = AgentHelpInboundGuard.Evaluate(message);
 
         Assert.True(result.Allowed);
         Assert.Null(result.RuleId);
     }
 
     [Fact]
-    public void Evaluate_BlocksEmptyMessage()
+    public void EvaluateBlocksEmptyMessage()
     {
-        var result = _guard.Evaluate("   ");
+        var result = AgentHelpInboundGuard.Evaluate("   ");
 
         Assert.False(result.Allowed);
         Assert.Equal("validation.empty-message", result.RuleId);
     }
 
     [Fact]
-    public void Evaluate_AllowsMcpFailureDescription_EvenWhenWriteTodoMentionedInContext()
+    public void EvaluateAllowsMcpFailureDescriptionEvenWhenWriteTodoMentionedInContext()
     {
         var message = "The MCP tool failed while calling todo_list. Describe why the MCP tool failed and suggest next steps.";
-        var result = _guard.Evaluate(message);
+        var result = AgentHelpInboundGuard.Evaluate(message);
 
         Assert.True(result.Allowed);
     }

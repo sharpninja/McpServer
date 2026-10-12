@@ -92,7 +92,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// upserts turns by request id instead of attempting duplicate inserts.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_ExistingRelationalSession_UpsertsTurnsByRequestIdWithoutDuplicateInsert()
+    public async Task SubmitAsyncExistingRelationalSessionUpsertsTurnsByRequestIdWithoutDuplicateInsert()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -142,7 +142,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// from the incoming document instead of hard-deleting them or their child rows.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_ExistingRelationalSession_PreservesAbsentDurableTurnsAndChildren()
+    public async Task SubmitAsyncExistingRelationalSessionPreservesAbsentDurableTurnsAndChildren()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -186,7 +186,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// Session header agent runtime fields are persisted and returned by read models.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_WithAgentRuntimeHeaderFields_PersistsAndReturnsThem()
+    public async Task SubmitAsyncWithAgentRuntimeHeaderFieldsPersistsAndReturnsThem()
     {
         var sessionId = BuildSessionId("Codex", "agent-runtime-header");
         var dto = CreateTestDto("Codex", sessionId);
@@ -294,7 +294,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task QueryAsync_WhenSummaryFieldsAreMissing_DerivesStartedAndTurnCountFromTurns()
+    public async Task QueryAsyncWhenSummaryFieldsAreMissingDerivesStartedAndTurnCountFromTurns()
     {
         var sessionId = BuildSessionId("ClaudeCode", "summary-derived");
         var dto = CreateTestDto("ClaudeCode", sessionId);
@@ -329,7 +329,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// source types; mixed Codex, Cursor, Cline, and McpAgent sessions are all in scope.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_WithoutAgent_ReturnsMixedSourceSessionsForWorkspace()
+    public async Task QueryAsyncWithoutAgentReturnsMixedSourceSessionsForWorkspace()
     {
         await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "mixed-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "mixed-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -350,7 +350,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// mixed-source history queries.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_WithAgent_ReturnsOnlyMatchingSourceType()
+    public async Task QueryAsyncWithAgentReturnsOnlyMatchingSourceType()
     {
         await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "agent-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -367,7 +367,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// leaking rows that belong to another registered workspace.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_DoesNotReturnSessionsFromOtherWorkspaces()
+    public async Task QueryAsyncDoesNotReturnSessionsFromOtherWorkspaces()
     {
         var primary = BuildSutWithWorkspaceContext(WorkspacePath);
         await primary.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "primary-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -389,7 +389,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// by when the session was originally started.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_OrdersByLastUpdatedForRecentActivity()
+    public async Task QueryAsyncOrdersByLastUpdatedForRecentActivity()
     {
         var olderStartedRecent = CreateTestDto("Cursor", BuildSessionId("Cursor", "older-start-recent-update"));
         olderStartedRecent.Started = "2026-03-01T00:00:00Z";
@@ -485,7 +485,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// unsearchable because BuildSearchText joined only the four turn scalar fields).
     /// </summary>
     [Fact]
-    public async Task QueryAsync_TextMatchesProcessingDialogContent()
+    public async Task QueryAsyncTextMatchesProcessingDialogContent()
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-search"));
         var turn = dto.Turns!.First();
@@ -510,7 +510,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// action description returns the session.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_TextMatchesActionDescription()
+    public async Task QueryAsyncTextMatchesActionDescription()
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "action-search"));
         var turn = dto.Turns!.First();
@@ -536,7 +536,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// ClaudeCode turn with no decisions/actions/commits is accepted; the same for QBAgent is rejected.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_CompletedEmptyTurn_AcceptedForClaudeCode_RejectedForQBAgent()
+    public async Task UpsertTurnAsyncCompletedEmptyTurnAcceptedForClaudeCodeRejectedForQBAgent()
     {
         var claudeSession = BuildSessionId("ClaudeCode", "gate-standard");
         await _sut.SubmitAsync(CreateTestDto("ClaudeCode", claudeSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -798,7 +798,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// are not hidden by the global query filter.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_StampsWorkspaceIdOnSessionEntity()
+    public async Task SubmitAsyncStampsWorkspaceIdOnSessionEntity()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
 
@@ -818,7 +818,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// pass the per-entity query filters at <see cref="McpDbContext.OnModelCreating"/>.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_StampsWorkspaceIdOnEveryChildEntity()
+    public async Task SubmitAsyncStampsWorkspaceIdOnEveryChildEntity()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
 
@@ -871,7 +871,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// the field via <see cref="McpDbContext.SaveChangesAsync"/>'s built-in stamping.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_WithNullWorkspaceContext_KeepsWorkspaceIdEmpty()
+    public async Task SubmitAsyncWithNullWorkspaceContextKeepsWorkspaceIdEmpty()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"SessionLogTests_NullCtx_{Guid.NewGuid()}")
@@ -897,7 +897,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// <see cref="WorkspaceContext"/> was populated by middleware or stdio wiring.
     /// </summary>
     [Fact]
-    public async Task QueryGetAndHashCheckAsync_UseWorkspaceContextWhenDbContextWasConstructedBeforeWorkspaceResolved()
+    public async Task QueryGetAndHashCheckAsyncUseWorkspaceContextWhenDbContextWasConstructedBeforeWorkspaceResolved()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"SessionLogTests_StaleCtx_Reads_{Guid.NewGuid()}")
@@ -937,7 +937,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// re-synchronize the DbContext discriminator before locating existing rows.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAndAppendDialogAsync_UseWorkspaceContextWhenDbContextWasConstructedBeforeWorkspaceResolved()
+    public async Task UpsertTurnAndAppendDialogAsyncUseWorkspaceContextWhenDbContextWasConstructedBeforeWorkspaceResolved()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"SessionLogTests_StaleCtx_Mutations_{Guid.NewGuid()}")
@@ -995,7 +995,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// must not leak records from a different workspace.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_WhenWorkspaceContextChanges_ReturnsOnlyCurrentWorkspaceRows()
+    public async Task QueryAsyncWhenWorkspaceContextChangesReturnsOnlyCurrentWorkspaceRows()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"SessionLogTests_TwoWorkspace_{Guid.NewGuid()}")
@@ -1035,7 +1035,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// against the delete-stale behavior of the full-session upsert.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurn_AppendsWithoutDeletingSiblings()
+    public async Task UpsertTurnAsyncNewTurnAppendsWithoutDeletingSiblings()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("Cursor", "turn-append");
@@ -1080,7 +1080,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// agents do not have to fold audit data into the response text.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_NewTurn_PersistsStructuredFields()
+    public async Task UpsertTurnAsyncNewTurnPersistsStructuredFields()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("ClaudeCode", "structured-turn-append");
@@ -1134,7 +1134,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// row in place rather than inserting a duplicate.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_ExistingTurn_UpdatesInPlace()
+    public async Task UpsertTurnAsyncExistingTurnUpdatesInPlace()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("Cursor", "turn-update");
@@ -1169,7 +1169,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// child rows when the later DTO omits those collections.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_ExistingTurn_PreservesStructuredCollectionsWhenOmitted()
+    public async Task UpsertTurnAsyncExistingTurnPreservesStructuredCollectionsWhenOmitted()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("ClaudeCode", "turn-merge-structured");
@@ -1228,7 +1228,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// (SourceType <c>QBAgent</c> = <c>McpHostedAgentDefaults.QBAgentSourceType</c>).
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_AcidAgentClosingTurnWithoutEvidence_ThrowsArgumentException()
+    public async Task UpsertTurnAsyncAcidAgentClosingTurnWithoutEvidenceThrowsArgumentException()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         const string qbAgentSourceType = "QBAgent";
@@ -1259,7 +1259,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// The ACID compliance gate must not leak into the standard session-log endpoints.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_StandardAgentClosingTurnWithoutEvidence_Succeeds()
+    public async Task UpsertTurnAsyncStandardAgentClosingTurnWithoutEvidenceSucceeds()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("Cursor", "turn-close-standard");
@@ -1285,7 +1285,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// not exist so the controller can map to 404.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_SessionMissing_ThrowsInvalidOperationException()
+    public async Task UpsertTurnAsyncSessionMissingThrowsInvalidOperationException()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var turn = new UnifiedRequestEntryDto
@@ -1305,7 +1305,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// returns the same record under the same workspace context.
     /// </summary>
     [Fact]
-    public async Task GetAsync_AfterSubmit_ReturnsRecord()
+    public async Task GetAsyncAfterSubmitReturnsRecord()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("Cursor", "get-by-id");
@@ -1323,7 +1323,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// exist (controller maps to 404).
     /// </summary>
     [Fact]
-    public async Task GetAsync_Missing_ReturnsNull()
+    public async Task GetAsyncMissingReturnsNull()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
 
@@ -1343,7 +1343,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// unique index (SessionLogId, RequestId) throws (HTTP 500 in production).
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_DriftedTurnStamp_UpdatesExistingTurnInsteadOfDuplicateInsert()
+    public async Task UpsertTurnAsyncDriftedTurnStampUpdatesExistingTurnInsteadOfDuplicateInsert()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -1384,7 +1384,7 @@ public sealed class SessionLogServiceTests : IDisposable
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task SubmitAndUpsert_ChildRowsAlwaysMatchParentSessionWorkspace(bool useServiceWorkspaceContext)
+    public async Task SubmitAndUpsertChildRowsAlwaysMatchParentSessionWorkspace(bool useServiceWorkspaceContext)
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -1441,7 +1441,7 @@ public sealed class SessionLogServiceTests : IDisposable
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task SubmitAsync_BareStatusUpdate_PreservesTurnsAndCommits(bool driftChildStamps)
+    public async Task SubmitAsyncBareStatusUpdatePreservesTurnsAndCommits(bool driftChildStamps)
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -1502,7 +1502,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// turnCount 0 while the rows still exist.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_DriftedTurnStamps_ReportsRealTurnCount()
+    public async Task QueryAsyncDriftedTurnStampsReportsRealTurnCount()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -1536,7 +1536,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// that shares the same identifiers.
     /// </summary>
     [Fact]
-    public async Task AppendProcessingDialogAsync_SameIdsInTwoWorkspaces_OnlyTouchesCurrentWorkspace()
+    public async Task AppendProcessingDialogAsyncSameIdsInTwoWorkspacesOnlyTouchesCurrentWorkspace()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -1583,7 +1583,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// their parent session's WorkspaceId and is idempotent.
     /// </summary>
     [Fact]
-    public async Task RepairWorkspaceStampsAsync_RestampsDriftedChildrenToParent_Idempotent()
+    public async Task RepairWorkspaceStampsAsyncRestampsDriftedChildrenToParentIdempotent()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -1631,7 +1631,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// (title, model) survive a partial submit; supplied scalars update.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_PartialSessionPayload_PreservesOmittedSessionScalars()
+    public async Task SubmitAsyncPartialSessionPayloadPreservesOmittedSessionScalars()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -1669,7 +1669,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// survive; previously appended collections survive.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_SparseTurnInSessionPayload_PreservesOmittedTurnFields()
+    public async Task SubmitAsyncSparseTurnInSessionPayloadPreservesOmittedTurnFields()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -1723,7 +1723,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// SubmitAsync with an original title, then explicitly retitled.
     /// </summary>
     [Fact]
-    public async Task SetSessionTitleAsync_ExistingSession_UpdatesTitle()
+    public async Task SetSessionTitleAsyncExistingSessionUpdatesTitle()
     {
         var sessionId = BuildSessionId("ClaudeCode", "set-session-title");
         await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Original session title"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -1741,7 +1741,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// default CreateTestDto turn (req-...-entry-001), then explicitly retitled.
     /// </summary>
     [Fact]
-    public async Task SetTurnTitleAsync_ExistingTurn_UpdatesQueryTitle()
+    public async Task SetTurnTitleAsyncExistingTurnUpdatesQueryTitle()
     {
         var sessionId = BuildSessionId("ClaudeCode", "set-turn-title");
         const string requestId = "req-20260211T100100Z-entry-001";
@@ -1759,7 +1759,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// InvalidOperationException when the target session does not exist.
     /// </summary>
     [Fact]
-    public async Task SetSessionTitleAsync_MissingSession_Throws()
+    public async Task SetSessionTitleAsyncMissingSessionThrows()
     {
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             _sut.SetSessionTitleAsync("ClaudeCode", BuildSessionId("ClaudeCode", "missing-session"), "x", TestContext.Current.CancellationToken)).ConfigureAwait(true);
@@ -1770,7 +1770,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// InvalidOperationException when the session exists but the turn does not.
     /// </summary>
     [Fact]
-    public async Task SetTurnTitleAsync_MissingTurn_Throws()
+    public async Task SetTurnTitleAsyncMissingTurnThrows()
     {
         var sessionId = BuildSessionId("ClaudeCode", "set-turn-title-missing");
         await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -1838,7 +1838,7 @@ public sealed class SessionLogServiceTests : IDisposable
     /// retries once and updates the row that won, leaving a single request id.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_UniqueSessionLogTurnsRace_RetriesOnceAndUpdates()
+    public async Task UpsertTurnAsyncUniqueSessionLogTurnsRaceRetriesOnceAndUpdates()
     {
         var databasePath = Path.Combine(Path.GetTempPath(), "sessionlog-unique-" + Guid.NewGuid().ToString("N") + ".db");
         var connectionString = new SqliteConnectionStringBuilder { DataSource = databasePath }.ToString();

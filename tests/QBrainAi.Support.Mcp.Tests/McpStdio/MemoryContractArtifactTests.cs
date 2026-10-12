@@ -10,7 +10,7 @@ public sealed class MemoryContractArtifactTests
 {
     /// <summary>The STDIO contract manifest includes all memory tools and their scope values.</summary>
     [Fact]
-    public void StdioToolContract_IncludesMemoryToolsAndScopes()
+    public void StdioToolContractIncludesMemoryToolsAndScopes()
     {
         var contractPath = Path.Combine(FindRepoRoot(), "docs", "stdio-tool-contract.json");
         using var document = JsonDocument.Parse(File.ReadAllText(contractPath));
@@ -44,7 +44,7 @@ public sealed class MemoryContractArtifactTests
 
     /// <summary>The default marker prompt documents required memory injection and tool surfaces.</summary>
     [Fact]
-    public void DefaultMarkerPrompt_IncludesMcpMemoryGuidance()
+    public void DefaultMarkerPromptIncludesMcpMemoryGuidance()
     {
         var templatePath = Path.Combine(FindRepoRoot(), "templates", "prompt-templates.yaml");
         var text = File.ReadAllText(templatePath);
@@ -66,7 +66,7 @@ public sealed class MemoryContractArtifactTests
 
     /// <summary>Memory context documentation includes import safeguards and audit attribution rules.</summary>
     [Fact]
-    public void MemoryContextDocumentation_IncludesImportAndAttributionRules()
+    public void MemoryContextDocumentationIncludesImportAndAttributionRules()
     {
         var docPath = Path.Combine(FindRepoRoot(), "docs", "context", "memory.md");
         var text = File.ReadAllText(docPath);

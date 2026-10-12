@@ -39,7 +39,7 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
     /// legacy datetimeoffset values were normalized to their UTC instant.
     /// </summary>
     [Fact]
-    public void Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables()
+    public void MigrateDecompose4nfBackfillsJsonListColumnsIntoChildTables()
     {
         EnsureScratchDatabase();
 
@@ -140,7 +140,7 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
     /// reconstructs the decomposed JSON columns from the child rows.
     /// </summary>
     [Fact]
-    public void Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows()
+    public void MigrateDownToPreSliceReconstructsJsonColumnsFromChildRows()
     {
         EnsureScratchDatabase();
 

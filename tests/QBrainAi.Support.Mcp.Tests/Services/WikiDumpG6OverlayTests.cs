@@ -66,7 +66,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: no dump file without --include-dump on GenerateWikiAsync.</summary>
     [Fact]
-    public async Task WikiExport_WithoutDumpFlag_UnchangedBehavior()
+    public async Task WikiExportWithoutDumpFlagUnchangedBehavior()
     {
         var first = Path.Combine(_workspace, "out-a");
         var second = Path.Combine(_workspace, "out-b");
@@ -81,7 +81,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: GenerateWikiAsync includeDump writes versioned JSON keyed by workspace.</summary>
     [Fact]
-    public async Task WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace()
+    public async Task WikiExportWithDumpFlagWritesVersionedJsonKeyedByWorkspace()
     {
         var output = Path.Combine(_workspace, "wiki-dump");
         var service = CreateDocService();
@@ -113,7 +113,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: shipped DI resolves the singleton orchestrator without a captive scoped dump.</summary>
     [Fact]
-    public async Task WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope()
+    public async Task WikiExportShippedDiResolvesOrchestratorWithoutCaptiveScope()
     {
         var output = Path.Combine(_workspace, "wiki-di");
         var connection = new SqliteConnection("Data Source=:memory:");
@@ -170,7 +170,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: dump TODOs and requirement links match the store.</summary>
     [Fact]
-    public async Task Dump_ContainsTodoRowsAndRequirementLinksMatchingStore()
+    public async Task DumpContainsTodoRowsAndRequirementLinksMatchingStore()
     {
         SeedTodo("TODO-DUMP-001");
         SeedLink("TODO-DUMP-001", "fr", "FR-DUMP-001");
@@ -187,7 +187,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: sha256 matches canonical UTF-8 JSON without the hash field.</summary>
     [Fact]
-    public async Task Dump_Sha256_MatchesCanonicalUtf8Json()
+    public async Task DumpSha256MatchesCanonicalUtf8Json()
     {
         var output = Path.Combine(_workspace, "dump-hash");
         var exported = await CreateDumpService().ExportAsync(new WikiDumpExportRequest { OutputRoot = output, IncludeDump = true, WorkspacePath = _workspace }, TestContext.Current.CancellationToken);
@@ -201,7 +201,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-004: add-workspace dump hydrates TODOs from dump, not todo.yaml.</summary>
     [Fact]
-    public async Task AddWorkspace_DumpParam_HydratesTodosFromDumpNotTodoYaml()
+    public async Task AddWorkspaceDumpParamHydratesTodosFromDumpNotTodoYaml()
     {
         SeedTodo("TODO-FROM-DUMP");
         var dumpRoot = Path.Combine(_workspace, "hydrate-dump");
@@ -226,7 +226,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-004: import remaps workspace id; old id is absent.</summary>
     [Fact]
-    public async Task Import_RemapsWorkspaceIdAndPaths_OldIdAbsent()
+    public async Task ImportRemapsWorkspaceIdAndPathsOldIdAbsent()
     {
         SeedTodo("TODO-REMAP");
         var dumpRoot = Path.Combine(_workspace, "remap-dump");
@@ -248,7 +248,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-004: malformed dump, version mismatch, missing tables, unsafe path are rejected.</summary>
     [Fact]
-    public async Task Import_MalformedDump_VersionMismatch_MissingTables_UnsafePath_Rejected()
+    public async Task ImportMalformedDumpVersionMismatchMissingTablesUnsafePathRejected()
     {
         var sut = CreateDumpService();
         var dest = Path.Combine(_workspace, "dest");
@@ -295,7 +295,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-004: re-import does not duplicate TODOs.</summary>
     [Fact]
-    public async Task Import_IdempotentReimport_NoDuplicateTodos()
+    public async Task ImportIdempotentReimportNoDuplicateTodos()
     {
         SeedTodo("TODO-IDEM");
         var dumpRoot = Path.Combine(_workspace, "idem-dump");
@@ -314,7 +314,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-005: todo.yaml is not the TODO source when dump is present.</summary>
     [Fact]
-    public async Task TodoYaml_NotSourceOfTruth_WhenDumpPresent()
+    public async Task TodoYamlNotSourceOfTruthWhenDumpPresent()
     {
         SeedTodo("TODO-DUMP-WINS");
         var dumpRoot = Path.Combine(_workspace, "yaml-vs-dump");
@@ -338,7 +338,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-005: cleanup archives todo.yaml with evidence and does not silent-delete.</summary>
     [Fact]
-    public async Task TodoYaml_Cleanup_ArchivesWithEvidence_NoSilentDelete()
+    public async Task TodoYamlCleanupArchivesWithEvidenceNoSilentDelete()
     {
         SeedTodo("TODO-ARCHIVE");
         var dumpRoot = Path.Combine(_workspace, "archive-dump");
@@ -364,7 +364,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-005: dump and todo.yaml conflict names both paths.</summary>
     [Fact]
-    public async Task DumpAndTodoYaml_Conflict_DumpWins_DiagnosticNamesBoth()
+    public async Task DumpAndTodoYamlConflictDumpWinsDiagnosticNamesBoth()
     {
         SeedTodo("TODO-BOTH");
         var dumpRoot = Path.Combine(_workspace, "conflict-dump");

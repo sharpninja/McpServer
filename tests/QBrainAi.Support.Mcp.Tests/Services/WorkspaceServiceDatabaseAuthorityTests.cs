@@ -16,7 +16,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityTests
     /// workspace rows before appsettings projection happens.
     /// </summary>
     [Fact]
-    public void DBFK_WorkspaceService_RequiresDatabaseContextDependency()
+    public void DBFKWorkspaceServiceRequiresDatabaseContextDependency()
     {
         var hasDatabaseDependency = typeof(WorkspaceService)
             .GetConstructors()
@@ -36,7 +36,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityTests
     /// commit and can omit secret-bearing configuration values.
     /// </summary>
     [Fact]
-    public void DBFK_WorkspaceService_UsesProjectionWriterDependency()
+    public void DBFKWorkspaceServiceUsesProjectionWriterDependency()
     {
         var hasProjectionWriter = typeof(WorkspaceService)
             .GetConstructors()

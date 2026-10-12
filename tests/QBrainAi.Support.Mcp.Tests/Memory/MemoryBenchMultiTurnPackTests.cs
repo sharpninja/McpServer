@@ -9,7 +9,7 @@ public sealed class MemoryBenchMultiTurnPackTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019-01: v2 pack lives at the canonical path and is versioned.</summary>
     [Fact]
-    public void PackFile_ExistsAndVersioned()
+    public void PackFileExistsAndVersioned()
     {
         var path = MemoryBenchMultiTurnCatalog.PackPath();
         Assert.True(File.Exists(path), "docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml must exist.");
@@ -47,7 +47,7 @@ public sealed class MemoryBenchMultiTurnPackTests
 
     /// <summary>AC-FR-MCP-MEMORY-019-04: Query turns do not restate gold facts in the user message.</summary>
     [Fact]
-    public void QueryTurns_DoNotRestateFacts()
+    public void QueryTurnsDoNotRestateFacts()
     {
         foreach (var job in MemoryBenchMultiTurnCatalog.LoadPack().Jobs)
         {

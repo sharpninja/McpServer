@@ -17,7 +17,7 @@ public sealed class SqlServerAuditPayloadMigrationTests : IDisposable
     private bool _databaseCreated;
 
     [Fact]
-    public async Task Migration_PersistsCompressedPayloads_AndDeniesAuditMutation()
+    public async Task MigrationPersistsCompressedPayloadsAndDeniesAuditMutation()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using (var admin = new SqlConnection(_serverConnectionString))
@@ -91,7 +91,7 @@ public sealed class PostgreSqlAuditPayloadMigrationTests : IClassFixture<Ephemer
         => _serverConnectionString = fixture.ServerConnectionString;
 
     [Fact]
-    public async Task Migration_PersistsCompressedPayloads()
+    public async Task MigrationPersistsCompressedPayloads()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using (var admin = new NpgsqlConnection(_serverConnectionString))

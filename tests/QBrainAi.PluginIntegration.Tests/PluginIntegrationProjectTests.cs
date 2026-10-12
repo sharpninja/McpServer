@@ -14,7 +14,7 @@ public sealed class PluginIntegrationProjectTests
     /// The test project enables GenerateDocumentationFile and disables parallelization.
     /// </summary>
     [Fact]
-    public void PluginIntegrationProject_HasXmlDocsAndNonparallelCollection()
+    public void PluginIntegrationProjectHasXmlDocsAndNonparallelCollection()
     {
         var repoRoot = FindRepositoryRoot();
         var csprojPath = Path.Combine(repoRoot, "tests", "QBrainAi.PluginIntegration.Tests", "QBrainAi.PluginIntegration.Tests.csproj");

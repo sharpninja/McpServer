@@ -52,7 +52,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
     [Theory]
     [InlineData("Hello")]
     [InlineData("Create Hello World in C++")]
-    public async Task ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots(string prompt)
+    public async Task ChatCompletionsLocalOllamaDefaultModelTriggersNormalBrainSlots(string prompt)
     {
         var modelId = await ResolveDefaultOllamaModelAsync().ConfigureAwait(true);
         var chatClientFactory = new RecordingBrainSlotChatClientFactory();
@@ -81,7 +81,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         Assert.All(chatClientFactory.InvokedEndpoints, value => Assert.Equal(OllamaOpenAiEndpoint, value));
         await AssertSessionLogCapturedBrainOutputsAsync(
                 seedClient,
-                nameof(ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots),
+                nameof(ChatCompletionsLocalOllamaDefaultModelTriggersNormalBrainSlots),
                 prompt,
                 sessionId,
                 turnId,
@@ -99,7 +99,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
     /// </summary>
     [Theory]
     [InlineData("Hello")]
-    public async Task QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse(string prompt)
+    public async Task QBAgentRunLoopLocalOllamaDefaultModelDisplaysQuadBrainResponse(string prompt)
     {
         var modelId = await ResolveDefaultOllamaModelAsync().ConfigureAwait(true);
         var chatClientFactory = new RecordingBrainSlotChatClientFactory();
@@ -124,7 +124,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         string? qbagentResponse = null;
         QBAgentPromptRunner runner = async (value, _) =>
         {
-            var response = await chatClient.GetResponseAsync([new ChatMessage(ChatRole.User, value)]).ConfigureAwait(false);
+            var response = await chatClient.GetResponseAsync([new ChatMessage(ChatRole.User, value)], cancellationToken: _).ConfigureAwait(false);
             qbagentResponse = ExtractResponseText(response);
             return qbagentResponse;
         };
@@ -143,7 +143,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         Assert.DoesNotContain("(no response)", displayed, StringComparison.Ordinal);
         Assert.Contains(receivedResponse.Trim(), displayed, StringComparison.Ordinal);
         var qbagentTranscriptPath = WriteQBAgentInteractionTranscript(
-            nameof(QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse),
+            nameof(QBAgentRunLoopLocalOllamaDefaultModelDisplaysQuadBrainResponse),
             prompt,
             sessionId,
             turnId,
@@ -167,7 +167,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         Assert.All(chatClientFactory.InvokedEndpoints, value => Assert.Equal(OllamaOpenAiEndpoint, value));
         await AssertSessionLogCapturedBrainOutputsAsync(
                 seedClient,
-                nameof(QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse),
+                nameof(QBAgentRunLoopLocalOllamaDefaultModelDisplaysQuadBrainResponse),
                 prompt,
                 sessionId,
                 turnId,
@@ -184,7 +184,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
     /// the MCP session processing dialog for the turn that invoked QuadBrain.
     /// </summary>
     [Fact]
-    public async Task ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn()
+    public async Task ChatCompletionsOpenAiCompatibleFieldVariantsAreLoggedToSessionTurn()
     {
         var chatClientFactory = new FieldVariantBrainSlotChatClientFactory();
         using var app = BuildFactory(chatClientFactory);
@@ -204,7 +204,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         Assert.Equal("reasoning-content-field-captured", choice.Message.Content);
         await AssertSessionLogCapturedBrainOutputsAsync(
                 seedClient,
-                nameof(ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn),
+                nameof(ChatCompletionsOpenAiCompatibleFieldVariantsAreLoggedToSessionTurn),
                 "Hello",
                 sessionId,
                 turnId,

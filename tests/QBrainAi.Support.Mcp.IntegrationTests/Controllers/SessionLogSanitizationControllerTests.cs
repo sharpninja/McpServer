@@ -48,7 +48,7 @@ public sealed class SessionLogSanitizationControllerTests : IClassFixture<Custom
     /// Fixture: CustomWebApplicationFactory. Validates TEST-MCP-SESSIONLOGSAN-001 / FR-MCP-SESSIONLOGSAN-001.
     /// </summary>
     [Fact]
-    public async Task S15_QueryAndGetHttpResponses_ReplaceSecretsInEveryDtoSection_WhileDbRowsRemainUnsanitized()
+    public async Task S15QueryAndGetHttpResponsesReplaceSecretsInEveryDtoSectionWhileDbRowsRemainUnsanitized()
     {
         var sessionId = BuildSessionId(SourceTypeS15, $"s15-{Guid.NewGuid():N}");
         var dto = CreateSecretSession(SourceTypeS15, sessionId, "2026-08-20T15:00:00Z");
@@ -92,7 +92,7 @@ public sealed class SessionLogSanitizationControllerTests : IClassFixture<Custom
     /// Fixture: CustomWebApplicationFactory. Validates TEST-MCP-SESSIONLOGSAN-001 / FR-MCP-SESSIONLOGSAN-001.
     /// </summary>
     [Fact]
-    public async Task S16_QueryTextFilter_SecretContainingRawRecordStillParticipates_AndPagingMetadataUnchanged()
+    public async Task S16QueryTextFilterSecretContainingRawRecordStillParticipatesAndPagingMetadataUnchanged()
     {
         var nonce = Guid.NewGuid().ToString("N");
         var decoyId = BuildSessionId(SourceTypeS16, $"s16-decoy-{nonce}");

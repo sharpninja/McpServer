@@ -34,7 +34,7 @@ public sealed class AuthoredSkillsTests
 
     /// <summary>Every authored workspace skill parses and is discoverable by name.</summary>
     [Fact]
-    public void AuthoredSkills_AllParseAndDiscover()
+    public void AuthoredSkillsAllParseAndDiscover()
     {
         var registry = new SkillRegistry([FindSkillsRoot()], new SkillManifestParser());
 
@@ -46,7 +46,7 @@ public sealed class AuthoredSkillsTests
 
     /// <summary>Each authored skill loads a non-empty instruction body.</summary>
     [Fact]
-    public void AuthoredSkills_HaveBodies()
+    public void AuthoredSkillsHaveBodies()
     {
         var registry = new SkillRegistry([FindSkillsRoot()], new SkillManifestParser());
 

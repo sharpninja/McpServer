@@ -28,7 +28,7 @@ public sealed class RequirementScopeLayerServiceTests
     /// durable layer creation without leaking across workspaces.
     /// </summary>
     [Fact]
-    public async Task LayerCatalog_SeedsLayerOneAndIsWorkspaceIsolated()
+    public async Task LayerCatalogSeedsLayerOneAndIsWorkspaceIsolated()
     {
         using var fixture = new RequirementsScopeFixture();
         var workspaceA = fixture.CreateWorkspace("a");
@@ -64,7 +64,7 @@ public sealed class RequirementScopeLayerServiceTests
     /// immutable key/order changes are rejected.
     /// </summary>
     [Fact]
-    public async Task LayerCatalog_RejectsDuplicatesAndInvalidLayerSunset()
+    public async Task LayerCatalogRejectsDuplicatesAndInvalidLayerSunset()
     {
         using var fixture = new RequirementsScopeFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("validation"));
@@ -99,7 +99,7 @@ public sealed class RequirementScopeLayerServiceTests
     /// effective requirement visibility.
     /// </summary>
     [Fact]
-    public async Task EffectiveRequirements_UseWorkspaceCurrentLayerRequirementEndsAndLayerSunsets()
+    public async Task EffectiveRequirementsUseWorkspaceCurrentLayerRequirementEndsAndLayerSunsets()
     {
         using var fixture = new RequirementsScopeFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("effective"));
@@ -164,7 +164,7 @@ public sealed class RequirementScopeLayerServiceTests
     /// and end-before-start applicability windows.
     /// </summary>
     [Fact]
-    public async Task RequirementScopeMutation_RejectsMissingLayerAndEndBeforeStart()
+    public async Task RequirementScopeMutationRejectsMissingLayerAndEndBeforeStart()
     {
         using var fixture = new RequirementsScopeFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("mutations"));

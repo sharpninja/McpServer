@@ -21,7 +21,7 @@ public sealed class UseCaseComponentUpdateWorkspaceResolutionContractTests
     private const string CanonicalWorkspaceId = @"F:\GitHub\TruckMate";
 
     [Fact]
-    public async Task MockGate_CanonicalComponentUpdates_PassContract()
+    public async Task MockGateCanonicalComponentUpdatesPassContract()
     {
         await AssertComponentUpdateContractAsync(
             () => Task.FromResult(SuccessActor()),
@@ -30,7 +30,7 @@ public sealed class UseCaseComponentUpdateWorkspaceResolutionContractTests
     }
 
     [Fact]
-    public async Task MockGate_RawWorkspaceActorFailure_IsRejected()
+    public async Task MockGateRawWorkspaceActorFailureIsRejected()
     {
         var rejection = await Assert.ThrowsAsync<TrueException>(
             () => AssertComponentUpdateContractAsync(
@@ -42,7 +42,7 @@ public sealed class UseCaseComponentUpdateWorkspaceResolutionContractTests
     }
 
     [Fact]
-    public async Task MockGate_RawWorkspaceFlowFailure_IsRejected()
+    public async Task MockGateRawWorkspaceFlowFailureIsRejected()
     {
         var rejection = await Assert.ThrowsAsync<TrueException>(
             () => AssertComponentUpdateContractAsync(
@@ -54,7 +54,7 @@ public sealed class UseCaseComponentUpdateWorkspaceResolutionContractTests
     }
 
     [Fact]
-    public async Task MockGate_RawWorkspaceStepFailure_IsRejected()
+    public async Task MockGateRawWorkspaceStepFailureIsRejected()
     {
         var rejection = await Assert.ThrowsAsync<TrueException>(
             () => AssertComponentUpdateContractAsync(
@@ -67,7 +67,7 @@ public sealed class UseCaseComponentUpdateWorkspaceResolutionContractTests
     }
 
     [Fact]
-    public async Task ProductionGate_EquivalentRawPath_UpdatesExistingComponents()
+    public async Task ProductionGateEquivalentRawPathUpdatesExistingComponents()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
         await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);

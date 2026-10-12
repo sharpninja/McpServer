@@ -23,7 +23,7 @@ public sealed class MemoryUiHostingTests
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-04: Static assets are included in publish output / Linux service package.</summary>
     [Fact]
-    public void Assets_InPublishOutput()
+    public void AssetsInPublishOutput()
     {
         Assert.True(File.Exists(MemoryS6Catalog.MemoryWwwrootFile("index.html")));
         Assert.True(File.Exists(MemoryS6Catalog.MemoryWwwrootFile("app.js")));
@@ -41,7 +41,7 @@ public sealed class MemoryUiHostingTests
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-05: Deep link /memory/{id} opens detail or fails closed for unknown id.</summary>
     [Fact]
-    public void DeepLink_DetailOrFailClosed()
+    public void DeepLinkDetailOrFailClosed()
     {
         var ui = MemoryS6Catalog.ReadMemoryUiSource();
         var program = MemoryS6Catalog.ReadProgramSource();
@@ -55,7 +55,7 @@ public sealed class MemoryUiHostingTests
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-06: UI uses the same API-key auth as other /mcpserver pages.</summary>
     [Fact]
-    public void Auth_SameAsMcpserver()
+    public void AuthSameAsMcpserver()
     {
         var memoryHtml = MemoryS6Catalog.ReadRequired(MemoryS6Catalog.MemoryWwwrootFile("index.html"));
         var memoryJs = MemoryS6Catalog.ReadRequired(MemoryS6Catalog.MemoryWwwrootFile("app.js"));
@@ -76,7 +76,7 @@ public sealed class MemoryUiHostingTests
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-07: CSP / no inline-eval matches sibling static UIs.</summary>
     [Fact]
-    public void Csp_MatchesSiblingUis()
+    public void CspMatchesSiblingUis()
     {
         var memory = MemoryS6Catalog.ReadMemoryUiSource();
         var sibling = MemoryS6Catalog.ReadUseCaseUiSource();
@@ -93,7 +93,7 @@ public sealed class MemoryUiHostingTests
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-08: Missing hashed bundles are 404, not a false 200 index.</summary>
     [Fact]
-    public void MissingAsset_NotFalse200()
+    public void MissingAssetNotFalse200()
     {
         var program = MemoryS6Catalog.ReadProgramSource();
         Assert.DoesNotContain("MapFallbackToFile", program, StringComparison.Ordinal);

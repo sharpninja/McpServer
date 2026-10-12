@@ -26,7 +26,7 @@ internal static class ProductShareHelper
     {
         // Scalar AsNoTracking projection: a tracked Workspaces row from a captive CQRS
         // DbContext must not hide a CurrentRequirementLayerKey written by another context
-        // (TEST-MCP-REQSCOPE-REPL-001 / HandleAsync_NullLayerKey_UsesPersistedCurrentLayerAfterExternalUpdate).
+        // (TEST-MCP-REQSCOPE-REPL-001 / HandleAsyncNullLayerKeyUsesPersistedCurrentLayerAfterExternalUpdate).
         var persistedLayerKey = await db.Workspaces
             .IgnoreQueryFilters()
             .AsNoTracking()

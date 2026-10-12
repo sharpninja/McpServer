@@ -29,7 +29,7 @@ public sealed class MemoryFederationStateAdapterTests
 
     /// <summary>Memory create operations preserve explicit ids, categories, raw text, scopes, workspace ownership, and initial versions.</summary>
     [Fact]
-    public async Task MemoryFederationAdapter_CreatePreservesGlobalAndWorkspaceState()
+    public async Task MemoryFederationAdapterCreatePreservesGlobalAndWorkspaceState()
     {
         using var provider = CreateProvider();
         var adapter = ResolveMemoryAdapter(provider);
@@ -95,7 +95,7 @@ public sealed class MemoryFederationStateAdapterTests
 
     /// <summary>Memory update operations increment versions and preserve workspace ownership when scope is unchanged.</summary>
     [Fact]
-    public async Task MemoryFederationAdapter_UpdateIncrementsVersionAndPreservesWorkspaceOwnership()
+    public async Task MemoryFederationAdapterUpdateIncrementsVersionAndPreservesWorkspaceOwnership()
     {
         using var provider = CreateProvider();
         await SeedMemoryAsync(provider, "MEMORY-OPERATOR-002", WorkspaceA, text: "Before", version: 1).ConfigureAwait(true);
@@ -130,7 +130,7 @@ public sealed class MemoryFederationStateAdapterTests
 
     /// <summary>Memory delete operations soft-delete rows and are idempotent when replayed.</summary>
     [Fact]
-    public async Task MemoryFederationAdapter_DeleteSoftDeletesAndIsIdempotent()
+    public async Task MemoryFederationAdapterDeleteSoftDeletesAndIsIdempotent()
     {
         using var provider = CreateProvider();
         await SeedMemoryAsync(provider, "MEMORY-OPERATOR-003", WorkspaceA, text: "Delete me", version: 4).ConfigureAwait(true);
@@ -166,7 +166,7 @@ public sealed class MemoryFederationStateAdapterTests
 
     /// <summary>Workspace-scoped memory updates from a different global workspace are conflicts and do not mutate hub state.</summary>
     [Fact]
-    public async Task MemoryFederationAdapter_CrossWorkspaceUpdateConflicts()
+    public async Task MemoryFederationAdapterCrossWorkspaceUpdateConflicts()
     {
         using var provider = CreateProvider();
         await SeedMemoryAsync(provider, "MEMORY-OPERATOR-004", WorkspaceA, text: "Original", version: 7).ConfigureAwait(true);
@@ -196,7 +196,7 @@ public sealed class MemoryFederationStateAdapterTests
 
     /// <summary>Invalid memory payloads and ids return conflicts instead of being applied.</summary>
     [Fact]
-    public async Task MemoryFederationAdapter_InvalidPayloadsAndIdsConflict()
+    public async Task MemoryFederationAdapterInvalidPayloadsAndIdsConflict()
     {
         using var provider = CreateProvider();
         var adapter = ResolveMemoryAdapter(provider);
@@ -236,7 +236,7 @@ public sealed class MemoryFederationStateAdapterTests
 
     /// <summary>Signed memory envelopes apply through the federation controller and create a hub memory row.</summary>
     [Fact]
-    public async Task MemoryFederation_SignedEnvelopeAppliesMemoryOperation()
+    public async Task MemoryFederationSignedEnvelopeAppliesMemoryOperation()
     {
         using var provider = CreateProvider();
         var topology = provider.GetRequiredService<IFederationTopologyService>();
@@ -260,7 +260,7 @@ public sealed class MemoryFederationStateAdapterTests
 
     /// <summary>Stale memory base versions create federation conflicts and do not overwrite hub state.</summary>
     [Fact]
-    public async Task MemoryFederation_StaleBaseVersionCreatesConflictAndDoesNotOverwrite()
+    public async Task MemoryFederationStaleBaseVersionCreatesConflictAndDoesNotOverwrite()
     {
         using var provider = CreateProvider();
         await SeedMemoryAsync(provider, "MEMORY-OPERATOR-007", WorkspaceA, text: "Hub wins", version: 2).ConfigureAwait(true);
@@ -304,7 +304,7 @@ public sealed class MemoryFederationStateAdapterTests
 
     /// <summary>Memory operations create hub fanout rows and recipient apply recreates the memory state.</summary>
     [Fact]
-    public async Task MemoryFederation_OperationCreatesFanoutAndRecipientApplyWorks()
+    public async Task MemoryFederationOperationCreatesFanoutAndRecipientApplyWorks()
     {
         using var hub = CreateProvider();
         var hubTopology = hub.GetRequiredService<IFederationTopologyService>();

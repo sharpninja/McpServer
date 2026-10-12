@@ -9,7 +9,7 @@ public sealed class ImportRecoveryReplayerTests
 {
     /// <summary>A successful persist deletes the envelope and leaves the canonical artifact.</summary>
     [Fact]
-    public async Task ReplayDirectory_DeletesOnlySuccessfulEnvelope()
+    public async Task ReplayDirectoryDeletesOnlySuccessfulEnvelope()
     {
         var dir = Path.Combine(Path.GetTempPath(), "import-recovery-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(dir);

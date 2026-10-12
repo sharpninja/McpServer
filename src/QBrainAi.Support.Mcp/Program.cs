@@ -816,7 +816,7 @@ if (!app.Environment.IsEnvironment("Test"))
             await McpDatabaseMigrationCoordinator.EnsureReadyAsync(db, runtimeOptions, ct).ConfigureAwait(false);
             if (!SessionLogSchemaGuard.Probe(db))
                 Log.Error("{Message}", SessionLogSchemaGuard.PendingMigrationMessage);
-            await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);
+            await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, ct).ConfigureAwait(false);
             await SessionLogTurnContextBackfillStartup.TryRunAsync(
                 db,
                 scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
@@ -1288,7 +1288,7 @@ static bool ContainsRequiredRole(string? claimValue, ISet<string> requiredRoles)
     if (requiredRoles.Contains(trimmed))
         return true;
 
-    if (trimmed.StartsWith("[", StringComparison.Ordinal))
+    if (trimmed.StartsWith('['))
     {
         try
         {

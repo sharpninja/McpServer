@@ -9,7 +9,7 @@ public sealed class OpenCodeSqliteTranscriptTests
 {
     /// <summary>Verifies OpenCode SQLite snapshots are detected as independent transcript bundles.</summary>
     [Fact]
-    public async Task Detector_DiscoversOpenCodeSqliteSnapshot()
+    public async Task DetectorDiscoversOpenCodeSqliteSnapshot()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -35,7 +35,7 @@ public sealed class OpenCodeSqliteTranscriptTests
 
     /// <summary>Verifies OpenCode SQLite snapshots normalize without writing to the source database file.</summary>
     [Fact]
-    public async Task IngestionService_NormalizesOpenCodeSqliteSnapshotWithoutWritingSource()
+    public async Task IngestionServiceNormalizesOpenCodeSqliteSnapshotWithoutWritingSource()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -85,7 +85,7 @@ public sealed class OpenCodeSqliteTranscriptTests
 
     /// <summary>Verifies OpenCode SQLite tool events with missing parent messages are diagnosed while preserved.</summary>
     [Fact]
-    public async Task IngestionService_DiagnosesOpenCodeSqliteOrphanToolEvent()
+    public async Task IngestionServiceDiagnosesOpenCodeSqliteOrphanToolEvent()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite-orphan-tool", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
@@ -126,7 +126,7 @@ public sealed class OpenCodeSqliteTranscriptTests
 
     /// <summary>Verifies OpenCode SQLite snapshots capture WAL-backed rows as a standalone database.</summary>
     [Fact]
-    public async Task Snapshot_CapturesWalBackedRowsAsStandaloneDatabase()
+    public async Task SnapshotCapturesWalBackedRowsAsStandaloneDatabase()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite-wal", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);

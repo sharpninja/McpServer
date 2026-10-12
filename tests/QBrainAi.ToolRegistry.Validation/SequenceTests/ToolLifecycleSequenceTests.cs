@@ -23,7 +23,7 @@ public sealed class ToolLifecycleSequenceTests
     public ToolLifecycleSequenceTests(ToolRegistryFixture f, ITestOutputHelper o) { _f = f; _out = o; }
 
     /// <summary>
-    /// Validates the <c>FullToolLifecycle_CreateThroughDelete</c> scenario.
+    /// Validates the <c>FullToolLifecycleCreateThroughDelete</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -31,7 +31,7 @@ public sealed class ToolLifecycleSequenceTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task FullToolLifecycle_CreateThroughDelete()
+    public async Task FullToolLifecycleCreateThroughDelete()
     {
         var toolName = ToolRegistryFixture.GenerateToolName();
         var uniqueTag = $"lifecycle{Guid.NewGuid().ToString("N")[..6]}";
@@ -122,7 +122,7 @@ public sealed class ToolLifecycleSequenceTests
     }
 
     /// <summary>
-    /// Validates the <c>FullBucketLifecycle_AddThroughRemove</c> scenario.
+    /// Validates the <c>FullBucketLifecycleAddThroughRemove</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
@@ -130,7 +130,7 @@ public sealed class ToolLifecycleSequenceTests
     /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
     /// </remarks>
     [Fact]
-    public async Task FullBucketLifecycle_AddThroughRemove()
+    public async Task FullBucketLifecycleAddThroughRemove()
     {
         var bucketName = ToolRegistryFixture.GenerateBucketName();
 

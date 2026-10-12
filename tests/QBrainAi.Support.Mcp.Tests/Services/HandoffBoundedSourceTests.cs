@@ -39,7 +39,7 @@ public sealed class HandoffBoundedSourceTests : IDisposable
 
     /// <summary>P2-1: an oversized Path source fails before extraction.</summary>
     [Fact]
-    public async Task ResolveAsync_OversizedPath_FailsClosed()
+    public async Task ResolveAsyncOversizedPathFailsClosed()
     {
         var path = Path.Combine(_workspace, "big.md");
         await File.WriteAllTextAsync(path, new string('x', HandoffPromptDefaults.MaxDecodedBytes + 1), TestContext.Current.CancellationToken);
@@ -57,7 +57,7 @@ public sealed class HandoffBoundedSourceTests : IDisposable
 
     /// <summary>P2-1: artifact chunks that exceed 8 MiB fail before full concatenation.</summary>
     [Fact]
-    public async Task ResolveAsync_OversizedArtifactChunks_FailsBeforeJoin()
+    public async Task ResolveAsyncOversizedArtifactChunksFailsBeforeJoin()
     {
         _db.Documents.Add(new ContextDocumentEntity
         {
@@ -86,7 +86,7 @@ public sealed class HandoffBoundedSourceTests : IDisposable
 
     /// <summary>P2-1: an artifact whose chunks sum to the limit succeeds.</summary>
     [Fact]
-    public async Task ResolveAsync_ArtifactExactlyAtLimit_Succeeds()
+    public async Task ResolveAsyncArtifactExactlyAtLimitSucceeds()
     {
         var half = HandoffPromptDefaults.MaxDecodedBytes / 2;
         _db.Documents.Add(new ContextDocumentEntity
@@ -115,7 +115,7 @@ public sealed class HandoffBoundedSourceTests : IDisposable
 
     /// <summary>P2-1: cancellation during artifact streaming throws.</summary>
     [Fact]
-    public async Task ResolveAsync_ArtifactCancelled_Throws()
+    public async Task ResolveAsyncArtifactCancelledThrows()
     {
         _db.Documents.Add(new ContextDocumentEntity
         {

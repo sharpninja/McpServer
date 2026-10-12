@@ -25,7 +25,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_JsonBlock_ExtractsIds()
+    public async Task ExtractRequirementIdsJsonBlockExtractsIds()
     {
         var body = """
             Here are the results:
@@ -53,7 +53,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_JsonWithoutCodeFence_ExtractsIds()
+    public async Task ExtractRequirementIdsJsonWithoutCodeFenceExtractsIds()
     {
         var body = """
             {"functionalRequirements": ["FR-BIZ-010"], "technicalRequirements": ["TR-BIZ-005"]}
@@ -70,7 +70,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_NoJson_FallsBackToRegex()
+    public async Task ExtractRequirementIdsNoJsonFallsBackToRegex()
     {
         var body = """
             I found the following requirements:
@@ -90,7 +90,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_EmptyBody_ReturnsEmptyLists()
+    public async Task ExtractRequirementIdsEmptyBodyReturnsEmptyLists()
     {
         var (frs, trs) = _sut.ExtractRequirementIds("");
 
@@ -101,7 +101,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_NoRequirements_ReturnsEmptyLists()
+    public async Task ExtractRequirementIdsNoRequirementsReturnsEmptyLists()
     {
         var body = "I analyzed the TODO but found no matching requirements.";
 
@@ -114,7 +114,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_MalformedJson_FallsBackToRegex()
+    public async Task ExtractRequirementIdsMalformedJsonFallsBackToRegex()
     {
         var body = """
             {"functionalRequirements": ["FR-LOC-001" -- bad json
@@ -131,7 +131,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_JsonEmptyArrays_FallsBackToRegex()
+    public async Task ExtractRequirementIdsJsonEmptyArraysFallsBackToRegex()
     {
         var body = """
             {"functionalRequirements": [], "technicalRequirements": []}
@@ -147,7 +147,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_DuplicateIds_Deduplicates()
+    public async Task ExtractRequirementIdsDuplicateIdsDeduplicates()
     {
         var body = """
             {
@@ -165,7 +165,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_OnlyFrs_ReturnsEmptyTrs()
+    public async Task ExtractRequirementIdsOnlyFrsReturnsEmptyTrs()
     {
         var body = "Found FR-SOCIAL-001 and FR-SOCIAL-002 but no TRs.";
 
@@ -178,7 +178,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task ExtractRequirementIds_OnlyTrs_ReturnsEmptyFrs()
+    public async Task ExtractRequirementIdsOnlyTrsReturnsEmptyFrs()
     {
         var body = "Found TR-DB-001 and TR-DB-002 but no FRs.";
 
@@ -191,7 +191,7 @@ public sealed class RequirementsServiceTests
     }
 
     [Fact]
-    public async Task AnalyzeAsync_UsesInfiniteCopilotTimeout()
+    public async Task AnalyzeAsyncUsesInfiniteCopilotTimeout()
     {
         var todo = new TodoFlatItem
         {

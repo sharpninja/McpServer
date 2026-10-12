@@ -74,7 +74,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void QueryFilter_ReturnsOnlyCurrentWorkspace()
+    public void QueryFilterReturnsOnlyCurrentWorkspace()
     {
         using var ctx = CreateContext(@"C:\ws\alpha");
 
@@ -85,7 +85,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void QueryFilter_WorkspaceB_ReturnsOnlyB()
+    public void QueryFilterWorkspaceBReturnsOnlyB()
     {
         using var ctx = CreateContext(@"C:\ws\beta");
 
@@ -96,7 +96,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void QueryFilter_AppliesToSessionLogs()
+    public void QueryFilterAppliesToSessionLogs()
     {
         using var ctx = CreateContext(@"C:\ws\alpha");
 
@@ -107,7 +107,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void QueryFilter_AppliesToToolBuckets()
+    public void QueryFilterAppliesToToolBuckets()
     {
         using var ctx = CreateContext(@"C:\ws\alpha");
 
@@ -119,7 +119,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void IgnoreQueryFilters_ReturnsAll()
+    public void IgnoreQueryFiltersReturnsAll()
     {
         using var ctx = CreateContext(@"C:\ws\alpha");
 
@@ -129,7 +129,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void EmptyWorkspaceId_HidesTenantScopedDocuments()
+    public void EmptyWorkspaceIdHidesTenantScopedDocuments()
     {
         using var ctx = CreateContext(string.Empty);
 
@@ -139,7 +139,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void EmptyWorkspaceId_ReturnsOnlyGlobalToolBuckets()
+    public void EmptyWorkspaceIdReturnsOnlyGlobalToolBuckets()
     {
         using var ctx = CreateContext(string.Empty);
 
@@ -150,7 +150,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void EmptyWorkspaceId_ReturnsOnlyGlobalAgentDefinitions()
+    public void EmptyWorkspaceIdReturnsOnlyGlobalAgentDefinitions()
     {
         using var ctx = CreateContext(string.Empty);
 
@@ -161,7 +161,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void WorkspaceFilter_IncludesGlobalAgentDefinitions()
+    public void WorkspaceFilterIncludesGlobalAgentDefinitions()
     {
         using var ctx = CreateContext(@"C:\ws\alpha");
 
@@ -172,7 +172,7 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void Insert_RespectsCurrentWorkspaceScope()
+    public void InsertRespectsCurrentWorkspaceScope()
     {
         using var ctx = CreateContext(@"C:\ws\alpha");
 

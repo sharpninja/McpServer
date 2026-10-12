@@ -25,7 +25,7 @@ public sealed class MemoryBenchHarness
     }
 
     /// <summary>Runs the pack under stub/recorded/live mode.</summary>
-    public MemoryBenchRunResult Run(MemoryBenchPackDocument pack, MemoryBenchRunOptions options)
+    public static MemoryBenchRunResult Run(MemoryBenchPackDocument pack, MemoryBenchRunOptions options)
     {
         ArgumentNullException.ThrowIfNull(pack);
         ArgumentNullException.ThrowIfNull(options);

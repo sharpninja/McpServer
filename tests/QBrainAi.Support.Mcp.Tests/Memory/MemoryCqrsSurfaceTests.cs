@@ -13,7 +13,7 @@ public sealed class MemoryCqrsSurfaceTests
 {
     /// <summary>AC-TR-MCP-MEMORY-API-002-01: Adapters dispatch CQRS handlers only.</summary>
     [Fact]
-    public void Adapters_DispatchHandlersOnly()
+    public void AdaptersDispatchHandlersOnly()
     {
         var serviceMethods = typeof(IMemoryService).GetMethods().Select(method => method.Name).ToHashSet(StringComparer.Ordinal);
         foreach (var forbidden in new[] { "RememberAsync", "RecallAsync", "ExploreAsync", "ConsolidateAsync", "PromoteAsync", "RevertAsync" })

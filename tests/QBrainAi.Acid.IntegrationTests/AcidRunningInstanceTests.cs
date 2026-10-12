@@ -12,7 +12,7 @@ public sealed class AcidRunningInstanceTests
 {
     /// <summary>Full happy-path commit with running key server and subscriber hosts.</summary>
     [Fact]
-    public async Task FullLifecycle_RunningKeyServerAndSubscriber_Commits()
+    public async Task FullLifecycleRunningKeyServerAndSubscriberCommits()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllRunning);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);

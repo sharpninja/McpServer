@@ -15,22 +15,22 @@ public sealed class QuadBrainOpenAiAuthTests
 {
     /// <summary>A Bearer authorization header yields its token.</summary>
     [Fact]
-    public void ExtractToken_Bearer_ReturnsToken()
+    public void ExtractTokenBearerReturnsToken()
         => Assert.Equal("abc123", OpenAiBearerAuth.ExtractToken("Bearer abc123", null));
 
     /// <summary>The X-Api-Key header is used when there is no Bearer authorization.</summary>
     [Fact]
-    public void ExtractToken_ApiKeyFallback_ReturnsKey()
+    public void ExtractTokenApiKeyFallbackReturnsKey()
         => Assert.Equal("key-9", OpenAiBearerAuth.ExtractToken(null, "key-9"));
 
     /// <summary>A non-Bearer authorization with no api key yields null.</summary>
     [Fact]
-    public void ExtractToken_NoneUsable_ReturnsNull()
+    public void ExtractTokenNoneUsableReturnsNull()
         => Assert.Null(OpenAiBearerAuth.ExtractToken("Basic xxx", null));
 
     /// <summary>A valid workspace token in the Authorization header is accepted.</summary>
     [Fact]
-    public async Task ChatCompletions_ValidBearer_Authorized()
+    public async Task ChatCompletionsValidBearerAuthorized()
     {
         var tokenService = new WorkspaceTokenService();
         var token = tokenService.GenerateToken(@"F:\ws");
@@ -45,7 +45,7 @@ public sealed class QuadBrainOpenAiAuthTests
 
     /// <summary>A missing token is rejected with 401.</summary>
     [Fact]
-    public async Task ChatCompletions_NoToken_Unauthorized()
+    public async Task ChatCompletionsNoTokenUnauthorized()
     {
         var controller = BuildController(new WorkspaceTokenService(), authorizationHeader: null);
 

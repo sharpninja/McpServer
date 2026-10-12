@@ -99,7 +99,7 @@ public class LoginHandler
         }
     }
 
-    private void ClearTokenFile()
+    private static void ClearTokenFile()
     {
         try
         {

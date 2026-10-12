@@ -32,7 +32,7 @@ public sealed class McpHostedAgentAdapterTests
     /// assertions stay stable without requiring a live LLM provider.
     /// </summary>
     [Fact]
-    public void Registration_CreateRunOptions_AttachesStableToolsAndFunctionInvocation()
+    public void RegistrationCreateRunOptionsAttachesStableToolsAndFunctionInvocation()
     {
         var (hostedAgent, _) = CreateHostedAgent();
         var registration = hostedAgent.Registration;
@@ -109,7 +109,7 @@ public sealed class McpHostedAgentAdapterTests
         var chatClientAgent = hostedAgent.CreateChatClientAgent(new StubChatClient());
 
         Assert.Equal(expectedToolNames, registration.Functions.Select(static function => function.Name));
-        foreach (var name in QBAgentDefinition.Instance.AllowedToolNames.Concat(QBAgentDefinition.Instance.BlockedToolNames))
+        foreach (var name in QBAgentDefinition.AllowedToolNames.Concat(QBAgentDefinition.BlockedToolNames))
             Assert.Contains(name, expectedToolNames);
         Assert.NotNull(hostedAgent.PowerShellSessions);
         Assert.True(baseFactoryCalled);
@@ -133,7 +133,7 @@ public sealed class McpHostedAgentAdapterTests
     /// rejects unreviewed host tools by default, and preserves serialized function invocation.
     /// </summary>
     [Fact]
-    public void Registration_CreateRunOptions_AcidProfileFiltersToolsAndRejectsHostTools()
+    public void RegistrationCreateRunOptionsAcidProfileFiltersToolsAndRejectsHostTools()
     {
         var (hostedAgent, _) = CreateHostedAgent(configureOptions: static options =>
             options.UseAcidTightlyCoupledProfile());
@@ -166,7 +166,7 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Contains("reject caller-supplied host tools", exception.Message, StringComparison.Ordinal);
         Assert.False(invokingClient.AllowConcurrentInvocation);
         Assert.False(runOptions.ChatOptions!.AllowMultipleToolCalls);
-        Assert.Equal(QBAgentDefinition.Instance.AllowedToolNames, toolNames);
+        Assert.Equal(QBAgentDefinition.AllowedToolNames, toolNames);
         Assert.DoesNotContain("mcp_client_invoke", toolNames);
         Assert.DoesNotContain("mcp_powershell_session_command", toolNames);
         Assert.DoesNotContain("mcp_repo_write", toolNames);
@@ -179,7 +179,7 @@ public sealed class McpHostedAgentAdapterTests
     /// and tool names, and none of those tool names references QuadBrain.
     /// </summary>
     [Fact]
-    public void AcidRuntime_ExposesNoQuadBrainSurface()
+    public void AcidRuntimeExposesNoQuadBrainSurface()
     {
         var (hostedAgent, handler) = CreateHostedAgent(configureOptions: static options =>
             options.UseAcidTightlyCoupledProfile());
@@ -203,7 +203,7 @@ public sealed class McpHostedAgentAdapterTests
     /// so the canonical session identifier and HTTP payload shape stay stable.
     /// </summary>
     [Fact]
-    public async Task Registration_Functions_BootstrapSessionThroughExistingWorkflow()
+    public async Task RegistrationFunctionsBootstrapSessionThroughExistingWorkflow()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var bootstrapFunction = hostedAgent.Registration.Functions.Single(static function =>
@@ -235,7 +235,7 @@ public sealed class McpHostedAgentAdapterTests
     /// output so the adapter proves it delegates to the existing transport-backed workflow methods.
     /// </summary>
     [Fact]
-    public async Task Registration_Functions_UpdateTodoAndBufferPlanThroughExistingWorkflow()
+    public async Task RegistrationFunctionsUpdateTodoAndBufferPlanThroughExistingWorkflow()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var updateFunction = hostedAgent.Registration.Functions.Single(static function =>
@@ -297,7 +297,7 @@ public sealed class McpHostedAgentAdapterTests
     /// path handling and response serialization without relying on a live MCP server.
     /// </summary>
     [Fact]
-    public async Task Registration_Functions_RepoOperations_ReuseExistingRepoClient()
+    public async Task RegistrationFunctionsRepoOperationsReuseExistingRepoClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var readFunction = hostedAgent.Registration.Functions.Single(static function =>
@@ -373,7 +373,7 @@ public sealed class McpHostedAgentAdapterTests
     /// endpoint routing can be asserted without starting a real local process.
     /// </summary>
     [Fact]
-    public async Task Registration_Functions_DesktopLaunch_ReusesExistingDesktopClient()
+    public async Task RegistrationFunctionsDesktopLaunchReusesExistingDesktopClient()
     {
         var (hostedAgent, handler) = CreateHostedAgent("desktop-secret");
         var launchFunction = hostedAgent.Registration.Functions.Single(static function =>
@@ -419,7 +419,7 @@ public sealed class McpHostedAgentAdapterTests
     /// without depending on any external shell executable or HTTP endpoint.
     /// </summary>
     [Fact]
-    public async Task Registration_Functions_PowerShellSessionCommands_RunInsidePersistentLocalSession()
+    public async Task RegistrationFunctionsPowerShellSessionCommandsRunInsidePersistentLocalSession()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var createFunction = hostedAgent.Registration.Functions.Single(static function =>
@@ -483,7 +483,7 @@ public sealed class McpHostedAgentAdapterTests
     /// input, preserve session state, and keep the runspace local to the hosted agent instance.
     /// </summary>
     [Fact]
-    public async Task PowerShellSessions_ExecuteInteractiveCommand_PreservesHostLocalSessionState()
+    public async Task PowerShellSessionsExecuteInteractiveCommandPreservesHostLocalSessionState()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
         var createdSession = hostedAgent.PowerShellSessions.CreateSession(TestWorkspacePath);
@@ -628,7 +628,7 @@ public sealed class McpHostedAgentAdapterTests
             };
         }
 
-        private HttpResponseMessage CreatePlanResponse() => new(HttpStatusCode.OK)
+        private static HttpResponseMessage CreatePlanResponse() => new(HttpStatusCode.OK)
         {
             Content = new StringContent(
                 "data: Step 1\n\ndata: Step 2\n\nevent: done\ndata: \n\n",

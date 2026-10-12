@@ -11,7 +11,7 @@ public sealed class PowerShellToolTests
 {
     /// <summary>The tool creates one session and runs the command, returning the captured output.</summary>
     [Fact]
-    public async Task Run_CreatesSession_AndExecutesCommand()
+    public async Task RunCreatesSessionAndExecutesCommand()
     {
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult { Success = true, Output = "PONG" });
         var tool = new PowerShellTool(manager, "F:/work/repo");
@@ -26,7 +26,7 @@ public sealed class PowerShellToolTests
 
     /// <summary>A second call reuses the same session (no new session created).</summary>
     [Fact]
-    public async Task Run_Twice_ReusesSession()
+    public async Task RunTwiceReusesSession()
     {
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult { Success = true, Output = "x" });
         var tool = new PowerShellTool(manager, "F:/work/repo");
@@ -40,7 +40,7 @@ public sealed class PowerShellToolTests
 
     /// <summary>An empty command is rejected before any session work.</summary>
     [Fact]
-    public async Task Run_EmptyCommand_Rejected()
+    public async Task RunEmptyCommandRejected()
     {
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult());
         var tool = new PowerShellTool(manager, "F:/work/repo");
@@ -53,7 +53,7 @@ public sealed class PowerShellToolTests
 
     /// <summary>When session creation fails, the tool surfaces the error and does not execute a command.</summary>
     [Fact]
-    public async Task Run_WhenCreateFails_ReturnsError()
+    public async Task RunWhenCreateFailsReturnsError()
     {
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult(), createSucceeds: false);
         var tool = new PowerShellTool(manager, "F:/work/repo");
@@ -67,7 +67,7 @@ public sealed class PowerShellToolTests
 
     /// <summary>Disposing the tool closes the reused session.</summary>
     [Fact]
-    public async Task Dispose_ClosesSession()
+    public async Task DisposeClosesSession()
     {
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult { Success = true, Output = "x" });
         var tool = new PowerShellTool(manager, "F:/work/repo");

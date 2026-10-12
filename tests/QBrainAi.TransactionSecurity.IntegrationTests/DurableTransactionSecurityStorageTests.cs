@@ -25,7 +25,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Keyserver public descriptors and audit rows survive service recreation.</summary>
     [Fact]
-    public async Task KeyServerSqliteStore_VerifiesManifestAfterServiceRecreation()
+    public async Task KeyServerSqliteStoreVerifiesManifestAfterServiceRecreation()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("keyserver.db");
@@ -61,7 +61,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Signed manifest trace records survive keyserver service recreation without private key material.</summary>
     [Fact]
-    public async Task KeyServerSqliteStore_PersistsSignedManifestTraceAcrossServiceRecreation()
+    public async Task KeyServerSqliteStorePersistsSignedManifestTraceAcrossServiceRecreation()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("keyserver-manifest-trace.db");
@@ -102,7 +102,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Signed manifest trace reports query durable ledger records without private key material.</summary>
     [Fact]
-    public async Task KeyServerSqliteStore_ReportsSignedManifestTraceAfterServiceRecreation()
+    public async Task KeyServerSqliteStoreReportsSignedManifestTraceAfterServiceRecreation()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("keyserver-manifest-trace-report.db");
@@ -142,7 +142,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Externally supplied signing private material can be re-provisioned after service recreation.</summary>
     [Fact]
-    public async Task KeyServerSqliteStore_ReprovisionsExternalSigningPrivateKeyAfterServiceRecreation()
+    public async Task KeyServerSqliteStoreReprovisionsExternalSigningPrivateKeyAfterServiceRecreation()
     {
         using var workspace = TempWorkspace.Create();
         using var signingKey = SigningKeyPair.Create();
@@ -212,7 +212,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Registration rejects mismatched public/private signing material instead of publishing a false descriptor.</summary>
     [Fact]
-    public async Task RegisterParty_WithConflictingExternalSigningPublicKey_Throws()
+    public async Task RegisterPartyWithConflictingExternalSigningPublicKeyThrows()
     {
         using var privateMaterial = SigningKeyPair.Create();
         using var conflictingPublicMaterial = SigningKeyPair.Create();
@@ -234,7 +234,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>In-memory keyserver rotation preserves old public descriptors for historic manifest verification.</summary>
     [Fact]
-    public async Task KeyServerMemoryStore_PreservesRotatedSigningPublicKeysForVerification()
+    public async Task KeyServerMemoryStorePreservesRotatedSigningPublicKeysForVerification()
     {
         using var keyServer = CreateKeyServer();
 
@@ -243,7 +243,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>SQLite keyserver rotation preserves old public descriptors for historic manifest verification.</summary>
     [Fact]
-    public async Task KeyServerSqliteStore_PreservesRotatedSigningPublicKeysForVerification()
+    public async Task KeyServerSqliteStorePreservesRotatedSigningPublicKeysForVerification()
     {
         using var workspace = TempWorkspace.Create();
         using var keyServer = CreateKeyServer(workspace.GetPath("keyserver-rotation.db"));
@@ -253,7 +253,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Keyserver replay nonce and sequence cursors survive SQLite store recreation.</summary>
     [Fact]
-    public async Task KeyServerSqliteStore_PersistsReplayStateAcrossStoreRecreation()
+    public async Task KeyServerSqliteStorePersistsReplayStateAcrossStoreRecreation()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("keyserver-replay.db");
@@ -303,7 +303,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Keyserver verification replay nonce and sequence cursors use a durable scope separate from signing.</summary>
     [Fact]
-    public async Task KeyServerSqliteStore_PersistsVerificationReplayStateAcrossStoreRecreation()
+    public async Task KeyServerSqliteStorePersistsVerificationReplayStateAcrossStoreRecreation()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("keyserver-verify-replay.db");
@@ -353,7 +353,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Subscriber commits, duplicate idempotency, sequence cursors, and audit rows survive service recreation.</summary>
     [Fact]
-    public async Task SubscriberSqliteStore_PersistsCommitStatusAndReplayStateAcrossServiceRecreation()
+    public async Task SubscriberSqliteStorePersistsCommitStatusAndReplayStateAcrossServiceRecreation()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("subscriber.db");
@@ -396,7 +396,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Subscriber SQLite storage exposes pending status while commit verification is in flight.</summary>
     [Fact]
-    public async Task SubscriberSqliteStore_ExposesPendingStatusDuringInFlightCommit()
+    public async Task SubscriberSqliteStoreExposesPendingStatusDuringInFlightCommit()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("subscriber-pending.db");
@@ -430,7 +430,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>High-contention duplicate commits never create conflicts for the same payload and settle to committed.</summary>
     [Fact]
-    public async Task SubscriberSqliteStore_HighContentionDuplicateCommit_SettlesToSingleCommittedTransaction()
+    public async Task SubscriberSqliteStoreHighContentionDuplicateCommitSettlesToSingleCommittedTransaction()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("subscriber-duplicate-contention.db");
@@ -464,7 +464,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>An abort racing an in-flight commit wins cleanly and the released commit reports an aborted reason.</summary>
     [Fact]
-    public async Task SubscriberSqliteStore_AbortDuringInFlightCommit_PreservesAbortAndRejectsReleasedCommit()
+    public async Task SubscriberSqliteStoreAbortDuringInFlightCommitPreservesAbortAndRejectsReleasedCommit()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("subscriber-abort-race.db");
@@ -507,7 +507,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Durable pub-sub keeps unavailable commit handoffs replayable across store recreation.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_PersistsPendingCommitAndReplaysAfterSubscriberRecovery()
+    public async Task PubSubSqliteStorePersistsPendingCommitAndReplaysAfterSubscriberRecovery()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-commit-replay.db");
@@ -544,7 +544,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Durable pub-sub persists topic and subscriber identity for pending messages across store recreation.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_PersistsTopicAndSubscriberIdForPendingMessagesAcrossRecreation()
+    public async Task PubSubSqliteStorePersistsTopicAndSubscriberIdForPendingMessagesAcrossRecreation()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-topic-subscriber.db");
@@ -578,7 +578,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Durable pub-sub retention purges expired terminal messages but keeps replayable in-progress work.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_PrunesExpiredTerminalMessagesButKeepsPendingAndFreshInProgress()
+    public async Task PubSubSqliteStorePrunesExpiredTerminalMessagesButKeepsPendingAndFreshInProgress()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-retention.db");
@@ -624,7 +624,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>A rolled-back coordinator mutation cancels the durable pending commit so recovery replay cannot commit it later.</summary>
     [Fact]
-    public async Task TurnCoordinator_WithDurablePubSub_WhenSubscriberUnavailableAfterRollback_DoesNotReplayRolledBackCommit()
+    public async Task TurnCoordinatorWithDurablePubSubWhenSubscriberUnavailableAfterRollbackDoesNotReplayRolledBackCommit()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-rollback-cancel.db");
@@ -703,7 +703,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>A timed-out durable commit is canceled after rollback so replay cannot later commit compensated state.</summary>
     [Fact]
-    public async Task TurnCoordinator_WithDurablePubSub_WhenSubscriberCommitTimesOutAndRollbackSucceeds_CancelsPendingCommit()
+    public async Task TurnCoordinatorWithDurablePubSubWhenSubscriberCommitTimesOutAndRollbackSucceedsCancelsPendingCommit()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-timeout-rollback-cancel.db");
@@ -784,7 +784,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Concurrent durable pub-sub replayers claim a pending commit once and do not double-deliver.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_ConcurrentReplayPendingCommit_DeliversOnceAndLeavesNoPending()
+    public async Task PubSubSqliteStoreConcurrentReplayPendingCommitDeliversOnceAndLeavesNoPending()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-concurrent-replay.db");
@@ -819,7 +819,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Concurrent durable replay workers divide a backlog and deliver every pending message once.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_ConcurrentReplayBacklog_DeliversEachPendingMessageOnceAndDrainsQueue()
+    public async Task PubSubSqliteStoreConcurrentReplayBacklogDeliversEachPendingMessageOnceAndDrainsQueue()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-concurrent-replay-backlog.db");
@@ -879,7 +879,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>High-volume durable pub-sub commit acknowledgements settle without pending replay work.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_HighVolumeConcurrentDistinctCommits_AcknowledgesAllAndLeavesNoPending()
+    public async Task PubSubSqliteStoreHighVolumeConcurrentDistinctCommitsAcknowledgesAllAndLeavesNoPending()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-high-volume-distinct.db");
@@ -911,7 +911,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>High-contention duplicate durable commits keep one pending message with complete attempt accounting.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_HighContentionDuplicatePendingCommit_RecordsSinglePendingMessageAndReplaysOriginalPayload()
+    public async Task PubSubSqliteStoreHighContentionDuplicatePendingCommitRecordsSinglePendingMessageAndReplaysOriginalPayload()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-high-contention-duplicate.db");
@@ -960,7 +960,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Stale in-progress durable pub-sub claims are reclaimable so crashed replayers do not wedge commits forever.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_ReclaimsStaleInProgressCommitAndReplaysAfterLeaseExpiry()
+    public async Task PubSubSqliteStoreReclaimsStaleInProgressCommitAndReplaysAfterLeaseExpiry()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-stale-inprogress-replay.db");
@@ -1002,7 +1002,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Fresh in-progress durable pub-sub claims are not reclaimed before the configured lease expires.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_DoesNotReclaimFreshInProgressCommitBeforeLeaseExpiry()
+    public async Task PubSubSqliteStoreDoesNotReclaimFreshInProgressCommitBeforeLeaseExpiry()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-fresh-inprogress-replay.db");
@@ -1041,7 +1041,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>DI-configured zero-second durable pub-sub leases reclaim fresh in-progress claims immediately.</summary>
     [Fact]
-    public async Task AddInProcessTransactionSecurity_WhenDurablePubSubLeaseZeroConfigured_ReclaimsFreshInProgressMessage()
+    public async Task AddInProcessTransactionSecurityWhenDurablePubSubLeaseZeroConfiguredReclaimsFreshInProgressMessage()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-di-zero-lease.db");
@@ -1071,7 +1071,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>DI-configured positive durable pub-sub leases do not reclaim fresh in-progress claims early.</summary>
     [Fact]
-    public async Task AddInProcessTransactionSecurity_WhenDurablePubSubLeasePositiveConfigured_DoesNotReclaimFreshInProgressMessage()
+    public async Task AddInProcessTransactionSecurityWhenDurablePubSubLeasePositiveConfiguredDoesNotReclaimFreshInProgressMessage()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-di-positive-lease.db");
@@ -1101,7 +1101,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Durable pub-sub returns a stored acknowledgement without republishing a committed handoff.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_ReturnsAcknowledgedCommitWithoutRepublishing()
+    public async Task PubSubSqliteStoreReturnsAcknowledgedCommitWithoutRepublishing()
     {
         using var workspace = TempWorkspace.Create();
         var request = CreateCommitRequest("txn-pubsub-durable-ack");
@@ -1122,7 +1122,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Durable pub-sub rejects same-transaction conflicting commit payloads without overwriting replay state.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_RejectsConflictingCommitPayloadWithoutOverwritingPendingMessage()
+    public async Task PubSubSqliteStoreRejectsConflictingCommitPayloadWithoutOverwritingPendingMessage()
     {
         using var workspace = TempWorkspace.Create();
         var transactionId = "txn-pubsub-durable-conflict";
@@ -1148,7 +1148,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
     /// <summary>Durable pub-sub keeps unavailable abort handoffs replayable across store recreation.</summary>
     [Fact]
-    public async Task PubSubSqliteStore_PersistsPendingAbortAndReplaysAfterSubscriberRecovery()
+    public async Task PubSubSqliteStorePersistsPendingAbortAndReplaysAfterSubscriberRecovery()
     {
         using var workspace = TempWorkspace.Create();
         var databasePath = workspace.GetPath("pubsub-abort-replay.db");

@@ -11,7 +11,7 @@ public sealed class SessionLogSanitizerTimeoutTests
 {
     /// <summary>Regex timeouts replace the complete affected string and log only rule ID plus field path.</summary>
     [Fact]
-    public void SanitizeString_WhenConfiguredRuleTimesOut_ReturnsTimeoutTokenAndDoesNotLogInput()
+    public void SanitizeStringWhenConfiguredRuleTimesOutReturnsTimeoutTokenAndDoesNotLogInput()
     {
         var logger = new CapturingLogger<SessionLogSanitizer>();
         var sanitizer = CreateTimeoutSanitizer(logger);
@@ -30,7 +30,7 @@ public sealed class SessionLogSanitizerTimeoutTests
 
     /// <summary>A timeout in one field does not stop later fields from being sanitized.</summary>
     [Fact]
-    public void SanitizeSessionLog_WhenOneFieldTimesOut_ContinuesSanitizingOtherFields()
+    public void SanitizeSessionLogWhenOneFieldTimesOutContinuesSanitizingOtherFields()
     {
         var logger = new CapturingLogger<SessionLogSanitizer>();
         var sanitizer = CreateTimeoutSanitizer(logger);

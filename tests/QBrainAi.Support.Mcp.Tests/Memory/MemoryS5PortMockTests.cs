@@ -9,7 +9,7 @@ public sealed class MemoryS5PortMockTests
 {
     /// <summary>H5-red: tools search lists new verbs against a port mock.</summary>
     [Fact]
-    public void PortMock_ToolsSearch_ListsNewVerbs()
+    public void PortMockToolsSearchListsNewVerbs()
     {
         var port = Substitute.For<IMemoryS5Port>();
         port.ListToolNames().Returns(MemoryS5Catalog.NewVerbs.Concat(MemoryS5Catalog.CompatVerbs).ToArray());
@@ -23,7 +23,7 @@ public sealed class MemoryS5PortMockTests
 
     /// <summary>H5-red: MemoryClient method names mirror REST verbs.</summary>
     [Fact]
-    public void PortMock_ClientMethods_MirrorRest()
+    public void PortMockClientMethodsMirrorRest()
     {
         var port = Substitute.For<IMemoryS5Port>();
         port.ListClientMethods().Returns(MemoryS5Catalog.ClientMethods);
@@ -33,7 +33,7 @@ public sealed class MemoryS5PortMockTests
 
     /// <summary>H5-red: plugin checklist fails when a required verb is omitted.</summary>
     [Fact]
-    public void PortMock_MissingVerb_FailsValidation()
+    public void PortMockMissingVerbFailsValidation()
     {
         var port = Substitute.For<IMemoryS5Port>();
         port.ValidatePluginSkill("remember only", MemoryS5Catalog.NewVerbs)

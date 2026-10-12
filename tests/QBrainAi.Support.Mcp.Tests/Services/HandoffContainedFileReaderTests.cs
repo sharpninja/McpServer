@@ -10,7 +10,7 @@ public sealed class HandoffContainedFileReaderTests
 {
     /// <summary>P1-6: \\?\UNC\ is normalized to a UNC path, not a local drive-looking remnant.</summary>
     [Fact]
-    public void NormalizeFinalPath_UncDevicePrefix_BecomesUncPath()
+    public void NormalizeFinalPathUncDevicePrefixBecomesUncPath()
     {
         var normalized = HandoffContainedFileReader.NormalizeFinalPath(@"\\?\UNC\server\share\file.md");
         Assert.Equal(@"\\server\share\file.md", normalized);
@@ -19,7 +19,7 @@ public sealed class HandoffContainedFileReaderTests
 
     /// <summary>P1-6: \\?\ local device prefix is stripped.</summary>
     [Fact]
-    public void NormalizeFinalPath_LocalDevicePrefix_IsStripped()
+    public void NormalizeFinalPathLocalDevicePrefixIsStripped()
     {
         var normalized = HandoffContainedFileReader.NormalizeFinalPath(@"\\?\C:\workspace\file.md");
         Assert.Equal(@"C:\workspace\file.md", normalized);
@@ -27,7 +27,7 @@ public sealed class HandoffContainedFileReaderTests
 
     /// <summary>P1-6: an unresolvable handle fails closed.</summary>
     [Fact]
-    public void TryGetFinalPath_InvalidHandle_FailsClosedOnWindows()
+    public void TryGetFinalPathInvalidHandleFailsClosedOnWindows()
     {
         if (!OperatingSystem.IsWindows())
             return;
@@ -39,7 +39,7 @@ public sealed class HandoffContainedFileReaderTests
 
     /// <summary>P2-1: decoded size exactly at the limit succeeds.</summary>
     [Fact]
-    public async Task ReadBoundedAsync_ExactlyAtLimit_ReturnsText()
+    public async Task ReadBoundedAsyncExactlyAtLimitReturnsText()
     {
         var bytes = Encoding.UTF8.GetBytes(new string('a', HandoffPromptDefaults.MaxDecodedBytes));
         using var stream = new MemoryStream(bytes);
@@ -50,7 +50,7 @@ public sealed class HandoffContainedFileReaderTests
 
     /// <summary>P2-1: a growing stream is stopped at the hard decoded-size bound.</summary>
     [Fact]
-    public async Task ReadBoundedAsync_GrowingStream_StopsAtLimit()
+    public async Task ReadBoundedAsyncGrowingStreamStopsAtLimit()
     {
         using var stream = new GrowingStream(HandoffPromptDefaults.MaxDecodedBytes + 4096);
         var text = await HandoffContainedFileReader.ReadBoundedAsync(stream, TestContext.Current.CancellationToken);
@@ -59,7 +59,7 @@ public sealed class HandoffContainedFileReaderTests
 
     /// <summary>P2-1: cancellation stops a bounded read.</summary>
     [Fact]
-    public async Task ReadBoundedAsync_Cancelled_Throws()
+    public async Task ReadBoundedAsyncCancelledThrows()
     {
         using var stream = new GrowingStream(HandoffPromptDefaults.MaxDecodedBytes);
         using var cts = new CancellationTokenSource();
@@ -70,7 +70,7 @@ public sealed class HandoffContainedFileReaderTests
 
     /// <summary>P1-6 / P2-1: the reader opens with a share mode that blocks writes and deletes.</summary>
     [Fact]
-    public async Task ReadAsync_OpenShare_BlocksWritesAndDeletes()
+    public async Task ReadAsyncOpenShareBlocksWritesAndDeletes()
     {
         var root = Path.Combine(Path.GetTempPath(), "handoff-reader", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
@@ -90,7 +90,7 @@ public sealed class HandoffContainedFileReaderTests
 
     /// <summary>P1-6: a long contained path can be opened when the OS supports it.</summary>
     [Fact]
-    public async Task ReadAsync_LongContainedPath_SucceedsWhenSupported()
+    public async Task ReadAsyncLongContainedPathSucceedsWhenSupported()
     {
         var root = Path.Combine(Path.GetTempPath(), "handoff-long", Guid.NewGuid().ToString("N"));
         var current = root;

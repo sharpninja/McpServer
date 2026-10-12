@@ -54,7 +54,7 @@ public sealed class McpToolBackendUnavailableErrorTests : IDisposable
     /// message.
     /// </summary>
     [Fact]
-    public async Task SessionLogCompleteTurn_StorageUnreachable_ReturnsTypedBackendUnavailableError()
+    public async Task SessionLogCompleteTurnStorageUnreachableReturnsTypedBackendUnavailableError()
     {
         _sessionLogService
             .UpsertTurnAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<UnifiedRequestEntryDto>(), Arg.Any<CancellationToken>())
@@ -85,7 +85,7 @@ public sealed class McpToolBackendUnavailableErrorTests : IDisposable
     /// ordinary tool errors are not reclassified. Passes before and after the fix by design.
     /// </summary>
     [Fact]
-    public async Task SessionLogCompleteTurn_OrdinaryFailure_KeepsUntypedErrorMessage()
+    public async Task SessionLogCompleteTurnOrdinaryFailureKeepsUntypedErrorMessage()
     {
         _sessionLogService
             .UpsertTurnAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<UnifiedRequestEntryDto>(), Arg.Any<CancellationToken>())
@@ -110,7 +110,7 @@ public sealed class McpToolBackendUnavailableErrorTests : IDisposable
     /// backend_unavailable with retryable true on the tool JSON payload.
     /// </summary>
     [Fact]
-    public async Task SessionLogReplaceSection_StorageUnreachable_ReturnsRetryableTrue()
+    public async Task SessionLogReplaceSectionStorageUnreachableReturnsRetryableTrue()
     {
         _sessionLogService
             .ReplaceTurnSectionAsync(

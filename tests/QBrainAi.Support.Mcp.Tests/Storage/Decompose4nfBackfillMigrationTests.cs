@@ -36,7 +36,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
     /// asserts each list landed as ordered 4NF child rows with the source columns dropped.
     /// </summary>
     [Fact]
-    public void Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables()
+    public void MigrateDecompose4nfBackfillsJsonListColumnsIntoChildTables()
     {
         using (var db = CreateContext())
         {
@@ -208,7 +208,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
     /// to offset-less UTC text by the StoreDateTimeOffsetAsUtcDateTime migration.
     /// </summary>
     [Fact]
-    public void Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText()
+    public void MigrateStoreDateTimeOffsetAsUtcDateTimeNormalizesLegacyOffsetText()
     {
         using (var db = CreateContext())
         {
@@ -233,7 +233,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
     /// pre-slice schema reconstructs every decomposed JSON column from the child rows.
     /// </summary>
     [Fact]
-    public void Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows()
+    public void MigrateDownToPreSliceReconstructsJsonColumnsFromChildRows()
     {
         using (var db = CreateContext())
         {

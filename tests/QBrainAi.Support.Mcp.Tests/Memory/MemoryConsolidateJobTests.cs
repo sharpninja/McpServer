@@ -55,7 +55,7 @@ public sealed class MemoryConsolidateJobTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-JOBS-002-04: job can be disabled without affecting CRUD.</summary>
     [Fact]
-    public async Task Disabled_NoEffectOnCrud()
+    public async Task DisabledNoEffectOnCrud()
     {
         var added = await _harness.AddCompatAsync(new MemoryAddRequest
         {
@@ -76,7 +76,7 @@ public sealed class MemoryConsolidateJobTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-JOBS-002-05: overlapping ticks do not double-apply merges.</summary>
     [Fact]
-    public async Task OverlappingTicks_NoDoubleApply()
+    public async Task OverlappingTicksNoDoubleApply()
     {
         var first = await _harness.RunConsolidateJobAsync(
             dryRun: false,
@@ -92,7 +92,7 @@ public sealed class MemoryConsolidateJobTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-JOBS-002-06: job logs structured start/end/error without secrets.</summary>
     [Fact]
-    public async Task Logs_NoSecrets()
+    public async Task LogsNoSecrets()
     {
         var result = await _harness.RunConsolidateJobAsync(
             dryRun: true,
@@ -105,7 +105,7 @@ public sealed class MemoryConsolidateJobTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-JOBS-002-07: lock TTL/expiry recovers from crashed holder.</summary>
     [Fact]
-    public async Task LockExpiry_Recovers()
+    public async Task LockExpiryRecovers()
     {
         var result = await _harness.RunConsolidateJobAsync(
             dryRun: false,
@@ -117,7 +117,7 @@ public sealed class MemoryConsolidateJobTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-JOBS-002-08: stats reflect last run time and dry-run vs write mode.</summary>
     [Fact]
-    public async Task Stats_ReflectLastRun()
+    public async Task StatsReflectLastRun()
     {
         var result = await _harness.RunConsolidateJobAsync(
             dryRun: true,

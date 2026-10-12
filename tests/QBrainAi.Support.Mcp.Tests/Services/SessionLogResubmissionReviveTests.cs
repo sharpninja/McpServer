@@ -31,7 +31,7 @@ public sealed class SessionLogResubmissionReviveTests
 
     /// <summary>Resubmitting a canonically named session after DeleteSessionAsync revives it with the corrected data.</summary>
     [Fact]
-    public async Task SubmitAsync_ResubmitAfterSessionDelete_RevivesSessionWithCorrectedTurns()
+    public async Task SubmitAsyncResubmitAfterSessionDeleteRevivesSessionWithCorrectedTurns()
     {
         using var connection = OpenConnection();
         Submit(connection, BuildCanonicalDto(response: "stale response"));
@@ -54,7 +54,7 @@ public sealed class SessionLogResubmissionReviveTests
 
     /// <summary>Resubmitting an imported session after its rows were tombstoned revives it through the import path.</summary>
     [Fact]
-    public async Task SubmitAsync_ImportResubmitAfterTombstone_RevivesSession()
+    public async Task SubmitAsyncImportResubmitAfterTombstoneRevivesSession()
     {
         using var connection = OpenConnection();
         Submit(connection, BuildImportedDto(output: "stale output"), sourceFilePath: @"F:\imports\rollout.jsonl");

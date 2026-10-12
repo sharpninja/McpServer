@@ -8,9 +8,9 @@ public sealed class WarningSuppressionValidationTargetTests
 {
     private const string PragmaToken = "#pragma";
 
-    private static readonly string GeneratedObsoleteDisablePragma = PragmaToken + " warning disable " + "612, 618";
+    private const string GeneratedObsoleteDisablePragma = PragmaToken + " warning disable " + "612, 618";
 
-    private static readonly string GeneratedObsoleteRestorePragma = PragmaToken + " warning restore " + "612, 618";
+    private const string GeneratedObsoleteRestorePragma = PragmaToken + " warning restore " + "612, 618";
 
     /// <summary>
     /// TEST-MCP-AIUNIT-002: Uses reflection to prove the build exposes a dedicated

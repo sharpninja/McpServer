@@ -6,7 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class LineSanitizerTests
 {
     [Fact]
-    public void Sanitize_RewritesDefaultPowerShellPrompt_WhenModelLabelProvided()
+    public void SanitizeRewritesDefaultPowerShellPromptWhenModelLabelProvided()
     {
         var line = "PS E:\\github\\QBrainAi>\n";
 
@@ -16,7 +16,7 @@ public sealed class LineSanitizerTests
     }
 
     [Fact]
-    public void Sanitize_LeavesDefaultPowerShellPromptUnchanged_WhenModelLabelMissing()
+    public void SanitizeLeavesDefaultPowerShellPromptUnchangedWhenModelLabelMissing()
     {
         var line = "PS E:\\github\\QBrainAi>\n";
 

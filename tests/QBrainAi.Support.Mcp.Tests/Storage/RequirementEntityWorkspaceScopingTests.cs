@@ -9,11 +9,11 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// Verifies requirements storage follows the same workspace discriminator
 /// contract as TODO/session/context storage.
 /// </summary>
-public sealed class RequirementEntity_WorkspaceScopingTests
+public sealed class RequirementEntityWorkspaceScopingTests
 {
     /// <summary>Requirement rows use a composite key so ids can repeat per workspace.</summary>
     [Fact]
-    public void Requirement_PrimaryKey_IsWorkspaceKindAndId()
+    public void RequirementPrimaryKeyIsWorkspaceKindAndId()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"req-pk-{Guid.NewGuid():N}")
@@ -32,7 +32,7 @@ public sealed class RequirementEntity_WorkspaceScopingTests
 
     /// <summary>Traceability rows are also workspace-scoped and multi-link capable.</summary>
     [Fact]
-    public void RequirementTraceability_PrimaryKey_IsWorkspaceFrTargetKindAndTargetId()
+    public void RequirementTraceabilityPrimaryKeyIsWorkspaceFrTargetKindAndTargetId()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"req-link-pk-{Guid.NewGuid():N}")
@@ -51,7 +51,7 @@ public sealed class RequirementEntity_WorkspaceScopingTests
 
     /// <summary>Both requirement tables must be clamped by global query filters.</summary>
     [Fact]
-    public void RequirementEntities_HaveGlobalQueryFilters()
+    public void RequirementEntitiesHaveGlobalQueryFilters()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"req-filter-{Guid.NewGuid():N}")

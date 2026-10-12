@@ -16,7 +16,7 @@ public sealed class ClientMutationPolicyTests
     /// passthrough from invoking an uncompensated mutation method.
     /// </summary>
     [Fact]
-    public async Task DispatchAsync_WhenPolicyRejectsUnsafeClientMutation_DoesNotInvokePassthrough()
+    public async Task DispatchAsyncWhenPolicyRejectsUnsafeClientMutationDoesNotInvokePassthrough()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var policy = Substitute.For<IClientMutationPolicy>();
@@ -57,7 +57,7 @@ public sealed class ClientMutationPolicyTests
     /// policy allows the request.
     /// </summary>
     [Fact]
-    public async Task DispatchAsync_WhenPolicyAllowsReadClientMethod_InvokesPassthrough()
+    public async Task DispatchAsyncWhenPolicyAllowsReadClientMethodInvokesPassthrough()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough
@@ -97,7 +97,7 @@ public sealed class ClientMutationPolicyTests
     /// the uncompensated analyzer side-effect path.
     /// </summary>
     [Fact]
-    public async Task DispatchAsync_WhenPolicyRejectsTodoAnalyzeRequirements_DoesNotInvokeWorkflow()
+    public async Task DispatchAsyncWhenPolicyRejectsTodoAnalyzeRequirementsDoesNotInvokeWorkflow()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var todo = Substitute.For<ITodoWorkflow>();
@@ -135,7 +135,7 @@ public sealed class ClientMutationPolicyTests
     /// protection before reflection can reach an unsafe client method.
     /// </summary>
     [Fact]
-    public async Task GenericClientPassthrough_WhenPolicyRejectsUnsafeMutation_ThrowsBeforeHttpRequest()
+    public async Task GenericClientPassthroughWhenPolicyRejectsUnsafeMutationThrowsBeforeHttpRequest()
     {
         var handler = new CountingHandler();
         using var http = new HttpClient(handler);
@@ -250,7 +250,7 @@ public sealed class ClientMutationPolicyTests
     [InlineData("workspace", "CreateAsync", false)]
     [InlineData("desktop", "LaunchAsync", false)]
     [InlineData("newClient", "NewMutationAsync", false)]
-    public void Evaluate_WithRequiredTransactions_AppliesKnownUnsafeMutationBlockList(
+    public void EvaluateWithRequiredTransactionsAppliesKnownUnsafeMutationBlockList(
         string clientName,
         string methodName,
         bool expectedAllowed)

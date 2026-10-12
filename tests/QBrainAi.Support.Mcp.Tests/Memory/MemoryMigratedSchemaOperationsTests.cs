@@ -50,7 +50,7 @@ public sealed class MemoryMigratedSchemaOperationsTests : IDisposable
     /// and remember fails on insert.
     /// </summary>
     [Fact]
-    public async Task Remember_Fails_WhenMemoryVersionsLacksSoftDeleteColumns()
+    public async Task RememberFailsWhenMemoryVersionsLacksSoftDeleteColumns()
     {
         await using (var db = CreateContext())
         {
@@ -74,7 +74,7 @@ public sealed class MemoryMigratedSchemaOperationsTests : IDisposable
 
     /// <summary>Full migrate applies the new soft-delete columns and remember/list/recall succeed.</summary>
     [Fact]
-    public async Task RememberListRecall_Succeed_AfterSoftDeleteColumnMigration()
+    public async Task RememberListRecallSucceedAfterSoftDeleteColumnMigration()
     {
         await using (var db = CreateContext())
         {

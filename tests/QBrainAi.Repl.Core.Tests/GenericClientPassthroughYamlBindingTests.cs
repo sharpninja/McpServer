@@ -13,7 +13,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
     [Theory]
     [InlineData(true, false, false)]
     [InlineData(false, true, true)]
-    public async Task ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(bool persisted, bool degraded, bool queued)
+    public async Task ClientSessionLogSubmitAsyncPreservesPersistenceReceipt(bool persisted, bool degraded, bool queued)
     {
         const string sessionId = "Codex-20261001T190000Z-receipt";
         const string turnId = "req-20261001T190000Z-receipt";
@@ -59,7 +59,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
 
     /// <summary>Nested object-keyed YAML lists must survive binding into typed client request models.</summary>
     [Fact]
-    public async Task ClientCreateFrAsync_NestedYamlAcceptanceCriteria_SendsCriteriaToRestClient()
+    public async Task ClientCreateFrAsyncNestedYamlAcceptanceCriteriaSendsCriteriaToRestClient()
     {
         var handler = new CapturingHttpHandler(
             """
@@ -124,7 +124,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
 
     /// <summary>Session log DTO fields and numeric YAML scalars must survive production passthrough binding.</summary>
     [Fact]
-    public async Task ClientSessionLogSubmitAsync_StructuredTurnWithYamlNumbers_SendsCompleteDto()
+    public async Task ClientSessionLogSubmitAsyncStructuredTurnWithYamlNumbersSendsCompleteDto()
     {
         var handler = new CapturingHttpHandler(
             """
@@ -205,7 +205,7 @@ public sealed class GenericClientPassthroughYamlBindingTests
     /// client methods whose runtime task type derives from <see cref="Task{TResult}"/>.
     /// </summary>
     [Fact]
-    public async Task ClientTriageQueryRunsAsync_AsyncTaskSubclass_EmitsResultPayload()
+    public async Task ClientTriageQueryRunsAsyncAsyncTaskSubclassEmitsResultPayload()
     {
         var handler = new CapturingHttpHandler(JsonSerializer.Serialize(new TriageRunQueryResult
         {

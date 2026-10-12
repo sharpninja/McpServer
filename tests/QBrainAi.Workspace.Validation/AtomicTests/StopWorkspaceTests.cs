@@ -37,7 +37,7 @@ public sealed class StopWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Stop_NotRunning_ReturnsStatus()
+    public async Task StopNotRunningReturnsStatus()
     {
         var response = await _fixture.Client.PostAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/stop", null, cancellationToken: TestContext.Current.CancellationToken);
@@ -52,7 +52,7 @@ public sealed class StopWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Stop_InvalidKey_Returns400()
+    public async Task StopInvalidKeyReturns400()
     {
         var response = await _fixture.Client.PostAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/stop", null, cancellationToken: TestContext.Current.CancellationToken);

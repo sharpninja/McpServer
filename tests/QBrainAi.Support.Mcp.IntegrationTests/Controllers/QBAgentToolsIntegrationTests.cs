@@ -25,7 +25,7 @@ public sealed class QBAgentToolsIntegrationTests
 {
     /// <summary>The agent loads a skill, then write_file + edit_file land on the server workspace file.</summary>
     [Fact]
-    public async Task Agent_LoadsSkill_ThenWritesAndEditsFile_ThroughServer()
+    public async Task AgentLoadsSkillThenWritesAndEditsFileThroughServer()
     {
         // The test workspace allowlist permits src/QBrainAi.Cqrs/**/*.cs, so the agent operates on that path.
         var orchestration = new ScriptedOrchestration(

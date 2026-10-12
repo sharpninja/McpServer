@@ -16,7 +16,7 @@ public sealed class MemoryControllerTests
 {
     /// <summary>GET /qbrainai/memory returns the service-provided visible memory list.</summary>
     [Fact]
-    public async Task ListAsync_ReturnsOkPayload()
+    public async Task ListAsyncReturnsOkPayload()
     {
         var service = Substitute.For<IMemoryService>();
         service.ListAsync(Arg.Any<MemoryListRequest>(), Arg.Any<CancellationToken>())
@@ -52,7 +52,7 @@ public sealed class MemoryControllerTests
 
     /// <summary>GET /qbrainai/memory accepts Effective as the explicit default list scope.</summary>
     [Fact]
-    public async Task ListAsync_WithEffectiveScope_ForwardsNullScope()
+    public async Task ListAsyncWithEffectiveScopeForwardsNullScope()
     {
         var service = Substitute.For<IMemoryService>();
         service.ListAsync(Arg.Any<MemoryListRequest>(), Arg.Any<CancellationToken>())
@@ -69,7 +69,7 @@ public sealed class MemoryControllerTests
 
     /// <summary>GET /qbrainai/memory rejects non-contract list scopes with BadRequest.</summary>
     [Fact]
-    public async Task ListAsync_WithInvalidScope_ReturnsBadRequest()
+    public async Task ListAsyncWithInvalidScopeReturnsBadRequest()
     {
         var service = Substitute.For<IMemoryService>();
         var controller = new MemoryController(service);
@@ -82,7 +82,7 @@ public sealed class MemoryControllerTests
 
     /// <summary>POST /qbrainai/memory returns Created with the canonical memory id location.</summary>
     [Fact]
-    public async Task AddAsync_WhenSuccessful_ReturnsCreated()
+    public async Task AddAsyncWhenSuccessfulReturnsCreated()
     {
         var service = Substitute.For<IMemoryService>();
         service.AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
@@ -115,7 +115,7 @@ public sealed class MemoryControllerTests
 
     /// <summary>POST /qbrainai/memory uses the transaction-gated mutation service when it is registered.</summary>
     [Fact]
-    public async Task AddAsync_WhenTransactionGateRegistered_UsesGatedAddService()
+    public async Task AddAsyncWhenTransactionGateRegisteredUsesGatedAddService()
     {
         var service = Substitute.For<IMemoryService>();
         var gated = Substitute.For<ITransactionGatedMemoryService>();
@@ -151,7 +151,7 @@ public sealed class MemoryControllerTests
 
     /// <summary>PUT /qbrainai/memory/{id} maps validation failures to BadRequest.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenValidationFails_ReturnsBadRequest()
+    public async Task UpdateAsyncWhenValidationFailsReturnsBadRequest()
     {
         var service = Substitute.For<IMemoryService>();
         service.UpdateAsync("MEMORY-OPERATOR-001", Arg.Any<MemoryUpdateRequest>(), Arg.Any<CancellationToken>())
@@ -170,7 +170,7 @@ public sealed class MemoryControllerTests
 
     /// <summary>DELETE /qbrainai/memory/{id} maps missing visible memory rows to NotFound.</summary>
     [Fact]
-    public async Task RemoveAsync_WhenMissing_ReturnsNotFound()
+    public async Task RemoveAsyncWhenMissingReturnsNotFound()
     {
         var service = Substitute.For<IMemoryService>();
         service.RemoveAsync("MEMORY-MISSING-001", Arg.Any<CancellationToken>())

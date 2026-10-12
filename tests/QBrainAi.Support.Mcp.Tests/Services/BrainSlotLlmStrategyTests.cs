@@ -12,7 +12,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class BrainSlotLlmStrategyTests
 {
     [Fact]
-    public void CreateStrategy_TwoRoles_ResolvesTwoDifferentStrategyTypes()
+    public void CreateStrategyTwoRolesResolvesTwoDifferentStrategyTypes()
     {
         var factory = new BrainSlotChatClientFactory();
         var creativity = Slot(BrainSlotRoles.Creativity, "OpenAICompatible", "http://localhost:11434/v1");
@@ -27,7 +27,7 @@ public sealed class BrainSlotLlmStrategyTests
     }
 
     [Fact]
-    public async Task CompletionStrategy_ReceivesSharedTurnContextByReference()
+    public async Task CompletionStrategyReceivesSharedTurnContextByReference()
     {
         var context = new BrainSlotTurnContext
         {
@@ -50,7 +50,7 @@ public sealed class BrainSlotLlmStrategyTests
     }
 
     [Fact]
-    public void BuildOpenAiCompatibleRequestJson_WhenTurnContextSupplied_IncludesOriginalInputAndTurnIds()
+    public void BuildOpenAiCompatibleRequestJsonWhenTurnContextSuppliedIncludesOriginalInputAndTurnIds()
     {
         var slot = Slot(BrainSlotRoles.Logic, "OpenAICompatible", "http://localhost:11434/v1");
         var context = new BrainSlotTurnContext
@@ -84,7 +84,7 @@ public sealed class BrainSlotLlmStrategyTests
     }
 
     [Fact]
-    public void Factory_CreateStrategy_ExistsWithoutNewAgentSdk()
+    public void FactoryCreateStrategyExistsWithoutNewAgentSdk()
     {
         Assert.NotNull(typeof(BrainSlotChatClientFactory).GetMethod("CreateStrategy"));
         Assert.NotNull(typeof(IBrainSlotCompletionStrategy));

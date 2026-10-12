@@ -10,7 +10,7 @@ public sealed class MemoryUiEndpointTests
 {
     /// <summary>Hashed bundles and the unknown-asset probe are not deep links.</summary>
     [Fact]
-    public void UnknownAsset_NotServedAsIndex()
+    public void UnknownAssetNotServedAsIndex()
     {
         Assert.True(MemoryUiEndpoints.IsUnknownAsset("unknown-asset"));
         Assert.True(MemoryUiEndpoints.IsUnknownAsset("app.abc123.js"));
@@ -20,7 +20,7 @@ public sealed class MemoryUiEndpointTests
 
     /// <summary>Only MEMORY-* path segments are treated as deep-link ids.</summary>
     [Fact]
-    public void DeepLink_AcceptsMemoryIdsOnly()
+    public void DeepLinkAcceptsMemoryIdsOnly()
     {
         Assert.True(MemoryUiEndpoints.IsMemoryId("MEMORY-FACT-001"));
         Assert.False(MemoryUiEndpoints.IsMemoryId("unknown-asset"));

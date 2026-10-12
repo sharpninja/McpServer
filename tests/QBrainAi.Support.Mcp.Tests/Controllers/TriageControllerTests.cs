@@ -20,7 +20,7 @@ public sealed class TriageControllerTests
     /// connection string used by the triage service.
     /// </summary>
     [Fact]
-    public async Task AllTriageRequests_LogExactResolvedDatabaseConnectionString()
+    public async Task AllTriageRequestsLogExactResolvedDatabaseConnectionString()
     {
         var service = Substitute.For<ITriageService>();
         var group = new TriageGroupDetail
@@ -126,7 +126,7 @@ public sealed class TriageControllerTests
     /// valid intake and delegates the shared report contract to the service.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_WhenServiceAccepts_ReturnsAcceptedQueueState()
+    public async Task SubmitReportAsyncWhenServiceAcceptsReturnsAcceptedQueueState()
     {
         var service = Substitute.For<ITriageService>();
         var quietDeadline = new DateTimeOffset(2026, 6, 25, 12, 15, 0, TimeSpan.Zero);
@@ -173,7 +173,7 @@ public sealed class TriageControllerTests
     /// TEST-MCP-TRIAGE-001: invalid report intake returns a Bad Request error envelope.
     /// </summary>
     [Fact]
-    public async Task SubmitReportAsync_WhenServiceRejects_ReturnsBadRequestEnvelope()
+    public async Task SubmitReportAsyncWhenServiceRejectsReturnsBadRequestEnvelope()
     {
         var service = Substitute.For<ITriageService>();
         service.SubmitReportAsync(Arg.Any<TriageReportRequest>(), Arg.Any<CancellationToken>())
@@ -197,7 +197,7 @@ public sealed class TriageControllerTests
     [Theory]
     [InlineData("flush")]
     [InlineData("retry")]
-    public async Task GroupMutationAsync_WhenGroupExists_ReturnsOkGroupState(string operation)
+    public async Task GroupMutationAsyncWhenGroupExistsReturnsOkGroupState(string operation)
     {
         var service = Substitute.For<ITriageService>();
         var group = new TriageGroupDetail
@@ -224,7 +224,7 @@ public sealed class TriageControllerTests
 
     /// <summary>TEST-MCP-TRIAGE-005: retry endpoint forwards the optional force flag.</summary>
     [Fact]
-    public async Task RetryGroupAsync_WhenForceTrue_ForwardsForceFlag()
+    public async Task RetryGroupAsyncWhenForceTrueForwardsForceFlag()
     {
         var service = Substitute.For<ITriageService>();
         var group = new TriageGroupDetail
@@ -250,7 +250,7 @@ public sealed class TriageControllerTests
     [InlineData("new")]
     [InlineData("consolidate")]
     [InlineData("merge")]
-    public async Task GroupEditAsync_WhenSelectionIsValid_ReturnsOkEditResult(string operation)
+    public async Task GroupEditAsyncWhenSelectionIsValidReturnsOkEditResult(string operation)
     {
         var service = Substitute.For<ITriageService>();
         var request = new TriageGroupSelectionRequest
@@ -287,7 +287,7 @@ public sealed class TriageControllerTests
 
     /// <summary>TEST-TRIAGE-003: group edit endpoints return Bad Request for invalid selections.</summary>
     [Fact]
-    public async Task CreateGroupFromSelectionAsync_WhenSelectionInvalid_ReturnsBadRequest()
+    public async Task CreateGroupFromSelectionAsyncWhenSelectionInvalidReturnsBadRequest()
     {
         var service = Substitute.For<ITriageService>();
         service.CreateGroupFromSelectionAsync(Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
@@ -303,7 +303,7 @@ public sealed class TriageControllerTests
 
     /// <summary>TEST-TRIAGE-001: GET /qbrainai/triage/dashboard returns queue and run history state.</summary>
     [Fact]
-    public async Task GetDashboardAsync_ReturnsDashboardState()
+    public async Task GetDashboardAsyncReturnsDashboardState()
     {
         var service = Substitute.For<ITriageService>();
         var dashboard = new TriageDashboardResult
@@ -342,7 +342,7 @@ public sealed class TriageControllerTests
 
     /// <summary>TEST-TRIAGE-001: run-history query endpoint returns current AI triage run statuses.</summary>
     [Fact]
-    public async Task QueryRunsAsync_ReturnsRunHistory()
+    public async Task QueryRunsAsyncReturnsRunHistory()
     {
         var service = Substitute.For<ITriageService>();
         var query = new TriageRunQueryResult
@@ -375,7 +375,7 @@ public sealed class TriageControllerTests
 
     /// <summary>TEST-TRIAGE-002: triage TODO endpoint returns created TODO ids with timestamps.</summary>
     [Fact]
-    public async Task QueryCreatedTodosAsync_ReturnsCreatedTodoIndex()
+    public async Task QueryCreatedTodosAsyncReturnsCreatedTodoIndex()
     {
         var service = Substitute.For<ITriageService>();
         var query = new TriageCreatedTodoQueryResult
@@ -408,7 +408,7 @@ public sealed class TriageControllerTests
 
     /// <summary>TEST-TRIAGE-001: run detail endpoint returns not-found envelopes for missing runs.</summary>
     [Fact]
-    public async Task GetRunAsync_WhenMissing_ReturnsNotFound()
+    public async Task GetRunAsyncWhenMissingReturnsNotFound()
     {
         var service = Substitute.For<ITriageService>();
         service.GetRunAsync("triage-run-missing", Arg.Any<CancellationToken>())

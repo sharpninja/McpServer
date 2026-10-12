@@ -60,7 +60,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     /// scopes stores created canonical TODO items in that workspace.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WithFixedWorkspaceOutsideHttp_StoresTodoItemInFixedWorkspace()
+    public async Task CreateAsyncWithFixedWorkspaceOutsideHttpStoresTodoItemInFixedWorkspace()
     {
         var workspacePath = Path.Combine(Path.GetTempPath(), $"todo-fixed-{Guid.NewGuid():N}");
         await using var connection = new SqliteConnection("Data Source=:memory:");
@@ -107,7 +107,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     /// link rows.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WithRequirementProjection_CreatesTodoItemRequirementsAndLinks()
+    public async Task CreateAsyncWithRequirementProjectionCreatesTodoItemRequirementsAndLinks()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -140,7 +140,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     /// backfill timestamp instead of the current read/list time.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WithRequirementProjection_UsesStablePlaceholderTimestamp()
+    public async Task CreateAsyncWithRequirementProjectionUsesStablePlaceholderTimestamp()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -169,7 +169,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     /// link rows use only the canonical bounded requirement identifier.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WithRequirementProjectionDisplayText_CreatesCanonicalRequirementLinks()
+    public async Task CreateAsyncWithRequirementProjectionDisplayTextCreatesCanonicalRequirementLinks()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -200,7 +200,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     /// normalized link rows synchronized, including stale-link soft deletion.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_RequirementProjection_KeepsLinksAndJsonProjectionInSync()
+    public async Task UpdateAsyncRequirementProjectionKeepsLinksAndJsonProjectionInSync()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {

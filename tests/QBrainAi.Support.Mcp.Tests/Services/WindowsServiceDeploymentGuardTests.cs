@@ -16,7 +16,7 @@ public sealed class WindowsServiceDeploymentGuardTests : IDisposable
     }
 
     [Fact]
-    public void HasDeploymentManifest_WhenManifestExists_ReturnsTrue()
+    public void HasDeploymentManifestWhenManifestExistsReturnsTrue()
     {
         WriteManifest(Array.Empty<ExecutableHashEntry>());
 
@@ -24,13 +24,13 @@ public sealed class WindowsServiceDeploymentGuardTests : IDisposable
     }
 
     [Fact]
-    public void HasDeploymentManifest_WhenManifestMissing_ReturnsFalse()
+    public void HasDeploymentManifestWhenManifestMissingReturnsFalse()
     {
         Assert.False(WindowsServiceDeploymentGuard.HasDeploymentManifest(_tempDirectory));
     }
 
     [Fact]
-    public void EnsureApprovedDeployment_MissingManifest_ThrowsAndLogsClearMessage()
+    public void EnsureApprovedDeploymentMissingManifestThrowsAndLogsClearMessage()
     {
         File.WriteAllText(Path.Combine(_tempDirectory, "appsettings.yaml"), "Logging:\n  LogLevel:\n    Default: Information\n");
         File.WriteAllText(Path.Combine(_tempDirectory, "QBrainAi.Support.Mcp.exe"), "fake exe");
@@ -46,7 +46,7 @@ public sealed class WindowsServiceDeploymentGuardTests : IDisposable
     }
 
     [Fact]
-    public void EnsureApprovedDeployment_BadExecutableHash_ThrowsAndLogsExecutableName()
+    public void EnsureApprovedDeploymentBadExecutableHashThrowsAndLogsExecutableName()
     {
         var exePath = Path.Combine(_tempDirectory, "QBrainAi.Support.Mcp.exe");
         File.WriteAllText(Path.Combine(_tempDirectory, "appsettings.yaml"), "Logging:\n  LogLevel:\n    Default: Information\n");
@@ -68,7 +68,7 @@ public sealed class WindowsServiceDeploymentGuardTests : IDisposable
     }
 
     [Fact]
-    public void EnsureApprovedDeployment_ValidManifest_SucceedsWithoutLogging()
+    public void EnsureApprovedDeploymentValidManifestSucceedsWithoutLogging()
     {
         var exePath = Path.Combine(_tempDirectory, "QBrainAi.Support.Mcp.exe");
         var launcherPath = Path.Combine(_tempDirectory, "QBrainAi.Launcher.exe");

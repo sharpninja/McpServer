@@ -20,7 +20,7 @@ public sealed class TransactionGatedGitHubCliServiceTests
     /// inner gh CLI service even when turn transactions are required.
     /// </summary>
     [Fact]
-    public async Task Mutations_WhenTransactionsRequired_DelegateToInner()
+    public async Task MutationsWhenTransactionsRequiredDelegateToInner()
     {
         var inner = Substitute.For<IGitHubCliService>();
         inner.CreateIssueAsync("title", "body", Arg.Any<CancellationToken>())
@@ -73,7 +73,7 @@ public sealed class TransactionGatedGitHubCliServiceTests
     /// allocate turn transactions.
     /// </summary>
     [Fact]
-    public async Task Reads_DelegateWithoutCoordinatorTransaction()
+    public async Task ReadsDelegateWithoutCoordinatorTransaction()
     {
         var inner = Substitute.For<IGitHubCliService>();
         inner.ListIssuesAsync("open", 30, Arg.Any<CancellationToken>())
@@ -117,7 +117,7 @@ public sealed class TransactionGatedGitHubCliServiceTests
     /// TEST-MCP-221: Degraded transaction security does not block GitHub CLI writes.
     /// </summary>
     [Fact]
-    public async Task CloseIssueAsync_WhenCoordinatorDegraded_DelegatesToInner()
+    public async Task CloseIssueAsyncWhenCoordinatorDegradedDelegatesToInner()
     {
         var inner = Substitute.For<IGitHubCliService>();
         inner.CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>())
@@ -135,7 +135,7 @@ public sealed class TransactionGatedGitHubCliServiceTests
     /// mutation behavior.
     /// </summary>
     [Fact]
-    public async Task CreateIssueAsync_WhenTransactionsNotRequired_DelegatesToInner()
+    public async Task CreateIssueAsyncWhenTransactionsNotRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IGitHubCliService>();
         inner.CreateIssueAsync("title", "body", Arg.Any<CancellationToken>())

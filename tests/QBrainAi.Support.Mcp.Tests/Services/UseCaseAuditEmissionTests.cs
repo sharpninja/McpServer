@@ -56,7 +56,7 @@ public sealed class UseCaseAuditEmissionTests : IDisposable
     /// asserted by EntityKind + WorkspaceId, not post-identity UseCaseId.
     /// </summary>
     [Fact]
-    public async Task UseCaseMutations_EmitDataAuditLogRows()
+    public async Task UseCaseMutationsEmitDataAuditLogRows()
     {
         long useCaseId;
         await using (var db = CreateContext())

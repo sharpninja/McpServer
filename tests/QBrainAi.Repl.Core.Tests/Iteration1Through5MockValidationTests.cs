@@ -21,7 +21,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that marker file reader and trust bootstrap service mocks work correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration1_TrustBootstrap_AllMocksWork()
+    public async Task Iteration1TrustBootstrapAllMocksWork()
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var trustService = Substitute.For<ITrustBootstrapService>();
@@ -50,7 +50,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that auth rotation handler mock works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration1_AuthRotation_MockBehaviorCorrect()
+    public async Task Iteration1AuthRotationMockBehaviorCorrect()
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var markerData = Substitute.For<IMarkerFileData>();
@@ -73,7 +73,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that session log workflow mock for opening sessions works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration2_SessionLogWorkflow_MockOpenSessionWorks()
+    public async Task Iteration2SessionLogWorkflowMockOpenSessionWorks()
     {
         var workflow = Substitute.For<ISessionLogWorkflow>();
 
@@ -89,7 +89,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that session log workflow mock for beginning turns works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration2_SessionLogWorkflow_MockBeginTurnWorks()
+    public async Task Iteration2SessionLogWorkflowMockBeginTurnWorks()
     {
         var workflow = Substitute.For<ISessionLogWorkflow>();
 
@@ -105,7 +105,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that session log workflow mock for completing turns works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration2_SessionLogWorkflow_MockCompleteTurnWorks()
+    public async Task Iteration2SessionLogWorkflowMockCompleteTurnWorks()
     {
         var workflow = Substitute.For<ISessionLogWorkflow>();
 
@@ -125,7 +125,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that TODO workflow mock for creating TODOs works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration3_TodoWorkflow_MockCreateWorks()
+    public async Task Iteration3TodoWorkflowMockCreateWorks()
     {
         var workflow = Substitute.For<ITodoWorkflow>();
         var createRequest = Substitute.For<ITodoCreateRequest>();
@@ -145,7 +145,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that TODO workflow mock for querying TODOs works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration3_TodoWorkflow_MockQueryWorks()
+    public async Task Iteration3TodoWorkflowMockQueryWorks()
     {
         var workflow = Substitute.For<ITodoWorkflow>();
         var queryResult = Substitute.For<ITodoQueryResult>();
@@ -164,7 +164,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that TODO workflow mock for updating TODOs works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration3_TodoWorkflow_MockUpdateWorks()
+    public async Task Iteration3TodoWorkflowMockUpdateWorks()
     {
         var workflow = Substitute.For<ITodoWorkflow>();
         var updateRequest = Substitute.For<ITodoUpdateRequest>();
@@ -188,7 +188,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that requirements workflow mock for creating FRs works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration4_RequirementsWorkflow_MockCreateFrWorks()
+    public async Task Iteration4RequirementsWorkflowMockCreateFrWorks()
     {
         var workflow = Substitute.For<IRequirementsWorkflow>();
         var createRequest = Substitute.For<IFrCreateRequest>();
@@ -208,7 +208,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that requirements workflow mock for listing FRs works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration4_RequirementsWorkflow_MockListFrWorks()
+    public async Task Iteration4RequirementsWorkflowMockListFrWorks()
     {
         var workflow = Substitute.For<IRequirementsWorkflow>();
         var queryResult = Substitute.For<IFrQueryResult>();
@@ -227,7 +227,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that requirements workflow mock for updating FRs works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration4_RequirementsWorkflow_MockUpdateFrWorks()
+    public async Task Iteration4RequirementsWorkflowMockUpdateFrWorks()
     {
         var workflow = Substitute.For<IRequirementsWorkflow>();
         var updateRequest = Substitute.For<IFrUpdateRequest>();
@@ -251,7 +251,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that generic client passthrough mock for context search works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration5_GenericPassthrough_MockContextSearchWorks()
+    public async Task Iteration5GenericPassthroughMockContextSearchWorks()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
 
@@ -285,7 +285,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that generic client passthrough mock for GitHub issues works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration5_GenericPassthrough_MockGitHubIssuesWorks()
+    public async Task Iteration5GenericPassthroughMockGitHubIssuesWorks()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
 
@@ -318,7 +318,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that generic client passthrough mock for repo file read works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration5_GenericPassthrough_MockRepoReadWorks()
+    public async Task Iteration5GenericPassthroughMockRepoReadWorks()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
 
@@ -349,7 +349,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that generic client passthrough mock for desktop launch works correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration5_GenericPassthrough_MockDesktopLaunchWorks()
+    public async Task Iteration5GenericPassthroughMockDesktopLaunchWorks()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
 
@@ -382,7 +382,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that generic client passthrough mock handles argument coercion correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration5_GenericPassthrough_MockArgumentCoercionWorks()
+    public async Task Iteration5GenericPassthroughMockArgumentCoercionWorks()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
 
@@ -405,7 +405,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that generic client passthrough mock handles error cases correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration5_GenericPassthrough_MockErrorHandlingWorks()
+    public async Task Iteration5GenericPassthroughMockErrorHandlingWorks()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
 
@@ -422,7 +422,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that generic client passthrough mock handles case-insensitive parameters correctly.
     /// </summary>
     [Fact]
-    public async Task Iteration5_GenericPassthrough_MockCaseInsensitivityWorks()
+    public async Task Iteration5GenericPassthroughMockCaseInsensitivityWorks()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
 
@@ -449,7 +449,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that all required interfaces are defined correctly.
     /// </summary>
     [Fact]
-    public void CrossIteration_AllInterfacesDefinedCorrectly()
+    public void CrossIterationAllInterfacesDefinedCorrectly()
     {
         Assert.NotNull(typeof(ITrustBootstrapService));
         Assert.NotNull(typeof(IMarkerFileReader));
@@ -465,7 +465,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that all required model classes exist.
     /// </summary>
     [Fact]
-    public void CrossIteration_AllModelClassesExist()
+    public void CrossIterationAllModelClassesExist()
     {
         Assert.NotNull(typeof(UnifiedSessionLogDto));
         Assert.NotNull(typeof(SessionLogSubmitResult));
@@ -486,7 +486,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that FakeYamlSerializer works correctly for basic serialization.
     /// </summary>
     [Fact]
-    public void YamlSerialization_FakeSerializerWorks()
+    public void YamlSerializationFakeSerializerWorks()
     {
         var serializer = new FakeYamlSerializer();
         var envelope = Substitute.For<IYamlEnvelope>();
@@ -503,7 +503,7 @@ public class Iteration1Through5MockValidationTests
     /// Validates that FakeYamlSerializer round-trips data correctly.
     /// </summary>
     [Fact]
-    public void YamlSerialization_RoundTripPreservesData()
+    public void YamlSerializationRoundTripPreservesData()
     {
         var serializer = new FakeYamlSerializer();
         var envelope = Substitute.For<IYamlEnvelope>();

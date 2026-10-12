@@ -22,7 +22,7 @@ public sealed class TodoWorkflowTests
     /// query string while still deserializing the real TODO query DTOs.
     /// </summary>
     [Fact]
-    public async Task QueryAsync_DelegatesToTodoClient()
+    public async Task QueryAsyncDelegatesToTodoClient()
     {
         var response = new TodoQueryResult
         {
@@ -69,7 +69,7 @@ public sealed class TodoWorkflowTests
     /// supplied by the host.
     /// </summary>
     [Fact]
-    public async Task GetAsync_DelegatesToTodoClient()
+    public async Task GetAsyncDelegatesToTodoClient()
     {
         var response = new TodoFlatItem
         {
@@ -102,7 +102,7 @@ public sealed class TodoWorkflowTests
     /// compatibility with real server content.
     /// </summary>
     [Fact]
-    public async Task GetAsync_AllowsLegacyTodoIdentifiers()
+    public async Task GetAsyncAllowsLegacyTodoIdentifiers()
     {
         var response = new TodoFlatItem
         {
@@ -132,7 +132,7 @@ public sealed class TodoWorkflowTests
     /// duplicated transport contract.
     /// </summary>
     [Fact]
-    public async Task UpdateAsync_DelegatesToTodoClient()
+    public async Task UpdateAsyncDelegatesToTodoClient()
     {
         var request = new TodoUpdateRequest
         {
@@ -182,7 +182,7 @@ public sealed class TodoWorkflowTests
     /// analysis DTOs from <c>QBrainAi.Client.Models</c>.
     /// </summary>
     [Fact]
-    public async Task AnalyzeRequirementsAsync_DelegatesToTodoClient()
+    public async Task AnalyzeRequirementsAsyncDelegatesToTodoClient()
     {
         var response = new RequirementsAnalysisResult
         {
@@ -216,7 +216,7 @@ public sealed class TodoWorkflowTests
     /// only the caller token can complete the workflow call.
     /// </summary>
     [Fact]
-    public async Task BufferedPromptHelpers_PreserveCallerCancellation()
+    public async Task BufferedPromptHelpersPreserveCallerCancellation()
     {
         var handler = new BlockingHttpHandler();
         using var httpClient = new HttpClient(handler)
@@ -248,7 +248,7 @@ public sealed class TodoWorkflowTests
     [InlineData("plan", "/qbrainai/todo/MCP-AGENT-001/prompt/plan", "data: Step 1\n\ndata: Step 2\n\nevent: done\ndata: \n\n", "Step 1\nStep 2")]
     [InlineData("status", "/qbrainai/todo/MCP-AGENT-001/prompt/status", "data: Healthy\n\ndata: Waiting on review\n\nevent: done\ndata: \n\n", "Healthy\nWaiting on review")]
     [InlineData("implement", "/qbrainai/todo/MCP-AGENT-001/prompt/implement", "data: Apply patch\n\nevent: done\ndata: \n\n", "Apply patch")]
-    public async Task BufferedPromptHelpers_AggregateStreamedOutput(
+    public async Task BufferedPromptHelpersAggregateStreamedOutput(
         string workflowOperation,
         string relativePath,
         string payload,

@@ -108,7 +108,7 @@ public sealed class GraphRagDispatcherTests
     /// intentional dispatcher update.
     /// </summary>
     [Fact]
-    public void GraphRagRouteCases_CoverAllCommandShapes()
+    public void GraphRagRouteCasesCoverAllCommandShapes()
     {
         Assert.Equal(17, GraphRagRouteCases().Count());
     }
@@ -121,7 +121,7 @@ public sealed class GraphRagDispatcherTests
     /// <param name="parameters">Representative command parameters.</param>
     [Theory]
     [MemberData(nameof(GraphRagRouteCases))]
-    public async Task Dispatcher_GraphRagWorkflowMethod_RoutesToRegisteredWorkflow(
+    public async Task DispatcherGraphRagWorkflowMethodRoutesToRegisteredWorkflow(
         string method,
         Dictionary<string, object?> parameters)
     {
@@ -144,7 +144,7 @@ public sealed class GraphRagDispatcherTests
     /// workflow dispatchers while keeping the entity identifier at the envelope parameter level.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_GraphRagEntityUpdate_AcceptsNestedRequestPayload()
+    public async Task DispatcherGraphRagEntityUpdateAcceptsNestedRequestPayload()
     {
         var workflow = Substitute.For<IGraphRagWorkflow>();
         ConfigureWorkflow(workflow);
@@ -182,7 +182,7 @@ public sealed class GraphRagDispatcherTests
     /// A dispatcher without GraphRAG registration returns a clear route error for the namespace.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_GraphRagWorkflowNotRegistered_ReturnsMethodNotFound()
+    public async Task DispatcherGraphRagWorkflowNotRegisteredReturnsMethodNotFound()
     {
         var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>());
 

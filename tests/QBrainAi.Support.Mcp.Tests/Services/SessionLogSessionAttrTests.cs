@@ -53,7 +53,7 @@ public sealed class SessionLogSessionAttrTests : IDisposable
     /// Named: filesModified outside root rejected or tagged.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected()
+    public async Task SubmitAsyncFilesModifiedOutsideRootUnmarkedIsRejected()
     {
         var dto = CreateSession("Cursor-20260819T220000Z-attr-unmarked-files");
         dto.Turns!.First().FilesModified = [ForeignPluginPath];
@@ -74,7 +74,7 @@ public sealed class SessionLogSessionAttrTests : IDisposable
     /// so completeness audits can filter the prefix.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_FilesModifiedOutsideRoot_ForeignPrefixed_Persists()
+    public async Task SubmitAsyncFilesModifiedOutsideRootForeignPrefixedPersists()
     {
         var dto = CreateSession("Cursor-20260819T220000Z-attr-prefixed-files");
         var marked = ForeignPrefix + ForeignPluginPath;
@@ -96,7 +96,7 @@ public sealed class SessionLogSessionAttrTests : IDisposable
     /// audits can filter that tag.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_FilesModifiedOutsideRoot_ForeignTagged_Persists()
+    public async Task SubmitAsyncFilesModifiedOutsideRootForeignTaggedPersists()
     {
         var dto = CreateSession("Cursor-20260819T220000Z-attr-tagged-files");
         dto.Turns!.First().Tags = [ForeignRepoTag];
@@ -117,7 +117,7 @@ public sealed class SessionLogSessionAttrTests : IDisposable
     /// AC: commit filesChanged outside workspace root without a foreign marker is rejected.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected()
+    public async Task SubmitAsyncCommitFilesOutsideRootUnmarkedIsRejected()
     {
         var dto = CreateSession("Cursor-20260819T220000Z-attr-unmarked-commit");
         dto.Turns!.First().Commits =
@@ -141,7 +141,7 @@ public sealed class SessionLogSessionAttrTests : IDisposable
     /// AC: commit filesChanged outside workspace root with a <c>foreign:</c> prefix persists.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_CommitFilesOutsideRoot_ForeignPrefixed_Persists()
+    public async Task SubmitAsyncCommitFilesOutsideRootForeignPrefixedPersists()
     {
         var dto = CreateSession("Cursor-20260819T220000Z-attr-prefixed-commit");
         var marked = ForeignPrefix + ForeignPluginPath;
@@ -167,7 +167,7 @@ public sealed class SessionLogSessionAttrTests : IDisposable
 
     /// <summary>AC: workspace-relative filesModified persist without a foreign marker.</summary>
     [Fact]
-    public async Task SubmitAsync_WorkspaceRelativeFilesModified_Persists()
+    public async Task SubmitAsyncWorkspaceRelativeFilesModifiedPersists()
     {
         var dto = CreateSession("Cursor-20260819T220000Z-attr-local-files");
         dto.Turns!.First().FilesModified = [LocalRelativePath];
@@ -186,7 +186,7 @@ public sealed class SessionLogSessionAttrTests : IDisposable
     /// does not mutate the existing turn.
     /// </summary>
     [Fact]
-    public async Task ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected()
+    public async Task ReplaceTurnSectionAsyncFilesModifiedOutsideRootUnmarkedIsRejected()
     {
         var sessionId = "Cursor-20260819T220000Z-attr-replace-unmarked";
         var dto = CreateSession(sessionId);

@@ -8,7 +8,7 @@ public sealed class MemoryOnboardingDocsTests
 {
     /// <summary>AC-FR-MCP-MEMORY-017-02: Committed examples for /mcp-transport and STDIO include the new verbs.</summary>
     [Fact]
-    public void Examples_ListNewVerbs()
+    public void ExamplesListNewVerbs()
     {
         var root = MemoryS5Catalog.FindRepoRoot();
         var stdio = File.ReadAllText(Path.Combine(root, "docs", "stdio-tool-contract.json"));
@@ -35,7 +35,7 @@ public sealed class MemoryOnboardingDocsTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-04: One-prompt give-yourself-memory sample exists with real tool names.</summary>
     [Fact]
-    public void GiveYourselfMemory_SampleExists()
+    public void GiveYourselfMemorySampleExists()
     {
         var path = Path.Combine(MemoryS5Catalog.FindRepoRoot(), "docs", "examples", "give-yourself-memory.md");
         Assert.True(File.Exists(path), "docs/examples/give-yourself-memory.md must exist.");
@@ -47,7 +47,7 @@ public sealed class MemoryOnboardingDocsTests
 
     /// <summary>AC-FR-MCP-MEMORY-017-07: Marker template documents new verbs without removing old ones.</summary>
     [Fact]
-    public void MarkerTemplate_DocumentsNewAndOld()
+    public void MarkerTemplateDocumentsNewAndOld()
     {
         var path = Path.Combine(MemoryS5Catalog.FindRepoRoot(), "templates", "prompt-templates.yaml");
         var text = File.ReadAllText(path);

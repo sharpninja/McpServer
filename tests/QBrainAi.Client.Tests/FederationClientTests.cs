@@ -20,7 +20,7 @@ public sealed class FederationClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task GetStatusAsync_SendsCorrectRequest()
+    public async System.Threading.Tasks.Task GetStatusAsyncSendsCorrectRequest()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -49,7 +49,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task EnableAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task EnableAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"enabled":true,"targets":[],"workspaceRoutes":[]}""");
         using var http = new HttpClient(handler);
@@ -63,7 +63,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DisableAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task DisableAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"enabled":false,"targets":[],"workspaceRoutes":[]}""");
         using var http = new HttpClient(handler);
@@ -77,7 +77,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListTargetsAsync_SendsGet()
+    public async System.Threading.Tasks.Task ListTargetsAsyncSendsGet()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """[{"name":"remote1","baseUrl":"http://r:7148","hasApiKey":false,"isDefault":true}]""");
         using var http = new HttpClient(handler);
@@ -93,7 +93,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AddTargetAsync_PostsBodyAndDeserializes()
+    public async System.Threading.Tasks.Task AddTargetAsyncPostsBodyAndDeserializes()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"name":"new-target","baseUrl":"http://r:7148","hasApiKey":true,"isDefault":false}""");
         using var http = new HttpClient(handler);
@@ -114,7 +114,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RemoveTargetAsync_SendsDelete()
+    public async System.Threading.Tasks.Task RemoveTargetAsyncSendsDelete()
     {
         var handler = new MockHttpHandler(HttpStatusCode.NoContent, "");
         using var http = new HttpClient(handler);
@@ -128,7 +128,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SetDefaultTargetAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task SetDefaultTargetAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"enabled":true,"targets":[],"workspaceRoutes":[]}""");
         using var http = new HttpClient(handler);
@@ -142,7 +142,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ClearDefaultTargetAsync_SendsDelete()
+    public async System.Threading.Tasks.Task ClearDefaultTargetAsyncSendsDelete()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"enabled":true,"targets":[],"workspaceRoutes":[]}""");
         using var http = new HttpClient(handler);
@@ -155,7 +155,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AddRouteAsync_PostsBodyAndDeserializes()
+    public async System.Threading.Tasks.Task AddRouteAsyncPostsBodyAndDeserializes()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """[{"workspacePath":"C:\\proj","targetName":"remote1"}]""");
         using var http = new HttpClient(handler);
@@ -174,7 +174,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RemoveRouteAsync_SendsDeleteWithBody()
+    public async System.Threading.Tasks.Task RemoveRouteAsyncSendsDeleteWithBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.NoContent, "");
         using var http = new HttpClient(handler);
@@ -192,7 +192,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetConnectionAsync_SendsWorkspaceName()
+    public async System.Threading.Tasks.Task GetConnectionAsyncSendsWorkspaceName()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"baseUrl":"http://host:7147","port":7147,"apiKey":"ws-token"}""");
         using var http = new HttpClient(handler);
@@ -207,7 +207,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DiscoverFromTunnelsAsync_PostsCorrectUrl()
+    public async System.Threading.Tasks.Task DiscoverFromTunnelsAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"discovered":1,"targets":[{"name":"ngrok","baseUrl":"https://abc.ngrok.io","hasApiKey":false,"isDefault":false}]}""");
         using var http = new HttpClient(handler);
@@ -222,7 +222,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListProxiesAsync_GetsProxyInventory()
+    public async System.Threading.Tasks.Task ListProxiesAsyncGetsProxyInventory()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -240,7 +240,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task EnrollProxyAsync_PostsEnrollmentPayload()
+    public async System.Threading.Tasks.Task EnrollProxyAsyncPostsEnrollmentPayload()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -275,7 +275,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task HeartbeatAsync_PostsProxyHeartbeat()
+    public async System.Threading.Tasks.Task HeartbeatAsyncPostsProxyHeartbeat()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -304,7 +304,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RegisterWorkspaceAsync_PostsProxyWorkspace()
+    public async System.Threading.Tasks.Task RegisterWorkspaceAsyncPostsProxyWorkspace()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -329,7 +329,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListWorkspacesAsync_SendsProxyFilter()
+    public async System.Threading.Tasks.Task ListWorkspacesAsyncSendsProxyFilter()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -347,7 +347,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetQueueStatusAsync_SendsProxyFilter()
+    public async System.Threading.Tasks.Task GetQueueStatusAsyncSendsProxyFilter()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"proxyId":"PAYTON-LEGION2","queueDepth":2,"conflictCount":1,"fanoutDepth":3}""");
         using var http = new HttpClient(handler);
@@ -364,7 +364,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ListConflictsAsync_SendsFilters()
+    public async System.Threading.Tasks.Task ListConflictsAsyncSendsFilters()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -383,7 +383,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetAdapterCoverageAsync_GetsCoverageDiagnostics()
+    public async System.Threading.Tasks.Task GetAdapterCoverageAsyncGetsCoverageDiagnostics()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """[{"domain":"todo","covered":true,"localOnly":false,"applySupported":true}]""");
         using var http = new HttpClient(handler);
@@ -399,7 +399,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetSyncItemsAsync_SendsProxyAndSequenceQuery()
+    public async System.Threading.Tasks.Task GetSyncItemsAsyncSendsProxyAndSequenceQuery()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """[{"sequence":7,"operationId":"op-1","proxyId":"PAYTON-LEGION2","domain":"todo"}]""");
         using var http = new HttpClient(handler);
@@ -416,7 +416,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AcknowledgeSyncAsync_PostsRecipientAck()
+    public async System.Threading.Tasks.Task AcknowledgeSyncAsyncPostsRecipientAck()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"operationId":"op-1","status":"applied","created":false}""");
         using var http = new HttpClient(handler);
@@ -435,7 +435,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RecordOperationAsync_PostsOperationIntake()
+    public async System.Threading.Tasks.Task RecordOperationAsyncPostsOperationIntake()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"operationId":"op-1","status":"accepted","created":true}""");
         using var http = new HttpClient(handler);
@@ -455,7 +455,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task AcknowledgeOperationAsync_PostsOperationAck()
+    public async System.Threading.Tasks.Task AcknowledgeOperationAsyncPostsOperationAck()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"operationId":"op-1","status":"applied","created":false}""");
         using var http = new HttpClient(handler);
@@ -475,7 +475,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task RecordEnvelopeAsync_PostsSignedEnvelope()
+    public async System.Threading.Tasks.Task RecordEnvelopeAsyncPostsSignedEnvelope()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"operationId":"op-1","status":"applied","created":false}""");
         using var http = new HttpClient(handler);
@@ -500,7 +500,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ResolveConflictAsync_PostsResolution()
+    public async System.Threading.Tasks.Task ResolveConflictAsyncPostsResolution()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"conflictId":"fedconf-1","operationId":"op-1","proxyId":"PAYTON-LEGION2","domain":"todo","resolutionStatus":"hub_wins","createdAtUtc":"2026-05-21T00:00:00Z"}""");
         using var http = new HttpClient(handler);
@@ -518,7 +518,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task PushAsync_NoFilter_PostsEmptyTypes()
+    public async System.Threading.Tasks.Task PushAsyncNoFilterPostsEmptyTypes()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"succeeded":5,"failed":0,"errors":[]}""");
         using var http = new HttpClient(handler);
@@ -533,7 +533,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task PushAsync_WithTypeFilter_PostsTypes()
+    public async System.Threading.Tasks.Task PushAsyncWithTypeFilterPostsTypes()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"succeeded":3,"failed":1,"errors":["oops"]}""");
         using var http = new HttpClient(handler);
@@ -548,7 +548,7 @@ public sealed class FederationClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task FederationClient_ExposedOnFacade()
+    public async System.Threading.Tasks.Task FederationClientExposedOnFacade()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"enabled":false,"targets":[],"workspaceRoutes":[]}""");
         using var http = new HttpClient(handler);

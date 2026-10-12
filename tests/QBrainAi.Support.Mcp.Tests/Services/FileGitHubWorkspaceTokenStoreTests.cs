@@ -33,7 +33,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
     }
 
     [Fact]
-    public async Task UpsertAndGetAsync_RoundTripsToken()
+    public async Task UpsertAndGetAsyncRoundTripsToken()
     {
         var workspacePath = Path.Combine(_tempRoot, "workspace-a");
         var expiresAt = DateTimeOffset.UtcNow.AddHours(2);
@@ -48,7 +48,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
     }
 
     [Fact]
-    public async Task UpsertAsync_SecondWriteReplacesToken()
+    public async Task UpsertAsyncSecondWriteReplacesToken()
     {
         var workspacePath = Path.Combine(_tempRoot, "workspace-b");
 
@@ -61,7 +61,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
     }
 
     [Fact]
-    public async Task DeleteAsync_RemovesTokenRecord()
+    public async Task DeleteAsyncRemovesTokenRecord()
     {
         var workspacePath = Path.Combine(_tempRoot, "workspace-c");
 
@@ -74,7 +74,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
     }
 
     [Fact]
-    public async Task UpsertAsync_WhenStoreLockIsHeld_WaitsForRelease()
+    public async Task UpsertAsyncWhenStoreLockIsHeldWaitsForRelease()
     {
         var workspacePath = Path.Combine(_tempRoot, "workspace-locked");
         var lockPath = Path.Combine(_tempRoot, "github-token-store.json.lock");
@@ -94,7 +94,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
     }
 
     [Fact]
-    public async Task UpsertAsync_HardensStoreAndLockFilePermissions()
+    public async Task UpsertAsyncHardensStoreAndLockFilePermissions()
     {
         var workspacePath = Path.Combine(_tempRoot, "workspace-permissions");
         var storePath = Path.Combine(_tempRoot, "github-token-store.json");

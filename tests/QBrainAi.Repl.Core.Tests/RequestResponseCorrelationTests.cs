@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class RequestResponseCorrelationTests
 {
     [Fact]
-    public async Task SendRequestAsync_ValidRequest_ReturnsResult()
+    public async Task SendRequestAsyncValidRequestReturnsResult()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
@@ -22,7 +22,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task SendRequestAsync_WithParameters_SendsParams()
+    public async Task SendRequestAsyncWithParametersSendsParams()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
@@ -42,7 +42,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task SendRequestAsync_NotConnected_ThrowsInvalidOperationException()
+    public async Task SendRequestAsyncNotConnectedThrowsInvalidOperationException()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(false);
@@ -56,7 +56,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task SendRequestAsync_ServerReturnsError_ThrowsReplProtocolException()
+    public async Task SendRequestAsyncServerReturnsErrorThrowsReplProtocolException()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
@@ -80,7 +80,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task SendRequestAsync_Typed_ReturnsTypedResult()
+    public async Task SendRequestAsyncTypedReturnsTypedResult()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
@@ -98,7 +98,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task SendRequestAsync_TypeConversionFails_ThrowsInvalidOperationException()
+    public async Task SendRequestAsyncTypeConversionFailsThrowsInvalidOperationException()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
@@ -112,7 +112,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task MultipleRequests_DifferentRequestIds_CorrelatesToRightResponse()
+    public async Task MultipleRequestsDifferentRequestIdsCorrelatesToRightResponse()
     {
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
@@ -128,7 +128,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task RegisterEventHandler_ServerSendsEvent_InvokesHandler()
+    public async Task RegisterEventHandlerServerSendsEventInvokesHandler()
     {
         var protocol = Substitute.For<IReplProtocol>();
         var handlerInvoked = false;
@@ -158,7 +158,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task UnregisterEventHandler_StopsReceivingEvents()
+    public async Task UnregisterEventHandlerStopsReceivingEvents()
     {
         var protocol = Substitute.For<IReplProtocol>();
 
@@ -172,7 +172,7 @@ public class RequestResponseCorrelationTests
     }
 
     [Fact]
-    public async Task ReplProtocolException_ContainsErrorDetails()
+    public async Task ReplProtocolExceptionContainsErrorDetails()
     {
         var errorPayload = Substitute.For<IErrorPayload>();
         errorPayload.RequestId.Returns("req-001");

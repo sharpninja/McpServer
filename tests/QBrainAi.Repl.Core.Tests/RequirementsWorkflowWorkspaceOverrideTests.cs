@@ -23,7 +23,7 @@ public sealed class RequirementsWorkflowWorkspaceOverrideTests
 
     /// <summary>An explicit workspacePath replaces the bound X-Workspace-Path header on the generate call.</summary>
     [Fact]
-    public async Task GenerateDocumentAsync_WorkspacePathOverride_ReplacesWorkspaceHeader()
+    public async Task GenerateDocumentAsyncWorkspacePathOverrideReplacesWorkspaceHeader()
     {
         var handler = new CapturingHandler();
         var workflow = BuildWorkflow(handler);
@@ -37,7 +37,7 @@ public sealed class RequirementsWorkflowWorkspaceOverrideTests
 
     /// <summary>Without an override the bound workspace header is preserved.</summary>
     [Fact]
-    public async Task GenerateDocumentAsync_NoOverride_KeepsBoundWorkspaceHeader()
+    public async Task GenerateDocumentAsyncNoOverrideKeepsBoundWorkspaceHeader()
     {
         var handler = new CapturingHandler();
         var workflow = BuildWorkflow(handler);
@@ -50,7 +50,7 @@ public sealed class RequirementsWorkflowWorkspaceOverrideTests
 
     /// <summary>The dispatcher forwards the workspacePath param to the requirements workflow.</summary>
     [Fact]
-    public async Task Dispatch_GenerateDocumentWithWorkspacePath_ForwardsOverrideToWorkflow()
+    public async Task DispatchGenerateDocumentWithWorkspacePathForwardsOverrideToWorkflow()
     {
         var workflow = Substitute.For<IRequirementsWorkflow>();
         workflow.GenerateDocumentAsync(

@@ -31,7 +31,7 @@ public sealed class QuerySessionLogTests
     public QuerySessionLogTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
     /// <summary>
-    /// Validates the <c>Query_NoFilters_Returns200WithResults</c> scenario.
+    /// Validates the <c>QueryNoFiltersReturns200WithResults</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -39,7 +39,7 @@ public sealed class QuerySessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Query_NoFilters_Returns200WithResults()
+    public async Task QueryNoFiltersReturns200WithResults()
     {
         var response = await _fixture.Client.GetAsync(SessionLogEndpointFixture.SessionLogRoute, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -51,7 +51,7 @@ public sealed class QuerySessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_FilterByAgent_Returns200Filtered</c> scenario.
+    /// Validates the <c>QueryFilterByAgentReturns200Filtered</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -59,7 +59,7 @@ public sealed class QuerySessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Query_FilterByAgent_Returns200Filtered()
+    public async Task QueryFilterByAgentReturns200Filtered()
     {
         // First submit a session with known agent
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("QueryAgentTest");
@@ -86,7 +86,7 @@ public sealed class QuerySessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_FilterByModel_Returns200Filtered</c> scenario.
+    /// Validates the <c>QueryFilterByModelReturns200Filtered</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -94,7 +94,7 @@ public sealed class QuerySessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Query_FilterByModel_Returns200Filtered()
+    public async Task QueryFilterByModelReturns200Filtered()
     {
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var uniqueModel = $"audit-model-{Guid.NewGuid():N}";
@@ -119,7 +119,7 @@ public sealed class QuerySessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_FilterByDateRange_Returns200</c> scenario.
+    /// Validates the <c>QueryFilterByDateRangeReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -127,7 +127,7 @@ public sealed class QuerySessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Query_FilterByDateRange_Returns200()
+    public async Task QueryFilterByDateRangeReturns200()
     {
         var from = DateTimeOffset.UtcNow.AddDays(-1).ToString("o");
         var to = DateTimeOffset.UtcNow.AddDays(1).ToString("o");
@@ -140,7 +140,7 @@ public sealed class QuerySessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_WithPagination_Returns200</c> scenario.
+    /// Validates the <c>QueryWithPaginationReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -148,7 +148,7 @@ public sealed class QuerySessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Query_WithPagination_Returns200()
+    public async Task QueryWithPaginationReturns200()
     {
         var response = await _fixture.Client.GetAsync($"{SessionLogEndpointFixture.SessionLogRoute}?limit=2&offset=0", cancellationToken: TestContext.Current.CancellationToken);
 
@@ -160,7 +160,7 @@ public sealed class QuerySessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_NonMatchingAgent_ReturnsEmptyResults</c> scenario.
+    /// Validates the <c>QueryNonMatchingAgentReturnsEmptyResults</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -168,7 +168,7 @@ public sealed class QuerySessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Query_NonMatchingAgent_ReturnsEmptyResults()
+    public async Task QueryNonMatchingAgentReturnsEmptyResults()
     {
         var response = await _fixture.Client.GetAsync(
             $"{SessionLogEndpointFixture.SessionLogRoute}?agent=NonExistentAgent_{Guid.NewGuid():N}", cancellationToken: TestContext.Current.CancellationToken);
@@ -180,7 +180,7 @@ public sealed class QuerySessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Query_FilterByText_Returns200</c> scenario.
+    /// Validates the <c>QueryFilterByTextReturns200</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -188,7 +188,7 @@ public sealed class QuerySessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Query_FilterByText_Returns200()
+    public async Task QueryFilterByTextReturns200()
     {
         // Submit a session with unique text
         var uniqueText = $"unique-search-text-{Guid.NewGuid():N}";

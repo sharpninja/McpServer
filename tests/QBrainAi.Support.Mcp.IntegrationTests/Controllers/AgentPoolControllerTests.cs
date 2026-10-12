@@ -17,7 +17,7 @@ public sealed class AgentPoolControllerTests
         => new() { WorkspacePath = @"E:\test-workspace" };
 
     [Fact]
-    public async Task StartAgentAsync_FailedMutation_ReturnsBadRequest()
+    public async Task StartAgentAsyncFailedMutationReturnsBadRequest()
     {
         var service = Substitute.For<IAgentPoolService>();
         service.StartAgentAsync("planner", @"E:\test-workspace", Arg.Any<CancellationToken>())
@@ -37,7 +37,7 @@ public sealed class AgentPoolControllerTests
     }
 
     [Fact]
-    public async Task ConnectDefaultAgentAsync_NoEligibleAgent_ReturnsNotFound()
+    public async Task ConnectDefaultAgentAsyncNoEligibleAgentReturnsNotFound()
     {
         var service = Substitute.For<IAgentPoolService>();
         service.ConnectInteractiveAsync(null, @"E:\test-workspace", Arg.Any<CancellationToken>())
@@ -57,7 +57,7 @@ public sealed class AgentPoolControllerTests
     }
 
     [Fact]
-    public async Task StreamNotificationsAsync_WritesSseDataFrames()
+    public async Task StreamNotificationsAsyncWritesSseDataFrames()
     {
         var service = Substitute.For<IAgentPoolService>();
         service.SubscribeNotificationsAsync(Arg.Any<CancellationToken>())
@@ -79,7 +79,7 @@ public sealed class AgentPoolControllerTests
     }
 
     [Fact]
-    public async Task StreamJobAsync_WritesSseDataFrames()
+    public async Task StreamJobAsyncWritesSseDataFrames()
     {
         var service = Substitute.For<IAgentPoolService>();
         service.SubscribeJobStreamAsync("job-1", Arg.Any<CancellationToken>())
@@ -101,7 +101,7 @@ public sealed class AgentPoolControllerTests
     }
 
     [Fact]
-    public async Task EnqueueOneShotAsync_UsesWorkspaceFromContext()
+    public async Task EnqueueOneShotAsyncUsesWorkspaceFromContext()
     {
         var service = Substitute.For<IAgentPoolService>();
         service.EnqueueOneShotAsync(Arg.Any<AgentPoolOneShotRequest>(), Arg.Any<CancellationToken>())
@@ -123,7 +123,7 @@ public sealed class AgentPoolControllerTests
     }
 
     [Fact]
-    public async Task GetAgentsAsync_IgnoresWorkspaceQueryAndUsesContext()
+    public async Task GetAgentsAsyncIgnoresWorkspaceQueryAndUsesContext()
     {
         var service = Substitute.For<IAgentPoolService>();
         service.GetAgentsAsync(@"E:\test-workspace", Arg.Any<CancellationToken>())

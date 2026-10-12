@@ -19,7 +19,7 @@ public sealed class GitHubIngestorTests
     }
 
     [Fact]
-    public async Task WhenIssuesExist_ThenCreatesDocumentsAndChunks()
+    public async Task WhenIssuesExistThenCreatesDocumentsAndChunks()
     {
         var issues = new[]
         {
@@ -43,7 +43,7 @@ public sealed class GitHubIngestorTests
     }
 
     [Fact]
-    public async Task WhenPullsExist_ThenCreatesDocumentsWithPrSourceType()
+    public async Task WhenPullsExistThenCreatesDocumentsWithPrSourceType()
     {
         _github.ListIssuesAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubIssueListResult(true, null, Array.Empty<GitHubIssueItem>()));
@@ -62,7 +62,7 @@ public sealed class GitHubIngestorTests
     }
 
     [Fact]
-    public async Task WhenGhFails_ThenReturnsEmptyResults()
+    public async Task WhenGhFailsThenReturnsEmptyResults()
     {
         _github.ListIssuesAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubIssueListResult(false, "not authenticated", Array.Empty<GitHubIssueItem>()));
@@ -75,7 +75,7 @@ public sealed class GitHubIngestorTests
     }
 
     [Fact]
-    public async Task ContentFormatting_IssueIncludesNumberAndTitle()
+    public async Task ContentFormattingIssueIncludesNumberAndTitle()
     {
         var issues = new[] { new GitHubIssueItem(99, "Critical bug", "https://github.com/test/issues/99", "open") };
         _github.ListIssuesAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())

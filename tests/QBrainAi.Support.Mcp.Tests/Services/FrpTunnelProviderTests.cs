@@ -17,7 +17,7 @@ public sealed class FrpTunnelProviderTests
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();
 
     [Fact]
-    public async Task StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck()
+    public async Task StartAsyncWhenProxyTypeUnsupportedSetsValidationErrorAndSkipsCliCheck()
     {
         var sut = CreateSut(o => o.Frp.ProxyType = "udp");
 
@@ -31,7 +31,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public async Task StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError()
+    public async Task StartAsyncWhenSubdomainAndCustomDomainConfiguredSetsValidationError()
     {
         var sut = CreateSut(o =>
         {
@@ -48,7 +48,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public async Task StartAsync_WhenCliMissing_SetsError()
+    public async Task StartAsyncWhenCliMissingSetsError()
     {
         _processRunner
             .RunAsync("frpc", Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -65,7 +65,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public void GenerateConfig_IncludesExpectedHttpFieldsAndToken()
+    public void GenerateConfigIncludesExpectedHttpFieldsAndToken()
     {
         var sut = CreateSut(o => o.Port = 7788);
         var frp = new FrpTunnelOptions
@@ -90,7 +90,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public void GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain()
+    public void GenerateConfigWhenSubdomainConfiguredUsesSubdomainInsteadOfCustomDomain()
     {
         var sut = CreateSut();
         var frp = new FrpTunnelOptions
@@ -107,7 +107,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public void GenerateConfig_TcpRange_CreatesOneToOneMappings()
+    public void GenerateConfigTcpRangeCreatesOneToOneMappings()
     {
         var sut = CreateSut(o => o.Port = 7147);
         var frp = new FrpTunnelOptions
@@ -133,7 +133,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public void GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort()
+    public void GenerateConfigTcpSinglePortUsesLocalTunnelPortAndConfiguredRemotePort()
     {
         var sut = CreateSut(o => o.Port = 7147);
         var frp = new FrpTunnelOptions
@@ -151,7 +151,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public void BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain()
+    public void BuildPublicUrlPrefersPublicBaseUrlThenCustomDomainThenSubdomain()
     {
         var withPublicBaseUrl = new FrpTunnelOptions
         {
@@ -182,7 +182,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public async Task GetStatusAsync_WhenTrackedProcessExited_ReturnsExitError()
+    public async Task GetStatusAsyncWhenTrackedProcessExitedReturnsExitError()
     {
         var sut = CreateSut();
         using var exitedProcess = StartExitedDotnetProcess();
@@ -199,7 +199,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public async Task StartAsync_WhenTcpRangeMissingEnd_SetsValidationError()
+    public async Task StartAsyncWhenTcpRangeMissingEndSetsValidationError()
     {
         var sut = CreateSut(o =>
         {
@@ -216,7 +216,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public async Task StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError()
+    public async Task StartAsyncWhenTcpRangeAndRemotePortBothConfiguredSetsValidationError()
     {
         var sut = CreateSut(o =>
         {
@@ -235,7 +235,7 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
-    public void Dispose_WhenTempConfigExists_DeletesFileAndClearsConfigPath()
+    public void DisposeWhenTempConfigExistsDeletesFileAndClearsConfigPath()
     {
         var sut = CreateSut();
         var tempConfigPath = Path.Combine(Path.GetTempPath(), $"frpc-test-{Guid.NewGuid():N}.toml");

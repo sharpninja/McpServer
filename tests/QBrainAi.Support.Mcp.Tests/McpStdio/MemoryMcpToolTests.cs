@@ -56,7 +56,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-MEMORY-003: memory_list forwards filters and returns the query result.</summary>
     [Fact]
-    public async Task MemoryList_DelegatesToMemoryService()
+    public async Task MemoryListDelegatesToMemoryService()
     {
         _memoryService.ListAsync(
                 Arg.Any<MemoryListRequest>(),
@@ -79,7 +79,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-MEMORY-003: memory_list accepts Effective as the explicit default scope.</summary>
     [Fact]
-    public async Task MemoryList_WithEffectiveScope_ForwardsNullScope()
+    public async Task MemoryListWithEffectiveScopeForwardsNullScope()
     {
         _memoryService.ListAsync(
                 Arg.Any<MemoryListRequest>(),
@@ -98,7 +98,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-MEMORY-003: memory_get returns the visible memory item by id.</summary>
     [Fact]
-    public async Task MemoryGet_DelegatesToMemoryService()
+    public async Task MemoryGetDelegatesToMemoryService()
     {
         _memoryService.GetAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>())
             .Returns(CreateMemory("MEMORY-AGENT-001"));
@@ -113,7 +113,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-MEMORY-003: memory_add forwards the creation request and returns mutation state.</summary>
     [Fact]
-    public async Task MemoryAdd_DelegatesToMemoryService()
+    public async Task MemoryAddDelegatesToMemoryService()
     {
         _memoryService.AddAsync(
                 Arg.Any<MemoryAddRequest>(),
@@ -144,7 +144,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-161: memory_add uses the transaction-gated mutation service when registered.</summary>
     [Fact]
-    public async Task MemoryAdd_WhenTransactionGateRegistered_DelegatesToTransactionGate()
+    public async Task MemoryAddWhenTransactionGateRegisteredDelegatesToTransactionGate()
     {
         var memoryMutations = Substitute.For<ITransactionGatedMemoryService>();
         memoryMutations.AddAsync(
@@ -177,7 +177,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-MEMORY-003: memory_update forwards only supplied replacement fields.</summary>
     [Fact]
-    public async Task MemoryUpdate_DelegatesToMemoryService()
+    public async Task MemoryUpdateDelegatesToMemoryService()
     {
         _memoryService.UpdateAsync(
                 "MEMORY-AGENT-001",
@@ -208,7 +208,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-TXN-004: memory_update uses the transaction-gated mutation service when registered.</summary>
     [Fact]
-    public async Task MemoryUpdate_WhenTransactionGateRegistered_DelegatesToTransactionGate()
+    public async Task MemoryUpdateWhenTransactionGateRegisteredDelegatesToTransactionGate()
     {
         var memoryMutations = Substitute.For<ITransactionGatedMemoryService>();
         memoryMutations.UpdateAsync(
@@ -236,7 +236,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-MEMORY-003: memory_remove forwards the delete request and returns mutation state.</summary>
     [Fact]
-    public async Task MemoryRemove_DelegatesToMemoryService()
+    public async Task MemoryRemoveDelegatesToMemoryService()
     {
         _memoryService.RemoveAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>())
             .Returns(new MemoryMutationResult(true));
@@ -251,7 +251,7 @@ public sealed class MemoryMcpToolTests : IDisposable
 
     /// <summary>TEST-MCP-TXN-004: memory_remove uses the transaction-gated mutation service when registered.</summary>
     [Fact]
-    public async Task MemoryRemove_WhenTransactionGateRegistered_DelegatesToTransactionGate()
+    public async Task MemoryRemoveWhenTransactionGateRegisteredDelegatesToTransactionGate()
     {
         var memoryMutations = Substitute.For<ITransactionGatedMemoryService>();
         memoryMutations.RemoveAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>())
@@ -272,7 +272,7 @@ public sealed class MemoryMcpToolTests : IDisposable
     /// and stores Scope=Global with a null workspace owner. Workspace scope still requires a real path.
     /// </summary>
     [Fact]
-    public async Task MemoryAdd_GlobalScope_AllowsEmptyOmittedAndDefaultWorkspace()
+    public async Task MemoryAddGlobalScopeAllowsEmptyOmittedAndDefaultWorkspace()
     {
         await using var gate = await MemoryGlobalWorkspaceFixture.CreateAsync().ConfigureAwait(true);
         var tools = CreateTools(gate.Db, gate.Service, workspaceContextPath: string.Empty);
@@ -324,7 +324,7 @@ public sealed class MemoryMcpToolTests : IDisposable
     /// FR-MCP-MEMORY-001: memory_remember Global create accepts an empty or configured default workspace path.
     /// </summary>
     [Fact]
-    public async Task MemoryRemember_GlobalScope_AllowsEmptyAndDefaultWorkspace()
+    public async Task MemoryRememberGlobalScopeAllowsEmptyAndDefaultWorkspace()
     {
         await using var gate = await MemoryGlobalWorkspaceFixture.CreateAsync().ConfigureAwait(true);
         var tools = CreateTools(gate.Db, gate.Service, dispatcher: gate.Dispatcher, workspaceContextPath: string.Empty);

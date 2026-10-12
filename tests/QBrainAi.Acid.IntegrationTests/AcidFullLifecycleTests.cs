@@ -13,7 +13,7 @@ public sealed class AcidFullLifecycleTests
 {
     /// <summary>Happy path: coordinator signs, applies the mutation, and the subscriber commits the diffgram.</summary>
     [Fact]
-    public async Task FullLifecycle_HappyPath_Commits()
+    public async Task FullLifecycleHappyPathCommits()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -33,7 +33,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>A failed mutation aborts the transaction and invokes rollback compensation before any commit.</summary>
     [Fact]
-    public async Task MutationFailure_AbortsAndRollsBack()
+    public async Task MutationFailureAbortsAndRollsBack()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -59,7 +59,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>An unavailable subscriber drives degraded mode and rolls the mutation back, fail-closed.</summary>
     [Fact]
-    public async Task SubscriberUnavailable_DegradesAndRollsBack()
+    public async Task SubscriberUnavailableDegradesAndRollsBack()
     {
         using var harness = AcidTransactionHarness.Create(
             AcidParticipants.AllMock,
@@ -87,7 +87,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>Message-level: a valid signed diffgram commits at the subscriber and reports committed status.</summary>
     [Fact]
-    public async Task Subscriber_ValidCommit_CommitsAndReportsStatus()
+    public async Task SubscriberValidCommitCommitsAndReportsStatus()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -104,7 +104,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>Message-level: a tampered manifest fails key-server signature verification at the subscriber.</summary>
     [Fact]
-    public async Task Subscriber_TamperedManifest_RejectsSignatureMismatch()
+    public async Task SubscriberTamperedManifestRejectsSignatureMismatch()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -119,7 +119,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>Message-level: an encrypted-body hash that disagrees with the manifest is rejected.</summary>
     [Fact]
-    public async Task Subscriber_EncryptedBodyMismatch_Rejected()
+    public async Task SubscriberEncryptedBodyMismatchRejected()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -135,7 +135,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>Message-level: a plaintext diffgram hash that disagrees with the manifest is rejected.</summary>
     [Fact]
-    public async Task Subscriber_PlaintextMismatch_Rejected()
+    public async Task SubscriberPlaintextMismatchRejected()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -151,7 +151,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>Message-level: a non-monotonic sequence is rejected after a prior commit for the same party pair.</summary>
     [Fact]
-    public async Task Subscriber_StaleSequence_Rejected()
+    public async Task SubscriberStaleSequenceRejected()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -169,7 +169,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>Message-level: the key server rejects a reused signing nonce.</summary>
     [Fact]
-    public async Task KeyServer_ReplayNonceOnSign_Rejected()
+    public async Task KeyServerReplayNonceOnSignRejected()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
@@ -184,7 +184,7 @@ public sealed class AcidFullLifecycleTests
 
     /// <summary>Message-level: aborting a transaction reports aborted status from the subscriber.</summary>
     [Fact]
-    public async Task Subscriber_Abort_ReportsAborted()
+    public async Task SubscriberAbortReportsAborted()
     {
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);

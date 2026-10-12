@@ -1316,9 +1316,9 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Factory create for two slots with different provider kinds returns two different strategy types in one process. (evidence: BrainSlotLlmStrategyTests.CreateStrategy_TwoRoles_ResolvesTwoDifferentStrategyTypes)
-- [x] A stub strategy invoked twice in one turn receives the same BrainSlotTurnContext instance (object.ReferenceEquals). (evidence: QuadBrainLiveOrchestrationTests Assert.Same shared context; BrainSlotInvocationTransactionTests InvokeAsync_WhenTurnContextSupplied_PassesSameInstanceToStrategy)
-- [x] OpenAI-compatible request JSON includes original input and session/turn/transaction identifiers in messages when flattening context. (evidence: BrainSlotLlmStrategyTests BuildOpenAiCompatibleRequestJson_WhenTurnContextSupplied_IncludesOriginalInputAndTurnIds)
+- [x] Factory create for two slots with different provider kinds returns two different strategy types in one process. (evidence: BrainSlotLlmStrategyTests.CreateStrategyTwoRolesResolvesTwoDifferentStrategyTypes)
+- [x] A stub strategy invoked twice in one turn receives the same BrainSlotTurnContext instance (object.ReferenceEquals). (evidence: QuadBrainLiveOrchestrationTests Assert.Same shared context; BrainSlotInvocationTransactionTests InvokeAsyncWhenTurnContextSuppliedPassesSameInstanceToStrategy)
+- [x] OpenAI-compatible request JSON includes original input and session/turn/transaction identifiers in messages when flattening context. (evidence: BrainSlotLlmStrategyTests BuildOpenAiCompatibleRequestJsonWhenTurnContextSuppliedIncludesOriginalInputAndTurnIds)
 
 ## TR-MCP-LOG-001
 
@@ -1992,8 +1992,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] RemainingToolCalls contains only non-mcp_ names. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs Interceptor_CatalogName_IsNotEmittedToAgent)
-- [x] When RemainingToolCalls is empty and internals succeeded, finish_reason is stop and content is the service result. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsync_CatalogName_StopsWithoutEmittingToolCall)
+- [x] RemainingToolCalls contains only non-mcp_ names. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainToolInterceptionTests.cs InterceptorCatalogNameIsNotEmittedToAgent)
+- [x] When RemainingToolCalls is empty and internals succeeded, finish_reason is stop and content is the service result. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs CompleteAsyncCatalogNameStopsWithoutEmittingToolCall)
 
 ## TR-MCP-QBEXEC-002
 
@@ -2002,9 +2002,9 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] The executor switch/table includes every mcp_* name from McpHostedAgentToolAdapter.CreateFunctions and QBAgentDefinition AllowedTools plus BlockedTools. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Catalog_ContainsEveryHostedAgentPublishedName; tests/McpServer.McpAgent.Tests/McpHostedAgentAdapterTests.cs)
-- [x] Each handled name has a unit test that asserts a mock in-process service was called and that HttpClient was not used. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_CatalogName_IsHandled AssertMatchingServiceInvokedAsync)
-- [x] A catalog-absent mcp_ name returns Unhandled and becomes a note, not RemainingToolCalls. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs Execute_UnknownCatalogAbsentMcpName_ReturnsUnhandled; QuadBrainToolInterceptionTests Interceptor_UnhandledInternal_IsNoteNotAgentCommand)
+- [x] The executor switch/table includes every mcp_* name from McpHostedAgentToolAdapter.CreateFunctions and QBAgentDefinition AllowedTools plus BlockedTools. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs CatalogContainsEveryHostedAgentPublishedName; tests/McpServer.McpAgent.Tests/McpHostedAgentAdapterTests.cs)
+- [x] Each handled name has a unit test that asserts a mock in-process service was called and that HttpClient was not used. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs ExecuteCatalogNameIsHandled AssertMatchingServiceInvokedAsync)
+- [x] A catalog-absent mcp_ name returns Unhandled and becomes a note, not RemainingToolCalls. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs ExecuteUnknownCatalogAbsentMcpNameReturnsUnhandled; QuadBrainToolInterceptionTests InterceptorUnhandledInternalIsNoteNotAgentCommand)
 - [x] Those tests do not start, query, or depend on the McpServer Windows service. (evidence: tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs mocks only)
 
 ## TR-MCP-QBEXEC-003
@@ -2186,8 +2186,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Full orchestration invokes LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision)
-- [x] Orchestration rejects non-ready workspaces before any role invocation. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenNotQuadReady_DoesNotInvokeAnySlot)
+- [x] Full orchestration invokes LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsyncWhenQuadReadyReturnsCommittedAotDecision)
+- [x] Orchestration rejects non-ready workspaces before any role invocation. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsyncWhenNotQuadReadyDoesNotInvokeAnySlot)
 
 ## TR-MCP-QUAD-007
 
@@ -2921,7 +2921,7 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] The route is ID-scoped under the existing mcpserver todo surface and returns TodoMutationResult. (evidence: TodoController.CloseAsync returns ActionResult<TodoMutationResult> for POST /mcpserver/todo/{id}/close.)
 - [x] The server owns the completion timestamp and formats it as a UTC ISO 8601 value. (evidence: TodoController.CloseAsync uses DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture) and tests parse zero offset.)
-- [x] The operation reuses existing TODO update validation, workspace scoping, transaction gate, and external sync behavior. (evidence: TodoController.CloseAsync delegates through TodoUpdateService or ITransactionGatedTodoMutationService.UpdateAsync; gated path covered by CloseAsync_WhenTransactionGateRegistered_UsesGatedUpdateService.)
+- [x] The operation reuses existing TODO update validation, workspace scoping, transaction gate, and external sync behavior. (evidence: TodoController.CloseAsync delegates through TodoUpdateService or ITransactionGatedTodoMutationService.UpdateAsync; gated path covered by CloseAsyncWhenTransactionGateRegisteredUsesGatedUpdateService.)
 
 ## TR-MCP-TPL-001
 
@@ -3028,7 +3028,7 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Projectors preserve provenance, tool pairing, reasoning, usage, and derived-value markers. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: IngestionService_NormalizesRealTranscriptFixtures; compatibility projector and diagnostics tests.)
+- [x] Projectors preserve provenance, tool pairing, reasoning, usage, and derived-value markers. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: IngestionServiceNormalizesRealTranscriptFixtures; compatibility projector and diagnostics tests.)
 
 ## TR-MCP-TRANSCRIPT-004
 
@@ -3084,7 +3084,7 @@ Scope: layer-1+
 
 ## TR-MCP-TRANSCRIPT-010
 
-**Int32.MaxValue transcript ceilings with streaming JSONL reader** — Implements FR-MCP-TRANSCRIPT-009. (1) TranscriptUtilities.ReadJsonLinesAsync raises maxSourceFileBytes from 256 MiB, maxLineBytes from 8 MiB, and maxRecords from 2,000,000 to int.MaxValue. (2) SessionLogTranscriptIngestionController raises MaxUploadRequestBytes from 512 MiB, MaxSourceFileBytes from 256 MiB, and MaxExpandedUploadBytes from 2 GiB to int.MaxValue; MaxArchiveEntries (10,000) and MaxCompressionRatio (20.0) are unchanged. RequestSizeLimit remains a compile-time constant attribute and continues to work because int.MaxValue is a constant. (3) ReadJsonLinesAsync streams lines through a StreamReader instead of calling File.ReadAllLinesAsync, so a ceiling of int.MaxValue does not convert a rejection into an out-of-memory kill. IMPLEMENTED 2026-07-20. Evidence: red gate IngestionService_AcceptsJsonlLineAboveFormerCeiling failed with "Transcript JSONL line exceeds the 8 MiB limit" at TranscriptUtilities.cs:104 (1 failed, 1 passed); green gate Support.Mcp.Tests 1692/0/0, Repl.Core.Tests 810/0/0, Client.Tests 259/0/0, transcript integration subset 10/0/0. Deployed to the McpServer Windows service (1.4.20, pid 39404) and verified live: sessionlog_ingest_path accepted a 9,437,285-byte single-line JSONL returning totalSessions 1 with zero diagnostics.
+**Int32.MaxValue transcript ceilings with streaming JSONL reader** — Implements FR-MCP-TRANSCRIPT-009. (1) TranscriptUtilities.ReadJsonLinesAsync raises maxSourceFileBytes from 256 MiB, maxLineBytes from 8 MiB, and maxRecords from 2,000,000 to int.MaxValue. (2) SessionLogTranscriptIngestionController raises MaxUploadRequestBytes from 512 MiB, MaxSourceFileBytes from 256 MiB, and MaxExpandedUploadBytes from 2 GiB to int.MaxValue; MaxArchiveEntries (10,000) and MaxCompressionRatio (20.0) are unchanged. RequestSizeLimit remains a compile-time constant attribute and continues to work because int.MaxValue is a constant. (3) ReadJsonLinesAsync streams lines through a StreamReader instead of calling File.ReadAllLinesAsync, so a ceiling of int.MaxValue does not convert a rejection into an out-of-memory kill. IMPLEMENTED 2026-07-20. Evidence: red gate IngestionServiceAcceptsJsonlLineAboveFormerCeiling failed with "Transcript JSONL line exceeds the 8 MiB limit" at TranscriptUtilities.cs:104 (1 failed, 1 passed); green gate Support.Mcp.Tests 1692/0/0, Repl.Core.Tests 810/0/0, Client.Tests 259/0/0, transcript integration subset 10/0/0. Deployed to the McpServer Windows service (1.4.20, pid 39404) and verified live: sessionlog_ingest_path accepted a 9,437,285-byte single-line JSONL returning totalSessions 1 with zero diagnostics.
 **Covered by:** FR: FR-MCP-TRANSCRIPT-009; TEST: TEST-MCP-TRANSCRIPT-013
 **Status:** pending
 Scope: layer-1+
@@ -3791,9 +3791,9 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
-- [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
-- [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsyncSendsWorkspaceFilter)
+- [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsyncReturnsCreatedTodoIndex)
+- [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsyncReturnsTodoIdsCreatedAtUtcAndTriageContext)
 
 ## TR-WEB-API-001
 

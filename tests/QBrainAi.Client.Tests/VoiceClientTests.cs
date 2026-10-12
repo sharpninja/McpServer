@@ -16,7 +16,7 @@ public sealed class VoiceClientTests
     };
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateSessionAsync_PostsPayload()
+    public async System.Threading.Tasks.Task CreateSessionAsyncPostsPayload()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"sessionId":"voice-1","status":"idle","language":"en-US"}""");
         using var http = new HttpClient(handler);
@@ -35,7 +35,7 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task CreateSessionAsync_SerializesExecutionStrategy()
+    public async System.Threading.Tasks.Task CreateSessionAsyncSerializesExecutionStrategy()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"sessionId":"voice-1","status":"idle","language":"en-US","executionStrategy":"hosted-mcp-agent"}""");
         using var http = new HttpClient(handler);
@@ -52,7 +52,7 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SubmitTurnAsync_PostsToTurnEndpoint()
+    public async System.Threading.Tasks.Task SubmitTurnAsyncPostsToTurnEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"sessionId":"voice-1","turnId":"t1","status":"completed"}""");
         using var http = new HttpClient(handler);
@@ -66,7 +66,7 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task InterruptAsync_PostsInterruptEndpoint()
+    public async System.Threading.Tasks.Task InterruptAsyncPostsInterruptEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"sessionId":"voice-1","interrupted":true,"status":"idle"}""");
         using var http = new HttpClient(handler);
@@ -80,7 +80,7 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetStatusAsync_GetsStatusEndpoint()
+    public async System.Threading.Tasks.Task GetStatusAsyncGetsStatusEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"sessionId":"voice-1","status":"idle","language":"en-US","createdUtc":"2026-01-01T00:00:00Z","lastUpdatedUtc":"2026-01-01T00:00:00Z","isTurnActive":false,"turnCounter":0,"transcriptCount":0}""");
         using var http = new HttpClient(handler);
@@ -94,7 +94,7 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GetTranscriptAsync_GetsTranscriptEndpoint()
+    public async System.Threading.Tasks.Task GetTranscriptAsyncGetsTranscriptEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"sessionId":"voice-1","items":[{"timestampUtc":"2026-01-01T00:00:00Z","role":"user","category":"transcript","text":"hello"}]}""");
         using var http = new HttpClient(handler);
@@ -108,7 +108,7 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteSessionAsync_ReturnsTrueOnNoContent()
+    public async System.Threading.Tasks.Task DeleteSessionAsyncReturnsTrueOnNoContent()
     {
         var handler = new MockHttpHandler(HttpStatusCode.NoContent, string.Empty, "text/plain");
         using var http = new HttpClient(handler);
@@ -122,7 +122,7 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task DeleteSessionAsync_ReturnsFalseOnNotFound()
+    public async System.Threading.Tasks.Task DeleteSessionAsyncReturnsFalseOnNotFound()
     {
         var handler = new MockHttpHandler(HttpStatusCode.NotFound, """{"error":"not found"}""");
         using var http = new HttpClient(handler);
@@ -134,7 +134,7 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task SubmitTurnStreamingAsync_ParsesSseEvents()
+    public async System.Threading.Tasks.Task SubmitTurnStreamingAsyncParsesSseEvents()
     {
         var payload = string.Join(
             "\n",

@@ -11,7 +11,7 @@ public sealed class PluginSessionLogCatalogTests
 {
     /// <summary>P4 red: each enabled row has a unique agent-source plus cache identity.</summary>
     [Fact]
-    public void Catalog_UniqueAgentSourceCache()
+    public void CatalogUniqueAgentSourceCache()
     {
         var rows = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot());
         Assert.All(rows, row =>
@@ -25,7 +25,7 @@ public sealed class PluginSessionLogCatalogTests
 
     /// <summary>P4 red: each catalog repository root exists under the sibling GitHub directory.</summary>
     [Fact]
-    public void Catalog_RepositoryRootsExist()
+    public void CatalogRepositoryRootsExist()
     {
         var repoRoot = FindRepositoryRoot();
         var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
@@ -38,7 +38,7 @@ public sealed class PluginSessionLogCatalogTests
 
     /// <summary>P4 red: every enabled row uses a defined PluginHostKind.</summary>
     [Fact]
-    public void Catalog_SupportedHostKinds()
+    public void CatalogSupportedHostKinds()
     {
         var rows = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot());
         Assert.All(rows, row => Assert.True(Enum.IsDefined(row.HostKind)));
@@ -46,7 +46,7 @@ public sealed class PluginSessionLogCatalogTests
 
     /// <summary>P4 red: required entrypoint files exist for each enabled host.</summary>
     [Fact]
-    public void Catalog_RequiredEntrypointFilesExist()
+    public void CatalogRequiredEntrypointFilesExist()
     {
         var repoRoot = FindRepositoryRoot();
         var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
@@ -65,7 +65,7 @@ public sealed class PluginSessionLogCatalogTests
 
     /// <summary>P4 red: version metadata is present for each enabled plugin.</summary>
     [Fact]
-    public void Catalog_VersionMetadataPresent()
+    public void CatalogVersionMetadataPresent()
     {
         var repoRoot = FindRepositoryRoot();
         var parent = PluginSessionLogCatalog.SiblingPluginParent(repoRoot);
@@ -81,7 +81,7 @@ public sealed class PluginSessionLogCatalogTests
 
     /// <summary>P4 red: exactly eight enabled catalog rows.</summary>
     [Fact]
-    public void Catalog_ExactlyEightEnabled()
+    public void CatalogExactlyEightEnabled()
     {
         var rows = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot());
         Assert.Equal(8, rows.Count);

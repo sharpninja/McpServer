@@ -17,12 +17,12 @@ public sealed class QuadBrainToolInterceptionTests
     [InlineData("mcp_requirements_create_tr", true)]
     [InlineData("do_local_thing", false)]
     [InlineData("", false)]
-    public void Classifier_IdentifiesInternalTools(string toolName, bool expectedInternal)
+    public void ClassifierIdentifiesInternalTools(string toolName, bool expectedInternal)
         => Assert.Equal(expectedInternal, new QuadBrainToolClassifier().IsInternal(toolName));
 
     /// <summary>FR-MCP-QBEXEC-001: unhandled internals are notes, never agent tool commands. External calls remain.</summary>
     [Fact]
-    public async Task Interceptor_UnhandledInternal_IsNoteNotAgentCommand()
+    public async Task InterceptorUnhandledInternalIsNoteNotAgentCommand()
     {
         var interceptor = new QuadBrainToolInterceptor(
             new QuadBrainToolClassifier(),
@@ -44,7 +44,7 @@ public sealed class QuadBrainToolInterceptionTests
     /// <summary>TEST-MCP-QBEXEC-001 AC-4: no catalog mcp_* name remains in RemainingToolCalls (real executor).</summary>
     [Theory]
     [MemberData(nameof(CatalogToolNames))]
-    public async Task Interceptor_CatalogName_IsNotEmittedToAgent(string name)
+    public async Task InterceptorCatalogNameIsNotEmittedToAgent(string name)
     {
         var fixture = new QuadBrainExecutorTestFixture();
         var executor = fixture.CreateExecutor();
@@ -72,7 +72,7 @@ public sealed class QuadBrainToolInterceptionTests
 
     /// <summary>A handled-but-failed internal tool is reported as a failure, not emitted to the agent.</summary>
     [Fact]
-    public async Task Interceptor_FailedInternal_IsReportedNotEmitted()
+    public async Task InterceptorFailedInternalIsReportedNotEmitted()
     {
         var interceptor = new QuadBrainToolInterceptor(
             new QuadBrainToolClassifier(),

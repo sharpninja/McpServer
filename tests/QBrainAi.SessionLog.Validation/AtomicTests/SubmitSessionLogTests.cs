@@ -31,7 +31,7 @@ public sealed class SubmitSessionLogTests
     public SubmitSessionLogTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
     /// <summary>
-    /// Validates the <c>Submit_MinimalSessionLog_Returns201</c> scenario.
+    /// Validates the <c>SubmitMinimalSessionLogReturns201</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -39,7 +39,7 @@ public sealed class SubmitSessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_MinimalSessionLog_Returns201()
+    public async Task SubmitMinimalSessionLogReturns201()
     {
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var payload = new
@@ -65,7 +65,7 @@ public sealed class SubmitSessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Submit_FullSessionLogWithTurns_Returns201</c> scenario.
+    /// Validates the <c>SubmitFullSessionLogWithTurnsReturns201</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -73,7 +73,7 @@ public sealed class SubmitSessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_FullSessionLogWithTurns_Returns201()
+    public async Task SubmitFullSessionLogWithTurnsReturns201()
     {
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var requestId = SessionLogEndpointFixture.GenerateRequestId("submit-full-session-log");
@@ -123,7 +123,7 @@ public sealed class SubmitSessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Submit_UpsertSameSession_Returns201WithUpdatedData</c> scenario.
+    /// Validates the <c>SubmitUpsertSameSessionReturns201WithUpdatedData</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -131,7 +131,7 @@ public sealed class SubmitSessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_UpsertSameSession_Returns201WithUpdatedData()
+    public async Task SubmitUpsertSameSessionReturns201WithUpdatedData()
     {
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var payload1 = new
@@ -172,7 +172,7 @@ public sealed class SubmitSessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Submit_WithProcessingDialog_Returns201</c> scenario.
+    /// Validates the <c>SubmitWithProcessingDialogReturns201</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -180,7 +180,7 @@ public sealed class SubmitSessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_WithProcessingDialog_Returns201()
+    public async Task SubmitWithProcessingDialogReturns201()
     {
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var payload = new

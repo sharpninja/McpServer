@@ -18,7 +18,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-01: dry-run=true returns a merge plan and writes zero row mutations.</summary>
     [Fact]
-    public async Task DryRun_NoMutations()
+    public async Task DryRunNoMutations()
     {
         var a = await SeedNearDupAsync("consolidate dry-run fact alpha").ConfigureAwait(true);
         var b = await SeedNearDupAsync("consolidate dry-run fact alpha twin").ConfigureAwait(true);
@@ -39,7 +39,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-02: write mode merges near-duplicates to one survivor with lineage.</summary>
     [Fact]
-    public async Task WriteMode_MergesNearDuplicates()
+    public async Task WriteModeMergesNearDuplicates()
     {
         var a = await SeedNearDupAsync("consolidate write fact shared").ConfigureAwait(true);
         var b = await SeedNearDupAsync("consolidate write fact shared twin").ConfigureAwait(true);
@@ -62,7 +62,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-03: hard-delete only when AllowHardDelete is true.</summary>
     [Fact]
-    public async Task HardDelete_OnlyWhenConfigured()
+    public async Task HardDeleteOnlyWhenConfigured()
     {
         Assert.False(MemoryConsolidateLimits.DefaultAllowHardDelete);
         await SeedNearDupAsync("hard-delete off A").ConfigureAwait(true);
@@ -78,7 +78,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-04: concurrent consolidate returns busy/conflict.</summary>
     [Fact]
-    public async Task LockContention_BusyError()
+    public async Task LockContentionBusyError()
     {
         await SeedNearDupAsync("lock busy A").ConfigureAwait(true);
         await SeedNearDupAsync("lock busy A twin").ConfigureAwait(true);
@@ -132,7 +132,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-07: empty workspace dry-run returns empty plan 200.</summary>
     [Fact]
-    public async Task EmptyWorkspace_EmptyPlan()
+    public async Task EmptyWorkspaceEmptyPlan()
     {
         var result = await _harness.ConsolidateAsync(
             new MemoryConsolidateRequest { DryRun = true },
@@ -145,7 +145,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-08: single memory dry-run returns empty merge plan.</summary>
     [Fact]
-    public async Task SingleMemory_NoMerge()
+    public async Task SingleMemoryNoMerge()
     {
         await SeedNearDupAsync("single only").ConfigureAwait(true);
 
@@ -160,7 +160,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-09: three near-duplicates collapse to one survivor in write mode.</summary>
     [Fact]
-    public async Task ThreeWay_CollapsesToOne()
+    public async Task ThreeWayCollapsesToOne()
     {
         await SeedNearDupAsync("three-way shared").ConfigureAwait(true);
         await SeedNearDupAsync("three-way shared twin").ConfigureAwait(true);
@@ -178,7 +178,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-10: survivor Content/Summary is non-empty after merge.</summary>
     [Fact]
-    public async Task Survivor_NonEmptyContent()
+    public async Task SurvivorNonEmptyContent()
     {
         await SeedNearDupAsync("survivor content A").ConfigureAwait(true);
         await SeedNearDupAsync("survivor content A twin").ConfigureAwait(true);
@@ -195,7 +195,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-11: merged-away ids disappear from default list/recall.</summary>
     [Fact]
-    public async Task MergedAway_HiddenFromListRecall()
+    public async Task MergedAwayHiddenFromListRecall()
     {
         var a = await SeedNearDupAsync("hidden merge A").ConfigureAwait(true);
         var b = await SeedNearDupAsync("hidden merge A twin").ConfigureAwait(true);
@@ -217,7 +217,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-12: get on merged-away id returns 404 or redirect (stable).</summary>
     [Fact]
-    public async Task GetMergedAway_StableBehavior()
+    public async Task GetMergedAwayStableBehavior()
     {
         await SeedNearDupAsync("get merged A").ConfigureAwait(true);
         await SeedNearDupAsync("get merged A twin").ConfigureAwait(true);
@@ -260,7 +260,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-14: same-scope only by default (no Global into Workspace silently).</summary>
     [Fact]
-    public async Task SameScopeOnly_ByDefault()
+    public async Task SameScopeOnlyByDefault()
     {
         var workspace = await SeedNearDupAsync("scope workspace").ConfigureAwait(true);
         var globalAdd = await _harness.AddCompatAsync(new MemoryAddRequest
@@ -283,7 +283,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-15: decay flags without unauthorized hard-delete.</summary>
     [Fact]
-    public async Task Decay_FlagsWithoutHardDelete()
+    public async Task DecayFlagsWithoutHardDelete()
     {
         var stale = await SeedNearDupAsync("decay stale low").ConfigureAwait(true);
         await _harness.UpdateCompatAsync(stale.Id, new MemoryUpdateRequest { Confidence = 0.05 }, cancellationToken: TestContext.Current.CancellationToken)
@@ -300,7 +300,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-17: plan items include candidate ids and similarity score.</summary>
     [Fact]
-    public async Task PlanItems_IncludeIdsAndScore()
+    public async Task PlanItemsIncludeIdsAndScore()
     {
         await SeedNearDupAsync("plan score A").ConfigureAwait(true);
         await SeedNearDupAsync("plan score A twin").ConfigureAwait(true);
@@ -317,7 +317,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-18: similarity threshold out of range returns 400.</summary>
     [Fact]
-    public async Task ThresholdOutOfRange_Returns400()
+    public async Task ThresholdOutOfRangeReturns400()
     {
         var low = await _harness.ConsolidateAsync(
             new MemoryConsolidateRequest { DryRun = true, SimilarityThreshold = -0.1 },
@@ -332,7 +332,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-19: cancel mid-run leaves store consistent.</summary>
     [Fact]
-    public async Task CancelMidRun_ConsistentStore()
+    public async Task CancelMidRunConsistentStore()
     {
         await SeedNearDupAsync("cancel mid A").ConfigureAwait(true);
         await SeedNearDupAsync("cancel mid A twin").ConfigureAwait(true);
@@ -349,7 +349,7 @@ public sealed class MemoryConsolidateTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-013-20: after merge, explore edges are rewired to survivor.</summary>
     [Fact]
-    public async Task Edges_RewiredToSurvivor()
+    public async Task EdgesRewiredToSurvivor()
     {
         var a = await SeedNearDupAsync("edge rewire A").ConfigureAwait(true);
         var b = await SeedNearDupAsync("edge rewire A twin").ConfigureAwait(true);

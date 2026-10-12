@@ -16,7 +16,7 @@ public sealed class MemorySurfaceParityTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-010-48: Remember via MCP tool and REST produce equivalent stored fields.</summary>
     [Fact]
-    public async Task McpAndRest_EquivalentStore()
+    public async Task McpAndRestEquivalentStore()
     {
         var payload = new MemoryRememberRequest
         {

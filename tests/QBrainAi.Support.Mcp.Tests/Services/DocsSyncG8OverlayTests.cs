@@ -45,7 +45,7 @@ public sealed class DocsSyncG8OverlayTests : IDisposable
 
     /// <summary>G8: default GenerateWikiAsync writes Azure and GitHub wiki folders and does not write mcp-wiki-dump.json.</summary>
     [Fact]
-    public async Task G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump()
+    public async Task G8GenerateWikiAsyncDefaultWritesWikiFoldersWithoutDump()
     {
         var service = new RequirementsDocumentService(
             MsOptions.Options.Create(new RequirementsOptions

@@ -7,7 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Models;
 public sealed class IssueNoteFrontmatterTests
 {
     [Fact]
-    public void Parse_ValidFrontmatter_ReturnsAllFields()
+    public void ParseValidFrontmatterReturnsAllFields()
     {
         var note = """
             status: OPEN
@@ -30,7 +30,7 @@ public sealed class IssueNoteFrontmatterTests
     }
 
     [Fact]
-    public void Parse_NullOrEmpty_ReturnsNull()
+    public void ParseNullOrEmptyReturnsNull()
     {
         Assert.Null(IssueNoteFrontmatter.Parse(null));
         Assert.Null(IssueNoteFrontmatter.Parse(""));
@@ -38,7 +38,7 @@ public sealed class IssueNoteFrontmatterTests
     }
 
     [Fact]
-    public void Parse_PartialFields_ReturnsPopulatedFieldsOnly()
+    public void ParsePartialFieldsReturnsPopulatedFieldsOnly()
     {
         var note = "status: closed\ngithub-url: https://example.com/1";
 
@@ -52,7 +52,7 @@ public sealed class IssueNoteFrontmatterTests
     }
 
     [Fact]
-    public void Serialize_AllFields_ProducesCorrectFormat()
+    public void SerializeAllFieldsProducesCorrectFormat()
     {
         var fm = new IssueNoteFrontmatter
         {
@@ -75,7 +75,7 @@ public sealed class IssueNoteFrontmatterTests
     }
 
     [Fact]
-    public void RoundTrip_SerializeThenParse_PreservesAllFields()
+    public void RoundTripSerializeThenParsePreservesAllFields()
     {
         var original = new IssueNoteFrontmatter
         {
@@ -100,7 +100,7 @@ public sealed class IssueNoteFrontmatterTests
     }
 
     [Fact]
-    public void Parse_NoRecognizedKeys_ReturnsNull()
+    public void ParseNoRecognizedKeysReturnsNull()
     {
         var note = "unknown-key: some value\nanother: thing";
         Assert.Null(IssueNoteFrontmatter.Parse(note));

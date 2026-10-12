@@ -15,7 +15,7 @@ public sealed class SessionLogReceiptTests
     [Theory]
     [InlineData(true, false, false)]
     [InlineData(false, true, true)]
-    public async Task SubmitAsync_PreservesPersistenceReceipt(bool persisted, bool degraded, bool queued)
+    public async Task SubmitAsyncPreservesPersistenceReceipt(bool persisted, bool degraded, bool queued)
     {
         const string requestId = "req-20261001T190000Z-receipt";
         var response = JsonSerializer.Serialize(new
@@ -45,7 +45,7 @@ public sealed class SessionLogReceiptTests
 
     /// <summary>A legacy server's row ID alone must never become a durable-write acknowledgement.</summary>
     [Fact]
-    public void LegacyReceipt_DoesNotImplyPersistence()
+    public void LegacyReceiptDoesNotImplyPersistence()
     {
         var result = JsonSerializer.Deserialize<SessionLogSubmitResult>("{\"id\":42}");
         var receipt = JsonSerializer.SerializeToElement(result);

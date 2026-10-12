@@ -59,7 +59,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     /// FR-MCP-080: Verifies that ListDocumentsAsync returns paginated results.
     /// </summary>
     [Fact]
-    public async Task ListDocumentsAsync_ReturnsPaginatedResults()
+    public async Task ListDocumentsAsyncReturnsPaginatedResults()
     {
         var sut = CreateSut();
 
@@ -73,7 +73,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     /// FR-MCP-080: Verifies that ListDocumentsAsync filters by source type.
     /// </summary>
     [Fact]
-    public async Task ListDocumentsAsync_FiltersBySourceType()
+    public async Task ListDocumentsAsyncFiltersBySourceType()
     {
         var sut = CreateSut();
 
@@ -87,7 +87,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     /// FR-MCP-080: Verifies that GetDocumentChunksAsync returns chunks ordered by index.
     /// </summary>
     [Fact]
-    public async Task GetDocumentChunksAsync_ReturnsChunksOrderedByIndex()
+    public async Task GetDocumentChunksAsyncReturnsChunksOrderedByIndex()
     {
         var sut = CreateSut();
 
@@ -104,7 +104,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     /// FR-MCP-080: Verifies that GetDocumentChunksAsync returns null for a nonexistent document.
     /// </summary>
     [Fact]
-    public async Task GetDocumentChunksAsync_ReturnsNullForNonexistent()
+    public async Task GetDocumentChunksAsyncReturnsNullForNonexistent()
     {
         var sut = CreateSut();
 
@@ -117,7 +117,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     /// FR-MCP-080: Verifies that DeleteDocumentAsync removes the document and its chunks.
     /// </summary>
     [Fact]
-    public async Task DeleteDocumentAsync_RemovesDocumentAndChunks()
+    public async Task DeleteDocumentAsyncRemovesDocumentAndChunks()
     {
         var sut = CreateSut();
 
@@ -137,7 +137,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     /// FR-MCP-080, TR-GRAPHRAG-ADHOC-003: Verifies that DeleteDocumentAsync calls RemoveVector for each chunk.
     /// </summary>
     [Fact]
-    public async Task DeleteDocumentAsync_CallsRemoveVectorForEachChunk()
+    public async Task DeleteDocumentAsyncCallsRemoveVectorForEachChunk()
     {
         var sut = CreateSut();
 

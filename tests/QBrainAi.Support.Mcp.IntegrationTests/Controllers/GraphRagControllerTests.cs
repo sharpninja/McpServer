@@ -17,7 +17,7 @@ public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplication
     }
 
     [Fact]
-    public async Task Status_ReturnsOk()
+    public async Task StatusReturnsOk()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/graphrag/status", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -33,7 +33,7 @@ public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplication
     }
 
     [Fact]
-    public async Task Index_ReturnsOk()
+    public async Task IndexReturnsOk()
     {
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/graphrag/index", UriKind.Relative), new { force = true }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -45,14 +45,14 @@ public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplication
     }
 
     [Fact]
-    public async Task Query_WithoutQuery_ReturnsBadRequest()
+    public async Task QueryWithoutQueryReturnsBadRequest()
     {
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/graphrag/query", UriKind.Relative), new { }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
-    public async Task Query_WithInvalidMaxChunks_ReturnsBadRequest()
+    public async Task QueryWithInvalidMaxChunksReturnsBadRequest()
     {
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/graphrag/query", UriKind.Relative), new
         {
@@ -64,7 +64,7 @@ public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplication
     }
 
     [Fact]
-    public async Task Query_ReturnsCorpusDiagnostics()
+    public async Task QueryReturnsCorpusDiagnostics()
     {
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/graphrag/query", UriKind.Relative), new
         {

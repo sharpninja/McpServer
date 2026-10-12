@@ -47,7 +47,7 @@ public sealed class TodoLifecycleIntegrationTests
     /// saves (FromMarkdown + PUT), and the list refreshes (GET all).
     /// </summary>
     [Fact]
-    public async Task Lifecycle_Create_SerializeToMarkdown_ParseBack_Update_Verify()
+    public async Task LifecycleCreateSerializeToMarkdownParseBackUpdateVerify()
     {
         const string id = "LIFECYCLE-TODO-001";
 
@@ -136,7 +136,7 @@ public sealed class TodoLifecycleIntegrationTests
     /// simulating the tree view refresh that fires after the TodoSaved event.
     /// </summary>
     [Fact]
-    public async Task Lifecycle_ListRefreshReflectsChanges()
+    public async Task LifecycleListRefreshReflectsChanges()
     {
         const string id = "LIFECYCLE-LIST-001";
 
@@ -183,7 +183,7 @@ public sealed class TodoLifecycleIntegrationTests
     /// into YAML front matter and must survive the serialize → edit → parse → update cycle.
     /// </summary>
     [Fact]
-    public async Task Lifecycle_FrTrFieldsSurviveMarkdownRoundTrip()
+    public async Task LifecycleFrTrFieldsSurviveMarkdownRoundTrip()
     {
         const string id = "LIFECYCLE-FRTR-001";
 
@@ -238,7 +238,7 @@ public sealed class TodoLifecycleIntegrationTests
     /// re-fetched (simulating the list refresh that both extensions trigger).
     /// </summary>
     [Fact]
-    public async Task Lifecycle_TwoSaves_EachProducesCorrectState()
+    public async Task LifecycleTwoSavesEachProducesCorrectState()
     {
         const string id = "LIFECYCLE-SAVE-001";
 
@@ -316,7 +316,7 @@ public sealed class TodoLifecycleIntegrationTests
     /// ensuring clean teardown and validating the DELETE endpoint used in cleanup.
     /// </summary>
     [Fact]
-    public async Task Lifecycle_DeleteRemovesFromList()
+    public async Task LifecycleDeleteRemovesFromList()
     {
         const string id = "LIFECYCLE-DEL-001";
 
@@ -356,7 +356,7 @@ public sealed class TodoLifecycleIntegrationTests
     /// This test catches the bug where FromMarkdown silently dropped priority/section.
     /// </summary>
     [Fact]
-    public async Task Lifecycle_PrioritySectionSurviveMarkdownRoundTrip()
+    public async Task LifecyclePrioritySectionSurviveMarkdownRoundTrip()
     {
         const string id = "LIFECYCLE-PRIO-001";
 
@@ -526,7 +526,7 @@ public sealed class TodoLifecycleIntegrationTests
                 if (key == "id") continue;
 
                 // Check for list start
-                if (value == "" || value == "[]")
+                if (string.IsNullOrEmpty(value) || value == "[]")
                 {
                     currentListKey = key;
                     currentList = [];

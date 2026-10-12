@@ -19,7 +19,7 @@ public sealed class MemoryEdgeTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-03: Unique (FromMemoryId, ToMemoryId, EdgeType) is enforced at the DB layer.</summary>
     [Fact]
-    public async Task UniqueFromToType_Enforced()
+    public async Task UniqueFromToTypeEnforced()
     {
         Assert.True(_harness.HasUniqueEdgeIndex());
         var entity = _harness.FindMappedEntity(typeof(MemoryEdgeEntity));
@@ -48,7 +48,7 @@ public sealed class MemoryEdgeTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-12: Duplicate explicit edge (same From, To, EdgeType) is 409 (documented).</summary>
     [Fact]
-    public async Task DuplicateExplicit_StableBehavior()
+    public async Task DuplicateExplicitStableBehavior()
     {
         var from = await SeedAsync("duplicate-edge from").ConfigureAwait(true);
         var to = await SeedAsync("duplicate-edge to").ConfigureAwait(true);
@@ -77,7 +77,7 @@ public sealed class MemoryEdgeTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-14: Edge weight outside [0,1] is rejected on create.</summary>
     [Fact]
-    public async Task WeightOutOfRange_Returns400()
+    public async Task WeightOutOfRangeReturns400()
     {
         var from = await SeedAsync("weight-range from").ConfigureAwait(true);
         var to = await SeedAsync("weight-range to").ConfigureAwait(true);
@@ -109,7 +109,7 @@ public sealed class MemoryEdgeTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-15: Invalid EdgeType is rejected on create.</summary>
     [Fact]
-    public async Task InvalidEdgeType_Returns400()
+    public async Task InvalidEdgeTypeReturns400()
     {
         var from = await SeedAsync("invalid-type from").ConfigureAwait(true);
         var to = await SeedAsync("invalid-type to").ConfigureAwait(true);
@@ -131,7 +131,7 @@ public sealed class MemoryEdgeTests : IDisposable
 
     /// <summary>AC-FR-MCP-MEMORY-012-20: Creating an edge to a foreign-workspace memory id fails closed.</summary>
     [Fact]
-    public async Task ForeignTarget_FailsClosed()
+    public async Task ForeignTargetFailsClosed()
     {
         var local = await SeedAsync("foreign-target local").ConfigureAwait(true);
         var foreign = await SeedAsync("foreign-target other", workspacePath: _harness.WorkspaceB)

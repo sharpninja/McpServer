@@ -12,7 +12,7 @@ public sealed class HandoffOneShotExtractorTests
 {
     /// <summary>TEST-HANDOFF-003: extractor invokes AgentPoolOneShotContext.HandoffTodoDraft.</summary>
     [Fact]
-    public async Task ExtractAsync_UsesHandoffTodoDraftContextAndVersionedPrompt()
+    public async Task ExtractAsyncUsesHandoffTodoDraftContextAndVersionedPrompt()
     {
         AgentPoolOneShotRequest? captured = null;
         var pool = Substitute.For<IAgentPoolService>();
@@ -46,7 +46,7 @@ public sealed class HandoffOneShotExtractorTests
     /// identity from the AgentPool enqueue result instead of hard-coding defaults.
     /// </summary>
     [Fact]
-    public async Task D5_ExtractAsync_PropagatesEffectivePromptIdentityFromEnqueue()
+    public async Task D5ExtractAsyncPropagatesEffectivePromptIdentityFromEnqueue()
     {
         const string effectivePrompt = "handoff-todo-draft/v1-effective";
         const string effectiveTemplate = "handoff-todo-draft-effective";

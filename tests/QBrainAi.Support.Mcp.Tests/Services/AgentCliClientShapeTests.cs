@@ -11,7 +11,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class AgentCliClientShapeTests
 {
     [Fact]
-    public async Task InvokeAsync_WithDefaultClineAgent_UsesClineCommandShape()
+    public async Task InvokeAsyncWithDefaultClineAgentUsesClineCommandShape()
     {
         CapturingProcessSpawner spawner = new(stdout: "cline response");
         AgentCliClient client = new(
@@ -41,7 +41,7 @@ public sealed class AgentCliClientShapeTests
     }
 
     [Fact]
-    public void CreateInteractiveSession_WithDefaultClineAgent_UsesClineInteractiveCommandShape()
+    public void CreateInteractiveSessionWithDefaultClineAgentUsesClineInteractiveCommandShape()
     {
         CapturingProcessSpawner spawner = new(stdout: "cline response");
         AgentCliClient client = new(

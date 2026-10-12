@@ -31,7 +31,7 @@ public sealed class MemoryGlobalDefaultWorkspaceTests : IDisposable
     /// Workspace scope in that same context is rejected.
     /// </summary>
     [Fact]
-    public async Task MemoryService_GlobalCreate_EmptyWorkspace_StoresNullOwner()
+    public async Task MemoryServiceGlobalCreateEmptyWorkspaceStoresNullOwner()
     {
         await using var db = _gate.OpenContext(string.Empty);
         var service = new MemoryService(db, NullLogger<MemoryService>.Instance);
@@ -67,7 +67,7 @@ public sealed class MemoryGlobalDefaultWorkspaceTests : IDisposable
     /// Workspace scope on that same path keeps the default workspace as owner.
     /// </summary>
     [Fact]
-    public async Task MemoryService_GlobalCreate_DefaultWorkspace_StoresNullOwner()
+    public async Task MemoryServiceGlobalCreateDefaultWorkspaceStoresNullOwner()
     {
         await using var db = _gate.OpenContext(_gate.DefaultWorkspacePath);
         var service = new MemoryService(db, NullLogger<MemoryService>.Instance);
@@ -101,7 +101,7 @@ public sealed class MemoryGlobalDefaultWorkspaceTests : IDisposable
     /// POST /qbrainai/memory and remember both persist a Global row when WorkspaceContext is empty.
     /// </summary>
     [Fact]
-    public async Task Controller_GlobalCreate_EmptyWorkspace_ReturnsCreated()
+    public async Task ControllerGlobalCreateEmptyWorkspaceReturnsCreated()
     {
         await using var db = _gate.OpenContext(null);
         var service = new MemoryService(db, NullLogger<MemoryService>.Instance);

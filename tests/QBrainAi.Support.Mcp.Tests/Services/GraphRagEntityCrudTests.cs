@@ -53,7 +53,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// FR-MCP-079: Verifies that CreateEntityAsync generates an ID with "ge-" prefix.
     /// </summary>
     [Fact]
-    public async Task CreateEntity_GeneratesIdWithPrefix()
+    public async Task CreateEntityGeneratesIdWithPrefix()
     {
         var sut = CreateSut();
         var request = new GraphEntityRequest { Name = "Alice", EntityType = "person" };
@@ -69,7 +69,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// FR-MCP-079: Verifies that CreateEntityAsync sets both CreatedAtUtc and UpdatedAtUtc.
     /// </summary>
     [Fact]
-    public async Task CreateEntity_SetsTimestamps()
+    public async Task CreateEntitySetsTimestamps()
     {
         var sut = CreateSut();
         var before = DateTime.UtcNow.AddSeconds(-1);
@@ -87,7 +87,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// FR-MCP-079: Verifies that GetEntityAsync returns null for a nonexistent entity.
     /// </summary>
     [Fact]
-    public async Task GetEntity_ReturnsNullForNonexistent()
+    public async Task GetEntityReturnsNullForNonexistent()
     {
         var sut = CreateSut();
 
@@ -100,7 +100,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// FR-MCP-079: Verifies that UpdateEntityAsync modifies fields and bumps UpdatedAtUtc.
     /// </summary>
     [Fact]
-    public async Task UpdateEntity_ModifiesFieldsAndBumpsTimestamp()
+    public async Task UpdateEntityModifiesFieldsAndBumpsTimestamp()
     {
         var sut = CreateSut();
         var created = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Original", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -128,7 +128,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// FR-MCP-079: Verifies that ListEntitiesAsync paginates correctly.
     /// </summary>
     [Fact]
-    public async Task ListEntities_PaginatesCorrectly()
+    public async Task ListEntitiesPaginatesCorrectly()
     {
         var sut = CreateSut();
         for (var i = 0; i < 5; i++)
@@ -149,7 +149,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// FR-MCP-079: Verifies that ListEntitiesAsync filters by entity type.
     /// </summary>
     [Fact]
-    public async Task ListEntities_FiltersByEntityType()
+    public async Task ListEntitiesFiltersByEntityType()
     {
         var sut = CreateSut();
         await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Person1", EntityType = "person" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -167,7 +167,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// FR-MCP-079: Verifies that DeleteEntityAsync returns true and removes the entity.
     /// </summary>
     [Fact]
-    public async Task DeleteEntity_ReturnsTrueAndRemoves()
+    public async Task DeleteEntityReturnsTrueAndRemoves()
     {
         var sut = CreateSut();
         var created = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "ToDelete", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -183,7 +183,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     /// FR-MCP-079: Verifies that DeleteEntityAsync returns false for a nonexistent entity.
     /// </summary>
     [Fact]
-    public async Task DeleteEntity_ReturnsFalseForNonexistent()
+    public async Task DeleteEntityReturnsFalseForNonexistent()
     {
         var sut = CreateSut();
 

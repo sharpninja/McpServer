@@ -11,7 +11,7 @@ public sealed class SessionLogSanitizerTests
 {
     /// <summary>Default rules redact bearer tokens, JWTs, provider token prefixes, and PEM private keys.</summary>
     [Fact]
-    public void SanitizeString_RedactsDefaultTokenAndKeyPatterns()
+    public void SanitizeStringRedactsDefaultTokenAndKeyPatterns()
     {
         var sanitizer = CreateSanitizer();
         const string jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -44,7 +44,7 @@ public sealed class SessionLogSanitizerTests
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
-    public void SanitizeString_RedactsDefaultTokenAndKeyPatterns_Repeated(int iteration)
+    public void SanitizeStringRedactsDefaultTokenAndKeyPatternsRepeated(int iteration)
     {
         _ = iteration;
         var sanitizer = CreateSanitizer();
@@ -66,7 +66,7 @@ public sealed class SessionLogSanitizerTests
 
     /// <summary>Default rules redact password, secret, API-key assignments, and connection-string passwords.</summary>
     [Fact]
-    public void SanitizeString_RedactsAssignmentsAndConnectionStringPasswords()
+    public void SanitizeStringRedactsAssignmentsAndConnectionStringPasswords()
     {
         var sanitizer = CreateSanitizer();
         const string password = "hunter2";
@@ -87,7 +87,7 @@ public sealed class SessionLogSanitizerTests
 
     /// <summary>Multiple secrets in one value are independently redacted.</summary>
     [Fact]
-    public void SanitizeString_RedactsMultipleSecretsInOneValue()
+    public void SanitizeStringRedactsMultipleSecretsInOneValue()
     {
         var sanitizer = CreateSanitizer();
         var input = "token=local-secret Authorization: Bearer zyxwvutsrqponmlkjihgfedcba sk-abcdef1234567890abcdef1234567890";
@@ -104,7 +104,7 @@ public sealed class SessionLogSanitizerTests
 
     /// <summary>Caller-configured overlapping rules run in configured order and produce deterministic replacement tokens.</summary>
     [Fact]
-    public void SanitizeString_AppliesOverlappingConfiguredRulesInOrder()
+    public void SanitizeStringAppliesOverlappingConfiguredRulesInOrder()
     {
         var sanitizer = CreateSanitizer(new SessionLogSanitizationOptions
         {
@@ -124,7 +124,7 @@ public sealed class SessionLogSanitizerTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void SanitizeString_PreservesNullAndEmptyValues(string? value)
+    public void SanitizeStringPreservesNullAndEmptyValues(string? value)
     {
         var sanitizer = CreateSanitizer();
 
@@ -135,7 +135,7 @@ public sealed class SessionLogSanitizerTests
 
     /// <summary>A second sanitizer pass leaves already-redacted values unchanged.</summary>
     [Fact]
-    public void SanitizeString_IsIdempotent()
+    public void SanitizeStringIsIdempotent()
     {
         var sanitizer = CreateSanitizer();
         const string input = "password=hunter2 Authorization: Bearer abcdefghijklmnopqrstuvwxyz123456";
@@ -148,7 +148,7 @@ public sealed class SessionLogSanitizerTests
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-008: clone copies planFile and todoId.</summary>
     [Fact]
-    public void SanitizeTurn_CopiesPlanFileAndTodoId()
+    public void SanitizeTurnCopiesPlanFileAndTodoId()
     {
         var sanitizer = CreateSanitizer();
         var source = new UnifiedSessionLogDto
@@ -174,7 +174,7 @@ public sealed class SessionLogSanitizerTests
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-008: sanitizer does not mutate the source turn.</summary>
     [Fact]
-    public void SanitizeTurn_DoesNotMutateSource()
+    public void SanitizeTurnDoesNotMutateSource()
     {
         var sanitizer = CreateSanitizer();
         var sourceTurn = new UnifiedRequestEntryDto
@@ -199,7 +199,7 @@ public sealed class SessionLogSanitizerTests
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-008: None is not rewritten.</summary>
     [Fact]
-    public void SanitizeTurn_LeavesNoneUnchanged()
+    public void SanitizeTurnLeavesNoneUnchanged()
     {
         var sanitizer = CreateSanitizer();
         var source = new UnifiedSessionLogDto

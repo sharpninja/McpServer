@@ -19,7 +19,7 @@ public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFact
 
     /// <summary>GET /qbrainai/repo/list returns 200 and entries array.</summary>
     [Fact]
-    public async Task List_ReturnsOk()
+    public async Task ListReturnsOk()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/repo/list", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -30,7 +30,7 @@ public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFact
 
     /// <summary>GET /qbrainai/repo/file without path returns 400.</summary>
     [Fact]
-    public async Task ReadFile_WithoutPath_ReturnsBadRequest()
+    public async Task ReadFileWithoutPathReturnsBadRequest()
     {
         var response = await _client.GetAsync(new Uri("/qbrainai/repo/file", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -38,7 +38,7 @@ public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFact
 
     /// <summary>POST /qbrainai/repo/file without body returns 400.</summary>
     [Fact]
-    public async Task WriteFile_WithoutPath_ReturnsBadRequest()
+    public async Task WriteFileWithoutPathReturnsBadRequest()
     {
         var response = await _client.PostAsJsonAsync(new Uri("/qbrainai/repo/file", UriKind.Relative), new { }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

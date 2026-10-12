@@ -47,7 +47,7 @@ public sealed class UseCaseDiagramGraphCqrsTests : IDisposable
 
     /// <summary>AC-012-1: GET returns empty schema-v1 graph when none saved.</summary>
     [Fact]
-    public async Task GetGraph_WhenNoneSaved_ReturnsEmptySchemaV1()
+    public async Task GetGraphWhenNoneSavedReturnsEmptySchemaV1()
     {
         var id = await CreateUseCaseAsync("UC A").ConfigureAwait(true);
         await using var db = CreateContext();
@@ -64,7 +64,7 @@ public sealed class UseCaseDiagramGraphCqrsTests : IDisposable
 
     /// <summary>AC-012-2: PUT then GET round-trips graph.</summary>
     [Fact]
-    public async Task PutGraph_ThenGet_RoundTrips()
+    public async Task PutGraphThenGetRoundTrips()
     {
         var id = await CreateUseCaseAsync("UC B").ConfigureAwait(true);
         var graph = SampleGraph();
@@ -91,7 +91,7 @@ public sealed class UseCaseDiagramGraphCqrsTests : IDisposable
 
     /// <summary>AC-012-5: Unknown edge type rejected.</summary>
     [Fact]
-    public async Task PutGraph_InvalidEdgeType_FailsValidation()
+    public async Task PutGraphInvalidEdgeTypeFailsValidation()
     {
         var id = await CreateUseCaseAsync("UC C").ConfigureAwait(true);
         var graph = SampleGraph();
@@ -108,7 +108,7 @@ public sealed class UseCaseDiagramGraphCqrsTests : IDisposable
 
     /// <summary>AC-012-5: Edge referencing missing node rejected.</summary>
     [Fact]
-    public async Task PutGraph_MissingNodeRef_FailsValidation()
+    public async Task PutGraphMissingNodeRefFailsValidation()
     {
         var id = await CreateUseCaseAsync("UC D").ConfigureAwait(true);
         var graph = SampleGraph();
@@ -125,7 +125,7 @@ public sealed class UseCaseDiagramGraphCqrsTests : IDisposable
 
     /// <summary>AC-012-6: Put writes DataAuditLog rows for UseCaseEntity.</summary>
     [Fact]
-    public async Task PutGraph_EmitsAuditLogRows()
+    public async Task PutGraphEmitsAuditLogRows()
     {
         var id = await CreateUseCaseAsync("UC E").ConfigureAwait(true);
         await using var db = CreateContext();
@@ -169,7 +169,7 @@ public sealed class UseCaseDiagramGraphCqrsTests : IDisposable
 
     /// <summary>AC-012-4: Soft-deleted use case is not returned by default get graph.</summary>
     [Fact]
-    public async Task GetGraph_AfterSoftDelete_NotFound()
+    public async Task GetGraphAfterSoftDeleteNotFound()
     {
         var id = await CreateUseCaseAsync("UC F").ConfigureAwait(true);
         await using (var db = CreateContext())

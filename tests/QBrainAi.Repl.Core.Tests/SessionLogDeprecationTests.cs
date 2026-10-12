@@ -30,7 +30,7 @@ public class SessionLogDeprecationTests
     /// this process and never touches the legacy workflow state.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_BeginTurnWithExplicitIds_RoutesStatelesslyToClient()
+    public async Task DispatcherBeginTurnWithExplicitIdsRoutesStatelesslyToClient()
     {
         var (sut, passthrough, legacyWorkflow) = BuildSut();
 
@@ -64,7 +64,7 @@ public class SessionLogDeprecationTests
     /// method, carrying the turn payload (response + evidence) through.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_CompleteTurnWithExplicitIds_RoutesStatelesslyToClient()
+    public async Task DispatcherCompleteTurnWithExplicitIdsRoutesStatelesslyToClient()
     {
         var (sut, passthrough, legacyWorkflow) = BuildSut();
 
@@ -92,7 +92,7 @@ public class SessionLogDeprecationTests
 
     /// <summary>failTurn with explicit ids routes statelessly and maps errorMessage to the failure note.</summary>
     [Fact]
-    public async Task Dispatcher_FailTurnWithExplicitIds_RoutesStatelesslyToClient()
+    public async Task DispatcherFailTurnWithExplicitIdsRoutesStatelesslyToClient()
     {
         var (sut, passthrough, legacyWorkflow) = BuildSut();
 
@@ -119,7 +119,7 @@ public class SessionLogDeprecationTests
 
     /// <summary>openSession with explicit ids routes to the idempotent stateless client open.</summary>
     [Fact]
-    public async Task Dispatcher_OpenSessionWithExplicitIds_RoutesStatelesslyToClient()
+    public async Task DispatcherOpenSessionWithExplicitIdsRoutesStatelesslyToClient()
     {
         var (sut, passthrough, legacyWorkflow) = BuildSut();
 
@@ -149,7 +149,7 @@ public class SessionLogDeprecationTests
 
     /// <summary>Other workflow namespaces (todo) are marked deprecated too.</summary>
     [Fact]
-    public async Task Dispatcher_WorkflowTodoResponse_IsMarkedDeprecated()
+    public async Task DispatcherWorkflowTodoResponseIsMarkedDeprecated()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         var todo = Substitute.For<ITodoWorkflow>();
@@ -167,7 +167,7 @@ public class SessionLogDeprecationTests
 
     /// <summary>client.* passthrough responses are NOT marked deprecated.</summary>
     [Fact]
-    public async Task Dispatcher_ClientPassthroughResponse_IsNotMarkedDeprecated()
+    public async Task DispatcherClientPassthroughResponseIsNotMarkedDeprecated()
     {
         var passthrough = Substitute.For<IGenericClientPassthrough>();
         passthrough.InvokeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
@@ -185,7 +185,7 @@ public class SessionLogDeprecationTests
 
     /// <summary>The serializer emits the deprecated flag on the wire and omits it when null.</summary>
     [Fact]
-    public void YamlSerializer_ResultPayloadDeprecated_EmitsDeprecatedField()
+    public void YamlSerializerResultPayloadDeprecatedEmitsDeprecatedField()
     {
         var serializer = new YamlSerializer();
 
@@ -211,7 +211,7 @@ public class SessionLogDeprecationTests
     /// The ids path is stateless for the *server* call but we mirror to _state for legacy mid-turn commands.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_BeginWithExplicitIds_PopulatesLocalState_AppendActionsSucceeds_AndActionPersists()
+    public async Task DispatcherBeginWithExplicitIdsPopulatesLocalStateAppendActionsSucceedsAndActionPersists()
     {
         // Use a *real* workflow (not substitute) so we can observe CurrentSession and the Submit that carries actions.
         var stubClient = new StubSessionLogClient();
@@ -294,7 +294,7 @@ public class SessionLogDeprecationTests
     /// The hard-coded ?? "Codex" was one cause of turns landing in the wrong session prefix.
     /// </summary>
     [Fact]
-    public async Task Dispatcher_OpenSession_RespectsSuppliedAgent_NoSilentCodexFallback()
+    public async Task DispatcherOpenSessionRespectsSuppliedAgentNoSilentCodexFallback()
     {
         var stubClient = new StubSessionLogClient();
         var realWorkflow = new SessionLogWorkflow(stubClient, TimeProvider.System);

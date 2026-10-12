@@ -7,7 +7,7 @@ namespace QBrainAi.QBAgent.Tests;
 public sealed class QBAgentSessionLogTests
 {
     [Fact]
-    public void CreateNew_WritesJsonlUnderRoot_WithSessionId()
+    public void CreateNewWritesJsonlUnderRootWithSessionId()
     {
         var root = NewRoot();
         var clock = new FixedUtcTimeProvider(new DateTimeOffset(2026, 9, 11, 15, 4, 5, 123, TimeSpan.Zero));
@@ -23,7 +23,7 @@ public sealed class QBAgentSessionLogTests
     }
 
     [Fact]
-    public void Append_WritesOneJsonObjectPerLine()
+    public void AppendWritesOneJsonObjectPerLine()
     {
         var root = NewRoot();
         var clock = new FixedUtcTimeProvider(new DateTimeOffset(2026, 9, 11, 15, 4, 5, TimeSpan.Zero));
@@ -39,7 +39,7 @@ public sealed class QBAgentSessionLogTests
     }
 
     [Fact]
-    public void Open_ReplaysUserAndAssistantAsChatMessages()
+    public void OpenReplaysUserAndAssistantAsChatMessages()
     {
         var root = NewRoot();
         var clock = new FixedUtcTimeProvider(new DateTimeOffset(2026, 9, 11, 15, 4, 5, TimeSpan.Zero));
@@ -57,7 +57,7 @@ public sealed class QBAgentSessionLogTests
     }
 
     [Fact]
-    public void OpenLatest_ReturnsMostRecentSession()
+    public void OpenLatestReturnsMostRecentSession()
     {
         var root = NewRoot();
         var older = QBAgentSessionLog.CreateNew(
@@ -71,7 +71,7 @@ public sealed class QBAgentSessionLogTests
     }
 
     [Fact]
-    public void Open_MissingSession_ThrowsFileNotFound()
+    public void OpenMissingSessionThrowsFileNotFound()
     {
         var root = NewRoot();
         var ex = Assert.Throws<FileNotFoundException>(() => QBAgentSessionLog.Open("qbagent-missing", root));

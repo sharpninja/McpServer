@@ -12,7 +12,7 @@ public sealed class QBAgentBootstrapperTests
 {
     /// <summary>With no marker in the start directory, bootstrap reports a graceful no-marker exit and binds nothing.</summary>
     [Fact]
-    public void Bootstrap_NoMarker_ReportsGracefulExit()
+    public void BootstrapNoMarkerReportsGracefulExit()
     {
         using var dir = new TempDirectory();
 
@@ -25,7 +25,7 @@ public sealed class QBAgentBootstrapperTests
 
     /// <summary>A valid marker binds baseUrl and apiKey from the marker and applies the QBAgent (QuadBrain-only) profile.</summary>
     [Fact]
-    public void Bootstrap_ValidMarker_BindsQuadBrainEndpointAndProfile()
+    public void BootstrapValidMarkerBindsQuadBrainEndpointAndProfile()
     {
         using var dir = new TempDirectory();
         dir.WriteMarker(
@@ -51,7 +51,7 @@ public sealed class QBAgentBootstrapperTests
 
     /// <summary>A marker missing the apiKey is rejected as invalid (QBAgent cannot bind to QuadBrain).</summary>
     [Fact]
-    public void Bootstrap_MarkerMissingApiKey_ReturnsInvalid()
+    public void BootstrapMarkerMissingApiKeyReturnsInvalid()
     {
         using var dir = new TempDirectory();
         dir.WriteMarker("baseUrl: http://localhost:7147");
@@ -64,7 +64,7 @@ public sealed class QBAgentBootstrapperTests
 
     /// <summary>A marker with a non-absolute baseUrl is rejected as invalid.</summary>
     [Fact]
-    public void Bootstrap_MarkerInvalidBaseUrl_ReturnsInvalid()
+    public void BootstrapMarkerInvalidBaseUrlReturnsInvalid()
     {
         using var dir = new TempDirectory();
         dir.WriteMarker("baseUrl: not-a-uri", "apiKey: test-key");

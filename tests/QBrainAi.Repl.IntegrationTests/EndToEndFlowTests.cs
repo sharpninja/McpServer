@@ -26,7 +26,7 @@ public sealed class EndToEndFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task CompleteFlow_HelloHandshake_ThenWorkspaceSelection()
+    public async Task CompleteFlowHelloHandshakeThenWorkspaceSelection()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -54,7 +54,7 @@ public sealed class EndToEndFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task CompleteFlow_TrustBootstrapWithHealthCheck()
+    public async Task CompleteFlowTrustBootstrapWithHealthCheck()
     {
         var serverUrl = "http://localhost:5177";
         var testNonce = "e2e-nonce-123";
@@ -95,7 +95,7 @@ public sealed class EndToEndFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task CompleteFlow_MultipleWorkspaceSwitch_WithAuth()
+    public async Task CompleteFlowMultipleWorkspaceSwitchWithAuth()
     {
         var serverUrl = "http://localhost:5177";
         var apiKey = "e2e-test-key-001";
@@ -134,7 +134,7 @@ public sealed class EndToEndFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task CompleteFlow_InvalidThenValidRequest()
+    public async Task CompleteFlowInvalidThenValidRequest()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -155,7 +155,7 @@ public sealed class EndToEndFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task CompleteFlow_StressTest_MultipleRapidRequests()
+    public async Task CompleteFlowStressTestMultipleRapidRequests()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -174,7 +174,7 @@ public sealed class EndToEndFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task CompleteFlow_AllEnvelopeTypes_InSequence()
+    public async Task CompleteFlowAllEnvelopeTypesInSequence()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -203,7 +203,7 @@ public sealed class EndToEndFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task CompleteFlow_HttpAndYaml_InterleavedRequests()
+    public async Task CompleteFlowHttpAndYamlInterleavedRequests()
     {
         var serverUrl = "http://localhost:5177";
         var apiKey = "interleaved-test-key";
@@ -232,7 +232,7 @@ public sealed class EndToEndFlowTests : IDisposable
     }
 
     [Fact]
-    public async Task CompleteFlow_ProcessCleanShutdown_AfterMultipleRequests()
+    public async Task CompleteFlowProcessCleanShutdownAfterMultipleRequests()
     {
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);

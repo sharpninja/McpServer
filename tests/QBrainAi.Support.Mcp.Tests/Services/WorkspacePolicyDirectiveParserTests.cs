@@ -14,7 +14,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class WorkspacePolicyDirectiveParserTests
 {
     [Fact]
-    public async Task ParseAsync_WhenCopilotFails_FallsBackToDeterministicParser()
+    public async Task ParseAsyncWhenCopilotFailsFallsBackToDeterministicParser()
     {
         var copilot = Substitute.For<IAgentCliClient>();
         copilot.InvokeAsync(Arg.Any<string>(), Arg.Any<AgentCliClientOptions?>(), Arg.Any<CancellationToken>())
@@ -36,7 +36,7 @@ public sealed class WorkspacePolicyDirectiveParserTests
     }
 
     [Fact]
-    public async Task ParseAsync_InvalidDirective_ReturnsFailure()
+    public async Task ParseAsyncInvalidDirectiveReturnsFailure()
     {
         var copilot = Substitute.For<IAgentCliClient>();
         copilot.InvokeAsync(Arg.Any<string>(), Arg.Any<AgentCliClientOptions?>(), Arg.Any<CancellationToken>())
@@ -53,7 +53,7 @@ public sealed class WorkspacePolicyDirectiveParserTests
     }
 
     [Fact]
-    public async Task ParseAsync_UsesInfiniteCopilotTimeout()
+    public async Task ParseAsyncUsesInfiniteCopilotTimeout()
     {
         AgentCliClientOptions? capturedOptions = null;
         var copilot = Substitute.For<IAgentCliClient>();

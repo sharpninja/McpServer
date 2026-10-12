@@ -20,7 +20,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-MCP-TRIAGE-001: SubmitReportAsync posts the shared triage report contract.</summary>
     [Fact]
-    public async Task SubmitReportAsync_PostsReportContract()
+    public async Task SubmitReportAsyncPostsReportContract()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.Accepted,
@@ -43,7 +43,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-MCP-TRIAGE-001: GetReportAsync reads a report by id.</summary>
     [Fact]
-    public async Task GetReportAsync_SendsCorrectUrl()
+    public async Task GetReportAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"reportId":"triage-report-001","groupId":"triage-group-001","status":"collecting","title":"bug","summary":"details"}""");
         using var http = new HttpClient(handler);
@@ -58,7 +58,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-MCP-TRIAGE-002: QueryGroupsAsync supports status and workspace filters.</summary>
     [Fact]
-    public async Task QueryGroupsAsync_SendsFilters()
+    public async Task QueryGroupsAsyncSendsFilters()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -75,7 +75,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-MCP-TRIAGE-002: GetGroupAsync reads a group by id.</summary>
     [Fact]
-    public async Task GetGroupAsync_SendsCorrectUrl()
+    public async Task GetGroupAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"groupId":"triage-group-001","status":"collecting","reportCount":1,"quietDeadlineUtc":"2026-06-25T05:15:00Z"}""");
         using var http = new HttpClient(handler);
@@ -90,7 +90,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-MCP-TRIAGE-002: FlushGroupAsync posts the flush command.</summary>
     [Fact]
-    public async Task FlushGroupAsync_PostsCorrectUrl()
+    public async Task FlushGroupAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"groupId":"triage-group-001","status":"queued","reportCount":1,"quietDeadlineUtc":"2026-06-25T05:00:00Z"}""");
         using var http = new HttpClient(handler);
@@ -105,7 +105,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-MCP-TRIAGE-005: RetryGroupAsync posts the retry command.</summary>
     [Fact]
-    public async Task RetryGroupAsync_PostsCorrectUrl()
+    public async Task RetryGroupAsyncPostsCorrectUrl()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"groupId":"triage-group-001","status":"collecting","reportCount":1,"quietDeadlineUtc":"2026-06-25T05:00:00Z"}""");
         using var http = new HttpClient(handler);
@@ -120,7 +120,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-MCP-TRIAGE-005: forced RetryGroupAsync passes the force query flag.</summary>
     [Fact]
-    public async Task RetryGroupAsync_WhenForceTrue_PostsForceQueryFlag()
+    public async Task RetryGroupAsyncWhenForceTruePostsForceQueryFlag()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"groupId":"triage-group-001","status":"collecting","reportCount":1,"quietDeadlineUtc":"2026-06-25T05:00:00Z"}""");
         using var http = new HttpClient(handler);
@@ -136,7 +136,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-TRIAGE-003: CreateGroupFromSelectionAsync posts selected reports and groups.</summary>
     [Fact]
-    public async Task CreateGroupFromSelectionAsync_PostsSelection()
+    public async Task CreateGroupFromSelectionAsyncPostsSelection()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -162,7 +162,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-TRIAGE-003: ConsolidateIntoGroupAsync posts selection to the target group.</summary>
     [Fact]
-    public async Task ConsolidateIntoGroupAsync_PostsSelectionToTargetGroup()
+    public async Task ConsolidateIntoGroupAsyncPostsSelectionToTargetGroup()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -182,7 +182,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-TRIAGE-003: MergeGroupsAsync posts source groups to the target group.</summary>
     [Fact]
-    public async Task MergeGroupsAsync_PostsSourceGroupsToTargetGroup()
+    public async Task MergeGroupsAsyncPostsSourceGroupsToTargetGroup()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -202,7 +202,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-TRIAGE-001: GetDashboardAsync reads queue buckets and run history for a workspace.</summary>
     [Fact]
-    public async Task GetDashboardAsync_SendsWorkspaceFilter()
+    public async Task GetDashboardAsyncSendsWorkspaceFilter()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -220,7 +220,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-TRIAGE-001: QueryRunsAsync sends status, group, and workspace filters.</summary>
     [Fact]
-    public async Task QueryRunsAsync_SendsFilters()
+    public async Task QueryRunsAsyncSendsFilters()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[],"totalCount":0}""");
         using var http = new HttpClient(handler);
@@ -241,7 +241,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-TRIAGE-001: GetRunAsync reads AI triage run result details by id.</summary>
     [Fact]
-    public async Task GetRunAsync_SendsCorrectUrl()
+    public async Task GetRunAsyncSendsCorrectUrl()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -259,7 +259,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-TRIAGE-002: QueryCreatedTodosAsync reads TODO ids created by triage.</summary>
     [Fact]
-    public async Task QueryCreatedTodosAsync_SendsWorkspaceFilter()
+    public async Task QueryCreatedTodosAsyncSendsWorkspaceFilter()
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
@@ -279,7 +279,7 @@ public sealed class TriageClientTests
 
     /// <summary>TEST-MCP-REPL-TRIAGE-001: QBrainAiClient exposes Triage for generic client passthrough.</summary>
     [Fact]
-    public void QBrainAiClient_ExposesTriageAndPropagatesWorkspacePath()
+    public void QBrainAiClientExposesTriageAndPropagatesWorkspacePath()
     {
         using var http = new HttpClient(new MockHttpHandler(HttpStatusCode.OK, "{}"));
         var client = new QBrainAiClient(http, DefaultOptions);

@@ -477,7 +477,7 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
         AgentHelpGuardResult? guardResult = null;
         if (_options.CurrentValue.GuardEnabled)
         {
-            guardResult = _inboundGuard.Evaluate(trimmed);
+            guardResult = AgentHelpInboundGuard.Evaluate(trimmed);
             if (!guardResult.Allowed)
             {
                 var incidentId = await RecordBlockedTurnAsync(state, turnId, guardResult, cancellationToken)

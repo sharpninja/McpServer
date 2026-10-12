@@ -30,7 +30,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task InitializeAsync_CreatesRequiredDirectoryStructure()
+    public async Task InitializeAsyncCreatesRequiredDirectoryStructure()
     {
         var sut = CreateSut(enabled: true);
 
@@ -45,7 +45,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task IndexAsync_WritesReadyArtifactAndMarksIndexed()
+    public async Task IndexAsyncWritesReadyArtifactAndMarksIndexed()
     {
         var sut = CreateSut(enabled: true);
         await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -60,7 +60,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task QueryAsync_WhenDisabled_ReturnsFallbackReason()
+    public async Task QueryAsyncWhenDisabledReturnsFallbackReason()
     {
         var sut = CreateSut(enabled: false);
 
@@ -76,7 +76,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task Status_InternalFallback_ReportsCorpusAndInputDiagnostics()
+    public async Task StatusInternalFallbackReportsCorpusAndInputDiagnostics()
     {
         var sut = CreateSut(enabled: true);
         var initialized = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -94,7 +94,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task IndexAsync_WhenExternalCommandFails_PersistsFailureStatus()
+    public async Task IndexAsyncWhenExternalCommandFailsPersistsFailureStatus()
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner
@@ -115,7 +115,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task InitializeAsync_GlobalScope_UsesDataFolderRoot()
+    public async Task InitializeAsyncGlobalScopeUsesDataFolderRoot()
     {
         var dataFolder = Path.Combine(_workspacePath, "mcp-data");
         Directory.CreateDirectory(dataFolder);
@@ -134,7 +134,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task QueryAsync_GlobalScope_SearchesGlobalInputCorpus()
+    public async Task QueryAsyncGlobalScopeSearchesGlobalInputCorpus()
     {
         var dataFolder = Path.Combine(_workspacePath, "mcp-data");
         Directory.CreateDirectory(dataFolder);
@@ -171,7 +171,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task Status_WithRootedPath_UsesWorkspaceIsolatedSubfolders()
+    public async Task StatusWithRootedPathUsesWorkspaceIsolatedSubfolders()
     {
         var sharedRoot = Path.Combine(_workspacePath, "shared-graphrag-root");
         Directory.CreateDirectory(sharedRoot);
@@ -193,7 +193,7 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task InitializeAsync_RemovesStaleTemporaryArtifacts()
+    public async Task InitializeAsyncRemovesStaleTemporaryArtifacts()
     {
         var sut = CreateSut(enabled: true);
         var status = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);

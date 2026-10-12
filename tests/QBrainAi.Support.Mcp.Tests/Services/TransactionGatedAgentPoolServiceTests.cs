@@ -16,7 +16,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
 {
     /// <summary>start-agent delegates to the inner pool while required transactions are active.</summary>
     [Fact]
-    public async Task StartAgentAsync_WhenTransactionsRequired_DelegatesToInner()
+    public async Task StartAgentAsyncWhenTransactionsRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IAgentPoolService>();
         inner.StartAgentAsync("planner", @"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
@@ -33,7 +33,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
 
     /// <summary>enqueue delegates when the coordinator is degraded.</summary>
     [Fact]
-    public async Task EnqueueOneShotAsync_WhenCoordinatorDegraded_DelegatesToInner()
+    public async Task EnqueueOneShotAsyncWhenCoordinatorDegradedDelegatesToInner()
     {
         var inner = Substitute.For<IAgentPoolService>();
         inner.EnqueueOneShotAsync(Arg.Any<AgentPoolOneShotRequest>(), Arg.Any<CancellationToken>())
@@ -50,7 +50,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
 
     /// <summary>connect delegates to the inner pool while required transactions are active.</summary>
     [Fact]
-    public async Task ConnectInteractiveAsync_WhenTransactionsRequired_DelegatesToInner()
+    public async Task ConnectInteractiveAsyncWhenTransactionsRequiredDelegatesToInner()
     {
         var inner = Substitute.For<IAgentPoolService>();
         inner.ConnectInteractiveAsync("planner", @"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
@@ -67,7 +67,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
 
     /// <summary>read-only agent status queries delegate while mutation transactions are required.</summary>
     [Fact]
-    public async Task GetAgentsAsync_WhenTransactionsRequired_Delegates()
+    public async Task GetAgentsAsyncWhenTransactionsRequiredDelegates()
     {
         var inner = Substitute.For<IAgentPoolService>();
         inner.GetAgentsAsync(@"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())
@@ -84,7 +84,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
 
     /// <summary>workspace seed delegates because it only materializes configured in-memory pool slots.</summary>
     [Fact]
-    public async Task SeedWorkspaceAgentsAsync_WhenTransactionsRequired_Delegates()
+    public async Task SeedWorkspaceAgentsAsyncWhenTransactionsRequiredDelegates()
     {
         var inner = Substitute.For<IAgentPoolService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
@@ -98,7 +98,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
 
     /// <summary>start-agent delegates when mutation transactions are not required.</summary>
     [Fact]
-    public async Task StartAgentAsync_WhenTransactionsNotRequired_Delegates()
+    public async Task StartAgentAsyncWhenTransactionsNotRequiredDelegates()
     {
         var inner = Substitute.For<IAgentPoolService>();
         inner.StartAgentAsync("planner", @"Q:\__mcp_unit_test__\QBrainAi", Arg.Any<CancellationToken>())

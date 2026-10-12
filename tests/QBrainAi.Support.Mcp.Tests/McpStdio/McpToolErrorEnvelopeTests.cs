@@ -45,7 +45,7 @@ public sealed class McpToolErrorEnvelopeTests : IDisposable
 
     /// <summary>DbUpdateException on complete_turn includes persistence/conflict code and inner text.</summary>
     [Fact]
-    public async Task SessionLogCompleteTurn_DbUpdateException_ReturnsFourFieldEnvelopeWithInner()
+    public async Task SessionLogCompleteTurnDbUpdateExceptionReturnsFourFieldEnvelopeWithInner()
     {
         var inner = new SqliteException("UNIQUE constraint failed: SessionLogTurns.RequestId", 19);
         _sessionLogService
@@ -73,7 +73,7 @@ public sealed class McpToolErrorEnvelopeTests : IDisposable
 
     /// <summary>KeyNotFound on complete_turn is not_found with retryable false.</summary>
     [Fact]
-    public async Task SessionLogCompleteTurn_KeyNotFound_ReturnsNotFoundEnvelope()
+    public async Task SessionLogCompleteTurnKeyNotFoundReturnsNotFoundEnvelope()
     {
         _sessionLogService
             .UpsertTurnAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<UnifiedRequestEntryDto>(), Arg.Any<CancellationToken>())
@@ -95,7 +95,7 @@ public sealed class McpToolErrorEnvelopeTests : IDisposable
 
     /// <summary>Ordinary validation failure is not retryable and has a stable code.</summary>
     [Fact]
-    public async Task SessionLogCompleteTurn_ArgumentException_ReturnsValidationEnvelope()
+    public async Task SessionLogCompleteTurnArgumentExceptionReturnsValidationEnvelope()
     {
         _sessionLogService
             .UpsertTurnAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<UnifiedRequestEntryDto>(), Arg.Any<CancellationToken>())

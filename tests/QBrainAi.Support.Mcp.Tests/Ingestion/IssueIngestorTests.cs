@@ -20,7 +20,7 @@ public sealed class IssueIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_IssuesExist_CreatesDocumentsWithIssueSourceType()
+    public async Task IngestAsyncIssuesExistCreatesDocumentsWithIssueSourceType()
     {
         var issues = new[] { new GitHubIssueItem(1, "Bug", "https://github.com/test/issues/1", "open") };
         _github.ListIssuesAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
@@ -37,7 +37,7 @@ public sealed class IssueIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_ContentIncludesTitleBodyComments()
+    public async Task IngestAsyncContentIncludesTitleBodyComments()
     {
         var issue = new GitHubIssueDetail(
             42, "Critical bug", "This is the body", "OPEN",
@@ -63,7 +63,7 @@ public sealed class IssueIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_GhFails_ReturnsEmpty()
+    public async Task IngestAsyncGhFailsReturnsEmpty()
     {
         _github.ListIssuesAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubIssueListResult(false, "not authenticated", Array.Empty<GitHubIssueItem>()));
@@ -74,7 +74,7 @@ public sealed class IssueIngestorTests
     }
 
     [Fact]
-    public async Task IngestAsync_GetIssueFails_SkipsIssue()
+    public async Task IngestAsyncGetIssueFailsSkipsIssue()
     {
         var issues = new[]
         {
@@ -95,7 +95,7 @@ public sealed class IssueIngestorTests
     }
 
     [Fact]
-    public void FormatIssueContent_IncludesAllSections()
+    public void FormatIssueContentIncludesAllSections()
     {
         var issue = new GitHubIssueDetail(
             1, "Test", "Body text", "OPEN", null,

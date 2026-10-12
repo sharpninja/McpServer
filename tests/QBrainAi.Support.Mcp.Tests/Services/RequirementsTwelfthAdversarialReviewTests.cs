@@ -16,7 +16,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
 {
     /// <summary>Traversal must reject a file count beyond its explicit limit.</summary>
     [Fact]
-    public void EnumerateFiles_FileCountLimit_Throws()
+    public void EnumerateFilesFileCountLimitThrows()
     {
         using var fixture = new TraversalFixture();
         fixture.Write("one.md", "1");
@@ -32,7 +32,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
 
     /// <summary>Traversal must reject a file larger than its explicit per-file byte limit.</summary>
     [Fact]
-    public void EnumerateFiles_PerFileByteLimit_Throws()
+    public void EnumerateFilesPerFileByteLimitThrows()
     {
         using var fixture = new TraversalFixture();
         fixture.Write("large.md", "12345");
@@ -47,7 +47,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
 
     /// <summary>Traversal must reject files whose combined size exceeds its aggregate limit.</summary>
     [Fact]
-    public void EnumerateFiles_AggregateByteLimit_Throws()
+    public void EnumerateFilesAggregateByteLimitThrows()
     {
         using var fixture = new TraversalFixture();
         fixture.Write("one.md", "1234");
@@ -63,7 +63,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
 
     /// <summary>Traversal must reject recursion beyond its explicit depth limit.</summary>
     [Fact]
-    public void EnumerateFiles_RecursionDepthLimit_Throws()
+    public void EnumerateFilesRecursionDepthLimitThrows()
     {
         using var fixture = new TraversalFixture();
         fixture.Write(Path.Combine("one", "two", "deep.md"), "deep");
@@ -80,7 +80,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// Enumeration must be lazy and observe cancellation after the first yielded file.
     /// </summary>
     [Fact]
-    public void EnumerateFiles_CancelledAfterFirstYield_StopsWithoutMaterializingAllPaths()
+    public void EnumerateFilesCancelledAfterFirstYieldStopsWithoutMaterializingAllPaths()
     {
         using var fixture = new TraversalFixture();
         fixture.Write("one.md", "1");
@@ -109,7 +109,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// </summary>
 #pragma warning disable xUnit1051 // Explicit deadlines must fail visibly instead of becoming runner-cancelled no-result tests.
     [Fact]
-    public async Task OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject()
+    public async Task OpenFileForReadDirectoryAliasSwapNeverReadsExternalObject()
     {
         using var fixture = new AliasSwapFixture();
         var method = ResolveContainedOpenMethod("OpenFileForRead");
@@ -171,7 +171,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// A swapping directory alias must never permit rollback-style writes to an external object.
     /// </summary>
     [Fact]
-    public async Task OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject()
+    public async Task OpenFileForWriteDirectoryAliasSwapNeverWritesExternalObject()
     {
         using var fixture = new AliasSwapFixture();
         var method = ResolveContainedOpenMethod("OpenFileForWrite");
@@ -560,7 +560,7 @@ public sealed class RequirementsTwelfthContainmentGateTests
 {
     /// <summary>Proves that rejecting every attempted contained operation fails the gate.</summary>
     [Fact]
-    public void AllRejectedAttempts_CannotPassConsumerGate()
+    public void AllRejectedAttemptsCannotPassConsumerGate()
     {
         _ = Assert.Throws<Xunit.Sdk.InRangeException>(
             () => RequirementsTwelfthAdversarialReviewTests.AssertRaceHadSuccessfulOperation(

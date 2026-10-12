@@ -34,7 +34,7 @@ public sealed class BrainSlotPartyKeyReconcilerTests
     /// because the key store holds no private half to copy.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_WhenCreativityPartyKeyIsMissing_MintsOwnKeyAndPreservesLegacy()
+    public async Task GetStatusAsyncWhenCreativityPartyKeyIsMissingMintsOwnKeyAndPreservesLegacy()
     {
         using var fixture = ReconcilerFixture.Create();
         var legacyKey = await fixture.RegisterLegacyPartyAsync(LegacyCreativityPartyId).ConfigureAwait(true);
@@ -61,7 +61,7 @@ public sealed class BrainSlotPartyKeyReconcilerTests
     /// own key rather than the legacy public PEM.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_WhenLogicPartyKeyIsMissing_MintsOwnKeyAndPreservesLegacy()
+    public async Task GetStatusAsyncWhenLogicPartyKeyIsMissingMintsOwnKeyAndPreservesLegacy()
     {
         using var fixture = ReconcilerFixture.Create();
         var legacyKey = await fixture.RegisterLegacyPartyAsync(LegacyLogicPartyId).ConfigureAwait(true);
@@ -81,7 +81,7 @@ public sealed class BrainSlotPartyKeyReconcilerTests
     /// rotate it, so an installation does not churn signing identities on every status call.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_RunTwice_KeepsTheSameMintedSigningKey()
+    public async Task GetStatusAsyncRunTwiceKeepsTheSameMintedSigningKey()
     {
         using var fixture = ReconcilerFixture.Create();
         var legacyKey = await fixture.RegisterLegacyPartyAsync(LegacyCreativityPartyId).ConfigureAwait(true);
@@ -104,7 +104,7 @@ public sealed class BrainSlotPartyKeyReconcilerTests
     /// key material for the renamed party.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_WhenNoLegacyPartyExists_NeverGeneratesKeyMaterial()
+    public async Task GetStatusAsyncWhenNoLegacyPartyExistsNeverGeneratesKeyMaterial()
     {
         using var fixture = ReconcilerFixture.Create();
         await fixture.AddRenamedSlotAsync("creativity", BrainSlotRoles.Creativity, CreativityPartyId).ConfigureAwait(true);
@@ -123,7 +123,7 @@ public sealed class BrainSlotPartyKeyReconcilerTests
     /// not overwrite that key with the legacy material.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_WhenPartyAlreadyHasSigningKey_LeavesItUnchanged()
+    public async Task GetStatusAsyncWhenPartyAlreadyHasSigningKeyLeavesItUnchanged()
     {
         using var fixture = ReconcilerFixture.Create();
         await fixture.Service.UpsertAsync(

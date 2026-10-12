@@ -21,7 +21,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Registry is disabled by default when no configuration is provided.</summary>
     [Fact]
-    public void IsEnabled_Default_IsFalse()
+    public void IsEnabledDefaultIsFalse()
     {
         var sut = CreateRegistry();
         Assert.False(sut.IsEnabled);
@@ -29,7 +29,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Registry reflects configuration when Enabled is true.</summary>
     [Fact]
-    public void IsEnabled_WhenConfiguredTrue_IsTrue()
+    public void IsEnabledWhenConfiguredTrueIsTrue()
     {
         var sut = CreateRegistry(o => o.Enabled = true);
         Assert.True(sut.IsEnabled);
@@ -37,7 +37,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>SetEnabled toggles the runtime state correctly.</summary>
     [Fact]
-    public void SetEnabled_TogglesState()
+    public void SetEnabledTogglesState()
     {
         var sut = CreateRegistry();
         sut.SetEnabled(true);
@@ -50,7 +50,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Returns null when federation is disabled regardless of targets.</summary>
     [Fact]
-    public void ResolveTarget_WhenDisabled_ReturnsNull()
+    public void ResolveTargetWhenDisabledReturnsNull()
     {
         var sut = CreateRegistry(o =>
         {
@@ -64,7 +64,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Returns null when enabled but no targets and no workspace route exist.</summary>
     [Fact]
-    public void ResolveTarget_WhenEnabledNoTargets_ReturnsNull()
+    public void ResolveTargetWhenEnabledNoTargetsReturnsNull()
     {
         var sut = CreateRegistry(o => o.Enabled = true);
         Assert.Null(sut.ResolveTarget(@"C:\ws\alpha"));
@@ -72,7 +72,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Returns the default target when enabled and no workspace route matches.</summary>
     [Fact]
-    public void ResolveTarget_FallsBackToDefault()
+    public void ResolveTargetFallsBackToDefault()
     {
         var sut = CreateRegistry(o =>
         {
@@ -88,7 +88,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Workspace-specific route takes priority over the global default.</summary>
     [Fact]
-    public void ResolveTarget_WorkspaceRoute_TakesPriorityOverDefault()
+    public void ResolveTargetWorkspaceRouteTakesPriorityOverDefault()
     {
         var sut = CreateRegistry(o =>
         {
@@ -110,7 +110,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Workspace path not in routes falls back to default target.</summary>
     [Fact]
-    public void ResolveTarget_UnknownWorkspace_FallsBackToDefault()
+    public void ResolveTargetUnknownWorkspaceFallsBackToDefault()
     {
         var sut = CreateRegistry(o =>
         {
@@ -131,7 +131,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Null workspace path still resolves the default target.</summary>
     [Fact]
-    public void ResolveTarget_NullWorkspace_ReturnsDefault()
+    public void ResolveTargetNullWorkspaceReturnsDefault()
     {
         var sut = CreateRegistry(o =>
         {
@@ -145,7 +145,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>LocalProxy resolves the configured hub target with the stable hub access token.</summary>
     [Fact]
-    public void ResolveTarget_LocalProxy_UsesHubAccessToken()
+    public void ResolveTargetLocalProxyUsesHubAccessToken()
     {
         var sut = CreateRegistry(o =>
         {
@@ -168,7 +168,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Adding a valid target succeeds and it appears in List().</summary>
     [Fact]
-    public void TryAddTarget_ValidOptions_AddsTarget()
+    public void TryAddTargetValidOptionsAddsTarget()
     {
         var sut = CreateRegistry();
         var opts = new FederationTargetOptions { Name = "t1", BaseUrl = "http://localhost:7148" };
@@ -182,7 +182,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Adding a target with a duplicate name fails.</summary>
     [Fact]
-    public void TryAddTarget_DuplicateName_ReturnsFalse()
+    public void TryAddTargetDuplicateNameReturnsFalse()
     {
         var sut = CreateRegistry();
         var opts = new FederationTargetOptions { Name = "t1", BaseUrl = "http://localhost:7148" };
@@ -196,7 +196,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Adding a target with an empty name fails.</summary>
     [Fact]
-    public void TryAddTarget_EmptyName_ReturnsFalse()
+    public void TryAddTargetEmptyNameReturnsFalse()
     {
         var sut = CreateRegistry();
         var opts = new FederationTargetOptions { Name = "", BaseUrl = "http://localhost:7148" };
@@ -211,7 +211,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Removing an existing target returns true and clears it from List().</summary>
     [Fact]
-    public void TryRemoveTarget_ExistingTarget_RemovesIt()
+    public void TryRemoveTargetExistingTargetRemovesIt()
     {
         var sut = CreateRegistry();
         sut.TryAddTarget(new FederationTargetOptions { Name = "t1", BaseUrl = "http://localhost:7148" }, out _);
@@ -224,7 +224,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Removing the default target also clears the default pointer.</summary>
     [Fact]
-    public void TryRemoveTarget_DefaultTarget_ClearsDefault()
+    public void TryRemoveTargetDefaultTargetClearsDefault()
     {
         var sut = CreateRegistry(o =>
         {
@@ -240,7 +240,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Removing a non-existent target returns false.</summary>
     [Fact]
-    public void TryRemoveTarget_NonExistent_ReturnsFalse()
+    public void TryRemoveTargetNonExistentReturnsFalse()
     {
         var sut = CreateRegistry();
         Assert.False(sut.TryRemoveTarget("ghost"));
@@ -250,7 +250,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>SetDefaultTarget with a valid name succeeds.</summary>
     [Fact]
-    public void SetDefaultTarget_ValidName_ReturnsTrue()
+    public void SetDefaultTargetValidNameReturnsTrue()
     {
         var sut = CreateRegistry(o =>
         {
@@ -265,7 +265,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>SetDefaultTarget with null clears the default.</summary>
     [Fact]
-    public void SetDefaultTarget_Null_ClearsDefault()
+    public void SetDefaultTargetNullClearsDefault()
     {
         var sut = CreateRegistry(o =>
         {
@@ -282,7 +282,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>Adding a workspace route routes correctly after SetWorkspaceRoute.</summary>
     [Fact]
-    public void SetWorkspaceRoute_ValidTarget_RoutesCorrectly()
+    public void SetWorkspaceRouteValidTargetRoutesCorrectly()
     {
         var sut = CreateRegistry(o =>
         {
@@ -298,7 +298,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>SetWorkspaceRoute returns false when the target does not exist.</summary>
     [Fact]
-    public void SetWorkspaceRoute_UnknownTarget_ReturnsFalse()
+    public void SetWorkspaceRouteUnknownTargetReturnsFalse()
     {
         var sut = CreateRegistry(o => o.Enabled = true);
         Assert.False(sut.SetWorkspaceRoute(@"C:\ws\alpha", "ghost"));
@@ -306,7 +306,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>RemoveWorkspaceRoute removes an existing rule and returns true.</summary>
     [Fact]
-    public void RemoveWorkspaceRoute_Existing_RemovesAndReturnsTrue()
+    public void RemoveWorkspaceRouteExistingRemovesAndReturnsTrue()
     {
         var sut = CreateRegistry(o =>
         {
@@ -325,7 +325,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>List reflects all configured targets with correct IsDefault flag.</summary>
     [Fact]
-    public void List_ReturnsAllTargetsWithCorrectIsDefault()
+    public void ListReturnsAllTargetsWithCorrectIsDefault()
     {
         var sut = CreateRegistry(o =>
         {
@@ -344,7 +344,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>ListRoutes reflects all configured workspace routing rules.</summary>
     [Fact]
-    public void ListRoutes_ReturnsAllRoutes()
+    public void ListRoutesReturnsAllRoutes()
     {
         var sut = CreateRegistry(o =>
         {
@@ -359,7 +359,7 @@ public sealed class FederationRegistryTests
 
     /// <summary>HasApiKey is true when target has an API key configured.</summary>
     [Fact]
-    public void List_TargetWithApiKey_HasApiKeyIsTrue()
+    public void ListTargetWithApiKeyHasApiKeyIsTrue()
     {
         var sut = CreateRegistry(o =>
             o.Targets.Add(new FederationTargetOptions { Name = "t1", BaseUrl = "http://localhost:7148", ApiKey = "secret" }));

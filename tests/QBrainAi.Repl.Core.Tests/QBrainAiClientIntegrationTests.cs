@@ -6,7 +6,7 @@ namespace QBrainAi.Repl.Core.Tests;
 public class QBrainAiClientIntegrationTests
 {
     [Fact]
-    public void QBrainAiClient_ApiKeyRotation_UpdatesAllSubClients()
+    public void QBrainAiClientApiKeyRotationUpdatesAllSubClients()
     {
         var httpClient = new HttpClient();
         var options = new QBrainAiClientOptions
@@ -25,7 +25,7 @@ public class QBrainAiClientIntegrationTests
     }
 
     [Fact]
-    public void QBrainAiClient_WorkspacePathChange_UpdatesAllSubClients()
+    public void QBrainAiClientWorkspacePathChangeUpdatesAllSubClients()
     {
         var httpClient = new HttpClient();
         var options = new QBrainAiClientOptions
@@ -44,7 +44,7 @@ public class QBrainAiClientIntegrationTests
     }
 
     [Fact]
-    public void QBrainAiClient_PortChange_UpdatesAllSubClients()
+    public void QBrainAiClientPortChangeUpdatesAllSubClients()
     {
         var httpClient = new HttpClient();
         var options = new QBrainAiClientOptions
@@ -62,7 +62,7 @@ public class QBrainAiClientIntegrationTests
     }
 
     [Fact]
-    public void QBrainAiClient_Logout_ClearsApiKeyAndBearerToken()
+    public void QBrainAiClientLogoutClearsApiKeyAndBearerToken()
     {
         var httpClient = new HttpClient();
         var options = new QBrainAiClientOptions
@@ -84,7 +84,7 @@ public class QBrainAiClientIntegrationTests
     }
 
     [Fact]
-    public async Task QBrainAiClient_MultipleAuthRotations_MaintainsConsistency()
+    public async Task QBrainAiClientMultipleAuthRotationsMaintainsConsistency()
     {
         var httpClient = new HttpClient();
         var options = new QBrainAiClientOptions
@@ -108,7 +108,7 @@ public class QBrainAiClientIntegrationTests
     }
 
     [Fact]
-    public async Task QBrainAiClient_SimultaneousWorkspaceAndAuthUpdate_HandlesCorrectly()
+    public async Task QBrainAiClientSimultaneousWorkspaceAndAuthUpdateHandlesCorrectly()
     {
         var httpClient = new HttpClient();
         var options = new QBrainAiClientOptions
@@ -130,7 +130,7 @@ public class QBrainAiClientIntegrationTests
     }
 
     [Fact]
-    public void QBrainAiClient_NullHttpClient_ThrowsArgumentNullException()
+    public void QBrainAiClientNullHttpClientThrowsArgumentNullException()
     {
         var options = new QBrainAiClientOptions
         {
@@ -141,7 +141,7 @@ public class QBrainAiClientIntegrationTests
     }
 
     [Fact]
-    public void QBrainAiClient_NullOptions_ThrowsArgumentNullException()
+    public void QBrainAiClientNullOptionsThrowsArgumentNullException()
     {
         var httpClient = new HttpClient();
 
@@ -149,7 +149,7 @@ public class QBrainAiClientIntegrationTests
     }
 
     [Fact]
-    public async Task QBrainAiClient_BearerTokenRotation_UpdatesAllSubClients()
+    public async Task QBrainAiClientBearerTokenRotationUpdatesAllSubClients()
     {
         var httpClient = new HttpClient();
         var options = new QBrainAiClientOptions

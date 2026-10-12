@@ -55,7 +55,7 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: dump policy registry covers every current DbSet exactly once.</summary>
     [Fact]
-    public void DumpPolicyRegistry_CoversEveryCurrentDbSetExactlyOnce()
+    public void DumpPolicyRegistryCoversEveryCurrentDbSetExactlyOnce()
     {
         var expected = typeof(McpDbContext).GetProperties()
             .Where(property => property.PropertyType.IsGenericType
@@ -73,7 +73,7 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: secret sentinels are redacted across scalar, nested, and encoded payloads.</summary>
     [Fact]
-    public async Task Dump_SecretSentinels_RedactedAcrossScalarNestedAndEncodedPayloads()
+    public async Task DumpSecretSentinelsRedactedAcrossScalarNestedAndEncodedPayloads()
     {
         SeedTodo("TODO-SECRET-SCALAR", $"api_key={SecretSentinel}");
         SeedTodo("TODO-SECRET-NESTED", "{\"api_key\":\"" + SecretSentinel + "\"}");
@@ -86,7 +86,7 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: diagnostics never echo the secret value.</summary>
     [Fact]
-    public async Task Dump_Diagnostics_NeverEchoSecretValue()
+    public async Task DumpDiagnosticsNeverEchoSecretValue()
     {
         SeedTodo("TODO-DIAG-SECRET", $"password={SecretSentinel}");
         var exported = await ExportAsync();
@@ -97,7 +97,7 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: dump excludes unrelated workspace rows and global secrets.</summary>
     [Fact]
-    public async Task Dump_ExcludesUnrelatedWorkspaceAndGlobalSecrets()
+    public async Task DumpExcludesUnrelatedWorkspaceAndGlobalSecrets()
     {
         SeedTodo("TODO-KEEP", "keep");
         using (var db = CreateDb())
@@ -122,7 +122,7 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: sha256 is computed after redaction on canonical UTF-8 JSON.</summary>
     [Fact]
-    public async Task Dump_FinalByteHash_VerifiesAfterRedaction()
+    public async Task DumpFinalByteHashVerifiesAfterRedaction()
     {
         SeedTodo("TODO-HASH-SECRET", $"secret={SecretSentinel}");
         var exported = await ExportAsync();
@@ -137,7 +137,7 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
     }
 
     [Fact]
-    public async Task Dump_AuditRecordsStayLocal()
+    public async Task DumpAuditRecordsStayLocal()
     {
         const string sentinel = "local-audit-only-92841";
         using (var db = CreateDb())

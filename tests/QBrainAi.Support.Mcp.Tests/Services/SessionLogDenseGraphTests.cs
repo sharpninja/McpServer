@@ -36,7 +36,7 @@ public sealed class SessionLogDenseGraphTests
     /// as separate queries. One SELECT must not join SessionLogActions and SessionLogTurnTags.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_DenseGraph_UsesSplitQueriesNotCartesianJoin()
+    public async Task UpsertTurnAsyncDenseGraphUsesSplitQueriesNotCartesianJoin()
     {
         await using var connection = OpenConnection();
         await SeedDenseSessionAsync(connection).ConfigureAwait(true);
@@ -68,7 +68,7 @@ public sealed class SessionLogDenseGraphTests
     /// and does not insert the turn or clear the existing session.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_SlowGraphLoad_FailsRetryableWithoutPersisting()
+    public async Task UpsertTurnAsyncSlowGraphLoadFailsRetryableWithoutPersisting()
     {
         await using var connection = OpenConnection();
         await SeedDenseSessionAsync(connection).ConfigureAwait(true);
@@ -98,7 +98,7 @@ public sealed class SessionLogDenseGraphTests
     /// The session is not reported missing and the new turn is not persisted.
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_SqlDeadlock1205_DoesNotReportMissingSession()
+    public async Task UpsertTurnAsyncSqlDeadlock1205DoesNotReportMissingSession()
     {
         await using var connection = OpenConnection();
         await SeedDenseSessionAsync(connection).ConfigureAwait(true);
