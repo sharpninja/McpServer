@@ -1,0 +1,38 @@
+{
+  "type": "result",
+  "payload": {
+    "result": {
+      "originalWorkspacePath": "/home/sharpninja/github/McpServer",
+      "groupId": "triage-group-2b5b8fca45c7528b",
+      "createdUtc": {
+        "nanosecond": 800,
+        "utcDateTime": "2026-10-11T18:40:10.7844898Z",
+        "totalOffsetMinutes": 0,
+        "day": 11,
+        "dateTime": "2026-10-11T18:40:10.7844898",
+        "hour": 18,
+        "timeOfDay": "18:40:10.7844898",
+        "year": 2026,
+        "dayOfWeek": "Sunday",
+        "minute": 40,
+        "localDateTime": "2026-10-11T13:40:10.7844898-05:00",
+        "month": 10,
+        "utcTicks": 639273408107844898,
+        "date": "2026-10-11T00:00:00.0000000",
+        "second": 10,
+        "microsecond": 489,
+        "millisecond": 784,
+        "offset": "00:00:00",
+        "dayOfYear": 284,
+        "ticks": 639273408107844898
+      },
+      "status": "grouped",
+      "reportId": "triage-report-cdf116adf956449fb0a8e576bd572f26",
+      "workspacePath": "/home/sharpninja/github/McpServer",
+      "title": "Build.Tests on Windows: eight Linux-only ServiceUpdateTests cases run and fail (mkfifo, Unix file modes, directory symlinks)",
+      "summary": "ServiceUpdateTests marks six Linux service-update methods (8 cases) with Trait Platform=Linux and Category=Integration, but nothing excludes or adapts them on Windows, and Build.Tests runs directly as the infrastructure check (never through Nuke Test, whose Category!=Integration filter would hide them). On Windows they fail: LinuxPreflight_RejectsSpecialApphostAndTextInputs (4 cases) and LinuxPreflight_RejectsSpecialStageFiles cannot start mkfifo; LinuxArchive_UsesPrivateMetadataPreservingCommands and LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False) throw PlatformNotSupportedException for Unix file modes; LinuxReplacement_DoesNotFollowSymlinks fails with UnauthorizedAccessException (symlink creation). No skips are allowed by the operator, so the tests need per-OS behavior (as BUG-BASELINE-004 did for Windows-only tests). Pre-existing: Build.Tests never ran on Windows before (the retired CI ran only ./build.ps1 Test)."
+    },
+    "requestId": "req-20261012T010242Z-b055",
+    "deprecated": true
+  }
+}

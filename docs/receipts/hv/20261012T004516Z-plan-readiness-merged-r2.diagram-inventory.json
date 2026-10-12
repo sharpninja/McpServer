@@ -1,0 +1,172 @@
+[
+  {
+    "Name": "MintSessionTurnCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "SubmitSessionLogCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "UpsertSessionTurnCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "PatchSessionTurnCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "ReplaceSessionTurnCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "CompleteSessionTurnCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "FailSessionTurnCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "RecordSessionTurnReviewCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "ResetSessionTurnReviewCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "GetSessionLogQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "QuerySessionLogsQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "GetAgentContextStatusQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "BuildAgentContextPackageCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "GetAgentContextPackageQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "QueryAgentContextPackagesQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "ReplayAgentContextPackageQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "SubmitAgentResponseCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "GetAgentResponseQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "QueryAgentResponsesQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "RunDeterministicGradeCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "RecordModelGradeCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "DecideAgentResponseTrustCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": false
+  },
+  {
+    "Name": "RejectAgentResponseCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "SupersedeAgentResponseCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "EvaluateStalenessCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "CreateAgentContextRelationshipCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "DeleteAgentContextRelationshipCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "QueryAgentContextRelationshipsQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "RetrieveAgentContextCandidatesQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "ProjectAgentResponsesCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "GetAgentContextPilotReportQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "CreateAgentContextHvRequestCommand",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "GetAgentContextHvRequestQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  },
+  {
+    "Name": "QueryAgentContextHvRequestsQuery",
+    "ActivityBlocks": 1,
+    "SequenceExists": true
+  }
+]
