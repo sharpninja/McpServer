@@ -4,6 +4,7 @@ using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.IntegrationTests;
 

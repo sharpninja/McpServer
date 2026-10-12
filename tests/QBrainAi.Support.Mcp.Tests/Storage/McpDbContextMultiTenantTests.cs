@@ -3,6 +3,7 @@ using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 

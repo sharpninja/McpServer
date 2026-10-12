@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Common.AgentCli.Processes;
 
 // TEST-MCP-TRIM-001: preserve existing assembly-qualified names after moving shared process execution.
 [assembly: TypeForwardedTo(typeof(IProcessRunner))]

@@ -5,6 +5,7 @@ using System.Text;
 using QBrainAi.Common.AgentCli;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
+using QBrainAi.Common.AgentCli.Processes;
 using MsOptions = Microsoft.Extensions.Options.Options;
 
 namespace QBrainAi.Support.Mcp.Tests.Documentation;

@@ -1,3 +1,5 @@
+using QBrainAi.Support.Mcp.Storage.Services;
+
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>TR-HANDOFF-SURFACE-001: One shared canonical workspace path for all handoff scopes.</summary>

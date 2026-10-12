@@ -6,6 +6,8 @@ using QBrainAi.TransactionSecurity.Services;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

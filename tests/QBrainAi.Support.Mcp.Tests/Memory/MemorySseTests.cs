@@ -1,5 +1,6 @@
 using QBrainAi.Support.Mcp.Notifications;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 

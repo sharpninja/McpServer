@@ -1,6 +1,8 @@
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 

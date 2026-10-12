@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System.Text.Json;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

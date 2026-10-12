@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using QBrainAi.Common.AgentCli;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Services;
 

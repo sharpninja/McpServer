@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Ingestion;
 
-namespace QBrainAi.Services;
+namespace QBrainAi.Support.Mcp;
 
 /// <summary>
 /// Extension methods for registering QBrainAi services with the DI container.

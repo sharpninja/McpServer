@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using ModelContextProtocol.Server;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

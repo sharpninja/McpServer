@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -40,7 +41,7 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
         var services = new ServiceCollection();
         // TR-MCP-TODO-008: WorkspaceContext fixture so legacy-migrated rows pass
         // the McpDbContext global query filter when the test re-reads them.
-        services.AddScoped(_ => new QBrainAi.Support.Mcp.Services.WorkspaceContext
+        services.AddScoped(_ => new QBrainAi.Support.Mcp.Storage.Services.WorkspaceContext
         {
             WorkspacePath = _tempRoot,
         });

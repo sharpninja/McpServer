@@ -1,5 +1,6 @@
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.Support.Mcp.Requirements;
 

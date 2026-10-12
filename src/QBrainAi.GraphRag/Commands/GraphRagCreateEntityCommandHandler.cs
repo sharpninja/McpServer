@@ -1,6 +1,8 @@
 using QBrainAi.Cqrs;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.GraphRag.Commands;
 

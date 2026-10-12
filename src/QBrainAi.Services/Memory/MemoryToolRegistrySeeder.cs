@@ -1,4 +1,7 @@
-namespace QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
+
+namespace QBrainAi.Support.Mcp.Memory;
 
 /// <summary>
 /// FR-MCP-MEMORY-017: Seeds additive and compat memory verbs into the tool registry

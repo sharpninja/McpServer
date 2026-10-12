@@ -1,9 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using QBrainAi.Support.Mcp.Indexing;
-using QBrainAi.Support.Mcp.Ingestion;
+using QBrainAi.Support.Mcp.Storage.Indexing;
 
-namespace QBrainAi.Storage;
+namespace QBrainAi.Support.Mcp.Storage;
 
 /// <summary>
 /// DI registration extension methods for QBrainAi.Storage services.

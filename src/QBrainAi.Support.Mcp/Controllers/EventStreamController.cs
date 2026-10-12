@@ -4,6 +4,8 @@ using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Controllers;
 

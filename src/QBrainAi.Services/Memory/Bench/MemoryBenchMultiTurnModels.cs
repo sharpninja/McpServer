@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-019 / TR-MCP-MEMORY-BENCH-003: One ordered turn inside a multi-turn job.

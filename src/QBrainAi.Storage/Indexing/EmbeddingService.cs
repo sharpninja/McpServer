@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 
-namespace QBrainAi.Support.Mcp.Indexing;
+namespace QBrainAi.Support.Mcp.Storage.Indexing;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: ONNX embedding service using all-MiniLM-L6-v2 for vector search.

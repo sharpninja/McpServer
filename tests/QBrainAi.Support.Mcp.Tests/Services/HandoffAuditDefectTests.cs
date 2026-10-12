@@ -8,6 +8,8 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 using MsOptions = Microsoft.Extensions.Options.Options;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;

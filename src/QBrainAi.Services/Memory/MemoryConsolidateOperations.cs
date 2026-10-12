@@ -3,8 +3,11 @@ using System.Text.RegularExpressions;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory;
 
 /// <summary>FR-MCP-MEMORY-013 / TR-MCP-MEMORY-JOBS-002: Consolidate / sleep-merge and job tick operations.</summary>
 public sealed partial class MemoryConsolidateOperations

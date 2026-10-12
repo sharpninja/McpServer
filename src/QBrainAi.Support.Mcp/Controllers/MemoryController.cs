@@ -4,6 +4,11 @@ using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QBrainAi.Support.Mcp.Memory.Commands;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Memory.Queries;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Controllers;
 

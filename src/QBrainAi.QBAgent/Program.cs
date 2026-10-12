@@ -3,11 +3,11 @@ using QBrainAi.McpAgent.Hosting;
 using QBrainAi.QBAgent;
 using QBrainAi.QBAgent.Skills;
 using QBrainAi.QBAgent.Tools;
-using QBrainAi.Support.Mcp.Services;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using QBrainAi.Common.AgentCli.Processes;
 
 // FR-MCP-QBAGENT-001 / FR-MCP-QBOPENAI-001: QBAgent starts in a folder, reads the AGENTS-README-FIRST.yaml
 // marker there, binds to QuadBrain (as an OpenAI-compatible model), and runs the Microsoft Agent Framework

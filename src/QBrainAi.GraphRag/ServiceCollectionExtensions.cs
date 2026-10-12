@@ -4,6 +4,8 @@ using QBrainAi.GraphRag.Queries;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.DependencyInjection;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Services;
 
 namespace QBrainAi.GraphRag;
 

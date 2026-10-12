@@ -2,7 +2,7 @@ using QBrainAi.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace QBrainAi.Support.Mcp.Indexing;
+namespace QBrainAi.Support.Mcp.Storage.Indexing;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: Hosted service that loads persisted HNSW index on startup and saves on shutdown.

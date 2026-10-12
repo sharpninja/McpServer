@@ -1,5 +1,6 @@
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Controllers;
 

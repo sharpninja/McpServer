@@ -1,3 +1,5 @@
+using QBrainAi.Support.Mcp.Storage.Models;
+
 namespace QBrainAi.Support.Mcp.Models;
 
 /// <summary>

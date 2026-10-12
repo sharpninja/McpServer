@@ -1,6 +1,7 @@
 using System.Text;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-019: Grok multi-turn adapter. Stub/recorded fixtures are fail-closed.

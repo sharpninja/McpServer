@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -52,7 +53,7 @@ public sealed class EfTodoServiceTests : IDisposable
         // global query filter installed in McpDbContext lets the fixture see its
         // own inserts. Without this, `!IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId`
         // is `false && ...` = false, suppressing every row.
-        services.AddScoped(_ => new QBrainAi.Support.Mcp.Services.WorkspaceContext
+        services.AddScoped(_ => new QBrainAi.Support.Mcp.Storage.Services.WorkspaceContext
         {
             WorkspacePath = _tempRoot,
         });

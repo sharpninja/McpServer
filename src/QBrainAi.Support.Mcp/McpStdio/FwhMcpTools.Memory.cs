@@ -2,6 +2,10 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using QBrainAi.Support.Mcp.Services;
 using ModelContextProtocol.Server;
+using QBrainAi.Support.Mcp.Memory.Commands;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Memory.Queries;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.McpStdio;
 

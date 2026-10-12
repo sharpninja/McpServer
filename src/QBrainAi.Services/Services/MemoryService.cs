@@ -3,6 +3,9 @@ using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using QBrainAi.Support.Mcp.Memory;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Services;
 

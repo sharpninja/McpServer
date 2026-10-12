@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Server;
 using Microsoft.Extensions.Logging;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.Support.Mcp.Storage.Models;
 
 namespace QBrainAi.Support.Mcp.McpStdio;
 

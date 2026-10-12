@@ -1,4 +1,5 @@
 using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Storage.Models;
 
 namespace QBrainAi.Support.Mcp.Ingestion;
 

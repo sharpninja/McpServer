@@ -1,7 +1,7 @@
 using QBrainAi.Common.AgentCli;
-using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.QBAgent.Tools;
 

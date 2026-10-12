@@ -1,3 +1,5 @@
+using QBrainAi.Common.AgentCli.Processes;
+
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>

@@ -5,7 +5,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Common.AgentCli.Processes;
 
 /// <content>
 /// TEST-MCP-USECASE-020: Windows CREATE_SUSPENDED plus kill-on-close job assignment before resume.

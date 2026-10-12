@@ -1,4 +1,4 @@
-namespace QBrainAi.Support.Mcp.Indexing;
+namespace QBrainAi.Support.Mcp.Storage.Indexing;
 
 /// <summary>
 /// TR-PLANNED-CORE-013: Abstraction for generating text embeddings for vector search.

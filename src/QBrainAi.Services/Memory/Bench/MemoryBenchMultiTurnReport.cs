@@ -1,7 +1,8 @@
 using System.Globalization;
 using System.Text;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-019: Token-first multi-turn report. Success-gated means are highlighted.

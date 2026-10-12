@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Xunit;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

@@ -5,8 +5,9 @@ using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Database;
 using QBrainAi.Support.Mcp.UseCases;
-using QBrainAi.Support.Mcp.UseCases.Models;
 using QBrainAi.Support.Mcp.UseCases.Queries;
+using QBrainAi.Support.Mcp.Storage.Services;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 

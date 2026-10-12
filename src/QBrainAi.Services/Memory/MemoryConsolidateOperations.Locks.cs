@@ -3,8 +3,9 @@ using System.Text.RegularExpressions;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory;
 
 public sealed partial class MemoryConsolidateOperations
 {

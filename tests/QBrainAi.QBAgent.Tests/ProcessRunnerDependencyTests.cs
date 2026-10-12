@@ -1,5 +1,5 @@
 using System.Text.Json;
-using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.QBAgent.Tests;
 

@@ -1,7 +1,6 @@
 // TR-PLANNED-CORE-013: Runs the MCP server over STDIO (stdin/stdout JSON-RPC) when --transport stdio.
 
 using QBrainAi.Support.Mcp.Extensions;
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Ingestion;
 using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Common.AgentCli;
@@ -27,6 +26,13 @@ using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ModelContextProtocol.Server;
+using QBrainAi.Support.Mcp.Storage.Indexing;
+using QBrainAi.GraphRag.Options;
+using QBrainAi.Common.AgentCli.Processes;
+using QBrainAi.GraphRag.Services;
+using QBrainAi.Support.Mcp.Memory.Commands;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.McpStdio;
 

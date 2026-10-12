@@ -1,4 +1,6 @@
-namespace QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
+
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-019: Scores multi-turn query answers. Both conditions use the same gold

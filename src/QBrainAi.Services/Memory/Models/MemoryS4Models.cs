@@ -1,4 +1,7 @@
-namespace QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Models;
+
+namespace QBrainAi.Support.Mcp.Memory.Models;
 
 /// <summary>
 /// FR-MCP-MEMORY-013 / TR-MCP-MEMORY-JOBS-002: Documented consolidate bounds.

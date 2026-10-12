@@ -1,6 +1,8 @@
 using QBrainAi.Cqrs;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Commands;
 
 /// <summary>
 /// TR-MCP-MEMORY-JOBS-002 / TEST-MCP-MEMORY-013: CQRS command for a scheduled consolidate tick.

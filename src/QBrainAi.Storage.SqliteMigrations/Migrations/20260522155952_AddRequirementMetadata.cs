@@ -2,51 +2,50 @@
 
 #nullable disable
 
-namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
+namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations;
+
+/// <inheritdoc />
+public partial class AddRequirementMetadata : Migration
 {
     /// <inheritdoc />
-    public partial class AddRequirementMetadata : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "Notes",
-                table: "Requirements",
-                type: "TEXT",
-                nullable: true);
+        migrationBuilder.AddColumn<string>(
+            name: "Notes",
+            table: "Requirements",
+            type: "TEXT",
+            nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "Priority",
-                table: "Requirements",
-                type: "TEXT",
-                maxLength: 32,
-                nullable: false,
-                defaultValue: "medium");
+        migrationBuilder.AddColumn<string>(
+            name: "Priority",
+            table: "Requirements",
+            type: "TEXT",
+            maxLength: 32,
+            nullable: false,
+            defaultValue: "medium");
 
-            migrationBuilder.AddColumn<string>(
-                name: "Status",
-                table: "Requirements",
-                type: "TEXT",
-                maxLength: 64,
-                nullable: false,
-                defaultValue: "pending");
-        }
+        migrationBuilder.AddColumn<string>(
+            name: "Status",
+            table: "Requirements",
+            type: "TEXT",
+            maxLength: 64,
+            nullable: false,
+            defaultValue: "pending");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "Notes",
-                table: "Requirements");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "Notes",
+            table: "Requirements");
 
-            migrationBuilder.DropColumn(
-                name: "Priority",
-                table: "Requirements");
+        migrationBuilder.DropColumn(
+            name: "Priority",
+            table: "Requirements");
 
-            migrationBuilder.DropColumn(
-                name: "Status",
-                table: "Requirements");
-        }
+        migrationBuilder.DropColumn(
+            name: "Status",
+            table: "Requirements");
     }
 }

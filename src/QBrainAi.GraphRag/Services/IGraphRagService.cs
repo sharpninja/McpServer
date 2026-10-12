@@ -1,6 +1,9 @@
 using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp;
+using QBrainAi.GraphRag.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.GraphRag.Services;
 
 /// <summary>
 /// Workspace-scoped GraphRAG orchestration service.

@@ -5,51 +5,50 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
+namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations;
+
+/// <summary>TR-MCP-MEMORY-SEARCH-002: Dedicated memory ANN/FTS side table (forward-only).</summary>
+[DbContext(typeof(McpDbContext))]
+[Migration("20260919060000_AddMemoryIndexStorage")]
+public partial class AddMemoryIndexStorage : Migration
 {
-    /// <summary>TR-MCP-MEMORY-SEARCH-002: Dedicated memory ANN/FTS side table (forward-only).</summary>
-    [DbContext(typeof(McpDbContext))]
-    [Migration("20260919060000_AddMemoryIndexStorage")]
-    public partial class AddMemoryIndexStorage : Migration
+    /// <inheritdoc />
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateTable(
-                name: "MemoryIndexes",
-                columns: table => new
-                {
-                    MemoryId = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
-                    WorkspaceId = table.Column<string>(type: "TEXT", maxLength: 1024, nullable: true),
-                    ContentHash = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
-                    EmbeddingJson = table.Column<string>(type: "TEXT", nullable: false),
-                    IndexedAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MemoryIndexes", x => x.MemoryId);
-                    table.ForeignKey(
-                        name: "FK_MemoryIndexes_Memories_MemoryId",
-                        column: x => x.MemoryId,
-                        principalTable: "Memories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+        migrationBuilder.CreateTable(
+            name: "MemoryIndexes",
+            columns: table => new
+            {
+                MemoryId = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                WorkspaceId = table.Column<string>(type: "TEXT", maxLength: 1024, nullable: true),
+                ContentHash = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
+                EmbeddingJson = table.Column<string>(type: "TEXT", nullable: false),
+                IndexedAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_MemoryIndexes", x => x.MemoryId);
+                table.ForeignKey(
+                    name: "FK_MemoryIndexes_Memories_MemoryId",
+                    column: x => x.MemoryId,
+                    principalTable: "Memories",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MemoryIndexes_WorkspaceId",
-                table: "MemoryIndexes",
-                column: "WorkspaceId");
-            migrationBuilder.CreateIndex(
-                name: "IX_MemoryIndexes_ContentHash",
-                table: "MemoryIndexes",
-                column: "ContentHash");
-        }
+        migrationBuilder.CreateIndex(
+            name: "IX_MemoryIndexes_WorkspaceId",
+            table: "MemoryIndexes",
+            column: "WorkspaceId");
+        migrationBuilder.CreateIndex(
+            name: "IX_MemoryIndexes_ContentHash",
+            table: "MemoryIndexes",
+            column: "ContentHash");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            ArgumentNullException.ThrowIfNull(migrationBuilder);
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(migrationBuilder);
     }
 }

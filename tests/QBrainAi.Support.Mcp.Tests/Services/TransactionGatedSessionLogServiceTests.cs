@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 using MsOptions = Microsoft.Extensions.Options;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;

@@ -1,4 +1,3 @@
-using QBrainAi.Support.Mcp.UseCases.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using QBrainAi.Cqrs;
@@ -10,6 +9,9 @@ using QBrainAi.Support.Mcp.UseCases.Commands;
 using QBrainAi.Support.Mcp.UseCases.Queries;
 using Xunit;
 using Xunit.Sdk;
+using QBrainAi.Support.Mcp.Storage.Services;
+using QBrainAi.Support.Mcp.UseCases.Services;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

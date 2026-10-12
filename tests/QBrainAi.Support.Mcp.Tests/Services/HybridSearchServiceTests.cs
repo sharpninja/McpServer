@@ -1,4 +1,3 @@
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Storage.Entities;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Indexing;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

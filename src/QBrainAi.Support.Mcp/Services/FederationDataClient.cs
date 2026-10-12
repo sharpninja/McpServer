@@ -1,11 +1,12 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using QBrainAi.Support.Mcp.GraphRag;
+using QBrainAi.GraphRag.Services;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging;
+using QBrainAi.GraphRag.Models;
 
-namespace QBrainAi.Support.Mcp;
+namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>
 /// FR-MCP-082/083/084/085: Production implementation of both <see cref="IFederationDataClient"/>

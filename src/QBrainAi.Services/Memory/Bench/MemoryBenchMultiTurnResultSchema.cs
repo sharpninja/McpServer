@@ -1,7 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using QBrainAi.Support.Mcp.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// TR-MCP-MEMORY-BENCH-003: Multi-turn result schema. Missing token fields hard-fail.

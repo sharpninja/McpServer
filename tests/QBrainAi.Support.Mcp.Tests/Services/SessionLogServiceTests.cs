@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

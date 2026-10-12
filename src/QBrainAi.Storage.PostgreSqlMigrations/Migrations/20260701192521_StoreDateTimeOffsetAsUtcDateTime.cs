@@ -3,31 +3,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
+namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations;
+
+/// <inheritdoc />
+public partial class StoreDateTimeOffsetAsUtcDateTime : Migration
 {
     /// <inheritdoc />
-    public partial class StoreDateTimeOffsetAsUtcDateTime : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.UpdateData(
-                table: "Workspaces",
-                keyColumn: "WorkspaceId",
-                keyValue: "",
-                columns: new[] { "DateTimeCreated", "DateTimeModified", "DeletedAtUtc" },
-                values: new object[] { new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null });
-        }
+        migrationBuilder.UpdateData(
+            table: "Workspaces",
+            keyColumn: "WorkspaceId",
+            keyValue: "",
+            columns: new[] { "DateTimeCreated", "DateTimeModified", "DeletedAtUtc" },
+            values: new object[] { new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null });
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.UpdateData(
-                table: "Workspaces",
-                keyColumn: "WorkspaceId",
-                keyValue: "",
-                columns: new[] { "DateTimeCreated", "DateTimeModified", "DeletedAtUtc" },
-                values: new object[] { new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null });
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.UpdateData(
+            table: "Workspaces",
+            keyColumn: "WorkspaceId",
+            keyValue: "",
+            columns: new[] { "DateTimeCreated", "DateTimeModified", "DeletedAtUtc" },
+            values: new object[] { new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null });
     }
 }

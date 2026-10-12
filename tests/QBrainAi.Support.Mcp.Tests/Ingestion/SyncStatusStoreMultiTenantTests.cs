@@ -1,5 +1,7 @@
 using QBrainAi.Support.Mcp.Ingestion;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage;
+using QBrainAi.Support.Mcp.Storage.Ingestion;
 
 namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 

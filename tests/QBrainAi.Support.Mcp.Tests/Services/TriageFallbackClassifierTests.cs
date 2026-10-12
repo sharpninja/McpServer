@@ -1,6 +1,7 @@
 using QBrainAi.Common.AgentCli;
 using QBrainAi.Support.Mcp.Services;
 using Xunit;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

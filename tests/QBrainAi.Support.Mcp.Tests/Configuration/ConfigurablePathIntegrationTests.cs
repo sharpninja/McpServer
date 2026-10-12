@@ -1,4 +1,3 @@
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Ingestion;
 using QBrainAi.Support.Mcp.Options;
 using QBrainAi.Support.Mcp.Services;
@@ -6,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Indexing;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Tests.Configuration;
 

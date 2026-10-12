@@ -1,4 +1,8 @@
-namespace QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp;
+using QBrainAi.Support.Mcp.Storage.Models;
+
+namespace QBrainAi.GraphRag.Models;
 
 /// <summary>Query request for GraphRAG retrieval.</summary>
 public sealed class GraphRagQueryRequest

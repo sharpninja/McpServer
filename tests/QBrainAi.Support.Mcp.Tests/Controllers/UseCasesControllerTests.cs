@@ -4,13 +4,14 @@ using QBrainAi.Support.Mcp.Controllers;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.UseCases;
 using QBrainAi.Support.Mcp.UseCases.Commands;
-using QBrainAi.Support.Mcp.UseCases.Models;
 using QBrainAi.Support.Mcp.UseCases.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Services;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Controllers;
 

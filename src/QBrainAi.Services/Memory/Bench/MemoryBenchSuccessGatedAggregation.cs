@@ -1,4 +1,6 @@
-namespace QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
+
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>
 /// FR-MCP-MEMORY-019: Macro mean/median tokens_total only over successful jobs.

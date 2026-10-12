@@ -1,8 +1,13 @@
 using System.Text.Json;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp;
+using QBrainAi.GraphRag.Models;
+using QBrainAi.GraphRag.Options;
+using QBrainAi.Common.AgentCli.Processes;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.GraphRag.Services;
 
 /// <summary>
 /// GraphRAG backend adapter that executes an external command.

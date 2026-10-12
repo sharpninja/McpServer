@@ -1,6 +1,7 @@
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
+using QBrainAi.Support.Mcp.Memory;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 

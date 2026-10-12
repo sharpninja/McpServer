@@ -1,11 +1,13 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using QBrainAi.Support.Mcp.Storage.Indexing;
+using QBrainAi.Support.Mcp.Storage.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Ingestion;
 

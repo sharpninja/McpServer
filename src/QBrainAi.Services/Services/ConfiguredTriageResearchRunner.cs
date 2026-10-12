@@ -1,5 +1,6 @@
 using QBrainAi.Common.AgentCli;
 using Microsoft.Extensions.Options;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Services;
 

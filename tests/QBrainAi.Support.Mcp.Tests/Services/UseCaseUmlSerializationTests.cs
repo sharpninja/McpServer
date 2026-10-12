@@ -1,6 +1,7 @@
 using QBrainAi.Support.Mcp.UseCases;
-using QBrainAi.Support.Mcp.UseCases.Models;
 using Xunit;
+using QBrainAi.Support.Mcp.UseCases.Services;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

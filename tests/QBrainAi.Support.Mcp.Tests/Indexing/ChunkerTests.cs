@@ -1,5 +1,5 @@
-using QBrainAi.Support.Mcp.Indexing;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Indexing;
 
 namespace QBrainAi.Support.Mcp.Tests.Indexing;
 

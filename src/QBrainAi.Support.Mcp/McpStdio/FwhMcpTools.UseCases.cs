@@ -7,10 +7,10 @@ using QBrainAi.Cqrs;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.UseCases;
 using QBrainAi.Support.Mcp.UseCases.Commands;
-using QBrainAi.Support.Mcp.UseCases.Models;
 using QBrainAi.Support.Mcp.UseCases.Queries;
 using ModelContextProtocol.Server;
 using Microsoft.Extensions.Logging;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.McpStdio;
 

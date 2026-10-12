@@ -2,21 +2,20 @@
 
 #nullable disable
 
-namespace QBrainAi.Support.Mcp.Storage.Migrations
+namespace QBrainAi.Support.Mcp.Storage.Migrations;
+
+/// <inheritdoc />
+public partial class FixRestartPolicyColumnDefault : Migration
 {
     /// <inheritdoc />
-    public partial class FixRestartPolicyColumnDefault : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
 
-        }
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
 
-        }
     }
 }

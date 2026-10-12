@@ -1,9 +1,9 @@
 using QBrainAi.Support.Mcp.Ingestion;
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Indexing;
 
 namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 

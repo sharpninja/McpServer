@@ -1,9 +1,10 @@
 using System.Text.Json;
 using QBrainAi.Cqrs;
 using QBrainAi.Support.Mcp.Services;
-using QBrainAi.Support.Mcp.UseCases.Models;
 using QBrainAi.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Storage.Services;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.UseCases.Commands;
 

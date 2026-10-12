@@ -3,11 +3,11 @@ using System.Linq.Expressions;
 using System.Data.Common;
 using System.Text.Json;
 using QBrainAi.Common.AgentCli;
-using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage.Database;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Storage.Services;
 
 namespace QBrainAi.Support.Mcp.Storage;
 

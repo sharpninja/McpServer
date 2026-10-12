@@ -1,6 +1,8 @@
 using System.Text;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory;
 
 /// <summary>
 /// FR-MCP-MEMORY-010-44 / FR-MCP-MEMORY-010-45: Renders the REQUIRED MEMORIES injection block

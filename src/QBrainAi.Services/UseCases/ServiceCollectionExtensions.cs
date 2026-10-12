@@ -1,9 +1,10 @@
 using QBrainAi.Cqrs;
 using QBrainAi.Support.Mcp.Services;
-using QBrainAi.Support.Mcp.UseCases.Models;
 using QBrainAi.Support.Mcp.UseCases.Commands;
 using QBrainAi.Support.Mcp.UseCases.Queries;
 using Microsoft.Extensions.DependencyInjection;
+using QBrainAi.Support.Mcp.UseCases.Services;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.UseCases;
 

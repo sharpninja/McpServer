@@ -2,6 +2,7 @@ using QBrainAi.Support.Mcp.Requirements;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

@@ -1,3 +1,5 @@
+using QBrainAi.Support.Mcp.Models;
+
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>TR-HANDOFF-MODES-001: Confidence gating and review decisions.</summary>

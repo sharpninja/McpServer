@@ -1,6 +1,8 @@
 using QBrainAi.Cqrs;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Commands;
 
 /// <summary>
 /// FR-MCP-MEMORY-014 / TR-MCP-MEMORY-API-002: CQRS command to revert a memory to snapshot N.

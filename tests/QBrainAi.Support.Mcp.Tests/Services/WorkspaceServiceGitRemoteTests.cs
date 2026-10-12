@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Common.AgentCli.Processes;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 

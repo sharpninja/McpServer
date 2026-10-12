@@ -1,7 +1,7 @@
 using QBrainAi.Support.Mcp.Services;
-using QBrainAi.Support.Mcp.UseCases.Models;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.UseCases;
+namespace QBrainAi.Support.Mcp.UseCases.Services;
 
 /// <summary>
 /// TR-MCP-USECASE-004: Pure diagram builder for use case aggregates.

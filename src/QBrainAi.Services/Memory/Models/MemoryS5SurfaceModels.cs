@@ -1,6 +1,8 @@
 using QBrainAi.Support.Mcp.Notifications;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Models;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Models;
 
 /// <summary>
 /// FR-MCP-MEMORY-017 / TR-MCP-MEMORY-API-002: Canonical S5 verb, route, and description catalog.

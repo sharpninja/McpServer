@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace QBrainAi.Support.Mcp.Migrations
+namespace QBrainAi.Support.Mcp.Storage.Migrations
 {
     [DbContext(typeof(McpDbContext))]
     [Migration("20260525104137_ScopeSessionLogUniqueIndexByWorkspace")]

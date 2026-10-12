@@ -1,5 +1,7 @@
 using QBrainAi.Support.Mcp.Services;
 using NSubstitute;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Models;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 

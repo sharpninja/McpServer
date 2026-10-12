@@ -1,4 +1,6 @@
-namespace QBrainAi.Support.Mcp.UseCases.Models;
+using QBrainAi.Support.Mcp.UseCases;
+
+namespace QBrainAi.Support.Mcp.Models;
 
 /// <summary>
 /// FR-MCP-USECASE-001 / TR-MCP-USECASE-002: Request payload to create a use case header

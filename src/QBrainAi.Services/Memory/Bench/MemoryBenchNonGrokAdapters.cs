@@ -1,4 +1,6 @@
-namespace QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
+
+namespace QBrainAi.Support.Mcp.Memory.Bench;
 
 /// <summary>FR-MCP-MEMORY-018-17: Claude Code recorded/stub adapter.</summary>
 public sealed class MemoryBenchClaudeCodeAdapter : IMemoryBenchPluginAdapter

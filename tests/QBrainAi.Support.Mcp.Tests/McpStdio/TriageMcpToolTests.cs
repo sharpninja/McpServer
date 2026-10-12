@@ -1,5 +1,4 @@
 using System.Text.Json;
-using QBrainAi.Support.Mcp.Indexing;
 using QBrainAi.Support.Mcp.Ingestion;
 using QBrainAi.Support.Mcp.McpStdio;
 using QBrainAi.Support.Mcp.Options;
@@ -13,6 +12,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
+using QBrainAi.Support.Mcp.Storage.Indexing;
+using QBrainAi.Common.AgentCli.Processes;
+using QBrainAi.GraphRag.Services;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 using MsOptions = Microsoft.Extensions.Options;
 
 namespace QBrainAi.Support.Mcp.Tests.McpStdio;

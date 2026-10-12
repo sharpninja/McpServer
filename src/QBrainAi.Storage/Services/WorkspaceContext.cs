@@ -1,4 +1,4 @@
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Storage.Services;
 
 /// <summary>
 /// TR-MCP-MT-001: Per-request ambient context holding the resolved workspace identity.

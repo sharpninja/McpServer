@@ -1,8 +1,11 @@
 using QBrainAi.Cqrs;
 using QBrainAi.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Memory.Models;
+using QBrainAi.Support.Mcp.Storage.Services;
 
-namespace QBrainAi.Support.Mcp.Services;
+namespace QBrainAi.Support.Mcp.Memory.Commands;
 
 /// <summary>
 /// FR-MCP-MEMORY-015 / TEST-MCP-MEMORY-015: Handles <see cref="PromoteMemoryCommand"/>.
