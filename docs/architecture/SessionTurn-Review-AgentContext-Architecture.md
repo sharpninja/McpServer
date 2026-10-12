@@ -78,7 +78,7 @@ flowchart LR
 - Identifiers: every identifier is human-readable and meaningful (operator, 2026-10-11: "Please use human-readable, meaningful identifiers."). Session ids `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>`; server-minted request ids `req-<yyyyMMddTHHmmssZ>-<8 hex>`; agent-context record keys derive from the turn and session they belong to (section 6.3): packages `pkg-<requestId>-<nn>`, responses `rsp-<requestId>-<nn>`, grades `grd-<responseId>-<kind>-<nn>`, relationships `rel-<type>-<yyyyMMddTHHmmssZ>-<nn>`, HV requests `hvr-<sessionId>-<yyyyMMddTHHmmssZ>`. Document labels use the command, query, process, and policy names.
 - Root ids: every record carries the root ids of its parents (workspace, MCP session, request, and for agent context the package and response).
 - Secrets: no API key, token, password, or credential is ever stored in a turn field, a context package, or a response; the session-log sanitizer and the agent-context secret filter redact on write and on every read surface.
-- Process: every slice follows the Byrd Development Process v4 (requirements, tests red, mocks green, implementation green, full gates with zero failures and zero skips) and ends with a Codex gpt-6-sol xhigh hostile validation at accuracy and completeness of at least 98 with every claim PASS. Builds and tests run as Nuke targets natively on Windows or Linux; GitHub Actions and Azure Pipelines are not part of any requirement or process; Octopus (container on LAB-OMARCHY) is used only for releases.
+- Process: every slice follows the Byrd Development Process v4 (requirements, tests red, mocks green, implementation green, full gates with zero failures and zero skips) and ends with a Codex gpt-6-astra max hostile validation at accuracy and completeness of at least 98 with every claim PASS. Builds and tests run as Nuke targets natively on Windows or Linux; GitHub Actions and Azure Pipelines are not part of any requirement or process; Octopus (container on LAB-OMARCHY) is used only for releases.
 
 ## 4. Phase A: correct, independent turn logging
 
@@ -1425,7 +1425,7 @@ Section `Mcp:AgentContext` (declared under `QBrainAi: AgentContext:` in `appsett
 - `Trust:Correctness`, `Trust:Completeness` (decimal in [0,1], default 0.98, inclusive).
 - `MaxCandidatesPerKind` (int, default 50, 1..1000) and `MaxPriorResponses` (int, default 10, 0..100).
 - `ProfileSources` (list of file globs resolved on the server host; default `~/.claude/profile/*.md` excluding `add-profile*.md`, the set the `/add-profile` skill reads) and `RuleSources` (list of workspace-relative paths; default `CLAUDE.md`, `AGENTS.md`, and `AGENTS-README-FIRST.yaml`, secret values redacted). Profile and rules are mandatory: when no profile file or no rule file resolves, the build fails with 409 `agent_context_profile_unavailable` instead of building a package without them.
-- `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-sol`), `ModelGrader:RequiredEffort` (default `xhigh`), `ModelGrader:ReceiptRoot` (workspace-relative, default `docs/receipts/hv`): a model grade from any other grader, or whose receipts are outside the receipt root or do not verify, is refused.
+- `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-astra`), `ModelGrader:RequiredEffort` (default `max`), `ModelGrader:ReceiptRoot` (workspace-relative, default `docs/receipts/hv`): a model grade from any other grader, or whose receipts are outside the receipt root or do not verify, is refused.
 - `HvRequest:MaxTurns` (int, default 200, 1..2000): the largest turn range one HV request may name.
 - `GraphRag:ProjectionEnabled` (bool, default true) and `GraphRag:UseForRetrieval` (bool, default true).
 - Validation failures (startup): `TokenBudget`, `BytesPerToken`, `HvRequest:MaxTurns`, thresholds outside their ranges, an empty `RuleSources`, an empty grader identity, or an empty `ModelGrader:ReceiptRoot`.
@@ -2607,7 +2607,7 @@ sequenceDiagram
 sequenceDiagram
     autonumber
     participant AG as Agent
-    participant HV as HV agent (Codex gpt-6-sol xhigh, launched as every HV is)
+    participant HV as HV agent (Codex gpt-6-astra max, launched as every HV is)
     participant API as Controller or MCP tool
     participant SVC as IDispatcher and RecordModelGradeCommandHandler
     participant T as DecideAgentResponseTrustCommandHandler (DecideAgentResponseTrustCommand)
@@ -3043,7 +3043,7 @@ flowchart LR
     MD(["Model"])
     HO(["Agent host and plugin"])
     SV(["Server"])
-    HR(["Hostile reviewer (Codex gpt-6-sol xhigh)"])
+    HR(["Hostile reviewer (Codex gpt-6-astra max)"])
     CA(["Client apps"])
     UC1(("Log each request as one turn"))
     UC2(("Persist writes with truthful receipts"))
@@ -3166,7 +3166,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    HR(["Hostile reviewer: Codex gpt-6-sol xhigh"]) --- U(("Record a hostile review with receipts"))
+    HR(["Hostile reviewer: Codex gpt-6-astra max"]) --- U(("Record a hostile review with receipts"))
     CO(["Coordinator agent"]) --- U
     U -. include .-> I1(("Runner writes request and response jsonl"))
     U -. include .-> I2(("Map the receipt to a review (process ConvertHvReceiptToReview)"))
@@ -3298,7 +3298,7 @@ flowchart LR
     IMP --> VER["Integration, live checks on Linux and Windows, phase-wide HV, operator approval"]
 ```
 
-Each arrow is crossed only after that phase's gates are green with zero failures and zero skips, its hostile validation (Codex gpt-6-sol xhigh) returns AGREE at accuracy and completeness of at least 98 with every claim PASS, and the operator approves.
+Each arrow is crossed only after that phase's gates are green with zero failures and zero skips, its hostile validation (Codex gpt-6-astra max) returns AGREE at accuracy and completeness of at least 98 with every claim PASS, and the operator approves.
 
 ### 8.2 What each phase delivers
 
@@ -3351,7 +3351,7 @@ flowchart TD
     WK --> GT{"Phase gates green with zero failures and zero skips?"}
     GT -->|no| FX["Fix within the phase"]
     FX --> GT
-    GT -->|yes| HV["Launch the phase HV (Codex gpt-6-sol xhigh) and store the full verdict"]
+    GT -->|yes| HV["Launch the phase HV (Codex gpt-6-astra max) and store the full verdict"]
     HV --> HR{"AGREE, both scores at least 98, every claim PASS?"}
     HR -->|no| SH["Show every FAIL and UNKNOWN to the operator, fix, relaunch"]
     SH --> HV
@@ -3381,7 +3381,7 @@ flowchart TD
     T3 -->|yes| IT["Add the context's integration tests"]
     IT --> G{"Context gates green, zero failures and zero skips, Linux and Windows?"}
     G -->|no| IM
-    G -->|yes| HV["Context HV (Codex gpt-6-sol xhigh)"]
+    G -->|yes| HV["Context HV (Codex gpt-6-astra max)"]
     HV --> HR{"AGREE at 98/98, every claim PASS?"}
     HR -->|no| IM
     HR -->|yes| MG(["Ready to merge in the rollout order"])

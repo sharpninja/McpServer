@@ -41,7 +41,7 @@ Section `Mcp:AgentContext` (declared under `QBrainAi: AgentContext:` in `appsett
 - `Trust:Correctness`, `Trust:Completeness` (decimal in [0,1], default 0.98, inclusive).
 - `MaxCandidatesPerKind` (int, default 50, 1..1000) and `MaxPriorResponses` (int, default 10, 0..100).
 - `ProfileSources` (list of file globs resolved on the server host; default `~/.claude/profile/*.md` excluding `add-profile*.md`, the set the `/add-profile` skill reads) and `RuleSources` (list of workspace-relative paths; default `CLAUDE.md`, `AGENTS.md`, and `AGENTS-README-FIRST.yaml`, secret values redacted). Profile and rules are mandatory: when no profile file or no rule file resolves, the build fails with 409 `agent_context_profile_unavailable` instead of building a package without them.
-- `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-sol`), `ModelGrader:RequiredEffort` (default `xhigh`), `ModelGrader:ReceiptRoot` (workspace-relative, default `docs/receipts/hv`): a model grade from any other grader, or whose receipts are outside the receipt root or do not verify, is refused.
+- `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-astra`), `ModelGrader:RequiredEffort` (default `max`), `ModelGrader:ReceiptRoot` (workspace-relative, default `docs/receipts/hv`): a model grade from any other grader, or whose receipts are outside the receipt root or do not verify, is refused.
 - `HvRequest:MaxTurns` (int, default 200, 1..2000): the largest turn range one HV request may name.
 - `GraphRag:ProjectionEnabled` (bool, default true) and `GraphRag:UseForRetrieval` (bool, default true).
 - Validation failures (startup): `TokenBudget`, `BytesPerToken`, `HvRequest:MaxTurns`, thresholds outside their ranges, an empty `RuleSources`, an empty grader identity, or an empty `ModelGrader:ReceiptRoot`.
@@ -1223,7 +1223,7 @@ sequenceDiagram
 sequenceDiagram
     autonumber
     participant AG as Agent
-    participant HV as HV agent (Codex gpt-6-sol xhigh, launched as every HV is)
+    participant HV as HV agent (Codex gpt-6-astra max, launched as every HV is)
     participant API as Controller or MCP tool
     participant SVC as IDispatcher and RecordModelGradeCommandHandler
     participant T as DecideAgentResponseTrustCommandHandler (DecideAgentResponseTrustCommand)
@@ -1750,7 +1750,7 @@ flowchart LR
     IMP --> VER["Integration, live checks on Linux and Windows, phase-wide HV, operator approval"]
 ```
 
-Each arrow is crossed only after that phase's gates are green with zero failures and zero skips, its hostile validation (Codex gpt-6-sol xhigh) returns AGREE at accuracy and completeness of at least 98 with every claim PASS, and the operator approves.
+Each arrow is crossed only after that phase's gates are green with zero failures and zero skips, its hostile validation (Codex gpt-6-astra max) returns AGREE at accuracy and completeness of at least 98 with every claim PASS, and the operator approves.
 
 ### 8.2 What each phase delivers
 
@@ -1803,7 +1803,7 @@ flowchart TD
     WK --> GT{"Phase gates green with zero failures and zero skips?"}
     GT -->|no| FX["Fix within the phase"]
     FX --> GT
-    GT -->|yes| HV["Launch the phase HV (Codex gpt-6-sol xhigh) and store the full verdict"]
+    GT -->|yes| HV["Launch the phase HV (Codex gpt-6-astra max) and store the full verdict"]
     HV --> HR{"AGREE, both scores at least 98, every claim PASS?"}
     HR -->|no| SH["Show every FAIL and UNKNOWN to the operator, fix, relaunch"]
     SH --> HV
@@ -1833,7 +1833,7 @@ flowchart TD
     T3 -->|yes| IT["Add the context's integration tests"]
     IT --> G{"Context gates green, zero failures and zero skips, Linux and Windows?"}
     G -->|no| IM
-    G -->|yes| HV["Context HV (Codex gpt-6-sol xhigh)"]
+    G -->|yes| HV["Context HV (Codex gpt-6-astra max)"]
     HV --> HR{"AGREE at 98/98, every claim PASS?"}
     HR -->|no| IM
     HR -->|yes| MG(["Ready to merge in the rollout order"])
