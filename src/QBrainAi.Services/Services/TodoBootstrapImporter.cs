@@ -79,7 +79,8 @@ internal sealed class TodoBootstrapImporter : IHostedService
     {
         // Workspace registrations live in the DB (IWorkspaceService) - not appsettings.
         List<WorkspaceConfigEntry> workspaces;
-        await using (var scope = _scopeFactory.CreateAsyncScope())
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using (scope.ConfigureAwait(false))
         {
             var workspaceSvc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
             var list = await workspaceSvc.ListAsync(cancellationToken).ConfigureAwait(false);
@@ -169,7 +170,8 @@ internal sealed class TodoBootstrapImporter : IHostedService
             return new BootstrapOutcome(workspacePath, BootstrapResult.SkippedMissingYaml, 0);
         }
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         ctx.OverrideWorkspaceId(workspacePath);
 

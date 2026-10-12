@@ -649,7 +649,8 @@ public sealed class FederationStateAdapterRegistryTests
 
     private static async Task SeedAsync(ServiceProvider provider, Action<McpDbContext> seed)
     {
-        await using var scope = provider.CreateAsyncScope();
+        var scope = provider.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(true);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         seed(db);
         await db.SaveChangesAsync().ConfigureAwait(false);

@@ -274,7 +274,8 @@ public sealed class MemoryMcpToolTests : IDisposable
     [Fact]
     public async Task MemoryAddGlobalScopeAllowsEmptyOmittedAndDefaultWorkspace()
     {
-        await using var gate = await MemoryGlobalWorkspaceFixture.CreateAsync().ConfigureAwait(true);
+        var gate = await MemoryGlobalWorkspaceFixture.CreateAsync().ConfigureAwait(true);
+        await using var gateDisposal = gate.ConfigureAwait(true);
         var tools = CreateTools(gate.Db, gate.Service, workspaceContextPath: string.Empty);
 
         var empty = await tools.MemoryAdd(
@@ -326,7 +327,8 @@ public sealed class MemoryMcpToolTests : IDisposable
     [Fact]
     public async Task MemoryRememberGlobalScopeAllowsEmptyAndDefaultWorkspace()
     {
-        await using var gate = await MemoryGlobalWorkspaceFixture.CreateAsync().ConfigureAwait(true);
+        var gate = await MemoryGlobalWorkspaceFixture.CreateAsync().ConfigureAwait(true);
+        await using var gateDisposal = gate.ConfigureAwait(true);
         var tools = CreateTools(gate.Db, gate.Service, dispatcher: gate.Dispatcher, workspaceContextPath: string.Empty);
 
         var empty = await tools.MemoryRemember(

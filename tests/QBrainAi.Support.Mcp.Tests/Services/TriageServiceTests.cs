@@ -808,8 +808,8 @@ public sealed class TriageServiceTests : IDisposable
             {
                 var request = (TriageResearchRequest)call[0]!;
                 Assert.NotNull(request.OutputReceivedAsync);
-                await request.OutputReceivedAsync!(new TriageResearchOutputUpdate("stdout", "analysis started"));
-                await request.OutputReceivedAsync!(new TriageResearchOutputUpdate("stderr", "loading context"));
+                await request.OutputReceivedAsync!(new TriageResearchOutputUpdate("stdout", "analysis started")).ConfigureAwait(true);
+                await request.OutputReceivedAsync!(new TriageResearchOutputUpdate("stderr", "loading context")).ConfigureAwait(true);
                 return new TriageResearchRunResult(false, null, "agent failed");
             });
 

@@ -164,19 +164,19 @@ public sealed class AgentHelpReplWorkflowTests
             case AgentHelpCommandShapes.CreateSessionMethod:
                 await workflow.Received(1).CreateSessionAsync(
                     Arg.Is<AgentHelpSessionCreateRequest?>(request => MatchesCreateSessionRequest(request)),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case AgentHelpCommandShapes.SubmitTurnMethod:
                 await workflow.Received(1).SubmitTurnAsync(
                     "help-001",
                     Arg.Is<AgentHelpTurnRequest>(request => MatchesSubmitTurnRequest(request)),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case AgentHelpCommandShapes.GetStatusMethod:
-                await workflow.Received(1).GetStatusAsync("help-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetStatusAsync("help-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case AgentHelpCommandShapes.GetTranscriptMethod:
-                await workflow.Received(1).GetTranscriptAsync("help-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetTranscriptAsync("help-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
         }
     }

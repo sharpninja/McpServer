@@ -46,7 +46,7 @@ public sealed class DesktopClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
-        return await PostAsync<DesktopLaunchResult>("qbrainai/desktop/launch", request, cancellationToken);
+        return await PostAsync<DesktopLaunchResult>("qbrainai/desktop/launch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

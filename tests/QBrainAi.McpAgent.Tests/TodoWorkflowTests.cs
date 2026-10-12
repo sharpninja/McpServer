@@ -231,7 +231,7 @@ public sealed class TodoWorkflowTests
         var completedTask = await Task.WhenAny(workflowTask, Task.Delay(TimeSpan.FromSeconds(1), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Same(workflowTask, completedTask);
-        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await workflowTask);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await workflowTask.ConfigureAwait(true));
     }
 
     /// <summary>
@@ -365,7 +365,7 @@ public sealed class TodoWorkflowTests
         /// <returns>Never returns successfully; completion is cancellation-only.</returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
+            await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken).ConfigureAwait(true);
             throw new InvalidOperationException("Cancellation should stop the infinite-delay handler before it returns.");
         }
     }

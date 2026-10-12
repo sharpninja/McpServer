@@ -71,7 +71,8 @@ public sealed class UseCaseComponentUpdateContractTests
     [Fact]
     public async Task CorrectRealHandlersSatisfyIdentityPreservingContract()
     {
-        await using var editor = await RealHandlerEditor.CreateAsync().ConfigureAwait(true);
+        var editor = await RealHandlerEditor.CreateAsync().ConfigureAwait(true);
+        await using var editorDisposal = editor.ConfigureAwait(true);
 
         var actor = await editor.UpdateActorAsync(ActorInput, TestContext.Current.CancellationToken).ConfigureAwait(true);
         var flow = await editor.UpdateFlowAsync(FlowInput, TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -90,7 +91,8 @@ public sealed class UseCaseComponentUpdateContractTests
     [Fact]
     public async Task RealHandlersRejectInvalidAndOutOfScopeTargetsWithoutMutation()
     {
-        await using var editor = await RealHandlerEditor.CreateAsync().ConfigureAwait(true);
+        var editor = await RealHandlerEditor.CreateAsync().ConfigureAwait(true);
+        await using var editorDisposal = editor.ConfigureAwait(true);
 
         await editor.AssertInvalidAndOutOfScopeUpdatesFailAsync(
             TestContext.Current.CancellationToken).ConfigureAwait(true);

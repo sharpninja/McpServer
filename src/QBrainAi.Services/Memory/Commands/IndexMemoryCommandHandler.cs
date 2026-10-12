@@ -18,7 +18,8 @@ public sealed class IndexMemoryCommandHandler(DbContextOptions<McpDbContext> opt
     {
         try
         {
-            await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+            var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+            await using var dbDisposal = db.ConfigureAwait(false);
             var operations = new MemorySearchOperations(db);
             var result = await operations.IndexAsync(
                 command.MemoryId,
@@ -46,7 +47,8 @@ public sealed class ReconcileMemoryIndexCommandHandler(DbContextOptions<McpDbCon
     /// <inheritdoc />
     public async Task<Result<MemoryIndexResult>> HandleAsync(ReconcileMemoryIndexCommand command, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemorySearchOperations(db);
         var result = await operations.ReconcileAsync(context.CancellationToken).ConfigureAwait(false);
         return Result<MemoryIndexResult>.Success(result);
@@ -62,7 +64,8 @@ public sealed class BatchIndexMemoriesCommandHandler(DbContextOptions<McpDbConte
     /// <inheritdoc />
     public async Task<Result<MemoryIndexResult>> HandleAsync(BatchIndexMemoriesCommand command, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemorySearchOperations(db);
         var result = await operations.BatchIndexAsync(command.MemoryIds, context.CancellationToken).ConfigureAwait(false);
         return Result<MemoryIndexResult>.Success(result);

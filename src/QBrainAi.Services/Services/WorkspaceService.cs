@@ -345,7 +345,8 @@ public sealed class WorkspaceService : IWorkspaceService
                 entity = existing;
             }
 
-            await using var transaction = await _db.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+            var transaction = await _db.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+            await using var transactionDisposal = transaction.ConfigureAwait(false);
             try
             {
                 await _db.SaveChangesAsync(ct).ConfigureAwait(false);

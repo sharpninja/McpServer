@@ -32,7 +32,7 @@ agentStdioCommand.SetHandler(async (context) =>
     var agent = context.ParseResult.GetValueForOption(agentOption);
     var host = CreateHost(workspacePath, markerFile, agent, suppressConsoleLogging: true);
     var agentStdioHandler = host.Services.GetRequiredService<AgentStdioHandler>();
-    await agentStdioHandler.RunAsync(context.GetCancellationToken());
+    await agentStdioHandler.RunAsync(context.GetCancellationToken()).ConfigureAwait(false);
 });
 
 var interactiveCommand = new Command("--interactive", "Run in interactive REPL mode");
@@ -46,7 +46,7 @@ interactiveCommand.SetHandler(async (context) =>
     var agent = context.ParseResult.GetValueForOption(agentOption);
     var host = CreateHost(workspacePath, markerFile, agent, suppressConsoleLogging: false);
     var interactiveHandler = host.Services.GetRequiredService<InteractiveHandler>();
-    await interactiveHandler.RunAsync(context.GetCancellationToken());
+    await interactiveHandler.RunAsync(context.GetCancellationToken()).ConfigureAwait(false);
 });
 
 rootCommand.AddCommand(agentStdioCommand);
@@ -74,7 +74,7 @@ rootCommand.SetHandler(() =>
     Console.WriteLine();
 });
 
-return await rootCommand.InvokeAsync(args);
+return await rootCommand.InvokeAsync(args).ConfigureAwait(false);
 
 static IHost CreateHost(string? workspacePathOverride, string? markerFileOverride, string? agentOverride, bool suppressConsoleLogging)
 {

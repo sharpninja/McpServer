@@ -27,13 +27,13 @@ public sealed class ContextClient : McpClientBase
         string query, string? sourceType = null, int limit = 20, CancellationToken cancellationToken = default)
     {
         var request = new ContextSearchRequest { Query = query, SourceType = sourceType, Limit = limit };
-        return await PostAsync<ContextSearchResult>("qbrainai/context/search", request, cancellationToken);
+        return await PostAsync<ContextSearchResult>("qbrainai/context/search", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Trigger a full index rebuild.</summary>
     public async Task<RebuildIndexResult> RebuildIndexAsync(CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RebuildIndexResult>("qbrainai/context/rebuild-index", null, cancellationToken);
+        return await PostAsync<RebuildIndexResult>("qbrainai/context/rebuild-index", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get a deterministic context pack for a query.</summary>
@@ -41,13 +41,13 @@ public sealed class ContextClient : McpClientBase
         string query, string? queryId = null, int limit = 20, CancellationToken cancellationToken = default)
     {
         var request = new ContextPackRequest { Query = query, QueryId = queryId, Limit = limit };
-        return await PostAsync<ContextPack>("qbrainai/context/pack", request, cancellationToken);
+        return await PostAsync<ContextPack>("qbrainai/context/pack", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>List all indexed document sources.</summary>
     public async Task<ContextSourcesResult> ListSourcesAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<ContextSourcesResult>("qbrainai/context/sources", cancellationToken);
+        return await GetAsync<ContextSourcesResult>("qbrainai/context/sources", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Ingest context directly from a website URL without staging files first.</summary>
@@ -71,7 +71,7 @@ public sealed class ContextClient : McpClientBase
             ForceRefresh = forceRefresh,
             TriggerGraphRagIndex = triggerGraphRagIndex
         };
-        return await PostAsync<WebsiteIngestResult>("qbrainai/context/ingest-website", request, cancellationToken);
+        return await PostAsync<WebsiteIngestResult>("qbrainai/context/ingest-website", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -88,13 +88,13 @@ public sealed class ContextClient : McpClientBase
     /// <summary>Get GraphRAG status for the active workspace.</summary>
     public async Task<GraphRagStatusResult> GraphRagStatusAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GraphRagStatusResult>("qbrainai/graphrag/status", cancellationToken);
+        return await GetAsync<GraphRagStatusResult>("qbrainai/graphrag/status", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Trigger GraphRAG indexing for the active workspace.</summary>
     public async Task<GraphRagStatusResult> GraphRagIndexAsync(bool force = false, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GraphRagStatusResult>("qbrainai/graphrag/index", new GraphRagIndexRequest { Force = force }, cancellationToken);
+        return await PostAsync<GraphRagStatusResult>("qbrainai/graphrag/index", new GraphRagIndexRequest { Force = force }, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Run a GraphRAG query for the active workspace.</summary>
@@ -120,7 +120,7 @@ public sealed class ContextClient : McpClientBase
             CommunityDepth = communityDepth,
             ResponseTokenBudget = responseTokenBudget
         };
-        return await PostAsync<GraphRagQueryResult>("qbrainai/graphrag/query", request, cancellationToken);
+        return await PostAsync<GraphRagQueryResult>("qbrainai/graphrag/query", request, cancellationToken).ConfigureAwait(false);
     }
 
     // ── Ad-Hoc Text Ingestion (FR-MCP-078, TR-GRAPHRAG-ADHOC-001) ──
@@ -129,7 +129,7 @@ public sealed class ContextClient : McpClientBase
     public async Task<GraphRagIngestTextResult> GraphRagIngestTextAsync(
         GraphRagIngestTextRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GraphRagIngestTextResult>("qbrainai/graphrag/documents/ingest", request, cancellationToken);
+        return await PostAsync<GraphRagIngestTextResult>("qbrainai/graphrag/documents/ingest", request, cancellationToken).ConfigureAwait(false);
     }
 
     // ── Document Management (FR-MCP-080, TR-GRAPHRAG-ADHOC-003) ──
@@ -141,7 +141,7 @@ public sealed class ContextClient : McpClientBase
         var path = $"qbrainai/graphrag/documents?skip={skip}&take={take}";
         if (!string.IsNullOrWhiteSpace(sourceType))
             path += $"&sourceType={Uri.EscapeDataString(sourceType)}";
-        return await GetAsync<GraphRagDocumentListResult>(path, cancellationToken);
+        return await GetAsync<GraphRagDocumentListResult>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Retrieve all chunks for a specific document.</summary>
@@ -149,7 +149,7 @@ public sealed class ContextClient : McpClientBase
         string documentId, CancellationToken cancellationToken = default)
     {
         return await GetAsync<GraphRagDocumentChunksResult>(
-            $"qbrainai/graphrag/documents/{Uri.EscapeDataString(documentId)}/chunks", cancellationToken);
+            $"qbrainai/graphrag/documents/{Uri.EscapeDataString(documentId)}/chunks", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Delete a document and its chunks from the corpus.</summary>
@@ -157,7 +157,7 @@ public sealed class ContextClient : McpClientBase
         string documentId, CancellationToken cancellationToken = default)
     {
         return await DeleteAsync<GraphRagDocumentDeleteResult>(
-            $"qbrainai/graphrag/documents/{Uri.EscapeDataString(documentId)}", cancellationToken);
+            $"qbrainai/graphrag/documents/{Uri.EscapeDataString(documentId)}", cancellationToken).ConfigureAwait(false);
     }
 
     // ── Entity CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
@@ -166,7 +166,7 @@ public sealed class ContextClient : McpClientBase
     public async Task<GraphEntityResult> GraphRagCreateEntityAsync(
         GraphEntityRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GraphEntityResult>("qbrainai/graphrag/entities", request, cancellationToken);
+        return await PostAsync<GraphEntityResult>("qbrainai/graphrag/entities", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>List graph entities with pagination and optional type filter.</summary>
@@ -176,7 +176,7 @@ public sealed class ContextClient : McpClientBase
         var path = $"qbrainai/graphrag/entities?skip={skip}&take={take}";
         if (!string.IsNullOrWhiteSpace(entityType))
             path += $"&entityType={Uri.EscapeDataString(entityType)}";
-        return await GetAsync<GraphEntityListResult>(path, cancellationToken);
+        return await GetAsync<GraphEntityListResult>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Retrieve a graph entity by ID.</summary>
@@ -184,7 +184,7 @@ public sealed class ContextClient : McpClientBase
         string entityId, CancellationToken cancellationToken = default)
     {
         return await GetAsync<GraphEntityResult>(
-            $"qbrainai/graphrag/entities/{Uri.EscapeDataString(entityId)}", cancellationToken);
+            $"qbrainai/graphrag/entities/{Uri.EscapeDataString(entityId)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Update an existing graph entity.</summary>
@@ -192,7 +192,7 @@ public sealed class ContextClient : McpClientBase
         string entityId, GraphEntityRequest request, CancellationToken cancellationToken = default)
     {
         return await PutAsync<GraphEntityResult>(
-            $"qbrainai/graphrag/entities/{Uri.EscapeDataString(entityId)}", request, cancellationToken);
+            $"qbrainai/graphrag/entities/{Uri.EscapeDataString(entityId)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Delete a graph entity by ID.</summary>
@@ -200,7 +200,7 @@ public sealed class ContextClient : McpClientBase
         string entityId, CancellationToken cancellationToken = default)
     {
         await SendForStatusAsync(HttpMethod.Delete,
-            $"qbrainai/graphrag/entities/{Uri.EscapeDataString(entityId)}", null, cancellationToken);
+            $"qbrainai/graphrag/entities/{Uri.EscapeDataString(entityId)}", null, cancellationToken).ConfigureAwait(false);
     }
 
     // ── Relationship CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
@@ -209,7 +209,7 @@ public sealed class ContextClient : McpClientBase
     public async Task<GraphRelationshipResult> GraphRagCreateRelationshipAsync(
         GraphRelationshipRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GraphRelationshipResult>("qbrainai/graphrag/relationships", request, cancellationToken);
+        return await PostAsync<GraphRelationshipResult>("qbrainai/graphrag/relationships", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>List graph relationships with pagination and optional filters.</summary>
@@ -222,7 +222,7 @@ public sealed class ContextClient : McpClientBase
             path += $"&entityId={Uri.EscapeDataString(entityId)}";
         if (!string.IsNullOrWhiteSpace(type))
             path += $"&type={Uri.EscapeDataString(type)}";
-        return await GetAsync<GraphRelationshipListResult>(path, cancellationToken);
+        return await GetAsync<GraphRelationshipListResult>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Retrieve a graph relationship by ID.</summary>
@@ -230,7 +230,7 @@ public sealed class ContextClient : McpClientBase
         string relationshipId, CancellationToken cancellationToken = default)
     {
         return await GetAsync<GraphRelationshipResult>(
-            $"qbrainai/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", cancellationToken);
+            $"qbrainai/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Update an existing graph relationship.</summary>
@@ -238,7 +238,7 @@ public sealed class ContextClient : McpClientBase
         string relationshipId, GraphRelationshipRequest request, CancellationToken cancellationToken = default)
     {
         return await PutAsync<GraphRelationshipResult>(
-            $"qbrainai/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", request, cancellationToken);
+            $"qbrainai/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Delete a graph relationship by ID.</summary>
@@ -246,7 +246,7 @@ public sealed class ContextClient : McpClientBase
         string relationshipId, CancellationToken cancellationToken = default)
     {
         await SendForStatusAsync(HttpMethod.Delete,
-            $"qbrainai/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", null, cancellationToken);
+            $"qbrainai/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", null, cancellationToken).ConfigureAwait(false);
     }
 }
 

@@ -171,7 +171,7 @@ public sealed class WikiDumpG7OverlayTests : IDisposable
             OutputRoot = output,
             IncludeDump = true,
             WorkspacePath = _workspace,
-        }, TestContext.Current.CancellationToken);
+        }, TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(exported.Success, exported.Error);
         Assert.NotNull(exported.Dump);
         return exported;

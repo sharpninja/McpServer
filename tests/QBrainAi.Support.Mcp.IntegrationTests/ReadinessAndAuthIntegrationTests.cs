@@ -67,7 +67,8 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
         var response = await client.GetAsync(new Uri("/ready", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var stream = await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await using var streamDisposal = stream.ConfigureAwait(true);
         using var payload = await JsonDocument.ParseAsync(stream, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("Healthy", payload.RootElement.GetProperty("status").GetString());
 

@@ -223,7 +223,8 @@ public sealed class AgentHelpEndpointTests : IDisposable
         HttpResponseMessage response,
         CancellationToken cancellationToken)
     {
-        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        await using var streamDisposal = stream.ConfigureAwait(true);
         using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
 
         var events = new List<JsonElement>();

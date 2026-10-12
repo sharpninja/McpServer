@@ -102,7 +102,8 @@ public sealed class SessionLogSubmitBudgetTests
             .UseInMemoryDatabase($"SessionLogSubmitBudget_{Guid.NewGuid():N}")
             .AddInterceptors(new DelayedSaveChangesInterceptor(TimeSpan.FromSeconds(6)))
             .Options;
-        await using var db = new McpDbContext(options);
+        var db = new McpDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         db.Database.EnsureCreated();
         db.OverrideWorkspaceId(WorkspacePath);
         var sut = new SessionLogService(

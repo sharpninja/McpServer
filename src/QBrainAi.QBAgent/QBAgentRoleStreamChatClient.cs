@@ -74,7 +74,8 @@ internal sealed class QBAgentRoleStreamChatClient : IChatClient
                 cancellationToken)
             .ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
-        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        await using var streamDisposal = stream.ConfigureAwait(false);
         await foreach (var update in ReadSseAsync(stream, _roleProgress, cancellationToken, _showIntent).ConfigureAwait(false))
             yield return update;
     }

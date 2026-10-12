@@ -94,7 +94,8 @@ public sealed class RequirementsRecoveryGuardrailTests
 
     private static async Task AssertRejectedAsync(string key, RequirementsRecoveryItemRequest item)
     {
-        await using var connection = OpenConnection();
+        var connection = OpenConnection();
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         var (service, db) = Build(connection);
         using (db)
         {

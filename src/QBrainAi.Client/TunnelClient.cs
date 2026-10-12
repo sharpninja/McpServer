@@ -23,42 +23,42 @@ public sealed class TunnelClient : McpClientBase
     /// <summary>List all registered tunnel providers.</summary>
     public async Task<List<TunnelProviderInfo>> ListAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<List<TunnelProviderInfo>>("qbrainai/tunnel/list", cancellationToken);
+        return await GetAsync<List<TunnelProviderInfo>>("qbrainai/tunnel/list", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get the status of a specific tunnel provider.</summary>
     public async Task<TunnelProviderInfo> GetStatusAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/status", cancellationToken);
+        return await GetAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/status", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Enable a tunnel provider.</summary>
     public async Task<TunnelProviderInfo> EnableAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/enable", null, cancellationToken);
+        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/enable", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Disable a tunnel provider.</summary>
     public async Task<TunnelProviderInfo> DisableAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/disable", null, cancellationToken);
+        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/disable", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Start a tunnel provider.</summary>
     public async Task<TunnelProviderInfo> StartAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/start", null, cancellationToken);
+        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/start", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Stop a tunnel provider.</summary>
     public async Task<TunnelProviderInfo> StopAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/stop", null, cancellationToken);
+        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/stop", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Restart a tunnel provider (stop then start).</summary>
     public async Task<TunnelProviderInfo> RestartAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/restart", null, cancellationToken);
+        return await PostAsync<TunnelProviderInfo>($"qbrainai/tunnel/{providerName}/restart", null, cancellationToken).ConfigureAwait(false);
     }
 }

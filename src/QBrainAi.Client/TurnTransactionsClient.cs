@@ -32,7 +32,7 @@ public sealed class TurnTransactionsClient : McpClientBase
     /// <returns>Transaction gate state and last failure reason.</returns>
     public async Task<TurnTransactionStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TurnTransactionStatusResponse>("qbrainai/turntransactions/status", cancellationToken);
+        return await GetAsync<TurnTransactionStatusResponse>("qbrainai/turntransactions/status", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public sealed class TurnTransactionsClient : McpClientBase
     {
         return await GetAsync<IReadOnlyList<TransactionPubSubMessageStatus>>(
             $"qbrainai/turntransactions/pubsub/status?maxMessages={maxMessages}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public sealed class TurnTransactionsClient : McpClientBase
         return await PostAsync<TransactionPubSubReplayResult>(
             $"qbrainai/turntransactions/pubsub/replay?maxMessages={maxMessages}",
             null,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -87,6 +87,6 @@ public sealed class TurnTransactionsClient : McpClientBase
         return await PostAsync<TransactionPubSubRetentionResult>(
             $"qbrainai/turntransactions/pubsub/retention/purge?{query}",
             null,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 }

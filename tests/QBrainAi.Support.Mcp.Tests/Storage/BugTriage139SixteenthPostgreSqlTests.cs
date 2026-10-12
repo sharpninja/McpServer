@@ -116,7 +116,8 @@ public sealed class BugTriage139SixteenthPostgreSqlBoundaryTests
     public async Task FreshPostgreSqlStatementTimeoutConcurrentWithCallerCancellationIsPreserved()
     {
         var testToken = TestContext.Current.CancellationToken;
-        await using var connection = new NpgsqlConnection(_fixture.ServerConnectionString);
+        var connection = new NpgsqlConnection(_fixture.ServerConnectionString);
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(testToken).ConfigureAwait(true);
         await using (var setup = connection.CreateCommand())
         {
@@ -174,7 +175,8 @@ public sealed class BugTriage139SixteenthPostgreSqlBoundaryTests
     public async Task FreshPostgreSqlExactCallerTokenCancellationRemainsCancellation()
     {
         var testToken = TestContext.Current.CancellationToken;
-        await using var connection = new NpgsqlConnection(_fixture.ServerConnectionString);
+        var connection = new NpgsqlConnection(_fixture.ServerConnectionString);
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(testToken).ConfigureAwait(true);
         await using (var setup = connection.CreateCommand())
         {
@@ -208,8 +210,10 @@ public sealed class BugTriage139SixteenthPostgreSqlBoundaryTests
     public async Task FreshPostgreSqlAdministrativeCancellationConcurrentWithCallerCancellationIsPreserved()
     {
         var testToken = TestContext.Current.CancellationToken;
-        await using var connection = new NpgsqlConnection(_fixture.ServerConnectionString);
-        await using var administrator = new NpgsqlConnection(_fixture.ServerConnectionString);
+        var connection = new NpgsqlConnection(_fixture.ServerConnectionString);
+        await using var connectionDisposal = connection.ConfigureAwait(true);
+        var administrator = new NpgsqlConnection(_fixture.ServerConnectionString);
+        await using var administratorDisposal = administrator.ConfigureAwait(true);
         await connection.OpenAsync(testToken).ConfigureAwait(true);
         await administrator.OpenAsync(testToken).ConfigureAwait(true);
 
@@ -293,7 +297,8 @@ public sealed class BugTriage139SixteenthPostgreSqlBoundaryTests
         var deadline = DateTimeOffset.UtcNow.AddSeconds(20);
         while (DateTimeOffset.UtcNow < deadline)
         {
-            await using var probe = administrator.CreateCommand();
+            var probe = administrator.CreateCommand();
+            await using var probeDisposal = probe.ConfigureAwait(true);
             probe.CommandText =
                 """
                 SELECT EXISTS (

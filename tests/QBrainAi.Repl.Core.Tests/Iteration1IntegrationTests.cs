@@ -169,7 +169,7 @@ public class Iteration1IntegrationTests
         {
             callbackInvoked = true;
             capturedData = data;
-            await authHandler.UpdateAuthStateAsync(data, TestContext.Current.CancellationToken);
+            await authHandler.UpdateAuthStateAsync(data, TestContext.Current.CancellationToken).ConfigureAwait(true);
         };
 
         await markerReader.WatchAsync(workspacePath, onChange, cancellationToken: TestContext.Current.CancellationToken);
@@ -261,7 +261,7 @@ public class Iteration1IntegrationTests
         Assert.True(authHandler.CurrentAuthState.IsValid);
         Assert.Equal("refreshed-key", authHandler.CurrentAuthState.ApiKey);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]

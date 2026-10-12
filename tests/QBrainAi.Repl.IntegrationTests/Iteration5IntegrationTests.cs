@@ -661,10 +661,10 @@ public sealed class Iteration5IntegrationTests : IDisposable
     private async Task SendCommandAndWaitAsync(object envelope)
     {
         var initialCount = _replProcess.StdoutLines.Count;
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(envelope));
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(initialCount + 1, TimeSpan.FromSeconds(15));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(envelope)).ConfigureAwait(true);
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(initialCount + 1, TimeSpan.FromSeconds(15)).ConfigureAwait(true);
         Assert.True(foundResponse, BuildTimeoutMessage(initialCount + 1));
-        await Task.Delay(100);
+        await Task.Delay(100).ConfigureAwait(true);
     }
 
     private string BuildTimeoutMessage(int expectedCount)

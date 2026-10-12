@@ -57,7 +57,8 @@ public static class McpDatabaseEncryptionCoordinator
         McpDatabaseEncryptionOptions options,
         CancellationToken cancellationToken)
     {
-        await using var connection = dbContext.Database.GetDbConnection();
+        var connection = dbContext.Database.GetDbConnection();
+        await using var connectionDisposal = connection.ConfigureAwait(false);
         if (connection.State != ConnectionState.Open)
         {
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -84,7 +85,8 @@ public static class McpDatabaseEncryptionCoordinator
             return;
         }
 
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText =
             """
             SELECT schemaname, tablename,
@@ -96,7 +98,8 @@ public static class McpDatabaseEncryptionCoordinator
 
         var hasUnencryptedAppTable = false;
         var hasEncryptedAppTable = false;
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             var isEncrypted = reader.GetBoolean(2);
@@ -122,7 +125,8 @@ public static class McpDatabaseEncryptionCoordinator
         McpDatabaseEncryptionOptions options,
         CancellationToken cancellationToken)
     {
-        await using var connection = dbContext.Database.GetDbConnection();
+        var connection = dbContext.Database.GetDbConnection();
+        await using var connectionDisposal = connection.ConfigureAwait(false);
         if (connection.State != ConnectionState.Open)
         {
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -162,7 +166,8 @@ public static class McpDatabaseEncryptionCoordinator
         string commandText,
         CancellationToken cancellationToken)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = commandText;
         var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
         if (result is null or DBNull)

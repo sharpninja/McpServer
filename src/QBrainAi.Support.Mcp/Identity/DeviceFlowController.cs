@@ -44,7 +44,7 @@ public sealed class DeviceFlowController : Controller
         if (!string.IsNullOrWhiteSpace(userCode))
         {
             // Auto-validate if user code is in query string
-            return await ProcessUserCode(userCode);
+            return await ProcessUserCode(userCode).ConfigureAwait(false);
         }
 
         // Show code entry form
@@ -65,12 +65,12 @@ public sealed class DeviceFlowController : Controller
         if (string.IsNullOrWhiteSpace(userCode))
             return Content(BuildCodeEntryHtml("Please enter the code displayed in your terminal."), "text/html");
 
-        return await ProcessUserCode(userCode.Trim());
+        return await ProcessUserCode(userCode.Trim()).ConfigureAwait(false);
     }
 
     private async Task<IActionResult> ProcessUserCode(string userCode)
     {
-        var request = await _interaction.GetAuthorizationContextAsync(userCode);
+        var request = await _interaction.GetAuthorizationContextAsync(userCode).ConfigureAwait(false);
         if (request is null)
         {
             return Content(BuildCodeEntryHtml("Invalid or expired code. Please try again."), "text/html");
@@ -87,7 +87,7 @@ public sealed class DeviceFlowController : Controller
         {
             ScopesValuesConsented = request.ValidatedResources.RawScopeValues,
         };
-        await _interaction.HandleRequestAsync(userCode, consent);
+        await _interaction.HandleRequestAsync(userCode, consent).ConfigureAwait(false);
 
         return Content(BuildSuccessHtml(), "text/html");
     }
@@ -105,11 +105,11 @@ public sealed class DeviceFlowController : Controller
         if (!idsOptions.Value.Enabled)
             return NotFound();
 
-        var request = await _interaction.GetAuthorizationContextAsync(userCode);
+        var request = await _interaction.GetAuthorizationContextAsync(userCode).ConfigureAwait(false);
         if (request is null)
             return Content(BuildCodeEntryHtml("Invalid or expired code."), "text/html");
 
-        var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false);
+        var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false).ConfigureAwait(false);
         if (!result.Succeeded)
         {
             return Content(BuildLoginHtml(userCode, "Invalid username or password."), "text/html");
@@ -120,7 +120,7 @@ public sealed class DeviceFlowController : Controller
         {
             ScopesValuesConsented = request.ValidatedResources.RawScopeValues,
         };
-        await _interaction.HandleRequestAsync(userCode, consent);
+        await _interaction.HandleRequestAsync(userCode, consent).ConfigureAwait(false);
 
         return Content(BuildSuccessHtml(), "text/html");
     }

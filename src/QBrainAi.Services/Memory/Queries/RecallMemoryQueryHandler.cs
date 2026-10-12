@@ -18,7 +18,8 @@ public sealed class RecallMemoryQueryHandler(DbContextOptions<McpDbContext> opti
     /// <inheritdoc />
     public async Task<Result<MemoryRecallResult>> HandleAsync(RecallMemoryQuery query, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = query.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = query.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemorySearchOperations(db);
         var result = await operations.RecallAsync(query, context.CancellationToken).ConfigureAwait(false);
         return Result<MemoryRecallResult>.Success(result);

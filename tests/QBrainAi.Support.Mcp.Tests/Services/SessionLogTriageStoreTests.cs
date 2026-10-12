@@ -138,7 +138,8 @@ public sealed class SessionLogTriageStoreTests : IDisposable
             .UseInMemoryDatabase($"SessionLogHungSave_{Guid.NewGuid():N}")
             .AddInterceptors(new HungSaveChangesInterceptor())
             .Options;
-        await using var db = new McpDbContext(options);
+        var db = new McpDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         db.Database.EnsureCreated();
         db.OverrideWorkspaceId(WorkspacePath);
         var sut = new SessionLogService(

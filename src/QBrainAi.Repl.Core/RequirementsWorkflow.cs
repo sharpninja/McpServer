@@ -92,7 +92,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<IFrQueryResult> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        var entries = await _client.ListFrAsync(area, status, cancellationToken);
+        var entries = await _client.ListFrAsync(area, status, cancellationToken).ConfigureAwait(false);
         var items = entries.Select(e => new FrItemAdapter(e)).ToList();
         return new FrQueryResultAdapter(items);
     }
@@ -108,7 +108,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     public async Task<IFrItem> GetFrAsync(string id, CancellationToken cancellationToken = default)
     {
         ValidateFrId(id);
-        var entry = await _client.GetFrAsync(id, cancellationToken);
+        var entry = await _client.GetFrAsync(id, cancellationToken).ConfigureAwait(false);
         return new FrItemAdapter(entry);
     }
 
@@ -132,7 +132,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         try
         {
-            var entry = await _client.CreateFrAsync(clientRequest, cancellationToken);
+            var entry = await _client.CreateFrAsync(clientRequest, cancellationToken).ConfigureAwait(false);
             return new FrMutationResultAdapter(true, new FrItemAdapter(entry));
         }
         catch (Exception ex) when (ex.Message.Contains("already exists"))
@@ -165,7 +165,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
-        var entry = await _client.UpdateFrAsync(frId, clientRequest, cancellationToken);
+        var entry = await _client.UpdateFrAsync(frId, clientRequest, cancellationToken).ConfigureAwait(false);
         return new FrMutationResultAdapter(true, new FrItemAdapter(entry));
     }
 
@@ -173,13 +173,13 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     public async Task DeleteFrAsync(string id, CancellationToken cancellationToken = default)
     {
         ValidateFrId(id);
-        await _client.DeleteFrAsync(id, cancellationToken);
+        await _client.DeleteFrAsync(id, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<ITrQueryResult> ListTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        var entries = await _client.ListTrAsync(area, subarea, status, cancellationToken);
+        var entries = await _client.ListTrAsync(area, subarea, status, cancellationToken).ConfigureAwait(false);
         var items = entries.Select(e => new TrItemAdapter(e)).ToList();
         return new TrQueryResultAdapter(items);
     }
@@ -188,7 +188,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     public async Task<ITrItem> GetTrAsync(string id, CancellationToken cancellationToken = default)
     {
         ValidateTrIdPresent(id);
-        var entry = await _client.GetTrAsync(id, cancellationToken);
+        var entry = await _client.GetTrAsync(id, cancellationToken).ConfigureAwait(false);
         return new TrItemAdapter(entry);
     }
 
@@ -212,7 +212,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         try
         {
-            var entry = await _client.CreateTrAsync(clientRequest, cancellationToken);
+            var entry = await _client.CreateTrAsync(clientRequest, cancellationToken).ConfigureAwait(false);
             return new TrMutationResultAdapter(true, new TrItemAdapter(entry));
         }
         catch (Exception ex) when (ex.Message.Contains("already exists"))
@@ -245,7 +245,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
-        var entry = await _client.UpdateTrAsync(trId, clientRequest, cancellationToken);
+        var entry = await _client.UpdateTrAsync(trId, clientRequest, cancellationToken).ConfigureAwait(false);
         return new TrMutationResultAdapter(true, new TrItemAdapter(entry));
     }
 
@@ -253,13 +253,13 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     public async Task DeleteTrAsync(string id, CancellationToken cancellationToken = default)
     {
         ValidateTrIdPresent(id);
-        await _client.DeleteTrAsync(id, cancellationToken);
+        await _client.DeleteTrAsync(id, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<ITestQueryResult> ListTestAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        var entries = await _client.ListTestAsync(area, status, cancellationToken);
+        var entries = await _client.ListTestAsync(area, status, cancellationToken).ConfigureAwait(false);
         var items = entries.Select(e => new TestItemAdapter(e)).ToList();
         return new TestQueryResultAdapter(items);
     }
@@ -268,7 +268,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     public async Task<ITestItem> GetTestAsync(string id, CancellationToken cancellationToken = default)
     {
         ValidateTestId(id);
-        var entry = await _client.GetTestAsync(id, cancellationToken);
+        var entry = await _client.GetTestAsync(id, cancellationToken).ConfigureAwait(false);
         return new TestItemAdapter(entry);
     }
 
@@ -292,7 +292,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         try
         {
-            var entry = await _client.CreateTestAsync(clientRequest, cancellationToken);
+            var entry = await _client.CreateTestAsync(clientRequest, cancellationToken).ConfigureAwait(false);
             return new TestMutationResultAdapter(true, new TestItemAdapter(entry));
         }
         catch (Exception ex) when (ex.Message.Contains("already exists"))
@@ -325,7 +325,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
-        var entry = await _client.UpdateTestAsync(testId, clientRequest, cancellationToken);
+        var entry = await _client.UpdateTestAsync(testId, clientRequest, cancellationToken).ConfigureAwait(false);
         return new TestMutationResultAdapter(true, new TestItemAdapter(entry));
     }
 
@@ -333,7 +333,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     public async Task DeleteTestAsync(string id, CancellationToken cancellationToken = default)
     {
         ValidateTestId(id);
-        await _client.DeleteTestAsync(id, cancellationToken);
+        await _client.DeleteTestAsync(id, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -343,7 +343,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         foreach (var record in RequireRecords(request.Records))
             ValidateFrId(record.Id ?? string.Empty);
 
-        return await _client.CreateFrBatchAsync(request, cancellationToken);
+        return await _client.CreateFrBatchAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -353,7 +353,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         foreach (var record in RequireRecords(request.Records))
             ValidateFrId(record.Id ?? string.Empty);
 
-        return await _client.UpdateFrBatchAsync(request, cancellationToken);
+        return await _client.UpdateFrBatchAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -363,7 +363,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         foreach (var record in RequireRecords(request.Records))
             ValidateTrId(record.Id ?? string.Empty);
 
-        return await _client.CreateTrBatchAsync(request, cancellationToken);
+        return await _client.CreateTrBatchAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -373,7 +373,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         foreach (var record in RequireRecords(request.Records))
             ValidateTrIdPresent(record.Id ?? string.Empty);
 
-        return await _client.UpdateTrBatchAsync(request, cancellationToken);
+        return await _client.UpdateTrBatchAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -383,7 +383,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         foreach (var record in RequireRecords(request.Records))
             ValidateTestId(record.Id ?? string.Empty);
 
-        return await _client.CreateTestBatchAsync(request, cancellationToken);
+        return await _client.CreateTestBatchAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -393,7 +393,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         foreach (var record in RequireRecords(request.Records))
             ValidateTestId(record.Id ?? string.Empty);
 
-        return await _client.UpdateTestBatchAsync(request, cancellationToken);
+        return await _client.UpdateTestBatchAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -403,7 +403,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         foreach (var record in RequireRecords(request.Records))
             ValidateBatchRecordId(record.Kind, record.Id);
 
-        return await _client.CreateBatchAsync(request, cancellationToken);
+        return await _client.CreateBatchAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -413,13 +413,13 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         foreach (var record in RequireRecords(request.Records))
             ValidateBatchRecordId(record.Kind, record.Id);
 
-        return await _client.UpdateBatchAsync(request, cancellationToken);
+        return await _client.UpdateBatchAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task<IMappingQueryResult> ListMappingsAsync(string? frId = null, string? trId = null, string? testId = null, CancellationToken cancellationToken = default)
     {
-        var mappings = await _client.ListMappingsAsync(cancellationToken);
+        var mappings = await _client.ListMappingsAsync(cancellationToken).ConfigureAwait(false);
         var filtered = mappings.AsEnumerable();
 
         if (!string.IsNullOrEmpty(frId))
@@ -482,7 +482,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         ValidateMappingRequirementId(frId, "FR");
         try
         {
-            await _client.GetFrAsync(frId, cancellationToken);
+            await _client.GetFrAsync(frId, cancellationToken).ConfigureAwait(false);
         }
         catch
         {
@@ -494,7 +494,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             ValidateMappingRequirementId(id, "TR");
             try
             {
-                await _client.GetTrAsync(id, cancellationToken);
+                await _client.GetTrAsync(id, cancellationToken).ConfigureAwait(false);
             }
             catch
             {
@@ -507,7 +507,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             ValidateMappingRequirementId(id, "TEST");
             try
             {
-                await _client.GetTestAsync(id, cancellationToken);
+                await _client.GetTestAsync(id, cancellationToken).ConfigureAwait(false);
             }
             catch
             {
@@ -517,7 +517,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         try
         {
-            var existing = await _client.GetMappingAsync(frId, cancellationToken);
+            var existing = await _client.GetMappingAsync(frId, cancellationToken).ConfigureAwait(false);
             trIds = NormalizeIds(existing.TrIds.Concat(trIds), null);
             testIds = NormalizeIds(existing.TestIds.Concat(testIds), null);
         }
@@ -532,7 +532,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             TestIds = testIds
         };
 
-        var mapping = await _client.UpsertMappingAsync(frId, upsertRequest, cancellationToken);
+        var mapping = await _client.UpsertMappingAsync(frId, upsertRequest, cancellationToken).ConfigureAwait(false);
         var item = new MappingItemAdapter(
             mapping.FrId,
             trIds.FirstOrDefault(),
@@ -549,7 +549,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             throw new ArgumentException("At least one requirement ID must be provided");
         }
 
-        var mappings = await _client.ListMappingsAsync(cancellationToken);
+        var mappings = await _client.ListMappingsAsync(cancellationToken).ConfigureAwait(false);
         var matching = mappings.AsEnumerable();
 
         if (!string.IsNullOrWhiteSpace(frId))
@@ -583,7 +583,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         {
             if (string.IsNullOrEmpty(trId) && string.IsNullOrEmpty(testId))
             {
-                await _client.DeleteMappingAsync(mapping.FrId, cancellationToken);
+                await _client.DeleteMappingAsync(mapping.FrId, cancellationToken).ConfigureAwait(false);
                 continue;
             }
 
@@ -598,7 +598,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             {
                 TrIds = remainingTrIds,
                 TestIds = remainingTestIds
-            }, cancellationToken);
+            }, cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -623,7 +623,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             _ => throw new ArgumentException($"Invalid docType: {docType}. Valid values: fr, tr, test, matrix, all")
         };
 
-        var generatedDoc = await _client.GenerateAsync(docParam, format, workspacePath, cancellationToken);
+        var generatedDoc = await _client.GenerateAsync(docParam, format, workspacePath, cancellationToken).ConfigureAwait(false);
 
         if (generatedDoc.ExportResult is not null)
         {
@@ -701,7 +701,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
                 MappingMarkdown = content
             };
 
-        var result = await _client.IngestAsync(request, cancellationToken);
+        var result = await _client.IngestAsync(request, cancellationToken).ConfigureAwait(false);
 
         return new DocumentIngestionResultAdapter(
             true,

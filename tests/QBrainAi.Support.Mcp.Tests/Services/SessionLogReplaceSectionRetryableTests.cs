@@ -39,7 +39,8 @@ public sealed class SessionLogReplaceSectionRetryableTests
         var seedOptions = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase(dbName)
             .Options;
-        await using (var seedDb = new McpDbContext(seedOptions))
+        var seedDb = new McpDbContext(seedOptions);
+        await using (seedDb.ConfigureAwait(true))
         {
             seedDb.Database.EnsureCreated();
             seedDb.OverrideWorkspaceId(WorkspacePath);
@@ -56,7 +57,8 @@ public sealed class SessionLogReplaceSectionRetryableTests
             .UseInMemoryDatabase(dbName)
             .AddInterceptors(new UnreachableSaveChangesInterceptor())
             .Options;
-        await using (var failingDb = new McpDbContext(failingOptions))
+        var failingDb = new McpDbContext(failingOptions);
+        await using (failingDb.ConfigureAwait(true))
         {
             failingDb.OverrideWorkspaceId(WorkspacePath);
             var failing = new SessionLogService(
@@ -83,7 +85,8 @@ public sealed class SessionLogReplaceSectionRetryableTests
         var readOptions = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase(dbName)
             .Options;
-        await using var readDb = new McpDbContext(readOptions);
+        var readDb = new McpDbContext(readOptions);
+        await using var readDbDisposal = readDb.ConfigureAwait(true);
         readDb.OverrideWorkspaceId(WorkspacePath);
         var reader = new SessionLogService(
             readDb,
@@ -128,7 +131,8 @@ public sealed class SessionLogReplaceSectionRetryableTests
         var seedOptions = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase(dbName)
             .Options;
-        await using (var seedDb = new McpDbContext(seedOptions))
+        var seedDb = new McpDbContext(seedOptions);
+        await using (seedDb.ConfigureAwait(true))
         {
             seedDb.Database.EnsureCreated();
             seedDb.OverrideWorkspaceId(WorkspacePath);
@@ -145,7 +149,8 @@ public sealed class SessionLogReplaceSectionRetryableTests
             .UseInMemoryDatabase(dbName)
             .AddInterceptors(new HungSaveChangesInterceptor())
             .Options;
-        await using var hungDb = new McpDbContext(hungOptions);
+        var hungDb = new McpDbContext(hungOptions);
+        await using var hungDbDisposal = hungDb.ConfigureAwait(true);
         hungDb.OverrideWorkspaceId(WorkspacePath);
         var sut = new SessionLogService(
             hungDb,

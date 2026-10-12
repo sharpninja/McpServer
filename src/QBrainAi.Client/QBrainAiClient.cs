@@ -263,7 +263,7 @@ public sealed class QBrainAiClient
             return string.Empty;
 
         var uri = new Uri($"{_options.BaseUrl.Scheme}://{_options.BaseUrl.Host}:{Port}/api-key");
-        using var response = await _http.GetAsync(uri, cancellationToken);
+        using var response = await _http.GetAsync(uri, cancellationToken).ConfigureAwait(false);
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
 

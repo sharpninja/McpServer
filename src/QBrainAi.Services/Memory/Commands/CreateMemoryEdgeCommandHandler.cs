@@ -17,7 +17,8 @@ public sealed class CreateMemoryEdgeCommandHandler(DbContextOptions<McpDbContext
     /// <inheritdoc />
     public async Task<Result<MemoryCreateEdgeResult>> HandleAsync(CreateMemoryEdgeCommand command, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemoryExploreOperations(db);
         var result = await operations.CreateEdgeAsync(command.Request, command.ReadOnlyCaller, context.CancellationToken)
             .ConfigureAwait(false);
@@ -35,7 +36,8 @@ public sealed class RecordHebbianCoRetrievalCommandHandler(DbContextOptions<McpD
     /// <inheritdoc />
     public async Task<Result<MemoryHebbianResult>> HandleAsync(RecordHebbianCoRetrievalCommand command, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemoryExploreOperations(db);
         var result = await operations.RecordHebbianAsync(
             command.MemoryIds,

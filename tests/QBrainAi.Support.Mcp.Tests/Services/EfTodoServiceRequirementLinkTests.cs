@@ -63,7 +63,8 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     public async Task CreateAsyncWithFixedWorkspaceOutsideHttpStoresTodoItemInFixedWorkspace()
     {
         var workspacePath = Path.Combine(Path.GetTempPath(), $"todo-fixed-{Guid.NewGuid():N}");
-        await using var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new SqliteConnection("Data Source=:memory:");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var services = new ServiceCollection();
         services.AddScoped(_ => new WorkspaceContext());

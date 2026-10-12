@@ -80,9 +80,10 @@ public sealed class RequirementsRecoveryService : IRequirementsRecoveryService
         // resolve to Replay / Conflict via FindRunAsync.
         for (var attempt = 1; attempt <= UniqueRaceMaxAttempts; attempt++)
         {
-            await using var transaction = await _db.Database
+            var transaction = await _db.Database
                 .BeginTransactionAsync(System.Data.IsolationLevel.Serializable, cancellationToken)
                 .ConfigureAwait(false);
+            await using var transactionDisposal = transaction.ConfigureAwait(false);
             try
             {
                 var raced = await FindRunAsync(payload.WorkspaceId, payload.Key, cancellationToken).ConfigureAwait(false);

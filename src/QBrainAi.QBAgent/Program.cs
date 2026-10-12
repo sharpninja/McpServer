@@ -82,7 +82,8 @@ try
     services.AddQBAgentTools();
     services.AddQBAgentSkills(skillsRoot);
 
-    await using var provider = services.BuildServiceProvider();
+    var provider = services.BuildServiceProvider();
+    await using var providerDisposal = provider.ConfigureAwait(false);
     var agent = provider.GetRequiredService<IMcpHostedAgent>();
     var processRunner = provider.GetRequiredService<IProcessRunner>();
     var skillRegistry = provider.GetRequiredService<ISkillRegistry>();

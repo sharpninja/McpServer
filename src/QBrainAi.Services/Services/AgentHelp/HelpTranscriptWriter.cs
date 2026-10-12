@@ -47,13 +47,14 @@ public sealed class HelpTranscriptWriter
         var line = JsonSerializer.Serialize(entry, AgentHelpTranscriptJsonContext.Default.AgentHelpTranscriptEntry) + Environment.NewLine;
         var bytes = Encoding.UTF8.GetBytes(line);
 
-        await using var stream = new FileStream(
+        var stream = new FileStream(
             filePath,
             FileMode.Append,
             FileAccess.Write,
             FileShare.Read,
             bufferSize: 4096,
             useAsync: true);
+        await using var streamDisposal = stream.ConfigureAwait(false);
         await stream.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
 
         _logger.LogDebug(

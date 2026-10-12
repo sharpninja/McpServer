@@ -37,7 +37,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     public async ValueTask InitializeAsync()
     {
         var body = new { Id = _testId, Title = "AuditUpdateOriginal", Section = "mvp-support", Priority = "low" };
-        var response = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+        var response = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
@@ -51,7 +51,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     /// </remarks>
     public async ValueTask DisposeAsync()
     {
-        await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}");
+        await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}").ConfigureAwait(true);
     }
 
     /// <summary>

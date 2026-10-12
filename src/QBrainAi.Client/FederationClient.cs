@@ -29,13 +29,13 @@ public sealed class FederationClient : McpClientBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Full federation status snapshot.</returns>
     public async Task<FederationStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
-        => await GetAsync<FederationStatusResponse>("qbrainai/federation/status", cancellationToken);
+        => await GetAsync<FederationStatusResponse>("qbrainai/federation/status", cancellationToken).ConfigureAwait(false);
 
     /// <summary>List local proxies enrolled with the hub.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Proxy inventory.</returns>
     public async Task<List<FederationProxyInfo>> ListProxiesAsync(CancellationToken cancellationToken = default)
-        => await GetAsync<List<FederationProxyInfo>>("qbrainai/federation/proxies", cancellationToken);
+        => await GetAsync<List<FederationProxyInfo>>("qbrainai/federation/proxies", cancellationToken).ConfigureAwait(false);
 
     /// <summary>Enroll a local proxy with the hub.</summary>
     /// <param name="request">Enrollment payload.</param>
@@ -44,7 +44,7 @@ public sealed class FederationClient : McpClientBase
     public async Task<FederationEnrollmentResponse> EnrollProxyAsync(
         FederationEnrollmentRequest request,
         CancellationToken cancellationToken = default)
-        => await PostAsync<FederationEnrollmentResponse>("qbrainai/federation/proxies/enroll", request, cancellationToken);
+        => await PostAsync<FederationEnrollmentResponse>("qbrainai/federation/proxies/enroll", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Record a heartbeat from an enrolled local proxy.</summary>
     /// <param name="proxyId">Proxy identifier.</param>
@@ -58,7 +58,7 @@ public sealed class FederationClient : McpClientBase
         => await PostAsync<FederationHeartbeatResponse>(
             $"qbrainai/federation/proxies/{Encode(proxyId)}/heartbeat",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     /// <summary>Register or update one workspace hosted by a proxy.</summary>
     /// <param name="proxyId">Proxy identifier.</param>
@@ -72,7 +72,7 @@ public sealed class FederationClient : McpClientBase
         => await PostAsync<FederationWorkspaceInfo>(
             $"qbrainai/federation/proxies/{Encode(proxyId)}/workspaces",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     /// <summary>List proxy-hosted workspaces known by the hub.</summary>
     /// <param name="proxyId">Optional proxy filter.</param>
@@ -83,7 +83,7 @@ public sealed class FederationClient : McpClientBase
         var path = string.IsNullOrWhiteSpace(proxyId)
             ? "qbrainai/federation/workspaces"
             : $"qbrainai/federation/workspaces?proxyId={Encode(proxyId)}";
-        return await GetAsync<List<FederationWorkspaceInfo>>(path, cancellationToken);
+        return await GetAsync<List<FederationWorkspaceInfo>>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Return queued operation and conflict counts.</summary>
@@ -95,7 +95,7 @@ public sealed class FederationClient : McpClientBase
         var path = string.IsNullOrWhiteSpace(proxyId)
             ? "qbrainai/federation/queue"
             : $"qbrainai/federation/queue?proxyId={Encode(proxyId)}";
-        return await GetAsync<FederationQueueStatusResponse>(path, cancellationToken);
+        return await GetAsync<FederationQueueStatusResponse>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>List federation conflicts.</summary>
@@ -111,14 +111,14 @@ public sealed class FederationClient : McpClientBase
         var query = string.IsNullOrWhiteSpace(proxyId)
             ? $"?openOnly={openOnly}"
             : $"?proxyId={Encode(proxyId)}&openOnly={openOnly}";
-        return await GetAsync<List<FederationConflictInfo>>($"qbrainai/federation/conflicts{query}", cancellationToken);
+        return await GetAsync<List<FederationConflictInfo>>($"qbrainai/federation/conflicts{query}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Return mutable state adapter coverage diagnostics.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Adapter coverage rows.</returns>
     public async Task<List<FederationStateAdapterCoverage>> GetAdapterCoverageAsync(CancellationToken cancellationToken = default)
-        => await GetAsync<List<FederationStateAdapterCoverage>>("qbrainai/federation/adapters", cancellationToken);
+        => await GetAsync<List<FederationStateAdapterCoverage>>("qbrainai/federation/adapters", cancellationToken).ConfigureAwait(false);
 
     /// <summary>Return hub fanout rows for a proxy after a sequence.</summary>
     /// <param name="proxyId">Proxy identifier.</param>
@@ -131,7 +131,7 @@ public sealed class FederationClient : McpClientBase
         CancellationToken cancellationToken = default)
         => await GetAsync<List<FederationSyncItem>>(
             $"qbrainai/federation/sync?proxyId={Encode(proxyId)}&afterSequence={afterSequence}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     /// <summary>Acknowledge one recipient-specific sync row.</summary>
     /// <param name="sequence">Sync sequence number.</param>
@@ -142,7 +142,7 @@ public sealed class FederationClient : McpClientBase
         long sequence,
         FederationSyncAckRequest request,
         CancellationToken cancellationToken = default)
-        => await PostAsync<FederationOperationResponse>($"qbrainai/federation/sync/{sequence}/ack", request, cancellationToken);
+        => await PostAsync<FederationOperationResponse>($"qbrainai/federation/sync/{sequence}/ack", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Accept or idempotently replay one federation operation.</summary>
     /// <param name="request">Operation payload.</param>
@@ -151,7 +151,7 @@ public sealed class FederationClient : McpClientBase
     public async Task<FederationOperationResponse> RecordOperationAsync(
         FederationOperationRequest request,
         CancellationToken cancellationToken = default)
-        => await PostAsync<FederationOperationResponse>("qbrainai/federation/operations", request, cancellationToken);
+        => await PostAsync<FederationOperationResponse>("qbrainai/federation/operations", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Acknowledge one replayed or fanned-out operation.</summary>
     /// <param name="operationId">Operation identifier.</param>
@@ -165,7 +165,7 @@ public sealed class FederationClient : McpClientBase
         => await PostAsync<FederationOperationResponse>(
             $"qbrainai/federation/operations/{Encode(operationId)}/ack",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     /// <summary>Accept or idempotently replay one signed federation operation envelope.</summary>
     /// <param name="envelope">Signed operation envelope.</param>
@@ -174,7 +174,7 @@ public sealed class FederationClient : McpClientBase
     public async Task<FederationOperationResponse> RecordEnvelopeAsync(
         FederationExecutionEnvelope envelope,
         CancellationToken cancellationToken = default)
-        => await PostAsync<FederationOperationResponse>("qbrainai/federation/envelopes", envelope, cancellationToken);
+        => await PostAsync<FederationOperationResponse>("qbrainai/federation/envelopes", envelope, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Resolve a federation conflict.</summary>
     /// <param name="conflictId">Conflict identifier.</param>
@@ -188,25 +188,25 @@ public sealed class FederationClient : McpClientBase
         => await PostAsync<FederationConflictInfo>(
             $"qbrainai/federation/conflicts/{Encode(conflictId)}/resolve",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     /// <summary>Enable federation proxying globally.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Updated federation status.</returns>
     public async Task<FederationStatusResponse> EnableAsync(CancellationToken cancellationToken = default)
-        => await PostAsync<FederationStatusResponse>("qbrainai/federation/enable", null, cancellationToken);
+        => await PostAsync<FederationStatusResponse>("qbrainai/federation/enable", null, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Disable federation proxying globally.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Updated federation status.</returns>
     public async Task<FederationStatusResponse> DisableAsync(CancellationToken cancellationToken = default)
-        => await PostAsync<FederationStatusResponse>("qbrainai/federation/disable", null, cancellationToken);
+        => await PostAsync<FederationStatusResponse>("qbrainai/federation/disable", null, cancellationToken).ConfigureAwait(false);
 
     /// <summary>List all registered federation targets.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Array of federation target info objects.</returns>
     public async Task<List<FederationTargetInfo>> ListTargetsAsync(CancellationToken cancellationToken = default)
-        => await GetAsync<List<FederationTargetInfo>>("qbrainai/federation/targets", cancellationToken);
+        => await GetAsync<List<FederationTargetInfo>>("qbrainai/federation/targets", cancellationToken).ConfigureAwait(false);
 
     /// <summary>Add a new named federation target.</summary>
     /// <param name="request">Target configuration.</param>
@@ -214,7 +214,7 @@ public sealed class FederationClient : McpClientBase
     /// <returns>The newly created target info.</returns>
     /// <exception cref="McpConflictException">A target with the same name already exists.</exception>
     public async Task<FederationTargetInfo> AddTargetAsync(FederationTargetAddRequest request, CancellationToken cancellationToken = default)
-        => await PostAsync<FederationTargetInfo>("qbrainai/federation/targets", request, cancellationToken);
+        => await PostAsync<FederationTargetInfo>("qbrainai/federation/targets", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Remove a federation target by name.</summary>
     /// <param name="name">Target name.</param>
@@ -222,7 +222,7 @@ public sealed class FederationClient : McpClientBase
     /// <returns>The HTTP status code (204 on success).</returns>
     /// <exception cref="McpNotFoundException">No target with the given name exists.</exception>
     public async Task<HttpStatusCode> RemoveTargetAsync(string name, CancellationToken cancellationToken = default)
-        => await SendForStatusAsync(HttpMethod.Delete, $"qbrainai/federation/targets/{Encode(name)}", null, cancellationToken);
+        => await SendForStatusAsync(HttpMethod.Delete, $"qbrainai/federation/targets/{Encode(name)}", null, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Set a target as the global default for requests with no workspace-specific route.</summary>
     /// <param name="name">Target name to set as default.</param>
@@ -230,13 +230,13 @@ public sealed class FederationClient : McpClientBase
     /// <returns>Updated federation status.</returns>
     /// <exception cref="McpNotFoundException">No target with the given name exists.</exception>
     public async Task<FederationStatusResponse> SetDefaultTargetAsync(string name, CancellationToken cancellationToken = default)
-        => await PostAsync<FederationStatusResponse>($"qbrainai/federation/targets/{Encode(name)}/set-default", null, cancellationToken);
+        => await PostAsync<FederationStatusResponse>($"qbrainai/federation/targets/{Encode(name)}/set-default", null, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Clear the global default target.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Updated federation status.</returns>
     public async Task<FederationStatusResponse> ClearDefaultTargetAsync(CancellationToken cancellationToken = default)
-        => await DeleteAsync<FederationStatusResponse>("qbrainai/federation/targets/default", cancellationToken);
+        => await DeleteAsync<FederationStatusResponse>("qbrainai/federation/targets/default", cancellationToken).ConfigureAwait(false);
 
     /// <summary>Add or update a workspace-specific routing rule.</summary>
     /// <param name="request">Workspace path and target name.</param>
@@ -244,7 +244,7 @@ public sealed class FederationClient : McpClientBase
     /// <returns>Updated route list.</returns>
     /// <exception cref="McpNotFoundException">The specified target does not exist.</exception>
     public async Task<List<WorkspaceRouteInfo>> AddRouteAsync(WorkspaceRouteRequest request, CancellationToken cancellationToken = default)
-        => await PostAsync<List<WorkspaceRouteInfo>>("qbrainai/federation/routes", request, cancellationToken);
+        => await PostAsync<List<WorkspaceRouteInfo>>("qbrainai/federation/routes", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Remove a workspace-specific routing rule.</summary>
     /// <param name="request">Route specifying the workspace path to remove.</param>
@@ -252,7 +252,7 @@ public sealed class FederationClient : McpClientBase
     /// <returns>The HTTP status code (204 on success).</returns>
     /// <exception cref="McpNotFoundException">No route for the specified workspace path exists.</exception>
     public async Task<HttpStatusCode> RemoveRouteAsync(WorkspaceRouteRequest request, CancellationToken cancellationToken = default)
-        => await SendForStatusAsync(HttpMethod.Delete, "qbrainai/federation/routes", request, cancellationToken);
+        => await SendForStatusAsync(HttpMethod.Delete, "qbrainai/federation/routes", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Get connection credentials so a federated peer can connect to this server.</summary>
     /// <param name="workspaceName">Display name of the workspace to look up.</param>
@@ -260,13 +260,13 @@ public sealed class FederationClient : McpClientBase
     /// <returns>Connection info including base URL, port, and API key.</returns>
     /// <exception cref="McpNotFoundException">No enabled workspace with the given name exists.</exception>
     public async Task<FederationConnectionInfo> GetConnectionAsync(string workspaceName, CancellationToken cancellationToken = default)
-        => await GetAsync<FederationConnectionInfo>($"qbrainai/federation/connection?workspaceName={Encode(workspaceName)}", cancellationToken);
+        => await GetAsync<FederationConnectionInfo>($"qbrainai/federation/connection?workspaceName={Encode(workspaceName)}", cancellationToken).ConfigureAwait(false);
 
     /// <summary>Auto-discover federation targets from running tunnel providers.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Discovery result with count and details of newly registered targets.</returns>
     public async Task<TunnelDiscoveryResult> DiscoverFromTunnelsAsync(CancellationToken cancellationToken = default)
-        => await PostAsync<TunnelDiscoveryResult>("qbrainai/federation/targets/discover-from-tunnels", null, cancellationToken);
+        => await PostAsync<TunnelDiscoveryResult>("qbrainai/federation/targets/discover-from-tunnels", null, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Push local data (TODOs, session logs) to the resolved federation target.</summary>
     /// <param name="types">
@@ -278,7 +278,7 @@ public sealed class FederationClient : McpClientBase
     /// <exception cref="McpConflictException">Federation is disabled.</exception>
     /// <exception cref="McpNotFoundException">No federation target resolved.</exception>
     public async Task<FederationPushResult> PushAsync(IReadOnlyList<string>? types = null, CancellationToken cancellationToken = default)
-        => await PostAsync<FederationPushResult>("qbrainai/federation/push", new FederationPushRequest { Types = types }, cancellationToken);
+        => await PostAsync<FederationPushResult>("qbrainai/federation/push", new FederationPushRequest { Types = types }, cancellationToken).ConfigureAwait(false);
 
     private static string Encode(string value) => Uri.EscapeDataString(value);
 }

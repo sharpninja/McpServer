@@ -25,7 +25,8 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
     {
         var databaseName = $"workspace-authority-{Guid.NewGuid():N}";
         var options = CreateOptions(databaseName);
-        await using var db = new McpDbContext(options);
+        var db = new McpDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var projectionWriter = new CommitObservingProjectionWriter(options);
         var sut = CreateSut(db, projectionWriter);
         var workspacePath = Path.Combine(Path.GetTempPath(), $"dbfk-create-{Guid.NewGuid():N}");
@@ -50,7 +51,8 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
     public async Task WorkspaceServiceDeleteSoftDeletesWorkspaceAndProjectionOmitsDeleted()
     {
         var options = CreateOptions($"workspace-delete-{Guid.NewGuid():N}");
-        await using var db = new McpDbContext(options);
+        var db = new McpDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var projectionWriter = new CommitObservingProjectionWriter(options);
         var sut = CreateSut(db, projectionWriter);
         var workspacePath = Path.Combine(Path.GetTempPath(), $"dbfk-delete-{Guid.NewGuid():N}");
@@ -86,7 +88,8 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
     public async Task WorkspaceServiceBannedPolicyListsRoundTripAndPartialUpdateReplacesOnlyThatCategory()
     {
         var options = CreateOptions($"workspace-banned-{Guid.NewGuid():N}");
-        await using var db = new McpDbContext(options);
+        var db = new McpDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var projectionWriter = new CommitObservingProjectionWriter(options);
         var sut = CreateSut(db, projectionWriter);
         var workspacePath = Path.Combine(Path.GetTempPath(), $"dbfk-banned-{Guid.NewGuid():N}");
@@ -169,7 +172,8 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
         public async Task WriteProjectionAsync(IReadOnlyList<WorkspaceConfigEntry> workspaces, CancellationToken ct)
         {
             LastProjection = workspaces.ToArray();
-            await using var probe = new McpDbContext(_options);
+            var probe = new McpDbContext(_options);
+            await using var probeDisposal = probe.ConfigureAwait(true);
             foreach (var workspace in workspaces)
             {
                 SawCommittedWorkspace |= await probe.Workspaces

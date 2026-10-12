@@ -16,7 +16,8 @@ public sealed class ConsolidateMemoryCommandHandler(DbContextOptions<McpDbContex
     /// <inheritdoc />
     public async Task<Result<MemoryConsolidateResult>> HandleAsync(ConsolidateMemoryCommand command, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemoryConsolidateOperations(db, command.WorkspacePath);
         var result = await operations.ConsolidateAsync(command.Request, command.ReadOnlyCaller, context.CancellationToken)
             .ConfigureAwait(false);

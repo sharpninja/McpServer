@@ -117,7 +117,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid FR ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -127,7 +127,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("FR item not found: FR-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.GetFrAsync("FR-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetFrAsync("FR-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -158,7 +158,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("FR item with ID FR-MCP-001 already exists"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -191,7 +191,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("No FR is currently selected"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -212,7 +212,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid FR ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.DeleteFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.DeleteFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -284,7 +284,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid TR ID format: TR-MCP-001"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetTrAsync("TR-MCP-001", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetTrAsync("TR-MCP-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -405,7 +405,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid TEST ID format: TEST-001"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetTestAsync("TEST-001", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetTestAsync("TEST-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -529,7 +529,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("Referenced FR does not exist: FR-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -541,7 +541,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("Referenced TR does not exist: TR-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -553,7 +553,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("At least one requirement ID must be provided"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -574,7 +574,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("At least one requirement ID must be provided"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.DeleteMappingAsync(cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.DeleteMappingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -584,7 +584,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("Mapping not found"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.DeleteMappingAsync(frId: "FR-MCP-001", trId: "TR-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.DeleteMappingAsync(frId: "FR-MCP-001", trId: "TR-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -665,7 +665,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid format: invalid. Valid values: markdown, yaml"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GenerateDocumentAsync("invalid", "fr", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GenerateDocumentAsync("invalid", "fr", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -675,7 +675,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid docType: invalid. Valid values: fr, tr, test, matrix, all"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GenerateDocumentAsync("markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GenerateDocumentAsync("markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -760,7 +760,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid format: invalid. Valid values: markdown, yaml"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.IngestDocumentAsync("content", "invalid", "overwrite", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.IngestDocumentAsync("content", "invalid", "overwrite", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -770,7 +770,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid mergeStrategy: invalid. Valid values: overwrite, merge, skip"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.IngestDocumentAsync("content", "markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.IngestDocumentAsync("content", "markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -780,7 +780,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Content cannot be null or empty"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.IngestDocumentAsync("", "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.IngestDocumentAsync("", "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -977,7 +977,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("FR item with ID FR-MCP-001 already exists"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("already exists", exception.Message);
         Assert.Contains("FR-MCP-001", exception.Message);
@@ -990,7 +990,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid TR ID format: TR-INVALID. Expected format: TR-<AREA>-<SUBAREA>-###"));
 
         var exception = await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetTrAsync("TR-INVALID", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetTrAsync("TR-INVALID", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("Invalid TR ID format", exception.Message);
     }
@@ -1002,7 +1002,7 @@ public class RequirementsWorkflowTests
             .Throws(new ArgumentException("Invalid TEST ID format: test-001. Expected format: TEST-<AREA>-###"));
 
         var exception = await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetTestAsync("test-001", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetTestAsync("test-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("Invalid TEST ID format", exception.Message);
     }
@@ -1016,7 +1016,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("Referenced TR does not exist: TR-NONEXISTENT-999"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("does not exist", exception.Message);
         Assert.Contains("TR-NONEXISTENT-999", exception.Message);
@@ -1029,7 +1029,7 @@ public class RequirementsWorkflowTests
             .Throws(new InvalidOperationException("Storage connection failed"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.ListFrAsync(cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.ListFrAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("Storage", exception.Message);
     }

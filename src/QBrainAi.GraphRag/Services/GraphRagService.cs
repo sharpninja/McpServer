@@ -1025,7 +1025,8 @@ internal sealed class GraphRagService : IGraphRagService
 
         try
         {
-            await using var stream = File.OpenRead(path);
+            var stream = File.OpenRead(path);
+            await using var streamDisposal = stream.ConfigureAwait(false);
             return await JsonSerializer.DeserializeAsync<PersistedGraphRagStatus>(stream, s_jsonOptions, cancellationToken).ConfigureAwait(false);
         }
         catch (JsonException)
@@ -1038,7 +1039,8 @@ internal sealed class GraphRagService : IGraphRagService
     {
         var path = GetStatusFilePath(graphRoot);
         var tempPath = path + ".tmp";
-        await using (var stream = File.Create(tempPath))
+        var stream = File.Create(tempPath);
+        await using (stream.ConfigureAwait(false))
         {
             await JsonSerializer.SerializeAsync(stream, status, s_jsonOptions, cancellationToken).ConfigureAwait(false);
         }

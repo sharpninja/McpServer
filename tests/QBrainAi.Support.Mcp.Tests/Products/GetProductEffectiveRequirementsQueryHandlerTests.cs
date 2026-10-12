@@ -66,7 +66,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncProductScopeUnionsSiblingRows()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Owner, "layer-1", "product"), _ctx);
@@ -93,7 +94,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncLocalScopeHidesSiblings()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Owner, "layer-1", "local"), _ctx);
@@ -112,7 +114,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncZeroProductWorkspaceKeepsLocalAcceptanceCriteria()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Outsider, "layer-1", "product"), _ctx);
 
@@ -128,7 +131,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncCollisionReturnsTwoOrigins()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Owner, "layer-1", "product"), _ctx);
@@ -144,7 +148,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncOriginLayerMissExcludesSiblingRow()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Owner, "layer-2", "product"), _ctx);
@@ -157,7 +162,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncAfterLeaveDropsSibling()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var left = await new RemoveProductMemberCommandHandler(db).HandleAsync(
             new RemoveProductMemberCommand(Sibling, "PROD-MCPSERVER", Sibling),
@@ -176,7 +182,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncOutsiderIsLocalOnly()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Outsider, "layer-1", "product"), _ctx);
@@ -191,7 +198,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncLocalDeleteSiblingOnlyIdLeavesSiblingRow()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         db.OverrideWorkspaceId(Owner);
         var local = await db.Requirements.FirstOrDefaultAsync(
@@ -210,7 +218,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncZeroProductWorkspaceStaysLocal()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var result = await new GetProductEffectiveRequirementsQueryHandler(db)
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Outsider, "layer-1", "product"), _ctx);
 
@@ -228,7 +237,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     [Fact]
     public async Task HandleAsyncNullLayerKeyUsesPersistedCurrentLayerAfterExternalUpdate()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         SeedRequirement(db, Owner, "fr", "FR-LAYER2-LOCAL", "Layer 2 FR", "body", "layer-2");
         await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -242,7 +252,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
         Assert.Contains(before.Value.Functional, f => f.Id == "FR-OWNER-001");
         Assert.DoesNotContain(before.Value.Functional, f => f.Id == "FR-LAYER2-LOCAL");
 
-        await using (var writer = new McpDbContext(_options))
+        var writer = new McpDbContext(_options);
+        await using (writer.ConfigureAwait(true))
         {
             var workspace = await writer.Workspaces
                 .IgnoreQueryFilters()
@@ -265,11 +276,11 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
     {
         var created = await new CreateProductCommandHandler(db).HandleAsync(
             new CreateProductCommand(Owner, new CreateProductRequest { Key = "PROD-MCPSERVER", Name = "Shared" }),
-            _ctx);
+            _ctx).ConfigureAwait(true);
         Assert.True(created.IsSuccess, created.Error);
         var added = await new AddProductMemberCommandHandler(db).HandleAsync(
             new AddProductMemberCommand(Owner, "PROD-MCPSERVER", Sibling),
-            _ctx);
+            _ctx).ConfigureAwait(true);
         Assert.True(added.IsSuccess, added.Error);
     }
 

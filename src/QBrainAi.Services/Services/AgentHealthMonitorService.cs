@@ -59,7 +59,8 @@ public sealed class AgentHealthMonitorService : BackgroundService
     private async Task MonitorOnceAsync(CancellationToken cancellationToken)
     {
         var runningAgents = await _agentProcessManager.ListRunningAsync(null, cancellationToken).ConfigureAwait(false);
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
 
         foreach (var info in runningAgents)

@@ -83,7 +83,7 @@ public class ProtocolHandshakeTests
             .Returns<IHelloPayload>(x => throw new InvalidOperationException("Already connected"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await protocol.ConnectAsync(cancellationToken: TestContext.Current.CancellationToken)
+            async () => await protocol.ConnectAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -158,7 +158,7 @@ public class ProtocolHandshakeTests
         protocol.ProtocolVersion.Returns("1.0");
 
         Assert.Equal("1.0", protocol.ProtocolVersion);
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -173,7 +173,7 @@ public class ProtocolHandshakeTests
             .Returns<IHelloPayload>(x => throw new TaskCanceledException());
 
         await Assert.ThrowsAsync<TaskCanceledException>(
-            async () => await protocol.ConnectAsync(null, null, cts.Token)
+            async () => await protocol.ConnectAsync(null, null, cts.Token).ConfigureAwait(true)
         );
     }
 
@@ -186,7 +186,7 @@ public class ProtocolHandshakeTests
             .Returns<IHelloPayload>(x => throw new HttpRequestException("Connection refused"));
 
         await Assert.ThrowsAsync<HttpRequestException>(
-            async () => await protocol.ConnectAsync(cancellationToken: TestContext.Current.CancellationToken)
+            async () => await protocol.ConnectAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 }

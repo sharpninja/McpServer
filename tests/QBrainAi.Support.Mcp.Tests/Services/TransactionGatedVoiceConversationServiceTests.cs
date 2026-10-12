@@ -134,7 +134,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
     private static async IAsyncEnumerable<VoiceTurnStreamEvent> OneVoiceEvent()
     {
         yield return new VoiceTurnStreamEvent { Type = "chunk", Text = "ok" };
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     private sealed class CapturingCoordinator : ITurnTransactionCoordinator

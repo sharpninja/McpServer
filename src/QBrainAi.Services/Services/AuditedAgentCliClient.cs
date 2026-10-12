@@ -175,7 +175,7 @@ public sealed class AuditedAgentCliClient : IAgentCliClient
         var succeeded = false;
         try
         {
-            await foreach (var line in _inner.InvokeStreamingAsync(prompt, options, cancellationToken))
+            await foreach (var line in _inner.InvokeStreamingAsync(prompt, options, cancellationToken).ConfigureAwait(false))
             {
                 lineCount++;
                 yield return line;

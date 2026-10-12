@@ -16,7 +16,8 @@ public sealed class RememberMemoryCommandHandler(DbContextOptions<McpDbContext> 
     /// <inheritdoc />
     public async Task<Result<MemoryRememberResult>> HandleAsync(RememberMemoryCommand command, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemoryCompetitiveOperations(db);
         var result = await operations.RememberAsync(command.Request, command.ReadOnlyCaller, context.CancellationToken)
             .ConfigureAwait(false);

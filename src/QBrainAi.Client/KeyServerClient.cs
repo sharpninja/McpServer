@@ -28,7 +28,7 @@ public sealed class KeyServerClient : McpClientBase
     public async Task<PartyRegistrationResponse> RegisterPartyAsync(
         PartyRegistrationRequest request,
         CancellationToken cancellationToken = default)
-        => await PostAsync<PartyRegistrationResponse>("qbrainai/keyserver/parties", request, cancellationToken);
+        => await PostAsync<PartyRegistrationResponse>("qbrainai/keyserver/parties", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Signs a canonical transaction manifest.</summary>
     /// <param name="request">Manifest signing payload.</param>
@@ -37,7 +37,7 @@ public sealed class KeyServerClient : McpClientBase
     public async Task<TransactionManifestSignResponse> SignManifestAsync(
         TransactionManifestSignRequest request,
         CancellationToken cancellationToken = default)
-        => await PostAsync<TransactionManifestSignResponse>("qbrainai/keyserver/manifests/sign", request, cancellationToken);
+        => await PostAsync<TransactionManifestSignResponse>("qbrainai/keyserver/manifests/sign", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Verifies a signed transaction manifest.</summary>
     /// <param name="request">Manifest verification payload.</param>
@@ -46,7 +46,7 @@ public sealed class KeyServerClient : McpClientBase
     public async Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
         TransactionManifestVerifyRequest request,
         CancellationToken cancellationToken = default)
-        => await PostAsync<TransactionManifestVerifyResponse>("qbrainai/keyserver/manifests/verify", request, cancellationToken);
+        => await PostAsync<TransactionManifestVerifyResponse>("qbrainai/keyserver/manifests/verify", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Gets persisted public trace metadata for a signed manifest.</summary>
     /// <param name="transactionId">Transaction identifier.</param>
@@ -57,7 +57,7 @@ public sealed class KeyServerClient : McpClientBase
         CancellationToken cancellationToken = default)
         => await GetAsync<TransactionManifestTraceRecord>(
             $"qbrainai/keyserver/manifests/{Encode(transactionId)}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     /// <summary>Gets a filtered public traceability report for signed manifests.</summary>
     /// <param name="request">Report filters and limit.</param>
@@ -70,7 +70,7 @@ public sealed class KeyServerClient : McpClientBase
         ArgumentNullException.ThrowIfNull(request);
         return await GetAsync<TransactionManifestTraceReport>(
             $"qbrainai/keyserver/manifests/report{BuildReportQuery(request)}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Gets one public key descriptor for a registered party.</summary>
@@ -84,7 +84,7 @@ public sealed class KeyServerClient : McpClientBase
         CancellationToken cancellationToken = default)
         => await GetAsync<PartyKeyDescriptor>(
             $"qbrainai/keyserver/parties/{Encode(partyId)}/keys/{Encode(keyId)}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     private static string Encode(string value) => Uri.EscapeDataString(value);
 

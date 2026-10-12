@@ -50,7 +50,8 @@ public sealed class PluginSessionLogAiTheoryTests
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         var result = await new PluginSessionLogWorkflowAdapter().ExecuteCanonicalTurnAsync(
             scenario,

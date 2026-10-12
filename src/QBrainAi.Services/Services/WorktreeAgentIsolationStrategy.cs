@@ -103,8 +103,10 @@ public sealed class WorktreeAgentIsolationStrategy : IAgentIsolationStrategy
         Directory.CreateDirectory(worktreePath);
         var markerDestinationPath = Path.Combine(worktreePath, MarkerFileService.MarkerFileName);
         Directory.CreateDirectory(worktreePath);
-        await using var source = File.OpenRead(markerSourcePath);
-        await using var destination = File.Create(markerDestinationPath);
+        var source = File.OpenRead(markerSourcePath);
+        await using var sourceDisposal = source.ConfigureAwait(false);
+        var destination = File.Create(markerDestinationPath);
+        await using var destinationDisposal = destination.ConfigureAwait(false);
         await source.CopyToAsync(destination, ct).ConfigureAwait(false);
     }
 

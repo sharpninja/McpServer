@@ -90,7 +90,8 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
     [Fact]
     public async Task RestSearchProductRequirementsIncludesSiblingFrNotCs()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         db.OverrideWorkspaceId(Owner);
         var controller = CreateController(db);
@@ -111,7 +112,8 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
     [Fact]
     public async Task RestPackIncludesSiblingFrNotCs()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         db.OverrideWorkspaceId(Owner);
         var controller = CreateController(db);
@@ -133,7 +135,8 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
     [Fact]
     public async Task McpContextSearchProductRequirementsIncludesSiblingFrNotCs()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var tools = CreateTools(db);
 
@@ -155,7 +158,8 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
     [Fact]
     public async Task McpContextPackIncludesSiblingFrNotCs()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var tools = CreateTools(db);
 
@@ -188,7 +192,8 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
     [Fact]
     public async Task McpRequirementsEffectiveDispatchesShareQueryWithProductScope()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         GetProductEffectiveRequirementsQuery? captured = null;
         var dispatcher = Substitute.For<IDispatcher>();
@@ -221,11 +226,11 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
     {
         var created = await new CreateProductCommandHandler(db).HandleAsync(
             new CreateProductCommand(Owner, new CreateProductRequest { Key = "PROD-MCPSERVER", Name = "Shared" }),
-            _ctx);
+            _ctx).ConfigureAwait(true);
         Assert.True(created.IsSuccess, created.Error);
         var added = await new AddProductMemberCommandHandler(db).HandleAsync(
             new AddProductMemberCommand(Owner, "PROD-MCPSERVER", Sibling),
-            _ctx);
+            _ctx).ConfigureAwait(true);
         Assert.True(added.IsSuccess, added.Error);
     }
 

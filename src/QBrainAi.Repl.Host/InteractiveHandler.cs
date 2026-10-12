@@ -56,7 +56,7 @@ public class InteractiveHandler
         // Attempt login before workspace selection if no valid token is cached
         if (!_loginHandler.IsLoggedIn)
         {
-            await _loginHandler.LoginAsync(cancellationToken);
+            await _loginHandler.LoginAsync(cancellationToken).ConfigureAwait(false);
             AnsiConsole.WriteLine();
         }
         else
@@ -65,7 +65,7 @@ public class InteractiveHandler
             AnsiConsole.WriteLine();
         }
 
-        await SelectWorkspaceAsync(cancellationToken);
+        await SelectWorkspaceAsync(cancellationToken).ConfigureAwait(false);
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -73,7 +73,7 @@ public class InteractiveHandler
             {
                 // Refresh token if expired before showing the menu
                 if (_loginHandler.IsLoggedIn || !string.IsNullOrWhiteSpace(_loginHandler.CurrentUser))
-                    await _loginHandler.EnsureAuthenticatedAsync(cancellationToken);
+                    await _loginHandler.EnsureAuthenticatedAsync(cancellationToken).ConfigureAwait(false);
 
                 var timeRemaining = _loginHandler.TokenTimeRemaining;
                 var tokenInfo = timeRemaining.HasValue ? $" [dim]({timeRemaining.Value.Minutes}m {timeRemaining.Value.Seconds}s)[/]" : "";
@@ -108,40 +108,40 @@ public class InteractiveHandler
                 switch (action)
                 {
                     case "Bootstrap Session":
-                        await BootstrapSessionAsync(cancellationToken);
+                        await BootstrapSessionAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Begin Turn":
-                        await BeginTurnAsync(cancellationToken);
+                        await BeginTurnAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "List TODOs":
-                        await ListTodosAsync(cancellationToken);
+                        await ListTodosAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Create TODO":
-                        await CreateTodoAsync(cancellationToken);
+                        await CreateTodoAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Update TODO":
-                        await UpdateTodoAsync(cancellationToken);
+                        await UpdateTodoAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Ingest Requirements":
-                        await IngestRequirementsAsync(cancellationToken);
+                        await IngestRequirementsAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "List Requirements":
-                        await ListRequirementsAsync(cancellationToken);
+                        await ListRequirementsAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Federation Status":
-                        await FederationStatusAsync(cancellationToken);
+                        await FederationStatusAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Federation Push":
-                        await FederationPushAsync(cancellationToken);
+                        await FederationPushAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Federation Pull":
-                        await FederationPullAsync(cancellationToken);
+                        await FederationPullAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Switch Workspace":
-                        await SelectWorkspaceAsync(cancellationToken);
+                        await SelectWorkspaceAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     case "Login":
-                        await _loginHandler.ManualLoginMenuAsync(null, cancellationToken);
+                        await _loginHandler.ManualLoginMenuAsync(null, cancellationToken).ConfigureAwait(false);
                         break;
                     case "Logout":
                         _loginHandler.Logout();
@@ -166,7 +166,7 @@ public class InteractiveHandler
     {
         try
         {
-            var result = await _client.Workspace.ListAsync(cancellationToken);
+            var result = await _client.Workspace.ListAsync(cancellationToken).ConfigureAwait(false);
 
             if (result?.Items == null || result.Items.Count == 0)
             {
@@ -250,7 +250,7 @@ public class InteractiveHandler
             await AnsiConsole.Status()
                 .StartAsync("Submitting session log...", async ctx =>
                 {
-                    var result = await _client.SessionLog.SubmitAsync(sessionLog, cancellationToken);
+                    var result = await _client.SessionLog.SubmitAsync(sessionLog, cancellationToken).ConfigureAwait(false);
                     
                     if (result != null && result.Id > 0)
                     {
@@ -260,7 +260,7 @@ public class InteractiveHandler
                     {
                         AnsiConsole.MarkupLine($"[red]✗[/] Failed to create session");
                     }
-                });
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -324,7 +324,7 @@ public class InteractiveHandler
             await AnsiConsole.Status()
                 .StartAsync("Submitting turn...", async ctx =>
                 {
-                    var result = await _client.SessionLog.SubmitAsync(sessionLog, cancellationToken);
+                    var result = await _client.SessionLog.SubmitAsync(sessionLog, cancellationToken).ConfigureAwait(false);
                     
                     if (result != null && result.Id > 0)
                     {
@@ -334,7 +334,7 @@ public class InteractiveHandler
                     {
                         AnsiConsole.MarkupLine($"[red]✗[/] Failed to create turn");
                     }
-                });
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -385,7 +385,7 @@ public class InteractiveHandler
                 {
                     var result = await _client.Todo.QueryAsync(
                         keyword: keyword, priority: priority, done: done,
-                        cancellationToken: cancellationToken);
+                        cancellationToken: cancellationToken).ConfigureAwait(false);
 
                     if (result?.Items == null || result.Items.Count == 0)
                     {
@@ -422,7 +422,7 @@ public class InteractiveHandler
 
                     AnsiConsole.Write(table);
                     AnsiConsole.MarkupLine($"\n[dim]Total: {result.Items.Count} TODO(s)[/]");
-                });
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -446,8 +446,8 @@ public class InteractiveHandler
             await AnsiConsole.Status()
                 .StartAsync("Fetching TODOs...", async ctx =>
                 {
-                    queryResult = await _client.Todo.QueryAsync(cancellationToken: cancellationToken);
-                });
+                    queryResult = await _client.Todo.QueryAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -532,7 +532,7 @@ public class InteractiveHandler
             await AnsiConsole.Status()
                 .StartAsync("Updating TODO...", async ctx =>
                 {
-                    var result = await _client.Todo.UpdateAsync(selectedId, request, cancellationToken);
+                    var result = await _client.Todo.UpdateAsync(selectedId, request, cancellationToken).ConfigureAwait(false);
 
                     if (result.Success && result.Item != null)
                     {
@@ -557,7 +557,7 @@ public class InteractiveHandler
                     {
                         AnsiConsole.MarkupLine($"[red]✗[/] Failed to update TODO");
                     }
-                });
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -607,7 +607,7 @@ public class InteractiveHandler
             await AnsiConsole.Status()
                 .StartAsync("Creating TODO...", async ctx =>
                 {
-                    var result = await _client.Todo.CreateAsync(request, cancellationToken);
+                    var result = await _client.Todo.CreateAsync(request, cancellationToken).ConfigureAwait(false);
                     
                     if (result.Success && result.Item != null)
                     {
@@ -628,7 +628,7 @@ public class InteractiveHandler
                     {
                         AnsiConsole.MarkupLine($"[red]✗[/] Failed to create TODO");
                     }
-                });
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -687,10 +687,10 @@ public class InteractiveHandler
             AnsiConsole.WriteLine();
 
             // Let user pick which files to ingest when there are multiple per type
-            request.FunctionalMarkdown = await SelectAndConcatFilesAsync(frFiles, "Functional (FR)", cancellationToken);
-            request.TechnicalMarkdown = await SelectAndConcatFilesAsync(trFiles, "Technical (TR)", cancellationToken);
-            request.TestingMarkdown = await SelectAndConcatFilesAsync(testFiles, "Testing (TEST)", cancellationToken);
-            request.MappingMarkdown = await SelectAndConcatFilesAsync(mapFiles, "Mapping", cancellationToken);
+            request.FunctionalMarkdown = await SelectAndConcatFilesAsync(frFiles, "Functional (FR)", cancellationToken).ConfigureAwait(false);
+            request.TechnicalMarkdown = await SelectAndConcatFilesAsync(trFiles, "Technical (TR)", cancellationToken).ConfigureAwait(false);
+            request.TestingMarkdown = await SelectAndConcatFilesAsync(testFiles, "Testing (TEST)", cancellationToken).ConfigureAwait(false);
+            request.MappingMarkdown = await SelectAndConcatFilesAsync(mapFiles, "Mapping", cancellationToken).ConfigureAwait(false);
         }
         else if (mode == "From Files")
         {
@@ -702,22 +702,22 @@ public class InteractiveHandler
             if (!string.IsNullOrWhiteSpace(frPath))
             {
                 if (!File.Exists(frPath)) { AnsiConsole.MarkupLine($"[red]File not found: {Markup.Escape(frPath)}[/]"); return; }
-                request.FunctionalMarkdown = await File.ReadAllTextAsync(frPath, cancellationToken);
+                request.FunctionalMarkdown = await File.ReadAllTextAsync(frPath, cancellationToken).ConfigureAwait(false);
             }
             if (!string.IsNullOrWhiteSpace(trPath))
             {
                 if (!File.Exists(trPath)) { AnsiConsole.MarkupLine($"[red]File not found: {Markup.Escape(trPath)}[/]"); return; }
-                request.TechnicalMarkdown = await File.ReadAllTextAsync(trPath, cancellationToken);
+                request.TechnicalMarkdown = await File.ReadAllTextAsync(trPath, cancellationToken).ConfigureAwait(false);
             }
             if (!string.IsNullOrWhiteSpace(testPath))
             {
                 if (!File.Exists(testPath)) { AnsiConsole.MarkupLine($"[red]File not found: {Markup.Escape(testPath)}[/]"); return; }
-                request.TestingMarkdown = await File.ReadAllTextAsync(testPath, cancellationToken);
+                request.TestingMarkdown = await File.ReadAllTextAsync(testPath, cancellationToken).ConfigureAwait(false);
             }
             if (!string.IsNullOrWhiteSpace(mapPath))
             {
                 if (!File.Exists(mapPath)) { AnsiConsole.MarkupLine($"[red]File not found: {Markup.Escape(mapPath)}[/]"); return; }
-                request.MappingMarkdown = await File.ReadAllTextAsync(mapPath, cancellationToken);
+                request.MappingMarkdown = await File.ReadAllTextAsync(mapPath, cancellationToken).ConfigureAwait(false);
             }
         }
         else // Paste Markdown
@@ -746,7 +746,7 @@ public class InteractiveHandler
             await AnsiConsole.Status()
                 .StartAsync("Ingesting requirements...", async ctx =>
                 {
-                    var result = await _client.Requirements.IngestAsync(request, cancellationToken);
+                    var result = await _client.Requirements.IngestAsync(request, cancellationToken).ConfigureAwait(false);
 
                     AnsiConsole.MarkupLine("[green]✓ Requirements ingested successfully[/]");
                     AnsiConsole.WriteLine();
@@ -776,7 +776,7 @@ public class InteractiveHandler
                         $"[yellow]{result.MappingUpdated}[/]");
 
                     AnsiConsole.Write(table);
-                });
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -907,7 +907,7 @@ public class InteractiveHandler
         var parts = new List<string>();
         foreach (var file in selected)
         {
-            var content = await File.ReadAllTextAsync(file.FullPath, cancellationToken);
+            var content = await File.ReadAllTextAsync(file.FullPath, cancellationToken).ConfigureAwait(false);
             parts.Add(content);
         }
 
@@ -921,7 +921,7 @@ public class InteractiveHandler
             await AnsiConsole.Status()
                 .StartAsync("Fetching federation status...", async ctx =>
                 {
-                    var status = await _client.Federation.GetStatusAsync(cancellationToken);
+                    var status = await _client.Federation.GetStatusAsync(cancellationToken).ConfigureAwait(false);
 
                     AnsiConsole.MarkupLine($"[bold blue]Federation Status[/]");
                     AnsiConsole.MarkupLine($"  Enabled: {(status.Enabled ? "[green]Yes[/]" : "[dim]No[/]")}");
@@ -977,7 +977,7 @@ public class InteractiveHandler
 
                         AnsiConsole.Write(routeTable);
                     }
-                });
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -1011,7 +1011,7 @@ public class InteractiveHandler
             await AnsiConsole.Status()
                 .StartAsync("Pushing data to federation target...", async ctx =>
                 {
-                    var result = await _client.Federation.PushAsync(types, cancellationToken);
+                    var result = await _client.Federation.PushAsync(types, cancellationToken).ConfigureAwait(false);
 
                     if (result.Failed == 0 && result.Errors.Count == 0)
                     {
@@ -1023,7 +1023,7 @@ public class InteractiveHandler
                         foreach (var err in result.Errors)
                             AnsiConsole.MarkupLine($"  [red]Error:[/] {Markup.Escape(err)}");
                     }
-                });
+                }).ConfigureAwait(false);
         }
         catch (McpConflictException)
         {
@@ -1067,7 +1067,7 @@ public class InteractiveHandler
                 await AnsiConsole.Status()
                     .StartAsync("Querying TODOs (local + federated)...", async ctx =>
                     {
-                        var result = await _client.Todo.QueryAsync(cancellationToken: cancellationToken);
+                        var result = await _client.Todo.QueryAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
                         if (result?.Items == null || result.Items.Count == 0)
                         {
@@ -1100,14 +1100,14 @@ public class InteractiveHandler
 
                         AnsiConsole.Write(table);
                         AnsiConsole.MarkupLine($"\n[dim]Total: {result.TotalCount} TODO(s) (local + federated)[/]");
-                    });
+                    }).ConfigureAwait(false);
             }
             else
             {
                 await AnsiConsole.Status()
                     .StartAsync("Querying session logs (local + federated)...", async ctx =>
                     {
-                        var result = await _client.SessionLog.QueryAsync(cancellationToken: cancellationToken);
+                        var result = await _client.SessionLog.QueryAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
                         if (result?.Items == null || result.Items.Count == 0)
                         {
@@ -1135,7 +1135,7 @@ public class InteractiveHandler
 
                         AnsiConsole.Write(table);
                         AnsiConsole.MarkupLine($"\n[dim]Total: {result.TotalCount} session log(s) (local + federated)[/]");
-                    });
+                    }).ConfigureAwait(false);
             }
         }
         catch (Exception ex)
@@ -1165,20 +1165,20 @@ public class InteractiveHandler
                 {
                     if (requirementType.StartsWith("Functional"))
                     {
-                        var frs = await _client.Requirements.ListFrAsync(cancellationToken);
+                        var frs = await _client.Requirements.ListFrAsync(cancellationToken).ConfigureAwait(false);
                         DisplayFunctionalRequirements(frs);
                     }
                     else if (requirementType.StartsWith("Technical"))
                     {
-                        var trs = await _client.Requirements.ListTrAsync(cancellationToken);
+                        var trs = await _client.Requirements.ListTrAsync(cancellationToken).ConfigureAwait(false);
                         DisplayTechnicalRequirements(trs);
                     }
                     else
                     {
-                        var tests = await _client.Requirements.ListTestAsync(cancellationToken);
+                        var tests = await _client.Requirements.ListTestAsync(cancellationToken).ConfigureAwait(false);
                         DisplayTestingRequirements(tests);
                     }
-                });
+                }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

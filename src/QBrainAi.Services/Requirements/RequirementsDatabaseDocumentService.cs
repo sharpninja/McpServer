@@ -237,7 +237,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<IReadOnlyList<RequirementScopeLayerEntry>> GetRequirementLayersAsync(CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.Context;
         await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
         var rows = await ctx.RequirementScopeLayers
@@ -256,7 +257,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             var workspaceId = RequireWorkspaceId(ctx);
@@ -298,7 +300,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             var key = NormalizeLayerKey(request.Key);
@@ -332,7 +335,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<RequirementScopeLayerEntry> GetWorkspaceCurrentRequirementLayerAsync(CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.Context;
         await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
         var workspace = await EnsureWorkspaceRowAsync(ctx, RequireWorkspaceId(ctx), ct).ConfigureAwait(false);
@@ -346,7 +350,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             var normalizedKey = NormalizeLayerKey(layerKey);
@@ -366,7 +371,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.Context;
         await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
         var workspace = await EnsureWorkspaceRowAsync(ctx, RequireWorkspaceId(ctx), ct).ConfigureAwait(false);
@@ -421,7 +427,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, cancellationToken).ConfigureAwait(false);
             var workspaceId = RequireWorkspaceId(ctx);
@@ -472,7 +479,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, cancellationToken).ConfigureAwait(false);
             await RestoreRequirementsCoreAsync(ctx, state, cancellationToken).ConfigureAwait(false);
@@ -488,7 +496,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<IReadOnlyList<FrEntry>> GetAllFrAsync(CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var rows = await scope.Context.Requirements
             .AsNoTracking()
@@ -503,7 +512,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<IReadOnlyList<FrEntry>> QueryFrAsync(string? area = null, string? status = null, CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var query = scope.Context.Requirements
             .AsNoTracking()
@@ -524,7 +534,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
 
             // Fetch translatable part first (Body startsWith is supported), then apply non-translatable regex + null check in memory to avoid EF translation failure.
@@ -569,7 +580,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     public async Task<FrEntry?> GetFrAsync(string id, CancellationToken ct = default)
     {
         ValidateId(id, nameof(id));
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, FrKind, id, asTracking: false, ct).ConfigureAwait(false);
         if (row is null)
@@ -604,7 +616,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             var row = await FindRequirementAsync(ctx, FrKind, id, asTracking: true, ct).ConfigureAwait(false)
@@ -623,7 +636,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<IReadOnlyList<TrEntry>> GetAllTrAsync(CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var rows = await scope.Context.Requirements
             .AsNoTracking()
@@ -638,7 +652,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<IReadOnlyList<TrEntry>> QueryTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var query = scope.Context.Requirements
             .AsNoTracking()
@@ -658,7 +673,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     public async Task<TrEntry?> GetTrAsync(string id, CancellationToken ct = default)
     {
         ValidateId(id, nameof(id));
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, TrKind, id, asTracking: false, ct).ConfigureAwait(false);
         return row is null ? null : MapTr(row);
@@ -688,7 +704,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<IReadOnlyList<TestEntry>> GetAllTestAsync(CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var rows = await scope.Context.Requirements
             .AsNoTracking()
@@ -703,7 +720,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<IReadOnlyList<TestEntry>> QueryTestAsync(string? area = null, string? status = null, CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var query = scope.Context.Requirements
             .AsNoTracking()
@@ -722,7 +740,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     public async Task<TestEntry?> GetTestAsync(string id, CancellationToken ct = default)
     {
         ValidateId(id, nameof(id));
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, TestKind, id, asTracking: false, ct).ConfigureAwait(false);
         return row is null ? null : MapTest(row);
@@ -759,10 +778,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
-            await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+            var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+            await using var transactionDisposal = transaction.ConfigureAwait(false);
 
             var workspaceId = RequireWorkspaceId(ctx);
             var now = Now();
@@ -824,10 +845,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
-            await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+            var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+            await using var transactionDisposal = transaction.ConfigureAwait(false);
 
             var updates = new List<(RequirementEntity Row, RequirementBatchValue Value)>();
             foreach (var value in EnumerateBatch(entries))
@@ -869,7 +892,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <inheritdoc />
     public async Task<IReadOnlyList<FrTrMapping>> GetAllMappingsAsync(CancellationToken ct = default)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var links = await scope.Context.RequirementTraceabilityLinks
             .AsNoTracking()
@@ -896,7 +920,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         // Filter to the requested FR server-side instead of materializing every
         // traceability link in the workspace and scanning in memory.
         var target = frId.Trim().ToUpperInvariant();
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var links = await scope.Context.RequirementTraceabilityLinks
             .AsNoTracking()
@@ -927,7 +952,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             await ValidateMappingTargetsAsync(ctx, mapping.FrId, normalizedTrIds, normalizedTestIds, ct).ConfigureAwait(false);
@@ -1007,7 +1033,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             var links = await ctx.RequirementTraceabilityLinks.Where(x => x.FrId == frId).ToListAsync(ct).ConfigureAwait(false);
@@ -1110,7 +1137,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             var requirementScope = await ValidateRequirementScopeAsync(ctx, scopeStartLayerKey, scopeEndLayerKey, ct).ConfigureAwait(false);
@@ -1182,7 +1210,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             var requirementScope = await ValidateRequirementScopeAsync(ctx, scopeStartLayerKey, scopeEndLayerKey, ct).ConfigureAwait(false);
@@ -1296,7 +1325,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             var row = await FindRequirementAsync(ctx, kind, id, asTracking: true, ct).ConfigureAwait(false)

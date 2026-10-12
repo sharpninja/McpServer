@@ -29,7 +29,7 @@ public sealed class AgentClient : McpClientBase
     /// </summary>
     public async Task<AgentDefinitionListResult> ListDefinitionsAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<AgentDefinitionListResult>("qbrainai/agents/definitions", cancellationToken)
+        return await GetAsync<AgentDefinitionListResult>("qbrainai/agents/definitions", cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -40,7 +40,7 @@ public sealed class AgentClient : McpClientBase
     /// <param name="cancellationToken">Cancellation token.</param>
     public async Task<AgentDefinition> GetDefinitionAsync(string agentType, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<AgentDefinition>($"qbrainai/agents/definitions/{Encode(agentType)}", cancellationToken)
+        return await GetAsync<AgentDefinition>($"qbrainai/agents/definitions/{Encode(agentType)}", cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -51,7 +51,7 @@ public sealed class AgentClient : McpClientBase
         AgentDefinitionRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentMutationResult>("qbrainai/agents/definitions", request, cancellationToken)
+        return await PostAsync<AgentMutationResult>("qbrainai/agents/definitions", request, cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -62,7 +62,7 @@ public sealed class AgentClient : McpClientBase
     /// <param name="cancellationToken">Cancellation token.</param>
     public async Task<AgentMutationResult> DeleteDefinitionAsync(string agentType, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<AgentMutationResult>($"qbrainai/agents/definitions/{Encode(agentType)}", cancellationToken)
+        return await DeleteAsync<AgentMutationResult>($"qbrainai/agents/definitions/{Encode(agentType)}", cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -71,7 +71,7 @@ public sealed class AgentClient : McpClientBase
     /// </summary>
     public async Task<AgentSeedDefaultsResult> SeedDefaultsAsync(CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentSeedDefaultsResult>("qbrainai/agents/definitions/seed", null, cancellationToken)
+        return await PostAsync<AgentSeedDefaultsResult>("qbrainai/agents/definitions/seed", null, cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -81,7 +81,7 @@ public sealed class AgentClient : McpClientBase
     /// </summary>
     public async Task<AgentSeedDefaultsResult> SeedDefinitionsAsync(CancellationToken cancellationToken = default)
     {
-        return await SeedDefaultsAsync(cancellationToken);
+        return await SeedDefaultsAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ public sealed class AgentClient : McpClientBase
         string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
-        return await GetAsync<AgentWorkspaceListResult>($"qbrainai/agents{BuildWorkspaceQuery(workspacePath)}", cancellationToken)
+        return await GetAsync<AgentWorkspaceListResult>($"qbrainai/agents{BuildWorkspaceQuery(workspacePath)}", cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -110,7 +110,7 @@ public sealed class AgentClient : McpClientBase
     {
         return await GetAsync<AgentWorkspaceConfig>(
                 $"qbrainai/agents/{Encode(agentId)}{BuildWorkspaceQuery(workspacePath)}",
-                cancellationToken)
+                cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -130,7 +130,7 @@ public sealed class AgentClient : McpClientBase
         return await PostAsync<AgentMutationResult>(
                 $"qbrainai/agents/{Encode(agentId)}{BuildWorkspaceQuery(workspacePath)}",
                 request,
-                cancellationToken)
+                cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -147,7 +147,7 @@ public sealed class AgentClient : McpClientBase
     {
         return await DeleteAsync<AgentMutationResult>(
                 $"qbrainai/agents/{Encode(agentId)}{BuildWorkspaceQuery(workspacePath)}",
-                cancellationToken)
+                cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -167,7 +167,7 @@ public sealed class AgentClient : McpClientBase
         return await PostAsync<AgentMutationResult>(
                 $"qbrainai/agents/{Encode(agentId)}/ban{BuildWorkspaceQuery(workspacePath)}",
                 request,
-                cancellationToken)
+                cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -187,7 +187,7 @@ public sealed class AgentClient : McpClientBase
         return await PostAsync<AgentMutationResult>(
                 $"qbrainai/agents/{Encode(agentId)}/unban{BuildWorkspaceAndGlobalQuery(workspacePath, global)}",
                 null,
-                cancellationToken)
+                cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -206,7 +206,7 @@ public sealed class AgentClient : McpClientBase
         return await PostAsync<AgentProcessInfo>(
             $"qbrainai/agents/{Encode(agentId)}/launch{BuildWorkspaceQuery(workspacePath)}",
             null,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -224,7 +224,7 @@ public sealed class AgentClient : McpClientBase
         return await PostAsync<AgentMutationResult>(
             $"qbrainai/agents/{Encode(agentId)}/stop{BuildWorkspaceQuery(workspacePath)}",
             null,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -241,7 +241,7 @@ public sealed class AgentClient : McpClientBase
     {
         return await GetAsync<AgentProcessInfo>(
             $"qbrainai/agents/{Encode(agentId)}/process-status{BuildWorkspaceQuery(workspacePath)}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -256,7 +256,7 @@ public sealed class AgentClient : McpClientBase
     {
         return await GetAsync<AgentRunningListResult>(
             $"qbrainai/agents/running{BuildWorkspaceQuery(workspacePath)}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -273,7 +273,7 @@ public sealed class AgentClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/agents/{Encode(agentId)}/events{BuildWorkspaceQuery(workspacePath)}";
-        return await PostAsync<AgentMutationResult>(path, request, cancellationToken);
+        return await PostAsync<AgentMutationResult>(path, request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -291,7 +291,7 @@ public sealed class AgentClient : McpClientBase
     {
         return await GetAsync<AgentEventListResult>(
                 $"qbrainai/agents/{Encode(agentId)}/events{BuildWorkspaceAndLimitQuery(workspacePath, limit)}",
-                cancellationToken)
+                cancellationToken).ConfigureAwait(false)
             ;
     }
 
@@ -304,7 +304,7 @@ public sealed class AgentClient : McpClientBase
         string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
-        return await GetAsync<AgentValidateResult>($"qbrainai/agents/validate{BuildWorkspaceQuery(workspacePath)}", cancellationToken)
+        return await GetAsync<AgentValidateResult>($"qbrainai/agents/validate{BuildWorkspaceQuery(workspacePath)}", cancellationToken).ConfigureAwait(false)
             ;
     }
 

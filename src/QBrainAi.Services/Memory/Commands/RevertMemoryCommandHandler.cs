@@ -16,7 +16,8 @@ public sealed class RevertMemoryCommandHandler(DbContextOptions<McpDbContext> op
     /// <inheritdoc />
     public async Task<Result<MemoryRevertResult>> HandleAsync(RevertMemoryCommand command, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemoryCompetitiveOperations(db);
         var result = await operations.RevertAsync(
             command.MemoryId,

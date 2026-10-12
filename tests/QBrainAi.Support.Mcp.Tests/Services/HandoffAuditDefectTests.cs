@@ -52,7 +52,7 @@ public sealed class HandoffAuditDefectTests : IDisposable
         extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns(async ci =>
             {
-                await Task.Delay(50, ci.Arg<CancellationToken>());
+                await Task.Delay(50, ci.Arg<CancellationToken>()).ConfigureAwait(true);
                 return new HandoffExtractionResult
                 {
                     Success = true,

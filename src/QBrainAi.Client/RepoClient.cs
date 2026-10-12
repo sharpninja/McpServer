@@ -23,14 +23,14 @@ public sealed class RepoClient : McpClientBase
     /// <summary>Read a file from the repository.</summary>
     public async Task<RepoFileReadResult> ReadFileAsync(string path, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<RepoFileReadResult>($"qbrainai/repo/file?path={Uri.EscapeDataString(path)}", cancellationToken);
+        return await GetAsync<RepoFileReadResult>($"qbrainai/repo/file?path={Uri.EscapeDataString(path)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Write a file to the repository.</summary>
     public async Task<RepoWriteResult> WriteFileAsync(string path, string content, CancellationToken cancellationToken = default)
     {
         var request = new RepoWriteRequest { Path = path, Content = content };
-        return await PostAsync<RepoWriteResult>("qbrainai/repo/file", request, cancellationToken);
+        return await PostAsync<RepoWriteResult>("qbrainai/repo/file", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: Apply a targeted string replacement to a repository file.</summary>
@@ -57,13 +57,13 @@ public sealed class RepoClient : McpClientBase
             ReplaceAll = replaceAll,
             ExpectedOccurrences = expectedOccurrences,
         };
-        return await PostAsync<RepoEditResult>("qbrainai/repo/edit", request, cancellationToken);
+        return await PostAsync<RepoEditResult>("qbrainai/repo/edit", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>List files and directories under a path.</summary>
     public async Task<RepoListResult> ListAsync(string? path = null, CancellationToken cancellationToken = default)
     {
         var qs = path is not null ? $"?path={Uri.EscapeDataString(path)}" : string.Empty;
-        return await GetAsync<RepoListResult>($"qbrainai/repo/list{qs}", cancellationToken);
+        return await GetAsync<RepoListResult>($"qbrainai/repo/list{qs}", cancellationToken).ConfigureAwait(false);
     }
 }

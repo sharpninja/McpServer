@@ -648,19 +648,21 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
         public async Task<IReadOnlyList<RequirementEntity>> GetRequirementRowsAsync()
         {
-            await using var scope = _provider.CreateAsyncScope();
+            var scope = _provider.CreateAsyncScope();
+            await using var scopeDisposal = scope.ConfigureAwait(true);
             return await scope.ServiceProvider.GetRequiredService<McpDbContext>()
                 .Requirements
                 .IgnoreQueryFilters()
                 .OrderBy(x => x.WorkspaceId)
                 .ThenBy(x => x.Kind)
                 .ThenBy(x => x.Id)
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(true);
         }
 
         public async Task<IReadOnlyList<RequirementTraceabilityLinkEntity>> GetTraceabilityRowsAsync()
         {
-            await using var scope = _provider.CreateAsyncScope();
+            var scope = _provider.CreateAsyncScope();
+            await using var scopeDisposal = scope.ConfigureAwait(true);
             return await scope.ServiceProvider.GetRequiredService<McpDbContext>()
                 .RequirementTraceabilityLinks
                 .IgnoreQueryFilters()
@@ -668,14 +670,15 @@ public sealed class RequirementsDatabaseDocumentServiceTests
                 .ThenBy(x => x.FrId)
                 .ThenBy(x => x.TargetKind)
                 .ThenBy(x => x.TargetId)
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(true);
         }
 
         public async Task SeedBadPlaceholderAsync(string workspacePath, string badId, string body)
         {
-            await using var scope = _provider.CreateAsyncScope();
+            var scope = _provider.CreateAsyncScope();
+            await using var scopeDisposal = scope.ConfigureAwait(true);
             var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            if (await ctx.Requirements.IgnoreQueryFilters().AnyAsync(x => x.WorkspaceId == workspacePath && x.Kind == "fr" && x.Id == badId)) return;
+            if (await ctx.Requirements.IgnoreQueryFilters().AnyAsync(x => x.WorkspaceId == workspacePath && x.Kind == "fr" && x.Id == badId).ConfigureAwait(true)) return;
             var now = DateTimeOffset.UtcNow.ToString("O");
             ctx.Requirements.Add(new RequirementEntity
             {
@@ -687,15 +690,16 @@ public sealed class RequirementsDatabaseDocumentServiceTests
                 CreatedAtUtc = now,
                 UpdatedAtUtc = now,
             });
-            await ctx.SaveChangesAsync();
+            await ctx.SaveChangesAsync().ConfigureAwait(true);
         }
 
         public async Task SeedTraceabilityLinkAsync(string workspacePath, string frId, string targetKind, string targetId)
         {
-            await using var scope = _provider.CreateAsyncScope();
+            var scope = _provider.CreateAsyncScope();
+            await using var scopeDisposal = scope.ConfigureAwait(true);
             var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            await EnsureRequirementAsync(ctx, workspacePath, "fr", frId);
-            await EnsureRequirementAsync(ctx, workspacePath, targetKind, targetId);
+            await EnsureRequirementAsync(ctx, workspacePath, "fr", frId).ConfigureAwait(true);
+            await EnsureRequirementAsync(ctx, workspacePath, targetKind, targetId).ConfigureAwait(true);
             ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity
             {
                 WorkspaceId = workspacePath,
@@ -704,13 +708,13 @@ public sealed class RequirementsDatabaseDocumentServiceTests
                 TargetId = targetId,
                 CreatedAtUtc = DateTimeOffset.UtcNow.ToString("O"),
             });
-            await ctx.SaveChangesAsync();
+            await ctx.SaveChangesAsync().ConfigureAwait(true);
         }
 
         private static async Task EnsureRequirementAsync(McpDbContext ctx, string workspacePath, string kind, string id)
         {
             if (await ctx.Requirements.IgnoreQueryFilters()
-                    .AnyAsync(x => x.WorkspaceId == workspacePath && x.Kind == kind && x.Id == id))
+                    .AnyAsync(x => x.WorkspaceId == workspacePath && x.Kind == kind && x.Id == id).ConfigureAwait(true))
             {
                 return;
             }

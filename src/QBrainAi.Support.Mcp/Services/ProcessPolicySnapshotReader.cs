@@ -34,7 +34,7 @@ public sealed class ProcessPolicySnapshotReader
         {
             // The memory query retains the context's workspace visibility filter.
             var parent = await _db.Memories.AsNoTracking()
-                .FirstOrDefaultAsync(memory => memory.Id == id);
+                .FirstOrDefaultAsync(memory => memory.Id == id).ConfigureAwait(false);
             if (parent is null ||
                 !string.Equals(parent.Id, id, StringComparison.Ordinal))
                 return new("confirmed_not_found");
@@ -46,7 +46,7 @@ public sealed class ProcessPolicySnapshotReader
             var versions = await _db.MemoryVersions.AsNoTracking()
                 .Where(snapshot => snapshot.MemoryId == id &&
                     snapshot.VersionNumber == version)
-                .Take(2).ToArrayAsync();
+                .Take(2).ToArrayAsync().ConfigureAwait(false);
             if (versions.Length != 1 ||
                 !string.Equals(versions[0].MemoryId, id, StringComparison.Ordinal))
                 return new("PROCESS_POLICY_STALE");

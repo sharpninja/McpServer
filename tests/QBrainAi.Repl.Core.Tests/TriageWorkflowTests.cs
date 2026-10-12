@@ -212,54 +212,54 @@ public sealed class TriageWorkflowTests
         switch (method)
         {
             case TriageCommandShapes.ReportMethod:
-                await workflow.Received(1).ReportAsync(Arg.Any<TriageReportRequest>(), Arg.Any<CancellationToken>());
+                await workflow.Received(1).ReportAsync(Arg.Any<TriageReportRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.GetReportMethod:
-                await workflow.Received(1).GetReportAsync("triage-report-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetReportAsync("triage-report-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.QueryGroupsMethod:
-                await workflow.Received(1).QueryGroupsAsync("failed", null, Arg.Any<CancellationToken>());
+                await workflow.Received(1).QueryGroupsAsync("failed", null, Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.GetDashboardMethod:
-                await workflow.Received(1).GetDashboardAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetDashboardAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.GetGroupMethod:
-                await workflow.Received(1).GetGroupAsync("triage-group-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetGroupAsync("triage-group-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.QueryRunsMethod:
-                await workflow.Received(1).QueryRunsAsync("failed", "triage-group-001", null, Arg.Any<CancellationToken>());
+                await workflow.Received(1).QueryRunsAsync("failed", "triage-group-001", null, Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.GetRunMethod:
-                await workflow.Received(1).GetRunAsync("triage-run-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetRunAsync("triage-run-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.QueryCreatedTodosMethod:
-                await workflow.Received(1).QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>());
+                await workflow.Received(1).QueryCreatedTodosAsync("Q:\\__mcp_unit_test__\\QBrainAi", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.FlushGroupMethod:
-                await workflow.Received(1).FlushGroupAsync("triage-group-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).FlushGroupAsync("triage-group-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.RetryGroupMethod:
-                await workflow.Received(1).RetryGroupAsync("triage-group-001", true, Arg.Any<CancellationToken>());
+                await workflow.Received(1).RetryGroupAsync("triage-group-001", true, Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.DeleteGroupMethod:
-                await workflow.Received(1).DeleteGroupAsync("triage-group-001", "fixed upstream", Arg.Any<CancellationToken>());
+                await workflow.Received(1).DeleteGroupAsync("triage-group-001", "fixed upstream", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.CreateGroupMethod:
                 await workflow.Received(1).CreateGroupFromSelectionAsync(
                     Arg.Is<TriageGroupSelectionRequest>(request => HasReportId(request, "triage-report-001")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.ConsolidateIntoGroupMethod:
                 await workflow.Received(1).ConsolidateIntoGroupAsync(
                     "triage-group-target",
                     Arg.Is<TriageGroupSelectionRequest>(request => HasGroupId(request, "triage-group-source")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case TriageCommandShapes.MergeGroupsMethod:
                 await workflow.Received(1).MergeGroupsAsync(
                     "triage-group-target",
                     Arg.Is<TriageGroupSelectionRequest>(request => HasGroupId(request, "triage-group-source")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
         }
     }

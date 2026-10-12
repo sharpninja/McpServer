@@ -283,7 +283,8 @@ public sealed partial class WebsiteIngestor : IWebsiteIngestor
                     return (false, response.StatusCode, null, string.Empty, string.Empty, $"HTTP {(int)response.StatusCode} returned from target.");
                 }
 
-                await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+                var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+                await using var streamDisposal = stream.ConfigureAwait(false);
                 var body = await ReadLimitedTextAsync(stream, maxBytes, cancellationToken).ConfigureAwait(false);
                 var contentType = response.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
                 return (true, response.StatusCode, null, body, contentType, null);

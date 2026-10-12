@@ -11,7 +11,8 @@ public sealed class IdentityServerSeederTests
     [Fact]
     public async Task SeedAsyncCreatesIdentityTablesWhenDatabaseAlreadyContainsOtherTables()
     {
-        await using var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new SqliteConnection("Data Source=:memory:");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await using (var command = connection.CreateCommand())

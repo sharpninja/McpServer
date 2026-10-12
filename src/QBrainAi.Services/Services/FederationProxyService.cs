@@ -165,7 +165,8 @@ public sealed class FederationProxyService
             {
                 // SSE / MCP transport: flush each chunk immediately
                 context.Response.Headers["Cache-Control"] = "no-cache";
-                await using var stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+                var stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+                await using var streamDisposal = stream.ConfigureAwait(false);
                 var buffer = new byte[4096];
                 int read;
                 while ((read = await stream.ReadAsync(buffer, ct).ConfigureAwait(false)) > 0)
@@ -407,7 +408,8 @@ public sealed class FederationProxyService
             return RequestBodyCapture.NotQueued;
 
         request.EnableBuffering();
-        await using var memory = new MemoryStream();
+        var memory = new MemoryStream();
+        await using var memoryDisposal = memory.ConfigureAwait(false);
         await request.Body.CopyToAsync(memory, cancellationToken).ConfigureAwait(false);
         if (memory.Length > maxBodyBytes)
         {

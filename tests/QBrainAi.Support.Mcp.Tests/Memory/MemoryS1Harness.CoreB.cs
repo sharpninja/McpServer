@@ -23,7 +23,8 @@ public sealed partial class MemoryS1Harness
         double weight = 1,
         string? workspacePath = null)
     {
-        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var db = CreateContext(workspacePath ?? WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         db.MemoryEdges.Add(new MemoryEdgeEntity
         {
             FromMemoryId = fromMemoryId,
@@ -37,7 +38,8 @@ public sealed partial class MemoryS1Harness
     /// <summary>Reads EmbeddingStatus for a memory, including soft-deleted rows.</summary>
     public async Task<string?> GetEmbeddingStatusAsync(string memoryId, string? workspacePath = null)
     {
-        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var db = CreateContext(workspacePath ?? WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var entity = await db.Memories
             .IgnoreQueryFilters()
             .AsNoTracking()
@@ -49,7 +51,8 @@ public sealed partial class MemoryS1Harness
     /// <summary>Test-only fixture helper to stamp EmbeddingStatus without an indexer.</summary>
     public async Task SetEmbeddingStatusAsync(string memoryId, string? status, string? workspacePath = null)
     {
-        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var db = CreateContext(workspacePath ?? WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var entity = await db.Memories
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(memory => memory.Id == memoryId)
@@ -110,7 +113,8 @@ public sealed partial class MemoryS1Harness
         string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
-        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var db = CreateContext(workspacePath ?? WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         return await CreateService(db).AddAsync(request, cancellationToken).ConfigureAwait(true);
     }
 
@@ -120,7 +124,8 @@ public sealed partial class MemoryS1Harness
         string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
-        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var db = CreateContext(workspacePath ?? WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         return await CreateService(db).ListAsync(request ?? new MemoryListRequest(), cancellationToken).ConfigureAwait(true);
     }
 
@@ -130,7 +135,8 @@ public sealed partial class MemoryS1Harness
         string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
-        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var db = CreateContext(workspacePath ?? WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         return await CreateService(db).GetAsync(id, cancellationToken).ConfigureAwait(true);
     }
 
@@ -141,7 +147,8 @@ public sealed partial class MemoryS1Harness
         string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
-        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var db = CreateContext(workspacePath ?? WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         return await CreateService(db).UpdateAsync(id, request, cancellationToken).ConfigureAwait(true);
     }
 
@@ -151,7 +158,8 @@ public sealed partial class MemoryS1Harness
         string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
-        await using var db = CreateContext(workspacePath ?? WorkspaceA);
+        var db = CreateContext(workspacePath ?? WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         return await CreateService(db).RemoveAsync(id, cancellationToken).ConfigureAwait(true);
     }
 

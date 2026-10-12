@@ -210,7 +210,7 @@ public class ContractCorrectnessTests
         Assert.True(typeof(IRequestPayload).IsInterface);
         Assert.True(typeof(IErrorPayload).IsInterface);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -243,7 +243,7 @@ public class ContractCorrectnessTests
         var envelope = Substitute.For<IYamlEnvelope>();
         Assert.NotNull(envelope);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -263,7 +263,7 @@ public class ContractCorrectnessTests
         Assert.True(promptMethod.ReturnType.IsGenericType);
         Assert.Equal(typeof(Task<>), promptMethod.ReturnType.GetGenericTypeDefinition());
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -280,7 +280,7 @@ public class ContractCorrectnessTests
         Assert.NotNull(cancellationTokenParam);
         Assert.True(cancellationTokenParam.IsOptional || cancellationTokenParam.HasDefaultValue);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -315,6 +315,6 @@ public class ContractCorrectnessTests
         var apiKeyNullability = nullabilityContext.Create(apiKeyProp);
         Assert.Equal(System.Reflection.NullabilityState.NotNull, apiKeyNullability.ReadState);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 }

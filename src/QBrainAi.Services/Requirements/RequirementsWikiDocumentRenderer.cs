@@ -681,7 +681,8 @@ internal static class RequirementsExportMatrixReader
 
         try
         {
-            await using var stream = await openContainedMatrix(ct).ConfigureAwait(false);
+            var stream = await openContainedMatrix(ct).ConfigureAwait(false);
+            await using var streamDisposal = stream.ConfigureAwait(false);
             using var reader = new StreamReader(
                 stream,
                 RequirementsWikiDocumentRenderer.Utf8NoBom,

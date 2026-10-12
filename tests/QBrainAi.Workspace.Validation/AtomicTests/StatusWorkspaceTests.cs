@@ -25,14 +25,14 @@ public sealed class StatusWorkspaceTests : IAsyncLifetime
     public async ValueTask InitializeAsync()
     {
         var body = new { WorkspacePath = _testPath, Name = "AuditStatusTest" };
-        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
     /// <summary>Disposes resources asynchronously.</summary>
     public async ValueTask DisposeAsync()
     {
-        await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
+        await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}").ConfigureAwait(true);
     }
 
     /// <summary>Test method.</summary>

@@ -86,7 +86,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             return await CaptureForRestoreCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
         }
         finally
@@ -110,7 +111,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
             var workspaceId = string.IsNullOrWhiteSpace(state.Item.WorkspaceId)
                 ? ctx.CurrentWorkspaceId
@@ -173,7 +175,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var snapshot = await CaptureForRestoreCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
             var result = await UpdateCoreAsync(scope.Context, id, request, cancellationToken).ConfigureAwait(false);
             return new TodoCompensatedMutationResult
@@ -196,7 +199,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var snapshot = await CaptureForRestoreCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
             var result = await DeleteCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
             return new TodoCompensatedMutationResult
@@ -219,7 +223,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
     public async Task<TodoQueryResult> QueryAsync(TodoQueryRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.Context;
 
         // Push row-level filters to SQL so an id/section/priority/done query does not
@@ -262,7 +267,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
     public async Task<TodoFlatItem?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(id);
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var row = await scope.Context.TodoItems
             .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id, cancellationToken)
@@ -291,7 +297,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var ctx = scope.Context;
 
             var existingItem = await ctx.TodoItems
@@ -397,7 +404,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             return await UpdateCoreAsync(scope.Context, id, request, cancellationToken).ConfigureAwait(false);
         }
         finally
@@ -414,7 +422,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             return await DeleteCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
         }
         finally
@@ -431,7 +440,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         var effectiveLimit = Math.Clamp(limit <= 0 ? 50 : limit, 1, 500);
         var effectiveOffset = Math.Max(offset, 0);
 
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.Context;
 
         var totalCount = await ctx.TodoAuditHistory.CountAsync(h => h.TodoId == id, cancellationToken).ConfigureAwait(false);
@@ -721,7 +731,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
 
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var metadata = await GetOrCreateDocumentMetadataAsync(scope.Context, CancellationToken.None).ConfigureAwait(false);
             metadata.LastProjectedToYamlUtc = DateTime.UtcNow.ToString("O");
             metadata.LastProjectionFailureUtc = null;
@@ -736,7 +747,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
 
     private async Task<TodoFile> BuildProjectedTodoFileAsync(CancellationToken cancellationToken)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.Context;
         var items = await ctx.TodoItems
             .AsNoTracking()
@@ -840,7 +852,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
 
     private async Task<TodoProjectionStatusResult> GetProjectionStatusCoreAsync(CancellationToken cancellationToken)
     {
-        await using var scope = CreateScope();
+        var scope = CreateScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.Context;
         var metadata = await ReadDocumentMetadataAsync(ctx, cancellationToken).ConfigureAwait(false);
         var projectedFile = await BuildProjectedTodoFileAsync(cancellationToken).ConfigureAwait(false);
@@ -932,7 +945,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
     {
         try
         {
-            await using var scope = CreateScope();
+            var scope = CreateScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var metadata = await GetOrCreateDocumentMetadataAsync(scope.Context, CancellationToken.None).ConfigureAwait(false);
             metadata.LastProjectionFailureUtc = DateTime.UtcNow.ToString("O");
             metadata.LastProjectionFailureMessage = ex.Message;

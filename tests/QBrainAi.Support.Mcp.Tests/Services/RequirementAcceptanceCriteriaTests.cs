@@ -45,7 +45,8 @@ public sealed class RequirementAcceptanceCriteriaTests
             .UseInMemoryDatabase($"reqac-rt-{Guid.NewGuid():N}")
             .Options;
 
-        await using (var write = new McpDbContext(options))
+        var write = new McpDbContext(options);
+        await using (write.ConfigureAwait(true))
         {
             write.OverrideWorkspaceId("ws://test");
             write.Requirements.Add(new RequirementEntity
@@ -67,7 +68,8 @@ public sealed class RequirementAcceptanceCriteriaTests
             await write.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
-        await using var read = new McpDbContext(options);
+        var read = new McpDbContext(options);
+        await using var readDisposal = read.ConfigureAwait(true);
         read.OverrideWorkspaceId("ws://test");
         var loaded = await read.RequirementAcceptanceCriteria
             .Where(c => c.RequirementId == "TEST-REQAC-RT-001")
@@ -95,7 +97,8 @@ public sealed class RequirementAcceptanceCriteriaTests
             .UseInMemoryDatabase($"reqac-empty-{Guid.NewGuid():N}")
             .Options;
 
-        await using (var write = new McpDbContext(options))
+        var write = new McpDbContext(options);
+        await using (write.ConfigureAwait(true))
         {
             write.OverrideWorkspaceId("ws://test");
             write.Requirements.Add(new RequirementEntity
@@ -114,7 +117,8 @@ public sealed class RequirementAcceptanceCriteriaTests
             await write.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
-        await using var read = new McpDbContext(options);
+        var read = new McpDbContext(options);
+        await using var readDisposal = read.ConfigureAwait(true);
         read.OverrideWorkspaceId("ws://test");
         var loaded = await read.RequirementAcceptanceCriteria
             .Where(c => c.RequirementId == "FR-REQAC-EMPTY-001")

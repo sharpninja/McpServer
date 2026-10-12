@@ -41,7 +41,7 @@ public class StubMarkerFileReaderTests
         var stub = new StubMarkerFileReader();
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await stub.ReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await stub.ReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -140,7 +140,7 @@ public class StubMarkerFileReaderTests
 
         await cts.CancelAsync();
 
-        await Assert.ThrowsAsync<TaskCanceledException>(async () => await watchTask);
+        await Assert.ThrowsAsync<TaskCanceledException>(async () => await watchTask.ConfigureAwait(true));
 
         Assert.NotNull(capturedData);
         Assert.Contains("rotated", capturedData.ApiKey);
@@ -258,7 +258,7 @@ internal sealed class StubMarkerFileReader : IMarkerFileReader
         Func<IMarkerFileData, Task> onChange,
         CancellationToken cancellationToken = default)
     {
-        await Task.Delay(10, cancellationToken);
+        await Task.Delay(10, cancellationToken).ConfigureAwait(true);
 
         var rotatedData = CreateMarkerData(
             workspacePath,
@@ -268,11 +268,11 @@ internal sealed class StubMarkerFileReader : IMarkerFileReader
                 ["rotated_at"] = DateTimeOffset.UtcNow
             });
 
-        await onChange(rotatedData);
+        await onChange(rotatedData).ConfigureAwait(true);
 
         while (!cancellationToken.IsCancellationRequested)
         {
-            await Task.Delay(100, cancellationToken);
+            await Task.Delay(100, cancellationToken).ConfigureAwait(true);
         }
 
         throw new TaskCanceledException();

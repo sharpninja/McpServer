@@ -162,7 +162,7 @@ public sealed class AuthConfigController : ControllerBase
         string body;
         using (var reader = new StreamReader(Request.Body, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true))
         {
-            body = await reader.ReadToEndAsync(cancellationToken);
+            body = await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
         }
 
         using var outbound = new HttpRequestMessage(HttpMethod.Post, endpoint);
@@ -195,9 +195,9 @@ public sealed class AuthConfigController : ControllerBase
         try
         {
             var client = httpClientFactory.CreateClient();
-            using var response = await client.SendAsync(outbound, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            using var response = await client.SendAsync(outbound, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
             var contentType = response.Content.Headers.ContentType?.ToString() ?? "application/json";
-            var content = await response.Content.ReadAsStringAsync(cancellationToken);
+            var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
             if (rewriteDeviceVerificationUris)
             {
@@ -372,7 +372,7 @@ public sealed class AuthConfigController : ControllerBase
 
         if (Request.ContentLength is > 0)
         {
-            var body = await ReadRequestBodyAsync(cancellationToken);
+            var body = await ReadRequestBodyAsync(cancellationToken).ConfigureAwait(false);
             outbound.Content = new StringContent(body, Encoding.UTF8);
             if (!string.IsNullOrWhiteSpace(Request.ContentType))
             {
@@ -384,7 +384,7 @@ public sealed class AuthConfigController : ControllerBase
 
         try
         {
-            using var response = await client.SendAsync(outbound, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            using var response = await client.SendAsync(outbound, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
             var proxyUiPrefix = "/auth/ui";
             var proxyUiBaseUrl = GetProxyUiBaseUrl();
 
@@ -394,7 +394,7 @@ public sealed class AuthConfigController : ControllerBase
             var contentType = response.Content.Headers.ContentType?.ToString();
             if (IsHtmlResponse(contentType))
             {
-                var html = await response.Content.ReadAsStringAsync(cancellationToken);
+                var html = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 html = RewriteBrowserHtmlForUiProxy(html, keycloakHostBaseUri, proxyUiBaseUrl, proxyUiPrefix);
                 return new ContentResult
                 {
@@ -404,7 +404,7 @@ public sealed class AuthConfigController : ControllerBase
                 };
             }
 
-            var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+            var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
             return new FileContentResult(bytes, contentType ?? "application/octet-stream");
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested || HttpContext.RequestAborted.IsCancellationRequested)
@@ -476,7 +476,7 @@ public sealed class AuthConfigController : ControllerBase
     private async Task<string> ReadRequestBodyAsync(CancellationToken cancellationToken)
     {
         using var reader = new StreamReader(Request.Body, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
-        return await reader.ReadToEndAsync(cancellationToken);
+        return await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
     }
 
     private void CopyInboundBrowserProxyRequestHeaders(HttpRequestMessage outbound)

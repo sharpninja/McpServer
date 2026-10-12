@@ -50,7 +50,8 @@ public sealed class ProviderDatabaseIntegrationTests
     public async Task SqlServerLocalDbCleanDatabaseAppliesMigrationsAndPersistsEntity()
     {
         await using var workspace = ProviderIntegrationTestSupport.CreateWorkspace();
-        await using var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
+        var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
+        await using var localDbDisposal = localDb.ConfigureAwait(true);
         var databaseName = $"mcp_provider_{Guid.NewGuid():N}";
         var factory = ProviderIntegrationTestSupport.CreateFactory(
             workspace,
@@ -83,7 +84,8 @@ public sealed class ProviderDatabaseIntegrationTests
     public async Task PostgreSqlCleanDatabaseAppliesHandoffMigrationAndPersistsEntity()
     {
         await using var workspace = ProviderIntegrationTestSupport.CreateWorkspace();
-        await using var postgres = new EphemeralPostgresSandbox();
+        var postgres = new EphemeralPostgresSandbox();
+        await using var postgresDisposal = postgres.ConfigureAwait(true);
         var databaseName = $"mcp_handoff_{Guid.NewGuid():N}";
         postgres.CreateDatabase(databaseName);
         var factory = ProviderIntegrationTestSupport.CreateFactory(

@@ -16,7 +16,8 @@ public sealed class ListMemoryVersionsQueryHandler(DbContextOptions<McpDbContext
     /// <inheritdoc />
     public async Task<Result<MemoryVersionListResult>> HandleAsync(ListMemoryVersionsQuery query, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = query.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = query.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemoryCompetitiveOperations(db);
         var result = await operations.ListVersionsAsync(query.MemoryId, context.CancellationToken).ConfigureAwait(false);
         return Result<MemoryVersionListResult>.Success(result);

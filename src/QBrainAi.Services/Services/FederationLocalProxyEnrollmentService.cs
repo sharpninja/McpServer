@@ -187,7 +187,8 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
 
     private async Task<IReadOnlyList<FederationWorkspaceRegistrationRequest>> BuildWorkspaceInventoryAsync(CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var workspaceSvc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
         var list = await workspaceSvc.ListAsync(cancellationToken).ConfigureAwait(false);
         return list.Items

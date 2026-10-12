@@ -221,7 +221,7 @@ public sealed class RequirementsClientTests
             using var http = new HttpClient(handler);
             var client = new RequirementsClient(http, DefaultOptions);
 
-            var result = await send(client);
+            var result = await send(client).ConfigureAwait(true);
 
             Assert.True(result.Success);
             Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);

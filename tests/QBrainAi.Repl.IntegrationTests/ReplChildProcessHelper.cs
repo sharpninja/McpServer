@@ -239,7 +239,8 @@ public sealed class ReplChildProcessHelper : IDisposable
                 return null;
             }
 
-            await using var keyStream = await keyResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            var keyStream = await keyResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            await using var keyStreamDisposal = keyStream.ConfigureAwait(true);
             using var keyDocument = await JsonDocument.ParseAsync(keyStream).ConfigureAwait(false);
             if (!keyDocument.RootElement.TryGetProperty("apiKey", out var keyElement))
             {
@@ -260,7 +261,8 @@ public sealed class ReplChildProcessHelper : IDisposable
                 return null;
             }
 
-            await using var workspaceStream = await workspaceResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            var workspaceStream = await workspaceResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            await using var workspaceStreamDisposal = workspaceStream.ConfigureAwait(true);
             using var workspaceDocument = await JsonDocument.ParseAsync(workspaceStream).ConfigureAwait(false);
             if (!workspaceDocument.RootElement.TryGetProperty("items", out var items)
                 || items.ValueKind != JsonValueKind.Array)
@@ -514,9 +516,9 @@ public sealed class ReplChildProcessHelper : IDisposable
             throw new InvalidOperationException($"Process is not running.{Environment.NewLine}{BuildDiagnostics()}");
         }
 
-        await _process.StandardInput.WriteLineAsync(yamlContent.AsMemory(), cancellationToken);
-        await _process.StandardInput.WriteLineAsync(string.Empty.AsMemory(), cancellationToken);
-        await _process.StandardInput.FlushAsync(cancellationToken);
+        await _process.StandardInput.WriteLineAsync(yamlContent.AsMemory(), cancellationToken).ConfigureAwait(true);
+        await _process.StandardInput.WriteLineAsync(string.Empty.AsMemory(), cancellationToken).ConfigureAwait(true);
+        await _process.StandardInput.FlushAsync(cancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -548,7 +550,7 @@ public sealed class ReplChildProcessHelper : IDisposable
                     $"Process exited before stdout reached {count} document(s).{Environment.NewLine}{BuildDiagnostics()}");
             }
 
-            await Task.Delay(50, cancellationToken);
+            await Task.Delay(50, cancellationToken).ConfigureAwait(true);
         }
 
         return false;
@@ -585,7 +587,7 @@ public sealed class ReplChildProcessHelper : IDisposable
                     $"Process exited before stdout contained a final response for request '{requestId}'.{Environment.NewLine}{BuildDiagnostics()}");
             }
 
-            await Task.Delay(50, cancellationToken);
+            await Task.Delay(50, cancellationToken).ConfigureAwait(true);
         }
 
         return false;
@@ -620,7 +622,7 @@ public sealed class ReplChildProcessHelper : IDisposable
                     $"Process exited before stdout contained '{expectedText}'.{Environment.NewLine}{BuildDiagnostics()}");
             }
 
-            await Task.Delay(50, cancellationToken);
+            await Task.Delay(50, cancellationToken).ConfigureAwait(true);
         }
 
         return false;
@@ -669,7 +671,7 @@ public sealed class ReplChildProcessHelper : IDisposable
                     $"Process exited before stdout matched '{pattern}'.{Environment.NewLine}{BuildDiagnostics()}");
             }
 
-            await Task.Delay(50, cancellationToken);
+            await Task.Delay(50, cancellationToken).ConfigureAwait(true);
         }
 
         return false;
@@ -709,7 +711,7 @@ public sealed class ReplChildProcessHelper : IDisposable
             }
 
             await _process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         }
         catch
         {

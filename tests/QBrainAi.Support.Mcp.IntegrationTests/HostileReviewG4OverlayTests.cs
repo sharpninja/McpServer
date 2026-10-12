@@ -46,7 +46,8 @@ public sealed class HostileReviewG4OverlayTests
 
     private static async Task RoundTripSqlServerAsync()
     {
-        await using var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
+        var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
+        await using var localDbDisposal = localDb.ConfigureAwait(true);
         var databaseName = $"mcp_hr_g4_{Guid.NewGuid():N}";
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseSqlServer($"{localDb.ConnectionString}Database={databaseName};Command Timeout=180;")
@@ -56,7 +57,8 @@ public sealed class HostileReviewG4OverlayTests
 
     private static async Task RoundTripPostgresAsync()
     {
-        await using var postgres = new EphemeralPostgresSandbox();
+        var postgres = new EphemeralPostgresSandbox();
+        await using var postgresDisposal = postgres.ConfigureAwait(true);
         var databaseName = $"mcp_hr_g4_{Guid.NewGuid():N}";
         postgres.CreateDatabase(databaseName);
         try
@@ -74,7 +76,8 @@ public sealed class HostileReviewG4OverlayTests
 
     private static async Task AssertRoundTripAsync(DbContextOptions<McpDbContext> options, string workspace)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = workspace });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = workspace });
+        await using var dbDisposal = db.ConfigureAwait(true);
         db.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
         await db.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         db.TodoItems.Add(new TodoItemEntity

@@ -637,7 +637,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         IReadOnlyCollection<PartyKeyDescriptor> keys,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var existing = await db.KeyServerParties
             .Include(entity => entity.Keys)
             .SingleOrDefaultAsync(entity => entity.PartyId == party.PartyId, cancellationToken)
@@ -672,7 +673,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         string partyId,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.KeyServerParties
             .AsNoTracking()
             .Include(party => party.Keys)
@@ -688,7 +690,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         string keyId,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.KeyServerPartyKeys
             .AsNoTracking()
             .SingleOrDefaultAsync(
@@ -702,7 +705,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         TransactionManifestTraceRecord manifest,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var existing = await db.KeyServerManifests
             .SingleOrDefaultAsync(entity => entity.TransactionId == manifest.TransactionId, cancellationToken)
             .ConfigureAwait(false);
@@ -718,7 +722,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         string transactionId,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.KeyServerManifests
             .AsNoTracking()
             .SingleOrDefaultAsync(manifest => manifest.TransactionId == transactionId, cancellationToken)
@@ -731,7 +736,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         int limit,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var query = db.KeyServerManifests.AsNoTracking();
         if (!string.IsNullOrWhiteSpace(request.PublisherPartyId))
             query = query.Where(manifest => manifest.PublisherPartyId == request.PublisherPartyId);
@@ -768,8 +774,10 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
     {
         var scopedPairKey = BuildScopedReplayKey(scope, pairKey);
         var scopedNonceKey = BuildScopedReplayKey(scope, nonceKey);
-        await using var db = CreateContext();
-        await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
+        var transaction = await db.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
+        await using var transactionDisposal = transaction.ConfigureAwait(false);
         var nonceExists = await db.KeyServerNonces
             .AsNoTracking()
             .AnyAsync(existing => existing.NonceKey == scopedNonceKey, cancellationToken)
@@ -827,7 +835,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         string transactionId,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.SubscriberTransactions
             .AsNoTracking()
             .SingleOrDefaultAsync(transaction => transaction.TransactionId == transactionId, cancellationToken)
@@ -839,7 +848,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         SubscriberTransactionState transaction,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         db.SubscriberTransactions.Add(ToEntity(transaction));
         try
         {
@@ -856,7 +866,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         SubscriberTransactionState transaction,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var existing = await db.SubscriberTransactions
             .SingleOrDefaultAsync(entity => entity.TransactionId == transaction.TransactionId, cancellationToken)
             .ConfigureAwait(false);
@@ -879,7 +890,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         SubscriberTransactionState transaction,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var existing = await db.SubscriberTransactions
             .SingleOrDefaultAsync(entity => entity.TransactionId == transaction.TransactionId, cancellationToken)
             .ConfigureAwait(false);
@@ -902,7 +914,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         string pairKey,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.SubscriberSequences
             .AsNoTracking()
             .SingleOrDefaultAsync(sequence => sequence.PairKey == pairKey, cancellationToken)
@@ -915,7 +928,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         long sequence,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.SubscriberSequences
             .SingleOrDefaultAsync(existing => existing.PairKey == pairKey, cancellationToken)
             .ConfigureAwait(false);
@@ -932,7 +946,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         string transactionId,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         db.SubscriberNonces.Add(new SubscriberNonceEntity
         {
             NonceKey = nonceKey,
@@ -957,7 +972,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         string? details,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         db.TransactionAuditEvents.Add(new TransactionAuditEntity
         {
             EventName = eventName,
@@ -973,7 +989,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         TransactionPubSubMessageState message,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var existing = await db.TransactionPubSubMessages
             .SingleOrDefaultAsync(entity => entity.OperationId == message.OperationId, cancellationToken)
             .ConfigureAwait(false);
@@ -1014,7 +1031,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         TransactionFailureReason reason,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.TransactionPubSubMessages
             .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)
             .ConfigureAwait(false);
@@ -1034,7 +1052,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         TransactionFailureReason reason,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.TransactionPubSubMessages
             .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)
             .ConfigureAwait(false);
@@ -1054,7 +1073,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         TransactionFailureReason reason,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entity = await db.TransactionPubSubMessages
             .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)
             .ConfigureAwait(false);
@@ -1075,7 +1095,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         CancellationToken cancellationToken)
     {
         var now = DateTimeOffset.UtcNow;
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var updated = await db.Database.ExecuteSqlInterpolatedAsync(
                 $"""
                 UPDATE "TransactionPubSubMessages"
@@ -1104,7 +1125,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         DateTimeOffset staleInProgressBeforeUtc,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entities = await db.TransactionPubSubMessages
             .AsNoTracking()
             .Where(message => message.Status == "pending" || message.Status == "in_progress")
@@ -1127,7 +1149,8 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         int maxMessages,
         CancellationToken cancellationToken)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(false);
         var entities = await db.TransactionPubSubMessages
             .ToArrayAsync(cancellationToken)
             .ConfigureAwait(false);

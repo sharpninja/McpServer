@@ -106,15 +106,18 @@ public sealed class SessionLogControllerReceiptTests
     [Fact]
     public async Task SubmitAsyncOuterRollbackNeverReturnsDurableReceipt()
     {
-        await using var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new SqliteConnection("Data Source=:memory:");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         var workspace = new WorkspaceContext { WorkspacePath = "receipt-rollback-workspace" };
-        await using var db = new McpDbContext(new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options, workspace);
+        var db = new McpDbContext(new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options, workspace);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await db.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         var service = new SessionLogService(db, NullLogger<SessionLogService>.Instance, workspaceContext: workspace);
         var controller = new SessionLogController(service, NullLogger<SessionLogController>.Instance);
-        await using var transaction = await db.Database.BeginTransactionAsync(
+        var transaction = await db.Database.BeginTransactionAsync(
             System.Data.IsolationLevel.Serializable, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await using var transactionDisposal = transaction.ConfigureAwait(true);
 
         var result = await controller.SubmitAsync(CreateRequest(1), TestContext.Current.CancellationToken).ConfigureAwait(true);
 

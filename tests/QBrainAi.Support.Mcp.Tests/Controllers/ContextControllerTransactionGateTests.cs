@@ -94,7 +94,8 @@ public sealed class ContextControllerTransactionGateTests : IDisposable
             .Returns(Task.FromResult<IReadOnlyList<WebsiteIngestPage>>([CreatePage()]));
         var controller = CreateController(new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
         var httpContext = new DefaultHttpContext();
-        await using var responseBody = new MemoryStream();
+        var responseBody = new MemoryStream();
+        await using var responseBodyDisposal = responseBody.ConfigureAwait(true);
         httpContext.Response.Body = responseBody;
         controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
 

@@ -36,17 +36,19 @@ internal static class BugTriage139FifteenthNativeScenarios
             }
 
             WorkspaceContainedFileSystem.EnsureDirectory(root, nested);
-            await using (var stream = WorkspaceContainedFileSystem.OpenFileForWrite(root, restoredFile))
+            var writeStream = WorkspaceContainedFileSystem.OpenFileForWrite(root, restoredFile);
+            await using (writeStream.ConfigureAwait(true))
             {
-                stream.SetLength(0);
-                await stream.WriteAsync(
+                writeStream.SetLength(0);
+                await writeStream.WriteAsync(
                         Encoding.UTF8.GetBytes("fifteenth-restored"),
                         TestContext.Current.CancellationToken)
                     .ConfigureAwait(true);
             }
 
-            await using (var stream = WorkspaceContainedFileSystem.OpenFileForRead(root, restoredFile))
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            var readStream = WorkspaceContainedFileSystem.OpenFileForRead(root, restoredFile);
+            await using (readStream.ConfigureAwait(true))
+            using (var reader = new StreamReader(readStream, Encoding.UTF8))
             {
                 Assert.Equal(
                     "fifteenth-restored",
@@ -271,7 +273,8 @@ internal static class BugTriage139FifteenthNativeScenarios
         Assert.True(
             LinuxHangingFuseFixture.IsSupported,
             "The Linux native gate requires non-root FUSE support and fusermount3.");
-        await using var fixture = await LinuxHangingFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxHangingFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(
             TestContext.Current.CancellationToken);
         cancellation.CancelAfter(TimeSpan.FromMilliseconds(250));
@@ -330,7 +333,8 @@ internal static class BugTriage139FifteenthNativeScenarios
         Assert.True(
             LinuxHangingFuseFixture.IsSupported,
             "The Linux native gate requires non-root FUSE support and fusermount3.");
-        await using var fixture = await LinuxHangingFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxHangingFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var databasePath = Path.Combine(fixture.MountPath, "blocked.db");
         using var connection = new SqliteConnection(
             new SqliteConnectionStringBuilder

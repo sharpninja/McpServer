@@ -386,7 +386,8 @@ public sealed class MemoryFederationStateAdapterTests
         string text,
         int version)
     {
-        await using var scope = provider.CreateAsyncScope();
+        var scope = provider.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(true);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         db.Memories.Add(new MemoryEntity
         {

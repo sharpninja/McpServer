@@ -47,7 +47,7 @@ public sealed class WorkspaceServiceAccessorTests
                 {
                     await Task.Yield();
                     observed[0] = accessor.GetWorkspacePath();
-                    await Task.Delay(25, ct);
+                    await Task.Delay(25, ct).ConfigureAwait(true);
                     Assert.Equal(Path.GetFullPath(@"F:\alpha"), accessor.GetWorkspacePath());
                 }
             }, ct),
@@ -57,7 +57,7 @@ public sealed class WorkspaceServiceAccessorTests
                 {
                     await Task.Yield();
                     observed[1] = accessor.GetWorkspacePath();
-                    await Task.Delay(25, ct);
+                    await Task.Delay(25, ct).ConfigureAwait(true);
                     Assert.Equal(Path.GetFullPath(@"F:\beta"), accessor.GetWorkspacePath());
                 }
             }, ct));

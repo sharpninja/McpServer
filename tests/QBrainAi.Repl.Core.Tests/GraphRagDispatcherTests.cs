@@ -259,10 +259,10 @@ public sealed class GraphRagDispatcherTests
         switch (method)
         {
             case GraphRagCommandShapes.StatusMethod:
-                await workflow.Received(1).GetStatusAsync(Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetStatusAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.IndexMethod:
-                await workflow.Received(1).IndexAsync(true, Arg.Any<CancellationToken>());
+                await workflow.Received(1).IndexAsync(true, Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.QueryMethod:
                 await workflow.Received(1).QueryAsync(
@@ -274,7 +274,7 @@ public sealed class GraphRagDispatcherTests
                     4,
                     2,
                     900,
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.IngestMethod:
                 await workflow.Received(1).IngestTextAsync(
@@ -285,16 +285,16 @@ public sealed class GraphRagDispatcherTests
                         request.SourceType == "test" &&
                         request.SourceKey == "graphrag-dispatcher" &&
                         request.TriggerReindex),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.DocumentsListMethod:
-                await workflow.Received(1).ListDocumentsAsync(2, 3, "repo", Arg.Any<CancellationToken>());
+                await workflow.Received(1).ListDocumentsAsync(2, 3, "repo", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.DocumentsChunksMethod:
-                await workflow.Received(1).GetDocumentChunksAsync("doc-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetDocumentChunksAsync("doc-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.DocumentsDeleteMethod:
-                await workflow.Received(1).DeleteDocumentAsync("doc-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).DeleteDocumentAsync("doc-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.EntitiesCreateMethod:
                 await workflow.Received(1).CreateEntityAsync(
@@ -304,13 +304,13 @@ public sealed class GraphRagDispatcherTests
                         request.EntityType == "component" &&
                         request.Description == "Routes workflow commands." &&
                         request.Metadata == "{\"test\":true}"),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.EntitiesListMethod:
-                await workflow.Received(1).ListEntitiesAsync(1, 7, "component", Arg.Any<CancellationToken>());
+                await workflow.Received(1).ListEntitiesAsync(1, 7, "component", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.EntitiesGetMethod:
-                await workflow.Received(1).GetEntityAsync("entity-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetEntityAsync("entity-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.EntitiesUpdateMethod:
                 await workflow.Received(1).UpdateEntityAsync(
@@ -321,10 +321,10 @@ public sealed class GraphRagDispatcherTests
                         request.EntityType == "component" &&
                         request.Description == "Routes all commands." &&
                         request.Metadata == "{\"updated\":true}"),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.EntitiesDeleteMethod:
-                await workflow.Received(1).DeleteEntityAsync("entity-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).DeleteEntityAsync("entity-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.RelationshipsCreateMethod:
                 await workflow.Received(1).CreateRelationshipAsync(
@@ -336,13 +336,13 @@ public sealed class GraphRagDispatcherTests
                         request.Description == "Dispatcher route edge." &&
                         Math.Abs(request.Weight - 0.75) < 0.001 &&
                         request.Metadata == "{\"edge\":true}"),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.RelationshipsListMethod:
-                await workflow.Received(1).ListRelationshipsAsync(4, 8, "entity-001", "routes-to", Arg.Any<CancellationToken>());
+                await workflow.Received(1).ListRelationshipsAsync(4, 8, "entity-001", "routes-to", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.RelationshipsGetMethod:
-                await workflow.Received(1).GetRelationshipAsync("rel-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).GetRelationshipAsync("rel-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.RelationshipsUpdateMethod:
                 await workflow.Received(1).UpdateRelationshipAsync(
@@ -355,10 +355,10 @@ public sealed class GraphRagDispatcherTests
                         request.Description == "Updated dispatcher route edge." &&
                         Math.Abs(request.Weight - 0.95) < 0.001 &&
                         request.Metadata == "{\"updated\":true}"),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case GraphRagCommandShapes.RelationshipsDeleteMethod:
-                await workflow.Received(1).DeleteRelationshipAsync("rel-001", Arg.Any<CancellationToken>());
+                await workflow.Received(1).DeleteRelationshipAsync("rel-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             default:
                 throw new InvalidOperationException($"Unexpected GraphRAG route: {method}");

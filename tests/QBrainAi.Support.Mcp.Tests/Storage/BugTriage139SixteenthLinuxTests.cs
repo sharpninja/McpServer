@@ -23,7 +23,8 @@ public sealed class BugTriage139SixteenthLinuxTests
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
 
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var safeRoot = Path.Combine(fixture.RootPath, "safe-alias-root");
         var alias = Path.Combine(safeRoot, "alias");
         Directory.CreateDirectory(safeRoot);
@@ -61,7 +62,8 @@ public sealed class BugTriage139SixteenthLinuxTests
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
 
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var safeRoot = Path.Combine(fixture.RootPath, "replacement-root");
         var safeTarget = Path.Combine(fixture.RootPath, "replacement-target");
         var alias = Path.Combine(safeRoot, "alias");
@@ -190,7 +192,8 @@ public sealed class BugTriage139SixteenthLinuxTests
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
 
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var safeRoot = Path.Combine(fixture.RootPath, "sqlite-replacement-root");
         var safeTarget = Path.Combine(fixture.RootPath, "sqlite-replacement-target");
         var alias = Path.Combine(safeRoot, "alias");
@@ -253,7 +256,8 @@ public sealed class BugTriage139SixteenthLinuxTests
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
 
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var safeRoot = Path.Combine(fixture.RootPath, "sqlite-native-open-root");
         var safeTarget = Path.Combine(fixture.RootPath, "sqlite-native-open-target");
         var holdingTarget = safeTarget + "-holding";
@@ -477,9 +481,10 @@ public sealed class BugTriage139SixteenthLinuxTests
                     .ConfigureAwait(true);
             }
 
-            await using (var transaction = await connection
+            var transaction = await connection
                              .BeginTransactionAsync(TestContext.Current.CancellationToken)
-                             .ConfigureAwait(true))
+                             .ConfigureAwait(true);
+            await using (transaction.ConfigureAwait(true))
             {
                 await using var command = connection.CreateCommand();
                 command.Transaction = (SqliteTransaction)transaction;

@@ -123,7 +123,7 @@ public sealed class TranscriptIngestionWorkflowTests
             LastRequest = request;
             LastRequestBody = request.Content is null
                 ? string.Empty
-                : await request.Content.ReadAsStringAsync(cancellationToken);
+                : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent(_responseBody, Encoding.UTF8, "application/json"),

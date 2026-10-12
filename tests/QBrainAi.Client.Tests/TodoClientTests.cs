@@ -661,7 +661,7 @@ public sealed class TodoClientTests
 
         await Assert.ThrowsAsync<System.InvalidOperationException>(async () =>
         {
-            await foreach (var _ in client.StreamStatusAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken)) { }
+            await foreach (var _ in client.StreamStatusAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)) { }
         });
     }
 
@@ -674,7 +674,7 @@ public sealed class TodoClientTests
 
         await Assert.ThrowsAsync<QBrainAiException>(async () =>
         {
-            await foreach (var _ in client.StreamStatusAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken)) { }
+            await foreach (var _ in client.StreamStatusAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)) { }
         });
     }
 

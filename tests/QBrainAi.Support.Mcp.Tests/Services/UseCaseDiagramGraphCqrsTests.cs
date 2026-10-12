@@ -192,7 +192,8 @@ public sealed class UseCaseDiagramGraphCqrsTests : IDisposable
 
     private async Task<long> CreateUseCaseAsync(string title)
     {
-        await using var db = CreateContext();
+        var db = CreateContext();
+        await using var dbDisposal = db.ConfigureAwait(true);
         var create = await new CreateUseCaseCommandHandler(db, Workspace())
             .HandleAsync(
                 new CreateUseCaseCommand(_workspace, new CreateUseCaseRequest { Title = title }),

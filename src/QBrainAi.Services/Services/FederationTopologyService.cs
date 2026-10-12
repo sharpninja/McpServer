@@ -53,7 +53,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
         var now = DateTimeOffset.UtcNow;
         var proxyId = NormalizeProxyId(request.ProxyId, request.DisplayName);
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var proxy = await db.FederationProxies.FindAsync([proxyId], cancellationToken).ConfigureAwait(false);
 
@@ -96,7 +97,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
         ArgumentNullException.ThrowIfNull(request);
         var now = DateTimeOffset.UtcNow;
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var proxy = await db.FederationProxies.FindAsync([proxyId], cancellationToken).ConfigureAwait(false);
 
@@ -140,7 +142,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
         ArgumentNullException.ThrowIfNull(request);
         var now = DateTimeOffset.UtcNow;
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var entity = await UpsertWorkspaceAsync(db, proxyId, request, now, cancellationToken).ConfigureAwait(false);
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -152,7 +155,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
     /// <inheritdoc />
     public async Task<IReadOnlyList<FederationProxyInfo>> ListProxiesAsync(CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var workspaceCounts = await db.FederationWorkspaces
             .GroupBy(w => w.ProxyId)
@@ -179,7 +183,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
     /// <inheritdoc />
     public async Task<IReadOnlyList<FederationWorkspaceInfo>> ListWorkspacesAsync(string? proxyId, CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var query = db.FederationWorkspaces.AsQueryable();
         if (!string.IsNullOrWhiteSpace(proxyId))
@@ -223,7 +228,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
         limit = limit <= 0 ? 25 : limit;
         maxAttempts = maxAttempts <= 0 ? int.MaxValue : maxAttempts;
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var candidates = await db.FederationOperations
             .Where(o =>
@@ -266,7 +272,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
         ArgumentException.ThrowIfNullOrWhiteSpace(operationId);
         var now = DateTimeOffset.UtcNow;
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var entity = await db.FederationOperations.FindAsync([operationId], cancellationToken).ConfigureAwait(false);
         if (entity is null)
@@ -308,7 +315,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
             ? $"fedop-{Guid.NewGuid():N}"
             : request.OperationId.Trim();
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         await EnsureProxyAsync(db, request.ProxyId, now, cancellationToken).ConfigureAwait(false);
 
@@ -391,7 +399,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
         ArgumentNullException.ThrowIfNull(request);
         var now = DateTimeOffset.UtcNow;
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var entity = await db.FederationOperations.FindAsync([operationId], cancellationToken).ConfigureAwait(false);
         if (entity is null)
@@ -442,7 +451,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
         ArgumentNullException.ThrowIfNull(request);
         var now = DateTimeOffset.UtcNow;
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var outbox = await db.FederationOutbox
             .FirstOrDefaultAsync(o => o.ProxyId == proxyId && o.Sequence == sequence, cancellationToken)
@@ -493,7 +503,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
     /// <inheritdoc />
     public async Task<FederationQueueStatusResponse> GetQueueStatusAsync(string? proxyId, CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var operations = db.FederationOperations.AsQueryable();
         var conflicts = db.FederationConflicts.AsQueryable();
@@ -520,7 +531,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
     /// <inheritdoc />
     public async Task<IReadOnlyList<FederationConflictInfo>> ListConflictsAsync(string? proxyId, bool openOnly, CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var query = db.FederationConflicts.AsQueryable();
         if (!string.IsNullOrWhiteSpace(proxyId))
@@ -552,7 +564,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
         ArgumentException.ThrowIfNullOrWhiteSpace(conflictId);
         ArgumentNullException.ThrowIfNull(request);
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var entity = await db.FederationConflicts.FindAsync([conflictId], cancellationToken).ConfigureAwait(false);
         if (entity is null)
@@ -582,7 +595,8 @@ public sealed class FederationTopologyService : IFederationTopologyService
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(proxyId);
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         return await db.FederationOutbox
             .Where(o => o.ProxyId == proxyId && o.Sequence > afterSequence && o.AcknowledgedAtUtc == null)

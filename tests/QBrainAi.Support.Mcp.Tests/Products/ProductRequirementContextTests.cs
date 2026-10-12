@@ -68,7 +68,8 @@ public sealed class ProductRequirementContextTests : IDisposable
     [Fact]
     public async Task HandleAsyncMemberIncludesSiblingFrBodyAndOrigin()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductRequirementContextQueryHandler(db)
             .HandleAsync(new GetProductRequirementContextQuery(Owner, null, "product-requirements"), _ctx);
@@ -84,7 +85,8 @@ public sealed class ProductRequirementContextTests : IDisposable
     [Fact]
     public async Task HandleAsyncMemberDoesNotIncludeSiblingSourceFiles()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductRequirementContextQueryHandler(db)
             .HandleAsync(new GetProductRequirementContextQuery(Owner, null, "product-requirements"), _ctx);
@@ -99,7 +101,8 @@ public sealed class ProductRequirementContextTests : IDisposable
     [Fact]
     public async Task HandleAsyncOutsiderDoesNotIncludeSiblingFr()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductRequirementContextQueryHandler(db)
             .HandleAsync(new GetProductRequirementContextQuery(Outsider, null, "product-requirements"), _ctx);
@@ -113,7 +116,8 @@ public sealed class ProductRequirementContextTests : IDisposable
     [Fact]
     public async Task HandleAsyncProductRequirementsSourceReturnsOnlyRequirementChunks()
     {
-        await using var db = new McpDbContext(_options);
+        var db = new McpDbContext(_options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await CreateProductAsync(db);
         var result = await new GetProductRequirementContextQueryHandler(db)
             .HandleAsync(new GetProductRequirementContextQuery(Owner, null, "product-requirements"), _ctx);
@@ -127,11 +131,11 @@ public sealed class ProductRequirementContextTests : IDisposable
     {
         var created = await new CreateProductCommandHandler(db).HandleAsync(
             new CreateProductCommand(Owner, new CreateProductRequest { Key = "PROD-MCPSERVER", Name = "Shared" }),
-            _ctx);
+            _ctx).ConfigureAwait(true);
         Assert.True(created.IsSuccess, created.Error);
         var added = await new AddProductMemberCommandHandler(db).HandleAsync(
             new AddProductMemberCommand(Owner, "PROD-MCPSERVER", Sibling),
-            _ctx);
+            _ctx).ConfigureAwait(true);
         Assert.True(added.IsSuccess, added.Error);
     }
 

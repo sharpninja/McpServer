@@ -306,7 +306,7 @@ internal sealed class QuadBrainExecutorTestFixture
 
     private static async IAsyncEnumerable<string> EmptyLines()
     {
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
         yield break;
     }
 }

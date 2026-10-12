@@ -359,7 +359,7 @@ public sealed class VoiceConversationServiceTests
 
         private static async IAsyncEnumerable<string> EmptyAsyncEnumerable()
         {
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
             yield break;
         }
     }

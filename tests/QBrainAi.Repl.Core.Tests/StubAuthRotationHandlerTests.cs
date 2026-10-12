@@ -28,7 +28,7 @@ public class StubAuthRotationHandlerTests
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await stub.UpdateAuthStateAsync(null!, cancellationToken: TestContext.Current.CancellationToken)
+            async () => await stub.UpdateAuthStateAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -44,7 +44,7 @@ public class StubAuthRotationHandlerTests
         {
             callbackInvoked = true;
             capturedState = state;
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         };
 
         stub.RegisterAuthChangeCallback(callback);
@@ -66,9 +66,9 @@ public class StubAuthRotationHandlerTests
         var callback2Invoked = false;
         var callback3Invoked = false;
 
-        stub.RegisterAuthChangeCallback(async _ => { callback1Invoked = true; await Task.CompletedTask; });
-        stub.RegisterAuthChangeCallback(async _ => { callback2Invoked = true; await Task.CompletedTask; });
-        stub.RegisterAuthChangeCallback(async _ => { callback3Invoked = true; await Task.CompletedTask; });
+        stub.RegisterAuthChangeCallback(async _ => { callback1Invoked = true; await Task.CompletedTask.ConfigureAwait(true); });
+        stub.RegisterAuthChangeCallback(async _ => { callback2Invoked = true; await Task.CompletedTask.ConfigureAwait(true); });
+        stub.RegisterAuthChangeCallback(async _ => { callback3Invoked = true; await Task.CompletedTask.ConfigureAwait(true); });
 
         var newMarkerData = CreateMarkerData("/home/user/project", "multi-callback-key");
         await stub.UpdateAuthStateAsync(newMarkerData, cancellationToken: TestContext.Current.CancellationToken);
@@ -86,8 +86,8 @@ public class StubAuthRotationHandlerTests
         var callback1Invoked = false;
         var callback2Invoked = false;
 
-        Func<IAuthState, Task> callback1 = async _ => { callback1Invoked = true; await Task.CompletedTask; };
-        Func<IAuthState, Task> callback2 = async _ => { callback2Invoked = true; await Task.CompletedTask; };
+        Func<IAuthState, Task> callback1 = async _ => { callback1Invoked = true; await Task.CompletedTask.ConfigureAwait(true); };
+        Func<IAuthState, Task> callback2 = async _ => { callback2Invoked = true; await Task.CompletedTask.ConfigureAwait(true); };
 
         stub.RegisterAuthChangeCallback(callback1);
         stub.RegisterAuthChangeCallback(callback2);
@@ -120,7 +120,7 @@ public class StubAuthRotationHandlerTests
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await stub.RefreshAuthStateAsync("/nonexistent/workspace", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await stub.RefreshAuthStateAsync("/nonexistent/workspace", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -237,7 +237,7 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
 
         foreach (var callback in _callbacks)
         {
-            await callback(_currentAuthState);
+            await callback(_currentAuthState).ConfigureAwait(true);
         }
     }
 

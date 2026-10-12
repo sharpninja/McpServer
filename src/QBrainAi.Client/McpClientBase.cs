@@ -360,7 +360,7 @@ public abstract class McpClientBase
         HttpResponseMessage response;
         try
         {
-            response = await _http.SendAsync(request, completionOption, cancellationToken);
+            response = await _http.SendAsync(request, completionOption, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -390,7 +390,7 @@ public abstract class McpClientBase
     /// <returns>Response status code.</returns>
     protected async Task<HttpStatusCode> SendForStatusAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
     {
-        using var response = await SendRawAsync(method, path, body, cancellationToken);
+        using var response = await SendRawAsync(method, path, body, cancellationToken).ConfigureAwait(false);
         return response.StatusCode;
     }
 
@@ -517,7 +517,7 @@ public abstract class McpClientBase
         HttpResponseMessage response;
         try
         {
-            response = await _http.SendAsync(request, cancellationToken);
+            response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -529,7 +529,7 @@ public abstract class McpClientBase
         {
             _logger?.LogInformation("[McpClient] {Method} {Uri} → HTTP {StatusCode}",
                 method, uri, (int)response.StatusCode);
-            return await ReadResponseAsync<T>(response, cancellationToken);
+            return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -582,7 +582,7 @@ public abstract class McpClientBase
                 JsonSerializer.Serialize(body, s_jsonOptions.GetTypeInfo(body.GetType())), Encoding.UTF8, "application/json");
 
         using var response = await _http.SendAsync(
-            request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
         {

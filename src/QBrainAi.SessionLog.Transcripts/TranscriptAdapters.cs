@@ -363,9 +363,11 @@ internal sealed class ClineTranscriptAdapter : JsonTranscriptAdapterBase
     {
         var sessionFile = bundle.Files.First(file => Path.GetFileName(file).Equals("session.json", StringComparison.OrdinalIgnoreCase));
         var messagesFile = bundle.Files.First(file => Path.GetFileName(file).Equals("messages.json", StringComparison.OrdinalIgnoreCase));
-        await using var sessionStream = File.OpenRead(sessionFile);
+        var sessionStream = File.OpenRead(sessionFile);
+        await using var sessionStreamDisposal = sessionStream.ConfigureAwait(false);
         using var sessionDocument = await JsonDocument.ParseAsync(sessionStream, cancellationToken: cancellationToken).ConfigureAwait(false);
-        await using var messagesStream = File.OpenRead(messagesFile);
+        var messagesStream = File.OpenRead(messagesFile);
+        await using var messagesStreamDisposal = messagesStream.ConfigureAwait(false);
         using var messagesDocument = await JsonDocument.ParseAsync(messagesStream, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var sessionRoot = sessionDocument.RootElement;
@@ -502,7 +504,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         var snapshotPath = await OpenCodeSqliteUtilities.CreateSnapshotAsync(sourcePath, cancellationToken).ConfigureAwait(false);
         try
         {
-            await using var connection = await OpenCodeSqliteUtilities.OpenReadOnlyAsync(snapshotPath, cancellationToken).ConfigureAwait(false);
+            var connection = await OpenCodeSqliteUtilities.OpenReadOnlyAsync(snapshotPath, cancellationToken).ConfigureAwait(false);
+            await using var connectionDisposal = connection.ConfigureAwait(false);
             var tables = await OpenCodeSqliteUtilities.ReadTableNamesAsync(connection, cancellationToken).ConfigureAwait(false);
             if (!tables.Contains("session") || !tables.Contains("message"))
                 throw new InvalidDataException("OpenCode SQLite snapshot is missing required session/message tables: " + sourcePath);
@@ -544,7 +547,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
     {
         var sessionId = TranscriptUtilities.DeriveSessionId(TranscriptSourceKind.OpenCode, sourceFiles);
         var orderColumn = OpenCodeSqliteUtilities.OrderColumnOrFallback(sessionColumns, "time_created", "created_at", "id");
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = "SELECT "
             + OpenCodeSqliteUtilities.SelectColumnOrNull(sessionColumns, "id", "id") + ", "
             + OpenCodeSqliteUtilities.SelectColumnOrNull(sessionColumns, "workspace_path", "workspace_path") + ", "
@@ -552,7 +556,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
             + " FROM " + OpenCodeSqliteUtilities.QuoteIdentifier("session")
             + " ORDER BY " + orderColumn + " LIMIT 1;";
 
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             return new OpenCodeSqliteSessionMetadata(sessionId, null, null);
 
@@ -575,7 +580,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
     {
         var orderColumn = OpenCodeSqliteUtilities.OrderColumnOrFallback(messageColumns, "time_created", "created_at", "id");
         var timestampColumn = SelectTimestampColumnOrNull(messageColumns);
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = "SELECT "
             + OpenCodeSqliteUtilities.SelectColumnOrNull(messageColumns, "id", "id") + ", "
             + OpenCodeSqliteUtilities.SelectColumnOrNull(messageColumns, "role", "role") + ", "
@@ -589,7 +595,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         command.Parameters.AddWithValue("$sessionId", sessionId);
 
         var rows = new List<OpenCodeSqliteMessageRow>();
-        await using (var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using (reader.ConfigureAwait(false))
         {
             while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             {
@@ -643,7 +650,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
             return [];
 
         var timestampColumn = SelectTimestampColumnOrNull(toolEventColumns);
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = "SELECT "
             + OpenCodeSqliteUtilities.SelectColumnOrNull(toolEventColumns, "id", "id") + ", "
             + OpenCodeSqliteUtilities.SelectColumnOrNull(toolEventColumns, "message_id", "message_id") + ", "
@@ -657,7 +665,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         command.Parameters.AddWithValue("$sessionId", sessionId);
 
         var events = new List<TranscriptEvent>();
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             var id = ReadNullableString(reader, 0) ?? "opencode-sqlite-tool-" + (events.Count + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
@@ -706,7 +715,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         if (partColumns.Count == 0 || !partColumns.Contains("message_id"))
             return [];
 
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = "SELECT "
             + OpenCodeSqliteUtilities.SelectColumnOrNull(partColumns, "type", "type") + ", "
             + OpenCodeSqliteUtilities.SelectColumnOrNull(partColumns, "json", "json")
@@ -716,7 +726,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         command.Parameters.AddWithValue("$messageId", messageId);
 
         var blocks = new List<TranscriptContentBlock>();
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             var type = ReadNullableString(reader, 0) ?? "text";
@@ -801,7 +812,8 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
     private static async Task<TranscriptSession> NormalizeExportAsync(TranscriptBundle bundle, CancellationToken cancellationToken)
     {
         var path = bundle.Files[0];
-        await using var stream = File.OpenRead(path);
+        var stream = File.OpenRead(path);
+        await using var streamDisposal = stream.ConfigureAwait(false);
         using var document = await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken).ConfigureAwait(false);
         var root = document.RootElement;
         var info = TranscriptUtilities.GetObject(root, "info");

@@ -46,7 +46,8 @@ public sealed class EventStreamIntegrationTests : IClassFixture<CustomWebApplica
         using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        await using var stream = await response.Content.ReadAsStreamAsync(cts.Token).ConfigureAwait(true);
+        var stream = await response.Content.ReadAsStreamAsync(cts.Token).ConfigureAwait(true);
+        await using var streamDisposal = stream.ConfigureAwait(true);
         using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
 
         // Allow subscription pipeline to fully attach before publishing.
@@ -95,7 +96,8 @@ public sealed class EventStreamIntegrationTests : IClassFixture<CustomWebApplica
         using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        await using var stream = await response.Content.ReadAsStreamAsync(cts.Token).ConfigureAwait(true);
+        var stream = await response.Content.ReadAsStreamAsync(cts.Token).ConfigureAwait(true);
+        await using var streamDisposal = stream.ConfigureAwait(true);
         using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
 
         // Allow subscription pipeline to fully attach before publishing.

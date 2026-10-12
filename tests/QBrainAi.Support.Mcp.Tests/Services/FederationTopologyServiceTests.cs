@@ -257,7 +257,8 @@ public sealed class FederationTopologyServiceTests : IDisposable
     [Fact]
     public async Task ListPendingOperationsAsyncWithSqliteProviderReturnsQueuedRows()
     {
-        await using var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new SqliteConnection("Data Source=:memory:");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var provider = CreateSqliteProvider(connection);
         await using (var scope = provider.CreateAsyncScope())

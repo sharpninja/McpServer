@@ -51,7 +51,7 @@ public sealed class UseCaseCqrsTests : IDisposable
     public async Task CreateUseCaseWithoutPreSeededWorkspaceAutoCreatesParentAndPersists()
     {
         var isolated = Path.Combine(Path.GetTempPath(), "mcp-uc-noseed-" + Guid.NewGuid().ToString("N"));
-        await using var db = new McpDbContext(_options, new WorkspaceContext
+        var db = new McpDbContext(_options, new WorkspaceContext
         {
             WorkspacePath = isolated,
             WorkspaceName = "uc-noseed",
@@ -60,6 +60,7 @@ public sealed class UseCaseCqrsTests : IDisposable
             SessionsPath = Path.Combine(isolated, "docs", "sessions"),
             ExternalDocsPath = Path.Combine(isolated, "docs", "external"),
         });
+        await using var dbDisposal = db.ConfigureAwait(true);
 
         Assert.False(await db.Workspaces.IgnoreQueryFilters().AnyAsync(
             w => w.WorkspaceId == isolated,

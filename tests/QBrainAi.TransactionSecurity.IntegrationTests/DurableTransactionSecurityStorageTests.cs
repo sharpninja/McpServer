@@ -1407,7 +1407,8 @@ public sealed class DurableTransactionSecurityStorageTests
         var options = new DbContextOptionsBuilder<TransactionSecurityDbContext>()
             .UseSqlite($"Data Source={Path.GetFullPath(databasePath)}")
             .Options;
-        await using var db = new TransactionSecurityDbContext(options);
+        var db = new TransactionSecurityDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         return await db.TransactionAuditEvents
             .AsNoTracking()
             .OrderBy(entry => entry.Id)

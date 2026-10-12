@@ -54,7 +54,8 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     [Fact]
     public async Task PairPostAfterRepeatedFailuresReturnsTooManyRequests()
     {
-        await using var factory = new PairingWebApplicationFactory();
+        var factory = new PairingWebApplicationFactory();
+        await using var factoryDisposal = factory.ConfigureAwait(true);
         using var client = factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = false,

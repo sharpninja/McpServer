@@ -135,14 +135,16 @@ public abstract class DatabaseFederationStateAdapterBase : FederationStateAdapte
 
     private async Task<string?> ReadPayloadJsonAsync(string resourceId, CancellationToken cancellationToken)
     {
-        await using var scope = ScopeFactory.CreateAsyncScope();
+        var scope = ScopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         return await ReadPayloadJsonAsync(db, resourceId, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<string?> GetExplicitVersionAsync(string resourceId, CancellationToken cancellationToken)
     {
-        await using var scope = ScopeFactory.CreateAsyncScope();
+        var scope = ScopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         return await ReadExplicitVersionAsync(db, resourceId, cancellationToken).ConfigureAwait(false);
     }
@@ -191,7 +193,8 @@ public sealed class WorkspaceFederationStateAdapter : FederationStateAdapterBase
     public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(operation);
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
         var resourceId = ResolveResourceId(operation);
 
@@ -270,7 +273,8 @@ public sealed class WorkspaceFederationStateAdapter : FederationStateAdapterBase
 
     private async Task<WorkspaceDto?> GetWorkspaceAsync(string resourceId, CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
         return await workspaceService.GetAsync(resourceId, cancellationToken).ConfigureAwait(false);
     }
@@ -326,7 +330,8 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
         try
         {
             var method = (operation.HttpMethod ?? string.Empty).Trim().ToUpperInvariant();
-            await using var scope = _scopeFactory.CreateAsyncScope();
+            var scope = _scopeFactory.CreateAsyncScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var todoService = scope.ServiceProvider.GetRequiredService<ITodoService>();
             return method switch
             {
@@ -619,7 +624,8 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
         try
         {
             var method = (operation.HttpMethod ?? string.Empty).Trim().ToUpperInvariant();
-            await using var scope = ScopeFactory.CreateAsyncScope();
+            var scope = ScopeFactory.CreateAsyncScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
             return method switch
             {
@@ -980,7 +986,8 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
         ArgumentNullException.ThrowIfNull(operation);
         var key = SessionLogKey.Parse(operation.ResourceId ?? string.Empty);
 
-        await using var scope = ScopeFactory.CreateAsyncScope();
+        var scope = ScopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         if (string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase))
         {
             if (string.IsNullOrWhiteSpace(key.SessionId))
@@ -1277,7 +1284,8 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
     {
         ArgumentNullException.ThrowIfNull(operation);
         var requirementKey = RequirementKey.Parse(operation.ResourceId ?? string.Empty);
-        await using var scope = ScopeFactory.CreateAsyncScope();
+        var scope = ScopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
 
         if (string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase))
@@ -1491,7 +1499,8 @@ public sealed class ToolsBucketsFederationStateAdapter : DatabaseFederationState
     public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(operation);
-        await using var scope = ScopeFactory.CreateAsyncScope();
+        var scope = ScopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
 
         if (string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase))
@@ -1714,7 +1723,8 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
     public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(operation);
-        await using var scope = ScopeFactory.CreateAsyncScope();
+        var scope = ScopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
 
         if (string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase))

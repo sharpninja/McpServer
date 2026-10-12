@@ -433,7 +433,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new InvalidOperationException("Unknown client: unknownclient"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _passthrough.InvokeAsync("unknownclient", "SomeMethod", args, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _passthrough.InvokeAsync("unknownclient", "SomeMethod", args, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -445,7 +445,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new InvalidOperationException("Unknown method: NonExistentMethod on client: context"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _passthrough.InvokeAsync("context", "NonExistentMethod", args, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _passthrough.InvokeAsync("context", "NonExistentMethod", args, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -461,7 +461,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new ArgumentException("Missing required parameter: query"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -477,7 +477,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new ArgumentException("Type conversion error for parameter 'limit': cannot convert 'not-a-number' to System.Int32"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -492,7 +492,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new ArgumentException("Null value provided for non-nullable parameter: query"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -507,7 +507,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new ArgumentException("JSON deserialization error for parameter 'request'"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _passthrough.InvokeAsync("desktop", "LaunchAsync", args, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _passthrough.InvokeAsync("desktop", "LaunchAsync", args, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -823,7 +823,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new OperationCanceledException());
 
         await Assert.ThrowsAsync<OperationCanceledException>(
-            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cts.Token));
+            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cts.Token).ConfigureAwait(true));
     }
 
     [Fact]

@@ -104,7 +104,7 @@ public class QBrainAiClientIntegrationTests
         client.ApiKey = "key-4";
         Assert.Equal("key-4", client.ApiKey);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class QBrainAiClientIntegrationTests
         Assert.Equal("new-key", client.ApiKey);
         Assert.Equal("/new/workspace", client.WorkspacePath);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -166,6 +166,6 @@ public class QBrainAiClientIntegrationTests
 
         Assert.Equal("rotated-bearer", client.BearerToken);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 }

@@ -26,7 +26,7 @@ public sealed class SessionLogClient : McpClientBase
     /// <summary>Submit (upsert) a session log entry. Creates or updates based on session ID.</summary>
     public async Task<SessionLogSubmitResult> SubmitAsync(UnifiedSessionLogDto sessionLog, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<SessionLogSubmitResult>("qbrainai/sessionlog", sessionLog, cancellationToken);
+        return await PostAsync<SessionLogSubmitResult>("qbrainai/sessionlog", sessionLog, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Upsert a single turn on an existing session log.</summary>
@@ -37,7 +37,7 @@ public sealed class SessionLogClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/turn";
-        return await PostAsync<SessionLogTurnSubmitResult>(path, turn, cancellationToken);
+        return await PostAsync<SessionLogTurnSubmitResult>(path, turn, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Query session logs with optional filters.</summary>
@@ -57,7 +57,7 @@ public sealed class SessionLogClient : McpClientBase
                 Limit = limit,
                 Offset = offset,
             },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Query session logs with the full controller filter surface.</summary>
@@ -81,7 +81,7 @@ public sealed class SessionLogClient : McpClientBase
         if (request.TurnStatus is not null) parts.Add($"turnStatus={Uri.EscapeDataString(request.TurnStatus)}");
         if (request.StaleOlderThanHours is not null) parts.Add($"staleOlderThanHours={request.StaleOlderThanHours.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
         var qs = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
-        return await GetAsync<SessionLogQueryResult>($"qbrainai/sessionlog{qs}", cancellationToken);
+        return await GetAsync<SessionLogQueryResult>($"qbrainai/sessionlog{qs}", cancellationToken).ConfigureAwait(false);
     }
 
 
@@ -91,7 +91,7 @@ public sealed class SessionLogClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
-        return await PostAsync<TranscriptIngestRunResponse>("qbrainai/sessionlog/ingest/path", request, cancellationToken);
+        return await PostAsync<TranscriptIngestRunResponse>("qbrainai/sessionlog/ingest/path", request, cancellationToken).ConfigureAwait(false);
     }
 
 
@@ -119,7 +119,7 @@ public sealed class SessionLogClient : McpClientBase
             form.Add(content, "files", file.FileName);
         }
 
-        return await PostContentAsync<TranscriptIngestRunResponse>("qbrainai/sessionlog/ingest/upload", form, cancellationToken);
+        return await PostContentAsync<TranscriptIngestRunResponse>("qbrainai/sessionlog/ingest/upload", form, cancellationToken).ConfigureAwait(false);
     }
 
     private static void AddFormString(MultipartFormDataContent form, string name, string? value)
@@ -133,7 +133,7 @@ public sealed class SessionLogClient : McpClientBase
         List<ProcessingDialogItemDto> items, CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/dialog";
-        return await PostAsync<DialogAppendResult>(path, items, cancellationToken);
+        return await PostAsync<DialogAppendResult>(path, items, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -149,7 +149,7 @@ public sealed class SessionLogClient : McpClientBase
         return await PostAsync<SessionLogWorkspaceStampRepairResult>(
             $"qbrainai/sessionlog/repair-workspace-stamps?dryRun={dryRun.ToString().ToLowerInvariant()}",
             null,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -164,7 +164,7 @@ public sealed class SessionLogClient : McpClientBase
         return await PostAsync<SessionLifecycleOpenResult>(
             path,
             new SessionLifecycleOpenRequest { Title = title, Model = model },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -188,7 +188,7 @@ public sealed class SessionLogClient : McpClientBase
                 PlanFile = planFile,
                 TodoId = todoId,
             },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -202,7 +202,7 @@ public sealed class SessionLogClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/complete";
-        return await PostAsync<SessionLogTurnSubmitResult>(path, payload ?? new UnifiedRequestEntryDto(), cancellationToken);
+        return await PostAsync<SessionLogTurnSubmitResult>(path, payload ?? new UnifiedRequestEntryDto(), cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -215,7 +215,7 @@ public sealed class SessionLogClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/fail";
-        return await PostAsync<SessionLogTurnSubmitResult>(path, payload ?? new UnifiedRequestEntryDto(), cancellationToken);
+        return await PostAsync<SessionLogTurnSubmitResult>(path, payload ?? new UnifiedRequestEntryDto(), cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -227,7 +227,7 @@ public sealed class SessionLogClient : McpClientBase
         UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}";
-        return await PatchAsync<SessionLogTurnSubmitResult>(path, turn, cancellationToken);
+        return await PatchAsync<SessionLogTurnSubmitResult>(path, turn, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -240,7 +240,7 @@ public sealed class SessionLogClient : McpClientBase
         UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}";
-        return await PutAsync<SessionLogMutationResult>(path, turn, cancellationToken);
+        return await PutAsync<SessionLogMutationResult>(path, turn, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -254,7 +254,7 @@ public sealed class SessionLogClient : McpClientBase
         return await PostAsync<SessionLogMutationResult>(
             path,
             new SessionTitleRequest { Title = title },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -268,7 +268,7 @@ public sealed class SessionLogClient : McpClientBase
         return await PostAsync<SessionLogMutationResult>(
             path,
             new SessionTitleRequest { Title = title },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -282,7 +282,7 @@ public sealed class SessionLogClient : McpClientBase
         UnifiedRequestEntryDto payload, CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/sections/{Uri.EscapeDataString(section)}";
-        return await PutAsync<SessionLogMutationResult>(path, payload, cancellationToken);
+        return await PutAsync<SessionLogMutationResult>(path, payload, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>FR-SUPPORT-010G: DELETE all items in a turn section (clear the section).</summary>
@@ -291,7 +291,7 @@ public sealed class SessionLogClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/sections/{Uri.EscapeDataString(section)}";
-        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
+        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -304,7 +304,7 @@ public sealed class SessionLogClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/sections/{Uri.EscapeDataString(section)}/items/{Uri.EscapeDataString(itemKey)}";
-        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
+        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>FR-SUPPORT-010G: DELETE a single turn and all of its child rows.</summary>
@@ -312,7 +312,7 @@ public sealed class SessionLogClient : McpClientBase
         string agent, string sessionId, string requestId, CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}";
-        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
+        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>FR-SUPPORT-010G: DELETE an entire session and every turn beneath it.</summary>
@@ -320,6 +320,6 @@ public sealed class SessionLogClient : McpClientBase
         string agent, string sessionId, CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}";
-        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
+        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken).ConfigureAwait(false);
     }
 }

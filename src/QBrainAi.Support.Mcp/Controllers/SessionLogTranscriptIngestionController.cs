@@ -216,8 +216,10 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
 
         var destination = ResolveUploadDestination(stagingRoot, file.FileName, stagedPaths);
         Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
-        await using var input = file.OpenReadStream();
-        await using var output = System.IO.File.Create(destination);
+        var input = file.OpenReadStream();
+        await using var inputDisposal = input.ConfigureAwait(false);
+        var output = System.IO.File.Create(destination);
+        await using var outputDisposal = output.ConfigureAwait(false);
         await CopyWithLimitAsync(input, output, MaxSourceFileBytes, cancellationToken).ConfigureAwait(false);
     }
 
@@ -252,8 +254,10 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
 
             var destination = ResolveUploadDestination(stagingRoot, entry.FullName, stagedPaths);
             Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
-            await using var input = entry.Open();
-            await using var output = System.IO.File.Create(destination);
+            var input = entry.Open();
+            await using var inputDisposal = input.ConfigureAwait(false);
+            var output = System.IO.File.Create(destination);
+            await using var outputDisposal = output.ConfigureAwait(false);
             await CopyWithLimitAsync(input, output, MaxSourceFileBytes, cancellationToken).ConfigureAwait(false);
         }
     }

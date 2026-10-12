@@ -16,7 +16,8 @@ public sealed class OneShotCliAgentExecutionStrategyTests
         CapturingProcessSpawner spawner = new(outputBody: "codex final");
         OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
 
-        await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("codex"), cancellationToken: TestContext.Current.CancellationToken);
+        IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("codex"), cancellationToken: TestContext.Current.CancellationToken);
+        await using var sessionDisposal = session.ConfigureAwait(true);
         AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
 
         Assert.Equal(AgentCliResultState.Success, result.State);
@@ -38,7 +39,8 @@ public sealed class OneShotCliAgentExecutionStrategyTests
         CapturingProcessSpawner spawner = new(stdout: "claude final");
         OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
 
-        await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("claude"), cancellationToken: TestContext.Current.CancellationToken);
+        IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("claude"), cancellationToken: TestContext.Current.CancellationToken);
+        await using var sessionDisposal = session.ConfigureAwait(true);
         AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
 
         Assert.Equal(AgentCliResultState.Success, result.State);
@@ -59,7 +61,8 @@ public sealed class OneShotCliAgentExecutionStrategyTests
         CapturingProcessSpawner spawner = new(stdout: "grok final");
         OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
 
-        await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("grok"), cancellationToken: TestContext.Current.CancellationToken);
+        IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("grok"), cancellationToken: TestContext.Current.CancellationToken);
+        await using var sessionDisposal = session.ConfigureAwait(true);
         AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
 
         Assert.Equal(AgentCliResultState.Success, result.State);
@@ -82,7 +85,8 @@ public sealed class OneShotCliAgentExecutionStrategyTests
         CapturingProcessSpawner spawner = new(stdout: "cline final");
         OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
 
-        await using IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("cline"), cancellationToken: TestContext.Current.CancellationToken);
+        IAgentExecutionSession session = await strategy.CreateSessionAsync(CreateRequest("cline"), cancellationToken: TestContext.Current.CancellationToken);
+        await using var sessionDisposal = session.ConfigureAwait(true);
         AgentCliResult result = await session.ReadInitialResponseAsync(CancellationToken.None);
 
         Assert.Equal(AgentCliResultState.Success, result.State);

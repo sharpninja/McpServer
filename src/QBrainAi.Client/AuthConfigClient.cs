@@ -42,9 +42,9 @@ public sealed class AuthConfigClient : McpClientBase
     public async Task<AuthConfigResponse> GetConfigAsync(CancellationToken cancellationToken = default)
     {
         var uri = new Uri($"{_scheme}://{_host}:{Port}/auth/config");
-        using var response = await _http.GetAsync(uri, cancellationToken);
+        using var response = await _http.GetAsync(uri, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
-        var json = await response.Content.ReadAsStringAsync(cancellationToken);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         return (AuthConfigResponse)JsonSerializer.Deserialize(json, s_jsonOptions.GetTypeInfo(typeof(AuthConfigResponse)))!;
     }
 
@@ -67,7 +67,7 @@ public sealed class AuthConfigClient : McpClientBase
         fields.Add(new("client_id", request.ClientId));
         fields.Add(new("scope", request.Scope));
 
-        return await PostFormAsync<AuthDeviceAuthorizationResponse>("auth/device", fields, cancellationToken);
+        return await PostFormAsync<AuthDeviceAuthorizationResponse>("auth/device", fields, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public sealed class AuthConfigClient : McpClientBase
         fields.Add(new("refresh_token", request.RefreshToken));
         fields.Add(new("scope", request.Scope));
 
-        return await PostFormAsync<AuthTokenResponse>("auth/token", fields, cancellationToken);
+        return await PostFormAsync<AuthTokenResponse>("auth/token", fields, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<T> PostFormAsync<T>(

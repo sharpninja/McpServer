@@ -51,7 +51,7 @@ public class RequestResponseCorrelationTests
             .Returns<object?>(x => throw new InvalidOperationException("Not connected"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await protocol.SendRequestAsync("workspace.select", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await protocol.SendRequestAsync("workspace.select", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -72,7 +72,7 @@ public class RequestResponseCorrelationTests
             .Returns<object?>(x => throw exception);
 
         var ex = await Assert.ThrowsAsync<ReplProtocolException>(
-            async () => await protocol.SendRequestAsync("workspace.select", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await protocol.SendRequestAsync("workspace.select", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
 
         Assert.Equal("invalid_workspace", ex.Code);
@@ -107,7 +107,7 @@ public class RequestResponseCorrelationTests
             .Returns<WorkspaceInfo?>(x => throw new InvalidOperationException("Type conversion failed"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await protocol.SendRequestAsync<WorkspaceInfo>("workspace.info", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await protocol.SendRequestAsync<WorkspaceInfo>("workspace.info", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -140,7 +140,7 @@ public class RequestResponseCorrelationTests
         {
             handlerInvoked = true;
             Assert.Equal("workspace.changed", payload.Event);
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         };
 
         protocol.When(x => x.RegisterEventHandler("workspace.changed", Arg.Any<Func<IEventPayload, Task>>()))
@@ -168,7 +168,7 @@ public class RequestResponseCorrelationTests
 
         protocol.Received(1).UnregisterEventHandler("workspace.changed", handler);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -190,7 +190,7 @@ public class RequestResponseCorrelationTests
         Assert.NotNull(exception.Details);
         Assert.Equal("invalid_token", exception.Details["reason"]);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     private class WorkspaceInfo

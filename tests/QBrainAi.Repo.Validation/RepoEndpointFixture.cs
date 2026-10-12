@@ -120,7 +120,8 @@ public sealed class RepoEndpointFixture : IDisposable
         if (!response.IsSuccessStatusCode)
             return null;
 
-        await using var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+        var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+        await using var contentStreamDisposal = contentStream.ConfigureAwait(true);
         using var document = await JsonDocument.ParseAsync(contentStream).ConfigureAwait(false);
         return document.RootElement.TryGetProperty("apiKey", out var apiKeyElement)
             ? apiKeyElement.GetString()

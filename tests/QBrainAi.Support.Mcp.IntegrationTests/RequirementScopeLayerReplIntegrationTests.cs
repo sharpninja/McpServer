@@ -28,11 +28,13 @@ public sealed class RequirementScopeLayerReplIntegrationTests
     [Fact]
     public async Task RequirementScopeLayerReplWorkflowExercisesCurrentEffectiveRequirementsBeforeAndAfterLayer()
     {
-        await using var scratch = await ScratchQBrainAi.StartAsync().ConfigureAwait(true);
-        await using var repl = await ReplProcess.StartAsync(
+        var scratch = await ScratchQBrainAi.StartAsync().ConfigureAwait(true);
+        await using var scratchDisposal = scratch.ConfigureAwait(true);
+        var repl = await ReplProcess.StartAsync(
             scratch.ReplHostAssemblyPath,
             scratch.WorkspacePath,
             scratch.MarkerPath).ConfigureAwait(true);
+        await using var replDisposal = repl.ConfigureAwait(true);
 
         await RunReplAsync(repl, "reqscope-int-create-layer-2", """
             type: request
@@ -346,7 +348,8 @@ public sealed class RequirementScopeLayerReplIntegrationTests
                     sqlite => sqlite.MigrationsAssembly("QBrainAi.Storage.SqliteMigrations"))
                 .Options;
 
-            await using var db = new McpDbContext(options);
+            var db = new McpDbContext(options);
+            await using var dbDisposal = db.ConfigureAwait(true);
             var now = DateTimeOffset.UtcNow;
             db.Workspaces.Add(new WorkspaceEntity
             {

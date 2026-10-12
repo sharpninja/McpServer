@@ -142,7 +142,7 @@ public class OrchestrationRulesTests
         {
             rotationDetected = true;
             rotatedData = data;
-            await authHandler.UpdateAuthStateAsync(data, TestContext.Current.CancellationToken);
+            await authHandler.UpdateAuthStateAsync(data, TestContext.Current.CancellationToken).ConfigureAwait(true);
         };
 
         await markerReader.WatchAsync(workspacePath, watchCallback, cancellationToken: TestContext.Current.CancellationToken);
@@ -251,8 +251,8 @@ public class OrchestrationRulesTests
         var callback1Invoked = false;
         var callback2Invoked = false;
 
-        Func<IAuthState, Task> callback1 = async _ => { callback1Invoked = true; await Task.CompletedTask; };
-        Func<IAuthState, Task> callback2 = async _ => { callback2Invoked = true; await Task.CompletedTask; };
+        Func<IAuthState, Task> callback1 = async _ => { callback1Invoked = true; await Task.CompletedTask.ConfigureAwait(true); };
+        Func<IAuthState, Task> callback2 = async _ => { callback2Invoked = true; await Task.CompletedTask.ConfigureAwait(true); };
 
         authHandler.When(x => x.RegisterAuthChangeCallback(Arg.Any<Func<IAuthState, Task>>()))
             .Do(callInfo =>

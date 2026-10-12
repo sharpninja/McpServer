@@ -125,7 +125,7 @@ public sealed class GenericClientPassthroughValidClientNamesTests
             clientName,
             "ListAsync",
             new Dictionary<string, object?>(),
-            TestContext.Current.CancellationToken));
+            TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         var invalid = Assert.IsType<InvalidOperationException>(exception);
         Assert.Empty(handler.RequestPaths);
@@ -134,7 +134,7 @@ public sealed class GenericClientPassthroughValidClientNamesTests
 
     private static async Task<IReadOnlyList<string>> GetAdvertisedClientNamesAsync()
     {
-        var message = await GetUnknownClientMessageAsync("NoSuchClientName");
+        var message = await GetUnknownClientMessageAsync("NoSuchClientName").ConfigureAwait(true);
         var listStart = message.IndexOf("Valid clients:", StringComparison.Ordinal);
         Assert.True(listStart >= 0, $"Diagnostic did not render a valid-client list: {message}");
 

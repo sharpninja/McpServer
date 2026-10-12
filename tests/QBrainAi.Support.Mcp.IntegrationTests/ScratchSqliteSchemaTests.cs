@@ -26,7 +26,8 @@ public sealed class ScratchSqliteSchemaTests
             Assert.False(await ScratchSqliteSchema.HasAgentExecutablePathAsync(path, TestContext.Current.CancellationToken).ConfigureAwait(true));
 
             var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite($"Data Source={path}").Options;
-            await using var db = new McpDbContext(options);
+            var db = new McpDbContext(options);
+            await using var dbDisposal = db.ConfigureAwait(true);
             db.OverrideWorkspaceId("F:/scratch-schema");
 
             var ex = await Assert.ThrowsAnyAsync<Exception>(
@@ -50,7 +51,8 @@ public sealed class ScratchSqliteSchemaTests
             Assert.True(await ScratchSqliteSchema.HasAgentExecutablePathAsync(path, TestContext.Current.CancellationToken).ConfigureAwait(true));
 
             var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite($"Data Source={path}").Options;
-            await using var db = new McpDbContext(options);
+            var db = new McpDbContext(options);
+            await using var dbDisposal = db.ConfigureAwait(true);
             db.OverrideWorkspaceId("F:/scratch-schema");
             db.SessionLogs.Add(new SessionLogEntity
             {
@@ -96,9 +98,11 @@ public sealed class ScratchSqliteSchemaTests
 
     private static async Task CreateLegacySessionLogsWithoutAgentExecutablePathAsync(string path)
     {
-        await using var connection = new SqliteConnection($"Data Source={path}");
+        var connection = new SqliteConnection($"Data Source={path}");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(true);
         command.CommandText =
             """
             CREATE TABLE SessionLogs (

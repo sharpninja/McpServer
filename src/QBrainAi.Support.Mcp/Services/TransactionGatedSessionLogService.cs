@@ -378,7 +378,8 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         SessionGraphSnapshot snapshot,
         CancellationToken cancellationToken)
     {
-        await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
+        var transaction = await _db.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false);
+        await using var transactionDisposal = transaction.ConfigureAwait(false);
         try
         {
             _db.ChangeTracker.Clear();

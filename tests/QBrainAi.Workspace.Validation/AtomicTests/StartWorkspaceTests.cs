@@ -25,7 +25,7 @@ public sealed class StartWorkspaceTests : IAsyncLifetime
     public async ValueTask InitializeAsync()
     {
         var body = new { WorkspacePath = _testPath, Name = "AuditStartTest" };
-        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
@@ -33,8 +33,8 @@ public sealed class StartWorkspaceTests : IAsyncLifetime
     public async ValueTask DisposeAsync()
     {
         // Stop first in case it was started, then delete.
-        await _fixture.Client.PostAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/stop", null);
-        await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
+        await _fixture.Client.PostAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/stop", null).ConfigureAwait(true);
+        await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}").ConfigureAwait(true);
     }
 
     /// <summary>Test method.</summary>

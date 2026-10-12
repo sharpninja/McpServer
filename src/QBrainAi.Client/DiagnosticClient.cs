@@ -22,7 +22,7 @@ public sealed class DiagnosticClient : McpClientBase
     {
         return await GetAsync<DiagnosticExecutionPathResult>(
             "qbrainai/diagnostic/execution-path",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Gets resolved appsettings-path diagnostic details.</summary>
@@ -30,6 +30,6 @@ public sealed class DiagnosticClient : McpClientBase
     {
         return await GetAsync<DiagnosticAppSettingsPathResult>(
             "qbrainai/diagnostic/appsettings-path",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 }

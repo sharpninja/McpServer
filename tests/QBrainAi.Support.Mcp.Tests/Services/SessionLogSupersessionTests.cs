@@ -157,8 +157,9 @@ public sealed class SessionLogSupersessionTests : IDisposable
     {
         await SubmitAsync(CreateTurn("in_progress", "Working")).ConfigureAwait(true);
         var workspace = new WorkspaceContext { WorkspacePath = "supersession-test-workspace" };
-        await using var otherDb = new McpDbContext(
+        var otherDb = new McpDbContext(
             new DbContextOptionsBuilder<McpDbContext>().UseSqlite(_connection).Options, workspace);
+        await using var otherDbDisposal = otherDb.ConfigureAwait(true);
         var otherService = new SessionLogService(otherDb, NullLogger<SessionLogService>.Instance, workspaceContext: workspace);
         await otherService.UpsertTurnAsync("Codex", SessionId, CreateTurn("completed", "Concurrent final response"),
             TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -192,8 +193,9 @@ public sealed class SessionLogSupersessionTests : IDisposable
     [Fact]
     public async Task SubmitAsyncCallerTransactionRejectsBeforeMutation()
     {
-        await using var transaction = await _db.Database.BeginTransactionAsync(
+        var transaction = await _db.Database.BeginTransactionAsync(
             System.Data.IsolationLevel.Serializable, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await using var transactionDisposal = transaction.ConfigureAwait(true);
         await Assert.ThrowsAsync<InvalidOperationException>(() => SubmitAsync(CreateTurn("completed", "Not durable")));
         Assert.Empty(_db.ChangeTracker.Entries<SessionLogEntity>());
         await transaction.RollbackAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -222,7 +224,8 @@ public sealed class SessionLogSupersessionTests : IDisposable
         var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connectionString).Options;
         try
         {
-            await using var completionDb = new McpDbContext(options, workspace);
+            var completionDb = new McpDbContext(options, workspace);
+            await using var completionDbDisposal = completionDb.ConfigureAwait(true);
             await completionDb.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
             var completion = new SessionLogService(completionDb, NullLogger<SessionLogService>.Instance, workspaceContext: workspace);
             await completion.SubmitAsync(Session(CreateTurn("in_progress", "Working")),
@@ -242,7 +245,8 @@ public sealed class SessionLogSupersessionTests : IDisposable
             });
             var cancellationOptions = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connectionString)
                 .AddInterceptors(interleaving).Options;
-            await using (var cancellationDb = new McpDbContext(cancellationOptions, workspace))
+            var cancellationDb = new McpDbContext(cancellationOptions, workspace);
+            await using (cancellationDb.ConfigureAwait(true))
             {
                 var cancellation = new SessionLogService(cancellationDb, NullLogger<SessionLogService>.Instance, workspaceContext: workspace);
                 await cancellation.SubmitAsync(Session(CreateTurn("canceled", "Stale cancellation")),

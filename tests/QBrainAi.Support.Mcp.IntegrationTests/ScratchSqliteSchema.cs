@@ -29,7 +29,8 @@ public static class ScratchSqliteSchema
             "QBrainAi.Storage.SqliteMigrations");
         var options = new DbContextOptionsBuilder<McpDbContext>();
         McpDatabaseProviderFactory.Configure(options, providerOptions);
-        await using (var db = new McpDbContext(options.Options))
+        var db = new McpDbContext(options.Options);
+        await using (db.ConfigureAwait(true))
         {
             await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, providerOptions, cancellationToken).ConfigureAwait(false);
         }
@@ -54,13 +55,15 @@ public static class ScratchSqliteSchema
             ("AgentExecutableVersion", "ALTER TABLE SessionLogs ADD COLUMN AgentExecutableVersion TEXT;"),
         };
 
-        await using var connection = new SqliteConnection($"Data Source={databasePath}");
+        var connection = new SqliteConnection($"Data Source={databasePath}");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         foreach (var (name, ddl) in columns)
         {
             if (await ColumnExistsAsync(connection, name, cancellationToken).ConfigureAwait(false))
                 continue;
-            await using var command = connection.CreateCommand();
+            var command = connection.CreateCommand();
+            await using var commandDisposal = command.ConfigureAwait(true);
             command.CommandText = ddl;
             await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -70,14 +73,16 @@ public static class ScratchSqliteSchema
     public static async Task<bool> HasAgentExecutablePathAsync(string databasePath, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(databasePath);
-        await using var connection = new SqliteConnection($"Data Source={databasePath}");
+        var connection = new SqliteConnection($"Data Source={databasePath}");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         return await ColumnExistsAsync(connection, AgentExecutablePathColumn, cancellationToken).ConfigureAwait(false);
     }
 
     private static async Task<bool> ColumnExistsAsync(SqliteConnection connection, string columnName, CancellationToken cancellationToken)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(true);
         command.CommandText = "SELECT COUNT(*) FROM pragma_table_info('SessionLogs') WHERE name = $name;";
         command.Parameters.AddWithValue("$name", columnName);
         var count = Convert.ToInt32(await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false), System.Globalization.CultureInfo.InvariantCulture);

@@ -62,7 +62,7 @@ public class SessionLogWorkflowTests
             .Throws(new InvalidOperationException("Storage initialization failed"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -121,7 +121,7 @@ public class SessionLogWorkflowTests
                 .Throws(new ArgumentException($"Invalid session ID format: {sessionId}"));
 
             await Assert.ThrowsAsync<ArgumentException>(
-                async () => await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken));
+                async () => await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         }
     }
 
@@ -133,22 +133,22 @@ public class SessionLogWorkflowTests
         _workflow.OpenSessionAsync(null!, validSessionId, "title", "model", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Agent cannot be null or empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.OpenSessionAsync(null!, validSessionId, "title", "model", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.OpenSessionAsync(null!, validSessionId, "title", "model", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.OpenSessionAsync("agent", null!, "title", "model", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("SessionId cannot be null or empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.OpenSessionAsync("agent", null!, "title", "model", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.OpenSessionAsync("agent", null!, "title", "model", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.OpenSessionAsync("agent", validSessionId, null!, "model", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Title cannot be null or empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.OpenSessionAsync("agent", validSessionId, null!, "model", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.OpenSessionAsync("agent", validSessionId, null!, "model", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.OpenSessionAsync("agent", validSessionId, "title", null!, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Model cannot be null or empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.OpenSessionAsync("agent", validSessionId, "title", null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.OpenSessionAsync("agent", validSessionId, "title", null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -162,7 +162,7 @@ public class SessionLogWorkflowTests
             .Throws(new InvalidOperationException($"Session with ID {sessionId} already exists"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -175,7 +175,7 @@ public class SessionLogWorkflowTests
             .Throws(new ArgumentException("Session ID prefix must match agent name"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.OpenSessionAsync(mismatchedAgent, sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.OpenSessionAsync(mismatchedAgent, sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -302,7 +302,7 @@ public class SessionLogWorkflowTests
                 .Throws(new ArgumentException($"Invalid request ID format: {invalidId}"));
 
             await Assert.ThrowsAsync<ArgumentException>(
-                async () => await _workflow.BeginTurnAsync(invalidId, "Title", "Query", cancellationToken: TestContext.Current.CancellationToken));
+                async () => await _workflow.BeginTurnAsync(invalidId, "Title", "Query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         }
     }
 
@@ -314,7 +314,7 @@ public class SessionLogWorkflowTests
             .Throws(new InvalidOperationException("No active session"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.BeginTurnAsync("req-20260304T113901Z-task", "Title", "Query", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.BeginTurnAsync("req-20260304T113901Z-task", "Title", "Query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -330,7 +330,7 @@ public class SessionLogWorkflowTests
             .Throws(new InvalidOperationException($"Turn with request ID {requestId} already exists"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.BeginTurnAsync(requestId, "Task", "Query", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.BeginTurnAsync(requestId, "Task", "Query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -386,7 +386,7 @@ public class SessionLogWorkflowTests
             .Throws(new InvalidOperationException("No active turn"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateTurnAsync(response: "Response", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateTurnAsync(response: "Response", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -403,7 +403,7 @@ public class SessionLogWorkflowTests
             .Throws(new InvalidOperationException("Turn is immutable (status: completed)"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateTurnAsync(response: "Updated response", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateTurnAsync(response: "Updated response", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -433,12 +433,12 @@ public class SessionLogWorkflowTests
         _workflow.CompleteTurnAsync(null!, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Response cannot be null or empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.CompleteTurnAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CompleteTurnAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.CompleteTurnAsync("", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Response cannot be null or empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.CompleteTurnAsync("", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CompleteTurnAsync("", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -454,17 +454,17 @@ public class SessionLogWorkflowTests
         _workflow.UpdateTurnAsync(Arg.Any<string>(), null, null, null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Turn is immutable"));
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateTurnAsync(response: "Cannot update", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateTurnAsync(response: "Cannot update", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.AppendDialogAsync(Arg.Any<IReadOnlyList<IDialogItem>>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Turn is immutable"));
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.AppendDialogAsync(new List<IDialogItem>(), cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.AppendDialogAsync(new List<IDialogItem>(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.AppendActionsAsync(Arg.Any<IReadOnlyList<ISessionAction>>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Turn is immutable"));
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.AppendActionsAsync(new List<ISessionAction>(), cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.AppendActionsAsync(new List<ISessionAction>(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -496,12 +496,12 @@ public class SessionLogWorkflowTests
         _workflow.FailTurnAsync(null!, null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Error message cannot be null or empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.FailTurnAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.FailTurnAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.FailTurnAsync("", null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Error message cannot be null or empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.FailTurnAsync("", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.FailTurnAsync("", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -517,12 +517,12 @@ public class SessionLogWorkflowTests
         _workflow.UpdateTurnAsync(Arg.Any<string>(), null, null, null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Turn is immutable"));
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateTurnAsync(response: "Cannot update", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateTurnAsync(response: "Cannot update", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.CompleteTurnAsync(Arg.Any<string>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Turn is immutable"));
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CompleteTurnAsync("Cannot complete", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CompleteTurnAsync("Cannot complete", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -562,12 +562,12 @@ public class SessionLogWorkflowTests
         _workflow.AppendDialogAsync(null!, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentNullException("dialogItems"));
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _workflow.AppendDialogAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.AppendDialogAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.AppendDialogAsync(Arg.Is<IReadOnlyList<IDialogItem>>(l => l != null && l.Count == 0), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("DialogItems cannot be empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.AppendDialogAsync(new List<IDialogItem>(), cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.AppendDialogAsync(new List<IDialogItem>(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -603,12 +603,12 @@ public class SessionLogWorkflowTests
         _workflow.AppendActionsAsync(null!, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentNullException("actions"));
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _workflow.AppendActionsAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.AppendActionsAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.AppendActionsAsync(Arg.Is<IReadOnlyList<ISessionAction>>(l => l != null && l.Count == 0), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Actions cannot be empty"));
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.AppendActionsAsync(new List<ISessionAction>(), cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.AppendActionsAsync(new List<ISessionAction>(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -741,12 +741,12 @@ public class SessionLogWorkflowTests
         _workflow.QueryHistoryAsync(null, -1, 0, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentOutOfRangeException("limit"));
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(
-            async () => await _workflow.QueryHistoryAsync(limit: -1, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.QueryHistoryAsync(limit: -1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.QueryHistoryAsync(null, 10, -1, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentOutOfRangeException("offset"));
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(
-            async () => await _workflow.QueryHistoryAsync(offset: -1, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.QueryHistoryAsync(offset: -1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -850,7 +850,7 @@ public class SessionLogWorkflowTests
             .Throws(new ArgumentException("Invalid session ID format"));
 
         var exception = await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.OpenSessionAsync("Copilot", invalidSessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.OpenSessionAsync("Copilot", invalidSessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("Invalid session ID", exception.Message);
     }
@@ -863,7 +863,7 @@ public class SessionLogWorkflowTests
             .Throws(new InvalidOperationException("No active session exists"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.BeginTurnAsync("req-20260304T113901Z-task", "Title", "Query", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.BeginTurnAsync("req-20260304T113901Z-task", "Title", "Query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("No active session", exception.Message);
     }
@@ -882,7 +882,7 @@ public class SessionLogWorkflowTests
             .Throws(new InvalidOperationException("Turn is immutable (status: completed)"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateTurnAsync(response: "Update", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateTurnAsync(response: "Update", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("immutable", exception.Message);
     }

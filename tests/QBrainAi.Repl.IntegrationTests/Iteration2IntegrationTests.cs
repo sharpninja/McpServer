@@ -588,11 +588,11 @@ public sealed class Iteration2IntegrationTests : IDisposable
 
     private async Task SetupSessionAsync()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync().ConfigureAwait(true);
+        await Task.Delay(1000).ConfigureAwait(true);
 
         await SendCommandAndWaitAsync(
-            YamlEnvelopeBuilder.CreateSessionLogBootstrapRequest(GenerateRequestId("bootstrap")));
+            YamlEnvelopeBuilder.CreateSessionLogBootstrapRequest(GenerateRequestId("bootstrap"))).ConfigureAwait(true);
 
         var sessionId = GenerateSessionId("Tonkotsu", "test-session");
         await SendCommandAndWaitAsync(
@@ -601,12 +601,12 @@ public sealed class Iteration2IntegrationTests : IDisposable
                 "Tonkotsu",
                 sessionId,
                 "Test Session",
-                "test-model-v1"));
+                "test-model-v1")).ConfigureAwait(true);
     }
 
     private async Task SetupSessionWithTurnAsync()
     {
-        await SetupSessionAsync();
+        await SetupSessionAsync().ConfigureAwait(true);
 
         var turnRequestId = GenerateRequestId("turn-001");
         await SendCommandAndWaitAsync(
@@ -614,16 +614,16 @@ public sealed class Iteration2IntegrationTests : IDisposable
                 GenerateRequestId("begin-turn"),
                 turnRequestId,
                 "Test Turn",
-                "Test turn for session log"));
+                "Test turn for session log")).ConfigureAwait(true);
     }
 
     private async Task SendCommandAndWaitAsync(object envelope)
     {
         var initialCount = _replProcess.StdoutLines.Count;
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(envelope));
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(initialCount + 1, TimeSpan.FromSeconds(15));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(envelope)).ConfigureAwait(true);
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(initialCount + 1, TimeSpan.FromSeconds(15)).ConfigureAwait(true);
         Assert.True(foundResponse, BuildTimeoutMessage(initialCount + 1));
-        await Task.Delay(100);
+        await Task.Delay(100).ConfigureAwait(true);
     }
 
     private string BuildTimeoutMessage(int expectedCount)

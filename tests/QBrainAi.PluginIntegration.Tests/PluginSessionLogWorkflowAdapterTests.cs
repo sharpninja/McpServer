@@ -57,7 +57,8 @@ public sealed class PluginSessionLogWorkflowAdapterTests
         Assert.False(string.IsNullOrWhiteSpace(scenario.CacheFolder));
         Assert.False(string.IsNullOrWhiteSpace(scenario.Entrypoint));
 
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         Assert.NotEqual(7147, fixture.Port);
         Assert.True(File.Exists(fixture.MarkerPath));
@@ -91,7 +92,8 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         var result = await new PluginSessionLogWorkflowAdapter().ExecuteCanonicalTurnAsync(
             scenario,
@@ -126,7 +128,8 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         var result = await new PluginSessionLogWorkflowAdapter().ExecuteCanonicalTurnAsync(
             scenario,
@@ -195,7 +198,8 @@ public sealed class PluginSessionLogWorkflowAdapterTests
         Environment.SetEnvironmentVariable("PLUGIN_ROOT_OVERRIDE", poison);
         try
         {
-            await using var fixture = new PluginIntegrationServerFixture();
+            var fixture = new PluginIntegrationServerFixture();
+            await using var fixtureDisposal = fixture.ConfigureAwait(true);
             await fixture.StartAsync(TestContext.Current.CancellationToken);
             var result = await new PluginSessionLogWorkflowAdapter().ExecuteCanonicalTurnAsync(
                 scenario,
@@ -238,7 +242,8 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         var result = await new PluginSessionLogWorkflowAdapter().ExecuteCanonicalTurnAsync(
             scenario,
@@ -269,7 +274,8 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         var result = await new PluginSessionLogWorkflowAdapter().ExecuteFailedSubmitAsync(
             scenario,
@@ -301,7 +307,8 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     {
         var scenario = PluginSessionLogCatalog.LoadAndValidate(FindRepositoryRoot())
             .Single(row => row.HostKind == hostKind);
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         var result = await new PluginSessionLogWorkflowAdapter().RetryFailedSubmitAsync(
             scenario,

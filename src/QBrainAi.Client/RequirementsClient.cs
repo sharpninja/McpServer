@@ -27,19 +27,19 @@ public sealed class RequirementsClient : McpClientBase
     /// <summary>Lists requirement scope layers for the current workspace.</summary>
     public async Task<IReadOnlyList<RequirementScopeLayer>> ListRequirementLayersAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<IReadOnlyList<RequirementScopeLayer>>("qbrainai/requirements/layers", cancellationToken);
+        return await GetAsync<IReadOnlyList<RequirementScopeLayer>>("qbrainai/requirements/layers", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates a requirement scope layer for the current workspace.</summary>
     public async Task<RequirementScopeLayer> CreateRequirementLayerAsync(RequirementScopeLayerRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RequirementScopeLayer>("qbrainai/requirements/layers", request, cancellationToken);
+        return await PostAsync<RequirementScopeLayer>("qbrainai/requirements/layers", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Updates mutable fields of a requirement scope layer.</summary>
     public async Task<RequirementScopeLayer> UpdateRequirementLayerAsync(string key, RequirementScopeLayerUpdate request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<RequirementScopeLayer>($"qbrainai/requirements/layers/{Uri.EscapeDataString(key)}", request, cancellationToken);
+        return await PutAsync<RequirementScopeLayer>($"qbrainai/requirements/layers/{Uri.EscapeDataString(key)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Gets requirements effective at the workspace current layer or an explicit preview layer.</summary>
@@ -61,19 +61,19 @@ public sealed class RequirementsClient : McpClientBase
             "qbrainai/requirements/effective",
             ("layerKey", layerKey),
             ("productScope", productScope));
-        return await GetAsync<EffectiveRequirementsResult>(url, cancellationToken);
+        return await GetAsync<EffectiveRequirementsResult>(url, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Lists functional requirements, optionally filtered by area or status.</summary>
     public async Task<IReadOnlyList<FrEntry>> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
         var url = BuildQueryUrl("qbrainai/requirements/fr", ("area", area), ("status", status));
-        return await GetAsync<IReadOnlyList<FrEntry>>(url, cancellationToken);
+        return await GetAsync<IReadOnlyList<FrEntry>>(url, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Lists all functional requirements (unfiltered).</summary>
     public async Task<IReadOnlyList<FrEntry>> ListFrAsync(CancellationToken cancellationToken = default)
-        => await ListFrAsync(null, null, cancellationToken);
+        => await ListFrAsync(null, null, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Repairs the FR catalog by purging invalid backfilled placeholders. Returns purged count.</summary>
     public async Task<int> RepairFrPlaceholdersAsync(CancellationToken cancellationToken = default)
@@ -89,143 +89,143 @@ public sealed class RequirementsClient : McpClientBase
     /// <summary>Gets a functional requirement by ID.</summary>
     public async Task<FrEntry> GetFrAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<FrEntry>($"qbrainai/requirements/fr/{Uri.EscapeDataString(id)}", cancellationToken);
+        return await GetAsync<FrEntry>($"qbrainai/requirements/fr/{Uri.EscapeDataString(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates a new functional requirement.</summary>
     public async Task<FrEntry> CreateFrAsync(CreateFrRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<FrEntry>("qbrainai/requirements/fr", request, cancellationToken);
+        return await PostAsync<FrEntry>("qbrainai/requirements/fr", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Updates an existing functional requirement.</summary>
     public async Task<FrEntry> UpdateFrAsync(string id, UpdateFrRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<FrEntry>($"qbrainai/requirements/fr/{Uri.EscapeDataString(id)}", request, cancellationToken);
+        return await PutAsync<FrEntry>($"qbrainai/requirements/fr/{Uri.EscapeDataString(id)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates multiple functional requirements atomically.</summary>
     public async Task<RequirementsBatchResult> CreateFrBatchAsync(CreateFrBatchRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RequirementsBatchResult>("qbrainai/requirements/fr/batch", request, cancellationToken);
+        return await PostAsync<RequirementsBatchResult>("qbrainai/requirements/fr/batch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Updates multiple functional requirements atomically.</summary>
     public async Task<RequirementsBatchResult> UpdateFrBatchAsync(UpdateFrBatchRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<RequirementsBatchResult>("qbrainai/requirements/fr/batch", request, cancellationToken);
+        return await PutAsync<RequirementsBatchResult>("qbrainai/requirements/fr/batch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Deletes a functional requirement by ID.</summary>
     public async Task<RequirementsMutationResult> DeleteFrAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<RequirementsMutationResult>($"qbrainai/requirements/fr/{Uri.EscapeDataString(id)}", cancellationToken);
+        return await DeleteAsync<RequirementsMutationResult>($"qbrainai/requirements/fr/{Uri.EscapeDataString(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Lists technical requirements, optionally filtered by area, subarea, or status.</summary>
     public async Task<IReadOnlyList<TrEntry>> ListTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken cancellationToken = default)
     {
         var url = BuildQueryUrl("qbrainai/requirements/tr", ("area", area), ("subarea", subarea), ("status", status));
-        return await GetAsync<IReadOnlyList<TrEntry>>(url, cancellationToken);
+        return await GetAsync<IReadOnlyList<TrEntry>>(url, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Lists all technical requirements (unfiltered).</summary>
     public async Task<IReadOnlyList<TrEntry>> ListTrAsync(CancellationToken cancellationToken = default)
-        => await ListTrAsync(null, null, null, cancellationToken);
+        => await ListTrAsync(null, null, null, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Gets a technical requirement by ID.</summary>
     public async Task<TrEntry> GetTrAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TrEntry>($"qbrainai/requirements/tr/{Uri.EscapeDataString(id)}", cancellationToken);
+        return await GetAsync<TrEntry>($"qbrainai/requirements/tr/{Uri.EscapeDataString(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates a new technical requirement.</summary>
     public async Task<TrEntry> CreateTrAsync(CreateTrRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TrEntry>("qbrainai/requirements/tr", request, cancellationToken);
+        return await PostAsync<TrEntry>("qbrainai/requirements/tr", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Updates an existing technical requirement.</summary>
     public async Task<TrEntry> UpdateTrAsync(string id, UpdateTrRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<TrEntry>($"qbrainai/requirements/tr/{Uri.EscapeDataString(id)}", request, cancellationToken);
+        return await PutAsync<TrEntry>($"qbrainai/requirements/tr/{Uri.EscapeDataString(id)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates multiple technical requirements atomically.</summary>
     public async Task<RequirementsBatchResult> CreateTrBatchAsync(CreateTrBatchRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RequirementsBatchResult>("qbrainai/requirements/tr/batch", request, cancellationToken);
+        return await PostAsync<RequirementsBatchResult>("qbrainai/requirements/tr/batch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Updates multiple technical requirements atomically.</summary>
     public async Task<RequirementsBatchResult> UpdateTrBatchAsync(UpdateTrBatchRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<RequirementsBatchResult>("qbrainai/requirements/tr/batch", request, cancellationToken);
+        return await PutAsync<RequirementsBatchResult>("qbrainai/requirements/tr/batch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Deletes a technical requirement by ID.</summary>
     public async Task<RequirementsMutationResult> DeleteTrAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<RequirementsMutationResult>($"qbrainai/requirements/tr/{Uri.EscapeDataString(id)}", cancellationToken);
+        return await DeleteAsync<RequirementsMutationResult>($"qbrainai/requirements/tr/{Uri.EscapeDataString(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Lists testing requirements, optionally filtered by area or status.</summary>
     public async Task<IReadOnlyList<TestEntry>> ListTestAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
         var url = BuildQueryUrl("qbrainai/requirements/test", ("area", area), ("status", status));
-        return await GetAsync<IReadOnlyList<TestEntry>>(url, cancellationToken);
+        return await GetAsync<IReadOnlyList<TestEntry>>(url, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Lists all testing requirements (unfiltered).</summary>
     public async Task<IReadOnlyList<TestEntry>> ListTestAsync(CancellationToken cancellationToken = default)
-        => await ListTestAsync(null, null, cancellationToken);
+        => await ListTestAsync(null, null, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Gets a testing requirement by ID.</summary>
     public async Task<TestEntry> GetTestAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TestEntry>($"qbrainai/requirements/test/{Uri.EscapeDataString(id)}", cancellationToken);
+        return await GetAsync<TestEntry>($"qbrainai/requirements/test/{Uri.EscapeDataString(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates a new testing requirement.</summary>
     public async Task<TestEntry> CreateTestAsync(CreateTestRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TestEntry>("qbrainai/requirements/test", request, cancellationToken);
+        return await PostAsync<TestEntry>("qbrainai/requirements/test", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Updates an existing testing requirement.</summary>
     public async Task<TestEntry> UpdateTestAsync(string id, UpdateTestRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<TestEntry>($"qbrainai/requirements/test/{Uri.EscapeDataString(id)}", request, cancellationToken);
+        return await PutAsync<TestEntry>($"qbrainai/requirements/test/{Uri.EscapeDataString(id)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates multiple testing requirements atomically.</summary>
     public async Task<RequirementsBatchResult> CreateTestBatchAsync(CreateTestBatchRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RequirementsBatchResult>("qbrainai/requirements/test/batch", request, cancellationToken);
+        return await PostAsync<RequirementsBatchResult>("qbrainai/requirements/test/batch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Updates multiple testing requirements atomically.</summary>
     public async Task<RequirementsBatchResult> UpdateTestBatchAsync(UpdateTestBatchRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<RequirementsBatchResult>("qbrainai/requirements/test/batch", request, cancellationToken);
+        return await PutAsync<RequirementsBatchResult>("qbrainai/requirements/test/batch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates mixed functional, technical, and testing requirements atomically.</summary>
     public async Task<RequirementsBatchResult> CreateBatchAsync(CreateRequirementsBatchRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RequirementsBatchResult>("qbrainai/requirements/batch", request, cancellationToken);
+        return await PostAsync<RequirementsBatchResult>("qbrainai/requirements/batch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Updates mixed functional, technical, and testing requirements atomically.</summary>
     public async Task<RequirementsBatchResult> UpdateBatchAsync(UpdateRequirementsBatchRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<RequirementsBatchResult>("qbrainai/requirements/batch", request, cancellationToken);
+        return await PutAsync<RequirementsBatchResult>("qbrainai/requirements/batch", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Deletes a testing requirement by ID.</summary>
     public async Task<RequirementsMutationResult> DeleteTestAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<RequirementsMutationResult>($"qbrainai/requirements/test/{Uri.EscapeDataString(id)}", cancellationToken);
+        return await DeleteAsync<RequirementsMutationResult>($"qbrainai/requirements/test/{Uri.EscapeDataString(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Copies a TODO item's acceptance criteria onto a functional requirement.</summary>
@@ -234,7 +234,7 @@ public sealed class RequirementsClient : McpClientBase
         CopyAcceptanceCriteriaFromTodoRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await CopyAcceptanceCriteriaFromTodoAsync<FrEntry>("fr", id, request, cancellationToken);
+        return await CopyAcceptanceCriteriaFromTodoAsync<FrEntry>("fr", id, request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Copies a TODO item's acceptance criteria onto a technical requirement.</summary>
@@ -243,7 +243,7 @@ public sealed class RequirementsClient : McpClientBase
         CopyAcceptanceCriteriaFromTodoRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await CopyAcceptanceCriteriaFromTodoAsync<TrEntry>("tr", id, request, cancellationToken);
+        return await CopyAcceptanceCriteriaFromTodoAsync<TrEntry>("tr", id, request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Copies a TODO item's acceptance criteria onto a testing requirement.</summary>
@@ -252,31 +252,31 @@ public sealed class RequirementsClient : McpClientBase
         CopyAcceptanceCriteriaFromTodoRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await CopyAcceptanceCriteriaFromTodoAsync<TestEntry>("test", id, request, cancellationToken);
+        return await CopyAcceptanceCriteriaFromTodoAsync<TestEntry>("test", id, request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Lists all FR-to-TR mapping rows.</summary>
     public async Task<IReadOnlyList<FrTrMapping>> ListMappingsAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<IReadOnlyList<FrTrMapping>>("qbrainai/requirements/mapping", cancellationToken);
+        return await GetAsync<IReadOnlyList<FrTrMapping>>("qbrainai/requirements/mapping", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Gets an FR-to-TR mapping row by FR ID.</summary>
     public async Task<FrTrMapping> GetMappingAsync(string frId, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<FrTrMapping>($"qbrainai/requirements/mapping/{Uri.EscapeDataString(frId)}", cancellationToken);
+        return await GetAsync<FrTrMapping>($"qbrainai/requirements/mapping/{Uri.EscapeDataString(frId)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates or updates an FR-to-TR mapping row.</summary>
     public async Task<FrTrMapping> UpsertMappingAsync(string frId, UpsertFrTrMappingRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<FrTrMapping>($"qbrainai/requirements/mapping/{Uri.EscapeDataString(frId)}", request, cancellationToken);
+        return await PutAsync<FrTrMapping>($"qbrainai/requirements/mapping/{Uri.EscapeDataString(frId)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Deletes an FR-to-TR mapping row by FR ID.</summary>
     public async Task<RequirementsMutationResult> DeleteMappingAsync(string frId, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<RequirementsMutationResult>($"qbrainai/requirements/mapping/{Uri.EscapeDataString(frId)}", cancellationToken);
+        return await DeleteAsync<RequirementsMutationResult>($"qbrainai/requirements/mapping/{Uri.EscapeDataString(frId)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -302,7 +302,7 @@ public sealed class RequirementsClient : McpClientBase
     public async Task<RequirementsGeneratedDocument> GenerateAsync(string doc, string format, string? workspacePath, CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/requirements/generate?doc={Uri.EscapeDataString(doc)}&format={Uri.EscapeDataString(format)}";
-        var (content, contentType) = await GetBytesAsync(path, cancellationToken, workspacePath);
+        var (content, contentType) = await GetBytesAsync(path, cancellationToken, workspacePath).ConfigureAwait(false);
         if (string.Equals(contentType, "application/json", StringComparison.OrdinalIgnoreCase))
         {
             var export = (RequirementsDocumentExportResult?)JsonSerializer.Deserialize(content, s_jsonOptions.GetTypeInfo(typeof(RequirementsDocumentExportResult)));
@@ -331,7 +331,7 @@ public sealed class RequirementsClient : McpClientBase
     /// <returns>Parsed, added, and updated counts per requirements document type.</returns>
     public async Task<RequirementsIngestResult> IngestAsync(RequirementsIngestRequest? request = null, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RequirementsIngestResult>("qbrainai/requirements/ingest", request, cancellationToken);
+        return await PostAsync<RequirementsIngestResult>("qbrainai/requirements/ingest", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>FR-MCP-REQRECOVERY-001: plans a recovery payload. The server writes nothing.</summary>
@@ -377,7 +377,7 @@ public sealed class RequirementsClient : McpClientBase
         return await PostAsync<TRequirement>(
             $"qbrainai/requirements/{Uri.EscapeDataString(kind)}/{Uri.EscapeDataString(id)}/acceptance-criteria/copy-from-todo",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     private static string BuildQueryUrl(string path, params (string Name, string? Value)[] query)

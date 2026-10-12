@@ -18,7 +18,8 @@ internal static class OpenCodeSqliteUtilities
         try
         {
             snapshotPath = await CreateSnapshotAsync(path, cancellationToken).ConfigureAwait(false);
-            await using var connection = await OpenReadOnlyAsync(snapshotPath, cancellationToken).ConfigureAwait(false);
+            var connection = await OpenReadOnlyAsync(snapshotPath, cancellationToken).ConfigureAwait(false);
+            await using var connectionDisposal = connection.ConfigureAwait(false);
             var tables = await ReadTableNamesAsync(connection, cancellationToken).ConfigureAwait(false);
             return tables.Contains("session")
                 && tables.Contains("message")
@@ -67,8 +68,10 @@ internal static class OpenCodeSqliteUtilities
             Mode = SqliteOpenMode.ReadWriteCreate
         }.ToString();
 
-        await using var sourceConnection = new SqliteConnection(sourceConnectionString);
-        await using var snapshotConnection = new SqliteConnection(snapshotConnectionString);
+        var sourceConnection = new SqliteConnection(sourceConnectionString);
+        await using var sourceConnectionDisposal = sourceConnection.ConfigureAwait(false);
+        var snapshotConnection = new SqliteConnection(snapshotConnectionString);
+        await using var snapshotConnectionDisposal = snapshotConnection.ConfigureAwait(false);
         await sourceConnection.OpenAsync(cancellationToken).ConfigureAwait(false);
         await snapshotConnection.OpenAsync(cancellationToken).ConfigureAwait(false);
         cancellationToken.ThrowIfCancellationRequested();
@@ -101,9 +104,11 @@ internal static class OpenCodeSqliteUtilities
 
     internal static async Task<HashSet<string>> ReadTableNamesAsync(SqliteConnection connection, CancellationToken cancellationToken)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = "SELECT name FROM sqlite_master WHERE type = 'table';";
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         var tables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             tables.Add(reader.GetString(0));
@@ -112,9 +117,11 @@ internal static class OpenCodeSqliteUtilities
 
     internal static async Task<HashSet<string>> ReadColumnNamesAsync(SqliteConnection connection, string tableName, CancellationToken cancellationToken)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = "PRAGMA table_info(" + QuoteIdentifier(tableName) + ");";
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         var columns = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             columns.Add(reader.GetString(1));

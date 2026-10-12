@@ -44,7 +44,8 @@ public sealed class HandoffIngestionStorageMigrationTests
     [Fact]
     public async Task SqlServerHandoffMigrationDowngradeAndReupgrade()
     {
-        await using var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
+        var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
+        await using var localDbDisposal = localDb.ConfigureAwait(true);
         var databaseName = $"mcp_handoff_mig_{Guid.NewGuid():N}";
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseSqlServer(
@@ -61,7 +62,8 @@ public sealed class HandoffIngestionStorageMigrationTests
     [Fact]
     public async Task PostgreSqlHandoffMigrationDowngradeAndReupgrade()
     {
-        await using var postgres = new EphemeralPostgresSandbox();
+        var postgres = new EphemeralPostgresSandbox();
+        await using var postgresDisposal = postgres.ConfigureAwait(true);
         var databaseName = $"mcp_handoff_mig_{Guid.NewGuid():N}";
         postgres.CreateDatabase(databaseName);
         try

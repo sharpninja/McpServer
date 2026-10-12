@@ -326,7 +326,8 @@ public sealed partial class PluginSessionLogWorkflowAdapter
 
         if (scenario.HostKind == PluginHostKind.Cline)
         {
-            await using var session = new NodeMcpStdioSession();
+            var session = new NodeMcpStdioSession();
+            await using var sessionDisposal = session.ConfigureAwait(true);
             await session.StartAsync(entrypointPath, pluginRoot, workspacePath, extraEnvironment, cancellationToken)
                 .ConfigureAwait(false);
             var output = new StringBuilder();
@@ -766,7 +767,8 @@ public sealed partial class PluginSessionLogWorkflowAdapter
         if (scenario.HostKind == PluginHostKind.Cline)
         {
             var entrypointPath = Path.Combine(pluginRoot, scenario.Entrypoint.Replace('/', Path.DirectorySeparatorChar));
-            await using var session = new NodeMcpStdioSession();
+            var session = new NodeMcpStdioSession();
+            await using var sessionDisposal = session.ConfigureAwait(true);
             await session.StartAsync(entrypointPath, pluginRoot, fixture.WorkspacePath, extraEnvironment, cancellationToken)
                 .ConfigureAwait(false);
             return;

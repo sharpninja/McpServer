@@ -415,7 +415,7 @@ public class Iteration1Through5MockValidationTests
             .Returns<object?>(x => throw new System.InvalidOperationException("Unknown client: unknownclient"));
 
         await Assert.ThrowsAsync<System.InvalidOperationException>(
-            async () => await passthrough.InvokeAsync("unknownclient", "SomeMethod", args, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await passthrough.InvokeAsync("unknownclient", "SomeMethod", args, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     /// <summary>

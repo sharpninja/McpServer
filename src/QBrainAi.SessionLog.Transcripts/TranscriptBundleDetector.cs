@@ -108,7 +108,8 @@ public sealed class TranscriptBundleDetector : ITranscriptBundleDetector
 
     private static async Task<TranscriptSourceKind> DetectJsonFileAsync(string path, CancellationToken cancellationToken)
     {
-        await using var stream = File.OpenRead(path);
+        var stream = File.OpenRead(path);
+        await using var streamDisposal = stream.ConfigureAwait(false);
         using var document = await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken).ConfigureAwait(false);
         var root = document.RootElement;
         if (root.ValueKind != JsonValueKind.Object)

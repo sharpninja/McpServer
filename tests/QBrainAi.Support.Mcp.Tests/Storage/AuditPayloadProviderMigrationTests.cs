@@ -20,7 +20,8 @@ public sealed class SqlServerAuditPayloadMigrationTests : IDisposable
     public async Task MigrationPersistsCompressedPayloadsAndDeniesAuditMutation()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        await using (var admin = new SqlConnection(_serverConnectionString))
+        var admin = new SqlConnection(_serverConnectionString);
+        await using (admin.ConfigureAwait(true))
         {
             await admin.OpenAsync(cancellationToken);
             await using var create = admin.CreateCommand();
@@ -41,13 +42,15 @@ public sealed class SqlServerAuditPayloadMigrationTests : IDisposable
             })
             .Options;
 
-        await using (var db = new McpDbContext(options))
+        var db = new McpDbContext(options);
+        await using (db.ConfigureAwait(true))
         {
             await db.Database.MigrateAsync(cancellationToken);
             await AuditPayloadProviderAssertions.AssertRoundTripAsync(db, cancellationToken);
         }
 
-        await using var connection = new SqlConnection(connectionString);
+        var connection = new SqlConnection(connectionString);
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(cancellationToken);
         await using var permissions = connection.CreateCommand();
         permissions.CommandText = """
@@ -94,7 +97,8 @@ public sealed class PostgreSqlAuditPayloadMigrationTests : IClassFixture<Ephemer
     public async Task MigrationPersistsCompressedPayloads()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        await using (var admin = new NpgsqlConnection(_serverConnectionString))
+        var admin = new NpgsqlConnection(_serverConnectionString);
+        await using (admin.ConfigureAwait(true))
         {
             await admin.OpenAsync(cancellationToken);
             await using var create = admin.CreateCommand();
@@ -112,7 +116,8 @@ public sealed class PostgreSqlAuditPayloadMigrationTests : IClassFixture<Ephemer
                 pg.MigrationsAssembly("QBrainAi.Storage.PostgreSqlMigrations"))
             .Options;
 
-        await using var db = new McpDbContext(options);
+        var db = new McpDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await db.Database.MigrateAsync(cancellationToken);
         await AuditPayloadProviderAssertions.AssertRoundTripAsync(db, cancellationToken);
     }
@@ -142,7 +147,7 @@ internal static class AuditPayloadProviderAssertions
 
     public static async Task AssertRoundTripAsync(McpDbContext db, CancellationToken cancellationToken)
     {
-        Assert.Contains(MigrationId, await db.Database.GetAppliedMigrationsAsync(cancellationToken));
+        Assert.Contains(MigrationId, await db.Database.GetAppliedMigrationsAsync(cancellationToken).ConfigureAwait(true));
 
         var now = DateTimeOffset.UtcNow;
         db.Workspaces.Add(new WorkspaceEntity
@@ -153,7 +158,7 @@ internal static class AuditPayloadProviderAssertions
             DateTimeCreated = now,
             DateTimeModified = now,
         });
-        await db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(true);
 
         var legacy = NewAudit("legacy");
         legacy.PayloadEncodingVersion = null;
@@ -164,16 +169,16 @@ internal static class AuditPayloadProviderAssertions
         compressed.DiffJson = "{\"change\":true}";
         compressed.MetadataJson = "{\"actor\":\"東京\"}";
         db.DataAuditLogs.AddRange(legacy, compressed);
-        await db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(true);
         db.ChangeTracker.Clear();
 
         var oldRow = await db.DataAuditLogs.AsNoTracking().SingleAsync(
-            row => row.EntityKey == "legacy", cancellationToken);
+            row => row.EntityKey == "legacy", cancellationToken).ConfigureAwait(true);
         Assert.Equal("{\"old\":true}", oldRow.CurrentSnapshotJson);
         Assert.Null(oldRow.CurrentSnapshotPayload);
 
         var newRow = await db.DataAuditLogs.AsNoTracking().SingleAsync(
-            row => row.EntityKey == "compressed", cancellationToken);
+            row => row.EntityKey == "compressed", cancellationToken).ConfigureAwait(true);
         Assert.Equal("{\"before\":\"Å\"}", newRow.PreviousSnapshotJson);
         Assert.Equal(compressed.CurrentSnapshotJson, newRow.CurrentSnapshotJson);
         Assert.Equal("{\"change\":true}", newRow.DiffJson);

@@ -61,7 +61,8 @@ public sealed class UseCaseDiagramUmlContractTests
     public async Task ProductionGateEquivalentRawPathReturnsScopedUmlAndSupportsGraphAndApproval()
     {
         const string canonicalWorkspace = @"F:\GitHub\TruckMate";
-        await using var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new SqliteConnection("Data Source=:memory:");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseSqlite(connection)
@@ -73,7 +74,8 @@ public sealed class UseCaseDiagramUmlContractTests
             DataDirectory = canonicalWorkspace,
         };
 
-        await using var db = new McpDbContext(options, workspaceContext);
+        var db = new McpDbContext(options, workspaceContext);
+        await using var dbDisposal = db.ConfigureAwait(true);
         await db.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         db.OverrideWorkspaceId(canonicalWorkspace);
         db.Workspaces.Add(new WorkspaceEntity

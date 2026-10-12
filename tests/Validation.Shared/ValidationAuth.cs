@@ -164,7 +164,8 @@ internal static class ValidationAuth
                 return null;
             }
 
-            await using var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            await using var contentStreamDisposal = contentStream.ConfigureAwait(true);
             using var document = await JsonDocument.ParseAsync(contentStream).ConfigureAwait(false);
             if (!document.RootElement.TryGetProperty("items", out var items)
                 || items.ValueKind != JsonValueKind.Array)
@@ -491,7 +492,8 @@ internal static class ValidationAuth
             return null;
         }
 
-        await using var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+        var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+        await using var contentStreamDisposal = contentStream.ConfigureAwait(true);
         using var document = await JsonDocument.ParseAsync(contentStream).ConfigureAwait(false);
         return document.RootElement.TryGetProperty("apiKey", out var apiKeyElement)
             ? apiKeyElement.GetString()

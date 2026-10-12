@@ -28,7 +28,8 @@ public sealed class FederationLocalExecutionService : IFederationLocalExecutionS
         if (string.IsNullOrWhiteSpace(request.WorkspacePath))
             return Failure("workspacePath is required for federation desktop_launch execution.");
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var desktopLaunchService = scope.ServiceProvider.GetRequiredService<DesktopLaunchService>();
         var result = await desktopLaunchService.LaunchAsync(
                 request.WorkspacePath,

@@ -1310,7 +1310,8 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
         if (!File.Exists(statePath))
             return new TodoExecutionStateDocument();
 
-        await using var stream = File.OpenRead(statePath);
+        var stream = File.OpenRead(statePath);
+        await using var streamDisposal = stream.ConfigureAwait(false);
         var state = await JsonSerializer.DeserializeAsync(stream, TodoExecutionStateJsonContext.Default.TodoExecutionStateDocument, cancellationToken).ConfigureAwait(false);
         return state ?? new TodoExecutionStateDocument();
     }
@@ -1318,7 +1319,8 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
     private static async Task SaveStateAsync(string statePath, TodoExecutionStateDocument state, CancellationToken cancellationToken)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(statePath)!);
-        await using var stream = File.Create(statePath);
+        var stream = File.Create(statePath);
+        await using var streamDisposal = stream.ConfigureAwait(false);
         await JsonSerializer.SerializeAsync(stream, state, TodoExecutionStateJsonContext.Default.TodoExecutionStateDocument, cancellationToken).ConfigureAwait(false);
         await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
     }

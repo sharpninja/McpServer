@@ -617,7 +617,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         typeof(FwhMcpTools).GetField("_httpContextAccessor", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(tools, new Microsoft.AspNetCore.Http.HttpContextAccessor());
         typeof(FwhMcpTools).GetField("_workspaceAccessor", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(tools, accessor);
         typeof(FwhMcpTools).GetField("_db", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(tools, CreateDb());
-        return await tools.WorkspaceValidate(_workspace, cancellationToken: cancellationToken);
+        return await tools.WorkspaceValidate(_workspace, cancellationToken: cancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>Records the shipped client HTTP body for workflow contract proof.</summary>

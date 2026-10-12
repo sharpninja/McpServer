@@ -62,7 +62,7 @@ public sealed class HandoffDurabilityTests : IDisposable
             .Returns(async ci =>
             {
                 started.TrySetResult();
-                await release.Task.WaitAsync(ci.Arg<CancellationToken>());
+                await release.Task.WaitAsync(ci.Arg<CancellationToken>()).ConfigureAwait(true);
                 return SuccessfulExtraction(ValidDraft("MCP-HANDOFFDEMO-101"));
             });
 
@@ -73,7 +73,7 @@ public sealed class HandoffDurabilityTests : IDisposable
         await started.Task.WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken);
         var replay = await second.IngestAsync(request, TestContext.Current.CancellationToken);
         release.TrySetResult();
-        var completed = await firstTask;
+        var completed = await firstTask.ConfigureAwait(true);
 
         Assert.False(replay.Success);
         Assert.False(replay.Replayed);
@@ -331,7 +331,7 @@ public sealed class HandoffDurabilityTests : IDisposable
             .Returns(async ci =>
             {
                 started.TrySetResult();
-                await release.Task.WaitAsync(ci.Arg<CancellationToken>());
+                await release.Task.WaitAsync(ci.Arg<CancellationToken>()).ConfigureAwait(true);
                 return SuccessfulExtraction(ValidDraft("MCP-HANDOFFDEMO-201", 0.9));
             });
 
@@ -355,7 +355,7 @@ public sealed class HandoffDurabilityTests : IDisposable
         _time.Advance(lease.Duration + TimeSpan.FromSeconds(1));
         var takeover = await second.IngestAsync(request, TestContext.Current.CancellationToken);
         release.TrySetResult();
-        var firstResult = await firstTask;
+        var firstResult = await firstTask.ConfigureAwait(true);
 
         Assert.True(takeover.Created, takeover.Error);
         Assert.False(firstResult.Created);
@@ -395,8 +395,8 @@ public sealed class HandoffDurabilityTests : IDisposable
             },
             TimeSpan.FromSeconds(5));
         todo.CreateGate.TrySetResult();
-        var takeover = await secondTask;
-        var firstResult = await firstTask;
+        var takeover = await secondTask.ConfigureAwait(true);
+        var firstResult = await firstTask.ConfigureAwait(true);
 
         Assert.True(takeover.Created, takeover.Error);
         Assert.False(firstResult.Created);
@@ -423,7 +423,7 @@ public sealed class HandoffDurabilityTests : IDisposable
         var second = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-203", 0.9)), todo);
         var secondResult = await second.ApproveAsync(pending.Provenance.RunId, new HandoffApprovalRequest { Approved = true, Reviewer = "b" }, TestContext.Current.CancellationToken);
         todo.CreateGate.TrySetResult();
-        var firstResult = await firstTask;
+        var firstResult = await firstTask.ConfigureAwait(true);
 
         Assert.False(secondResult.Created);
         Assert.Equal(HandoffErrorCodes.InProgress, secondResult.ErrorCode);
@@ -642,7 +642,7 @@ public sealed class HandoffDurabilityTests : IDisposable
             Status = "completed",
             Text = text,
         };
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     /// <summary>
@@ -661,7 +661,7 @@ public sealed class HandoffDurabilityTests : IDisposable
             .Returns(async ci =>
             {
                 started.TrySetResult();
-                await release.Task.WaitAsync(ci.Arg<CancellationToken>());
+                await release.Task.WaitAsync(ci.Arg<CancellationToken>()).ConfigureAwait(true);
                 return SuccessfulExtraction(ValidDraft("MCP-HANDOFFDEMO-301"));
             });
 
@@ -729,7 +729,7 @@ public sealed class HandoffDurabilityTests : IDisposable
             }
 
             release.TrySetResult();
-            var firstResult = await ingestTask;
+            var firstResult = await ingestTask.ConfigureAwait(true);
 
             Assert.False(firstResult.Success);
             Assert.Equal(HandoffErrorCodes.InProgress, firstResult.ErrorCode);

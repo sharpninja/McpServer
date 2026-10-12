@@ -46,7 +46,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     /// </remarks>
     public async ValueTask DisposeAsync()
     {
-        await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}");
+        await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}").ConfigureAwait(true);
     }
 
     /// <summary>

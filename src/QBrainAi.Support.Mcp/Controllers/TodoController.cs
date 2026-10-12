@@ -458,7 +458,7 @@ public sealed class TodoController : ControllerBase
         }
         finally
         {
-            await enumerator.DisposeAsync();
+            await enumerator.DisposeAsync().ConfigureAwait(false);
         }
 
         await Response.WriteAsync("event: done\ndata: \n\n", cancellationToken).ConfigureAwait(false);

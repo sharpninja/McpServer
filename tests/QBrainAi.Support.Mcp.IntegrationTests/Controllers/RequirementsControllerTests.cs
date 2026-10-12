@@ -339,7 +339,8 @@ public sealed class RequirementsControllerTests : IDisposable
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/zip", response.Content.Headers.ContentType?.MediaType);
 
-        await using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await using var responseStreamDisposal = responseStream.ConfigureAwait(true);
         using var archive = new ZipArchive(responseStream, ZipArchiveMode.Read, leaveOpen: false);
         var names = archive.Entries.Select(e => e.FullName).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
 

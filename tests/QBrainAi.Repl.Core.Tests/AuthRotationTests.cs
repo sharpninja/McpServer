@@ -34,7 +34,7 @@ public class AuthRotationTests
             .Returns<Task>(x => throw new ArgumentNullException("newMarkerData"));
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await authHandler.UpdateAuthStateAsync(null!, cancellationToken: TestContext.Current.CancellationToken)
+            async () => await authHandler.UpdateAuthStateAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -45,7 +45,7 @@ public class AuthRotationTests
 
         Func<IAuthState, Task> callback = async state =>
         {
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         };
 
         authHandler.RegisterAuthChangeCallback(callback);
@@ -78,13 +78,13 @@ public class AuthRotationTests
         Func<IAuthState, Task> callback1 = async state =>
         {
             callback1Invoked = true;
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         };
 
         Func<IAuthState, Task> callback2 = async state =>
         {
             callback2Invoked = true;
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         };
 
         authHandler.When(x => x.RegisterAuthChangeCallback(Arg.Any<Func<IAuthState, Task>>()))
@@ -129,7 +129,7 @@ public class AuthRotationTests
             .Returns<IAuthState>(x => throw new FileNotFoundException("Marker file not found"));
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -142,7 +142,7 @@ public class AuthRotationTests
             .Returns<IAuthState>(x => throw new FormatException("Invalid marker file format"));
 
         await Assert.ThrowsAsync<FormatException>(
-            async () => await authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -208,7 +208,7 @@ public class AuthRotationTests
         Assert.True(authState.IsValid);
         Assert.NotNull(authState.LastValidated);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -220,7 +220,7 @@ public class AuthRotationTests
 
         Assert.Equal(updateTime, authState.LastUpdated);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -259,7 +259,7 @@ public class AuthRotationTests
         currentKey = authHandler.CurrentAuthState.ApiKey;
         Assert.Equal("new-key-after-restart", currentKey);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]

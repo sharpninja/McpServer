@@ -32,20 +32,20 @@ public sealed class VoiceClient : McpClientBase
     /// <summary>Creates a new voice session.</summary>
     public async Task<VoiceSessionCreateResponse> CreateSessionAsync(VoiceSessionCreateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<VoiceSessionCreateResponse>("qbrainai/voice/session", request, cancellationToken);
+        return await PostAsync<VoiceSessionCreateResponse>("qbrainai/voice/session", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Finds an active voice session by device ID.</summary>
     public async Task<VoiceSessionStatus> FindSessionByDeviceAsync(string deviceId, CancellationToken cancellationToken = default)
     {
         var path = $"qbrainai/voice/session?deviceId={Uri.EscapeDataString(deviceId)}";
-        return await GetAsync<VoiceSessionStatus>(path, cancellationToken);
+        return await GetAsync<VoiceSessionStatus>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Submits a single voice turn for a session.</summary>
     public async Task<VoiceTurnResponse> SubmitTurnAsync(string sessionId, VoiceTurnRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<VoiceTurnResponse>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}/turn", request, cancellationToken);
+        return await PostAsync<VoiceTurnResponse>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}/turn", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Submits a voice turn and streams SSE events.</summary>
@@ -60,7 +60,7 @@ public sealed class VoiceClient : McpClientBase
             request,
             HttpCompletionOption.ResponseHeadersRead,
             "text/event-stream",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
         using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(true);
         using var reader = new System.IO.StreamReader(stream);
@@ -93,25 +93,25 @@ public sealed class VoiceClient : McpClientBase
     /// <summary>Interrupts an active turn for the specified session.</summary>
     public async Task<VoiceInterruptResponse> InterruptAsync(string sessionId, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<VoiceInterruptResponse>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}/interrupt", null, cancellationToken);
+        return await PostAsync<VoiceInterruptResponse>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}/interrupt", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Sends escape characters to the active interactive voice session.</summary>
     public async Task<VoiceEscapeResponse> EscapeAsync(string sessionId, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<VoiceEscapeResponse>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}/escape", null, cancellationToken);
+        return await PostAsync<VoiceEscapeResponse>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}/escape", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Gets session status for the specified voice session.</summary>
     public async Task<VoiceSessionStatus> GetStatusAsync(string sessionId, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<VoiceSessionStatus>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}", cancellationToken);
+        return await GetAsync<VoiceSessionStatus>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Gets transcript entries for the specified voice session.</summary>
     public async Task<VoiceTranscriptResponse> GetTranscriptAsync(string sessionId, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<VoiceTranscriptResponse>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}/transcript", cancellationToken);
+        return await GetAsync<VoiceTranscriptResponse>($"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}/transcript", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Deletes a voice session.</summary>
@@ -119,7 +119,7 @@ public sealed class VoiceClient : McpClientBase
     {
         try
         {
-            var status = await SendForStatusAsync(HttpMethod.Delete, $"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}", null, cancellationToken);
+            var status = await SendForStatusAsync(HttpMethod.Delete, $"qbrainai/voice/session/{Uri.EscapeDataString(sessionId)}", null, cancellationToken).ConfigureAwait(false);
             return status == HttpStatusCode.NoContent || status == HttpStatusCode.OK;
         }
         catch (McpNotFoundException)

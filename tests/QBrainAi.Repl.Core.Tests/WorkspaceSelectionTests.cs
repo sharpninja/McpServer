@@ -84,7 +84,7 @@ public class WorkspaceSelectionTests
             .Returns<IWorkspaceSelectionResult>(x => throw new UnauthorizedAccessException("Workspace not trusted"));
 
         await Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await selector.SelectWorkspaceAsync("/untrusted/workspace", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await selector.SelectWorkspaceAsync("/untrusted/workspace", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -97,7 +97,7 @@ public class WorkspaceSelectionTests
             .Returns<IWorkspaceSelectionResult>(x => throw new FileNotFoundException("Workspace not found"));
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await selector.SelectWorkspaceAsync("/nonexistent/workspace", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await selector.SelectWorkspaceAsync("/nonexistent/workspace", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -111,7 +111,7 @@ public class WorkspaceSelectionTests
             .Returns<IWorkspaceSelectionResult>(x => throw new InvalidOperationException("Workspace already active"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await selector.SelectWorkspaceAsync("/home/user/project", forceReselect: false, cancellationToken: TestContext.Current.CancellationToken)
+            async () => await selector.SelectWorkspaceAsync("/home/user/project", forceReselect: false, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -174,7 +174,7 @@ public class WorkspaceSelectionTests
             .Returns<Task>(x => throw new InvalidOperationException("No workspace is currently active"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await selector.DeselectWorkspaceAsync(cancellationToken: TestContext.Current.CancellationToken)
+            async () => await selector.DeselectWorkspaceAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -278,7 +278,7 @@ public class WorkspaceSelectionTests
         Assert.True(candidate.IsTrusted);
         Assert.False(candidate.IsActive);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]
@@ -299,6 +299,6 @@ public class WorkspaceSelectionTests
         Assert.True(result.AuthState.IsValid);
         Assert.True(result.Success);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 }

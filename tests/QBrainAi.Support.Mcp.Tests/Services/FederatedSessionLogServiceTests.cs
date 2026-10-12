@@ -203,7 +203,8 @@ public sealed class FederatedSessionLogServiceTests
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<QBrainAi.Support.Mcp.Storage.McpDbContext>()
             .UseInMemoryDatabase("fed-omit-" + Guid.NewGuid().ToString("N"))
             .Options;
-        await using var db = new QBrainAi.Support.Mcp.Storage.McpDbContext(options);
+        var db = new QBrainAi.Support.Mcp.Storage.McpDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         db.Database.EnsureCreated();
         var workspace = Path.Combine(Path.GetTempPath(), "fed-omit");
         db.OverrideWorkspaceId(workspace);

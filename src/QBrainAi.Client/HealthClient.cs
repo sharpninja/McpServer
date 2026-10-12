@@ -41,7 +41,7 @@ public sealed class HealthClient : McpClientBase
     /// </summary>
     public async Task<HealthCheckResult> GetAsync(CancellationToken cancellationToken = default)
     {
-        return await GetPublicAsync<HealthCheckResult>("health", cancellationToken);
+        return await GetPublicAsync<HealthCheckResult>("health", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public sealed class HealthClient : McpClientBase
     /// <returns>Liveness health payload.</returns>
     public async Task<HealthCheckResult> GetAliveAsync(CancellationToken cancellationToken = default)
     {
-        return await GetPublicAsync<HealthCheckResult>("alive", cancellationToken);
+        return await GetPublicAsync<HealthCheckResult>("alive", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ public sealed class HealthClient : McpClientBase
     /// <returns>Readiness health payload.</returns>
     public async Task<HealthCheckResult> GetReadyAsync(CancellationToken cancellationToken = default)
     {
-        return await GetPublicAsync<HealthCheckResult>("ready", cancellationToken);
+        return await GetPublicAsync<HealthCheckResult>("ready", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public sealed class HealthClient : McpClientBase
     /// <returns>Server startup diagnostics.</returns>
     public async Task<ServerStartupResult> GetServerStartupAsync(CancellationToken cancellationToken = default)
     {
-        return await GetPublicAsync<ServerStartupResult>("server-startup-utc", cancellationToken);
+        return await GetPublicAsync<ServerStartupResult>("server-startup-utc", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public sealed class HealthClient : McpClientBase
     {
         return await GetPublicAsync<MarkerFileTimestampResult>(
             $"marker-file-timestamp?repoPath={Uri.EscapeDataString(repoPath)}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<T> GetPublicAsync<T>(string path, CancellationToken cancellationToken)

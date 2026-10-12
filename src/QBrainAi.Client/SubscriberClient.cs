@@ -27,7 +27,7 @@ public sealed class SubscriberClient : McpClientBase
     public async Task<DiffgramCommitResponse> CommitDiffgramAsync(
         DiffgramCommitRequest request,
         CancellationToken cancellationToken = default)
-        => await PostAsync<DiffgramCommitResponse>("qbrainai/subscriber/diffgrams/commit", request, cancellationToken);
+        => await PostAsync<DiffgramCommitResponse>("qbrainai/subscriber/diffgrams/commit", request, cancellationToken).ConfigureAwait(false);
 
     /// <summary>Gets subscriber transaction status by transaction identifier.</summary>
     /// <param name="transactionId">Transaction identifier.</param>
@@ -38,7 +38,7 @@ public sealed class SubscriberClient : McpClientBase
         CancellationToken cancellationToken = default)
         => await GetAsync<TransactionStatusResponse>(
             $"qbrainai/subscriber/transactions/{Encode(transactionId)}/status",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     /// <summary>Aborts a subscriber transaction before commit.</summary>
     /// <param name="transactionId">Transaction identifier.</param>
@@ -52,7 +52,7 @@ public sealed class SubscriberClient : McpClientBase
         => await PostAsync<TransactionAbortResponse>(
             $"qbrainai/subscriber/transactions/{Encode(transactionId)}/abort",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
     private static string Encode(string value) => Uri.EscapeDataString(value);
 }

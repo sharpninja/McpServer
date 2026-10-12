@@ -166,7 +166,7 @@ public sealed class PluginHostProcessAdapterTests
             },
         };
         var adapter = new PluginHostProcessAdapter(fake);
-        var result = await adapter.LaunchAsync(scenario, envelope, TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
+        var result = await adapter.LaunchAsync(scenario, envelope, TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(fake.LastRequest);
         return (scenario, fake, result, pluginRoot);
     }

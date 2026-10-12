@@ -97,7 +97,8 @@ public sealed class OpenCodeSqliteTranscriptTests
             {
                 DataSource = databasePath
             }.ToString();
-            await using (var connection = new SqliteConnection(connectionString))
+            var connection = new SqliteConnection(connectionString);
+            await using (connection.ConfigureAwait(true))
             {
                 await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
                 await ExecuteNonQueryAsync(connection, "INSERT INTO tool_event (id, session_id, message_id, tool_name, status, payload_json, time_created) VALUES ('tool-orphan', 'ses_sqlite_fixture', 'missing-message', 'shell', 'completed', '{\"content\":\"orphaned sqlite tool result\"}', 1735689602500);").ConfigureAwait(true);
@@ -135,7 +136,8 @@ public sealed class OpenCodeSqliteTranscriptTests
         {
             var databasePath = Path.Combine(tempDirectory, "opencode.db");
             await CreateOpenCodeSqliteFixtureAsync(databasePath).ConfigureAwait(true);
-            await using (var sourceConnection = new SqliteConnection(new SqliteConnectionStringBuilder { DataSource = databasePath }.ToString()))
+            var sourceConnection = new SqliteConnection(new SqliteConnectionStringBuilder { DataSource = databasePath }.ToString());
+            await using (sourceConnection.ConfigureAwait(true))
             {
                 await sourceConnection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
                 await ExecuteNonQueryAsync(sourceConnection, "PRAGMA journal_mode=WAL;").ConfigureAwait(true);
@@ -149,11 +151,12 @@ public sealed class OpenCodeSqliteTranscriptTests
             Assert.False(File.Exists(snapshotPath + "-wal"), "A consistent backup snapshot should be a standalone database file.");
             Assert.False(File.Exists(snapshotPath + "-shm"), "A consistent backup snapshot should not require a copied shared-memory sidecar.");
 
-            await using var snapshotConnection = new SqliteConnection(new SqliteConnectionStringBuilder
+            var snapshotConnection = new SqliteConnection(new SqliteConnectionStringBuilder
             {
                 DataSource = snapshotPath,
                 Mode = SqliteOpenMode.ReadOnly
             }.ToString());
+            await using var snapshotConnectionDisposal = snapshotConnection.ConfigureAwait(true);
             await snapshotConnection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
             await using var command = snapshotConnection.CreateCommand();
             command.CommandText = "SELECT json FROM part WHERE id = 'part-wal';";
@@ -191,7 +194,8 @@ public sealed class OpenCodeSqliteTranscriptTests
             DataSource = databasePath
         }.ToString();
 
-        await using var connection = new SqliteConnection(connectionString);
+        var connection = new SqliteConnection(connectionString);
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "CREATE TABLE session (id TEXT PRIMARY KEY, title TEXT, version TEXT, time_created INTEGER, time_updated INTEGER, workspace_path TEXT);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "CREATE TABLE message (id TEXT PRIMARY KEY, session_id TEXT NOT NULL, role TEXT NOT NULL, model_id TEXT, provider_id TEXT, time_created INTEGER, time_completed INTEGER);").ConfigureAwait(true);
@@ -209,7 +213,8 @@ public sealed class OpenCodeSqliteTranscriptTests
 
     private static async Task ExecuteNonQueryAsync(SqliteConnection connection, string commandText)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(true);
         command.CommandText = commandText;
         await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
     }

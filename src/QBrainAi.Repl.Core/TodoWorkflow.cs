@@ -66,7 +66,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
         bool? done = null,
         CancellationToken cancellationToken = default)
     {
-        var result = await _client.QueryAsync(keyword, priority, section, id, done, cancellationToken);
+        var result = await _client.QueryAsync(keyword, priority, section, id, done, cancellationToken).ConfigureAwait(false);
         return new TodoQueryResultAdapter(result);
     }
 
@@ -80,7 +80,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            var item = await _client.GetAsync(id, cancellationToken);
+            var item = await _client.GetAsync(id, cancellationToken).ConfigureAwait(false);
             return new TodoItemAdapter(item);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -99,7 +99,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            var item = await _client.GetAsync(id, cancellationToken);
+            var item = await _client.GetAsync(id, cancellationToken).ConfigureAwait(false);
             SetSelection(new TodoSelectionState(
                 item.Id,
                 item.Title,
@@ -142,7 +142,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            var result = await _client.CreateAsync(clientRequest, cancellationToken);
+            var result = await _client.CreateAsync(clientRequest, cancellationToken).ConfigureAwait(false);
             return new TodoMutationResultAdapter(result);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Conflict)
@@ -161,7 +161,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
         ArgumentNullException.ThrowIfNull(request);
 
         var clientRequest = MapUpdateRequest(request);
-        var result = await _client.UpdateAsync(id, clientRequest, cancellationToken);
+        var result = await _client.UpdateAsync(id, clientRequest, cancellationToken).ConfigureAwait(false);
         return new TodoMutationResultAdapter(result);
     }
 
@@ -177,7 +177,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
         TodoMutationResult result;
         try
         {
-            result = await _client.UpdateAsync(selection.Id, clientRequest, cancellationToken);
+            result = await _client.UpdateAsync(selection.Id, clientRequest, cancellationToken).ConfigureAwait(false);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
@@ -208,7 +208,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         ValidateTodoId(id);
 
-        var result = await _client.DeleteAsync(id, cancellationToken);
+        var result = await _client.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             throw new InvalidOperationException(result.Error ?? "Failed to delete TODO item");
 
@@ -226,7 +226,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
         TodoMutationResult result;
         try
         {
-            result = await _client.DeleteAsync(selection.Id, cancellationToken);
+            result = await _client.DeleteAsync(selection.Id, cancellationToken).ConfigureAwait(false);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
@@ -250,7 +250,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            var result = await _client.AnalyzeRequirementsAsync(id, cancellationToken);
+            var result = await _client.AnalyzeRequirementsAsync(id, cancellationToken).ConfigureAwait(false);
             return new TodoRequirementsAnalysisAdapter(result, id);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -272,7 +272,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            await foreach (var line in _client.StreamStatusAsync(id, cancellationToken))
+            await foreach (var line in _client.StreamStatusAsync(id, cancellationToken).ConfigureAwait(false))
             {
                 var evt = new StreamingEvent(
                     "status.progress",
@@ -281,7 +281,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                     ++sequence
                 );
 
-                await eventCallback(evt);
+                await eventCallback(evt).ConfigureAwait(false);
             }
 
             var completeEvent = new StreamingEvent(
@@ -291,7 +291,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(completeEvent);
+            await eventCallback(completeEvent).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -302,7 +302,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(cancelledEvent);
+            await eventCallback(cancelledEvent).ConfigureAwait(false);
             throw;
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -314,7 +314,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(errorEvent);
+            await eventCallback(errorEvent).ConfigureAwait(false);
             throw new InvalidOperationException($"TODO item not found: {id}", ex);
         }
         catch (Exception ex)
@@ -326,7 +326,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(errorEvent);
+            await eventCallback(errorEvent).ConfigureAwait(false);
             throw;
         }
     }
@@ -344,7 +344,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            await foreach (var line in _client.StreamPlanAsync(id, cancellationToken))
+            await foreach (var line in _client.StreamPlanAsync(id, cancellationToken).ConfigureAwait(false))
             {
                 var evt = new StreamingEvent(
                     "plan.progress",
@@ -353,7 +353,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                     ++sequence
                 );
 
-                await eventCallback(evt);
+                await eventCallback(evt).ConfigureAwait(false);
             }
 
             var completeEvent = new StreamingEvent(
@@ -363,7 +363,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(completeEvent);
+            await eventCallback(completeEvent).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -374,7 +374,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(cancelledEvent);
+            await eventCallback(cancelledEvent).ConfigureAwait(false);
             throw;
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -386,7 +386,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(errorEvent);
+            await eventCallback(errorEvent).ConfigureAwait(false);
             throw new InvalidOperationException($"TODO item not found: {id}", ex);
         }
         catch (Exception ex)
@@ -398,7 +398,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(errorEvent);
+            await eventCallback(errorEvent).ConfigureAwait(false);
             throw;
         }
     }
@@ -416,7 +416,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            await foreach (var line in _client.StreamImplementAsync(id, cancellationToken))
+            await foreach (var line in _client.StreamImplementAsync(id, cancellationToken).ConfigureAwait(false))
             {
                 var evt = new StreamingEvent(
                     "implement.progress",
@@ -425,7 +425,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                     ++sequence
                 );
 
-                await eventCallback(evt);
+                await eventCallback(evt).ConfigureAwait(false);
             }
 
             var completeEvent = new StreamingEvent(
@@ -435,7 +435,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(completeEvent);
+            await eventCallback(completeEvent).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -446,7 +446,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(cancelledEvent);
+            await eventCallback(cancelledEvent).ConfigureAwait(false);
             throw;
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -458,7 +458,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(errorEvent);
+            await eventCallback(errorEvent).ConfigureAwait(false);
             throw new InvalidOperationException($"TODO item not found: {id}", ex);
         }
         catch (Exception ex)
@@ -470,7 +470,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
                 ++sequence
             );
 
-            await eventCallback(errorEvent);
+            await eventCallback(errorEvent).ConfigureAwait(false);
             throw;
         }
     }
@@ -485,7 +485,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            var status = await _client.GetProjectionStatusAsync(cancellationToken);
+            var status = await _client.GetProjectionStatusAsync(cancellationToken).ConfigureAwait(false);
 
             // Map the workspace-level projection status to a TODO-specific status
             return new TodoProjectionStatusAdapter(id, status);
@@ -506,7 +506,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         try
         {
-            var result = await _client.RepairProjectionAsync(cancellationToken);
+            var result = await _client.RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
             if (!result.Success)
                 throw new InvalidOperationException(result.Error ?? "Failed to repair projection");
         }

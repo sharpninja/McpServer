@@ -166,10 +166,11 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
         }
 
         Assert.NotNull(operation);
-        await using var openedConnection = await operation.WaitAsync(
+        var openedConnection = await operation.WaitAsync(
                 TimeSpan.FromSeconds(2),
                 TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
+        await using var openedConnectionDisposal = openedConnection.ConfigureAwait(true);
         Assert.NotSame(connection, openedConnection);
         Assert.Equal(ConnectionState.Closed, connection.State);
         Assert.Equal(ConnectionState.Open, openedConnection.State);

@@ -153,9 +153,10 @@ public sealed class SessionLogService : ISessionLogService
         var isImport = !string.IsNullOrWhiteSpace(sourceFilePath);
         // The terminal-state check must remain valid until the write commits, including
         // when another request uses a different context or service process.
-        await using var transaction = _db.Database.IsRelational()
+        var transaction = _db.Database.IsRelational()
             ? await _db.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken).ConfigureAwait(false)
             : null;
+        await using var transactionDisposal = transaction.ConfigureAwait(false);
         await DetachUnchangedSessionGraphAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
         var existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
 
@@ -1046,7 +1047,8 @@ public sealed class SessionLogService : ISessionLogService
         SyncDbWorkspaceFromContext();
         ValidateTurnIdentifiers(sourceType, sessionId, requestId);
 
-        await using var _ = await s_deleteTurnLock.AcquireAsync($"{sourceType}/{sessionId}", cancellationToken).ConfigureAwait(false);
+        var _ = await s_deleteTurnLock.AcquireAsync($"{sourceType}/{sessionId}", cancellationToken).ConfigureAwait(false);
+        await using var _Disposal = _.ConfigureAwait(false);
 
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
         var turnEntity = session?.Turns.FirstOrDefault(t => t.RequestId == requestId);

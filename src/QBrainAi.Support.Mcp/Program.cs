@@ -938,7 +938,7 @@ app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtimeInfo) =>
 
 app.MapGet("/marker-file-timestamp", async (string? repoPath, IConfiguration configuration, IWorkspaceService workspaceSvc) =>
 {
-    var workspacePaths = (await workspaceSvc.ListAsync()).Items.Select(w => w.WorkspacePath);
+    var workspacePaths = (await workspaceSvc.ListAsync().ConfigureAwait(false)).Items.Select(w => w.WorkspacePath);
     return MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
         repoPath,
         configuration,
@@ -1104,7 +1104,7 @@ app.MapGet("/pair/qr", async (HttpContext context, IOptions<PairingOptions> opts
 // Seed IdentityServer defaults (admin user, roles) on first run
 if (identityServerOptions is { Enabled: true, SeedDefaults: true })
 {
-    await IdentityServerSeeder.SeedAsync(app.Services, identityServerOptions);
+    await IdentityServerSeeder.SeedAsync(app.Services, identityServerOptions).ConfigureAwait(false);
 }
 
 try

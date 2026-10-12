@@ -24,7 +24,7 @@ public sealed class ConfigurationClient : McpClientBase
     /// </summary>
     public async Task<Dictionary<string, string>> GetValuesAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<Dictionary<string, string>>("qbrainai/configuration", cancellationToken);
+        return await GetAsync<Dictionary<string, string>>("qbrainai/configuration", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -40,6 +40,6 @@ public sealed class ConfigurationClient : McpClientBase
         return await PatchIncludingNullsAsync<Dictionary<string, string>>(
             "qbrainai/configuration",
             values,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 }

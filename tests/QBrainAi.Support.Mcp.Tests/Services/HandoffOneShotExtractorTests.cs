@@ -87,6 +87,6 @@ public sealed class HandoffOneShotExtractorTests
             Status = "completed",
             Text = text,
         };
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 }

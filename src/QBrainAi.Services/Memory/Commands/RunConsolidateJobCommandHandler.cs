@@ -16,7 +16,8 @@ public sealed class RunConsolidateJobCommandHandler(DbContextOptions<McpDbContex
     /// <inheritdoc />
     public async Task<Result<MemoryConsolidateJobResult>> HandleAsync(RunConsolidateJobCommand command, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = command.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemoryConsolidateOperations(db, command.WorkspacePath);
         var result = await operations.RunJobAsync(command.DryRun, command.ForceOverlap, context.CancellationToken)
             .ConfigureAwait(false);

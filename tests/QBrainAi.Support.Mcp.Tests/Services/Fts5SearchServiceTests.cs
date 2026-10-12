@@ -23,7 +23,8 @@ public sealed class Fts5SearchServiceTests
     [Fact]
     public async Task SearchAsyncExcludesSoftDeletedDocumentsBeforeAndAfterRebuild()
     {
-        await using var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new SqliteConnection("Data Source=:memory:");
+        await using var connectionDisposal = connection.ConfigureAwait(true);
         await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await using var db = CreateDb(connection);
         await CreateFtsTableAsync(connection).ConfigureAwait(true);
@@ -72,7 +73,8 @@ public sealed class Fts5SearchServiceTests
 
     private static async Task CreateFtsTableAsync(SqliteConnection connection)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(true);
         command.CommandText = """
             CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(
                 ChunkId UNINDEXED,
@@ -84,7 +86,8 @@ public sealed class Fts5SearchServiceTests
 
     private static async Task<int> CountFtsRowsAsync(SqliteConnection connection, string chunkId)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(true);
         command.CommandText = "SELECT COUNT(*) FROM chunks_fts WHERE ChunkId = $chunkId";
         var parameter = command.CreateParameter();
         parameter.ParameterName = "$chunkId";

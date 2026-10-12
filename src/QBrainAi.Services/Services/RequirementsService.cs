@@ -117,7 +117,7 @@ internal sealed class RequirementsService(
         try
         {
             var lines = new List<string>();
-            await foreach (var line in copilotClient.InvokeStreamingAsync(prompt, options, cancellationToken))
+            await foreach (var line in copilotClient.InvokeStreamingAsync(prompt, options, cancellationToken).ConfigureAwait(false))
             {
                 if (!string.IsNullOrWhiteSpace(line))
                     lines.Add(line);

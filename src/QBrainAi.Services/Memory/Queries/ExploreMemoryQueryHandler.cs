@@ -17,7 +17,8 @@ public sealed class ExploreMemoryQueryHandler(DbContextOptions<McpDbContext> opt
     /// <inheritdoc />
     public async Task<Result<MemoryExploreResult>> HandleAsync(ExploreMemoryQuery query, CallContext context)
     {
-        await using var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = query.WorkspacePath });
+        var db = new McpDbContext(options, new WorkspaceContext { WorkspacePath = query.WorkspacePath });
+        await using var dbDisposal = db.ConfigureAwait(false);
         var operations = new MemoryExploreOperations(db);
         var result = await operations.ExploreAsync(query, context.CancellationToken).ConfigureAwait(false);
         return Result<MemoryExploreResult>.Success(result);

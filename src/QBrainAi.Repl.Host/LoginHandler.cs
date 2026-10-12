@@ -139,7 +139,7 @@ public class LoginHandler
         _logger.LogInformation("Cached token expired, attempting refresh");
         AnsiConsole.MarkupLine("[yellow]Cached token expired, refreshing...[/]");
 
-        if (await TryRefreshTokenAsync(cancellationToken))
+        if (await TryRefreshTokenAsync(cancellationToken).ConfigureAwait(false))
         {
             SaveTokenToFile();
             return true;
@@ -163,7 +163,7 @@ public class LoginHandler
             _logger.LogInformation("Bearer token expired, attempting refresh");
             AnsiConsole.MarkupLine("[yellow]Token expired, refreshing...[/]");
 
-            if (await TryRefreshTokenAsync(cancellationToken))
+            if (await TryRefreshTokenAsync(cancellationToken).ConfigureAwait(false))
             {
                 SaveTokenToFile();
                 return true;
@@ -185,7 +185,7 @@ public class LoginHandler
     public async Task<bool> LoginAsync(CancellationToken cancellationToken)
     {
         // Step 1: Try cached token
-        if (await TryRestoreSessionAsync(cancellationToken))
+        if (await TryRestoreSessionAsync(cancellationToken).ConfigureAwait(false))
             return true;
 
         // Step 2: Discover auth config
@@ -194,7 +194,7 @@ public class LoginHandler
         Client.Models.AuthConfigResponse authConfig;
         try
         {
-            authConfig = await _client.AuthConfig.GetConfigAsync(cancellationToken);
+            authConfig = await _client.AuthConfig.GetConfigAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -217,7 +217,7 @@ public class LoginHandler
         if (!string.IsNullOrWhiteSpace(authConfig.DeviceAuthorizationEndpoint))
         {
             AnsiConsole.MarkupLine("[blue]Starting device authorization flow...[/]");
-            if (await DeviceFlowLoginAsync(authConfig, cancellationToken))
+            if (await DeviceFlowLoginAsync(authConfig, cancellationToken).ConfigureAwait(false))
                 return true;
 
             // Device flow failed — fall through to manual menu
@@ -226,7 +226,7 @@ public class LoginHandler
         }
 
         // Step 4: Manual login menu (fallback)
-        return await ManualLoginMenuAsync(authConfig, cancellationToken);
+        return await ManualLoginMenuAsync(authConfig, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -241,7 +241,7 @@ public class LoginHandler
         {
             try
             {
-                authConfig = await _client.AuthConfig.GetConfigAsync(cancellationToken);
+                authConfig = await _client.AuthConfig.GetConfigAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -268,9 +268,9 @@ public class LoginHandler
 
         return loginMethod switch
         {
-            "Device Flow" => await DeviceFlowLoginAsync(authConfig, cancellationToken),
-            "Password Login" => await PasswordLoginAsync(authConfig, cancellationToken),
-            "Client Credentials" => await ClientCredentialsLoginAsync(authConfig, cancellationToken),
+            "Device Flow" => await DeviceFlowLoginAsync(authConfig, cancellationToken).ConfigureAwait(false),
+            "Password Login" => await PasswordLoginAsync(authConfig, cancellationToken).ConfigureAwait(false),
+            "Client Credentials" => await ClientCredentialsLoginAsync(authConfig, cancellationToken).ConfigureAwait(false),
             _ => false
         };
     }
@@ -302,7 +302,7 @@ public class LoginHandler
                     Address = _cachedTokenEndpoint,
                     ClientId = _cachedClientId ?? "mcp-director",
                     RefreshToken = _cachedRefreshToken,
-                }, cancellationToken);
+                }, cancellationToken).ConfigureAwait(false);
 
                 if (!refreshResponse.IsError)
                 {
@@ -325,7 +325,7 @@ public class LoginHandler
                         ClientId = _cachedClientId ?? "mcp-agent",
                         ClientSecret = _cachedClientSecret,
                         Scope = _cachedScopes ?? "mcp-api",
-                    }, cancellationToken);
+                    }, cancellationToken).ConfigureAwait(false);
 
                 if (!tokenResponse.IsError)
                 {
@@ -344,7 +344,7 @@ public class LoginHandler
                     Scope = _cachedScopes ?? "openid profile email",
                     UserName = _cachedUsername,
                     Password = _cachedPassword,
-                }, cancellationToken);
+                }, cancellationToken).ConfigureAwait(false);
 
                 if (!tokenResponse.IsError)
                 {
@@ -418,7 +418,7 @@ public class LoginHandler
                         Scope = scopes,
                         UserName = username,
                         Password = password,
-                    }, cancellationToken);
+                    }, cancellationToken).ConfigureAwait(false);
 
                     if (tokenResponse.IsError)
                     {
@@ -452,7 +452,7 @@ public class LoginHandler
                     _logger.LogError(ex, "Password login error");
                     return false;
                 }
-            });
+            }).ConfigureAwait(false);
     }
 
     private async Task<bool> ClientCredentialsLoginAsync(
@@ -489,7 +489,7 @@ public class LoginHandler
                             ClientId = clientId,
                             ClientSecret = clientSecret,
                             Scope = scopes,
-                        }, cancellationToken);
+                        }, cancellationToken).ConfigureAwait(false);
 
                     if (tokenResponse.IsError)
                     {
@@ -522,7 +522,7 @@ public class LoginHandler
                     _logger.LogError(ex, "Client credentials login error");
                     return false;
                 }
-            });
+            }).ConfigureAwait(false);
     }
 
     private async Task<bool> DeviceFlowLoginAsync(
@@ -543,15 +543,15 @@ public class LoginHandler
                 ["scope"] = scopes,
             });
 
-            var deviceResponse = await httpClient.PostAsync(deviceEndpoint, content, cancellationToken);
+            var deviceResponse = await httpClient.PostAsync(deviceEndpoint, content, cancellationToken).ConfigureAwait(false);
             if (!deviceResponse.IsSuccessStatusCode)
             {
-                var body = await deviceResponse.Content.ReadAsStringAsync(cancellationToken);
+                var body = await deviceResponse.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 AnsiConsole.MarkupLine($"[red]Device authorization failed: {Markup.Escape(body)}[/]");
                 return false;
             }
 
-            var deviceJson = await deviceResponse.Content.ReadAsStringAsync(cancellationToken);
+            var deviceJson = await deviceResponse.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             var device = JsonSerializer.Deserialize(deviceJson, ReplHostJsonContext.Default.DeviceAuthResponse);
             if (device is null)
             {
@@ -593,7 +593,7 @@ public class LoginHandler
 
             while (DateTime.UtcNow < deadline && !cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(TimeSpan.FromSeconds(interval), cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(interval), cancellationToken).ConfigureAwait(false);
 
                 var pollContent = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
@@ -602,8 +602,8 @@ public class LoginHandler
                     ["device_code"] = device.DeviceCode,
                 });
 
-                var pollResponse = await httpClient.PostAsync(tokenEndpoint, pollContent, cancellationToken);
-                var pollJson = await pollResponse.Content.ReadAsStringAsync(cancellationToken);
+                var pollResponse = await httpClient.PostAsync(tokenEndpoint, pollContent, cancellationToken).ConfigureAwait(false);
+                var pollJson = await pollResponse.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 var tokenResult = JsonSerializer.Deserialize(pollJson, ReplHostJsonContext.Default.DeviceTokenResponse);
 
                 if (tokenResult is null)

@@ -248,8 +248,8 @@ public sealed class AgentCliInteractiveSession : IAsyncDisposable, IDisposable
         MarkShutdownRequested();
         try
         {
-            await _process.StandardInput!.WriteLineAsync("End Session");
-            await _process.StandardInput!.FlushAsync();
+            await _process.StandardInput!.WriteLineAsync("End Session").ConfigureAwait(false);
+            await _process.StandardInput!.FlushAsync().ConfigureAwait(false);
 
             using var cts = new CancellationTokenSource(timeout);
             await ReadUntilSentinelAsync(cts.Token).ConfigureAwait(true);

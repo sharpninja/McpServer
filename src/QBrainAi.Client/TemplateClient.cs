@@ -26,49 +26,49 @@ public sealed class TemplateClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var qs = BuildQueryString(category, tag, keyword);
-        return await GetAsync<TemplateQueryResult>($"qbrainai/templates{qs}", cancellationToken);
+        return await GetAsync<TemplateQueryResult>($"qbrainai/templates{qs}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get a single template by ID.</summary>
     public async Task<TemplateItem> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TemplateItem>($"qbrainai/templates/{Encode(id)}", cancellationToken);
+        return await GetAsync<TemplateItem>($"qbrainai/templates/{Encode(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Create a new template.</summary>
     public async Task<TemplateMutationResult> CreateAsync(TemplateCreateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TemplateMutationResult>("qbrainai/templates", request, cancellationToken);
+        return await PostAsync<TemplateMutationResult>("qbrainai/templates", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Update an existing template.</summary>
     public async Task<TemplateMutationResult> UpdateAsync(string id, TemplateUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<TemplateMutationResult>($"qbrainai/templates/{Encode(id)}", request, cancellationToken);
+        return await PutAsync<TemplateMutationResult>($"qbrainai/templates/{Encode(id)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Delete a template.</summary>
     public async Task<TemplateMutationResult> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<TemplateMutationResult>($"qbrainai/templates/{Encode(id)}", cancellationToken);
+        return await DeleteAsync<TemplateMutationResult>($"qbrainai/templates/{Encode(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Test/render a stored template with sample data.</summary>
     public async Task<TemplateTestResult> TestAsync(string id, TemplateTestRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TemplateTestResult>($"qbrainai/templates/{Encode(id)}/test", request, cancellationToken);
+        return await PostAsync<TemplateTestResult>($"qbrainai/templates/{Encode(id)}/test", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Test/render an inline template (without saving).</summary>
     public async Task<TemplateTestResult> TestInlineAsync(TemplateTestRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TemplateTestResult>("qbrainai/templates/test", request, cancellationToken);
+        return await PostAsync<TemplateTestResult>("qbrainai/templates/test", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Resolve a stored template by ID using a dictionary of values.</summary>
     public async Task<TemplateResolveResult> ResolveAsync(string id, TemplateResolveRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TemplateResolveResult>($"qbrainai/templates/{Encode(id)}/resolve", request, cancellationToken);
+        return await PostAsync<TemplateResolveResult>($"qbrainai/templates/{Encode(id)}/resolve", request, cancellationToken).ConfigureAwait(false);
     }
 
     private static string Encode(string value) => System.Uri.EscapeDataString(value);

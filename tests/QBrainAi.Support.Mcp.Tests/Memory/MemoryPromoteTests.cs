@@ -248,7 +248,8 @@ public sealed class MemoryPromoteTests : IDisposable
     private async Task<(string SourceRef, string Raw)> SeedSessionSourceAsync(string raw, string? workspacePath = null)
     {
         var ws = workspacePath ?? _harness.WorkspaceA;
-        await using var db = _harness.CreateContext(ws);
+        var db = _harness.CreateContext(ws);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var session = new SessionLogEntity
         {
             SourceType = "CursorGrok",
@@ -291,7 +292,8 @@ public sealed class MemoryPromoteTests : IDisposable
     {
         var parts = sourceRef.Split('/', StringSplitOptions.RemoveEmptyEntries);
         var actionId = long.Parse(parts[^1]);
-        await using var db = _harness.CreateContext(_harness.WorkspaceA);
+        var db = _harness.CreateContext(_harness.WorkspaceA);
+        await using var dbDisposal = db.ConfigureAwait(true);
         var action = await db.SessionLogActions.AsNoTracking()
             .FirstAsync(a => a.Id == actionId)
             .ConfigureAwait(true);

@@ -25,107 +25,107 @@ public sealed class GitHubClient : McpClientBase
     public async Task<GitHubIssueListResult> ListIssuesAsync(string? state = null, int limit = 30, CancellationToken cancellationToken = default)
     {
         var qs = BuildIssueListQuery(state, limit);
-        return await GetAsync<GitHubIssueListResult>($"qbrainai/gh/issues{qs}", cancellationToken);
+        return await GetAsync<GitHubIssueListResult>($"qbrainai/gh/issues{qs}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get a single issue by number.</summary>
     public async Task<GitHubIssueDetail> GetIssueAsync(int number, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GitHubIssueDetail>($"qbrainai/gh/issues/{number}", cancellationToken);
+        return await GetAsync<GitHubIssueDetail>($"qbrainai/gh/issues/{number}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Create a new GitHub issue.</summary>
     public async Task<GitHubCreateIssueResult> CreateIssueAsync(GitHubIssueRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GitHubCreateIssueResult>("qbrainai/gh/issues", request, cancellationToken);
+        return await PostAsync<GitHubCreateIssueResult>("qbrainai/gh/issues", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Update a GitHub issue.</summary>
     public async Task<GitHubMutationResult> UpdateIssueAsync(int number, GitHubIssueUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<GitHubMutationResult>($"qbrainai/gh/issues/{number}", request, cancellationToken);
+        return await PutAsync<GitHubMutationResult>($"qbrainai/gh/issues/{number}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Close a GitHub issue.</summary>
     public async Task<GitHubMutationResult> CloseIssueAsync(int number, string? reason = null, CancellationToken cancellationToken = default)
     {
         var qs = reason is not null ? $"?reason={Uri.EscapeDataString(reason)}" : string.Empty;
-        return await PostAsync<GitHubMutationResult>($"qbrainai/gh/issues/{number}/close{qs}", null, cancellationToken);
+        return await PostAsync<GitHubMutationResult>($"qbrainai/gh/issues/{number}/close{qs}", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Reopen a GitHub issue.</summary>
     public async Task<GitHubMutationResult> ReopenIssueAsync(int number, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GitHubMutationResult>($"qbrainai/gh/issues/{number}/reopen", null, cancellationToken);
+        return await PostAsync<GitHubMutationResult>($"qbrainai/gh/issues/{number}/reopen", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Comment on a GitHub issue.</summary>
     public async Task<GitHubMutationResult> CommentOnIssueAsync(int number, string body, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GitHubMutationResult>($"qbrainai/gh/issues/{number}/comments", new GitHubCommentRequest { Body = body }, cancellationToken);
+        return await PostAsync<GitHubMutationResult>($"qbrainai/gh/issues/{number}/comments", new GitHubCommentRequest { Body = body }, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>List repository labels.</summary>
     public async Task<GitHubLabelsResult> ListLabelsAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GitHubLabelsResult>("qbrainai/gh/labels", cancellationToken);
+        return await GetAsync<GitHubLabelsResult>("qbrainai/gh/labels", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>List pull requests.</summary>
     public async Task<GitHubPullListResult> ListPullsAsync(string? state = null, int limit = 30, CancellationToken cancellationToken = default)
     {
         var qs = BuildIssueListQuery(state, limit);
-        return await GetAsync<GitHubPullListResult>($"qbrainai/gh/pulls{qs}", cancellationToken);
+        return await GetAsync<GitHubPullListResult>($"qbrainai/gh/pulls{qs}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Comment on a pull request.</summary>
     public async Task<GitHubMutationResult> CommentOnPullAsync(int number, string body, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GitHubMutationResult>($"qbrainai/gh/pulls/{number}/comments", new GitHubCommentRequest { Body = body }, cancellationToken);
+        return await PostAsync<GitHubMutationResult>($"qbrainai/gh/pulls/{number}/comments", new GitHubCommentRequest { Body = body }, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Sync issues from GitHub to TODO items.</summary>
     public async Task<IssueSyncResult> SyncFromGitHubAsync(string? state = "open", int limit = 30, CancellationToken cancellationToken = default)
     {
         var qs = BuildIssueListQuery(state, limit);
-        return await PostAsync<IssueSyncResult>($"qbrainai/gh/issues/sync/from-github{qs}", null, cancellationToken);
+        return await PostAsync<IssueSyncResult>($"qbrainai/gh/issues/sync/from-github{qs}", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Sync TODO items back to GitHub issues.</summary>
     public async Task<IssueSyncResult> SyncToGitHubAsync(CancellationToken cancellationToken = default)
     {
-        return await PostAsync<IssueSyncResult>("qbrainai/gh/issues/sync/to-github", null, cancellationToken);
+        return await PostAsync<IssueSyncResult>("qbrainai/gh/issues/sync/to-github", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Sync a single issue by number.</summary>
     public async Task<SingleIssueSyncResult> SyncIssueAsync(int number, string direction = "from-github", CancellationToken cancellationToken = default)
     {
         var qs = $"?direction={Uri.EscapeDataString(direction)}";
-        return await PostAsync<SingleIssueSyncResult>($"qbrainai/gh/issues/{number}/sync{qs}", null, cancellationToken);
+        return await PostAsync<SingleIssueSyncResult>($"qbrainai/gh/issues/{number}/sync{qs}", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get GitHub auth status for the active workspace.</summary>
     public async Task<GitHubAuthStatusResult> GetAuthStatusAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GitHubAuthStatusResult>("qbrainai/gh/auth/status", cancellationToken);
+        return await GetAsync<GitHubAuthStatusResult>("qbrainai/gh/auth/status", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Set or replace the workspace GitHub token.</summary>
     public async Task<GitHubOperationResult> SetAuthTokenAsync(GitHubAuthTokenUpsertRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<GitHubOperationResult>("qbrainai/gh/auth/token", request, cancellationToken);
+        return await PutAsync<GitHubOperationResult>("qbrainai/gh/auth/token", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Delete the workspace GitHub token.</summary>
     public async Task<GitHubOperationResult> DeleteAuthTokenAsync(CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<GitHubOperationResult>("qbrainai/gh/auth/token", cancellationToken);
+        return await DeleteAsync<GitHubOperationResult>("qbrainai/gh/auth/token", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get OAuth app bootstrap configuration.</summary>
     public async Task<GitHubOAuthConfigResult> GetOAuthConfigAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GitHubOAuthConfigResult>("qbrainai/gh/oauth/config", cancellationToken);
+        return await GetAsync<GitHubOAuthConfigResult>("qbrainai/gh/oauth/config", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Build a GitHub OAuth authorize URL from server-side configuration.</summary>
@@ -134,7 +134,7 @@ public sealed class GitHubClient : McpClientBase
         var path = string.IsNullOrWhiteSpace(state)
             ? "qbrainai/gh/oauth/authorize-url"
             : $"qbrainai/gh/oauth/authorize-url?state={Uri.EscapeDataString(state)}";
-        return await GetAsync<GitHubAuthorizeUrlResult>(path, cancellationToken);
+        return await GetAsync<GitHubAuthorizeUrlResult>(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>List workflow runs.</summary>
@@ -147,25 +147,25 @@ public sealed class GitHubClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var qs = BuildWorkflowRunQuery(branch, status, eventName, workflow, limit);
-        return await GetAsync<GitHubWorkflowRunListResult>($"qbrainai/gh/actions/runs{qs}", cancellationToken);
+        return await GetAsync<GitHubWorkflowRunListResult>($"qbrainai/gh/actions/runs{qs}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get workflow run details.</summary>
     public async Task<GitHubWorkflowRunDetail> GetWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GitHubWorkflowRunDetail>($"qbrainai/gh/actions/runs/{runId}", cancellationToken);
+        return await GetAsync<GitHubWorkflowRunDetail>($"qbrainai/gh/actions/runs/{runId}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Request a rerun of a workflow run.</summary>
     public async Task<GitHubOperationResult> RerunWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GitHubOperationResult>($"qbrainai/gh/actions/runs/{runId}/rerun", null, cancellationToken);
+        return await PostAsync<GitHubOperationResult>($"qbrainai/gh/actions/runs/{runId}/rerun", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Cancel a workflow run.</summary>
     public async Task<GitHubOperationResult> CancelWorkflowRunAsync(long runId, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GitHubOperationResult>($"qbrainai/gh/actions/runs/{runId}/cancel", null, cancellationToken);
+        return await PostAsync<GitHubOperationResult>($"qbrainai/gh/actions/runs/{runId}/cancel", null, cancellationToken).ConfigureAwait(false);
     }
 
     private static string BuildIssueListQuery(string? state, int limit)

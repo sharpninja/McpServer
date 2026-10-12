@@ -1279,7 +1279,8 @@ public sealed partial class VoiceConversationService
         var workspacePath = _workspaceAccessor.GetWorkspacePath();
         if (!string.IsNullOrWhiteSpace(workspacePath))
         {
-            await using var scope = _scopeFactory.CreateAsyncScope();
+            var scope = _scopeFactory.CreateAsyncScope();
+            await using var scopeDisposal = scope.ConfigureAwait(false);
             var workspaceSvc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
             var dto = await workspaceSvc.GetAsync(workspacePath, cancellationToken).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(dto?.AgentPath))
@@ -1882,7 +1883,7 @@ public sealed partial class VoiceConversationService
                         _logger.LogInformation("Idle cleanup: sending shutdown command to {SessionId}", sessionId);
                         var responseStream = sessionState.InteractiveSession.SendStreamingAsync(command, CancellationToken.None);
 
-                        await foreach (var line in responseStream)
+                        await foreach (var line in responseStream.ConfigureAwait(false))
                         {
                             if (!string.IsNullOrEmpty(line) && line.Contains(sentinel, StringComparison.OrdinalIgnoreCase))
                             {

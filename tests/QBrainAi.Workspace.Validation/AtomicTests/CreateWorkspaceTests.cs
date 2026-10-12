@@ -28,7 +28,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
     public async ValueTask DisposeAsync()
     {
         // Clean up: delete the test workspace if it was created.
-        await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
+        await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}").ConfigureAwait(true);
     }
 
     /// <summary>Test method.</summary>

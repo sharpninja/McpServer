@@ -104,7 +104,8 @@ public sealed class SqliteBoundedOpenFourteenthTests
     public async Task OpenAsyncNativeLockAtOpenTimesOutAndJoinsWorker()
     {
         var connectionString = SharedMemoryConnectionString();
-        await using var anchor = new SqliteConnection(connectionString);
+        var anchor = new SqliteConnection(connectionString);
+        await using var anchorDisposal = anchor.ConfigureAwait(true);
         await anchor.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         await using (var create = anchor.CreateCommand())
         {
@@ -113,7 +114,8 @@ public sealed class SqliteBoundedOpenFourteenthTests
                 .ConfigureAwait(true);
         }
 
-        await using var blocker = new SqliteConnection(connectionString);
+        var blocker = new SqliteConnection(connectionString);
+        await using var blockerDisposal = blocker.ConfigureAwait(true);
         await blocker.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         await using (var begin = blocker.CreateCommand())
         {
@@ -122,7 +124,8 @@ public sealed class SqliteBoundedOpenFourteenthTests
                 .ConfigureAwait(true);
         }
 
-        await using var candidate = new SqliteConnection(connectionString);
+        var candidate = new SqliteConnection(connectionString);
+        await using var candidateDisposal = candidate.ConfigureAwait(true);
         candidate.DefaultTimeout = 23;
         var stopwatch = Stopwatch.StartNew();
         try

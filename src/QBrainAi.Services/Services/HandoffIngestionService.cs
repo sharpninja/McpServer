@@ -883,7 +883,8 @@ public sealed class HandoffIngestionService : IHandoffIngestionService
         if (todo is null)
             return false;
 
-        await using var fresh = CreateFreshContext();
+        var fresh = CreateFreshContext();
+        await using var freshDisposal = fresh.ConfigureAwait(false);
         fresh.OverrideWorkspaceId(entity.WorkspaceId);
         var updated = await fresh.HandoffIngestionRuns
             .Where(run => run.RunId == entity.RunId
@@ -993,7 +994,8 @@ public sealed class HandoffIngestionService : IHandoffIngestionService
             {
                 await WaitForHeartbeatIntervalAsync(cancellationToken).ConfigureAwait(false);
                 var now = _time.GetUtcNow();
-                await using var db = CreateFreshContext();
+                var db = CreateFreshContext();
+                await using var dbDisposal = db.ConfigureAwait(false);
                 var renewed = await db.HandoffIngestionRuns
                     .Where(run => run.RunId == entity.RunId
                         && run.ProcessingOwner == _instanceId

@@ -29,13 +29,13 @@ public sealed class TodoClient : McpClientBase
         string? id = null, bool? done = null, CancellationToken cancellationToken = default)
     {
         var qs = BuildQueryString(keyword, priority, section, id, done);
-        return await GetAsync<TodoQueryResult>($"qbrainai/todo{qs}", cancellationToken);
+        return await GetAsync<TodoQueryResult>($"qbrainai/todo{qs}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get a single TODO item by ID.</summary>
     public async Task<TodoFlatItem> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TodoFlatItem>($"qbrainai/todo/{Encode(id)}", cancellationToken);
+        return await GetAsync<TodoFlatItem>($"qbrainai/todo/{Encode(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get append-only audit history for a TODO item.</summary>
@@ -49,55 +49,55 @@ public sealed class TodoClient : McpClientBase
         if (limit.HasValue) parts.Add($"limit={limit.Value}");
         if (offset.HasValue) parts.Add($"offset={offset.Value}");
         var suffix = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
-        return await GetAsync<TodoAuditQueryResult>($"qbrainai/todo/{Encode(id)}/audit{suffix}", cancellationToken);
+        return await GetAsync<TodoAuditQueryResult>($"qbrainai/todo/{Encode(id)}/audit{suffix}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get projection status for database-authoritative TODO storage.</summary>
     public async Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TodoProjectionStatusResult>("qbrainai/todo/projection/status", cancellationToken);
+        return await GetAsync<TodoProjectionStatusResult>("qbrainai/todo/projection/status", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Repair TODO.yaml projection from database-authoritative TODO storage.</summary>
     public async Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TodoProjectionRepairResult>("qbrainai/todo/projection/repair", null, cancellationToken);
+        return await PostAsync<TodoProjectionRepairResult>("qbrainai/todo/projection/repair", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Create a new TODO item.</summary>
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TodoMutationResult>("qbrainai/todo", request, cancellationToken);
+        return await PostAsync<TodoMutationResult>("qbrainai/todo", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Update an existing TODO item.</summary>
     public async Task<TodoMutationResult> UpdateAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<TodoMutationResult>($"qbrainai/todo/{Encode(id)}", request, cancellationToken);
+        return await PutAsync<TodoMutationResult>($"qbrainai/todo/{Encode(id)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Close a TODO item by ID with a server-owned completion timestamp.</summary>
     public async Task<TodoMutationResult> CloseAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TodoMutationResult>($"qbrainai/todo/{Encode(id)}/close", null, cancellationToken);
+        return await PostAsync<TodoMutationResult>($"qbrainai/todo/{Encode(id)}/close", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Delete a TODO item.</summary>
     public async Task<TodoMutationResult> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<TodoMutationResult>($"qbrainai/todo/{Encode(id)}", cancellationToken);
+        return await DeleteAsync<TodoMutationResult>($"qbrainai/todo/{Encode(id)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Move a TODO item to another registered workspace.</summary>
     public async Task<TodoMutationResult> MoveAsync(string id, TodoMoveRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TodoMutationResult>($"qbrainai/todo/{Encode(id)}/move", request, cancellationToken);
+        return await PostAsync<TodoMutationResult>($"qbrainai/todo/{Encode(id)}/move", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Analyze requirements for a TODO item via Copilot.</summary>
     public async Task<RequirementsAnalysisResult> AnalyzeRequirementsAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RequirementsAnalysisResult>($"qbrainai/todo/{Encode(id)}/requirements", null, cancellationToken);
+        return await PostAsync<RequirementsAnalysisResult>($"qbrainai/todo/{Encode(id)}/requirements", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Create a bounded Byrd iteration phase.</summary>
@@ -105,7 +105,7 @@ public sealed class TodoClient : McpClientBase
         CreateIterationPhaseRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PostAsync<CreateIterationPhaseResult>("qbrainai/todo-execution/phases", request, cancellationToken);
+        return await PostAsync<CreateIterationPhaseResult>("qbrainai/todo-execution/phases", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Create execution TODOs from an approved plan.</summary>
@@ -114,19 +114,19 @@ public sealed class TodoClient : McpClientBase
         CreateTodosFromPlanRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PostAsync<CreateTodosFromPlanResult>($"qbrainai/todo-execution/phases/{Encode(phaseId)}/todos", request, cancellationToken);
+        return await PostAsync<CreateTodosFromPlanResult>($"qbrainai/todo-execution/phases/{Encode(phaseId)}/todos", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Return the active Byrd execution TODO.</summary>
     public async Task<ActiveTodoResult> GetActiveTodoAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<ActiveTodoResult>("qbrainai/todo-execution/active", cancellationToken);
+        return await GetAsync<ActiveTodoResult>("qbrainai/todo-execution/active", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Return the next ready Byrd execution TODO.</summary>
     public async Task<ActiveTodoResult> GetNextReadyTodoAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<ActiveTodoResult>("qbrainai/todo-execution/next-ready", cancellationToken);
+        return await GetAsync<ActiveTodoResult>("qbrainai/todo-execution/next-ready", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Hydrate the bounded execution context for a Byrd TODO.</summary>
@@ -138,7 +138,7 @@ public sealed class TodoClient : McpClientBase
     {
         return await GetAsync<ActiveTodoContext>(
             $"qbrainai/todo-execution/todos/{Encode(todoId)}?requirementSnippetLimit={requirementSnippetLimit}&sessionTurnSummaryLimit={sessionTurnSummaryLimit}",
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Return the execution delta for a Byrd TODO since a checkpoint.</summary>
@@ -150,7 +150,7 @@ public sealed class TodoClient : McpClientBase
         var suffix = string.IsNullOrWhiteSpace(sinceCheckpointId)
             ? string.Empty
             : $"?sinceCheckpointId={Encode(sinceCheckpointId)}";
-        return await GetAsync<TodoDeltaContext>($"qbrainai/todo-execution/todos/{Encode(todoId)}/delta{suffix}", cancellationToken);
+        return await GetAsync<TodoDeltaContext>($"qbrainai/todo-execution/todos/{Encode(todoId)}/delta{suffix}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Store the test plan for a Byrd TODO.</summary>
@@ -159,7 +159,7 @@ public sealed class TodoClient : McpClientBase
         SetTodoTestPlanRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PutAsync<SetTodoTestPlanResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/test-plan", request, cancellationToken);
+        return await PutAsync<SetTodoTestPlanResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/test-plan", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Move a Byrd TODO through its execution states.</summary>
@@ -168,7 +168,7 @@ public sealed class TodoClient : McpClientBase
         UpdateTodoStatusRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PostAsync<UpdateTodoStatusResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/status", request, cancellationToken);
+        return await PostAsync<UpdateTodoStatusResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/status", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Append a checkpoint to a Byrd TODO.</summary>
@@ -177,7 +177,7 @@ public sealed class TodoClient : McpClientBase
         AppendTodoCheckpointRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AppendTodoCheckpointResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/checkpoints", request, cancellationToken);
+        return await PostAsync<AppendTodoCheckpointResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/checkpoints", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Record a validation result for a Byrd TODO.</summary>
@@ -186,7 +186,7 @@ public sealed class TodoClient : McpClientBase
         RecordTodoValidationResultRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RecordTodoValidationResultResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/validation", request, cancellationToken);
+        return await PostAsync<RecordTodoValidationResultResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/validation", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Link historical session turns to a Byrd TODO.</summary>
@@ -195,7 +195,7 @@ public sealed class TodoClient : McpClientBase
         LinkTodoToSessionTurnsRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PostAsync<LinkTodoToSessionTurnsResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/session-turns", request, cancellationToken);
+        return await PostAsync<LinkTodoToSessionTurnsResult>($"qbrainai/todo-execution/todos/{Encode(todoId)}/session-turns", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Perform a safe Android ADB step.</summary>
@@ -203,7 +203,7 @@ public sealed class TodoClient : McpClientBase
         AdbStepRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AdbStepResult>("qbrainai/todo-execution/adb/step", request, cancellationToken);
+        return await PostAsync<AdbStepResult>("qbrainai/todo-execution/adb/step", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -278,7 +278,7 @@ public sealed class TodoClient : McpClientBase
         return await PostAsync<AgentPoolEnqueueResult>(
             $"qbrainai/todo/{Encode(id)}/prompt/status/queue",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -296,7 +296,7 @@ public sealed class TodoClient : McpClientBase
         return await PostAsync<AgentPoolEnqueueResult>(
             $"qbrainai/todo/{Encode(id)}/prompt/implement/queue",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -314,7 +314,7 @@ public sealed class TodoClient : McpClientBase
         return await PostAsync<AgentPoolEnqueueResult>(
             $"qbrainai/todo/{Encode(id)}/prompt/plan/queue",
             request,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     private static string Encode(string value) => System.Uri.EscapeDataString(value);

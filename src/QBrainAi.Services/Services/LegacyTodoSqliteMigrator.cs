@@ -95,7 +95,8 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
             return MigrationOutcome.SkippedMarkerPresent;
         }
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        var scope = _scopeFactory.CreateAsyncScope();
+        await using var scopeDisposal = scope.ConfigureAwait(false);
         var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
 
         if (await ctx.TodoItems.AnyAsync(cancellationToken).ConfigureAwait(false))
@@ -162,7 +163,8 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
             Cache = SqliteCacheMode.Shared,
         }.ToString();
 
-        await using var connection = new SqliteConnection(connectionString);
+        var connection = new SqliteConnection(connectionString);
+        await using var connectionDisposal = connection.ConfigureAwait(false);
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
         var items = await ReadItemsAsync(connection, cancellationToken).ConfigureAwait(false);
@@ -186,7 +188,8 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
                    COALESCE(item_order,0) AS item_order,
                    phase_label
             FROM todo_items;";
-        await using var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             var id = reader.GetString(0);
@@ -332,7 +335,8 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
                    snapshot_json, previous_snapshot_json, source
             FROM todo_item_history
             ORDER BY todo_id, version;";
-        await using var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             result.Add(new TodoAuditHistoryEntity
@@ -358,7 +362,8 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
                    last_imported_from_yaml_utc, last_projected_to_yaml_utc,
                    last_projection_failure_utc, last_projection_failure_message
             FROM todo_document_metadata WHERE singleton_id = 1;";
-        await using var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             return null;
 

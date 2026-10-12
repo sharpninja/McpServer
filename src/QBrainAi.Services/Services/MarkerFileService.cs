@@ -218,16 +218,20 @@ public static class MarkerFileService
             {
                 try
                 {
-                    await using (var stream = new FileStream(
+                    var stream = new FileStream(
                         markerPath,
                         FileMode.Create,
                         FileAccess.Write,
                         FileShare.ReadWrite | FileShare.Delete,
                         bufferSize: 4096,
-                        options: FileOptions.Asynchronous | FileOptions.SequentialScan))
-                    await using (var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)))
+                        options: FileOptions.Asynchronous | FileOptions.SequentialScan);
+                    await using (stream.ConfigureAwait(false))
                     {
-                        await writer.WriteAsync(yaml.AsMemory(), ct).ConfigureAwait(false);
+                        var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+                        await using (writer.ConfigureAwait(false))
+                        {
+                            await writer.WriteAsync(yaml.AsMemory(), ct).ConfigureAwait(false);
+                        }
                     }
 
                     logger?.LogInformation("Wrote MCP marker file: {Path}", markerPath);

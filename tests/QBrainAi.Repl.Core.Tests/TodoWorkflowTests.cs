@@ -191,7 +191,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("Storage connection failed"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.QueryAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("Storage", exception.Message);
     }
@@ -223,7 +223,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         var exception = await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("Invalid TODO ID format", exception.Message);
     }
@@ -235,7 +235,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: mcp-api-001"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetAsync("mcp-api-001", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetAsync("mcp-api-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -245,7 +245,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: MCP-API-1"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetAsync("MCP-API-1", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetAsync("MCP-API-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -255,13 +255,13 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("TODO ID cannot be null or empty"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.GetAsync("", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("TODO ID cannot be null or empty"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetAsync("", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetAsync("", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -271,7 +271,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.GetAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("not found", exception.Message);
     }
@@ -332,7 +332,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.SelectAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.SelectAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -342,7 +342,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.SelectAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.SelectAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -413,7 +413,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentNullException("request"));
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _workflow.CreateAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -425,7 +425,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -437,7 +437,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item with ID MCP-API-001 already exists"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -469,7 +469,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Title is required"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -527,7 +527,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("No TODO is currently selected"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateAsync(request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -539,7 +539,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.UpdateAsync("invalid-id", request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateAsync("invalid-id", request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -549,7 +549,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentNullException("request"));
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _workflow.UpdateAsync("MCP-API-001", null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateAsync("MCP-API-001", null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -561,7 +561,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateAsync("MCP-NONEXISTENT-999", request, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.UpdateAsync("MCP-NONEXISTENT-999", request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -622,7 +622,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("No TODO is currently selected"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.DeleteAsync(cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.DeleteAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -632,7 +632,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.DeleteAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.DeleteAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -642,7 +642,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.DeleteAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.DeleteAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -652,13 +652,13 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("TODO ID cannot be null or empty"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.DeleteAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.DeleteAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         _workflow.DeleteAsync("", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("TODO ID cannot be null or empty"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.DeleteAsync("", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.DeleteAsync("", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     #endregion
@@ -695,7 +695,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.AnalyzeRequirementsAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.AnalyzeRequirementsAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -705,7 +705,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.AnalyzeRequirementsAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.AnalyzeRequirementsAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -812,15 +812,15 @@ public class TodoWorkflowTests
             .Returns(async callInfo =>
             {
                 var callback = callInfo.ArgAt<Func<IStreamingEvent, Task>>(1);
-                await callback(CreateStreamingEvent("status.progress", 1));
-                await callback(CreateStreamingEvent("status.progress", 2));
-                await callback(CreateStreamingEvent("status.complete", 3));
+                await callback(CreateStreamingEvent("status.progress", 1)).ConfigureAwait(true);
+                await callback(CreateStreamingEvent("status.progress", 2)).ConfigureAwait(true);
+                await callback(CreateStreamingEvent("status.complete", 3)).ConfigureAwait(true);
             });
 
         await _workflow.StreamStatusAsync("MCP-API-001", async evt =>
         {
             events.Add(evt);
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(3, events.Count);
@@ -837,7 +837,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentNullException("eventCallback"));
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _workflow.StreamStatusAsync("MCP-API-001", null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamStatusAsync("MCP-API-001", null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -847,7 +847,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentNullException("eventCallback"));
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _workflow.StreamPlanAsync("MCP-API-001", null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamPlanAsync("MCP-API-001", null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -857,7 +857,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentNullException("eventCallback"));
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _workflow.StreamImplementAsync("MCP-API-001", null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamImplementAsync("MCP-API-001", null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -867,7 +867,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.StreamStatusAsync("invalid-id", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamStatusAsync("invalid-id", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -877,7 +877,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.StreamPlanAsync("invalid-id", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamPlanAsync("invalid-id", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -887,7 +887,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.StreamImplementAsync("invalid-id", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamImplementAsync("invalid-id", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -900,7 +900,7 @@ public class TodoWorkflowTests
             .Throws(new OperationCanceledException());
 
         await Assert.ThrowsAsync<OperationCanceledException>(
-            async () => await _workflow.StreamStatusAsync("MCP-API-001", evt => Task.CompletedTask, cts.Token));
+            async () => await _workflow.StreamStatusAsync("MCP-API-001", evt => Task.CompletedTask, cts.Token).ConfigureAwait(true));
     }
 
     [Fact]
@@ -913,7 +913,7 @@ public class TodoWorkflowTests
             .Throws(new OperationCanceledException());
 
         await Assert.ThrowsAsync<OperationCanceledException>(
-            async () => await _workflow.StreamPlanAsync("MCP-API-001", evt => Task.CompletedTask, cts.Token));
+            async () => await _workflow.StreamPlanAsync("MCP-API-001", evt => Task.CompletedTask, cts.Token).ConfigureAwait(true));
     }
 
     [Fact]
@@ -926,7 +926,7 @@ public class TodoWorkflowTests
             .Throws(new OperationCanceledException());
 
         await Assert.ThrowsAsync<OperationCanceledException>(
-            async () => await _workflow.StreamImplementAsync("MCP-API-001", evt => Task.CompletedTask, cts.Token));
+            async () => await _workflow.StreamImplementAsync("MCP-API-001", evt => Task.CompletedTask, cts.Token).ConfigureAwait(true));
     }
 
     [Fact]
@@ -936,7 +936,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.StreamStatusAsync("MCP-NONEXISTENT-999", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamStatusAsync("MCP-NONEXISTENT-999", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -946,7 +946,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.StreamPlanAsync("MCP-NONEXISTENT-999", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamPlanAsync("MCP-NONEXISTENT-999", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -956,7 +956,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.StreamImplementAsync("MCP-NONEXISTENT-999", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.StreamImplementAsync("MCP-NONEXISTENT-999", evt => Task.CompletedTask, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -968,14 +968,14 @@ public class TodoWorkflowTests
             .Returns(async callInfo =>
             {
                 var callback = callInfo.ArgAt<Func<IStreamingEvent, Task>>(1);
-                await callback(CreateStreamingEvent("plan.progress", 1));
-                await callback(CreateStreamingEvent("plan.error", 2, new { errorMessage = "Planning failed" }));
+                await callback(CreateStreamingEvent("plan.progress", 1)).ConfigureAwait(true);
+                await callback(CreateStreamingEvent("plan.error", 2, new { errorMessage = "Planning failed" })).ConfigureAwait(true);
             });
 
         await _workflow.StreamPlanAsync("MCP-API-001", async evt =>
         {
             events.Add(evt);
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, events.Count);
@@ -1042,7 +1042,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetProjectionStatusAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetProjectionStatusAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -1052,7 +1052,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.GetProjectionStatusAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetProjectionStatusAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -1073,7 +1073,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException("Invalid TODO ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.RepairProjectionAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.RepairProjectionAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -1083,7 +1083,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.RepairProjectionAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.RepairProjectionAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -1284,7 +1284,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentException($"Invalid TODO ID format: {invalidId}"));
 
         var exception = await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetAsync(invalidId, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetAsync(invalidId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("Invalid TODO ID", exception.Message);
     }
@@ -1296,7 +1296,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.GetAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.GetAsync("MCP-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("not found", exception.Message);
     }
@@ -1308,7 +1308,7 @@ public class TodoWorkflowTests
             .Throws(new InvalidOperationException("Storage connection failed"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.QueryAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Contains("Storage", exception.Message);
     }
@@ -1320,7 +1320,7 @@ public class TodoWorkflowTests
             .Throws(new ArgumentNullException("request", "Request cannot be null"));
 
         var exception = await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _workflow.CreateAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
+            async () => await _workflow.CreateAsync(null!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Equal("request", exception.ParamName);
     }

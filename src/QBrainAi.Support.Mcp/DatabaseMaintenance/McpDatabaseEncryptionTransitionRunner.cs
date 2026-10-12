@@ -63,7 +63,8 @@ internal static class McpDatabaseEncryptionTransitionRunner
             "Validate live encryption state",
             "Reuse the same provider-aware validation path that normal startup uses so maintenance verification and runtime enforcement stay aligned.");
 
-        await using var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);
+        var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);
+        await using var dbContextDisposal = dbContext.ConfigureAwait(false);
         await McpDatabaseEncryptionCoordinator.ValidateAsync(dbContext, runtimeOptions, cancellationToken).ConfigureAwait(false);
         step.Status = "completed";
         report.Summary = "Live encryption state matches the configured runtime intent.";
@@ -243,8 +244,10 @@ internal static class McpDatabaseEncryptionTransitionRunner
 
         await RunProcessAsync(dumpToolPath, ["-Fc", "-f", Path.GetFullPath(options.BackupPath!), "-d", runtimeOptions.ProviderOptions.ConnectionString], null, cancellationToken).ConfigureAwait(false);
 
-        await using var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);
-        await using var connection = dbContext.Database.GetDbConnection();
+        var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);
+        await using var dbContextDisposal = dbContext.ConfigureAwait(false);
+        var connection = dbContext.Database.GetDbConnection();
+        await using var connectionDisposal = connection.ConfigureAwait(false);
         if (connection.State != ConnectionState.Open)
         {
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -319,8 +322,10 @@ internal static class McpDatabaseEncryptionTransitionRunner
             return;
         }
 
-        await using var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);
-        await using var connection = dbContext.Database.GetDbConnection();
+        var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);
+        await using var dbContextDisposal = dbContext.ConfigureAwait(false);
+        var connection = dbContext.Database.GetDbConnection();
+        await using var connectionDisposal = connection.ConfigureAwait(false);
         if (connection.State != ConnectionState.Open)
         {
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -382,7 +387,8 @@ internal static class McpDatabaseEncryptionTransitionRunner
                 runtimeOptions.EncryptionOptions.SqlServerCertificateName,
                 runtimeOptions.EncryptionOptions.SqlServerDatabaseEncryptionKeyName));
 
-        await using var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);
+        var dbContext = CreateDbContext(runtimeOptions.ProviderOptions);
+        await using var dbContextDisposal = dbContext.ConfigureAwait(false);
         await McpDatabaseEncryptionCoordinator.ValidateAsync(dbContext, validationOptions, cancellationToken).ConfigureAwait(false);
     }
 
@@ -493,10 +499,12 @@ internal static class McpDatabaseEncryptionTransitionRunner
             ORDER BY tablename;
             """;
 
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = sql;
         var tables = new List<(string Schema, string Table, bool IsEncrypted)>();
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using var readerDisposal = reader.ConfigureAwait(false);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             tables.Add((reader.GetString(0), reader.GetString(1), reader.GetBoolean(2)));
@@ -510,7 +518,8 @@ internal static class McpDatabaseEncryptionTransitionRunner
         string sql,
         CancellationToken cancellationToken)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = sql;
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -520,7 +529,8 @@ internal static class McpDatabaseEncryptionTransitionRunner
         string sql,
         CancellationToken cancellationToken)
     {
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+        await using var commandDisposal = command.ConfigureAwait(false);
         command.CommandText = sql;
         var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
         if (result is null or DBNull)

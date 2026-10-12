@@ -97,7 +97,8 @@ public sealed class TranscriptSessionLogPersisterTests
         var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<QBrainAi.Support.Mcp.Storage.McpDbContext>()
             .UseInMemoryDatabase("import-omit-" + Guid.NewGuid().ToString("N"))
             .Options;
-        await using var db = new QBrainAi.Support.Mcp.Storage.McpDbContext(options);
+        var db = new QBrainAi.Support.Mcp.Storage.McpDbContext(options);
+        await using var dbDisposal = db.ConfigureAwait(true);
         db.Database.EnsureCreated();
         var workspace = Path.Combine(Path.GetTempPath(), "import-omit-" + Guid.NewGuid().ToString("N"));
         db.OverrideWorkspaceId(workspace);

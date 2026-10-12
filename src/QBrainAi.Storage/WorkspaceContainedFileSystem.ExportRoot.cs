@@ -213,13 +213,14 @@ public static partial class WorkspaceContainedFileSystem
             if (OperatingSystem.IsLinux())
             {
                 _ = SetFileReadOnlyIfExists(relative, readOnly: false);
-                await using var target = OpenLinuxContainedFileRooted(
+                var target = OpenLinuxContainedFileRooted(
                     _rootHandle,
                     _linuxRootIdentity,
                     relative,
                     ResolvePath(relative),
                     write: true,
                     asyncHandle: false);
+                await using var targetDisposal = target.ConfigureAwait(false);
                 target.SetLength(0);
                 var bytes = encoding.GetBytes(content);
                 await target.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
@@ -230,7 +231,8 @@ public static partial class WorkspaceContainedFileSystem
             }
 
             _ = SetFileReadOnlyIfExists(relative, readOnly: false);
-            await using var windowsTarget = OpenFileForWrite(relative);
+            var windowsTarget = OpenFileForWrite(relative);
+            await using var windowsTargetDisposal = windowsTarget.ConfigureAwait(false);
             windowsTarget.SetLength(0);
             var windowsBytes = encoding.GetBytes(content);
             await windowsTarget.WriteAsync(windowsBytes, cancellationToken).ConfigureAwait(false);
@@ -342,11 +344,12 @@ public static partial class WorkspaceContainedFileSystem
             TimeSpan timeout,
             CancellationToken cancellationToken = default)
         {
-            await using var source = await OpenFileForReadBoundedAsync(
+            var source = await OpenFileForReadBoundedAsync(
                     relativePath,
                     timeout,
                     cancellationToken)
                 .ConfigureAwait(false);
+            await using var sourceDisposal = source.ConfigureAwait(false);
             ushort? unixMode = null;
             if (OperatingSystem.IsLinux())
                 unixMode = FStatUnix(source.SafeFileHandle.DangerousGetHandle().ToInt32()).Mode;
@@ -399,7 +402,8 @@ public static partial class WorkspaceContainedFileSystem
                 EnsureDirectory(parent);
             _ = SetFileReadOnlyIfExists(relative, readOnly: false);
 
-            await using var target = OpenFileForWrite(relative);
+            var target = OpenFileForWrite(relative);
+            await using var targetDisposal = target.ConfigureAwait(false);
             target.SetLength(0);
             await content.CopyToAsync(target, 64 * 1024, cancellationToken).ConfigureAwait(false);
             await target.FlushAsync(cancellationToken).ConfigureAwait(false);

@@ -59,21 +59,24 @@ internal static partial class RepositoryEvidenceTestSupport
             var errorPath = prefix + ".stderr";
             try
             {
-                await using var input = new FileStream(
+                var input = new FileStream(
                     inputPath,
                     FileMode.CreateNew,
                     FileAccess.ReadWrite,
                     FileShare.ReadWrite | FileShare.Delete);
-                await using var output = new FileStream(
+                await using var inputDisposal = input.ConfigureAwait(true);
+                var output = new FileStream(
                     outputPath,
                     FileMode.CreateNew,
                     FileAccess.ReadWrite,
                     FileShare.ReadWrite | FileShare.Delete);
-                await using var error = new FileStream(
+                await using var outputDisposal = output.ConfigureAwait(true);
+                var error = new FileStream(
                     errorPath,
                     FileMode.CreateNew,
                     FileAccess.ReadWrite,
                     FileShare.ReadWrite | FileShare.Delete);
+                await using var errorDisposal = error.ConfigureAwait(true);
                 if (standardInput is not null)
                 {
                     var inputBytes = Encoding.UTF8.GetBytes(standardInput);

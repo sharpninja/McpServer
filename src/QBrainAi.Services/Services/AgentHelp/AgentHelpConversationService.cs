@@ -631,7 +631,7 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
                 var strategy = _strategyResolver.Resolve(state.ExecutionStrategy);
                 var options = BuildAgentCliOptions(state);
                 var prompt = BuildHelperPrompt(state, userMessage);
-                await using var session = await strategy.CreateSessionAsync(
+                var session = await strategy.CreateSessionAsync(
                     new AgentExecutionSessionRequest(
                         prompt,
                         state.WorkspacePath,
@@ -639,6 +639,7 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
                         state.ExecutionStrategy,
                         options),
                     cancellationToken).ConfigureAwait(false);
+                await using var sessionDisposal = session.ConfigureAwait(false);
 
                 var result = await session.ReadInitialResponseAsync(cancellationToken).ConfigureAwait(false);
                 if (result.State == AgentCliResultState.Success && !string.IsNullOrWhiteSpace(result.Body))

@@ -1840,37 +1840,37 @@ public class YamlPipeExecutionTests
                 await requirements.Received(1).CreateFrBatchAsync(
                     Arg.Is<CreateFrBatchRequest>(request =>
                         MatchesTypedBatchCriteria(request, "FR-MCP-REQAC-999-AC001")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case RequirementsCommandShapes.UpdateFrBatchMethod:
                 await requirements.Received(1).UpdateFrBatchAsync(
                     Arg.Is<UpdateFrBatchRequest>(request =>
                         MatchesTypedBatchCriteria(request, "FR-MCP-REQAC-999-AC002")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case RequirementsCommandShapes.CreateTrBatchMethod:
                 await requirements.Received(1).CreateTrBatchAsync(
                     Arg.Is<CreateTrBatchRequest>(request =>
                         MatchesTypedBatchCriteria(request, "TR-MCP-REQAC-999-AC001")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case RequirementsCommandShapes.UpdateTrBatchMethod:
                 await requirements.Received(1).UpdateTrBatchAsync(
                     Arg.Is<UpdateTrBatchRequest>(request =>
                         MatchesTypedBatchCriteria(request, "TR-MCP-REQAC-999-AC002")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case RequirementsCommandShapes.CreateTestBatchMethod:
                 await requirements.Received(1).CreateTestBatchAsync(
                     Arg.Is<CreateTestBatchRequest>(request =>
                         MatchesTypedBatchCriteria(request, "TEST-MCP-REQAC-999-AC001")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             case RequirementsCommandShapes.UpdateTestBatchMethod:
                 await requirements.Received(1).UpdateTestBatchAsync(
                     Arg.Is<UpdateTestBatchRequest>(request =>
                         MatchesTypedBatchCriteria(request, "TEST-MCP-REQAC-999-AC002")),
-                    Arg.Any<CancellationToken>());
+                    Arg.Any<CancellationToken>()).ConfigureAwait(true);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(method), method, "Unsupported typed batch method.");

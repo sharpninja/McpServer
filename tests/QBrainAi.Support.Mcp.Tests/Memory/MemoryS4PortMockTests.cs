@@ -138,7 +138,7 @@ public sealed class MemoryS4PortMockTests
     {
         var port = Substitute.For<IMemoryS4Port>();
         // Never called until explicit PromoteAsync — contract is that callers must invoke the port.
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
         Assert.Empty(port.ReceivedCalls());
     }
 }

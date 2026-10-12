@@ -14,7 +14,8 @@ public sealed class PluginIntegrationServerFixtureTests
     [Fact(Timeout = 120000)]
     public async Task ServerFixtureSelectsFreePort()
     {
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         Assert.InRange(fixture.Port, 1024, 65535);
         Assert.NotEqual(7147, fixture.Port);
@@ -24,7 +25,8 @@ public sealed class PluginIntegrationServerFixtureTests
     [Fact(Timeout = 120000)]
     public async Task ServerFixtureCreatesIsolatedTempWorkspaceAndDatabase()
     {
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         Assert.True(Directory.Exists(fixture.WorkspacePath));
         Assert.True(File.Exists(fixture.DatabasePath) || Directory.Exists(Path.GetDirectoryName(fixture.DatabasePath)));
@@ -36,7 +38,8 @@ public sealed class PluginIntegrationServerFixtureTests
     [Fact(Timeout = 30000)]
     public async Task ServerFixtureStartupTimeout()
     {
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
         try
         {
@@ -54,7 +57,8 @@ public sealed class PluginIntegrationServerFixtureTests
     [Fact(Timeout = 120000)]
     public async Task ServerFixtureCreatesMarker()
     {
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         Assert.True(File.Exists(fixture.MarkerPath));
         Assert.Contains("AGENTS-README-FIRST.yaml", fixture.MarkerPath, StringComparison.OrdinalIgnoreCase);
@@ -64,7 +68,8 @@ public sealed class PluginIntegrationServerFixtureTests
     [Fact(Timeout = 120000)]
     public async Task ServerFixtureSignatureAndNonceTrust()
     {
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         Assert.True(File.Exists(fixture.MarkerPath));
         var marker = await File.ReadAllTextAsync(fixture.MarkerPath, TestContext.Current.CancellationToken);
@@ -91,7 +96,8 @@ public sealed class PluginIntegrationServerFixtureTests
     [Fact(Timeout = 120000)]
     public async Task ServerFixtureHealthReadyExposesTrustedMarkerAndClient()
     {
-        await using var fixture = new PluginIntegrationServerFixture();
+        var fixture = new PluginIntegrationServerFixture();
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         await fixture.StartAsync(TestContext.Current.CancellationToken);
         Assert.True(File.Exists(fixture.MarkerPath));
         var marker = await File.ReadAllTextAsync(fixture.MarkerPath, TestContext.Current.CancellationToken);

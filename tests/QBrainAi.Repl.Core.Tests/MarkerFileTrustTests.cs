@@ -34,7 +34,7 @@ public class MarkerFileTrustTests
             .Returns<IMarkerFileData>(x => throw new FileNotFoundException("Marker file not found"));
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await reader.ReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await reader.ReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -47,7 +47,7 @@ public class MarkerFileTrustTests
             .Returns<IMarkerFileData>(x => throw new FormatException("Invalid YAML format"));
 
         await Assert.ThrowsAsync<FormatException>(
-            async () => await reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -60,7 +60,7 @@ public class MarkerFileTrustTests
             .Returns<IMarkerFileData>(x => throw new FormatException("Missing required field: serverUrl"));
 
         await Assert.ThrowsAsync<FormatException>(
-            async () => await reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
+            async () => await reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)
         );
     }
 
@@ -180,7 +180,7 @@ public class MarkerFileTrustTests
         {
             callbackInvoked = true;
             Assert.Equal("new-rotated-key", data.ApiKey);
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(true);
         };
 
         reader.WatchAsync("/home/user/project", callback, cancellationToken: TestContext.Current.CancellationToken)
@@ -207,7 +207,7 @@ public class MarkerFileTrustTests
             .Returns<Task>(x => throw new TaskCanceledException());
 
         await Assert.ThrowsAsync<TaskCanceledException>(
-            async () => await reader.WatchAsync("/home/user/project", _ => Task.CompletedTask, cts.Token)
+            async () => await reader.WatchAsync("/home/user/project", _ => Task.CompletedTask, cts.Token).ConfigureAwait(true)
         );
     }
 
@@ -227,7 +227,7 @@ public class MarkerFileTrustTests
         Assert.Equal("/home/user/project", markerData.WorkspaceId);
         Assert.NotEqual(default(DateTimeOffset), markerData.LastModified);
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(true);
     }
 
     [Fact]

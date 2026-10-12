@@ -80,7 +80,7 @@ internal sealed class ConfiguredTriageResearchRunner(
         }
 
         var strategy = strategyResolver.Resolve(tier.ExecutionStrategy);
-        await using var session = await strategy.CreateSessionAsync(
+        var session = await strategy.CreateSessionAsync(
             new AgentExecutionSessionRequest(
                 request.Prompt,
                 request.WorkspacePath,
@@ -88,6 +88,7 @@ internal sealed class ConfiguredTriageResearchRunner(
                 tier.ExecutionStrategy,
                 clientOptions),
             timeout.Token).ConfigureAwait(false);
+        await using var sessionDisposal = session.ConfigureAwait(false);
 
         var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(false);
         await session.EndAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);

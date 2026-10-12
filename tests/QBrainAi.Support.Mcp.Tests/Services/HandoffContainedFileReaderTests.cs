@@ -78,7 +78,8 @@ public sealed class HandoffContainedFileReaderTests
         await File.WriteAllTextAsync(path, "handoff", TestContext.Current.CancellationToken);
         try
         {
-            await using var held = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous);
+            var held = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous);
+            await using var heldDisposal = held.ConfigureAwait(true);
             Assert.ThrowsAny<IOException>(() => new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite));
             Assert.ThrowsAny<IOException>(() => File.Delete(path));
         }

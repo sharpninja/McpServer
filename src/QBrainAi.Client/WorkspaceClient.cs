@@ -24,90 +24,90 @@ public sealed class WorkspaceClient : McpClientBase
     /// <summary>List all registered workspaces.</summary>
     public async Task<WorkspaceListResult> ListAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<WorkspaceListResult>("qbrainai/workspace", cancellationToken);
+        return await GetAsync<WorkspaceListResult>("qbrainai/workspace", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get a workspace by its Base64URL-encoded path key.</summary>
     public async Task<WorkspaceDto> GetAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<WorkspaceDto>($"qbrainai/workspace/{Uri.EscapeDataString(key)}", cancellationToken);
+        return await GetAsync<WorkspaceDto>($"qbrainai/workspace/{Uri.EscapeDataString(key)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Register a new workspace.</summary>
     public async Task<WorkspaceMutationResult> CreateAsync(WorkspaceCreateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspaceMutationResult>("qbrainai/workspace", request, cancellationToken);
+        return await PostAsync<WorkspaceMutationResult>("qbrainai/workspace", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Update a workspace.</summary>
     public async Task<WorkspaceMutationResult> UpdateAsync(string key, WorkspaceUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<WorkspaceMutationResult>($"qbrainai/workspace/{Uri.EscapeDataString(key)}", request, cancellationToken);
+        return await PutAsync<WorkspaceMutationResult>($"qbrainai/workspace/{Uri.EscapeDataString(key)}", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Apply a natural-language workspace policy directive.</summary>
     public async Task<WorkspacePolicyApplyResult> ApplyPolicyAsync(WorkspacePolicyApplyRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspacePolicyApplyResult>("qbrainai/workspace/policy", request, cancellationToken);
+        return await PostAsync<WorkspacePolicyApplyResult>("qbrainai/workspace/policy", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Delete a workspace.</summary>
     public async Task<WorkspaceMutationResult> DeleteAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<WorkspaceMutationResult>($"qbrainai/workspace/{Uri.EscapeDataString(key)}", cancellationToken);
+        return await DeleteAsync<WorkspaceMutationResult>($"qbrainai/workspace/{Uri.EscapeDataString(key)}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Initialize workspace directory scaffold.</summary>
     public async Task<WorkspaceInitResult> InitAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspaceInitResult>($"qbrainai/workspace/{Uri.EscapeDataString(key)}/init", null, cancellationToken);
+        return await PostAsync<WorkspaceInitResult>($"qbrainai/workspace/{Uri.EscapeDataString(key)}/init", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Start a workspace Kestrel host.</summary>
     public async Task<WorkspaceProcessStatus> StartAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspaceProcessStatus>($"qbrainai/workspace/{Uri.EscapeDataString(key)}/start", null, cancellationToken);
+        return await PostAsync<WorkspaceProcessStatus>($"qbrainai/workspace/{Uri.EscapeDataString(key)}/start", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Stop a workspace Kestrel host.</summary>
     public async Task<WorkspaceProcessStatus> StopAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspaceProcessStatus>($"qbrainai/workspace/{Uri.EscapeDataString(key)}/stop", null, cancellationToken);
+        return await PostAsync<WorkspaceProcessStatus>($"qbrainai/workspace/{Uri.EscapeDataString(key)}/stop", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get workspace process status.</summary>
     public async Task<WorkspaceProcessStatus> GetStatusAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<WorkspaceProcessStatus>($"qbrainai/workspace/{Uri.EscapeDataString(key)}/status", cancellationToken);
+        return await GetAsync<WorkspaceProcessStatus>($"qbrainai/workspace/{Uri.EscapeDataString(key)}/status", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Get the global marker prompt template. Only available on the primary workspace.</summary>
     public async Task<GlobalPromptResult> GetGlobalPromptAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GlobalPromptResult>("qbrainai/workspace/prompt", cancellationToken);
+        return await GetAsync<GlobalPromptResult>("qbrainai/workspace/prompt", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Update the global marker prompt template. Only available on the primary workspace.</summary>
     public async Task<GlobalPromptResult> UpdateGlobalPromptAsync(GlobalPromptUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<GlobalPromptResult>("qbrainai/workspace/prompt", request, cancellationToken);
+        return await PutAsync<GlobalPromptResult>("qbrainai/workspace/prompt", request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Regenerates marker files for all currently running workspaces.</summary>
     public async Task<MarkerRegenerationResult> RegenerateMarkersAsync(CancellationToken cancellationToken = default)
     {
-        return await PostAsync<MarkerRegenerationResult>("qbrainai/workspace/markers/regenerate", null, cancellationToken);
+        return await PostAsync<MarkerRegenerationResult>("qbrainai/workspace/markers/regenerate", null, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Gets the current requirement scope layer for the active workspace.</summary>
     public async Task<WorkspaceCurrentRequirementLayer> GetCurrentRequirementLayerAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<WorkspaceCurrentRequirementLayer>("qbrainai/workspace/current-requirement-layer", cancellationToken);
+        return await GetAsync<WorkspaceCurrentRequirementLayer>("qbrainai/workspace/current-requirement-layer", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Sets the current requirement scope layer for the active workspace.</summary>
     public async Task<WorkspaceCurrentRequirementLayer> SetCurrentRequirementLayerAsync(WorkspaceCurrentRequirementLayerUpdate request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<WorkspaceCurrentRequirementLayer>("qbrainai/workspace/current-requirement-layer", request, cancellationToken);
+        return await PutAsync<WorkspaceCurrentRequirementLayer>("qbrainai/workspace/current-requirement-layer", request, cancellationToken).ConfigureAwait(false);
     }
 }

@@ -113,7 +113,8 @@ public sealed class BugTriage139EighteenthLinuxTests
                 readOnly: true,
                 cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        await using var originalBytes = new MemoryStream(Encoding.UTF8.GetBytes(originalContent), writable: false);
+        var originalBytes = new MemoryStream(Encoding.UTF8.GetBytes(originalContent), writable: false);
+        await using var originalBytesDisposal = originalBytes.ConfigureAwait(true);
         await exportRoot.RestoreFileAsync(
                 "rollback.md",
                 originalBytes,
@@ -168,7 +169,8 @@ public sealed class BugTriage139EighteenthLinuxTests
     public async Task EnumerateFilesBoundedAsyncDelayedFuseChildMountIsRejectedBeforeTraversal()
     {
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var stopwatch = Stopwatch.StartNew();
 
         var exception = await Assert.ThrowsAsync<NotSupportedException>(
@@ -196,7 +198,8 @@ public sealed class BugTriage139EighteenthLinuxTests
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var root = Path.Combine(fixture.RootPath, "pinned-root");
         var movedRoot = Path.Combine(fixture.RootPath, "moved-root");
         var ordinary = Path.Combine(root, "ordinary.md");
@@ -256,7 +259,8 @@ public sealed class BugTriage139EighteenthLinuxTests
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var roots = Enumerable.Range(0, 5)
             .Select(index => Path.Combine(fixture.RootPath, $"admission-root-{index}"))
             .ToArray();
@@ -366,7 +370,8 @@ public sealed class BugTriage139EighteenthLinuxTests
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var root = Path.Combine(fixture.RootPath, "pre-capture-root");
         var movedRoot = Path.Combine(fixture.RootPath, "pre-capture-root-retained");
         Directory.CreateDirectory(root);
@@ -458,7 +463,8 @@ public sealed class BugTriage139EighteenthLinuxTests
     {
         Assert.True(OperatingSystem.IsLinux());
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
-        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        await using var fixtureDisposal = fixture.ConfigureAwait(true);
         var root = Path.Combine(fixture.RootPath, "export-root");
         var movedRoot = Path.Combine(fixture.RootPath, "export-root-moved");
         Directory.CreateDirectory(root);
@@ -603,11 +609,12 @@ public sealed class BugTriage139EighteenthLinuxTests
                 Pooling = false,
             }.ToString());
 
-        await using var opened = await SqliteBoundedConnectionOpener.OpenAsync(
+        var opened = await SqliteBoundedConnectionOpener.OpenAsync(
                 caller,
                 TimeSpan.FromSeconds(3),
                 TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
+        await using var openedDisposal = opened.ConfigureAwait(true);
         await using var command = opened.CreateCommand();
         command.CommandText = "SELECT 1;";
         var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken)
