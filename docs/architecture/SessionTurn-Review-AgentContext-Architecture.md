@@ -74,7 +74,7 @@ flowchart LR
 - Authentication: `X-Api-Key` (or `api_key`) from the workspace marker. Plugins never call REST directly; they use the REPL wrapper.
 - Plugin scripting: PowerShell only (operator, 2026-10-11: "You should be designing all scripts and script tools around PowerShell and only PowerShell."). `plugins/core/lib-ps` is the one plugin core for all nine hosts; cline, cline-v2, and opencode keep only the adapter entry file their host API forces, which forwards each host hook invocation (`{ input, output }`) to `lib/plugin-hook.ps1 -HostEvent` and applies the returned `output`, forwards each tool call (`{ params, hostContext }`) to `lib/Invoke-McpPlugin.ps1 -InvocationFromStdin`, and registers the tools listed in `lib/tool-descriptors.json`; the host's own build compiles that one file into the git-ignored `dist/`; Pester is the only plugin test runner.
 - Routes: every REST route exists under `/qbrainai/...` with the legacy alias `/mcpserver/...`.
-- Errors: every REST error of a unit this plan adds or changes is the `ClassifiedError` problem+json body `{ "type", "title", "status", "detail", "code", "message", "retryable", "details" }` emitted through `McpErrorClassifier` (`SessionLogController.cs` and the agent-context controller); `code` carries the unit's error code (for example `review_status_conflict`, `agent_context_budget_exceeded`), the HTTP status is the one stated per unit (400 validation, 403 not allowed, 404 not found, 409 conflict or disabled, 422 semantic refusal), and MCP tools return `{ code, error, message, retryable, details }`. Existing routes whose behavior this plan does not change keep today's error bodies (for example the `{ error }` 400 of the dialog route and the "Invalid session identifier." problem of the open and title routes), stated per unit. The REPL error envelope is `type: error` with `code`, `message`, and `retryable`.
+- Errors: every REST error of a unit this plan adds or changes is the `ClassifiedError` problem+json body `{ "type", "title", "status", "detail", "code", "message", "retryable", "details" }` emitted through `McpErrorClassifier` (`SessionLogController.cs` and the agent-context controller); `code` carries the unit's error code (for example `review_status_conflict`, `agent_context_budget_exceeded`), the HTTP status is the one stated per unit (400 validation, 403 not allowed, 404 not found, 409 conflict or disabled, 422 semantic refusal), and MCP tools return `{ code, error, message, retryable, details }`. The completion gate is the one exception to the code rule: its `code` is `validation_error` and its message starts with the token `session_turn_completion_gate` followed by the missing items in the order requestClass, agentReview, hostileReview (FR-MCP-SESSIONCLASS-002-AC006); the diagrams name that refusal by its token. Existing routes whose behavior this plan does not change keep today's error bodies (for example the `{ error }` 400 of the dialog route and the "Invalid session identifier." problem of the open and title routes), stated per unit. The REPL error envelope is `type: error` with `code`, `message`, and `retryable`.
 - Identifiers: every identifier is human-readable and meaningful (operator, 2026-10-11: "Please use human-readable, meaningful identifiers."). Session ids `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>`; server-minted request ids `req-<yyyyMMddTHHmmssZ>-<8 hex>`; agent-context record keys derive from the turn and session they belong to (section 6.3): packages `pkg-<requestId>-<nn>`, responses `rsp-<requestId>-<nn>`, grades `grd-<responseId>-<kind>-<nn>`, relationships `rel-<type>-<yyyyMMddTHHmmssZ>-<nn>`, HV requests `hvr-<sessionId>-<yyyyMMddTHHmmssZ>`. Document labels use the command, query, process, and policy names.
 - Root ids: every record carries the root ids of its parents (workspace, MCP session, request, and for agent context the package and response).
 - Secrets: no API key, token, password, or credential is ever stored in a turn field, a context package, or a response; the session-log sanitizer and the agent-context secret filter redact on write and on every read surface.
@@ -115,9 +115,9 @@ Each unit of work is exactly one CQRS command or query with its handler (operato
 - Trigger: a user message arrives at a host arrival mechanism (prompt hook, arrival bridge, or host-native adapter). Only hooks and adapters call it; there is no MCP tool, and the plugin wrapper refuses a model-originated call with `mint_requires_host_ingress`.
 - Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/mint` (alias `/mcpserver/...`), client `MintTurnAsync`, REPL `workflow.sessionlog.mintTurn`.
 - Request `SessionLogMintTurnRequest`: `ingressNonce` (string, required: the host's per-message id or a SHA-256 of host event fields), `queryTitle`, `queryText`, `model`, `planFile` (value or the `None` sentinel), `todoId` (value or `None`).
-- Response `SessionLogMintTurnResult`: `requestId` (`req-<yyyyMMddTHHmmssZ>-<8 hex>`), `outcome` (`created` or `merged`), `storedStatus`.
-  - 201 `created`: a new in-progress turn.
-  - 200 `merged`: the same nonce was already minted in this MCP session; the same `requestId` is returned and a terminal turn is not reopened.
+- Response `SessionLogMintTurnResult`: `requestId` (`req-<yyyyMMddTHHmmssZ>-<8 hex>`), `outcome` (`created` or `merged`), and `storedStatus` on `merged` only (TR-MCP-SESSIONTURN-004 AC-005).
+  - 201 `{ requestId, outcome: "created" }`: a new in-progress turn.
+  - 200 `{ requestId, outcome: "merged", storedStatus }`: the same nonce was already minted in this MCP session; the same `requestId` is returned and a terminal turn is not reopened.
 - Errors: 400 `ingress_nonce_invalid` (missing or invalid nonce, TR-MCP-SESSIONTURN-004 AC-005), 400 `validation_error` (invalid `planFile` or `todoId`), 404 with detail code `session_not_open`, 500 with final detail code `mint_collision_exhausted` after six request-id collisions.
 
 ```mermaid
@@ -134,7 +134,7 @@ flowchart TD
     K --> G["Minter generates req-UTC-8hex"]
     G --> I["Insert in-progress turn with ingressNonce"]
     I --> R{"Insert result"}
-    R -->|success| C(["201 created: requestId, storedStatus in_progress"])
+    R -->|success| C(["201 created: requestId"])
     R -->|nonce unique index violated by a concurrent mint| X["Read the turn that holds the nonce"]
     X --> M
     R -->|requestId unique index violated| A{"attempt less than 6?"}
@@ -149,8 +149,8 @@ flowchart TD
 - Surfaces: `POST /qbrainai/sessionlog` (existing route), MCP `sessionlog_submit`, client `SubmitAsync`, REPL submit. This is the route every turn verb already uses: the plugin verbs `appendActions`, `appendDecisions`, `updateTurn`, `completeTurn`, and `failTurn` send the one bound turn in a session document (`Invoke-ReplPersistTurn`, `plugins/core/lib-ps/repl-invoke.ps1:1602-1736`, method `client.SessionLog.SubmitAsync`; process PersistTurnWriteWithReceipt), and so do the REPL workflow (`src/QBrainAi.Repl.Core/SessionLogWorkflow.cs`) and McpAgent (`src/QBrainAi.McpAgent/SessionLog/SessionLogWorkflow.cs`). Dialog and titles use their own routes (AppendTurnDialogCommand, SetTurnTitleCommand, SetSessionTitleCommand).
 - Request: the unified session-log document (`UnifiedSessionLogDto`) with its turns.
 - Response 201 `SessionLogSubmitResult`: existing fields plus `turns: [{ requestId, outcome, storedStatus, reason }]`, where `outcome` is `created`, `merged`, or `skipped_terminal`. MCP returns `{ success, id, turns }`. The status code stays 201.
-- Rules: an identical resubmit is `merged` with reason `no_change`; duplicate request ids in one submission apply last-wins with one outcome each; a write whose status would move a terminal turn (the stored status is `completed`, `failed`, or `canceled`, and the incoming status is supplied, differs, and is not terminal, or the write is a superseded hook persist; today's guard at `SessionLogService.cs:1611-1618`, which the seam `ISessionLogTurnUpsertGuard` replaces unchanged, TR-MCP-SESSIONTURN-004 AC-002) is `skipped_terminal` and changes nothing, while a write that omits the status merges additively even on a terminal turn (omitted-status enrichment, FR-MCP-SESSIONTURN-004-AC003); there is no `skipped_duplicate` outcome.
-- Errors: 400 `validation_error`; 400 `request_class_invalid`; 400 `session_turn_completion_gate` (from S10: a turn of the submission moves to `completed` or `failed` without meeting the gate; the whole submission is rejected atomically and the error names that `requestId` and its missing items).
+- Rules: an identical resubmit is `merged` with reason `no_change`; duplicate request ids in one submission apply last-wins with one outcome each; a write whose status would move a terminal turn (the stored status is terminal, that is `completed`, `failed`, `closed`, `canceled`, or `cancelled` (`IsTerminalTurnStatus`), the incoming status is supplied and differs from it, and either the incoming status is not terminal or the write is a superseded hook persist; today's guard at `SessionLogService.cs:1611-1618`, which the seam `ISessionLogTurnUpsertGuard` replaces unchanged, TR-MCP-SESSIONTURN-004 AC-002) is `skipped_terminal` and changes nothing, while a write that omits the status merges additively even on a terminal turn (omitted-status enrichment, FR-MCP-SESSIONTURN-004-AC003); there is no `skipped_duplicate` outcome.
+- Errors: 400 `validation_error`; 400 `request_class_invalid`; 400 `validation_error` with the token `session_turn_completion_gate` (from S10: one or more turns of the submission move to `completed` or `failed` without meeting the gate; every turn is evaluated first, then the whole submission is rejected atomically and the error names each failing `requestId` with its missing items, FR-MCP-SESSIONCLASS-002-AC005).
 
 ```mermaid
 flowchart TD
@@ -160,7 +160,7 @@ flowchart TD
     D --> L["For each turn in the submission"]
     L --> F{"Turn exists in store?"}
     F -->|no| CR["Insert turn: outcome created"]
-    F -->|yes| T{"Policy TerminalTurnOutcomeGuard: stored status terminal and incoming status supplied, different, and not terminal, or a superseded hook persist?"}
+    F -->|yes| T{"Policy TerminalTurnOutcomeGuard: stored status terminal, incoming status supplied and different, and either not terminal or a superseded hook persist?"}
     T -->|yes| SK["Leave stored turn unchanged: outcome skipped_terminal with storedStatus and reason"]
     T -->|no| Q{"Incoming equals stored?"}
     Q -->|yes| NC["outcome merged, reason no_change"]
@@ -174,160 +174,214 @@ flowchart TD
     RC -->|no| TRN{"Write moves the turn to completed or failed?"}
     TRN -->|yes| GT["Policy CompletionGate (from S10)"]
     GT --> GTR{"Gate met?"}
-    GTR -->|no| E4(["400 session_turn_completion_gate naming the requestId and its missing items: change tracker cleared, nothing saved"])
+    GTR -->|no| FL["Record this requestId and its missing items as a gate failure"]
+    FL --> NX
     GTR -->|yes| NX
     TRN -->|no| NX{"More turns?"}
     SK --> NX
     NC --> NX
     NX -->|yes| L
-    NX -->|no| SV["Save changes in one transaction"]
+    NX -->|no| AF{"Any gate failure recorded?"}
+    AF -->|yes| E4(["400 validation_error session_turn_completion_gate naming each failing requestId and its missing items: change tracker cleared, nothing saved"])
+    AF -->|no| SV["Save changes in one transaction"]
     SV --> R(["201 with turns outcome list"])
 ```
 
 #### UpsertSessionTurnCommand: append or merge one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-006, FR-MCP-SESSIONTURN-007]
 
-- Handler: `UpsertSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, SessionLogTurnUpsertRequest Request) : ICommand<SessionLogTurnWriteResult>` and `UpsertSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/UpsertSessionTurnCommand.cs`, delegating to `ISessionLogService.SubmitWithOutcomesAsync` for one turn.
-- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/turn` (alias `/mcpserver/...`), client `UpsertTurnAsync`, REPL `client.SessionLog.UpsertTurnAsync`, no dedicated MCP tool (MCP callers write turns through `sessionlog_submit`, SubmitSessionLogCommand, and `sessionlog_replace_turn`, ReplaceSessionTurnCommand). The plugin, REPL workflow, and McpAgent verbs do not use this route; they persist through SubmitSessionLogCommand.
-- Request `SessionLogTurnUpsertRequest`: the turn's `requestId` and the fields to add or merge (actions, dialog, `designDecisions`, `requirementsDiscovered`, `blockers`, title, `requestClass` from Phase B, status).
-- Response `SessionLogTurnWriteResult { requestId, outcome, storedStatus, reason }` with `outcome` in `created`, `merged`, `skipped_terminal`.
-- Errors: 400 `validation_error`; 400 `request_class_invalid` (policy RequestClassification); 400 `session_turn_completion_gate` when the write transitions the turn to `completed` or `failed` and the gate is unmet (policy CompletionGate, from S10); 404 `session_not_open`.
+The single-turn routes (this unit, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand) keep today's request bodies, response bodies, and errors (`SessionLogController.cs:191-220` and `:425-566`, `SessionLogService.cs:716-889`). They are the explicit route for deliberate status corrections (the comment on the submit guard, `SessionLogService.cs:1610`), so policy TerminalTurnOutcomeGuard does not apply to them and they report no per-turn outcome. This plan adds only the Phase B policies to them: RequestClassification when a write carries `requestClass` (S4), and CompletionGate when a write moves the turn into `completed` or `failed`, or a PUT carries a terminal status (S10, FR-MCP-SESSIONCLASS-002-AC003, AC004). Both refusals reach these routes through `McpErrorClassifier` (S5, TR-MCP-SESSIONCLASS-002 AC-003) as `ClassifiedError` bodies; every other error keeps today's body.
+
+- Handler: `UpsertSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, UnifiedRequestEntryDto Turn) : ICommand<long>` and `UpsertSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/UpsertSessionTurnCommand.cs`, delegating to `ISessionLogService.UpsertTurnAsync` (`SessionLogService.cs:716-806`), which returns the turn id; the controller composes today's body.
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/turn` (alias `/mcpserver/...`), client `UpsertTurnAsync(agent, sessionId, UnifiedRequestEntryDto)` returning `SessionLogTurnSubmitResult`, REPL `client.SessionLog.UpsertTurnAsync`; no MCP tool (MCP callers write turns through `sessionlog_submit`, SubmitSessionLogCommand). The plugin, REPL-workflow, and McpAgent verbs do not use this route; they persist through SubmitSessionLogCommand.
+- Request: `UnifiedRequestEntryDto` (the turn with its `requestId`; from Phase B also `requestClass`). A new turn is inserted with its turn context (planFile and todoId validated as for a new entry); an existing turn is merged additively (omitted fields never clobber stored values), whatever its status.
+- Response 201 `{ turnId, agent, sessionId, requestId }` (Location `/qbrainai/sessionlog/{agent}/{sessionId}`). A first insert that loses a unique-index race to a concurrent insert of the same requestId is retried once as an update of the winning row.
+- Errors: 400 problem "Invalid turn body." (no body); 400 problem "Invalid turn payload." (invalid session or request id, invalid planFile or todoId, a filesModified path or commit not attributed to the workspace (FR-MCP-SESSIONATTR-001), or the existing QBAgent-only terminal compliance check `ValidateTerminalTurnCompliance`); 404 `not_found` for a missing session (`ClassifiedError`); from Phase B, 400 `request_class_invalid` and the completion-gate refusal (400 `validation_error` with the token `session_turn_completion_gate`), nothing saved.
 
 ```mermaid
 flowchart TD
-    S(["UpsertSessionTurnCommand dispatched"]) --> V{"Request valid?"}
-    V -->|no| E1(["400 validation_error"])
-    V -->|yes| O{"MCP session open?"}
-    O -->|no| E2(["404 session_not_open"])
-    O -->|yes| G["Policy TerminalTurnOutcomeGuard: outcome guard for the stored turn"]
-    G --> GO{"Guard result"}
-    GO -->|skipped_terminal| SK(["Result skipped_terminal with storedStatus: nothing saved"])
-    GO -->|merged no_change| NC(["Result merged, reason no_change"])
-    GO -->|created or merged| RC{"requestClass in the request?"}
-    RC -->|yes| PC["Policy RequestClassification: normalize class, apply the Chore flip"]
-    PC --> PCR{"Class valid?"}
-    PCR -->|no| E3(["400 request_class_invalid: nothing saved"])
-    PCR -->|yes| TRN
-    RC -->|no| TRN{"Write transitions the turn to completed or failed?"}
-    TRN -->|yes| GT["Policy CompletionGate: completion gate"]
+    S(["UpsertSessionTurnCommand dispatched"]) --> BD{"Body present?"}
+    BD -->|no| E0(["400 problem Invalid turn body."])
+    BD -->|yes| ID{"Session id and request id valid?"}
+    ID -->|no| E1(["400 problem Invalid turn payload."])
+    ID -->|yes| SE{"Session exists in the workspace?"}
+    SE -->|no| E2(["404 not_found"])
+    SE -->|yes| EX{"Turn with this requestId exists?"}
+    EX -->|no| NEW{"Turn context valid for a new entry (planFile and todoId), filesModified and commits attributed to the workspace?"}
+    NEW -->|no| E3(["400 problem Invalid turn payload."])
+    NEW -->|yes| INS["Insert the new turn"]
+    EX -->|yes| CTX{"Supplied planFile and todoId valid, filesModified and commits attributed to the workspace?"}
+    CTX -->|no| E4(["400 problem Invalid turn payload."])
+    CTX -->|yes| MG["Merge additively, whatever the stored status: omitted fields never clobber stored values"]
+    INS --> RC{"requestClass supplied (from S4)?"}
+    MG --> RC
+    RC -->|yes| PC["Policy RequestClassification"]
+    PC --> PCV{"Class valid?"}
+    PCV -->|no| E5(["400 request_class_invalid: nothing saved"])
+    PCV -->|yes| TRN
+    RC -->|no| TRN{"Write moves the turn into completed or failed (from S10)?"}
+    TRN -->|yes| GT["Policy CompletionGate"]
     GT --> GTR{"Gate met?"}
-    GTR -->|no| E4(["400 session_turn_completion_gate: change tracker cleared, nothing saved"])
-    GTR -->|yes| SV
-    TRN -->|no| SV["Save the turn and its children in one transaction"]
-    SV --> R(["Result created or merged with storedStatus"])
+    GTR -->|no| E6(["400 validation_error session_turn_completion_gate with missing items: change tracker cleared, nothing saved"])
+    GTR -->|yes| QB
+    TRN -->|no| QB{"Terminal QBAgent turn without a decision, action, or commit (ValidateTerminalTurnCompliance)?"}
+    QB -->|yes| E7(["400 problem Invalid turn payload."])
+    QB -->|no| SV["Stamp the children with the session's workspace, refresh the session summary, save"]
+    SV --> RACE{"First insert lost a unique-index race?"}
+    RACE -->|yes| RT["Retry once as an update of the winning row"]
+    RT --> R
+    RACE -->|no| R(["201 turnId, agent, sessionId, requestId"])
 ```
 
 #### PatchSessionTurnCommand: change named fields of one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-007]
 
-- Handler: `PatchSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, SessionLogTurnPatchRequest Request) : ICommand<SessionLogTurnWriteResult>` and `PatchSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/PatchSessionTurnCommand.cs`.
-- Surfaces: `PATCH /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}`, client `PatchTurnAsync`, REPL `client.SessionLog.PatchTurnAsync`, no MCP tool.
-- Request: only the fields to change (null means unchanged); response and errors as UpsertSessionTurnCommand, plus 404 `not_found` for an unknown `requestId`.
+- Handler: `PatchSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, UnifiedRequestEntryDto Turn) : ICommand<long>` and `PatchSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/PatchSessionTurnCommand.cs`, delegating to `ISessionLogService.UpsertTurnAsync` with the route `requestId` (`SessionLogController.cs` PATCH route, the additive verb of FR-SUPPORT-010G).
+- Surfaces: `PATCH /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}`, client `PatchTurnAsync` returning `SessionLogTurnSubmitResult`, REPL `client.SessionLog.PatchTurnAsync`; no MCP tool.
+- Request: `UnifiedRequestEntryDto` holding only the fields to change (a missing body is an empty turn; the route `requestId` replaces any body value). As today, a `requestId` the session does not hold is inserted as a new turn.
+- Response 200 `{ turnId, agent, sessionId, requestId, status }` (`status` echoes the body's status, null when omitted). Errors as UpsertSessionTurnCommand (no "Invalid turn body." case).
 
 ```mermaid
 flowchart TD
-    S(["PatchSessionTurnCommand dispatched"]) --> V{"Request valid?"}
-    V -->|no| E1(["400 validation_error"])
-    V -->|yes| F{"Turn found in the session?"}
-    F -->|no| E2(["404 not_found"])
-    F -->|yes| G["Policy TerminalTurnOutcomeGuard: outcome guard"]
-    G --> GO{"Guard result"}
-    GO -->|skipped_terminal| SK(["Result skipped_terminal: nothing saved"])
-    GO -->|merged no_change| NC(["Result merged, reason no_change"])
-    GO -->|merged| RC{"requestClass supplied?"}
+    S(["PatchSessionTurnCommand dispatched"]) --> RQ["Turn = body or an empty turn; requestId = the route value"]
+    RQ --> ID{"Session id and request id valid?"}
+    ID -->|no| E1(["400 problem Invalid turn payload."])
+    ID -->|yes| SE{"Session exists in the workspace?"}
+    SE -->|no| E2(["404 not_found"])
+    SE -->|yes| EX{"Turn with this requestId exists?"}
+    EX -->|no| NEW{"Turn context valid for a new entry, filesModified and commits attributed to the workspace?"}
+    NEW -->|no| E3(["400 problem Invalid turn payload."])
+    NEW -->|yes| INS["Insert the new turn (today's behavior)"]
+    EX -->|yes| CTX{"Supplied planFile and todoId valid, filesModified and commits attributed to the workspace?"}
+    CTX -->|no| E4(["400 problem Invalid turn payload."])
+    CTX -->|yes| MG["Apply only the supplied fields, whatever the stored status"]
+    INS --> RC{"requestClass supplied (from S4)?"}
+    MG --> RC
     RC -->|yes| PC["Policy RequestClassification"]
-    PC --> PCR{"Class valid?"}
-    PCR -->|no| E3(["400 request_class_invalid"])
-    PCR -->|yes| TRN
-    RC -->|no| TRN{"Status supplied and terminal?"}
-    TRN -->|yes| GT["Policy CompletionGate: completion gate"]
+    PC --> PCV{"Class valid?"}
+    PCV -->|no| E5(["400 request_class_invalid: nothing saved"])
+    PCV -->|yes| TRN
+    RC -->|no| TRN{"Write moves the turn into completed or failed (from S10)?"}
+    TRN -->|yes| GT["Policy CompletionGate"]
     GT --> GTR{"Gate met?"}
-    GTR -->|no| E4(["400 session_turn_completion_gate: nothing saved"])
-    GTR -->|yes| AP
-    TRN -->|no| AP["Apply only the supplied fields"]
-    AP --> SV["Save"]
-    SV --> R(["Result merged with storedStatus"])
+    GTR -->|no| E6(["400 validation_error session_turn_completion_gate with missing items: nothing saved"])
+    GTR -->|yes| QB
+    TRN -->|no| QB{"Terminal QBAgent turn without a decision, action, or commit?"}
+    QB -->|yes| E7(["400 problem Invalid turn payload."])
+    QB -->|no| SV["Save"]
+    SV --> R(["200 turnId, agent, sessionId, requestId, status"])
 ```
 
 #### ReplaceSessionTurnCommand: replace one turn [FR-MCP-SESSIONTURN-004, FR-SUPPORT-016]
 
-- Handler: `ReplaceSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, SessionLogTurnReplaceRequest Request) : ICommand<SessionLogTurnWriteResult>` and `ReplaceSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/ReplaceSessionTurnCommand.cs`.
-- Surfaces: `PUT /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}`, MCP `sessionlog_replace_turn`, client `ReplaceTurnAsync`, REPL `client.SessionLog.ReplaceTurnAsync`.
-- Request: the whole turn; response and errors as PatchSessionTurnCommand.
+- Handler: `ReplaceSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, UnifiedRequestEntryDto Turn) : ICommand<long>` and `ReplaceSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/ReplaceSessionTurnCommand.cs`, delegating to `ISessionLogService.ReplaceTurnAsync` (`SessionLogService.cs:839-889`).
+- Surfaces: `PUT /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}`, MCP `sessionlog_replace_turn` (returns `{ success, turnId, agent, sessionId, requestId, replaced: true }`), client `ReplaceTurnAsync` returning `SessionLogMutationResult`, REPL `client.SessionLog.ReplaceTurnAsync`.
+- Request: the whole turn as `UnifiedRequestEntryDto` (a missing body is an empty turn; the route `requestId` replaces any body value). Omitted scalars reset and every section becomes exactly what the body carries; a superseded hook persist gets the `None` planFile and todoId sentinels when it carries none, as today.
+- Response 200 `{ turnId, agent, sessionId, requestId, replaced: true }`. Errors (all through `ClassifiedError`, as today): 400 `validation_error` (invalid session or request id, invalid planFile or todoId, a filesModified path or commit not attributed to the workspace, the QBAgent-only terminal compliance check), 404 `not_found` (missing session or turn); from Phase B, 400 `request_class_invalid` and the completion-gate refusal when the replacement carries a terminal status.
 
 ```mermaid
 flowchart TD
-    S(["ReplaceSessionTurnCommand dispatched"]) --> V{"Request valid and its requestId equals the route?"}
-    V -->|no| E1(["400 validation_error"])
-    V -->|yes| F{"Turn found?"}
-    F -->|no| E2(["404 not_found"])
-    F -->|yes| G["Policy TerminalTurnOutcomeGuard: outcome guard"]
-    G --> GO{"Guard result"}
-    GO -->|skipped_terminal| SK(["Result skipped_terminal: nothing saved"])
-    GO -->|merged no_change| NC(["Result merged, reason no_change"])
-    GO -->|merged| PC["Policy RequestClassification on the class"]
-    PC --> PCR{"Class valid?"}
-    PCR -->|no| E3(["400 request_class_invalid"])
-    PCR -->|yes| TRN{"Replacement transitions to completed or failed?"}
+    S(["ReplaceSessionTurnCommand dispatched"]) --> RQ["Turn = body or an empty turn; requestId = the route value"]
+    RQ --> ID{"Session id and request id valid?"}
+    ID -->|no| E1(["400 validation_error"])
+    ID -->|yes| SE{"Session exists in the workspace?"}
+    SE -->|no| E2(["404 not_found session"])
+    SE -->|yes| TF{"Turn found?"}
+    TF -->|no| E3(["404 not_found turn"])
+    TF -->|yes| HK{"Superseded hook persist without planFile or todoId?"}
+    HK -->|yes| SN["Use the None sentinels"]
+    HK -->|no| CTX
+    SN --> CTX{"planFile and todoId valid for an entry, filesModified and commits attributed to the workspace?"}
+    CTX -->|no| E4(["400 validation_error"])
+    CTX -->|yes| RP["Replace the turn's fields and child sections"]
+    RP --> RC{"requestClass supplied (from S4)?"}
+    RC -->|yes| PC["Policy RequestClassification"]
+    PC --> PCV{"Class valid?"}
+    PCV -->|no| E5(["400 request_class_invalid: nothing saved"])
+    PCV -->|yes| TRN
+    RC -->|no| TRN{"Replacement carries a terminal status (from S10)?"}
     TRN -->|yes| GT["Policy CompletionGate"]
     GT --> GTR{"Gate met?"}
-    GTR -->|no| E4(["400 session_turn_completion_gate: nothing saved"])
-    GTR -->|yes| RP
-    TRN -->|no| RP["Replace the turn's fields and child sections"]
-    RP --> SV["Save"]
-    SV --> R(["Result merged with storedStatus"])
+    GTR -->|no| E6(["400 validation_error session_turn_completion_gate with missing items: nothing saved"])
+    GTR -->|yes| QB
+    TRN -->|no| QB{"Terminal QBAgent turn without a decision, action, or commit?"}
+    QB -->|yes| E7(["400 validation_error"])
+    QB -->|no| SV["Save"]
+    SV --> R(["200 turnId, agent, sessionId, requestId, replaced true"])
 ```
 
 #### CompleteSessionTurnCommand: complete one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONCLASS-002]
 
-- Handler: `CompleteSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, SessionLogTurnCloseRequest Request) : ICommand<SessionLogTurnWriteResult>` and `CompleteSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/CompleteSessionTurnCommand.cs`.
-- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/complete`, MCP `sessionlog_complete_turn`, client `CompleteTurnAsync`, REPL `client.SessionLog.CompleteTurnAsync`. The plugin `completeTurn` verb does not call this route: it sends the bound turn with status `completed` through SubmitSessionLogCommand after its model-evidence check and advisory pre-check (processes PersistTurnWriteWithReceipt and AdvisoryCompletionPrecheck), and the same policies apply there.
-- Request `SessionLogTurnCloseRequest { response, requestClass, designDecisions, requirementsDiscovered, blockers }`; response `SessionLogTurnWriteResult`.
-- Errors: 400 `validation_error`, `request_class_invalid`, `session_turn_completion_gate` (from S10); 404 `not_found`; a terminal turn returns `skipped_terminal`.
+- Handler: `CompleteSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, UnifiedRequestEntryDto Turn) : ICommand<long>` and `CompleteSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/CompleteSessionTurnCommand.cs`, delegating to `ISessionLogService.UpsertTurnAsync` with status `completed` (`SessionLogController.cs:425-472`).
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/complete`, MCP `sessionlog_complete_turn` (optional `turnJson`; returns `{ success, turnId, agent, sessionId, requestId, status }`), client `CompleteTurnAsync` returning `SessionLogTurnSubmitResult`, REPL `client.SessionLog.CompleteTurnAsync`. The plugin `completeTurn` verb does not call this route: it sends the bound turn with status `completed` through SubmitSessionLogCommand after its model-evidence check and advisory pre-check (processes PersistTurnWriteWithReceipt and AdvisoryCompletionPrecheck), and the same policies apply there.
+- Request: optional `UnifiedRequestEntryDto` merged additively (from Phase B it may carry `requestClass`); the route sets `requestId` and status `completed`.
+- Response 200 `{ turnId, agent, sessionId, requestId, status: "completed" }`. Errors as PatchSessionTurnCommand; the gate fires only when the write moves the turn into `completed`, so completing an already completed turn merges the carried fields without re-gating (FR-MCP-SESSIONCLASS-002-AC004).
 
 ```mermaid
 flowchart TD
-    S(["CompleteSessionTurnCommand dispatched"]) --> V{"Request valid?"}
-    V -->|no| E1(["400 validation_error"])
-    V -->|yes| F{"Turn found?"}
-    F -->|no| E2(["404 not_found"])
-    F -->|yes| T{"Turn already terminal?"}
-    T -->|yes| SK(["Result skipped_terminal with storedStatus"])
-    T -->|no| RC{"requestClass supplied?"}
+    S(["CompleteSessionTurnCommand dispatched"]) --> RQ["Turn = body or an empty turn; requestId = the route value; status completed"]
+    RQ --> ID{"Session id and request id valid?"}
+    ID -->|no| E1(["400 problem Invalid turn payload."])
+    ID -->|yes| SE{"Session exists in the workspace?"}
+    SE -->|no| E2(["404 not_found"])
+    SE -->|yes| EX{"Turn with this requestId exists?"}
+    EX -->|no| NEW{"Turn context valid for a new entry, filesModified and commits attributed to the workspace?"}
+    NEW -->|no| E3(["400 problem Invalid turn payload."])
+    NEW -->|yes| INS["Insert the turn at completed (today's behavior)"]
+    EX -->|yes| CTX{"Supplied planFile and todoId valid, filesModified and commits attributed to the workspace?"}
+    CTX -->|no| E4(["400 problem Invalid turn payload."])
+    CTX -->|yes| MG["Merge the carried fields, status completed"]
+    INS --> RC{"requestClass supplied (from S4)?"}
+    MG --> RC
     RC -->|yes| PC["Policy RequestClassification"]
-    PC --> PCR{"Valid?"}
-    PCR -->|no| E3(["400 request_class_invalid"])
-    PCR -->|yes| GT
-    RC -->|no| GT["Policy CompletionGate: completion gate for completed"]
+    PC --> PCV{"Class valid?"}
+    PCV -->|no| E5(["400 request_class_invalid: nothing saved"])
+    PCV -->|yes| TRN
+    RC -->|no| TRN{"Write moves the turn into completed (from S10)?"}
+    TRN -->|yes| GT["Policy CompletionGate for completed"]
     GT --> GTR{"Gate met?"}
-    GTR -->|no| E4(["400 session_turn_completion_gate with missing items: nothing saved"])
-    GTR -->|yes| SV["Status completed, carried fields saved"]
-    SV --> R(["Result merged, storedStatus completed"])
+    GTR -->|no| E6(["400 validation_error session_turn_completion_gate with missing items in order: nothing saved"])
+    GTR -->|yes| QB
+    TRN -->|no, already completed| QB{"QBAgent turn without a decision, action, or commit?"}
+    QB -->|yes| E7(["400 problem Invalid turn payload."])
+    QB -->|no| SV["Save"]
+    SV --> R(["200 turnId, agent, sessionId, requestId, status completed"])
 ```
 
 #### FailSessionTurnCommand: fail one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONCLASS-002]
 
-- Handler: `FailSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, SessionLogTurnFailRequest Request) : ICommand<SessionLogTurnWriteResult>` and `FailSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/FailSessionTurnCommand.cs`.
-- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/fail`, MCP `sessionlog_fail_turn`, client `FailTurnAsync`, REPL `client.SessionLog.FailTurnAsync`. The plugin `failTurn` verb sends the bound turn with status `failed` and its error message through SubmitSessionLogCommand (process PersistTurnWriteWithReceipt), where the same policies apply.
-- Request `SessionLogTurnFailRequest { errorMessage, requestClass, designDecisions, requirementsDiscovered, blockers }`; response `SessionLogTurnWriteResult`.
-- Errors: 400 `validation_error` (blank error message), `request_class_invalid`, `session_turn_completion_gate` (class missing, from S10); 404 `not_found`.
+- Handler: `FailSessionTurnCommand(string WorkspacePath, string Agent, string SessionId, string RequestId, UnifiedRequestEntryDto Turn) : ICommand<long>` and `FailSessionTurnCommandHandler` in `src/QBrainAi.Services/SessionLog/Commands/FailSessionTurnCommand.cs`, delegating to `ISessionLogService.UpsertTurnAsync` with status `failed` (`SessionLogController.cs:448-472`).
+- Surfaces: `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/fail`, MCP `sessionlog_fail_turn` (optional `turnJson`; returns `{ success, turnId, agent, sessionId, requestId, status }`), client `FailTurnAsync` returning `SessionLogTurnSubmitResult`, REPL `client.SessionLog.FailTurnAsync`. The plugin `failTurn` verb sends the bound turn with status `failed` and its error message through SubmitSessionLogCommand (process PersistTurnWriteWithReceipt), where the same policies apply.
+- Request: optional `UnifiedRequestEntryDto` merged additively (its `failureNote` records the failure; from Phase B it may carry `requestClass`); the route sets `requestId` and status `failed`.
+- Response 200 `{ turnId, agent, sessionId, requestId, status: "failed" }`. Errors as PatchSessionTurnCommand; the gate needs only `requestClass` for `failed` and fires only when the write moves the turn into `failed`.
 
 ```mermaid
 flowchart TD
-    S(["FailSessionTurnCommand dispatched"]) --> V{"Error message nonblank and request valid?"}
-    V -->|no| E1(["400 validation_error"])
-    V -->|yes| F{"Turn found?"}
-    F -->|no| E2(["404 not_found"])
-    F -->|yes| T{"Turn already terminal?"}
-    T -->|yes| SK(["Result skipped_terminal with storedStatus"])
-    T -->|no| RC{"requestClass supplied?"}
+    S(["FailSessionTurnCommand dispatched"]) --> RQ["Turn = body or an empty turn; requestId = the route value; status failed"]
+    RQ --> ID{"Session id and request id valid?"}
+    ID -->|no| E1(["400 problem Invalid turn payload."])
+    ID -->|yes| SE{"Session exists in the workspace?"}
+    SE -->|no| E2(["404 not_found"])
+    SE -->|yes| EX{"Turn with this requestId exists?"}
+    EX -->|no| NEW{"Turn context valid for a new entry, filesModified and commits attributed to the workspace?"}
+    NEW -->|no| E3(["400 problem Invalid turn payload."])
+    NEW -->|yes| INS["Insert the turn at failed (today's behavior)"]
+    EX -->|yes| CTX{"Supplied planFile and todoId valid, filesModified and commits attributed to the workspace?"}
+    CTX -->|no| E4(["400 problem Invalid turn payload."])
+    CTX -->|yes| MG["Merge the carried fields and failureNote, status failed"]
+    INS --> RC{"requestClass supplied (from S4)?"}
+    MG --> RC
     RC -->|yes| PC["Policy RequestClassification"]
-    PC --> PCR{"Valid?"}
-    PCR -->|no| E3(["400 request_class_invalid"])
-    PCR -->|yes| GT
-    RC -->|no| GT["Policy CompletionGate: failed requires requestClass only"]
+    PC --> PCV{"Class valid?"}
+    PCV -->|no| E5(["400 request_class_invalid: nothing saved"])
+    PCV -->|yes| TRN
+    RC -->|no| TRN{"Write moves the turn into failed (from S10)?"}
+    TRN -->|yes| GT["Policy CompletionGate for failed: requestClass only"]
     GT --> GTR{"Class present and not Unclassified?"}
-    GTR -->|no| E4(["400 session_turn_completion_gate: missing requestClass"])
-    GTR -->|yes| SV["Status failed with the error message"]
-    SV --> R(["Result merged, storedStatus failed"])
+    GTR -->|no| E6(["400 validation_error session_turn_completion_gate: missing requestClass, nothing saved"])
+    GTR -->|yes| QB
+    TRN -->|no, already failed| QB{"QBAgent turn without a decision, action, or commit?"}
+    QB -->|yes| E7(["400 problem Invalid turn payload."])
+    QB -->|no| SV["Save"]
+    SV --> R(["200 turnId, agent, sessionId, requestId, status failed"])
 ```
 
 #### OpenSessionLogCommand: open (ensure) a session [FR-MCP-SESSIONTURN-001, FR-MCP-SESSIONTURN-007]
@@ -405,13 +459,13 @@ Existing session-log routes this plan does not change (they keep today's behavio
 
 #### Policy TerminalTurnOutcomeGuard: terminal-turn outcome guard (`ISessionLogTurnUpsertGuard`) [FR-MCP-SESSIONTURN-004]
 
-Applied by SubmitSessionLogCommand, UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand. It never saves; it returns the outcome the handler must honor. The seam replaces the inline guard at `SessionLogService.cs:1606-1618` without changing its rule (TR-MCP-SESSIONTURN-004 AC-002): only a status move away from a terminal status is skipped; a write that omits the status, a review-section write, and a requestClass-only write merge on a terminal turn (FR-MCP-SESSIONTURN-004-AC003, AC004).
+Applied by SubmitSessionLogCommand only, as today: the single-turn routes (UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand) are the explicit route for deliberate status corrections and have no outcome guard (`SessionLogService.cs:1610`). It never saves; it returns the outcome the handler must honor. The seam replaces the inline guard at `SessionLogService.cs:1606-1618` without changing its rule (TR-MCP-SESSIONTURN-004 AC-002): a write is skipped only when the stored status is terminal and the incoming status is supplied, differs from it, and is either not terminal or carried by a superseded hook persist; a write that omits the status, a review-section write, and a requestClass-only write merge on a terminal turn (FR-MCP-SESSIONTURN-004-AC003, AC004).
 
 ```mermaid
 flowchart TD
     S(["Guard called with stored and incoming turn"]) --> EX{"Stored turn exists?"}
     EX -->|no| C(["created"])
-    EX -->|yes| TM{"Stored status terminal, and the incoming status supplied, different, and not terminal, or the write a superseded hook persist?"}
+    EX -->|yes| TM{"Stored status terminal, incoming status supplied and different, and either not terminal or a superseded hook persist?"}
     TM -->|yes| SK(["skipped_terminal with storedStatus and reason"])
     TM -->|no| EQ{"Incoming equals stored?"}
     EQ -->|yes| NC(["merged, reason no_change"])
@@ -566,6 +620,7 @@ flowchart TD
     RES -->|server error| ER{"Error code"}
     ER -->|session_turn_completion_gate| GR["Record the server refusal and missing items locally: turn stays in progress"]
     GR --> GRE(["Receipt persisted false with the server message and missing items, exit 1"])
+    ER -->|dialog or title 404| RQU(["Receipt persisted false, code request_unknown, exit 1"])
     ER -->|other| OE(["Receipt persisted false with the server code, exit 1"])
     RES -->|dialog or title 200| OK
     RES -->|submit 201 without a turns list| UV(["Receipt outcomeVerified false: never a confirmed close, so openDelivered and the ledger keep the request"])
@@ -791,7 +846,7 @@ sequenceDiagram
         L->>D: insert turn with minted requestId (retry on requestId collision, at most 6 attempts)
         D-->>L: inserted
         L-->>S: created
-        S-->>C: 201 requestId, outcome created, storedStatus in_progress
+        S-->>C: 201 requestId, outcome created
         C-->>P: result
         P->>P: bridge: queue entry queued. Prompt hook: deliver, write target, ledger
     else nonce found (retry, failsafe replay, or doubled hook)
@@ -844,7 +899,7 @@ sequenceDiagram
         L->>G: evaluate stored turn and incoming turn
         alt new turn
             G-->>L: created
-        else stored status terminal and the incoming status supplied, different, and not terminal
+        else stored status terminal, incoming status supplied and different, and either not terminal or a superseded hook persist
             G-->>L: skipped_terminal with storedStatus and reason
         else identical
             G-->>L: merged, reason no_change
@@ -864,7 +919,7 @@ sequenceDiagram
         S-->>W: 400 request_class_invalid, nothing saved
         W->>W: correct the class and resend
     else a transition refused by the gate
-        S-->>W: 400 session_turn_completion_gate naming the requestId and its missing items, nothing saved
+        S-->>W: 400 validation_error session_turn_completion_gate naming each failing requestId and its missing items, nothing saved
         W->>W: supply the missing items by the turn's pair, keep the turn open
     end
 ```
@@ -925,26 +980,29 @@ sequenceDiagram
     participant C as Client or REPL (client.SessionLog.UpsertTurnAsync)
     participant S as SessionLogController
     participant X as IDispatcher and UpsertSessionTurnCommandHandler
-    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/turn (SessionLogTurnUpsertRequest)
-    S->>X: SendAsync(UpsertSessionTurnCommand)
-    alt created or merged
-        X-->>S: SessionLogTurnWriteResult
-        S-->>C: 200 outcome and storedStatus
-        C->>C: persisted
-    else unchanged
-        S-->>C: 200 merged, reason no_change
-    else stored turn terminal and the status move refused
-        S-->>C: 200 outcome skipped_terminal
-        C->>C: report persisted false, never retry
-    else invalid request or class
-        S-->>C: 400 validation_error or request_class_invalid
-        C->>C: fix and resend
-    else session not open
-        S-->>C: 404 session_not_open
-        C->>C: open the session (OpenSessionLogCommand) first
-    else transition refused by the gate
-        S-->>C: 400 session_turn_completion_gate with missing items
-        C->>C: supply the missing items, keep the turn open
+    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/turn (UnifiedRequestEntryDto)
+    alt no body
+        S-->>C: 400 problem Invalid turn body.
+        C->>C: send the turn
+    else body present
+        S->>X: SendAsync(UpsertSessionTurnCommand)
+        alt inserted or merged
+            X-->>S: turnId
+            S-->>C: 201 turnId, agent, sessionId, requestId
+            C->>C: persisted (SessionLogTurnSubmitResult)
+        else invalid ids, turn context, attribution, or QBAgent compliance
+            S-->>C: 400 problem Invalid turn payload.
+            C->>C: fix and resend
+        else invalid class (from S4)
+            S-->>C: 400 request_class_invalid
+            C->>C: correct the class and resend
+        else session missing
+            S-->>C: 404 not_found
+            C->>C: open the session (OpenSessionLogCommand) first
+        else transition refused by the gate (from S10)
+            S-->>C: 400 validation_error session_turn_completion_gate with missing items
+            C->>C: supply the missing items, keep the turn open
+        end
     end
 ```
 
@@ -958,26 +1016,21 @@ sequenceDiagram
     participant X as IDispatcher and PatchSessionTurnCommandHandler
     C->>S: PATCH /qbrainai/sessionlog/{agent}/{sessionId}/{requestId} (fields to change)
     S->>X: SendAsync(PatchSessionTurnCommand)
-    alt applied
-        X-->>S: merged with storedStatus
-        S-->>C: 200 SessionLogTurnWriteResult
-        C->>C: persisted
-    else unchanged
-        X-->>S: merged, reason no_change
-        S-->>C: 200
-        C->>C: nothing to do
-    else stored turn terminal
-        X-->>S: skipped_terminal
-        S-->>C: 200 outcome skipped_terminal
-        C->>C: report persisted false, never retry
-    else invalid request or class
-        X-->>S: validation_error or request_class_invalid
-        S-->>C: 400 problem+json with the code
+    alt applied (an unknown requestId is inserted, as today)
+        X-->>S: turnId
+        S-->>C: 200 turnId, agent, sessionId, requestId, status
+        C->>C: persisted (SessionLogTurnSubmitResult)
+    else invalid ids, turn context, attribution, or QBAgent compliance
+        S-->>C: 400 problem Invalid turn payload.
         C->>C: fix and resend
-    else unknown requestId
+    else invalid class (from S4)
+        S-->>C: 400 request_class_invalid
+        C->>C: correct the class and resend
+    else session missing
         S-->>C: 404 not_found
-    else transition refused by the gate
-        S-->>C: 400 session_turn_completion_gate with missing items
+        C->>C: open the session first
+    else transition refused by the gate (from S10)
+        S-->>C: 400 validation_error session_turn_completion_gate with missing items
         C->>C: supply the missing items, keep the turn open
     end
 ```
@@ -993,21 +1046,20 @@ sequenceDiagram
     C->>S: PUT /qbrainai/sessionlog/{agent}/{sessionId}/{requestId} (whole turn)
     S->>X: SendAsync(ReplaceSessionTurnCommand)
     alt replaced
-        X-->>S: merged with storedStatus
-        S-->>C: 200 SessionLogTurnWriteResult
-    else identical
-        S-->>C: 200 merged, reason no_change
-    else stored turn terminal
-        S-->>C: 200 outcome skipped_terminal
-        C->>C: report persisted false
-    else body requestId differs from the route, or invalid
+        X-->>S: turnId
+        S-->>C: 200 turnId, agent, sessionId, requestId, replaced true (MCP adds success true)
+        C->>C: persisted (SessionLogMutationResult)
+    else invalid ids, turn context, attribution, or QBAgent compliance
         S-->>C: 400 validation_error
-    else invalid class
+        C->>C: fix and resend
+    else invalid class (from S4)
         S-->>C: 400 request_class_invalid
-    else unknown requestId
+    else session or turn missing
         S-->>C: 404 not_found
-    else transition refused by the gate
-        S-->>C: 400 session_turn_completion_gate with missing items
+        C->>C: report, the turn must exist before a replace
+    else terminal status refused by the gate (from S10)
+        S-->>C: 400 validation_error session_turn_completion_gate with missing items
+        C->>C: supply the missing items or replace without the terminal status
     end
 ```
 
@@ -1046,7 +1098,7 @@ sequenceDiagram
         else gate unmet
             G-->>X: SessionTurnCompletionGateException with missing items
             X-->>S: atomic rejection
-            S-->>R: 400 session_turn_completion_gate, missing items in order (failed: requestClass only)
+            S-->>R: 400 validation_error session_turn_completion_gate, missing items in order (failed: requestClass only)
             R-->>P: refusal
             P->>P: record refusal for the Stop gate, keep open and ledgered
             P-->>M: server message and missing items, exit 1
@@ -1077,22 +1129,21 @@ sequenceDiagram
     participant S as SessionLogController or MCP tool
     participant X as IDispatcher and CompleteSessionTurnCommandHandler
     participant G as Completion gate (Phase B, S10)
-    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/complete (SessionLogTurnCloseRequest)
-    S->>X: SendAsync(CompleteSessionTurnCommand): RequestClassification, then CompletionGate
-    alt gate met
-        X-->>S: merged, storedStatus completed
-        S-->>C: 200 SessionLogTurnWriteResult
+    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/complete (optional UnifiedRequestEntryDto)
+    S->>X: SendAsync(CompleteSessionTurnCommand): RequestClassification, then CompletionGate on the move into completed
+    alt completed, or an already completed turn enriched
+        X-->>S: turnId
+        S-->>C: 200 turnId, agent, sessionId, requestId, status completed (MCP adds success true)
     else gate unmet
         G-->>X: SessionTurnCompletionGateException with missing items
-        S-->>C: 400 session_turn_completion_gate, missing items in order, nothing saved
+        S-->>C: 400 validation_error session_turn_completion_gate, missing items in order, nothing saved
         C->>C: supply the class or reviews, then close again
-    else invalid request or class
-        S-->>C: 400 validation_error or request_class_invalid
-    else unknown requestId
+    else invalid ids, turn context, attribution, or QBAgent compliance
+        S-->>C: 400 problem Invalid turn payload.
+    else invalid class
+        S-->>C: 400 request_class_invalid
+    else session missing
         S-->>C: 404 not_found
-    else already terminal
-        S-->>C: 200 outcome skipped_terminal
-        C->>C: report persisted false, never retry
     end
 ```
 
@@ -1104,21 +1155,21 @@ sequenceDiagram
     participant C as Client, REPL, or MCP sessionlog_fail_turn
     participant S as SessionLogController or MCP tool
     participant X as IDispatcher and FailSessionTurnCommandHandler
-    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/fail (SessionLogTurnFailRequest)
-    S->>X: SendAsync(FailSessionTurnCommand)
-    alt class present and not Unclassified
-        X-->>S: merged, storedStatus failed
-        S-->>C: 200 SessionLogTurnWriteResult
-    else class missing or Unclassified
+    C->>S: POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/fail (optional UnifiedRequestEntryDto with failureNote)
+    S->>X: SendAsync(FailSessionTurnCommand): RequestClassification, then CompletionGate on the move into failed
+    alt failed, or an already failed turn enriched
+        X-->>S: turnId
+        S-->>C: 200 turnId, agent, sessionId, requestId, status failed (MCP adds success true)
+    else class missing or Unclassified on the move into failed
         X-->>S: SessionTurnCompletionGateException
-        S-->>C: 400 session_turn_completion_gate, missing requestClass
+        S-->>C: 400 validation_error session_turn_completion_gate, missing requestClass
         C->>C: write the class, then fail again
-    else blank error message or invalid class
-        S-->>C: 400 validation_error or request_class_invalid
-    else unknown requestId
+    else invalid ids, turn context, attribution, or QBAgent compliance
+        S-->>C: 400 problem Invalid turn payload.
+    else invalid class
+        S-->>C: 400 request_class_invalid
+    else session missing
         S-->>C: 404 not_found
-    else already terminal
-        S-->>C: 200 outcome skipped_terminal
     end
 ```
 
@@ -1273,7 +1324,7 @@ sequenceDiagram
                     end
                 else write or close record
                     P->>R: send under the minted or bound id
-                    R->>S: upsert or close
+                    R->>S: submit with the bound turn (SubmitSessionLogCommand), dialog append, or turn title
                     S-->>P: outcome
                     P->>P: map per process PersistTurnWriteWithReceipt, remove the record unless outage
                 end
@@ -1402,12 +1453,15 @@ flowchart TD
 #### GetSessionLogQuery: read one session with its turns and reviews [FR-MCP-SESSIONREVIEW-001, FR-MCP-SESSIONREVIEW-004]
 
 - Handler: `GetSessionLogQuery(string WorkspacePath, string Agent, string SessionId) : IQuery<UnifiedSessionLogDto>` and `GetSessionLogQueryHandler` in `src/QBrainAi.Services/SessionLog/Queries/GetSessionLogQuery.cs`.
-- Surfaces: REST `GET /qbrainai/sessionlog/{agent}/{sessionId}` only (the typed client and the REPL have no single-session read; they use QuerySessionLogsQuery with the sessionId filter).
-- Response: both review records with exact decimal scores (a 28-digit score reads back byte-equal), sanitized text, and `null` for unset fields.
+- Surfaces: REST `GET /qbrainai/sessionlog/{agent}/{sessionId}` only (`SessionLogController.cs:163-179`; the typed client and the REPL have no single-session read and use QuerySessionLogsQuery, which has no session-id filter, so they select the session by its `sessionId` in the returned items).
+- Response: 200 `UnifiedSessionLogDto` with both review records per turn, exact decimal scores (a 28-digit score reads back byte-equal), sanitized text, and `null` for unset fields.
+- Errors (today's bodies): 400 problem "Invalid session identifier." for a session id invalid for the agent; 404 with no body for a missing session.
 
 ```mermaid
 flowchart TD
-    S(["Read request"]) --> W{"Workspace and session found?"}
+    S(["Read request"]) --> V{"Session id valid for the agent?"}
+    V -->|no| E0(["400 problem Invalid session identifier."])
+    V -->|yes| W{"Session found in the workspace?"}
     W -->|no| E(["404"])
     W -->|yes| LD["Load turns with review columns and reason children"]
     LD --> SAN["Sanitize review text fields on the read surface"]
@@ -1418,15 +1472,17 @@ flowchart TD
 #### QuerySessionLogsQuery: query sessions and turns with their reviews [FR-MCP-SESSIONREVIEW-001, FR-MCP-SESSIONREVIEW-004]
 
 - Handler: `QuerySessionLogsQuery(string WorkspacePath, SessionLogQueryRequest Request) : IQuery<SessionLogQueryResult>` and `QuerySessionLogsQueryHandler` in `src/QBrainAi.Services/SessionLog/Queries/QuerySessionLogsQuery.cs`.
-- Surfaces: REST `GET /qbrainai/sessionlog?agent&sessionId&limit&offset` (limit default 100, max 1000), MCP `sessionlog_query`, client `QueryAsync`, REPL `client.SessionLog.QueryAsync`, plugins.
-- Response `SessionLogQueryResult { totalCount, limit, offset, items }`, each turn with both review records as in GetSessionLogQuery.
-- Errors: 400 `validation_error` (limit or offset out of range).
+- Surfaces: REST `GET /qbrainai/sessionlog?agent&agentDefinitionId&model&text&from&to&limit&offset&planFile&todoId&turnStatus&staleOlderThanHours` (`SessionLogController.cs:109-151`; there is no session-id filter), MCP `sessionlog_query` (the same filters without `agentDefinitionId` and `offset`), client `QueryAsync(SessionLogQueryRequest)`, REPL `client.SessionLog.QueryAsync`, plugins.
+- Request `SessionLogQueryRequest` (unchanged). Paging is clamped, never refused: `limit` defaults to 100 and is clamped to 1..1000, and a negative `offset` is read as 0 (`SessionLogService.cs:476-477`).
+- Response `SessionLogQueryResult { totalCount, limit, offset, items }`: the matching sessions, each turn with both review records as in GetSessionLogQuery.
+- Errors (today's): 503 `persistence_error` with reason `pending_migration` while the session-log schema migration is pending, and other storage failures through `ClassifiedError`.
 
 ```mermaid
 flowchart TD
-    S(["QuerySessionLogsQuery dispatched"]) --> V{"limit 1..1000 and offset 0 or more?"}
-    V -->|no| E(["400 validation_error"])
-    V -->|yes| Q["Filter by workspace, agent, and session; order; count total; page"]
+    S(["QuerySessionLogsQuery dispatched"]) --> SCH{"Session-log schema current?"}
+    SCH -->|no| E(["503 persistence_error pending_migration"])
+    SCH -->|yes| CL["Clamp limit to 1..1000, read a negative offset as 0"]
+    CL --> Q["Filter by workspace and the supplied filters (agent, agentDefinitionId, model, text, from, to, planFile, todoId, turnStatus, staleOlderThanHours); order; count total; page"]
     Q --> SAN["Sanitize review text fields"]
     SAN --> SER["Serialize scores as exact decimal lexemes, unset fields as null"]
     SER --> OK(["200 totalCount, limit, offset, items"])
@@ -1692,12 +1748,17 @@ sequenceDiagram
     participant S as SessionLogController
     participant X as IDispatcher and GetSessionLogQueryHandler
     C->>S: GET /qbrainai/sessionlog/{agent}/{sessionId}
-    S->>X: QueryAsync(GetSessionLogQuery)
-    alt found
-        S-->>C: 200 turns with requestClass and both review records
-        C->>C: read scores as exact decimals (lossless scalars in the PowerShell core, and the TypeScript-host adapters pass scores through as strings)
-    else not found
-        S-->>C: 404
+    alt session id invalid for the agent
+        S-->>C: 400 problem Invalid session identifier.
+        C->>C: fix the id, never retry unchanged
+    else valid
+        S->>X: QueryAsync(GetSessionLogQuery)
+        alt found
+            S-->>C: 200 turns with requestClass and both review records
+            C->>C: read scores as exact decimals (lossless scalars in the PowerShell core, and the TypeScript-host adapters pass scores through as strings)
+        else not found
+            S-->>C: 404
+        end
     end
 ```
 
@@ -1709,15 +1770,15 @@ sequenceDiagram
     participant C as Client, REPL, MCP sessionlog_query, or plugin
     participant S as SessionLogController or MCP tool
     participant X as IDispatcher and QuerySessionLogsQueryHandler
-    C->>S: GET /qbrainai/sessionlog?agent&sessionId&limit&offset
+    C->>S: GET /qbrainai/sessionlog?agent&text&planFile&todoId&turnStatus&limit&offset (and the other filters)
     S->>X: QueryAsync(QuerySessionLogsQuery)
-    alt valid
-        X-->>S: page
+    alt schema current
+        X-->>S: page (limit clamped to 1..1000, offset at least 0)
         S-->>C: 200 totalCount, limit, offset, items
-        C->>C: page until complete, read scores as exact decimals
-    else invalid paging
-        S-->>C: 400 validation_error
-        C->>C: correct limit or offset
+        C->>C: page until complete, select the session by its sessionId, read scores as exact decimals
+    else session-log migration pending
+        S-->>C: 503 persistence_error pending_migration
+        C->>C: report, retry after the migration is applied
     end
 ```
 
@@ -1737,7 +1798,7 @@ sequenceDiagram
 
 Section `Mcp:AgentContext` (declared under `QBrainAi: AgentContext:` in `appsettings.yaml`, projected onto `Mcp:` by `CanonicalSectionProjectionProvider`), class `QBrainAi.Support.Mcp.Options.AgentContextOptions` with `SectionName = "Mcp:AgentContext"`, a `Validate()` method, and `ValidateOnStart()`.
 
-- `Mode` (enum `AgentContextMode`: `Off`, `Pilot`, `Stateless`; default `Off`). `Off`: every agent-context endpoint except status returns 409 `agent_context_disabled`. `Pilot`: packages are built and responses graded, but plugins keep the stateful conversation (no injection). `Stateless`: plugins inject the package and carry no history.
+- `Mode` (enum `AgentContextMode`: `Off`, `Pilot`, `Stateless`; default `Off`). `Off`: every agent-context endpoint except status returns 409 `agent_context_disabled`. `Pilot`: packages are built and responses graded, but plugins keep the stateful conversation (no injection). `Stateless`: plugins inject the package and carry no history, on a host with an authoritative history-exclusion operation recorded in its P0.2 row; any other host treats `Stateless` as `Pilot` (section 6.6).
 - `TokenBudget` (int, default 32000, must be 1024..1000000).
 - `BytesPerToken` (int, default 4, must be 1..16): the deterministic token estimate is `ceil(utf8ByteCount / BytesPerToken)` per item.
 - `Trust:Correctness`, `Trust:Completeness` (decimal in [0.98, 1], default 0.98, inclusive): the attached plan's minimum of 98 percent is a floor that configuration cannot lower; a value below 0.98 or above 1 fails startup validation (`AgentContextOptions_TrustBelow098_FailsStartup`, `AgentContextOptions_TrustAt098And1_Accepted`), and RunDeterministicGradeCommand, RecordModelGradeCommand, and DecideAgentResponseTrustCommand apply `max(configured, 0.98)` so no stored or earlier value below the floor can trust a response (`Trust_StoredThresholdBelowFloor_FloorApplied`). The Phase B review thresholds (FR-MCP-SESSIONREVIEW-007) stay configurable as approved.
@@ -1977,7 +2038,7 @@ Error codes (problem+json body `{ type, title, status, detail, code, message, re
 - 400 `agent_context_hv_request_invalid` (unknown session, an unknown or out-of-order range, a range over `HvRequest:MaxTurns`, or a range with no agent response).
 - 403 `agent_context_grader_not_allowed` (model grade from a grader other than the configured one).
 - 409 `agent_context_grade_not_in_hv_request` (the response is not an item of the named HV request) and 409 `agent_context_hv_request_closed` (the HV request is `Completed`).
-- 404 `not_found` with `details.resource` (`package`, `response`, `relationship`, `session_turn`, `ref`).
+- 404 `not_found` with `details.resource` (`package`, `response`, `relationship`, `session_turn`, `ref`, `hv_request`).
 - 409 `agent_context_disabled` (mode `Off`).
 - 409 `agent_context_package_overflow` (a response or replay against an `Overflow` package).
 - 409 `agent_context_response_not_gradable` (response `Rejected` or `Superseded`).
@@ -4202,4 +4263,4 @@ Relationship notes:
 - `AgentResponse.SupersededByResponseId` is a self reference within one request; SupersedeAgentResponseCommand prevents cycles, and a `supersedes` row in `AgentContextRelationship` records the same link with its evidence.
 - `AgentContextProjection` has at most one row per response (key `ResponseId`); its `GraphRagDocumentId` is the id of the `ContextDocumentEntity` row (the `Documents` set, id `adhoc-<Guid>`) that `IGraphRagService.IngestTextAsync` creates with its `ContextChunkEntity` children (`src/QBrainAi.GraphRag/Services/GraphRagService.cs:348-372`), always in the workspace scope; removal deletes that document and its chunks (`IGraphRagService.DeleteDocumentAsync`). It never points at a knowledge-graph entity (`GraphEntity`, which stays a separate graph node) or at the global scope.
 - Requirement-family keys are composite (`WorkspaceId`, `Kind`, `Id`); TODO keys are (`WorkspaceId`, `Id`); agent-context keys are human-readable strings derived from the turn and session they belong to (`pkg-`, `rsp-`, `grd-`, `rel-`, `hvr-`, section 6.3); every child row of the new tables uses a `long` identity key.
-- `AgentContextHvRequest` names a range of turns of one MCP session (logical reference by `SessionId`); its items list the responses in that range when it was created; each model grade names the HV request that produced it (foreign key), and the request completes when every item is graded.
+- `AgentContextHvRequest` names a range of turns of one MCP session (logical reference by `SessionId`); its items list the responses in that range when it was created; each model grade names the HV request that produced it (foreign key), and the request completes when no item stays `Pending` (each item `Graded`, or `Closed` because its response was rejected or superseded, section 6.3).
