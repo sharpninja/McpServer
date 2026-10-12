@@ -17,9 +17,9 @@ static partial class WarningSuppressionScanner
 
     private static readonly HashSet<string> ExcludedRelativePaths = new(StringComparer.OrdinalIgnoreCase)
     {
-        "tests/Build.Tests/WarningSuppressionApprovalValidatorTests.cs",
-        "tests/Build.Tests/WarningSuppressionScannerTests.cs",
-        "tests/Build.Tests/WarningSuppressionValidationTargetTests.cs",
+        "build/Build.Tests/WarningSuppressionApprovalValidatorTests.cs",
+        "build/Build.Tests/WarningSuppressionScannerTests.cs",
+        "build/Build.Tests/WarningSuppressionValidationTargetTests.cs",
     };
 
     private static readonly string[] ExcludedRelativePathPrefixes =

@@ -118,8 +118,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-AUDIT-001
 
@@ -128,8 +128,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Every run stores normalized provenance and diagnostics independently of TODO rows. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Persisted records omit raw credentials and raw source content. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Every run stores normalized provenance and diagnostics independently of TODO rows. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Persisted records omit raw credentials and raw source content. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-CONTRACT-001
 
@@ -138,8 +138,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] HandoffSourceKind, HandoffIngestionMode, HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest exist with complete XMLDocs. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Contracts serialize and deserialize with the shared client JSON context without silent field loss. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] HandoffSourceKind, HandoffIngestionMode, HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest exist with complete XMLDocs. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Contracts serialize and deserialize with the shared client JSON context without silent field loss. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-MODES-001
 
@@ -148,9 +148,9 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Approval revalidates the stored draft before TODO creation. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Replays of the same workspace, content hash, and prompt version are deterministic unless force=true. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Approval revalidates the stored draft before TODO creation. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Replays of the same workspace, content hash, and prompt version are deterministic unless force=true. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-SECURITY-001
 
@@ -159,8 +159,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Readers refuse more than 8 MiB of decoded input and unsupported formats. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Readers refuse more than 8 MiB of decoded input and unsupported formats. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-SURFACE-001
 
@@ -169,8 +169,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-TODO-001
 
@@ -179,8 +179,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] The only TODO mutation path is ITodoService.CreateAsync. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Existing TODO IDs require review and are never silently renamed. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] The only TODO mutation path is ITodoService.CreateAsync. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Existing TODO IDs require review and are never silently renamed. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-HANDOFF-VALIDATE-001
 
@@ -189,8 +189,8 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Validation and normalization have no TODO or run-store side effects. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Validation and normalization have no TODO or run-store side effects. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics. (evidence: tests/McpServer.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## TR-LOC-001
 
@@ -1668,13 +1668,13 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] A typed PluginSessionLogScenario catalog contains agent identity, repository, supported entrypoint, environment variables, cache folder name, and expected source type for all eight plugins. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] The fixture starts or binds to a real MCP Server on an isolated workspace and verifies marker trust before invoking plugins. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] PowerShell/hook plugins and Node SDK plugins are invoked through their supported production entrypoints, not by bypassing them with raw REST. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] Each row asserts session, turn, action, dialog, completion status, cache path, source revision, and failsafe cleanup from server and filesystem receipts. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] AiTheory rows use the same scenario catalog to review persisted YAML/receipt semantics; deterministic Theory rows remain the correctness gate. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] The explicit plugin-integration target preflights aiUnit strategy availability and fails when any scenario is skipped. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] Adapters capture executable, arguments, stdin, environment, cwd, timeout, exit, stdout, and stderr. Deterministic validation remains authoritative. Model and configuration failures are classified separately. Source revision and installed artifact hashes are recorded. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] A typed PluginSessionLogScenario catalog contains agent identity, repository, supported entrypoint, environment variables, cache folder name, and expected source type for all eight plugins. (evidence: tests/McpServer.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] The fixture starts or binds to a real MCP Server on an isolated workspace and verifies marker trust before invoking plugins. (evidence: tests/McpServer.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] PowerShell/hook plugins and Node SDK plugins are invoked through their supported production entrypoints, not by bypassing them with raw REST. (evidence: tests/McpServer.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Each row asserts session, turn, action, dialog, completion status, cache path, source revision, and failsafe cleanup from server and filesystem receipts. (evidence: tests/McpServer.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] AiTheory rows use the same scenario catalog to review persisted YAML/receipt semantics; deterministic Theory rows remain the correctness gate. (evidence: tests/McpServer.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] The explicit plugin-integration target preflights aiUnit strategy availability and fails when any scenario is skipped. (evidence: tests/McpServer.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Adapters capture executable, arguments, stdin, environment, cwd, timeout, exit, stdout, and stderr. Deterministic validation remains authoritative. Model and configuration failures are classified separately. Source revision and installed artifact hashes are recorded. (evidence: tests/McpServer.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
 
 ## TR-MCP-PLUGIN-SKILLS-001
 
@@ -1938,7 +1938,7 @@ Scope: layer-1+
 
 ## TR-MCP-QA-030
 
-**QA FAQ Wiki Snapshot Tests** — FAQ wiki content tests: a `tests/Build.Tests/FaqWikiPageTests.cs` test invokes `BuildFaqWikiPage` against a fixture FAQ JSON payload, snapshot-compares the generated Markdown to a checked-in expected output to catch unintended formatting changes, and asserts the wiki index files reference the new page.
+**QA FAQ Wiki Snapshot Tests** — FAQ wiki content tests: a `build/Build.Tests/FaqWikiPageTests.cs` test invokes `BuildFaqWikiPage` against a fixture FAQ JSON payload, snapshot-compares the generated Markdown to a checked-in expected output to catch unintended formatting changes, and asserts the wiki index files reference the new page.
 **Covered by:** FR: FR-MCP-102; TEST: TEST-MCP-132
 **Status:** pending
 Scope: layer-1+
@@ -2221,7 +2221,7 @@ Scope: layer-1+
 - [x] CA1819 is approved where returning arrays is intentional for DTO or API shape and the suppression includes justification. (evidence: config/warning-suppression-approvals.json and ContextChunkEntity.Embedding justify byte[] as EF Core BLOB storage contract.)
 - [x] Current CA2227 suppressions are approved only for non observable JSON, YAML, options binding DTOs, and EF navigation collections. Observable collections must be repopulated in place and not suppressed. (evidence: config/warning-suppression-approvals.json and WarningSuppressionValidationTargetTests CA2227 allowed-scope check.)
 - [x] CA1308 is not approved. Code must use explicit mapping or invariant case insensitive comparison rather than lower case normalization. (evidence: src/McpServer.Support.Mcp/Logging/ParseableEventFormatter.cs, src/McpServer.Services/Ingestion/MarkdownSessionLogParser.cs, src/McpServer.Storage/Indexing/EmbeddingService.cs, tests/McpServer.Support.Mcp.Tests/Indexing/EmbeddingServiceTests.cs)
-- [x] CS8632 is not approved. Every project must enable nullable annotations and CS8632 NoWarn entries must be removed. (evidence: Directory.Build.props, build/_build.csproj, lib/NSubstitute/NSubstitute.csproj, tests/Build.Tests/Build.Tests.csproj, solution build on 2026-07-07)
+- [x] CS8632 is not approved. Every project must enable nullable annotations and CS8632 NoWarn entries must be removed. (evidence: Directory.Build.props, build/_build.csproj, lib/NSubstitute/NSubstitute.csproj, build/Build.Tests/Build.Tests.csproj, solution build on 2026-07-07)
 - [x] TreatWarningsAsErrors false is not approved. The build project warning bypass must remain removed after warning clean validation. (evidence: Directory.Build.props and dotnet build McpServer.sln -c Debug -v minimal passed with zero warnings and zero errors on 2026-07-07)
 - [x] Stale ASP0019 suppressions are not approved. ASP0019 NoWarn entries must remain removed when no IHeaderDictionary Add usage remains. (evidence: tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj, tests/McpServer.Support.Mcp.IntegrationTests/McpServer.Support.Mcp.IntegrationTests.csproj, solution build on 2026-07-07)
 - [x] Every warning suppression or warning bypass not explicitly approved by this TR must remain open remediation work until fixed and validated. (evidence: ValidateWarningSuppressions passes after CA1848, CS8602, and Storage migration obsolete pragma removals; approval register contains only scoped approved suppressions.)

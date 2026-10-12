@@ -1200,8 +1200,8 @@ Write-Output ("agent=" + $script:AgentName)
         $gateText = [System.IO.File]::ReadAllText($gate)
         $gateText | Should -Match 'PluginIntegration'
         $gateText | Should -Match 'deliberately excluded'
-        $validator = Join-Path $script:RepoRoot 'tests\Build.Tests\SessionLifeUnitGateValidatorTests.cs'
-        $consumer = Join-Path $script:RepoRoot 'tests\Build.Tests\SessionLifeUnitGateConsumerTests.cs'
+        $validator = Join-Path $script:RepoRoot 'build\Build.Tests\SessionLifeUnitGateValidatorTests.cs'
+        $consumer = Join-Path $script:RepoRoot 'build\Build.Tests\SessionLifeUnitGateConsumerTests.cs'
         Test-Path -LiteralPath $validator | Should -BeTrue
         Test-Path -LiteralPath $consumer | Should -BeTrue
         $vText = [System.IO.File]::ReadAllText($validator)

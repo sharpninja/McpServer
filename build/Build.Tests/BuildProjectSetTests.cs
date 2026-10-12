@@ -72,7 +72,8 @@ public sealed class BuildProjectSetTests
     /// <summary>
     /// Operator directive 2026-10-12: <c>build/Directory.Build.props</c> ends MSBuild's upward search for the Nuke project, so
     /// neither the product properties nor an enclosing checkout's <c>Directory.Build.props</c> (worktrees nest inside the main
-    /// checkout under <c>.claude/worktrees</c>) apply to <c>build/_build.csproj</c>. The stop file imports and sets nothing.
+    /// checkout under <c>.claude/worktrees</c>) apply to <c>build/_build.csproj</c> or <c>build/Build.Tests</c>. The stop file
+    /// imports and sets nothing.
     /// </summary>
     [Fact]
     public void NukeProjectPropsSearchStopsAtTheBuildFolder()
@@ -94,6 +95,48 @@ public sealed class BuildProjectSetTests
 
         Assert.Equal("true", UnconditionalProperty(project, "TreatWarningsAsErrors"));
         Assert.Equal("enable", UnconditionalProperty(project, "ImplicitUsings"));
+    }
+
+    /// <summary>
+    /// Operator directive 2026-10-12 ("Build.Tests should be a sibling to the Build project and out of the scope of the
+    /// analyzers"): Build.Tests lives in <c>build/Build.Tests</c>, beside <c>build/_build.csproj</c>, under the same
+    /// <c>build/Directory.Build.props</c> stop file, and nothing remains in <c>tests/Build.Tests</c>. Reads the repository tree.
+    /// </summary>
+    [Fact]
+    public void BuildTestsLivesBesideTheNukeProject()
+    {
+        var root = FindRepositoryRoot();
+
+        Assert.True(File.Exists(Path.Combine(root, "build", "Build.Tests", "Build.Tests.csproj")), "build/Build.Tests/Build.Tests.csproj must exist");
+        Assert.False(Directory.Exists(Path.Combine(root, "tests", "Build.Tests")), "tests/Build.Tests must not exist");
+    }
+
+    /// <summary>
+    /// Operator directive 2026-10-12: the Nuke project's default item globs cover everything under <c>build/</c>, so
+    /// <c>build/_build.csproj</c> excludes <c>Build.Tests/**</c>; otherwise the test sources and their generated obj files would
+    /// compile into the build assembly. Reads the project file.
+    /// </summary>
+    [Fact]
+    public void NukeProjectGlobsExcludeBuildTests()
+    {
+        var project = XDocument.Load(Path.Combine(FindRepositoryRoot(), "build", "_build.csproj"));
+
+        Assert.Contains("Build.Tests/**", UnconditionalProperty(project, "DefaultItemExcludes") ?? string.Empty, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TR-MCP-QUALITY-001 (no warning bypass): outside the product properties, <c>build/Build.Tests/Build.Tests.csproj</c> sets
+    /// TreatWarningsAsErrors itself, plus ImplicitUsings and UseMicrosoftTestingPlatformRunner, which it inherited before the
+    /// move. Reads the project file.
+    /// </summary>
+    [Fact]
+    public void BuildTestsKeepsWarningsAsErrorsOnItsOwn()
+    {
+        var project = XDocument.Load(Path.Combine(FindRepositoryRoot(), "build", "Build.Tests", "Build.Tests.csproj"));
+
+        Assert.Equal("true", UnconditionalProperty(project, "TreatWarningsAsErrors"));
+        Assert.Equal("enable", UnconditionalProperty(project, "ImplicitUsings"));
+        Assert.Equal("true", UnconditionalProperty(project, "UseMicrosoftTestingPlatformRunner"));
     }
 
     /// <summary>Returns the last value an unconditional PropertyGroup assigns to <paramref name="name"/>, or null.</summary>

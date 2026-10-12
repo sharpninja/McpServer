@@ -19,7 +19,7 @@ trigger:
       - tests/QBrainAi.Support.Mcp.Tests/**
       - tests/QBrainAi.Client.Tests/**
       - tests/QBrainAi.Cqrs.Tests/**
-      - tests/Build.Tests/**
+      - build/Build.Tests/**
       - build/**
       - build.ps1
       - docs/**
@@ -56,7 +56,7 @@ pr:
       - tests/QBrainAi.Support.Mcp.Tests/**
       - tests/QBrainAi.Client.Tests/**
       - tests/QBrainAi.Cqrs.Tests/**
-      - tests/Build.Tests/**
+      - build/Build.Tests/**
       - build/**
       - build.ps1
       - docs/**

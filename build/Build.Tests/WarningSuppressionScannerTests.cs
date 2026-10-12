@@ -93,7 +93,7 @@ public sealed class WarningSuppressionScannerTests
                 #pragma warning disable 612, 618
                 """);
             WriteFile(root, "src/Generated/Contract.g.cs", "#pragma warning disable CA1819");
-            WriteFile(root, "tests/Build.Tests/WarningSuppressionScannerTests.cs", "<Project><PropertyGroup><NoWarn>CA9990</NoWarn></PropertyGroup></Project>");
+            WriteFile(root, "build/Build.Tests/WarningSuppressionScannerTests.cs", "<Project><PropertyGroup><NoWarn>CA9990</NoWarn></PropertyGroup></Project>");
 
             var occurrences = WarningSuppressionScanner.Scan(root);
             var diagnostics = occurrences.Select(occurrence => occurrence.DiagnosticId).ToArray();

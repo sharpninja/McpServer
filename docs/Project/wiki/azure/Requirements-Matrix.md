@@ -256,7 +256,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-GRAPHRAG-ADHOC-001 | ✅ Complete | src/McpServer.GraphRag, src/McpServer.Support.Mcp/Controllers/GraphRagController.cs |
 | TR-GRAPHRAG-ADHOC-002 | ✅ Complete | src/McpServer.GraphRag |
 | TR-GRAPHRAG-ADHOC-003 | ✅ Complete | src/McpServer.GraphRag |
-| TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md, tests/Build.Tests/DocumentationGuidanceTests.cs |
+| TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md, build/Build.Tests/DocumentationGuidanceTests.cs |
 | TR-MCP-TODO-007 | ✅ Complete | src/McpServer.Support.Mcp/Services/TodoCreationService.cs |
 | TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Storage/McpDbContext.cs, EfTodoService, TodoBootstrapImporter, AddTodoWorkspaceScoping migrations |
 | TEST-MCP-001 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Configuration |

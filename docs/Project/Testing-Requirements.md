@@ -17,39 +17,39 @@
 - TEST-HANDOFF-001: Cover documented request, result, draft, provenance, and diagnostic contracts, including typed-client serialization.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] All public handoff contract types round-trip through the typed client JSON context. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-  - [x] Required contract types exist with complete XMLDocs and the documented enum values. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] All public handoff contract types round-trip through the typed client JSON context. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Required contract types exist with complete XMLDocs and the documented enum values. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - TEST-HANDOFF-002: Cover bounded readers, workspace containment, and rejection of missing, unsupported, oversized, traversal, external, and reparse-escaping sources.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] Missing, unsupported, oversized, traversal, external, and reparse-escaping paths fail with diagnostics and no TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-  - [x] Markdown, text, JSON, and YAML inputs are accepted when contained and within 8 MiB. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Missing, unsupported, oversized, traversal, external, and reparse-escaping paths fail with diagnostics and no TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Markdown, text, JSON, and YAML inputs are accepted when contained and within 8 MiB. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - TEST-HANDOFF-003: Cover versioned HandoffTodoDraft extraction and strict JSON parsing, including malformed AI output.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] Extraction is invoked with AgentPoolOneShotContext.HandoffTodoDraft and a versioned prompt. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-  - [x] Malformed or compatibility JSON produces diagnostics and never creates a TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Extraction is invoked with AgentPoolOneShotContext.HandoffTodoDraft and a versioned prompt. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Malformed or compatibility JSON produces diagnostics and never creates a TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - TEST-HANDOFF-004: Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] Invalid or conflicting draft fields produce field-specific diagnostics. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-  - [x] DraftOnly never mutates TODOs, RequireReview persists an approvable run, and CreateWhenConfident honors the 0.75 confidence and no-error gates. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Invalid or conflicting draft fields produce field-specific diagnostics. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] DraftOnly never mutates TODOs, RequireReview persists an approvable run, and CreateWhenConfident honors the 0.75 confidence and no-error gates. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - TEST-HANDOFF-005: Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] Successful creation produces exactly one TODO through ITodoService. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-  - [x] Replay of the same workspace, content hash, and prompt version returns the existing receipt unless force=true. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-  - [x] ID collisions require review and are never silently renamed. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Successful creation produces exactly one TODO through ITodoService. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Replay of the same workspace, content hash, and prompt version returns the existing receipt unless force=true. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] ID collisions require review and are never silently renamed. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - TEST-HANDOFF-006: Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] Ingest, get, and approve exist on API, client, REPL, Director, MCP tools, and plugin skill. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-  - [x] Every surface delegates to IHandoffIngestionService and applies workspace isolation. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Ingest, get, and approve exist on API, client, REPL, Director, MCP tools, and plugin skill. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Every surface delegates to IHandoffIngestionService and applies workspace isolation. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - TEST-HANDOFF-007: Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] Persisted runs retain run ID, source kind and locator, SHA-256 hash, extraction time, prompt version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-  - [x] Persisted runs and logs do not contain raw credentials or source content. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Persisted runs retain run ID, source kind and locator, SHA-256 hash, extraction time, prompt version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+  - [x] Persisted runs and logs do not contain raw credentials or source content. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 - TEST-MCP-001: Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct.
   Scope: layer-1+
 - TEST-MCP-002: Given TODO API operations, when create/update/delete/query run, then contracts remain stable.
@@ -525,7 +525,7 @@
   - [x] An ACID profile test proves the Quad Brain coding tool is exposed while unsafe tools remain blocked.
   - [x] Tests use an in-memory MCP HTTP handler and do not require live external model credentials or network calls.
   - [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
-- TEST-MCP-188: Registered 2026-07-20 to close a pre-existing traceability drift: this id was cited at tests/Build.Tests/DocumentationGuidanceTests.cs:35 but existed in neither the MCP requirements store nor docs/Project/Testing-Requirements.md, so a naive next-free-id calculation would have collided with live code. The test verifies that the workspace marker template pins the PowerShell and Node runtime guidance agents depend on: DocumentationGuidanceTests asserts the generated marker prompt instructs agents to invoke PowerShell as pwsh.exe from PATH rather than hard-coding an absolute install path, and that Node usage guidance is present, so that agents on hosts with WindowsApps or MSIX PowerShell layouts still resolve a working runtime. Fixture: the rendered marker prompt template read from the repository. This entry documents existing coverage; no behavior changed when it was registered.
+- TEST-MCP-188: Registered 2026-07-20 to close a pre-existing traceability drift: this id was cited at build/Build.Tests/DocumentationGuidanceTests.cs:35 but existed in neither the MCP requirements store nor docs/Project/Testing-Requirements.md, so a naive next-free-id calculation would have collided with live code. The test verifies that the workspace marker template pins the PowerShell and Node runtime guidance agents depend on: DocumentationGuidanceTests asserts the generated marker prompt instructs agents to invoke PowerShell as pwsh.exe from PATH rather than hard-coding an absolute install path, and that Node usage guidance is present, so that agents on hosts with WindowsApps or MSIX PowerShell layouts still resolve a working runtime. Fixture: the rendered marker prompt template read from the repository. This entry documents existing coverage; no behavior changed when it was registered.
   Scope: layer-1+
 - TEST-MCP-189: Validates FR-MCP-140 and TR-MCP-SEC-005. Unit: the emitted AGENTS-README-FIRST.yaml signature block contains a fields array and a format string, and the fields array lists exactly the canonical marker-v1 payload field names in the order BuildSignaturePayload emits them. Unit, byte-compatibility gate: the HMAC-SHA256 signature value computed for a fixed known marker is unchanged by the refactor, proving the six existing independent verifiers (McpSession.psm1, plugins lib-ps and lib-sh marker resolvers, lib-node and mcp-repl-ts TypeScript resolvers, mcpserver-agent-core marker-trust.ts, MarkerFileClientOptionsResolver.cs) continue to validate. Unit, conditional tail: a marker written with an agentPlugins contract emits the agentPlugins.policy and agentPlugins.contractDigest names in fields, and a marker written without one does not. Unit, drift guard: the canonical key order documented in docs/REPL-AGENT-GUIDE.md matches SignaturePayloadFields exactly, so the prose specification cannot drift from the code.
   Scope: layer-1+
@@ -565,7 +565,7 @@
   Scope: layer-1+
 - TEST-MCP-ACID-006: Committed, bypassed (disabled/non-mutating), aborted, rejected on key-server sign failure fail-closed before mutation, rejected on subscriber commit rejection with rollback, degraded on subscriber unavailable. Coordinator validates key server and subscriber results.
   Scope: layer-1+
-- TEST-MCP-AIUNIT-001: Add tests in tests/Build.Tests/ covering:
+- TEST-MCP-AIUNIT-001: Add tests in build/Build.Tests/ covering:
 - Build target properties AiCodeReview and AiProjectReview exist.
 - WriteAiUnitReviewMarkdownFromData produces correct MD file with prompt + response sections.
 - CreateAiUnitClient (internal or exposed) constructs without throw when given valid IConfiguration stub (mocked config for ActiveStrategy, Strategies section); returns non-null client-like object.
@@ -1709,7 +1709,7 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] QBrainAi.sln exists and QBrainAi.sln does not.
-  - [ ] tests/Build.Tests keeps RootNamespace NukeBuild.Tests.
+  - [ ] build/Build.Tests keeps RootNamespace NukeBuild.Tests.
   - [ ] build/_build.csproj is still _build.
 - TEST-MCP-QBRAIN-003: New package ids and 1.x SharpNinja.QBrainAi.* facades. qbrain-ai-repl is canonical and qbrain-ai-repl remains on the facade. NuGet push of QBrainAI.* stays gated.
   Scope: layer-1+

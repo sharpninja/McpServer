@@ -12,6 +12,8 @@
     <!-- TR-MCP-QUALITY-001: no warning bypass for the build project. Set here because build/Directory.Build.props keeps the
          product MSBuild properties (src/Directory.Build.props) out of this project. -->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Build.Tests is a sibling project in build/Build.Tests; keep its sources and obj output out of this project's globs. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);Build.Tests/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

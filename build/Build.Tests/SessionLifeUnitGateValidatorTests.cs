@@ -371,7 +371,7 @@ public sealed class SessionLifeUnitGateValidatorTests
         {
             "build/Build.Test.cs",
             "src/QBrainAi.Services/SessionLogService.cs",
-            "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+            "build/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
             "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
         };
 

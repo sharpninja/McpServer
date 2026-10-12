@@ -32,7 +32,7 @@ For specific operational instructions (session bootstrap, turn logging lifecycle
 # or individual projects:
 # dotnet test tests\QBrainAi.Support.Mcp.Tests -c Debug
 # dotnet test tests\QBrainAi.Client.Tests -c Debug
-# dotnet test tests\Build.Tests -c Debug
+# dotnet test build\Build.Tests -c Debug
 
 # Run integration tests (uses CustomWebApplicationFactory, in-memory EF)
 dotnet test tests\QBrainAi.Support.Mcp.IntegrationTests -c Debug

@@ -60,7 +60,7 @@ public sealed class QBrainAiRebrandPhase1Tests
             }
         }
 
-        var buildTests = File.ReadAllText(Path.Combine(root, "tests", "Build.Tests", "Build.Tests.csproj"));
+        var buildTests = File.ReadAllText(Path.Combine(root, "build", "Build.Tests", "Build.Tests.csproj"));
         Assert.Contains("<RootNamespace>NukeBuild.Tests</RootNamespace>", buildTests, StringComparison.Ordinal);
         var nuke = File.ReadAllText(Path.Combine(root, "build", "_build.csproj"));
         Assert.Contains("<RootNamespace>_build</RootNamespace>", nuke, StringComparison.Ordinal);

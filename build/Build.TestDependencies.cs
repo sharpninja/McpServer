@@ -70,7 +70,7 @@ partial class Build
             var projectsWithIntegrationTests = new[]
             {
                 TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
-                TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
+                RootDirectory / "build" / "Build.Tests" / "Build.Tests.csproj",
             };
 
             var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);

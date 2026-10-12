@@ -5,59 +5,59 @@
 Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Supports Markdown, text, JSON, and YAML inputs. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Maximum decoded input is 8 MiB. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Supports Markdown, text, JSON, and YAML inputs. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Maximum decoded input is 8 MiB. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-002 Extract structured MCP TODO drafts via one-shot agents
 
 Use the existing one-shot agent system to extract a structured MCP TODO draft.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Extraction uses a versioned prompt and strict JSON contract. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Malformed output produces diagnostics and never creates a TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Unknown or missing source information is not silently discarded. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Extraction uses a versioned prompt and strict JSON contract. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Malformed output produces diagnostics and never creates a TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Unknown or missing source information is not silently discarded. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-003 Validate and normalize generated TODO drafts
 
 Validate and normalize generated TODO drafts.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Invalid or conflicting values produce field-specific diagnostics. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Invalid or conflicting values produce field-specific diagnostics. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-004 Support DraftOnly, RequireReview, and CreateWhenConfident modes
 
 Support DraftOnly, RequireReview, and CreateWhenConfident modes.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] DraftOnly is the default and never mutates TODO state. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] RequireReview persists an approvable run without creating a TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] DraftOnly is the default and never mutates TODO state. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] RequireReview persists an approvable run without creating a TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-005 Persist approved TODOs exclusively through the TODO service
 
 Persist approved TODOs exclusively through the existing TODO service.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Successful creation produces exactly one TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Replay of the same workspace, content hash, and prompt version returns the existing receipt. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] ID collisions require review and are never silently renamed. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Successful creation produces exactly one TODO. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Replay of the same workspace, content hash, and prompt version returns the existing receipt. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] ID collisions require review and are never silently renamed. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-006 Preserve auditable provenance and diagnostics
 
 Preserve auditable provenance and diagnostics for every run.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
-- [x] Raw credentials or source content are not copied into logs. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Raw credentials or source content are not copied into logs. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-HANDOFF-007 Provide equivalent public handoff surfaces
 
 Provide behaviorally equivalent API, client, REPL, Director, MCP-tool, and plugin-skill entrypoints.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
+- [x] Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows. (evidence: tests/QBrainAi.Client.Tests/HandoffClientTests.cs; build/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6)
 
 ## FR-LOC-001 Localization Support
 
@@ -1624,12 +1624,12 @@ Scope: layer-1+
 The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real QBrain.AI.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
-- [x] Every one of the eight catalog rows executes its production plugin entrypoint for bootstrap, begin, append dialog, append actions, complete, failed submit, and retry. Direct QBrainAi.Client calls do not satisfy plugin invocation. Persisted state is independently queried after process success. The aiUnit assertion invokes the configured aiUnit evaluator against a redacted execution receipt and fails closed on malformed, skipped, unavailable, or synthetic output. (evidence: tests/QBrainAi.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content. (evidence: tests/QBrainAi.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}. (evidence: tests/QBrainAi.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state. (evidence: tests/QBrainAi.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios. (evidence: tests/QBrainAi.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario. (evidence: tests/QBrainAi.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [x] Every one of the eight catalog rows executes its production plugin entrypoint for bootstrap, begin, append dialog, append actions, complete, failed submit, and retry. Direct QBrainAi.Client calls do not satisfy plugin invocation. Persisted state is independently queried after process success. The aiUnit assertion invokes the configured aiUnit evaluator against a redacted execution receipt and fails closed on malformed, skipped, unavailable, or synthetic output. (evidence: tests/QBrainAi.PluginIntegration.Tests; build/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
 - [ ] For each server-side session persistence contract changed by this remediation, all eight supported production plugin entrypoints normalize primary success, retryable degraded or queued state, and terminal failure identically. Process exit alone never proves persistence; primary success requires exact server readback.
 
 ## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across QBrainAi plugins

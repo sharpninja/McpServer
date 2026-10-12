@@ -6,6 +6,11 @@
     <IsTestProject>true</IsTestProject>
     <RootNamespace>NukeBuild.Tests</RootNamespace>
     <Nullable>enable</Nullable>
+    <!-- Build.Tests lives beside the Nuke project under build/Directory.Build.props, outside the product MSBuild properties and
+         analyzers (operator directive 2026-10-12), so it sets what it used to inherit. TR-MCP-QUALITY-001: no warning bypass. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
   </PropertyGroup>
 
   <ItemGroup>

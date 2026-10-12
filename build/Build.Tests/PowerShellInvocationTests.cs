@@ -30,7 +30,7 @@ public sealed class PowerShellInvocationTests
     public async Task BuildTests_PwshProcessStartInfo_UsesNonInteractiveFlags()
     {
         var testSource = await ReadRepositoryTextAsync(
-            Path.Combine("tests", "Build.Tests", "RequirementsWikiPublishScriptTests.cs")).ConfigureAwait(true);
+            Path.Combine("build", "Build.Tests", "RequirementsWikiPublishScriptTests.cs")).ConfigureAwait(true);
 
         Assert.Contains("new ProcessStartInfo(\"pwsh.exe\")", testSource, StringComparison.Ordinal);
         Assert.Contains("psi.ArgumentList.Add(\"-NoLogo\")", testSource, StringComparison.Ordinal);

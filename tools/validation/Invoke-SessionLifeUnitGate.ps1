@@ -251,7 +251,7 @@ try {
     $buildExit = Invoke-GateNative -Name 'build-tests' -Command {
         # The TRX logger is the report. Hang-dump collection is omitted because it
         # writes multi-hundred-megabyte dumps after the counters are already complete.
-        & dotnet test (Join-Path $repoRoot 'tests/Build.Tests/Build.Tests.csproj') -c Debug --filter 'Category!=Integration' --logger "trx;LogFileName=Build.Tests.trx" --results-directory $buildTestsDir
+        & dotnet test (Join-Path $repoRoot 'build/Build.Tests/Build.Tests.csproj') -c Debug --filter 'Category!=Integration' --logger "trx;LogFileName=Build.Tests.trx" --results-directory $buildTestsDir
     }
     Get-ChildItem -LiteralPath $buildTestsDir -Filter '*.trx' -Recurse -File |
         Where-Object { $_.Name -ne 'Build.Tests.trx' } |
