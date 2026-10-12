@@ -179,7 +179,7 @@ partial class Build
 
     AbsolutePath AgentProject => SourceDirectory / "QBrainAi.McpAgent.SampleHost" / "QBrainAi.McpAgent.SampleHost.csproj";
 
-    static void PublishSingleFileProject(AbsolutePath project, AbsolutePath output)
+    void PublishSingleFileProject(AbsolutePath project, AbsolutePath output)
     {
         DotNetPublish(_ => _
             .SetProject(project)

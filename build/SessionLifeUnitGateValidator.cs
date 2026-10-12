@@ -202,7 +202,7 @@ internal sealed partial class SessionLifeUnitGateValidator
     /// <param name="request">The run-scoped validation request.</param>
     /// <param name="lane">The canonical lane directory name.</param>
     /// <param name="resultsRoot">The absolute results root.</param>
-    private static void ValidateInventory(SessionLifeUnitGateValidationRequest request, string lane, string resultsRoot)
+    private void ValidateInventory(SessionLifeUnitGateValidationRequest request, string lane, string resultsRoot)
     {
         var inventoryToken = $"{lane}/selected-projects.json";
         var inventoryPath = CombineUnder(resultsRoot, inventoryToken);

@@ -4,12 +4,14 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>_build</RootNamespace>
-    <!-- CA1707: the assembly name carries no underscore; the project file keeps the Nuke-conventional _build.csproj name. -->
-    <AssemblyName>QBrainAi.Build</AssemblyName>
     <IsPackable>false</IsPackable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <NukeTelemetryVersion>1</NukeTelemetryVersion>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- TR-MCP-QUALITY-001: no warning bypass for the build project. Set here because build/Directory.Build.props keeps the
+         product MSBuild properties (src/Directory.Build.props) out of this project. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

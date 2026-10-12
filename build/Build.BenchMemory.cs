@@ -44,7 +44,7 @@ partial class Build
                 .SetResultsDirectory(RootDirectory / "TestResults"));
         });
 
-    private static bool H7aAgreed()
+    private bool H7aAgreed()
     {
         var path = RootDirectory / "docs" / "benchmarks" / "h7a-value-gate.json";
         if (!File.Exists(path))
@@ -53,7 +53,7 @@ partial class Build
         return document.RootElement.TryGetProperty("agree", out var agree) && agree.GetBoolean();
     }
 
-    private static void PrintTokenMeansFirst(string plugin)
+    private void PrintTokenMeansFirst(string plugin)
     {
         Log.Information("TOKEN MEANS (primary metric) plugin={Plugin} condition=with_memory|without_memory", plugin);
         Log.Information("tokens_in / tokens_out / tokens_total are required cell fields; pass/fail is correctness/safety only.");

@@ -6,9 +6,9 @@ public static class GeneratedMigrationObsoletePragmaNormalizer
 {
     private const string PragmaToken = "#pragma";
 
-    private const string DisablePair = PragmaToken + " warning disable " + "612, 618";
+    private static readonly string DisablePair = PragmaToken + " warning disable " + "612, 618";
 
-    private const string RestorePair = PragmaToken + " warning restore " + "612, 618";
+    private static readonly string RestorePair = PragmaToken + " warning restore " + "612, 618";
 
     private static readonly string[] MigrationRoots =
     [

@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
+using System.Xml.Linq;
+
 namespace NukeBuild.Tests;
 
 /// <summary>
@@ -46,6 +48,61 @@ public sealed class BuildProjectSetTests
         Assert.Contains("GetBuildProjectFiles(SourceDirectory, TestsDirectory)", restore, StringComparison.Ordinal);
         Assert.Contains("GetBuildProjectFiles(SourceDirectory, TestsDirectory)", compile, StringComparison.Ordinal);
     }
+
+    /// <summary>
+    /// Operator directive 2026-10-12 ("The Directory.Build.props need to be located where it will not apply to the Nuke
+    /// project"): the repository root holds no <c>Directory.Build.props</c>; the product properties live in
+    /// <c>src/Directory.Build.props</c>, and <c>tests/Directory.Build.props</c> imports that file. Reads the repository files.
+    /// </summary>
+    [Fact]
+    public void ProductPropsLiveUnderSrcAndTestsNotAtRepositoryRoot()
+    {
+        var root = FindRepositoryRoot();
+
+        Assert.False(File.Exists(Path.Combine(root, "Directory.Build.props")), "the repository root must not hold Directory.Build.props");
+        var productProps = XDocument.Load(Path.Combine(root, "src", "Directory.Build.props"));
+        Assert.Equal("true", UnconditionalProperty(productProps, "TreatWarningsAsErrors"));
+        var testProps = XDocument.Load(Path.Combine(root, "tests", "Directory.Build.props"));
+        var imports = testProps.Root!.Elements("Import")
+            .Select(element => ((string?)element.Attribute("Project") ?? string.Empty).Replace('\\', '/'))
+            .ToArray();
+        Assert.Contains(imports, project => project.EndsWith("../src/Directory.Build.props", StringComparison.Ordinal));
+    }
+
+    /// <summary>
+    /// Operator directive 2026-10-12: <c>build/Directory.Build.props</c> ends MSBuild's upward search for the Nuke project, so
+    /// neither the product properties nor an enclosing checkout's <c>Directory.Build.props</c> (worktrees nest inside the main
+    /// checkout under <c>.claude/worktrees</c>) apply to <c>build/_build.csproj</c>. The stop file imports and sets nothing.
+    /// </summary>
+    [Fact]
+    public void NukeProjectPropsSearchStopsAtTheBuildFolder()
+    {
+        var stop = XDocument.Load(Path.Combine(FindRepositoryRoot(), "build", "Directory.Build.props"));
+
+        Assert.Empty(stop.Root!.Elements());
+    }
+
+    /// <summary>
+    /// TR-MCP-QUALITY-001 ("TreatWarningsAsErrors false is not approved. The build project warning bypass must remain
+    /// removed"): with the product properties out of reach, <c>build/_build.csproj</c> sets TreatWarningsAsErrors itself, and
+    /// ImplicitUsings, which its sources rely on. Reads the project file.
+    /// </summary>
+    [Fact]
+    public void NukeProjectKeepsWarningsAsErrorsOnItsOwn()
+    {
+        var project = XDocument.Load(Path.Combine(FindRepositoryRoot(), "build", "_build.csproj"));
+
+        Assert.Equal("true", UnconditionalProperty(project, "TreatWarningsAsErrors"));
+        Assert.Equal("enable", UnconditionalProperty(project, "ImplicitUsings"));
+    }
+
+    /// <summary>Returns the last value an unconditional PropertyGroup assigns to <paramref name="name"/>, or null.</summary>
+    private static string? UnconditionalProperty(XDocument project, string name) =>
+        project.Root!.Elements("PropertyGroup")
+            .Where(group => group.Attribute("Condition") is null)
+            .Elements(name)
+            .Select(element => element.Value.Trim())
+            .LastOrDefault();
 
     /// <summary>Finds the repository root by the <c>.nuke/parameters.json</c> file.</summary>
     private static string FindRepositoryRoot()

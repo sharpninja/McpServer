@@ -167,7 +167,7 @@ public sealed class WarningSuppressionApprovalValidatorTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "Directory.Build.props")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }

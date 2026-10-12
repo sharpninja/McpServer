@@ -1,0 +1,5 @@
+<Project>
+  <!-- SPDX-License-Identifier: Apache-2.0 -->
+  <!-- Test projects share the product MSBuild properties, including the test-only property groups at the end of that file. -->
+  <Import Project="$(MSBuildThisFileDirectory)../src/Directory.Build.props" />
+</Project>

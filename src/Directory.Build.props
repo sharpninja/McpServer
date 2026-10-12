@@ -1,4 +1,7 @@
 <Project>
+  <!-- Product MSBuild properties for every project under src/ and, through tests/Directory.Build.props, under tests/. They
+       live here rather than at the repository root so they never reach the Nuke build project; build/Directory.Build.props
+       ends MSBuild's upward search for build/_build.csproj (operator directive 2026-10-12). -->
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -9,7 +12,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName.EndsWith('.IntegrationTests')) OR '$(MSBuildProjectName)' == '_build'">
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName.EndsWith('.IntegrationTests'))">
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 

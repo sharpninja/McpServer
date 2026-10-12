@@ -1,0 +1,7 @@
+<Project>
+  <!-- SPDX-License-Identifier: Apache-2.0 -->
+  <!-- Ends MSBuild's upward search for Directory.Build.props at build/, so neither the product properties
+       (src/Directory.Build.props) nor an enclosing checkout's Directory.Build.props (worktrees nest inside the main checkout)
+       apply to the Nuke build project; build/_build.csproj sets the properties it needs itself (operator directive
+       2026-10-12). Intentionally empty. -->
+</Project>

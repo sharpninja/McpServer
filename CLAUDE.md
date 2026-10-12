@@ -86,7 +86,7 @@ EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, Postgr
 
 ### XML Documentation Required
 
-`TreatWarningsAsErrors` and `GenerateDocumentationFile` are enabled globally in `Directory.Build.props`. **All public types and members must have XML doc comments** or the build fails (CS1591). Use `/// <inheritdoc />` for interface implementations. Test classes and methods also require XML docs stating what is tested, what data/fixtures are used, and which requirement IDs are validated.
+`TreatWarningsAsErrors` and `GenerateDocumentationFile` are enabled for every project under `src/` and `tests/` in `src/Directory.Build.props` (which `tests/Directory.Build.props` imports); the Nuke build project is kept out of it by `build/Directory.Build.props` and sets `TreatWarningsAsErrors` itself. **All public types and members must have XML doc comments** or the build fails (CS1591). Use `/// <inheritdoc />` for interface implementations. Test classes and methods also require XML docs stating what is tested, what data/fixtures are used, and which requirement IDs are validated.
 
 ### Requirement Traceability
 

@@ -4,7 +4,7 @@
 /// </summary>
 static class MsixHelper
 {
-    private const string WindowsKitsRoot = @"C:\Program Files (x86)\Windows Kits\10\bin";
+    private static readonly string WindowsKitsRoot = @"C:\Program Files (x86)\Windows Kits\10\bin";
 
     /// <summary>
     /// Searches for a Windows SDK tool (makeappx.exe, signtool.exe) on PATH

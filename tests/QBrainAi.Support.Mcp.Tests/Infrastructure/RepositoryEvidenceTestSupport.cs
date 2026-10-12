@@ -94,7 +94,7 @@ internal static partial class RepositoryEvidenceTestSupport
         var gitMarker = Path.Combine(root, ".git");
         return (File.Exists(gitMarker) || Directory.Exists(gitMarker)) &&
                File.Exists(Path.Combine(root, "QBrainAi.sln")) &&
-               File.Exists(Path.Combine(root, "Directory.Build.props")) &&
+               File.Exists(Path.Combine(root, "Directory.Packages.props")) &&
                File.Exists(
                    Path.Combine(
                        root,
