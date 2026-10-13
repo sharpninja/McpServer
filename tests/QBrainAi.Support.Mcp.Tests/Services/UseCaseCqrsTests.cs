@@ -291,9 +291,9 @@ public sealed class UseCaseCqrsTests : IDisposable
         Assert.Equal(UseCaseConstants.DefaultLinkType, result.Value.FrLinks[0].LinkType);
     }
 
-    /// <summary>TR-MCP-USECASE-004: Diagram query returns mermaid sequenceDiagram content.</summary>
+    /// <summary>TR-MCP-USECASE-004: Diagram query returns scoped Mermaid UML use-case content.</summary>
     [Fact]
-    public async Task GetUseCaseDiagram_ReturnsMermaidSequence()
+    public async Task GetUseCaseDiagram_ReturnsScopedMermaidUml()
     {
         await using var db = CreateContext();
         var create = await new CreateUseCaseCommandHandler(db, CreateWorkspaceContext())
@@ -309,14 +309,14 @@ public sealed class UseCaseCqrsTests : IDisposable
         var diagram = await new GetUseCaseDiagramQueryHandler(
                 db,
                 CreateWorkspaceContext(),
-                new MermaidUseCaseDiagramService())
+                new UseCaseUmlSerializationService())
             .HandleAsync(new GetUseCaseDiagramQuery(_workspace, create.Value!.UseCaseId, "mermaid"), _ctx)
             .ConfigureAwait(true);
 
         Assert.True(diagram.IsSuccess, diagram.Error);
         Assert.Equal("mermaid", diagram.Value!.Format);
-        Assert.Contains("sequenceDiagram", diagram.Value.Content, StringComparison.Ordinal);
-        Assert.Contains("Do work", diagram.Value.Content, StringComparison.Ordinal);
+        Assert.Contains("flowchart", diagram.Value.Content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Diagram UC", diagram.Value.Content, StringComparison.Ordinal);
     }
 
     private McpDbContext CreateContext()

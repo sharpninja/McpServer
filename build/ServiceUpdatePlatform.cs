@@ -51,10 +51,20 @@ internal sealed record ServiceUpdatePlatform(bool IsWindows, string DefaultServi
             && string.Equals(TrimDirectory(requestedInstallPath), canonicalInstall, StringComparison.OrdinalIgnoreCase);
         if (usingDefaults)
         {
-            if (!canonicalServiceExists && legacyServiceExists)
+            if (canonicalServiceExists)
+            {
+                serviceName = canonicalService;
+                installPath = canonicalInstall;
+            }
+            else if (legacyServiceExists)
+            {
                 serviceName = legacyService;
-            if (!canonicalInstallExists && legacyInstallExists)
                 installPath = legacyInstall;
+            }
+            else if (!canonicalInstallExists && legacyInstallExists)
+            {
+                installPath = legacyInstall;
+            }
         }
 
         return new WindowsInstallIdentity(serviceName, installPath, "QBrainAi.Support.Mcp.exe");

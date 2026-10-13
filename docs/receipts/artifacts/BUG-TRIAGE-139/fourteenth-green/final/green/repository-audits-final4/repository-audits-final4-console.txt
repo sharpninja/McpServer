@@ -1,0 +1,12 @@
+xUnit.net v3 Microsoft.Testing.Platform v1 Runner v3.2.2+728c1dce01 (64-bit .NET 10.0.11)
+
+
+  In process file artifacts produced:
+    - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\repository-audits-final4\repository-audits-final4.trx
+
+Test run summary: Passed! - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll (net10.0|x64)
+  total: 14
+  failed: 0
+  succeeded: 14
+  skipped: 0
+  duration: 36s 467ms

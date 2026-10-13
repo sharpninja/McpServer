@@ -308,6 +308,33 @@ static partial class WindowsServiceHelper
             File.Copy(file, destPath, true);
         }
     }
+    /// <summary>
+    /// Ensures the Windows publish stage contains the baseline YAML configuration required by the service.
+    /// An explicitly staged configuration is preserved; otherwise the repository baseline is copied.
+    /// </summary>
+    /// <returns>The full path to the staged configuration.</returns>
+    public static string EnsureBaselineConfiguration(string publishRoot, string baselineConfigPath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(publishRoot);
+        ArgumentException.ThrowIfNullOrWhiteSpace(baselineConfigPath);
+
+        if (!Directory.Exists(publishRoot))
+            throw new DirectoryNotFoundException($"Publish stage path not found: {publishRoot}");
+
+        var publishedConfigPath = Path.Combine(publishRoot, "appsettings.yaml");
+        if (File.Exists(publishedConfigPath))
+            return publishedConfigPath;
+
+        if (!File.Exists(baselineConfigPath))
+            throw new FileNotFoundException(
+                "Windows service deployment requires a baseline appsettings.yaml before the service is stopped.",
+                baselineConfigPath);
+
+        File.Copy(baselineConfigPath, publishedConfigPath, false);
+        return publishedConfigPath;
+    }
+
+
 
     /// <summary>Checks the health endpoint with retries.</summary>
     public static HealthResult CheckHealth(int port, int attempts = 10, int timeoutSeconds = 3, int delaySeconds = 2)

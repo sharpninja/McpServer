@@ -158,6 +158,131 @@ public sealed partial class FwhMcpTools
         }
     }
 
+    /// <summary>FR-MCP-USECASE-018: Update an actor already associated with a use case.</summary>
+    [McpServerTool(Name = "usecase_update_actor"), Description("Update an existing use-case actor in place while preserving its id.")]
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public async Task<string> UseCaseUpdateActor(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Use case id")] long useCaseId,
+        [Description("Actor id")] long actorId,
+        [Description("Replacement actor name")] string name,
+        [Description("Replacement actor type: Primary, Secondary, System, or External")] string type,
+        [Description("Whether the actor is primary for this use case")] bool isPrimary,
+        [Description("Replacement description; omit to clear")] string? description = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (_dispatcher is null)
+            return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
+
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _dispatcher.SendAsync(
+                new UpdateUseCaseActorCommand(
+                    workspacePath,
+                    useCaseId,
+                    actorId,
+                    new UpdateUseCaseActorRequest
+                    {
+                        Name = name,
+                        Description = description,
+                        Type = type,
+                        IsPrimary = isPrimary,
+                    }),
+                cancellationToken).ConfigureAwait(false);
+            return SerializeResult(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return McpToolErrors.Serialize(ex);
+        }
+    }
+
+    /// <summary>FR-MCP-USECASE-018: Update a flow already owned by a use case.</summary>
+    [McpServerTool(Name = "usecase_update_flow"), Description("Update an existing use-case flow in place while preserving its id.")]
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public async Task<string> UseCaseUpdateFlow(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Use case id")] long useCaseId,
+        [Description("Flow id")] long flowId,
+        [Description("Replacement flow type: Basic, Alternative, or Exception")] string flowType,
+        [Description("Replacement positive sequence number")] int sequenceNumber,
+        [Description("Replacement name; omit to clear")] string? name = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (_dispatcher is null)
+            return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
+
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _dispatcher.SendAsync(
+                new UpdateUseCaseFlowCommand(
+                    workspacePath,
+                    useCaseId,
+                    flowId,
+                    new UpdateUseCaseFlowRequest
+                    {
+                        FlowType = flowType,
+                        Name = name,
+                        SequenceNumber = sequenceNumber,
+                    }),
+                cancellationToken).ConfigureAwait(false);
+            return SerializeResult(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return McpToolErrors.Serialize(ex);
+        }
+    }
+
+    /// <summary>FR-MCP-USECASE-018: Update a step already owned by a use-case flow.</summary>
+    [McpServerTool(Name = "usecase_update_step"), Description("Update an existing use-case step in place while preserving its id.")]
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public async Task<string> UseCaseUpdateStep(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Use case id")] long useCaseId,
+        [Description("Flow id")] long flowId,
+        [Description("Step id")] long stepId,
+        [Description("Replacement positive step number")] int stepNumber,
+        [Description("Replacement action text")] string action,
+        [Description("Replacement actor id; omit to clear")] long? actorId = null,
+        [Description("Replacement system response; omit to clear")] string? systemResponse = null,
+        [Description("Replacement data-entity notes; omit to clear")] string? dataEntities = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (_dispatcher is null)
+            return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
+
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _dispatcher.SendAsync(
+                new UpdateUseCaseStepCommand(
+                    workspacePath,
+                    useCaseId,
+                    flowId,
+                    stepId,
+                    new UpdateUseCaseStepRequest
+                    {
+                        StepNumber = stepNumber,
+                        ActorId = actorId,
+                        Action = action,
+                        SystemResponse = systemResponse,
+                        DataEntities = dataEntities,
+                    }),
+                cancellationToken).ConfigureAwait(false);
+            return SerializeResult(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return McpToolErrors.Serialize(ex);
+        }
+    }
+
     /// <summary>FR-MCP-USECASE-001: Soft-delete a use case.</summary>
     [McpServerTool(Name = "usecase_delete"), Description("Soft-delete a use case and its durable child rows.")]
     [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
@@ -382,8 +507,32 @@ public sealed partial class FwhMcpTools
     {
         if (result.IsFailure)
         {
-            var exception = result.Exception
-                ?? new InvalidOperationException(result.Error ?? "Use case operation failed.");
+            var error = result.Error ?? "Use case operation failed.";
+            if (error.StartsWith(UseCaseResultCodes.NotFound, StringComparison.Ordinal))
+            {
+                var message = error[UseCaseResultCodes.NotFound.Length..];
+                return JsonSerializer.Serialize(
+                    new { code = "not_found", error = "not_found", message, retryable = false },
+                    s_camelCaseOptions);
+            }
+
+            if (error.StartsWith(UseCaseResultCodes.Validation, StringComparison.Ordinal))
+            {
+                var message = error[UseCaseResultCodes.Validation.Length..];
+                return JsonSerializer.Serialize(
+                    new { code = "validation_error", error = "validation_error", message, retryable = false },
+                    s_camelCaseOptions);
+            }
+
+            if (error.StartsWith(UseCaseResultCodes.Conflict, StringComparison.Ordinal))
+            {
+                var message = error[UseCaseResultCodes.Conflict.Length..];
+                return JsonSerializer.Serialize(
+                    new { code = "conflict", error = "conflict", message, retryable = false },
+                    s_camelCaseOptions);
+            }
+
+            var exception = result.Exception ?? new InvalidOperationException(error);
             return McpToolErrors.Serialize(exception);
         }
 

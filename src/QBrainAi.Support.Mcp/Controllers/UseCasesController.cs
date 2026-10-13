@@ -287,6 +287,79 @@ public sealed class UseCasesController : ControllerBase
             result.Value);
     }
 
+    /// <summary>FR-MCP-USECASE-018: Updates an actor already associated with a use case.</summary>
+    [HttpPut("{id:long}/actors/{actorId:long}")]
+    [ProducesResponseType(typeof(UseCaseActorDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public async Task<ActionResult<UseCaseActorDto>> UpdateActorAsync(
+        long id,
+        long actorId,
+        [FromBody] UpdateUseCaseActorRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
+
+        var result = await _dispatcher.SendAsync(
+            new UpdateUseCaseActorCommand(GetWorkspacePath(), id, actorId, request),
+            cancellationToken).ConfigureAwait(false);
+        if (result.IsFailure)
+            return MapFailure(result);
+
+        return Ok(result.Value);
+    }
+
+    /// <summary>FR-MCP-USECASE-018: Updates a flow already owned by a use case.</summary>
+    [HttpPut("{id:long}/flows/{flowId:long}")]
+    [ProducesResponseType(typeof(UseCaseFlowDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public async Task<ActionResult<UseCaseFlowDto>> UpdateFlowAsync(
+        long id,
+        long flowId,
+        [FromBody] UpdateUseCaseFlowRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
+
+        var result = await _dispatcher.SendAsync(
+            new UpdateUseCaseFlowCommand(GetWorkspacePath(), id, flowId, request),
+            cancellationToken).ConfigureAwait(false);
+        if (result.IsFailure)
+            return MapFailure(result);
+
+        return Ok(result.Value);
+    }
+
+    /// <summary>FR-MCP-USECASE-018: Updates a step already owned by a use-case flow.</summary>
+    [HttpPut("{id:long}/flows/{flowId:long}/steps/{stepId:long}")]
+    [ProducesResponseType(typeof(UseCaseStepDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [RequiresUnreferencedCode("CQRS dispatcher uses reflection over handler types.")]
+    public async Task<ActionResult<UseCaseStepDto>> UpdateStepAsync(
+        long id,
+        long flowId,
+        long stepId,
+        [FromBody] UpdateUseCaseStepRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
+
+        var result = await _dispatcher.SendAsync(
+            new UpdateUseCaseStepCommand(GetWorkspacePath(), id, flowId, stepId, request),
+            cancellationToken).ConfigureAwait(false);
+        if (result.IsFailure)
+            return MapFailure(result);
+
+        return Ok(result.Value);
+    }
+
     /// <summary>FR-MCP-USECASE-003: Links a use case to a functional requirement.</summary>
     [HttpPost("{id:long}/links")]
     [ProducesResponseType(typeof(UseCaseFrLinkDto), StatusCodes.Status201Created)]

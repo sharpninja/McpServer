@@ -42,7 +42,12 @@ public sealed class PutUseCaseDiagramGraphCommandHandler(
 
         try
         {
-            UseCaseCqrsHelpers.ResolveWorkspaceId(db, workspaceContext, command.WorkspacePath);
+            await UseCaseCqrsHelpers.ResolveWorkspaceAsync(
+                    db,
+                    workspaceContext,
+                    command.WorkspacePath,
+                    context.CancellationToken)
+                .ConfigureAwait(false);
 
             var entity = await db.UseCases
                 .FirstOrDefaultAsync(u => u.UseCaseId == command.UseCaseId, context.CancellationToken)

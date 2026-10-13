@@ -1,0 +1,88 @@
+## Findings
+
+1. **High — requirements snapshot traversal is still pathname-based and can enter a swapped or blocking filesystem.** `CaptureExportSnapshotAsync` calls `Directory.Exists` before establishing any bounded physical boundary ([TransactionGatedRequirementsDocumentService.cs:395](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Support.Mcp/Services/TransactionGatedRequirementsDocumentService.cs:395)). `IsSafeEntry` performs `File.GetAttributes`, then only lexical containment ([WorkspaceContainedFileSystem.cs:258](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/WorkspaceContainedFileSystem.cs:258)); enumeration subsequently performs synchronous `MoveNext`, attribute reads, and `FileInfo.Length` after that point-in-time check ([WorkspaceContainedFileSystem.cs:291](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/WorkspaceContainedFileSystem.cs:291)). A directory can be replaced between check and traversal with a symlink/mount into FUSE or NFS. Cancellation cannot interrupt those synchronous metadata calls. This fails finding 1 and AC001.
+
+2. **High — Linux write/create operations can mutate outside the root after a parent rename.** `OpenLinuxDirectoryChain` pins directory descriptors but never proves the opened child remains descended from the root ([WorkspaceContainedFileSystem.cs:952](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/WorkspaceContainedFileSystem.cs:952)). A new file is created with `openat` before the resulting path is validated ([WorkspaceContainedFileSystem.cs:916](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/WorkspaceContainedFileSystem.cs:916), [WorkspaceContainedFileSystem.cs:931](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/WorkspaceContainedFileSystem.cs:931)); failure only disposes the handle and leaves the created file. `EnsureLinuxDirectory` similarly executes `mkdirat` without any final ancestry validation ([WorkspaceContainedFileSystem.cs:1026](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/WorkspaceContainedFileSystem.cs:1026)). Linux permits an opened child directory to be renamed outside the root while its descriptor remains valid. The race tests swap an alias and operate on an already-existing file; they do not exercise this parent-move/create window. This fails AC001 and AC006.
+
+3. **High — persisted physical identity depends on which public save overload is used.** Synchronous `SaveChanges(bool)` invokes lexical normalization ([McpDbContext.cs:1127](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/McpDbContext.cs:1127), [McpDbContext.cs:1373](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/McpDbContext.cs:1373)); only the single-argument async override uses physical resolution ([McpDbContext.cs:1421](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/McpDbContext.cs:1421)). Against the exact candidate build, a real directory alias produced `SyncKeysEqual=False` and `AsyncKeysEqual=True`. Thus synchronous persistence can admit duplicate durable identities for one physical workspace. Additionally, the public inherited `SaveChangesAsync(bool, CancellationToken)` overload is not overridden; EF Core 10’s implementation saves directly, so callers through `DbContext` can bypass all candidate preparation. No changed test exercises either persistence path with aliases. This violates the physical-identity contract and public API consistency.
+
+4. **High — ordinary opaque workspace IDs are still sent through filesystem resolution.** `GetPersistedStorageKeyAsync` falls back from a blank path to `workspaceId`, but then calls the path resolver ([WorkspaceIdentity.cs:98](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/WorkspaceIdentity.cs:98)). Only URI-scheme-shaped values containing a colon are recognized as opaque ([WorkspaceIdentityPath.cs:928](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/WorkspaceIdentityPath.cs:928)). The migration backfill consumes this method directly ([McpDatabaseMigrationCoordinator.cs:305](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/Database/McpDatabaseMigrationCoordinator.cs:305)). An exact-candidate runtime probe of `opaque-ninth-federation` returned:
+
+   `windows:F:\GITHUB\MCPSERVER\.MCPSERVER\WORKTREES\BUG-TRIAGE-139-REVIEW\OPAQUE-NINTH-FEDERATION`
+
+   That is a current-directory filesystem identity, not an opaque identifier. The test covers only `ws:test`, which happens to satisfy the colon heuristic ([BugTriage139SixteenthIdentityConsumerTests.cs:293](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:293)). AC010 fails.
+
+5. **High — SQLite timeout returns control while the caller’s connection remains mutated and concurrently owned.** The opener changes `DefaultTimeout` before starting the worker ([SqliteBoundedConnectionOpener.cs:68](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/SqliteBoundedConnectionOpener.cs:68)). Restoration occurs only inside the worker’s `finally` ([SqliteBoundedConnectionOpener.cs:100](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/SqliteBoundedConnectionOpener.cs:100)), but the public task throws after the 250 ms cleanup bound while that worker can remain alive ([SqliteBoundedConnectionOpener.cs:183](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Storage/SqliteBoundedConnectionOpener.cs:183)). On Linux the worker may also have temporarily replaced `ConnectionString` with `/proc/self/fd/...`. The caller can therefore observe or dispose/reuse a modified connection while the background thread continues touching it. The test releases the worker before checking restored state ([BugTriage139SixteenthSqliteConsumerTests.cs:79](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs:79)), so it misses the unsafe public-completion state. Finding 2 and AC003 fail.
+
+6. **High — the evidence contract is not mechanically reliable.**
+
+   - The receipt and declaration identify `final-verification/exact-final-head.yaml` ([receipt:23](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/BUG-TRIAGE-139-sixteenth-remediation.md:23), [evidence-declaration.yaml:129](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/artifacts/BUG-TRIAGE-139/sixteenth-remediation/evidence-declaration.yaml:129)). That path does not exist. The ledger exists only under the unreferenced `final-verification/exact-3ce5a81402b4/` directory.
+   - The ledger’s TODO proof targeted `F:\GitHub\McpServer`, not this worktree ([exact-final-head.yaml:172](C:/Users/kingd/AppData/Local/Temp/BUG-TRIAGE-139-sixteenth-review/BUG-TRIAGE-139-sixteenth-remediation-20260904T181236Z/final-verification/exact-3ce5a81402b4/exact-final-head.yaml:172)). Read-only live queries scoped to the current worktree found no `BUG-TRIAGE-139` TODO or triage record. Its `done=false` claim is therefore for the wrong workspace.
+   - Historical receipts were not immutable. The eleventh receipt differs from the approved base at [line 127](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/BUG-TRIAGE-139-eleventh-remediation.md:127), and the fifteenth receipt was modified after rejected commit `f410963f...` to insert a supersession header ([line 3](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/BUG-TRIAGE-139-fifteenth-remediation.md:3)). A test actively requires the old eleventh text to have been removed ([BugTriage139TwelfthRepositoryAuditTests.cs:234](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Documentation/BugTriage139TwelfthRepositoryAuditTests.cs:234)), while the final ledger says historical receipts were preserved.
+
+   AC008 and finding 7 fail.
+
+7. **Blocking validation gap — native Linux/FUSE/FIFO/non-root execution is absent.** The receipt correctly admits this ([receipt:115](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/docs/receipts/BUG-TRIAGE-139-sixteenth-remediation.md:115)), and the Windows TRX contains zero Linux-native test definitions. Compilation composition is genuine and there are no skip/source-pass branches, but the FUSE prerequisite check does not assert effective UID is non-root ([BugTriage139SixteenthLinuxTests.cs:597](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:597)). Even a future run as root could be mislabeled “non-root.” AC005 fails; AC007 remains unproven.
+
+8. **Medium — `RESOLVE_NO_XDEV` rejects every Linux mount crossing, including safe local filesystems.** Both identity and SQLite open `openat2` from `AT_FDCWD` with an absolute path and `RESOLVE_NO_XDEV` ([LinuxPhysicalPathResolver.cs:121](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/LinuxPhysicalPathResolver.cs:121), [LinuxPhysicalPathResolver.cs:191](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/LinuxPhysicalPathResolver.cs:191)). A workspace under a separate ext4/xfs volume, bind mount, Docker volume, or Kubernetes volume is rejected, even though the preceding policy accepts local bounded filesystem types ([BoundedFileSystemPolicy.cs:78](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Client/BoundedFileSystemPolicy.cs:78)). There is no acceptance test for a safe separate mount. This is a Linux compatibility regression.
+
+9. **Medium test gap — fresh PostgreSQL coverage omits administrative cancellation.** Mocked tests cover statement timeout and administrative `57014` ([BugTriage139SixteenthPostgreSqlTests.cs:17](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/BugTriage139SixteenthPostgreSqlTests.cs:17)), but the fresh-provider tests cover only statement timeout and exact caller cancellation ([line 115](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/tests/McpServer.Support.Mcp.Tests/Storage/BugTriage139SixteenthPostgreSqlTests.cs:115)). The implementation itself correctly requires an exact-token `OperationCanceledException` ([FederationTopologyService.cs:847](F:/GitHub/McpServer/.mcpServer/worktrees/bug-triage-139-review/src/McpServer.Services/Services/FederationTopologyService.cs:847)), but the complete mocked-plus-fresh AC004 matrix is unproven.
+
+## Original seven findings
+
+1. **FAIL** — synchronous/unbounded traversal remains, Linux create can escape after parent movement, and synchronous durable identity is not physical.
+2. **FAIL** — SQLite can return while the caller’s connection remains mutated and concurrently worker-owned.
+3. **PASS for implementation behavior** — PostgreSQL `57014` is not classified as caller cancellation; only an exact-token OCE is translated. Fresh administrative-cancel coverage remains missing.
+4. **FAIL** — platform composition is fixed, but required native Linux execution did not occur.
+5. **FAIL** — the all-rejected negative control and success counters are now real and passed on Windows, but the Linux write/create escape and missing Linux execution prevent the no-escape result.
+6. **PASS on Windows** — `CREATE_SUSPENDED`, job assignment, then `ResumeThread` are in the real runner, and immediate-descendant cleanup passed independently.
+7. **FAIL** — wrong ledger path, wrong-workspace TODO proof, and mutated historical receipts invalidate the evidence claim.
+
+## FR/TR/TEST and ten acceptance criteria
+
+Live read-only queries returned `FR-MCP-USECASE-017`, `TR-MCP-USECASE-019`, and `TEST-MCP-USECASE-020` as `in_progress`, each with the same ten criteria and each criterion still `isSatisfied=false`. The two expected mappings exist: FR→TR and FR→TEST.
+
+- **AC001 — FAIL:** traversal TOCTOU/blocking and Linux parent-rename mutation escape.
+- **AC002 — PASS:** Windows worker timeout/cancellation accounting and end-to-end use-case cancellation passed.
+- **AC003 — FAIL:** SQLite public completion does not preserve exclusive connection ownership/state.
+- **AC004 — UNPROVEN:** logic and statement-timeout tests pass; no fresh administrative-cancel race.
+- **AC005 — FAIL:** Linux/FUSE/FIFO/non-root gate absent; non-root UID is not enforced.
+- **AC006 — FAIL:** success-count and all-rejected controls are repaired, but Linux write/create containment is not safe.
+- **AC007 — UNPROVEN:** Windows creation-time containment passed; Unix process-group behavior was not executed.
+- **AC008 — FAIL:** receipt immutability, path resolution, and TODO provenance defects.
+- **AC009 — PASS:** all 229 migration-tree entries have identical Git object IDs between base and candidate; the 300-second allowance and plan rewriting occur only in test code.
+- **AC010 — FAIL:** non-scheme opaque IDs enter native filesystem resolution.
+
+## Verification performed
+
+- Exact Git state: candidate and branch both `3ce5a81402b46a1e106f6deff63375e073030bca`; tree `c9fc6db67fe4a4f7062c41f0a2d8eed2e8f8f576`; merge base equals the approved base.
+- Full comparison enumerated: 30 commits, 489 files, 24,306 insertions, 1,222 deletions.
+- Recomputed 93 referenced final-ledger artifact hashes: all matched.
+- Reparsed 17 final-ledger TRX files: all recorded counters matched.
+- Recorded final Windows/local unit evidence is 3,351/3,351 with zero failures/not-executed/aborted.
+- Independently replayed exact ledger row `exact-focused-all-seven-39`, changing only the results directory: **39 passed, 0 failed, 0 skipped**. New TRX SHA-256: `377C020F0B40866948A0D7E2B0BCC1A743349EA051C8E2D30E53D15216535693`.
+- Recomputed receipt, evidence declaration, review-copy, command-ledger, requirements-receipt, and exact-ledger hashes.
+- Verified the three migration trees are byte/object-identical between base and candidate.
+- Final worktree remained clean.
+
+Principal Git commands included:
+
+```text
+git cat-file -t <base-or-candidate>
+git show -s --format=%T <base-or-candidate>
+git show -s --format=%P 3ce5a81402b46a1e106f6deff63375e073030bca
+git merge-base 210cb223d81dac6b4045b868e4d7b2712d08b752 3ce5a81402b46a1e106f6deff63375e073030bca
+git rev-list --count 210cb223d81dac6b4045b868e4d7b2712d08b752..3ce5a81402b46a1e106f6deff63375e073030bca
+git diff --name-status 210cb223d81dac6b4045b868e4d7b2712d08b752 3ce5a81402b46a1e106f6deff63375e073030bca
+git diff --shortstat 210cb223d81dac6b4045b868e4d7b2712d08b752 3ce5a81402b46a1e106f6deff63375e073030bca
+git ls-tree -r <sha> -- src/McpServer.Storage.*Migrations/Migrations
+git status --short --branch
+```
+
+The required native Linux command could not be run because no functional Linux execution surface was available. I did not substitute source inspection or the Windows inventory for that gate. PowerShell.Mcp also mangled direct `git rev-parse <sha>^{tree}` braces; the equivalent `git show -s --format=%T <sha>` succeeded. Initial Windows-wildcard `rg` probes were rejected and were rerun with directory-scoped searches.
+
+## Verdict
+
+**NOT APPROVED.**
+
+This candidate **must not be merged**. It has substantive containment, identity, SQLite-lifecycle, compatibility, and evidence-integrity defects in addition to the independently sufficient BDPv4 blocker: the required native Linux/FUSE/FIFO/non-root gate has not run.

@@ -84,19 +84,11 @@ partial class Build
                     .AssertZeroExitCode();
             }
 
-            // Step 2: Stop service
-            Log.Information(">> 1/{Total}  Stopping service '{ServiceName}' ...", 8, serviceName);
-            WindowsServiceHelper.StopService(serviceName, serviceProcessName);
-
             var deploymentVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
             Log.Information("  Deployment version: {Version}", deploymentVersion);
 
-            // Step 3: Backup config and data
-            Log.Information(">> 2/{Total}  Backing up config and data files ...", 8);
-            var backup = WindowsServiceHelper.BackupPreservedState(installPath, backupDir, archivePath);
-
-            // Step 4: Publish new build
-            Log.Information(">> 3/{Total}  Publishing new build ...", 8);
+            // Step 2: Publish and validate the complete stage before stopping the service
+            Log.Information(">> 1/{Total}  Publishing new build ...", 9);
             string stageDir;
 
             if (SkipBuild)
@@ -154,6 +146,19 @@ partial class Build
                     Directory.Delete(launcherStage, true);
                 }
             }
+            var baselineConfigPath = (SourceDirectory / "QBrainAi.Support.Mcp" / "appsettings.yaml").ToString();
+            var stagedConfigPath = WindowsServiceHelper.EnsureBaselineConfiguration(stageDir, baselineConfigPath);
+            Log.Information("  Staged baseline configuration: {Path}", stagedConfigPath);
+
+            // Step 3: Stop only after the complete stage passes validation
+            Log.Information(">> 2/{Total}  Stopping service '{ServiceName}' ...", 9, serviceName);
+            WindowsServiceHelper.StopService(serviceName, serviceProcessName);
+
+            // Step 4: Backup live config and data
+            Log.Information(">> 3/{Total}  Backing up config and data files ...", 9);
+            var backup = WindowsServiceHelper.BackupPreservedState(installPath, backupDir, archivePath);
+
+
 
             // Remove stale files and copy
             Log.Information("  Cleaning stale files before copy ...");

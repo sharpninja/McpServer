@@ -32,7 +32,12 @@ public sealed class GetUseCaseDiagramGraphQueryHandler(
 
         try
         {
-            UseCaseCqrsHelpers.ResolveWorkspaceId(db, workspaceContext, query.WorkspacePath);
+            await UseCaseCqrsHelpers.ResolveWorkspaceAsync(
+                    db,
+                    workspaceContext,
+                    query.WorkspacePath,
+                    context.CancellationToken)
+                .ConfigureAwait(false);
 
             var entity = await db.UseCases
                 .AsNoTracking()

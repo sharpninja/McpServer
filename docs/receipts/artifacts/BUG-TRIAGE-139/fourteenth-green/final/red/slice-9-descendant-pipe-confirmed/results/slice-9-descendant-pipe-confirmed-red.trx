@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="dcdc0fd9-e56a-449f-b7f9-31d9da16c884" name="SYSTEM@PAYTON-LEGION2 2026-09-04 01:23:36" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T01:23:36.8511330-05:00" queuing="2026-09-04T01:23:36.8511332-05:00" start="2026-09-04T01:23:03.9066076-05:00" finish="2026-09-04T01:23:36.8563635-05:00" />
+  <TestSettings name="default" id="3d6acf07-1ab4-4204-af7a-be94072f1dff">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-04_01_23_36" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="4da188b2-a6d6-438c-bced-4404290a5e07" testId="e813db88-5fea-4a38-0757-100b4726c458" testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" computerName="PAYTON-LEGION2" duration="00:00:30.7483918" startTime="2026-09-04T01:23:05.9717090-05:00" endTime="2026-09-04T01:23:36.7439120-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4da188b2-a6d6-438c-bced-4404290a5e07">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.IsType() Failure: Value is null&#xD;
+Expected: typeof(System.TimeoutException)&#xD;
+Actual:   null</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139FourteenthHarnessTests.cs:line 135&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-9-descendant-pipe-confirmed\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="e813db88-5fea-4a38-0757-100b4726c458">
+      <Execution id="4da188b2-a6d6-438c-bced-4404290a5e07" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-9-descendant-pipe-confirmed\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e813db88-5fea-4a38-0757-100b4726c458" executionId="4da188b2-a6d6-438c-bced-4404290a5e07" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="1" executed="1" passed="0" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.33]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.31]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.52]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:32.37]       Assert.IsType() Failure: Value is null&#xD;
+[xUnit.net 00:00:32.37]       Expected: typeof(System.TimeoutException)&#xD;
+[xUnit.net 00:00:32.37]       Actual:   null&#xD;
+[xUnit.net 00:00:32.37]       Stack Trace:&#xD;
+[xUnit.net 00:00:32.37]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139FourteenthHarnessTests.cs(135,0): at McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound()&#xD;
+[xUnit.net 00:00:32.37]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:32.37]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:32.38]   Finished:    McpServer.Support.Mcp.Tests (ID = 'da45baaa2c8639e5af3035b8d5b8d93880009bffd6747b7e0a8e2fe2b9333c31')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T01:23:36.7519092-05:00">
+        <Text>[xUnit.net 00:00:32.37]     McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

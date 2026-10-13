@@ -270,6 +270,116 @@ public sealed class UseCasesControllerTests
         await dispatcher.DidNotReceive().SendAsync(Arg.Any<ICommand<UseCaseDetailDto>>(), Arg.Any<CancellationToken>());
     }
 
+    /// <summary>
+    /// TEST-MCP-USECASE-021: PUT component routes preserve route identities and dispatch full replacements.
+    /// </summary>
+    [Fact]
+    public async Task UseCaseComponentUpdateRoutes_DispatchIdentityPreservingCommands()
+    {
+        var dispatcher = Substitute.For<IDispatcher>();
+        var actor = new UseCaseActorDto { UseCaseId = 125, ActorId = 20, Name = "Tentacle", Type = "System" };
+        var flow = new UseCaseFlowDto { UseCaseId = 125, FlowId = 314, FlowType = "Basic", SequenceNumber = 1 };
+        var step = new UseCaseStepDto { FlowId = 314, StepId = 383, StepNumber = 1, Action = "Deploy" };
+
+        dispatcher.SendAsync(Arg.Any<UpdateUseCaseActorCommand>(), Arg.Any<CancellationToken>())
+            .Returns(Result<UseCaseActorDto>.Success(actor));
+        dispatcher.SendAsync(Arg.Any<UpdateUseCaseFlowCommand>(), Arg.Any<CancellationToken>())
+            .Returns(Result<UseCaseFlowDto>.Success(flow));
+        dispatcher.SendAsync(Arg.Any<UpdateUseCaseStepCommand>(), Arg.Any<CancellationToken>())
+            .Returns(Result<UseCaseStepDto>.Success(step));
+
+        var controller = CreateController(dispatcher);
+        var actorRequest = new UpdateUseCaseActorRequest
+        {
+            Name = "Tentacle",
+            Type = "System",
+            IsPrimary = true,
+        };
+        var flowRequest = new UpdateUseCaseFlowRequest
+        {
+            FlowType = "Basic",
+            SequenceNumber = 1,
+        };
+        var stepRequest = new UpdateUseCaseStepRequest
+        {
+            StepNumber = 1,
+            ActorId = 20,
+            Action = "Deploy",
+        };
+
+        var actorAction = await controller.UpdateActorAsync(125, 20, actorRequest, CancellationToken.None).ConfigureAwait(true);
+        var flowAction = await controller.UpdateFlowAsync(125, 314, flowRequest, CancellationToken.None).ConfigureAwait(true);
+        var stepAction = await controller.UpdateStepAsync(125, 314, 383, stepRequest, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Same(actor, Assert.IsType<OkObjectResult>(actorAction.Result).Value);
+        Assert.Same(flow, Assert.IsType<OkObjectResult>(flowAction.Result).Value);
+        Assert.Same(step, Assert.IsType<OkObjectResult>(stepAction.Result).Value);
+
+        await dispatcher.Received(1).SendAsync(
+            Arg.Is<UpdateUseCaseActorCommand>(c =>
+                c != null && c.WorkspacePath == Workspace && c.UseCaseId == 125 && c.ActorId == 20 && ReferenceEquals(c.Request, actorRequest)),
+            Arg.Any<CancellationToken>());
+        await dispatcher.Received(1).SendAsync(
+            Arg.Is<UpdateUseCaseFlowCommand>(c =>
+                c != null && c.WorkspacePath == Workspace && c.UseCaseId == 125 && c.FlowId == 314 && ReferenceEquals(c.Request, flowRequest)),
+            Arg.Any<CancellationToken>());
+        await dispatcher.Received(1).SendAsync(
+            Arg.Is<UpdateUseCaseStepCommand>(c =>
+                c != null && c.WorkspacePath == Workspace && c.UseCaseId == 125 && c.FlowId == 314 && c.StepId == 383 && ReferenceEquals(c.Request, stepRequest)),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-USECASE-021: PUT component routes preserve classified 400 and 404 failures.
+    /// </summary>
+    [Fact]
+    public async Task UseCaseComponentUpdateRoutes_MapClassifiedFailures()
+    {
+        var dispatcher = Substitute.For<IDispatcher>();
+        dispatcher.SendAsync(Arg.Any<UpdateUseCaseActorCommand>(), Arg.Any<CancellationToken>())
+            .Returns(Result<UseCaseActorDto>.Failure(UseCaseResultCodes.NotFoundMsg("Actor 20 was not found.")));
+        dispatcher.SendAsync(Arg.Any<UpdateUseCaseFlowCommand>(), Arg.Any<CancellationToken>())
+            .Returns(Result<UseCaseFlowDto>.Failure(UseCaseResultCodes.ValidationMsg("SequenceNumber must be positive.")));
+        dispatcher.SendAsync(Arg.Any<UpdateUseCaseStepCommand>(), Arg.Any<CancellationToken>())
+            .Returns(Result<UseCaseStepDto>.Failure(UseCaseResultCodes.NotFoundMsg("Step 383 was not found.")));
+
+        var controller = CreateController(dispatcher);
+
+        var actorAction = await controller.UpdateActorAsync(
+            125,
+            20,
+            new UpdateUseCaseActorRequest { Name = "Tentacle", Type = "System" },
+            CancellationToken.None).ConfigureAwait(true);
+        var flowAction = await controller.UpdateFlowAsync(
+            125,
+            314,
+            new UpdateUseCaseFlowRequest { FlowType = "Basic", SequenceNumber = 0 },
+            CancellationToken.None).ConfigureAwait(true);
+        var stepAction = await controller.UpdateStepAsync(
+            125,
+            314,
+            383,
+            new UpdateUseCaseStepRequest { StepNumber = 1, Action = "Deploy" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        AssertClassifiedFailure<NotFoundObjectResult>(actorAction.Result, 404, "not_found");
+        AssertClassifiedFailure<BadRequestObjectResult>(flowAction.Result, 400, "validation_error");
+        AssertClassifiedFailure<NotFoundObjectResult>(stepAction.Result, 404, "not_found");
+    }
+
+    private static void AssertClassifiedFailure<TResult>(
+        ActionResult? actionResult,
+        int expectedStatusCode,
+        string expectedCode)
+        where TResult : ObjectResult
+    {
+        var result = Assert.IsType<TResult>(actionResult);
+        Assert.Equal(expectedStatusCode, result.StatusCode);
+        var json = JsonSerializer.Serialize(result.Value);
+        using var document = JsonDocument.Parse(json);
+        Assert.Equal(expectedCode, document.RootElement.GetProperty("code").GetString());
+    }
+
     private static UseCasesController CreateController(IDispatcher dispatcher)
     {
         var workspace = new WorkspaceContext { WorkspacePath = Workspace };

@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7fc84e16-f6ed-4ab7-8075-9e2182b9b01b" name="SYSTEM@PAYTON-LEGION2 2026-10-11 00:30:19" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-11T00:30:19.5672143-05:00" queuing="2026-10-11T00:30:19.5672149-05:00" start="2026-10-11T00:30:15.5540834-05:00" finish="2026-10-11T00:30:29.4989164-05:00" />
+  <TestSettings name="default" id="9341266d-6e90-4802-bd30-19ded1eab6c0">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-10-11_00_30_19" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="568ab02a-ae49-4d33-a618-a6deab88ec64" testId="3f3d8f68-0480-7854-63db-e7bed46c4f55" testName="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection" computerName="PAYTON-LEGION2" duration="00:00:00.0038281" startTime="2026-10-11T00:30:29.3837387-05:00" endTime="2026-10-11T00:30:29.3884958-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="568ab02a-ae49-4d33-a618-a6deab88ec64">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.DirectoryNotFoundException : Could not find a part of the path 'F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\docs\receipts\artifacts\BUG-TRIAGE-139\reviews\sixteenth-independent-review.txt'.</Message>
+          <StackTrace>   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.File.OpenRead(String path)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Documentation\BugTriage139SixteenthEvidenceTests.cs:line 56&#xD;
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="43af7e6d-fbd5-4bec-a24b-3c2a7a67a728" testId="f9a7c394-02e6-5dd9-d769-7b849f105f87" testName="QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" computerName="PAYTON-LEGION2" duration="00:00:01.2225872" startTime="2026-10-11T00:30:23.6807616-05:00" endTime="2026-10-11T00:30:24.9050499-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="43af7e6d-fbd5-4bec-a24b-3c2a7a67a728">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.PostgresException : 42703: column "IsQBrainAiRelated" of relation "TriageGroups" does not exist&#xD;
+&#xD;
+POSITION: 210</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult()&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery()&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\PostgresDecompose4nfBackfillMigrationTests.cs:line 282&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\PostgresDecompose4nfBackfillMigrationTests.cs:line 46&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bb8e4e7a-ffca-4717-93ab-f8e4fabb8fe2" testId="1f8fd3ab-52e4-09c0-4053-6dafd7326083" testName="QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport" computerName="PAYTON-LEGION2" duration="00:00:00.3234305" startTime="2026-10-11T00:30:17.9850413-05:00" endTime="2026-10-11T00:30:18.3259286-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb8e4e7a-ffca-4717-93ab-f8e4fabb8fe2">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Invalid docs/wiki.yaml: documents[22].source source file 'docs/McpServer-UseCase-Extension-Design-v3.0.md' does not exist.</Message>
+          <StackTrace>   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportConfigLoader.Validate(WikiConfigFile file, String configPath, String workspaceRoot) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\src\QBrainAi.Services\Requirements\RequirementsWikiExportConfig.cs:line 163&#xD;
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportConfigLoader.Load(String workspaceRoot, RequirementsOptions options) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\src\QBrainAi.Services\Requirements\RequirementsWikiExportConfig.cs:line 131&#xD;
+   at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\src\QBrainAi.Services\Requirements\RequirementsWikiExportOrchestrator.cs:line 72&#xD;
+   at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\src\QBrainAi.Services\Requirements\RequirementsDocumentService.cs:line 641&#xD;
+   at QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Services\HandoffD3D5OverlayTests.cs:line 113&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0a8a32e7-0d60-46d0-8be9-ffc828509769" testId="3d4926d8-80f9-921d-eeef-cc69ab6c284b" testName="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" computerName="PAYTON-LEGION2" duration="00:00:00.7046132" startTime="2026-10-11T00:30:20.6103268-05:00" endTime="2026-10-11T00:30:21.3155741-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a8a32e7-0d60-46d0-8be9-ffc828509769">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Data.Sqlite.SqliteException : SQLite Error 1: 'table TriageGroups has no column named IsQBrainAiRelated'.</Message>
+          <StackTrace>   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()&#xD;
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs:line 362&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs:line 44&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0996e844-d74f-43ad-954b-6c0c038038f3" testId="339ee157-af43-b611-6458-69ebd84e3770" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" computerName="PAYTON-LEGION2" duration="00:00:04.3158055" startTime="2026-10-11T00:30:25.0639236-05:00" endTime="2026-10-11T00:30:29.3803892-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0996e844-d74f-43ad-954b-6c0c038038f3">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Data.SqlClient.SqlException : Invalid column name 'IsQBrainAiRelated'.</Message>
+          <StackTrace>   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)&#xD;
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean&amp; dataReady)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task&amp; task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task&amp; task, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String method)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, Boolean sendToPipe, Int32 timeout, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String methodName)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteNonQuery()&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\SqlServerDecompose4nfBackfillMigrationTests.cs:line 282&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\SqlServerDecompose4nfBackfillMigrationTests.cs:line 49&#xD;
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="fd8b988d-8228-4e26-839f-2697065ab709" testId="e5a1edef-3a7b-4bac-b812-037fa397c6f1" testName="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries" computerName="PAYTON-LEGION2" duration="00:00:00.0024911" startTime="2026-10-11T00:30:29.3888619-05:00" endTime="2026-10-11T00:30:29.3920350-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd8b988d-8228-4e26-839f-2697065ab709">
+      <Output>
+        <ErrorInfo>
+          <Message>Missing command ledger: F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\docs\receipts\artifacts\BUG-TRIAGE-139\sixteenth-remediation\superseded-command-ledger.tsv</Message>
+          <StackTrace>   at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Documentation\BugTriage139SixteenthEvidenceTests.cs:line 79&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f7027b87-8eed-4497-90c4-2e10e76a9c3d" testId="6d771f50-fb70-7fc8-b5cf-94c789bdea1f" testName="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText" computerName="PAYTON-LEGION2" duration="00:00:02.6180005" startTime="2026-10-11T00:30:17.9850452-05:00" endTime="2026-10-11T00:30:20.6083067-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7027b87-8eed-4497-90c4-2e10e76a9c3d">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Data.Sqlite.SqliteException : SQLite Error 1: 'table TriageGroups has no column named IsQBrainAiRelated'.</Message>
+          <StackTrace>   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()&#xD;
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs:line 362&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs:line 216&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9353f4c7-14c4-4513-9c55-f0913d2f0708" testId="6e9945b8-05ed-485d-981b-dba4d10e7fcb" testName="QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" computerName="PAYTON-LEGION2" duration="00:00:02.8390487" startTime="2026-10-11T00:30:20.8356772-05:00" endTime="2026-10-11T00:30:23.6791042-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9353f4c7-14c4-4513-9c55-f0913d2f0708">
+      <Output>
+        <ErrorInfo>
+          <Message>Npgsql.PostgresException : 42703: column "IsQBrainAiRelated" of relation "TriageGroups" does not exist&#xD;
+&#xD;
+POSITION: 210</Message>
+          <StackTrace>   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlDataReader.NextResult()&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery()&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\PostgresDecompose4nfBackfillMigrationTests.cs:line 282&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\PostgresDecompose4nfBackfillMigrationTests.cs:line 156&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="97acd2a8-bbea-4d34-9ddc-7756f45f677a" testId="539ceecc-b7ee-1296-a2a2-19a6873a6f3c" testName="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" computerName="PAYTON-LEGION2" duration="00:00:00.8968834" startTime="2026-10-11T00:30:21.3169453-05:00" endTime="2026-10-11T00:30:22.2143637-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="97acd2a8-bbea-4d34-9ddc-7756f45f677a">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Data.Sqlite.SqliteException : SQLite Error 1: 'table TriageGroups has no column named IsQBrainAiRelated'.</Message>
+          <StackTrace>   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()&#xD;
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()&#xD;
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs:line 362&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs:line 241&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0f448e07-d943-420f-a06d-ecb30ef5d994" testId="096f2295-4e99-186b-5c2f-6bcb032089d0" testName="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact" computerName="PAYTON-LEGION2" duration="00:00:00.0212594" startTime="2026-10-11T00:30:17.9850144-05:00" endTime="2026-10-11T00:30:18.0359471-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0f448e07-d943-420f-a06d-ecb30ef5d994">
+      <Output>
+        <ErrorInfo>
+          <Message>System.IO.DirectoryNotFoundException : Could not find a part of the path 'F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\docs\receipts\artifacts\BUG-TRIAGE-139\reviews\eighteenth-input-independent-review-3ce5a814.txt'.</Message>
+          <StackTrace>   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+   at System.IO.File.OpenHandle(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)&#xD;
+   at System.IO.File.ReadAllBytes(String path)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Documentation\BugTriage139EighteenthEvidenceTests.cs:line 64&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="651b0b67-fd39-48c5-9b2c-e0e3da1a3bc7" testId="945192d3-e53f-c8a3-307f-444f5698df36" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" computerName="PAYTON-LEGION2" duration="00:00:07.0655521" startTime="2026-10-11T00:30:17.9850172-05:00" endTime="2026-10-11T00:30:25.0615838-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="651b0b67-fd39-48c5-9b2c-e0e3da1a3bc7">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Data.SqlClient.SqlException : Invalid column name 'IsQBrainAiRelated'.</Message>
+          <StackTrace>   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)&#xD;
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean&amp; dataReady)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task&amp; task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task&amp; task, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String method)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, Boolean sendToPipe, Int32 timeout, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String methodName)&#xD;
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteNonQuery()&#xD;
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db) in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\SqlServerDecompose4nfBackfillMigrationTests.cs:line 282&#xD;
+   at QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows() in F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\SqlServerDecompose4nfBackfillMigrationTests.cs:line 150&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="3f3d8f68-0480-7854-63db-e7bed46c4f55">
+      <Execution id="568ab02a-ae49-4d33-a618-a6deab88ec64" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests" name="FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="6d771f50-fb70-7fc8-b5cf-94c789bdea1f">
+      <Execution id="f7027b87-8eed-4497-90c4-2e10e76a9c3d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests" name="Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="339ee157-af43-b611-6458-69ebd84e3770">
+      <Execution id="0996e844-d74f-43ad-954b-6c0c038038f3" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests" name="Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="1f8fd3ab-52e4-09c0-4053-6dafd7326083">
+      <Execution id="bb8e4e7a-ffca-4717-93ab-f8e4fabb8fe2" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests" name="D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="e5a1edef-3a7b-4bac-b812-037fa397c6f1">
+      <Execution id="fd8b988d-8228-4e26-839f-2697065ab709" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests" name="IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="945192d3-e53f-c8a3-307f-444f5698df36">
+      <Execution id="651b0b67-fd39-48c5-9b2c-e0e3da1a3bc7" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests" name="Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="3d4926d8-80f9-921d-eeef-cc69ab6c284b">
+      <Execution id="0a8a32e7-0d60-46d0-8be9-ffc828509769" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests" name="Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="f9a7c394-02e6-5dd9-d769-7b849f105f87">
+      <Execution id="43af7e6d-fbd5-4bec-a24b-3c2a7a67a728" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests" name="Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="096f2295-4e99-186b-5c2f-6bcb032089d0">
+      <Execution id="0f448e07-d943-420f-a06d-ecb30ef5d994" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests" name="EighteenthInputReview_IsDurableAndByteExact" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="539ceecc-b7ee-1296-a2a2-19a6873a6f3c">
+      <Execution id="97acd2a8-bbea-4d34-9ddc-7756f45f677a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests" name="Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" storage="f:\github\mcpserver\.worktrees\baseline-usecase-get-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="6e9945b8-05ed-485d-981b-dba4d10e7fcb">
+      <Execution id="9353f4c7-14c4-4513-9c55-f0913d2f0708" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests" name="Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="3f3d8f68-0480-7854-63db-e7bed46c4f55" executionId="568ab02a-ae49-4d33-a618-a6deab88ec64" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f9a7c394-02e6-5dd9-d769-7b849f105f87" executionId="43af7e6d-fbd5-4bec-a24b-3c2a7a67a728" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f8fd3ab-52e4-09c0-4053-6dafd7326083" executionId="bb8e4e7a-ffca-4717-93ab-f8e4fabb8fe2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3d4926d8-80f9-921d-eeef-cc69ab6c284b" executionId="0a8a32e7-0d60-46d0-8be9-ffc828509769" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="339ee157-af43-b611-6458-69ebd84e3770" executionId="0996e844-d74f-43ad-954b-6c0c038038f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e5a1edef-3a7b-4bac-b812-037fa397c6f1" executionId="fd8b988d-8228-4e26-839f-2697065ab709" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d771f50-fb70-7fc8-b5cf-94c789bdea1f" executionId="f7027b87-8eed-4497-90c4-2e10e76a9c3d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e9945b8-05ed-485d-981b-dba4d10e7fcb" executionId="9353f4c7-14c4-4513-9c55-f0913d2f0708" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="539ceecc-b7ee-1296-a2a2-19a6873a6f3c" executionId="97acd2a8-bbea-4d34-9ddc-7756f45f677a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="096f2295-4e99-186b-5c2f-6bcb032089d0" executionId="0f448e07-d943-420f-a06d-ecb30ef5d994" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="945192d3-e53f-c8a3-307f-444f5698df36" executionId="651b0b67-fd39-48c5-9b2c-e0e3da1a3bc7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="11" executed="11" passed="0" failed="11" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.12)&#xD;
+[xUnit.net 00:00:00.41]   Discovering: QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.64]   Discovered:  QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.87]   Starting:    QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.99]       System.IO.DirectoryNotFoundException : Could not find a part of the path 'F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\docs\receipts\artifacts\BUG-TRIAGE-139\reviews\eighteenth-input-independent-review-3ce5a814.txt'.&#xD;
+[xUnit.net 00:00:02.00]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.00]            at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+[xUnit.net 00:00:02.00]            at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:02.00]            at System.IO.File.OpenHandle(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)&#xD;
+[xUnit.net 00:00:02.00]            at System.IO.File.ReadAllBytes(String path)&#xD;
+[xUnit.net 00:00:02.00]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Documentation\BugTriage139EighteenthEvidenceTests.cs(64,0): at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact()&#xD;
+[xUnit.net 00:00:02.00]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:02.00]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:02.28]       System.InvalidOperationException : Invalid docs/wiki.yaml: documents[22].source source file 'docs/McpServer-UseCase-Extension-Design-v3.0.md' does not exist.&#xD;
+[xUnit.net 00:00:02.28]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.28]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\src\QBrainAi.Services\Requirements\RequirementsWikiExportConfig.cs(163,0): at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportConfigLoader.Validate(WikiConfigFile file, String configPath, String workspaceRoot)&#xD;
+[xUnit.net 00:00:02.28]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\src\QBrainAi.Services\Requirements\RequirementsWikiExportConfig.cs(131,0): at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportConfigLoader.Load(String workspaceRoot, RequirementsOptions options)&#xD;
+[xUnit.net 00:00:02.28]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\src\QBrainAi.Services\Requirements\RequirementsWikiExportOrchestrator.cs(72,0): at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct)&#xD;
+[xUnit.net 00:00:02.28]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\src\QBrainAi.Services\Requirements\RequirementsDocumentService.cs(641,0): at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump)&#xD;
+[xUnit.net 00:00:02.28]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Services\HandoffD3D5OverlayTests.cs(113,0): at QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport()&#xD;
+[xUnit.net 00:00:02.28]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:04.56]       Microsoft.Data.Sqlite.SqliteException : SQLite Error 1: 'table TriageGroups has no column named IsQBrainAiRelated'.&#xD;
+[xUnit.net 00:00:04.56]       Stack Trace:&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+[xUnit.net 00:00:04.56]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+[xUnit.net 00:00:04.56]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs(362,0): at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db)&#xD;
+[xUnit.net 00:00:04.56]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs(216,0): at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText()&#xD;
+[xUnit.net 00:00:04.56]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:04.56]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:05.27]       Microsoft.Data.Sqlite.SqliteException : SQLite Error 1: 'table TriageGroups has no column named IsQBrainAiRelated'.&#xD;
+[xUnit.net 00:00:05.27]       Stack Trace:&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+[xUnit.net 00:00:05.27]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+[xUnit.net 00:00:05.27]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs(362,0): at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db)&#xD;
+[xUnit.net 00:00:05.27]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs(44,0): at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables()&#xD;
+[xUnit.net 00:00:05.27]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:05.27]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:06.17]       Microsoft.Data.Sqlite.SqliteException : SQLite Error 1: 'table TriageGroups has no column named IsQBrainAiRelated'.&#xD;
+[xUnit.net 00:00:06.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+[xUnit.net 00:00:06.17]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+[xUnit.net 00:00:06.17]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs(362,0): at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db)&#xD;
+[xUnit.net 00:00:06.17]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\Decompose4nfBackfillMigrationTests.cs(241,0): at QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows()&#xD;
+[xUnit.net 00:00:06.17]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:06.17]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:07.63]       Npgsql.PostgresException : 42703: column "IsQBrainAiRelated" of relation "TriageGroups" does not exist&#xD;
+[xUnit.net 00:00:07.63]       &#xD;
+[xUnit.net 00:00:07.63]       POSITION: 210&#xD;
+[xUnit.net 00:00:07.63]       Stack Trace:&#xD;
+[xUnit.net 00:00:07.63]            at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+[xUnit.net 00:00:07.63]            at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+[xUnit.net 00:00:07.63]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:07.63]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:07.63]            at Npgsql.NpgsqlDataReader.NextResult()&#xD;
+[xUnit.net 00:00:07.63]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:07.63]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:07.63]            at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:07.63]            at Npgsql.NpgsqlCommand.ExecuteNonQuery()&#xD;
+[xUnit.net 00:00:07.63]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+[xUnit.net 00:00:07.63]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+[xUnit.net 00:00:07.63]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+[xUnit.net 00:00:07.63]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\PostgresDecompose4nfBackfillMigrationTests.cs(282,0): at QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db)&#xD;
+[xUnit.net 00:00:07.63]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\PostgresDecompose4nfBackfillMigrationTests.cs(156,0): at QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows()&#xD;
+[xUnit.net 00:00:07.63]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:07.63]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:08.86]       Npgsql.PostgresException : 42703: column "IsQBrainAiRelated" of relation "TriageGroups" does not exist&#xD;
+[xUnit.net 00:00:08.86]       &#xD;
+[xUnit.net 00:00:08.86]       POSITION: 210&#xD;
+[xUnit.net 00:00:08.86]       Stack Trace:&#xD;
+[xUnit.net 00:00:08.86]            at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)&#xD;
+[xUnit.net 00:00:08.86]            at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource&lt;TResult&gt;.GetResult(Int16 token)&#xD;
+[xUnit.net 00:00:08.86]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.86]            at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.86]            at Npgsql.NpgsqlDataReader.NextResult()&#xD;
+[xUnit.net 00:00:08.86]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.86]            at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.86]            at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:08.86]            at Npgsql.NpgsqlCommand.ExecuteNonQuery()&#xD;
+[xUnit.net 00:00:08.86]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+[xUnit.net 00:00:08.86]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+[xUnit.net 00:00:08.86]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+[xUnit.net 00:00:08.86]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\PostgresDecompose4nfBackfillMigrationTests.cs(282,0): at QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db)&#xD;
+[xUnit.net 00:00:08.86]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\PostgresDecompose4nfBackfillMigrationTests.cs(46,0): at QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables()&#xD;
+[xUnit.net 00:00:08.86]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:08.86]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:09.01]       Microsoft.Data.SqlClient.SqlException : Invalid column name 'IsQBrainAiRelated'.&#xD;
+[xUnit.net 00:00:09.01]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean&amp; dataReady)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task&amp; task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task&amp; task, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String method)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, Boolean sendToPipe, Int32 timeout, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String methodName)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.Data.SqlClient.SqlCommand.ExecuteNonQuery()&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+[xUnit.net 00:00:09.01]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+[xUnit.net 00:00:09.01]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\SqlServerDecompose4nfBackfillMigrationTests.cs(282,0): at QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db)&#xD;
+[xUnit.net 00:00:09.01]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\SqlServerDecompose4nfBackfillMigrationTests.cs(150,0): at QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows()&#xD;
+[xUnit.net 00:00:09.01]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:09.01]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:13.33]       Microsoft.Data.SqlClient.SqlException : Invalid column name 'IsQBrainAiRelated'.&#xD;
+[xUnit.net 00:00:13.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean&amp; dataReady)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task&amp; task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task&amp; task, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String method)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, Boolean sendToPipe, Int32 timeout, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String methodName)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.Data.SqlClient.SqlCommand.ExecuteNonQuery()&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)&#xD;
+[xUnit.net 00:00:13.33]            at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)&#xD;
+[xUnit.net 00:00:13.33]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\SqlServerDecompose4nfBackfillMigrationTests.cs(282,0): at QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.SeedPreSliceData(McpDbContext db)&#xD;
+[xUnit.net 00:00:13.33]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Storage\SqlServerDecompose4nfBackfillMigrationTests.cs(49,0): at QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables()&#xD;
+[xUnit.net 00:00:13.33]            at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)&#xD;
+[xUnit.net 00:00:13.33]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:13.33]            at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:13.34]       System.IO.DirectoryNotFoundException : Could not find a part of the path 'F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\docs\receipts\artifacts\BUG-TRIAGE-139\reviews\sixteenth-independent-review.txt'.&#xD;
+[xUnit.net 00:00:13.34]       Stack Trace:&#xD;
+[xUnit.net 00:00:13.34]            at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)&#xD;
+[xUnit.net 00:00:13.34]            at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:13.34]            at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:13.34]            at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)&#xD;
+[xUnit.net 00:00:13.34]            at System.IO.File.OpenRead(String path)&#xD;
+[xUnit.net 00:00:13.34]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Documentation\BugTriage139SixteenthEvidenceTests.cs(56,0): at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection()&#xD;
+[xUnit.net 00:00:13.34]            at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)&#xD;
+[xUnit.net 00:00:13.34]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:13.34]            at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:13.34]       Missing command ledger: F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\docs\receipts\artifacts\BUG-TRIAGE-139\sixteenth-remediation\superseded-command-ledger.tsv&#xD;
+[xUnit.net 00:00:13.34]       Stack Trace:&#xD;
+[xUnit.net 00:00:13.34]         F:\GitHub\McpServer\.worktrees\baseline-usecase-get-20261011\tests\QBrainAi.Support.Mcp.Tests\Documentation\BugTriage139SixteenthEvidenceTests.cs(79,0): at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries()&#xD;
+[xUnit.net 00:00:13.34]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:13.35]   Finished:    QBrainAi.Support.Mcp.Tests (ID = '4b787c06f9afa8c97489e8c92af252d8107e4fc3601126ffece2a7157ae7e4ba')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:18.0432198-05:00">
+        <Text>[xUnit.net 00:00:01.99]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:18.3266290-05:00">
+        <Text>[xUnit.net 00:00:02.28]     QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:20.6092068-05:00">
+        <Text>[xUnit.net 00:00:04.56]     QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:21.3161852-05:00">
+        <Text>[xUnit.net 00:00:05.27]     QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:22.2149100-05:00">
+        <Text>[xUnit.net 00:00:06.17]     QBrainAi.Support.Mcp.Tests.Storage.Decompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:23.6796117-05:00">
+        <Text>[xUnit.net 00:00:07.63]     QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:24.9055553-05:00">
+        <Text>[xUnit.net 00:00:08.86]     QBrainAi.Support.Mcp.Tests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:25.0624156-05:00">
+        <Text>[xUnit.net 00:00:09.01]     QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:29.3810203-05:00">
+        <Text>[xUnit.net 00:00:13.33]     QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:29.3888917-05:00">
+        <Text>[xUnit.net 00:00:13.34]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-11T00:30:29.3924237-05:00">
+        <Text>[xUnit.net 00:00:13.34]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

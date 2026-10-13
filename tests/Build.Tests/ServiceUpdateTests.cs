@@ -27,6 +27,153 @@ public sealed class ServiceUpdateTests
         Assert.Equal(failCopy ? ["stop", "archive", "copy", "stop", "restore"] :
             new[] { "stop", "archive", "copy", "restore", "start", "health" }, calls);
     }
+    /// <summary>Reference double proves baseline seeding and preserved-live precedence before production binding.</summary>
+    [Fact]
+    public void MockContract_WindowsConfigurationRequiresBaselineBeforeStopAndPreservesLive()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "windows-service-update-mock-" + Guid.NewGuid().ToString("N"));
+        var source = Path.Combine(root, "source");
+        var stage = Path.Combine(root, "stage");
+        var install = Path.Combine(root, "install");
+        var backup = Path.Combine(root, "backup");
+        var baseline = Path.Combine(source, "appsettings.yaml");
+        var stageConfig = Path.Combine(stage, "appsettings.yaml");
+        var liveConfig = Path.Combine(install, "appsettings.yaml");
+        var backupConfig = Path.Combine(backup, "appsettings.yaml");
+        var events = new List<string>();
+
+        try
+        {
+            foreach (var path in new[] { source, stage, install, backup })
+                Directory.CreateDirectory(path);
+
+            void ReferenceDeploy()
+            {
+                events.Add("validate");
+                if (!File.Exists(baseline))
+                    throw new FileNotFoundException("baseline configuration is required", baseline);
+
+                File.Copy(baseline, stageConfig, true);
+                events.Add("stage");
+                events.Add("stop");
+
+                if (File.Exists(liveConfig))
+                {
+                    File.Copy(liveConfig, backupConfig, true);
+                    events.Add("backup");
+                }
+
+                File.Copy(stageConfig, liveConfig, true);
+                events.Add("copy");
+
+                if (File.Exists(backupConfig))
+                {
+                    File.Copy(backupConfig, liveConfig, true);
+                    events.Add("restore");
+                }
+            }
+
+            var missing = Assert.Throws<FileNotFoundException>(ReferenceDeploy);
+            Assert.Equal(baseline, missing.FileName);
+            Assert.Equal(["validate"], events);
+
+            File.WriteAllText(baseline, "mode: baseline");
+            events.Clear();
+            ReferenceDeploy();
+            Assert.Equal("mode: baseline", File.ReadAllText(liveConfig));
+            Assert.Equal(["validate", "stage", "stop", "copy"], events);
+
+            File.WriteAllText(liveConfig, "mode: live");
+            events.Clear();
+            ReferenceDeploy();
+            Assert.Equal("mode: live", File.ReadAllText(liveConfig));
+            Assert.Equal(["validate", "stage", "stop", "backup", "copy", "restore"], events);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
+        }
+    }
+
+
+    /// <summary>Production helper seeds a missing stage config and preserves an explicit published config.</summary>
+    [Fact]
+    public void WindowsConfiguration_StagesBaselineAndPreservesExplicitPublishConfig()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "windows-service-update-production-" + Guid.NewGuid().ToString("N"));
+        var stage = Path.Combine(root, "stage");
+        var baseline = Path.Combine(root, "source", "appsettings.yaml");
+
+        try
+        {
+            Directory.CreateDirectory(stage);
+            Directory.CreateDirectory(Path.GetDirectoryName(baseline)!);
+            File.WriteAllText(baseline, "mode: baseline");
+
+            var stagedConfig = WindowsServiceHelper.EnsureBaselineConfiguration(stage, baseline);
+            Assert.Equal("mode: baseline", File.ReadAllText(stagedConfig));
+
+            File.WriteAllText(stagedConfig, "mode: explicit");
+            Assert.Equal(stagedConfig, WindowsServiceHelper.EnsureBaselineConfiguration(stage, baseline));
+            Assert.Equal("mode: explicit", File.ReadAllText(stagedConfig));
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
+        }
+    }
+
+    /// <summary>Production helper rejects an incomplete stage before service mutation can begin.</summary>
+    [Fact]
+    public void WindowsConfiguration_MissingBaselineFailsWithSourcePath()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "windows-service-update-missing-" + Guid.NewGuid().ToString("N"));
+        var stage = Path.Combine(root, "stage");
+        var baseline = Path.Combine(root, "source", "appsettings.yaml");
+
+        try
+        {
+            Directory.CreateDirectory(stage);
+            var error = Assert.Throws<FileNotFoundException>(
+                () => WindowsServiceHelper.EnsureBaselineConfiguration(stage, baseline));
+            Assert.Equal(baseline, error.FileName);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
+        }
+    }
+
+
+    /// <summary>Reference double rejects a split legacy-service/canonical-directory identity before production binding.</summary>
+    [Fact]
+    public void MockContract_WindowsIdentityKeepsServiceAndInstallPaired()
+    {
+        static (string Service, string Install) Resolve(
+            bool canonicalServiceExists,
+            bool legacyServiceExists,
+            bool canonicalInstallExists,
+            bool legacyInstallExists)
+        {
+            if (canonicalServiceExists)
+                return ("QBrainAi", @"C:\ProgramData\QBrainAi");
+            if (legacyServiceExists)
+                return ("McpServer", @"C:\ProgramData\McpServer");
+            if (!canonicalInstallExists && legacyInstallExists)
+                return ("QBrainAi", @"C:\ProgramData\McpServer");
+            return ("QBrainAi", @"C:\ProgramData\QBrainAi");
+        }
+
+        var actual = Resolve(false, true, true, true);
+        Assert.Equal(("McpServer", @"C:\ProgramData\McpServer"), actual);
+        Assert.NotEqual(("McpServer", @"C:\ProgramData\QBrainAi"), actual);
+        Assert.Equal(("QBrainAi", @"C:\ProgramData\QBrainAi"), Resolve(true, true, true, true));
+    }
+
+
 
     /// <summary>FR-MCP-SERVICEUPDATE-001: host fixtures preserve Windows defaults and select Linux architecture.</summary>
     [Theory]
@@ -71,6 +218,17 @@ public sealed class ServiceUpdateTests
         Assert.Equal(@"C:\ProgramData\McpServer", Property(identity, "InstallPath"));
         Assert.Equal("QBrainAi.Support.Mcp.exe", Property(identity, "ExecutableName"));
     }
+
+    /// <summary>TR-MCP-QBRAIN-006: stale canonical files cannot split a live legacy service from its install.</summary>
+    [Fact]
+    public void WindowsInstall_LegacyServiceKeepsLegacyInstallWhenCanonicalDirectoryIsStale()
+    {
+        var identity = Call("ServiceUpdatePlatform", "ResolveExistingWindowsInstall", null,
+            "QBrainAi", @"C:\ProgramData\QBrainAi", false, true, true, true);
+        Assert.Equal("McpServer", Property(identity, "ServiceName"));
+        Assert.Equal(@"C:\ProgramData\McpServer", Property(identity, "InstallPath"));
+    }
+
 
     /// <summary>TR-MCP-QBRAIN-006: an explicit service name is not redirected onto the legacy registration.</summary>
     [Fact]

@@ -69,6 +69,46 @@ public sealed class UseCaseClient : McpClientBase
         return await PostAsync<UseCaseActor>($"qbrainai/usecases/{useCaseId}/actors", request, cancellationToken).ConfigureAwait(true);
     }
 
+    /// <summary>Updates an actor already associated with a use case.</summary>
+    public async Task<UseCaseActor> UpdateActorAsync(
+        long useCaseId,
+        long actorId,
+        UpdateUseCaseActorRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<UseCaseActor>(
+            $"qbrainai/usecases/{useCaseId}/actors/{actorId}",
+            request,
+            cancellationToken).ConfigureAwait(true);
+    }
+
+    /// <summary>Updates a flow already owned by a use case.</summary>
+    public async Task<UseCaseFlow> UpdateFlowAsync(
+        long useCaseId,
+        long flowId,
+        UpdateUseCaseFlowRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<UseCaseFlow>(
+            $"qbrainai/usecases/{useCaseId}/flows/{flowId}",
+            request,
+            cancellationToken).ConfigureAwait(true);
+    }
+
+    /// <summary>Updates a step already owned by a use-case flow.</summary>
+    public async Task<UseCaseStep> UpdateStepAsync(
+        long useCaseId,
+        long flowId,
+        long stepId,
+        UpdateUseCaseStepRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<UseCaseStep>(
+            $"qbrainai/usecases/{useCaseId}/flows/{flowId}/steps/{stepId}",
+            request,
+            cancellationToken).ConfigureAwait(true);
+    }
+
     /// <summary>Links a use case to a functional requirement.</summary>
     public async Task<UseCaseFrLink> LinkFrAsync(long useCaseId, LinkUseCaseToFrRequest request, CancellationToken cancellationToken = default)
     {

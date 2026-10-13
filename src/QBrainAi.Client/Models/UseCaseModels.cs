@@ -147,6 +147,72 @@ public sealed class AttachUseCaseActorRequest
 }
 
 /// <summary>
+/// TR-MCP-CLIENT-001 / FR-MCP-USECASE-018: Full replacement payload for an existing actor association.
+/// </summary>
+public sealed class UpdateUseCaseActorRequest
+{
+    /// <summary>Replacement actor name.</summary>
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>Replacement actor description; null clears it.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Replacement actor type.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = "Primary";
+
+    /// <summary>Whether this actor is primary for the use case.</summary>
+    [JsonPropertyName("isPrimary")]
+    public bool IsPrimary { get; set; }
+}
+
+/// <summary>
+/// TR-MCP-CLIENT-001 / FR-MCP-USECASE-018: Full replacement payload for an existing flow.
+/// </summary>
+public sealed class UpdateUseCaseFlowRequest
+{
+    /// <summary>Replacement flow type.</summary>
+    [JsonPropertyName("flowType")]
+    public string FlowType { get; set; } = "Basic";
+
+    /// <summary>Replacement flow name; null clears it.</summary>
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+
+    /// <summary>Replacement positive sequence number.</summary>
+    [JsonPropertyName("sequenceNumber")]
+    public int SequenceNumber { get; set; }
+}
+
+/// <summary>
+/// TR-MCP-CLIENT-001 / FR-MCP-USECASE-018: Full replacement payload for an existing step.
+/// </summary>
+public sealed class UpdateUseCaseStepRequest
+{
+    /// <summary>Replacement positive step number.</summary>
+    [JsonPropertyName("stepNumber")]
+    public int StepNumber { get; set; }
+
+    /// <summary>Replacement actor id; null removes the assignment.</summary>
+    [JsonPropertyName("actorId")]
+    public long? ActorId { get; set; }
+
+    /// <summary>Replacement actor action text.</summary>
+    [JsonPropertyName("action")]
+    public string Action { get; set; } = string.Empty;
+
+    /// <summary>Replacement system response; null clears it.</summary>
+    [JsonPropertyName("systemResponse")]
+    public string? SystemResponse { get; set; }
+
+    /// <summary>Replacement data-entity notes; null clears them.</summary>
+    [JsonPropertyName("dataEntities")]
+    public string? DataEntities { get; set; }
+}
+
+/// <summary>
 /// TR-MCP-CLIENT-001 / FR-MCP-USECASE-003: Request to link a use case to a functional requirement.
 /// </summary>
 public sealed class LinkUseCaseToFrRequest
@@ -294,6 +360,10 @@ public sealed class UseCaseActor
     /// <summary>Actor id.</summary>
     [JsonPropertyName("actorId")]
     public long ActorId { get; set; }
+
+    /// <summary>Parent use case id.</summary>
+    [JsonPropertyName("useCaseId")]
+    public long UseCaseId { get; set; }
 
     /// <summary>Actor name.</summary>
     [JsonPropertyName("name")]
