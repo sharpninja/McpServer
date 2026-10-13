@@ -164,51 +164,39 @@ public sealed partial class TrimAnalysisWarningInventoryTests
 
     private static async Task<ProcessResult> RunDotnetAsync(string[] arguments)
     {
-        var processStartInfo = new ProcessStartInfo("dotnet")
-        {
-            WorkingDirectory = FindRepositoryRoot(),
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
+        var result = await BoundedProcess.RunAsync(
+            BoundedProcess.Dotnet(FindRepositoryRoot(), arguments),
+            TimeSpan.FromMinutes(20),
+            TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        foreach (var argument in arguments)
-        {
-            processStartInfo.ArgumentList.Add(argument);
-        }
-
-        using var process = Process.Start(processStartInfo) ?? throw new InvalidOperationException("Failed to start dotnet.");
-        var stdoutTask = process.StandardOutput.ReadToEndAsync();
-        var stderrTask = process.StandardError.ReadToEndAsync();
-        using var timeout = new CancellationTokenSource(TimeSpan.FromMinutes(20));
-        try
-        {
-            await process.WaitForExitAsync(timeout.Token).ConfigureAwait(false);
-        }
-        catch (OperationCanceledException)
-        {
-            try
-            {
-                process.Kill(entireProcessTree: true);
-            }
-            catch (InvalidOperationException)
-            {
-            }
-
-            throw new TimeoutException($"dotnet timed out after 20 minutes: {string.Join(" ", arguments)}");
-        }
-
-        var output = string.Concat(await stdoutTask.ConfigureAwait(false), Environment.NewLine, await stderrTask.ConfigureAwait(false));
-        return new ProcessResult(process.ExitCode, output);
+        return new ProcessResult(result.ExitCode, string.Concat(result.Stdout, Environment.NewLine, result.Stderr));
     }
 
     /// <summary>
-    /// Best-effort artifact cleanup. Recursive <see cref="Directory.Delete(string, bool)"/> of a
-    /// trimmed self-contained publish tree can block testhost for tens of minutes under AV scan.
+    /// Best-effort artifact cleanup on every OS (TR-MCP-NUKE-010 AC-001, BUG-BUILD-009). On Windows a recursive
+    /// <see cref="Directory.Delete(string, bool)"/> of a trimmed self-contained publish tree can block testhost for
+    /// tens of minutes under AV scan, so the delete runs in a detached cmd.exe there; elsewhere it runs in place.
     /// </summary>
-    private static void TryDeleteArtifacts(string artifactsRoot)
+    internal static void TryDeleteArtifacts(string artifactsRoot)
     {
         if (!Directory.Exists(artifactsRoot))
         {
+            return;
+        }
+
+        if (!OperatingSystem.IsWindows())
+        {
+            try
+            {
+                Directory.Delete(artifactsRoot, recursive: true);
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+
             return;
         }
 

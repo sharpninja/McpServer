@@ -1,0 +1,151 @@
+{
+  "TimestampUtc": "2026-10-10T04:02:23Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "sessionId": "01a123ed-a74b-74b0-b698-efb103c5c81a",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "liveProof": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T22-49-00-01a123ed-a74b-74b0-b698-efb103c5c81a.jsonl session_meta and turn_context"
+  },
+  "MandatoryReads": {
+    "addProfileSkillRead": true,
+    "profileNonSkillMarkdownCount": 19,
+    "mainMarkerReadInFull": true,
+    "markerLines": 397,
+    "secretsFiltered": true,
+    "memoryListCount": 13,
+    "allListedMemoriesRead": true,
+    "memoryProcess007Read": true,
+    "memoryProcess008Read": true
+  },
+  "HeadSha": "059c48f1f536fb19327162a1be942ea6f872c4f5",
+  "PlanLines": 651,
+  "PlanNonEmptyLines": 531,
+  "HandoffLines": 209,
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "PASS",
+      "evidence": "Read all 651 plan lines. Current heads, versions, and dirty counts of all nine plugin repositories match the dated inventory. Sampled source anchors in server, client, REPL, build, and plugins. No false present-tense source statement identified. The future sync behavior defect is scored in P5/P6/P8."
+    },
+    {
+      "id": "P2",
+      "status": "FAIL",
+      "evidence": "F-R30-03. Independent extraction found 21 proposed FR, 23 TR, 23 TEST, and 21 FR mapping rows, with no missing new TR or TEST mapping edge. `TEST-SUPPORT-023` still collides with a completed row in `docs/Project/Requirements-Matrix.md:474`. The main live store could not be reconfirmed this round."
+    },
+    {
+      "id": "P3",
+      "status": "PASS",
+      "evidence": "D1-D12, partial clearance, licensing, `skipped_duplicate` removal, unsupported-session failsafe option 1, and the 98/98 bar appear in the contracts, tasks, and gates. C1-C12 ACKs and later C2 notices in `MEMORY-PROCESS-007` agree with the written contracts."
+    },
+    {
+      "id": "P4",
+      "status": "FAIL",
+      "evidence": "F-R30-02. The plan names all required surfaces and three provider migrations, but S9 mutates all nine plugin repos through `SyncAgentPlugins` and specifies G6 for only three."
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "F-R30-01 and F-R30-02 leave prerequisite and release/version behavior to the implementer."
+    },
+    {
+      "id": "P6",
+      "status": "FAIL",
+      "evidence": "F-R30-01 and F-R30-02 make named slice gates and rollout non-executable as ordered. The round-29 elevation defect is repaired at plan lines 622, 635, 636 and agrees with `build/Build.UpdateService.cs:40,223-227`. The BDPv4 contract/stubs, RED, mocks-green negative check, self-review, real green, refactor, and G1-G6 sequence remains stated."
+    },
+    {
+      "id": "P7",
+      "status": "PASS",
+      "evidence": "The round-29 span defect is repaired at line 370 and rows 381/392, with S5/S6 case ownership named in their tasks. The independent 21/23/23 extraction found no unmapped new ID. HV-P0, HV-A, and HV-B consistently name Codex `gpt-6-sol` `xhigh` and 98/98. This does not cure P8 dependency defects."
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "F-R30-01 and F-R30-02. The P0.8 graph omits two prerequisite edges. Repeated all-nine sync and version bumps contradict fixed rollout versions and S9 gate scope."
+    },
+    {
+      "id": "P9",
+      "status": "UNKNOWN",
+      "evidence": "U-R30-01. Source and handoff counts are 651/531 and the handoff describes the r29 corrections. The live TODO description, 30 tasks, note, and technicalDetails could not be compared: main-workspace `workflow.todo.get` returned bare `False` and exit 1 on repeated read-only wrapper calls."
+    },
+    {
+      "id": "P10",
+      "status": "UNKNOWN",
+      "evidence": "U-R30-02. Worktree `workflow.triage.getGroup` verified `triage-group-804b21086f3019ab` as `failed`, with one grouped report. The other named main-workspace triage IDs had dated r29 verification but no round-30 live read because the main wrapper failed."
+    }
+  ],
+  "Findings": [
+    {
+      "id": "F-R30-01",
+      "classification": "implementer edit",
+      "operatorDecision": null,
+      "detail": "- Plan: P0.8 line 178; A3 line 581; A4 line 583; C12 line 131; S6 line 607; S9 line 613.\n- Defect: P0.8 allows A4 after A1 alone, although A4 RED cases consume the arrival bridge, queue, and minted-turn behavior implemented in A3. It allows S9 after S5 and S7, although C12 requires the S6 REPL release with `recordReview` and lossless scores before dependent host pins and S9 adopts those Node hosts.\n- Evidence: The exact `dependsOn` chain at line 178 omits A3 from A4 and S6 from S9. The cited slice lines name the prerequisites and dependent cases.\n- Change to PASS: Add A3 to A4 `dependsOn` and S6 to S9 `dependsOn`. Propagate to all 30 TODO tasks, technicalDetails, handoff, and gate order. Keep each RED after its dependencies exist.\n- Operator decision: none. The agreed C12 and test allocations settle this."
+    },
+    {
+      "id": "F-R30-02",
+      "classification": "implementer edit",
+      "operatorDecision": null,
+      "detail": "- Plan: plugin gate lines 98-107; A9 line 593; S8 line 611; S9 line 613; rollout line 622.\n- Defect: `SyncAgentPlugins` runs in A9, S8, and S9. At HEAD it syncs every discovered repo and computes the next minor version on every successful run. S8 can create 1.120.0 from 1.119.0, but S9 then creates 1.121.0 while rollout still requires 1.120.0. An A9 retry likewise changes the promised 1.119.0. S9 names G6 only for three TypeScript hosts even though that sync rewrites all nine repos. It repacks the Node core without an explicit new core package version and pin.\n- Evidence: `build/Build.SyncAgentPlugins.cs:56-71` loops all roots, refreshes Node vendor packages, and rewrites all plugin versions; `:89-110` returns highest minor plus one; `:522-563` rebuilds and copies the Node tarball. Plan S8/S9 call this target, but S9 limits G6 and rollout fixes 1.120.0.\n- Change to PASS: Specify an idempotent pinned version or selective sync per slice, including a new Node core package version and host pin when its content changes. If S9 still uses all-nine sync, run G6 for all nine affected repos; otherwise make it touch only the three TypeScript hosts. Update A9 retry behavior, Phase B version, rollout, TODO tasks, and handoff.\n- Operator decision: none. This is a release and gate implementation choice within the locked scope."
+    },
+    {
+      "id": "F-R30-03",
+      "classification": "implementer edit",
+      "operatorDecision": null,
+      "detail": "- Plan: P0.3 line 173; FR-SUPPORT-016 catalog lines 187-192; TEST-SUPPORT-023 line 394; mapping line 399.\n- Defect: The plan calls `TEST-SUPPORT-023` a new free ID without reconciling an existing completed `TEST-SUPPORT-023` matrix row. That row names `SessionLogControllerTests` and `SessionLogServiceTests`; the proposed TEST names `SessionLogServiceReplaceDeleteTests` and new S4/S5 cases.\n- Evidence: `docs/Project/Requirements-Matrix.md:474` has the completed row. `rg` found no matching record in `docs/Project/Testing-Requirements.md`. The main live requirements wrapper was unavailable; r29 reported the ID free on its dated read.\n- Change to PASS: Reconcile the matrix row against the authoritative live record before selecting the ID. If stale, document and regenerate the projection through the approved workflow; if it represents a live requirement, preserve it and select an unused ID. Update all mappings, TODO metadata, and handoff.\n- Operator decision: none unless the live record proves an independent product choice is needed; no such choice is evidenced now."
+    }
+  ],
+  "Unknowns": [
+    {
+      "id": "U-R30-01",
+      "reason": "Main-workspace workflow.todo.get returned False exit 1"
+    },
+    {
+      "id": "U-R30-02",
+      "reason": "Main-workspace triage read unavailable"
+    }
+  ],
+  "PriorRound": {
+    "round29": "F-R29-01 and F-R29-02 repaired",
+    "rounds1to28": "Surveyed summaries and handoff history; no written-contract regression found"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 94,
+  "Completeness": 90,
+  "Confidence": 96,
+  "PassCount": 3,
+  "FailCount": 5,
+  "UnknownCount": 2,
+  "FailList": [
+    "F-R30-01",
+    "F-R30-02",
+    "F-R30-03"
+  ],
+  "UnknownList": [
+    "U-R30-01",
+    "U-R30-02"
+  ],
+  "ImplementerFixes": [
+    "F-R30-01",
+    "F-R30-02",
+    "F-R30-03"
+  ],
+  "OperatorDecisionFails": [],
+  "ReviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T035247Z-plan-r30-hv",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r30-20261010T034859Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r30-20261010T034859Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T034859Z-plan-readiness-r30.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T034859Z-plan-readiness-r30.response.jsonl"
+  ],
+  "PersistenceProof": {
+    "method": "client.SessionLog.QueryAsync via installed Codex plugin wrapper",
+    "reviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+    "reviewerRequestId": "req-20261010T035247Z-plan-r30-hv",
+    "status": "completed",
+    "responseChars": 10348,
+    "responseExactlyMatchesMarkdown": true,
+    "actions": 4,
+    "dialogItems": 2
+  }
+}

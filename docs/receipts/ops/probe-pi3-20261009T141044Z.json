@@ -1,0 +1,20 @@
+{
+  "timestampUtc": "20261009T141044Z",
+  "device": "enp5s0",
+  "tempAddress": "10.42.0.250/24",
+  "target": "10.42.0.1",
+  "addressesBefore": "",
+  "ping": "PING 10.42.0.1 (10.42.0.1) from 10.42.0.250 enp5s0: 56(84) bytes of data.\nFrom 10.42.0.250 icmp_seq=1 Destination Host Unreachable\nFrom 10.42.0.250 icmp_seq=2 Destination Host Unreachable\nFrom 10.42.0.250 icmp_seq=3 Destination Host Unreachable\n\n--- 10.42.0.1 ping statistics ---\n3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2083ms\npipe 3",
+  "pingExit": 1,
+  "neighbor": "10.42.0.1 FAILED",
+  "tcp": {
+    "22": "no-connect",
+    "53": "refused-or-error",
+    "80": "no-connect"
+  },
+  "peers": {
+    "10.42.0.143": false
+  },
+  "neighborsOnSegment": "10.42.0.1 INCOMPLETE \n10.42.0.143 INCOMPLETE",
+  "addressesAfter": ""
+}

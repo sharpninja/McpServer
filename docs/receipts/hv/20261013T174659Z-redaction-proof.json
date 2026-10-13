@@ -1,0 +1,72 @@
+{
+  "TimestampUtc": "2026-10-13T18:14:54.9266150Z",
+  "Rule": "Current main/worktree marker apiKey literals and apiKey/api_key/X-Api-Key assignments of 20 or more characters; length-preserving writes keep the active runner append offset intact.",
+  "Files": [
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-approved-plan-store.json",
+      "SnapshotLength": 427554,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-architecture-merged-r2.audit.ps1",
+      "SnapshotLength": 2859,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-architecture-merged-r2.evidence.jsonl",
+      "SnapshotLength": 2410222,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-architecture-merged-r2.request.jsonl",
+      "SnapshotLength": 26485,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-architecture-merged-r2.response.jsonl",
+      "SnapshotLength": 2863104,
+      "Redactions": 3
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-catalog-audit.json",
+      "SnapshotLength": 500998,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-check-diagrams.ps1",
+      "SnapshotLength": 3486,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-effective-requirements.json",
+      "SnapshotLength": 1606546,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-independent-diagram-survey.json",
+      "SnapshotLength": 3149,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-live-Fr.json",
+      "SnapshotLength": 477811,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-live-Test.json",
+      "SnapshotLength": 395584,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-live-Tr.json",
+      "SnapshotLength": 541631,
+      "Redactions": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261013T174659Z-redact-receipts.ps1",
+      "SnapshotLength": 3204,
+      "Redactions": 0
+    }
+  ],
+  "TotalRedactions": 3.0
+}

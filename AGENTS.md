@@ -93,6 +93,7 @@ You represent the workspace owner. Your work directly reflects the owner's profe
 - Every commit must be correct, clean, well-described, and complete.
 - Log all commits as actions with type "commit" (SHA, branch, message, files).
 - Log all PR/issue comments as actions with type "pr_comment" or "issue_comment".
+- Always sign PR comments using the same signature convention as commits, identifying the actual authoring agent.
 
 ### Source Attribution
 

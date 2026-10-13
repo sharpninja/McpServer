@@ -13,7 +13,6 @@ namespace QBrainAi.Support.Mcp.Services;
 /// </summary>
 public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
 {
-    private static readonly char[] s_trimSlashChars = { '/', '\\' };
     private readonly IngestionOptions _options;
     private readonly WorkspaceContext _workspaceContext;
     private readonly IWriteAuditLog _auditLog;
@@ -257,10 +256,30 @@ public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
             File.Delete(fullPath);
     }
 
-    private static string NormalizeRelative(string? relative)
+    /// <summary>
+    /// TR-MCP-QBTOOLS-000 AC-001 (BUG-BASELINE-003): maps a requested path to the repo-relative path every operation uses. An
+    /// absolute path inside the repository root becomes the matching repo-relative path. An absolute path outside the root, or
+    /// one with a .. segment, is returned unchanged so the rooted-path check rejects it. A leading separator is never stripped:
+    /// on Unix it marks an absolute path, not a repo-relative one.
+    /// </summary>
+    private string NormalizeRelative(string? relative)
     {
         if (string.IsNullOrWhiteSpace(relative)) return ".";
-        var s = relative.Replace('\\', '/').TrimStart(s_trimSlashChars);
+        var s = relative.Replace('\\', '/');
+        if (Path.IsPathRooted(s))
+        {
+            if (SplitPathSegments(s).Any(segment => string.Equals(segment, "..", StringComparison.Ordinal)))
+                return s;
+
+            var repoRoot = GetRepoRoot();
+            var full = Path.GetFullPath(s);
+            if (!IsPathWithinRoot(repoRoot, full))
+                return s;
+
+            var inside = Path.GetRelativePath(repoRoot, full).Replace('\\', '/');
+            return string.IsNullOrEmpty(inside) ? "." : inside;
+        }
+
         return string.IsNullOrEmpty(s) ? "." : s;
     }
 

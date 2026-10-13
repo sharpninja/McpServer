@@ -1,0 +1,203 @@
+{
+  "TimestampUtc": "2026-10-09T22:36:02Z",
+  "ValidatorIdentity": {
+    "Name": "Codex CLI",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "LiveProofPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T17-27-56-01a122c7-b7d9-7941-8b08-459721ffa15c.jsonl",
+    "TurnContextTimestampUtc": "2026-10-09T22:27:58.433Z"
+  },
+  "AddProfileCount": 19,
+  "MarkerReadConfirmation": "Main marker read in full; apiKey line and Authentication block filtered from output",
+  "MemoryReadConfirmation": "workflow.memory.list read all 15 main-workspace memories, including MEMORY-PROCESS-006, 007 and 008",
+  "PlanReadConfirmation": "649 of 649 source lines; 529 non-empty lines compared to TODO description; handoff 126 lines",
+  "Claims": [
+    {
+      "Id": "P1",
+      "Status": "PASS",
+      "Evidence": "HEAD and nine plugin inventories checked; baseline has no source/build/test changes; dated store totals verified"
+    },
+    {
+      "Id": "P2",
+      "Status": "PASS",
+      "Evidence": "21 FR, 23 TR, 23 TEST proposed in P0, no collision; existing IDs and mappings checked"
+    },
+    {
+      "Id": "P3",
+      "Status": "FAIL",
+      "Evidence": "D1 equal-record nonce collision F-R14-01; D2 entry/drain race F-R14-03; UC-1 stale bridge path F-R14-04"
+    },
+    {
+      "Id": "P4",
+      "Status": "PASS",
+      "Evidence": "Server/client/REPL/MCP/PowerShell/Node, all nine plugin repos and three SQL providers assigned tasks/gates"
+    },
+    {
+      "Id": "P5",
+      "Status": "FAIL",
+      "Evidence": "Equal-content remove attribution F-R14-02 and delivery cutoff F-R14-03 unresolved"
+    },
+    {
+      "Id": "P6",
+      "Status": "UNKNOWN",
+      "Evidence": "Paths and gates structurally checked, but no runtime gate execution; SDK 10.0.111 vs global.json 10.0.201 and Pester/bats absent"
+    },
+    {
+      "Id": "P7",
+      "Status": "FAIL",
+      "Evidence": "Missing equal-timestamp, ambiguous remove, verb-entry race, combined remedy, and Cowork prompt-form/FIFO tests"
+    },
+    {
+      "Id": "P8",
+      "Status": "FAIL",
+      "Evidence": "UC-1 bridge contradiction, entry/current-end ordering conflict, partial stop remedies; coordination otherwise acyclic"
+    },
+    {
+      "Id": "P9",
+      "Status": "FAIL",
+      "Evidence": "Description equals 529 non-empty lines; live TODO task 3 retains deleted prompt_id and hook-order spike"
+    },
+    {
+      "Id": "P10",
+      "Status": "PASS",
+      "Evidence": "All ten triage IDs exist; grouped worktree report status/location and scheduled risks verified"
+    }
+  ],
+  "Findings": [
+    {
+      "Id": "F-R14-01",
+      "PlanLines": "29,83,195,201,579",
+      "Defect": "Nonce hash collapses distinct same-time equal-content enqueues",
+      "Fix": "Use replay-stable unique enqueue record identity and RED same timestamp/content restart",
+      "Classification": "Implementer edit"
+    },
+    {
+      "Id": "F-R14-02",
+      "PlanLines": "83,170,201-202,579",
+      "Defect": "Content-only remove/popAll cannot identify equal pending messages without host-order proof",
+      "Fix": "Prove removal order or fail closed; RED duplicate pending removal/restart",
+      "Classification": "Implementer edit"
+    },
+    {
+      "Id": "F-R14-03",
+      "PlanLines": "34,83,245,551,579,581",
+      "Defect": "Drain to current end can apply a dequeue that occurred after invocation entry",
+      "Fix": "Specify observable entry cutoff and interleaving RED",
+      "Classification": "Implementer edit"
+    },
+    {
+      "Id": "F-R14-04",
+      "PlanLines": "83,201,477",
+      "Defect": "UC-1 still says prompt hook mints and immediately targets for bridge hosts",
+      "Fix": "Rewrite UC-1 bridge queue/delivery flow",
+      "Classification": "Implementer edit"
+    },
+    {
+      "Id": "F-R14-05",
+      "PlanLines": "224-225,231,267-272,548,587",
+      "Defect": "Per-code stop remedies omit other unmet evidence/review prerequisites",
+      "Fix": "Accumulate all unmet prerequisites and literal-follow RED",
+      "Classification": "Implementer edit"
+    },
+    {
+      "Id": "F-R14-06",
+      "PlanLines": "83-84,170,201,579,591",
+      "Defect": "Cowork bridge lacks prompt-form, FIFO and removal readiness proof",
+      "Fix": "Mirror Claude probes, fail closed under D6, name RED/live assertions",
+      "Classification": "Implementer edit"
+    },
+    {
+      "Id": "F-R14-07",
+      "PlanLines": "83,170,201",
+      "Defect": "TODO implementation task 3 retains deleted prompt_id and hook-order work",
+      "Fix": "Update TODO task 3 to current P0.2 and read back",
+      "Classification": "Implementer edit"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 93,
+  "Completeness": 89,
+  "Confidence": 97,
+  "FailList": [
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "UnknownList": [
+    "P6"
+  ],
+  "ImplementerFixes": [
+    "F-R14-01",
+    "F-R14-02",
+    "F-R14-03",
+    "F-R14-04",
+    "F-R14-05",
+    "F-R14-06",
+    "F-R14-07"
+  ],
+  "OperatorDecisionFails": [],
+  "HeadSha": "482dc0e53523d458af7ea31ce0660539d73e4d3f",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r14-20261009T222756Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r14-20261009T222756Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T222756Z-plan-readiness-r14.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T222756Z-plan-readiness-r14.response.jsonl"
+  ],
+  "ReviewerSessionId": "Codex-20261009T032846Z-plugin-session",
+  "ReviewerRequestId": "req-20261009T222756Z-hostile-plan-r14",
+  "Verdict": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 93,
+    "completeness": 89,
+    "confidence": 97,
+    "passCount": 4,
+    "failCount": 5,
+    "unknownCount": 1,
+    "failList": [
+      "P3",
+      "P5",
+      "P7",
+      "P8",
+      "P9"
+    ],
+    "unknownList": [
+      "P6"
+    ],
+    "implementerFixes": [
+      "F-R14-01",
+      "F-R14-02",
+      "F-R14-03",
+      "F-R14-04",
+      "F-R14-05",
+      "F-R14-06",
+      "F-R14-07"
+    ],
+    "operatorDecisionFails": [],
+    "headSha": "482dc0e53523d458af7ea31ce0660539d73e4d3f",
+    "receiptPaths": [
+      "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r14-20261009T222756Z.md",
+      "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r14-20261009T222756Z.json",
+      "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T222756Z-plan-readiness-r14.request.jsonl",
+      "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T222756Z-plan-readiness-r14.response.jsonl"
+    ],
+    "reviewerSessionId": "Codex-20261009T032846Z-plugin-session",
+    "reviewerRequestId": "req-20261009T222756Z-hostile-plan-r14"
+  },
+  "SessionLogPersistenceProof": {
+    "Method": "client.SessionLog.QueryAsync through Codex plugin wrapper",
+    "SessionId": "Codex-20261009T032846Z-plugin-session",
+    "RequestId": "req-20261009T222756Z-hostile-plan-r14",
+    "StatusAtReadback": "in_progress",
+    "ResponseChars": 19914,
+    "ExactMarkdownParity": true,
+    "Actions": 3,
+    "DialogEntries": 2,
+    "HasFinalFinding": true,
+    "HasVerdictJson": true,
+    "FinalStatus": "completed",
+    "FinalResponseChars": 20505,
+    "FinalExactMarkdownParity": true
+  }
+}

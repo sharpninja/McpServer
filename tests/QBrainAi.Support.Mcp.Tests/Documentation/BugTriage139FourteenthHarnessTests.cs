@@ -54,8 +54,8 @@ public sealed class BugTriage139FourteenthHarnessTests
         var linuxInventory = new Dictionary<string, int>(StringComparer.Ordinal)
         {
             ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthLinuxNativeTests"] = 3,
-            ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests"] = 7,
-            ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests"] = 15,
+            ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests"] = 8,
+            ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests"] = 25,
             ["QBrainAi.Support.Mcp.Tests.Services.RequirementsFourteenthLinuxNativeTests"] = 1,
         };
         var applicableInventory = OperatingSystem.IsWindows()
@@ -84,7 +84,7 @@ public sealed class BugTriage139FourteenthHarnessTests
             unsupportedInventory.Keys,
             typeName => Assert.Null(assembly.GetType(typeName, throwOnError: false)));
         Assert.Equal(
-            OperatingSystem.IsWindows() ? 11 : 26,
+            OperatingSystem.IsWindows() ? 11 : 37,
             applicableInventory.Values.Sum());
     }
 

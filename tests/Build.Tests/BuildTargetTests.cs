@@ -428,8 +428,8 @@ public sealed class BuildTargetTests
         var installReplTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.InstallReplTool.cs"));
 
         Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("EnumerateFiles(SourceDirectory.ToString(), \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("EnumerateFiles(TestsDirectory.ToString(), \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("EnumerateFiles(sourceDirectory, \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("EnumerateFiles(testsDirectory, \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
         Assert.Contains("!path.EndsWith(Path.Combine(\"Build.Tests\", \"Build.Tests.csproj\"), StringComparison.OrdinalIgnoreCase)", compileTarget, StringComparison.Ordinal);
         Assert.DoesNotContain(".SetProjectFile(Solution)", compileTarget, StringComparison.Ordinal);
         Assert.Contains(".SetProperty(\"PackageVersion\", buildVersion)", compileTarget, StringComparison.Ordinal);
@@ -450,16 +450,20 @@ public sealed class BuildTargetTests
     [Fact]
     public void InstallReplTool_ParsesInstalledGlobalToolVersion()
     {
+        // TR-MCP-NUKE-007 AC-001 (BUG-BUILD-004): dotnet prints package ids in lowercase; QBrainAI.Repl (qbrain-ai-repl) and the
+        // 1.x alias SharpNinja.McpServer.Repl (mcpserver-repl, TR-MCP-QBRAIN-003) are different tools.
         const string output = """
             Package Id                    Version      Commands
             ---------------------------------------------------
-            sharpninja.mcpserver.repl     6.1.1        qbrain-ai-repl
+            qbrainai.repl                 6.1.1        qbrain-ai-repl
+            sharpninja.mcpserver.repl     1.4.41       mcpserver-repl
             other.tool                    1.0.0        other
             """;
 
         var version = Build.GetInstalledGlobalToolVersion(output, "QBrainAI.Repl");
 
         Assert.Equal("6.1.1", version);
+        Assert.Equal("1.4.41", Build.GetInstalledGlobalToolVersion(output, "SharpNinja.McpServer.Repl"));
         Assert.Null(Build.GetInstalledGlobalToolVersion(output, "missing.tool"));
     }
 

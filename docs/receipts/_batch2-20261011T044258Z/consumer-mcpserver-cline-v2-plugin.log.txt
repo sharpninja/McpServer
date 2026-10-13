@@ -1,0 +1,44 @@
+
+changed 1 package, and audited 524 packages in 2s
+
+79 packages are looking for funding
+  run `npm fund` for details
+
+75 vulnerabilities (13 low, 17 moderate, 39 high, 6 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
+npm warn install-scripts 2 packages have install scripts not yet covered by allowScripts:
+npm warn install-scripts   esbuild@0.27.7 (postinstall: node install.js)
+npm warn install-scripts   protobufjs@7.5.8 (postinstall: node scripts/postinstall)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+
+> @sharpninja/mcpserver-cline-v2-plugin@1.119.0 build
+> tsc
+
+
+> @sharpninja/mcpserver-cline-v2-plugin@1.119.0 test
+> jest
+
+PASS tests/memory-skill.test.ts
+required-memory injection skipped: mcp unavailable
+required-memory injection skipped: MCP_MEMORY_FETCH_ERROR is set
+required-memory injection skipped: mcp unavailable
+PASS tests/plugin.test.ts
+PASS tests/memory-injection.test.ts
+PASS tests/skills.test.ts
+
+Test Suites: 4 passed, 4 total
+Tests:       27 passed, 27 total
+Snapshots:   0 total
+Time:        2.888 s, estimated 4 s
+Ran all test suites.

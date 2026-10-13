@@ -7,6 +7,11 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
 /// TEST-MCP-USECASE-020-AC008: Eighteenth-review proof that historical receipts are immutable and
 /// rejection/correction state lives in the append-only evidence index.
 /// </summary>
+/// <remarks>
+/// BUG-BASELINE-007 (operator decision 2026-10-11, "Retire those tests"): the byte-exact check of the eighteenth
+/// input review and the sixteenth evidence class were retired as superseded; their docs/receipts/artifacts inputs were
+/// never tracked on this lineage (.gitignore artifacts/).
+/// </remarks>
 public sealed class BugTriage139EighteenthEvidenceTests
 {
     /// <summary>Verifies every published historical receipt against its immutable Git-era hash.</summary>
@@ -44,28 +49,6 @@ public sealed class BugTriage139EighteenthEvidenceTests
         var bytes = File.ReadAllBytes(path);
 
         Assert.Equal(expectedSha256, Convert.ToHexString(SHA256.HashData(bytes)));
-    }
-
-    /// <summary>
-    /// Verifies the exact independent rejection used as the eighteenth remediation input is durable
-    /// and matches the operator-provided SHA-256.
-    /// </summary>
-    [Fact]
-    public void EighteenthInputReview_IsDurableAndByteExact()
-    {
-        var path = Path.Combine(
-            RepositoryEvidenceTestSupport.ResolveRepositoryRoot(),
-            "docs",
-            "receipts",
-            "artifacts",
-            "BUG-TRIAGE-139",
-            "reviews",
-            "eighteenth-input-independent-review-3ce5a814.txt");
-        var bytes = File.ReadAllBytes(path);
-
-        Assert.Equal(
-            "B39E4AF54974655D31F31A16B461390017C39350F618FB17DB74AB92BFD2F842",
-            Convert.ToHexString(SHA256.HashData(bytes)));
     }
 
     /// <summary>

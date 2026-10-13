@@ -106,6 +106,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
         SeedWorkspace(db, StaleAnchorWorkspacePath, "Deployed service workspace", now);
         SeedWorkspace(db, WorkspacePath, "QBrainAi", now);
 
+        // Historical schema: the column keeps its 1.x name until 20261005170000_RenameTriageIsMcpServerRelatedColumn.
         db.Database.ExecuteSqlRaw(
             """
             INSERT INTO "TriageGroups" (
@@ -157,6 +158,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
         SeedWorkspace(db, StaleAnchorWorkspacePath, "Deployed service workspace", now);
         SeedWorkspace(db, WorkspacePath, "QBrainAi", now);
 
+        // Historical schema: the column keeps its 1.x name until 20261005170000_RenameTriageIsMcpServerRelatedColumn.
         db.Database.ExecuteSqlRaw(
             """
             INSERT INTO "TriageGroups" (

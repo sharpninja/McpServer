@@ -1,0 +1,217 @@
+{
+  "TimestampUtc": "2026-10-10T07:41:47.2323772Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "CodexSessionId": "01a124b2-eb72-7df2-920c-2e7849b873ae",
+    "LiveProof": "rollout turn_context 2026-10-10T07:24:29.544Z"
+  },
+  "AddProfile": {
+    "SkillRead": true,
+    "NonSkillMarkdownRead": 19
+  },
+  "Marker": {
+    "RootMarkerReadInFull": true,
+    "Lines": 397,
+    "CredentialLinesAndAuthenticationBlockFiltered": true
+  },
+  "Memory": {
+    "WorkflowMemoryListRun": true,
+    "MainWorkspaceCacheRetrySucceeded": true,
+    "EffectiveCount": 15,
+    "Process007And008Read": true
+  },
+  "HeadSha": "f57809ad530f9f2bcd7a3270687f7371d67a2d07",
+  "Plan": {
+    "Source": "/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md",
+    "Lines": 652,
+    "NonEmptyLines": 532,
+    "Status": "NOT APPROVED",
+    "Todo": "PLAN-SESSIONTURNREVIEW-001",
+    "ImplementationTasks": 30
+  },
+  "Scope": "Plan readiness; historic conduct, infrastructure repair and Pi3 monitor excluded",
+  "Claims": [
+    {
+      "Id": "P1",
+      "Evidence": "All 652 plan lines/532 nonempty read at HEAD f57809ad; current file, target, route, type, host and line anchors spot-checked; no product-source delta since r38.",
+      "Status": "PASS"
+    },
+    {
+      "Id": "P2",
+      "Evidence": "21 proposed FR, 23 TR, 23 TEST IDs have zero collisions. Existing TR-MCP-CLEARSESSION-001 eight-plugin/byte-identical/fail-if-blocked contract is not reconciled with new nine-host selection.",
+      "Status": "FAIL"
+    },
+    {
+      "Id": "P3",
+      "Evidence": "D1-D12, partial clearance, licensing, skipped_duplicate removal, option-1 failsafe, C1-C12 ACKs and 98/98 rule represented. R38 queue fix respects D6.",
+      "Status": "PASS"
+    },
+    {
+      "Id": "P4",
+      "Evidence": "Server/client/REPL/cores/nine hosts and three storage providers have tasks; S9 omits the existing cline, cline-v2, opencode clear-session skill text and nine-file parity.",
+      "Status": "FAIL"
+    },
+    {
+      "Id": "P5",
+      "Evidence": "Blocked/withdrawn turns have unresolved clear-session fail-versus-leave-open/complete paths. P0.2 is both read-only and a TODO writer.",
+      "Status": "FAIL"
+    },
+    {
+      "Id": "P6",
+      "Evidence": "Static verification: build.ps1, targets, projects, paths and G1-G6 gates exist; future --plugin-version introduced/tested A9 before S8; P0.1 gates unavailable host prerequisites. Each slice states BDPv4 steps and HV. No future suite executed while unapproved.",
+      "Status": "PASS"
+    },
+    {
+      "Id": "P7",
+      "Evidence": "Only negative gate-unmet clear-session cases; no ready/mixed original-pair selection, no-fabrication or blocked/withdrawn tests at S8/S9; no all-nine skill parity test. HV-P0/A/B 98/98 otherwise consistent.",
+      "Status": "FAIL"
+    },
+    {
+      "Id": "P8",
+      "Evidence": "Never-fail clear-session instruction conflicts with existing fail-if-blocked TR/skill and planned withdrawn failTurn. P0.2 read-only label conflicts with TODO mutation. D6 overview overstates adapter rollout.",
+      "Status": "FAIL"
+    },
+    {
+      "Id": "P9",
+      "Evidence": "Main-workspace TODO description exactly matches 532 nonempty plan lines; 30 tasks equal 1 approval+9 P0+9 A+11 S; note NOT APPROVED, technicalDetails and handoff current.",
+      "Status": "PASS"
+    },
+    {
+      "Id": "P10",
+      "Evidence": "All nine cited risk triage IDs resolve with matching titles; worktree restore/clone group failed and main absent as described; other risks scheduled or filed.",
+      "Status": "PASS"
+    }
+  ],
+  "Findings": [
+    {
+      "Claims": [
+        "P2",
+        "P4",
+        "P7",
+        "P8"
+      ],
+      "PlanLocation": "line 474; TEST rows 390, 393-394; S8 612; S9 614; S11 618",
+      "Defect": "S8 changes six PowerShell clear-session skills, but S9 does not change existing skills in cline, cline-v2, opencode. Existing TR requires byte-identical skill text across eight plugins, while rollout has nine. SyncAgentPlugins does not copy clear-session skill.",
+      "Classification": "implementer edit",
+      "MakePass": "Update existing TR/TEST to nine-host contract; schedule all three Node skill edits by S9; require nine-file byte-parity and behavioral-content test in G6.",
+      "Evidence": "Nine sibling clear-session skills currently share a SHA256 and still say completeTurn or failTurn if blocked. plugins/core/sync/sync-plugin-core.ps1 syncs handoff skill only. Live TR and docs/Project/Technical-Requirements.md:661-665 retain eight-plugin byte-parity wording.",
+      "Id": "F-R39-01"
+    },
+    {
+      "Options": [
+        "A status-specific fail/complete",
+        "B leave blocked/withdrawn open for explicit later failTurn"
+      ],
+      "Id": "F-R39-02",
+      "Evidence": "Current skill line 21 says completeTurn or failTurn if blocked. Plan 474 says never failing. Plan 234 requires failTurn withdrawn by original pair. Plan 54 gives failed a different completion gate from completed.",
+      "Classification": "operator decision",
+      "Defect": "Clear-session says never fail, while current skill/TR say fail if blocked and planned withdrawn AC mandates failTurn. Generic ready-selection could complete a withdrawn turn or leave it open. No status-specific choice is recorded.",
+      "Claims": [
+        "P2",
+        "P5",
+        "P7",
+        "P8"
+      ],
+      "PlanLocation": "lines 54, 234, 271, 474, 612, 614",
+      "MakePass": "Operator chooses A: status-specific fail of blocked/withdrawn turns when failed-state class/evidence met, normal ready completes; or B: never fail in clear-session, leave blocked/withdrawn open for later explicit failTurn and revise existing TR/skill/withdrawn remedy. Propagate chosen rule to ACs/tasks/tests.",
+      "Decision": "Clear-session treatment of blocked and withdrawn turns"
+    },
+    {
+      "Claims": [
+        "P7"
+      ],
+      "PlanLocation": "TEST rows 390,393-394; TR update 474; S8 612; S9 614",
+      "Defect": "Only gate-unmet negative clear-session cases are named. A coordinator closing zero turns can pass. No mixed positive case proves ready turns close by original pair while unready turns remain and reviews are not fabricated.",
+      "Classification": "implementer edit after operator decision",
+      "MakePass": "At S8 and S9 add RED/green mixed-turn positive cases: two ready close by original pairs, one unready stays with exact missing items, no review fabricated; add blocked/withdrawn case after F-R39-02 decision; map every relevant AC.",
+      "Evidence": "S8 ClearSession_GateUnmetTurn_StaysInProgress_Reported and S9 clearSession_gateUnmetTurn_staysInProgress_reported are negative. TEST-009 checks only that skill text lists steps.",
+      "Id": "F-R39-03"
+    },
+    {
+      "Claims": [
+        "P5",
+        "P8"
+      ],
+      "PlanLocation": "D6 summary line 32; table line 84; P0.2 line 173; TODO P0.2 task",
+      "Defect": "P0.2 is called read-only but files an MCP follow-up TODO. D6 overview says every host gets an arrival adapter wherever a mechanism exists, whereas only Claude bridge is in this plan and other processing-time hosts remain unsupported.",
+      "Classification": "implementer edit",
+      "MakePass": "Keep P0.2 read-only and file traced TODO in P0.8, or relabel P0.2 and TODO task as probe-plus-TODO. Rewrite line 32 to state other hosts stay unsupported pending separately approved adapters.",
+      "Evidence": "Plan line 173 begins Read-only spike, later files TODO. TODO task retains read-only label. Lines 84/173 explicitly limit the built adapter to Claude bridge.",
+      "Id": "F-R39-04"
+    }
+  ],
+  "SectionAudit": [
+    "Opening/decisions: D6 overview overbroad; other locked decisions represented.",
+    "Host table/P0: r38 queue repair present, P0.2 read-only contradiction.",
+    "Phase A: bridge/identity/withdraw and nine-host adoption dependencies otherwise placed.",
+    "Phase B requirements/tests: clear-session existing TR migration, mixed tests and status choice missing.",
+    "S1-S11: S8 selection before S10 gate is specified, but S9 Node skill text absent.",
+    "Risks/rollout: triage verified; HV gates consistent."
+  ],
+  "PhaseBoundaryAudit": "P0.8, A1-A9 and S1-S11 dependencies reviewed. S8/S9 clear-session ACs lack positive behavior tests and S9 skill migration; other gate order coherent.",
+  "PriorRounds": {
+    "R38Verdict": "DISAGREE 97/94",
+    "R38F01": "Repaired by unsupported-pending-adapter rule",
+    "R38F02": "Selection added but sibling gaps remain",
+    "R1ToR37": "Themes and handoff chronology re-attacked; no further proven regression"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 93,
+  "Confidence": 98,
+  "PassCount": 5,
+  "FailCount": 5,
+  "UnknownCount": 0,
+  "FailList": [
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "UnknownList": [],
+  "ImplementerFixes": [
+    "F-R39-01",
+    "F-R39-03",
+    "F-R39-04"
+  ],
+  "OperatorDecisionFails": [
+    "F-R39-02"
+  ],
+  "ReviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T072722Z-plan-r39-hv",
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r39-20261010T072427Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r39-20261010T072427Z.json"
+  ],
+  "RunnerRequestJsonl": "docs/receipts/hv/20261010T072427Z-plan-readiness-r39.request.jsonl",
+  "RunnerResponseJsonl": "docs/receipts/hv/20261010T072427Z-plan-readiness-r39.response.jsonl",
+  "SecretHandling": "No marker credential value copied to output or receipts",
+  "ReviewerTurnPersistenceProof": {
+    "method": "client.SessionLog.QueryAsync through installed Codex wrapper",
+    "state": "in_progress before completion",
+    "sessionMatched": true,
+    "requestMatched": true,
+    "claimIdsMatched": 10,
+    "findingIdsMatched": 4,
+    "sectionAuditPresent": true,
+    "queryTimeUtc": "2026-10-10T07:43:38.4474727Z",
+    "FinalReadback": {
+      "Status": "completed",
+      "DialogCount": 3,
+      "ActionCount": 3,
+      "ClaimIdsMatched": 10,
+      "FindingIdsMatched": 4,
+      "ProofPresent": true,
+      "Method": "client.SessionLog.QueryAsync via installed Codex wrapper"
+    }
+  },
+  "SecretScan": {
+    "CredentialFieldLines": 7,
+    "RunnerResponseValueMatches": 0,
+    "ReceiptValueMatches": 0,
+    "ValuesNotEmitted": true
+  }
+}

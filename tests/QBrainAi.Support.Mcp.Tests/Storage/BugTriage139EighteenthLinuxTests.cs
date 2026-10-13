@@ -66,13 +66,15 @@ public sealed class BugTriage139EighteenthLinuxTests
     }
 
     /// <summary>
-    /// Linux has no mkdirat operation with openat2's contained-resolution guarantees, so a missing
-    /// export directory fails closed before it can create an externally visible child.
+    /// BUG-BASELINE-001 fallback (TR-MCP-USECASE-017): without Landlock, Linux has no mkdirat with
+    /// openat2's contained-resolution guarantees, so a missing export directory fails closed before
+    /// it can create an externally visible child. Landlock is reported unavailable through the seam.
     /// </summary>
     [Fact]
     public void EnsureDirectory_MissingNestedDirectory_FailsClosedBeforeMutation()
     {
         using var fixture = new LinuxMutationFixture();
+        using var fallback = LandlockUnavailable();
 
         Assert.Throws<DirectoryNotFoundException>(
             () => WorkspaceContainedFileSystem.EnsureDirectory(
@@ -82,6 +84,201 @@ public sealed class BugTriage139EighteenthLinuxTests
         Assert.False(Directory.Exists(Path.Combine(fixture.ExternalParent, "escaped-directory")));
         Assert.False(Directory.Exists(Path.Combine(fixture.LiveParent, "escaped-directory")));
     }
+
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): with Landlock, a missing nested export folder chain is
+    /// created beneath the pinned root and nothing appears outside it.
+    /// </summary>
+    [Fact]
+    public void EnsureDirectory_MissingNestedDirectory_IsCreatedUnderLandlock()
+    {
+        Assert.True(LandlockAbiVersion() >= 1, "The native Linux gate requires the Landlock LSM.");
+        using var fixture = new LinuxMutationFixture();
+        var target = Path.Combine(fixture.LiveParent, "created", "nested");
+
+        WorkspaceContainedFileSystem.EnsureDirectory(fixture.Root, target);
+
+        Assert.True(Directory.Exists(target));
+        Assert.False(Directory.Exists(fixture.ExternalParent));
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): a pinned parent moved outside the root between pinning
+    /// and mkdirat is denied by the kernel through Landlock, so no directory appears outside. The move
+    /// runs on another thread because the confined thread itself may not mutate outside the root.
+    /// </summary>
+    [Fact]
+    public void EnsureDirectory_ParentMovedOutsideBeforeCreate_IsDeniedByLandlock()
+    {
+        using var fixture = new LinuxMutationFixture();
+        using var seam = BeforeConfinedMutation(
+            () => Directory.Move(fixture.LiveParent, fixture.ExternalParent));
+
+        Assert.ThrowsAny<IOException>(
+            () => WorkspaceContainedFileSystem.EnsureDirectory(
+                fixture.Root,
+                Path.Combine(fixture.LiveParent, "escaped-directory")));
+
+        Assert.True(Directory.Exists(fixture.ExternalParent));
+        Assert.False(Directory.Exists(Path.Combine(fixture.ExternalParent, "escaped-directory")));
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): with Landlock, a nested stale file is deleted through
+    /// its pinned parent.
+    /// </summary>
+    [Fact]
+    public void DeleteFileIfExists_NestedStaleFile_DeletesUnderLandlock()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var stale = Path.Combine(fixture.LiveParent, "stale.md");
+        File.WriteAllText(stale, "stale");
+
+        Assert.True(WorkspaceContainedFileSystem.DeleteFileIfExists(fixture.Root, stale));
+        Assert.False(File.Exists(stale));
+        Assert.False(WorkspaceContainedFileSystem.DeleteFileIfExists(fixture.Root, stale));
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): a nested stale file whose parent is moved outside the
+    /// root before unlinkat stays intact; the kernel denies the delete through Landlock.
+    /// </summary>
+    [Fact]
+    public void DeleteFileIfExists_NestedParentMovedOutsideBeforeUnlink_IsDeniedByLandlock()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var stale = Path.Combine(fixture.LiveParent, "stale.md");
+        File.WriteAllText(stale, "stale");
+        using var seam = BeforeConfinedMutation(
+            () => Directory.Move(fixture.LiveParent, fixture.ExternalParent));
+
+        Assert.ThrowsAny<IOException>(
+            () => WorkspaceContainedFileSystem.DeleteFileIfExists(fixture.Root, stale));
+
+        Assert.Equal("stale", File.ReadAllText(Path.Combine(fixture.ExternalParent, "stale.md")));
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): with Landlock, a missing export root and its missing
+    /// ancestors are created beneath the deepest existing ancestor and then pinned.
+    /// </summary>
+    [Fact]
+    public void OpenExportRoot_MissingRootAndAncestors_IsCreatedUnderLandlock()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var missingRoot = Path.Combine(fixture.Root, "docs", "Project", "wiki");
+
+        using (var exportRoot = WorkspaceContainedFileSystem.OpenExportRoot(missingRoot))
+            Assert.Equal(missingRoot, exportRoot.RootPath);
+
+        Assert.True(Directory.Exists(missingRoot));
+        Assert.False(Directory.Exists(fixture.ExternalParent));
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 fallback (TR-MCP-USECASE-017): without Landlock a missing export root still
+    /// fails closed before any directory is created.
+    /// </summary>
+    [Fact]
+    public void OpenExportRoot_MissingRoot_FailsClosedWithoutLandlock()
+    {
+        using var fixture = new LinuxMutationFixture();
+        using var fallback = LandlockUnavailable();
+        var missingRoot = Path.Combine(fixture.Root, "docs", "Project", "wiki");
+
+        Assert.Throws<DirectoryNotFoundException>(
+            () => WorkspaceContainedFileSystem.OpenExportRoot(missingRoot));
+
+        Assert.False(Directory.Exists(Path.Combine(fixture.Root, "docs")));
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): an operation run under the export confinement cannot
+    /// create a directory outside its hierarchy even through an absolute path, proving the kernel,
+    /// not the caller's path checks, enforces the boundary.
+    /// </summary>
+    [Fact]
+    public void LandlockConfinement_DeniesDirectoryCreationOutsideItsHierarchy()
+    {
+        using var fixture = new LinuxMutationFixture();
+        Directory.CreateDirectory(fixture.ExternalParent);
+        var outside = Path.Combine(fixture.ExternalParent, "outside-attempt");
+        var run = typeof(WorkspaceContainedFileSystem).GetMethod(
+            "RunLandlockConfined",
+            BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.NotNull(run);
+        var descriptor = OpenPathDescriptor(fixture.LiveParent, 0x200000 | 0x10000 | 0x80000);
+        Assert.True(descriptor >= 0, $"open(O_PATH) failed: {Marshal.GetLastPInvokeError()}");
+        using var hierarchy = new Microsoft.Win32.SafeHandles.SafeFileHandle((nint)descriptor, ownsHandle: true);
+
+        var failure = Assert.IsType<TargetInvocationException>(
+            Record.Exception(() => run!.MakeGenericMethod(typeof(bool)).Invoke(
+                null,
+                [hierarchy, (Func<bool>)(() =>
+                {
+                    Directory.CreateDirectory(outside);
+                    return true;
+                })])));
+
+        Assert.IsAssignableFrom<UnauthorizedAccessException>(failure.InnerException);
+        Assert.False(Directory.Exists(outside));
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 what-if (TR-MCP-USECASE-017 AC-004): when the confinement cannot be set up, the
+    /// operation never runs and the call fails. The kernel itself rejects the path-beneath rule here,
+    /// because directory rights cannot be granted on a regular-file descriptor (landlock_add_rule EINVAL).
+    /// </summary>
+    [Fact]
+    public void LandlockConfinement_RuleSetupFailure_NeverRunsTheOperation()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var regularFile = Path.Combine(fixture.LiveParent, "not-a-directory");
+        File.WriteAllText(regularFile, "file");
+        var run = typeof(WorkspaceContainedFileSystem).GetMethod(
+            "RunLandlockConfined",
+            BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.NotNull(run);
+        var descriptor = OpenPathDescriptor(regularFile, 0x200000 | 0x80000);
+        Assert.True(descriptor >= 0, $"open(O_PATH) failed: {Marshal.GetLastPInvokeError()}");
+        using var hierarchy = new Microsoft.Win32.SafeHandles.SafeFileHandle((nint)descriptor, ownsHandle: true);
+        var ran = false;
+
+        var failure = Assert.IsType<TargetInvocationException>(
+            Record.Exception(() => run!.MakeGenericMethod(typeof(bool)).Invoke(
+                null,
+                [hierarchy, (Func<bool>)(() =>
+                {
+                    ran = true;
+                    return true;
+                })])));
+
+        Assert.IsAssignableFrom<IOException>(failure.InnerException);
+        Assert.False(ran);
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 what-if (TR-MCP-USECASE-017 AC-005): a symbolic link planted at a missing folder
+    /// name just before mkdirat is never followed. mkdirat reports EEXIST, the re-open beneath the anchor
+    /// refuses the link, the call fails, and nothing is created through the link outside the root.
+    /// </summary>
+    [Fact]
+    public void EnsureDirectory_SymlinkPlantedAtMissingSegment_IsNeverFollowed()
+    {
+        using var fixture = new LinuxMutationFixture();
+        Directory.CreateDirectory(fixture.ExternalParent);
+        var planted = Path.Combine(fixture.LiveParent, "created");
+        using var seam = BeforeConfinedMutation(
+            () => Directory.CreateSymbolicLink(planted, fixture.ExternalParent));
+
+        Assert.NotNull(Record.Exception(
+            () => WorkspaceContainedFileSystem.EnsureDirectory(
+                fixture.Root,
+                Path.Combine(planted, "nested"))));
+
+        Assert.Empty(Directory.EnumerateFileSystemEntries(fixture.ExternalParent));
+    }
+
     /// <summary>
     /// Proves a rejected Linux export transaction restores both bytes and the exact Unix permissions
     /// through the retained root authority rather than by reopening an untrusted pathname.
@@ -164,7 +361,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Proves traversal rejects a real delayed FUSE child mount at the root-descriptor boundary
     /// without entering its blocking metadata implementation.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_DelayedFuseChildMount_IsRejectedBeforeTraversal()
     {
         Assert.True(LinuxDelayedFuseFixture.IsSupported);
@@ -191,7 +388,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// FUSE filesystem. Traversal must finish from the original descriptor without opening the
     /// replacement mount or consuming a bounded worker.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -217,7 +414,7 @@ public sealed class BugTriage139EighteenthLinuxTests
                     return;
                 Directory.Move(root, movedRoot);
                 Directory.CreateDirectory(root);
-                fixture.BindMountAtAsync(root).GetAwaiter().GetResult();
+                fixture.MountDelayedFuseAtAsync(root).GetAwaiter().GetResult();
             }));
 
         try
@@ -251,7 +448,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Every caller must complete from its already-pinned root descriptor; no blocked replacement
     /// provider may consume an admission slot for a later caller.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -283,7 +480,7 @@ public sealed class BugTriage139EighteenthLinuxTests
                 Assert.InRange(index, 0, roots.Length - 1);
                 Directory.Move(roots[index], movedRoots[index]);
                 Directory.CreateDirectory(roots[index]);
-                fixture.BindMountAtAsync(roots[index]).GetAwaiter().GetResult();
+                fixture.MountDelayedFuseAtAsync(roots[index]).GetAwaiter().GetResult();
             }));
 
         try
@@ -361,7 +558,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// descriptor authority capture. Every attempted caller must reject promptly without consuming
     /// a traversal worker, and a later caller of the original retained tree must still succeed.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -389,7 +586,7 @@ public sealed class BugTriage139EighteenthLinuxTests
                     {
                         Directory.Move(root, movedRoot);
                         Directory.CreateDirectory(root);
-                        fixture.BindMountAtAsync(root).GetAwaiter().GetResult();
+                        fixture.MountDelayedFuseAtAsync(root).GetAwaiter().GetResult();
                     }
                     finally
                     {
@@ -453,7 +650,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// root-relative validation and immediately before O_CREAT. The atomic openat2 mutation must
     /// write only through the pinned root descriptor, never through the replacement mount.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -472,7 +669,7 @@ public sealed class BugTriage139EighteenthLinuxTests
                     return;
                 Directory.Move(root, movedRoot);
                 Directory.CreateDirectory(root);
-                fixture.BindMountAtAsync(root).GetAwaiter().GetResult();
+                fixture.MountDelayedFuseAtAsync(root).GetAwaiter().GetResult();
             }));
 
         try
@@ -532,13 +729,44 @@ public sealed class BugTriage139EighteenthLinuxTests
     }
 
     /// <summary>
-    /// A nested stale entry requires a delete operation for which Linux has no contained atomic
-    /// primitive, so cleanup rejects the export before any generated file becomes visible.
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): with Landlock, export cleanup deletes a nested stale
+    /// file and writes the generated file.
+    /// </summary>
+    [Fact]
+    public async Task RequirementsExport_NestedStaleCleanup_DeletesStaleUnderLandlock()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var stale = Path.Combine(fixture.LiveParent, "stale.md");
+        var generated = Path.Combine(fixture.Root, "generated.md");
+        await File.WriteAllTextAsync(stale, "stale", TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        await RequirementsDocumentExportWriter.WriteAsync(
+                fixture.Root,
+                "markdown",
+                "all",
+                DateTimeOffset.UtcNow,
+                [new RequirementsRenderedDocument("generated.md", "generated", "text/markdown")],
+                ["."],
+                TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.False(File.Exists(stale));
+        Assert.Equal(
+            "generated",
+            await File.ReadAllTextAsync(generated, TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
+    /// <summary>
+    /// BUG-BASELINE-001 fallback (TR-MCP-USECASE-017): without Landlock a nested stale entry needs a
+    /// delete for which Linux has no contained atomic primitive, so cleanup rejects the export before
+    /// any generated file becomes visible. Landlock is reported unavailable through the seam.
     /// </summary>
     [Fact]
     public async Task RequirementsExport_NestedStaleCleanup_IsRejectedBeforeGeneratedWrite()
     {
         using var fixture = new LinuxMutationFixture();
+        using var fallback = LandlockUnavailable();
         var stale = Path.Combine(fixture.LiveParent, "stale.md");
         var generated = Path.Combine(fixture.Root, "generated.md");
         await File.WriteAllTextAsync(
@@ -634,6 +862,58 @@ public sealed class BugTriage139EighteenthLinuxTests
     private static extern int CreateFifo(
         [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
         uint mode);
+
+    private static FieldInfo StorageSeam(string name)
+    {
+        var field = typeof(WorkspaceContainedFileSystem).GetField(
+            name,
+            BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.NotNull(field);
+        return field!;
+    }
+
+    private static int LandlockAbiVersion()
+    {
+        var method = typeof(WorkspaceContainedFileSystem).GetMethod(
+            "GetLandlockAbiVersion",
+            BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.NotNull(method);
+        return Assert.IsType<int>(method!.Invoke(null, null));
+    }
+
+    /// <summary>Reports Landlock unavailable (ABI 0) until disposed, selecting the fail-closed fallback.</summary>
+    private static SeamScope LandlockUnavailable()
+    {
+        var field = StorageSeam("s_landlockAbiVersionOverride");
+        field.SetValue(null, (Func<int>)(() => 0));
+        return new SeamScope(field);
+    }
+
+    /// <summary>
+    /// Runs <paramref name="unconfinedAction"/> on another thread at the confined-mutation boundary (the
+    /// confined thread itself cannot mutate outside the root), once.
+    /// </summary>
+    private static SeamScope BeforeConfinedMutation(Action unconfinedAction)
+    {
+        var field = StorageSeam("s_beforeLinuxConfinedMutation");
+        var fired = 0;
+        field.SetValue(
+            null,
+            (Action<string>)(_ =>
+            {
+                if (Interlocked.Exchange(ref fired, 1) == 0)
+                    Task.Run(unconfinedAction).GetAwaiter().GetResult();
+            }));
+        return new SeamScope(field);
+    }
+
+    [DllImport("libc", EntryPoint = "open", SetLastError = true)]
+    private static extern int OpenPathDescriptor(string path, int flags);
+
+    private sealed class SeamScope(FieldInfo field) : IDisposable
+    {
+        public void Dispose() => field.SetValue(null, null);
+    }
 
     private sealed class LinuxMutationFixture : IDisposable
     {

@@ -1,0 +1,61 @@
+=== mcpserver-claude-code-plugin (bug-build-008-plugin-sync) changed entries: 1
+    ?? AGENTS-README-FIRST.yaml
+  .version: 1.119.0
+  integrity: core integrity OK: 14 files match
+  manifest coreVersion: coreVersion: aac26681
+=== mcpserver-claude-cowork-plugin (bug-build-008-plugin-sync) changed entries: 1
+    ?? AGENTS-README-FIRST.yaml
+  .version: 1.119.0
+  integrity: core integrity OK: 14 files match
+  manifest coreVersion: coreVersion: aac26681
+=== mcpserver-cline-plugin (bug-build-008-plugin-sync) changed entries: 1
+    ?? AGENTS-README-FIRST.yaml
+  .version: 1.119.0
+  package-lock.json: version 1.119.0 packages[""].version 1.119.0
+  package.json: version 1.119.0
+  vendor tgz: @qbrainai/qbrain-ai-plugin-core@0.2.0, 42395 bytes, exports createMcpServerPluginCore: True, McpServerPluginCoreConfig: True
+  vendor variants: sharpninja-mcpserver-plugin-core.tgz
+  integrity: core integrity OK: 14 files match
+  manifest coreVersion: coreVersion: aac26681
+=== mcpserver-cline-v2-plugin (bug-build-008-plugin-sync) changed entries: 0
+  .version: 1.119.0
+  package-lock.json: version 1.119.0 packages[""].version 1.119.0
+  package.json: version 1.119.0
+  vendor tgz: @qbrainai/qbrain-ai-plugin-core@0.2.0, 42395 bytes, exports createMcpServerPluginCore: True, McpServerPluginCoreConfig: True
+  vendor variants: sharpninja-mcpserver-plugin-core.tgz
+  integrity: core integrity OK: 14 files match
+  manifest coreVersion: coreVersion: aac26681
+=== mcpserver-codex-plugin (bug-build-008-plugin-sync) changed entries: 0
+  .version: 1.119.0
+  integrity: core integrity OK: 14 files match
+  manifest coreVersion: coreVersion: aac26681
+=== mcpserver-copilot-plugin (bug-build-008-plugin-sync) changed entries: 1
+    ?? AGENTS-README-FIRST.yaml
+  .version: 1.119.0
+  plugin.json: version 1.119.0
+  integrity: core integrity OK: 14 files match
+  manifest coreVersion: coreVersion: aac26681
+=== mcpserver-grok-plugin (bug-build-008-plugin-sync) changed entries: 1
+    ?? AGENTS-README-FIRST.yaml
+  .version: 1.119.0
+  integrity: core integrity OK: 14 files match
+  manifest coreVersion: coreVersion: aac26681
+=== mcpserver-opencode-plugin (bug-build-008-plugin-sync) changed entries: 0
+  .version: 1.119.0
+  package-lock.json: version 1.119.0 packages[""].version 1.119.0
+  package.json: version 1.119.0
+  vendor tgz: @qbrainai/qbrain-ai-plugin-core@0.2.0, 42395 bytes, exports createMcpServerPluginCore: True, McpServerPluginCoreConfig: True
+  vendor variants: sharpninja-mcpserver-plugin-core.tgz
+  integrity: core integrity OK: 14 files match
+  manifest coreVersion: coreVersion: aac26681
+=== caches
+/home/sharpninja/.claude/plugins/cache/mcpserver-local/mcpserver/1.119.0: files 74, .version 1.119.0, marker copy: False
+/home/sharpninja/.claude/plugins/cache/mcpserver-cowork/mcpserver-cowork/1.119.0: files 69, .version 1.119.0, marker copy: False
+/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.119.0: files 90, .version 1.119.0, marker copy: False
+/home/sharpninja/.codex/plugins/cache/mcpserver-local/mcpserver/1.119.0: files 90, .version 1.119.0, marker copy: False
+/home/sharpninja/.grok/installed-plugins/mcpserver-grok-plugin-e1212ea7: files 70, .version 1.119.0, marker copy: False
+  leftovers named *.deleting-*: 
+  installed_plugins mcpserver entry: /home/sharpninja/.claude/plugins/cache/mcpserver-local/mcpserver/1.118.0
+=== worktree
+   M docs/benchmarks/results/memory-bench-20260919T091800Z.json
+   M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json

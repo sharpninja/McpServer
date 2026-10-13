@@ -1,0 +1,150 @@
+purpose: BUG-BUILD-008 plugin repo preparation before SyncAgentPlugins
+atUtc: 20261011T005850Z
+branch: bug-build-008-plugin-sync
+repos:
+- repo: mcpserver-claude-code-plugin
+  was: main
+  head: d3a07e01da5366758aa316c96b5aeac8b0507c05
+  upstream: origin/main
+  base: d3a07e01da5366758aa316c96b5aeac8b0507c05
+  reason: HEAD equals origin/main
+  residue:
+  - ?? AGENTS-README-FIRST.yaml
+  stashTag: bug-build-008-presync-mcpserver-claude-code-plugin-20261011T005735Z
+  stashSha: 3f1d33d73d6a3f18756024680e71eeef72b41d6a
+  collisions: []
+  branch: bug-build-008-plugin-sync
+  leftInPlace:
+  - AGENTS-README-FIRST.yaml
+- repo: mcpserver-claude-cowork-plugin
+  was: main
+  head: c34436917d84da4baf3bac1e35e06aee4459c3b8
+  upstream: origin/main
+  base: c34436917d84da4baf3bac1e35e06aee4459c3b8
+  reason: HEAD equals origin/main
+  residue:
+  - ' M .gitignore'
+  - ?? docs/wiki.yaml
+  stashTag: bug-build-008-presync-mcpserver-claude-cowork-plugin-20261011T005850Z
+  stashSha: 20371f45cb19834748e8ee011bade6cf9be7dbb5
+  collisions: []
+  branch: bug-build-008-plugin-sync
+  leftInPlace:
+  - AGENTS-README-FIRST.yaml
+- repo: mcpserver-cline-plugin
+  was: (detached at 4ded634)
+  head: 4ded634073f9108f8a0c442801f21d9d4532a3eb
+  upstream: origin/main
+  base: f943ca4d23e8f9efdad5b780c4e3a90f2a410c42
+  reason: HEAD is behind origin/main; base origin/main
+  residue:
+  - ' M .gitignore'
+  - ' M .version'
+  - ' M CORE-MANIFEST.yaml'
+  - ' M lib/McpPluginShim.psm1'
+  - ' M lib/mcp-status.ps1'
+  - ' M lib/plugin-hook.ps1'
+  - ' M lib/repl-invoke.ps1'
+  - ' M lib/resolve-cache-dir.ps1'
+  - ' M package-lock.json'
+  - ' M package.json'
+  - ' M vendor/sharpninja-mcpserver-plugin-core.tgz'
+  - ?? docs/wiki.yaml
+  stashTag: bug-build-008-presync-mcpserver-cline-plugin-20261011T005850Z
+  stashSha: dd0c5208ca905006acbc8f3dd8667fcd9987c942
+  collisions: []
+  branch: bug-build-008-plugin-sync
+  leftInPlace:
+  - AGENTS-README-FIRST.yaml
+- repo: mcpserver-cline-v2-plugin
+  was: main
+  head: daa0824f5ee4c475bcd95c70c147412e6f0732f0
+  upstream: origin/main
+  base: daa0824f5ee4c475bcd95c70c147412e6f0732f0
+  reason: HEAD is ahead of origin/main (local commits kept); base HEAD
+  residue:
+  - ' M .gitignore'
+  - ?? docs/wiki.yaml
+  stashTag: bug-build-008-presync-mcpserver-cline-v2-plugin-20261011T005850Z
+  stashSha: 60cb6fb25ae811e6df947f581430062bcaaa4f20
+  collisions: []
+  branch: bug-build-008-plugin-sync
+  leftInPlace: []
+- repo: mcpserver-codex-plugin
+  was: (detached at b776df5)
+  head: b776df525fc721894ca76e2604a51764d49e1a4d
+  upstream: origin/main
+  base: ce4a7a6447bc76461db9e993988c2802b875f4e2
+  reason: HEAD is behind origin/main; base origin/main
+  residue:
+  - ' M .codex-plugin/plugin.json'
+  - ' M .gitignore'
+  - ' M .version'
+  - ' M CORE-MANIFEST.yaml'
+  - ' M lib/McpPluginShim.psm1'
+  - ' M lib/mcp-status.ps1'
+  - ' M lib/plugin-hook.ps1'
+  - ' M lib/repl-invoke.ps1'
+  - ' M lib/resolve-cache-dir.ps1'
+  - ' M lib/user-prompt-submit.ps1'
+  - ?? docs/wiki.yaml
+  stashTag: bug-build-008-presync-mcpserver-codex-plugin-20261011T005850Z
+  stashSha: 3bd36f9a3caf69814071621a735296f5b370f70c
+  collisions: []
+  branch: bug-build-008-plugin-sync
+  leftInPlace:
+  - AGENTS-README-FIRST.yaml
+- repo: mcpserver-copilot-plugin
+  was: main
+  head: ff622fae712566fb9c36e2ec558821639872e68a
+  upstream: origin/main
+  base: ff622fae712566fb9c36e2ec558821639872e68a
+  reason: HEAD equals origin/main
+  residue:
+  - ' M .gitignore'
+  - ?? docs/wiki.yaml
+  stashTag: bug-build-008-presync-mcpserver-copilot-plugin-20261011T005850Z
+  stashSha: 3a84d3c8c1dcf58285e1d76f9f5c18c8e8337ca3
+  collisions: []
+  branch: bug-build-008-plugin-sync
+  leftInPlace:
+  - AGENTS-README-FIRST.yaml
+- repo: mcpserver-grok-plugin
+  was: (detached at a527ffc)
+  head: a527ffc080e41198952848130b9675327e338f88
+  upstream: origin/main
+  base: 24a9a933b3fedbbf3907a19ef205a9e5ec0d0651
+  reason: HEAD is behind origin/main; base origin/main
+  residue:
+  - ' M .claude-plugin/plugin.json'
+  - ' M .codex-plugin/plugin.json'
+  - ' M .gitignore'
+  - ' M .grok-plugin/plugin.json'
+  - ' M .version'
+  - ' M CORE-MANIFEST.yaml'
+  - ' M hooks/hooks.json'
+  - ' M hooks/scripts/user-prompt-submit.ps1'
+  - ' M lib/McpPluginShim.psm1'
+  - ' M lib/mcp-status.ps1'
+  - ' M lib/plugin-hook.ps1'
+  - ' M lib/repl-invoke.ps1'
+  - ' M lib/resolve-cache-dir.ps1'
+  - ?? docs/wiki.yaml
+  stashTag: bug-build-008-presync-mcpserver-grok-plugin-20261011T005850Z
+  stashSha: 1c2db7b58e66b9dbae28079994d3e080168b9378
+  collisions: []
+  branch: bug-build-008-plugin-sync
+  leftInPlace:
+  - AGENTS-README-FIRST.yaml
+- repo: mcpserver-opencode-plugin
+  was: master
+  head: 2b87f58ae72187baf6efb7c7657824eab60c1644
+  upstream: origin/master
+  base: 2b87f58ae72187baf6efb7c7657824eab60c1644
+  reason: HEAD is ahead of origin/master (local commits kept); base HEAD
+  residue: []
+  stashTag: 
+  stashSha: 
+  collisions: []
+  branch: bug-build-008-plugin-sync
+  leftInPlace: []

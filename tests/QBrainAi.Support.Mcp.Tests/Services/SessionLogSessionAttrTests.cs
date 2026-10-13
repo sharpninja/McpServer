@@ -18,8 +18,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class SessionLogSessionAttrTests : IDisposable
 {
-    private const string WorkspacePath = @"E:\tests\sessionlog-session-attr";
-    private const string ForeignPluginPath = @"Q:\__mcp_unit_test__\mcpserver-claude-code-plugin\src\index.ts";
+    private static readonly string WorkspacePath = UnitTestPaths.Combine("tests", "sessionlog-session-attr");
+    private static readonly string ForeignPluginPath = UnitTestPaths.Combine("mcpserver-claude-code-plugin", "src", "index.ts");
     private const string LocalRelativePath = @"src\QBrainAi.Services\SessionLogService.cs";
     private const string ForeignPrefix = "foreign:";
     private const string ForeignRepoTag = "foreign-repo";

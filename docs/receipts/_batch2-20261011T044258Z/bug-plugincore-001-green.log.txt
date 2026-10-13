@@ -1,0 +1,101 @@
+
+> @qbrainai/qbrain-ai-plugin-core@0.2.0 build
+> tsc -p tsconfig.json
+
+
+> @qbrainai/qbrain-ai-plugin-core@0.2.0 test
+> jest
+
+PASS tests/marker-resolver.test.ts
+PASS tests/aliases-1x-types.test.ts
+PASS tests/package-version.test.ts
+[repl] Failed to parse YAML: : : not : valid
+
+PASS tests/repl-bridge.test.ts
+PASS tests/memory.test.ts
+PASS tests/cache-manager.test.ts
+PASS tests/graphrag.test.ts (5.017 s)
+PASS tests/usecase.test.ts (5.149 s)
+FAIL tests/workspace.test.ts (5.204 s)
+  ● workspace_ensure › registers and initializes a missing untrusted workspace with failsafe-protected mutations
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 4
+    + Received  + 3
+
+      Object {
+    -   "created": true,
+    +   "created": false,
+        "initialized": true,
+    -   "markerReloadRequired": true,
+        "registered": true,
+    -   "trusted": false,
+    -   "workspacePath": "F:\\GitHub\\NewWorkspace",
+    +   "trusted": true,
+    +   "workspacePath": ".",
+      }
+
+      45 |       );
+      46 |
+    > 47 |       expect(result).toMatchObject({
+         |                      ^
+      48 |         trusted: false,
+      49 |         registered: true,
+      50 |         initialized: true,
+
+      at Object.<anonymous> (tests/workspace.test.ts:47:22)
+
+  ● workspace_ensure › does not create when the workspace is already registered
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 4
+    + Received  + 1
+
+    - Array [
+    -   "client.Workspace.ListAsync",
+    -   "client.Workspace.InitAsync",
+    - ]
+    + Array []
+
+      84 |
+      85 |     expect(result).toMatchObject({ created: false, initialized: true });
+    > 86 |     expect(fake.calls.map((call) => call.method)).toEqual([
+         |                                                   ^
+      87 |       'client.Workspace.ListAsync',
+      88 |       'client.Workspace.InitAsync',
+      89 |     ]);
+
+      at Object.<anonymous> (tests/workspace.test.ts:86:51)
+
+  ● workspace_ensure › keeps a YAML failsafe when workspace creation fails
+
+    expect(received).rejects.toThrow()
+
+    Received promise resolved instead of rejected
+    Resolved to value: {"baseUrl": "http://LAB-OMARCHY:7147", "created": false, "initialized": true, "markerFile": "AGENTS-README-FIRST.yaml", "registered": true, "trusted": true, "workspace": "session-20261009", "workspacePath": "."}
+
+      102 |
+      103 |     try {
+    > 104 |       await expect(handleWorkspaceTool('workspace_ensure', { workspacePath }, asBridge(fake))).rejects.toThrow(
+          |             ^
+      105 |         /Local failsafe saved:/,
+      106 |       );
+      107 |       const files = fs.readdirSync(failsafeDir).filter((file) => file.endsWith('.yaml'));
+
+      at expect (node_modules/expect/build/index.js:113:15)
+      at Object.<anonymous> (tests/workspace.test.ts:104:13)
+
+PASS tests/todo.test.ts (5.211 s)
+PASS tests/quadbrain-absence.test.ts (5.229 s)
+PASS tests/host-context.test.ts (5.454 s)
+PASS tests/session-shim.test.ts (5.534 s)
+PASS tests/aliases-1x.test.ts (5.429 s)
+PASS tests/requirements.test.ts (5.419 s)
+
+Test Suites: 1 failed, 14 passed, 15 total
+Tests:       3 failed, 134 passed, 137 total
+Snapshots:   0 total
+Time:        6.658 s
+Ran all test suites.

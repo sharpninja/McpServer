@@ -23,9 +23,16 @@ internal static class SqliteBoundedConnectionOpener
     private static Action? s_beforeWorkerExit = null;
     private static int s_activeWorkerCount;
     private static int s_workerInvocationCount;
+    private static int s_activePreflightCount;
 
     /// <summary>Gets the number of currently running open workers.</summary>
     internal static int ActiveWorkerCount => Volatile.Read(ref s_activeWorkerCount);
+
+    /// <summary>
+    /// Gets the number of caller-side data-source preflights still running, including any that outlived the bound
+    /// of the open that started them (BUG-BASELINE-009).
+    /// </summary>
+    internal static int ActivePreflightCount => Volatile.Read(ref s_activePreflightCount);
 
     /// <summary>Gets the total number of open workers started by this process.</summary>
     internal static int WorkerInvocationCount => Volatile.Read(ref s_workerInvocationCount);
@@ -59,7 +66,6 @@ internal static class SqliteBoundedConnectionOpener
 
         var connectionString = connection.ConnectionString;
         var defaultTimeout = connection.DefaultTimeout;
-        ValidateBoundedDataSource(connection);
 
         var workerOutcome = new TaskCompletionSource<SqliteOpenOutcome>(
             TaskCreationOptions.RunContinuationsAsynchronously);
@@ -88,6 +94,11 @@ internal static class SqliteBoundedConnectionOpener
             },
             (cancellationState, timeoutSignal));
 
+        // BUG-BASELINE-009 (C2): the caller-side preflight shares the open's single deadline; no worker starts before it
+        // succeeds.
+        await RunBoundedPreflightAsync(connectionString, timeout, timeoutSource.Token, cancellationToken)
+            .ConfigureAwait(false);
+
         var thread = new Thread(
             () =>
             {
@@ -103,7 +114,7 @@ internal static class SqliteBoundedConnectionOpener
                     {
                         DefaultTimeout = 1,
                     };
-                    ValidateBoundedDataSource(workerConnection, invokeBoundaryHook: false);
+                    ValidateBoundedDataSource(connectionString, invokeBoundaryHook: false);
                     if (cancellationState.RequestedKind == OpenCancellationKind.None)
                     {
                         Volatile.Read(ref s_beforePinnedDataSourceOpen)?.Invoke();
@@ -323,11 +334,67 @@ internal static class SqliteBoundedConnectionOpener
             failure);
     }
 
+    /// <summary>
+    /// BUG-BASELINE-009 (C2): runs the caller-side data-source preflight off the caller's thread, bounded by the open's
+    /// deadline and the caller's cancellation, in the pattern of the bounded workspace identity resolution. A preflight
+    /// that does not return surfaces as <see cref="TimeoutException"/> (or the caller's cancellation) at the bound and
+    /// stays counted in <see cref="ActivePreflightCount"/> until it actually returns.
+    /// </summary>
+    private static async Task RunBoundedPreflightAsync(
+        string connectionString,
+        TimeSpan timeout,
+        CancellationToken timeoutToken,
+        CancellationToken cancellationToken)
+    {
+        using var bound = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutToken);
+        Interlocked.Increment(ref s_activePreflightCount);
+        Task preflight;
+        try
+        {
+            preflight = Task.Run(
+                () =>
+                {
+                    try
+                    {
+                        ValidateBoundedDataSource(connectionString);
+                    }
+                    finally
+                    {
+                        Interlocked.Decrement(ref s_activePreflightCount);
+                    }
+                },
+                CancellationToken.None);
+        }
+        catch
+        {
+            Interlocked.Decrement(ref s_activePreflightCount);
+            throw;
+        }
+
+        try
+        {
+            await preflight.WaitAsync(bound.Token).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException exception) when (cancellationToken.IsCancellationRequested)
+        {
+            throw new OperationCanceledException(
+                "SQLite connection opening was cancelled by the caller.",
+                exception,
+                cancellationToken);
+        }
+        catch (OperationCanceledException exception) when (timeoutToken.IsCancellationRequested)
+        {
+            throw new TimeoutException(
+                $"SQLite connection opening exceeded the finite timeout of {timeout}.",
+                exception);
+        }
+    }
+
     private static void ValidateBoundedDataSource(
-        SqliteConnection connection,
+        string connectionString,
         bool invokeBoundaryHook = true)
     {
-        var options = new SqliteConnectionStringBuilder(connection.ConnectionString);
+        var options = new SqliteConnectionStringBuilder(connectionString);
         var dataSource = options.DataSource;
         if (options.Mode == SqliteOpenMode.Memory ||
             string.IsNullOrWhiteSpace(dataSource) ||

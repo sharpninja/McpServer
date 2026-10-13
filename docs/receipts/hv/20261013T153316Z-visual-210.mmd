@@ -1,0 +1,36 @@
+erDiagram
+    AgentContextRelationship {
+        string WorkspaceId PK, UK
+        string RelationshipId PK
+        string FromKind UK
+        string FromRef UK
+        string Type UK
+        string ToKind UK
+        string ToRef UK
+    }
+    AgentContextProjection {
+        string WorkspaceId PK, FK
+        string ResponseId PK, FK
+        string GraphRagDocumentId
+    }
+    ContextDocument {
+        string Id PK
+    }
+    ContextChunk {
+        string Id PK
+        string DocumentId FK
+    }
+    GraphEntity {
+        string Id PK
+    }
+    GraphRelationship {
+        string Id PK
+        string SourceEntityId FK
+        string TargetEntityId FK
+    }
+    AgentResponse ||--o| AgentContextProjection : "projection"
+    AgentContextProjection |o..o| ContextDocument : "GraphRagDocumentId"
+    ContextDocument ||--o{ ContextChunk : "chunks"
+    GraphEntity ||--o{ GraphRelationship : "source"
+    GraphEntity ||--o{ GraphRelationship : "target"
+

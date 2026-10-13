@@ -359,6 +359,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             WorkspacePath,
             """["src/A.cs","docs/B.md"]""");
 
+        // Historical schema: the column keeps its 1.x name until 20261005170000_RenameTriageIsMcpServerRelatedColumn.
         db.Database.ExecuteSqlRaw(
             """
             INSERT INTO "TriageGroups" (

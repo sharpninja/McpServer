@@ -1,0 +1,36 @@
+sequenceDiagram
+    autonumber
+    participant M as Model
+    participant P as Plugin updateTurn
+    participant R as qbrain-ai-repl
+    participant S as SessionLogController
+    participant X as IDispatcher and SubmitSessionLogCommandHandler
+    M->>P: updateTurn requestClass Chore (optional requestId)
+    Note over P: ref process BindVerbToTurn. A class-only update binds to a locally terminal turn, including a closed write target (FR-MCP-SESSIONTURN-004-AC004)
+    alt binding refused
+        P-->>M: refused with the binding code, nothing sent
+    else bound
+        Note over P,R: ref process PersistTurnWriteWithReceipt, its receipt branches as drawn there
+        P->>R: client.SessionLog.SubmitAsync with the bound turn carrying requestClass
+        R->>S: POST /qbrainai/sessionlog
+        alt transport outage or retryable 503
+            R-->>P: outage
+            P-->>M: persisted false, code queued, failsafe record kept, exit 0
+        else answered
+            S->>X: SendAsync(SubmitSessionLogCommand)
+            Note over X: TurnWritePipeline inside SerializableWrite applies policy RequestClassification
+            alt valid class
+                X-->>S: class stored, hostile default applied on a turn nonterminal before the write, a terminal turn not re-gated
+                S-->>R: 201 turns outcome merged
+                R-->>P: outcome
+                P-->>M: persisted, hostile status shown
+            else invalid class
+                S-->>R: 400 request_class_invalid
+                P-->>M: refused, nothing changed
+            else SerializableWrite bound exhausted
+                S-->>R: 409 conflict, retryable
+                P-->>M: persisted false, code queued, failsafe kept, exit 0 (outage)
+            end
+        end
+    end
+

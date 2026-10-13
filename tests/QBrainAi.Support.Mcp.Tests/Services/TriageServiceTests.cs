@@ -18,9 +18,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class TriageServiceTests : IDisposable
 {
-    private const string PrimaryWorkspace = "Q:\\__mcp_unit_test__\\IncidentSource";
-    private const string AlternateWorkspace = "Q:\\__mcp_unit_test__\\OtherSource";
-    private const string QBrainAiWorkspace = "Q:\\__mcp_unit_test__\\QBrainAi";
+    private static readonly string PrimaryWorkspace = UnitTestPaths.Combine("IncidentSource");
+    private static readonly string AlternateWorkspace = UnitTestPaths.Combine("OtherSource");
+    private static readonly string QBrainAiWorkspace = UnitTestPaths.Combine("QBrainAi");
 
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _dbOptions;
@@ -51,7 +51,7 @@ public sealed class TriageServiceTests : IDisposable
     {
         var clock = System.Diagnostics.Stopwatch.StartNew();
         var unreachableOptions = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(@"Data Source=Z:\mcp-triage-missing\unreachable.db")
+            .UseSqlite($"Data Source={UnitTestPaths.Combine("mcp-triage-missing", "unreachable.db")}")
             .Options;
         var db = new McpDbContext(unreachableOptions, new WorkspaceContext { WorkspacePath = PrimaryWorkspace });
         var workspaceContext = new WorkspaceContext { WorkspacePath = PrimaryWorkspace, WorkspaceName = "IncidentSource" };
@@ -241,7 +241,7 @@ public sealed class TriageServiceTests : IDisposable
             Title = "mcpserver-codex-plugin masks method_not_found",
             Summary = "The QBrain.AI Codex plugin reports success after a workflow.triage call fails.",
             Component = "mcpserver-codex-plugin",
-            AffectedPaths = ["Q:\\__mcp_unit_test__\\mcpserver-codex-plugin\\lib\\repl-invoke.sh"],
+            AffectedPaths = [UnitTestPaths.Combine("mcpserver-codex-plugin", "lib", "repl-invoke.sh")],
         }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(QBrainAiWorkspace, result.WorkspacePath);
@@ -1241,8 +1241,10 @@ public sealed class TriageServiceTests : IDisposable
         string status,
         DateTimeOffset timestamp,
         string? createdTodoId = null,
-        string workspacePath = PrimaryWorkspace)
-        => new()
+        string? workspacePath = null)
+    {
+        workspacePath ??= PrimaryWorkspace;
+        return new()
         {
             WorkspaceId = workspacePath,
             GroupId = groupId,
@@ -1257,14 +1259,17 @@ public sealed class TriageServiceTests : IDisposable
             QuietDeadlineUtc = timestamp.AddMinutes(15),
             CreatedTodoId = createdTodoId,
         };
+    }
 
     private static TriageReportEntity SeedReport(
         string reportId,
         string groupId,
         string title,
         DateTimeOffset timestamp,
-        string workspacePath = PrimaryWorkspace)
-        => new()
+        string? workspacePath = null)
+    {
+        workspacePath ??= PrimaryWorkspace;
+        return new()
         {
             WorkspaceId = workspacePath,
             ReportId = reportId,
@@ -1277,6 +1282,7 @@ public sealed class TriageServiceTests : IDisposable
             Status = "grouped",
             CreatedUtc = timestamp,
         };
+    }
 
     private static TriageResearchRunEntity SeedRun(
         string runId,
@@ -1290,10 +1296,10 @@ public sealed class TriageServiceTests : IDisposable
         string? agentStderr = null,
         int? agentExitCode = null,
         string? createdTodoId = null,
-        string workspacePath = PrimaryWorkspace)
+        string? workspacePath = null)
         => new()
         {
-            WorkspaceId = workspacePath,
+            WorkspaceId = workspacePath ?? PrimaryWorkspace,
             RunId = runId,
             GroupId = groupId,
             Status = status,
@@ -1313,10 +1319,10 @@ public sealed class TriageServiceTests : IDisposable
     private static TodoItemEntity SeedTodoItem(
         string todoId,
         string title,
-        string workspacePath = PrimaryWorkspace)
+        string? workspacePath = null)
         => new()
         {
-            WorkspaceId = workspacePath,
+            WorkspaceId = workspacePath ?? PrimaryWorkspace,
             Id = todoId,
             Title = title,
             Section = "Backlog",

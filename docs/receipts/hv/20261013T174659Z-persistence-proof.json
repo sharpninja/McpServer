@@ -1,0 +1,41 @@
+{
+  "TimestampUtc": "2026-10-13T18:42:08.8266112Z",
+  "ReviewerSessionId": "Codex-20261013T175033Z-architecture-merged-r2",
+  "ReviewerRequestId": "req-20261013T174659Z-architecture-merged-r2",
+  "ReadMethod": "client.SessionLog.QueryAsync",
+  "WriteMethod": "workflow.sessionlog.appendDialog",
+  "PartCount": 12,
+  "ExpectedCharacters": 117288,
+  "StoredCharacters": 117288,
+  "ExactReadbackEquals": true,
+  "ReceiptSha256": "43f0c6b355570fc491a5b57abea59637b56a4b3f27598dd37ddf2405a014d588",
+  "StoredSha256": "43f0c6b355570fc491a5b57abea59637b56a4b3f27598dd37ddf2405a014d588",
+  "StoredTurnStatus": "completed",
+  "WriteReceipt": "docs/receipts/hv/20261013T174659Z-full-result-write.json",
+  "ReadbackReceipt": "docs/receipts/hv/20261013T174659Z-reviewer-readback.json",
+  "ResultReceipt": "docs/receipts/hv/hostile-validator-architecture-merged-r2-20261013T174659Z.json",
+  "ResultPartPrefix": "HV-ARCHITECTURE-R2-FINAL-RESULT-V2",
+  "ReadCorrections": [
+    "Session-ID text query returned no records because text is not a session-ID filter.",
+    "QueryAsync from string was refused by the live parameter converter. Agent-only query succeeded; selected the exact own session and request locally.",
+    "Initial result readback detected server secret-scrubber changes to two harmless key-name regex expressions. Redacted those expressions in the receipt and appended the corrected complete result with the distinct V2 prefix; findings and verdict unchanged."
+  ],
+  "Completion": {
+    "degraded": false,
+    "requestId": "req-20261013T174659Z-architecture-merged-r2",
+    "failsafePath": "",
+    "method": "workflow.sessionlog.completeTurn",
+    "childStderr": "",
+    "queued": false,
+    "message": "Session log persist confirmed a durable write for request 'req-20261013T174659Z-architecture-merged-r2'.",
+    "agent": "Codex",
+    "retryable": false,
+    "sessionId": "Codex-20261013T175033Z-architecture-merged-r2",
+    "persisted": true,
+    "code": "persisted"
+  },
+  "ProofRecordedOnOwnTurn": true,
+  "ReceiptActionsPersisted": true,
+  "RichTurnUpdatePersisted": true,
+  "TerminalResultReadbackEquals": true
+}

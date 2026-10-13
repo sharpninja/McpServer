@@ -50,7 +50,11 @@ internal static class LinuxPhysicalPathResolver
         if (!OperatingSystem.IsLinux())
             throw new PlatformNotSupportedException("Linux physical resolution requires Linux.");
 
-        var normalizedPath = Path.GetFullPath(lexicalPath);
+        // BUG-BASELINE-009 (C3): like the data-file open, resolve symbolic-link prefixes through the mount table first, so
+        // an absolute same-filesystem alias is not walked from / through a nested mount such as /tmp under RESOLVE_NO_XDEV.
+        var normalizedPath = ResolveSymlinksOnApprovedMounts(
+            Path.GetFullPath(lexicalPath),
+            "Linux physical identity resolution");
         var mount = BoundedFileSystemPolicy.GetApprovedLinuxMount(
             normalizedPath,
             "Linux physical identity resolution");
@@ -279,6 +283,80 @@ internal static class LinuxPhysicalPathResolver
 
 
 
+    /// <summary>
+    /// BUG-BASELINE-001 (TR-MCP-USECASE-017): pins the deepest existing directory of
+    /// <paramref name="lexicalPath"/> for confined creation of its missing tail. The approved mount is
+    /// classified and pinned first, then each mount-relative component is opened from the previous
+    /// descriptor with <c>openat2</c> and <c>RESOLVE_NO_SYMLINKS | RESOLVE_NO_XDEV | RESOLVE_NO_MAGICLINKS</c>,
+    /// so no link is followed and no mount is crossed, matching the export-root capture.
+    /// </summary>
+    /// <param name="lexicalPath">Absolute path whose deepest existing directory is wanted.</param>
+    /// <param name="operation">Operation name for error messages.</param>
+    /// <param name="missingRelativeTail">The missing components below the returned directory, '/'-separated; empty when the path exists.</param>
+    /// <returns>An owning descriptor for the deepest existing directory.</returns>
+    internal static SafeFileHandle OpenDeepestExistingDirectoryNoCrossDevice(
+        string lexicalPath,
+        string operation,
+        out string missingRelativeTail)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(lexicalPath);
+        ArgumentException.ThrowIfNullOrWhiteSpace(operation);
+        if (!OperatingSystem.IsLinux())
+            throw new PlatformNotSupportedException("Linux directory pinning requires Linux.");
+
+        var normalizedPath = Path.GetFullPath(lexicalPath);
+        var mount = BoundedFileSystemPolicy.GetApprovedLinuxMount(normalizedPath, operation);
+        var current = OpenApprovedMountAnchor(mount, operation);
+        try
+        {
+            if (!TryGetMountRelativePath(mount.MountPoint, normalizedPath, out var relativePath))
+            {
+                throw new IOException(
+                    $"{operation} cannot anchor '{normalizedPath}' at approved mount '{mount.MountPoint}'.");
+            }
+
+            var components = relativePath.Split('/', StringSplitOptions.RemoveEmptyEntries)
+                .Where(component => component != ".")
+                .ToArray();
+            for (var index = 0; index < components.Length; index++)
+            {
+                var how = new OpenHow
+                {
+                    Flags = OpenPath | OpenDirectory | OpenNoFollow | OpenCloseOnExec,
+                    Resolve = ResolveNoCrossDevice | ResolveNoMagicLinks | ResolveNoSymbolicLinks,
+                };
+                var descriptor = OpenAt2(
+                    OpenAt2SystemCall,
+                    current.DangerousGetHandle().ToInt32(),
+                    components[index],
+                    ref how,
+                    (nuint)Marshal.SizeOf<OpenHow>());
+                if (descriptor < 0)
+                {
+                    var error = Marshal.GetLastPInvokeError();
+                    if (error == ErrorNoEntry)
+                    {
+                        missingRelativeTail = string.Join('/', components[index..]);
+                        return current;
+                    }
+
+                    throw CreateAtomicDirectoryOpenException(normalizedPath, error);
+                }
+
+                current.Dispose();
+                current = new SafeFileHandle((nint)descriptor, ownsHandle: true);
+            }
+
+            missingRelativeTail = string.Empty;
+            return current;
+        }
+        catch
+        {
+            current.Dispose();
+            throw;
+        }
+    }
+
     private static SafeFileHandle OpenApprovedMountAnchor(
         BoundedFileSystemPolicy.LinuxMount mount,
         string operation)
@@ -386,50 +464,46 @@ internal static class LinuxPhysicalPathResolver
             $"{operation} exceeded {MaxAncestorDepth} symbolic-link ancestors.");
     }
 
+    private const ushort FileTypeMask = 0xF000;
+    private const ushort SymbolicLinkFileType = 0xA000;
+
+    /// <summary>
+    /// BUG-BASELINE-009 (C1): classifies <paramref name="path"/> with <c>statx(AT_SYMLINK_NOFOLLOW)</c> and reads a
+    /// link's target with <c>readlink</c>, so preflight never asks the filesystem behind a link. File.GetAttributes
+    /// follows a link with <c>stat</c> to report whether its target is a directory, which sends a userspace mount a
+    /// lookup before the mount table can reject the target.
+    /// </summary>
     private static bool TryGetLinuxLinkTarget(string path, out string target)
     {
         target = string.Empty;
-        try
+        if (!TryStatxPath(path, out var identity) ||
+            (identity.Mode & FileTypeMask) != SymbolicLinkFileType)
         {
-            var attributes = File.GetAttributes(path);
-            if ((attributes & FileAttributes.ReparsePoint) == 0)
+            return false;
+        }
+
+        var size = 1024;
+        while (size <= MaximumLinkBuffer)
+        {
+            var buffer = new byte[size];
+            var length = ReadLink(path, buffer, (nuint)buffer.Length);
+            if (length <= 0)
                 return false;
 
-            var linkTarget = (attributes & FileAttributes.Directory) != 0
-                ? new DirectoryInfo(path).LinkTarget
-                : new FileInfo(path).LinkTarget;
-            if (string.IsNullOrEmpty(linkTarget))
-                return false;
+            if (length < buffer.Length)
+            {
+                target = Encoding.UTF8.GetString(buffer, 0, checked((int)length));
+                return true;
+            }
 
-            target = linkTarget;
-            return true;
+            size = checked(size * 2);
         }
-        catch (IOException)
-        {
-            return false;
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return false;
-        }
+
+        return false;
     }
 
-    private static bool LinuxPathExistsWithoutFollowing(string path)
-    {
-        try
-        {
-            _ = File.GetAttributes(path);
-            return true;
-        }
-        catch (IOException)
-        {
-            return false;
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return false;
-        }
-    }
+    /// <summary>BUG-BASELINE-009 (C1): existence without following a final link (<c>statx(AT_SYMLINK_NOFOLLOW)</c>).</summary>
+    private static bool LinuxPathExistsWithoutFollowing(string path) => TryStatxPath(path, out _);
 
     private const int AtFdCwd = -100;
     private const int AtSymlinkNoFollow = 0x100;
@@ -626,6 +700,9 @@ internal static class LinuxPhysicalPathResolver
     [StructLayout(LayoutKind.Explicit, Size = 256)]
     private struct UnixStatxIdentity
     {
+        [FieldOffset(28)]
+        internal ushort Mode;
+
         [FieldOffset(32)]
         internal ulong Inode;
 

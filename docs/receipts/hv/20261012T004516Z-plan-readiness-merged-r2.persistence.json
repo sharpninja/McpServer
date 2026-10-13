@@ -1,0 +1,48 @@
+{
+  "TimestampUtc": "2026-10-12T01:28:37.8051829Z",
+  "ReviewerSessionId": "Codex-20261012T004725Z-plugin-session",
+  "ReviewerRequestId": "req-20261012T004516Z-plan-readiness-merged-r2",
+  "Status": "completed",
+  "DurableWrite": {
+    "queued": false,
+    "message": "Session log persist confirmed a durable write for request 'req-20261012T004516Z-plan-readiness-merged-r2'.",
+    "code": "persisted",
+    "degraded": false,
+    "agent": "Codex",
+    "requestId": "req-20261012T004516Z-plan-readiness-merged-r2",
+    "failsafePath": "",
+    "childStderr": "",
+    "retryable": false,
+    "persisted": true,
+    "method": "workflow.sessionlog.completeTurn",
+    "sessionId": "Codex-20261012T004725Z-plugin-session"
+  },
+  "ReadbackMethod": "client.SessionLog.QueryAsync through installed Codex plugin wrapper with -ParamsObject and main workspace",
+  "ExpectedCharacters": 118116,
+  "ActualCharacters": 118116,
+  "EntireResultConfirmed": true,
+  "Normalization": "Native JSON object equality. Receipt command inventory reflects the server sanitizer; all non-command result fields are unchanged. Exact original commands are retained in the command ledger.",
+  "ExpectedResponseSha256": "795A87BA5F9A927A2D3A492509E980EF827137DA44FAAE6DF6E9AD95CCD8461E",
+  "StoredResponseSha256": "795A87BA5F9A927A2D3A492509E980EF827137DA44FAAE6DF6E9AD95CCD8461E",
+  "ReceiptFileSha256": "7058427C751DB04524D37AA026B84298531387995F37B25929BCDEEA3F27A66E",
+  "StoredVerdict": "DISAGREE",
+  "StoredClaimCount": 12,
+  "StoredFindingCount": 12,
+  "DesignDecisionsPresent": 1,
+  "ActionCount": 3,
+  "DialogCount": 1,
+  "NonCommandResultExact": true,
+  "CommandSanitization": [
+    {
+      "Index": 80,
+      "TimestampUtc": "2026-10-12T01:06:13.2029252Z",
+      "ExpectedCharacters": 1318,
+      "StoredCharacters": 1313,
+      "ExitCode": 0,
+      "Explanation": "Server sanitizer redacted a non-secret API-key regex expression. The exact checked command remains in the commands JSONL ledger."
+    }
+  ],
+  "CanonicalReceiptAndStoredResponseSha256": "795A87BA5F9A927A2D3A492509E980EF827137DA44FAAE6DF6E9AD95CCD8461E",
+  "OriginalSubmittedCharacters": 118123,
+  "OriginalSubmittedSha256": "63D4892977F2963FF78FE6C819133C0EEDE83E54E1FB779823EAB6ED4F2317DB"
+}

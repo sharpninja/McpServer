@@ -8,6 +8,7 @@
  */
 export {
   type QBrainAiPluginCoreConfig,
+  type McpServerPluginCoreConfig,
   setCoreConfig,
   getCoreConfig,
   coreAgentName,
@@ -63,3 +64,9 @@ import type { QBrainAiPluginCoreConfig } from './runtime/core-config.js';
 export function createQBrainAiPluginCore(config: QBrainAiPluginCoreConfig = {}): HostContext {
   return new HostContext(config);
 }
+
+/**
+ * @deprecated 1.x alias of {@link createQBrainAiPluginCore}, kept through 1.x for host plugins
+ * built before the QBrainAi rename (TR-MCP-QBRAIN-003). New code calls createQBrainAiPluginCore.
+ */
+export const createMcpServerPluginCore = createQBrainAiPluginCore;

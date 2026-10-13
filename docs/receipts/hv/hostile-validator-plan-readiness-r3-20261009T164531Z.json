@@ -1,0 +1,169 @@
+{
+  "TimestampUtc": "2026-10-09T16:54:00Z",
+  "ValidatorIdentity": {
+    "agent": "Codex CLI",
+    "model": "gpt-6-sol",
+    "effort": "xhigh",
+    "codexSessionId": "01a1218e-3b6a-76d2-b5fc-7c2ceea3ac99",
+    "rolloutPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T11-45-32-01a1218e-3b6a-76d2-b5fc-7c2ceea3ac99.jsonl",
+    "sessionMetaUtc": "2026-10-09T16:45:32.621Z",
+    "turnContextUtc": "2026-10-09T16:45:33.801Z"
+  },
+  "FirstActions": {
+    "addProfileExecuted": true,
+    "globalProfileFilesRead": 19,
+    "markerReadInFull": true,
+    "markerLineCount": 397,
+    "memoryListRun": true,
+    "memoriesRead": 13
+  },
+  "Claims": [
+    {
+      "claim": "P1",
+      "status": "FAIL",
+      "evidence": "Line 151 says FR-SUPPORT-010G is referenced only in `SessionLogService.cs:1287-1317` and a retired handoff. `rg -n -F FR-SUPPORT-010G src tests` returns **36** references across **9** files, including `SessionLogController.cs:521`, `SessionLogClient.cs:222`, `FwhMcpTools.SessionLog.cs:177`, and two test projects. Other checked source anchors, HEAD, plugin local heads, and named migration directories agreed with the plan. See R3-05."
+    },
+    {
+      "claim": "P2",
+      "status": "PASS",
+      "evidence": "The plan declares 21 new FR, 23 TR, 23 TEST, and 21 full-ID mapping rows. A mechanical row check found no shortened/nonexistent proposed mapping id. Live `workflow.requirements.listFr/listTr/listTest` returned **352/480/512** records; the proposed ID families have no collision. The 33 existing-record check in the round-2 receipt remains applicable because src/docs HEAD has no product changes and the live counts are unchanged. P0 explicitly creates the new ids."
+    },
+    {
+      "claim": "P3",
+      "status": "FAIL",
+      "evidence": "D3's scoped use-case gate, D4's mandatory Other reason, and the D5 nonce derived from the earliest enqueue record are represented. But D2's request-that-caused-the-write rule is contradicted when D5 mint advances the active pointer before the queued request is processed (R3-01). The plan also exempts hook-poor hosts from D1 arrival timing without an operator ruling (R3-03)."
+    },
+    {
+      "claim": "P4",
+      "status": "FAIL",
+      "evidence": "Server, client, REPL, MCP, both plugin cores, eight named plugins, and SQLite/PostgreSQL/SQL Server migrations have tasks and tests. However, the hostless/queued ingress exceptions and transcript removal lifecycle leave supported hosts without a complete implementation of the promised one-request-one-turn behavior (R3-02/03)."
+    },
+    {
+      "claim": "P5",
+      "status": "FAIL",
+      "evidence": "The implementer must still decide when a queued mint becomes the write target, how to close a queued turn removed before delivery, and whether D1 may be weakened for hook-poor hosts. R3-01/02/03 give the missing decisions and permitted fixes."
+    },
+    {
+      "claim": "P6",
+      "status": "UNKNOWN",
+      "evidence": "Named Nuke targets, test project paths, provider migration directories, and the G1-G6/BDPv4 order were confirmed in source. P0.1 now pins `dotnet-ef` 10.0.0 and specifies the three provider commands. This host has only SDK 10.0.111 against `global.json` 10.0.201, and lacks Pester and bats, so the commands cannot be run here until P0.1's toolchain gate is satisfied. No build/test gate was represented as run or green in this review."
+    },
+    {
+      "claim": "P7",
+      "status": "FAIL",
+      "evidence": "A4 tests currently assert the wrong queued-message attribution (R3-01). A3 has no remove/popAll recovery test (R3-02). Baseline-green FR-SUPPORT-010G `ac-4` claims case-insensitive aliases and error text, but its only named test checks that an unknown section throws, not aliases or the message (R3-06). The Copilot duplicate-hook test feeds the same recorded payload twice, which does not establish that separately invoked host hooks receive an identical timestamp (R3-07)."
+    },
+    {
+      "claim": "P8",
+      "status": "FAIL",
+      "evidence": "The task count and dependencies match. But the wire contract says `active-request.yaml` is written only by the prompt hook although D5 arrival bridge and hook-poor model mints must write it (R3-04). The classifier's blanket “hostile or subagent briefs” skip also contradicts the reviewer's required turn (R3-05)."
+    },
+    {
+      "claim": "P9",
+      "status": "UNKNOWN",
+      "evidence": "TODO description and task count match the source, and handoff plan status/counts match. The handoff line 94 asserts group `triage-group-804b21086f3019ab` was filed in the worktree; read-only `workflow.triage.getGroup` returned not found with both the worktree and main workspace paths. The plan line 570 now correctly labels the group unverified and schedules P0.1 retrieval. The handoff has not adopted that uncertainty. See R3-08."
+    },
+    {
+      "claim": "P10",
+      "status": "FAIL",
+      "evidence": "Nine ordinary triage report ids in lines 569-570 resolved through read-only `workflow.triage.getReport` with status `grouped`; the group remains unverified and scheduled. The arrival-bridge risk list omits the observed `remove` and `popAll` queue operations, which can leave a minted turn unprocessed and indefinitely in the stop ledger (R3-02). This risk has neither an in-plan lifecycle nor a triage id."
+    }
+  ],
+  "Findings": [
+    {
+      "id": "R3-01",
+      "title": "Queue mint steals work attribution (P3/P4/P5/P7/P8).",
+      "detail": "Plan “Locked operator decisions” line 31 makes the active request the most recently *minted* one; host table line 74 and FR-MCP-SESSIONTURN-001-AC009 line 162 mint R2 at enqueue; FR-MCP-SESSIONTURN-007-AC007 lines 205-207 and UC-1 line 422 explicitly send every later unqualified verb to R2. If the model is still executing R1, its next action was caused by R1, yet is written to R2. The A4 tests at line 524 assert this same wrong behavior. **Make PASS:** separate arrival-minted queued tokens from the host's currently processing request; advance write binding only on a verified processing transition or carry the invoking prompt identity, and keep the invocation binding immutable thereafter. Replace the A4/A8 tests with R1-work-after-R2-enqueue and R2-work-after-actual-delivery cases, including no explicit override. **Implementer plan edit preserving D1/D2/D5; no new operator decision.**"
+    },
+    {
+      "id": "R3-02",
+      "title": "Removed queued messages have no lifecycle (P4/P5/P7/P10).",
+      "detail": "Plan lines 30, 74, 162, 303, 522, 568 only consume `queue-operation/enqueue`. Read-only parsing of the worktree Claude transcripts found **116 enqueue, 79 dequeue, 34 remove, 2 popAll** records; `remove` carries `content` and `reason`, while `dequeue` has no content. A removed entry can be minted but never claimed by UserPromptSubmit, and A7's ledger then blocks forever (lines 187-195). **Make PASS:** specify and test the turn state and attribution for `remove`/`popAll`, including how the model learns of and closes a never-processed minted request while retaining the one-turn and model-closes rules; define offset/mint/recovery ordering across bridge restart. Add fixture and live tests for remove/popAll. Add this observed format/lifecycle risk to line 568 and schedule its handling in A3/A7. **Implementer plan edit; if the author wants a host hook to close such turns instead, that is an operator decision because it changes the locked model-closes rule.**"
+    },
+    {
+      "id": "R3-03",
+      "title": "D1 arrival is waived for supported hosts (P3/P4/P5).",
+      "detail": "Line 29 says every user message is minted when it arrives, but lines 75, 79-80, 136, and 165 set Cowork without hooks, classic Cline, and possibly cline-v2 queued messages to mint only when the model first sees them. A host limitation shown to the operator is not approval of an exception; D5 explicitly chose an arrival bridge to keep D1 literal. **Make PASS:** provide arrival integrations and tests for those supported modes, or list the exact exceptions as an explicit operator decision with options: (A) preserve D1 by building a host arrival adapter, or (B) approve a scoped first-sight waiver for named hosts. **Operator decision required for option B; implementation design for option A may be edited by the implementer.**"
+    },
+    {
+      "id": "R3-04",
+      "title": "Wire contract contradicts its mint writers (P8).",
+      "detail": "Line 495 says `sessions/<hostSessionKey>/active-request.yaml` is written “only by the prompt hook mint”; lines 31 and 305 say the arrival bridge or model `mintTurn` also writes it. **Make PASS:** after R3-01 is resolved, name distinct queued-token and processing-target files and specify exactly which event writes each; update wire contracts, A3/A4/A8 tasks, and tests consistently. **Implementer plan edit.**"
+    },
+    {
+      "id": "R3-05",
+      "title": "Genuine hostile review request is classified as a system event, and a source claim is false (P1/P8).",
+      "detail": "FR-MCP-SESSIONTURN-002-AC001 line 170 and A3 line 522 skip “hostile or subagent briefs” by content, while line 123 requires the Codex hostile reviewer to write its own MCP turn. The current review brief is a user prompt to Codex and needs that turn. A structural subagent marker (`agent_id`, `MCP_SUBAGENT_ID`) is distinct from a textual brief. Separately, line 151's “referenced only” claim is contradicted by **36** src/test references in **9** files (`rg -n -F FR-SUPPORT-010G src tests`). **Make PASS:** remove content-based hostile/subagent-brief exclusion and test a user-supplied hostile brief opens a turn while a true marked subagent event does not; correct line 151 to list the actual service, controller, client, MCP, and test references. **Implementer plan edit.**"
+    },
+    {
+      "id": "R3-06",
+      "title": "Baseline-green ac-4 is not verified (P7).",
+      "detail": "FR-SUPPORT-010G `ac-4` line 155 promises every alias, case insensitivity, and an error naming valid sections. Lines 352, 442, and 483 allocate only `SessionLogServiceReplaceDeleteTests.ReplaceTurnSectionAsync_UnknownSection_Throws`. That test at `tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs:272-282` asserts only `ArgumentException`, while source `SessionLogService.cs:1300-1317` implements the broader aliases. **Make PASS:** add named characterization tests for every alias/case variant and the valid-section error text to the P0 baseline-green gate, or narrow the AC to the tested behavior and create a separately tested new AC. Update TEST-SUPPORT-010G and P0's no-new-tests wording accordingly. **Implementer plan edit.**"
+    },
+    {
+      "id": "R3-07",
+      "title": "Copilot nonce identity is not established (P3/P7).",
+      "detail": "Host table line 77 hashes `sessionId`, `timestamp`, and `prompt`; line 522 feeds the *same recorded payload* to two test processes. The [Copilot hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference) defines `timestamp` as a hook input, but does not promise a stable per-message id across independently registered callbacks. The plan's guarantee at lines 29 and 161 depends on such stability. This is an inference risk, not proof that Copilot emits different values. **Make PASS:** capture two real host deliveries for one event and test that their nonce inputs match, or enforce a single trusted delivery boundary/another stable host message key; make a mismatched-timestamp duplicate a negative test. **Implementer plan edit/evidence.**"
+    },
+    {
+      "id": "R3-08",
+      "title": "Filed triage group is unverified (P9 UNKNOWN).",
+      "detail": "Plan “Risks” line 570 correctly says `triage-group-804b21086f3019ab` status is unverified and P0.1 line 135 schedules getGroup. Handoff line 94 still asserts it was filed in the worktree. `workflow.triage.getGroup` with `groupId` and `workspacePath` set to the worktree, then the main workspace, returned `McpNotFoundException` both times. This does not prove it was never filed. **Make PASS:** obtain a retrievable read-only group receipt from its actual scope, or change the handoff to state “unverified” and retain the scheduled read-only check. **Implementer handoff edit/evidence; no triage mutation in this review.**"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 90,
+  "Completeness": 82,
+  "Confidence": 96,
+  "passCount": 1,
+  "failCount": 7,
+  "unknownCount": 2,
+  "FAIL": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P10"
+  ],
+  "UNKNOWN": [
+    "P6",
+    "P9"
+  ],
+  "ImplementerFixes": [
+    "R3-01",
+    "R3-02",
+    "R3-04",
+    "R3-05",
+    "R3-06",
+    "R3-07",
+    "R3-08"
+  ],
+  "OperatorDecisionFails": [
+    "R3-03: D1 waiver for named hook-poor hosts requires operator choice",
+    "R3-02 only if host-side closure replaces model closure"
+  ],
+  "headSha": "c47594498b6dd5e26f24617bb8cc72f7132af642",
+  "receiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r3-20261009T164531Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r3-20261009T164531Z.json",
+    "docs/receipts/hv/20261009T164531Z-plan-readiness-r3.request.jsonl",
+    "docs/receipts/hv/20261009T164531Z-plan-readiness-r3.response.jsonl"
+  ],
+  "reviewerSessionId": "Codex-20261009T032846Z-plugin-session",
+  "reviewerRequestId": "req-20261009T164531Z-plan-readiness-r3",
+  "mcpPersistenceProof": {
+    "fullResultDialogPersisted": true,
+    "turnCompleted": true,
+    "historyVerified": true,
+    "markdownExactChars": 16672,
+    "markdownDialogParts": 6,
+    "queryMethod": "client.SessionLog.QueryAsync via installed Codex wrapper",
+    "queryStatus": "completed",
+    "serverDialogCount": 8,
+    "serverActionCount": 7,
+    "terminalReadbackUtc": "2026-10-09T16:58:18.5983445Z"
+  },
+  "FullReviewMarkdown": "# Hostile validator: PLAN-SESSIONTURNREVIEW-001 readiness, round 3\n\n- TimestampUtc: 2026-10-09T16:54:00Z (review launched 2026-10-09T16:45:31Z).\n- OverallVerdict: **DISAGREE**. The plan remains **NOT APPROVED**.\n- Accuracy: **90/100**. Most verified inventory and contract claims are correct, but one source claim is false and the attribution contract contradicts the requested behavior.\n- Completeness: **82/100**. Queue lifecycle, hook-poor ingress, and baseline test coverage remain open.\n- Confidence: **96/100**. Runtime execution of future gates and one triage group remain unverified.\n- Claim counts: **1 PASS, 7 FAIL, 2 UNKNOWN**. A claim passes only when every applicable assertion passes.\n- Reviewer identity: Codex CLI, model `gpt-6-sol`, reasoning effort `xhigh`. Live proof: `CODEX_SESSION_ID=01a1218e-3b6a-76d2-b5fc-7c2ceea3ac99`; `/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T11-45-32-01a1218e-3b6a-76d2-b5fc-7c2ceea3ac99.jsonl` has `session_meta` at 16:45:32.621Z (`originator=codex_exec`, this worktree) and `turn_context` at 16:45:33.801Z (`model=gpt-6-sol`, `effort=xhigh`).\n- First actions: executed `/home/sharpninja/.claude/skills/add-profile/SKILL.md` and read all **19** non-skill profile Markdown files in full; read all **397** lines of `/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml`; `workflow.memory.list` through the installed Codex wrapper returned and exposed all **13** memories (11 Global, 2 Workspace), including MEMORY-PROCESS-003 and -005. The wrapper Status returned `available` for Codex and the reviewer turn began with `persisted:true`.\n- HEAD: `c47594498b6dd5e26f24617bb8cc72f7132af642` on `worktree-session-20261009`. The baseline diff contains documentation and receipts, with no src/tests/build/plugins changes. Review-only writes: these two receipts and the reviewer's own MCP turn. Runner JSONL already exists at `docs/receipts/hv/20261009T164531Z-plan-readiness-r3.request.jsonl` and `.response.jsonl`.\n- Reviewer MCP turn: sessionId `Codex-20261009T032846Z-plugin-session`, requestId `req-20261009T164531Z-plan-readiness-r3`.\n\n## Round-2 re-attack\n\nThe revised source has **591 lines, 479 non-empty**. The live TODO description has **479 lines, 479 ordinal-equal** to those non-empty source lines; `done=false`, note says NOT APPROVED, and there are **30** implementationTasks. The handoff reports these counts and the status accurately. The revised source explicitly fixes R2-01 (new mint route and required context), R2-02 (event-derived nonces), R2-03/R2-05 (live-session refusal and stale stdio key), R2-04 (full canonical mapping ids), R2-06 (Codex hook trust), R2-07 (pinned local dotnet-ef and PowerShell install), R2-09 (baseline-green exception), and R2-10's *statement* of uncertainty and P0.1 retrieval task. R2-08/D5 now has a concrete Claude arrival bridge. A sampled real transcript `enqueue` record has keys `type, operation, timestamp, sessionId, content` and no `source_uuid`; deriving its nonce from those fields is faithful to the earliest observed enqueue record. These textual corrections do not prove the design works. Findings R3-01 through R3-07 below re-attack its behavior. The round-1 F01-F16 corrections and round-2 corrections were checked against their receipts and the revised sections; neither prior verdict authorizes approval.\n\n## Claim results\n\n- **P1 Source accuracy: FAIL.** Line 151 says FR-SUPPORT-010G is referenced only in `SessionLogService.cs:1287-1317` and a retired handoff. `rg -n -F FR-SUPPORT-010G src tests` returns **36** references across **9** files, including `SessionLogController.cs:521`, `SessionLogClient.cs:222`, `FwhMcpTools.SessionLog.cs:177`, and two test projects. Other checked source anchors, HEAD, plugin local heads, and named migration directories agreed with the plan. See R3-05.\n- **P2 Requirements accuracy: PASS.** The plan declares 21 new FR, 23 TR, 23 TEST, and 21 full-ID mapping rows. A mechanical row check found no shortened/nonexistent proposed mapping id. Live `workflow.requirements.listFr/listTr/listTest` returned **352/480/512** records; the proposed ID families have no collision. The 33 existing-record check in the round-2 receipt remains applicable because src/docs HEAD has no product changes and the live counts are unchanged. P0 explicitly creates the new ids.\n- **P3 Locked decisions: FAIL.** D3's scoped use-case gate, D4's mandatory Other reason, and the D5 nonce derived from the earliest enqueue record are represented. But D2's request-that-caused-the-write rule is contradicted when D5 mint advances the active pointer before the queued request is processed (R3-01). The plan also exempts hook-poor hosts from D1 arrival timing without an operator ruling (R3-03).\n- **P4 Scope completeness: FAIL.** Server, client, REPL, MCP, both plugin cores, eight named plugins, and SQLite/PostgreSQL/SQL Server migrations have tasks and tests. However, the hostless/queued ingress exceptions and transcript removal lifecycle leave supported hosts without a complete implementation of the promised one-request-one-turn behavior (R3-02/03).\n- **P5 Decision completeness: FAIL.** The implementer must still decide when a queued mint becomes the write target, how to close a queued turn removed before delivery, and whether D1 may be weakened for hook-poor hosts. R3-01/02/03 give the missing decisions and permitted fixes.\n- **P6 Executability: UNKNOWN.** Named Nuke targets, test project paths, provider migration directories, and the G1-G6/BDPv4 order were confirmed in source. P0.1 now pins `dotnet-ef` 10.0.0 and specifies the three provider commands. This host has only SDK 10.0.111 against `global.json` 10.0.201, and lacks Pester and bats, so the commands cannot be run here until P0.1's toolchain gate is satisfied. No build/test gate was represented as run or green in this review.\n- **P7 Testability: FAIL.** A4 tests currently assert the wrong queued-message attribution (R3-01). A3 has no remove/popAll recovery test (R3-02). Baseline-green FR-SUPPORT-010G `ac-4` claims case-insensitive aliases and error text, but its only named test checks that an unknown section throws, not aliases or the message (R3-06). The Copilot duplicate-hook test feeds the same recorded payload twice, which does not establish that separately invoked host hooks receive an identical timestamp (R3-07).\n- **P8 Internal consistency: FAIL.** The task count and dependencies match. But the wire contract says `active-request.yaml` is written only by the prompt hook although D5 arrival bridge and hook-poor model mints must write it (R3-04). The classifier's blanket “hostile or subagent briefs” skip also contradicts the reviewer's required turn (R3-05).\n- **P9 Artifact parity: UNKNOWN.** TODO description and task count match the source, and handoff plan status/counts match. The handoff line 94 asserts group `triage-group-804b21086f3019ab` was filed in the worktree; read-only `workflow.triage.getGroup` returned not found with both the worktree and main workspace paths. The plan line 570 now correctly labels the group unverified and schedules P0.1 retrieval. The handoff has not adopted that uncertainty. See R3-08.\n- **P10 Risks: FAIL.** Nine ordinary triage report ids in lines 569-570 resolved through read-only `workflow.triage.getReport` with status `grouped`; the group remains unverified and scheduled. The arrival-bridge risk list omits the observed `remove` and `popAll` queue operations, which can leave a minted turn unprocessed and indefinitely in the stop ledger (R3-02). This risk has neither an in-plan lifecycle nor a triage id.\n\n## Defects and exact pass changes\n\n**R3-01 - Queue mint steals work attribution (P3/P4/P5/P7/P8).** Plan “Locked operator decisions” line 31 makes the active request the most recently *minted* one; host table line 74 and FR-MCP-SESSIONTURN-001-AC009 line 162 mint R2 at enqueue; FR-MCP-SESSIONTURN-007-AC007 lines 205-207 and UC-1 line 422 explicitly send every later unqualified verb to R2. If the model is still executing R1, its next action was caused by R1, yet is written to R2. The A4 tests at line 524 assert this same wrong behavior. **Make PASS:** separate arrival-minted queued tokens from the host's currently processing request; advance write binding only on a verified processing transition or carry the invoking prompt identity, and keep the invocation binding immutable thereafter. Replace the A4/A8 tests with R1-work-after-R2-enqueue and R2-work-after-actual-delivery cases, including no explicit override. **Implementer plan edit preserving D1/D2/D5; no new operator decision.**\n\n**R3-02 - Removed queued messages have no lifecycle (P4/P5/P7/P10).** Plan lines 30, 74, 162, 303, 522, 568 only consume `queue-operation/enqueue`. Read-only parsing of the worktree Claude transcripts found **116 enqueue, 79 dequeue, 34 remove, 2 popAll** records; `remove` carries `content` and `reason`, while `dequeue` has no content. A removed entry can be minted but never claimed by UserPromptSubmit, and A7's ledger then blocks forever (lines 187-195). **Make PASS:** specify and test the turn state and attribution for `remove`/`popAll`, including how the model learns of and closes a never-processed minted request while retaining the one-turn and model-closes rules; define offset/mint/recovery ordering across bridge restart. Add fixture and live tests for remove/popAll. Add this observed format/lifecycle risk to line 568 and schedule its handling in A3/A7. **Implementer plan edit; if the author wants a host hook to close such turns instead, that is an operator decision because it changes the locked model-closes rule.**\n\n**R3-03 - D1 arrival is waived for supported hosts (P3/P4/P5).** Line 29 says every user message is minted when it arrives, but lines 75, 79-80, 136, and 165 set Cowork without hooks, classic Cline, and possibly cline-v2 queued messages to mint only when the model first sees them. A host limitation shown to the operator is not approval of an exception; D5 explicitly chose an arrival bridge to keep D1 literal. **Make PASS:** provide arrival integrations and tests for those supported modes, or list the exact exceptions as an explicit operator decision with options: (A) preserve D1 by building a host arrival adapter, or (B) approve a scoped first-sight waiver for named hosts. **Operator decision required for option B; implementation design for option A may be edited by the implementer.**\n\n**R3-04 - Wire contract contradicts its mint writers (P8).** Line 495 says `sessions/<hostSessionKey>/active-request.yaml` is written “only by the prompt hook mint”; lines 31 and 305 say the arrival bridge or model `mintTurn` also writes it. **Make PASS:** after R3-01 is resolved, name distinct queued-token and processing-target files and specify exactly which event writes each; update wire contracts, A3/A4/A8 tasks, and tests consistently. **Implementer plan edit.**\n\n**R3-05 - Genuine hostile review request is classified as a system event, and a source claim is false (P1/P8).** FR-MCP-SESSIONTURN-002-AC001 line 170 and A3 line 522 skip “hostile or subagent briefs” by content, while line 123 requires the Codex hostile reviewer to write its own MCP turn. The current review brief is a user prompt to Codex and needs that turn. A structural subagent marker (`agent_id`, `MCP_SUBAGENT_ID`) is distinct from a textual brief. Separately, line 151's “referenced only” claim is contradicted by **36** src/test references in **9** files (`rg -n -F FR-SUPPORT-010G src tests`). **Make PASS:** remove content-based hostile/subagent-brief exclusion and test a user-supplied hostile brief opens a turn while a true marked subagent event does not; correct line 151 to list the actual service, controller, client, MCP, and test references. **Implementer plan edit.**\n\n**R3-06 - Baseline-green ac-4 is not verified (P7).** FR-SUPPORT-010G `ac-4` line 155 promises every alias, case insensitivity, and an error naming valid sections. Lines 352, 442, and 483 allocate only `SessionLogServiceReplaceDeleteTests.ReplaceTurnSectionAsync_UnknownSection_Throws`. That test at `tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs:272-282` asserts only `ArgumentException`, while source `SessionLogService.cs:1300-1317` implements the broader aliases. **Make PASS:** add named characterization tests for every alias/case variant and the valid-section error text to the P0 baseline-green gate, or narrow the AC to the tested behavior and create a separately tested new AC. Update TEST-SUPPORT-010G and P0's no-new-tests wording accordingly. **Implementer plan edit.**\n\n**R3-07 - Copilot nonce identity is not established (P3/P7).** Host table line 77 hashes `sessionId`, `timestamp`, and `prompt`; line 522 feeds the *same recorded payload* to two test processes. The [Copilot hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference) defines `timestamp` as a hook input, but does not promise a stable per-message id across independently registered callbacks. The plan's guarantee at lines 29 and 161 depends on such stability. This is an inference risk, not proof that Copilot emits different values. **Make PASS:** capture two real host deliveries for one event and test that their nonce inputs match, or enforce a single trusted delivery boundary/another stable host message key; make a mismatched-timestamp duplicate a negative test. **Implementer plan edit/evidence.**\n\n**R3-08 - Filed triage group is unverified (P9 UNKNOWN).** Plan “Risks” line 570 correctly says `triage-group-804b21086f3019ab` status is unverified and P0.1 line 135 schedules getGroup. Handoff line 94 still asserts it was filed in the worktree. `workflow.triage.getGroup` with `groupId` and `workspacePath` set to the worktree, then the main workspace, returned `McpNotFoundException` both times. This does not prove it was never filed. **Make PASS:** obtain a retrievable read-only group receipt from its actual scope, or change the handoff to state “unverified” and retain the scheduled read-only check. **Implementer handoff edit/evidence; no triage mutation in this review.**\n\n## Verification boundaries and sources\n\nNo implementation, build, migration, or test was run; this is a readiness review. Current toolchain: `dotnet --list-sdks` shows only 10.0.111, and Pester/bats are absent, as the plan now acknowledges. The named Nuke targets exist (`SyncAgentPlugins`, `ValidatePluginPowerShellOnly`, `MigrationIntegrationTests`, `PluginSessionLogIntegration`, `NormalizeGeneratedMigrationObsoletePragmas`); `global.json` asks for 10.0.201. The three provider migration directories and the Build.Tests project exist. Local and round-2 shallow plugin heads matched the plan's inventory; four absent repos were inspected from `/tmp/hv-plan-readiness-r2-20261009T160546Z`, outside the worktree. The R2 and R1 receipts were read in full.\n\nPrimary host references: [Claude Code hook input and `prompt_id`](https://code.claude.com/docs/en/hooks), [Copilot hook payload](https://docs.github.com/en/copilot/reference/hooks-reference), [Codex bundled-hook trust](https://developers.openai.com/plugins/build/plugins), [Codex hook lifecycle](https://learn.chatgpt.com/docs/hooks). These sources support host-field observations; R3-07 is explicitly an inference about the missing stability guarantee.\n\n## MCP persistence proof\n\nThe entire Markdown result, including every finding and the verdict JSON, is appended as ordered dialog parts to reviewer turn `req-20261009T164531Z-plan-readiness-r3`; the JSON companion records exact character count, part count, read-back status, and terminal status after verification. Request and response JSONL are runner-written and durable under `docs/receipts/hv/`.\n\n=== VERDICT JSON ===\n{\"overallVerdict\":\"DISAGREE\",\"accuracy\":90,\"completeness\":82,\"confidence\":96,\"passCount\":1,\"failCount\":7,\"unknownCount\":2,\"failList\":[\"P1\",\"P3\",\"P4\",\"P5\",\"P7\",\"P8\",\"P10\"],\"unknownList\":[\"P6\",\"P9\"],\"implementerFixes\":[\"R3-01\",\"R3-02\",\"R3-04\",\"R3-05\",\"R3-06\",\"R3-07\",\"R3-08\"],\"operatorDecisionFails\":[\"R3-03: D1 waiver for named hook-poor hosts requires operator choice\",\"R3-02 only if host-side closure replaces model closure\"],\"headSha\":\"c47594498b6dd5e26f24617bb8cc72f7132af642\",\"receiptPaths\":[\"docs/receipts/hv/hostile-validator-plan-readiness-r3-20261009T164531Z.md\",\"docs/receipts/hv/hostile-validator-plan-readiness-r3-20261009T164531Z.json\",\"docs/receipts/hv/20261009T164531Z-plan-readiness-r3.request.jsonl\",\"docs/receipts/hv/20261009T164531Z-plan-readiness-r3.response.jsonl\"],\"reviewerSessionId\":\"Codex-20261009T032846Z-plugin-session\",\"reviewerRequestId\":\"req-20261009T164531Z-plan-readiness-r3\"}\n"
+}

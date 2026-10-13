@@ -1,0 +1,38 @@
+{
+  "type": "result",
+  "payload": {
+    "result": {
+      "originalWorkspacePath": "/home/sharpninja/github/McpServer",
+      "groupId": "triage-group-005c7ca0eb823c06",
+      "createdUtc": {
+        "nanosecond": 0,
+        "utcDateTime": "2026-10-11T22:33:46.4714800Z",
+        "totalOffsetMinutes": 0,
+        "day": 11,
+        "dateTime": "2026-10-11T22:33:46.4714800",
+        "hour": 22,
+        "timeOfDay": "22:33:46.4714800",
+        "year": 2026,
+        "dayOfWeek": "Sunday",
+        "minute": 33,
+        "localDateTime": "2026-10-11T17:33:46.4714800-05:00",
+        "month": 10,
+        "utcTicks": 639273548264714800,
+        "date": "2026-10-11T00:00:00.0000000",
+        "second": 46,
+        "microsecond": 480,
+        "millisecond": 471,
+        "offset": "00:00:00",
+        "dayOfYear": 284,
+        "ticks": 639273548264714800
+      },
+      "status": "grouped",
+      "reportId": "triage-report-f4d47e1f85b746de8ce3f5926103711f",
+      "workspacePath": "/home/sharpninja/github/McpServer",
+      "title": "Windows unit gate: HostileReviewWorker_InvalidOptions_FailStartup gets an AggregateException that never names HostileReviewWorker",
+      "summary": "The test builds Host.CreateApplicationBuilder() with invalid HostileReviewWorker options (RenewalInterval equal to LeaseDuration) and expects host.StartAsync to fail with an exception whose text contains HostileReviewWorker. On PAYTON-LEGION2 StartAsync throws System.AggregateException (\"An error occurred while ...\") whose ToString() does not contain HostileReviewWorker; on Linux the same test passes. Inference (unverified): on Windows another startup step fails first (for example a Windows-only logging provider under the lab-wsman account), so the options validation failure is not what surfaces. Needs the full exception text before classifying it as environment or defect."
+    },
+    "requestId": "req-20261012T010244Z-5b2a",
+    "deprecated": true
+  }
+}

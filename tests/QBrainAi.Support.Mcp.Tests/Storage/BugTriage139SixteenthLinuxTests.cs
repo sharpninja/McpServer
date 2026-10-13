@@ -17,7 +17,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// FUSE mount through a symbolic link is rejected by the atomic no-cross-device lookup before
     /// the target mount is traversed.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task WorkspaceIdentity_SafeSymlinkIntoFuse_IsRejectedByAtomicNoCrossDeviceResolver()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -55,7 +55,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Verifies that replacing a previously safe alias with a delayed FUSE target between lexical
     /// classification and physical lookup is rejected by the atomic no-cross-device resolver.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task WorkspaceIdentity_AliasReplacement_IsRejectedByAtomicNoCrossDeviceResolver()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -106,7 +106,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Verifies that a local symbolic link into a real delayed FUSE filesystem is rejected before
     /// any SQLite worker or native handle is created.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -181,10 +181,63 @@ public sealed class BugTriage139SixteenthLinuxTests
     }
 
     /// <summary>
+    /// BUG-BASELINE-009 (C1): a local symbolic link to a path below the root of a delayed FUSE mount is rejected
+    /// by classifying the link target in the mount table, without the preflight entering the mount. Following the
+    /// link with stat would send the helper a lookup it never answers; only its root is answered, which is why the
+    /// root-target cases above cannot catch this.
+    /// </summary>
+    [Fact(Timeout = 60_000)]
+    public async Task SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount()
+    {
+        Assert.True(OperatingSystem.IsLinux());
+        Assert.True(LinuxDelayedFuseFixture.IsSupported);
+
+        await using var fixture = await LinuxDelayedFuseFixture.CreateAsync().ConfigureAwait(true);
+        var safeRoot = Path.Combine(fixture.RootPath, "sqlite-below-root");
+        var alias = Path.Combine(safeRoot, "alias");
+        Directory.CreateDirectory(safeRoot);
+        Directory.CreateSymbolicLink(alias, Path.Combine(fixture.MountPath, "inside"));
+
+        using var connection = new SqliteConnection(
+            new SqliteConnectionStringBuilder
+            {
+                DataSource = Path.Combine(alias, "blocked.db"),
+                Mode = SqliteOpenMode.ReadWriteCreate,
+                Pooling = false,
+            }.ToString());
+        var invocationsBefore = SqliteBoundedConnectionOpener.WorkerInvocationCount;
+        Exception? publicFailure = null;
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            using var opened = await SqliteBoundedConnectionOpener.OpenAsync(
+                    connection,
+                    TimeSpan.FromMilliseconds(250),
+                    TestContext.Current.CancellationToken)
+                .WaitAsync(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+        }
+        catch (Exception operationFailure)
+        {
+            publicFailure = operationFailure;
+        }
+
+        stopwatch.Stop();
+        var exception = Assert.IsType<NotSupportedException>(publicFailure);
+        Assert.Contains("fuse", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.True(
+            stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+            $"Rejection of a link below the FUSE root took {stopwatch.Elapsed}.");
+        Assert.Equal(invocationsBefore, SqliteBoundedConnectionOpener.WorkerInvocationCount);
+        Assert.Equal(0, SqliteBoundedConnectionOpener.ActiveWorkerCount);
+        Assert.Equal(System.Data.ConnectionState.Closed, connection.State);
+    }
+
+    /// <summary>
     /// Verifies replacement of a previously safe SQLite alias at the validation boundary cannot
     /// reach the synchronous open worker.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task SqliteOpen_AliasReplacementBeforePhysicalResolution_IsRejected()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -247,7 +300,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Verifies that replacing a safe alias after the worker's last validation cannot reach native
     /// SQLite opening: the actual file descriptor is acquired by one atomic no-cross-device open.
     /// </summary>
-    [Fact]
+    [Fact(Timeout = 60_000)]
     public async Task SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected()
     {
         Assert.True(OperatingSystem.IsLinux());
@@ -616,21 +669,37 @@ int main(int argc, char **argv)
 }
 """;
 
+    /// <summary>
+    /// BUG-BASELINE-009: hard cap on a fixture's life. Its helpers are killed when it elapses or when the test's own
+    /// token is cancelled (the per-test timeout), which fails every pending FUSE request, so a thread blocked in one is
+    /// released instead of hanging the run.
+    /// </summary>
+    private static readonly TimeSpan s_watchdogLimit = TimeSpan.FromSeconds(30);
+
+    private readonly object _gate = new();
+    private readonly string _executablePath;
     private readonly Process _process;
     private readonly Task<string> _standardError;
-    private readonly List<string> _boundMounts = [];
+    private readonly List<(string MountPath, Process Process, Task<string> StandardError)> _replacementMounts = [];
+    private readonly CancellationTokenSource _watchdog;
+    private readonly CancellationTokenRegistration _watchdogRegistration;
     private bool _stopped;
 
     private LinuxDelayedFuseFixture(
         string rootPath,
         string mountPath,
+        string executablePath,
         Process process,
         Task<string> standardError)
     {
         RootPath = rootPath;
         MountPath = mountPath;
+        _executablePath = executablePath;
         _process = process;
         _standardError = standardError;
+        _watchdog = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        _watchdog.CancelAfter(s_watchdogLimit);
+        _watchdogRegistration = _watchdog.Token.Register(KillHelpers);
     }
 
     internal static bool IsSupported =>
@@ -638,9 +707,7 @@ int main(int argc, char **argv)
         File.Exists("/dev/fuse") &&
         File.Exists("/usr/bin/gcc") &&
         File.Exists("/usr/include/fuse3/fuse.h") &&
-        File.Exists("/usr/bin/fusermount3") &&
-        File.Exists("/usr/bin/mount") &&
-        File.Exists("/usr/bin/umount");
+        File.Exists("/usr/bin/fusermount3");
 
     internal string RootPath { get; }
 
@@ -668,27 +735,11 @@ int main(int argc, char **argv)
                 TimeSpan.FromSeconds(20))
             .ConfigureAwait(true);
 
-        var startInfo = new ProcessStartInfo(executablePath)
-        {
-            UseShellExecute = false,
-            RedirectStandardError = true,
-            RedirectStandardOutput = true,
-            CreateNoWindow = true,
-        };
-        startInfo.ArgumentList.Add("-f");
-        startInfo.ArgumentList.Add("-s");
-        startInfo.ArgumentList.Add("-o");
-        startInfo.ArgumentList.Add("fsname=bug139-sixteenth");
-        startInfo.ArgumentList.Add(mountPath);
-        var process = Process.Start(startInfo)
-            ?? throw new InvalidOperationException("Unable to start the delayed FUSE helper.");
-        var standardError = process.StandardError.ReadToEndAsync(
-            TestContext.Current.CancellationToken);
-        _ = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
-        var fixture = new LinuxDelayedFuseFixture(rootPath, mountPath, process, standardError);
+        var (process, standardError) = StartHelper(executablePath, mountPath);
+        var fixture = new LinuxDelayedFuseFixture(rootPath, mountPath, executablePath, process, standardError);
         try
         {
-            await fixture.WaitForMountAsync().ConfigureAwait(true);
+            await WaitForMountAsync(mountPath, process, standardError).ConfigureAwait(true);
             return fixture;
         }
         catch
@@ -699,83 +750,149 @@ int main(int argc, char **argv)
     }
 
     /// <summary>
-    /// Bind-mounts this real delayed FUSE filesystem at an existing replacement-root path.
+    /// Mounts a second instance of this delayed FUSE filesystem at an existing replacement-root path. The helper mounts
+    /// through the unprivileged fusermount3, so a non-root test user can replace a root with a real delayed FUSE mount
+    /// (BUG-BASELINE-009, operator decision 2026-10-11; the root-only mount --bind it replaces exits 32 for non-root users).
     /// </summary>
     /// <param name="destination">Empty directory that becomes the replacement root mount.</param>
-    internal async Task BindMountAtAsync(string destination)
+    internal async Task MountDelayedFuseAtAsync(string destination)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(destination);
         Directory.CreateDirectory(destination);
-        await RunProcessAsync(
-                "/usr/bin/mount",
-                ["--bind", MountPath, destination],
-                TimeSpan.FromSeconds(5))
-            .ConfigureAwait(true);
-        _boundMounts.Add(destination);
+        var (process, standardError) = StartHelper(_executablePath, destination);
+        lock (_gate)
+            _replacementMounts.Add((destination, process, standardError));
+        if (_watchdog.IsCancellationRequested)
+            KillHelpers();
+        await WaitForMountAsync(destination, process, standardError).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// Starts one helper instance mounted at <paramref name="mountPath"/>. It runs multi-threaded (no -s), so a request
+    /// another process leaves blocked on a non-root path cannot wedge the root lookups the tests rely on.
+    /// </summary>
+    private static (Process Process, Task<string> StandardError) StartHelper(string executablePath, string mountPath)
+    {
+        var startInfo = new ProcessStartInfo(executablePath)
+        {
+            UseShellExecute = false,
+            RedirectStandardError = true,
+            RedirectStandardOutput = true,
+            CreateNoWindow = true,
+        };
+        startInfo.ArgumentList.Add("-f");
+        startInfo.ArgumentList.Add("-o");
+        startInfo.ArgumentList.Add("fsname=bug139-sixteenth");
+        startInfo.ArgumentList.Add(mountPath);
+        var process = Process.Start(startInfo)
+            ?? throw new InvalidOperationException("Unable to start the delayed FUSE helper.");
+        var standardError = process.StandardError.ReadToEndAsync(CancellationToken.None);
+        _ = process.StandardOutput.ReadToEndAsync(CancellationToken.None);
+        return (process, standardError);
+    }
+
+    /// <summary>Kills every helper process (watchdog and teardown); each kill aborts that helper's FUSE connection.</summary>
+    private void KillHelpers()
+    {
+        List<Process> processes;
+        lock (_gate)
+            processes = [_process, .. _replacementMounts.Select(mount => mount.Process)];
+        foreach (var process in processes)
+        {
+            try
+            {
+                if (!process.HasExited)
+                    process.Kill(entireProcessTree: true);
+            }
+            catch (InvalidOperationException)
+            {
+                // The helper already exited or was disposed.
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // The helper exited while it was being killed.
+            }
+        }
+    }
+
+    /// <summary>
+    /// Detaches every replacement mount and then the original one, each with fusermount3 and a helper kill. Teardown
+    /// ignores the test's token (bounded by its own timeouts instead), so a timed-out test still detaches its mounts.
+    /// </summary>
     internal async Task StopAsync()
     {
         if (_stopped)
             return;
         _stopped = true;
 
-        foreach (var boundMount in _boundMounts.AsEnumerable().Reverse())
+        List<(string MountPath, Process Process, Task<string> StandardError)> replacements;
+        lock (_gate)
+            replacements = [.. _replacementMounts];
+        foreach (var replacement in replacements.AsEnumerable().Reverse())
         {
-            try
-            {
-                await RunProcessAsync(
-                        "/usr/bin/umount",
-                        ["-l", boundMount],
-                        TimeSpan.FromSeconds(5))
-                    .ConfigureAwait(true);
-            }
-            catch (InvalidOperationException)
-            {
-                // Continue tearing down remaining bind mounts and the FUSE helper.
-            }
+            await DetachAsync(replacement.MountPath, replacement.Process, replacement.StandardError)
+                .ConfigureAwait(true);
         }
 
+        await DetachAsync(MountPath, _process, _standardError).ConfigureAwait(true);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await StopAsync().ConfigureAwait(true);
+        _watchdogRegistration.Dispose();
+        _watchdog.Dispose();
+        _process.Dispose();
+        lock (_gate)
+        {
+            foreach (var replacement in _replacementMounts)
+                replacement.Process.Dispose();
+        }
+
+        if (Directory.Exists(RootPath))
+            Directory.Delete(RootPath, recursive: true);
+    }
+
+    private static async Task DetachAsync(string mountPath, Process process, Task<string> standardError)
+    {
         try
         {
             await RunProcessAsync(
                     "/usr/bin/fusermount3",
-                    ["-u", "-z", MountPath],
-                    TimeSpan.FromSeconds(5))
+                    ["-u", "-z", mountPath],
+                    TimeSpan.FromSeconds(5),
+                    CancellationToken.None)
                 .ConfigureAwait(true);
         }
-        catch (InvalidOperationException)
+        catch (Exception exception) when (exception is InvalidOperationException or TimeoutException)
         {
             // An unconditional helper kill follows a failed or concurrent detach.
         }
 
         try
         {
-            if (!_process.HasExited)
-                _process.Kill(entireProcessTree: true);
-            await _process.WaitForExitAsync(TestContext.Current.CancellationToken)
-                .WaitAsync(
-                    TimeSpan.FromSeconds(5),
-                    TestContext.Current.CancellationToken)
+            if (!process.HasExited)
+                process.Kill(entireProcessTree: true);
+            await process.WaitForExitAsync(CancellationToken.None)
+                .WaitAsync(TimeSpan.FromSeconds(5))
                 .ConfigureAwait(true);
         }
-        catch (InvalidOperationException)
+        catch (Exception exception) when (exception is InvalidOperationException or TimeoutException)
         {
-            // The helper exited between observation and cleanup.
+            // The helper exited between observation and cleanup, or did not exit in time.
         }
 
-        _ = await _standardError.ConfigureAwait(true);
+        try
+        {
+            _ = await standardError.WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(true);
+        }
+        catch (TimeoutException)
+        {
+            // The helper's standard error stayed open; its process was killed above.
+        }
     }
 
-    public async ValueTask DisposeAsync()
-    {
-        await StopAsync().ConfigureAwait(true);
-        _process.Dispose();
-        if (Directory.Exists(RootPath))
-            Directory.Delete(RootPath, recursive: true);
-    }
-
-    private async Task WaitForMountAsync()
+    private static async Task WaitForMountAsync(string mountPath, Process process, Task<string> standardError)
     {
         var stopwatch = Stopwatch.StartNew();
         while (stopwatch.Elapsed < TimeSpan.FromSeconds(5))
@@ -785,17 +902,17 @@ int main(int argc, char **argv)
                     TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
             if (mountInfo.Contains(
-                    " " + MountPath + " ",
+                    " " + mountPath + " ",
                     StringComparison.Ordinal))
             {
                 return;
             }
 
-            if (_process.HasExited)
+            if (process.HasExited)
             {
                 throw new InvalidOperationException(
                     "FUSE helper exited before mounting: " +
-                    await _standardError.ConfigureAwait(true));
+                    await standardError.ConfigureAwait(true));
             }
 
             await Task.Delay(
@@ -804,13 +921,20 @@ int main(int argc, char **argv)
                 .ConfigureAwait(true);
         }
 
-        throw new TimeoutException("The FUSE helper did not mount within five seconds.");
+        throw new TimeoutException($"The FUSE helper did not mount {mountPath} within five seconds.");
     }
+
+    private static Task RunProcessAsync(
+        string fileName,
+        IReadOnlyList<string> arguments,
+        TimeSpan timeout) =>
+        RunProcessAsync(fileName, arguments, timeout, TestContext.Current.CancellationToken);
 
     private static async Task RunProcessAsync(
         string fileName,
         IReadOnlyList<string> arguments,
-        TimeSpan timeout)
+        TimeSpan timeout,
+        CancellationToken cancellationToken)
     {
         var startInfo = new ProcessStartInfo(fileName)
         {
@@ -824,14 +948,12 @@ int main(int argc, char **argv)
 
         using var process = Process.Start(startInfo)
             ?? throw new InvalidOperationException($"Unable to start {fileName}.");
-        var output = process.StandardOutput.ReadToEndAsync(
-            TestContext.Current.CancellationToken);
-        var error = process.StandardError.ReadToEndAsync(
-            TestContext.Current.CancellationToken);
+        var output = process.StandardOutput.ReadToEndAsync(cancellationToken);
+        var error = process.StandardError.ReadToEndAsync(cancellationToken);
         try
         {
-            await process.WaitForExitAsync(TestContext.Current.CancellationToken)
-                .WaitAsync(timeout, TestContext.Current.CancellationToken)
+            await process.WaitForExitAsync(cancellationToken)
+                .WaitAsync(timeout, cancellationToken)
                 .ConfigureAwait(true);
         }
         catch

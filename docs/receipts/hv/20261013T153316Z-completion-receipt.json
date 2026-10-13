@@ -1,0 +1,19 @@
+{
+  "type": "result",
+  "payload": {
+    "result": {
+      "retryable": false,
+      "message": "Session log persist confirmed a durable write for request 'req-20261013T153316Z-hv-architecture-r1'.",
+      "code": "persisted",
+      "queued": false,
+      "sessionId": "Codex-20261013T153702Z-plugin-session",
+      "persisted": true,
+      "failsafePath": "",
+      "method": "workflow.sessionlog.completeTurn",
+      "childStderr": "",
+      "agent": "Codex",
+      "degraded": false,
+      "requestId": "req-20261013T153316Z-hv-architecture-r1"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+captured: 2026-10-10T22:13:58Z host: LAB-OMARCHY dotnet: 10.0.201
+--- process (pid ppid elapsed-s cpu-time stat args)
+2575389 2575341     425        0 Sl   tests/Build.Tests/bin/Debug/net10.0/Build.Tests @@ /tmp/tmp2pZIah.tmp
+--- children of the test process
+(none)
+--- pipes held by the test process, with every other holder
+pipe:[16182170] test fds 0,5,57 <- pid 2575341 fd140 [/home/sharpninja/.dotnet/dotnet exec --runtimeconfig /home/sharpninja/github/McpServer/.claude/worktrees/sessi]; pid 2575659 fd0 [/home/sharpninja/.dotnet/dotnet /home/sharpninja/.dotnet/sdk/10.0.201/MSBuild.dll /noautoresponse /nologo /nod]; pid 2575659 fd5 [/home/sharpninja/.dotnet/dotnet /home/sharpninja/.dotnet/sdk/10.0.201/MSBuild.dll /noautoresponse /nologo /nod]
+pipe:[16182171] test fds 1,54,6 <- pid 2575341 fd142 [/home/sharpninja/.dotnet/dotnet exec --runtimeconfig /home/sharpninja/github/McpServer/.claude/worktrees/sessi]
+pipe:[16187069] test fds 3,4 <- no other holder
+pipe:[16191059] test fds 91 <- no other holder
+pipe:[16191060] test fds 93 <- no other holder
+pipe:[16191191] test fds 103 <- pid 2575659 fd1 [/home/sharpninja/.dotnet/dotnet /home/sharpninja/.dotnet/sdk/10.0.201/MSBuild.dll /noautoresponse /nologo /nod]; pid 2575659 fd45 [/home/sharpninja/.dotnet/dotnet /home/sharpninja/.dotnet/sdk/10.0.201/MSBuild.dll /noautoresponse /nologo /nod]; pid 2575659 fd6 [/home/sharpninja/.dotnet/dotnet /home/sharpninja/.dotnet/sdk/10.0.201/MSBuild.dll /noautoresponse /nologo /nod]
+pipe:[16191192] test fds 106 <- pid 2575659 fd2 [/home/sharpninja/.dotnet/dotnet /home/sharpninja/.dotnet/sdk/10.0.201/MSBuild.dll /noautoresponse /nologo /nod]; pid 2575659 fd7 [/home/sharpninja/.dotnet/dotnet /home/sharpninja/.dotnet/sdk/10.0.201/MSBuild.dll /noautoresponse /nologo /nod]
+pipe:[16192015] test fds 18,19 <- no other holder
+pipe:[16192016] test fds 55,56 <- no other holder
+pipe:[16197825] test fds 2,7 <- pid 2575289 fd162 [dotnet exec /home/sharpninja/.dotnet/sdk/10.0.201/vstest.console.dll --testAdapterPath:/home/sharpninja/.nuget]; pid 2575341 fd2 [/home/sharpninja/.dotnet/dotnet exec --runtimeconfig /home/sharpninja/github/McpServer/.claude/worktrees/sessi]; pid 2575341 fd7 [/home/sharpninja/.dotnet/dotnet exec --runtimeconfig /home/sharpninja/github/McpServer/.claude/worktrees/sessi]
+pipe:[16198677] test fds 102 <- no other holder
+pipe:[16198678] test fds 104 <- no other holder
+--- live MSBuild worker nodes and compiler servers (pid ppid elapsed-s fd0 fd1 fd2 args)
+2575659 1082 729 pipe:[16182170] pipe:[16191191] pipe:[16191192] /home/sharpninja/.dotnet/dotnet /home/sharpninja/.dotnet/sdk/10.0.201/MSBuild.dll /noautoresponse /nologo /nodemode:1 /nodeReuse:true /low:f

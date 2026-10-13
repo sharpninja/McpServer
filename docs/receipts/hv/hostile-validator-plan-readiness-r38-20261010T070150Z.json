@@ -1,0 +1,110 @@
+{
+  "TimestampUtc": "2026-10-10T07:18:39Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "LiveProof": {
+      "Rollout": "/home/sharpninja/.codex/sessions/2026/10/10/rollout-2026-10-10T02-01-51-01a1249e-3731-7d90-99f9-60eec9cebcf4.jsonl",
+      "ThreadId": "01a1249e-3731-7d90-99f9-60eec9cebcf4",
+      "TurnContextModel": "gpt-6-sol",
+      "TurnContextEffort": "xhigh"
+    }
+  },
+  "AddProfileCount": 19,
+  "MarkerReadConfirmation": "Full root marker read; credential lines and Authentication block suppressed before output",
+  "MemoryReadConfirmation": "workflow.memory.list returned 15 effective memories; all read, including MEMORY-PROCESS-007 and -008",
+  "HeadSha": "b69c18870c456fac1efbf903ec2bfedb0bb7f2b6",
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "PASS"
+    },
+    {
+      "id": "P2",
+      "status": "PASS"
+    },
+    {
+      "id": "P3",
+      "status": "PASS"
+    },
+    {
+      "id": "P4",
+      "status": "FAIL"
+    },
+    {
+      "id": "P5",
+      "status": "FAIL"
+    },
+    {
+      "id": "P6",
+      "status": "PASS"
+    },
+    {
+      "id": "P7",
+      "status": "FAIL"
+    },
+    {
+      "id": "P8",
+      "status": "FAIL"
+    },
+    {
+      "id": "P9",
+      "status": "PASS"
+    },
+    {
+      "id": "P10",
+      "status": "PASS"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 97,
+  "Completeness": 94,
+  "Confidence": 98,
+  "PassCount": 6,
+  "FailCount": 4,
+  "UnknownCount": 0,
+  "FailList": [
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "UnknownList": [],
+  "Findings": [
+    {
+      "id": "F-R38-01",
+      "location": "Host binding table 79,84,88-93; P0.2 173; A3 582; A8 592; A9 594; TEST 373,380-381",
+      "defect": "Positive enqueue-event path has no host-specific adapter contract or tests",
+      "evidence": "Detailed Claude bridge contrasts with generic other-host rule; P0.2 probes existence only",
+      "fix": "Specify event schema, identity, correlation, lifecycle, replay and per-host tests, or deterministic unsupported outcome",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R38-02",
+      "location": "FR-SESSIONCLASS-004-AC002 285; TR-CLEARSESSION-001-AC001 474; TEST-REVIEW-005 390; S8 612; S10 616; S11 618",
+      "defect": "S8 selective clear-session AC precedes server gate but only advisory pre-check and no clear-session task are specified",
+      "evidence": "Current clear-session skill 21-39 sends completeTurn; S8 omits named case and skill update",
+      "fix": "Add S8 clear-session selection workflow, RED/G6 case and skill edit while ordinary verb precheck remains advisory",
+      "classification": "implementer edit"
+    }
+  ],
+  "ImplementerFixes": [
+    "F-R38-01",
+    "F-R38-02"
+  ],
+  "OperatorDecisionFails": [],
+  "ReviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T070512Z-plan-r38-hv",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r38-20261010T070150Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r38-20261010T070150Z.json"
+  ],
+  "RunnerJsonlPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T070150Z-plan-readiness-r38.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T070150Z-plan-readiness-r38.response.jsonl"
+  ],
+  "PersistenceProof": "Read-only client.SessionLog.QueryAsync through the Codex wrapper found Codex-20261010T004320Z-plugin-session / req-20261010T070512Z-plan-r38-hv in_progress with 3 actions and 2 dialog items. The observation item contains P1, P10, F-R38-01 and F-R38-02, length 9104 characters; appendDialog returned code persisted and persisted true.",
+  "MarkerCredentialScan": "One credential field found in the root marker; zero occurrences of its value in the runner response JSONL.",
+  "FinalPersistenceProof": "Final read-only QueryAsync after completeTurn found status completed, 3 dialog items, 5 actions, and the last observation containing P10, F-R38-01 and F-R38-02."
+}

@@ -1,0 +1,125 @@
+{
+  "TimestampUtc": "2026-10-10T15:43:58.5042241Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "liveProof": {
+      "sessionEnvId": "01a1266d-bf82-7a11-b1fe-cd663db6aa87",
+      "rolloutPath": "/home/sharpninja/.codex/sessions/2026/10/10/rollout-2026-10-10T10-28-09-01a1266d-bf82-7a11-b1fe-cd663db6aa87.jsonl",
+      "sessionMetaOriginator": "codex_exec",
+      "cliVersion": "0.160.1",
+      "turnContextModel": "gpt-6-sol",
+      "turnContextEffort": "xhigh"
+    }
+  },
+  "addProfile": {
+    "skillRead": true,
+    "profileMarkdownFilesRead": 19
+  },
+  "markerRead": {
+    "path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "readInFull": true,
+    "secretLineAndAuthenticationBlockFiltered": true
+  },
+  "memoryRead": {
+    "method": "workflow.memory.list",
+    "workspacePath": "/home/sharpninja/github/McpServer",
+    "count": 15,
+    "allTextsRead": true,
+    "memory007Read": true,
+    "memory008Read": true,
+    "fallbackUsed": false
+  },
+  "headSha": "9b736add1f7cad101c892842a2c1b74e32cd4ea6",
+  "planSource": "/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md",
+  "todoId": "PLAN-SESSIONTURNREVIEW-001",
+  "planStatus": "NOT APPROVED",
+  "claims": [
+    {
+      "id": "P1",
+      "status": "PASS",
+      "evidence": "All 653 plan lines, HEAD source anchors, nine plugin repos, CLI help, and official hook docs reviewed; historical transcript subcount at line 629 is nonmaterial and snapshot scoped."
+    },
+    {
+      "id": "P2",
+      "status": "PASS",
+      "evidence": "Live main store 354 FR, 482 TR, 514 TEST; proposed IDs free; legacy labels and test names explicitly distinguished; mappings and catalog checked."
+    },
+    {
+      "id": "P3",
+      "status": "PASS",
+      "evidence": "D1-D12, partial clearance, licensing, skipped_duplicate removal, clear-session A, and unsupported-session failsafe 1 propagate."
+    },
+    {
+      "id": "P4",
+      "status": "PASS",
+      "evidence": "Server, client, REPL, MCP, McpAgent, both cores, all nine plugins, and SQLite/PostgreSQL/SQL Server migration tests assigned."
+    },
+    {
+      "id": "P5",
+      "status": "PASS",
+      "evidence": "Wire and host contracts decide behavior; P0 probes have pass/fail/unavailable outcomes and explicit stop or D6 fallback."
+    },
+    {
+      "id": "P6",
+      "status": "PASS",
+      "evidence": "Static commands, targets, source paths, CLI switches, and BDPv4 order checked; missing host tools gated in P0.1; no unapproved gate executed."
+    },
+    {
+      "id": "P7",
+      "status": "PASS",
+      "evidence": "Named cases and TEST span rule cover ACs; HV-P0/A/B on gpt-6-sol xhigh and 98/98 consistent."
+    },
+    {
+      "id": "P8",
+      "status": "PASS",
+      "evidence": "P0.8 dependencies, 30 tasks, A9 integration ownership, S10 real-gate ownership, S9 skill parity, and rollout agree."
+    },
+    {
+      "id": "P9",
+      "status": "PASS",
+      "evidence": "TODO description equals 533 nonblank source lines; 30 task labels and handoff status, locations, counts, triage agree."
+    },
+    {
+      "id": "P10",
+      "status": "PASS",
+      "evidence": "All nine plan triage reports and worktree-only group read live; plugin defects scheduled; format risk fail closed."
+    }
+  ],
+  "OverallVerdict": "AGREE",
+  "Accuracy": 99,
+  "Completeness": 98,
+  "Confidence": 95,
+  "passCount": 10,
+  "failCount": 0,
+  "unknownCount": 0,
+  "failList": [],
+  "unknownList": [],
+  "implementerFixes": [],
+  "operatorDecisionFails": [],
+  "nonmaterialObservation": "Plan line 629 says 27 of 35 remove records carry absorbed_mid_turn; the 117/79/35/2 prefix found in current worktree transcripts has 35. Historical query scope and time unstated; no functional dependency.",
+  "r42Finding": "F-R42-01 repaired by isolated Codex app-server plus codex queue probe and propagation to A4, A9, and Phase A live check.",
+  "priorRegressionAudit": "Available r2-r41 receipts reviewed; r1 summarized in handoff and TODO; no material recurrence.",
+  "reviewerSessionId": "Codex-20261010T153018Z-plugin-session",
+  "reviewerRequestId": "req-20261010T153016Z-plan-r43-hv",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r43-20261010T152808Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r43-20261010T152808Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T152808Z-plan-readiness-r43.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T152808Z-plan-readiness-r43.response.jsonl"
+  ],
+  "runnerRequestJsonl": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T152808Z-plan-readiness-r43.request.jsonl",
+  "runnerResponseJsonl": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T152808Z-plan-readiness-r43.response.jsonl",
+  "reviewerTurnPersistenceProof": {
+    "readbackUtc": "2026-10-10T15:45:18.6079521Z",
+    "sessionId": "Codex-20261010T153018Z-plugin-session",
+    "requestId": "req-20261010T153016Z-plan-r43-hv",
+    "status": "completed",
+    "responseEqualsMarkdownExactly": true,
+    "responseCharacters": 12186,
+    "actionCount": 8,
+    "decisionDialogCount": 1,
+    "readMethod": "client.SessionLog.QueryAsync via installed Codex wrapper"
+  }
+}

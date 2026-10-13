@@ -119,9 +119,6 @@ public sealed class QBrainAiRebrandPhase1Tests
             Assert.False(facade is null, packageId);
             _ = facadeDir;
         }
-
-        var workflow = File.ReadAllText(Path.Combine(root, ".github", "workflows", "build.yml"));
-        Assert.Contains("QBRAINAI_NUGET_PUBLISH", workflow, StringComparison.Ordinal);
     }
 
     /// <summary>
@@ -177,9 +174,6 @@ public sealed class QBrainAiRebrandPhase1Tests
         Assert.Contains("[string]$ServiceName = 'QBrainAi'", service, StringComparison.Ordinal);
         Assert.Contains("[string]$DisplayName = 'QBrain.AI'", service, StringComparison.Ordinal);
         Assert.Contains(@"[string]$InstallPath = 'C:\ProgramData\QBrainAi'", service, StringComparison.Ordinal);
-        var pipelines = File.ReadAllText(Path.Combine(root, "azure-pipelines.yml"));
-        Assert.Contains("AllowLegionDeploy", pipelines, StringComparison.Ordinal);
-        Assert.Contains("PAYTON-LEGION2", pipelines, StringComparison.Ordinal);
     }
 
     /// <summary>

@@ -26,9 +26,10 @@ session-log logic lives here and is distributed by sync.
     per-file sha256).
   - `apply-memory-s7b-hosts.ps1 <plugin-root> -HostName <id>` copies the host
     memory skill, descriptor, and descriptor-load tests into a plugin repo.
-  - `check-core-integrity.sh|ps1 <plugin-root>` is the CI guard: it fails the
-    build when any synced file was edited locally. Fix in this directory and
-    re-sync; never patch a plugin's copy.
+  - `check-core-integrity.sh|ps1 <plugin-root>` is the checksum guard (run by
+    the Nuke `SyncAgentPlugins` target): it fails when any synced file was
+    edited locally. Fix in this directory and re-sync; never patch a plugin's
+    copy.
 
 ## Contract rules
 

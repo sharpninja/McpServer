@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    FR-MCP-PLUGINCORE-002: CI checksum guard (PowerShell twin of check-core-integrity.sh).
+    FR-MCP-PLUGINCORE-001 / TR-MCP-PLUGINCORE-001: checksum guard (PowerShell twin of check-core-integrity.sh).
 .DESCRIPTION
     Verifies every file listed in a plugin repo's CORE-MANIFEST.yaml still
     matches its synced sha256. A mismatch means a synced core file was edited

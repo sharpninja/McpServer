@@ -1,0 +1,38 @@
+{
+  "type": "result",
+  "payload": {
+    "result": {
+      "originalWorkspacePath": "/home/sharpninja/github/McpServer",
+      "groupId": "triage-group-c943f696c39b8b6b",
+      "createdUtc": {
+        "nanosecond": 500,
+        "utcDateTime": "2026-10-11T18:10:15.0725625Z",
+        "totalOffsetMinutes": 0,
+        "day": 11,
+        "dateTime": "2026-10-11T18:10:15.0725625",
+        "hour": 18,
+        "timeOfDay": "18:10:15.0725625",
+        "year": 2026,
+        "dayOfWeek": "Sunday",
+        "minute": 10,
+        "localDateTime": "2026-10-11T13:10:15.0725625-05:00",
+        "month": 10,
+        "utcTicks": 639273390150725625,
+        "date": "2026-10-11T00:00:00.0000000",
+        "second": 15,
+        "microsecond": 562,
+        "millisecond": 72,
+        "offset": "00:00:00",
+        "dayOfYear": 284,
+        "ticks": 639273390150725625
+      },
+      "status": "grouped",
+      "reportId": "triage-report-c03d190f194b4a76a4923ca626adbb41",
+      "workspacePath": "/home/sharpninja/github/McpServer",
+      "title": "REPL workflow.requirements.generateDocument rejects format markdown and docType fr: OptionalEnum overload binds the first allowed value as the error path",
+      "summary": "ReplYamlMessageValidator registers generateDocument with OptionalEnum(args, \"format\", errors, \"markdown\", \"yaml\", \"wiki\") and OptionalEnum(args, \"docType\", errors, \"fr\", \"tr\", ...). C# overload resolution picks OptionalEnum(args, key, errors, string path, params string[] values) over OptionalEnum(args, key, errors, params string[] values) because it has more declared parameters, so \"markdown\" and \"fr\" become the error path and are dropped from the allowed sets. Result: the documented call generateDocument format: markdown docType: fr fails schema_validation_failed (\"markdown must be one of: yaml, wiki.\" / \"fr must be one of: tr, test, matrix, all, functional, technical, testing, mapping.\"), while RequirementsWorkflow.ValidateFormat and the REST endpoint accept markdown. Markdown requirement projections (docs/Project/*.md) cannot be regenerated through the plugin route."
+    },
+    "requestId": "req-20261012T010240Z-d744",
+    "deprecated": true
+  }
+}

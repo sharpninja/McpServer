@@ -1,0 +1,49 @@
+
+> @qbrainai/qbrain-ai-plugin-core@0.2.0 test
+> jest tests/aliases-1x.test.ts tests/aliases-1x-types.test.ts
+
+FAIL tests/aliases-1x-types.test.ts
+  ● Test suite failed to run
+
+    [96mtests/aliases-1x-types.test.ts[0m:[93m16[0m:[93m15[0m - [91merror[0m[90m TS2305: [0mModule '"../src/index.js"' has no exported member 'McpServerPluginCoreConfig'.
+
+    [7m16[0m import type { McpServerPluginCoreConfig, QBrainAiPluginCoreConfig } from '../src/index.js';
+    [7m  [0m [91m              ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+FAIL tests/aliases-1x.test.ts
+  ● 1.x aliases of the renamed plugin core (TR-MCP-QBRAIN-003, BUG-PLUGINCORE-001) › exports createMcpServerPluginCore as the QBrainAi factory itself
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      63 |
+      64 |   it('exports createMcpServerPluginCore as the QBrainAi factory itself', () => {
+    > 65 |     expect(typeof legacyFactory()).toBe('function');
+         |                                    ^
+      66 |     expect(legacyFactory()).toBe(createQBrainAiPluginCore);
+      67 |   });
+      68 |
+
+      at Object.<anonymous> (tests/aliases-1x.test.ts:65:36)
+
+  ● 1.x aliases of the renamed plugin core (TR-MCP-QBRAIN-003, BUG-PLUGINCORE-001) › builds a HostContext through the 1.x factory name
+
+    TypeError: factory is not a function
+
+      69 |   it('builds a HostContext through the 1.x factory name', () => {
+      70 |     const factory = legacyFactory() as typeof createQBrainAiPluginCore;
+    > 71 |     const context = factory({
+         |                     ^
+      72 |       agentName: 'OpenCode',
+      73 |       pluginId: 'opencode',
+      74 |       bridge: new FakeBridge() as unknown as ReplBridge,
+
+      at Object.<anonymous> (tests/aliases-1x.test.ts:71:21)
+
+Test Suites: 2 failed, 2 total
+Tests:       2 failed, 2 total
+Snapshots:   0 total
+Time:        2.599 s
+Ran all test suites matching /tests\/aliases-1x.test.ts|tests\/aliases-1x-types.test.ts/i.

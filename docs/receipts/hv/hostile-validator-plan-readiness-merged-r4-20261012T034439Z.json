@@ -1,0 +1,2054 @@
+{
+  "TimestampUtc": "2026-10-12T04:35:40.8681087Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Product": "Codex CLI",
+    "CliVersion": "0.160.1",
+    "Model": "gpt-6-astra",
+    "ReasoningEffort": "max",
+    "ThreadId": "01a12e36-65d8-7b01-b9fc-f99a9ce2ee7e",
+    "MetadataPath": "/home/sharpninja/.codex/sessions/2026/10/11/rollout-2026-10-11T22-44-39-01a12e36-65d8-7b01-b9fc-f99a9ce2ee7e.jsonl",
+    "LiveTurnContexts": [
+      {
+        "Line": 8,
+        "TimestampUtc": "2026-10-12T03:44:41.224Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009",
+        "TurnId": "01a12e36-6828-7322-9552-f58bd0fc01c4"
+      },
+      {
+        "Line": 366,
+        "TimestampUtc": "2026-10-12T03:59:05.691Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009",
+        "TurnId": "01a12e36-6828-7322-9552-f58bd0fc01c4"
+      },
+      {
+        "Line": 658,
+        "TimestampUtc": "2026-10-12T04:13:06.216Z",
+        "Model": "gpt-6-astra",
+        "Effort": "max",
+        "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009",
+        "TurnId": "01a12e36-6828-7322-9552-f58bd0fc01c4"
+      }
+    ],
+    "DeclarationAloneUsedAsProof": false,
+    "ReviewTimeBound": null
+  },
+  "AddProfile": {
+    "Skill": "/home/sharpninja/.claude/skills/add-profile/SKILL.md",
+    "SkillReadInFull": true,
+    "Count": 20,
+    "Files": [
+      {
+        "Path": "/home/sharpninja/.claude/profile/accuracy-first-verify-sources.md",
+        "Bytes": 1207,
+        "Sha256": "D9BD665C6229E1D29A77EC7EF42B96DC52678817D5E88B711F20CDFD320F5E96",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/adversarial-review-global.md",
+        "Bytes": 7722,
+        "Sha256": "2FA01939E3D7F626C514AC63FE9CE760F0B798E2CED31B86B4D2E26DC430BB49",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/approve-before-execute.md",
+        "Bytes": 2269,
+        "Sha256": "A61FD0A5FACA21AC172474F0A0A7084CDAC70E8CD7EB3A7BC2C6D26560E4CAB4",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/bring-the-receipts.md",
+        "Bytes": 2056,
+        "Sha256": "E425710866D9D7E50F38ADC6DA393D52721DD5482BEA08EAA246D70691F76F31",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/hostile-on-goal-state.md",
+        "Bytes": 1734,
+        "Sha256": "480984F745566769A4D6479028BA311D4550105336540F49916D635FC77DAE87",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/hostile-ops-vs-requirements.md",
+        "Bytes": 2050,
+        "Sha256": "A73EA4A7B125D94B6D2A64F20A160CDA12EB235A918FB034A5E56FCE97203602",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/hostile-phase-gates.md",
+        "Bytes": 1317,
+        "Sha256": "EE448E9FD9E0F1C12E13277A89696482E57752CE0A4EC0FE5EF9B4093C754B9C",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/hv-jsonl-and-session-log.md",
+        "Bytes": 4208,
+        "Sha256": "8A8CB1500FE6C35B2F267064EC47CE290E54C9F39713303729733B88EE073B52",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/lab-authorization.md",
+        "Bytes": 2183,
+        "Sha256": "E7575409948FF11C59DC86D6D6DB943DC541592F579323838607E540868C575F",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/log-decisions-as-conclusions.md",
+        "Bytes": 2060,
+        "Sha256": "DF2973F5353B194413C22722C3819A323AB12E1E6A9DFAB70F87A7BD7910E07A",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/never-skip-explicit-actions.md",
+        "Bytes": 2957,
+        "Sha256": "577B1375C11D764018F076DF858C779E61602A2E19D7E3B1B36C967F94C2C84E",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/no-attitude-honesty-tell.md",
+        "Bytes": 1357,
+        "Sha256": "4730B15F8B99DCC5ACF0796DC343FF915C037892BF9FFFEAF90FA1F551B578BD",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/no-python-lab.md",
+        "Bytes": 1096,
+        "Sha256": "DC7E5D396873CD1F4899797E9914A76D3F9F748FD790E604CF0A913A5FCD895D",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/no-shortcuts-precision-over-convenience.md",
+        "Bytes": 2030,
+        "Sha256": "E2A25D7D577DF221B69E7059E71BEEEDA91872C43447E4E2D5BF449CE4505392",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/operator-rulings-2026-10-11.md",
+        "Bytes": 7802,
+        "Sha256": "C8FDEF77D2A550987B5EE134D93677FFC4B1AEDACFA9B176F0FD20A4442A2CC1",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/philosophical-dialogue-mode.md",
+        "Bytes": 1230,
+        "Sha256": "0C43A1A1899B36F6F73AF3B9A8091A5C05D26BF36B163048F8CDB46B09A0737F",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/PROFILE.md",
+        "Bytes": 18480,
+        "Sha256": "A929C28D1DF2E7BFE4DB91C0E82FA27F2E4C1B5312D4E8E2E25F85A392B88A7A",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/requirement-change-plan-first.md",
+        "Bytes": 2215,
+        "Sha256": "64A5558B0BC9C321D0CB3D206F73B16A680CA12E8D8390431D126FF02D8CF9F9",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/session-turn-title-summary.md",
+        "Bytes": 1196,
+        "Sha256": "15DEE8BB21BC8FB948403078BEA6C525411161558E290A1C2A3ECF3B5E33BD95",
+        "ReadInFull": true
+      },
+      {
+        "Path": "/home/sharpninja/.claude/profile/user-payton-byrd.md",
+        "Bytes": 1519,
+        "Sha256": "C47927C3086B462A9EE5031F8A8DF94697B7B384AFE9590324D81A8246D8DBDA",
+        "ReadInFull": true
+      }
+    ]
+  },
+  "Marker": {
+    "Path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "ReadInFull": true,
+    "SignatureVerified": true,
+    "Method": "Test-MarkerSignature and installed Codex session-start bootstrap/health nonce",
+    "ApiKey": "[REDACTED:api-key]"
+  },
+  "McpMemory": {
+    "Workspace": "/home/sharpninja/github/McpServer",
+    "Method": "workflow.memory.list through installed Codex wrapper -ParamsObject",
+    "Count": 15,
+    "EveryMemoryReadInFull": true,
+    "Items": [
+      {
+        "Id": "MEMORY-FACT-001",
+        "Version": 1,
+        "Scope": "Global",
+        "Characters": 37,
+        "Sha256": "24991C6F998F3EA3BB50683CC56FBB53CB17F308A92D2795EC0EEF40230E8E04",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-FACT-002",
+        "Version": 2,
+        "Scope": "Global",
+        "Characters": 240,
+        "Sha256": "7CC48D9E7C94CAFEF33AF6602A2ACAB920CBCF26010325519AEA2CB095FDAFED",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-FACT-003",
+        "Version": 1,
+        "Scope": "Global",
+        "Characters": 455,
+        "Sha256": "21F0206F6E95F774E1292B8832961B0A78F765DEF131188998B05CF80BA2A3DC",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-FACT-004",
+        "Version": 1,
+        "Scope": "Global",
+        "Characters": 1254,
+        "Sha256": "03E77FF424A1B8FDE3EDC443F0F9896094B3829EB4CC982C3B8D88B0A65A95D0",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PREFERENCE-001",
+        "Version": 1,
+        "Scope": "Global",
+        "Characters": 53,
+        "Sha256": "2994CC83C08D24936DFB691CE6C209E10B338652500F246448E70603F42C6F56",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PROCESS-002",
+        "Version": 3,
+        "Scope": "Global",
+        "Characters": 1761,
+        "Sha256": "7C032BB78A248180BF06288B193F7A88BCB440A9E33EC76B61C707B5F4A4E1C0",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PROCESS-003",
+        "Version": 2,
+        "Scope": "Global",
+        "Characters": 1336,
+        "Sha256": "83D148DA6BC0CC372C7129740AC506B05FCF98ACD8CF9F7D1502C0A9190DBDC8",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PROCESS-004",
+        "Version": 1,
+        "Scope": "Global",
+        "Characters": 281,
+        "Sha256": "C1AEE5454435153C1FFD21A3C5B12F119EB6DACB9422B8569F5AE6F9B446DA92",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PROCESS-005",
+        "Version": 1,
+        "Scope": "Global",
+        "Characters": 226,
+        "Sha256": "632B06861056790988DED69C07C3CE878299AC0E5B44C49EF33EC6A7A04E9758",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PROCESS-006",
+        "Version": 1,
+        "Scope": "Global",
+        "Characters": 556,
+        "Sha256": "C117CC7E492456C0784B05C33C75248258372854DB0CC8B31DF96E505D229C3C",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PROCESS-007",
+        "Version": 67,
+        "Scope": "Global",
+        "Characters": 123508,
+        "Sha256": "8F1C1052C94755A3AC03D2721CB885132A8C8943551ECC286148BA7A84E71984",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PROCESS-008",
+        "Version": 7,
+        "Scope": "Global",
+        "Characters": 7344,
+        "Sha256": "F114D5A6FB63EDC64ED1B78155D71DC67B1EE3C0834308DE94C92B85DF158EA7",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-REQ-001",
+        "Version": 1,
+        "Scope": "Global",
+        "Characters": 119,
+        "Sha256": "8170FA6276739453E911DB577B0DCF0A94C7D4796C3177C0C271E43A848C4D22",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-DEVPROCESS-001",
+        "Version": 3,
+        "Scope": "Workspace",
+        "Characters": 20129,
+        "Sha256": "34D3C89A0550DAFC687B1A90DE266CB22B88AD63A453BC11917F9D10A2F0A06A",
+        "ReadInFull": true
+      },
+      {
+        "Id": "MEMORY-PROCESS-001",
+        "Version": 2,
+        "Scope": "Workspace",
+        "Characters": 1006,
+        "Sha256": "E8523C27BB91A708D2236D0416ED0EE881A9368EC884CB7A5D596AD0FFCE9A50",
+        "ReadInFull": true
+      }
+    ],
+    "CoordinationContract": "MEMORY-PROCESS-007 v67, CONTRACT 2026-10-12T01:49:44Z: PowerShell port, governed protections, aliases and retirement ACK requirement",
+    "Mutations": "None"
+  },
+  "Scope": "One plan-readiness review only; no product/plan edits, builds, commits, pushes, deletions, triage, memory, setting, TODO or requirement changes. Only receipts and this reviewer turn written. Main workspace used for live store reads; isolated plugin cache outside the worktree.",
+  "Artifacts": [
+    {
+      "Path": "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md",
+      "Sha256": "5087D6E42A768A4E6B72D1CDD6C162D89A19A5B8ED43DAF3A6ED59CA9F8F8C5F",
+      "ReadInFull": true
+    },
+    {
+      "Path": "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md",
+      "Sha256": "8F427C97C7E39C9055AD53CC797C91ADB56C9DBD7CEA49B97368535A0CD47090",
+      "ReadInFull": true
+    },
+    {
+      "Path": "docs/Stateless-Agent-Context-Management.md",
+      "Sha256": "9BAA2356FF8BFF01906F2B5769C2050A24CC8087E038FB542C1EA19CB81A7D98",
+      "ReadInFull": true
+    }
+  ],
+  "HeadSha": "845a87dfeb05ac2f1acfdf0596a3a5e0dc32326b",
+  "ComparisonBase": "c681112d",
+  "Branch": "worktree-session-20261009",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 92,
+  "Completeness": 90,
+  "Confidence": 98,
+  "PassCount": 3,
+  "FailCount": 9,
+  "UnknownCount": 0,
+  "FailList": [
+    "R3",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M9",
+    "M11"
+  ],
+  "UnknownList": [],
+  "ImplementerFixes": [
+    "R4-F1",
+    "R4-F2",
+    "R4-F3",
+    "R4-F4",
+    "R4-F5",
+    "R4-F6",
+    "R4-F7",
+    "R4-F8",
+    "R4-F9",
+    "R4-F10",
+    "R4-F11",
+    "R4-F12",
+    "R4-F13",
+    "R4-F14"
+  ],
+  "OperatorDecisionFails": [],
+  "ScoreRationale": "92/90 are review judgments, not statistical confidence intervals or a count-based percentage. Most inventory and prior fixes are present, but reproducible overflow, trust, concurrency, host-contract and phase-execution defects prevent a functioning implementation under the written contract. No wording/style issue is scored. The acceptance bar remains 98/98 with every claim PASS.",
+  "Claims": [
+    {
+      "Evidence": "Eleven of fifteen round-3 findings resolved on their original scope; R3-F5/F6/F7/F10 not resolved. Four earlier residuals are resolved as left by round 3. See every individual re-attack below.",
+      "FindingIds": [
+        "R4-F4",
+        "R4-F5",
+        "R4-F7",
+        "R4-F8"
+      ],
+      "Id": "R3",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "The attached plan elements are represented: authoritative relational records, GraphRAG fallback, provenance, budgets, grading, trust floor, rejection/staleness audit, all nine relationship types, opt-in pilot, eight delivery topics and publication. Mode/source/token choices are identified. Executable failure/trust/HV behavior still contradicts the intended guarantees.",
+      "FindingIds": [
+        "R4-F1",
+        "R4-F2",
+        "R4-F3",
+        "R4-F4",
+        "R4-F5",
+        "R4-F6"
+      ],
+      "Id": "M1",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "Section 6 of the two documents is byte-identical and contains options/entities/DTOs/enums, 23 CQRS handlers, REST alias, MCP, client, REPL, builders and descriptors. The evidence model cannot retain a required verification input, accepted evidence kinds lack check contracts, and A/B MCP surface descriptions are not accurate.",
+      "FindingIds": [
+        "R4-F2",
+        "R4-F3",
+        "R4-F9"
+      ],
+      "Id": "M2",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "All 126 architecture Mermaid blocks independently rendered with Mermaid 11.17.2, exit 0. Thirty-eight handlers (11 turn, 4 review/read, 23 context) have activity diagrams; processes/policies are labelled; sequences, 15 use cases, and the entity addendum exist. Semantic branch/response/order completeness fails despite valid syntax.",
+      "FindingIds": [
+        "R4-F1",
+        "R4-F4",
+        "R4-F5",
+        "R4-F6",
+        "R4-F8",
+        "R4-F9"
+      ],
+      "Id": "M3",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "Reviewed the approved TODO text and all removed/renamed host allocations against the shared-PowerShell design. Most obligations and tests survive. Live REST upsert/PATCH/PUT/complete/fail semantics and bulk-only terminal guard placement are corrected; OpenCode routing and several A/B diagrams/MCP response paths still diverge.",
+      "FindingIds": [
+        "R4-F7",
+        "R4-F8",
+        "R4-F9"
+      ],
+      "Id": "M4",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "Verified cited controllers, service, MCP tools, client binding, context storage, GraphRAG ingest and core entry points. The new serialized response protocol and whole-submission idempotency are specified; the listed contract contradictions prevent acceptance.",
+      "FindingIds": [
+        "R4-F1",
+        "R4-F2",
+        "R4-F3",
+        "R4-F4",
+        "R4-F5",
+        "R4-F6",
+        "R4-F9"
+      ],
+      "Id": "M5",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "NOT APPROVED/code freeze is explicit; four phases cover the plan; P0 may fill the Phase C catalog; named TODO graph is acyclic and contains no IMPL-PLUGINCORENODE-001. However the neutral-stub/live-surface gate, early adapter adoption, missing ownership and post-completion grade submission prevent executing it as written.",
+      "FindingIds": [
+        "R4-F6",
+        "R4-F10",
+        "R4-F11",
+        "R4-F14"
+      ],
+      "Id": "M6",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:74-78,214-231,241,781 specifies no GitHub Actions/Azure gate/evidence; all non-Build.Tests builds/tests through native Nuke; direct full Build.Tests only, removed from MigrationIntegrationTests in prerequisite P0.1c; Octopus releases only as LAB-OMARCHY container; Windows gates through WSMan in F:/GitHub/McpServer/.worktrees. Opus=Octopus and lab-omarkey=LAB-OMARCHY are reasonable and explicitly stated in context.",
+      "FindingIds": [],
+      "Id": "M7",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "Independently inspected all five commit parents and file lists, remote ls-remote, local reflog, blob identity, and retained worktree/branch. Every publication is one file and consecutive fast-forward ancestry; current develop and HEAD document blobs equal 5f3ed62630d4c8a6594fd34a151cfb72c8efe51d. Reflog says update by push; no force update is evidenced.",
+      "FindingIds": [],
+      "Id": "M8",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "All 100 proposed new IDs are absent from the complete main-workspace FR/TR/TEST lists (353/487/512 records). Rewritten PS TR/TEST and Nuke ACs have allocations/cases; exactly-one ownership now has a rule, but changed original ACs remain missing from TEST statements.",
+      "FindingIds": [
+        "R4-F12"
+      ],
+      "Id": "M9",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "Both new documents have Apache-2.0 SPDX headers; all three documents contain zero en/em dashes. git diff c681112d..HEAD --check passed. No current marker key or generic long API-key value was found in the reviewed documents or commit diff. Reviewer artifacts are independently redacted before finalization.",
+      "FindingIds": [],
+      "Id": "M10",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "One lib-ps core for nine hosts, Pester-only gates, explicit argv/stdin/error contract, planned actual entry-point extensions, existing ValidatePluginPowerShellOnly extension, bats/lib-sh/lib-node retirements, governed-host AC010..012 and tests, and Astra/max unbounded review rules are present. MEMORY-PROCESS-007 v67 contains the cited 2026-10-12 CONTRACT; ACK/operator resolution is explicitly required before Node retirement. Actual OpenCode event mapping, Phase 2 suite sequencing and shell preflight still fail.",
+      "FindingIds": [
+        "R4-F7",
+        "R4-F11",
+        "R4-F13"
+      ],
+      "Id": "M11",
+      "Status": "FAIL"
+    }
+  ],
+  "PriorFindings": [
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:137,163-174 now bind the completed rollout session id, response thread id, verdict thread id, and every turn_context model/effort. Named wrong-runtime and wrong-thread controls at docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:766.",
+      "Resolution": "RESOLVED",
+      "Regression": "The runtime-check defect is resolved. R4-F6 separately identifies the resulting completion/submission ordering gap.",
+      "Id": "R3-F1",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:171 permits independent Codex reviewer and producer sessions, refuses the reviewed/producing session, and names an acceptance case.",
+      "Resolution": "RESOLVED",
+      "Regression": "No regression of agent/session independence found.",
+      "Id": "R3-F2",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:294 defines request/query nesting, route/scalar parameters, builder types/defaults, descriptor envelopes, and real-binder tests; agrees with GenericClientPassthrough.cs:649-695.",
+      "Resolution": "RESOLVED",
+      "Regression": "No flat-payload binding regression found.",
+      "Id": "R3-F3",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:120 uses canonical user-prompt-submit, accepted by plugin-hook.ps1:5; planned HostEvent and InvocationFromStdin extensions are explicit at :423.",
+      "Resolution": "RESOLVED",
+      "Regression": "The classic Cline binder error is fixed; R4-F7 concerns the separate OpenCode host event API.",
+      "Id": "R3-F4",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:128 fixes separate hostContext, input/output, shell.env and mechanical output mutation, but the real OpenCode event callback still cannot reach the specified session.idle mapping. R4-F7.",
+      "Resolution": "NOT RESOLVED",
+      "Regression": "Remaining exact host-boundary incompatibility.",
+      "Id": "R3-F5",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:162-190,460-478,559-599 correct bulk gating, the terminal guard and explicit terminal targets. :513 includes system queue entries and :688 permits withdrawn captured-close warning. R4-F8 identifies remaining counterexamples.",
+      "Resolution": "NOT RESOLVED",
+      "Regression": "Per-content popAll, system remove, final mint retention and unsupported-session refusal precedence still disagree with approved prose.",
+      "Id": "R3-F6",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:161,876 filters terminal responses and introduces Closed items, but the creation race at R4-F4 still yields an ungradable permanent Pending item.",
+      "Resolution": "NOT RESOLVED",
+      "Regression": "Sequential lifecycle repaired; concurrent lifecycle not closed.",
+      "Id": "R3-F7",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:51 specifies first-write StatusVersion locking, Serializable transactions, whole-operation retries and three-provider forced interleavings for grade/status changes.",
+      "Resolution": "RESOLVED",
+      "Regression": "The original trust race is addressed. Creation of HV items is outside this protocol and is R4-F4.",
+      "Id": "R3-F8",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:110-118,436,451-459 uses the whole-submission SubmissionSha256 on both ordinary replay and unique-index collision, with differing package/claims/evidence cases.",
+      "Resolution": "RESOLVED",
+      "Regression": "No content-only response-idempotency regression found. Package overflow idempotency is separately R4-F1.",
+      "Id": "R3-F9",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:90,665 adds response-only evidence and supports dependencies; :664,760-794 checks RetrieveCandidates freshness. Get/Query trusted surfaces still bypass it (R4-F5), and claimed-hash information is lost (R4-F2).",
+      "Resolution": "NOT RESOLVED",
+      "Regression": "R4-F2 is introduced by the new evidence-hash handling.",
+      "Id": "R3-F10",
+      "Status": "FAIL"
+    },
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:257-261,760-794 now carries sessionId/requestId/focusRefs, validates the turn, and ranks that explicit neighborhood; named same-text/different-neighborhood and unknown-turn cases.",
+      "Resolution": "RESOLVED",
+      "Regression": "No request-neighborhood regression found.",
+      "Id": "R3-F11",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/Stateless-Agent-Context-Management.md:921-962; docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:128,774 specify authoritative message-list replacement/fresh invocation, P0.2 capability evidence, fallback to Pilot and an actual-model-request sentinel test.",
+      "Resolution": "RESOLVED",
+      "Regression": "No absent-history-operation regression found. Host routing defects are separately R4-F7.",
+      "Id": "R3-F12",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:438,730 permits exact src/index.ts, tsconfig/package/lock, ignored compiler dist outputs and installed dependencies; names positive compiled-output and negative helper/dist cases against the existing validator.",
+      "Resolution": "RESOLVED",
+      "Regression": "No compiled-adapter allowlist contradiction remains.",
+      "Id": "R3-F13",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4185-4205,4253-4264 now links projection to workspace ContextDocument and its chunks. GraphRagService.cs:348-385 creates exactly those rows.",
+      "Resolution": "RESOLVED",
+      "Regression": "Knowledge-graph entities remain separate.",
+      "Id": "R3-F14",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:445-480 defines one owner, contributor-only references and merged named cases, repairing the specific duplicate-ownership examples.",
+      "Resolution": "RESOLVED",
+      "Regression": "Different missing changed-AC allocations remain under R4-F12; the duplicate-ownership repair itself is accepted.",
+      "Id": "R3-F15",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "Remaining runtime-verification part is repaired by docs/Stateless-Agent-Context-Management.md:163-174; parsed verdict, content binding, complete findings and reviewer result remain checked. See R3-F1.",
+      "Resolution": "RESOLVED",
+      "Regression": "Execution ordering is R4-F6, not a loss of the new verification checks.",
+      "Id": "R2-F2",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "As left by round 3, canonical classic Cline HookName is fixed; the plan explicitly adds HostEvent/InvocationFromStdin, UTF-8 opaque invocation transport, exact argv and real-binder tests. docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:120,128,423.",
+      "Resolution": "RESOLVED",
+      "Regression": "R4-F7 is a host callback mismatch beyond the original PowerShell parameter-binding issue.",
+      "Id": "R2-F6",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "AgentResponseTrustDecision is defined, and docs/Stateless-Agent-Context-Management.md:294 defines the complete builder/descriptor/typed-method envelope. Both section-6 copies are identical.",
+      "Resolution": "RESOLVED",
+      "Regression": "No regression of this definition/binding fix found.",
+      "Id": "R2-F11",
+      "Status": "PASS"
+    },
+    {
+      "Evidence": "Round-1 F8 as left by rounds 2/3: nonempty claims/evidence, zero evaluated denominator yields zero, zero UNKNOWN/FAIL trust rule, and now actual reviewer-runtime verification. docs/Stateless-Agent-Context-Management.md:163-174,436-450,508-535.",
+      "Resolution": "RESOLVED",
+      "Regression": "Other deterministic-evidence holes are reported as R4-F2/R4-F3 rather than claiming the original arithmetic remains broken.",
+      "Id": "F8",
+      "Status": "PASS"
+    }
+  ],
+  "Findings": [
+    {
+      "Id": "R4-F1",
+      "Title": "An idempotent overflow retry becomes a successful invocation",
+      "Claims": [
+        "M1",
+        "M3",
+        "M5"
+      ],
+      "Locations": [
+        "docs/Stateless-Agent-Context-Management.md:318",
+        "docs/Stateless-Agent-Context-Management.md:340",
+        "docs/Stateless-Agent-Context-Management.md:346",
+        "docs/Stateless-Agent-Context-Management.md:359",
+        "docs/Stateless-Agent-Context-Management.md:1577",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2103",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:86"
+      ],
+      "Defect": "BuildPackage returns 200 for any identical saved package, including Overflow, while the invocation process treats every 200/201 as a usable package and invokes the model. The mandatory fail-the-invocation decision is therefore not invariant under retry.",
+      "Evidence": [
+        "First build exceeds the mandatory budget, stores status Overflow with no items/content, and returns 422. An identical retry finds the same InputsSha256 and takes the unconditional 200 existing-package branch. The concurrent-winner branch has the same problem.",
+        "RunStatelessInvocation at stateless:1577-1596 sends 200/201 through model execution and only errors through prompt refusal/cancellation. SubmitResponse later refusing an Overflow package does not undo the answer already produced."
+      ],
+      "SpecificChange": "Return the same 422 agent_context_budget_exceeded, including stored diagnostics, whenever the matching existing or winning package is Overflow; make the host success path require Built defensively. Update both contracts and diagrams and name retry-after-lost-overflow-response and concurrent-overflow cases.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Newly identified interaction between existing overflow and idempotency contracts."
+    },
+    {
+      "Id": "R4-F2",
+      "Title": "Submission discards the claimed evidence hash required by grading",
+      "Claims": [
+        "M1",
+        "M2",
+        "M5"
+      ],
+      "Locations": [
+        "docs/Stateless-Agent-Context-Management.md:90",
+        "docs/Stateless-Agent-Context-Management.md:123",
+        "docs/Stateless-Agent-Context-Management.md:455",
+        "docs/Stateless-Agent-Context-Management.md:508",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1853",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1886"
+      ],
+      "Defect": "The server-computed hash and the submitted hash have different required meanings, but only one Sha256 is stored. Submission overwrites it with the server hash, so the later deterministic grade cannot identify a submitted mismatch.",
+      "Evidence": [
+        "Section 6.3 explicitly requires a submitted hash that differs from the source to make the deterministic evidence check FAIL.",
+        "AgentResponseEvidenceEntity has only Sha256 and CommitSha. Submit computes source hashes and saves evidence with those hashes. There is no submitted-hash field, immutable submission snapshot, or persisted mismatch finding. SubmissionSha256 is an irreversible fingerprint, not the missing input.",
+        "Counterexample: cite an existing file with deliberately wrong hash Hbad. Submission stores Hactual. After restart the grade compares Hactual with the file and cannot distinguish this submission from one that cited Hactual."
+      ],
+      "SpecificChange": "Retain the submitted hash separately from the authoritative source hash, or retain an immutable submission snapshot/mismatch result sufficient for the later grade. Specify null and unavailable-source behavior and use the authoritative hash for staleness. Add a wrong-submitted-hash case that remains FAIL after restart; mirror entity, DTO, grade, and diagram changes.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Introduced by the R3-F10 server-computed evidence-hash fix."
+    },
+    {
+      "Id": "R4-F3",
+      "Title": "Two accepted evidence kinds have no deterministic verification contract",
+      "Claims": [
+        "M1",
+        "M2",
+        "M5"
+      ],
+      "Locations": [
+        "docs/Stateless-Agent-Context-Management.md:90",
+        "docs/Stateless-Agent-Context-Management.md:123",
+        "docs/Stateless-Agent-Context-Management.md:508",
+        "docs/Stateless-Agent-Context-Management.md:509"
+      ],
+      "Defect": "Command and Commit are accepted evidence kinds, but the complete deterministic-check list defines neither verification algorithm nor expected result for them. The text says command results are checked only by the deterministic grade, whose contract omits that check.",
+      "Evidence": [
+        "The enum admits File, Requirement, Receipt, Commit, Command, SessionLogTurn. RunDeterministicGrade names per-kind checks only for File, Requirement, Receipt and SessionLogTurn.",
+        "The evidence model supplies Ref, Sha256 and CommitSha but no specified command-result representation or success/claim-validation rule. A claim whose sole evidence is Command or Commit therefore has an unspecified evidence-check set and score outcome."
+      ],
+      "SpecificChange": "Define reproducible deterministic checks and required evidence fields for Command and Commit, including PASS/FAIL/UNKNOWN, missing/mismatched receipt or commit, workspace scope, and score contribution. Alternatively explicitly remove unsupported kinds from this effort and update all schemas. Add discriminating cases for every retained kind.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Holistic completeness finding; not a request for a new grading pipeline."
+    },
+    {
+      "Id": "R4-F4",
+      "Title": "HV-request creation can race terminal response changes and strand a Pending item",
+      "Claims": [
+        "R3",
+        "M1",
+        "M3",
+        "M5"
+      ],
+      "Locations": [
+        "docs/Stateless-Agent-Context-Management.md:51",
+        "docs/Stateless-Agent-Context-Management.md:161",
+        "docs/Stateless-Agent-Context-Management.md:876",
+        "docs/Stateless-Agent-Context-Management.md:879",
+        "docs/Stateless-Agent-Context-Management.md:614"
+      ],
+      "Defect": "The R3-F7 fix filters terminal responses and closes existing items, but creation participates in no response serialization protocol. A response can become Rejected/Superseded between selection and item insertion, leaving an ungradable Pending item forever.",
+      "Evidence": [
+        "Allowed interleaving: CreateHvRequest reads response R as Trusted; Reject locks R, sets Rejected, sees no open HV item, commits; CreateHvRequest saves Open request plus Pending R.",
+        "All grading then refuses R with agent_context_response_not_gradable. Repeat rejection returns unchanged. The enumerated StatusVersion/Serializable operations exclude CreateAgentContextHvRequestCommand, which only writes the HV request/items."
+      ],
+      "SpecificChange": "Make HV creation and terminal transitions share an atomic eligibility/item-creation protocol. Define ordered response locking or serializable validation/retry across the three providers, and completion behavior if every item becomes terminal. Add forced create-versus-reject and create-versus-supersede tests; update errors and diagrams.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Residual R3-F7 under concurrency; sequential cases are repaired."
+    },
+    {
+      "Id": "R4-F5",
+      "Title": "Trusted response reads still bypass freshness verification",
+      "Claims": [
+        "R3",
+        "M1",
+        "M3",
+        "M5"
+      ],
+      "Locations": [
+        "docs/Stateless-Agent-Context-Management.md:464",
+        "docs/Stateless-Agent-Context-Management.md:497",
+        "docs/Stateless-Agent-Context-Management.md:664",
+        "docs/Stateless-Agent-Context-Management.md:1197",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:616"
+      ],
+      "Defect": "GetResponse and QueryResponses(trustedOnly=true) return stored Trusted status without evaluating freshness. The GetResponse sequence explicitly authorizes use as context solely from that status.",
+      "Evidence": [
+        "After a file changes, no requirement-update trigger runs. QueryResponses restricts to status Trusted and returns it; GetResponse loads fields and returns them. Neither calls EvaluateStaleness.",
+        "R3-F10 added freshness to BuildPackage and RetrieveCandidates only. The merged FR-MCP-AGENTCONTEXT-005 says every trusted retrieval checks freshness before returning a response, and the attached plan excludes stale responses from trusted retrieval."
+      ],
+      "SpecificChange": "Apply the same freshness boundary to every surface returning content as trusted, including GetResponse and trusted/status-filtered QueryResponses, before filtering/counting/paging. Or explicitly make audit reads incapable of authorizing trusted use and provide an authoritative freshness-checked path. Update sequences and add direct get/query-after-file-change tests.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Residual R3-F10; response-only dependencies and RetrieveCandidates are addressed, but public trusted reads remain a bypass."
+    },
+    {
+      "Id": "R4-F6",
+      "Title": "The HV agent must submit grades after the execution that could submit them has ended",
+      "Claims": [
+        "M1",
+        "M3",
+        "M5",
+        "M6"
+      ],
+      "Locations": [
+        "docs/Stateless-Agent-Context-Management.md:137",
+        "docs/Stateless-Agent-Context-Management.md:167",
+        "docs/Stateless-Agent-Context-Management.md:542",
+        "docs/Stateless-Agent-Context-Management.md:1275",
+        "docs/Stateless-Agent-Context-Management.md:1277",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:228",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:229"
+      ],
+      "Defect": "The model-grade sequence requires a completed CLI turn and the runner-copied completed rollout before the same HV execution posts its grades. No continuation or second grading-submission step is specified.",
+      "Evidence": [
+        "The runner waits for turn.completed and only after reviewer completion copies the rollout. RecordModelGrade requires both completed-turn evidence and that rollout.",
+        "The sequence assigns review, final verdict, completed-runner copy, then POST grades/model to the same HV lifeline. An active single codex exec cannot have its own turn.completed receipt before returning; after it returns it cannot make another tool call.",
+        "The text explicitly makes the HV agent the caller and excludes a server grading worker/pipeline, so an unstated coordinator submission cannot silently fill this gap."
+      ],
+      "SpecificChange": "Specify an executable two-step manual reviewer protocol, for example a grade-only continuation by the configured HV agent after the runner freezes the completed review receipts. Define which execution/turn supplies the immutable verdict and proof, how the continuation receives them, and retry/idempotency behavior. Keep the no-HV-pipeline scope and update the sequence/live check.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "The completed-rollout requirement added for R3-F1 makes this pre-existing ordering ambiguity explicit."
+    },
+    {
+      "Id": "R4-F7",
+      "Title": "OpenCode session.idle is an event payload, not the specified host hook",
+      "Claims": [
+        "R3",
+        "M4",
+        "M11"
+      ],
+      "Locations": [
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:128",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:423",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:728",
+        "/home/sharpninja/github/mcpserver-opencode-plugin/src/plugin.ts:215",
+        "/home/sharpninja/github/mcpserver-opencode-plugin/node_modules/@opencode-ai/plugin/dist/index.d.ts:173",
+        "https://opencode.ai/docs/plugins/"
+      ],
+      "Defect": "The exact adapter contract registers/forwards a session.idle hook, but OpenCode calls event({event}) for that event. Forwarding the actual hook name event is rejected by the core mapping; registering session.idle is never invoked.",
+      "Evidence": [
+        "Live Hooks declares event(input: { event: Event }): Promise<void>; the plugin implements event at plugin.ts:215 and extracts the event type from its payload. The official OpenCode plugin example likewise handles session.idle inside event.",
+        "The plan allows only chat.message/session.idle/shell.env/messages.transform for this host and says any other hook exits host_event_unknown. Its logic-free adapter cannot secretly rename/filter event.type and still satisfy the exact opaque forwarding rule.",
+        "The R3-F5 fixes for separate ToolContext, input/output transport, shell.env and output mutation are present; this remaining host-shape mismatch prevents the approved stop-equivalent from reaching the PowerShell gate."
+      ],
+      "SpecificChange": "Register the real event callback and forward its opaque input as HostEvent event; put event.type/session identity routing and irrelevant-event handling in the PowerShell core. Update the binding table, ACs, descriptors if needed, and Pester fixtures to exercise the real Hooks shape and session.idle delivery.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "R3-F5 is only partially resolved at the actual host boundary."
+    },
+    {
+      "Id": "R4-F8",
+      "Title": "Phase A process diagrams still contradict queue, failsafe, and Stop contracts",
+      "Claims": [
+        "R3",
+        "M3",
+        "M4"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:507",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:513",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:655",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:685",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1321",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:273",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:275",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:298"
+      ],
+      "Defect": "The corrected activities still accept ambiguous queue removal, deliver system entries, delete final mint evidence, and block a session whose unsupported-session exception requires warning after close capture.",
+      "Evidence": [
+        "popAll compares only total line count with total queued count. Queue [A,B] and popped lines [A,A] pass that test while failing the required per-content matching-count rule. remove(absorbed_mid_turn) sends any unique matched entry straight to delivered/write-target, without the system-kind branch used by dequeue.",
+        "DrainFailsafe activity and sequence remove a mint record on session_not_open after confirmed open. FR-MCP-SESSIONTURN-001-AC008 requires retaining it marked final and not retried, with a warning naming the prompt.",
+        "EvaluateStopGate tests remembered server gate refusal first and blocks immediately. FR-MCP-SESSIONTURN-005-AC003 explicitly excepts an already-open turn after unsupportedSince; after its close is captured, the current diagram can still block on the old refusal."
+      ],
+      "SpecificChange": "Match popAll by attributable content multiplicities, branch on kind for remove, retain final mint failures with their diagnostic state, and evaluate the unsupported-session/captured-close exception before a remembered completion refusal can block. Correct response sequences and trace the existing named bridge/final-mint/unsupported-session cases through every branch.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "R3-F6 is not fully resolved. The bulk-submit gate, terminal enrichment, explicit terminal target, total system-entry count, and simple withdrawn-close warning paths were corrected."
+    },
+    {
+      "Id": "R4-F9",
+      "Title": "The architecture still conflates REST and MCP session-log contracts",
+      "Claims": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:315",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:353",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:408",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1209",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1477",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1777",
+        "src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs:47",
+        "src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs:103",
+        "src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs:349"
+      ],
+      "Defect": "The updated units and response sequences continue to describe REST bodies/paging as if MCP returned them, and lifecycle payload descriptions omit the live MCP field-selection boundary.",
+      "Evidence": [
+        "sessionlog_dialog returns {success:true,totalDialogItems:count}; architecture:408 and the shared controller/tool sequence use {agent,sessionId,requestId,totalDialogCount}. These are different field names and envelopes.",
+        "sessionlog_query returns only {totalCount,items} and has no offset parameter. Although architecture:1475 notes the missing offset, :1777-1778 still tells an MCP caller to consume limit/offset and page until complete. It cannot retrieve a later page that way.",
+        "MCP complete/fail parses turnJson then copies an explicit subset in FinalizeLifecycleTurnToolAsync:349-369. Fields such as planFile and todoId are not copied. REST forwards the body and validates those fields; the shared full-body merge/error description does not disclose this live difference. S5 adds Phase B fields, not an approved unrelated widening of every carried field."
+      ],
+      "SpecificChange": "Define each existing REST and MCP request/response/error shape separately and show surface-specific response processing. Keep MCP query limitations explicit and route paging through the typed client/REST when needed. Document the current lifecycle field whitelist plus only the Phase B additions; do not silently redesign existing routes.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Found while verifying the second holistic read corrections. The REST single-turn bodies and the bulk-only TerminalTurnOutcomeGuard placement themselves are substantially corrected."
+    },
+    {
+      "Id": "R4-F10",
+      "Title": "Neutral registered handlers replace live behavior before the no-regression gate",
+      "Claims": [
+        "M6"
+      ],
+      "Locations": [
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:172",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:173",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:175",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:176",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3732",
+        "tests/QBrainAi.Support.Mcp.Tests/Controllers/SessionLogControllerReceiptTests.cs:26",
+        "tests/QBrainAi.Support.Mcp.Tests/Controllers/SessionLogControllerReceiptTests.cs:85"
+      ],
+      "Defect": "Phase 2 completes dispatch-only versions of existing session-log surfaces, registers every handler as a neutral stub, and requires the existing tests to remain green. Existing routes now dispatch to no-op handlers instead of performing their current behavior.",
+      "Evidence": [
+        "Submit/Open/Upsert/Get/Query and the other existing routes are now units of this plan, so every-handler/every-surface includes them.",
+        "Existing unit evidence is discriminating: SubmitAsync_AcknowledgesOnlyAfterPersistence awaits real/substituted persistence and asserts id 42; SubmitAsync_RealService_AcknowledgesReadableSession reads the stored session. A neutral 0/null handler cannot satisfy those unchanged assertions.",
+        "The unregistered-entity correction prevents schema regressions but does not preserve the existing execution path. No temporary delegation/activation seam is specified."
+      ],
+      "SpecificChange": "Explicitly keep current routes and plugin behavior on working implementations through Phases 2 and 3. Define compatibility/delegating handlers or defer activation while exposing new seams/stubs to the RED tests. State the Phase 4 activation point and retain the existing regression suite; do not solve this by weakening tests or implementing new behavior before its tests.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Whole-plan phase reconstruction remains non-executable under its own gate."
+    },
+    {
+      "Id": "R4-F11",
+      "Title": "Phase 2 adopts TypeScript adapters before their permitted test runner and core exist",
+      "Claims": [
+        "M6",
+        "M11"
+      ],
+      "Locations": [
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:175",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:176",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:231",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:241",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:248",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:730"
+      ],
+      "Defect": "Phase 2 writes each TypeScript adapter in final forwarding form and must gate/merge every changed plugin repo, but those repos retain Jest and have no Pester suite until Phase 4 A9. The prerequisite TestAgentPlugins deliberately fails that state.",
+      "Evidence": [
+        "P0.1b ports bats only. P0.7 explicitly excludes the three TypeScript hosts from the Pester baseline because their suites arrive in A9. TestAgentPlugins refuses npm/Jest test commands in any selected repo.",
+        "The live manifests for cline, cline-v2, and opencode still declare Jest test commands. Phase 2 nevertheless changes their adapters and requires G6; each changed plugin PR requires G6 before merging and the next phase.",
+        "The actual lib-ps host-event/stdin behavior is implemented in Phase 4 and delivered by its one sync. A final Phase 2 adapter cannot preserve the existing host behavior by forwarding to that absent implementation."
+      ],
+      "SpecificChange": "Sequence interface declarations, adapter activation, and Jest-to-Pester adoption so every phase can satisfy its stated gates. Keep live adapters until Phase 4 and specify non-activated contract seams/fixtures in Phases 2-3, or move a complete behavior-preserving Pester migration into an approved prerequisite. State exactly which repos/suites run at each phase and preserve zero skips.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Bats retirement is correctly sequenced, but it does not solve the separate TypeScript-host Phase 2 gate."
+    },
+    {
+      "Id": "R4-F12",
+      "Title": "Changed existing acceptance criteria still have no owning TEST statement",
+      "Claims": [
+        "M9"
+      ],
+      "Locations": [
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:443",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:445",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:482",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:484",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:534",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:556",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:558",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:671",
+        "TEST-MCP-SESSIONLIFE-001",
+        "TEST-MCP-SESSIONLIFE-002"
+      ],
+      "Defect": "The new owner/contributor rule resolves duplicate allocations but cannot assign changed ACs that no TEST row names. Several changed original ACs are only assigned to a slice, contrary to the exactly-one TEST-statement requirement.",
+      "Evidence": [
+        "FR-MCP-SESSIONLIFE-001-AC002 is explicitly changed at :556 and allocated to A3 at :671. TEST-SESSIONTURN-001 and the mapping name the new AC007, not the changed AC002.",
+        "TR-MCP-SESSIONLIFE-002-AC002 is explicitly changed at :558 and allocated to A4 at :671. TEST-SESSIONTURN-003 names new AC004, not original AC002. Similar omissions exist for the listed changed original outcome ACs.",
+        "Read-only live TEST-MCP-SESSIONLIFE-001/-002 records contain broad old test descriptions, not these changed AC ids plus a named case. The instruction that P0 must verify coverage is not a concrete ownership allocation for the missing entries."
+      ],
+      "SpecificChange": "Add every changed original AC in the allocation list to exactly one TEST statement with its named case, reusing the appropriate existing/new test without duplicating ownership. Update mapping brackets and the P0 uniqueness/coverage input list. Preserve the new contributor rule.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "R3-F15 duplicate ownership is repaired; holistic M9 still fails on missing changed-AC coverage."
+    },
+    {
+      "Id": "R4-F13",
+      "Title": "The rollout still specifies a shell script outside PowerShell",
+      "Claims": [
+        "M11"
+      ],
+      "Locations": [
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:88",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:781",
+        "CLAUDE.md:235"
+      ],
+      "Defect": "The prescribed deploy preflight invokes sh -c with a two-command script, despite the all-scripts-in-PowerShell ruling and the plan assertion that it designs no shell script/tool.",
+      "Evidence": [
+        "The forward-looking deploy procedure runs env with PATH followed by sh -c and the script command -v id dotnet; dotnet --list-sdks. This is shell script execution, not merely launching PowerShell or quoting historical code.",
+        "The same read-only lookup can run in a PowerShell process under the proposed environment; no host API requires a shell adapter here."
+      ],
+      "SpecificChange": "Replace the sh -c preflight with pwsh -NoProfile -NonInteractive using Get-Command for executable resolution and the native dotnet --list-sdks command; keep the environment/SDK evidence and analyzer requirement.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Residual PowerShell-only nonconformance in the rollout procedure."
+    },
+    {
+      "Id": "R4-F14",
+      "Title": "Required A9 changes fall outside every Phase 4 file owner",
+      "Claims": [
+        "M6"
+      ],
+      "Locations": [
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:180",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:182",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:191",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:192",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:730",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3782",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3784"
+      ],
+      "Defect": "The exclusive bounded-context file rules do not assign A9 server marker changes, shared plugin hook-template changes, or root integration-fixture changes to a context, even though A9 requires them before the gates.",
+      "Evidence": [
+        "A9 changes src/QBrainAi.Services/Services/MarkerFileService.cs, plugins/core/hooks-templates/generate-wrappers.ps1, and tests/QBrainAi.PluginIntegration.Tests PluginHostKind/PluginHostProcessAdapter.",
+        "SessionTurnLogging lists session-log handlers/services; PluginCorePowerShell owns plugins/core/lib-ps; BuildTooling owns build; HostPluginAdoption owns the nine sibling repos. None owns these known paths. Phase 2 shared-file list does not include their new behavior, and Phase 4 says an agent must stop and seek a Phase 2 amendment for changes outside its files."
+      ],
+      "SpecificChange": "Assign these already-required changes and their tests to explicit Phase 4 contexts/TODOs, state their dependencies before sync/integration gates, and update the ownership diagrams/list. Audit the remaining scope entries for the same omission without expanding scope.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Whole-plan allocation gap, not a request to alter approved A/B behavior."
+    }
+  ],
+  "Interpretations": [
+    "Opus means Octopus in the build/release discussion; expressly stated, reasonable.",
+    "A single complete activity diagram for every unit means one complete diagram per CQRS handler; expressly stated, reasonable.",
+    "Outline now, catalog in P0 permits expansion of Phase C FR/TR/TEST/UC records during P0; it does not waive current contradictions or existing-AC ownership.",
+    "Common PowerShell behavior need not be retested as a duplicate Node core. Renamed host-specific cases and actual adapter transports must preserve the obligations."
+  ],
+  "Publication": {
+    "Commits": [
+      "99da6af8a415d502d79a4aaeecd4fb2151076166",
+      "51d2482e7af09093c844fa704b6549c67b949a95",
+      "63d4743df28da7bbf277aa06bd8d8c3003570516",
+      "33a5a9546fd774ece957a34422fc8d5320b5b510",
+      "a8d3934bc6238dc8e27f71c1d0561b55f48e88d4"
+    ],
+    "EveryCommitOnlyStatelessDocument": true,
+    "ConsecutiveFastForwardAncestry": true,
+    "RemoteDevelop": "a8d3934bc6238dc8e27f71c1d0561b55f48e88d4",
+    "BranchAndDevelopBlob": "5f3ed62630d4c8a6594fd34a151cfb72c8efe51d",
+    "RetainedWorktree": "/home/sharpninja/github/McpServer/.claude/worktrees/agentcontext-doc-20261011",
+    "RetainedBranch": "docs/agentcontext-plan-20261011",
+    "ReflogEvidence": "All five origin/develop entries say update by push; ancestry is fast-forward. No force-push inferred or performed."
+  },
+  "Verification": {
+    "MermaidBlocks": 126,
+    "MermaidVersion": "11.17.2",
+    "MermaidExitCode": 0,
+    "Section6Identical": true,
+    "Section6Characters": 127884,
+    "NewRequirementIdsChecked": 100,
+    "NewRequirementIdCollisions": 0,
+    "LiveFrCount": 353,
+    "LiveTrCount": 487,
+    "LiveTestCount": 512,
+    "DiffCheckExitCode": 0,
+    "EnEmDashCount": 0,
+    "KnownMarkerKeyMatches": 0,
+    "GenericApiKeyValueMatches": 0,
+    "ProductBuildsOrTestsRun": "None; review-only scope. Existing source tests inspected as evidence, not claimed executed."
+  },
+  "Commands": [
+    {
+      "TimestampUtc": "2026-10-12T03:46:57.4140469Z",
+      "Command": "& \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Status",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:47:06.305159Z",
+      "Command": "& \"$env:CODEX_PLUGIN_ROOT/lib/session-start.ps1\" -WorkspacePath $env:MCP_WORKSPACE_PATH",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:47:15.9805323Z",
+      "Command": "& \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Status; Get-Content -LiteralPath \"$env:MCP_CACHE_DIR_OVERRIDE/session-state.yaml\" -Raw; Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/lib/session-start.ps1\" -Raw",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:47:32.5279959Z",
+      "Command": "Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/lib/plugin-hook.ps1\" -TotalCount 100; Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/lib/plugin-hook.ps1\" | Select-Object -Skip 300 -First 370; rg -n 'MCP_UNTRUSTED|Verify.*Marker|Test.*Marker|signature|nonce' \"$env:CODEX_PLUGIN_ROOT/lib/marker-trust.ps1\"; Get-ChildItem -LiteralPath $env:MCP_CACHE_DIR_OVERRIDE -Recurse -File | Select-Object FullName,Length | ConvertTo-Json",
+      "ExitCode": 2,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:47:41.0993366Z",
+      "Command": "Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/lib/plugin-hook.ps1\" | Select-Object -Skip 100 -First 210; rg -n \"function Invoke-FullBootstrap|function Get-MarkerFileSnapshot|function Resolve-Marker\" \"$env:CODEX_PLUGIN_ROOT/lib\"; Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/lib/plugin-env.ps1\" -TotalCount 130; Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/lib/marker-resolver.ps1\" -TotalCount 200",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:47:52.0675349Z",
+      "Command": ". \"$env:CODEX_PLUGIN_ROOT/lib/marker-resolver.ps1\"; Get-MarkerFileSnapshot -StartDir $env:MCP_WORKSPACE_PATH | ConvertTo-Json; Test-MarkerSignature -MarkerFile \"$env:MCP_WORKSPACE_PATH/AGENTS-README-FIRST.yaml\"; Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/lib/marker-resolver.ps1\" | Select-Object -Skip 195",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:47:59.5364811Z",
+      "Command": "$env:MCP_MODEL = \"gpt-6-astra\"; $env:MCP_SESSION_SUFFIX = \"hv-plan-readiness-r4\"; & \"$env:CODEX_PLUGIN_ROOT/lib/plugin-hook.ps1\" -HookName session-start -HostName codex -CacheMode flat -WorkspacePath $env:MCP_WORKSPACE_PATH",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:48:09.036973Z",
+      "Command": "Get-Content -LiteralPath \"$env:MCP_CACHE_DIR_OVERRIDE/session-state.yaml\" -Raw; & \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Status",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:48:20.8045692Z",
+      "Command": "$result = & \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.memory.list -ParamsObject @{}; $result | Set-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Encoding utf8; $result",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:48:44.96641Z",
+      "Command": "Import-Module powershell-yaml; $memories = (ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Raw)).payload.result.items; $memories | ForEach-Object { [pscustomobject]@{Id=$_.id; Scope=$_.scope; Version=$_.version; TextLength=$_.text.Length} } | ConvertTo-Json; Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-plan-readiness-merged-r4.request.jsonl\" | ForEach-Object { ($_ | ConvertFrom-Json).PSObject.Properties.Name }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:49:08.3545673Z",
+      "Command": "Import-Module powershell-yaml; $items = (ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Raw)).payload.result.items; $items | Where-Object id -NE \"MEMORY-PROCESS-007\" | ForEach-Object { Write-Output (\"MEMORY \" + $_.id + \" scope=\" + $_.scope + \" version=\" + $_.version); $_.text }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:49:17.6270302Z",
+      "Command": "Import-Module powershell-yaml; $items = (ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Raw)).payload.result.items; $memory = $items | Where-Object id -EQ \"MEMORY-PROCESS-007\"; $memory.text.Substring(0,30000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:49:26.8157119Z",
+      "Command": "Import-Module powershell-yaml; $items = (ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Raw)).payload.result.items; $memory = $items | Where-Object id -EQ \"MEMORY-PROCESS-007\"; $memory.text.Substring(30000,30000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:49:34.8365867Z",
+      "Command": "Import-Module powershell-yaml; $items = (ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Raw)).payload.result.items; $memory = $items | Where-Object id -EQ \"MEMORY-PROCESS-007\"; $memory.text.Substring(60000,30000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:49:43.3304245Z",
+      "Command": "Import-Module powershell-yaml; $items = (ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Raw)).payload.result.items; $memory = $items | Where-Object id -EQ \"MEMORY-PROCESS-007\"; $memory.text.Substring(90000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:49:59.3807505Z",
+      "Command": "$ask = Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-plan-readiness-merged-r4.request.jsonl\" | ForEach-Object { $_ | ConvertFrom-Json } | Where-Object body; & \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.beginTurn -ParamsObject @{ requestId=\"req-20261012T034439Z-hv-merged-r4\"; queryTitle=\"Hostile plan-readiness review of merged plan, round 4\"; queryText=[string]$ask.body; interpretation=\"Independent single-round plan-readiness review at HEAD 845a87df. No product or plan edits. Read-only live store access; writes limited to reviewer receipts and this reviewer turn.\" }",
+      "ExitCode": 1,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:50:14.6092653Z",
+      "Command": "rg -n \"FAILSAFE|failsafe payload could not|PersistVerb|function Invoke-WorkflowOpenSession|function Invoke-WorkflowBeginTurn\" \"$env:CODEX_PLUGIN_ROOT/lib/repl-invoke.ps1\" \"$env:CODEX_PLUGIN_ROOT/lib/failsafe.ps1\" \"$env:CODEX_PLUGIN_ROOT/lib/resolve-cache-dir.ps1\"; Get-Content -LiteralPath \"$env:MCP_CACHE_DIR_OVERRIDE/current-turn.yaml\" -Raw; Get-Content -LiteralPath \"docs/receipts/hv/hostile-validator-plan-readiness-merged-r3-20261012T015245Z.md\" -TotalCount 160",
+      "ExitCode": 2,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:50:36.2631121Z",
+      "Command": "$ask = Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-plan-readiness-merged-r4.request.jsonl\" | ForEach-Object { $_ | ConvertFrom-Json } | Where-Object body; & \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.beginTurn -ParamsObject @{ requestId=\"req-20261012T034439Z-hv-merged-r4\"; queryTitle=\"Hostile plan-readiness review of merged plan, round 4\"; queryText=[string]$ask.body; interpretation=\"Independent single-round plan-readiness review at HEAD 845a87df. No product or plan edits. Read-only live store access; writes limited to reviewer receipts and this reviewer turn.\" }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:50:58.2846671Z",
+      "Command": "Get-Content -LiteralPath \"docs/receipts/hv/hostile-validator-plan-readiness-merged-r3-20261012T015245Z.md\" | Select-Object -Skip 150 -First 230",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:50:58.2629586Z",
+      "Command": "git status --short; git rev-parse HEAD; git diff --stat c681112d..HEAD; Get-Item docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md,docs/architecture/SessionTurn-Review-AgentContext-Architecture.md,docs/Stateless-Agent-Context-Management.md,.github/copilot-instructions.md,docs/Project/Requirements-Matrix.md | Select-Object FullName,Length | ConvertTo-Json; rg -n \"^#{1,5} \" docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md docs/Stateless-Agent-Context-Management.md docs/architecture/SessionTurn-Review-AgentContext-Architecture.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:51:22.3544863Z",
+      "Command": "Get-Content -LiteralPath \"docs/receipts/hv/hostile-validator-plan-readiness-merged-r3-20261012T015245Z.md\" | Select-Object -Skip 155 -First 100; Get-Content -LiteralPath \".github/copilot-instructions.md\" -Raw; rg -n \"^#{1,4} \" docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:51:51.7162952Z",
+      "Command": "& \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.appendActions -ParamsObject @{actions=@(@{order=1;type=\"read\";status=\"completed\";description=\"Executed add-profile; read all 20 non-skill profile markdown files, the complete main marker, and all 15 MCP memories. Live own rollout turn_context proves gpt-6-astra/max. Codex plugin 1.119.0 marker HMAC and health nonce verified; own cache and failsafe isolated under /tmp.\";filePath=\"docs/receipts/hv/20261012T034439Z-review-commands.jsonl\"})}; & \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.appendDialog -ParamsObject @{dialogItems=@(@{timestamp=[DateTime]::UtcNow.ToString(\"o\");role=\"model\";category=\"decision\";content=\"Decision: review only at 845a87df, with all prior findings re-attacked and the whole merged plan checked for functional readiness. Preserve the original A/B substance, treating merge fidelity and the PowerShell rewrite as in scope. Alternatives rejected: reviewing only changed lines, trusting self-review receipts, or mutating product records. No product or plan edits.\"})}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:51:58.4448845Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -First 100",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:52:10.7924067Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -Skip 100 -First 95",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:52:28.1558338Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -Skip 195 -First 110",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:52:45.0451831Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -Skip 304 -First 230",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:53:07.4076584Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -Skip 534 -First 280",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:53:36.6557927Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -Skip 814 -First 190",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:54:01.3148846Z",
+      "Command": "rg -n \"workflow.requirements.(list|query|effective)|workflow.todo.(get|query)\" \"$env:CODEX_PLUGIN_ROOT/lib/tool-descriptors.json\"; rg -n \"^    (\\[Http|public |private |internal )|Route\\(\" src/QBrainAi.Support.Mcp/Controllers/SessionLogController.cs; rg -n \"^    public |^    private |IsolationLevel\" src/QBrainAi.Services/Services/SessionLogService.cs",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:54:02.4469424Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -Skip 1004 -First 250",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:54:12.7326458Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -Skip 1254 -First 310",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:54:50.3352192Z",
+      "Command": "rg -n \"^\" docs/Stateless-Agent-Context-Management.md | Select-Object -Skip 1564; rg -n \"workflow.requirements.list|workflow.todo.get|workflow.todo.query\" \"$env:CODEX_PLUGIN_ROOT/skills/requirements/SKILL.md\" \"$env:CODEX_PLUGIN_ROOT/skills/todo/SKILL.md\"; rg -n \"mermaid|playwright|node_modules\" docs/receipts/hv/hostile-validator-plan-readiness-merged-r3-20261012T015245Z.md | Select-Object -Last 12",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:55:08.8843435Z",
+      "Command": "Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/skills/requirements/SKILL.md\" | Select-Object -Skip 86 -First 53; Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/skills/todo/SKILL.md\" | Select-Object -Skip 63 -First 77; Get-Content -LiteralPath \"/tmp/hv-mermaid-20261011/node_modules/mermaid/package.json\" -Raw | ConvertFrom-Json | Select-Object name,version; git ls-remote origin refs/heads/develop; git rev-parse origin/develop; git worktree list --porcelain; git log --format=\"%H %P %s\" c681112d..HEAD",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:55:25.493194Z",
+      "Command": "Import-Module powershell-yaml; $raw = & \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.todo.get -ParamsObject @{id=\"PLAN-SESSIONTURNREVIEW-001\"}; $dto = ConvertFrom-Yaml -Yaml ($raw -join \"`n\"); $dto | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-approved-todo.json\" -Encoding utf8; $dto.payload.result.Keys; $dto.payload.result | Select-Object id,title,done,dependsOn | ConvertTo-Json -Depth 10",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:55:36.7879282Z",
+      "Command": "rg -n \"^\" docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md | Select-Object -First 90",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:55:24.7347811Z",
+      "Command": "& node \"/tmp/hv-mermaid-20261011/node_modules/@mermaid-js/mermaid-cli/src/cli.js\" -i \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\" -o \"docs/receipts/hv/20261012T034439Z-mermaid-architecture.md\" -a \"docs/receipts/hv/20261012T034439Z-mermaid\" -j 4 -p \"/tmp/hv-mermaid-20261011/puppeteer.json\"",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:59:30.7262941Z",
+      "Command": "rg -n \"^#{1,6} \" docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md docs/architecture/SessionTurn-Review-AgentContext-Architecture.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:59:30.7356753Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 40..42 + 90..113 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:59:30.6784657Z",
+      "Command": "& \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Method \"workflow.sessionlog.appendDialog\" -ParamsObject @{ requestId=\"req-20261012T034439Z-hv-merged-r4\"; category=\"analysis\"; content=\"Review context restored after compaction. Independently rendered all 126 architecture Mermaid blocks with mermaid 11.17.2 via its CLI invoked from analyzer-checked PowerShell; command exited 0. Continuing full plan, live source, traceability, publication, and R3 regression checks. No verdict yet.\" }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:59:39.850751Z",
+      "Command": "Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -TotalCount 150",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:59:40.9537534Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 114..135 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T03:59:51.7701924Z",
+      "Command": "& \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method \"workflow.sessionlog.appendDialog\" -ParamsObject @{ requestId=\"req-20261012T034439Z-hv-merged-r4\"; category=\"analysis\"; content=\"Review context restored after compaction. Independently rendered all 126 architecture Mermaid blocks with mermaid 11.17.2 via its CLI invoked from analyzer-checked PowerShell; command exited 0. Continuing full plan, live source, traceability, publication, and R3 regression checks. An attempted append without -Command Invoke returned only Status; this correctly invoked append records the progress. No verdict yet.\" }",
+      "ExitCode": 1,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:00:03.0231698Z",
+      "Command": "$a=Get-Content \"docs/receipts/hv/20261012T034439Z-review-commands.jsonl\" | ForEach-Object {ConvertFrom-Json $_}; $a | Where-Object {$_.Command -match \"appendActions|appendDialog|beginTurn\"} | Select-Object TimestampUtc,Command,ExitCode | ConvertTo-Json -Depth 6",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:00:03.0427433Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 136..180 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:00:17.3864562Z",
+      "Command": "& \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.appendDialog -ParamsObject @{dialogItems=@(@{timestamp=[DateTime]::UtcNow.ToString(\"o\");role=\"model\";category=\"analysis\";content=\"Review context restored after compaction. Independently rendered all 126 architecture Mermaid blocks using mermaid 11.17.2; exit 0. Continuing live contract and whole-plan checks. Earlier append attempts either returned Status or were rejected for missing dialogItems; this valid append records progress. No verdict yet.\"})}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:00:25.2670129Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 181..236 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:00:33.185525Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 237..255 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:00:55.8022314Z",
+      "Command": "$l=Get-Content -LiteralPath \"src/QBrainAi.Support.Mcp/Controllers/SessionLogController.cs\"; 28..281 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:00:55.7921855Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; 1..234 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:01:03.398903Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; 235..457 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:01:12.8048209Z",
+      "Command": "$l=Get-Content -LiteralPath \"src/QBrainAi.Services/Services/SessionLogService.cs\"; 596..955 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:01:12.8637313Z",
+      "Command": "$l=Get-Content -LiteralPath \"src/QBrainAi.Support.Mcp/Controllers/SessionLogController.cs\"; 282..575 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:01:23.9528437Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; 460..721 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:01:43.196988Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; 721..1008 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:01:52.623183Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; 1009..1337 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:02:03.2619255Z",
+      "Command": "Get-Content -LiteralPath \"src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs\" -Raw",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:02:03.2811509Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; 1338..1567 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:02:14.5829193Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; 1568..1784 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }; $s=Get-Content -LiteralPath \"src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs\"; 385..435 | ForEach-Object { \"{0}: {1}\" -f $_,$s[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:02:27.0218404Z",
+      "Command": "rg -n \"listFr|listTr|listTest|getFr|getTr|getTest|queryHistory|querySessions\" \"$env:CODEX_PLUGIN_ROOT/skills/requirements/SKILL.md\" \"$env:CODEX_PLUGIN_ROOT/skills/session/SKILL.md\"; $a=Get-Content \"docs/receipts/hv/20261012T034439Z-approved-todo.json\" -Raw | ConvertFrom-Json; $a | ConvertTo-Json -Depth 2 | Select-Object -First 1",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:02:37.803276Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 256..299 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }; $s=Get-Content -LiteralPath \"$env:CODEX_PLUGIN_ROOT/skills/requirements/SKILL.md\"; 101..154 + 253..276 + 310..330 | ForEach-Object {$s[$_-1]}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:02:59.3157152Z",
+      "Command": "Import-Module powershell-yaml; foreach($kind in @(\"Fr\",\"Tr\",\"Test\")) { $raw=& \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method (\"workflow.requirements.list\"+$kind) -ParamsObject @{}; $obj=ConvertFrom-Yaml -Yaml ($raw -join \"`n\"); $obj | ConvertTo-Json -Depth 80 | Set-Content -LiteralPath (\"docs/receipts/hv/20261012T034439Z-live-requirements-\"+$kind.ToLowerInvariant()+\".json\") -Encoding utf8; [pscustomobject]@{Kind=$kind;Count=$obj.payload.result.totalCount;Items=@($obj.payload.result.items).Count;EnvelopeType=$obj.type} | ConvertTo-Json -Compress }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:03:18.4507883Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 300..356 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:03:42.0638421Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 357..412 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:03:48.7061752Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 413..427 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:04:05.6315937Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 428..449 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:04:12.3006379Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 450..481 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:04:17.9898131Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 482..493 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:04:39.716992Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 494..530 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:05:04.8275498Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 531..566 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:05:13.4129409Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 567..610 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:05:45.7850257Z",
+      "Command": "rg -n \"^#{1,4} \" docs/Stateless-Agent-Context-Management.md; rg -n \"class|record|ICommand|SendAsync|QueryAsync|AddCqrsHandlers\" src/QBrainAi.Cqrs/Abstractions/*.cs",
+      "ExitCode": 2,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:05:45.8044947Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; $ids=@(); foreach($line in $l[255..440]){ if($line -match \"^(?:- )?((?:FR|TR)-[A-Z0-9-]+-\\d{3})\\b\"){$ids+=$Matches[1]} }; foreach($line in $l[481..503]){if($line -match \"^- (TEST-[A-Z0-9-]+-\\d{3})\\b\"){$ids+=$Matches[1]}}; foreach($kind in @(\"FR\",\"TR\",\"TEST\")){1..9|ForEach-Object{$ids+=(\"{0}-MCP-AGENTCONTEXT-{1:D3}\" -f $kind,$_)} };11..14|ForEach-Object{$ids+=(\"TR-MCP-NUKE-{0:D3}\" -f $_)}; $live=@();foreach($kind in @(\"fr\",\"tr\",\"test\")){$d=Get-Content (\"docs/receipts/hv/20261012T034439Z-live-requirements-\"+$kind+\".json\") -Raw | ConvertFrom-Json; $live+=@($d.payload.result.items).id };[pscustomobject]@{ProposedIds=($ids|Sort-Object -Unique);ProposedCount=@($ids|Sort-Object -Unique).Count;Conflicts=@($ids|Where-Object{$_ -in $live}|Sort-Object -Unique);LiveCount=$live.Count} | ConvertTo-Json -Depth 6",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:05:45.7695405Z",
+      "Command": "$doc=\"docs/Stateless-Agent-Context-Management.md\"; foreach($c in @(\"99da6af8\",\"51d2482e\",\"63d4743d\",\"33a5a954\",\"a8d3934b\")) { git show --format=\"%H %P %s\" --name-only $c }; git rev-parse (\"HEAD:\"+$doc) (\"origin/develop:\"+$doc); git ls-remote origin refs/heads/develop; git worktree list --porcelain; git reflog show origin/develop -8 --format=\"%H %gs\"",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:06:05.2421345Z",
+      "Command": "$a=Get-Content \"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\" -Raw; $s=Get-Content \"docs/Stateless-Agent-Context-Management.md\" -Raw; $aa=$a.Substring($a.IndexOf(\"## 6. Phase C:\")); $aa=$aa.Substring(0,$aa.IndexOf(\"## 7.\"));$ss=$s.Substring($s.IndexOf(\"## 6. Phase C:\"));$ss=$ss.Substring(0,$ss.IndexOf(\"## 7.\")); [pscustomobject]@{Section6ByteEqual=[string]::Equals($aa,$ss,[System.StringComparison]::Ordinal);ArchitectureChars=$aa.Length;StatelessChars=$ss.Length;ArchitecturalMermaidCount=[regex]::Matches($a,\"(?m)^```mermaid\").Count} | ConvertTo-Json; rg --files src/QBrainAi.Cqrs; rg -n \"class .*Tests|\\[Fact\\]|SessionLog(Open|Complete|Fail|Query|Submit)|UpsertTurnAsync|ReplaceTurnAsync\" tests/QBrainAi.Support.Mcp.Tests/McpStdio/FwhMcpToolsSessionLogTests.cs; rg -n \"ValidatePluginPowerShellOnly|EnumerateFiles|lib-node|lib-sh\" build/Build.SyncAgentPlugins.cs; Get-Content \"plugins/core/lib-ps/plugin-hook.ps1\" -TotalCount 75; Get-Content \"plugins/core/lib-ps/Invoke-McpPlugin.ps1\" -TotalCount 100",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:06:27.4367505Z",
+      "Command": "$l=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 611..637 | ForEach-Object { \"{0}: {1}\" -f $_,$l[$_-1] }; Get-Content \"src/QBrainAi.Cqrs/IDispatcher.cs\" -Raw; Get-Content \"src/QBrainAi.Cqrs/Result.cs\" -TotalCount 100; rg --files tests/QBrainAi.Support.Mcp.Tests | rg \"SessionLog.*Tool|FwhMcp\"; rg -n \"MCP_PLUGIN_HOST|HostName|hostName|cline|opencode\" plugins/core/lib-ps/plugin-env.ps1",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:06:58.3140338Z",
+      "Command": "$l=Get-Content \"/home/sharpninja/github/mcpserver-opencode-plugin/src/plugin.ts\"; 135..280 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}; rg --files /home/sharpninja/github/mcpserver-opencode-plugin/node_modules/@opencode-ai/plugin",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:06:58.3978806Z",
+      "Command": "Get-Content \"tests/QBrainAi.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs\" -Raw; $l=Get-Content \"build/Build.SyncAgentPlugins.cs\"; 64..95 + 406..442 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}; Get-Content \"plugins/core/lib-ps/plugin-env.ps1\" -TotalCount 96; rg -n \"plugin-env|MCP_PLUGIN_HOST|PLUGIN_AGENT_DEFAULT|PLUGIN_AGENT_NAME|ArgumentList|Arguments|repl-invoke\" plugins/core/lib-ps/Invoke-McpPlugin.ps1 plugins/core/lib-ps/McpPluginShim.psm1",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:07:07.5601264Z",
+      "Command": "$l=Get-Content \"plugins/core/lib-ps/Invoke-McpPlugin.ps1\"; 145..264 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}; rg --files --no-ignore /home/sharpninja/github/mcpserver-opencode-plugin/node_modules/@opencode-ai/plugin | Select-Object -First 30; Get-Content \"/home/sharpninja/github/mcpserver-opencode-plugin/node_modules/@opencode-ai/plugin/package.json\" -Raw; $l=Get-Content \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 638..676 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:07:26.9523424Z",
+      "Command": "$l=Get-Content \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 677..703 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}; $l=Get-Content \"/home/sharpninja/github/mcpserver-opencode-plugin/node_modules/@opencode-ai/plugin/dist/index.d.ts\"; 1..75 + 182..345 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:07:52.4228656Z",
+      "Command": "$l=Get-Content \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 704..721 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}; $l=Get-Content \"/home/sharpninja/github/mcpserver-opencode-plugin/node_modules/@opencode-ai/plugin/dist/index.d.ts\"; 171..185 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:08:05.1765554Z",
+      "Command": "$l=Get-Content \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 722..728 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:08:18.863547Z",
+      "Command": "& \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.appendActions -ParamsObject @{actions=@(@{order=2;type=\"web_reference\";status=\"completed\";description=\"OpenCode official plugin documentation, https://opencode.ai/docs/plugins/ : confirms session.idle is handled inside the event callback and shell.env uses an output object. Cross-checked installed @opencode-ai/plugin 1.15.10 Hooks declarations and plugin source. Used for the PowerShell adapter contract review.\";filePath=\"https://opencode.ai/docs/plugins/\"})}; & \"$env:CODEX_PLUGIN_ROOT/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.updateTurn -ParamsObject @{contextList=@(\"https://opencode.ai/docs/plugins/\",\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\",\"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\",\"docs/Stateless-Agent-Context-Management.md\") }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:08:49.8483881Z",
+      "Command": "$l=Get-Content \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; 729..741 | ForEach-Object {\"{0}: {1}\" -f $_,$l[$_-1]}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:13:15.9445415Z",
+      "Command": "$p=\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; $a=Get-Content -LiteralPath $p; for($i=741;$i -lt $a.Count;$i++){ \"{0}:{1}\" -f ($i+1),$a[$i] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:13:24.5563848Z",
+      "Command": "$p=\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; $a=Get-Content -LiteralPath $p; for($i=751;$i -lt 781;$i++){ \"{0}:{1}\" -f ($i+1),$a[$i] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:13:24.5714206Z",
+      "Command": "$p=\"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; $a=Get-Content -LiteralPath $p; $n=($a | Select-String \"^## 7\" | Select-Object -First 1).LineNumber; for($i=$n-1;$i -lt $a.Count;$i++){ \"{0}:{1}\" -f ($i+1),$a[$i] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:13:31.6311241Z",
+      "Command": "$p=\"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; $a=Get-Content -LiteralPath $p; for($i=($a | Select-String \"^## 7\" | Select-Object -First 1).LineNumber-1;$i -lt 3856;$i++){ \"{0}:{1}\" -f ($i+1),$a[$i] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:13:47.6180184Z",
+      "Command": "$files=@(@{Path=\"src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs\";Ranges=@(@(25,115),@(280,395))},@{Path=\"src/QBrainAi.Services/Services/SessionLogService.cs\";Ranges=@(@(115,272),@(400,580),@(1325,1357),@(1585,1640))}); foreach($f in $files){ $a=Get-Content -LiteralPath $f.Path; foreach($r in $f.Ranges){ for($i=$r[0]-1;$i -lt $r[1];$i++){ \"{0}:{1}:{2}\" -f $f.Path,($i+1),$a[$i] } } }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:13:55.9432909Z",
+      "Command": "$p=\"src/QBrainAi.Services/Services/SessionLogService.cs\"; $a=Get-Content -LiteralPath $p; foreach($r in @(@(119,272),@(405,467))){ for($i=$r[0]-1;$i -lt $r[1];$i++){ \"{0}:{1}\" -f ($i+1),$a[$i] } }; $p=\"src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs\"; $a=Get-Content -LiteralPath $p; for($i=348;$i -lt 384;$i++){ \"{0}:{1}\" -f ($i+1),$a[$i] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:14:06.4608338Z",
+      "Command": "$p=\"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"; $a=Get-Content -LiteralPath $p; foreach($r in @(@(313,460),@(1191,1212),@(1450,1510),@(1765,1781))){ for($i=$r[0]-1;$i -lt $r[1];$i++){ \"{0}:{1}\" -f ($i+1),$a[$i] } }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:14:42.2418864Z",
+      "Command": "$old=Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-approved-todo.json\" -Raw | ConvertFrom-Json -Depth 100; $old.payload.result.PSObject.Properties.Name; $base=[string]$old.payload.result.description; $current=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\" -Raw; \"APPROVED_LENGTH=$($base.Length)\"; $tagMatches=[regex]::Matches($base,\"(?s).{0,240}(?:\\+A8|\\+S9).{0,300}\"); \"MATCH_COUNT=$($tagMatches.Count)\"; foreach($m in $tagMatches){ $m.Value }; \"RENAMED_OR_REMOVED_CASES\"; $oldCases=[regex]::Matches($base,\"\\b[A-Z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)+\\b\") | ForEach-Object { $_.Value } | Sort-Object -Unique; foreach($c in $oldCases){ if(-not $current.Contains($c)){ $c } }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:14:57.6383368Z",
+      "Command": "$old=Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-approved-todo.json\" -Raw | ConvertFrom-Json -Depth 100; $base=[string]$old.payload.result.description; $current=Get-Content -LiteralPath \"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\" -Raw; $oldCases=[regex]::Matches($base,\"\\b[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)+\\b\") | ForEach-Object { $_.Value } | Sort-Object -Unique; foreach($c in $oldCases){ if(-not $current.Contains($c)){ $c } }; \"REMOVED_ALLOCATION_IDS\"; $acMatches=[regex]::Matches($base,\"(?s)(FR-MCP-[A-Z0-9-]+-AC\\d{3})\\s+(.*?)(?=\\s+- FR-MCP-|\\s+FR-MCP-|###|$)\"); foreach($m in $acMatches){ if($m.Value -match \"\\+A8|\\+S9\"){ $id=$m.Groups[1].Value; \"{0} : preserved={1}\" -f $id,$current.Contains($id) } }; rg -n \"NodeStopEquivalent|TsHost_StopEquivalent|nodeHookAuthored|twoHostSessions|rootIds every|TsHost_.*Evidence|HookAuthoredWrites|HostSession.*NeverRetargets\" docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:15:38.0045978Z",
+      "Command": "rg -n \"Required Usage|PowerShell|^8\\.|\\.ps1|PS Analyzer\" CLAUDE.md; rg -n \"SPDX|GitHub Actions|Azure Pipelines|gpt-6-sol|gpt-6-astra|time.?bound|time limit|timeout|Opus|one complete|sh -c|bash|npm test|Jest|jest\" docs/Stateless-Agent-Context-Management.md docs/architecture/SessionTurn-Review-AgentContext-Architecture.md; git diff c681112d..HEAD --check; $paths=@(\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\",\"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\",\"docs/Stateless-Agent-Context-Management.md\"); foreach($p in $paths){ $t=Get-Content -LiteralPath $p -Raw; \"{0}: enEmDash={1}; spdx={2}\" -f $p,([regex]::Matches($t,\"[\\u2013\\u2014]\").Count),$t.Contains(\"SPDX-License-Identifier: Apache-2.0\") }; $keys=@(); foreach($m in @(\"/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml\",\"AGENTS-README-FIRST.yaml\")){ Import-Module powershell-yaml; $doc=ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath $m -Raw); $keys+= $doc.apiKey; $keys+= $doc.api_key }; $diff=git diff c681112d..HEAD; $allText=($paths | ForEach-Object{Get-Content -LiteralPath $_ -Raw}) -join [Environment]::NewLine; $allText += [Environment]::NewLine + ($diff -join [Environment]::NewLine); foreach($key in $keys | Where-Object{$_ -and $_.Length -ge 20} | Sort-Object -Unique){ \"KnownMarkerKeyPresent=$($allText.Contains($key))\" }; \"GenericKeyValueMatches=$([regex]::Matches($allText,'(?i)(?:apiKey|api_key|X-Api-Key)\\s*[\"'':=]+\\s*[\"'']?([a-z0-9+/=_-]{20,})').Count)\"",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:16:03.6634328Z",
+      "Command": "$r=Get-Content -LiteralPath \"docs/receipts/hv/hostile-validator-plan-readiness-merged-r3-20261012T015245Z.json\" -Raw | ConvertFrom-Json -Depth 100; $r.PSObject.Properties.Name; $r.Findings | ConvertTo-Json -Depth 15; rg -n \"R2-F2|R2-F6|R2-F11|F8\" docs/receipts/hv/hostile-validator-plan-readiness-merged-r3-20261012T015245Z.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:16:13.6691982Z",
+      "Command": "$p=\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; $a=Get-Content -LiteralPath $p; foreach($n in @(445,446,482,483,485,486,531,532,533,534,535,536,537,538,539,540,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,671)){ \"{0}:{1}\" -f $n,$a[$n-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:16:25.3245785Z",
+      "Command": "$r=Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-live-requirements-test.json\" -Raw | ConvertFrom-Json -Depth 100; $r.PSObject.Properties.Name; $r.payload.result.PSObject.Properties.Name; $r.payload.result | ConvertTo-Json -Depth 4 | Select-Object -First 1",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:16:33.9085823Z",
+      "Command": "$r=Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-live-requirements-test.json\" -Raw | ConvertFrom-Json -Depth 100; $r.payload.result.items | Where-Object { $_.id -in @(\"TEST-MCP-SESSIONLIFE-001\",\"TEST-MCP-SESSIONLIFE-002\",\"TEST-MCP-SESSIONLIFE-003\") -or ($_.description -match \"FR-MCP-SESSIONLIFE-001-AC002|TR-MCP-SESSIONLIFE-002-AC002\") } | ConvertTo-Json -Depth 10",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:16:46.8223505Z",
+      "Command": "$checks=@(@{Path=\"src/QBrainAi.Repl.Core/GenericClientPassthrough.cs\";Start=640;End=711},@{Path=\"src/QBrainAi.GraphRag/Services/GraphRagService.cs\";Start=342;End=385},@{Path=\"src/QBrainAi.Storage/McpDbContext.cs\";Start=285;End=315},@{Path=\"build/Build.SyncAgentPlugins.cs\";Start=401;End=437},@{Path=\"plugins/core/lib-ps/plugin-hook.ps1\";Start=1;End=23},@{Path=\"plugins/core/lib-ps/Invoke-McpPlugin.ps1\";Start=1;End=48});foreach($c in $checks){$a=Get-Content -LiteralPath $c.Path;for($i=$c.Start-1;$i -lt $c.End;$i++){\"{0}:{1}:{2}\" -f $c.Path,($i+1),$a[$i]}}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:16:55.9800844Z",
+      "Command": "$p=\"docs/Stateless-Agent-Context-Management.md\"; $a=Get-Content -LiteralPath $p; foreach($r in @(@(82,96),@(118,145),@(314,363),@(432,464),@(504,537))){for($i=$r[0]-1;$i -lt $r[1];$i++){\"{0}:{1}\" -f ($i+1),$a[$i]}}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:17:17.9204009Z",
+      "Command": "$p=\"docs/Stateless-Agent-Context-Management.md\"; $a=Get-Content -LiteralPath $p; foreach($r in @(@(152,175),@(464,503),@(660,690),@(853,881),@(1262,1317))){for($i=$r[0]-1;$i -lt $r[1];$i++){\"{0}:{1}\" -f ($i+1),$a[$i]}}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:17:34.3093089Z",
+      "Command": "$p=\"docs/Stateless-Agent-Context-Management.md\"; $a=Get-Content -LiteralPath $p; foreach($n in @(51,52,249,254,280,285,294,538,539,540,541,542,543,544,545,546,547,550,551,610,614,615,618,619,620,624,627,636,640,645,651)){ \"{0}:{1}\" -f $n,$a[$n-1] }; $p=\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\";$a=Get-Content -LiteralPath $p;foreach($n in @(170,172,173,174,175,176,178,241,248,730)){ \"{0}:{1}\" -f $n,$a[$n-1] }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:17:45.4576303Z",
+      "Command": "$p=\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\"; $a=Get-Content -LiteralPath $p; foreach($r in @(@(213,231),@(493,497),@(669,675))){for($i=$r[0]-1;$i -lt $r[1];$i++){\"{0}:{1}\" -f ($i+1),$a[$i]}}; $p=\"/home/sharpninja/github/mcpserver-opencode-plugin/src/plugin.ts\";$a=Get-Content -LiteralPath $p;for($i=180;$i -lt 255;$i++){\"{0}:{1}:{2}\" -f $p,($i+1),$a[$i]}; $p=\"/home/sharpninja/github/mcpserver-opencode-plugin/node_modules/@opencode-ai/plugin/dist/index.d.ts\";$a=Get-Content -LiteralPath $p;for($i=168;$i -lt 186;$i++){\"{0}:{1}:{2}\" -f $p,($i+1),$a[$i]}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:17:57.7540127Z",
+      "Command": "Get-ChildItem -LiteralPath docs/receipts/hv -File | Where-Object Name -Like \"20261012T034439Z*\" | Select-Object Name,Length; Get-Content -LiteralPath docs/receipts/hv/20261012T034439Z-review-command.ps1 -Raw; $p=\"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\";$a=Get-Content -LiteralPath $p;foreach($r in @(@(490,525),@(650,710),@(1304,1333))){for($i=$r[0]-1;$i -lt $r[1];$i++){\"{0}:{1}\" -f ($i+1),$a[$i]}}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:18:19.2704153Z",
+      "Command": "& \"/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.119.0/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.appendDialog -ParamsObject @{dialogItems=@(@{timestamp=[DateTime]::UtcNow.ToString(\"o\");role=\"model\";category=\"decision\";content=\"Round 4 review decision: continue toward DISAGREE unless the current text resolves the verified counterexamples. Current contract evidence includes Overflow idempotency returning 200, stored server evidence hashes replacing claimed hashes before grading, unguarded HV-request creation versus rejection, trusted response reads without freshness evaluation, live MCP response-shape mismatches, OpenCode event registration mismatch, and Phase 2 stub/adoption gates. Alternatives considered: accepting general test promises as resolving contradictory executable branches; rejected because operator defines those as material plan-readiness defects. No product or plan changes are authorized. All fixes remain implementer edits unless later evidence requires an operator choice.\"})} -WorkspacePath $env:MCP_WORKSPACE_PATH -CacheRoot $env:MCP_CACHE_DIR_OVERRIDE; & \"/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.119.0/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method workflow.sessionlog.appendActions -ParamsObject @{actions=@(@{order=3;type=\"design_decision\";status=\"completed\";description=\"Independently re-attacked R3 findings and compared new single-turn/read architecture contracts with SessionLogController, FwhMcpTools.SessionLog, SessionLogService, real plugin entry points, OpenCode SDK, and GenericClientPassthrough. Rendered 126 Mermaid blocks successfully; syntax success does not establish branch fidelity. All five develop publication commits are single-file consecutive fast-forward ancestry; remote and branch stateless blobs match; 100 proposed requirement IDs absent from complete live lists.\";filePath=\"docs/architecture/SessionTurn-Review-AgentContext-Architecture.md\"})} -WorkspacePath $env:MCP_WORKSPACE_PATH -CacheRoot $env:MCP_CACHE_DIR_OVERRIDE",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:18:59.6042426Z",
+      "Command": "$p=\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\";$a=Get-Content -LiteralPath $p;foreach($n in @(6,7,8,81,84,88,90,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,423,435,438,440,441,442,443,616,632,638)){ \"{0}:{1}\" -f $n,$a[$n-1] }; rg -n \"RecordModelGrade|completed thread|resume|follow.up|resum|registration|diagrams|live contract\" docs/Stateless-Agent-Context-Management.md | Select-Object -First 45",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:19:33.465804Z",
+      "Command": "Get-Content -LiteralPath \"/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.119.0/skills/session/SKILL.md\" -Raw; $p=\"docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md\";$a=Get-Content -LiteralPath $p;foreach($n in @(3,4,73,74,75,76,77,85,86,87,128,273,275,298,435)){ \"{0}:{1}\" -f $n,$a[$n-1] }; rg -n \"sessionlog.queryHistory|completeTurn|GetContent|completeTurn.*ParamsObject|turns.*requestId\" \"/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.119.0/lib/repl-invoke.ps1\" | Select-Object -First 35",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:20:00.4445216Z",
+      "Command": "$r=Get-Content -LiteralPath \"docs/receipts/hv/hostile-validator-plan-readiness-merged-r2-20261012T004516Z.json\" -Raw | ConvertFrom-Json -Depth 100; $r.Findings | Where-Object Id -In @(\"R2-F2\",\"R2-F6\",\"R2-F11\") | ConvertTo-Json -Depth 15; $s=Get-Content -LiteralPath \"docs/receipts/hv/hostile-validator-plan-readiness-merged-r3-20261012T015245Z.json\" -Raw | ConvertFrom-Json -Depth 100; $s.RemovedHostTagAudit | ConvertTo-Json -Depth 10",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:20:17.7347742Z",
+      "Command": "rg -n \"SessionLogController|Submit_Returns|Query_Returns|Get.*Session\" tests/QBrainAi.Support.Mcp.Tests/Controllers/SessionLogControllerTests.cs tests/QBrainAi.Support.Mcp.Tests --glob \"*SessionLog*Tests.cs\" | Select-Object -First 50; foreach($p in @(\"/home/sharpninja/github/mcpserver-cline-plugin/package.json\",\"/home/sharpninja/github/mcpserver-cline-v2-plugin/package.json\",\"/home/sharpninja/github/mcpserver-opencode-plugin/package.json\")){ $j=Get-Content -LiteralPath $p -Raw | ConvertFrom-Json; [pscustomobject]@{path=$p;main=$j.main;scripts=$j.scripts;engines=$j.engines} | ConvertTo-Json -Depth 8 }; rg -n \"NOT APPROVED|IMPL-PLUGINCORENODE-001|single, complete|one complete|diagram per\" docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md | Select-Object -First 10",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:21:27.0817067Z",
+      "Command": "$p=\"tests/QBrainAi.Support.Mcp.Tests/Controllers/SessionLogControllerReceiptTests.cs\";$a=Get-Content -LiteralPath $p;foreach($r in @(@(20,48),@(80,105))){for($i=$r[0]-1;$i -lt $r[1];$i++){\"{0}:{1}:{2}\" -f $p,($i+1),$a[$i]}}; $p=\"docs/Stateless-Agent-Context-Management.md\";$a=Get-Content -LiteralPath $p;foreach($r in @(@(250,253),@(1187,1205),@(1564,1605))){for($i=$r[0]-1;$i -lt $r[1];$i++){\"{0}:{1}\" -f ($i+1),$a[$i]}}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:21:55.9634426Z",
+      "Command": "$profileFiles=Get-ChildItem -LiteralPath \"/home/sharpninja/.claude/profile\" -File -Filter \"*.md\" | Where-Object { $_.Name -notmatch \"(?i)skill\" } | Sort-Object Name; \"PROFILE_COUNT=$($profileFiles.Count)\"; $profileFiles | ForEach-Object { \"{0} {1}\" -f $_.Name,(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }; $roll=\"/home/sharpninja/.codex/sessions/2026/10/11/rollout-2026-10-11T22-44-39-01a12e36-65d8-7b01-b9fc-f99a9ce2ee7e.jsonl\"; $tc=@(Get-Content -LiteralPath $roll | ForEach-Object { $line=ConvertFrom-Json -InputObject $_ -Depth 100; if($line.type -eq \"turn_context\"){ [pscustomobject]@{timestamp=$line.timestamp;model=$line.payload.model;effort=$line.payload.effort;cwd=$line.payload.cwd;turnId=$line.payload.turn_id} } }); $tc | ConvertTo-Json -Depth 5; Import-Module powershell-yaml; $mem=ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Raw); $mem.payload.result.items | ForEach-Object { [pscustomobject]@{id=$_.id;version=$_.version;characters=$_.content.Length;properties=($_.PSObject.Properties.Name -join \",\")} } | ConvertTo-Json -Depth 4",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:22:03.1461964Z",
+      "Command": "Import-Module powershell-yaml; $mem=ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath \"docs/receipts/hv/20261012T034439Z-memory-read.json\" -Raw); $mem.payload.result.items[0].Keys; $mem.payload.result.items[0] | ConvertTo-Json -Depth 6; $c=$mem.payload.result.items | Where-Object id -eq \"MEMORY-PROCESS-007\"; $c.Keys",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:28:43.7582807Z",
+      "Command": "$p=\"docs/receipts/hv/20261012T034439Z-write-review.ps1\"; $tokens=$null; $errors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path -LiteralPath $p).Path,[ref]$tokens,[ref]$errors); $issues=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error); [pscustomobject]@{ParserErrors=@($errors).Count;AnalyzerVersion=(Get-Module PSScriptAnalyzer).Version.ToString();AnalyzerFindings=$issues.Count} | ConvertTo-Json; if($errors.Count -gt 0){$errors | Format-List;throw \"Parser failed\"}; if($issues.Count -gt 0){$issues | Format-List;throw \"Analyzer failed\"}; & $p -WhatIf; rg -n \"QueryAsync|SessionLogQueryRequest\" src/QBrainAi.Client/SessionLogClient.cs | Select-Object -First 8",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:28:55.6347827Z",
+      "Command": "& \"docs/receipts/hv/20261012T034439Z-write-review.ps1\"; $r=Get-Content -LiteralPath \"docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json\" -Raw | ConvertFrom-Json -Depth 100; [pscustomobject]@{ClaimCount=$r.Claims.Count;PassCount=$r.PassCount;FailCount=$r.FailCount;Findings=$r.Findings.Count;ReceiptPaths=$r.ReceiptPaths;Cli=$r.ValidatorIdentity.CliVersion;Profiles=$r.AddProfile.Count;Memories=$r.McpMemory.Count;Commands=$r.Commands.Count} | ConvertTo-Json -Depth 6",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:29:33.6540312Z",
+      "Command": "$p=\"docs/receipts/hv/20261012T034439Z-write-review.ps1\";$tok=$null;$err=$null;$null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path -LiteralPath $p).Path,[ref]$tok,[ref]$err);$issues=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);if($err.Count -or $issues.Count){throw \"Review writer parser/analyzer failed\"};& $p; $j=Get-Content -LiteralPath \"docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json\" -Raw | ConvertFrom-Json -Depth 100; $j.VerdictJson | ConvertTo-Json -Depth 10; git rev-parse HEAD; git ls-remote origin refs/heads/develop; git diff --stat; git diff --numstat -- docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md docs/architecture/SessionTurn-Review-AgentContext-Architecture.md docs/Stateless-Agent-Context-Management.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:32:03.95203Z",
+      "Command": "Import-Module powershell-yaml; $keys=@();foreach($p in @(\"/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml\",\"AGENTS-README-FIRST.yaml\")){$k=ConvertFrom-Yaml -Yaml (Get-Content -LiteralPath $p -Raw);$keys+= $k.apiKey}; $files=@(Get-ChildItem -LiteralPath docs/receipts/hv -File | Where-Object { $_.Name -like \"*20261012T034439Z*\" -and $_.Extension -in @(\".md\",\".json\",\".jsonl\",\".ps1\") }); foreach($f in $files){$t=[IO.File]::ReadAllText($f.FullName);$n=0;foreach($key in $keys | Where-Object{$_} | Sort-Object -Unique){$n += [regex]::Matches($t,[regex]::Escape($key)).Count}; [pscustomobject]@{File=$f.Name;KnownKeyMatches=$n;Bytes=$f.Length} | ConvertTo-Json -Compress}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:32:30.5073794Z",
+      "Command": "$raw=& \"/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.119.0/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method client.SessionLog.QueryAsync -ParamsObject @{request=@{agent=\"Codex\";text=\"20261012T034439Z\";limit=100;offset=0}} -WorkspacePath $env:MCP_WORKSPACE_PATH -CacheRoot $env:MCP_CACHE_DIR_OVERRIDE | Out-String; Import-Module powershell-yaml; $r=ConvertFrom-Yaml -Yaml $raw; [pscustomobject]@{Type=$r.type;ResultKeys=@($r.payload.result.Keys);Count=$r.payload.result.totalCount;Sessions=@($r.payload.result.items | ForEach-Object{[pscustomobject]@{sessionId=$_.sessionId;turnCount=$_.turns.Count;turnIds=@($_.turns | ForEach-Object requestId)}})} | ConvertTo-Json -Depth 8",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:32:56.2278377Z",
+      "Command": "$p=\"src/QBrainAi.Client/SessionLogClient.cs\";$a=Get-Content -LiteralPath $p;for($i=36;$i -lt 78;$i++){\"{0}:{1}\" -f ($i+1),$a[$i]}; $raw=& \"/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.119.0/Invoke-CodexMcpPlugin.ps1\" -Command Invoke -Method client.SessionLog.QueryAsync -ParamsObject @{agent=\"Codex\";text=\"20261012T034439Z\";limit=5;offset=0} -WorkspacePath $env:MCP_WORKSPACE_PATH -CacheRoot $env:MCP_CACHE_DIR_OVERRIDE | Out-String;Import-Module powershell-yaml;$r=ConvertFrom-Yaml -Yaml $raw;$s=$r.payload.result.items | Where-Object sessionId -eq \"Codex-20261012T034800Z-hv-plan-readiness-r4\";[pscustomobject]@{Count=$r.payload.result.totalCount;Limit=$r.payload.result.limit;OwnSessionFound=[bool]$s;OwnTurnStatus=$s.turns[0].status;OwnTurnKeys=@($s.turns[0].Keys)} | ConvertTo-Json -Depth 5",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:34:31.1503888Z",
+      "Command": "$p=\"docs/receipts/hv/20261012T034439Z-finalize-review.ps1\";$tok=$null;$err=$null;$null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path -LiteralPath $p).Path,[ref]$tok,[ref]$err);$issues=@(Invoke-ScriptAnalyzer -Path $p -Severity Warning,Error);[pscustomobject]@{ParserErrors=$err.Count;AnalyzerFindings=$issues.Count;AnalyzerVersion=(Get-Module PSScriptAnalyzer).Version.ToString()}|ConvertTo-Json;if($err.Count){$err|Format-List;throw \"Parser failed\"};if($issues.Count){$issues|Format-List;throw \"Analyzer failed\"};& $p -Stage Protect -WhatIf; & $p -Stage Persist -WhatIf; & $p -Stage Complete -WhatIf",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-12T04:34:57.8203456Z",
+      "Command": "& \"docs/receipts/hv/20261012T034439Z-finalize-review.ps1\" -Stage Protect; $p=\"docs/receipts/hv/20261012T034439Z-plan-readiness-merged-r4.response.jsonl\";$text=[IO.File]::ReadAllText((Resolve-Path -LiteralPath $p).Path);$lines=$text.Split([char]10);$valid=0;$invalid=0;for($i=0;$i -lt $lines.Count-1;$i++){if($lines[$i].Trim()) {try{$null=ConvertFrom-Json -InputObject $lines[$i] -Depth 100;$valid++}catch{$invalid++}}};[pscustomobject]@{CompletedJsonlLinesValid=$valid;CompletedJsonlLinesInvalid=$invalid;NullCharacters=[regex]::Matches($text,[string][char]0).Count;ActiveFinalLineMayBeIncomplete=$true}|ConvertTo-Json;if($invalid -gt 0){throw \"Active stream completed line invalid after redaction\"}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    }
+  ],
+  "CommandEvidence": "docs/receipts/hv/20261012T034439Z-review-commands.jsonl",
+  "CommandNotes": [
+    "The command ledger records exact checked PowerShell script text and outer exit codes; embedded command failures are retained in its output, and outer success is not represented as proof that every embedded command succeeded.",
+    "Exploratory corrections: initial wrapper bootstrap/first turn attempt failed before isolated-cache/failsafe setup; corrected bootstrap and turn persisted. One appendDialog used the wrong parameter shape and was corrected. A PowerShell parser error and a PSScriptAnalyzer automatic-variable warning stopped exploratory scripts before execution; corrected versions passed. Some exploratory rg paths did not exist (rg error 2), followed by verified file discovery. A broad requirement-output inspection was accidentally verbose; subsequent query was filtered.",
+    "The independent Mermaid CLI was invoked from PowerShell under the explicit user exception. No authored JavaScript, Bash or Python script was run.",
+    "Final receipt creation, persistence and redaction commands append to the same ledger after this snapshot; see finalization proof sidecar and runner stream for their outputs."
+  ],
+  "ReviewerSessionId": "Codex-20261012T034800Z-hv-plan-readiness-r4",
+  "ReviewerRequestId": "req-20261012T034439Z-hv-merged-r4",
+  "RequestJsonl": "docs/receipts/hv/20261012T034439Z-plan-readiness-merged-r4.request.jsonl",
+  "ResponseJsonl": "docs/receipts/hv/20261012T034439Z-plan-readiness-merged-r4.response.jsonl",
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json"
+  ],
+  "McpPersistence": {
+    "TargetAgent": "Codex",
+    "SessionId": "Codex-20261012T034800Z-hv-plan-readiness-r4",
+    "RequestId": "req-20261012T034439Z-hv-merged-r4",
+    "InitialBeginAndProgressPersisted": true,
+    "EntireResult": "The entire markdown receipt is persisted on this reviewer turn and read back before completion; the finalization proof records exact hashes and completed status.",
+    "ProofPath": "docs/receipts/hv/20261012T034439Z-persistence-proof.json"
+  },
+  "Redaction": "Every known current marker key and every long apiKey/api_key/X-Api-Key value is replaced with [REDACTED:api-key]. Six occurrences from the early mandatory marker reads were removed from the active runner stream. For that open stream only, the replacement is space-padded within the original secret span to preserve the runner file offsets; no non-secret byte is changed. Completed JSONL lines remain valid and no NUL byte was introduced. The runner must preserve redaction when freezing its completed stream/rollout.",
+  "VerdictJson": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 92,
+    "completeness": 90,
+    "confidence": 98,
+    "passCount": 3,
+    "failCount": 9,
+    "unknownCount": 0,
+    "failList": [
+      "R3",
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5",
+      "M6",
+      "M9",
+      "M11"
+    ],
+    "unknownList": [],
+    "implementerFixes": [
+      "R4-F1",
+      "R4-F2",
+      "R4-F3",
+      "R4-F4",
+      "R4-F5",
+      "R4-F6",
+      "R4-F7",
+      "R4-F8",
+      "R4-F9",
+      "R4-F10",
+      "R4-F11",
+      "R4-F12",
+      "R4-F13",
+      "R4-F14"
+    ],
+    "operatorDecisionFails": [],
+    "headSha": "845a87dfeb05ac2f1acfdf0596a3a5e0dc32326b",
+    "receiptPaths": [
+      "docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.md",
+      "docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json"
+    ],
+    "reviewerSessionId": "Codex-20261012T034800Z-hv-plan-readiness-r4",
+    "reviewerRequestId": "req-20261012T034439Z-hv-merged-r4"
+  }
+}

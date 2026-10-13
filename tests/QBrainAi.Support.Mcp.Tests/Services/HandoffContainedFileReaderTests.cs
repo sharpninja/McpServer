@@ -68,7 +68,11 @@ public sealed class HandoffContainedFileReaderTests
             HandoffContainedFileReader.ReadBoundedAsync(stream, cts.Token));
     }
 
-    /// <summary>P1-6 / P2-1: the reader opens with a share mode that blocks writes and deletes.</summary>
+    /// <summary>
+    /// P1-6 / P2-1: the reader opens with FileShare.Read, as HandoffContainedFileReader does. On Windows that share mode blocks
+    /// writes and deletes while the reader holds the file. Linux and macOS have no mandatory share modes (BUG-BASELINE-004), so
+    /// there a concurrent delete succeeds and the held handle keeps reading the original bytes.
+    /// </summary>
     [Fact]
     public async Task ReadAsync_OpenShare_BlocksWritesAndDeletes()
     {
@@ -79,8 +83,18 @@ public sealed class HandoffContainedFileReaderTests
         try
         {
             await using var held = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous);
-            Assert.ThrowsAny<IOException>(() => new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite));
-            Assert.ThrowsAny<IOException>(() => File.Delete(path));
+            if (OperatingSystem.IsWindows())
+            {
+                Assert.ThrowsAny<IOException>(() => new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite));
+                Assert.ThrowsAny<IOException>(() => File.Delete(path));
+            }
+            else
+            {
+                File.Delete(path);
+                Assert.False(File.Exists(path));
+                using var reader = new StreamReader(held, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
+                Assert.Equal("handoff", await reader.ReadToEndAsync(TestContext.Current.CancellationToken));
+            }
         }
         finally
         {

@@ -48,6 +48,47 @@ public sealed class ConfigValidatorTests
         Assert.Equal("todo.db", instances["alt-local"].SqliteDataSource);
     }
 
+    /// <summary>
+    /// TR-MCP-NUKE-008 AC-001 (BUG-BUILD-005): instances under the canonical QBrainAi: root parse like those under the legacy Mcp:
+    /// root; the live appsettings.yaml uses QBrainAi: since the rename. Inline YAML; no fixture file.
+    /// </summary>
+    [Fact]
+    public void ParseInstances_QBrainAiRoot_ReturnsInstances()
+    {
+        string[] yaml = ["QBrainAi:", "  Instances:", "    default:", "      RepoRoot: .", "      Port: 7147"];
+
+        var instances = ConfigValidator.ParseInstances(yaml);
+
+        Assert.NotNull(instances);
+        Assert.Equal(7147, instances!["default"].Port);
+        Assert.Equal(".", instances["default"].RepoRoot);
+    }
+
+    /// <summary>
+    /// TR-MCP-NUKE-008 AC-003 (BUG-BUILD-005, HV round 1 finding F-B5): with both roots in one file, the canonical QBrainAi: root
+    /// wins per key whichever root comes first, as CanonicalSectionProjectionProvider does within a file layer; keys and instances
+    /// only under the legacy Mcp: root are kept; and a sibling key after one root's Instances block does not stop parsing of the
+    /// other root. Inline YAML in both orders; no fixture file.
+    /// </summary>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void ParseInstances_BothRoots_CanonicalWinsPerKeyInEitherOrder(bool canonicalFirst)
+    {
+        string[] canonical = ["QBrainAi:", "  Instances:", "    default:", "      RepoRoot: /canonical", "      Port: 7147", "  Federation:", "    Enabled: true"];
+        string[] legacy = ["Mcp:", "  Instances:", "    default:", "      RepoRoot: /legacy", "      Port: 7999", "      TodoStorage:", "        Provider: sqlite", "    alt-local:", "      RepoRoot: /alt", "      Port: 7148"];
+        string[] yaml = canonicalFirst ? [.. canonical, .. legacy] : [.. legacy, .. canonical];
+
+        var instances = ConfigValidator.ParseInstances(yaml);
+
+        Assert.NotNull(instances);
+        Assert.Equal(7147, instances!["default"].Port);
+        Assert.Equal("/canonical", instances["default"].RepoRoot);
+        Assert.Equal("sqlite", instances["default"].TodoProvider);
+        Assert.Equal(7148, instances["alt-local"].Port);
+        Assert.Equal("/alt", instances["alt-local"].RepoRoot);
+    }
+
     [Fact]
     public void ParseInstances_NoMcpSection_ReturnsNull()
     {
