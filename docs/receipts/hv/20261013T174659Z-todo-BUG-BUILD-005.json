@@ -1,0 +1,52 @@
+{
+  "type": "result",
+  "payload": {
+    "requestId": "req-20261013T181844Z-56e4",
+    "result": {
+      "technicalDetails": [],
+      "priority": "high",
+      "functionalRequirements": [
+        "FR-MCP-BUILD-001"
+      ],
+      "id": "BUG-BUILD-005",
+      "dependsOn": [],
+      "technicalRequirements": [
+        "TR-MCP-NUKE-008"
+      ],
+      "done": false,
+      "implementationTasks": [
+        {
+          "task": "Root cause: McpSectionRegex matched only ^Mcp: while the live appsettings root is QBrainAi: since the rename; TR-MCP-NUKE-008 created under FR-MCP-BUILD-001",
+          "done": true
+        },
+        {
+          "task": "RED: ParseInstances_QBrainAiRoot_ReturnsInstances and G8_ValidateConfig failed with Assert.NotNull (Failed 2, Passed 0, Skipped 0)",
+          "done": true
+        },
+        {
+          "task": "Fix (47b41d0d): QBrainAi or legacy Mcp root; Passed 14, Skipped 0; ./build.ps1 ValidateConfig succeeds (G5 unblocked)",
+          "done": true
+        },
+        {
+          "task": "Codex gpt-6-sol xhigh HV pass before done",
+          "done": false
+        },
+        {
+          "task": "HV round 1 finding F-B5 (DISAGREE, 2026-10-10): the later of QBrainAi: and Mcp: won. RED: ParseInstances_BothRoots_CanonicalWinsPerKeyInEitherOrder failed in both orders (Expected \"sqlite\", Actual null; Failed 2, Passed 13). Fix: parse each root separately, merge per key with QBrainAi winning, keep parsing after a sibling key; green Passed 15, Skipped 0. TR-MCP-NUKE-008 AC-003 added",
+          "done": true
+        }
+      ],
+      "section": "Build",
+      "title": "ConfigValidator parses the instances of the live appsettings.yaml",
+      "description": [
+        "DocsSyncG8OverlayTests.G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings fails at DocsSyncG8OverlayTests.cs:81 with Assert.NotNull() Failure: ConfigValidator.ParseInstances returns null for src/QBrainAi.Support.Mcp/appsettings.yaml.",
+        "Triage: triage-report-dbbbec24a03a4d70856cfe9c5fd7ab80 (Build.Tests rename leftovers).",
+        "Found 2026-10-10 by the full Build.Tests run (dotnet test tests/Build.Tests/Build.Tests.csproj -c Debug: Failed 5, Passed 347, Skipped 0, Total 352) in worktree .claude/worktrees/session-20261009 at a90e8b4c, Linux, SDK 10.0.201.",
+        "Classification: Build.Tests is the build-infrastructure suite, not application unit tests (operator ruling 2026-10-10T17:30:54Z: \"Build.Tests is infrastructure, not application and should not be treated as unit tests.\"), so this is a build-infrastructure defect, not a P0.1 unit-baseline failure; it is fixed before slice A1 all the same: the P0.1 receipt requires every baseline failure fixed before A1 (docs/receipts/p01-baselines-20261010T215349Z.md), and the approved order fixes the BUG-BUILD TODOs first (operator, 2026-10-10T20:22:06Z: \"Get it done\"). Accountability: through a TR only (operator ruling 2026-10-10T17:32:03Z: \"NUKE is only accountable through TR.\").",
+        "Fix by Byrd v4: root cause with evidence, a RED Build.Tests case that encodes the correct behavior (the existing failing case if it already does), the fix, green with zero skips and no new Build.Tests failure, then a Codex gpt-6-sol xhigh HV before done.",
+        "Root cause verified 2026-10-10 (read-only): src/QBrainAi.Support.Mcp/appsettings.yaml:46 is the QBrainAi: root and the file has no top-level Mcp: line, so ConfigValidator.ParseInstances returns null (build/ConfigValidator.cs:133, \"return hasMcp ? instances : null\") and Build.ValidateConfig throws \"Missing 'Mcp' section in config.\" (build/Build.ValidateConfig.cs:21-22). ./build.ps1 ValidateConfig therefore fails today, so G5 fails at P0.9. Gate impact: fix before P0.9 (G5) and before the first slice gate that runs the Build.Tests infrastructure step (A9). Found by the plan-amendment delta reviewer and confirmed by grep."
+      ]
+    },
+    "deprecated": true
+  }
+}

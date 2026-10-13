@@ -1,5 +1,7 @@
 # Handoff: Session-turn logging, request class, and turn reviews plan (APPROVED; amended 2026-10-10)
 
+> Superseded on 2026-10-13T16:55 local by `docs/handoffs/session-20261009-worktree-handoff-20261013T165506.md`. The merged plan (Phases A, B and C) is NOT APPROVED; this file remains the history of the pre-merge plan through 2026-10-10.
+
 **Active workstream handoff.** Prepared by ClaudeCode (Opus 5.5, effort xhigh) on 2026-10-09 UTC for Payton Byrd, after the operator declined plan approval and directed: "Write plan to high todo and create handoff (remove existing handoffs in worktree)".
 
 Copy everything below the line into the next agent.
@@ -325,4 +327,4 @@ Kept on purpose:
 - `docs/handoffs/example.md`: the handoff-ingestion worked sample, referenced by `docs/Handoff-Ingestion.md`, `docs/CLIENT-INTEGRATION.md`, the REPL guides, `plugins/core/skills/handoff/SKILL.md`, and `HandoffSkillDelegationTests.cs`.
 - `docs/Handoff-Ingestion.md` and its wiki copies: feature documentation, not handoffs.
 
-This file is the only active handoff for this workstream.
+This file was the only active handoff for this workstream until 2026-10-13; the active handoff is now `docs/handoffs/session-20261009-worktree-handoff-20261013T165506.md`.
