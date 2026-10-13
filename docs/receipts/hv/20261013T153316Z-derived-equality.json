@@ -1,0 +1,34 @@
+[
+  {
+    "Section": "3.5",
+    "Equal": true,
+    "ArchitectureChars": 42174,
+    "StatelessChars": 42174,
+    "ArchitectureSha256": "5581084e993eb5f3c3c9c7863c7735b40ad9ba98e9822967386a8ca0e61e04aa",
+    "StatelessSha256": "5581084e993eb5f3c3c9c7863c7735b40ad9ba98e9822967386a8ca0e61e04aa"
+  },
+  {
+    "Section": "6",
+    "Equal": true,
+    "ArchitectureChars": 311543,
+    "StatelessChars": 311543,
+    "ArchitectureSha256": "ded447714c7efb0b02de63a5720b0625d2b75a0e959e2a906cc247c6b5a7949c",
+    "StatelessSha256": "ded447714c7efb0b02de63a5720b0625d2b75a0e959e2a906cc247c6b5a7949c"
+  },
+  {
+    "Section": "7.11-7.16",
+    "Equal": true,
+    "ArchitectureChars": 17815,
+    "StatelessChars": 17815,
+    "ArchitectureSha256": "6a089992e38d611e7e899432397b847f863bccc71706ee5be70188db18bff378",
+    "StatelessSha256": "6a089992e38d611e7e899432397b847f863bccc71706ee5be70188db18bff378"
+  },
+  {
+    "Section": "8.1-8.6",
+    "Equal": true,
+    "ArchitectureChars": 45211,
+    "StatelessChars": 45211,
+    "ArchitectureSha256": "db09e4a83060e19817fd783d2039b7215d5ebd99d94ffa1ab4f1add60f852a3e",
+    "StatelessSha256": "db09e4a83060e19817fd783d2039b7215d5ebd99d94ffa1ab4f1add60f852a3e"
+  }
+]

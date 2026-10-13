@@ -1,0 +1,19 @@
+flowchart TD
+    S(["Next selected response"]) --> EV["Dispatch EvaluateStalenessCommand for this response through IDispatcher"]
+    EV -->|"409 conflict, retryable true"| X(["Stop the loop: the unit returns 409 conflict, retryable true"])
+    EV -->|"evaluated, status persisted"| TR{"Response Trusted?"}
+    TR -->|yes| PE{"GraphRAG enabled and ProjectionEnabled?"}
+    PE -->|"no: Skipped, projection_disabled or graphrag_disabled"| SV[["SerializableWrite, locking the response: re-read its status and row after any GraphRAG call, then save the row state, keeping an overlapping pass's document and deleting its own"]]
+    PE -->|yes| UP{"Projected content hash equals ContentSha256?"}
+    UP -->|yes| NX(["Continue with the next response"])
+    UP -->|no| ING["IGraphRagService.IngestTextAsync in GraphRagStorageScope.Workspace with the content and its root ids"]
+    TR -->|no| DOC{"Row holds a GraphRagDocumentId?"}
+    DOC -->|"no: Removed"| SV
+    DOC -->|yes| GE{"GraphRAG enabled?"}
+    GE -->|"no: the row stays Pending"| NX
+    GE -->|yes| DEL["IGraphRagService.DeleteDocumentAsync"]
+    ING -->|"ok: Projected, or Pending for removal with the new document id when the response left Trusted meanwhile. Error: Failed"| SV
+    DEL -->|"ok: Removed. Error: Failed, keeping the document id"| SV
+    SV -->|committed| NX
+    SV -->|retries exhausted| X
+

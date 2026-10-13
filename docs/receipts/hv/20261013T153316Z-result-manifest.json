@@ -1,0 +1,12 @@
+{
+  "ReviewResultSha256": "0f8a513cae4a7517b9fd7e6ca2ccb211497fbe98b38378ea44439e17a8d51140",
+  "Characters": 117374,
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-architecture-merged-r1-20261013T153316Z.md",
+    "docs/receipts/hv/hostile-validator-architecture-merged-r1-20261013T153316Z.json"
+  ],
+  "OverallVerdict": "DISAGREE",
+  "PassCount": 8,
+  "FailCount": 9,
+  "UnknownCount": 1
+}
