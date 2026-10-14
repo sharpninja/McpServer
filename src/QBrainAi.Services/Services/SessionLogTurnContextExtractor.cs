@@ -249,7 +249,7 @@ public sealed class SessionLogTurnContextExtractor
         var candidates = new List<string>();
         foreach (var context in turn.ContextItems)
             AddCandidate(candidates, context.ContextItem, userProfilePath);
-        foreach (var item in turn.StringListItems.Where(i => i.ListType == "FileModified"))
+        foreach (var item in turn.StringListItems.Where(i => i.ListType == SessionLogTurnStringListTypes.FileModified))
             AddCandidate(candidates, item.Value, userProfilePath);
         foreach (var action in turn.Actions)
             AddCandidate(candidates, action.FilePath, userProfilePath);

@@ -114,6 +114,14 @@ public sealed class TrEntry
     /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
     [JsonPropertyName("scopeEndLayerKey")]
     public string? ScopeEndLayerKey { get; set; }
+
+    /// <summary>Stored creation time of the requirement, or null when the server stores or sends none (triage-report-b72cfaf4).</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset? CreatedAtUtc { get; set; }
+
+    /// <summary>Stored last-update time of the requirement, or null when the server stores or sends none (triage-report-b72cfaf4).</summary>
+    [JsonPropertyName("updatedAtUtc")]
+    public DateTimeOffset? UpdatedAtUtc { get; set; }
 }
 
 /// <summary>A testing requirement entry.</summary>
@@ -158,6 +166,14 @@ public sealed class TestEntry
     /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
     [JsonPropertyName("scopeEndLayerKey")]
     public string? ScopeEndLayerKey { get; set; }
+
+    /// <summary>Stored creation time of the requirement, or null when the server stores or sends none (triage-report-b72cfaf4).</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset? CreatedAtUtc { get; set; }
+
+    /// <summary>Stored last-update time of the requirement, or null when the server stores or sends none (triage-report-b72cfaf4).</summary>
+    [JsonPropertyName("updatedAtUtc")]
+    public DateTimeOffset? UpdatedAtUtc { get; set; }
 }
 
 /// <summary>FR-MCP-REQSCOPE-001: requirement scope layer returned by layer catalog endpoints.</summary>

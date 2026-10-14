@@ -62,6 +62,40 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Contains(export.Files, file => file.RelativePath == "Requirements-Matrix.md");
     }
 
+    /// <summary>
+    /// B2 (triage-report-b72cfaf4, getTr and getTest): GetTr and GetTest return the CreatedAtUtc and UpdatedAtUtc stored on the
+    /// row, and a row that stores none returns null for both, never the time of the read. Data: in-memory SQLite; a TR and a TEST
+    /// row whose stored timestamps are set to 2026-10-10T01:02:03Z and 2026-10-11T04:05:06Z, then the TR row's set to empty.
+    /// </summary>
+    [Fact]
+    public async Task GetById_ReturnsTheStoredTimestamps()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("b2-timestamps"));
+        var service = fixture.CreateService();
+        await service.AddTrAsync(new TrEntry("TR-MCP-902", "TR", "TR body"), ct: ct);
+        await service.AddTestAsync(new TestEntry("TEST-MCP-902", "Test body"), ct: ct);
+        var created = new DateTimeOffset(2026, 10, 10, 1, 2, 3, TimeSpan.Zero);
+        var updated = new DateTimeOffset(2026, 10, 11, 4, 5, 6, TimeSpan.Zero);
+        var createdText = created.ToString("O", System.Globalization.CultureInfo.InvariantCulture);
+        var updatedText = updated.ToString("O", System.Globalization.CultureInfo.InvariantCulture);
+        await fixture.SetStoredTimestampsAsync("tr", "TR-MCP-902", createdText, updatedText);
+        await fixture.SetStoredTimestampsAsync("test", "TEST-MCP-902", createdText, updatedText);
+
+        var tr = await service.GetTrAsync("TR-MCP-902", ct);
+        Assert.Equal(created, tr!.CreatedAtUtc);
+        Assert.Equal(updated, tr.UpdatedAtUtc);
+        var test = await service.GetTestAsync("TEST-MCP-902", ct);
+        Assert.Equal(created, test!.CreatedAtUtc);
+        Assert.Equal(updated, test.UpdatedAtUtc);
+
+        await fixture.SetStoredTimestampsAsync("tr", "TR-MCP-902", string.Empty, string.Empty);
+        var bare = await service.GetTrAsync("TR-MCP-902", ct);
+        Assert.Null(bare!.CreatedAtUtc);
+        Assert.Null(bare.UpdatedAtUtc);
+    }
+
     /// <summary>Mapping validation rejects missing FR/TR/TEST ids before storing links.</summary>
     [Fact]
     public async Task UpsertMapping_ValidatesFrTrAndTestIds()
@@ -737,6 +771,17 @@ public sealed class RequirementsDatabaseDocumentServiceTests
 
         /// <summary>Creates a DI scope for direct DbContext seeding in tests.</summary>
         public IServiceScope CreateRawScope() => _provider.CreateScope();
+
+        /// <summary>B2: sets the stored CreatedAtUtc and UpdatedAtUtc text of the one requirement row of this kind and id.</summary>
+        public async Task SetStoredTimestampsAsync(string kind, string id, string createdAtUtc, string updatedAtUtc)
+        {
+            await using var scope = _provider.CreateAsyncScope();
+            var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+            var row = await ctx.Requirements.IgnoreQueryFilters().SingleAsync(x => x.Kind == kind && x.Id == id);
+            row.CreatedAtUtc = createdAtUtc;
+            row.UpdatedAtUtc = updatedAtUtc;
+            await ctx.SaveChangesAsync();
+        }
 
         public void Dispose()
         {

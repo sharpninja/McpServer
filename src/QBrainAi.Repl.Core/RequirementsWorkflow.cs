@@ -107,7 +107,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<IFrItem> GetFrAsync(string id, CancellationToken cancellationToken = default)
     {
-        ValidateFrId(id);
+        ValidateFrIdPresent(id);
         var entry = await _client.GetFrAsync(id, cancellationToken);
         return new FrItemAdapter(entry);
     }
@@ -152,7 +152,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             throw new InvalidOperationException("No FR is currently selected");
         }
 
-        ValidateFrId(frId);
+        ValidateFrIdPresent(frId);
         var clientRequest = new UpdateFrRequest
         {
             Title = request.Title,
@@ -172,7 +172,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task DeleteFrAsync(string id, CancellationToken cancellationToken = default)
     {
-        ValidateFrId(id);
+        ValidateFrIdPresent(id);
         await _client.DeleteFrAsync(id, cancellationToken);
     }
 
@@ -267,7 +267,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<ITestItem> GetTestAsync(string id, CancellationToken cancellationToken = default)
     {
-        ValidateTestId(id);
+        ValidateTestIdPresent(id);
         var entry = await _client.GetTestAsync(id, cancellationToken);
         return new TestItemAdapter(entry);
     }
@@ -312,7 +312,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             throw new InvalidOperationException("No TEST is currently selected");
         }
 
-        ValidateTestId(testId);
+        ValidateTestIdPresent(testId);
         var clientRequest = new UpdateTestRequest
         {
             Title = request.Title,
@@ -332,7 +332,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task DeleteTestAsync(string id, CancellationToken cancellationToken = default)
     {
-        ValidateTestId(id);
+        ValidateTestIdPresent(id);
         await _client.DeleteTestAsync(id, cancellationToken);
     }
 
@@ -351,7 +351,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
         foreach (var record in RequireRecords(request.Records))
-            ValidateFrId(record.Id ?? string.Empty);
+            ValidateFrIdPresent(record.Id ?? string.Empty);
 
         return await _client.UpdateFrBatchAsync(request, cancellationToken);
     }
@@ -391,7 +391,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
         foreach (var record in RequireRecords(request.Records))
-            ValidateTestId(record.Id ?? string.Empty);
+            ValidateTestIdPresent(record.Id ?? string.Empty);
 
         return await _client.UpdateTestBatchAsync(request, cancellationToken);
     }
@@ -401,7 +401,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
         foreach (var record in RequireRecords(request.Records))
-            ValidateBatchRecordId(record.Kind, record.Id);
+            ValidateBatchRecordId(record.Kind, record.Id, requireCanonicalFormat: true);
 
         return await _client.CreateBatchAsync(request, cancellationToken);
     }
@@ -411,7 +411,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
         foreach (var record in RequireRecords(request.Records))
-            ValidateBatchRecordId(record.Kind, record.Id);
+            ValidateBatchRecordId(record.Kind, record.Id, requireCanonicalFormat: false);
 
         return await _client.UpdateBatchAsync(request, cancellationToken);
     }
@@ -769,21 +769,24 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         return records;
     }
 
-    private static void ValidateBatchRecordId(string? kind, string? id)
+    // B7 (triage-report-3bd514bb): creates require the canonical id format; updates of stored FR and TEST records, whose legacy
+    // ids may fall outside it, check presence only. TR records keep the canonical check here (outside B7).
+    private static void ValidateBatchRecordId(string? kind, string? id, bool requireCanonicalFormat)
     {
+        var value = id ?? string.Empty;
         switch ((kind ?? string.Empty).Trim().ToLowerInvariant())
         {
             case "fr":
             case "functional":
-                ValidateFrId(id ?? string.Empty);
+                if (requireCanonicalFormat) ValidateFrId(value); else ValidateFrIdPresent(value);
                 return;
             case "tr":
             case "technical":
-                ValidateTrId(id ?? string.Empty);
+                ValidateTrId(value);
                 return;
             case "test":
             case "testing":
-                ValidateTestId(id ?? string.Empty);
+                if (requireCanonicalFormat) ValidateTestId(value); else ValidateTestIdPresent(value);
                 return;
             default:
                 throw new ArgumentException($"Invalid requirement kind: {kind}. Valid values: fr, tr, test");
@@ -807,10 +810,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
     private static void ValidateFrId(string id)
     {
-        if (string.IsNullOrWhiteSpace(id))
-        {
-            throw new ArgumentException("FR ID cannot be null or empty", nameof(id));
-        }
+        ValidateFrIdPresent(id);
 
         if (!FrIdPattern.IsMatch(id))
         {
@@ -836,16 +836,31 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         }
     }
 
-    private static void ValidateTestId(string id)
+    // B7 (triage-report-3bd514bb): lookups and updates of stored FR records check presence only, like ValidateTrIdPresent.
+    private static void ValidateFrIdPresent(string id)
     {
         if (string.IsNullOrWhiteSpace(id))
         {
-            throw new ArgumentException("TEST ID cannot be null or empty", nameof(id));
+            throw new ArgumentException("FR ID cannot be null or empty", nameof(id));
         }
+    }
+
+    private static void ValidateTestId(string id)
+    {
+        ValidateTestIdPresent(id);
 
         if (!TestIdPattern.IsMatch(id))
         {
             throw new ArgumentException($"Invalid TEST ID format: {id}. Expected format: TEST-<AREA>[-<QUALIFIER>]-###");
+        }
+    }
+
+    // B7 (triage-report-3bd514bb): lookups and updates of stored TEST records check presence only, like ValidateTrIdPresent.
+    private static void ValidateTestIdPresent(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            throw new ArgumentException("TEST ID cannot be null or empty", nameof(id));
         }
     }
 
@@ -970,6 +985,19 @@ internal sealed class FrItemAdapter : IFrItem
     }
 }
 
+/// <summary>
+/// triage-report-b72cfaf4: renders a requirement's stored timestamp for the REPL item adapters in round-trip format, or an empty
+/// string when the server sends none; an item never reports the time of the read as its own.
+/// </summary>
+internal static class StoredTimestampText
+{
+    /// <summary>Formats the stored timestamp, or returns an empty string when there is none.</summary>
+    /// <param name="stored">The stored timestamp from the server entry.</param>
+    /// <returns>The round-trip ("o") text, or an empty string.</returns>
+    public static string Format(DateTimeOffset? stored) =>
+        stored?.ToString("o", System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty;
+}
+
 internal sealed class FrQueryResultAdapter : IFrQueryResult
 {
     private readonly IReadOnlyList<IFrItem> _items;
@@ -1018,8 +1046,8 @@ internal sealed class TrItemAdapter : ITrItem
     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
     /// <inheritdoc />
     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+    public string CreatedAt => StoredTimestampText.Format(_entry.CreatedAtUtc);
+    public string UpdatedAt => StoredTimestampText.Format(_entry.UpdatedAtUtc);
 
     private static string ExtractArea(string id)
     {
@@ -1082,8 +1110,8 @@ internal sealed class TestItemAdapter : ITestItem
     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
     /// <inheritdoc />
     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+    public string CreatedAt => StoredTimestampText.Format(_entry.CreatedAtUtc);
+    public string UpdatedAt => StoredTimestampText.Format(_entry.UpdatedAtUtc);
 
     private static string ExtractArea(string id)
     {

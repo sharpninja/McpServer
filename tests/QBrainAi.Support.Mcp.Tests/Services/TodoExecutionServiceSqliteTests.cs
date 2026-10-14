@@ -1,5 +1,6 @@
 using QBrainAi.Support.Mcp.Ingestion;
 using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Notifications;
 using QBrainAi.Support.Mcp.Requirements;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage;
@@ -121,16 +122,18 @@ public sealed class TodoExecutionServiceSqliteTests : IDisposable
             requirementIds: ["FR-BYRD-001"],
             relevantFiles: ["src/QBrainAi.Services/Services/TodoExecutionService.cs"]).ConfigureAwait(true);
 
-        // Seed two turns with distinct DateTimeOffset timestamps so ordering is observable.
-        await SeedSessionTurnAsync("req-sqlite-001", "Older turn evidence.", "docs/older.md", DateTimeOffset.UtcNow.AddMinutes(-10)).ConfigureAwait(true);
-        await SeedSessionTurnAsync("req-sqlite-002", "Newer turn evidence.", "docs/newer.md", DateTimeOffset.UtcNow).ConfigureAwait(true);
+        // Seed two turns with distinct DateTimeOffset timestamps so ordering is observable. The
+        // session-log writer itself stores them (triage-report-04659db1), so the reader is held to
+        // the list type the writer uses rather than to a hand-seeded literal.
+        await SubmitTurnThroughWriterAsync("sqlite-older", "req-20260211T100100Z-sqlite-001", "Older turn evidence.", "docs/older.md", DateTimeOffset.UtcNow.AddMinutes(-10)).ConfigureAwait(true);
+        await SubmitTurnThroughWriterAsync("sqlite-newer", "req-20260211T100200Z-sqlite-002", "Newer turn evidence.", "docs/newer.md", DateTimeOffset.UtcNow).ConfigureAwait(true);
 
         await _sut.LinkTodoToSessionTurnsAsync(
             _workspacePath,
             todoId,
             new LinkTodoToSessionTurnsRequest
             {
-                SessionTurnIds = ["req-sqlite-001", "req-sqlite-002"]
+                SessionTurnIds = ["req-20260211T100100Z-sqlite-001", "req-20260211T100200Z-sqlite-002"]
             }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var context = await _sut.GetExecutionContextAsync(_workspacePath, todoId, 1, 2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -143,6 +146,79 @@ public sealed class TodoExecutionServiceSqliteTests : IDisposable
         Assert.Contains("Older", context.RecentTurnSummaries[1], StringComparison.OrdinalIgnoreCase);
         Assert.Contains("docs/newer.md", context.RelevantFiles);
         Assert.Contains("docs/older.md", context.RelevantFiles);
+    }
+
+    /// <summary>
+    /// TEST-MCP-104 / FR-MCP-082 / TR-MCP-BYRD-002 (triage-report-04659db1, mock gate): the session-log
+    /// writer stores a submitted turn's files-modified value as exactly one string-list row of that
+    /// turn, so the execution-context test that reads it has a non-vacuous fixture written by the real
+    /// writer rather than hand-seeded rows. Data: SQLite; one turn submitted through SessionLogService.
+    /// </summary>
+    [Fact]
+    public async Task FilesModifiedFixture_SessionLogWriterStoresOneRowForTheTurnFile()
+    {
+        const string requestId = "req-20260211T100100Z-fixture-001";
+        await SubmitTurnThroughWriterAsync("a6-fixture", requestId, "Fixture turn.", "docs/fixture.md", DateTimeOffset.UtcNow).ConfigureAwait(true);
+
+        var rows = await _db.SessionLogTurnStringLists
+            .AsNoTracking()
+            .Where(row => row.Value == "docs/fixture.md" && row.SessionLogTurn!.RequestId == requestId)
+            .ToListAsync(TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Single(rows);
+    }
+
+    /// <summary>
+    /// TEST-MCP-104 / FR-MCP-082 (triage-report-04659db1): the list type the session-log writer stores
+    /// for files modified is the one shared definition the execution-context reader filters on, so the
+    /// writer and the reader cannot drift apart again. Data: SQLite; one turn submitted through
+    /// SessionLogService.
+    /// </summary>
+    [Fact]
+    public async Task FilesModifiedListType_WriterStoresTheSharedDefinition()
+    {
+        const string requestId = "req-20260211T100100Z-listtype-001";
+        await SubmitTurnThroughWriterAsync("a6-listtype", requestId, "List type turn.", "docs/listtype.md", DateTimeOffset.UtcNow).ConfigureAwait(true);
+
+        var row = await _db.SessionLogTurnStringLists
+            .AsNoTracking()
+            .SingleAsync(item => item.Value == "docs/listtype.md" && item.SessionLogTurn!.RequestId == requestId, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(SessionLogTurnStringListTypes.FileModified, row.ListType);
+    }
+
+    // FR-MCP-082: a turn written by the session-log service itself, so the reader is bound to the writer's contract.
+    private async Task SubmitTurnThroughWriterAsync(string sessionSuffix, string requestId, string queryTitle, string fileModified, DateTimeOffset timestamp)
+    {
+        var writer = new SessionLogService(
+            _db,
+            NullLogger<SessionLogService>.Instance,
+            Substitute.For<IChangeEventBus>(),
+            new WorkspaceContext { WorkspacePath = _workspacePath });
+        await writer.SubmitAsync(new UnifiedSessionLogDto
+        {
+            SourceType = "Codex",
+            SessionId = $"Codex-20260211T100000Z-{sessionSuffix}",
+            Title = queryTitle,
+            Model = "gpt-5",
+            Started = timestamp.ToString("o", System.Globalization.CultureInfo.InvariantCulture),
+            LastUpdated = timestamp.ToString("o", System.Globalization.CultureInfo.InvariantCulture),
+            Status = "in_progress",
+            Turns =
+            [
+                new UnifiedRequestEntryDto
+                {
+                    RequestId = requestId,
+                    Timestamp = timestamp.ToString("o", System.Globalization.CultureInfo.InvariantCulture),
+                    QueryTitle = queryTitle,
+                    Response = queryTitle,
+                    Status = "in_progress",
+                    PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                    TodoId = SessionLogTurnContextValidator.NoneSentinel,
+                    FilesModified = [fileModified],
+                },
+            ],
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     private async Task<string> CreateExecutionTodoAsync(
@@ -179,39 +255,5 @@ public sealed class TodoExecutionServiceSqliteTests : IDisposable
             }).ConfigureAwait(true);
 
         return result.TodoIds[0];
-    }
-
-    private async Task SeedSessionTurnAsync(string requestId, string queryTitle, string fileModified, DateTimeOffset timestamp)
-    {
-        var session = new SessionLogEntity
-        {
-            SourceType = "Codex",
-            SessionId = $"Codex-{Guid.NewGuid():N}",
-            Model = "gpt-5",
-            Started = timestamp,
-            LastUpdated = timestamp,
-        };
-        _db.SessionLogs.Add(session);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
-
-        var turn = new SessionLogTurnEntity
-        {
-            SessionLogId = session.Id,
-            RequestId = requestId,
-            Timestamp = timestamp,
-            QueryTitle = queryTitle,
-            Response = queryTitle,
-        };
-        _db.SessionLogTurns.Add(turn);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
-
-        _db.SessionLogTurnStringLists.Add(new SessionLogTurnStringListEntity
-        {
-            SessionLogTurnId = turn.Id,
-            ListType = "filesModified",
-            Ordinal = 0,
-            Value = fileModified,
-        });
-        await _db.SaveChangesAsync().ConfigureAwait(true);
     }
 }

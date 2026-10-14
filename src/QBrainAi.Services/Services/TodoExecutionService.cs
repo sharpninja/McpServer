@@ -1469,9 +1469,10 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
 
         // BUG-SESSIONLOG-WS-001..004: child sets carry no workspace query filter,
         // so isolation comes from the explicit parent-session predicate here.
+        // FR-MCP-082 (triage-report-04659db1): filter on the list type the session-log writer stores.
         var items = await _db.SessionLogTurnStringLists
             .AsNoTracking()
-            .Where(item => item.ListType == "filesModified"
+            .Where(item => item.ListType == QBrainAi.Support.Mcp.Storage.Entities.SessionLogTurnStringListTypes.FileModified
                 && item.SessionLogTurn != null
                 && item.SessionLogTurn.RequestId != null
                 && requestIdSet.Contains(item.SessionLogTurn.RequestId)

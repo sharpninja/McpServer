@@ -658,6 +658,33 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
+    /// FR-SUPPORT-010G (triage-report-ed3b0381): DELETE a single item from a turn section with the
+    /// item key in the query string (<c>?itemKey=</c>). A key that contains a slash cannot travel as a
+    /// path segment, because ASP.NET Core keeps <c>%2F</c> encoded in route values; query values are
+    /// decoded, so this route carries any key unchanged. The key meanings match
+    /// <see cref="DeleteTurnItemAsync"/>.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="section">Turn section name.</param>
+    /// <param name="itemKey">Item key, decoded from the query string.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 with deleted=true, 404 when the item is absent, or 400 for an invalid section or key.</returns>
+    [HttpDelete("{agent}/{sessionId}/{requestId}/sections/{section}/items")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public Task<IActionResult> DeleteTurnItemByQueryAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        string section,
+        [FromQuery] string itemKey,
+        CancellationToken cancellationToken)
+        => DeleteTurnItemAsync(agent, sessionId, requestId, section, itemKey, cancellationToken);
+
+    /// <summary>
     /// FR-SUPPORT-010G: DELETE a single turn (and all of its child rows). The
     /// parent session is preserved.
     /// </summary>

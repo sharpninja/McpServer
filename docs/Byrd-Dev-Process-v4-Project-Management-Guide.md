@@ -3,7 +3,7 @@
 ## Byrd Dev Process v4 on QBrainAi — Astra, Sol, and Grok
 
 Audience: the human coordinator (project lead) running AI-assisted delivery in a QBrainAi workspace.
-Canonical process reference: `docs/Development-Process-draft-v4.md` in [sharpninja/McpServer](https://github.com/sharpninja/mcpserver). In-repo aliases `Byrd Dev Process`, `BDP`, and `BDPv4` all resolve to that file, per `CODEX-HANDOFF.md`.
+Canonical process reference: `docs/Development-Process-draft-v4.md` in [sharpninja/McpServer](https://github.com/sharpninja/mcpserver). In-repo aliases `Byrd Dev Process`, `BDP`, and `BDPv4` all resolve to that file.
 
 Version 4 — three named personas with separated authority, their durable persona prompts (§11), and concrete launch commands (§12).
 
@@ -923,7 +923,7 @@ Flag surfaces move. Re-check `codex exec --help` and `grok --help` after an upgr
 
 - Byrd Development Process v4 — `docs/Development-Process-draft-v4.md`, [sharpninja/McpServer](https://github.com/sharpninja/mcpserver)
 - Hostile validator contract (adversarial Grok sub-agent, receipt schema, AGREE gate) — `docs/McpServer-UseCase-Extension-Design-v3.0.md` §6.1, and existing receipts under `docs/receipts/hostile-validator-*.json`
-- `skills/byrd-tdd-process/SKILL.md`, `skills/mcp-todo/SKILL.md`, `AGENTS.md` (Byrd Test Gate, identity rule 11), `CLAUDE.md`, `CODEX-HANDOFF.md`, `templates/prompt-templates.yaml`
+- `skills/byrd-tdd-process/SKILL.md`, `skills/mcp-todo/SKILL.md`, `AGENTS.md` (Byrd Test Gate, identity rule 11), `CLAUDE.md`, `templates/prompt-templates.yaml`
 - TODO-Centered Byrd Development Process Implementation Spec — `docs/byrd-todo-execution-spec.md`
 - Agent execution strategies and marker activation text — `src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs`, `GrokCliAgentExecutionStrategy.cs`, `MarkerFileService.cs`, `build/Build.SyncAgentPlugins.cs`
 - Repository capabilities, build targets, CI/CD — [QBrainAi README](https://github.com/sharpninja/mcpserver)

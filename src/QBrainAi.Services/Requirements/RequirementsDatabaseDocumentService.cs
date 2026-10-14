@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using QBrainAi.Support.Mcp.Models;
@@ -138,6 +139,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
 
     /// <summary>
+    /// Parses a stored round-trip timestamp of a requirement row; null when the row stores none or an unparseable value, so a
+    /// read never reports its own time as the row's (triage-report-b72cfaf4).
+    /// </summary>
+    private static DateTimeOffset? ParseStoredTimestamp(string? stored) =>
+        DateTimeOffset.TryParse(stored, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var value) ? value : null;
+
+    /// <summary>
     /// FR-MCP-USECASE-003: Loads UC links for the given FR ids using the same join as GetUseCasesForFrQuery
     /// (UseCaseFrLinks × UseCases), batched to avoid N+1.
     /// </summary>
@@ -194,11 +202,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
     /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria.</summary>
     private static TrEntry MapTr(RequirementEntity x) =>
-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
+            ParseStoredTimestamp(x.CreatedAtUtc), ParseStoredTimestamp(x.UpdatedAtUtc));
 
     /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria.</summary>
     private static TestEntry MapTest(RequirementEntity x) =>
-        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
+            ParseStoredTimestamp(x.CreatedAtUtc), ParseStoredTimestamp(x.UpdatedAtUtc));
 
     /// <summary>Maps a stored requirement scope layer row to the public model.</summary>
     private static RequirementScopeLayerEntry MapLayer(RequirementScopeLayerEntity x) =>

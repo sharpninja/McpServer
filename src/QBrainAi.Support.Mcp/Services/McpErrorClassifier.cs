@@ -68,7 +68,8 @@ public static class McpErrorClassifier
                 StatusCode: 503);
         }
 
-        if (exception is RequirementsRecoveryConflictException)
+        // TR-MCP-DB-003 (triage-report-1af9a7de): a write naming a deleted turn's retired request id.
+        if (exception is RequirementsRecoveryConflictException or SessionLogTurnConflictException)
         {
             return new McpErrorClassification(
                 Conflict,

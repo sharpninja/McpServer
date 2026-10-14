@@ -648,9 +648,7 @@ builder.Services.AddSingleton<QBrainAi.Support.Mcp.GraphRag.IGraphRagFederationC
         var local = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
         var inner = new TransactionGatedSessionLogService(
             local,
-            sp.GetRequiredService<McpDbContext>(),
             sp.GetService<ITurnTransactionCoordinator>(),
-            sp.GetService<WorkspaceContext>(),
             sp.GetService<IOptions<TurnTransactionOptions>>());
         var federated = new FederatedSessionLogService(
             inner,

@@ -17,7 +17,9 @@ namespace QBrainAi.Support.Mcp.Services.FederationAdapters;
 [JsonSerializable(typeof(MemoryItem))]
 [JsonSerializable(typeof(MemoryFederationStateAdapter.MemoryApplyPayload))]
 [JsonSerializable(typeof(UnifiedSessionLogDto))]
-[JsonSerializable(typeof(SessionLogFederationStateAdapter.SessionLogSnapshotPayload))]
+// TR-MCP-FED-SESSIONLOG-001: the session-log snapshot is a UnifiedSessionLogDto whose object-typed turn
+// fields (RawContext, OriginalEntry) hold JsonElement values after a store read.
+[JsonSerializable(typeof(JsonElement))]
 [JsonSerializable(typeof(RequirementsFederationStateAdapter.RequirementsPayload))]
 [JsonSerializable(typeof(ToolsBucketsFederationStateAdapter.ToolsBucketsPayload))]
 [JsonSerializable(typeof(AgentsFederationStateAdapter.AgentsPayload))]

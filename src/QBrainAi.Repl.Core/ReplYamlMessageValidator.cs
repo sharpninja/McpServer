@@ -896,9 +896,11 @@ internal static class ReplYamlMessageValidator
     }
 
     private static void OptionalEnum(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, params string[] values)
-        => OptionalEnum(args, key, errors, $"payload.params.{key}", values);
+        => OptionalEnumAt(args, key, errors, $"payload.params.{key}", values);
 
-    private static void OptionalEnum(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, string path, params string[] values)
+    // B3 (triage-report-c03d190f): a distinct name, because as an OptionalEnum overload a call passing only values bound here,
+    // since C# prefers the overload with more declared parameters, and took the first allowed value as the path.
+    private static void OptionalEnumAt(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, string path, params string[] values)
     {
         if (!args.TryGetValue(key, out var value) || value is null)
         {

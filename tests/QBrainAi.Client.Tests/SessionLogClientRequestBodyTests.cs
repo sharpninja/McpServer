@@ -29,6 +29,48 @@ public sealed class SessionLogClientRequestBodyTests
     /// title/model body through the source-generated context and reach the server.
     /// Fixture: <see cref="MockHttpHandler"/> returning a 200 open result.
     /// </summary>
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-report-ed3b0381, mock gate): the item-key URI assertion accepts a
+    /// request whose path ends at /items and whose query carries the decoded key, and rejects a
+    /// request that carries the key as an encoded path segment. Data: hand-built URIs for the key
+    /// "FR/TR/TEST".
+    /// </summary>
+    [Fact]
+    public void ItemKeyUriAssertion_AcceptsQueryKeyAndRejectsPathSegmentKey()
+    {
+        AssertItemKeyInQuery(new Uri("http://localhost:7147/qbrainai/sessionlog/a/s/r/sections/designDecisions/items?itemKey=FR%2FTR%2FTEST"), "FR/TR/TEST");
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(
+            () => AssertItemKeyInQuery(new Uri("http://localhost:7147/qbrainai/sessionlog/a/s/r/sections/designDecisions/items/FR%2FTR%2FTEST"), "FR/TR/TEST"));
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-report-ed3b0381): DeleteTurnItemAsync sends DELETE to the items
+    /// collection with the item key in the query string, so a key containing a slash reaches the
+    /// server unchanged. Data: MockHttpHandler; key "FR/TR/TEST".
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task DeleteTurnItemAsync_SendsItemKeyInQueryString()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"deleted":true}""");
+        using var http = new HttpClient(handler);
+        var client = new SessionLogClient(http, DefaultOptions);
+
+        await client.DeleteTurnItemAsync(
+            "ClaudeCode", "ClaudeCode-20261013T120000Z-a8", "req-20261013T120100Z-a8", "designDecisions", "FR/TR/TEST",
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
+        Assert.Equal("/qbrainai/sessionlog/ClaudeCode/ClaudeCode-20261013T120000Z-a8/req-20261013T120100Z-a8/sections/designDecisions/items", handler.LastRequest.RequestUri!.AbsolutePath);
+        AssertItemKeyInQuery(handler.LastRequest.RequestUri, "FR/TR/TEST");
+    }
+
+    // FR-SUPPORT-010G (A8): the item key travels in the query string, never as a path segment.
+    private static void AssertItemKeyInQuery(Uri requestUri, string itemKey)
+    {
+        Assert.EndsWith("/items", requestUri.AbsolutePath, StringComparison.Ordinal);
+        Assert.Equal(itemKey, System.Web.HttpUtility.ParseQueryString(requestUri.Query)["itemKey"]);
+    }
+
     [Fact]
     public async System.Threading.Tasks.Task OpenSessionAsync_SerializesTitleAndModelBody()
     {

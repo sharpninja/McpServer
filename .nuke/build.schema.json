@@ -252,6 +252,17 @@
           "type": "boolean",
           "description": "Fail when UseCaseFrLinks Realizes coverage findings are non-empty (default false)"
         },
+        "TestFilter": {
+          "type": "string",
+          "description": "TR-MCP-NUKE-011: extra dotnet test filter, appended to the category filter as (<category filter>)&(<filter>)"
+        },
+        "TestProjects": {
+          "type": "array",
+          "description": "TR-MCP-NUKE-011: test or validation project names to run instead of the default unit selection (space- or comma-separated); Build.Tests is refused",
+          "items": {
+            "type": "string"
+          }
+        },
         "TestRunId": {
           "type": "string",
           "description": "Session-life gate run id. Test and MigrationIntegrationTests then write TestResults/<id> inventory and per-project TRX files"

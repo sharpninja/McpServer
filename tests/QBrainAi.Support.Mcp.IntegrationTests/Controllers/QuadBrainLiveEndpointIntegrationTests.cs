@@ -30,7 +30,8 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
     [Fact]
     public async Task ChatCompletions_RealOrchestration_ReturnsArbiterContent()
     {
-        var factory = new RecordingChatClientFactory("the live arbiter decision");
+        // triage-report-76cc478c (with B5): the Arbiter answers with a final envelope; a non-envelope reply loops when tools are offered.
+        var factory = new RecordingChatClientFactory("{\"intent\":\"final\",\"content\":\"the live arbiter decision\"}");
         using var app = BuildFactory(factory);
         using var seedClient = SeedClient(app);
         await SeedQuadAsync(seedClient, BrainSlotRoles.All).ConfigureAwait(true);

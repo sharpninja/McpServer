@@ -31,7 +31,9 @@ public sealed class QBAgentToolsIntegrationTests
             "{\"tool_calls\":[{\"name\":\"load_skill\",\"arguments\":{\"name\":\"e2e-skill\"}}]}",
             "{\"tool_calls\":[{\"name\":\"write_file\",\"arguments\":{\"path\":\"src/QBrainAi.Cqrs/E2e.cs\",\"content\":\"class World {}\"}}]}",
             "{\"tool_calls\":[{\"name\":\"edit_file\",\"arguments\":{\"path\":\"src/QBrainAi.Cqrs/E2e.cs\",\"oldString\":\"World\",\"newString\":\"There\"}}]}",
-            "done");
+            // B5 (triage-report-43f0a95a): with tools offered the server loops on any reply that is not an arbiter envelope
+            // (QuadBrainArbiterEnvelope.RequiresAnotherRound, since 55fae924), so the final answer is a final envelope.
+            "{\"intent\":\"final\",\"content\":\"done\"}");
         using var factory = BuildFactory(orchestration);
         var token = ResolveToken(factory);
         var skillsRoot = CreateSkillsRoot();

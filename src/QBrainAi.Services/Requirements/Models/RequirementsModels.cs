@@ -51,6 +51,8 @@ public sealed record LinkedUseCaseRef(
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
 /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</param>
 /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</param>
+/// <param name="CreatedAtUtc">The stored creation time of the row, or null when none is stored (triage-report-b72cfaf4).</param>
+/// <param name="UpdatedAtUtc">The stored last-update time of the row, or null when none is stored (triage-report-b72cfaf4).</param>
 public sealed record TrEntry(
     string Id,
     string Title,
@@ -61,7 +63,9 @@ public sealed record TrEntry(
     string? Notes = null,
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
-    string? ScopeEndLayerKey = null);
+    string? ScopeEndLayerKey = null,
+    DateTimeOffset? CreatedAtUtc = null,
+    DateTimeOffset? UpdatedAtUtc = null);
 
 /// <summary>FR-MCP-026: Testing Requirement entry parsed from Testing-Requirements.md.</summary>
 /// <param name="Id">The TEST identifier (e.g. TEST-MCP-001).</param>
@@ -74,6 +78,8 @@ public sealed record TrEntry(
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
 /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</param>
 /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</param>
+/// <param name="CreatedAtUtc">The stored creation time of the row, or null when none is stored (triage-report-b72cfaf4).</param>
+/// <param name="UpdatedAtUtc">The stored last-update time of the row, or null when none is stored (triage-report-b72cfaf4).</param>
 public sealed record TestEntry(
     string Id,
     string Condition,
@@ -84,7 +90,9 @@ public sealed record TestEntry(
     string? Notes = null,
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
-    string? ScopeEndLayerKey = null);
+    string? ScopeEndLayerKey = null,
+    DateTimeOffset? CreatedAtUtc = null,
+    DateTimeOffset? UpdatedAtUtc = null);
 
 /// <summary>
 /// FR-MCP-026: Grouped FR/TR/TEST requirement entries used by atomic batch mutations.

@@ -104,15 +104,7 @@ public sealed class SessionLogService : ISessionLogService
             sessionTag.WorkspaceId = workspaceId;
 
         foreach (var turn in session.Turns)
-        {
-            turn.WorkspaceId = workspaceId;
-            foreach (var action in turn.Actions) action.WorkspaceId = workspaceId;
-            foreach (var tag in turn.Tags) tag.WorkspaceId = workspaceId;
-            foreach (var context in turn.ContextItems) context.WorkspaceId = workspaceId;
-            foreach (var dialog in turn.ProcessingDialog) dialog.WorkspaceId = workspaceId;
-            foreach (var commit in turn.Commits) commit.WorkspaceId = workspaceId;
-            foreach (var stringItem in turn.StringListItems) stringItem.WorkspaceId = workspaceId;
-        }
+            StampTurnChildren(turn, workspaceId);
     }
 
     /// <inheritdoc />
@@ -149,6 +141,13 @@ public sealed class SessionLogService : ISessionLogService
             }
         }
 
+        ThrowOnNullElement(dto.Tags, "tags");
+        if (dto.Turns is { Count: > 0 })
+        {
+            foreach (var turn in dto.Turns)
+                ValidateListElements(turn);
+        }
+
         var isImport = !string.IsNullOrWhiteSpace(sourceFilePath);
         // The terminal-state check must remain valid until the write commits, including
         // when another request uses a different context or service process.
@@ -166,6 +165,11 @@ public sealed class SessionLogService : ISessionLogService
             && await TryReviveTombstonedSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false))
         {
             existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (existing is not null && dto.Turns is { Count: > 0 })
+        {
+            await ThrowIfRequestIdRetiredAsync(existing, dto.Turns.Select(t => t.RequestId), cancellationToken).ConfigureAwait(false);
         }
 
         if (dto.Turns is { Count: > 0 })
@@ -436,9 +440,7 @@ public sealed class SessionLogService : ISessionLogService
             ?? throw new InvalidOperationException(
                 $"Entry not found: {sourceType}/{sessionId}/{requestId}");
 
-        var nextOrdinal = entry.ProcessingDialog.Count > 0
-            ? entry.ProcessingDialog.Max(p => p.Ordinal) + 1
-            : 0;
+        var nextOrdinal = NextOrdinal(entry.ProcessingDialog, p => p.Ordinal);
 
         var workspaceId = ResolveWorkspaceId();
         foreach (var item in items)
@@ -659,7 +661,12 @@ public sealed class SessionLogService : ISessionLogService
                 foreach (var dialog in turn.ProcessingDialog)
                     changed += Restamp(dialog.WorkspaceId, workspaceId, value => dialog.WorkspaceId = value);
                 foreach (var commit in turn.Commits)
+                {
                     changed += Restamp(commit.WorkspaceId, workspaceId, value => commit.WorkspaceId = value);
+                    // FR-SUPPORT-010A ac-2 (triage-report-d8c40d80): drifted commit files are repaired too.
+                    foreach (var file in commit.Files)
+                        changed += Restamp(file.WorkspaceId, workspaceId, value => file.WorkspaceId = value);
+                }
                 foreach (var stringItem in turn.StringListItems)
                     changed += Restamp(stringItem.WorkspaceId, workspaceId, value => stringItem.WorkspaceId = value);
             }
@@ -727,12 +734,16 @@ public sealed class SessionLogService : ISessionLogService
         var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);
         if (requestIdError is not null)
             throw new ArgumentException(requestIdError, nameof(turn));
+        ValidateListElements(turn);
 
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
             ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
 
         var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);
         SessionLogTurnEntity persistedTurn;
+
+        if (existingTurn is null)
+            await ThrowIfRequestIdRetiredAsync(session, [turn.RequestId], cancellationToken).ConfigureAwait(false);
 
         ValidateWorkspaceAttribution(turn, existingTurn);
 
@@ -831,7 +842,13 @@ public sealed class SessionLogService : ISessionLogService
         foreach (var tag in turn.Tags) tag.WorkspaceId = workspaceId;
         foreach (var context in turn.ContextItems) context.WorkspaceId = workspaceId;
         foreach (var dialog in turn.ProcessingDialog) dialog.WorkspaceId = workspaceId;
-        foreach (var commit in turn.Commits) commit.WorkspaceId = workspaceId;
+        foreach (var commit in turn.Commits)
+        {
+            commit.WorkspaceId = workspaceId;
+            // FR-SUPPORT-010A (triage-report-d8c40d80): commit files are child rows too.
+            foreach (var file in commit.Files) file.WorkspaceId = workspaceId;
+        }
+
         foreach (var stringItem in turn.StringListItems) stringItem.WorkspaceId = workspaceId;
     }
 
@@ -850,6 +867,7 @@ public sealed class SessionLogService : ISessionLogService
         var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);
         if (requestIdError is not null)
             throw new ArgumentException(requestIdError, nameof(turn));
+        ValidateListElements(turn);
 
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
             ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
@@ -967,6 +985,7 @@ public sealed class SessionLogService : ISessionLogService
 
         var parsed = ParseSection(section); // throws ArgumentException on unknown section
         ValidateTurnIdentifiers(sourceType, sessionId, requestId);
+        ValidateListElements(payload);
 
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
         var turnEntity = session?.Turns.FirstOrDefault(t => t.RequestId == requestId);
@@ -1173,23 +1192,57 @@ public sealed class SessionLogService : ISessionLogService
         if (sessionRowId is null)
             return false;
 
+        // TR-MCP-DB-003 (triage-report-1af9a7de): revive exactly what the session delete removed. That
+        // delete stamps one DeletedAtUtc on the session row and on every row it soft-deletes, so the
+        // timestamp is the traceable key of the operation. Rows removed earlier (section or PUT
+        // replace, item delete, turn delete) carry other timestamps and stay deleted. The comparison is
+        // made in SQL against the session row's stored value, so it never depends on how a client
+        // round-trips the timestamp.
+        var id = sessionRowId.Value;
+        var sessionDeletedAt = _db.SessionLogs
+            .IgnoreQueryFilters(["SoftDelete"])
+            .Where(s => s.Id == id)
+            .Select(s => EF.Property<DateTimeOffset?>(s, "DeletedAtUtc"));
         var turnIds = _db.SessionLogTurns
             .IgnoreQueryFilters(["SoftDelete"])
-            .Where(t => t.SessionLogId == sessionRowId.Value)
+            .Where(t => t.SessionLogId == id)
             .Select(t => t.Id);
 
-        await RestoreRowsAsync(_db.SessionLogActions.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
-        await RestoreRowsAsync(_db.SessionLogTurnTags.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
-        await RestoreRowsAsync(_db.SessionLogTurnContexts.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
-        await RestoreRowsAsync(_db.SessionLogProcessingDialogs.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
-        await RestoreRowsAsync(_db.SessionLogCommits.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
-        await RestoreRowsAsync(_db.SessionLogTurnStringLists.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
-        await RestoreRowsAsync(_db.SessionLogTurns.IgnoreQueryFilters(["SoftDelete"]).Where(t => t.SessionLogId == sessionRowId.Value), cancellationToken).ConfigureAwait(false);
-        await RestoreRowsAsync(_db.SessionLogs.IgnoreQueryFilters(["SoftDelete"]).Where(s => s.Id == sessionRowId.Value), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogActions.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId) && sessionDeletedAt.Contains(EF.Property<DateTimeOffset?>(x, "DeletedAtUtc"))), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogTurnTags.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId) && sessionDeletedAt.Contains(EF.Property<DateTimeOffset?>(x, "DeletedAtUtc"))), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogTurnContexts.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId) && sessionDeletedAt.Contains(EF.Property<DateTimeOffset?>(x, "DeletedAtUtc"))), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogProcessingDialogs.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId) && sessionDeletedAt.Contains(EF.Property<DateTimeOffset?>(x, "DeletedAtUtc"))), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogCommits.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId) && sessionDeletedAt.Contains(EF.Property<DateTimeOffset?>(x, "DeletedAtUtc"))), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogTurnStringLists.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId) && sessionDeletedAt.Contains(EF.Property<DateTimeOffset?>(x, "DeletedAtUtc"))), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogTurns.IgnoreQueryFilters(["SoftDelete"]).Where(t => t.SessionLogId == id && sessionDeletedAt.Contains(EF.Property<DateTimeOffset?>(t, "DeletedAtUtc"))), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogs.IgnoreQueryFilters(["SoftDelete"]).Where(s => s.Id == id), cancellationToken).ConfigureAwait(false);
 
         _db.ChangeTracker.Clear();
-        _logger.LogInformation("Revived soft-deleted session log {SourceType}/{SessionId} (Id={Id}) for resubmission", sourceType, sessionId, sessionRowId.Value);
+        _logger.LogInformation("Revived soft-deleted session log {SourceType}/{SessionId} (Id={Id}) for resubmission", sourceType, sessionId, id);
         return true;
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003 / FR-SUPPORT-010G (triage-report-1af9a7de; operator decision 2026-10-13 "Refuse with clear conflict"): refuses,
+    /// before any change, a write that names a turn whose row is deleted. That row keeps the unique (session, request id) key, so
+    /// the request id is retired; a live row and a deleted row never share it.
+    /// </summary>
+    private async Task ThrowIfRequestIdRetiredAsync(SessionLogEntity session, IEnumerable<string?> requestIds, CancellationToken cancellationToken)
+    {
+        var ids = requestIds.Where(id => !string.IsNullOrWhiteSpace(id)).Select(id => id!).Distinct(StringComparer.Ordinal).ToArray();
+        if (ids.Length == 0)
+            return;
+
+        var sessionRowId = session.Id;
+        var retired = await _db.SessionLogTurns
+            .IgnoreQueryFilters(["SoftDelete"])
+            .Where(t => t.SessionLogId == sessionRowId && ids.Contains(t.RequestId) && EF.Property<bool>(t, "IsDeleted"))
+            .Select(t => t.RequestId)
+            .OrderBy(id => id)
+            .FirstOrDefaultAsync(cancellationToken)
+            .ConfigureAwait(false);
+        if (retired is not null)
+            throw new SessionLogTurnConflictException(session.SourceType, session.SessionId, retired);
     }
 
     private static Task<int> RestoreRowsAsync<TEntity>(
@@ -1204,6 +1257,36 @@ public sealed class SessionLogService : ISessionLogService
                 .SetProperty(entity => EF.Property<string?>(entity, "DeletedBy"), (string?)null)
                 .SetProperty(entity => EF.Property<string?>(entity, "DeleteReason"), (string?)null),
             cancellationToken);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-reports 17b0cad8 and b14f30ba; mcpserver.service journal 2026-10-13
+    /// 16:36:41 and 17:29:00: "Cannot insert the value NULL into column 'Value'"): a turn whose list
+    /// fields carry a null element is refused before any change, naming the field and element index,
+    /// instead of failing at save. An empty list stays a no-op.
+    /// </summary>
+    private static void ValidateListElements(UnifiedRequestEntryDto turn)
+    {
+        ThrowOnNullElement(turn.DesignDecisions, "designDecisions");
+        ThrowOnNullElement(turn.RequirementsDiscovered, "requirementsDiscovered");
+        ThrowOnNullElement(turn.FilesModified, "filesModified");
+        ThrowOnNullElement(turn.Blockers, "blockers");
+        ThrowOnNullElement(turn.Tags, "tags");
+        ThrowOnNullElement(turn.ContextList, "contextList");
+    }
+
+    private static void ThrowOnNullElement(IEnumerable<string>? values, string field)
+    {
+        if (values is null)
+            return;
+
+        var index = 0;
+        foreach (var value in values)
+        {
+            if (value is null)
+                throw new ArgumentException($"{field}[{index}] is null; list items must be non-null strings.", nameof(values));
+            index++;
+        }
     }
 
     private static void ValidateTurnIdentifiers(string sourceType, string sessionId, string requestId)
@@ -1229,10 +1312,10 @@ public sealed class SessionLogService : ISessionLogService
             case TurnSection.Context: ReplaceCollection(turn.ContextItems, MapContextItems(payload.ContextList)); break;
             case TurnSection.Dialog: ReplaceCollection(turn.ProcessingDialog, MapProcessingDialog(payload.ProcessingDialog)); break;
             case TurnSection.Commits: ReplaceCollection(turn.Commits, MapCommits(payload.Commits)); break;
-            case TurnSection.DesignDecisions: ReplaceStringListItems(turn, "DesignDecision", payload.DesignDecisions, mergeOmittedFields: false); break;
-            case TurnSection.RequirementsDiscovered: ReplaceStringListItems(turn, "Requirement", payload.RequirementsDiscovered, mergeOmittedFields: false); break;
-            case TurnSection.FilesModified: ReplaceStringListItems(turn, "FileModified", payload.FilesModified, mergeOmittedFields: false); break;
-            case TurnSection.Blockers: ReplaceStringListItems(turn, "Blocker", payload.Blockers, mergeOmittedFields: false); break;
+            case TurnSection.DesignDecisions: ReplaceStringListItems(turn, SessionLogTurnStringListTypes.DesignDecision, payload.DesignDecisions, mergeOmittedFields: false); break;
+            case TurnSection.RequirementsDiscovered: ReplaceStringListItems(turn, SessionLogTurnStringListTypes.Requirement, payload.RequirementsDiscovered, mergeOmittedFields: false); break;
+            case TurnSection.FilesModified: ReplaceStringListItems(turn, SessionLogTurnStringListTypes.FileModified, payload.FilesModified, mergeOmittedFields: false); break;
+            case TurnSection.Blockers: ReplaceStringListItems(turn, SessionLogTurnStringListTypes.Blocker, payload.Blockers, mergeOmittedFields: false); break;
             default: throw new ArgumentOutOfRangeException(nameof(section), section, "Unhandled section.");
         }
     }
@@ -1244,12 +1327,12 @@ public sealed class SessionLogService : ISessionLogService
             TurnSection.Tags => RemoveMatching(turn.Tags, t => string.Equals(t.Tag, itemKey, StringComparison.Ordinal)),
             TurnSection.Context => RemoveMatching(turn.ContextItems, c => string.Equals(c.ContextItem, itemKey, StringComparison.Ordinal)),
             TurnSection.Commits => RemoveMatching(turn.Commits, c => string.Equals(c.Sha, itemKey, StringComparison.Ordinal)),
-            TurnSection.Actions => int.TryParse(itemKey, out var order) && RemoveMatching(turn.Actions, a => a.Order == order),
-            TurnSection.Dialog => int.TryParse(itemKey, out var ordinal) && RemoveMatching(turn.ProcessingDialog, d => d.Ordinal == ordinal),
-            TurnSection.DesignDecisions => RemoveStringListItem(turn, "DesignDecision", itemKey),
-            TurnSection.RequirementsDiscovered => RemoveStringListItem(turn, "Requirement", itemKey),
-            TurnSection.FilesModified => RemoveStringListItem(turn, "FileModified", itemKey),
-            TurnSection.Blockers => RemoveStringListItem(turn, "Blocker", itemKey),
+            TurnSection.Actions => int.TryParse(itemKey, out var order) && RemoveSingleByKey(turn.Actions, a => a.Order == order, "Action order", itemKey),
+            TurnSection.Dialog => int.TryParse(itemKey, out var ordinal) && RemoveSingleByKey(turn.ProcessingDialog, d => d.Ordinal == ordinal, "Dialog ordinal", itemKey),
+            TurnSection.DesignDecisions => RemoveStringListItem(turn, SessionLogTurnStringListTypes.DesignDecision, itemKey),
+            TurnSection.RequirementsDiscovered => RemoveStringListItem(turn, SessionLogTurnStringListTypes.Requirement, itemKey),
+            TurnSection.FilesModified => RemoveStringListItem(turn, SessionLogTurnStringListTypes.FileModified, itemKey),
+            TurnSection.Blockers => RemoveStringListItem(turn, SessionLogTurnStringListTypes.Blocker, itemKey),
             _ => false,
         };
     }
@@ -1266,6 +1349,25 @@ public sealed class SessionLogService : ISessionLogService
             target.Remove(match);
         }
         return true;
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-report-36d2da23): removes the one item an order or ordinal key names.
+    /// Rows written before ordinals were kept unique can share a key; such a delete is refused and
+    /// removes nothing, because the key cannot say which of them the caller meant.
+    /// </summary>
+    private bool RemoveSingleByKey<TEntity>(ICollection<TEntity> target, Func<TEntity, bool> predicate, string keyName, string itemKey)
+        where TEntity : class
+    {
+        var matches = target.Where(predicate).ToList();
+        if (matches.Count > 1)
+        {
+            throw new ArgumentException(
+                $"{keyName} {itemKey} matches {matches.Count} items; delete refused because legacy rows share the key. Replace the section to remove them.",
+                nameof(itemKey));
+        }
+
+        return RemoveMatching(target, predicate);
     }
 
     private bool RemoveStringListItem(SessionLogTurnEntity turn, string listType, string value)
@@ -1656,9 +1758,9 @@ public sealed class SessionLogService : ISessionLogService
             // PATCH/additive: omitted collections preserved, items appended.
             MergeCollection(entity.Actions, dto.Actions, MapActions, SameAction, mergeOmittedFields);
             MergeCollection(entity.Tags, dto.Tags, MapTags, SameTag, mergeOmittedFields);
-            MergeCollection(entity.ContextItems, dto.ContextList, MapContextItems, SameContextItem, mergeOmittedFields);
-            MergeCollection(entity.ProcessingDialog, dto.ProcessingDialog, MapProcessingDialog, SameProcessingDialog, mergeOmittedFields);
-            MergeCollection(entity.Commits, dto.Commits, MapCommits, SameCommit, mergeOmittedFields);
+            MergeOrderedCollection(entity.ContextItems, dto.ContextList, MapContextItems, SameContextItem, item => item.Ordinal, (item, ordinal) => item.Ordinal = ordinal);
+            MergeOrderedCollection(entity.ProcessingDialog, dto.ProcessingDialog, MapProcessingDialog, SameProcessingDialog, item => item.Ordinal, (item, ordinal) => item.Ordinal = ordinal);
+            MergeOrderedCollection(entity.Commits, dto.Commits, MapCommits, SameCommit, item => item.Ordinal, (item, ordinal) => item.Ordinal = ordinal);
         }
         else
         {
@@ -1671,10 +1773,10 @@ public sealed class SessionLogService : ISessionLogService
             ReplaceCollection(entity.Commits, MapCommits(dto.Commits));
         }
 
-        ReplaceStringListItems(entity, "DesignDecision", dto.DesignDecisions, mergeOmittedFields);
-        ReplaceStringListItems(entity, "Requirement", dto.RequirementsDiscovered, mergeOmittedFields);
-        ReplaceStringListItems(entity, "FileModified", dto.FilesModified, mergeOmittedFields);
-        ReplaceStringListItems(entity, "Blocker", dto.Blockers, mergeOmittedFields);
+        ReplaceStringListItems(entity, SessionLogTurnStringListTypes.DesignDecision, dto.DesignDecisions, mergeOmittedFields);
+        ReplaceStringListItems(entity, SessionLogTurnStringListTypes.Requirement, dto.RequirementsDiscovered, mergeOmittedFields);
+        ReplaceStringListItems(entity, SessionLogTurnStringListTypes.FileModified, dto.FilesModified, mergeOmittedFields);
+        ReplaceStringListItems(entity, SessionLogTurnStringListTypes.Blocker, dto.Blockers, mergeOmittedFields);
     }
 
     private static T ApplyValue<T>(
@@ -1685,6 +1787,31 @@ public sealed class SessionLogService : ISessionLogService
     {
         return !mergeOmittedFields || supplied ? incoming : current;
     }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-report-36d2da23): merges a PATCH batch into an ordinal-ordered turn
+    /// collection; every item the batch appends takes the next ordinal after the collection's highest,
+    /// so ordinals stay unique within the turn across batches instead of restarting at 0.
+    /// </summary>
+    private static void MergeOrderedCollection<TIncoming, TEntity>(
+        ICollection<TEntity> target,
+        IEnumerable<TIncoming>? incoming,
+        Func<IEnumerable<TIncoming>?, List<TEntity>> map,
+        Func<TEntity, TEntity, bool> same,
+        Func<TEntity, int> getOrdinal,
+        Action<TEntity, int> setOrdinal)
+        where TEntity : class
+    {
+        var before = new HashSet<TEntity>(target, ReferenceEqualityComparer.Instance);
+        var next = NextOrdinal(before, getOrdinal);
+        MergeCollection(target, incoming, map, same, mergeOmittedFields: true);
+        foreach (var appended in target.Where(item => !before.Contains(item)).ToList())
+            setOrdinal(appended, next++);
+    }
+
+    /// <summary>FR-SUPPORT-010G: the ordinal that follows the highest one in <paramref name="items"/> (0 when empty).</summary>
+    private static int NextOrdinal<TEntity>(IEnumerable<TEntity> items, Func<TEntity, int> getOrdinal)
+        => items.Select(getOrdinal).DefaultIfEmpty(-1).Max() + 1;
 
     private static void MergeCollection<TIncoming, TEntity>(
         ICollection<TEntity> target,
@@ -1748,11 +1875,7 @@ public sealed class SessionLogService : ISessionLogService
             .Where(item => item.ListType == listType)
             .Select(item => item.Value)
             .ToHashSet(StringComparer.Ordinal);
-        var ordinal = entity.StringListItems
-            .Where(item => item.ListType == listType)
-            .Select(item => item.Ordinal)
-            .DefaultIfEmpty(-1)
-            .Max() + 1;
+        var ordinal = NextOrdinal(entity.StringListItems.Where(item => item.ListType == listType), item => item.Ordinal);
         foreach (var value in incoming.Where(value => existingValues.Add(value)))
         {
             entity.StringListItems.Add(new SessionLogTurnStringListEntity
@@ -1973,10 +2096,10 @@ public sealed class SessionLogService : ISessionLogService
     private static List<SessionLogTurnStringListEntity> MapStringListItems(UnifiedRequestEntryDto dto)
     {
         var items = new List<SessionLogTurnStringListEntity>();
-        AddStringListItems(items, "DesignDecision", dto.DesignDecisions);
-        AddStringListItems(items, "Requirement", dto.RequirementsDiscovered);
-        AddStringListItems(items, "FileModified", dto.FilesModified);
-        AddStringListItems(items, "Blocker", dto.Blockers);
+        AddStringListItems(items, SessionLogTurnStringListTypes.DesignDecision, dto.DesignDecisions);
+        AddStringListItems(items, SessionLogTurnStringListTypes.Requirement, dto.RequirementsDiscovered);
+        AddStringListItems(items, SessionLogTurnStringListTypes.FileModified, dto.FilesModified);
+        AddStringListItems(items, SessionLogTurnStringListTypes.Blocker, dto.Blockers);
         return items;
     }
 
@@ -2105,10 +2228,10 @@ public sealed class SessionLogService : ISessionLogService
                     : null
             }).ToList()
             : null,
-        DesignDecisions = MapStringListToDto(e.StringListItems, "DesignDecision"),
-        RequirementsDiscovered = MapStringListToDto(e.StringListItems, "Requirement"),
-        FilesModified = MapStringListToDto(e.StringListItems, "FileModified"),
-        Blockers = MapStringListToDto(e.StringListItems, "Blocker")
+        DesignDecisions = MapStringListToDto(e.StringListItems, SessionLogTurnStringListTypes.DesignDecision),
+        RequirementsDiscovered = MapStringListToDto(e.StringListItems, SessionLogTurnStringListTypes.Requirement),
+        FilesModified = MapStringListToDto(e.StringListItems, SessionLogTurnStringListTypes.FileModified),
+        Blockers = MapStringListToDto(e.StringListItems, SessionLogTurnStringListTypes.Blocker)
     };
 
     private static DateTimeOffset? ParseDateTimeOffset(string? value)

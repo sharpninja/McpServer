@@ -1027,71 +1027,42 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
         return new FederationApplyResult { Applied = true, Version = version };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// TR-MCP-FED-SESSIONLOG-001 / FR-MCP-103 (triage-report-ab06ac3b): the snapshot payload is the local
+    /// session-log read of the session after the outbound session-log sanitizer, in the
+    /// <see cref="UnifiedSessionLogDto"/> shape that <see cref="ApplyAsync"/> accepts, so it carries every
+    /// session field and every turn with all of its fields and child collections. It reads only the local
+    /// store through <paramref name="db"/> (never a federated read), so snapshotting never calls a peer.
+    /// </summary>
+    /// <param name="db">Database context of the snapshot scope.</param>
+    /// <param name="resourceId">Session resource identifier (<c>source/session</c>, <c>source:session</c>, or <c>session</c>).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The serialized sanitized read, or <c>null</c> when the session does not exist.</returns>
     protected override async Task<string?> ReadPayloadJsonAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
         var key = SessionLogKey.Parse(resourceId);
-        var query = db.SessionLogs.AsNoTracking().Where(s => s.SessionId == key.SessionId);
-        if (!string.IsNullOrWhiteSpace(key.SourceType))
-            query = query.Where(s => s.SourceType == key.SourceType);
+        var sourceType = key.SourceType;
+        if (string.IsNullOrWhiteSpace(sourceType))
+        {
+            sourceType = await db.SessionLogs.AsNoTracking()
+                .Where(s => s.SessionId == key.SessionId)
+                .Select(s => s.SourceType)
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(sourceType))
+                return null;
+        }
 
-        var session = await query
-            .Select(s => new SessionLogSnapshotRow
-            {
-                Id = s.Id,
-                SourceType = s.SourceType,
-                SessionId = s.SessionId,
-                AgentDefinitionId = s.AgentDefinitionId,
-                Title = s.Title,
-                Model = s.Model,
-                Started = s.Started,
-                LastUpdated = s.LastUpdated,
-                Status = s.Status,
-                TurnCount = s.TurnCount,
-                TotalTokens = s.TotalTokens,
-                ContentHash = s.ContentHash,
-            })
-            .FirstOrDefaultAsync(cancellationToken)
+        var read = await new SessionLogService(db, Microsoft.Extensions.Logging.Abstractions.NullLogger<SessionLogService>.Instance)
+            .GetAsync(sourceType, key.SessionId, cancellationToken)
             .ConfigureAwait(false);
-
-        if (session is null)
+        if (read is null)
             return null;
 
-        var turns = await db.SessionLogTurns
-            .AsNoTracking()
-            .Where(t => t.SessionLogId == session.Id)
-            .OrderBy(t => t.Timestamp)
-            .ThenBy(t => t.Id)
-            .Select(t => new SessionLogTurnSnapshotPayload
-            {
-                RequestId = t.RequestId,
-                Timestamp = t.Timestamp,
-                Model = t.Model,
-                ModelProvider = t.ModelProvider,
-                QueryTitle = t.QueryTitle,
-                Status = t.Status,
-                TokenCount = t.TokenCount,
-                FailureNote = t.FailureNote,
-            })
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-        var payload = new SessionLogSnapshotPayload
-        {
-            SourceType = session.SourceType,
-            SessionId = session.SessionId,
-            AgentDefinitionId = session.AgentDefinitionId,
-            Title = session.Title,
-            Model = session.Model,
-            Started = session.Started,
-            LastUpdated = session.LastUpdated,
-            Status = session.Status,
-            TurnCount = session.TurnCount,
-            TotalTokens = session.TotalTokens,
-            ContentHash = session.ContentHash,
-            Turns = turns,
-        };
-        return JsonSerializer.Serialize(payload, typeof(SessionLogSnapshotPayload), FederationAdapterJsonContext.Default);
+        // The same outbound sanitizer SessionLogSanitizingService applies to reads; resolved only when there is a session to send.
+        await using var scope = ScopeFactory.CreateAsyncScope();
+        var sanitized = scope.ServiceProvider.GetRequiredService<ISessionLogSanitizer>().SanitizeSessionLog(read);
+        return JsonSerializer.Serialize(sanitized, typeof(UnifiedSessionLogDto), FederationAdapterJsonContext.Default);
     }
 
     /// <inheritdoc />
@@ -1119,79 +1090,6 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
             Conflict = true,
             Message = message,
         };
-
-    internal sealed class SessionLogSnapshotRow
-    {
-        public long Id { get; set; }
-
-        public string? SourceType { get; set; }
-
-        public string? SessionId { get; set; }
-
-        public string? AgentDefinitionId { get; set; }
-
-        public string? Title { get; set; }
-
-        public string? Model { get; set; }
-
-        public DateTimeOffset? Started { get; set; }
-
-        public DateTimeOffset? LastUpdated { get; set; }
-
-        public string? Status { get; set; }
-
-        public int TurnCount { get; set; }
-
-        public int? TotalTokens { get; set; }
-
-        public string? ContentHash { get; set; }
-    }
-
-    internal sealed class SessionLogSnapshotPayload
-    {
-        public string? SourceType { get; set; }
-
-        public string? SessionId { get; set; }
-
-        public string? AgentDefinitionId { get; set; }
-
-        public string? Title { get; set; }
-
-        public string? Model { get; set; }
-
-        public DateTimeOffset? Started { get; set; }
-
-        public DateTimeOffset? LastUpdated { get; set; }
-
-        public string? Status { get; set; }
-
-        public int TurnCount { get; set; }
-
-        public int? TotalTokens { get; set; }
-
-        public string? ContentHash { get; set; }
-
-        public List<SessionLogTurnSnapshotPayload> Turns { get; set; } = [];
-    }
-
-    internal sealed class SessionLogTurnSnapshotPayload
-    {
-        public string? RequestId { get; set; }
-
-        public DateTimeOffset? Timestamp { get; set; }
-
-        public string? Model { get; set; }
-
-        public string? ModelProvider { get; set; }
-
-        public string? QueryTitle { get; set; }
-
-        public string? Status { get; set; }
-
-        public int? TokenCount { get; set; }
-
-        public string? FailureNote { get; set; }
-    }
 
     private static IQueryable<SessionLogEntity> SessionLogGraphQuery(McpDbContext db)
         => db.SessionLogs

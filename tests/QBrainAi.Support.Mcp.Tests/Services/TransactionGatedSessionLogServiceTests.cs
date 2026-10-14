@@ -15,12 +15,13 @@ using MsOptions = Microsoft.Extensions.Options;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-161: QBAgent session-log mutations execute through the turn transaction
-/// coordinator and restore durable session-log records when post-mutation commit
-/// fails.
-/// TEST-MCP-221 / FR-MCP-173 / TR-MCP-TXNKEY-001: non-QBAgent session-log mutations
-/// persist without calling the coordinator (and therefore without keyserver signing)
-/// even when turn transactions are required.
+/// TEST-MCP-221 / FR-MCP-173 / TR-MCP-TXNKEY-001: every session-log mutation, QBAgent
+/// included, persists through the inner session-log service without calling the turn
+/// transaction coordinator (and therefore without keyserver signing) even when turn
+/// transactions are required and the coordinator would reject, fail commit, roll back,
+/// or is degraded. TEST-MCP-161 / TR-MCP-TXN-001: applied workspace-stamp repair stays
+/// fail-closed while required turn transactions are active. Data: in-memory SQLite with
+/// the real SessionLogService and a capturing coordinator double.
 /// </summary>
 public sealed class TransactionGatedSessionLogServiceTests
 {
@@ -30,11 +31,12 @@ public sealed class TransactionGatedSessionLogServiceTests
     private const string RequestId = "req-20260614T120000Z-seed-sessionlog-gate";
 
     /// <summary>
-    /// TEST-MCP-161: A pre-mutation coordinator rejection prevents the session-log
-    /// submit from creating a parent session row or any child rows.
+    /// TEST-MCP-221 / FR-MCP-173: a QBAgent submit persists the session and its turn
+    /// without calling the coordinator, even though the coordinator would reject before
+    /// the mutation.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotPersistSession()
+    public async Task SubmitAsync_WhenCoordinatorWouldRejectBeforeMutation_PersistsWithoutCallingCoordinator()
     {
         using var connection = OpenConnection();
         var coordinator = new CapturingCoordinator
@@ -60,11 +62,12 @@ public sealed class TransactionGatedSessionLogServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-161: When an add-style submit succeeds locally and the subscriber
-    /// rejects afterward, rollback preserves the created session-log record.
+    /// TEST-MCP-221 / FR-MCP-173: a QBAgent submit that creates a session persists without
+    /// calling the coordinator and without any rollback, even though the coordinator would
+    /// fail the commit and roll back.
     /// </summary>
     [Fact]
-    public async Task SubmitAsync_WhenCommitFailsAfterCreatedSession_RestoresCreatedSessionRecord()
+    public async Task SubmitAsync_WhenCoordinatorWouldFailCommitAndRollBack_PersistsWithoutCallingCoordinator()
     {
         using var connection = OpenConnection();
         var sessionId = BuildSessionId("submit-created-restore");
@@ -91,11 +94,12 @@ public sealed class TransactionGatedSessionLogServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-161: A failed post-mutation replace restores the prior turn
-    /// scalars and all child sections from the pre-image graph.
+    /// TEST-MCP-221 / FR-MCP-173: a QBAgent turn replace persists the replacement without
+    /// calling the coordinator and without any rollback, even though the coordinator would
+    /// fail the commit and roll back.
     /// </summary>
     [Fact]
-    public async Task ReplaceTurnAsync_WhenCommitFailsAfterMutation_RestoresPriorTurnGraph()
+    public async Task ReplaceTurnAsync_WhenCoordinatorWouldFailCommitAndRollBack_PersistsReplacementWithoutCallingCoordinator()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -135,17 +139,19 @@ public sealed class TransactionGatedSessionLogServiceTests
         }
 
         Assert.Null(coordinator.Request);
+        Assert.False(coordinator.RollbackAttempted);
         var replaced = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Equal("completed", replaced.Status);
         Assert.Contains(replaced.Actions!, action => action.Description == "replacement action");
     }
 
     /// <summary>
-    /// TEST-MCP-161: A failed post-mutation session delete restores the parent
-    /// session, its turn, and every child row from the pre-delete graph.
+    /// TEST-MCP-221 / FR-MCP-173: a QBAgent session delete takes effect without calling the
+    /// coordinator and without any rollback, even though the coordinator would fail the
+    /// commit and roll back.
     /// </summary>
     [Fact]
-    public async Task DeleteSessionAsync_WhenCommitFailsAfterMutation_RestoresPriorSessionGraph()
+    public async Task DeleteSessionAsync_WhenCoordinatorWouldFailCommitAndRollBack_DeletesWithoutCallingCoordinator()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -165,12 +171,72 @@ public sealed class TransactionGatedSessionLogServiceTests
         }
 
         Assert.Null(coordinator.Request);
+        Assert.False(coordinator.RollbackAttempted);
         Assert.Null(await GetSessionAsync(connection, sessionId).ConfigureAwait(true));
     }
 
     /// <summary>
-    /// TR-MCP-DB-003: rollback code must not bypass tracked soft-delete protection with
-    /// bulk physical delete operations.
+    /// TEST-MCP-221 / FR-MCP-173 / TR-MCP-TXNKEY-001 (characterization before the retirement
+    /// of the unreachable restore path, PLAN-SESSIONTRIAGEFIX-001 A1/A2/A4): the seven
+    /// QBAgent mutations no other test covers (dialog append, session title, turn title,
+    /// section replace, section clear, item delete, turn delete) each take effect without
+    /// calling the coordinator, although it would reject every transaction. Data: the seeded
+    /// full session of <see cref="CreateSession"/>.
+    /// </summary>
+    [Fact]
+    public async Task RemainingMutations_WhenCoordinatorWouldReject_TakeEffectWithoutCallingCoordinator()
+    {
+        using var connection = OpenConnection();
+        var sessionId = SeedFullSession(connection);
+        var coordinator = new CapturingCoordinator
+        {
+            InvokeMutation = false,
+            Status = "rejected",
+            Reason = TransactionFailureReason.UnknownKey,
+            Message = "Keyserver manifest signing failed.",
+        };
+        var (sut, db) = BuildGatedSut(connection, coordinator);
+        var ct = TestContext.Current.CancellationToken;
+
+        using (db)
+        {
+            await sut.AppendProcessingDialogAsync(
+                    Agent,
+                    sessionId,
+                    RequestId,
+                    [new ProcessingDialogItemDto { Timestamp = "2026-06-14T12:04:00Z", Role = "model", Content = "appended", Category = "reasoning" }],
+                    ct)
+                .ConfigureAwait(true);
+            await sut.SetSessionTitleAsync(Agent, sessionId, "retitled session", ct).ConfigureAwait(true);
+            await sut.SetTurnTitleAsync(Agent, sessionId, RequestId, "retitled turn", ct).ConfigureAwait(true);
+            Assert.True(await sut.ReplaceTurnSectionAsync(Agent, sessionId, RequestId, "tags", new UnifiedRequestEntryDto { Tags = ["replaced-tag"] }, ct).ConfigureAwait(true));
+            Assert.True(await sut.ClearTurnSectionAsync(Agent, sessionId, RequestId, "blockers", ct).ConfigureAwait(true));
+            Assert.True(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "context", "docs/a.md", ct).ConfigureAwait(true));
+        }
+
+        var session = await GetSessionAsync(connection, sessionId).ConfigureAwait(true);
+        Assert.NotNull(session);
+        Assert.Equal("retitled session", session!.Title);
+        var turn = session.Turns!.Single(t => t.RequestId == RequestId);
+        Assert.Equal("retitled turn", turn.QueryTitle);
+        Assert.Contains(turn.ProcessingDialog!, item => item.Content == "appended");
+        Assert.Equal("replaced-tag", Assert.Single(turn.Tags!));
+        Assert.True(turn.Blockers is null || turn.Blockers.Count == 0);
+        Assert.DoesNotContain("docs/a.md", turn.ContextList!);
+        Assert.Contains("docs/b.md", turn.ContextList!);
+
+        var (deleteSut, deleteDb) = BuildGatedSut(connection, coordinator);
+        using (deleteDb)
+            Assert.True(await deleteSut.DeleteTurnAsync(Agent, sessionId, RequestId, ct).ConfigureAwait(true));
+
+        var afterDelete = await GetSessionAsync(connection, sessionId).ConfigureAwait(true);
+        Assert.DoesNotContain(afterDelete?.Turns ?? [], t => t.RequestId == RequestId);
+        Assert.Null(coordinator.Request);
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003: the session-log gate must not bypass tracked soft-delete protection
+    /// with bulk physical delete operations.
     /// </summary>
     [Fact]
     public void TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes()
@@ -418,9 +484,7 @@ public sealed class TransactionGatedSessionLogServiceTests
             workspaceContext);
         var sut = new TransactionGatedSessionLogService(
             inner,
-            db,
             coordinator,
-            workspaceContext,
             MsOptions.Options.Create(transactionOptions ?? new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
         return (sut, db);
     }

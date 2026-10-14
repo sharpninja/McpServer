@@ -297,13 +297,15 @@ public sealed class SessionLogClient : McpClientBase
     /// <summary>
     /// FR-SUPPORT-010G: DELETE a single item from a turn section. The item key is
     /// the value for string sections (tags/context/string-lists), the SHA for
-    /// commits, the Order for actions, and the ordinal for dialog.
+    /// commits, the Order for actions, and the ordinal for dialog. The key travels in
+    /// the query string (triage-report-ed3b0381), so a key containing a slash reaches
+    /// the server unchanged; this requires a server that serves the query-string route.
     /// </summary>
     public async Task<SessionLogMutationResult> DeleteTurnItemAsync(
         string agent, string sessionId, string requestId, string section, string itemKey,
         CancellationToken cancellationToken = default)
     {
-        var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/sections/{Uri.EscapeDataString(section)}/items/{Uri.EscapeDataString(itemKey)}";
+        var path = $"qbrainai/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/sections/{Uri.EscapeDataString(section)}/items?itemKey={Uri.EscapeDataString(itemKey)}";
         return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
     }
 

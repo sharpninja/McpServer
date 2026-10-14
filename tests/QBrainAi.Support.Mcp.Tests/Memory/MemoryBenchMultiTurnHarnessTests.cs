@@ -109,14 +109,22 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     [Fact]
     public void AllEight_WritesMultiTurnStubArtifacts()
     {
-        var directory = Path.Combine(MemoryBenchMultiTurnCatalog.FindRepoRoot(), "docs", "benchmarks", "results");
+        // C1 (triage-report-80d6f90c): write into a temporary directory, never the tracked docs/benchmarks/results files.
+        var directory = Path.Combine(Path.GetTempPath(), "memory-bench-mt-all-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);
-        var result = MemoryBenchMultiTurnCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
-        Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
-        Assert.All(result.Jobs, job => Assert.True(job.Pass, job.Plugin + " " + job.JobId + " " + job.Condition));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.json")));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.md")));
-        Assert.Contains("SUCCESS-GATED mean tokens_total", result.SummaryMarkdown, StringComparison.Ordinal);
+        try
+        {
+            var result = MemoryBenchMultiTurnCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
+            Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
+            Assert.All(result.Jobs, job => Assert.True(job.Pass, job.Plugin + " " + job.JobId + " " + job.Condition));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.json")));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.md")));
+            Assert.Contains("SUCCESS-GATED mean tokens_total", result.SummaryMarkdown, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Writes multiturn artifacts with token tables first.</summary>

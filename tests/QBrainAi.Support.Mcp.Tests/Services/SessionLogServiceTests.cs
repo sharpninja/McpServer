@@ -1626,6 +1626,574 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-SUPPORT-010A-1 ac-3 (FR-SUPPORT-010A, TR-MCP-MT-003A; triage-report-d8c40d80), mock gate:
+    /// the stamp assertion accepts a hand-built session graph whose turn and every child row
+    /// (action, tag, context item, dialog item, commit, both commit files, string-list item)
+    /// carry the session's WorkspaceId. Data: an in-memory entity graph; no database.
+    /// </summary>
+    [Fact]
+    public void StampAssertion_AcceptsGraphWhoseEveryChildCarriesSessionStamp()
+    {
+        AssertTurnGraphStampedToSession(BuildStampGraph(WorkspacePath));
+    }
+
+    /// <summary>
+    /// TEST-SUPPORT-010A-1 ac-3 (FR-SUPPORT-010A, TR-MCP-MT-003A; triage-report-d8c40d80), mock gate
+    /// negative controls: the stamp assertion rejects the hand-built graph when exactly one row of
+    /// the named kind carries another workspace (for commit files, only the second of two files).
+    /// Data: the graph of <see cref="StampAssertion_AcceptsGraphWhoseEveryChildCarriesSessionStamp"/>
+    /// with one row drifted to the drift workspace.
+    /// </summary>
+    /// <param name="driftedKind">The kind of the single row drifted to another workspace.</param>
+    [Theory]
+    [InlineData("turn")]
+    [InlineData("action")]
+    [InlineData("tag")]
+    [InlineData("context")]
+    [InlineData("dialog")]
+    [InlineData("commit")]
+    [InlineData("commitFile")]
+    [InlineData("stringItem")]
+    public void StampAssertion_RejectsGraphWithOneDriftedRow(string driftedKind)
+    {
+        var session = BuildStampGraph(WorkspacePath);
+        var turn = session.Turns.Single();
+        switch (driftedKind)
+        {
+            case "turn": turn.WorkspaceId = DriftedWorkspacePath; break;
+            case "action": turn.Actions.Single().WorkspaceId = DriftedWorkspacePath; break;
+            case "tag": turn.Tags.Single().WorkspaceId = DriftedWorkspacePath; break;
+            case "context": turn.ContextItems.Single().WorkspaceId = DriftedWorkspacePath; break;
+            case "dialog": turn.ProcessingDialog.Single().WorkspaceId = DriftedWorkspacePath; break;
+            case "commit": turn.Commits.Single().WorkspaceId = DriftedWorkspacePath; break;
+            case "commitFile": turn.Commits.Single().Files[1].WorkspaceId = DriftedWorkspacePath; break;
+            case "stringItem": turn.StringListItems.Single().WorkspaceId = DriftedWorkspacePath; break;
+            default: throw new ArgumentOutOfRangeException(nameof(driftedKind), driftedKind, "Unknown row kind.");
+        }
+
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertTurnGraphStampedToSession(session));
+    }
+
+    /// <summary>
+    /// TEST-SUPPORT-010A-1 ac-1 (FR-SUPPORT-010A ac-1, TR-MCP-MT-003A; triage-report-d8c40d80):
+    /// a session submitted with a commit that has two files, whose turn, actions, tags, commits,
+    /// string-list items and commit file rows are then drifted to another workspace, is upserted;
+    /// afterwards every child row of the turn, commit files included, carries the session's
+    /// WorkspaceId. Data: in-memory SQLite; <see cref="CreateStampGraphDto"/>; the drift workspace.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_DriftedCommitFileStamps_RestampsEveryChildToParentSession()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-drift-commit-files");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            await sut1.SubmitAsync(CreateStampGraphDto(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        DriftTurnRows(connection, sessionId, driftGrandchildren: true);
+        DriftCommitFileRows(connection, sessionId);
+        Assert.Equal(2, CountCommitFileRows(connection, sessionId, DriftedWorkspacePath));
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            await sut2.UpsertTurnAsync("ClaudeCode", sessionId, new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260211T100100Z-entry-001",
+                Timestamp = "2026-02-11T10:05:00Z",
+                QueryText = "How do I configure EF Core?",
+                Response = "Updated response after drift",
+                Status = "in_progress"
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var session = LoadStampGraph(connection, sessionId);
+        Assert.Equal(2, session.Turns.Single().Commits.Single().Files.Count);
+        AssertTurnGraphStampedToSession(session);
+        Assert.Equal(0, CountCommitFileRows(connection, sessionId, DriftedWorkspacePath));
+    }
+
+    /// <summary>
+    /// TEST-SUPPORT-010A-1 ac-2 (FR-SUPPORT-010A ac-2, BUG-SESSIONLOG-WS-005; triage-report-d8c40d80):
+    /// with only the two commit file rows drifted, the dry run and the first repair each return 2,
+    /// the dry run leaves both rows drifted, the second repair returns 0, and every row of the turn
+    /// graph then carries the session's WorkspaceId. Data: in-memory SQLite;
+    /// <see cref="CreateStampGraphDto"/>; the drift workspace.
+    /// </summary>
+    [Fact]
+    public async Task RepairWorkspaceStampsAsync_DriftedCommitFiles_RestampsAndCounts()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-repair-commit-files");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            await sut1.SubmitAsync(CreateStampGraphDto(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        DriftCommitFileRows(connection, sessionId);
+        Assert.Equal(2, CountCommitFileRows(connection, sessionId, DriftedWorkspacePath));
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            Assert.Equal(2, await sut2.RepairWorkspaceStampsAsync(dryRun: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+            Assert.Equal(2, CountCommitFileRows(connection, sessionId, DriftedWorkspacePath));
+            Assert.Equal(2, await sut2.RepairWorkspaceStampsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+            Assert.Equal(0, await sut2.RepairWorkspaceStampsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        }
+
+        var session = LoadStampGraph(connection, sessionId);
+        Assert.Equal(2, session.Turns.Single().Commits.Single().Files.Count);
+        AssertTurnGraphStampedToSession(session);
+        Assert.Equal(0, CountCommitFileRows(connection, sessionId, DriftedWorkspacePath));
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-report-36d2da23, mock gate): the ordinal-uniqueness assertion used for
+    /// dialog, commit and context ordinals accepts distinct ordinals and rejects a repeated ordinal.
+    /// Data: hand-built ordinal lists.
+    /// </summary>
+    [Fact]
+    public void OrdinalAssertion_AcceptsDistinctOrdinalsAndRejectsARepeatedOrdinal()
+    {
+        AssertOrdinalsUnique([0, 1, 2]);
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertOrdinalsUnique([0, 1, 0]));
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-reports 17b0cad8 and b14f30ba, root cause in the server journal of
+    /// 2026-10-13: a NULL string-list value, mock gate): the null-element assertion accepts an
+    /// ArgumentException naming the field and element index, and rejects the generic persistence
+    /// error and an ArgumentException that names another field. Data: hand-built exceptions.
+    /// </summary>
+    [Fact]
+    public void NullElementAssertion_AcceptsFieldAndIndexAndRejectsOtherErrors()
+    {
+        AssertNamesNullElement(new ArgumentException("designDecisions[0] is null; list items must be non-null strings.", "turn"), "designDecisions", 0);
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(
+            () => AssertNamesNullElement(new InvalidOperationException("The change could not be saved."), "designDecisions", 0));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(
+            () => AssertNamesNullElement(new ArgumentException("tags[0] is null; list items must be non-null strings.", "turn"), "designDecisions", 0));
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003 / FR-SUPPORT-010G (triage-report-1af9a7de, mock gate): after an actions-section
+    /// replace and then a session delete, the stored delete marks tell the two removals apart: the
+    /// replaced action keeps reason soft_delete, while the session row and the current action carry
+    /// session_log_session_delete with one shared DeletedAtUtc, the traceable key a revive can use.
+    /// Data: in-memory SQLite; <see cref="CreateTestDto"/> with one action replaced by another.
+    /// </summary>
+    [Fact]
+    public async Task ReviveFixture_ReplacedRowAndSessionDeleteRowsCarryDistinctDeleteMarks()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "revive-fixture");
+        var ct = TestContext.Current.CancellationToken;
+
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            dto.Turns!.First().Actions = [new UnifiedActionDto { Order = 1, Description = "old action", Type = "edit", Status = "completed" }];
+            await sut.SubmitAsync(dto, cancellationToken: ct).ConfigureAwait(true);
+            Assert.True(await sut.ReplaceTurnSectionAsync(
+                    "ClaudeCode",
+                    sessionId,
+                    "req-20260211T100100Z-entry-001",
+                    "actions",
+                    new UnifiedRequestEntryDto { Actions = [new UnifiedActionDto { Order = 1, Description = "new action", Type = "edit", Status = "completed" }] },
+                    ct)
+                .ConfigureAwait(true));
+            Assert.True(await sut.DeleteSessionAsync("ClaudeCode", sessionId, ct).ConfigureAwait(true));
+        }
+
+        var sessionMark = ReadDeleteMark(connection, "SELECT DeleteReason, DeletedAtUtc FROM SessionLogs WHERE SessionId = @sid", sessionId);
+        var oldAction = ReadDeleteMark(connection, $"{ActionMarkSql} AND a.Description = 'old action'", sessionId);
+        var newAction = ReadDeleteMark(connection, $"{ActionMarkSql} AND a.Description = 'new action'", sessionId);
+        Assert.Equal("session_log_session_delete", sessionMark.Reason);
+        Assert.Equal("soft_delete", oldAction.Reason);
+        Assert.Equal(sessionMark, newAction);
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003 / FR-SUPPORT-010G (triage-report-1af9a7de; operator decision 2026-10-13 "Refuse with clear
+    /// conflict"), mock gate: the retired-request assertion accepts an exception the shared classifier maps to a 409
+    /// conflict whose message names the request id, and rejects the generic persistence failure and the
+    /// "disappeared after UNIQUE constraint failure" error the service raises today. Data: hand-built exceptions.
+    /// </summary>
+    [Fact]
+    public void RetiredRequestAssertion_AcceptsNamedConflictAndRejectsOtherErrors()
+    {
+        AssertRetiredRequestConflict(new QBrainAi.Support.Mcp.Requirements.RequirementsRecoveryConflictException("Turn req-20260211T100200Z-entry-002 was deleted."), "req-20260211T100200Z-entry-002");
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(
+            () => AssertRetiredRequestConflict(new DbUpdateException("An error occurred while saving the entity changes."), "req-20260211T100200Z-entry-002"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(
+            () => AssertRetiredRequestConflict(new InvalidOperationException("Turn req-20260211T100200Z-entry-002 disappeared after UNIQUE constraint failure."), "req-20260211T100200Z-entry-002"));
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-report-36d2da23): two PATCH batches that each append a dialog item, a
+    /// commit and a context item keep the ordinals of each collection unique within the turn, and
+    /// every appended item's ordinal follows the existing ones. Data: in-memory SQLite;
+    /// <see cref="CreateTestDto"/> seeded with one dialog item, one commit and one context item.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_TwoPatchBatches_KeepDialogCommitAndContextOrdinalsUnique()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ordinal-batches");
+        await SeedOrdinalSessionAsync(connection, sessionId).ConfigureAwait(true);
+
+        var turn = LoadStampGraph(connection, sessionId).Turns.Single();
+        Assert.Equal(3, turn.ProcessingDialog.Count);
+        Assert.Equal(3, turn.Commits.Count);
+        Assert.Equal(3, turn.ContextItems.Count);
+        AssertOrdinalsUnique(turn.ProcessingDialog.Select(item => item.Ordinal).ToList());
+        AssertOrdinalsUnique(turn.Commits.Select(item => item.Ordinal).ToList());
+        AssertOrdinalsUnique(turn.ContextItems.Select(item => item.Ordinal).ToList());
+        Assert.Equal("first,second,third", string.Join(',', turn.ProcessingDialog.OrderBy(item => item.Ordinal).Select(item => item.Content)));
+        Assert.Equal("sha-a,sha-b,sha-c", string.Join(',', turn.Commits.OrderBy(item => item.Ordinal).Select(item => item.Sha)));
+        Assert.Equal("docs/a.md,docs/b.md,docs/c.md", string.Join(',', turn.ContextItems.OrderBy(item => item.Ordinal).Select(item => item.ContextItem)));
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-report-36d2da23): after two PATCH batches appended dialog items,
+    /// deleting the second item by its ordinal removes exactly that item. Data: in-memory SQLite;
+    /// the seeded session of <see cref="UpsertTurnAsync_TwoPatchBatches_KeepDialogCommitAndContextOrdinalsUnique"/>.
+    /// </summary>
+    [Fact]
+    public async Task DeleteTurnItemAsync_DialogOrdinalAfterPatchBatches_RemovesExactlyOneItem()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ordinal-delete");
+        await SeedOrdinalSessionAsync(connection, sessionId).ConfigureAwait(true);
+        var second = LoadStampGraph(connection, sessionId).Turns.Single().ProcessingDialog.Single(item => item.Content == "second");
+
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            Assert.True(await sut.DeleteTurnItemAsync(
+                    "ClaudeCode",
+                    sessionId,
+                    "req-20260211T100100Z-entry-001",
+                    "dialog",
+                    second.Ordinal.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    TestContext.Current.CancellationToken)
+                .ConfigureAwait(true));
+        }
+
+        var dialog = LoadStampGraph(connection, sessionId).Turns.Single().ProcessingDialog;
+        Assert.Equal("first,third", string.Join(',', dialog.OrderBy(item => item.Ordinal).Select(item => item.Content)));
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-report-36d2da23): when legacy rows share a key, a delete by that key is
+    /// refused with an ArgumentException that names how many items match, and nothing is deleted:
+    /// two dialog items whose ordinals were both set to 0, and two actions that share Order 1.
+    /// Data: in-memory SQLite; duplicate ordinals written by SQL to model legacy rows.
+    /// </summary>
+    [Fact]
+    public async Task DeleteTurnItemAsync_AmbiguousLegacyKey_RefusesAndDeletesNothing()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ordinal-ambiguous");
+        const string requestId = "req-20260211T100100Z-entry-001";
+        var ct = TestContext.Current.CancellationToken;
+
+        var (seedSut, seedDb) = BuildSqliteSut(connection);
+        using (seedDb)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            var turn = dto.Turns!.First();
+            turn.ProcessingDialog =
+            [
+                new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:01:10Z", Role = "user", Content = "legacy one", Category = "prompt" },
+                new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:01:20Z", Role = "model", Content = "legacy two", Category = "reasoning" },
+            ];
+            turn.Actions =
+            [
+                new UnifiedActionDto { Order = 1, Description = "first action one", Type = "edit", Status = "completed" },
+                new UnifiedActionDto { Order = 1, Description = "second action one", Type = "edit", Status = "completed" },
+            ];
+            await seedSut.SubmitAsync(dto, cancellationToken: ct).ConfigureAwait(true);
+        }
+
+        ExecuteSql(connection,
+            "UPDATE SessionLogProcessingDialogs SET Ordinal = 0 WHERE SessionLogTurnId IN (SELECT t.Id FROM SessionLogTurns t JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = @sid)",
+            ("@sid", sessionId));
+
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var dialogError = await Assert.ThrowsAsync<ArgumentException>(
+                    () => sut.DeleteTurnItemAsync("ClaudeCode", sessionId, requestId, "dialog", "0", ct))
+                .ConfigureAwait(true);
+            Assert.Contains("matches 2", dialogError.Message, StringComparison.Ordinal);
+            var actionError = await Assert.ThrowsAsync<ArgumentException>(
+                    () => sut.DeleteTurnItemAsync("ClaudeCode", sessionId, requestId, "actions", "1", ct))
+                .ConfigureAwait(true);
+            Assert.Contains("matches 2", actionError.Message, StringComparison.Ordinal);
+        }
+
+        var stored = LoadStampGraph(connection, sessionId).Turns.Single();
+        Assert.Equal(2, stored.ProcessingDialog.Count);
+        Assert.Equal(2, stored.Actions.Count);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-reports 17b0cad8 and b14f30ba; root cause in the server journal of
+    /// 2026-10-13: a NULL string-list value): a turn upsert whose named list carries a null element is
+    /// refused before any change with an ArgumentException naming the field and the element index,
+    /// and the stored turn keeps no part of that write. Data: in-memory SQLite; the list ["kept", null].
+    /// </summary>
+    /// <param name="field">The camelCase name of the list carrying the null element.</param>
+    [Theory]
+    [InlineData("designDecisions")]
+    [InlineData("requirementsDiscovered")]
+    [InlineData("filesModified")]
+    [InlineData("blockers")]
+    [InlineData("tags")]
+    [InlineData("contextList")]
+    public async Task UpsertTurnAsync_NullListElement_RefusedWithFieldAndIndex(string field)
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "null-element");
+        var ct = TestContext.Current.CancellationToken;
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: ct).ConfigureAwait(true);
+            var patch = new UnifiedRequestEntryDto { RequestId = "req-20260211T100100Z-entry-001", Status = "in_progress" };
+            List<string> values = ["kept", null!];
+            switch (field)
+            {
+                case "designDecisions": patch.DesignDecisions = values; break;
+                case "requirementsDiscovered": patch.RequirementsDiscovered = values; break;
+                case "filesModified": patch.FilesModified = values; break;
+                case "blockers": patch.Blockers = values; break;
+                case "tags": patch.Tags = values; break;
+                case "contextList": patch.ContextList = values; break;
+                default: throw new ArgumentOutOfRangeException(nameof(field), field, "Unknown list.");
+            }
+
+            var error = await Assert.ThrowsAnyAsync<Exception>(
+                    () => sut.UpsertTurnAsync("ClaudeCode", sessionId, patch, ct))
+                .ConfigureAwait(true);
+            AssertNamesNullElement(error, field, 1);
+        }
+
+        var stored = LoadStampGraph(connection, sessionId).Turns.Single();
+        Assert.DoesNotContain(stored.StringListItems, item => item.Value == "kept");
+        Assert.DoesNotContain(stored.Tags, item => item.Tag == "kept");
+        Assert.DoesNotContain(stored.ContextItems, item => item.ContextItem == "kept");
+        Assert.Equal("completed", stored.Status);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-reports 17b0cad8 and b14f30ba): a whole-session submit whose turn
+    /// carries a null design decision is refused with an ArgumentException naming the field and
+    /// index, and no session row is written. Data: in-memory SQLite; <see cref="CreateTestDto"/>.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_NullDesignDecision_RefusedWithFieldAndIndexAndWritesNothing()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "null-submit");
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            dto.Turns!.First().DesignDecisions = [null!];
+            var error = await Assert.ThrowsAnyAsync<Exception>(
+                    () => sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken))
+                .ConfigureAwait(true);
+            AssertNamesNullElement(error, "designDecisions", 0);
+        }
+
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = "SELECT COUNT(*) FROM SessionLogs WHERE SessionId = @sid";
+        cmd.Parameters.AddWithValue("@sid", sessionId);
+        Assert.Equal(0, Convert.ToInt32(cmd.ExecuteScalar(), System.Globalization.CultureInfo.InvariantCulture));
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G (triage-reports 17b0cad8 and b14f30ba): an empty designDecisions list in a
+    /// PATCH saves as a no-op and keeps the decisions already stored. Data: in-memory SQLite;
+    /// <see cref="CreateTestDto"/> with one decision.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_EmptyDesignDecisions_SavesAndKeepsStoredDecisions()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "empty-decisions");
+        var ct = TestContext.Current.CancellationToken;
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            dto.Turns!.First().DesignDecisions = ["Decision: stored before the patch."];
+            await sut.SubmitAsync(dto, cancellationToken: ct).ConfigureAwait(true);
+            Assert.True(await sut.UpsertTurnAsync(
+                    "ClaudeCode",
+                    sessionId,
+                    new UnifiedRequestEntryDto { RequestId = "req-20260211T100100Z-entry-001", Status = "completed", DesignDecisions = [] },
+                    ct)
+                .ConfigureAwait(true) > 0);
+        }
+
+        var decisions = LoadStampGraph(connection, sessionId).Turns.Single().StringListItems.Where(item => item.ListType == "DesignDecision").Select(item => item.Value);
+        Assert.Equal("Decision: stored before the patch.", Assert.Single(decisions));
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003 / FR-SUPPORT-010G (triage-report-1af9a7de): resubmitting a deleted session revives
+    /// exactly the rows the session delete removed. An action replaced before the delete, a dialog item
+    /// deleted before it, and a turn deleted before it stay deleted; the current action, the kept dialog
+    /// item and the kept turn come back. Data: in-memory SQLite; <see cref="CreateTestDto"/> with a second turn.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_AfterSessionDelete_RevivesOnlyRowsTheDeleteRemoved()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "revive-exact");
+        const string keptTurn = "req-20260211T100100Z-entry-001";
+        const string deletedTurn = "req-20260211T100200Z-entry-002";
+        var ct = TestContext.Current.CancellationToken;
+
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            var turn = dto.Turns!.First();
+            turn.Actions = [new UnifiedActionDto { Order = 1, Description = "old action", Type = "edit", Status = "completed" }];
+            turn.ProcessingDialog =
+            [
+                new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:01:10Z", Role = "user", Content = "kept dialog", Category = "prompt" },
+                new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:01:20Z", Role = "model", Content = "deleted dialog", Category = "reasoning" },
+            ];
+            dto.Turns!.Add(new UnifiedRequestEntryDto
+            {
+                RequestId = deletedTurn,
+                Timestamp = "2026-02-11T10:02:00Z",
+                QueryText = "second turn",
+                Status = "completed",
+                PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                TodoId = SessionLogTurnContextValidator.NoneSentinel,
+                DesignDecisions = ["Decision: second turn."],
+            });
+            await sut.SubmitAsync(dto, cancellationToken: ct).ConfigureAwait(true);
+            Assert.True(await sut.ReplaceTurnSectionAsync(
+                    "ClaudeCode", sessionId, keptTurn, "actions",
+                    new UnifiedRequestEntryDto { Actions = [new UnifiedActionDto { Order = 1, Description = "new action", Type = "edit", Status = "completed" }] },
+                    ct)
+                .ConfigureAwait(true));
+            Assert.True(await sut.DeleteTurnItemAsync("ClaudeCode", sessionId, keptTurn, "dialog", "1", ct).ConfigureAwait(true));
+            Assert.True(await sut.DeleteTurnAsync("ClaudeCode", sessionId, deletedTurn, ct).ConfigureAwait(true));
+            Assert.True(await sut.DeleteSessionAsync("ClaudeCode", sessionId, ct).ConfigureAwait(true));
+        }
+
+        var (reviveSut, reviveDb) = BuildSqliteSut(connection);
+        using (reviveDb)
+        {
+            await reviveSut.SubmitAsync(
+                    new UnifiedSessionLogDto { SourceType = "ClaudeCode", SessionId = sessionId, Status = "in_progress" },
+                    cancellationToken: ct)
+                .ConfigureAwait(true);
+        }
+
+        var (readSut, readDb) = BuildSqliteSut(connection);
+        using (readDb)
+        {
+            var session = await readSut.GetAsync("ClaudeCode", sessionId, ct).ConfigureAwait(true);
+            Assert.NotNull(session);
+            var revived = Assert.Single(session!.Turns!);
+            Assert.Equal(keptTurn, revived.RequestId);
+            Assert.Equal("new action", Assert.Single(revived.Actions!).Description);
+            Assert.Equal("kept dialog", Assert.Single(revived.ProcessingDialog!).Content);
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003 / FR-SUPPORT-010G (triage-report-1af9a7de; operator decision 2026-10-13 "Refuse with clear conflict"): a
+    /// whole-session submit and a turn upsert that name a turn deleted earlier are each refused with a 409 conflict naming the
+    /// retired request id, and neither changes anything: the deleted turn stays deleted and the kept turn keeps its query text.
+    /// Data: in-memory SQLite; <see cref="CreateTestDto"/> with a second turn, which is then deleted.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAndUpsert_NamingDeletedTurn_AreRefusedWithConflictAndChangeNothing()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "retired-request");
+        const string keptTurn = "req-20260211T100100Z-entry-001";
+        const string deletedTurn = "req-20260211T100200Z-entry-002";
+        var ct = TestContext.Current.CancellationToken;
+
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            dto.Turns!.Add(SecondTurn(deletedTurn, "second turn"));
+            await sut.SubmitAsync(dto, cancellationToken: ct).ConfigureAwait(true);
+            Assert.True(await sut.DeleteTurnAsync("ClaudeCode", sessionId, deletedTurn, ct).ConfigureAwait(true));
+        }
+
+        var (submitSut, submitDb) = BuildSqliteSut(connection);
+        using (submitDb)
+        {
+            var resubmit = CreateTestDto("ClaudeCode", sessionId);
+            resubmit.Turns!.First().QueryText = "changed by the refused submit";
+            resubmit.Turns!.Add(SecondTurn(deletedTurn, "second turn again"));
+            var submitError = await Assert.ThrowsAsync<SessionLogTurnConflictException>(
+                () => submitSut.SubmitAsync(resubmit, cancellationToken: ct)).ConfigureAwait(true);
+            AssertRetiredRequestConflict(submitError, deletedTurn);
+        }
+
+        var (upsertSut, upsertDb) = BuildSqliteSut(connection);
+        using (upsertDb)
+        {
+            var upsertError = await Assert.ThrowsAsync<SessionLogTurnConflictException>(
+                () => upsertSut.UpsertTurnAsync("ClaudeCode", sessionId, SecondTurn(deletedTurn, "upserted"), ct)).ConfigureAwait(true);
+            AssertRetiredRequestConflict(upsertError, deletedTurn);
+        }
+
+        var (readSut, readDb) = BuildSqliteSut(connection);
+        using (readDb)
+        {
+            var session = await readSut.GetAsync("ClaudeCode", sessionId, ct).ConfigureAwait(true);
+            var kept = Assert.Single(session!.Turns!);
+            Assert.Equal(keptTurn, kept.RequestId);
+            Assert.NotEqual("changed by the refused submit", kept.QueryText);
+        }
+    }
+
+    // A10: a minimal valid second turn for the retired-request tests.
+    private static UnifiedRequestEntryDto SecondTurn(string requestId, string queryText) => new()
+    {
+        RequestId = requestId,
+        Timestamp = "2026-02-11T10:02:00Z",
+        QueryText = queryText,
+        Status = "in_progress",
+        PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+        TodoId = SessionLogTurnContextValidator.NoneSentinel,
+    };
+
+    /// <summary>
     /// FR-SUPPORT-015: whole-session submit is ADDITIVE. Omitted session scalars
     /// (title, model) survive a partial submit; supplied scalars update.
     /// </summary>
@@ -1825,6 +2393,166 @@ public sealed class SessionLogServiceTests : IDisposable
         foreach (var (name, value) in args)
             cmd.Parameters.AddWithValue(name, value);
         cmd.ExecuteNonQuery();
+    }
+
+    // FR-SUPPORT-010A / TR-MCP-MT-003A: every row of every turn carries the session's WorkspaceId.
+    private static void AssertTurnGraphStampedToSession(SessionLogEntity session)
+    {
+        Assert.False(string.IsNullOrEmpty(session.WorkspaceId));
+        Assert.NotEmpty(session.Turns);
+        foreach (var turn in session.Turns)
+        {
+            Assert.Equal(session.WorkspaceId, turn.WorkspaceId);
+            foreach (var row in turn.Actions) Assert.Equal(session.WorkspaceId, row.WorkspaceId);
+            foreach (var row in turn.Tags) Assert.Equal(session.WorkspaceId, row.WorkspaceId);
+            foreach (var row in turn.ContextItems) Assert.Equal(session.WorkspaceId, row.WorkspaceId);
+            foreach (var row in turn.ProcessingDialog) Assert.Equal(session.WorkspaceId, row.WorkspaceId);
+            foreach (var commit in turn.Commits)
+            {
+                Assert.Equal(session.WorkspaceId, commit.WorkspaceId);
+                foreach (var file in commit.Files) Assert.Equal(session.WorkspaceId, file.WorkspaceId);
+            }
+
+            foreach (var row in turn.StringListItems) Assert.Equal(session.WorkspaceId, row.WorkspaceId);
+        }
+    }
+
+    private const string CommitFilesOfSessionSql =
+        "SELECT f.Id FROM SessionLogCommitFiles f JOIN SessionLogCommits c ON c.Id = f.SessionLogCommitId JOIN SessionLogTurns t ON t.Id = c.SessionLogTurnId JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = @sid";
+
+    private static void DriftCommitFileRows(SqliteConnection connection, string sessionId)
+    {
+        EnsureWorkspaceRow(connection, DriftedWorkspacePath);
+        ExecuteSql(connection,
+            $"UPDATE SessionLogCommitFiles SET WorkspaceId = @ws WHERE Id IN ({CommitFilesOfSessionSql})",
+            ("@ws", DriftedWorkspacePath), ("@sid", sessionId));
+    }
+
+    private static int CountCommitFileRows(SqliteConnection connection, string sessionId, string workspaceId)
+    {
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = $"SELECT COUNT(*) FROM SessionLogCommitFiles WHERE WorkspaceId = @ws AND Id IN ({CommitFilesOfSessionSql})";
+        cmd.Parameters.AddWithValue("@ws", workspaceId);
+        cmd.Parameters.AddWithValue("@sid", sessionId);
+        return Convert.ToInt32(cmd.ExecuteScalar(), System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    // FR-SUPPORT-010A: reads the stored graph through a fresh context so assertions see the
+    // database rows, not entities tracked by the service under test. Only the Workspace filter is
+    // dropped (the fresh context has no workspace); the SoftDelete filter stays, so soft-deleted rows
+    // are not counted as present.
+    private static SessionLogEntity LoadStampGraph(SqliteConnection connection, string sessionId)
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options;
+        using var db = new McpDbContext(options);
+        return db.SessionLogs.IgnoreQueryFilters(["Workspace"]).AsNoTracking()
+            .Include(s => s.Turns).ThenInclude(t => t.Actions)
+            .Include(s => s.Turns).ThenInclude(t => t.Tags)
+            .Include(s => s.Turns).ThenInclude(t => t.ContextItems)
+            .Include(s => s.Turns).ThenInclude(t => t.ProcessingDialog)
+            .Include(s => s.Turns).ThenInclude(t => t.Commits).ThenInclude(c => c.Files)
+            .Include(s => s.Turns).ThenInclude(t => t.StringListItems)
+            .AsSplitQuery()
+            .First(s => s.SessionId == sessionId);
+    }
+
+    // FR-SUPPORT-010A: a session whose single turn has one row of each child kind and a commit with two files.
+    private static UnifiedSessionLogDto CreateStampGraphDto(string sessionId)
+    {
+        var dto = CreateTestDto("ClaudeCode", sessionId);
+        var turn = dto.Turns!.First();
+        turn.Actions = [new UnifiedActionDto { Order = 1, Description = "edit", Type = "edit", Status = "completed", FilePath = "src/a.cs" }];
+        turn.Tags = ["a3"];
+        turn.ContextList = ["context"];
+        turn.ProcessingDialog = [new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:01:30Z", Role = "user", Category = "prompt", Content = "prompt" }];
+        turn.Commits = [new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "m", FilesChanged = ["src/a.cs", "src/b.cs"] }];
+        turn.DesignDecisions = ["Decision: commit files inherit the session stamp."];
+        return dto;
+    }
+
+    // FR-SUPPORT-010G (A7): a session whose turn received one dialog item, commit and context item at
+    // submit and one more of each in two PATCH batches.
+    private static async Task SeedOrdinalSessionAsync(SqliteConnection connection, string sessionId)
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            var turn = dto.Turns!.First();
+            turn.ProcessingDialog = [new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:01:10Z", Role = "user", Content = "first", Category = "prompt" }];
+            turn.Commits = [new SessionLogCommitDto { Sha = "sha-a", Branch = "main", Message = "a" }];
+            turn.ContextList = ["docs/a.md"];
+            turn.DesignDecisions = ["Decision: seed."];
+            await sut.SubmitAsync(dto, cancellationToken: ct).ConfigureAwait(true);
+
+            foreach (var (content, sha, context) in new[] { ("second", "sha-b", "docs/b.md"), ("third", "sha-c", "docs/c.md") })
+            {
+                await sut.UpsertTurnAsync("ClaudeCode", sessionId, new UnifiedRequestEntryDto
+                {
+                    RequestId = "req-20260211T100100Z-entry-001",
+                    ProcessingDialog = [new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:02:00Z", Role = "model", Content = content, Category = "reasoning" }],
+                    Commits = [new SessionLogCommitDto { Sha = sha, Branch = "main", Message = sha }],
+                    ContextList = [context],
+                }, cancellationToken: ct).ConfigureAwait(true);
+            }
+        }
+    }
+
+    // TR-MCP-DB-003 (A10, operator decision "Refuse with clear conflict"): a 409 conflict that names the retired request id.
+    private static void AssertRetiredRequestConflict(Exception exception, string requestId)
+    {
+        var classification = McpErrorClassifier.Classify(exception);
+        Assert.Equal(409, classification.StatusCode);
+        Assert.Equal(McpErrorClassifier.Conflict, classification.Code);
+        Assert.Contains(requestId, exception.Message, StringComparison.Ordinal);
+    }
+
+    // FR-SUPPORT-010G (A7): no two items of one turn collection share an ordinal.
+    private static void AssertOrdinalsUnique(IReadOnlyCollection<int> ordinals)
+        => Assert.Equal(ordinals.Count, ordinals.Distinct().Count());
+
+    // FR-SUPPORT-010G (A9): a null list element is refused with a validation error naming field and index.
+    private static void AssertNamesNullElement(Exception exception, string field, int index)
+    {
+        var argument = Assert.IsAssignableFrom<ArgumentException>(exception);
+        Assert.Contains($"{field}[{index}]", argument.Message, StringComparison.Ordinal);
+    }
+
+    private const string ActionMarkSql =
+        "SELECT a.DeleteReason, a.DeletedAtUtc FROM SessionLogActions a JOIN SessionLogTurns t ON t.Id = a.SessionLogTurnId JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = @sid";
+
+    // TR-MCP-DB-003 (A10): the stored delete reason and time of one row, read without query filters.
+    private static (string? Reason, string? DeletedAt) ReadDeleteMark(SqliteConnection connection, string sql, string sessionId)
+    {
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = sql;
+        cmd.Parameters.AddWithValue("@sid", sessionId);
+        using var reader = cmd.ExecuteReader();
+        Assert.True(reader.Read(), "expected one row");
+        var mark = (
+            reader.IsDBNull(0) ? null : reader.GetString(0),
+            reader.IsDBNull(1) ? null : Convert.ToString(reader.GetValue(1), System.Globalization.CultureInfo.InvariantCulture));
+        Assert.False(reader.Read(), "expected exactly one row");
+        return mark;
+    }
+
+    // TEST-SUPPORT-010A-1 ac-3: one row of each child kind, two commit files, all stamped alike.
+    private static SessionLogEntity BuildStampGraph(string workspaceId)
+    {
+        var session = new SessionLogEntity { SourceType = "ClaudeCode", SessionId = "stamp-graph", WorkspaceId = workspaceId };
+        var turn = new SessionLogTurnEntity { WorkspaceId = workspaceId, RequestId = "req-20260211T100100Z-entry-001" };
+        turn.Actions.Add(new SessionLogActionEntity { WorkspaceId = workspaceId, Order = 1, Description = "edit" });
+        turn.Tags.Add(new SessionLogTurnTagEntity { WorkspaceId = workspaceId, Tag = "a3" });
+        turn.ContextItems.Add(new SessionLogTurnContextEntity { WorkspaceId = workspaceId, ContextItem = "context" });
+        turn.ProcessingDialog.Add(new SessionLogProcessingDialogEntity { WorkspaceId = workspaceId, Role = "user", Content = "prompt" });
+        var commit = new SessionLogCommitEntity { WorkspaceId = workspaceId, Sha = "abc123" };
+        commit.Files.Add(new SessionLogCommitFileEntity { WorkspaceId = workspaceId, Ordinal = 0, Path = "src/a.cs" });
+        commit.Files.Add(new SessionLogCommitFileEntity { WorkspaceId = workspaceId, Ordinal = 1, Path = "src/b.cs" });
+        turn.Commits.Add(commit);
+        turn.StringListItems.Add(new SessionLogTurnStringListEntity { WorkspaceId = workspaceId, ListType = "DesignDecision", Value = "decision" });
+        session.Turns.Add(turn);
+        return session;
     }
 
     private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(

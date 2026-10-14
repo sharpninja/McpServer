@@ -34,7 +34,8 @@ public sealed class QBAgentSendingIntegrationTests
     [Fact]
     public async Task QBAgent_NoToolAction_ReturnsPlainResponse()
     {
-        var orchestration = new ScriptedOrchestration("the plain arbiter answer");
+        // triage-report-76cc478c (with B5): a final answer is an arbiter final envelope; a non-envelope reply loops when tools are offered.
+        var orchestration = new ScriptedOrchestration("{\"intent\":\"final\",\"content\":\"the plain arbiter answer\"}");
         using var factory = BuildFactory(orchestration, new RecordingExecutor());
 
         await using var agentProvider = BuildAgentProvider(factory, out var token);
@@ -50,7 +51,7 @@ public sealed class QBAgentSendingIntegrationTests
     {
         var orchestration = new ScriptedOrchestration(
             "{\"tool_calls\":[{\"name\":\"apply_patch\",\"arguments\":{\"path\":\"src/x.cs\"}}]}",
-            "patch applied to src/x.cs");
+            "{\"intent\":\"final\",\"content\":\"patch applied to src/x.cs\"}");
         using var factory = BuildFactory(orchestration, new RecordingExecutor());
 
         var invoked = new ConcurrentBag<string>();
@@ -197,8 +198,11 @@ public sealed class QBAgentSendingIntegrationTests
     [Fact]
     public async Task QBAgent_InternalTool_ExecutedServerSide_NeverReachesAgent()
     {
+        // triage-report-76cc478c (with B5, operator 2026-10-13 "Align: 2 calls"): since 55fae924 the server feeds an executed
+        // internal tool's result back to the model once, so the second reply is the final envelope.
         var orchestration = new ScriptedOrchestration(
-            "{\"tool_calls\":[{\"name\":\"mcp_todo_update\",\"arguments\":{\"id\":\"X\"}}]}");
+            "{\"tool_calls\":[{\"name\":\"mcp_todo_update\",\"arguments\":{\"id\":\"X\"}}]}",
+            "{\"intent\":\"final\",\"content\":\"todo X updated\"}");
         var executor = new RecordingExecutor("mcp_todo_update");
         using var factory = BuildFactory(orchestration, executor);
 
@@ -213,7 +217,7 @@ public sealed class QBAgentSendingIntegrationTests
 
         Assert.Equal("mcp_todo_update", Assert.Single(executor.Executed)); // ran server-side
         Assert.Empty(invoked);                                             // agent executed nothing
-        Assert.Equal(1, orchestration.Calls);                             // no second round - nothing to feed back
+        Assert.Equal(2, orchestration.Calls);                             // the internal result is fed back once, then the final answer
         Assert.NotNull(text);
     }
 

@@ -703,10 +703,11 @@ public sealed class TodoExecutionServiceTests : IDisposable
         _db.SessionLogTurns.Add(turn);
         await _db.SaveChangesAsync().ConfigureAwait(true);
 
+        // triage-report-04659db1: seed under the list type the session-log writer stores.
         _db.SessionLogTurnStringLists.Add(new SessionLogTurnStringListEntity
         {
             SessionLogTurnId = turn.Id,
-            ListType = "filesModified",
+            ListType = SessionLogTurnStringListTypes.FileModified,
             Ordinal = 0,
             Value = fileModified,
         });

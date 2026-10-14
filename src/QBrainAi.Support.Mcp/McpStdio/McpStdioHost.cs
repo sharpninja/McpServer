@@ -295,9 +295,7 @@ public static class McpStdioHost
             var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
             var gated = new TransactionGatedSessionLogService(
                 inner,
-                sp.GetRequiredService<McpDbContext>(),
                 sp.GetService<ITurnTransactionCoordinator>(),
-                sp.GetService<WorkspaceContext>(),
                 sp.GetService<IOptions<TurnTransactionOptions>>());
             return new SessionLogSanitizingService(
                 gated,
