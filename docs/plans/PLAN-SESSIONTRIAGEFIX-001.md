@@ -258,7 +258,30 @@ Blast radius: test files, the new isolation test and two test helpers under plug
 - E6 triage-report-3546932e (BUG-BASELINE-017): AI-lane receipts carry the aiUnit response for every host.
 
 ### Slice F: other repositories (each on fix/session-triage-20261013 in its main checkout)
-- F1 triage-report-eb56d4eb: the Codex plugin wrapper reads the main workspace from a worktree session, or returns a structured error, never bare False (mcpserver-codex-plugin).
+- F1 triage-report-eb56d4eb: the Codex plugin wrapper reads the main workspace from a worktree session, or returns a structured error, never bare False (mcpserver-codex-plugin). See "F1 plan" below.
+
+#### F1 plan (bug in already-specified behavior: TR-MCP-REPL-001 "Response envelopes SHALL contain type (result/error/event) ... and error details")
+
+Root cause (receipts 2026-10-15): the bare False comes from the canonical core, not from the Codex wrapper. Invoke-ReplMethodCore (plugins/core/lib-ps/repl-invoke.ps1) wrote `[bool]$r.Success` to stdout whenever the backend call returned no output: a marker refresh that fails (MCP_UNTRUSTED), no REPL executable on PATH, a timeout, or a REPL child that exits non-zero without writing anything. The failure text (`$r.Error`) went nowhere, so the Codex wrapper, which forwards stdout and throws on exit 1, showed only "False". Why the main-workspace read failed for Codex is not reproducible here: Claude's wrapper made the same reads in the same period, and the Codex host was running from the worktree. Inference, not verified: the Codex sandbox kept the main workspace's plugin cache or its REPL child from writing outside the worktree. With the fix, the envelope names that cause the next time it happens. The plan allows exactly this outcome ("or returns a structured error").
+
+Requirement (through the plugin route, isSatisfied false until HV): TR-MCP-REPL-001 AC-001. A call that fails before any response envelope gets one YAML envelope of type error on stdout and exit 1. Its payload carries code, message (the failure text, or the REPL's exit code when it wrote nothing) and retryable, with code and retryable from the plugin's error classification (TR-MCP-TRIAGEERR-001). A success without output writes nothing. The bridge never writes a bare True or False.
+
+Tests first (Pester through TestPluginCore, plugins/core/test-fixtures/pester/ReplBridgeErrorEnvelope.Tests.ps1):
+- Mock gate ReplBridgeErrorAssertion_AcceptsErrorEnvelopeAndRejectsBareBooleanOrUntypedOutput, with negative controls: today's bare False, a result envelope, an envelope without a code, one naming another failure, a zero exit code, a bare True on success, and a non-zero exit on success.
+- Bindings, held in the session scratchpad `triagefix/held/f1/` until the change:
+  - ReplBridge_FailureWithoutOutput_WritesErrorEnvelope: in process, a pre-process failure with error text and a silent non-zero REPL exit.
+  - ReplBridge_SuccessWithoutOutput_WritesNothing.
+  - ReplBridge_Script_MissingRepl_ExitsOneWithErrorEnvelope: the shipped script as its own process, in a temporary workspace from Initialize-TestHookCache, with no REPL executable on PATH.
+
+Implementation: the no-output branch of Invoke-ReplMethodCore only. It reuses ConvertTo-McpPluginClassifiedError and builds the envelope from native objects; no new code list. The script exit code is unchanged (it already came from LastInvokeReplMethodSuccess). No caller reads the removed boolean: searched in the core and the nine plugin repositories, the only in-process callers pass output through.
+
+Results (2026-10-15, Linux):
+- Mock gate f1-mockgate-20261015T0721: 1 of 1.
+- Bindings f1-binding-20261015T0722: 4 of 4.
+- Whole plugin-core suite f1-suite-20261015T0722: 287 of 287, 0 failed, 0 skipped.
+- Analyzer delta on repl-invoke.ps1: 0 added and 0 removed (36 existing findings), parser 0.
+
+The change reaches the plugins, Codex's included, through C3's sync.
 - F2 triage-report-834cec2e: mcpserver-cline-plugin main carries hooks/scripts/memory-context.ps1 its memory-skill test reads. See "F2 plan" below.
 
 #### F2 plan (bug in already-specified behavior: TR-MCP-MEMORY-008 "Official McpServer plugins ... expose memory tools through their supported tool surfaces")

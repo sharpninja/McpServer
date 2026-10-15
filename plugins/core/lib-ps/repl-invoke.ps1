@@ -3103,8 +3103,26 @@ function Invoke-ReplMethodCore {
         return
     }
 
+    # TR-MCP-REPL-001 AC-001 (PLAN-SESSIONTRIAGEFIX-001 F1, triage-report-eb56d4eb): without a response envelope the
+    # outcome lives only in the success flag, never in a bare True or False on stdout. A failure answers with one
+    # error envelope naming why, with its code and retryable from the plugin's error classification
+    # (TR-MCP-TRIAGEERR-001); a success without output writes nothing.
     $script:LastInvokeReplMethodSuccess = [bool]$r.Success
-    return [bool]$r.Success
+    if ($r.Success) { return }
+    $failureText = [string]$r.Error
+    if ([string]::IsNullOrWhiteSpace($failureText)) {
+        $failureText = if ($null -ne $r.ExitCode) { "qbrain-ai-repl exited with code $($r.ExitCode) without a response to $Method" } else { "$Method failed without a response" }
+    }
+    $classified = ConvertTo-McpPluginClassifiedError -ErrorText $failureText
+    ConvertTo-Yaml -Data ([ordered]@{
+            type = 'error'
+            payload = [ordered]@{
+                code = [string]$classified.code
+                message = [string]$classified.message
+                retryable = [bool]$classified.retryable
+                details = [ordered]@{ method = $Method }
+            }
+        }) -Options WithIndentedSequences
 }
 
 function Invoke-ReplMethod {
