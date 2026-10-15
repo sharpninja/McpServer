@@ -1,0 +1,25 @@
+P20 sanitized fixtures harness against development UpdateService
+stamp=20260822T133039Z
+sanitized=true
+agent=P20Harness
+no live operator session id
+no apiKey in this log
+serviceName=McpServer
+serviceStatus=Running
+installPath=C:\ProgramData\McpServer
+baseUrl=http://PAYTON-LEGION2:7147
+apiKey=REDACTED
+healthStatus=Healthy
+healthVersion=1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8
+healthNonceMatch=true
+storage=reachable
+openUriHost=UpdateService
+openOk=True
+beginUriHost=UpdateService
+beginStatus=in_progress
+beginAgent=P20Harness
+beginSessionSanitized=True
+completeStatus=completed
+Failed: 0
+Skipped: 0
+EXIT=0

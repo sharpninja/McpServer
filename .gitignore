@@ -106,6 +106,8 @@ StyleCopReport.xml
 *.tmp_proj
 *_wpftmp.csproj
 *.log
+# TEST-MCP-PLUGININT-001 AC-002 (PLAN-SESSIONTRIAGEFIX-001 E2): a P20 harness receipt carries the log its summary.json names.
+!docs/receipts/pluginint-p20-*/harness.log
 *.tlog
 *.vspscc
 *.vssscc

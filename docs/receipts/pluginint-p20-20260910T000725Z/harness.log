@@ -1,0 +1,15 @@
+P20 sanitized fixtures harness against development UpdateService
+stamp=20260910T000725Z
+sanitized=true
+branch=develop
+sha=08eaf2a506a0aa2db89766e6a547d9ae1c85f681
+no live operator session id
+no apiKey in this log
+serviceName=McpServer
+deployTarget=UpdateService
+environment=Development
+promotion Staging/Production blocked without operator approval artifact
+no staging or production binary deploy
+Failed: 0
+Skipped: 0
+EXIT=0
