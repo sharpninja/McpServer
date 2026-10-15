@@ -1,0 +1,37 @@
+
+> @sharpninja/mcpserver-opencode-plugin@1.106.0 test
+> node --experimental-vm-modules node_modules/jest/bin/jest.js --no-cache
+
+(node:63504) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ PASS  tests/skills.test.ts
+(node:84000) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[mcpserver-opencode] tool.execute.before audit failed: invoke_failed: string failure Local failsafe saved: C:\Users\kingd\.mcpServer\failsafe\opencode\1788998844474-6648fb3e60fed8-client.sessionlog.upsertturnasync.yaml
+[mcpserver-opencode] tool.execute.after audit failed: invoke_failed: string failure Local failsafe saved: C:\Users\kingd\.mcpServer\failsafe\opencode\1788998844478-320a77c7eaa6c8-client.sessionlog.upsertturnasync.yaml
+[mcpserver-opencode] marker bootstrap failed; continuing with failsafe behavior: MCP_UNTRUSTED: No marker file found
+[mcpserver-opencode] marker bootstrap failed; continuing with failsafe behavior: MCP_UNTRUSTED: No marker file found
+[mcpserver-opencode] failsafe replay flushed=4 failed=0 pending=0
+[mcpserver-opencode] tool.execute.before audit failed: invoke_failed: submit failed Local failsafe saved: C:\Users\kingd\.mcpServer\failsafe\opencode\1788998844744-76203e7823a8a-client.sessionlog.upsertturnasync.yaml
+[mcpserver-opencode] tool.execute.after audit failed: invoke_failed: submit failed Local failsafe saved: C:\Users\kingd\.mcpServer\failsafe\opencode\1788998844745-021d357e3b53a8-client.sessionlog.upsertturnasync.yaml
+[mcpserver-opencode] failsafe replay failed: Error: ENOTDIR: not a directory, scandir 'C:\Users\kingd\AppData\Local\Temp\mcp-ff-1788998844773.tmp'
+[mcpserver-opencode] failsafe replay failed: Error: ENOTDIR: not a directory, scandir 'C:\Users\kingd\AppData\Local\Temp\mcp-ff-1788998844773.tmp'
+[mcpserver-opencode] failsafe replay failed: Error: ENOTDIR: not a directory, scandir 'C:\Users\kingd\AppData\Local\Temp\mcp-ff-1788998844773.tmp'
+[mcpserver-opencode] failsafe replay failed: Error: ENOTDIR: not a directory, scandir 'C:\Users\kingd\AppData\Local\Temp\mcp-ff-1788998844773.tmp'
+ PASS  tests/plugin.test.ts
+-----------|---------|----------|---------|---------|-------------------
+File       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------|---------|----------|---------|---------|-------------------
+[32;1mAll files [0m | [32;1m  98.52[0m | [32;1m      82[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                 [0m 
+[32;1m plugin.ts[0m | [32;1m  98.52[0m | [32;1m      82[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m125-195,212,229  [0m 
+-----------|---------|----------|---------|---------|-------------------
+
+Test Suites: 2 passed, 2 total
+Tests:       33 passed, 33 total
+Snapshots:   0 total
+Time:        1.959 s
+Ran all test suites.
+
+EXIT=0
+Failed: 0
+Skipped: 0

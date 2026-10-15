@@ -1,0 +1,17 @@
+[95m
+[95mStarting discovery in 6 files.[0m
+[95mDiscovery found 18 tests in 318ms.[0m
+[95mRunning tests.[0m
+[32m[+] F:\GitHub\mcpserver-codex-plugin\tests\NativeSmoke.Tests.ps1[0m[90m 2.82s (1.91s|699ms)[0m
+[32m[+] F:\GitHub\mcpserver-codex-plugin\tests\ReplFailsafe.Tests.ps1[0m[90m 2.26s (2.16s|76ms)[0m
+[32m[+] F:\GitHub\mcpserver-codex-plugin\tests\ReplMethodTimeout.Tests.ps1[0m[90m 327ms (240ms|77ms)[0m
+[32m[+] F:\GitHub\mcpserver-codex-plugin\tests\ReplWorkspaceResolution.Tests.ps1[0m[90m 511ms (395ms|93ms)[0m
+[32m[+] F:\GitHub\mcpserver-codex-plugin\tests\SessionIdCanonicalAgent.Tests.ps1[0m[90m 490ms (405ms|75ms)[0m
+[32m[+] F:\GitHub\mcpserver-codex-plugin\tests\Skills.Tests.ps1[0m[90m 179ms (80ms|89ms)[0m
+[97mTests completed in 6.64s[0m
+[32mTests Passed: 18, [0m[90mFailed: 0, [0m[90mSkipped: 0, [0m[90mInconclusive: 0, [0m[37m[0m[90mNotRun: 0[0m
+
+
+Failed: 0
+Skipped: 0
+EXIT=0

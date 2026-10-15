@@ -1,0 +1,38 @@
+
+> @sharpninja/mcpserver-opencode-plugin@1.100.0 test
+> node --experimental-vm-modules node_modules/jest/bin/jest.js --no-cache --ci --watchAll=false --passWithNoTests=false
+
+-----------|---------|----------|---------|---------|-------------------
+File       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------|---------|----------|---------|---------|-------------------
+All files  |   98.52 |       82 |     100 |     100 |                   
+ plugin.ts |   98.52 |       82 |     100 |     100 | 125-195,212,229   
+-----------|---------|----------|---------|---------|-------------------
+
+(node:70608) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS tests/skills.test.ts
+(node:86316) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[mcpserver-opencode] tool.execute.before audit failed: invoke_failed: string failure Local failsafe saved: C:\Users\kingd\.mcpServer\failsafe\opencode\1787392799600-c4684536550b-client.sessionlog.upsertturnasync.yaml
+[mcpserver-opencode] tool.execute.after audit failed: invoke_failed: string failure Local failsafe saved: C:\Users\kingd\.mcpServer\failsafe\opencode\1787392799610-100455aedeced-client.sessionlog.upsertturnasync.yaml
+[mcpserver-opencode] marker bootstrap failed; continuing with failsafe behavior: MCP_UNTRUSTED: No marker file found
+[mcpserver-opencode] marker bootstrap failed; continuing with failsafe behavior: MCP_UNTRUSTED: No marker file found
+[mcpserver-opencode] failsafe replay flushed=4 failed=0 pending=0
+[mcpserver-opencode] tool.execute.before audit failed: invoke_failed: submit failed Local failsafe saved: C:\Users\kingd\.mcpServer\failsafe\opencode\1787392800254-ee866681698438-client.sessionlog.upsertturnasync.yaml
+[mcpserver-opencode] tool.execute.after audit failed: invoke_failed: submit failed Local failsafe saved: C:\Users\kingd\.mcpServer\failsafe\opencode\1787392800256-e4456b725306c8-client.sessionlog.upsertturnasync.yaml
+[mcpserver-opencode] failsafe replay failed: Error: ENOTDIR: not a directory, scandir 'C:\Users\kingd\AppData\Local\Temp\mcp-ff-1787392800314.tmp'
+[mcpserver-opencode] failsafe replay failed: Error: ENOTDIR: not a directory, scandir 'C:\Users\kingd\AppData\Local\Temp\mcp-ff-1787392800314.tmp'
+[mcpserver-opencode] failsafe replay failed: Error: ENOTDIR: not a directory, scandir 'C:\Users\kingd\AppData\Local\Temp\mcp-ff-1787392800314.tmp'
+[mcpserver-opencode] failsafe replay failed: Error: ENOTDIR: not a directory, scandir 'C:\Users\kingd\AppData\Local\Temp\mcp-ff-1787392800314.tmp'
+PASS tests/plugin.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       33 passed, 33 total
+Snapshots:   0 total
+Time:        4.428 s
+Ran all test suites.
+
+Failed: 0
+Skipped: 0
+EXIT=0

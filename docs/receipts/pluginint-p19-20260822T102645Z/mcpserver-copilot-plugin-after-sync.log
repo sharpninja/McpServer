@@ -1,0 +1,17 @@
+[95m
+[95mStarting discovery in 6 files.[0m
+[95mDiscovery found 18 tests in 286ms.[0m
+[95mRunning tests.[0m
+[32m[+] F:\GitHub\mcpserver-copilot-plugin\tests\NativeSmoke.Tests.ps1[0m[90m 2.56s (1.73s|642ms)[0m
+[32m[+] F:\GitHub\mcpserver-copilot-plugin\tests\ReplFailsafe.Tests.ps1[0m[90m 1.81s (1.72s|71ms)[0m
+[32m[+] F:\GitHub\mcpserver-copilot-plugin\tests\ReplMethodTimeout.Tests.ps1[0m[90m 239ms (161ms|59ms)[0m
+[32m[+] F:\GitHub\mcpserver-copilot-plugin\tests\ReplWorkspaceResolution.Tests.ps1[0m[90m 343ms (275ms|59ms)[0m
+[32m[+] F:\GitHub\mcpserver-copilot-plugin\tests\SessionIdCanonicalAgent.Tests.ps1[0m[90m 304ms (250ms|44ms)[0m
+[32m[+] F:\GitHub\mcpserver-copilot-plugin\tests\Skills.Tests.ps1[0m[90m 112ms (48ms|56ms)[0m
+[97mTests completed in 5.41s[0m
+[32mTests Passed: 18, [0m[90mFailed: 0, [0m[90mSkipped: 0, [0m[90mInconclusive: 0, [0m[37m[0m[90mNotRun: 0[0m
+
+
+Failed: 0
+Skipped: 0
+EXIT=0

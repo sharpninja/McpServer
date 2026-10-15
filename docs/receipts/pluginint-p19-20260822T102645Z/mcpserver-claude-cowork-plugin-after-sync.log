@@ -1,0 +1,17 @@
+[95m
+[95mStarting discovery in 6 files.[0m
+[95mDiscovery found 18 tests in 391ms.[0m
+[95mRunning tests.[0m
+[32m[+] F:\GitHub\mcpserver-claude-cowork-plugin\tests\NativeSmoke.Tests.ps1[0m[90m 3.29s (2.36s|674ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-cowork-plugin\tests\ReplFailsafe.Tests.ps1[0m[90m 2.11s (2.01s|84ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-cowork-plugin\tests\ReplMethodTimeout.Tests.ps1[0m[90m 310ms (226ms|71ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-cowork-plugin\tests\ReplWorkspaceResolution.Tests.ps1[0m[90m 526ms (425ms|73ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-cowork-plugin\tests\SessionIdCanonicalAgent.Tests.ps1[0m[90m 374ms (300ms|62ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-cowork-plugin\tests\Skills.Tests.ps1[0m[90m 171ms (94ms|64ms)[0m
+[97mTests completed in 6.84s[0m
+[32mTests Passed: 18, [0m[90mFailed: 0, [0m[90mSkipped: 0, [0m[90mInconclusive: 0, [0m[37m[0m[90mNotRun: 0[0m
+
+
+Failed: 0
+Skipped: 0
+EXIT=0

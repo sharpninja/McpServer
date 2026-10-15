@@ -1,0 +1,18 @@
+
+> @sharpninja/mcpserver-cline-plugin@1.101.0 test
+> jest --ci --watchAll=false --passWithNoTests=false
+
+
+PASS tests/skills.test.ts
+PASS tests/smoke.test.ts
+PASS tests/plugin-helpers.test.ts
+
+Test Suites: 3 passed, 3 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        4.069 s
+Ran all test suites.
+
+Failed: 0
+Skipped: 0
+EXIT=0

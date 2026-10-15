@@ -108,6 +108,8 @@ StyleCopReport.xml
 *.log
 # TEST-MCP-PLUGININT-001 AC-002 (PLAN-SESSIONTRIAGEFIX-001 E2): a P20 harness receipt carries the log its summary.json names.
 !docs/receipts/pluginint-p20-*/harness.log
+# TEST-MCP-PLUGININT-001 AC-005 (PLAN-SESSIONTRIAGEFIX-001 E7): a P19 receipt carries the logs its run wrote (the native-suite logs its summary.json names, and sync-agent-plugins.log).
+!docs/receipts/pluginint-p19-*/*.log
 *.tlog
 *.vspscc
 *.vssscc

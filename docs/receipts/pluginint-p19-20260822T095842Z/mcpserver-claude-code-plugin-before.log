@@ -1,0 +1,18 @@
+[95m
+[95mStarting discovery in 7 files.[0m
+[95mDiscovery found 20 tests in 472ms.[0m
+[95mRunning tests.[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\NativeSmoke.Tests.ps1[0m[90m 3.23s (2.29s|685ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\Skills.Tests.ps1[0m[90m 191ms (84ms|88ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\ReplMethodTimeout.Tests.ps1[0m[90m 710ms (584ms|82ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\ReplWorkspaceResolution.Tests.ps1[0m[90m 501ms (404ms|78ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\SessionIdCanonicalAgent.Tests.ps1[0m[90m 670ms (605ms|50ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\ClaudeHookWiring.Tests.ps1[0m[90m 357ms (257ms|84ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\StopGateHardening.Tests.ps1[0m[90m 1.29s (1.2s|61ms)[0m
+[97mTests completed in 7s[0m
+[32mTests Passed: 20, [0m[90mFailed: 0, [0m[90mSkipped: 0, [0m[90mInconclusive: 0, [0m[37m[0m[90mNotRun: 0[0m
+
+
+Failed: 0
+Skipped: 0
+EXIT=0

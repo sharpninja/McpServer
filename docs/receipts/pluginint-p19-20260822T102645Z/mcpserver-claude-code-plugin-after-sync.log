@@ -1,0 +1,22 @@
+[95m
+[95mStarting discovery in 10 files.[0m
+[95mDiscovery found 25 tests in 429ms.[0m
+[95mRunning tests.[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\ClaudeHookWiring.Tests.ps1[0m[90m 1.52s (552ms|757ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\CurrentTurnSessionRebind.Tests.ps1[0m[90m 1.35s (1.22s|108ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\HookTurnDedupe.Tests.ps1[0m[90m 1.21s (1.12s|80ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\NativeSmoke.Tests.ps1[0m[90m 2.95s (2.77s|126ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\ReplFailsafe.Tests.ps1[0m[90m 3.28s (3.17s|90ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\ReplMethodTimeout.Tests.ps1[0m[90m 405ms (311ms|83ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\ReplWorkspaceResolution.Tests.ps1[0m[90m 575ms (464ms|96ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\SessionIdCanonicalAgent.Tests.ps1[0m[90m 459ms (360ms|87ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\Skills.Tests.ps1[0m[90m 186ms (81ms|89ms)[0m
+[32m[+] F:\GitHub\mcpserver-claude-code-plugin\tests\StopGateHardening.Tests.ps1[0m[90m 823ms (736ms|72ms)[0m
+[97mTests completed in 12.89s[0m
+[32mTests Passed: 25, [0m[90mFailed: 0, [0m[90mSkipped: 0, [0m[90mInconclusive: 0, [0m[37m[0m[90mNotRun: 0[0m
+
+workflow.sessionlog.completeTurn re-binding current-turn cache 'C:\Users\kingd\AppData\Local\Temp\mcp-turn-rebind-fcbfd01428ad4ee083efef52a6181e67\current-turn.yaml' from rotated sessionId 'ClaudeCode-20260716T010000Z-plugin-session' to active sessionId 'ClaudeCode-20260716T020000Z-plugin-session'.
+
+Failed: 0
+Skipped: 0
+EXIT=0

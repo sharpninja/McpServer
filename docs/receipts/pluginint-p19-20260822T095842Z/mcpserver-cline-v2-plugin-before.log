@@ -1,0 +1,18 @@
+
+> @sharpninja/mcpserver-cline-v2-plugin@1.100.0 test
+> jest --ci --watchAll=false --passWithNoTests=false
+
+
+PASS tests/skills.test.ts
+PASS tests/plugin.test.ts
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+
+Test Suites: 2 passed, 2 total
+Tests:       10 passed, 10 total
+Snapshots:   0 total
+Time:        6.485 s, estimated 7 s
+Ran all test suites.
+
+Failed: 0
+Skipped: 0
+EXIT=0

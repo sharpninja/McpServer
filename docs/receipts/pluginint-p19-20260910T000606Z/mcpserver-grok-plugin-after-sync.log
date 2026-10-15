@@ -1,0 +1,16 @@
+[95m
+[95mStarting discovery in 6 files.[0m
+[95mDiscovery found 18 tests in 220ms.[0m
+[95mRunning tests.[0m
+[32m[+] F:\GitHub\mcpserver-grok-plugin\tests\NativeSmoke.Tests.ps1[0m[90m 1.94s (1.41s|394ms)[0m
+[32m[+] F:\GitHub\mcpserver-grok-plugin\tests\ReplFailsafe.Tests.ps1[0m[90m 1.24s (1.18s|41ms)[0m
+[32m[+] F:\GitHub\mcpserver-grok-plugin\tests\ReplMethodTimeout.Tests.ps1[0m[90m 177ms (126ms|43ms)[0m
+[32m[+] F:\GitHub\mcpserver-grok-plugin\tests\ReplWorkspaceResolution.Tests.ps1[0m[90m 266ms (218ms|40ms)[0m
+[32m[+] F:\GitHub\mcpserver-grok-plugin\tests\SessionIdCanonicalAgent.Tests.ps1[0m[90m 221ms (180ms|36ms)[0m
+[32m[+] F:\GitHub\mcpserver-grok-plugin\tests\Skills.Tests.ps1[0m[90m 103ms (49ms|47ms)[0m
+[97mTests completed in 3.98s[0m
+[32mTests Passed: 18, [0m[90mFailed: 0, [0m[90mSkipped: 0, [0m[90mInconclusive: 0, [0m[37m[0m[90mNotRun: 0[0m
+
+EXIT=0
+Failed: 0
+Skipped: 0
