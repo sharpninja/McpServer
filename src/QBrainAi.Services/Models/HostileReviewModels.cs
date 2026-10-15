@@ -196,17 +196,20 @@ public sealed class HostileReviewQueryRequest
     public int Limit { get; set; } = 50;
 }
 
-/// <summary>TR-MCP-HOSTILEREVIEW-003: Reviewer output accepted into the normalized store.</summary>
+/// <summary>
+/// TR-MCP-HOSTILEREVIEW-003: Reviewer output accepted into the normalized store. The reviewer agent, model and effort are what the reviewer
+/// reports; empty when it reports none, never a default model (AC-002, PLAN-SESSIONTRIAGEFIX-001 B9).
+/// </summary>
 public sealed class HostileReviewerOutput
 {
-    /// <summary>Reviewer agent.</summary>
-    public string ReviewerAgent { get; set; } = "Astra";
+    /// <summary>Reviewer agent as reported; empty when not reported.</summary>
+    public string ReviewerAgent { get; set; } = string.Empty;
 
-    /// <summary>Model.</summary>
-    public string Model { get; set; } = "gpt-6-astra";
+    /// <summary>Model as reported; empty when not reported.</summary>
+    public string Model { get; set; } = string.Empty;
 
-    /// <summary>Effort.</summary>
-    public string Effort { get; set; } = "xhigh";
+    /// <summary>Effort as reported; empty when not reported.</summary>
+    public string Effort { get; set; } = string.Empty;
 
     /// <summary>Source surface.</summary>
     public string? SourceSurface { get; set; } = "mcp";

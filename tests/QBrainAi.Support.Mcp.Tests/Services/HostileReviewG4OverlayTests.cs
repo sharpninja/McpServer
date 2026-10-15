@@ -475,6 +475,130 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
         await Assert.ThrowsAnyAsync<Exception>(() => AssertStartupFailsNamingWorker(() => Task.CompletedTask));
     }
 
+    /// <summary>
+    /// TR-MCP-HOSTILEREVIEW-003 AC-001 (PLAN-SESSIONTRIAGEFIX-001 B9, operator rule 2026-10-15): option validation accepts the agent, model and
+    /// effort unset or configured to any value; none is pinned.
+    /// </summary>
+    private static void AssertOptionsAcceptUnpinned(Action<string, string, string> validate)
+    {
+        foreach (var (agent, model, effort) in new[] { ("", "", ""), ("Astra", "gpt-6-astra", "xhigh"), ("Reviewer", "grok-4.7", "high") })
+        {
+            validate(agent, model, effort);
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-HOSTILEREVIEW-003 AC-002 (PLAN-SESSIONTRIAGEFIX-001 B9): with no model or effort configured, any reported model and effort, or
+    /// none, is accepted; a configured model or effort is required of the output.
+    /// </summary>
+    private static void AssertOutputRule(Func<string, string, string, string, bool> accepts)
+    {
+        Assert.True(accepts("grok-4.7", "high", "", ""), "an unconfigured worker refused a reported model");
+        Assert.True(accepts("", "", "", ""), "an unconfigured worker refused an output that reports no model");
+        Assert.True(accepts("gpt-6-astra", "xhigh", "gpt-6-astra", "xhigh"), "a configured worker refused the configured model");
+        Assert.False(accepts("grok-4.7", "xhigh", "gpt-6-astra", ""), "a configured model was not required of the output");
+        Assert.False(accepts("gpt-6-astra", "high", "", "xhigh"), "a configured effort was not required of the output");
+    }
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-003 AC-002 (B9): a reviewer output that reports no agent, model or effort carries none, never a default.</summary>
+    private static void AssertNoFabricatedReviewerDefaults(HostileReviewerOutput output)
+    {
+        Assert.Equal(string.Empty, output.ReviewerAgent);
+        Assert.Equal(string.Empty, output.Model);
+        Assert.Equal(string.Empty, output.Effort);
+    }
+
+    /// <summary>
+    /// Mock gate for TR-MCP-HOSTILEREVIEW-003 AC-001 and AC-002 (PLAN-SESSIONTRIAGEFIX-001 B9): the options assertion accepts a validation that
+    /// keeps only the relationship rules and rejects today's validation pinned to Astra, gpt-6-astra and xhigh; the output assertion accepts
+    /// the configured-only rule and rejects today's constant rule and a rule that ignores the configuration; the defaults assertion accepts an
+    /// output built without agent, model or effort and rejects the output defaults of 2026-10-15 (Astra, gpt-6-astra, xhigh). Data: reference
+    /// delegates and hand-built outputs; the shipped options and service are not called.
+    /// </summary>
+    [Fact]
+    public void WorkerOptionsAndOutputRules_AcceptUnpinnedOrConfiguredAndRejectPinsOrIgnoredConfig()
+    {
+        AssertOptionsAcceptUnpinned((_, _, _) => { });
+        Assert.ThrowsAny<Exception>(() => AssertOptionsAcceptUnpinned((agent, model, effort) =>
+        {
+            if (agent != "Astra" || model != "gpt-6-astra" || effort != "xhigh")
+                throw new InvalidOperationException("HostileReviewWorker AgentName, RequiredModel and RequiredEffort are pinned.");
+        }));
+
+        static bool ConfiguredOnly(string model, string effort, string requiredModel, string requiredEffort) =>
+            (requiredModel.Length == 0 || model == requiredModel) && (requiredEffort.Length == 0 || effort == requiredEffort);
+        AssertOutputRule(ConfiguredOnly);
+        Assert.ThrowsAny<Exception>(() => AssertOutputRule((model, effort, _, _) => model == "gpt-6-astra" && effort == "xhigh"));
+        Assert.ThrowsAny<Exception>(() => AssertOutputRule((_, _, _, _) => true));
+
+        AssertNoFabricatedReviewerDefaults(new HostileReviewerOutput { ReviewerAgent = string.Empty, Model = string.Empty, Effort = string.Empty });
+        Assert.ThrowsAny<Exception>(() => AssertNoFabricatedReviewerDefaults(new HostileReviewerOutput { ReviewerAgent = "Astra", Model = "gpt-6-astra", Effort = "xhigh" }));
+    }
+
+    /// <summary>
+    /// Binding for TR-MCP-HOSTILEREVIEW-003 AC-001 (PLAN-SESSIONTRIAGEFIX-001 B9): the shipped HostileReviewWorkerOptions.Validate accepts the
+    /// agent, model and effort unset or configured to any value. Data: the three pinned combinations of the mock gate.
+    /// </summary>
+    [Fact]
+    public void HostileReviewWorkerOptions_AnyAgentModelEffort_PassValidation() =>
+        AssertOptionsAcceptUnpinned((agent, model, effort) =>
+            new HostileReviewWorkerOptions { AgentName = agent, RequiredModel = model, RequiredEffort = effort }.Validate());
+
+    /// <summary>
+    /// Binding for TR-MCP-HOSTILEREVIEW-003 AC-002 (PLAN-SESSIONTRIAGEFIX-001 B9): a reviewer output built without agent, model or effort carries
+    /// none; with none configured, the shipped service accepts an output reporting grok-4.7 at high effort and records exactly that, and
+    /// records nothing for an output that reports nothing. Fixture: the in-memory SQLite workspace and default worker options.
+    /// </summary>
+    [Fact]
+    public async Task AcceptReviewerOutput_NoConfiguredModel_RecordsReportedModel()
+    {
+        AssertNoFabricatedReviewerDefaults(new HostileReviewerOutput());
+        var sut = CreateService();
+        var first = await sut.SubmitAsync(ValidRequest(), TestContext.Current.CancellationToken);
+        var reported = SampleOutput();
+        reported.ReviewerAgent = "Reviewer";
+        reported.Model = "grok-4.7";
+        reported.Effort = "high";
+        var accepted = await ((IHostileReviewWorker)sut).AcceptReviewerOutputAsync(first.RequestId!, reported, TestContext.Current.CancellationToken);
+        Assert.NotEqual("ModelUnavailable", accepted.ErrorCode);
+        var execution = Assert.Single(accepted.Executions);
+        Assert.Equal("Reviewer", execution.ReviewerAgent);
+        Assert.Equal("grok-4.7", execution.Model);
+        Assert.Equal("high", execution.Effort);
+
+        var second = await sut.SubmitAsync(ValidRequest(agent: "agent-b"), TestContext.Current.CancellationToken);
+        var silent = new HostileReviewerOutput { Verdict = "DISAGREE", RequestQuality = SampleOutput().RequestQuality };
+        var unreported = await ((IHostileReviewWorker)sut).AcceptReviewerOutputAsync(second.RequestId!, silent, TestContext.Current.CancellationToken);
+        Assert.NotEqual("ModelUnavailable", unreported.ErrorCode);
+        var none = Assert.Single(unreported.Executions);
+        Assert.Equal(string.Empty, none.ReviewerAgent);
+        Assert.Equal(string.Empty, none.Model);
+        Assert.Equal(string.Empty, none.Effort);
+    }
+
+    /// <summary>
+    /// Binding for TR-MCP-HOSTILEREVIEW-003 AC-002 (PLAN-SESSIONTRIAGEFIX-001 B9): with RequiredModel configured, an output reporting another
+    /// model fails the request as ModelUnavailable and records no execution, and an output reporting the configured model is accepted.
+    /// Fixture: the in-memory SQLite workspace and worker options with RequiredModel gpt-6-astra.
+    /// </summary>
+    [Fact]
+    public async Task AcceptReviewerOutput_ConfiguredModelMismatch_FailsModelUnavailable()
+    {
+        var sut = new HostileReviewService(CreateDb(), new HostileReviewWorkerOptions { RequiredModel = "gpt-6-astra" });
+        var first = await sut.SubmitAsync(ValidRequest(), TestContext.Current.CancellationToken);
+        var other = SampleOutput();
+        other.Model = "grok-4.7";
+        var refused = await ((IHostileReviewWorker)sut).AcceptReviewerOutputAsync(first.RequestId!, other, TestContext.Current.CancellationToken);
+        Assert.False(refused.Success);
+        Assert.Equal("ModelUnavailable", refused.ErrorCode);
+        Assert.Empty(refused.Executions);
+
+        var second = await sut.SubmitAsync(ValidRequest(agent: "agent-b"), TestContext.Current.CancellationToken);
+        var accepted = await ((IHostileReviewWorker)sut).AcceptReviewerOutputAsync(second.RequestId!, SampleOutput(), TestContext.Current.CancellationToken);
+        Assert.NotEqual("ModelUnavailable", accepted.ErrorCode);
+        Assert.Equal("gpt-6-astra", Assert.Single(accepted.Executions).Model);
+    }
+
     /// <summary>TR-MCP-HOSTILEREVIEW-003 AC-001: the start fails, and the failure text names HostileReviewWorker.</summary>
     private static async Task AssertStartupFailsNamingWorker(Func<Task> start)
     {
@@ -538,6 +662,9 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
     private static HostileReviewerOutput SampleOutput()
         => new()
         {
+            ReviewerAgent = "Astra",
+            Model = "gpt-6-astra",
+            Effort = "xhigh",
             Verdict = "DISAGREE",
             Findings = [new HostileReviewFinding { Category = "defect", Severity = "high", Recommendation = "add tests" }],
             RequestQuality = new HostileReviewRequestQuality

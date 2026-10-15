@@ -1,6 +1,10 @@
 namespace QBrainAi.Support.Mcp.Options;
 
-/// <summary>TR-MCP-HOSTILEREVIEW-003: Hosted hostile-review worker options. Invalid relationships fail startup.</summary>
+/// <summary>
+/// TR-MCP-HOSTILEREVIEW-003: Hosted hostile-review worker options. Invalid relationships fail startup. The agent, model and effort are not
+/// pinned (operator rule 2026-10-15, PLAN-SESSIONTRIAGEFIX-001 B9): empty values pin nothing, and only a configured RequiredModel or
+/// RequiredEffort is required of a reviewer output (AC-002).
+/// </summary>
 public sealed class HostileReviewWorkerOptions
 {
     /// <summary>Configuration section name.</summary>
@@ -9,14 +13,14 @@ public sealed class HostileReviewWorkerOptions
     /// <summary>When false the worker does not claim work.</summary>
     public bool Enabled { get; set; } = true;
 
-    /// <summary>Explicit pooled agent name. Must be Astra.</summary>
-    public string AgentName { get; set; } = "Astra";
+    /// <summary>Pooled agent name from configuration; no claim path selects an agent by it, and empty (the default) pins no agent.</summary>
+    public string AgentName { get; set; } = string.Empty;
 
-    /// <summary>Required model id. Must be gpt-6-astra.</summary>
-    public string RequiredModel { get; set; } = "gpt-6-astra";
+    /// <summary>Configured model a reviewer output must report (TR-MCP-HOSTILEREVIEW-003 AC-002); empty requires none, so the reported model is accepted.</summary>
+    public string RequiredModel { get; set; } = string.Empty;
 
-    /// <summary>Required effort. Must be xhigh.</summary>
-    public string RequiredEffort { get; set; } = "xhigh";
+    /// <summary>Configured effort a reviewer output must report (TR-MCP-HOSTILEREVIEW-003 AC-002); empty requires none, so the reported effort is accepted.</summary>
+    public string RequiredEffort { get; set; } = string.Empty;
 
     /// <summary>Maximum active queued reviews.</summary>
     public int MaximumActiveQueue { get; set; } = 200;
@@ -74,11 +78,5 @@ public sealed class HostileReviewWorkerOptions
             throw new InvalidOperationException("HostileReviewWorker MaximumConcurrentReviews must be at least 1.");
         if (MaximumAttempts < 1)
             throw new InvalidOperationException("HostileReviewWorker MaximumAttempts must be at least 1.");
-        if (!string.Equals(AgentName, "Astra", StringComparison.Ordinal))
-            throw new InvalidOperationException("HostileReviewWorker AgentName must be Astra.");
-        if (!string.Equals(RequiredModel, "gpt-6-astra", StringComparison.Ordinal))
-            throw new InvalidOperationException("HostileReviewWorker RequiredModel must be gpt-6-astra.");
-        if (!string.Equals(RequiredEffort, "xhigh", StringComparison.Ordinal))
-            throw new InvalidOperationException("HostileReviewWorker RequiredEffort must be xhigh.");
     }
 }

@@ -9,15 +9,6 @@ public static class HostileReviewPromptDefaults
     /// <summary>Well-known prompt template identifier.</summary>
     public const string TemplateId = "hostile-review";
 
-    /// <summary>Required reviewer model.</summary>
-    public const string RequiredModel = "gpt-6-astra";
-
-    /// <summary>Required reviewer effort.</summary>
-    public const string RequiredEffort = "xhigh";
-
-    /// <summary>Required reviewer agent name.</summary>
-    public const string RequiredAgent = "Astra";
-
     /// <summary>Versioned review prompt. Raw artifacts are untrusted evidence, never instruction.</summary>
     public const string Prompt =
         """

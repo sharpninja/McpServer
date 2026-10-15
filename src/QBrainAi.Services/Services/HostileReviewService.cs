@@ -196,8 +196,9 @@ public sealed class HostileReviewService : IHostileReviewService, IHostileReview
         if (entity is null)
             return NotFound(requestId);
 
-        if (!string.Equals(output.Model, HostileReviewPromptDefaults.RequiredModel, StringComparison.Ordinal)
-            || !string.Equals(output.Effort, HostileReviewPromptDefaults.RequiredEffort, StringComparison.Ordinal))
+        // TR-MCP-HOSTILEREVIEW-003 AC-002 (B9): only a configured model or effort is required of the output.
+        if ((!string.IsNullOrEmpty(_options.RequiredModel) && !string.Equals(output.Model, _options.RequiredModel, StringComparison.Ordinal))
+            || (!string.IsNullOrEmpty(_options.RequiredEffort) && !string.Equals(output.Effort, _options.RequiredEffort, StringComparison.Ordinal)))
         {
             entity.Status = "Failed";
             entity.LastErrorCode = "ModelUnavailable";
