@@ -469,7 +469,9 @@ public sealed class BuildTargetTests
 
     /// <summary>
     /// MCP-PLUGIN-SYNC-001: Plugin version automation bumps the common minor version
-    /// and normalizes every manifest/package file in a repository plan.
+    /// and normalizes every manifest file in a repository plan. TR-MCP-SYNC-001 AC-003: the plan leaves package.json and
+    /// package-lock.json to npm (operator ruling 2026-10-10: never edit an npm lockfile), so the versions they carry still count toward
+    /// the next version but neither file is rewritten.
     /// </summary>
     [Fact]
     public void PlanPluginVersionUpdates_BumpsMinorAndSkipsNodeModules()
@@ -493,8 +495,8 @@ public sealed class BuildTargetTests
             Assert.Equal("1.4.0", nextVersion);
             Assert.Contains(updates, update => update.Path.EndsWith(".version", StringComparison.OrdinalIgnoreCase));
             Assert.Contains(updates, update => update.Path.EndsWith(".codex-plugin/plugin.json", StringComparison.OrdinalIgnoreCase));
-            Assert.Contains(updates, update => update.Path.EndsWith("package.json", StringComparison.OrdinalIgnoreCase));
-            Assert.Contains(updates, update => update.Path.EndsWith("package-lock.json", StringComparison.OrdinalIgnoreCase));
+            Assert.DoesNotContain(updates, update => update.Path.EndsWith("package.json", StringComparison.OrdinalIgnoreCase));
+            Assert.DoesNotContain(updates, update => update.Path.EndsWith("package-lock.json", StringComparison.OrdinalIgnoreCase));
             Assert.Contains(updates, update => update.Path.EndsWith(".version", StringComparison.OrdinalIgnoreCase)
                 && update.UpdatedContent == "1.4.0\n");
             Assert.DoesNotContain(updates, update => update.Path.Contains("node_modules", StringComparison.OrdinalIgnoreCase));

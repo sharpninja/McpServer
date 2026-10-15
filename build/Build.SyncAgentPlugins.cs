@@ -68,6 +68,12 @@ partial class Build
                 Log.Information("Updated plugin version in {Path} to {Version}", update.Path, nextVersion);
             }
 
+            // TR-MCP-SYNC-001 AC-003: npm's own files change only through npm.
+            foreach (var pluginRoot in pluginRoots)
+            {
+                VersionNodePluginPackage(pluginRoot, nextVersion);
+            }
+
             RefreshKnownPluginCaches(pluginRoots, nextVersion);
         });
 
@@ -110,7 +116,10 @@ partial class Build
         return $"{highest.Value.Major}.{highest.Value.Minor + 1}.0";
     }
 
-    /// <summary>Create deterministic JSON rewrites for plugin manifests and root package files.</summary>
+    /// <summary>
+    /// Create deterministic rewrites for plugin manifests and .version files. A plugin's package.json and package-lock.json belong to npm
+    /// and are versioned through <see cref="VersionNodePluginPackage"/> instead (TR-MCP-SYNC-001 AC-003).
+    /// </summary>
     internal static IReadOnlyList<PluginVersionUpdate> PlanPluginVersionUpdates(
         IReadOnlyList<AbsolutePath> pluginRoots,
         string version)
@@ -120,7 +129,7 @@ partial class Build
             throw new ArgumentException("Plugin version is required.", nameof(version));
 
         var updates = new List<PluginVersionUpdate>();
-        foreach (var path in EnumerateVersionedFiles(pluginRoots))
+        foreach (var path in EnumerateVersionedFiles(pluginRoots).Where(static path => !IsNpmOwnedFile(path)))
         {
             var originalContent = File.ReadAllText(path);
             var updatedContent = RewriteVersionedFile(path, originalContent, version.Trim());
@@ -140,6 +149,37 @@ partial class Build
 
     /// <summary>A planned plugin version file rewrite.</summary>
     internal sealed record PluginVersionUpdate(string Path, string OriginalContent, string UpdatedContent);
+
+    /// <summary>TR-MCP-SYNC-001 AC-003: package.json and package-lock.json, the files npm owns.</summary>
+    private static bool IsNpmOwnedFile(string path)
+    {
+        var fileName = Path.GetFileName(path);
+        return fileName.Equals("package.json", StringComparison.OrdinalIgnoreCase)
+            || fileName.Equals("package-lock.json", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// TR-MCP-SYNC-001 AC-003: versions a Node plugin's package.json and package-lock.json through npm (npm version, no git commit or tag,
+    /// no lifecycle scripts), so they change in their version lines only and keep npm's own formatting; a plugin root without a
+    /// package.json is left alone.
+    /// </summary>
+    /// <param name="pluginRoot">The plugin repository root.</param>
+    /// <param name="version">The plugin version to record.</param>
+    internal static void VersionNodePluginPackage(AbsolutePath pluginRoot, string version)
+    {
+        if (string.IsNullOrWhiteSpace(version) || version.Any(char.IsWhiteSpace))
+            throw new ArgumentException("A plugin version must be non-empty and contain no whitespace.", nameof(version));
+
+        if (!File.Exists((pluginRoot / "package.json").ToString()))
+            return;
+
+        ProcessTasks.StartProcess(
+                "npm",
+                $"version {version} --no-git-tag-version --allow-same-version --ignore-scripts",
+                workingDirectory: pluginRoot.ToString())
+            .AssertZeroExitCode();
+        Log.Information("Updated plugin version through npm in {PluginRoot} to {Version}", pluginRoot, version);
+    }
 
     internal static IReadOnlyList<AbsolutePath> DiscoverAgentPluginRoots(AbsolutePath rootDirectory, string? pluginParent = null)
     {
@@ -349,12 +389,6 @@ partial class Build
         }
 
         root["version"] = version;
-
-        if (Path.GetFileName(path).Equals("package-lock.json", StringComparison.OrdinalIgnoreCase)
-            && root["packages"]?[""] is JsonObject rootPackage)
-        {
-            rootPackage["version"] = version;
-        }
 
         var json = root.ToJsonString(s_pluginJsonOptions)
             .Replace("\r\n", "\n", StringComparison.Ordinal)
