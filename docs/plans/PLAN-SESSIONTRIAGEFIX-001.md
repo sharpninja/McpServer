@@ -259,7 +259,26 @@ Blast radius: test files, the new isolation test and two test helpers under plug
 
 ### Slice F: other repositories (each on fix/session-triage-20261013 in its main checkout)
 - F1 triage-report-eb56d4eb: the Codex plugin wrapper reads the main workspace from a worktree session, or returns a structured error, never bare False (mcpserver-codex-plugin).
-- F2 triage-report-834cec2e: mcpserver-cline-plugin main carries hooks/scripts/memory-context.ps1 its memory-skill test reads.
+- F2 triage-report-834cec2e: mcpserver-cline-plugin main carries hooks/scripts/memory-context.ps1 its memory-skill test reads. See "F2 plan" below.
+
+#### F2 plan (bug in already-specified behavior: TR-MCP-MEMORY-008 "Official McpServer plugins ... expose memory tools through their supported tool surfaces")
+
+Root cause (receipts 2026-10-15): the commit "fix: sync session-log lifecycle and receipt contracts" (2026-10-01T21:15) deleted the memory helper in six plugin repositories: hooks/scripts/memory-context.ps1 in cline (f943ca4), claude-code (d3a07e0), copilot (ff622fa), grok and grok-bot (24a9a93), and lib/memory-context.ps1 in codex (ce4a7a6). Each plugin's memory skill wrapper (skills/memory/scripts/invoke.ps1) loads that helper and throws "memory-context.ps1 was not found" without it; claude-cowork and opencode kept theirs, and cline-v2's wrapper does not use it. Nothing in today's core sync removes it: sync-plugin-core.ps1 deletes only the lib/ files its previous CORE-MANIFEST.yaml lists, lib/*.sh, *.bash and *.js, Invoke-*McpPlugin.ps1 variants and GAPS.md, and hooks/scripts/*.sh and *.bash; the Nuke target deletes only Node vendor tarballs.
+
+Requirement (through the plugin route, isSatisfied false until HV): TR-MCP-MEMORY-008 AC-001. In every official plugin whose memory skill wrapper loads memory-context.ps1, the helper is present at a path the wrapper searches, so the wrapper dispatches memory_list to workflow.memory.list and exits 0 (through the helper's MCP_PLUGIN_REPL_LOG seam, without a server); a core sync leaves the helper byte-identical.
+
+Tests first (Pester through TestPluginCore; plugin test files by absolute path as in D5):
+- tests/MemoryWrapperHelper.Tests.ps1, one file in claude-code, claude-cowork, cline, codex, copilot, grok and opencode. Mock gate MemoryDispatchAssertion_AcceptsHelperInSearchPathAndRejectsMissingMisplacedOrWrongDispatch: fixture plugin roots built from the repository's own wrapper and descriptor and a stand-in helper; negative controls: no helper, a helper outside every wrapper's search paths, a helper that dispatches elsewhere. Binding (held in the session scratchpad `triagefix/held/f2/` until the restore): MemoryWrapper_ThisPlugin_DispatchesThroughItsHelper.
+- McpServer plugins/core/test-fixtures/pester/PluginCoreSyncHostFiles.Tests.ps1. Mock gate HostHelperSyncAssertion_AcceptsKeptHelperAndRejectsDeletedRewrittenOrSkippedSync (negative controls: a sync that deletes the helper, one that rewrites it, one that does no work); binding CoreSync_KeepsPluginMemoryHelper runs the shipped sync on a temporary plugin root.
+- The plugins' existing tests/MemoryInjection.Tests.ps1 and MemorySkill.Tests.ps1 and Cline's tests/memory-skill.test.ts are the applicable suites.
+
+Implementation: each plugin's own last committed helper is copied back byte for byte from its history blob (copy, verified by blob id); codex's goes to hooks/scripts, the second path its wrapper searches, rather than lib/, because lib/ is the folder the core sync owns.
+
+Results (2026-10-15, Linux): baseline before the restore f2-baseline-20261015T0656 (MemoryInjection 0 of 9 in claude-code, codex, copilot, grok and grok-bot; 7 of 9 in claude-cowork); mock gate f2-mockgate-20261015T0705, 8 of 8; bindings and applicable suites f2-binding-20261015T0706, 71 tests, 61 passed: MemoryWrapperHelper 14 of 14, PluginCoreSyncHostFiles 2 of 2, MemorySkill 10 of 10, MemoryInjection 35 of 45; Cline npm test 32 of 32 (the report recorded 31 of 32), package-lock.json unchanged. Plugin commits on fix/session-triage-20261013, pushed: claude-code c53c8a8, cline 3e4e551, codex 9a6ffab, copilot 95dbe0b, grok eab2cb5, claude-cowork a5ae85a, opencode 9b19a84.
+
+Limits (stated, not fixed here):
+- The 10 MemoryInjection failures are its two user-prompt-submit injection cases in each of the five plugins; they fail the same way in claude-cowork, whose helper was never deleted. The same 2026-10-01 commit removed the hooks' call to Add-McpRequiredMemoryToHookOutput, so no UserPromptSubmit hook renders REQUIRED MEMORIES: filed as triage-report-f01b3544, outside this report. Operator decision pending: whether F2's gate accepts these 10 cases as a stated exception.
+- mcpserver-grok-bot-plugin carries the same defect, but its main checkout is on remove-github-actions with uncommitted work that is not this session's; operator decision pending on how it joins the fix line.
 
 ## Order and gates
 
