@@ -22,10 +22,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="scenarios\plugin-sessionlog-scenarios.json" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="appsettings.aiunit.json" CopyToOutputDirectory="PreserveNewest" />
+    <!-- TEST-MCP-PLUGININT-001 AC-004 (PLAN-SESSIONTRIAGEFIX-001 E6): each operating system gets the strategy whose command it can start. -->
+    <None Include="appsettings.aiunit.json" CopyToOutputDirectory="PreserveNewest" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    <None Include="appsettings.aiunit.unix.json" Link="appsettings.aiunit.json" CopyToOutputDirectory="PreserveNewest" Condition="!$([MSBuild]::IsOSPlatform('Windows'))" />
     <None Include="..\..\templates\prompt-templates.yaml" Link="templates\prompt-templates.yaml" CopyToOutputDirectory="PreserveNewest" />
     <None Include="invoke-node-plugin-export.mjs" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\QBrainAi.Review.Tests\aiunit-grok-json.cmd" Link="aiunit-grok-json.cmd" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\QBrainAi.Review.Tests\aiunit-grok-json.ps1" Link="aiunit-grok-json.ps1" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="aiunit-grok-evaluator.ps1" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="aiunit-grok-evaluator.cmd" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
