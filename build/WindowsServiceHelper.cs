@@ -606,7 +606,7 @@ static partial class WindowsServiceHelper
         }
     }
 
-    /// <summary>TR-MCP-SERVICEUPDATE-001: shared live config and data preservation policy for both platforms.</summary>
+    /// <summary>TR-MCP-NUKE-015: shared live config and data preservation policy for both platforms.</summary>
     public static IReadOnlyList<string> GetPreservedStatePaths(string installRoot)
     {
         installRoot = Path.GetFullPath(installRoot);

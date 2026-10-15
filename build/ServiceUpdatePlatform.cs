@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-/// <summary>TR-MCP-SERVICEUPDATE-001: deployment defaults resolved before invoking platform-specific APIs.</summary>
+/// <summary>TR-MCP-NUKE-015: deployment defaults resolved before invoking platform-specific APIs.</summary>
 internal sealed record ServiceUpdatePlatform(bool IsWindows, string DefaultServiceName, string DefaultInstallPath,
     string ExecutableName, string RuntimeIdentifier)
 {

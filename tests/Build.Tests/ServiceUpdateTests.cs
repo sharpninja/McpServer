@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace NukeBuild.Tests;
 
-/// <summary>TEST-MCP-SERVICEUPDATE-001: temporary fixtures exercise deployment without a real service.</summary>
+/// <summary>TR-MCP-NUKE-015: temporary fixtures exercise deployment without a real service.</summary>
 public sealed class ServiceUpdateTests
 {
     /// <summary>Reference doubles establish the required preservation order before production exists.</summary>
@@ -175,7 +175,7 @@ public sealed class ServiceUpdateTests
 
 
 
-    /// <summary>FR-MCP-SERVICEUPDATE-001: host fixtures preserve Windows defaults and select Linux architecture.</summary>
+    /// <summary>TR-MCP-NUKE-015: host fixtures preserve Windows defaults and select Linux architecture.</summary>
     [Theory]
     [InlineData(true, false, Architecture.X64, "QBrainAi", "win-x64", "QBrainAi.Support.Mcp.exe")]
     [InlineData(false, true, Architecture.X64, "mcpserver.service", "linux-x64", "QBrainAi.Support.Mcp")]
@@ -190,7 +190,7 @@ public sealed class ServiceUpdateTests
         Assert.Equal(windows ? @"C:\ProgramData\QBrainAi" : "/opt/mcpserver/app", Property(value, "DefaultInstallPath"));
     }
 
-    /// <summary>Unsupported hosts fail before any native effect (TR-MCP-SERVICEUPDATE-001).</summary>
+    /// <summary>Unsupported hosts fail before any native effect (TR-MCP-NUKE-015).</summary>
     [Theory]
     [InlineData(false, false, Architecture.X64)]
     [InlineData(false, true, Architecture.X86)]
@@ -316,7 +316,7 @@ public sealed class ServiceUpdateTests
         Assert.DoesNotContain(f.Executable, paths);
     }
 
-    /// <summary>Missing unit, wrong executable, overlays and link roots cannot reach stop (TR-MCP-SERVICEUPDATE-001).</summary>
+    /// <summary>Missing unit, wrong executable, overlays and link roots cannot reach stop (TR-MCP-NUKE-015).</summary>
     [Theory]
     [InlineData("missing")]
     [InlineData("executable")]
@@ -343,7 +343,7 @@ public sealed class ServiceUpdateTests
         Assert.Equal("old", File.ReadAllText(f.Executable));
     }
 
-    /// <summary>TEST-MCP-SERVICEUPDATE-001: systemd simple units may return before exec; transient process observations must settle before health verification.</summary>
+    /// <summary>TR-MCP-NUKE-015: systemd simple units may return before exec; transient process observations must settle before health verification.</summary>
     [Theory]
     [InlineData("/usr/lib/systemd/systemd")]
     [InlineData(null)]
@@ -357,7 +357,7 @@ public sealed class ServiceUpdateTests
         Assert.Equal(1, f.Events.Count(value => value == "stop"));
     }
 
-    /// <summary>TEST-MCP-SERVICEUPDATE-001: a persistent wrong executable must fail within a bounded wait, restore live state and never pass health.</summary>
+    /// <summary>TR-MCP-NUKE-015: a persistent wrong executable must fail within a bounded wait, restore live state and never pass health.</summary>
     [Fact]
     public void LinuxUpdate_PersistentWrongProcessFailsAndRestores()
     {
@@ -417,7 +417,7 @@ public sealed class ServiceUpdateTests
     /// <summary>
     /// GNU tar preserves modes and symlink targets; private archive protects live secrets. On Windows, which has no Unix modes, ACLs or
     /// xattrs for the helper's tar to carry, the case asserts the archive request through the tar double: the same metadata flags, no
-    /// dereference, and the live state restored (C2, TR-MCP-SERVICEUPDATE-001 per-os-tests).
+    /// dereference, and the live state restored (C2, TR-MCP-NUKE-015 AC-005).
     /// </summary>
     [Fact]
     [Trait("Category", "Integration")]
@@ -470,7 +470,7 @@ public sealed class ServiceUpdateTests
     /// <summary>
     /// A stale directory link is removed without modifying its external target. On Windows File.Delete cannot remove a directory link, so
     /// the helper's replacement stops at the link with its recovery evidence kept; the target is not followed on either system (C2,
-    /// TR-MCP-SERVICEUPDATE-001 per-os-tests; production runs WindowsServiceHelper on Windows).
+    /// TR-MCP-NUKE-015 AC-005; production runs WindowsServiceHelper on Windows).
     /// </summary>
     [Fact]
     [Trait("Category", "Integration")]
@@ -496,7 +496,7 @@ public sealed class ServiceUpdateTests
     /// <summary>
     /// Linux rejects linked data roots and nonexecutable stages before stopping the selected service. Windows has no execute bit and the
     /// helper checks it on Unix only, so there a stage without one is accepted and the update runs; a linked data root is rejected on both
-    /// (C2, TR-MCP-SERVICEUPDATE-001 per-os-tests).
+    /// (C2, TR-MCP-NUKE-015 AC-005).
     /// </summary>
     [Theory]
     [Trait("Category", "Integration")]
@@ -647,7 +647,7 @@ public sealed class ServiceUpdateTests
     }
 
     /// <summary>
-    /// TR-MCP-SERVICEUPDATE-001 per-os-tests mock gate (PLAN-SESSIONTRIAGEFIX-001 C2): the stat double reports a registered path as a FIFO,
+    /// TR-MCP-NUKE-015 AC-005 mock gate (PLAN-SESSIONTRIAGEFIX-001 C2): the stat double reports a registered path as a FIFO,
     /// so the helper's regular-file guard rejects it on any operating system, while an ordinary file that is not registered stays accepted
     /// (the negative control: a double that ignored the registration would let the Windows cases pass without reaching the guard).
     /// </summary>
@@ -667,7 +667,7 @@ public sealed class ServiceUpdateTests
 
     /// <summary>
     /// Special stage files are rejected before an apphost read or any service mutation can block on a FIFO. Windows has no FIFOs, so there
-    /// the stat double reports the file as one and the same regular-file guard runs (C2, TR-MCP-SERVICEUPDATE-001 per-os-tests).
+    /// the stat double reports the file as one and the same regular-file guard runs (C2, TR-MCP-NUKE-015 AC-005).
     /// </summary>
     [Fact]
     [Trait("Category", "Integration")]
@@ -685,7 +685,7 @@ public sealed class ServiceUpdateTests
 
     /// <summary>
     /// Apphost and live text inputs reject FIFOs through the regular-file guard before opening them. Windows has no FIFOs, so there the stat
-    /// double reports the input as one and the same guard runs (C2, TR-MCP-SERVICEUPDATE-001 per-os-tests).
+    /// double reports the input as one and the same guard runs (C2, TR-MCP-NUKE-015 AC-005).
     /// </summary>
     [Theory]
     [Trait("Category", "Integration")]

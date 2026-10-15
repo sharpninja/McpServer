@@ -36,7 +36,7 @@ partial class Build
     readonly string PublishSource = string.Empty;
 
     /// <summary>
-    /// FR-MCP-SERVICEUPDATE-001: update the MCP Windows or Linux service while preserving live configuration and file data.
+    /// TR-MCP-NUKE-015: update the MCP Windows or Linux service while preserving live configuration and file data.
     /// Requires elevation (Administrator). Invoke via: sudo --chdir . pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService
     /// </summary>
     public Target UpdateService => _ => _
@@ -224,7 +224,7 @@ partial class Build
                 Log.Information("  Archive : {Path}", backup.ArchivePath);
         });
 
-    /// <summary>TR-MCP-SERVICEUPDATE-001: publishes before stopping an existing Linux unit and retains recovery state.</summary>
+    /// <summary>TR-MCP-NUKE-015: publishes before stopping an existing Linux unit and retains recovery state.</summary>
     private void UpdateLinuxService(ServiceUpdatePlatform platform)
     {
         var identity = LinuxServiceHelper.RunCommand("id", ["-u"]);

@@ -2,7 +2,7 @@
 
 Status: implementation present; full validation blocked. No completion or deployment approval. Operator explicitly requested implementation and then continued it.
 Source baseline: develop / origin/develop `62e612cf1b6dacc392ea406b5e37716ef094212f`.
-Requirements: FR-MCP-SERVICEUPDATE-001, TR-MCP-SERVICEUPDATE-001, TEST-MCP-SERVICEUPDATE-001.
+Requirements: FR-MCP-SERVICEUPDATE-001, TR-MCP-SERVICEUPDATE-001, TEST-MCP-SERVICEUPDATE-001. (Moved 2026-10-15 to TR-MCP-NUKE-015 under FR-MCP-BUILD-001 by PLAN-SESSIONTRIAGEFIX-001 C11: Nuke behavior lives only in TR-MCP-NUKE TRs; the three records were retired.)
 TODO: IMPL-SERVICEUPDATE-001.
 
 ## Outcome and boundaries

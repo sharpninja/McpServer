@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-/// <summary>TR-MCP-SERVICEUPDATE-001: native command result; output is never included in failure messages.</summary>
+/// <summary>TR-MCP-NUKE-015: native command result; output is never included in failure messages.</summary>
 internal sealed record ServiceCommandResult(int ExitCode, string StandardOutput);
 
 /// <summary>Explicit update paths; the lock-root override exists for isolated tests only.</summary>
@@ -16,7 +16,7 @@ internal sealed record LinuxServiceUpdateResult(string ArchivePath, string Archi
 /// <summary>Systemd environment-file path and missing-file policy.</summary>
 internal sealed record ServiceEnvironmentFile(string Path, bool Optional);
 
-/// <summary>TR-MCP-SERVICEUPDATE-001: updates an existing systemd unit with retained live-state recovery.</summary>
+/// <summary>TR-MCP-NUKE-015: updates an existing systemd unit with retained live-state recovery.</summary>
 internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, ServiceCommandResult> run)
 {
     private const string AppHost = "QBrainAi.Support.Mcp";
@@ -134,7 +134,7 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         }
     }
 
-    /// <summary>TR-MCP-SERVICEUPDATE-001: systemd simple units report start before exec; bound retries until the active main process resolves to the deployed apphost.</summary>
+    /// <summary>TR-MCP-NUKE-015: systemd simple units report start before exec; bound retries until the active main process resolves to the deployed apphost.</summary>
     private int WaitForServiceProcess(string service, string executable)
     {
         const int attempts = 100;
