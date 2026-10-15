@@ -1,0 +1,23 @@
+{
+  "runId": "win-b9c11-20261015T1523",
+  "worktreeHeadAtCopy": "1675632d8acd72f116a6bbe0bd93876e803db9d9",
+  "copiedLocal": "2026-10-15T15:26:51",
+  "files": [
+    {
+      "remotePath": "F:\\GitHub\\McpServer\\.worktrees\\triage-fixes-20261015\\TestResults\\win-b9c11-20261015T1523-b4\\targeted\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+      "relative": "win-b9c11-20261015T1523-b4/targeted/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "bytes": 36732,
+      "sha256": "5940daa778cf6463f76091fec818cafed2014fd042625da6a8b3e0b78b154a0d",
+      "remoteSha256": "5940daa778cf6463f76091fec818cafed2014fd042625da6a8b3e0b78b154a0d",
+      "keyLikeValue": false
+    },
+    {
+      "remotePath": "F:\\GitHub\\McpServer\\.worktrees\\triage-fixes-20261015\\TestResults\\win-b9c11-20261015T1523-c2\\serviceupdate.trx",
+      "relative": "win-b9c11-20261015T1523-c2/serviceupdate.trx",
+      "bytes": 114240,
+      "sha256": "e5e4308faae89110bf1c81259ff50f9e3c9ad5d1a539bdb82b7ecf1ec10951fe",
+      "remoteSha256": "e5e4308faae89110bf1c81259ff50f9e3c9ad5d1a539bdb82b7ecf1ec10951fe",
+      "keyLikeValue": false
+    }
+  ]
+}

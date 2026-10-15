@@ -1,0 +1,15 @@
+{
+  "runId": "win-final-20261015T1153",
+  "worktreeHead": "32fcc1447332643c83c2b148d89e01c3874a0ad2",
+  "copiedLocal": "2026-10-15T13:24:55",
+  "files": [
+    {
+      "remotePath": "F:\\GitHub\\McpServer\\.worktrees\\triage-fixes-20261015\\TestResults\\win-final-20261015T1153\\pester\\results.xml",
+      "relative": "win-final-20261015T1153/pester/results.xml",
+      "bytes": 365,
+      "sha256": "200ed1ee3902fadd6b926730751b8305c0d5e4438a69154bc4ff8edcfb3f0896",
+      "remoteSha256": "200ed1ee3902fadd6b926730751b8305c0d5e4438a69154bc4ff8edcfb3f0896",
+      "keyLikeValue": false
+    }
+  ]
+}

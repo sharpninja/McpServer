@@ -1,0 +1,10 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+# PLAN-SESSIONTRIAGEFIX-001 Windows evidence (PAYTON-LEGION2)
+
+Runs on PAYTON-LEGION2 over the operator's WSMan route, in the worktree F:\GitHub\McpServer\.worktrees\triage-fixes-20261015. Each file was read over WSMan, written here, and its SHA-256 checked against the original on F:, which is kept; manifest.json in each run folder lists the remote path, size and both hashes of every file. In the first three manifests the field worktreeHead is the worktree HEAD when the files were copied (32fcc144), not the HEAD the run tested; the later manifest names it worktreeHeadAtCopy. The HEAD each run tested is stated below.
+
+- win-final-20261015T1153 (tested HEAD 09b1b532): TestPluginCore (slices C and D): 297 of 297 tests ran green, but Pester 5.9.1's NUnit writer failed in Get-RunTimeEnvironment (Get-CimInstance Win32_OperatingSystem: AccessDenied, HRESULT 0x80041003, for the WSMan account), so results.xml holds only its header and the target refused the run. Blocked on the operator's WMI change.
+- win-dotnet-20261015T1201 (tested HEAD 09b1b532): Before the B4 and C2 fixes: HostileReviewG4OverlayTests 17 of 18 (B4's HostileReviewWorker_InvalidOptions_FailStartup failed) and Build.Tests ServiceUpdateTests 70 of 78 (C2's eight Linux-only cases failed).
+- win-b4c2-20261015T1309 (tested HEAD 32fcc144): After B4 and C2: HostileReviewG4OverlayTests 19 of 19 (targeted Nuke Test) and ServiceUpdateTests 79 of 79 (Build.Tests run directly).
+- win-b9c11-20261015T1523 (tested HEAD 1675632d): After B9 and C11: HostileReviewG4OverlayTests 23 of 23 (B4 with B9) and ServiceUpdateTests 79 of 79 (C2 with C11).
+

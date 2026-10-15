@@ -1,0 +1,716 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="eb706158-8537-4ac5-9a78-98cfd358e9f5" name="lab-wsman@PAYTON-LEGION2 2026-10-15 12:03:47" runUser="PAYTON-LEGION2\lab-wsman" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-15T12:03:47.3744014-05:00" queuing="2026-10-15T12:03:47.3744017-05:00" start="2026-10-15T12:03:45.7803958-05:00" finish="2026-10-15T12:03:59.5953822-05:00" />
+  <TestSettings name="default" id="667ed66b-9b66-4cd7-a8f4-5c2d068ad15a">
+    <Deployment runDeploymentRoot="lab-wsman_PAYTON-LEGION2_2026-10-15_12_03_47" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a31cbc3b-bc87-4b23-a72d-590410aacac0" testId="eb8839dd-4458-51b3-c065-bb115a277b5b" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation(alias: True)" computerName="PAYTON-LEGION2" duration="00:00:00.0232875" startTime="2026-10-15T12:03:47.8395947-05:00" endTime="2026-10-15T12:03:47.8629297-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a31cbc3b-bc87-4b23-a72d-590410aacac0" />
+    <UnitTestResult executionId="60dbeccd-7e7b-4414-8698-1069f376f977" testId="dfc30672-061e-0dbb-668e-ad04ca745586" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_LegacyExecStartInDropInIsRetargeted" computerName="PAYTON-LEGION2" duration="00:00:00.0813475" startTime="2026-10-15T12:03:47.3274092-05:00" endTime="2026-10-15T12:03:47.4088042-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60dbeccd-7e7b-4414-8698-1069f376f977" />
+    <UnitTestResult executionId="4145c1f3-5e0a-4c37-87b7-9eb327628ffa" testId="973d3b46-ce84-1ae6-2522-8b5d5d47593c" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth" computerName="PAYTON-LEGION2" duration="00:00:00.0314759" startTime="2026-10-15T12:03:47.9607494-05:00" endTime="2026-10-15T12:03:47.9922715-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4145c1f3-5e0a-4c37-87b7-9eb327628ffa" />
+    <UnitTestResult executionId="aaecc594-e5ee-424f-8180-0c640eececcd" testId="ede9fdfe-bd4d-a4ca-b9db-fbf6afbf3395" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;ExtensionImages&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0097861" startTime="2026-10-15T12:03:48.0568413-05:00" endTime="2026-10-15T12:03:48.0666759-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aaecc594-e5ee-424f-8180-0c640eececcd" />
+    <UnitTestResult executionId="bd834473-4af1-4d77-b1cd-bf1cef9aeeb0" testId="fbda7dc8-4ec9-0433-7ad8-19537f1150f9" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootImage&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0104572" startTime="2026-10-15T12:03:48.0873094-05:00" endTime="2026-10-15T12:03:48.0978173-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bd834473-4af1-4d77-b1cd-bf1cef9aeeb0" />
+    <UnitTestResult executionId="c2fc6b4e-9b7d-4434-ba6b-bef41e7518cb" testId="ff25d45e-d9e0-6fdd-1e55-ce1759f5d041" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;missing&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0096314" startTime="2026-10-15T12:03:47.9270441-05:00" endTime="2026-10-15T12:03:47.9367247-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2fc6b4e-9b7d-4434-ba6b-bef41e7518cb" />
+    <UnitTestResult executionId="636cbb09-c051-438a-833f-b3047fb1a9fc" testId="cede043b-2213-a365-a504-8ac9a95adb73" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;overlay&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0107111" startTime="2026-10-15T12:03:47.9369889-05:00" endTime="2026-10-15T12:03:47.9477457-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="636cbb09-c051-438a-833f-b3047fb1a9fc" />
+    <UnitTestResult executionId="1bc0564a-ecf4-4a73-96b1-61075bb98747" testId="bd76b7a6-1b2c-a7b4-5d7a-e61eb37ead0c" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner" computerName="PAYTON-LEGION2" duration="00:00:00.0112666" startTime="2026-10-15T12:03:59.2959742-05:00" endTime="2026-10-15T12:03:59.3073220-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1bc0564a-ecf4-4a73-96b1-61075bb98747" />
+    <UnitTestResult executionId="e8522182-9d99-4f66-87f6-a1002eeb9d38" testId="3f8634a1-bac1-d5b9-c46a-5bfbe84b7f95" testName="NukeBuild.Tests.ServiceUpdateTests.WindowsConfiguration_MissingBaselineFailsWithSourcePath" computerName="PAYTON-LEGION2" duration="00:00:00.0173585" startTime="2026-10-15T12:03:47.1865070-05:00" endTime="2026-10-15T12:03:47.2124927-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e8522182-9d99-4f66-87f6-a1002eeb9d38" />
+    <UnitTestResult executionId="d339452b-1ab0-4173-8e47-149875b625d4" testId="cdb2d734-c6f9-6da4-04b2-d9f559588dea" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: True)" computerName="PAYTON-LEGION2" duration="00:00:00.0204908" startTime="2026-10-15T12:03:47.9926290-05:00" endTime="2026-10-15T12:03:48.0131640-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d339452b-1ab0-4173-8e47-149875b625d4" />
+    <UnitTestResult executionId="473b9e99-003d-46d0-bd26-1cc853a0ed39" testId="70b5515c-2bbf-faac-8f5b-4c170ac4ea5e" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;environment&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0067926" startTime="2026-10-15T12:03:47.7970129-05:00" endTime="2026-10-15T12:03:47.8040969-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="473b9e99-003d-46d0-bd26-1cc853a0ed39">
+      <Output>
+        <ErrorInfo>
+          <Message>System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.</Message>
+          <StackTrace>   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+   at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 66&#xD;
+   at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 39&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 669&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(String input) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 645&#xD;
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e02af804-311b-47ee-b76c-85a6c9641a8b" testId="d1000721-4b52-6966-409e-10b2afe864ee" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: Arm)" computerName="PAYTON-LEGION2" duration="00:00:00.0004414" startTime="2026-10-15T12:03:59.2939508-05:00" endTime="2026-10-15T12:03:59.2944354-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e02af804-311b-47ee-b76c-85a6c9641a8b" />
+    <UnitTestResult executionId="8b75420b-c985-4e94-88c4-e0b0d303801a" testId="13653462-9f98-f12b-3d2a-484427dac583" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;/Mcp:DataDirectory=/unbacked&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0110018" startTime="2026-10-15T12:03:47.2845012-05:00" endTime="2026-10-15T12:03:47.2955500-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8b75420b-c985-4e94-88c4-e0b0d303801a" />
+    <UnitTestResult executionId="4c814f2e-1c29-4a50-ad87-480d1ac2d94c" testId="04b56b4e-b7e9-9e1f-32d3-b44ba9f438ef" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;TemporaryFileSystem&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0100019" startTime="2026-10-15T12:03:48.0465146-05:00" endTime="2026-10-15T12:03:48.0565644-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4c814f2e-1c29-4a50-ad87-480d1ac2d94c" />
+    <UnitTestResult executionId="a044cae8-9819-4e00-ab13-5f12def342d4" testId="8f154b7f-3d69-b183-cc35-d50e52412941" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: True, architecture: X86)" computerName="PAYTON-LEGION2" duration="00:00:00.0003479" startTime="2026-10-15T12:03:59.2947195-05:00" endTime="2026-10-15T12:03:59.2951098-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a044cae8-9819-4e00-ab13-5f12def342d4" />
+    <UnitTestResult executionId="59e898f7-e5fb-45a7-a1a2-e27745e31342" testId="b3fedc99-4598-8c66-a5eb-9318b8c3ea7b" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_DefaultRootPreservesLegacyFiles" computerName="PAYTON-LEGION2" duration="00:00:00.0193884" startTime="2026-10-15T12:03:59.1382019-05:00" endTime="2026-10-15T12:03:59.1576629-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="59e898f7-e5fb-45a7-a1a2-e27745e31342" />
+    <UnitTestResult executionId="33e62807-0181-4b9d-b12f-70a9c20e6111" testId="1af7fae8-9f8e-8fdf-7488-3fe7d6ae7589" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands" computerName="PAYTON-LEGION2" duration="00:00:00.0091596" startTime="2026-10-15T12:03:59.4942057-05:00" endTime="2026-10-15T12:03:59.5037031-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33e62807-0181-4b9d-b12f-70a9c20e6111">
+      <Output>
+        <ErrorInfo>
+          <Message>System.PlatformNotSupportedException : Unix file modes are not supported on this platform.</Message>
+          <StackTrace>   at System.IO.File.SetUnixFileModeCore(String path, UnixFileMode mode)&#xD;
+   at System.IO.File.SetUnixFileMode(String path, UnixFileMode mode)&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands() in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 425&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ee5fe0d3-4f93-4050-a435-96aba086db37" testId="6da9f643-9ab1-2303-19c8-0586daacb0ff" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks" computerName="PAYTON-LEGION2" duration="00:00:00.0322218" startTime="2026-10-15T12:03:59.4109363-05:00" endTime="2026-10-15T12:03:59.4450973-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ee5fe0d3-4f93-4050-a435-96aba086db37">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Service update failed; recovery evidence retained at C:\Users\lab-wsman\AppData\Local\Temp\service-update-968b3d82094f40d796c819c67a1f05d9\backups\20261015T170359429Z-ae8326913be54f8d9d47f8b1a0abcb19. No binary rollback was performed.&#xD;
+---- System.UnauthorizedAccessException : Access to the path 'C:\Users\lab-wsman\AppData\Local\Temp\service-update-968b3d82094f40d796c819c67a1f05d9\app\stale' is denied.</Message>
+          <StackTrace>   at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\build\LinuxServiceHelper.cs:line 133&#xD;
+   at InvokeStub_LinuxServiceHelper.Update(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+--- End of stack trace from previous location ---&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 683&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.Fixture.Update() in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 745&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks() in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 464&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+----- Inner Stack Trace -----&#xD;
+   at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+   at LinuxServiceHelper.&lt;ReplaceFiles&gt;g__Clean|35_1(String directory, &lt;&gt;c__DisplayClass35_0&amp;) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\build\LinuxServiceHelper.cs:line 446&#xD;
+   at LinuxServiceHelper.ReplaceFiles(String stage, String install, IReadOnlyList`1 preserved) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\build\LinuxServiceHelper.cs:line 472&#xD;
+   at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\build\LinuxServiceHelper.cs:line 112</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7d1aa5eb-a080-49d9-849d-247e9995890d" testId="61945694-53ac-89aa-4eca-ffe09cfa0513" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles" computerName="PAYTON-LEGION2" duration="00:00:00.0073665" startTime="2026-10-15T12:03:48.1398393-05:00" endTime="2026-10-15T12:03:48.1475370-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7d1aa5eb-a080-49d9-849d-247e9995890d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.</Message>
+          <StackTrace>   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+   at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 66&#xD;
+   at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 39&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 669&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles() in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 620&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2041fec8-6947-4dc7-a804-839062d41924" testId="26cff2aa-e98b-292e-3b94-5f33fbd14433" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;unit&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0119396" startTime="2026-10-15T12:03:47.7641360-05:00" endTime="2026-10-15T12:03:47.7880448-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2041fec8-6947-4dc7-a804-839062d41924">
+      <Output>
+        <ErrorInfo>
+          <Message>System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.</Message>
+          <StackTrace>   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+   at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 66&#xD;
+   at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 39&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 669&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(String input) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 645&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7dcdd6f9-4eae-41e0-87c1-7420226caeed" testId="b2a59998-7bee-b366-ae25-7c7b4a3282d5" testName="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 1, valid: False)" computerName="PAYTON-LEGION2" duration="00:00:00.0005382" startTime="2026-10-15T12:03:59.0743427-05:00" endTime="2026-10-15T12:03:59.0749160-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7dcdd6f9-4eae-41e0-87c1-7420226caeed" />
+    <UnitTestResult executionId="14edd209-0f26-40df-a741-c4854a3cce88" testId="20a66a2d-ea95-3f26-1ee2-4e25f2b30c59" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;PrivateTmp&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0096197" startTime="2026-10-15T12:03:48.0669448-05:00" endTime="2026-10-15T12:03:48.0766139-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14edd209-0f26-40df-a741-c4854a3cce88" />
+    <UnitTestResult executionId="c0b7d95a-5aca-4a77-9ece-7d33c8961dae" testId="064967fc-ba56-2b6f-e61e-e36f249714e2" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)" computerName="PAYTON-LEGION2" duration="00:00:00.0134981" startTime="2026-10-15T12:03:48.1190598-05:00" endTime="2026-10-15T12:03:48.1326048-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0b7d95a-5aca-4a77-9ece-7d33c8961dae" />
+    <UnitTestResult executionId="696c7114-35c6-479c-bf7b-a22a6110be34" testId="026d8b24-92be-1425-222a-02720c80f881" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;environment&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0158402" startTime="2026-10-15T12:03:47.8735012-05:00" endTime="2026-10-15T12:03:47.8893981-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="696c7114-35c6-479c-bf7b-a22a6110be34" />
+    <UnitTestResult executionId="ac1a9d9b-4554-48fc-be8d-e7031faf2b17" testId="1d91b7b5-21ea-3fed-7588-31e494d11c6d" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;MountImages&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0103072" startTime="2026-10-15T12:03:48.1082225-05:00" endTime="2026-10-15T12:03:48.1185830-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac1a9d9b-4554-48fc-be8d-e7031faf2b17" />
+    <UnitTestResult executionId="4999e98f-75bd-443c-b888-ca6a8cc705ce" testId="48b8bc97-a241-e099-028e-495703475903" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: ''\nMcp:\n  DataDirectory: '../data'\n&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0182056" startTime="2026-10-15T12:03:47.7262430-05:00" endTime="2026-10-15T12:03:47.7444969-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4999e98f-75bd-443c-b888-ca6a8cc705ce" />
+    <UnitTestResult executionId="7a8d4217-a8c4-4015-9ca7-d910a49f7f34" testId="d65c738a-1822-1412-70e7-c0a71ff6fce3" testName="NukeBuild.Tests.ServiceUpdateTests.WindowsConfiguration_StagesBaselineAndPreservesExplicitPublishConfig" computerName="PAYTON-LEGION2" duration="00:00:00.0160976" startTime="2026-10-15T12:03:59.3942249-05:00" endTime="2026-10-15T12:03:59.4104177-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a8d4217-a8c4-4015-9ca7-d910a49f7f34" />
+    <UnitTestResult executionId="0fc02860-277f-4bc8-a7eb-c80cd3909ed9" testId="1624d00f-6e9a-b175-3d6e-711048a9571f" testName="NukeBuild.Tests.ServiceUpdateTests.WindowsInstall_LegacyServiceKeepsLegacyInstallWhenCanonicalDirectoryIsStale" computerName="PAYTON-LEGION2" duration="00:00:00.0002781" startTime="2026-10-15T12:03:59.3167533-05:00" endTime="2026-10-15T12:03:59.3170844-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0fc02860-277f-4bc8-a7eb-c80cd3909ed9" />
+    <UnitTestResult executionId="f828274a-67a5-4baa-a9c6-1a8650d343eb" testId="a16b3136-cb9f-9f30-2dbc-f641145183b4" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: False)" computerName="PAYTON-LEGION2" duration="00:00:00.0293280" startTime="2026-10-15T12:03:59.1082671-05:00" endTime="2026-10-15T12:03:59.1376643-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f828274a-67a5-4baa-a9c6-1a8650d343eb" />
+    <UnitTestResult executionId="14808f47-8dca-4f02-acaf-72b1088d1c5b" testId="06dafa7b-c650-5f5f-5634-a183c7038413" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '  '\nMcp:\n  DataDirectory: '../data'&quot;···)" computerName="PAYTON-LEGION2" duration="00:00:00.0184256" startTime="2026-10-15T12:03:47.6721923-05:00" endTime="2026-10-15T12:03:47.6906651-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14808f47-8dca-4f02-acaf-72b1088d1c5b" />
+    <UnitTestResult executionId="d8bd82b7-b124-4aeb-a7d3-28e48ebd870f" testId="8322eca6-052e-5bed-bdfe-2985d6b22437" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles" computerName="PAYTON-LEGION2" duration="00:00:00.0203448" startTime="2026-10-15T12:03:47.2255436-05:00" endTime="2026-10-15T12:03:47.2459284-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d8bd82b7-b124-4aeb-a7d3-28e48ebd870f" />
+    <UnitTestResult executionId="9686e8dd-8dea-465e-879a-ad2422de4063" testId="074e9a36-f15c-e80a-b013-810b63738be4" testName="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 0, valid: True)" computerName="PAYTON-LEGION2" duration="00:00:00.0000288" startTime="2026-10-15T12:03:59.0751673-05:00" endTime="2026-10-15T12:03:59.0752381-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9686e8dd-8dea-465e-879a-ad2422de4063" />
+    <UnitTestResult executionId="1398e2ff-35b9-4938-839b-6b70ea23664b" testId="dcf59443-62e8-9de2-da30-423b360b30c5" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;ExtensionDirectories&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0100693" startTime="2026-10-15T12:03:48.0361387-05:00" endTime="2026-10-15T12:03:48.0462573-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1398e2ff-35b9-4938-839b-6b70ea23664b" />
+    <UnitTestResult executionId="0d56cc8e-8e08-4ebd-8c49-5683d9b09066" testId="8bc7b0ea-a952-c25a-1304-1e5c77bacef5" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: null)" computerName="PAYTON-LEGION2" duration="00:00:00.1247319" startTime="2026-10-15T12:03:47.5470287-05:00" endTime="2026-10-15T12:03:47.6718095-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d56cc8e-8e08-4ebd-8c49-5683d9b09066" />
+    <UnitTestResult executionId="5f859d8a-b313-4bb2-b8b0-da03f8526c67" testId="0638da29-30db-8721-801f-07202f1b33a2" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: X86)" computerName="PAYTON-LEGION2" duration="00:00:00.0000480" startTime="2026-10-15T12:03:59.2956128-05:00" endTime="2026-10-15T12:03:59.2956883-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5f859d8a-b313-4bb2-b8b0-da03f8526c67" />
+    <UnitTestResult executionId="19adafe3-59fb-435a-8319-943f1d258f07" testId="9a35abe9-faf2-5407-1963-9dd93311481e" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation(alias: False)" computerName="PAYTON-LEGION2" duration="00:00:00.0274677" startTime="2026-10-15T12:03:47.8118208-05:00" endTime="2026-10-15T12:03:47.8393424-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19adafe3-59fb-435a-8319-943f1d258f07" />
+    <UnitTestResult executionId="bc33dbd1-9366-4d1a-8bbd-df7fa917b191" testId="99e296dd-8853-14e9-90dc-9babb9b22679" testName="NukeBuild.Tests.ServiceUpdateTests.WindowsInstall_KeepsExplicitServiceName" computerName="PAYTON-LEGION2" duration="00:00:00.0010067" startTime="2026-10-15T12:03:59.3079440-05:00" endTime="2026-10-15T12:03:59.3090239-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc33dbd1-9366-4d1a-8bbd-df7fa917b191" />
+    <UnitTestResult executionId="fc3ce815-28d9-4e14-b342-3c348c2601ba" testId="72166685-9d05-5fde-fe12-e560529feea9" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_LegacyExecStartIsRetargeted" computerName="PAYTON-LEGION2" duration="00:00:00.0397176" startTime="2026-10-15T12:03:59.2504214-05:00" endTime="2026-10-15T12:03:59.2902396-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc3ce815-28d9-4e14-b342-3c348c2601ba" />
+    <UnitTestResult executionId="10e7fa2b-1920-4bfb-97ba-94be864f200e" testId="1b68bcc1-bacd-702d-6b80-c15c71331f4b" testName="NukeBuild.Tests.ServiceUpdateTests.MockContract_WindowsIdentityKeepsServiceAndInstallPaired" computerName="PAYTON-LEGION2" duration="00:00:00.0044822" startTime="2026-10-15T12:03:59.3095721-05:00" endTime="2026-10-15T12:03:59.3141342-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="10e7fa2b-1920-4bfb-97ba-94be864f200e" />
+    <UnitTestResult executionId="8e7bf2af-c5cc-421f-921c-41bb7871448f" testId="3c92dfcd-f360-3f81-ab19-f402f2ee9f43" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;working-directory&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0098993" startTime="2026-10-15T12:03:47.8633042-05:00" endTime="2026-10-15T12:03:47.8732475-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e7bf2af-c5cc-421f-921c-41bb7871448f" />
+    <UnitTestResult executionId="af130ed1-f696-4193-9ba7-8db4d359ce69" testId="d000d00d-2760-b4f8-4ff9-682376824212" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;executable&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0095555" startTime="2026-10-15T12:03:47.9044337-05:00" endTime="2026-10-15T12:03:47.9140369-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af130ed1-f696-4193-9ba7-8db4d359ce69" />
+    <UnitTestResult executionId="dda1148e-8580-4c03-b261-b1e77335a135" testId="435ef72a-0cee-51ac-776e-a64e1e33e2d0" testName="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 2, failed: 0, valid: True)" computerName="PAYTON-LEGION2" duration="00:00:00.0000323" startTime="2026-10-15T12:03:59.0754450-05:00" endTime="2026-10-15T12:03:59.0755028-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dda1148e-8580-4c03-b261-b1e77335a135" />
+    <UnitTestResult executionId="0a4f9de1-ef0e-4b97-9935-98d9844c6f62" testId="7d5b812e-69ef-a466-065c-1f9d7fee4d79" testName="NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: False, service: &quot;QBrainAi&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0004143" startTime="2026-10-15T12:03:59.2916056-05:00" endTime="2026-10-15T12:03:59.2920589-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a4f9de1-ef0e-4b97-9935-98d9844c6f62" />
+    <UnitTestResult executionId="918eb016-2d91-4804-aab7-349ece53c093" testId="2451f6b8-c067-6b92-0cfe-b8aff0466cf6" testName="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 0, healthy: 0, failed: 0, valid: False)" computerName="PAYTON-LEGION2" duration="00:00:00.0010047" startTime="2026-10-15T12:03:59.0730600-05:00" endTime="2026-10-15T12:03:59.0741151-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="918eb016-2d91-4804-aab7-349ece53c093" />
+    <UnitTestResult executionId="ecd789ba-b71b-4602-8efe-840ca9b8e69c" testId="e9427ac5-8cb0-340f-4b22-3dd3c3600473" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;/DataFolder=/unbacked&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0378821" startTime="2026-10-15T12:03:47.2463176-05:00" endTime="2026-10-15T12:03:47.2842450-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ecd789ba-b71b-4602-8efe-840ca9b8e69c" />
+    <UnitTestResult executionId="be53525f-1114-4d42-a608-5b9f3cd8d084" testId="d65269de-83a4-e43e-bec7-02072e0fb457" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;invalid-elf&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0122950" startTime="2026-10-15T12:03:47.9480024-05:00" endTime="2026-10-15T12:03:47.9603447-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be53525f-1114-4d42-a608-5b9f3cd8d084" />
+    <UnitTestResult executionId="53303e03-cea6-422c-82b9-6d1c9b2c248e" testId="6629f6e4-c325-422b-79e5-1ec128d30f83" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: True, linux: False, architecture: X64, service: &quot;QBrainAi&quot;, rid: &quot;win-x64&quot;, executable: &quot;QBrainAi.Support.Mcp.exe&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0007175" startTime="2026-10-15T12:03:47.2243744-05:00" endTime="2026-10-15T12:03:47.2251220-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="53303e03-cea6-422c-82b9-6d1c9b2c248e" />
+    <UnitTestResult executionId="43918e00-b6fb-4384-9bb1-5fe83ac15b5b" testId="a6fd3ec3-00ed-1aec-f7e7-224c571d2f71" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: null\nMcp:\n  DataDirectory: '../data'&quot;···)" computerName="PAYTON-LEGION2" duration="00:00:00.0175396" startTime="2026-10-15T12:03:47.7083982-05:00" endTime="2026-10-15T12:03:47.7259873-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="43918e00-b6fb-4384-9bb1-5fe83ac15b5b" />
+    <UnitTestResult executionId="31c3792b-9537-4c94-961b-c5bbddeb089d" testId="119bce3c-a69a-754f-af62-163682fcbc33" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindPaths&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0098020" startTime="2026-10-15T12:03:48.0981010-05:00" endTime="2026-10-15T12:03:48.1079535-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31c3792b-9537-4c94-961b-c5bbddeb089d" />
+    <UnitTestResult executionId="12758324-a908-4cc3-aefc-706981710e3a" testId="51972173-f24b-4591-9fb7-d63badb53543" testName="NukeBuild.Tests.ServiceUpdateTests.MockContract_WindowsConfigurationRequiresBaselineBeforeStopAndPreservesLive" computerName="PAYTON-LEGION2" duration="00:00:00.0339565" startTime="2026-10-15T12:03:59.1581551-05:00" endTime="2026-10-15T12:03:59.1922082-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="12758324-a908-4cc3-aefc-706981710e3a" />
+    <UnitTestResult executionId="d123e27e-7586-4ad5-98de-e6f7595ad7dd" testId="7e04bbba-e1e9-684c-59fb-dcf87ef8bd87" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindReadOnlyPaths&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0101008" startTime="2026-10-15T12:03:48.0768841-05:00" endTime="2026-10-15T12:03:48.0870356-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d123e27e-7586-4ad5-98de-e6f7595ad7dd" />
+    <UnitTestResult executionId="84776472-7593-4c60-a28f-bce759d8ae4a" testId="7340de00-d41c-88eb-8345-1497c9631d0f" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_PreservesDropInWithSpaces" computerName="PAYTON-LEGION2" duration="00:00:00.0360753" startTime="2026-10-15T12:03:59.3574160-05:00" endTime="2026-10-15T12:03:59.3935812-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84776472-7593-4c60-a28f-bce759d8ae4a" />
+    <UnitTestResult executionId="9b4cbb13-149f-4bf1-8043-62946ee8fb03" testId="b0d8e21d-98e1-2a80-aa4a-0cef475f9076" testName="NukeBuild.Tests.ServiceUpdateTests.DeploymentManifest_HashesExtensionlessApphost" computerName="PAYTON-LEGION2" duration="00:00:00.0569921" startTime="2026-10-15T12:03:59.1929145-05:00" endTime="2026-10-15T12:03:59.2499874-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9b4cbb13-149f-4bf1-8043-62946ee8fb03" />
+    <UnitTestResult executionId="032d79e8-ba4d-462b-9673-1d9e8bb2fa9a" testId="2179eb8e-3265-f669-6ca1-dabb91b6f13d" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PersistentWrongProcessFailsAndRestores" computerName="PAYTON-LEGION2" duration="00:00:10.9244965" startTime="2026-10-15T12:03:48.1478714-05:00" endTime="2026-10-15T12:03:59.0724301-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="032d79e8-ba4d-462b-9673-1d9e8bb2fa9a" />
+    <UnitTestResult executionId="ff16950c-0dc8-44ca-a4f4-d51c44f3cbd8" testId="be661922-288c-0155-1857-77bccbcfdbf2" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;apphost&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0074587" startTime="2026-10-15T12:03:47.7887881-05:00" endTime="2026-10-15T12:03:47.7967205-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff16950c-0dc8-44ca-a4f4-d51c44f3cbd8">
+      <Output>
+        <ErrorInfo>
+          <Message>System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.</Message>
+          <StackTrace>   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+   at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 66&#xD;
+   at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 39&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 669&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(String input) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 645&#xD;
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="01b0e821-7ca4-4998-918d-a5035617887c" testId="42e2010d-8fe7-d9ce-e475-18ea8b0feedb" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: True)" computerName="PAYTON-LEGION2" duration="00:00:00.0320172" startTime="2026-10-15T12:03:59.0758328-05:00" endTime="2026-10-15T12:03:59.1079080-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="01b0e821-7ca4-4998-918d-a5035617887c" />
+    <UnitTestResult executionId="43a5a3ba-fb20-47a4-a0f1-9a79a3140790" testId="a80b4c15-0632-c615-72d4-5029483d893a" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: False)" computerName="PAYTON-LEGION2" duration="00:00:00.0112322" startTime="2026-10-15T12:03:48.0134043-05:00" endTime="2026-10-15T12:03:48.0246857-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="43a5a3ba-fb20-47a4-a0f1-9a79a3140790" />
+    <UnitTestResult executionId="f3881db3-cbd3-4d0c-aa45-1b651b621e1b" testId="eb58d47c-d14d-0b9e-d5b2-1965f5602860" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '../data'\nMcp:\n  DataDirectory: igno&quot;···)" computerName="PAYTON-LEGION2" duration="00:00:00.0172319" startTime="2026-10-15T12:03:47.7447570-05:00" endTime="2026-10-15T12:03:47.7620392-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3881db3-cbd3-4d0c-aa45-1b651b621e1b" />
+    <UnitTestResult executionId="7bafa1d4-384f-4c98-a90d-8b6851707501" testId="2793d808-d161-7f72-9574-d3bde55c8c23" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: Arm64, service: &quot;mcpserver.service&quot;, rid: &quot;linux-arm64&quot;, executable: &quot;QBrainAi.Support.Mcp&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0048077" startTime="2026-10-15T12:03:47.2192255-05:00" endTime="2026-10-15T12:03:47.2241130-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7bafa1d4-384f-4c98-a90d-8b6851707501" />
+    <UnitTestResult executionId="bb9d5957-31f4-4808-a2e8-d9c44e6d0874" testId="73d6e390-a1a3-accf-30b1-dcbeea04c299" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;wrong-architecture&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0124372" startTime="2026-10-15T12:03:47.9142936-05:00" endTime="2026-10-15T12:03:47.9267790-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb9d5957-31f4-4808-a2e8-d9c44e6d0874" />
+    <UnitTestResult executionId="3c57c99b-d8fd-4db8-a767-490d65bbff92" testId="2bf580b2-029f-f558-5bb1-29ec114ad235" testName="NukeBuild.Tests.ServiceUpdateTests.MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure(failCopy: False)" computerName="PAYTON-LEGION2" duration="00:00:00.0002722" startTime="2026-10-15T12:03:59.4697408-05:00" endTime="2026-10-15T12:03:59.4700538-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c57c99b-d8fd-4db8-a767-490d65bbff92" />
+    <UnitTestResult executionId="2e9bcb46-5e37-4edf-801f-74368b95df14" testId="75a960c0-4b83-2582-3d99-85d165cb22e8" testName="NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: True, service: &quot;mcpserver.service&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0003909" startTime="2026-10-15T12:03:59.2909188-05:00" endTime="2026-10-15T12:03:59.2913583-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e9bcb46-5e37-4edf-801f-74368b95df14" />
+    <UnitTestResult executionId="b98296af-aa24-485b-9a8d-e5dc736b6195" testId="f05d83e8-e91c-ee84-e768-bc83dc0c9d79" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;Mcp:\n  DataDirectory: '../data'\n&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0171707" startTime="2026-10-15T12:03:47.6909200-05:00" endTime="2026-10-15T12:03:47.7081381-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b98296af-aa24-485b-9a8d-e5dc736b6195" />
+    <UnitTestResult executionId="fe26af06-4fb8-4710-a383-5665d5e6f59f" testId="1a04a891-401c-20a8-c2ba-52a888fc9912" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: False, architecture: X64)" computerName="PAYTON-LEGION2" duration="00:00:00.0000550" startTime="2026-10-15T12:03:59.2953339-05:00" endTime="2026-10-15T12:03:59.2954190-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fe26af06-4fb8-4710-a383-5665d5e6f59f" />
+    <UnitTestResult executionId="6b15c910-18e6-4203-81b0-83b3f6573a25" testId="78118963-72dd-6413-8b6d-4d51da4b1571" testName="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: X64, service: &quot;mcpserver.service&quot;, rid: &quot;linux-x64&quot;, executable: &quot;QBrainAi.Support.Mcp&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0000217" startTime="2026-10-15T12:03:47.2253108-05:00" endTime="2026-10-15T12:03:47.2253523-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b15c910-18e6-4203-81b0-83b3f6573a25" />
+    <UnitTestResult executionId="4c271dc3-9651-43d5-aa74-1cbb848242ae" testId="13ed1fc5-0a43-43cc-393c-9cfc62043dca" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;overlap&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0141331" startTime="2026-10-15T12:03:47.8900021-05:00" endTime="2026-10-15T12:03:47.9041873-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4c271dc3-9651-43d5-aa74-1cbb848242ae" />
+    <UnitTestResult executionId="d42a0093-ef8a-4635-910c-3c3f81f95d2e" testId="987a381a-f1cf-abd1-cbad-73a35684ee10" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;configuration&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0066119" startTime="2026-10-15T12:03:47.8043609-05:00" endTime="2026-10-15T12:03:47.8112957-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d42a0093-ef8a-4635-910c-3c3f81f95d2e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.</Message>
+          <StackTrace>   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+   at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 66&#xD;
+   at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs:line 39&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 669&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(String input) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 645&#xD;
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="63a0bfe7-d2cb-4437-8bae-de617be71a16" testId="b667ea0e-02c7-5d38-5a60-d0014ebbdea0" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootDirectory&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0106586" startTime="2026-10-15T12:03:48.0251337-05:00" endTime="2026-10-15T12:03:48.0358436-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="63a0bfe7-d2cb-4437-8bae-de617be71a16" />
+    <UnitTestResult executionId="f3ee31f8-513a-4d1c-b37e-81b4be989d1c" testId="d647d46b-e94d-0ce5-f266-48068bbad25d" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--instance another&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0099457" startTime="2026-10-15T12:03:47.2957922-05:00" endTime="2026-10-15T12:03:47.3057847-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3ee31f8-513a-4d1c-b37e-81b4be989d1c" />
+    <UnitTestResult executionId="1d22f512-3048-4d41-b2fd-86db2407231e" testId="8b177c7c-2ae9-ec74-6cd4-5c46706c5ef6" testName="NukeBuild.Tests.ServiceUpdateTests.MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure(failCopy: True)" computerName="PAYTON-LEGION2" duration="00:00:00.0011754" startTime="2026-10-15T12:03:59.4682840-05:00" endTime="2026-10-15T12:03:59.4695038-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1d22f512-3048-4d41-b2fd-86db2407231e" />
+    <UnitTestResult executionId="edc9e960-4939-45b0-aeb6-5eb11fbebc88" testId="39ec6e5c-78b7-037b-2616-a5d68bdf9b94" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: &quot;/usr/lib/systemd/systemd&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.1375180" startTime="2026-10-15T12:03:47.4092064-05:00" endTime="2026-10-15T12:03:47.5467727-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="edc9e960-4939-45b0-aeb6-5eb11fbebc88" />
+    <UnitTestResult executionId="4a144b30-c9ef-491f-8270-8ce2a186ecd4" testId="82ec61df-286c-cdc1-4c5d-f34ffb7933b1" testName="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_MalformedYamlFailsClosed" computerName="PAYTON-LEGION2" duration="00:00:00.0229314" startTime="2026-10-15T12:03:59.4703335-05:00" endTime="2026-10-15T12:03:59.4933503-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4a144b30-c9ef-491f-8270-8ce2a186ecd4" />
+    <UnitTestResult executionId="d32e4fad-55f0-4e70-969f-e5d2acfd5213" testId="82911ee8-bdf4-0c51-9ba9-a9d1314fa05b" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_BackupFailureNeverCopiesOrStarts" computerName="PAYTON-LEGION2" duration="00:00:00.0219257" startTime="2026-10-15T12:03:59.4455643-05:00" endTime="2026-10-15T12:03:59.4675664-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d32e4fad-55f0-4e70-969f-e5d2acfd5213" />
+    <UnitTestResult executionId="54380e99-735f-47cc-984e-18d2a65db23f" testId="4ee2aecb-0ab1-4e6d-405b-3fbbd0e24f95" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--contentRoot /unbacked&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0103339" startTime="2026-10-15T12:03:47.3166494-05:00" endTime="2026-10-15T12:03:47.3270345-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="54380e99-735f-47cc-984e-18d2a65db23f" />
+    <UnitTestResult executionId="c957db42-0769-47a9-9a23-edf8ee7046a6" testId="71bc30b8-2efb-99b8-bb47-a109906a6df9" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--DataFolder=/unbacked&quot;)" computerName="PAYTON-LEGION2" duration="00:00:00.0102934" startTime="2026-10-15T12:03:47.3060469-05:00" endTime="2026-10-15T12:03:47.3163891-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c957db42-0769-47a9-9a23-edf8ee7046a6" />
+    <UnitTestResult executionId="ea909cb0-7563-43e0-8d2d-93633aafd815" testId="d4d321c1-9ee2-4979-5d7f-da60c6188471" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" computerName="PAYTON-LEGION2" duration="00:00:00.0392915" startTime="2026-10-15T12:03:59.3175173-05:00" endTime="2026-10-15T12:03:59.3568856-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ea909cb0-7563-43e0-8d2d-93633aafd815" />
+    <UnitTestResult executionId="a12b4edf-8e25-4880-8760-463661e9f533" testId="a4b5d818-b37b-61e4-60bf-aa45cb5f681f" testName="NukeBuild.Tests.ServiceUpdateTests.WindowsInstall_UsesLegacyServiceWhenCanonicalRegistrationIsAbsent" computerName="PAYTON-LEGION2" duration="00:00:00.0009611" startTime="2026-10-15T12:03:59.2924119-05:00" endTime="2026-10-15T12:03:59.2934209-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a12b4edf-8e25-4880-8760-463661e9f533" />
+    <UnitTestResult executionId="bba30e05-e1dc-4df1-a23e-4c19ee85cb43" testId="5941a85f-5775-2fdd-236b-f6d02416e16a" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)" computerName="PAYTON-LEGION2" duration="00:00:00.0061084" startTime="2026-10-15T12:03:48.1328778-05:00" endTime="2026-10-15T12:03:48.1394530-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bba30e05-e1dc-4df1-a23e-4c19ee85cb43">
+      <Output>
+        <ErrorInfo>
+          <Message>System.PlatformNotSupportedException : Unix file modes are not supported on this platform.</Message>
+          <StackTrace>   at System.IO.File.SetUnixFileModeCore(String path, UnixFileMode mode)&#xD;
+   at System.IO.File.SetUnixFileMode(String path, UnixFileMode mode)&#xD;
+   at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Boolean symlink) in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs:line 480&#xD;
+   at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: Arm)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="d1000721-4b52-6966-409e-10b2afe864ee">
+      <Execution id="e02af804-311b-47ee-b76c-85a6c9641a8b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;apphost&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="be661922-288c-0155-1857-77bccbcfdbf2">
+      <Execution id="ff16950c-0dc8-44ca-a4f4-d51c44f3cbd8" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="d4d321c1-9ee2-4979-5d7f-da60c6188471">
+      <Execution id="ea909cb0-7563-43e0-8d2d-93633aafd815" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation(alias: False)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="9a35abe9-faf2-5407-1963-9dd93311481e">
+      <Execution id="19adafe3-59fb-435a-8319-943f1d258f07" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_ConcurrentInvocationFailsWithoutMutation" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;environment&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="026d8b24-92be-1425-222a-02720c80f881">
+      <Execution id="696c7114-35c6-479c-bf7b-a22a6110be34" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;unit&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="26cff2aa-e98b-292e-3b94-5f33fbd14433">
+      <Execution id="2041fec8-6947-4dc7-a804-839062d41924" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootImage&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="fbda7dc8-4ec9-0433-7ad8-19537f1150f9">
+      <Execution id="bd834473-4af1-4d77-b1cd-bf1cef9aeeb0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_MalformedYamlFailsClosed" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="82ec61df-286c-cdc1-4c5d-f34ffb7933b1">
+      <Execution id="4a144b30-c9ef-491f-8270-8ce2a186ecd4" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_MalformedYamlFailsClosed" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="5941a85f-5775-2fdd-236b-f6d02416e16a">
+      <Execution id="bba30e05-e1dc-4df1-a23e-4c19ee85cb43" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: X64, service: &quot;mcpserver.service&quot;, rid: &quot;linux-x64&quot;, executable: &quot;QBrainAi.Support.Mcp&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="78118963-72dd-6413-8b6d-4d51da4b1571">
+      <Execution id="6b15c910-18e6-4203-81b0-83b3f6573a25" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: null)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="8bc7b0ea-a952-c25a-1304-1e5c77bacef5">
+      <Execution id="0d56cc8e-8e08-4ebd-8c49-5683d9b09066" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;TemporaryFileSystem&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="04b56b4e-b7e9-9e1f-32d3-b44ba9f438ef">
+      <Execution id="4c814f2e-1c29-4a50-ad87-480d1ac2d94c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;working-directory&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="3c92dfcd-f360-3f81-ab19-f402f2ee9f43">
+      <Execution id="8e7bf2af-c5cc-421f-921c-41bb7871448f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '  '\nMcp:\n  DataDirectory: '../data'&quot;···)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="06dafa7b-c650-5f5f-5634-a183c7038413">
+      <Execution id="14808f47-8dca-4f02-acaf-72b1088d1c5b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;RootDirectory&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="b667ea0e-02c7-5d38-5a60-d0014ebbdea0">
+      <Execution id="63a0bfe7-d2cb-4437-8bae-de617be71a16" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_DefaultRootPreservesLegacyFiles" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="b3fedc99-4598-8c66-a5eb-9318b8c3ea7b">
+      <Execution id="59e898f7-e5fb-45a7-a1a2-e27745e31342" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_DefaultRootPreservesLegacyFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: True, linux: False, architecture: X64, service: &quot;QBrainAi&quot;, rid: &quot;win-x64&quot;, executable: &quot;QBrainAi.Support.Mcp.exe&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="6629f6e4-c325-422b-79e5-1ec128d30f83">
+      <Execution id="53303e03-cea6-422c-82b9-6d1c9b2c248e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindPaths&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="119bce3c-a69a-754f-af62-163682fcbc33">
+      <Execution id="31c3792b-9537-4c94-961b-c5bbddeb089d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;BindReadOnlyPaths&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="7e04bbba-e1e9-684c-59fb-dcf87ef8bd87">
+      <Execution id="d123e27e-7586-4ad5-98de-e6f7595ad7dd" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: False, architecture: X64)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="1a04a891-401c-20a8-c2ba-52a888fc9912">
+      <Execution id="fe26af06-4fb8-4710-a383-5665d5e6f59f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: null\nMcp:\n  DataDirectory: '../data'&quot;···)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="a6fd3ec3-00ed-1aec-f7e7-224c571d2f71">
+      <Execution id="43918e00-b6fb-4384-9bb1-5fe83ac15b5b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_LegacyExecStartIsRetargeted" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="72166685-9d05-5fde-fe12-e560529feea9">
+      <Execution id="fc3ce815-28d9-4e14-b342-3c348c2601ba" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_LegacyExecStartIsRetargeted" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: ''\nMcp:\n  DataDirectory: '../data'\n&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="48b8bc97-a241-e099-028e-495703475903">
+      <Execution id="4999e98f-75bd-443c-b888-ca6a8cc705ce" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: False, linux: True, architecture: X86)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="8f154b7f-3d69-b183-cc35-d50e52412941">
+      <Execution id="a044cae8-9819-4e00-ab13-5f12def342d4" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;overlay&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="cede043b-2213-a365-a504-8ac9a95adb73">
+      <Execution id="636cbb09-c051-438a-833f-b3047fb1a9fc" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WindowsInstall_KeepsExplicitServiceName" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="99e296dd-8853-14e9-90dc-9babb9b22679">
+      <Execution id="bc33dbd1-9366-4d1a-8bbd-df7fa917b191" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WindowsInstall_KeepsExplicitServiceName" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;ExtensionDirectories&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="dcf59443-62e8-9de2-da30-423b360b30c5">
+      <Execution id="1398e2ff-35b9-4938-839b-6b70ea23664b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 0, valid: True)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="074e9a36-f15c-e80a-b013-810b63738be4">
+      <Execution id="9686e8dd-8dea-465e-879a-ad2422de4063" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WorkspaceHealth_UnavailableOrEmptyNeverPasses" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WindowsConfiguration_MissingBaselineFailsWithSourcePath" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="3f8634a1-bac1-d5b9-c46a-5bfbe84b7f95">
+      <Execution id="e8522182-9d99-4f66-87f6-a1002eeb9d38" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WindowsConfiguration_MissingBaselineFailsWithSourcePath" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 0, healthy: 0, failed: 0, valid: False)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="2451f6b8-c067-6b92-0cfe-b8aff0466cf6">
+      <Execution id="918eb016-2d91-4804-aab7-349ece53c093" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WorkspaceHealth_UnavailableOrEmptyNeverPasses" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: False)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="a16b3136-cb9f-9f30-2dbc-f641145183b4">
+      <Execution id="f828274a-67a5-4baa-a9c6-1a8650d343eb" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_FailureRestoresAndRetainsArchive" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PersistentWrongProcessFailsAndRestores" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="2179eb8e-3265-f669-6ca1-dabb91b6f13d">
+      <Execution id="032d79e8-ba4d-462b-9673-1d9e8bb2fa9a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_PersistentWrongProcessFailsAndRestores" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="8322eca6-052e-5bed-bdfe-2985d6b22437">
+      <Execution id="d8bd82b7-b124-4aeb-a7d3-28e48ebd870f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUnitState_ParsesDropInsAndOptionalEnvironmentFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;overlap&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="13ed1fc5-0a43-43cc-393c-9cfc62043dca">
+      <Execution id="4c271dc3-9651-43d5-aa74-1cbb848242ae" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;PrivateTmp&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="20a66a2d-ea95-3f26-1ee2-4e25f2b30c59">
+      <Execution id="14edd209-0f26-40df-a741-c4854a3cce88" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WindowsConfiguration_StagesBaselineAndPreservesExplicitPublishConfig" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="d65c738a-1822-1412-70e7-c0a71ff6fce3">
+      <Execution id="7a8d4217-a8c4-4015-9ca7-d910a49f7f34" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WindowsConfiguration_StagesBaselineAndPreservesExplicitPublishConfig" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.MockContract_WindowsConfigurationRequiresBaselineBeforeStopAndPreservesLive" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="51972173-f24b-4591-9fb7-d63badb53543">
+      <Execution id="12758324-a908-4cc3-aefc-706981710e3a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="MockContract_WindowsConfigurationRequiresBaselineBeforeStopAndPreservesLive" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_LegacyExecStartInDropInIsRetargeted" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="dfc30672-061e-0dbb-668e-ad04ca745586">
+      <Execution id="60dbeccd-7e7b-4414-8698-1069f376f977" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_LegacyExecStartInDropInIsRetargeted" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: True, service: &quot;mcpserver.service&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="75a960c0-4b83-2582-3d99-85d165cb22e8">
+      <Execution id="2e9bcb46-5e37-4edf-801f-74368b95df14" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="ParameterDefaults_DoNotRequireSupportedDeploymentHost" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;MountImages&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="1d91b7b5-21ea-3fed-7588-31e494d11c6d">
+      <Execution id="ac1a9d9b-4554-48fc-be8d-e7031faf2b17" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsRemappedServiceFilesystem(property: &quot;ExtensionImages&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="ede9fdfe-bd4d-a4ca-b9db-fbf6afbf3395">
+      <Execution id="aaecc594-e5ee-424f-8180-0c640eececcd" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsRemappedServiceFilesystem" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="064967fc-ba56-2b6f-e61e-e36f249714e2">
+      <Execution id="c0b7d95a-5aca-4a77-9ece-7d33c8961dae" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_BackupFailureNeverCopiesOrStarts" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="82911ee8-bdf4-0c51-9ba9-a9d1314fa05b">
+      <Execution id="d32e4fad-55f0-4e70-969f-e5d2acfd5213" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_BackupFailureNeverCopiesOrStarts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_PreservesDropInWithSpaces" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="7340de00-d41c-88eb-8345-1497c9631d0f">
+      <Execution id="84776472-7593-4c60-a28f-bce759d8ae4a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUnitState_PreservesDropInWithSpaces" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="6da9f643-9ab1-2303-19c8-0586daacb0ff">
+      <Execution id="ee5fe0d3-4f93-4050-a435-96aba086db37" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxReplacement_DoesNotFollowSymlinks" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.ParameterDefaults_DoNotRequireSupportedDeploymentHost(linux: False, service: &quot;QBrainAi&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="7d5b812e-69ef-a466-065c-1f9d7fee4d79">
+      <Execution id="0a4f9de1-ef0e-4b97-9935-98d9844c6f62" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="ParameterDefaults_DoNotRequireSupportedDeploymentHost" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.DeploymentManifest_HashesExtensionlessApphost" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="b0d8e21d-98e1-2a80-aa4a-0cef475f9076">
+      <Execution id="9b4cbb13-149f-4bf1-8043-62946ee8fb03" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="DeploymentManifest_HashesExtensionlessApphost" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart(firstExecutable: &quot;/usr/lib/systemd/systemd&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="39ec6e5c-78b7-037b-2616-a5d68bdf9b94">
+      <Execution id="edc9e960-4939-45b0-aeb6-5eb11fbebc88" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_WaitsForExpectedProcessAfterSystemdStart" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;environment&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="70b5515c-2bbf-faac-8f5b-4c170ac4ea5e">
+      <Execution id="473b9e99-003d-46d0-bd26-1cc853a0ed39" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;missing&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="ff25d45e-d9e0-6fdd-1e55-ce1759f5d041">
+      <Execution id="c2fc6b4e-9b7d-4434-ba6b-bef41e7518cb" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure(failCopy: False)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="2bf580b2-029f-f558-5bb1-29ec114ad235">
+      <Execution id="3c57c99b-d8fd-4db8-a767-490d65bbff92" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="bd76b7a6-1b2c-a7b4-5d7a-e61eb37ead0c">
+      <Execution id="1bc0564a-ecf4-4a73-96b1-61075bb98747" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUntrustedPrivateDirectoryOwner" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="973d3b46-ce84-1ae6-2522-8b5d5d47593c">
+      <Execution id="4145c1f3-5e0a-4c37-87b7-9eb327628ffa" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_ArchivesBeforeReplaceRestoresBeforeStartAndChecksHealth" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--contentRoot /unbacked&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="4ee2aecb-0ab1-4e6d-405b-3fbbd0e24f95">
+      <Execution id="54380e99-735f-47cc-984e-18d2a65db23f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_ConcurrentInvocationFailsWithoutMutation(alias: True)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="eb8839dd-4458-51b3-c065-bb115a277b5b">
+      <Execution id="a31cbc3b-bc87-4b23-a72d-590410aacac0" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_ConcurrentInvocationFailsWithoutMutation" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;executable&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="d000d00d-2760-b4f8-4ff9-682376824212">
+      <Execution id="af130ed1-f696-4193-9ba7-8db4d359ce69" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_FailureRestoresAndRetainsArchive(failCopy: True)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="42e2010d-8fe7-d9ce-e475-18ea8b0feedb">
+      <Execution id="01b0e821-7ca4-4998-918d-a5035617887c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxUpdate_FailureRestoresAndRetainsArchive" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="1af7fae8-9f8e-8fdf-7488-3fe7d6ae7589">
+      <Execution id="33e62807-0181-4b9d-b12f-70a9c20e6111" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxArchive_UsesPrivateMetadataPreservingCommands" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid(windows: False, linux: True, architecture: Arm64, service: &quot;mcpserver.service&quot;, rid: &quot;linux-arm64&quot;, executable: &quot;QBrainAi.Support.Mcp&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="2793d808-d161-7f72-9574-d3bde55c8c23">
+      <Execution id="7bafa1d4-384f-4c98-a90d-8b6851707501" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_PreservesWindowsDefaultsAndSelectsLinuxRid" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WindowsInstall_UsesLegacyServiceWhenCanonicalRegistrationIsAbsent" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="a4b5d818-b37b-61e4-60bf-aa45cb5f681f">
+      <Execution id="a12b4edf-8e25-4880-8760-463661e9f533" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WindowsInstall_UsesLegacyServiceWhenCanonicalRegistrationIsAbsent" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;Mcp:\n  DataDirectory: '../data'\n&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="f05d83e8-e91c-ee84-e768-bc83dc0c9d79">
+      <Execution id="b98296af-aa24-485b-9a8d-e5dc736b6195" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--DataFolder=/unbacked&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="71bc30b8-2efb-99b8-bb47-a109906a6df9">
+      <Execution id="c957db42-0769-47a9-9a23-edf8ee7046a6" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="61945694-53ac-89aa-4eca-ffe09cfa0513">
+      <Execution id="7d1aa5eb-a080-49d9-849d-247e9995890d" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialStageFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.MockContract_WindowsIdentityKeepsServiceAndInstallPaired" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="1b68bcc1-bacd-702d-6b80-c15c71331f4b">
+      <Execution id="10e7fa2b-1920-4bfb-97ba-94be864f200e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="MockContract_WindowsIdentityKeepsServiceAndInstallPaired" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: True)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="cdb2d734-c6f9-6da4-04b2-d9f559588dea">
+      <Execution id="d339452b-1ab0-4173-8e47-149875b625d4" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RespectsOptionalEnvironmentFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PlatformSelection_RejectsUnsupportedHosts(windows: True, linux: False, architecture: X86)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="0638da29-30db-8721-801f-07202f1b33a2">
+      <Execution id="5f859d8a-b313-4bb2-b8b0-da03f8526c67" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PlatformSelection_RejectsUnsupportedHosts" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;/DataFolder=/unbacked&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="e9427ac5-8cb0-340f-4b22-3dd3c3600473">
+      <Execution id="ecd789ba-b71b-4602-8efe-840ca9b8e69c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 2, failed: 0, valid: True)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="435ef72a-0cee-51ac-776e-a64e1e33e2d0">
+      <Execution id="dda1148e-8580-4c03-b261-b1e77335a135" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WorkspaceHealth_UnavailableOrEmptyNeverPasses" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RespectsOptionalEnvironmentFiles(optional: False)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="a80b4c15-0632-c615-72d4-5029483d893a">
+      <Execution id="43a5a3ba-fb20-47a4-a0f1-9a79a3140790" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RespectsOptionalEnvironmentFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;/Mcp:DataDirectory=/unbacked&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="13653462-9f98-f12b-3d2a-484427dac583">
+      <Execution id="8b75420b-c985-4e94-88c4-e0b0d303801a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;invalid-elf&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="d65269de-83a4-e43e-bec7-02072e0fb457">
+      <Execution id="be53525f-1114-4d42-a608-5b9f3cd8d084" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;configuration&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="987a381a-f1cf-abd1-cbad-73a35684ee10">
+      <Execution id="d42a0093-ef8a-4635-910c-3c3f81f95d2e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WindowsInstall_LegacyServiceKeepsLegacyInstallWhenCanonicalDirectoryIsStale" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="1624d00f-6e9a-b175-3d6e-711048a9571f">
+      <Execution id="0fc02860-277f-4bc8-a7eb-c80cd3909ed9" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WindowsInstall_LegacyServiceKeepsLegacyInstallWhenCanonicalDirectoryIsStale" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsCommandLineDataOverrides(arguments: &quot;--instance another&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="d647d46b-e94d-0ce5-f266-48068bbad25d">
+      <Execution id="f3ee31f8-513a-4d1c-b37e-81b4be989d1c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsCommandLineDataOverrides" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.WorkspaceHealth_UnavailableOrEmptyNeverPasses(count: 2, healthy: 1, failed: 1, valid: False)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="b2a59998-7bee-b366-ae25-7c7b4a3282d5">
+      <Execution id="7dcdd6f9-4eae-41e0-87c1-7420226caeed" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="WorkspaceHealth_UnavailableOrEmptyNeverPasses" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping(defect: &quot;wrong-architecture&quot;)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="73d6e390-a1a3-accf-30b1-dcbeea04c299">
+      <Execution id="bb9d5957-31f4-4808-a2e8-d9c44e6d0874" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsUnsafeConfigurationWithoutStopping" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback(yaml: &quot;DataFolder: '../data'\nMcp:\n  DataDirectory: igno&quot;···)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="eb58d47c-d14d-0b9e-d5b2-1965f5602860">
+      <Execution id="f3881db3-cbd3-4d0c-aa45-1b651b621e1b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="PreservationPaths_UsesConfiguredDataFolderAndLegacyFallback" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure(failCopy: True)" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\build.tests\bin\debug\net10.0\build.tests.dll" id="8b177c7c-2ae9-ec74-6cd4-5c46706c5ef6">
+      <Execution id="1d22f512-3048-4d41-b2fd-86db2407231e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0\Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="MockContract_RestoresBeforeStartAndRetainsBackupOnCopyFailure" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="eb8839dd-4458-51b3-c065-bb115a277b5b" executionId="a31cbc3b-bc87-4b23-a72d-590410aacac0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dfc30672-061e-0dbb-668e-ad04ca745586" executionId="60dbeccd-7e7b-4414-8698-1069f376f977" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="973d3b46-ce84-1ae6-2522-8b5d5d47593c" executionId="4145c1f3-5e0a-4c37-87b7-9eb327628ffa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ede9fdfe-bd4d-a4ca-b9db-fbf6afbf3395" executionId="aaecc594-e5ee-424f-8180-0c640eececcd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fbda7dc8-4ec9-0433-7ad8-19537f1150f9" executionId="bd834473-4af1-4d77-b1cd-bf1cef9aeeb0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff25d45e-d9e0-6fdd-1e55-ce1759f5d041" executionId="c2fc6b4e-9b7d-4434-ba6b-bef41e7518cb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cede043b-2213-a365-a504-8ac9a95adb73" executionId="636cbb09-c051-438a-833f-b3047fb1a9fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd76b7a6-1b2c-a7b4-5d7a-e61eb37ead0c" executionId="1bc0564a-ecf4-4a73-96b1-61075bb98747" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f8634a1-bac1-d5b9-c46a-5bfbe84b7f95" executionId="e8522182-9d99-4f66-87f6-a1002eeb9d38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cdb2d734-c6f9-6da4-04b2-d9f559588dea" executionId="d339452b-1ab0-4173-8e47-149875b625d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="70b5515c-2bbf-faac-8f5b-4c170ac4ea5e" executionId="473b9e99-003d-46d0-bd26-1cc853a0ed39" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1000721-4b52-6966-409e-10b2afe864ee" executionId="e02af804-311b-47ee-b76c-85a6c9641a8b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13653462-9f98-f12b-3d2a-484427dac583" executionId="8b75420b-c985-4e94-88c4-e0b0d303801a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="04b56b4e-b7e9-9e1f-32d3-b44ba9f438ef" executionId="4c814f2e-1c29-4a50-ad87-480d1ac2d94c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8f154b7f-3d69-b183-cc35-d50e52412941" executionId="a044cae8-9819-4e00-ab13-5f12def342d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3fedc99-4598-8c66-a5eb-9318b8c3ea7b" executionId="59e898f7-e5fb-45a7-a1a2-e27745e31342" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1af7fae8-9f8e-8fdf-7488-3fe7d6ae7589" executionId="33e62807-0181-4b9d-b12f-70a9c20e6111" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6da9f643-9ab1-2303-19c8-0586daacb0ff" executionId="ee5fe0d3-4f93-4050-a435-96aba086db37" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="61945694-53ac-89aa-4eca-ffe09cfa0513" executionId="7d1aa5eb-a080-49d9-849d-247e9995890d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="26cff2aa-e98b-292e-3b94-5f33fbd14433" executionId="2041fec8-6947-4dc7-a804-839062d41924" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2a59998-7bee-b366-ae25-7c7b4a3282d5" executionId="7dcdd6f9-4eae-41e0-87c1-7420226caeed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="20a66a2d-ea95-3f26-1ee2-4e25f2b30c59" executionId="14edd209-0f26-40df-a741-c4854a3cce88" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="064967fc-ba56-2b6f-e61e-e36f249714e2" executionId="c0b7d95a-5aca-4a77-9ece-7d33c8961dae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="026d8b24-92be-1425-222a-02720c80f881" executionId="696c7114-35c6-479c-bf7b-a22a6110be34" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d91b7b5-21ea-3fed-7588-31e494d11c6d" executionId="ac1a9d9b-4554-48fc-be8d-e7031faf2b17" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48b8bc97-a241-e099-028e-495703475903" executionId="4999e98f-75bd-443c-b888-ca6a8cc705ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d65c738a-1822-1412-70e7-c0a71ff6fce3" executionId="7a8d4217-a8c4-4015-9ca7-d910a49f7f34" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1624d00f-6e9a-b175-3d6e-711048a9571f" executionId="0fc02860-277f-4bc8-a7eb-c80cd3909ed9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a16b3136-cb9f-9f30-2dbc-f641145183b4" executionId="f828274a-67a5-4baa-a9c6-1a8650d343eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="06dafa7b-c650-5f5f-5634-a183c7038413" executionId="14808f47-8dca-4f02-acaf-72b1088d1c5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8322eca6-052e-5bed-bdfe-2985d6b22437" executionId="d8bd82b7-b124-4aeb-a7d3-28e48ebd870f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="074e9a36-f15c-e80a-b013-810b63738be4" executionId="9686e8dd-8dea-465e-879a-ad2422de4063" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dcf59443-62e8-9de2-da30-423b360b30c5" executionId="1398e2ff-35b9-4938-839b-6b70ea23664b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8bc7b0ea-a952-c25a-1304-1e5c77bacef5" executionId="0d56cc8e-8e08-4ebd-8c49-5683d9b09066" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0638da29-30db-8721-801f-07202f1b33a2" executionId="5f859d8a-b313-4bb2-b8b0-da03f8526c67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9a35abe9-faf2-5407-1963-9dd93311481e" executionId="19adafe3-59fb-435a-8319-943f1d258f07" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="99e296dd-8853-14e9-90dc-9babb9b22679" executionId="bc33dbd1-9366-4d1a-8bbd-df7fa917b191" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="72166685-9d05-5fde-fe12-e560529feea9" executionId="fc3ce815-28d9-4e14-b342-3c348c2601ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b68bcc1-bacd-702d-6b80-c15c71331f4b" executionId="10e7fa2b-1920-4bfb-97ba-94be864f200e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3c92dfcd-f360-3f81-ab19-f402f2ee9f43" executionId="8e7bf2af-c5cc-421f-921c-41bb7871448f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d000d00d-2760-b4f8-4ff9-682376824212" executionId="af130ed1-f696-4193-9ba7-8db4d359ce69" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="435ef72a-0cee-51ac-776e-a64e1e33e2d0" executionId="dda1148e-8580-4c03-b261-b1e77335a135" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7d5b812e-69ef-a466-065c-1f9d7fee4d79" executionId="0a4f9de1-ef0e-4b97-9935-98d9844c6f62" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2451f6b8-c067-6b92-0cfe-b8aff0466cf6" executionId="918eb016-2d91-4804-aab7-349ece53c093" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e9427ac5-8cb0-340f-4b22-3dd3c3600473" executionId="ecd789ba-b71b-4602-8efe-840ca9b8e69c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d65269de-83a4-e43e-bec7-02072e0fb457" executionId="be53525f-1114-4d42-a608-5b9f3cd8d084" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6629f6e4-c325-422b-79e5-1ec128d30f83" executionId="53303e03-cea6-422c-82b9-6d1c9b2c248e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6fd3ec3-00ed-1aec-f7e7-224c571d2f71" executionId="43918e00-b6fb-4384-9bb1-5fe83ac15b5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="119bce3c-a69a-754f-af62-163682fcbc33" executionId="31c3792b-9537-4c94-961b-c5bbddeb089d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="51972173-f24b-4591-9fb7-d63badb53543" executionId="12758324-a908-4cc3-aefc-706981710e3a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7e04bbba-e1e9-684c-59fb-dcf87ef8bd87" executionId="d123e27e-7586-4ad5-98de-e6f7595ad7dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7340de00-d41c-88eb-8345-1497c9631d0f" executionId="84776472-7593-4c60-a28f-bce759d8ae4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b0d8e21d-98e1-2a80-aa4a-0cef475f9076" executionId="9b4cbb13-149f-4bf1-8043-62946ee8fb03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2179eb8e-3265-f669-6ca1-dabb91b6f13d" executionId="032d79e8-ba4d-462b-9673-1d9e8bb2fa9a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="be661922-288c-0155-1857-77bccbcfdbf2" executionId="ff16950c-0dc8-44ca-a4f4-d51c44f3cbd8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="42e2010d-8fe7-d9ce-e475-18ea8b0feedb" executionId="01b0e821-7ca4-4998-918d-a5035617887c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a80b4c15-0632-c615-72d4-5029483d893a" executionId="43a5a3ba-fb20-47a4-a0f1-9a79a3140790" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb58d47c-d14d-0b9e-d5b2-1965f5602860" executionId="f3881db3-cbd3-4d0c-aa45-1b651b621e1b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2793d808-d161-7f72-9574-d3bde55c8c23" executionId="7bafa1d4-384f-4c98-a90d-8b6851707501" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73d6e390-a1a3-accf-30b1-dcbeea04c299" executionId="bb9d5957-31f4-4808-a2e8-d9c44e6d0874" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2bf580b2-029f-f558-5bb1-29ec114ad235" executionId="3c57c99b-d8fd-4db8-a767-490d65bbff92" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="75a960c0-4b83-2582-3d99-85d165cb22e8" executionId="2e9bcb46-5e37-4edf-801f-74368b95df14" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f05d83e8-e91c-ee84-e768-bc83dc0c9d79" executionId="b98296af-aa24-485b-9a8d-e5dc736b6195" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a04a891-401c-20a8-c2ba-52a888fc9912" executionId="fe26af06-4fb8-4710-a383-5665d5e6f59f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78118963-72dd-6413-8b6d-4d51da4b1571" executionId="6b15c910-18e6-4203-81b0-83b3f6573a25" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13ed1fc5-0a43-43cc-393c-9cfc62043dca" executionId="4c271dc3-9651-43d5-aa74-1cbb848242ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="987a381a-f1cf-abd1-cbad-73a35684ee10" executionId="d42a0093-ef8a-4635-910c-3c3f81f95d2e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b667ea0e-02c7-5d38-5a60-d0014ebbdea0" executionId="63a0bfe7-d2cb-4437-8bae-de617be71a16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d647d46b-e94d-0ce5-f266-48068bbad25d" executionId="f3ee31f8-513a-4d1c-b37e-81b4be989d1c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b177c7c-2ae9-ec74-6cd4-5c46706c5ef6" executionId="1d22f512-3048-4d41-b2fd-86db2407231e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="39ec6e5c-78b7-037b-2616-a5d68bdf9b94" executionId="edc9e960-4939-45b0-aeb6-5eb11fbebc88" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="82ec61df-286c-cdc1-4c5d-f34ffb7933b1" executionId="4a144b30-c9ef-491f-8270-8ce2a186ecd4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="82911ee8-bdf4-0c51-9ba9-a9d1314fa05b" executionId="d32e4fad-55f0-4e70-969f-e5d2acfd5213" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ee2aecb-0ab1-4e6d-405b-3fbbd0e24f95" executionId="54380e99-735f-47cc-984e-18d2a65db23f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="71bc30b8-2efb-99b8-bb47-a109906a6df9" executionId="c957db42-0769-47a9-9a23-edf8ee7046a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d4d321c1-9ee2-4979-5d7f-da60c6188471" executionId="ea909cb0-7563-43e0-8d2d-93633aafd815" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a4b5d818-b37b-61e4-60bf-aa45cb5f681f" executionId="a12b4edf-8e25-4880-8760-463661e9f533" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5941a85f-5775-2fdd-236b-f6d02416e16a" executionId="bba30e05-e1dc-4df1-a23e-4c19ee85cb43" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="78" executed="78" passed="70" failed="8" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.23]   Discovering: Build.Tests&#xD;
+[xUnit.net 00:00:00.68]   Discovered:  Build.Tests&#xD;
+[xUnit.net 00:00:00.92]   Starting:    Build.Tests&#xD;
+[xUnit.net 00:00:01.59]       System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.&#xD;
+[xUnit.net 00:00:01.59]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.59]            at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.59]            at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(66,0): at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(39,0): at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(669,0): at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(645,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(String input)&#xD;
+[xUnit.net 00:00:01.59]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.59]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.59]       System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.&#xD;
+[xUnit.net 00:00:01.59]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.59]            at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.59]            at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(66,0): at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(39,0): at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(669,0): at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments)&#xD;
+[xUnit.net 00:00:01.59]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(645,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(String input)&#xD;
+[xUnit.net 00:00:01.59]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.59]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.60]       System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.&#xD;
+[xUnit.net 00:00:01.60]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.60]            at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.60]            at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.60]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(66,0): at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.60]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(39,0): at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.60]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(669,0): at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments)&#xD;
+[xUnit.net 00:00:01.60]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(645,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(String input)&#xD;
+[xUnit.net 00:00:01.60]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.60]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.61]       System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.&#xD;
+[xUnit.net 00:00:01.61]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.61]            at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.61]            at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.61]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(66,0): at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.61]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(39,0): at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.61]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(669,0): at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments)&#xD;
+[xUnit.net 00:00:01.61]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(645,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(String input)&#xD;
+[xUnit.net 00:00:01.61]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.61]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.93]       System.PlatformNotSupportedException : Unix file modes are not supported on this platform.&#xD;
+[xUnit.net 00:00:01.93]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.93]            at System.IO.File.SetUnixFileModeCore(String path, UnixFileMode mode)&#xD;
+[xUnit.net 00:00:01.93]            at System.IO.File.SetUnixFileMode(String path, UnixFileMode mode)&#xD;
+[xUnit.net 00:00:01.93]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(480,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Boolean symlink)&#xD;
+[xUnit.net 00:00:01.93]            at InvokeStub_ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.93]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.94]       System.ComponentModel.Win32Exception : An error occurred trying to start process 'mkfifo' with working directory 'F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\bin\Debug\net10.0'. The system cannot find the file specified.&#xD;
+[xUnit.net 00:00:01.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.94]            at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.94]            at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)&#xD;
+[xUnit.net 00:00:01.94]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(66,0): at NukeBuild.Tests.BoundedProcess.RunAsync(ProcessStartInfo startInfo, TimeSpan exitTimeout, TimeSpan drainTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.94]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\BoundedProcess.cs(39,0): at NukeBuild.Tests.BoundedProcess.Run(ProcessStartInfo startInfo, TimeSpan exitTimeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.94]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(669,0): at NukeBuild.Tests.ServiceUpdateTests.Native(String command, String[] arguments)&#xD;
+[xUnit.net 00:00:01.94]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(620,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles()&#xD;
+[xUnit.net 00:00:01.94]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.94]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:13.24]       System.InvalidOperationException : Service update failed; recovery evidence retained at C:\Users\lab-wsman\AppData\Local\Temp\service-update-968b3d82094f40d796c819c67a1f05d9\backups\20261015T170359429Z-ae8326913be54f8d9d47f8b1a0abcb19. No binary rollback was performed.&#xD;
+[xUnit.net 00:00:13.24]       ---- System.UnauthorizedAccessException : Access to the path 'C:\Users\lab-wsman\AppData\Local\Temp\service-update-968b3d82094f40d796c819c67a1f05d9\app\stale' is denied.&#xD;
+[xUnit.net 00:00:13.24]       Stack Trace:&#xD;
+[xUnit.net 00:00:13.24]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\build\LinuxServiceHelper.cs(133,0): at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth)&#xD;
+[xUnit.net 00:00:13.24]            at InvokeStub_LinuxServiceHelper.Update(Object, Span`1)&#xD;
+[xUnit.net 00:00:13.24]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:13.24]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:13.24]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(683,0): at NukeBuild.Tests.ServiceUpdateTests.Call(String type, String method, Object instance, Object[] args)&#xD;
+[xUnit.net 00:00:13.24]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(745,0): at NukeBuild.Tests.ServiceUpdateTests.Fixture.Update()&#xD;
+[xUnit.net 00:00:13.24]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(464,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks()&#xD;
+[xUnit.net 00:00:13.24]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:13.24]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:13.24]         ----- Inner Stack Trace -----&#xD;
+[xUnit.net 00:00:13.24]            at System.IO.FileSystem.DeleteFile(String fullPath)&#xD;
+[xUnit.net 00:00:13.24]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\build\LinuxServiceHelper.cs(446,0): at LinuxServiceHelper.&lt;ReplaceFiles&gt;g__Clean|35_1(String directory, &lt;&gt;c__DisplayClass35_0&amp;)&#xD;
+[xUnit.net 00:00:13.24]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\build\LinuxServiceHelper.cs(472,0): at LinuxServiceHelper.ReplaceFiles(String stage, String install, IReadOnlyList`1 preserved)&#xD;
+[xUnit.net 00:00:13.24]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\build\LinuxServiceHelper.cs(112,0): at LinuxServiceHelper.Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth)&#xD;
+[xUnit.net 00:00:13.30]       System.PlatformNotSupportedException : Unix file modes are not supported on this platform.&#xD;
+[xUnit.net 00:00:13.30]       Stack Trace:&#xD;
+[xUnit.net 00:00:13.30]            at System.IO.File.SetUnixFileModeCore(String path, UnixFileMode mode)&#xD;
+[xUnit.net 00:00:13.30]            at System.IO.File.SetUnixFileMode(String path, UnixFileMode mode)&#xD;
+[xUnit.net 00:00:13.30]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\Build.Tests\ServiceUpdateTests.cs(425,0): at NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands()&#xD;
+[xUnit.net 00:00:13.30]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:13.30]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:13.32]   Finished:    Build.Tests (ID = 'daccbd232394e94e4a9fbab37630eaff6ceea3f755ba45c47188838b0c3a9ab5')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:47.7945811-05:00">
+        <Text>[xUnit.net 00:00:01.59]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "unit") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:47.7972867-05:00">
+        <Text>[xUnit.net 00:00:01.59]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "apphost") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:47.8047779-05:00">
+        <Text>[xUnit.net 00:00:01.60]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "environment") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:47.8122039-05:00">
+        <Text>[xUnit.net 00:00:01.61]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: "configuration") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:48.1400491-05:00">
+        <Text>[xUnit.net 00:00:01.93]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:48.1482038-05:00">
+        <Text>[xUnit.net 00:00:01.94]     NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:59.4460388-05:00">
+        <Text>[xUnit.net 00:00:13.24]     NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:59.5042059-05:00">
+        <Text>[xUnit.net 00:00:13.30]     NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

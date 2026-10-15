@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a41db9ce-a723-4e7e-a508-d69639510f29" name="lab-wsman@PAYTON-LEGION2 2026-10-15 12:03:38" runUser="PAYTON-LEGION2\lab-wsman" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-15T12:03:38.5786390-05:00" queuing="2026-10-15T12:03:38.5786396-05:00" start="2026-10-15T12:03:34.0146423-05:00" finish="2026-10-15T12:03:42.6007728-05:00" />
+  <TestSettings name="default" id="c872b40c-108c-4c36-8fcb-cd07db7546d3">
+    <Deployment runDeploymentRoot="lab-wsman_PAYTON-LEGION2_2026-10-15_12_03_38" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="4cef9bed-b73e-4166-b784-cbd4530af442" testId="df881d11-0e50-6525-68b4-5a155af8fe6c" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_ForeignWorkspace_403" computerName="PAYTON-LEGION2" duration="00:00:00.1834420" startTime="2026-10-15T12:03:38.8420104-05:00" endTime="2026-10-15T12:03:39.0255178-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4cef9bed-b73e-4166-b784-cbd4530af442" />
+    <UnitTestResult executionId="10610ffa-d5ed-476d-b0ec-580b99412fc7" testId="65471951-1133-fd48-6686-9ead9afabd0a" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewQuery_ByRequesterAndTargetType_AndFilters" computerName="PAYTON-LEGION2" duration="00:00:00.2962627" startTime="2026-10-15T12:03:39.4171652-05:00" endTime="2026-10-15T12:03:39.7134914-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="10610ffa-d5ed-476d-b0ec-580b99412fc7" />
+    <UnitTestResult executionId="51bf9d0e-0230-4da1-b880-cb610050dbd8" testId="38648eb4-3a29-61bb-61d6-508aeee9c6b8" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewExecution_RecordsModelEffortAgentTemplateRunId" computerName="PAYTON-LEGION2" duration="00:00:00.3897592" startTime="2026-10-15T12:03:39.0263972-05:00" endTime="2026-10-15T12:03:39.4162212-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="51bf9d0e-0230-4da1-b880-cb610050dbd8" />
+    <UnitTestResult executionId="9f7d7bd1-d851-4c05-8c18-df36361b1b64" testId="b0e099e6-449b-8bc4-9a76-f36ea5296097" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReview_Default_DoesNotMutateProductFiles" computerName="PAYTON-LEGION2" duration="00:00:00.1597501" startTime="2026-10-15T12:03:40.0752844-05:00" endTime="2026-10-15T12:03:40.2371775-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f7d7bd1-d851-4c05-8c18-df36361b1b64" />
+    <UnitTestResult executionId="35315b78-3246-48dd-be7f-1cfe946008a2" testId="037cdd30-114f-a7c5-da26-860adf0cfb93" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic" computerName="PAYTON-LEGION2" duration="00:00:00.2847930" startTime="2026-10-15T12:03:38.5550396-05:00" endTime="2026-10-15T12:03:38.8400592-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35315b78-3246-48dd-be7f-1cfe946008a2" />
+    <UnitTestResult executionId="f8fdd166-ea9e-419c-915a-5ace4d329935" testId="53ed6581-9587-9a49-0c06-52ffe8172a69" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewQuery_NoMatch_EmptyList" computerName="PAYTON-LEGION2" duration="00:00:00.2001547" startTime="2026-10-15T12:03:40.2439647-05:00" endTime="2026-10-15T12:03:40.4441905-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f8fdd166-ea9e-419c-915a-5ace4d329935" />
+    <UnitTestResult executionId="ab1c3b20-a762-452a-b70e-5a0092deeeb9" testId="01c25f68-f32e-9f86-e84e-a5188ca4c555" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReview_SurfaceParity_RestReplDirectorPlugin" computerName="PAYTON-LEGION2" duration="00:00:00.4126456" startTime="2026-10-15T12:03:41.4904613-05:00" endTime="2026-10-15T12:03:41.9031650-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab1c3b20-a762-452a-b70e-5a0092deeeb9" />
+    <UnitTestResult executionId="7b2a2c29-13c6-4e6f-b107-149e302ad4fa" testId="9f855273-5c67-7fd6-2fc7-a0a621be21cf" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_OversizedPayload_Rejected" computerName="PAYTON-LEGION2" duration="00:00:00.1149183" startTime="2026-10-15T12:03:41.3744915-05:00" endTime="2026-10-15T12:03:41.4894613-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7b2a2c29-13c6-4e6f-b107-149e302ad4fa" />
+    <UnitTestResult executionId="feeea059-fba7-42c1-9ecd-daeed38a96af" testId="ea90a32a-b44e-e319-eac0-4edfc393d66b" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_AmbiguousLink_Diagnostic" computerName="PAYTON-LEGION2" duration="00:00:00.1582818" startTime="2026-10-15T12:03:39.9150905-05:00" endTime="2026-10-15T12:03:40.0734359-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="feeea059-fba7-42c1-9ecd-daeed38a96af" />
+    <UnitTestResult executionId="8e65e3f6-d201-4e3e-9099-decc5b1b7300" testId="328f1f63-079f-308f-818a-785daa31ad2c" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer" computerName="PAYTON-LEGION2" duration="00:00:00.1503498" startTime="2026-10-15T12:03:41.2233553-05:00" endTime="2026-10-15T12:03:41.3737558-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e65e3f6-d201-4e3e-9099-decc5b1b7300" />
+    <UnitTestResult executionId="4b465ddf-e7df-462d-a994-5efee43b34e6" testId="8d679ea2-6ef7-65b7-1ab1-0e17beece423" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewExecution_OmitsFabricatedTokenCounts" computerName="PAYTON-LEGION2" duration="00:00:00.1588783" startTime="2026-10-15T12:03:40.9127423-05:00" endTime="2026-10-15T12:03:41.0716768-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4b465ddf-e7df-462d-a994-5efee43b34e6" />
+    <UnitTestResult executionId="60502339-82d5-464a-8109-ccab46c5f11e" testId="fce0db37-3f9c-f858-2ebe-6012702f85a9" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup" computerName="PAYTON-LEGION2" duration="00:00:00.2942995" startTime="2026-10-15T12:03:40.4459248-05:00" endTime="2026-10-15T12:03:40.7489573-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60502339-82d5-464a-8109-ccab46c5f11e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Sub-string not found&#xD;
+String:    "System.AggregateException: An error occurred while"···&#xD;
+Not found: "HostileReviewWorker"</Message>
+          <StackTrace>   at QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup() in F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\Services\HostileReviewG4OverlayTests.cs:line 475&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2e522aa6-4dd7-4cac-867a-498d42e91dca" testId="a4ad234d-8230-db9b-231b-022328d88152" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_ValidRequest_CreatesQueueItem" computerName="PAYTON-LEGION2" duration="00:00:02.1591701" startTime="2026-10-15T12:03:36.3802895-05:00" endTime="2026-10-15T12:03:38.5481698-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e522aa6-4dd7-4cac-867a-498d42e91dca" />
+    <UnitTestResult executionId="b18ee357-2023-4cf3-9792-dd7b557cce68" testId="f75479eb-00eb-8248-7be0-1cac047428a4" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext" computerName="PAYTON-LEGION2" duration="00:00:00.1612524" startTime="2026-10-15T12:03:40.7504920-05:00" endTime="2026-10-15T12:03:40.9117987-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b18ee357-2023-4cf3-9792-dd7b557cce68" />
+    <UnitTestResult executionId="cc63c102-5f01-4b19-ab74-8e49cd9b2a17" testId="a3743e5e-566f-aae9-8b92-149d002ee02d" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns" computerName="PAYTON-LEGION2" duration="00:00:00.3065300" startTime="2026-10-15T12:03:41.9042237-05:00" endTime="2026-10-15T12:03:42.2108136-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cc63c102-5f01-4b19-ab74-8e49cd9b2a17" />
+    <UnitTestResult executionId="458854dd-c1a3-4721-ad20-161e6006a0de" testId="0ee9e977-2348-0d85-ee9e-7570557c4bc3" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit" computerName="PAYTON-LEGION2" duration="00:00:00.1982528" startTime="2026-10-15T12:03:39.7150046-05:00" endTime="2026-10-15T12:03:39.9133246-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="458854dd-c1a3-4721-ad20-161e6006a0de" />
+    <UnitTestResult executionId="40b1dcaf-4970-46ce-b27e-6418cd114d0b" testId="6a49b367-19dc-fbd0-9229-201899999872" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewProtectedContext_NoRawPromptInPublishedSurface" computerName="PAYTON-LEGION2" duration="00:00:00.2721532" startTime="2026-10-15T12:03:42.2124952-05:00" endTime="2026-10-15T12:03:42.4847075-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="40b1dcaf-4970-46ce-b27e-6418cd114d0b" />
+    <UnitTestResult executionId="c61fd9cf-7069-4b1b-a270-e7afff09c5ef" testId="05c8f31a-f2d2-e1e6-c7c1-60a99266390d" testName="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewGet_NormalizedFindings_TaxonomyComplete" computerName="PAYTON-LEGION2" duration="00:00:00.1497746" startTime="2026-10-15T12:03:41.0725894-05:00" endTime="2026-10-15T12:03:41.2224178-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c61fd9cf-7069-4b1b-a270-e7afff09c5ef" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewEntity_RoundTrip_SqlitePgSqlServer" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="328f1f63-079f-308f-818a-785daa31ad2c">
+      <Execution id="8e65e3f6-d201-4e3e-9099-decc5b1b7300" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewEntity_RoundTrip_SqlitePgSqlServer" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_AmbiguousLink_Diagnostic" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="ea90a32a-b44e-e319-eac0-4edfc393d66b">
+      <Execution id="feeea059-fba7-42c1-9ecd-daeed38a96af" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewSubmit_AmbiguousLink_Diagnostic" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewExecution_OmitsFabricatedTokenCounts" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="8d679ea2-6ef7-65b7-1ab1-0e17beece423">
+      <Execution id="4b465ddf-e7df-462d-a994-5efee43b34e6" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewExecution_OmitsFabricatedTokenCounts" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewExecution_RecordsModelEffortAgentTemplateRunId" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="38648eb4-3a29-61bb-61d6-508aeee9c6b8">
+      <Execution id="51bf9d0e-0230-4da1-b880-cb610050dbd8" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewExecution_RecordsModelEffortAgentTemplateRunId" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewQuery_ByRequesterAndTargetType_AndFilters" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="65471951-1133-fd48-6686-9ead9afabd0a">
+      <Execution id="10610ffa-d5ed-476d-b0ec-580b99412fc7" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewQuery_ByRequesterAndTargetType_AndFilters" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewQuery_NoMatch_EmptyList" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="53ed6581-9587-9a49-0c06-52ffe8172a69">
+      <Execution id="f8fdd166-ea9e-419c-915a-5ace4d329935" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewQuery_NoMatch_EmptyList" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="f75479eb-00eb-8248-7be0-1cac047428a4">
+      <Execution id="b18ee357-2023-4cf3-9792-dd7b557cce68" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReview_RequestQuality_ScoresDisclosureScopeObjectiveConfidenceContext" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReview_SurfaceParity_RestReplDirectorPlugin" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="01c25f68-f32e-9f86-e84e-a5188ca4c555">
+      <Execution id="ab1c3b20-a762-452a-b70e-5a0092deeeb9" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReview_SurfaceParity_RestReplDirectorPlugin" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="037cdd30-114f-a7c5-da26-860adf0cfb93">
+      <Execution id="35315b78-3246-48dd-be7f-1cfe946008a2" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewSubmit_StaleOrUnauthorizedLink_Diagnostic" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReview_Default_DoesNotMutateProductFiles" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="b0e099e6-449b-8bc4-9a76-f36ea5296097">
+      <Execution id="9f7d7bd1-d851-4c05-8c18-df36361b1b64" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReview_Default_DoesNotMutateProductFiles" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_OversizedPayload_Rejected" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="9f855273-5c67-7fd6-2fc7-a0a621be21cf">
+      <Execution id="7b2a2c29-13c6-4e6f-b107-149e302ad4fa" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewSubmit_OversizedPayload_Rejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="fce0db37-3f9c-f858-2ebe-6012702f85a9">
+      <Execution id="60502339-82d5-464a-8109-ccab46c5f11e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewWorker_InvalidOptions_FailStartup" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_ForeignWorkspace_403" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="df881d11-0e50-6525-68b4-5a155af8fe6c">
+      <Execution id="4cef9bed-b73e-4166-b784-cbd4530af442" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewSubmit_ForeignWorkspace_403" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewProtectedContext_NoRawPromptInPublishedSurface" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="6a49b367-19dc-fbd0-9229-201899999872">
+      <Execution id="40b1dcaf-4970-46ce-b27e-6418cd114d0b" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewProtectedContext_NoRawPromptInPublishedSurface" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewGet_NormalizedFindings_TaxonomyComplete" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="05c8f31a-f2d2-e1e6-c7c1-60a99266390d">
+      <Execution id="c61fd9cf-7069-4b1b-a270-e7afff09c5ef" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewGet_NormalizedFindings_TaxonomyComplete" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_ValidRequest_CreatesQueueItem" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="a4ad234d-8230-db9b-231b-022328d88152">
+      <Execution id="2e522aa6-4dd7-4cac-867a-498d42e91dca" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewSubmit_ValidRequest_CreatesQueueItem" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="0ee9e977-2348-0d85-ee9e-7570557c4bc3">
+      <Execution id="458854dd-c1a3-4721-ad20-161e6006a0de" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewSubmit_MissingArtifact_ReturnsDiagnosticNotSilentOmit" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns" storage="f:\github\mcpserver\.worktrees\triage-fixes-20261015\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="a3743e5e-566f-aae9-8b92-149d002ee02d">
+      <Execution id="cc63c102-5f01-4b19-ab74-8e49cd9b2a17" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests" name="HostileReviewQuery_ByModelAndEffort_ReturnsOnlyMatchingRuns" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="df881d11-0e50-6525-68b4-5a155af8fe6c" executionId="4cef9bed-b73e-4166-b784-cbd4530af442" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="65471951-1133-fd48-6686-9ead9afabd0a" executionId="10610ffa-d5ed-476d-b0ec-580b99412fc7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="38648eb4-3a29-61bb-61d6-508aeee9c6b8" executionId="51bf9d0e-0230-4da1-b880-cb610050dbd8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b0e099e6-449b-8bc4-9a76-f36ea5296097" executionId="9f7d7bd1-d851-4c05-8c18-df36361b1b64" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="037cdd30-114f-a7c5-da26-860adf0cfb93" executionId="35315b78-3246-48dd-be7f-1cfe946008a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="53ed6581-9587-9a49-0c06-52ffe8172a69" executionId="f8fdd166-ea9e-419c-915a-5ace4d329935" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="01c25f68-f32e-9f86-e84e-a5188ca4c555" executionId="ab1c3b20-a762-452a-b70e-5a0092deeeb9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f855273-5c67-7fd6-2fc7-a0a621be21cf" executionId="7b2a2c29-13c6-4e6f-b107-149e302ad4fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ea90a32a-b44e-e319-eac0-4edfc393d66b" executionId="feeea059-fba7-42c1-9ecd-daeed38a96af" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="328f1f63-079f-308f-818a-785daa31ad2c" executionId="8e65e3f6-d201-4e3e-9099-decc5b1b7300" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d679ea2-6ef7-65b7-1ab1-0e17beece423" executionId="4b465ddf-e7df-462d-a994-5efee43b34e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fce0db37-3f9c-f858-2ebe-6012702f85a9" executionId="60502339-82d5-464a-8109-ccab46c5f11e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a4ad234d-8230-db9b-231b-022328d88152" executionId="2e522aa6-4dd7-4cac-867a-498d42e91dca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f75479eb-00eb-8248-7be0-1cac047428a4" executionId="b18ee357-2023-4cf3-9792-dd7b557cce68" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a3743e5e-566f-aae9-8b92-149d002ee02d" executionId="cc63c102-5f01-4b19-ab74-8e49cd9b2a17" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0ee9e977-2348-0d85-ee9e-7570557c4bc3" executionId="458854dd-c1a3-4721-ad20-161e6006a0de" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6a49b367-19dc-fbd0-9229-201899999872" executionId="40b1dcaf-4970-46ce-b27e-6418cd114d0b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="05c8f31a-f2d2-e1e6-c7c1-60a99266390d" executionId="c61fd9cf-7069-4b1b-a270-e7afff09c5ef" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="18" executed="18" passed="17" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.43]   Discovering: QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.66]   Discovered:  QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.88]   Starting:    QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:06.31]       Assert.Contains() Failure: Sub-string not found&#xD;
+[xUnit.net 00:00:06.31]       String:    "System.AggregateException: An error occurred while"···&#xD;
+[xUnit.net 00:00:06.31]       Not found: "HostileReviewWorker"&#xD;
+[xUnit.net 00:00:06.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:06.31]         F:\GitHub\McpServer\.worktrees\triage-fixes-20261015\tests\QBrainAi.Support.Mcp.Tests\Services\HostileReviewG4OverlayTests.cs(475,0): at QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup()&#xD;
+[xUnit.net 00:00:06.31]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:08.06]   Finished:    QBrainAi.Support.Mcp.Tests (ID = 'abdb9a7458d311ec1d7a67ad88eb0a18186e695873658ceee892602fc299fc5d')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-15T12:03:40.7557305-05:00">
+        <Text>[xUnit.net 00:00:06.31]     QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>
