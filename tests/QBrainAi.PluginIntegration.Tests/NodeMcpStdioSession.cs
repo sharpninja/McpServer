@@ -50,7 +50,7 @@ public sealed class NodeMcpStdioSession : IAsyncDisposable
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             CreateNoWindow = true,
-            StandardInputEncoding = Encoding.UTF8,
+            StandardInputEncoding = PluginHostStdin.Encoding,
             StandardOutputEncoding = Encoding.UTF8,
             StandardErrorEncoding = Encoding.UTF8,
         };
