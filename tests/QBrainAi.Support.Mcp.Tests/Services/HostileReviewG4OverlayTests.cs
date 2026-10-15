@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ModelContextProtocol.Server;
 using NSubstitute;
 using Xunit;
@@ -456,11 +457,42 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
         Assert.All(queue, item => Assert.DoesNotContain(raw, item.RenderedPrompt ?? string.Empty, StringComparison.Ordinal));
     }
 
-    /// <summary>TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation.</summary>
+    /// <summary>
+    /// TR-MCP-HOSTILEREVIEW-003 AC-001 mock gate (PLAN-SESSIONTRIAGEFIX-001 B4): the startup assertion accepts a startup fault that names
+    /// HostileReviewWorker, and rejects the masked outcome PAYTON-LEGION2 produced on 2026-10-15 (the logging error the Windows EventLog
+    /// provider raised while the host logged the fault) and a start that does not fail.
+    /// </summary>
+    [Fact]
+    public async Task HostileReviewStartupAssertion_AcceptsWorkerFailureAndRejectsMaskedOrMissing()
+    {
+        await AssertStartupFailsNamingWorker(() => Task.FromException(new Microsoft.Extensions.Options.OptionsValidationException(
+            "HostileReviewWorkerOptions", typeof(HostileReviewWorkerOptions), ["HostileReviewWorker options failed startup validation."])));
+        // Negative control: the exception the Windows run raised (triage-report-f4d47e1f).
+        var masked = new AggregateException("An error occurred while writing to logger(s).",
+            new InvalidOperationException("Cannot open log for source '.NET Runtime'. You may not have write access."));
+        await Assert.ThrowsAnyAsync<Exception>(() => AssertStartupFailsNamingWorker(() => Task.FromException(masked)));
+        // Negative control: a start that does not fail.
+        await Assert.ThrowsAnyAsync<Exception>(() => AssertStartupFailsNamingWorker(() => Task.CompletedTask));
+    }
+
+    /// <summary>TR-MCP-HOSTILEREVIEW-003 AC-001: the start fails, and the failure text names HostileReviewWorker.</summary>
+    private static async Task AssertStartupFailsNamingWorker(Func<Task> start)
+    {
+        var ex = await Assert.ThrowsAnyAsync<Exception>(start);
+        Assert.Contains("HostileReviewWorker", ex.ToString(), StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TR-MCP-HOSTILEREVIEW-003 AC-001: invalid worker options fail host startup validation with an error naming HostileReviewWorker. The
+    /// default host logs a startup fault to every logging provider, and on Windows its EventLog provider throws for an account that cannot
+    /// write the Application log, which replaced the fault with a logging error on PAYTON-LEGION2 (PLAN-SESSIONTRIAGEFIX-001 B4,
+    /// triage-report-f4d47e1f); the test host owns its providers, so the outcome does not depend on the machine's event log rights.
+    /// </summary>
     [Fact]
     public async Task HostileReviewWorker_InvalidOptions_FailStartup()
     {
         var builder = Host.CreateApplicationBuilder();
+        builder.Logging.ClearProviders();
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["Mcp:HostileReviewWorker:LeaseDuration"] = "00:01:00",
@@ -471,8 +503,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
         });
         builder.Services.AddHostileReviewServices();
         using var host = builder.Build();
-        var ex = await Assert.ThrowsAnyAsync<Exception>(() => host.StartAsync(TestContext.Current.CancellationToken));
-        Assert.Contains("HostileReviewWorker", ex.ToString(), StringComparison.Ordinal);
+        await AssertStartupFailsNamingWorker(() => host.StartAsync(TestContext.Current.CancellationToken));
     }
 
     private HostileReviewService CreateService()
