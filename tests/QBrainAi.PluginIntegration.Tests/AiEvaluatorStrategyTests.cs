@@ -72,6 +72,118 @@ public sealed class AiEvaluatorStrategyTests
         AssertEvaluatorSchema(arguments[ValueIndex(arguments, "--json-schema")]);
     }
 
+    /// <summary>
+    /// TEST-MCP-PLUGININT-001 AC-004 (PLAN-SESSIONTRIAGEFIX-001 E6 follow-up): the evaluator's instructions state the receipt contract: every
+    /// required field by name, status completed, the turn identities, deterministicFailure optional and false when absent, and the three
+    /// answer keys; they never call deterministicFailure required.
+    /// </summary>
+    private static void AssertEvaluatorContract(string prompt, IReadOnlyList<string> requiredFields)
+    {
+        Assert.NotEmpty(requiredFields);
+        foreach (var field in requiredFields)
+        {
+            Assert.Contains(field, prompt, StringComparison.Ordinal);
+        }
+
+        Assert.Contains("completed", prompt, StringComparison.Ordinal);
+        foreach (var identity in new[] { "sessionId", "requestId", "sourceSha" })
+        {
+            Assert.Contains(identity, prompt, StringComparison.Ordinal);
+        }
+
+        Assert.Contains("deterministicFailure is optional and false when absent", prompt, StringComparison.Ordinal);
+        Assert.DoesNotMatch(@"deterministicFailure\s+(is\s+)?required", prompt);
+        foreach (var key in new[] { "valid", "missingFields", "contradictions" })
+        {
+            Assert.Contains(key, prompt, StringComparison.Ordinal);
+        }
+    }
+
+    /// <summary>The slowest evaluator answer measured on 2026-10-15 (e6-latency-probe: 28.7, 29.1 and 59.3 seconds), in seconds.</summary>
+    private const double MeasuredSlowestEvaluatorSeconds = 59.3;
+
+    /// <summary>The time a theory row spends before the evaluation starts (fixture start and the canonical turn), allowed generously.</summary>
+    private static readonly TimeSpan TheorySetupAllowance = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// TEST-MCP-PLUGININT-001 AC-004 (PLAN-SESSIONTRIAGEFIX-001 E6 follow-up): the evaluation waits for the strategy's TimeoutSeconds plus a
+    /// 30-second margin, so aiUnit reports its own timeout first; that setting covers at least twice the slowest measured evaluator answer;
+    /// and the wait with the setup allowance fits inside the theory's timeout.
+    /// </summary>
+    private static void AssertEvaluatorWait(TimeSpan wait, int strategyTimeoutSeconds, TimeSpan theoryTimeout)
+    {
+        Assert.Equal(TimeSpan.FromSeconds(strategyTimeoutSeconds + 30), wait);
+        Assert.True(strategyTimeoutSeconds >= 2 * MeasuredSlowestEvaluatorSeconds, "the strategy timeout does not cover twice the slowest measured answer");
+        Assert.True(wait + TheorySetupAllowance <= theoryTimeout, "the wait does not fit inside the theory's timeout");
+    }
+
+    /// <summary>A pinned contract prompt; the switches produce the wrong variants the mock gate rejects.</summary>
+    private static string ContractPrompt(bool optionalFlag = true, bool includeEntrypoint = true) =>
+        "You evaluate one plugin Session Log persistence receipt. Required non-empty strings: agent, cacheFolder, "
+        + (includeEntrypoint ? "entrypoint, " : string.Empty)
+        + "status (must be completed); sessionId, requestId and sourceSha identify the persisted turn; "
+        + (optionalFlag ? "deterministicFailure is optional and false when absent. " : "deterministicFailure is required. ")
+        + "Return only JSON with keys valid, missingFields and contradictions.";
+
+    /// <summary>
+    /// Mock gate for TEST-MCP-PLUGININT-001 AC-004's contract (PLAN-SESSIONTRIAGEFIX-001 E6 follow-up): the contract assertion accepts a
+    /// prompt that states it, and rejects the prompt the AI lane used on 2026-10-15 (pluginint-20261015T1311: three rows judged
+    /// missingFields=deterministicFailure), a prompt calling deterministicFailure required, and a prompt that leaves out entrypoint. Data:
+    /// pinned prompts and the deterministic required fields only.
+    /// </summary>
+    [Fact]
+    public void EvaluatorContractAssertion_AcceptsStatedContractAndRejectsUnstatedOrRequiredFlag()
+    {
+        string[] required = ["agent", "cacheFolder", "entrypoint", "status"];
+        AssertEvaluatorContract(ContractPrompt(), required);
+        const string promptOfPluginint20261015T1311 =
+            "Return only JSON with keys valid (boolean), missingFields (string array), and contradictions (string array). " +
+            "Never set valid=true when deterministicFailure is true, required workflow fields are missing, or JSON is malformed.";
+        Assert.ThrowsAny<Exception>(() => AssertEvaluatorContract(promptOfPluginint20261015T1311, required));
+        Assert.ThrowsAny<Exception>(() => AssertEvaluatorContract(ContractPrompt(optionalFlag: false), required));
+        Assert.ThrowsAny<Exception>(() => AssertEvaluatorContract(ContractPrompt(includeEntrypoint: false), required));
+    }
+
+    /// <summary>
+    /// Mock gate for TEST-MCP-PLUGININT-001 AC-004's wait (PLAN-SESSIONTRIAGEFIX-001 E6 follow-up): the wait assertion accepts a 120-second
+    /// strategy timeout waited 150 seconds inside a 240-second theory, and rejects the fixed 60-second wait of 2026-10-15 under that
+    /// strategy, the old 60-second strategy timeout waited 90 seconds, and a 200-second strategy timeout whose wait overruns the theory. Data:
+    /// pinned numbers only.
+    /// </summary>
+    [Fact]
+    public void EvaluatorWaitAssertion_AcceptsStrategyTimeoutPlusMarginAndRejectsFixedOrOverBudget()
+    {
+        var theory = TimeSpan.FromMilliseconds(240000);
+        AssertEvaluatorWait(TimeSpan.FromSeconds(150), 120, theory);
+        Assert.ThrowsAny<Exception>(() => AssertEvaluatorWait(TimeSpan.FromSeconds(60), 120, theory));
+        Assert.ThrowsAny<Exception>(() => AssertEvaluatorWait(TimeSpan.FromSeconds(90), 60, theory));
+        Assert.ThrowsAny<Exception>(() => AssertEvaluatorWait(TimeSpan.FromSeconds(230), 200, theory));
+    }
+
+    /// <summary>
+    /// TEST-MCP-PLUGININT-001 AC-004 (operator rule 2026-10-15: requirements name no model; an agent launched without a model spec runs its
+    /// default model): the active strategy names no model and no temperature.
+    /// </summary>
+    private static void AssertNoModelSpec(JsonNode strategy)
+    {
+        Assert.Null(strategy["Model"]);
+        Assert.Null(strategy["Temperature"]);
+    }
+
+    /// <summary>
+    /// Mock gate for TEST-MCP-PLUGININT-001 AC-004's no-model clause: the assertion accepts a strategy with a command and a timeout only, and
+    /// rejects the strategy of 2026-10-15 (Model grok-4, which grok 1.0.46 does not offer, and Temperature 0.0, which its CLI cannot set),
+    /// a strategy with a model only and one with a temperature only. Data: pinned strategy objects only.
+    /// </summary>
+    [Fact]
+    public void EvaluatorStrategyModelAssertion_AcceptsNoModelSpecAndRejectsPinnedModelOrTemperature()
+    {
+        AssertNoModelSpec(JsonNode.Parse("{\"Kind\":\"cli\",\"Command\":\"aiunit-grok-evaluator.ps1\",\"TimeoutSeconds\":120}")!);
+        Assert.ThrowsAny<Exception>(() => AssertNoModelSpec(JsonNode.Parse("{\"Kind\":\"cli\",\"Command\":\"aiunit-grok-evaluator.ps1\",\"Model\":\"grok-4\",\"TimeoutSeconds\":60,\"Temperature\":0.0}")!));
+        Assert.ThrowsAny<Exception>(() => AssertNoModelSpec(JsonNode.Parse("{\"Kind\":\"cli\",\"Model\":\"grok-4.7\"}")!));
+        Assert.ThrowsAny<Exception>(() => AssertNoModelSpec(JsonNode.Parse("{\"Kind\":\"cli\",\"Temperature\":0.0}")!));
+    }
+
     /// <summary>The index of the value that follows <paramref name="flag"/>; fails when the flag or its value is missing.</summary>
     private static int ValueIndex(IReadOnlyList<string> arguments, string flag)
     {
@@ -220,5 +332,37 @@ public sealed class AiEvaluatorStrategyTests
         {
             Directory.Delete(root, recursive: true);
         }
+    }
+
+    /// <summary>
+    /// Binding for TEST-MCP-PLUGININT-001 AC-004's contract (PLAN-SESSIONTRIAGEFIX-001 E6 follow-up): AiStrategyFixture's own instructions
+    /// state the receipt contract over its own required fields. Data: the shipped SystemPrompt and RequiredFields.
+    /// </summary>
+    [Fact]
+    public void EvaluatorPrompt_Fixture_StatesReceiptContract() =>
+        AssertEvaluatorContract(AiStrategyFixture.SystemPrompt, AiStrategyFixture.RequiredFields);
+
+    /// <summary>
+    /// Binding for TEST-MCP-PLUGININT-001 AC-004's wait and no-model clauses (PLAN-SESSIONTRIAGEFIX-001 E6 follow-up; operator rule
+    /// 2026-10-15): the active strategy in this test's output folder names no model or temperature, and the fixture's wait for that
+    /// strategy's TimeoutSeconds fits inside the AI theory's own timeout attribute. Data: the output folder as built and the theory's
+    /// attribute.
+    /// </summary>
+    [Fact]
+    public void EvaluatorWait_Fixture_UsesStrategyTimeoutWithinTheoryBudget()
+    {
+        var settings = JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "appsettings.aiunit.json")))!["AiUnit"]!;
+        var strategy = settings["Strategies"]![(string)settings["ActiveStrategy"]!]!;
+        AssertNoModelSpec(strategy);
+        var timeoutSeconds = (int)strategy["TimeoutSeconds"]!;
+        var theory = typeof(PluginSessionLogAiTheoryTests)
+            .GetMethod(nameof(PluginSessionLogAiTheoryTests.AiTheory_Agent_RequiresValidJsonFields))!
+            .GetCustomAttributes(typeof(TheoryAttribute), inherit: false)
+            .Cast<TheoryAttribute>()
+            .Single();
+        AssertEvaluatorWait(AiStrategyFixture.EvaluationWait(timeoutSeconds), timeoutSeconds, TimeSpan.FromMilliseconds(theory.Timeout));
+        Assert.Equal(timeoutSeconds, AiStrategyFixture.StrategyTimeoutSeconds(new { Name = "grok-build", TimeoutSeconds = timeoutSeconds }));
+        Assert.Null(AiStrategyFixture.StrategyTimeoutSeconds(new { Name = "grok-build" }));
+        Assert.Null(AiStrategyFixture.StrategyTimeoutSeconds(null));
     }
 }

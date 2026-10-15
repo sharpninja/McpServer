@@ -2,7 +2,8 @@ namespace QBrainAi.PluginIntegration.Tests;
 
 /// <summary>
 /// TR-MCP-PLUGININT-001 AC3: maps each PluginHostKind onto a process launch through IPluginProcessRunner.
-/// PowerShell hosts use pwsh.exe -File on the catalog entrypoint. Node hosts use node plus dist/index.js.
+/// PowerShell hosts use -File on the catalog entrypoint through the PowerShell executable the operating system provides, pwsh.exe on
+/// Windows and pwsh elsewhere (TEST-MCP-PLUGININT-001 AC-006, PLAN-SESSIONTRIAGEFIX-001 E8). Node hosts use node plus dist/index.js.
 /// </summary>
 public sealed class PluginHostProcessAdapter
 {
@@ -79,7 +80,7 @@ public sealed class PluginHostProcessAdapter
         string executable;
         if (IsPowerShellHost(scenario.HostKind))
         {
-            executable = "pwsh.exe";
+            executable = OperatingSystem.IsWindows() ? "pwsh.exe" : "pwsh";
             arguments.Add("-NoProfile");
             arguments.Add("-NonInteractive");
             arguments.Add("-File");

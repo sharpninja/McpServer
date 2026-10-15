@@ -8,14 +8,41 @@ namespace QBrainAi.PluginIntegration.Tests;
 /// TEST-MCP-PLUGININT-001 AC3: aiUnit companion evaluator for plugin Session Log receipts.
 /// Deterministic failures (invalid JSON, missing fields, contradictions, deterministicFailure=true)
 /// are never overridden to Valid=true. Success-path evaluation invokes SharpNinja.aiUnit.
+/// TEST-MCP-PLUGININT-001 AC-004 (PLAN-SESSIONTRIAGEFIX-001 E6 follow-up): the instructions state the receipt contract, and the
+/// evaluation waits for the active strategy's TimeoutSeconds plus <see cref="EvaluationMarginSeconds"/>, so aiUnit reports its own
+/// timeout first; no model is named (operator rule 2026-10-15).
 /// </summary>
 public static class AiStrategyFixture
 {
-    private static readonly string[] RequiredFields = ["agent", "cacheFolder", "entrypoint", "status"];
+    /// <summary>Receipt fields the deterministic check and the evaluator's contract both require as non-empty strings.</summary>
+    internal static readonly string[] RequiredFields = ["agent", "cacheFolder", "entrypoint", "status"];
 
-    private const string SystemPrompt =
-        "Return only JSON with keys valid (boolean), missingFields (string array), and contradictions (string array). " +
-        "Never set valid=true when deterministicFailure is true, required workflow fields are missing, or JSON is malformed.";
+    /// <summary>Seconds added to the strategy's TimeoutSeconds before the fixture stops waiting for aiUnit's answer.</summary>
+    internal const int EvaluationMarginSeconds = 30;
+
+    /// <summary>The evaluator's instructions: the receipt contract and the answer it returns.</summary>
+    internal const string SystemPrompt =
+        "You evaluate one plugin Session Log persistence receipt, given as JSON after these instructions. " +
+        "The receipt contract: agent, cacheFolder, entrypoint and status are required non-empty strings, and status must be completed; " +
+        "sessionId, requestId and sourceSha identify the persisted turn and must be non-empty strings when present; " +
+        "deterministicFailure is optional and false when absent. " +
+        "Return only JSON with keys valid (boolean), missingFields (string array naming only required fields that are absent or empty), " +
+        "and contradictions (string array naming fields whose values contradict the contract). " +
+        "Never set valid=true when deterministicFailure is true, a required field is missing, or the JSON is malformed.";
+
+    /// <summary>TEST-MCP-PLUGININT-001 AC-004: how long the fixture waits for an answer under a strategy timeout of <paramref name="strategyTimeoutSeconds"/>.</summary>
+    /// <param name="strategyTimeoutSeconds">The active strategy's TimeoutSeconds.</param>
+    /// <returns>The strategy timeout plus <see cref="EvaluationMarginSeconds"/>.</returns>
+    internal static TimeSpan EvaluationWait(int strategyTimeoutSeconds) => TimeSpan.FromSeconds(strategyTimeoutSeconds + EvaluationMarginSeconds);
+
+    /// <summary>
+    /// TEST-MCP-PLUGININT-001 AC-004: the active strategy's TimeoutSeconds from aiUnit's resolved strategy, which aiUnit 2.1.3 exposes as
+    /// object (its own reader, ExtractStrategyTimeoutSeconds, is private and reads the property the same way); null when it has none.
+    /// </summary>
+    /// <param name="resolved">AiStrategyFixture.Default.Resolved.</param>
+    /// <returns>The strategy's TimeoutSeconds, or null.</returns>
+    internal static int? StrategyTimeoutSeconds(object? resolved) =>
+        resolved?.GetType().GetProperty("TimeoutSeconds")?.GetValue(resolved) is int seconds ? seconds : null;
 
     /// <summary>
     /// Evaluates a redacted persistence receipt and returns strict JSON fields valid, missingFields, and contradictions.
@@ -75,7 +102,8 @@ public static class AiStrategyFixture
         }
 
         var client = AiUnitRuntime.Default.Client;
-        if (client is null)
+        var strategyTimeoutSeconds = StrategyTimeoutSeconds(AiUnitRuntime.Default.Resolved);
+        if (client is null || strategyTimeoutSeconds is null)
         {
             return new AiStrategyEvaluation
             {
@@ -88,7 +116,7 @@ public static class AiStrategyFixture
         try
         {
             var response = await client.SendAsync(new FrontierRequest(SystemPrompt, redactedReceipt))
-                .WaitAsync(TimeSpan.FromSeconds(60), cancellationToken)
+                .WaitAsync(EvaluationWait(strategyTimeoutSeconds.Value), cancellationToken)
                 .ConfigureAwait(false);
             if (response.Error is not null || string.IsNullOrWhiteSpace(response.Text))
             {

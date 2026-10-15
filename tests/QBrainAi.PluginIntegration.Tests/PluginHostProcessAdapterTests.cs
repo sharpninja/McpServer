@@ -81,7 +81,8 @@ public sealed class PluginHostProcessAdapterTests
     }
 
     /// <summary>
-    /// P8 green: Codex and PowerShell-hook hosts launch the catalog-declared entrypoint via pwsh.exe, not raw REST or repl-invoke.ps1.
+    /// P8 green: Codex and PowerShell-hook hosts launch the catalog-declared entrypoint through the operating system's PowerShell executable
+    /// (pwsh.exe on Windows, pwsh elsewhere; TEST-MCP-PLUGININT-001 AC-006), not raw REST or repl-invoke.ps1.
     /// </summary>
     /// <param name="hostKind">Codex or a PowerShell-hook host kind.</param>
     [Theory]
@@ -93,7 +94,7 @@ public sealed class PluginHostProcessAdapterTests
     public async Task Adapter_CodexAndPowerShellHook_UseDeclaredEntrypoint(PluginHostKind hostKind)
     {
         var (scenario, fake, _, pluginRoot) = await LaunchWithFakeAsync(hostKind);
-        Assert.Equal("pwsh.exe", fake.LastRequest!.Executable, StringComparer.OrdinalIgnoreCase);
+        AssertPowerShellHostExecutable(fake.LastRequest!.Executable, OperatingSystem.IsWindows());
         Assert.Contains("-File", fake.LastRequest.Arguments, StringComparer.OrdinalIgnoreCase);
         var entrypointPath = Path.Combine(pluginRoot, scenario.Entrypoint.Replace('/', Path.DirectorySeparatorChar));
         Assert.Contains(entrypointPath, fake.LastRequest.Arguments, StringComparer.OrdinalIgnoreCase);
@@ -146,6 +147,46 @@ public sealed class PluginHostProcessAdapterTests
         Assert.Equal(pluginRoot, fake.LastRequest.WorkingDirectory, StringComparer.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// TEST-MCP-PLUGININT-001 AC-006 (PLAN-SESSIONTRIAGEFIX-001 E8): a PowerShell plugin host starts through the PowerShell executable name
+    /// the operating system provides: pwsh.exe on Windows, pwsh elsewhere.
+    /// </summary>
+    private static void AssertPowerShellHostExecutable(string executable, bool isWindows) =>
+        Assert.Equal(isWindows ? "pwsh.exe" : "pwsh", executable, StringComparer.Ordinal);
+
+    /// <summary>
+    /// Mock gate for TEST-MCP-PLUGININT-001 AC-006 (PLAN-SESSIONTRIAGEFIX-001 E8): the executable assertion accepts the per-OS reference rule
+    /// on both systems, and rejects the fixed pwsh.exe the harness used on Linux before E8 (LAB-OMARCHY passed only through its machine-local
+    /// pwsh.exe symlinks), a fixed pwsh on Windows, and powershell.exe. Data: pinned names only.
+    /// </summary>
+    [Fact]
+    public void PowerShellHostExecutableAssertion_AcceptsPerOsNameAndRejectsFixedName()
+    {
+        static string ReferenceRule(bool isWindows) => isWindows ? "pwsh.exe" : "pwsh";
+        AssertPowerShellHostExecutable(ReferenceRule(isWindows: true), isWindows: true);
+        AssertPowerShellHostExecutable(ReferenceRule(isWindows: false), isWindows: false);
+        Assert.ThrowsAny<Exception>(() => AssertPowerShellHostExecutable("pwsh.exe", isWindows: false));
+        Assert.ThrowsAny<Exception>(() => AssertPowerShellHostExecutable("pwsh", isWindows: true));
+        Assert.ThrowsAny<Exception>(() => AssertPowerShellHostExecutable("powershell.exe", isWindows: true));
+    }
+
+    /// <summary>
+    /// Binding for TEST-MCP-PLUGININT-001 AC-006 (PLAN-SESSIONTRIAGEFIX-001 E8): the shipped adapter starts each PowerShell host through the
+    /// running operating system's PowerShell executable name. Fixture: FakePluginProcessRunner and the catalog row.
+    /// </summary>
+    /// <param name="hostKind">A PowerShell host kind.</param>
+    [Theory]
+    [InlineData(PluginHostKind.Codex)]
+    [InlineData(PluginHostKind.ClaudeCode)]
+    [InlineData(PluginHostKind.ClaudeCowork)]
+    [InlineData(PluginHostKind.Copilot)]
+    [InlineData(PluginHostKind.Grok)]
+    public async Task PluginHostProcessAdapter_PowerShellHost_UsesOsExecutableName(PluginHostKind hostKind)
+    {
+        var (_, fake, _, _) = await LaunchWithFakeAsync(hostKind);
+        AssertPowerShellHostExecutable(fake.LastRequest!.Executable, OperatingSystem.IsWindows());
+    }
+
     private async Task<(PluginSessionLogScenario Scenario, FakePluginProcessRunner Fake, PluginProcessLaunchResult Result, string PluginRoot)> LaunchWithFakeAsync(
         PluginHostKind hostKind,
         string? stdin = null)
@@ -179,7 +220,7 @@ public sealed class PluginHostProcessAdapterTests
             or PluginHostKind.Grok;
 
     private static string ExpectedExecutable(PluginHostKind hostKind) =>
-        IsPowerShellHost(hostKind) ? "pwsh.exe" : "node";
+        IsPowerShellHost(hostKind) ? (OperatingSystem.IsWindows() ? "pwsh.exe" : "pwsh") : "node";
 
     private static string FindRepositoryRoot()
     {
