@@ -37,6 +37,7 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
 
         $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
         $script:ReplScript = Join-Path $script:RepoRoot 'plugins\core\lib-ps\repl-invoke.ps1'
+        . (Join-Path $PSScriptRoot '..\PluginTestFixtures.ps1')
         . $script:ReplScript
         if ($env:MCP_PLUGIN_PERSIST_LOG) {
             Remove-Item Env:MCP_PLUGIN_PERSIST_LOG
@@ -167,7 +168,15 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        # TR-MCP-NUKE-012 AC-006: an isolated workspace with its own marker, never the repository root.
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $snapshot = Get-TestMarkerSnapshot -Workspace $workspace
+        # A marker-bearing current directory outranks MCP_WORKSPACE_PATH, and above a worktree sits the main checkout's live marker.
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $workspace
         $script:DialogResult = @{ Success = $false; Output = 'HTTP 404'; Error = 'not_found' }
         $script:PersistCallCount = 0
         $script:PersistRecoveryReturnsFalse = $true
@@ -187,8 +196,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 degraded = $true
                 queryText = 'keep me'
                 queryTitle = 'kept title'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: hello`n"
             $ok | Should -BeTrue
@@ -206,8 +215,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 degraded = $false
                 auditDialog = 0
                 queryText = 'keep me'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
             $never = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: never`n"
             $never | Should -BeFalse
@@ -221,7 +230,9 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             (Read-McpYamlObject -Path (Join-Path $dir 'current-turn.yaml'))['auditDialog'] | Should -Be 0
         } finally {
             $script:PersistRecoveryReturnsFalse = $false
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -231,7 +242,15 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        # TR-MCP-NUKE-012 AC-006: an isolated workspace with its own marker, never the repository root.
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $snapshot = Get-TestMarkerSnapshot -Workspace $workspace
+        # A marker-bearing current directory outranks MCP_WORKSPACE_PATH, and above a worktree sits the main checkout's live marker.
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $workspace
         $script:ForceDegradedPersist = $true
         try {
             Write-McpYamlObject -Path (Join-Path $dir 'session-state.yaml') -Document ([ordered]@{
@@ -246,8 +265,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
                 planFile = 'docs/plans/kept.md'
                 todoId = 'BUG-TRIAGE-245'
                 queryText = 'keep me'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
             $ok = Invoke-WorkflowBeginTurn -ParamsYaml "requestId: req-20260923T205606Z-001-life`nqueryText: keep me`nqueryTitle: kept`n"
             $ok | Should -BeTrue
@@ -256,7 +275,9 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             $script:LastPersistTodo | Should -Be 'BUG-TRIAGE-245'
         } finally {
             $script:ForceDegradedPersist = $false
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -277,13 +298,8 @@ Describe 'FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache' {
             markerFilePath = $snapshot.markerFilePath
             markerLastWriteUtc = $snapshot.markerLastWriteUtc
         })
-        $sleeper = if ($IsWindows) { Join-Path $dir 'sleep.cmd' } else { Join-Path $dir 'sleep.sh' }
-        if ($IsWindows) {
-            Set-Content -LiteralPath $sleeper -Value "@echo off`r`nping -n 40 127.0.0.1 >nul`r`n" -Encoding ascii
-        } else {
-            Set-Content -LiteralPath $sleeper -Value "#!/bin/bash`nsleep 30`n" -Encoding ascii
-            chmod +x $sleeper
-        }
+        # TR-MCP-NUKE-012 AC-006: the REPL child that never exits is a PowerShell fake on both platforms (no bash).
+        $sleeper = Write-TestPwshExecutable -Directory $dir -Name 'sleep' -Body 'Start-Sleep -Seconds 30'
         $priorExe = $env:MCP_REPL_EXECUTABLE
         $priorTimeout = $env:REPL_TIMEOUT
         $priorCache = $env:MCP_CACHE_DIR_OVERRIDE

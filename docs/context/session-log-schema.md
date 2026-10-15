@@ -48,7 +48,7 @@ Query, GET, MCP, and stdio reads clone the DTO and apply `Mcp:SessionLogSanitiza
 
 ## Stale in_progress turns (BUG-TRIAGE-121)
 
-Forward-only. Do not mass-close historical `in_progress` turns. Recurrence of completed-then-canceled is the UserPromptSubmit isolation path: background briefs `reuse` an in-progress root work turn and `isolate-skip` a completed root turn.
+Forward-only. Do not mass-close historical `in_progress` turns. A background or hostile-agent brief opens its own turn in the root's session, kept in its own cache folder, so it neither reuses nor cancels the root's turn, whether that turn is in progress or completed (TR-MCP-PLUGIN-013 AC-005).
 
 Operator listing of stale open turns (sessions that contain at least one matching turn; inspect `turns[].status` and `turns[].timestamp`; complete or fail individually):
 

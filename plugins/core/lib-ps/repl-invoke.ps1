@@ -93,8 +93,15 @@ if (-not (Get-Command Resolve-McpCacheDir -ErrorAction SilentlyContinue) -or
     . (Join-Path $PSScriptRoot 'resolve-cache-dir.ps1')
 }
 
-# Resolved lazily so per-call context (workspace / env) governs path.
-function script:Get-ReplInvokeCacheDir { Resolve-McpCacheDir }
+# Resolved lazily so per-call context (workspace / env) governs path. TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): a
+# subagent's own session-log verbs (MCP_SUBAGENT_ID or GROK_SUBAGENT_ID set, no explicit override) reach its own background folder.
+function script:Get-ReplInvokeCacheDir {
+    $cacheDir = Resolve-McpCacheDir
+    if (Get-Command Resolve-McpBackgroundScopeCacheDir -ErrorAction SilentlyContinue) {
+        return (Resolve-McpBackgroundScopeCacheDir -CacheDir $cacheDir)
+    }
+    return $cacheDir
+}
 
 function New-ReplPluginSessionId {
     if ($env:MCP_SESSION_ID) { return $env:MCP_SESSION_ID }
@@ -1669,6 +1676,8 @@ function Invoke-ReplPersistTurn {
             status = $Status
             boundPlanFile = [bool]$PSBoundParameters.ContainsKey('PlanFile')
             boundTodoId = [bool]$PSBoundParameters.ContainsKey('TodoId')
+            tags = @($Tags)
+            contextList = @($ContextList)
         }
         Add-Content -LiteralPath $env:MCP_PLUGIN_PERSIST_LOG -Value ($persistRecord | ConvertTo-Json -Compress)
         # Test seam mimics a confirmed durable write: set persisted so beginTurn
@@ -2169,6 +2178,17 @@ function Invoke-WorkflowBeginTurn {
     $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
     $planExplicit = Test-ReplExplicitParam -ParamsYaml $ParamsYaml -Name 'planFile'
     $todoExplicit = Test-ReplExplicitParam -ParamsYaml $ParamsYaml -Name 'todoId'
+    # TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): optional contextList and tags for a new turn's first write, so a background
+    # turn names its root session and root turn from the start (completeTurn does not send them).
+    $beginContextList = [string[]]@()
+    $beginTags = [string[]]@()
+    $beginParams = if ($ParamsYaml) { Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml } else { $null }
+    if ($beginParams) {
+        $contextValue = Get-ReplObjectValue -InputObject $beginParams -Name 'contextList'
+        if ($null -ne $contextValue) { $beginContextList = ConvertTo-McpPluginStringList -Value $contextValue }
+        $tagValue = Get-ReplObjectValue -InputObject $beginParams -Name 'tags'
+        if ($null -ne $tagValue) { $beginTags = ConvertTo-McpPluginStringList -Value $tagValue }
+    }
     $currentTurnId = Get-ReplCurrentTurnValue -Key 'turnRequestId'
     $cachedPlan = Get-ReplCurrentTurnValue -Key 'planFile'
     $cachedTodo = Get-ReplCurrentTurnValue -Key 'todoId'
@@ -2275,6 +2295,8 @@ function Invoke-WorkflowBeginTurn {
             $turnState['planFile'] = $planFile
             $turnState['todoId'] = $todoId
         }
+        if ($beginContextList.Count -gt 0) { $turnState['contextList'] = @($beginContextList) }
+        if ($beginTags.Count -gt 0) { $turnState['tags'] = @($beginTags) }
     }
 
     # HV02: durable reopen must keep the bound marker proof; do not overwrite
@@ -2312,7 +2334,20 @@ function Invoke-WorkflowBeginTurn {
             $persisted = [bool](Invoke-ReplPersistTurn @persistArgs -IncludeSessionTitle:$seedSessionTitle)
         } else {
             $script:ReplPersistVerbMethod = 'workflow.sessionlog.beginTurn'
-            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
+            $persistArgs = @{
+                RequestId = $requestId
+                Title = $queryTitle
+                Status = 'in_progress'
+                ResponseText = '(turn opened)'
+                IncludeSessionTitle = $seedSessionTitle
+                PlanFile = $planFile
+                TodoId = $todoId
+            }
+            # TR-MCP-PLUGIN-013 AC-005 (D3): only a turn opened with contextList or tags sends them, so every other turn's first write
+            # keeps its exact earlier shape.
+            if ($beginTags.Count -gt 0) { $persistArgs.Tags = $beginTags }
+            if ($beginContextList.Count -gt 0) { $persistArgs.ContextList = $beginContextList }
+            $persisted = [bool](Invoke-ReplPersistTurn @persistArgs)
         }
         if (-not $persisted) {
             $degraded = $false

@@ -806,32 +806,49 @@ function Test-PluginPromptIsBackgroundAgent {
     return $false
 }
 
-function Get-PluginRootTurnIsolationDecision {
+function Resolve-PluginBackgroundScope {
     <#
     .SYNOPSIS
-        FR-MCP-TRIAGEPLUGIN-001: reuse or skip-open when a background prompt would clobber the root turn.
+        TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3, triage-report-061f30e9): the background scope of the host this hook runs
+        for, its key (Get-McpBackgroundScopeKey over the payload's session_id and the agentSessionId the root's session-state.yaml records)
+        and its cache folder under the root cache; $null for the root host. FR-MCP-TRIAGEPLUGIN-001: the root turn stays the root's.
     #>
     param(
-        $OpenTurn,
-        [string]$IncomingPrompt,
+        [Parameter(Mandatory)][string]$CacheDir,
         [string]$Payload
     )
 
-    if ($null -eq $OpenTurn) { return 'open-new' }
+    $sessionFile = Join-Path $CacheDir 'session-state.yaml'
+    $rootAgentSessionId = if (Test-Path -LiteralPath $sessionFile) { [string](Get-YamlScalar -Path $sessionFile -Key 'agentSessionId') } else { '' }
+    $key = Get-McpBackgroundScopeKey -PayloadSessionId (Get-HookPayloadValue -Payload $Payload -Name 'session_id') -RootAgentSessionId $rootAgentSessionId
+    if (-not $key) { return $null }
+    return [pscustomobject]@{ Key = $key; Dir = (Join-McpBackgroundScopePath -CacheDir $CacheDir -Key $key) }
+}
 
-    $status = ''
-    $requestId = ''
-    if ($OpenTurn -is [System.Collections.IDictionary]) {
-        if ($OpenTurn.Contains('status')) { $status = [string]$OpenTurn['status'] }
-        if ($OpenTurn.Contains('turnRequestId')) { $requestId = [string]$OpenTurn['turnRequestId'] }
+function Initialize-PluginBackgroundScope {
+    <#
+    .SYNOPSIS
+        TR-MCP-PLUGIN-013 AC-005 (D3): prepares a background host's cache folder for a turn in the root's session. Its session-state.yaml
+        becomes a copy of the root's (the same session, marker proof and title, so the turn lands in the root's session and never retitles
+        it) plus the scope key. Returns the root's session id and the id of the turn the root's current-turn.yaml names, open or completed.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$RootCacheDir,
+        [Parameter(Mandatory)]$Scope
+    )
+
+    [void][System.IO.Directory]::CreateDirectory($Scope.Dir)
+    $rootState = Read-McpYamlObject -Path (Join-Path $RootCacheDir 'session-state.yaml')
+    $scopeState = [ordered]@{}
+    foreach ($name in @($rootState.Keys)) { $scopeState[$name] = $rootState[$name] }
+    if (-not $scopeState.Contains('title') -or [string]::IsNullOrWhiteSpace([string]$scopeState['title'])) {
+        $scopeState['title'] = "background scope of $([string]$rootState['sessionId'])"
     }
-    if ([string]::IsNullOrWhiteSpace($requestId)) { return 'open-new' }
-    if (-not (Test-PluginPromptIsBackgroundAgent -Prompt $IncomingPrompt -Payload $Payload)) {
-        return 'open-new'
-    }
-    if ($status -eq 'in_progress') { return 'reuse' }
-    if ($status -eq 'completed') { return 'isolate-skip' }
-    return 'open-new'
+    $scopeState['backgroundScopeKey'] = [string]$Scope.Key
+    Write-McpYamlObject -Path (Join-Path $Scope.Dir 'session-state.yaml') -Document $scopeState
+    $rootTurnFile = Join-Path $RootCacheDir 'current-turn.yaml'
+    $rootTurnId = if (Test-Path -LiteralPath $rootTurnFile) { [string](Get-YamlScalar -Path $rootTurnFile -Key 'turnRequestId') } else { '' }
+    return [pscustomobject]@{ SessionId = [string]$rootState['sessionId']; RootTurnId = $rootTurnId }
 }
 
 function Open-PluginTurn {
@@ -900,6 +917,20 @@ function Open-PluginTurn {
     if (-not $title) { $title = 'Continuation turn' }
     if ($title.Length -gt 60) { $title = $title.Substring(0, 60) }
 
+    # TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3, triage-report-061f30e9): a background or hostile-agent brief from a host whose
+    # identity differs from the root's opens and logs its own turn in the root's session, kept in its own cache folder, so the root's
+    # current-turn.yaml and turn are never reused, skipped, superseded or rewritten. A brief with the root's own identity is the root's prompt.
+    $backgroundScope = $null
+    $backgroundContext = $null
+    if (Test-PluginPromptIsBackgroundAgent -Prompt $prompt -Payload $payload) {
+        $backgroundScope = Resolve-PluginBackgroundScope -CacheDir $cacheDir -Payload $payload
+    }
+    if ($backgroundScope) {
+        $backgroundContext = Initialize-PluginBackgroundScope -RootCacheDir $cacheDir -Scope $backgroundScope
+        $cacheDir = $backgroundScope.Dir
+        $sessionFile = Join-Path $cacheDir 'session-state.yaml'
+    }
+
     # Double hook registration (plugin hooks.json plus the settings.json bridge) delivers the
     # same prompt twice per user message; reuse the turn the first delivery opened instead of
     # opening a duplicate session-log turn (triage-report-7c84e6437f7b42d0a67fbe32679a686a).
@@ -941,23 +972,6 @@ function Open-PluginTurn {
                 return
             }
 
-            $isolation = Get-PluginRootTurnIsolationDecision -OpenTurn $openTurn -IncomingPrompt $prompt -Payload $payload
-            if ($isolation -eq 'reuse' -or $isolation -eq 'isolate-skip') {
-                Write-PluginJson ([ordered]@{
-                    hookSpecificOutput = [ordered]@{
-                        hookEventName = 'UserPromptSubmit'
-                        status = $(if ($isolation -eq 'reuse') { 'turn-already-open' } else { 'root-turn-isolated' })
-                        turnRequestId = $openRequestId
-                        isolation = $isolation
-                        additionalContext = if ($isolation -eq 'reuse') {
-                            "session log turn $openRequestId remains active. Background UserPromptSubmit did not supersede the root work turn."
-                        } else {
-                            "root session log turn $openRequestId is completed. Background UserPromptSubmit did not rewrite current-turn.yaml."
-                        }
-                    }
-                })
-                return
-            }
         }
     }
 
@@ -971,14 +985,28 @@ function Open-PluginTurn {
 
     $turnRequestId = 'req-{0}-prompt-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff)
     $turnContext = Resolve-PluginTurnPlanContext
-    $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+    $beginParams = [ordered]@{
         requestId = $turnRequestId
         queryTitle = $title
         queryText = $prompt
         planFile = $turnContext.planFile
         todoId = $turnContext.todoId
-    })
-    $beginOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml
+    }
+    if ($backgroundContext) {
+        # TR-MCP-PLUGIN-013 AC-005 (D3): the background turn's first write names its root session and root turn.
+        $rootIds = @("root session: $($backgroundContext.SessionId)")
+        if ($backgroundContext.RootTurnId) { $rootIds += "root turn: $($backgroundContext.RootTurnId)" }
+        $beginParams['contextList'] = $rootIds
+        $beginParams['tags'] = @('background-agent')
+    }
+    $paramsYaml = ConvertTo-PluginParamsYaml $beginParams
+    $priorCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+    if ($backgroundScope) { $env:MCP_CACHE_DIR_OVERRIDE = $backgroundScope.Dir }
+    try {
+        $beginOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml
+    } finally {
+        if ($backgroundScope) { $env:MCP_CACHE_DIR_OVERRIDE = $priorCacheOverride }
+    }
     if ($script:LastPluginReplExitCode -ne 0) {
         Write-PluginJson ([ordered]@{
             hookSpecificOutput = [ordered]@{
@@ -1035,6 +1063,11 @@ function Open-PluginTurn {
         turnRequestId = $turnRequestId
         additionalContext = $additionalContext
     }
+    if ($backgroundScope) {
+        $rootTurnText = if ($backgroundContext.RootTurnId) { "root turn $($backgroundContext.RootTurnId) is unchanged" } else { 'the root has no current turn' }
+        $hookOutput['backgroundScope'] = [string]$backgroundScope.Key
+        $hookOutput['additionalContext'] = "$additionalContext Background agent turn in the root session; $rootTurnText."
+    }
     if ($openStatus -eq 'turn-opened-degraded') {
         $hookOutput['recoveryArtifactPath'] = [string]$recoveryArtifactPath
     }
@@ -1047,6 +1080,11 @@ function Close-PluginTurnIfNeeded {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
     $cacheDir = Get-PluginCacheDir -StartPath $startPath
+    # TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): a background host's Stop completes its own turn, kept in its own cache
+    # folder, and never the root's.
+    $backgroundScope = Resolve-PluginBackgroundScope -CacheDir $cacheDir -Payload (Read-HookInput)
+    if ($backgroundScope -and -not (Test-Path -LiteralPath (Join-Path $backgroundScope.Dir 'current-turn.yaml'))) { $backgroundScope = $null }
+    if ($backgroundScope) { $cacheDir = $backgroundScope.Dir }
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
     if ($env:CLAUDE_STOP_HOOK_ACTIVE -eq 'true') {
         Write-PluginJson ([ordered]@{})
@@ -1116,7 +1154,8 @@ function Close-PluginTurnIfNeeded {
         $stopText = (Get-YamlScalar -Path $turnFile -Key 'queryText') ?? ''
         $stopFirstLine = @($stopTitle, $stopText) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
         $stopIsSystemEvent = $stopFirstLine -match '^\s*<(task-notification|user_query|command-name|command-message|command-args|local-command-[a-z-]+)>'
-        if ($stopIsSystemEvent -or ($stopEdits -le 0 -and $stopAuditTotal -le 0)) {
+        # A background agent's turn is a real request (D3), so its Stop closes it even when no work was recorded in it.
+        if (-not $backgroundScope -and ($stopIsSystemEvent -or ($stopEdits -le 0 -and $stopAuditTotal -le 0))) {
             Write-PluginJson ([ordered]@{})
             return
         }
@@ -1125,7 +1164,13 @@ function Close-PluginTurnIfNeeded {
         $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
             response = $response
         })
-        $completeOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml
+        $priorCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        if ($backgroundScope) { $env:MCP_CACHE_DIR_OVERRIDE = $backgroundScope.Dir }
+        try {
+            $completeOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml
+        } finally {
+            if ($backgroundScope) { $env:MCP_CACHE_DIR_OVERRIDE = $priorCacheOverride }
+        }
         if ($script:LastPluginReplExitCode -ne 0) {
             Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'workflow.sessionlog.completeTurn failed; current turn remains in_progress'; output = (($completeOutput | Out-String).Trim()) })
             return

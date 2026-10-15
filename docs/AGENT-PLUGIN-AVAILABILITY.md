@@ -130,7 +130,7 @@ When direct `--agent-stdio` is used, send one single-line JSON request envelope 
 
 ## UserPromptSubmit and background agents
 
-Root `UserPromptSubmit` stays on the root session while background agents run (FR-MCP-TRIAGEPLUGIN-001). A hostile-validator or other background brief does not open a new root `req-*-prompt-*` turn, does not cancel an in-progress root work turn, and does not rewrite `current-turn.yaml` after the root turn is completed. A distinct operator prompt still opens a new root turn. Operators list stale `in_progress` turns with `turnStatus=in_progress` and `staleOlderThanHours=N`; mass close is out of scope (BUG-TRIAGE-121).
+Root `UserPromptSubmit` stays on the root session while background agents run (FR-MCP-TRIAGEPLUGIN-001). A hostile-validator or other background brief from a host whose identity (`MCP_SUBAGENT_ID`, else `GROK_SUBAGENT_ID`, else the hook payload's `session_id`) differs from the root's opens and logs its own turn in the root's session, kept in `<cache>/background/<identity>/`; it never reuses, cancels or rewrites the root's turn or `current-turn.yaml`, and that host's Stop completes its own turn (TR-MCP-PLUGIN-013 AC-005). A brief with the root's own identity is the root host's own prompt. A distinct operator prompt still opens a new root turn. Operators list stale `in_progress` turns with `turnStatus=in_progress` and `staleOlderThanHours=N`; mass close is out of scope (BUG-TRIAGE-121).
 
 ## Related Docs
 

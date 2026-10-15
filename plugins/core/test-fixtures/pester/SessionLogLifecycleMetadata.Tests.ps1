@@ -77,7 +77,15 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        # TR-MCP-NUKE-012 AC-006: an isolated workspace with its own marker, never the repository root; a marker-bearing current
+        # directory outranks MCP_WORKSPACE_PATH, and above a worktree sits the main checkout's live marker.
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $snapshot = Get-TestMarkerSnapshot -Workspace $workspace
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $workspace
         $script:PersistCalls = 0
         $script:PersistOk = $true
         try {
@@ -90,14 +98,16 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendActions -ParamsYaml "requestId: req-other`nactions:`n  - type: design_decision`n    description: note`n"
             $ok | Should -BeFalse
             $script:PersistCalls | Should -Be 0
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -107,7 +117,15 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        # TR-MCP-NUKE-012 AC-006: an isolated workspace with its own marker, never the repository root; a marker-bearing current
+        # directory outranks MCP_WORKSPACE_PATH, and above a worktree sits the main checkout's live marker.
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $snapshot = Get-TestMarkerSnapshot -Workspace $workspace
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $workspace
         $script:PersistCalls = 0
         $script:PersistOk = $false
         $script:PersistQueued = $false
@@ -121,8 +139,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
             $ok = Invoke-WorkflowAppendActions -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
             $ok | Should -BeFalse
@@ -130,7 +148,9 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
             $script:LastInvokeReplMethodSuccess | Should -BeFalse
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -140,7 +160,15 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        # TR-MCP-NUKE-012 AC-006: an isolated workspace with its own marker, never the repository root; a marker-bearing current
+        # directory outranks MCP_WORKSPACE_PATH, and above a worktree sits the main checkout's live marker.
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $snapshot = Get-TestMarkerSnapshot -Workspace $workspace
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $workspace
         $script:PersistCalls = 0
         $script:PersistOk = $false
         $script:PersistQueued = $true
@@ -154,8 +182,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
             Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n  - type: design_decision`n    description: note`n"
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
@@ -163,7 +191,9 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             $script:LastReplPersistenceDetails.persisted | Should -BeFalse
             $script:LastReplPersistenceDetails.queued | Should -BeTrue
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -173,7 +203,15 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        # TR-MCP-NUKE-012 AC-006: an isolated workspace with its own marker, never the repository root; a marker-bearing current
+        # directory outranks MCP_WORKSPACE_PATH, and above a worktree sits the main checkout's live marker.
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $snapshot = Get-TestMarkerSnapshot -Workspace $workspace
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $workspace
         $script:PersistCalls = 0
         $script:PersistOk = $false
         $script:PersistQueued = $true
@@ -187,8 +225,8 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 sessionId = 'GrokCode-20260923T205606Z-life'
                 status = 'in_progress'
                 queryText = 'keep'
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
             Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: kept response`ninterpretation: noted interpretation`ntags:`n  - life`ncontextList:`n  - src/QBrainAi.Services/Services/SessionLogService.cs`n"
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
@@ -199,7 +237,9 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             $script:LastPersistContext | Should -Contain 'src/QBrainAi.Services/Services/SessionLogService.cs'
             $script:LastReplPersistenceDetails.persisted | Should -BeFalse
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -212,6 +252,10 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         $priorHost = $env:MCP_PLUGIN_HOST
         $env:MCP_CACHE_DIR_OVERRIDE = $cache
         $env:MCP_PLUGIN_HOST = 'grok'
+        # TR-MCP-NUKE-012 AC-006: the fixture directory is the workspace, with its own marker, never the repository root.
+        $snapshot = Get-TestMarkerSnapshot -Workspace $dir
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $dir
         $old = (Get-Date).ToUniversalTime().AddHours(-30).ToString('o')
         $fresh = (Get-Date).ToUniversalTime().ToString('o')
         Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
@@ -226,15 +270,16 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             status = 'in_progress'
             queryText = 'real work'
             auditActions = 2
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
         try {
-            $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $script:RepoRoot | Out-String
+            $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $dir | Out-String
             $output | Should -Match 'stale cached session cannot be reused'
         } finally {
             if ($null -eq $priorCache) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $priorCache }
             if ($null -eq $priorHost) { Remove-Item Env:MCP_PLUGIN_HOST -ErrorAction SilentlyContinue } else { $env:MCP_PLUGIN_HOST = $priorHost }
+            Set-Location -LiteralPath $priorLocation
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
@@ -247,6 +292,10 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
         $priorHost = $env:MCP_PLUGIN_HOST
         $env:MCP_CACHE_DIR_OVERRIDE = $cache
         $env:MCP_PLUGIN_HOST = 'grok'
+        # TR-MCP-NUKE-012 AC-006: the fixture directory is the workspace, with its own marker, never the repository root.
+        $snapshot = Get-TestMarkerSnapshot -Workspace $dir
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $dir
         $old = (Get-Date).ToUniversalTime().AddHours(-30).ToString('o')
         Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
             status = 'verified'
@@ -261,15 +310,16 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
             queryText = 'finished'
             auditActions = 1
             codeEdits = 0
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
         try {
-            $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $script:RepoRoot | Out-String
+            $output = & $script:HookScript -HookName stop-gate -HostName grok -WorkspacePath $dir | Out-String
             $output | Should -Not -Match 'stale cached session cannot be reused'
         } finally {
             if ($null -eq $priorCache) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $priorCache }
             if ($null -eq $priorHost) { Remove-Item Env:MCP_PLUGIN_HOST -ErrorAction SilentlyContinue } else { $env:MCP_PLUGIN_HOST = $priorHost }
+            Set-Location -LiteralPath $priorLocation
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }

@@ -252,7 +252,7 @@ Do not send formatted YAML or a single `type: batch` envelope; unsupported batch
 4. When complete, call `workflow.sessionlog.completeTurn` with final response
 5. Persist session log immediately after turn completion
 
-Root `UserPromptSubmit` does not open a new root turn, cancel an in-progress root work turn, or rewrite `current-turn.yaml` after a completed root turn when the incoming prompt is a background or hostile-validator brief (FR-MCP-TRIAGEPLUGIN-001). A distinct operator prompt still opens a new root turn. To list stale `in_progress` turns older than N hours without mass-closing them, query `GET /mcpserver/sessionlog?turnStatus=in_progress&staleOlderThanHours=N` (BUG-TRIAGE-121).
+When the incoming prompt is a background or hostile-validator brief from a host whose identity differs from the root's, `UserPromptSubmit` opens that agent's own turn in the root's session, kept in the agent's own cache folder, and never reuses, cancels or rewrites the root turn or the root's `current-turn.yaml` (FR-MCP-TRIAGEPLUGIN-001, TR-MCP-PLUGIN-013 AC-005). With `MCP_SUBAGENT_ID` or `GROK_SUBAGENT_ID` set, the session-log verbs the agent calls itself reach its own turn. A distinct operator prompt still opens a new root turn. To list stale `in_progress` turns older than N hours without mass-closing them, query `GET /mcpserver/sessionlog?turnStatus=in_progress&staleOlderThanHours=N` (BUG-TRIAGE-121).
 
 **At regular intervals during long sessions (~10 interactions):**
 

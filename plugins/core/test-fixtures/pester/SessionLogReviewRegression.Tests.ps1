@@ -181,6 +181,7 @@ Describe 'Session lifecycle public wrapper processes' {
     BeforeAll {
         $script:WrapperRepo = (Resolve-Path (Join-Path $PSScriptRoot '../../../..')).ProviderPath
         $script:WrapperLib = Join-Path $script:WrapperRepo 'plugins/core/lib-ps'
+        . (Join-Path $PSScriptRoot '../PluginTestFixtures.ps1')
         . (Join-Path $script:WrapperLib 'yaml-object-mutation.ps1')
         Import-McpYamlSerializer
     }
@@ -201,7 +202,8 @@ Describe 'Session lifecycle public wrapper processes' {
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot '../SessionLogWrapperHarness.ps1') -Destination (Join-Path $lib 'repl-invoke.ps1') -Force
         $wrapperPath = Join-Path $lib 'Invoke-McpPlugin.ps1'
         if ($Wrapper -eq 'codex') {
-            $wrapperPath = Join-Path (Split-Path $script:WrapperRepo -Parent) 'mcpserver-codex-plugin/Invoke-CodexMcpPlugin.ps1'
+            # TR-MCP-NUKE-012 AC-006: the codex plugin is found by the TR-MCP-NUKE-006 walk-up, not beside the checkout.
+            $wrapperPath = Join-Path (Get-TestPluginSiblingRepository -CheckoutRoot $script:WrapperRepo -Name 'mcpserver-codex-plugin') 'Invoke-CodexMcpPlugin.ps1'
         }
         Write-McpYamlObject -Path (Join-Path $cache 'current-turn.yaml') -Document (@{
             turnRequestId = 'req-20261002T004900Z-review'; sessionId = 'Codex-20261002T004900Z-review'

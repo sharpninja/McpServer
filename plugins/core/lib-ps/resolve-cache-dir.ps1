@@ -67,6 +67,70 @@ function Join-McpWorkspaceCachePath {
     return (Join-Path (Join-Path $WorkspacePath '.mcpServer') (Get-McpCacheAgentKey))
 }
 
+function Get-McpBackgroundScopeKey {
+    <#
+    .SYNOPSIS
+        TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): the identity of a background host: MCP_SUBAGENT_ID, else GROK_SUBAGENT_ID,
+        else the hook payload's session_id. None when there is none or when it equals the agentSessionId recorded for the root, because
+        then the prompt is the root host's own.
+    #>
+    [CmdletBinding()]
+    param(
+        [string]$PayloadSessionId,
+        [string]$RootAgentSessionId
+    )
+
+    $key = @($env:MCP_SUBAGENT_ID, $env:GROK_SUBAGENT_ID, $PayloadSessionId) |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace($key)) { return $null }
+    $key = $key.Trim()
+    if (-not [string]::IsNullOrWhiteSpace($RootAgentSessionId) -and
+        [string]::Equals($key, $RootAgentSessionId.Trim(), [System.StringComparison]::Ordinal)) {
+        return $null
+    }
+    return $key
+}
+
+function Join-McpBackgroundScopePath {
+    <#
+    .SYNOPSIS
+        TR-MCP-PLUGIN-013 AC-005 (D3): the cache folder of one background host, <cache>/background/<key>. A key with characters other than
+        letters, digits, dot, underscore and hyphen, or longer than 96 characters, is made file-safe and suffixed with a hash of the
+        original, so two keys never share a folder.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$CacheDir,
+        [Parameter(Mandatory)][string]$Key
+    )
+
+    $safe = ($Key -replace '[^A-Za-z0-9._-]+', '-').Trim('-', '.')
+    if ($safe -cne $Key -or $safe.Length -gt 96) {
+        $hash = [System.Convert]::ToHexString([System.Security.Cryptography.SHA256]::HashData([System.Text.Encoding]::UTF8.GetBytes($Key))).Substring(0, 12).ToLowerInvariant()
+        if ($safe.Length -gt 80) { $safe = $safe.Substring(0, 80) }
+        $safe = if ($safe) { "$safe-$hash" } else { $hash }
+    }
+    return (Join-Path (Join-Path $CacheDir 'background') $safe)
+}
+
+function Resolve-McpBackgroundScopeCacheDir {
+    <#
+    .SYNOPSIS
+        TR-MCP-PLUGIN-013 AC-005 (D3): the cache a session-log verb the agent calls itself uses. With no MCP_CACHE_DIR_OVERRIDE and with
+        MCP_SUBAGENT_ID or GROK_SUBAGENT_ID set, that agent's background folder when it holds a current-turn.yaml; otherwise CacheDir.
+        Those two are the only host identities an agent's own calls carry.
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$CacheDir)
+
+    if ($env:MCP_CACHE_DIR_OVERRIDE) { return $CacheDir }
+    $key = @($env:MCP_SUBAGENT_ID, $env:GROK_SUBAGENT_ID) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace($key)) { return $CacheDir }
+    $scope = Join-McpBackgroundScopePath -CacheDir $CacheDir -Key $key.Trim()
+    if (Test-Path -LiteralPath (Join-Path $scope 'current-turn.yaml') -PathType Leaf) { return $scope }
+    return $CacheDir
+}
+
 function Get-McpWorkspaceFromEnvironment {
     $configured = @(
         $env:MCPSERVER_WORKSPACE_PATH,

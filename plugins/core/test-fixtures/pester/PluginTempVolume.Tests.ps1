@@ -51,57 +51,90 @@ Describe 'TEST-MCP-TEMPVOL-001 plugin same-volume TEMP alignment' {
         }
     }
 
-    It 'sets TEMP and TMP to a writable directory on the workspace volume when they differ' {
-        $letter = Get-UnusedDriveLetter
-        $letter | Should -Not -BeNullOrEmpty
-        $workspaceHost = Join-Path $TestDrive 'cross-volume-ws'
-        New-Item -ItemType Directory -Path $workspaceHost | Out-Null
-        subst "$letter`:" $workspaceHost
+    It 'TEMPVOL cross-volume target per platform: Windows moves TEMP and TMP to the target drive; a single-root system leaves them unchanged' {
         $savedTemp = $env:TEMP
         $savedTmp = $env:TMP
         $foreignTemp = Join-Path $TestDrive 'foreign-temp'
         New-Item -ItemType Directory -Path $foreignTemp | Out-Null
-        try {
-            $env:TEMP = $foreignTemp
-            $env:TMP = $foreignTemp
-            $target = '{0}:\ws' -f $letter
+        if ($IsWindows) {
+            $letter = Get-UnusedDriveLetter
+            $letter | Should -Not -BeNullOrEmpty
+            $workspaceHost = Join-Path $TestDrive 'cross-volume-ws'
+            New-Item -ItemType Directory -Path $workspaceHost | Out-Null
+            subst "$letter`:" $workspaceHost
+            try {
+                $env:TEMP = $foreignTemp
+                $env:TMP = $foreignTemp
+                $target = '{0}:\ws' -f $letter
+                New-Item -ItemType Directory -Path $target | Out-Null
+                $result = Set-McpPluginSameVolumeTemp -TargetPath $target
+                $result.Succeeded | Should -BeTrue
+                $result.Changed | Should -BeTrue
+                $result.Error | Should -BeNullOrEmpty
+                $alignedRoot = Get-McpPathVolumeRoot -Path $env:TEMP
+                $targetRoot = Get-McpPathVolumeRoot -Path $target
+                $alignedRoot | Should -Be $targetRoot
+                (Get-McpPathVolumeRoot -Path $env:TMP) | Should -Be $targetRoot
+                Test-Path -LiteralPath $env:TEMP -PathType Container | Should -BeTrue
+                $probe = Join-Path $env:TEMP 'tempvol-write-probe.txt'
+                Set-Content -LiteralPath $probe -Value 'ok'
+                Test-Path -LiteralPath $probe -PathType Leaf | Should -BeTrue
+            } finally {
+                $env:TEMP = $savedTemp
+                $env:TMP = $savedTmp
+                subst "$letter`:" /d | Out-Null
+            }
+        }
+        else {
+            # TR-MCP-TEMPVOL-001 AC-001: every path shares the root '/', so TEMP and TMP stay where they are.
+            $target = Join-Path $TestDrive 'single-root-ws'
             New-Item -ItemType Directory -Path $target | Out-Null
-            $result = Set-McpPluginSameVolumeTemp -TargetPath $target
-            $result.Succeeded | Should -BeTrue
-            $result.Changed | Should -BeTrue
-            $result.Error | Should -BeNullOrEmpty
-            $alignedRoot = Get-McpPathVolumeRoot -Path $env:TEMP
-            $targetRoot = Get-McpPathVolumeRoot -Path $target
-            $alignedRoot | Should -Be $targetRoot
-            (Get-McpPathVolumeRoot -Path $env:TMP) | Should -Be $targetRoot
-            Test-Path -LiteralPath $env:TEMP -PathType Container | Should -BeTrue
-            $probe = Join-Path $env:TEMP 'tempvol-write-probe.txt'
-            Set-Content -LiteralPath $probe -Value 'ok'
-            Test-Path -LiteralPath $probe -PathType Leaf | Should -BeTrue
-        } finally {
-            $env:TEMP = $savedTemp
-            $env:TMP = $savedTmp
-            subst "$letter`:" /d | Out-Null
+            try {
+                $env:TEMP = $foreignTemp
+                $env:TMP = $foreignTemp
+                (Get-McpPathVolumeRoot -Path $target) | Should -Be (Get-McpPathVolumeRoot -Path $foreignTemp)
+                $result = Set-McpPluginSameVolumeTemp -TargetPath $target
+                $result.Succeeded | Should -BeTrue
+                $result.Changed | Should -BeFalse
+                $result.Error | Should -BeNullOrEmpty
+                $env:TEMP | Should -Be $foreignTemp
+                $env:TMP | Should -Be $foreignTemp
+            } finally {
+                $env:TEMP = $savedTemp
+                $env:TMP = $savedTmp
+            }
         }
     }
 
-    It 'does not mutate TEMP when the workspace temp directory cannot be created and returns a visible error' {
-        $letter = Get-UnusedDriveLetter
-        $letter | Should -Not -BeNullOrEmpty
+    It 'TEMPVOL uncreatable target per platform: Windows leaves TEMP unchanged with a visible error; a single-root system leaves it unchanged without one' {
         $savedTemp = $env:TEMP
         $savedTmp = $env:TMP
         $foreignTemp = Join-Path $TestDrive 'unchanged-temp'
         New-Item -ItemType Directory -Path $foreignTemp | Out-Null
+        if ($IsWindows) {
+            $letter = Get-UnusedDriveLetter
+            $letter | Should -Not -BeNullOrEmpty
+            $missingTarget = '{0}:\no-such-workspace' -f $letter
+        }
+        else {
+            $missingTarget = Join-Path $TestDrive 'no-such-workspace'
+        }
         try {
             $env:TEMP = $foreignTemp
             $env:TMP = $foreignTemp
-            $missingTarget = '{0}:\no-such-workspace' -f $letter
             $result = Set-McpPluginSameVolumeTemp -TargetPath $missingTarget
-            $result.Succeeded | Should -BeFalse
             $result.Changed | Should -BeFalse
-            $result.Error | Should -Not -BeNullOrEmpty
             $env:TEMP | Should -Be $foreignTemp
             $env:TMP | Should -Be $foreignTemp
+            if ($IsWindows) {
+                $result.Succeeded | Should -BeFalse
+                $result.Error | Should -Not -BeNullOrEmpty
+            }
+            else {
+                # TR-MCP-TEMPVOL-001 AC-001: the missing target shares the root '/', so nothing is attempted and no error is raised.
+                $result.Succeeded | Should -BeTrue
+                $result.Error | Should -BeNullOrEmpty
+            }
         } finally {
             $env:TEMP = $savedTemp
             $env:TMP = $savedTmp

@@ -2,11 +2,21 @@
 
 BeforeAll {
     $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
+    . (Join-Path $PSScriptRoot '..\PluginTestFixtures.ps1')
+    # TR-MCP-NUKE-012 AC-006: the staged plugin is written into a temporary root and the sibling plugin repositories are found by the
+    # TR-MCP-NUKE-006 walk-up, so a worktree validates the same packages as the main checkout.
+    $script:StagedRoot = Write-TestStagedPlugin -RepoRoot $script:RepoRoot -Root (Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-staged-plugin-' + [guid]::NewGuid().ToString('N')))
+}
+
+AfterAll {
+    if ($script:StagedRoot -and $script:StagedRoot.StartsWith([System.IO.Path]::GetTempPath())) {
+        Remove-Item -LiteralPath $script:StagedRoot -Recurse -Force -ErrorAction SilentlyContinue
+    }
 }
 
 Describe 'PowerShell-only plugin migration requirements' {
     It 'TEST-MCP-PLUGIN-PSONLY-002 rejects forbidden Bash and Node runtime files from shipped plugin packages' {
-        $parentRoot = Split-Path -Parent $script:RepoRoot
+        $parentRoot = Find-TestPluginSiblingParent -CheckoutRoot $script:RepoRoot
         $siblingNames = @(
             'mcpserver-claude-code-plugin',
             'mcpserver-claude-cowork-plugin',
@@ -17,7 +27,7 @@ Describe 'PowerShell-only plugin migration requirements' {
             'mcpserver-grok-plugin',
             'mcpserver-opencode-plugin'
         )
-        $packageRoots = @((Join-Path $script:RepoRoot 'plugins\core\.staged-plugin')) + @($siblingNames | ForEach-Object { Join-Path $parentRoot $_ })
+        $packageRoots = @($script:StagedRoot) + @($siblingNames | ForEach-Object { Join-Path $parentRoot $_ })
         $packageRoots = $packageRoots | Where-Object { Test-Path -LiteralPath $_ }
 
         $forbidden = [System.Collections.Generic.List[string]]::new()

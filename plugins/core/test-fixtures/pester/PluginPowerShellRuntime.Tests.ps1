@@ -9,7 +9,13 @@ BeforeAll {
     }
     $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
     $script:LibRoot = Join-Path $script:RepoRoot 'plugins\core\lib-ps'
-    $script:StagedRoot = Join-Path $script:RepoRoot 'plugins\core\.staged-plugin'
+    . (Join-Path $PSScriptRoot '..\PluginTestFixtures.ps1')
+    # TR-MCP-NUKE-012 AC-006: the plugin is staged into a temporary root the way Nuke SyncAgentPlugins stages it, so no test needs a
+    # pre-built plugins/core/.staged-plugin; child processes that run staged entrypoints start in a markerless temporary workspace, so no
+    # marker lookup can walk up to a checkout's live marker.
+    $script:StagedRoot = Write-TestStagedPlugin -RepoRoot $script:RepoRoot -Root (Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-staged-plugin-' + [guid]::NewGuid().ToString('N')))
+    $script:IsolatedWorkspace = Join-Path ([System.IO.Path]::GetTempPath()) ('mcp-psonly-ws-' + [guid]::NewGuid().ToString('N'))
+    [void][System.IO.Directory]::CreateDirectory($script:IsolatedWorkspace)
     # These fixtures include markerless directories; workspace-scoped TEMP has an ancestor marker.
     $script:SmokeCache = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'Temp/mcp-plugin-psonly-pester'
 
@@ -85,6 +91,11 @@ AfterAll {
     }
     foreach ($entry in $script:HostPluginEnvironment.GetEnumerator()) {
         [Environment]::SetEnvironmentVariable($entry.Key, $entry.Value, 'Process')
+    }
+    foreach ($temporary in $script:StagedRoot, $script:IsolatedWorkspace) {
+        if ($temporary -and $temporary.StartsWith([System.IO.Path]::GetTempPath())) {
+            Remove-Item -LiteralPath $temporary -Recurse -Force -ErrorAction SilentlyContinue
+        }
     }
 }
 
@@ -2194,9 +2205,10 @@ param(
                 MCP_AGENT_NAME = 'ClaudeCode'
                 MCP_PLUGIN_REFUSE_POWERSHELL = '1'
                 PLUGIN_ROOT_OVERRIDE = $script:SmokeCache
-                MCP_WORKSPACE_PATH = $script:RepoRoot
-                MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
-            }
+                MCP_WORKSPACE_PATH = $script:IsolatedWorkspace
+                MCPSERVER_WORKSPACE_PATH = $script:IsolatedWorkspace
+            } `
+            -WorkingDirectory $script:IsolatedWorkspace
 
         $result.ExitCode | Should -Be 0
         $result.Stdout | Should -Be 'MCP_PLUGIN_UNAVAILABLE:ClaudeCode'
@@ -2210,9 +2222,10 @@ param(
                 MCP_PLUGIN_HOST = 'claude-code'
                 MCP_AGENT_NAME = 'ClaudeCode'
                 PLUGIN_ROOT_OVERRIDE = $script:SmokeCache
-                MCP_WORKSPACE_PATH = $script:RepoRoot
-                MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
-            }
+                MCP_WORKSPACE_PATH = $script:IsolatedWorkspace
+                MCPSERVER_WORKSPACE_PATH = $script:IsolatedWorkspace
+            } `
+            -WorkingDirectory $script:IsolatedWorkspace
 
         $result.ExitCode | Should -Be 0
         $result.Stdout | Should -Be '{}'
@@ -2247,9 +2260,10 @@ param(
                 MCP_PLUGIN_HOST = 'claude-code'
                 MCP_AGENT_NAME = 'ClaudeCode'
                 PLUGIN_ROOT_OVERRIDE = $script:SmokeCache
-                MCP_WORKSPACE_PATH = $script:RepoRoot
-                MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
-            }
+                MCP_WORKSPACE_PATH = $script:IsolatedWorkspace
+                MCPSERVER_WORKSPACE_PATH = $script:IsolatedWorkspace
+            } `
+            -WorkingDirectory $script:IsolatedWorkspace
 
         $result.ExitCode | Should -Be 0
         $status = $result.Stdout | ConvertFrom-Json
@@ -2757,7 +2771,9 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
             $content | Should -Not -Match 'PowerShell import command exposed by the active plugin package'
         }
 
-        $sessionSkillPath = Join-Path $script:StagedRoot 'skills\session\SKILL.md'
+        # The session skill lives in the plugin repositories, never in the core's staged package (plugins/core/skills has no session
+        # skill in its history); the Claude plugin's copy is read, found by the TR-MCP-NUKE-006 walk-up.
+        $sessionSkillPath = Join-Path (Get-TestPluginSiblingRepository -CheckoutRoot $script:RepoRoot -Name 'mcpserver-claude-code-plugin') 'skills/session/SKILL.md'
         $sessionSkillContent = [System.IO.File]::ReadAllText($sessionSkillPath)
         $sessionSkillContent | Should -Match 'The active model must write its own session log'
         $sessionSkillContent | Should -Not -Match 'importRecovery'
@@ -2880,7 +2896,9 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
 
 
     It 'TEST-MCP-BUGTRIAGE-050 triage skill documents schema-valid REPL status methods' {
-        $skillPath = Join-Path $script:StagedRoot 'skills\triage\SKILL.md'
+        # The triage skill lives in the plugin repositories, never in the core's staged package; the Claude plugin's copy is read, found by
+        # the TR-MCP-NUKE-006 walk-up.
+        $skillPath = Join-Path (Get-TestPluginSiblingRepository -CheckoutRoot $script:RepoRoot -Name 'mcpserver-claude-code-plugin') 'skills/triage/SKILL.md'
         $content = [System.IO.File]::ReadAllText($skillPath)
 
         $content | Should -Match 'Native MCP clients may use `triage_status`'

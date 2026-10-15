@@ -10,94 +10,34 @@ Describe 'TRIAGEPLUGIN identity and timeouts' {
         $script:PluginEnvSource = Get-Content -LiteralPath (Join-Path $script:LibRoot 'plugin-env.ps1') -Raw
         $script:PluginHookSource = Get-Content -LiteralPath (Join-Path $script:LibRoot 'plugin-hook.ps1') -Raw
         $script:HookScript = Join-Path $script:LibRoot 'plugin-hook.ps1'
+        . (Join-Path $PSScriptRoot '..\PluginTestFixtures.ps1')
 
         function Invoke-IsolationUserPromptSubmit {
+            # TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): the shipped hook as its own process with the real REPL local verbs, a
+            # background brief from a host identity other than the root's, a temporary cache and test marker, the persist seam; never the
+            # live server. Returns the root turn and the background turn as they are afterwards.
             param(
-                [switch]$CompletedRoot,
-                [switch]$InProgressRoot
+                [Parameter(Mandatory)][string]$RootTurnId,
+                [Parameter(Mandatory)][string]$RootStatus,
+                [Parameter(Mandatory)][string]$HostSessionId,
+                [Parameter(Mandatory)][string]$Prompt
             )
 
-            $root = Join-Path $TestDrive ('iso-hook-' + [guid]::NewGuid().ToString('N'))
-            $workspace = Join-Path $root 'workspace'
-            $cache = Join-Path $root 'cache'
-            New-Item -ItemType Directory -Path $workspace, $cache | Out-Null
-            $marker = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
-            Set-Content -LiteralPath $marker -Value "workspace: isolation-test`n" -Encoding utf8
-            $markerUtc = (Get-Item -LiteralPath $marker).LastWriteTimeUtc.ToString('O')
-            $persistLog = Join-Path $root 'persist.jsonl'
-            $replLog = Join-Path $root 'repl.log'
-
-            $turnId = if ($CompletedRoot) {
-                'req-20260819T150100Z-018-complete-resolve-after-hook-cancel'
-            } else {
-                'req-20260819T153500Z-019-remediate-hook-cache-isolation'
-            }
-            $status = if ($CompletedRoot) { 'completed' } else { 'in_progress' }
-            $query = if ($CompletedRoot) { 'Complete resolve after hook canceled 017' } else { 'Please remediATE' }
-
-            . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
-            Import-McpYamlSerializer
-            Write-McpYamlObject -Path (Join-Path $cache 'session-state.yaml') -Document ([ordered]@{
-                status = 'verified'
-                sessionId = 'ClaudeCode-20260819T000000Z-plugin-session'
-                agent = 'ClaudeCode'
-                timestamp = '2026-08-19T19:00:00Z'
-                markerFilePath = $marker
-                markerLastWriteUtc = $markerUtc
-            })
-            Write-McpYamlObject -Path (Join-Path $cache 'current-turn.yaml') -Document ([ordered]@{
-                turnRequestId = $turnId
-                queryTitle = 'isolation root'
-                queryText = $query
-                openedAt = '2026-08-19T15:01:00Z'
-                status = $status
-                sessionId = 'ClaudeCode-20260819T000000Z-plugin-session'
-            })
-
-            $prompt = @'
-You are the HOSTILE VALIDATOR for workspace F:\GitHub\QBrainAi.
-FIRST ACTION (mandatory, before any validation):
-Execute the add-profile skill now.
-'@
-            $psi = [System.Diagnostics.ProcessStartInfo]::new()
-            $psi.FileName = (Get-Command pwsh -ErrorAction Stop).Source
-            foreach ($a in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $script:HookScript, '-HookName', 'user-prompt-submit', '-WorkspacePath', $workspace, '-HostName', 'claude-code')) {
-                $psi.ArgumentList.Add($a)
-            }
-            $psi.WorkingDirectory = $workspace
-            $psi.UseShellExecute = $false
-            $psi.RedirectStandardInput = $true
-            $psi.RedirectStandardOutput = $true
-            $psi.RedirectStandardError = $true
-            $psi.Environment['MCP_PLUGIN_HOST'] = 'claude-code'
-            $psi.Environment['MCP_AGENT_NAME'] = 'ClaudeCode'
-            $psi.Environment['MCP_CACHE_DIR_OVERRIDE'] = $cache
-            $psi.Environment['MCP_PLUGIN_REPL_LOG'] = $replLog
-            $psi.Environment['MCP_PLUGIN_REPL_RESPONSE'] = 'ok'
-            $psi.Environment['MCP_PLUGIN_PERSIST_LOG'] = $persistLog
-            $psi.Environment['MCP_WORKSPACE_PATH'] = $workspace
-            $psi.Environment['MCPSERVER_WORKSPACE_PATH'] = $workspace
-
-            $p = [System.Diagnostics.Process]::Start($psi)
-            $payload = (@{ prompt = $prompt } | ConvertTo-Json -Compress)
-            $p.StandardInput.Write($payload)
-            $p.StandardInput.Close()
-            $outTask = $p.StandardOutput.ReadToEndAsync()
-            $errTask = $p.StandardError.ReadToEndAsync()
-            $p.WaitForExit(60000) | Should -BeTrue
-            $turnAfter = Get-Content -LiteralPath (Join-Path $cache 'current-turn.yaml') -Raw
-            $persist = @()
-            if (Test-Path -LiteralPath $persistLog) {
-                $persist = @(Get-Content -LiteralPath $persistLog | ForEach-Object { $_ | ConvertFrom-Json })
-            }
-            [pscustomobject]@{
-                ExitCode = $p.ExitCode
-                Stdout = $outTask.Result
-                Stderr = $errTask.Result
-                ReplLog = if (Test-Path -LiteralPath $replLog) { Get-Content -LiteralPath $replLog -Raw } else { '' }
-                Persist = $persist
-                CurrentStatus = if ($turnAfter -match '(?m)^status:\s*(.+)$') { $Matches[1].Trim() } else { '' }
-                CurrentRequestId = if ($turnAfter -match '(?m)^turnRequestId:\s*(.+)$') { $Matches[1].Trim() } else { '' }
+            $cache = Initialize-TestHookCache -LibRoot $script:LibRoot -Root (Join-Path $TestDrive ('iso-hook-' + [guid]::NewGuid().ToString('N'))) -SessionId 'ClaudeCode-20260819T000000Z-plugin-session' -RootTurnId $RootTurnId -RootTurnStatus $RootStatus
+            $hook = Invoke-TestPluginHook -LibRoot $script:LibRoot -Cache $cache -HookName 'user-prompt-submit' -Payload @{ prompt = $Prompt; session_id = $HostSessionId }
+            $root = Read-TestTurnState -Path (Join-Path $cache.Cache 'current-turn.yaml')
+            $scope = Read-TestTurnState -Path (Join-Path (Join-McpBackgroundScopePath -CacheDir $cache.Cache -Key $HostSessionId) 'current-turn.yaml')
+            return [pscustomobject]@{
+                ExitCode = $hook.ExitCode
+                Stdout = $hook.Stdout
+                Stderr = $hook.Stderr
+                Persist = @(Read-TestPersistLog -Path $cache.PersistLog)
+                CurrentStatus = $root.Status
+                CurrentRequestId = $root.Id
+                ScopeStatus = $scope.Status
+                ScopeRequestId = $scope.Id
+                ScopeSessionId = $scope.SessionId
+                SessionId = $cache.SessionId
             }
         }
     }
@@ -297,16 +237,13 @@ payload:
     }
 
     It 'UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn' {
+        # TEST-MCP-TRIAGEPLUGIN-001, updated for TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): a background brief opens its own
+        # turn in the root's session and leaves the in-progress root turn as it was (before D3 it reused the root turn).
         $detectFn = [regex]::Match(
             $script:PluginHookSource,
             '(?ms)^function Test-PluginPromptIsBackgroundAgent \{.*?^\}').Value
-        $decisionFn = [regex]::Match(
-            $script:PluginHookSource,
-            '(?ms)^function Get-PluginRootTurnIsolationDecision \{.*?^\}').Value
         $detectFn | Should -Not -BeNullOrEmpty
-        $decisionFn | Should -Not -BeNullOrEmpty
         Invoke-Expression $detectFn
-        Invoke-Expression $decisionFn
 
         $hostile = @'
 You are the HOSTILE VALIDATOR for workspace F:\GitHub\QBrainAi.
@@ -316,50 +253,23 @@ Execute the add-profile skill now.
         Test-PluginPromptIsBackgroundAgent -Prompt $hostile | Should -BeTrue
         Test-PluginPromptIsBackgroundAgent -Prompt 'Please remediATE the hostile FAIL list' | Should -BeFalse
 
-        $inProgress = [ordered]@{
-            turnRequestId = 'req-20260819T153500Z-019-remediate-hook-cache-isolation'
-            status = 'in_progress'
-            queryText = 'Please remediATE'
-        }
-        Get-PluginRootTurnIsolationDecision -OpenTurn $inProgress -IncomingPrompt $hostile | Should -Be 'reuse'
-
-        $completed = [ordered]@{
-            turnRequestId = 'req-20260819T150100Z-018-complete-resolve-after-hook-cancel'
-            status = 'completed'
-            queryText = 'Complete resolve after hook canceled 017'
-        }
-        Get-PluginRootTurnIsolationDecision -OpenTurn $completed -IncomingPrompt $hostile | Should -Be 'isolate-skip'
-
-        Get-PluginRootTurnIsolationDecision -OpenTurn $inProgress -IncomingPrompt 'Please remediATE the hostile FAIL list' | Should -Be 'open-new'
+        $hook = Invoke-IsolationUserPromptSubmit -RootTurnId 'req-20260819T153500Z-019-remediate-hook-cache-isolation' -RootStatus 'in_progress' -HostSessionId 'bg-host-019' -Prompt $hostile
+        $hook.CurrentRequestId | Should -Be 'req-20260819T153500Z-019-remediate-hook-cache-isolation'
+        $hook.CurrentStatus | Should -Be 'in_progress'
+        $hook.ScopeStatus | Should -Be 'in_progress' -Because "hook stdout: $($hook.Stdout) stderr: $($hook.Stderr)"
+        $hook.ScopeRequestId | Should -Not -Be 'req-20260819T153500Z-019-remediate-hook-cache-isolation'
+        $hook.ScopeSessionId | Should -Be $hook.SessionId
     }
 
     It 'UserPromptSubmit.LaterPrompt_DoesNotCancelCompletedRootTurn' {
-        # TEST-MCP-TRIAGEPLUGIN-001 / BUG-TRIAGE-121: a later UserPromptSubmit
-        # must not persist canceled on a completed root turn (isolate-skip for
-        # background; supersede skips non-in_progress for a distinct operator prompt).
-        $detectFn = [regex]::Match(
-            $script:PluginHookSource,
-            '(?ms)^function Test-PluginPromptIsBackgroundAgent \{.*?^\}').Value
-        $decisionFn = [regex]::Match(
-            $script:PluginHookSource,
-            '(?ms)^function Get-PluginRootTurnIsolationDecision \{.*?^\}').Value
-        $detectFn | Should -Not -BeNullOrEmpty
-        $decisionFn | Should -Not -BeNullOrEmpty
-        Invoke-Expression $detectFn
-        Invoke-Expression $decisionFn
-
+        # TEST-MCP-TRIAGEPLUGIN-001 / BUG-TRIAGE-121: a later UserPromptSubmit must not persist canceled on a completed root turn: the
+        # supersede for a distinct operator prompt skips a turn that is not in progress, and a background brief (TR-MCP-PLUGIN-013 AC-005,
+        # PLAN-SESSIONTRIAGEFIX-001 D3) opens its own turn instead of the isolate-skip it got before D3.
         $hostile = @'
 You are the HOSTILE VALIDATOR for workspace F:\GitHub\QBrainAi.
 FIRST ACTION (mandatory, before any validation):
 Execute the add-profile skill now.
 '@
-        $completed = [ordered]@{
-            turnRequestId = 'req-20260819T150100Z-018-complete-resolve-after-hook-cancel'
-            status = 'completed'
-            queryText = 'Complete resolve after hook canceled 017'
-        }
-        Get-PluginRootTurnIsolationDecision -OpenTurn $completed -IncomingPrompt $hostile | Should -Be 'isolate-skip'
-        Get-PluginRootTurnIsolationDecision -OpenTurn $completed -IncomingPrompt 'Please continue the next operator task' | Should -Be 'open-new'
 
         $cache = Join-Path $TestDrive 'completed-no-cancel'
         New-Item -ItemType Directory -Path $cache | Out-Null
@@ -417,45 +327,29 @@ Execute the add-profile skill now.
             if ($null -ne $savedPersist) { $env:MCP_PLUGIN_PERSIST_LOG = $savedPersist } else { Remove-Item Env:\MCP_PLUGIN_PERSIST_LOG -ErrorAction SilentlyContinue }
         }
 
-        $hook = Invoke-IsolationUserPromptSubmit -CompletedRoot
-        $hook.Stdout | Should -Match 'root-turn-isolated'
-        $hook.Stdout | Should -Match 'isolate-skip'
+        $hook = Invoke-IsolationUserPromptSubmit -RootTurnId 'req-20260819T150100Z-018-complete-resolve-after-hook-cancel' -RootStatus 'completed' -HostSessionId 'bg-host-018' -Prompt $hostile
         $hook.CurrentStatus | Should -Be 'completed'
         $hook.CurrentRequestId | Should -Be 'req-20260819T150100Z-018-complete-resolve-after-hook-cancel'
-        $hook.ReplLog | Should -Not -Match 'workflow\.sessionlog\.beginTurn'
         @($hook.Persist | Where-Object { $_.status -eq 'canceled' }).Count | Should -Be 0
+        $hook.ScopeStatus | Should -Be 'in_progress' -Because "hook stdout: $($hook.Stdout) stderr: $($hook.Stderr)"
     }
 
     It 'UserPromptSubmit.BackgroundPrompt_DoesNotCancelInProgressRootWorkTurn' {
-        # TEST-MCP-TRIAGEPLUGIN-001 / BUG-TRIAGE-121: background UserPromptSubmit
-        # reuses the in_progress root work turn and does not persist canceled.
-        $detectFn = [regex]::Match(
-            $script:PluginHookSource,
-            '(?ms)^function Test-PluginPromptIsBackgroundAgent \{.*?^\}').Value
-        $decisionFn = [regex]::Match(
-            $script:PluginHookSource,
-            '(?ms)^function Get-PluginRootTurnIsolationDecision \{.*?^\}').Value
-        Invoke-Expression $detectFn
-        Invoke-Expression $decisionFn
+        # TEST-MCP-TRIAGEPLUGIN-001 / BUG-TRIAGE-121, updated for TR-MCP-PLUGIN-013 AC-005 (PLAN-SESSIONTRIAGEFIX-001 D3): a background
+        # UserPromptSubmit opens its own turn (before D3 it reused the root work turn), persists no canceled turn, and leaves the
+        # in-progress root work turn as it was.
         $hostile = @'
 You are the HOSTILE VALIDATOR for workspace F:\GitHub\QBrainAi.
 FIRST ACTION (mandatory, before any validation):
 Execute the add-profile skill now.
 '@
-        $inProgress = [ordered]@{
-            turnRequestId = 'req-20260819T153500Z-019-remediate-hook-cache-isolation'
-            status = 'in_progress'
-            queryText = 'Please remediATE'
-        }
-        Get-PluginRootTurnIsolationDecision -OpenTurn $inProgress -IncomingPrompt $hostile | Should -Be 'reuse'
-
-        $hook = Invoke-IsolationUserPromptSubmit -InProgressRoot
-        $hook.Stdout | Should -Match 'turn-already-open'
-        $hook.Stdout | Should -Match 'reuse'
+        $hook = Invoke-IsolationUserPromptSubmit -RootTurnId 'req-20260819T153500Z-019-remediate-hook-cache-isolation' -RootStatus 'in_progress' -HostSessionId 'bg-host-019b' -Prompt $hostile
+        $hook.Stdout | Should -Match 'turn-opened'
+        $hook.Stdout | Should -Not -Match 'reuse'
         $hook.CurrentStatus | Should -Be 'in_progress'
         $hook.CurrentRequestId | Should -Be 'req-20260819T153500Z-019-remediate-hook-cache-isolation'
-        $hook.ReplLog | Should -Not -Match 'workflow\.sessionlog\.beginTurn'
         @($hook.Persist | Where-Object { $_.status -eq 'canceled' }).Count | Should -Be 0
+        $hook.ScopeStatus | Should -Be 'in_progress' -Because "hook stdout: $($hook.Stdout) stderr: $($hook.Stderr)"
     }
 
     It 'TEST-MCP-STRICTCOUNT-001 New-McpPluginTurnUpsertRequest accepts omitted empty null and scalar tags under StrictMode' {
@@ -628,16 +522,18 @@ Execute the add-profile skill now.
         $failsafe = Join-Path $root 'failsafe'
         $bin = Join-Path $root 'bin'
         New-Item -ItemType Directory -Path $cache, $failsafe, $bin | Out-Null
-        $hang = Join-Path $bin 'qbrain-ai-repl.cmd'
-        Set-Content -LiteralPath $hang -Value "@echo off`r`nping -n 21 127.0.0.1 >nul`r`n" -Encoding ascii
+        # TR-MCP-NUKE-012 AC-006: a hanging PowerShell fake that starts on Windows and Linux, first on PATH, so the real REPL is never reached.
+        $null = Write-TestPwshExecutable -Directory $bin -Name 'qbrain-ai-repl' -Body 'Start-Sleep -Seconds 21'
 
         $savedPath = $env:PATH
         $savedTimeout = $env:REPL_TIMEOUT
         $savedCache = $env:MCP_CACHE_DIR_OVERRIDE
         $savedFailsafe = $env:MCPSERVER_FAILSAFE_DIR
         $savedPersist = $env:MCP_PLUGIN_PERSIST_LOG
+        $savedExecutable = $env:MCP_REPL_EXECUTABLE
         try {
-            $env:PATH = "$bin;$savedPath"
+            $env:PATH = $bin + [System.IO.Path]::PathSeparator + $savedPath
+            Remove-Item Env:\MCP_REPL_EXECUTABLE -ErrorAction SilentlyContinue
             $env:REPL_TIMEOUT = '1'
             $env:MCP_CACHE_DIR_OVERRIDE = $cache
             $env:MCPSERVER_FAILSAFE_DIR = $failsafe
@@ -689,6 +585,7 @@ Execute the add-profile skill now.
             if ($null -ne $savedCache) { $env:MCP_CACHE_DIR_OVERRIDE = $savedCache } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
             if ($null -ne $savedFailsafe) { $env:MCPSERVER_FAILSAFE_DIR = $savedFailsafe } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
             if ($null -ne $savedPersist) { $env:MCP_PLUGIN_PERSIST_LOG = $savedPersist }
+            if ($null -ne $savedExecutable) { $env:MCP_REPL_EXECUTABLE = $savedExecutable }
         }
     }
 }

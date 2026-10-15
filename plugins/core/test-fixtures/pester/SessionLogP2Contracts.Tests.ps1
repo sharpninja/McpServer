@@ -12,9 +12,9 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
         $script:ResolveScript = Join-Path $script:RepoRoot 'plugins\core\lib-ps\resolve-cache-dir.ps1'
         $script:Work = Join-Path ([System.IO.Path]::GetTempPath()) ('sessionlife-p2-' + [guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($script:Work)
-        if ($IsWindows) {
-            $script:FakeRepl = Join-Path $script:Work 'fake-repl.cmd'
-            $fakePs1 = Join-Path $script:Work 'fake-repl.ps1'
+        . (Join-Path $PSScriptRoot '..\PluginTestFixtures.ps1')
+        # TR-MCP-NUKE-012 AC-006: one PowerShell fake REPL serves Windows and Linux with the same responses; the bash fake it replaces on
+        # Linux omitted the session and request ids the typed identity checks need.
             $fakeBody = @(
                 '[Console]::InputEncoding = [System.Text.UTF8Encoding]::new($false); [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); $stdin = [Console]::In.ReadToEnd(); if ($stdin.Length -gt 0 -and [int][char]$stdin[0] -eq 0xFEFF) { $stdin = $stdin.Substring(1) }'
                 'if ($env:P2_REPL_LOG) { [System.IO.File]::AppendAllText($env:P2_REPL_LOG, $stdin + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false)) }'
@@ -50,36 +50,7 @@ Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
                 '@("type: error","payload:","  code: backend_unavailable","  message: HTTP 503","  retryable: true") -join [Environment]::NewLine | Write-Output'
                 'exit 1'
             ) -join [Environment]::NewLine
-            Set-Content -LiteralPath $fakePs1 -Value $fakeBody -Encoding utf8
-            $pwshExe = (Get-Command pwsh -ErrorAction Stop).Source
-            $cmdBody = '@echo off' + [Environment]::NewLine + '"' + $pwshExe + '" -NoLogo -NoProfile -NonInteractive -File "%~dp0fake-repl.ps1"' + [Environment]::NewLine + 'exit /b %ERRORLEVEL%' + [Environment]::NewLine
-            [System.IO.File]::WriteAllText($script:FakeRepl, $cmdBody)
-        }
-        else {
-            $script:FakeRepl = Join-Path $script:Work 'fake-repl.sh'
-            $bashBody = @(
-                '#!/bin/bash'
-                'stdin=$(cat)'
-                'if [ -n "${P2_REPL_LOG:-}" ]; then'
-                '  printf ''%s\n'' "$stdin" >> "$P2_REPL_LOG"'
-                'fi'
-                'if [ "${P2_REPL_MODE:-primary}" = "primary" ]; then'
-                '  if [ -n "${P2_SERVER_STATE:-}" ]; then'
-                '    printf ''%s\n'' "$stdin" >> "$P2_SERVER_STATE"'
-                '  fi'
-                '  printf ''type: result\npayload:\n  result:\n    persisted: true\n    degraded: false\n'''
-                '  exit 0'
-                'fi'
-                'if [ "${P2_REPL_MODE:-primary}" = "notfound" ]; then'
-                '  printf ''type: error\npayload:\n  code: not_found\n  message: HTTP 404\n  retryable: false\n'''
-                '  exit 1'
-                'fi'
-                'printf ''type: error\npayload:\n  code: backend_unavailable\n  message: HTTP 503\n  retryable: true\n'''
-                'exit 1'
-            ) -join [Environment]::NewLine
-            Set-Content -LiteralPath $script:FakeRepl -Value $bashBody -Encoding ascii
-            & chmod +x -- $script:FakeRepl
-        }
+        $script:FakeRepl = Write-TestPwshExecutable -Directory $script:Work -Name 'fake-repl' -Body $fakeBody
         . $script:ReplScript
         if ($env:MCP_PLUGIN_PERSIST_LOG) { Remove-Item Env:MCP_PLUGIN_PERSIST_LOG }
 

@@ -71,7 +71,15 @@ Describe 'FR-MCP-SESSIONLIFE-005 audit dialog reconcile' {
         [void][System.IO.Directory]::CreateDirectory($dir)
         $prior = $env:MCP_CACHE_DIR_OVERRIDE
         $env:MCP_CACHE_DIR_OVERRIDE = $dir
-        $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+        # TR-MCP-NUKE-012 AC-006: an isolated workspace with its own marker, never the repository root; a marker-bearing current
+        # directory outranks MCP_WORKSPACE_PATH, and above a worktree sits the main checkout's live marker.
+        $workspace = Join-Path $dir 'ws'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        $priorWorkspace = $env:MCP_WORKSPACE_PATH
+        $env:MCP_WORKSPACE_PATH = $workspace
+        $snapshot = Get-TestMarkerSnapshot -Workspace $workspace
+        $priorLocation = (Get-Location).Path
+        Set-Location -LiteralPath $workspace
         $script:QueryYaml = @"
 payload:
   result:
@@ -96,8 +104,8 @@ payload:
                 status = 'in_progress'
                 queryText = 'keep'
                 auditDialog = 5
-                markerFilePath = (Get-TestMarkerSnapshot).markerFilePath
-                markerLastWriteUtc = (Get-TestMarkerSnapshot).markerLastWriteUtc
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
             })
             $failed = Invoke-WorkflowAppendDialog -ParamsYaml "dialogItems:`n  - role: model`n    content: classified`n"
             $failed | Should -BeFalse
@@ -107,7 +115,9 @@ payload:
             $completed | Should -BeTrue
             [int](Get-ReplTurnCacheField -Field 'auditDialog') | Should -Be 2
         } finally {
+            Set-Location -LiteralPath $priorLocation
             if ($null -eq $prior) { Remove-Item Env:MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue } else { $env:MCP_CACHE_DIR_OVERRIDE = $prior }
+            if ($null -eq $priorWorkspace) { Remove-Item Env:MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue } else { $env:MCP_WORKSPACE_PATH = $priorWorkspace }
             Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
