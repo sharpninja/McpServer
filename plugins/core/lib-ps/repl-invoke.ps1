@@ -629,19 +629,46 @@ function Get-ReplMethodTimeoutSeconds {
         # REPL_FAILSAFE_DRAIN_TIMEOUT (default 120s), or REPL_TIMEOUT when greater.
         # Sessionlog workflow methods keep $default (30s). Nested drain stays deferred.
         $drain = if ($env:REPL_FAILSAFE_DRAIN_TIMEOUT) { [int]$env:REPL_FAILSAFE_DRAIN_TIMEOUT } else { 120 }
-        if ($default -gt $drain) { return $default }
-        return $drain
+        $seconds = if ($default -gt $drain) { $default } else { $drain }
+    } else {
+        $seconds = switch -Wildcard ($Method) {
+            'workflow.todo.analyzeRequirements'       { $long; break }
+            'workflow.requirements.generateDocument'  { $long; break }
+            'workflow.requirements.ingestDocument'    { $long; break }
+            'workflow.requirements.analyze*'          { $long; break }
+            'client.Requirements.Analyze*'            { $long; break }
+            'workflow.agenthelp.submitTurn'           { $helper; break }
+            default                                   { $default }
+        }
     }
 
-    switch -Wildcard ($Method) {
-        'workflow.todo.analyzeRequirements'       { return $long }
-        'workflow.requirements.generateDocument'  { return $long }
-        'workflow.requirements.ingestDocument'    { return $long }
-        'workflow.requirements.analyze*'          { return $long }
-        'client.Requirements.Analyze*'            { return $long }
-        'workflow.agenthelp.submitTurn'           { return $helper }
-        default                                   { return $default }
-    }
+    # TR-MCP-REPL-012 AC-001 (D1, triage-report-124a374c): inside a hook no call
+    # may wait past the hook's deadline; outside a hook the timeout is unchanged.
+    return (Get-ReplCappedTimeout -TimeoutSeconds $seconds -RemainingMs (Get-ReplHookTimeLeft))
+}
+
+function Get-ReplHookTimeLeft {
+    # TR-MCP-REPL-012 AC-001 (D1): milliseconds left before the deadline that
+    # plugin-hook.ps1 publishes in MCP_HOOK_DEADLINE_UTC_MS (Unix milliseconds);
+    # $null outside a hook. May be negative once the deadline has passed.
+    $deadline = 0L
+    if (-not [long]::TryParse([string]$env:MCP_HOOK_DEADLINE_UTC_MS, [ref]$deadline) -or $deadline -le 0) { return $null }
+    return ($deadline - [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
+}
+
+function Get-ReplCappedTimeout {
+    # TR-MCP-REPL-012 AC-001 (D1): the lesser of the per-method timeout and the
+    # whole seconds left before the hook deadline, so a slow or silent server ends
+    # the call in time and the persist falls back to its write-ahead failsafe
+    # record. 0 when less than one second is left: the call is then not started
+    # (Invoke-ReplRawCore), because a call begun after the deadline would carry the
+    # hook past its budget. Without a deadline the timeout is unchanged.
+    param(
+        [Parameter(Mandatory)][int]$TimeoutSeconds,
+        [AllowNull()][Nullable[long]]$RemainingMs
+    )
+    if ($null -eq $RemainingMs) { return $TimeoutSeconds }
+    return [int][Math]::Max(0, [Math]::Min([double]$TimeoutSeconds, [Math]::Floor([double]$RemainingMs / 1000)))
 }
 
 function Invoke-ReplRaw {
@@ -649,10 +676,10 @@ function Invoke-ReplRaw {
         [Parameter(Mandatory)][string]$Method,
         [string]$ParamsYaml = ''
     )
-    if ($script:ReplFailsafeDrainDeferred -and -not $script:ReplRawInFlight) {
-        $script:ReplFailsafeDrainDeferred = $false
-        Invoke-ReplFailsafeDrainOnFirstSuccessCore
-    }
+    # TR-MCP-REPL-016 AC-001 (D1): a drain deferred by an earlier successful call no
+    # longer runs here, ahead of this call: it ran before beginTurn's new-turn persist
+    # and never ran at all in an invocation with one backend call. The script entry
+    # runs it once the invoked method has completed.
     $script:ReplRawInFlight = $true
     try {
         return (Invoke-ReplRawCore -Method $Method -ParamsYaml $ParamsYaml)
@@ -687,6 +714,11 @@ function Invoke-ReplRawCore {
 
     $requestId = "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$((Get-Random -Maximum 0xFFFF).ToString('x4'))"
     $timeout = Get-ReplMethodTimeoutSeconds -Method $Method
+    if ($timeout -le 0) {
+        # TR-MCP-REPL-012 AC-001 (D1): under one second is left before the hook deadline, so the call is not
+        # started; it fails as timed out and a persist keeps its write-ahead failsafe record as the fallback.
+        return (New-McpPluginReplResult -Success $false -Output '' -Error "qbrain-ai-repl timed out after 0s: the hook deadline left no time to start $Method")
+    }
 
     # Build as an object and serialize to JSON so request envelopes keep a
     # single canonical shape across plugin hosts.
@@ -1063,6 +1095,7 @@ function Invoke-ReplFailsafeDrain {
         skipped = 0
         aborted = $false
         abortReason = ''
+        stoppedAtDeadline = $false
     }
 
     if ($script:ReplFailsafeDraining) {
@@ -1091,6 +1124,14 @@ function Invoke-ReplFailsafeDrain {
 
         foreach ($record in $records) {
             if ($MaxRecords -gt 0 -and $summary.scanned -ge $MaxRecords) { break }
+            # TR-MCP-REPL-016 AC-002 (D1): inside a hook, start a record only while at
+            # least one second is left before the hook deadline; the records not reached
+            # stay queued with their attempt counts unchanged for a later invocation.
+            $remainingMs = Get-ReplHookTimeLeft
+            if ($null -ne $remainingMs -and $remainingMs -lt 1000) {
+                $summary.stoppedAtDeadline = $true
+                break
+            }
             if ($script:ReplFailsafeInFlight.Contains($record.FullName)) {
                 $summary.skipped++
                 continue
@@ -2055,59 +2096,17 @@ function Get-ReplServerDialogCount {
     return -1
 }
 
-function Get-ReplServerTurnTitle {
-    # TR-MCP-REPL-019: read the server-side title of one turn through the
-    # existing client passthrough (client.SessionLog.QueryAsync). Returns ''
-    # when the session, the turn, or its title cannot be resolved; callers
-    # treat '' as "omit the title" (TR-MCP-REPL-015).
-    param([Parameter(Mandatory)][string]$RequestId)
-
-    $meta = Get-ReplSessionMeta
-    if (-not $meta) { return '' }
-
-    try {
-        $callParams = [ordered]@{
-            agent = $meta.SourceType
-            limit = 25
-        }
-        $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
-        $result = Invoke-ReplRaw -Method 'client.SessionLog.QueryAsync' -ParamsYaml $callYaml
-        if (-not $result.Success) { return '' }
-
-        $response = Convert-ReplParamsYamlToObject -ParamsYaml $result.Output
-        $payload = Get-ReplObjectValue -InputObject $response -Name 'payload'
-        $details = Get-ReplObjectValue -InputObject $payload -Name 'result'
-        if ($null -eq $details) { $details = $payload }
-        $items = Get-ReplObjectValue -InputObject $details -Name 'items'
-        foreach ($session in @($items)) {
-            if ([string](Get-ReplObjectValue -InputObject $session -Name 'sessionId') -ne $meta.SessionId) { continue }
-            foreach ($turn in @((Get-ReplObjectValue -InputObject $session -Name 'turns'))) {
-                if ([string](Get-ReplObjectValue -InputObject $turn -Name 'requestId') -eq $RequestId) {
-                    return [string](Get-ReplObjectValue -InputObject $turn -Name 'queryTitle')
-                }
-            }
-        }
-    } catch {
-        # An unreadable query response must never block the supersede persist;
-        # fall through to '' so the title is simply omitted.
-    }
-    return ''
-}
-
 function Resolve-ReplSupersedeTitle {
-    # TR-MCP-REPL-019: choose the title persisted with a superseded turn.
-    # Rules (BUG-TRIAGE-086):
+    # TR-MCP-REPL-019 AC-001: choose the title persisted with a superseded turn
+    # from the local cache alone (BUG-TRIAGE-086; D1, triage-report-124a374c):
     #   - A locally refined title (non-empty and different from the hook's raw
-    #     default: the prompt first line or the literal 'User prompt') wins and
-    #     costs no server round trip.
-    #   - An empty or raw-default local title defers to the server-side title,
-    #     fetched through the existing client passthrough.
-    #   - Raw prompt text is NEVER re-sent as a title; when no refined title
-    #     exists anywhere the title is omitted ('') per TR-MCP-REPL-015.
-    param(
-        [Parameter(Mandatory)]$State,
-        [Parameter(Mandatory)][string]$RequestId
-    )
+    #     default: the prompt first line or the literal 'User prompt') is sent.
+    #   - An empty or raw-default local title is omitted (''): the turn upsert then
+    #     carries no queryTitle and the server keeps the title it stores, refined
+    #     or not, under the additive turn merge (FR-SUPPORT-015). No server read is
+    #     made; the whole-session query it took outran the UserPromptSubmit budget.
+    #   - Raw prompt text is never sent as a title (TR-MCP-REPL-015).
+    param([Parameter(Mandatory)]$State)
 
     $localTitle = if ($State.Contains('queryTitle')) { [string]$State['queryTitle'] } else { '' }
     $queryText = if ($State.Contains('queryText')) { [string]$State['queryText'] } else { '' }
@@ -2118,12 +2117,6 @@ function Resolve-ReplSupersedeTitle {
     $trimmedLocal = $localTitle.Trim()
     if ($trimmedLocal -and ($rawDefaults -notcontains $trimmedLocal)) {
         return $localTitle
-    }
-
-    $serverTitle = Get-ReplServerTurnTitle -RequestId $RequestId
-    $trimmedServer = $serverTitle.Trim()
-    if ($trimmedServer -and ($rawDefaults -notcontains $trimmedServer)) {
-        return $serverTitle
     }
     return ''
 }
@@ -2138,11 +2131,10 @@ function Invoke-ReplSupersedeCurrentTurnIfInProgress {
     $oldRequestId = if ($state.Contains('turnRequestId')) { [string]$state['turnRequestId'] } else { '' }
     if (-not $oldRequestId -or $oldRequestId -eq $NextRequestId) { return }
     try {
-        # TR-MCP-REPL-019: persist the superseded turn with a title that can
-        # never clobber a refined title: a locally refined title is kept, a raw
-        # or empty local title defers to the server-side title, and raw prompt
-        # text is never re-sent (TR-MCP-REPL-015 omission is the fallback).
-        $title = Resolve-ReplSupersedeTitle -State $state -RequestId $oldRequestId
+        # TR-MCP-REPL-019 AC-001: persist the superseded turn with a title that can
+        # never clobber a refined title: a locally refined title is kept, and a raw
+        # or empty local title is omitted so the server keeps its stored title.
+        $title = Resolve-ReplSupersedeTitle -State $state
         # Durable turns omit unbound links; first writes preserve cached links before None.
         $script:ReplPersistVerbMethod = 'workflow.sessionlog.beginTurn'
         $persistArgs = @{
@@ -3137,6 +3129,15 @@ function Invoke-ReplMethod {
 if ($Method -and $MyInvocation.InvocationName -ne '.') {
     $script:LastInvokeReplMethodSuccess = $false
     Invoke-ReplMethod -Method $Method -ParamsYaml $ParamsYaml
+    # TR-MCP-REPL-016 AC-001 (D1, triage-report-124a374c): the drain the first
+    # successful backend call asked for runs here, after the method has completed
+    # and written its output, so it never delays one of the method's own backend
+    # calls; inside a hook it stops at the hook deadline (AC-002). It does not
+    # change this invocation's exit code.
+    if ($script:ReplFailsafeDrainDeferred) {
+        $script:ReplFailsafeDrainDeferred = $false
+        Invoke-ReplFailsafeDrainOnFirstSuccessCore
+    }
     if (-not $script:LastInvokeReplMethodSuccess) { exit 1 }
     exit 0
 }

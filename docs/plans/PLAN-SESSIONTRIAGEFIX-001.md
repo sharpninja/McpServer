@@ -10,8 +10,8 @@ Status: in execution under the operator's direction of 2026-10-13: "I want you t
 ## Process (every work item)
 
 1. Requirements: find the FR, TR and AC that already specify the behavior (bugs in specified behavior); where the AC is deficient, strengthen it through the requirements plugin route (reconcile first, strengthen second, new requirement only when genuinely new). Record the ids on the item's TODO.
-2. Tests first: tests that cover 100 percent of the item's ACs, run against mocks or fakes, with negative controls proving each assertion rejects wrong behavior; a documented green mock gate before production code. The mock gate runs through the full Nuke `Test` target once per slice: the slice's assertion proofs, negative controls and characterization tests are in the tree, its production-bound tests are held outside the source (session scratchpad `triagefix/held/`), and the run must be green (a targeted `./build.ps1 Test --test-projects` run, C5, may come first, but the gate is the full run; red production-bound tests are not acceptable in a gate run). Build.Tests mock gates run directly, because Build.Tests is infrastructure and no Nuke target runs it.
-3. Implementation bound to the same tests (the held production-bound tests return with the implementation); then the full applicable suite through Nuke (`./build.ps1 Test`, plus the named integration project or Build.Tests infrastructure check where the item touches it), Failed 0, Skipped 0.
+2. Tests first: tests that cover 100 percent of the item's ACs, run against mocks or fakes, with negative controls proving each assertion rejects wrong behavior; a documented green mock gate before production code. The mock gate runs through the full Nuke `Test` target once per slice: the slice's assertion proofs, negative controls and characterization tests are in the tree, its production-bound tests are held outside the source (session scratchpad `triagefix/held/`), and the run must be green (a targeted `./build.ps1 Test --test-projects` run, C5, may come first, but the gate is the full run; red production-bound tests are not acceptable in a gate run). Build.Tests mock gates run directly, because Build.Tests is infrastructure and no Nuke target runs it. Pester mock gates and binding runs (slice D) run through `./build.ps1 TestPluginCore --pester-paths <paths>` (C6).
+3. Implementation bound to the same tests (the held production-bound tests return with the implementation); then the full applicable suite through Nuke (`./build.ps1 Test`, plus the named integration project, `./build.ps1 TestPluginCore` for plugin core changes, or the Build.Tests infrastructure check where the item touches it), Failed 0, Skipped 0.
 4. Windows evidence on PAYTON-LEGION2 over the WSMan route where an item is Windows-specific.
 5. Hostile validation per slice once the slice's gates are green: Codex gpt-6-astra at effort max, no time bound, request and response jsonl under `docs/receipts/hv/`, the reviewer's own session-log turn, AGREE with accuracy and completeness of at least 98 and every claim PASS. No TODO is marked done before its slice's AGREE.
 
@@ -64,13 +64,131 @@ Requirement: TR-MCP-NUKE-011 "Targeted test runs through Nuke: Test accepts --te
 - Blast radius: build/Build.Test.cs (two parameters, two internal helpers, the targeted lane) and Build.Tests cases; no product code, configuration, or CI change. Not breaking: without the parameters the target is unchanged (AC-004).
 - Gates: Build.Tests (infrastructure) green, an end-to-end targeted run and a refusal run, then the baseline runs above, then HV with the slice it lands in.
 
+- C6 (operator decision 2026-10-14, "Build TestPluginCore first"): `./build.ps1 TestPluginCore --pester-paths <paths>` runs the plugin core's Pester suites through Nuke, TR-MCP-NUKE-012 under FR-MCP-BUILD-001 exactly as PLAN-SESSIONTURN-SESSIONREVIEW-001 defines it (catalog P0.1a, G4), built here early so slice D's Pester mock gates and binding runs go through Nuke; see "C6 plan" below.
+
+#### C6 plan (requirement adopted from PLAN-SESSIONTURN-SESSIONREVIEW-001; operator decision 2026-10-14: "Build TestPluginCore first")
+
+Requirement: TR-MCP-NUKE-012 "Plugin core suite through Nuke (G4): TestPluginCore --pester-paths" (AC-001 to AC-005), created 2026-10-14 through the plugin route as that plan's catalog states it and mapped to FR-MCP-BUILD-001. Nuke behavior is accountable through TR only, so there is no TEST record; Build.Tests verifies it.
+
+- Observable outcome: `./build.ps1 TestPluginCore [--pester-paths <paths>]` resolves every named path against the repository root before Pester starts (a missing path fails the target naming it; no path means the whole plugins/core/test-fixtures/pester folder), runs build/Invoke-PluginCorePester.ps1 with pwsh, which runs Pester 5 with the two settings -CI applies (Run.Exit and TestResult.Enabled; Pester 5.9.1 Pester.psm1:5090-5095) and writes NUnit XML to TestResults/<run id>/pester/results.xml, and fails on any failure, error, skip, ignored, not-run, inconclusive or invalid test, on a run that records no test, on a missing result, and on a nonzero Pester exit. A result left by an earlier run is removed before the run, so it cannot stand in for it.
+- Tests (tests/Build.Tests/TestPluginCoreTargetTests.cs): a mock gate of three tests proves the path, result and argument assertions against reference functions, with negative controls (a resolver that passes missing paths through, an evaluator that ignores skips, a composer that drops a path), green before the target was written. The binding tests carry the TR's names: TestPluginCoreRunsPesterCiOnNamedPaths, TestPluginCorePesterFailureFailsTarget, TestPluginCorePesterSkipFailsTarget, TestPluginCoreMissingPathFailsTarget, TestPluginCoreRunsNatively; they run the target's run with the real runner script on temporary fixture files through BoundedProcess (TR-MCP-NUKE-009). Expected counters come from a probe of Pester 5.9.1 (one failing It is failures="1", one skipped It is skipped="1").
+- Blast radius: build/Build.TestPluginCore.cs, build/Invoke-PluginCorePester.ps1, the regenerated .nuke/build.schema.json and Build.Tests cases; no product code, configuration, or CI change. Not breaking: a new target.
+- Gates: Build.Tests green, an end-to-end run and a refusal run, AC-005 on Windows (PAYTON-LEGION2) as well as Linux, then HV with slice C.
+
 ### Slice D: plugin prompt and session hooks (canonical core plugins/core, synced to the plugins)
-- D1 triage-report-124a374c: the UserPromptSubmit hook attempts its server call within its budget and falls back to a failsafe record only when that call fails; pending records drain without blocking new turns (root cause of the cancellations first).
-- D2 triage-report-d9bd6fc3: one session-log session per SessionStart.
+- D1 triage-report-124a374c: the UserPromptSubmit hook attempts its server call within its budget and falls back to a failsafe record only when that call fails; pending records drain without blocking new turns (root cause of the cancellations first). See "D1 plan" below.
+- D2 triage-report-d9bd6fc3: one session-log session per SessionStart. See "D2 plan" below.
 - D3 triage-report-061f30e9: background and hostile-agent prompts open and log their own turns; root-turn isolation protects the root turn without skipping theirs.
-- D4 triage-report-5c7278cd: subagent hand-backs and task notifications do not open turns and never cancel a request turn.
+- D4 triage-report-5c7278cd: subagent hand-backs and task notifications do not open turns and never cancel a request turn. See "D4 plan" below.
 - D5 triage-report-bd1f4386: the hook validator recognizes the enabled plugin without CLAUDE_PLUGIN_ROOT.
 - D6 triage-report-e1f01430: plugin memory verbs log a documented action type and take the next free action order.
+
+#### D1 plan (operator decision 2026-10-14: "Full fix (Recommended)"; live plugin state left as it is: "Leave it (Recommended)")
+
+Root cause (measured 2026-10-14):
+- All 231 UserPromptSubmit hook_cancelled records of this chat are timedOut=true at timeoutMs=10000, the timeout hooks.json registers (hooks.claude-code.json). The hook is killed at its budget; it is not cancelled by the next prompt.
+- When a prompt arrives while current-turn.yaml holds an in_progress turn whose local title is the hook's raw default, Resolve-ReplSupersedeTitle reads the server title through Get-ReplServerTurnTitle. That call is client.SessionLog.QueryAsync for 25 whole sessions: 2.8 to 2.9 s for the call and 12.9 to 15.8 s to parse its 5.5 MB of YAML.
+- The hook dies before it writes the new current-turn.yaml, so the stale turn (req-20261013T183327Z-prompt-bf87, title "<task-notification>") stays cached and every later prompt repeats the lookup.
+- The lookup is redundant. The plugin omits an empty title (McpPluginShim.psm1:437-442), and the server keeps a stored title when a submitted turn omits it (SessionLogService.cs:1722-1743, FR-SUPPORT-015).
+- Second defect: Invoke-ReplRaw marks the call in flight before Invoke-ReplRawCore asks for the drain, so the drain is always deferred to the next Invoke-ReplRaw of the invocation. An invocation with one backend call never drains, and in beginTurn the deferred drain runs ahead of the new turn's persist. The two write-ahead records that killed hooks left behind have not been attempted in 16 hours.
+
+Requirements (strengthened through the plugin route, isSatisfied false until HV):
+- TR-MCP-REPL-019 AC-001: the supersede path chooses the canceled turn's title from the local cache alone. A refined local title is sent; a raw or empty one is omitted, so the server keeps its stored title. No server read is made.
+- TR-MCP-REPL-016 AC-001: an invocation whose backend answered drains after the invoked method completes, including an invocation with one backend call, and never between two backend calls of one method.
+- TR-MCP-REPL-016 AC-002: inside a hook the drain starts a record only while at least one second remains before the hook's deadline, and records it does not reach stay queued with their attempt counts unchanged.
+- TR-MCP-REPL-012 AC-001: inside a hook, each REPL call's timeout is the lesser of its per-method timeout and the whole seconds left before the hook's deadline. With less than one second left, a call is not started: it fails as timed out and the write-ahead record is the fallback. The deadline is the hook process's start time plus the timeout the plugin's generated hooks.json registers for that hook, less a three-second margin for writing the hook's result. Without a registered timeout, and outside hooks, timeouts are unchanged.
+- TR-MCP-REPL-012 AC-002: a UserPromptSubmit hook whose server calls do not answer attempts its server call and returns before its registered timeout, with the turn opened degraded and the write-ahead failsafe record kept. This holds also when the hook must first supersede an in-progress turn, and is proven at the production timeout of 10 s.
+- Amended 2026-10-14 before any review, from a what-if on the first binding run. The first AC-001 text gave every call at least one second, so a supersede that used the time up to the deadline would let the new-turn call start after it and carry the hook past its budget.
+- Amended again 2026-10-14 before any review: the margin was two seconds. In the whole-suite run the supersede-first budget test exited at 6167 ms against a 6000 ms registered timeout, about 2.2 s after its deadline, so the margin is three seconds.
+- FR-MCP-REPL-011's drain-budget criterion gains the hook qualifier: outside a hook a replay keeps the 120-second default, and inside a hook the deadline caps it (propagation of TR-MCP-REPL-012 AC-001 and TR-MCP-REPL-016 AC-002).
+
+Tests first (Pester, run through `./build.ps1 TestPluginCore --pester-paths`, C6):
+- A mock gate proves each assertion against reference script blocks, with negative controls: a deadline without the margin, an uncapped timeout, a drain that ignores the deadline, a replay ordered before the turn persists, a supersede that reads the server, and a hook that overruns its budget.
+- The binding tests then run the real functions and processes. A pwsh fake REPL stands in for qbrain-ai-repl (Linux: shebang script with its execute bit set from .NET; Windows: the suite's one-line .cmd launcher of pwsh). Each test uses a temporary cache, failsafe queue and plugin root, never the live server.
+- TEST-MCP-REPL-040's case that pinned the server lookup is rewritten to the new AC; its other supersede cases gain a zero-lookup assertion.
+
+Blast radius:
+- Changed: plugins/core/lib-ps/repl-invoke.ps1 (supersede title, drain placement, deadline cap) and plugins/core/lib-ps/plugin-hook.ps1 (hook deadline from the generated hooks.json), plus Pester files.
+- Unchanged: server code, wire contracts, hooks.json timeouts. The fix reaches the installed plugins only through the C3 sync and a plugin release.
+- Not breaking. A hook that cannot finish now opens its turn degraded instead of being killed.
+
+#### D4 plan (bug in already-specified behavior: TR-MCP-PLUGIN-013 "opens exactly one turn per user prompt")
+
+Root cause (receipts 2026-10-14):
+- The prompt hook opens a turn for every UserPromptSubmit. Claude Code delivers task notifications and subagent hand-backs through UserPromptSubmit as bare blocks: the stored queryText of the hook-opened turns starts with `<task-notification>` or with `<agent-message from="...">`.
+- Across the ten newest ClaudeCode sessions, 140 of the 192 hook-opened turns were such events (84 task notifications, 56 hand-backs); no hook prompt used the "Another Claude session sent a message:" delivery form.
+- Each event turn supersedes the open operator turn. The stuck D1 turn bf87 is one of them: its queryText is `<task-notification>`.
+
+Requirement (through the plugin route, isSatisfied false until HV): TR-MCP-PLUGIN-013 AC-003. A prompt made only of complete host-event blocks opens no turn, supersedes nothing, leaves current-turn.yaml unchanged and reports status system-event. A prompt with any other text, including an operator message after such a block, opens its turn as before.
+
+Tests first (Pester, through TestPluginCore):
+- Mock gate: a classification assertion over the pinned shapes, with negative controls: a starts-with-"<" rule that swallows the `<!-- reply N -->` operator prompts, and a starts-with-a-tag rule that swallows an operator message after a block. A hook-outcome assertion, with negative controls: a classifier that opens a turn for an event, and one that cancels the open turn.
+- Binding: the classifier taken from plugin-hook.ps1, and the shipped hook through the MCP_PLUGIN_REPL_LOG seam (no server).
+
+Blast radius: plugins/core/lib-ps/plugin-hook.ps1 (one classifier and an early return in Open-PluginTurn, ahead of the marker refresh so an event costs no server call) and one Pester file. Not breaking: operator prompts are unchanged.
+
+#### D2 plan (bug in already-specified behavior)
+
+Root cause (receipts 2026-10-14):
+- The 55 ClaudeCode sessions the store returns (2026-10-09 to 2026-10-14) hold 22 pairs. In each pair an empty "plugin-session" session is followed 3 to 5 seconds later by the session that receives the turns. The pairs include today's 20261014T154130Z and 20261014T154134Z.
+- Transcript hook timestamps are start times. Today's SessionStart started at 15:41:33 and minted 20261014T154134Z, the session in session-state.yaml. On 2026-10-13 the SessionStart that started at 17:46:38 minted 20261013T174639Z. The empty session of each pair is minted 3 to 4 s before SessionStart starts.
+- plugin-hook.ps1 dispatches both session-start and post-compact to Start-PluginSession, and each run mints a new id. hooks.claude-code.json registers both hooks.
+- Inference: the empty session is PostCompact's. Claude Code fires PostCompact after a compaction and then SessionStart with source compact; this chat's starts were compactions; PostCompact outcomes are not recorded in the transcript. A resume (SessionStart alone) was not observed separately.
+
+Requirement (through the plugin route, isSatisfied false until HV): TR-MCP-PLUGIN-012 AC-003. A compaction leaves exactly one new session: PostCompact starts no session, leaves session-state.yaml unchanged and emits only {} (the existing status-only output contract); SessionStart starts the one session.
+
+Tests first (Pester, through TestPluginCore):
+- Mock gate: a PostCompact outcome assertion, with negative controls: today's mint, an untrusted overwrite of session-state, and output beyond {}.
+- Binding: the shipped hook with -HookName post-compact on a sandbox with a verified session-state and an unsigned marker. Today's code then fails bootstrap and overwrites session-state with MCP_UNTRUSTED, which the assertion rejects.
+
+Blast radius: one dispatch line in plugins/core/lib-ps/plugin-hook.ps1 and one Pester file. Not breaking: if a host fires PostCompact without SessionStart, the open session simply continues, which the triage report also accepts ("reuse of the open session for the same chat").
+
+The Stop gate's own first-line wrapper rule (TR-MCP-PLUGIN-011 AC1, plugin-hook.ps1 Close-PluginTurnIfNeeded) stays as it is, on purpose. It decides whether an already-open turn with no recorded work may be no-op'd. Its wider set (`<command-name>`, `<local-command-*>`, `<user_query>`) includes operator skill invocations such as `/add-profile`, which D4 must keep opening as requests.
+
+#### D6 plan (bug in already-specified behavior: docs/context/memory.md gives a memory mutation's action type edit)
+
+Root cause (receipts 2026-10-14):
+- MemorySessionLogHook.TryAppendAsync is the server's only writer of memory-mutation actions (callers: MemoryService add, update and remove; MemoryCompetitiveOperations revert). It writes type "memory" and the order count + 1, where count is the number of the turn's actions, deleted ones included. Both lines are unchanged since 03b04880 (2026-09-18), so today's code is the code behind the report.
+- docs/context/memory.md:88 gives a memory mutation's action type edit; docs/context/action-types.md lists edit and not memory. Nothing in src, tests, the plugin core, the installed plugin 1.118.0 or the Claude plugin repository reads actions by type memory.
+- count + 1 is the next free order only when the turn's orders run from 1 to count without a gap. Otherwise it lands on an order the turn already holds (live orders 5 to 8 and a deleted 9 give 6), and the server keeps both rows: SameAction (SessionLogService.cs:2057-2061) keeps two actions with one order apart when their descriptions differ.
+- The reported turn (req-20261009T060905Z-prompt-c0e0, session ClaudeCode-20261009T002615Z-plugin-session) was rebuilt by that session's own script after the report. It now holds 26 actions with orders 14, 15, 16 and 18 each held twice, each time by a "Design decision:" action that no product or plugin code writes. The rows behind "orders 7 and 8 duplicated" are gone, so the writer that reused them cannot be observed again; the fix rests on the source what-if above, not on the rebuilt rows.
+
+Requirement (through the plugin route, isSatisfied false until HV): FR-MCP-MEMORY-007 criterion 6. A session-log action that the server appends for a memory mutation uses type edit and takes the next free order on its turn: one more than the highest order already recorded on that turn, deleted actions included, so no order is reused; on a turn with no actions it takes order 1. Amended 2026-10-14 before any review: the first text said the action lands on the workspace's open turn, which this fix does not change (see the last item below), and it did not state the empty-turn boundary.
+
+Tests first (xUnit in QBrainAi.Support.Mcp.Tests, through Nuke `Test`):
+- Mock gate, MemoryActionAssertion_AcceptsEditNextFreeOrderAndRejectsCountOrMemoryType: the assertion accepts the reference outcome (type edit, highest order + 1) for a turn with live orders 5 to 8 and a deleted 9, and order 1 for a turn with no actions. Negative controls: today's count rule (6, held by a live action), type memory, a highest order that leaves out the deleted action (9), and order 0 on an empty turn.
+- Binding, held in the session scratchpad `triagefix/held/d6/` until the hook changes: Mutation_ActionUsesDocumentedEditType (a memory add on a turn with no actions gives one action: type edit, status completed, order 1, description "memory_add <id>"); Mutation_ActionTakesNextFreeOrderAfterGappedAndDeletedOrders (a memory add and then an update on a turn with live orders 5 to 8 and a deleted 9 give orders 10 and 11, and no live order is held twice).
+- Mutations_AppendActionWhenTurnOpen stays as it is; its description check still holds.
+
+Blast radius:
+- Changed: src/QBrainAi.Services/Memory/MemorySessionLogHook.cs (the type, the order query and the doc comment) and MemorySessionLogTests.cs.
+- Unchanged: schema, migrations, endpoints, wire contracts, configuration and the plugins. Rows already stored keep type memory; nothing rewrites them.
+- Not breaking: no reader selects actions by type memory.
+- Limit, unchanged by this fix: two memory mutations committed at the same moment on one turn can still read the same highest order, because no unique index covers a turn's action orders, and adding one is a schema change outside this report.
+- Outside this report: no contract says a turn's action orders are unique, and the server stores the orders other writers send as given, so another writer can still repeat an order (making orders unique is a requirement add, the operator's decision). The hook appends to the workspace's newest turn by row id whatever its status, session or delete state, while FR-MCP-MEMORY-010 and docs/context/memory.md speak of an open or active turn; that is filed through triage and not fixed here.
+
+#### D5 plan (bug in already-specified behavior: TR-MCP-PLUGIN-013, and the workspace contract's hook validation step)
+
+Root cause (receipts 2026-10-14):
+- In mcpserver-claude-code-plugin, skills/claude-hook-validation/scripts/validate-claude-mcp-hooks.ps1:64-93 and skills/claude-hook-wiring/scripts/install-claude-mcp-hooks.ps1:105-134 each define Test-PluginEnabled (identical on origin/main and on the checked-out bug-build-008-plugin-sync; McpServer holds no copy). It wraps settings.enabledPlugins in @() and compares each entry, cast to a string, with the manifest name, "mcpserver" or the plugin root.
+- Claude Code writes enabledPlugins as an object whose keys are "<plugin>@<marketplace>" and whose values are booleans. LAB-OMARCHY's ~/.claude/settings.json holds "mcpserver@mcpserver-local" = True, which ConvertFrom-Json -AsHashtable returns as one OrderedHashtable; @() wraps that object as a single entry whose string is its type name, so no entry matches and only the CLAUDE_PLUGIN_ROOT fallback recognizes the plugin.
+- On that real settings file with CLAUDE_PLUGIN_ROOT unset, the unchanged validator reports status missing for UserPromptSubmit, Stop and PostToolUse, although the enabled plugin registers all three. The installer's repair would then add settings-level bridge hooks beside the plugin's registration, so each prompt reaches the prompt hook twice (the twin turns behind the removal of 9 bridge hooks on 2026-10-09).
+- The validator's tests (tests/ClaudeHookWiring.Tests.ps1) pin enabledPlugins as a list (@('mcpserver')), a shape Claude Code does not write, so they stayed green; they cite TEST-MCP-BUGTRIAGE-026, which has no record in the requirement store.
+
+Requirement (through the plugin route, isSatisfied false until HV): TR-MCP-PLUGIN-013 AC-004, under the TR whose description already covers one prompt delivered twice through the plugin's registration and a settings bridge. The validator and the installer recognize the plugin from a "<plugin name>@<marketplace>" key whose value is true, with or without CLAUDE_PLUGIN_ROOT; from enabledPlugins, a false value, another plugin's key (including one whose name only contains this plugin's name) or no entry is not recognized; the list form stays accepted and the CLAUDE_PLUGIN_ROOT fallback is unchanged; with the plugin enabled the validator reports valid and the installer adds no bridge hook. Amended 2026-10-14 before any review: the first text said "not recognized" without "from enabledPlugins", which the unchanged fallback would contradict whenever CLAUDE_PLUGIN_ROOT names this plugin.
+
+Tests first (Pester in the plugin repository's own worktree, ~/github/worktrees/mcpserver-claude-code-plugin-triage-fixes-20261013, branch fix/session-triage-20261013 from origin/main with no upstream set):
+- They run through McpServer's `./build.ps1 TestPluginCore --pester-paths <absolute path of the test file>`, because the plugin repository has no build of its own. The parameter is documented as relative to the McpServer root and takes an absolute path only because Path.Combine keeps a rooted path.
+- Mock gate EnabledPluginAssertion_AcceptsObjectFormAndRejectsCastOrBooleanBlindRules: eight pinned settings shapes built by the same JSON parse the scripts use; the reference rule passes; negative controls: today's cast rule, a rule that ignores the value, and a substring rule.
+- Binding, held in the session scratchpad `triagefix/held/d5/` until the scripts changed: EnabledPlugin_BothScripts_PinnedSettingsShapes (each script's own functions, taken from its syntax tree, over the same shapes), Validator_ObjectFormWithoutPluginRoot_ReportsValid, Validator_DisabledObjectForm_ReportsMissing, Installer_ObjectFormWithoutPluginRoot_AddsNoBridgeHooks; each unsets CLAUDE_PLUGIN_ROOT and restores it afterwards.
+- Applicable suite: only tests/ClaudeHookWiring.Tests.ps1 runs either script (searched by script name and skill folder). The repository's other 11 test files are not run for D5; three of them name live routes (marker, endpoints or the real REPL), and none was surveyed for isolation.
+- The existing two tests are unchanged and pass on Linux before and after (an earlier statement in this session that their backslash paths fail on Linux was wrong and is withdrawn).
+
+Blast radius:
+- Changed: Test-PluginEnabled in both scripts and tests/ClaudeHookWiring.Tests.ps1 of the plugin repository; nothing in McpServer's code.
+- The two copies of Test-PluginEnabled are pre-existing duplication and get the same change; folding them into one helper is outside this report. The analyzer findings both scripts carried before (plural nouns, ShouldProcess on two helper verbs) are unchanged and outside it too.
+- Unchanged: the scripts' parameters and output, the CLAUDE_PLUGIN_ROOT fallback. Not breaking: the list form stays accepted.
+- The fix reaches installed plugins only through a plugin release. Windows evidence on PAYTON-LEGION2 is due, because the settings path and plugin cache differ there.
 
 ### Slice E: plugin integration harness (TODOs BUG-BASELINE-012..017)
 - E1 triage-report-de98c84b and -f2684f90 (BUG-BASELINE-012): TypeScript plugin lockfiles match their vendored core after sync (lockfiles change only through npm).

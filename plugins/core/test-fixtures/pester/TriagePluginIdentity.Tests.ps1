@@ -127,38 +127,47 @@ Execute the add-profile skill now.
     }
 
     It 'Get-ReplMethodTimeoutSeconds treats workflow.agenthelp.submitTurn as a long helper timeout' {
-        $fn = [regex]::Match(
-            $script:ReplInvokeSource,
-            '(?ms)^function Get-ReplMethodTimeoutSeconds \{.*?^\}').Value
-        $fn | Should -Not -BeNullOrEmpty
-        Invoke-Expression $fn
+        # Get-ReplMethodTimeoutSeconds caps its result by the hook deadline through two helpers (TR-MCP-REPL-012 AC-001,
+        # PLAN-SESSIONTRIAGEFIX-001 D1), so they are loaded with it; no deadline is set, so the per-method value is expected.
+        foreach ($name in 'Get-ReplMethodTimeoutSeconds', 'Get-ReplHookTimeLeft', 'Get-ReplCappedTimeout') {
+            $fn = [regex]::Match($script:ReplInvokeSource, "(?ms)^function $name \{.*?^\}").Value
+            $fn | Should -Not -BeNullOrEmpty -Because $name
+            Invoke-Expression $fn
+        }
         $savedHelper = $env:REPL_HELPER_TIMEOUT
         $savedDefault = $env:REPL_TIMEOUT
+        $savedDeadline = $env:MCP_HOOK_DEADLINE_UTC_MS
         try {
             $env:REPL_HELPER_TIMEOUT = $null
             $env:REPL_TIMEOUT = $null
+            $env:MCP_HOOK_DEADLINE_UTC_MS = $null
             Get-ReplMethodTimeoutSeconds -Method 'workflow.agenthelp.submitTurn' | Should -Be 120
         } finally {
             $env:REPL_HELPER_TIMEOUT = $savedHelper
             $env:REPL_TIMEOUT = $savedDefault
+            $env:MCP_HOOK_DEADLINE_UTC_MS = $savedDeadline
         }
     }
 
     It 'Get-ReplMethodTimeoutSeconds keeps sessionlog methods on the short default' {
-        $fn = [regex]::Match(
-            $script:ReplInvokeSource,
-            '(?ms)^function Get-ReplMethodTimeoutSeconds \{.*?^\}').Value
-        $fn | Should -Not -BeNullOrEmpty
-        Invoke-Expression $fn
+        # Loads the two deadline helpers with the function (TR-MCP-REPL-012 AC-001, D1); no deadline is set.
+        foreach ($name in 'Get-ReplMethodTimeoutSeconds', 'Get-ReplHookTimeLeft', 'Get-ReplCappedTimeout') {
+            $fn = [regex]::Match($script:ReplInvokeSource, "(?ms)^function $name \{.*?^\}").Value
+            $fn | Should -Not -BeNullOrEmpty -Because $name
+            Invoke-Expression $fn
+        }
         $savedHelper = $env:REPL_HELPER_TIMEOUT
         $savedDefault = $env:REPL_TIMEOUT
+        $savedDeadline = $env:MCP_HOOK_DEADLINE_UTC_MS
         try {
             $env:REPL_HELPER_TIMEOUT = $null
             $env:REPL_TIMEOUT = $null
+            $env:MCP_HOOK_DEADLINE_UTC_MS = $null
             Get-ReplMethodTimeoutSeconds -Method 'workflow.sessionlog.beginTurn' | Should -Be 30
         } finally {
             $env:REPL_HELPER_TIMEOUT = $savedHelper
             $env:REPL_TIMEOUT = $savedDefault
+            $env:MCP_HOOK_DEADLINE_UTC_MS = $savedDeadline
         }
     }
 

@@ -56,6 +56,7 @@
         "Test",
         "TestGraphRagSmoke",
         "TestMultiInstance",
+        "TestPluginCore",
         "UpdateService",
         "UpdateTrustedThirdPartyService",
         "ValidateConfig",
@@ -198,6 +199,13 @@
         "PackageVersion": {
           "type": "string",
           "description": "Package version for NuGet pack (defaults to GitVersion output)"
+        },
+        "PesterPaths": {
+          "type": "array",
+          "description": "TR-MCP-NUKE-012: Pester test paths relative to the repository root (space- or comma-separated); the whole plugins/core/test-fixtures/pester folder when omitted",
+          "items": {
+            "type": "string"
+          }
         },
         "Plugin": {
           "type": "string",

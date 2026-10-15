@@ -38,6 +38,75 @@ $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'agent-runtime-header.ps1')
 Import-McpYamlSerializer
 
+function Get-PluginHookDeadline {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-012 AC-001 (D1, triage-report-124a374c): this hook's deadline in Unix milliseconds: the hook
+        process's start time plus the timeout the plugin's generated hooks.json registers for the hook's script,
+        less a three-second margin for writing the hook's result (measured 2026-10-14: up to 2.2 s from the
+        deadline to process exit under load). $null when hooks.json is missing or unreadable or registers no
+        timeout for the hook.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$HooksJsonPath,
+        [Parameter(Mandatory)][string]$HookName,
+        [Parameter(Mandatory)][datetime]$ProcessStartUtc
+    )
+
+    if (-not (Test-Path -LiteralPath $HooksJsonPath -PathType Leaf)) { return $null }
+    try {
+        $document = [System.IO.File]::ReadAllText($HooksJsonPath) | ConvertFrom-Json -Depth 20 -ErrorAction Stop
+    } catch {
+        return $null
+    }
+    $hooksProperty = if ($null -ne $document) { $document.PSObject.Properties['hooks'] } else { $null }
+    if (-not $hooksProperty -or $null -eq $hooksProperty.Value) { return $null }
+
+    # Property lookups through PSObject keep this safe under Set-StrictMode -Version Latest.
+    $scriptPattern = '[\\/]hooks[\\/]scripts[\\/]' + [regex]::Escape($HookName) + '\.ps1'
+    foreach ($hookEvent in $hooksProperty.Value.PSObject.Properties) {
+        foreach ($group in @($hookEvent.Value)) {
+            $groupHooks = if ($null -ne $group) { $group.PSObject.Properties['hooks'] } else { $null }
+            if (-not $groupHooks) { continue }
+            foreach ($hook in @($groupHooks.Value)) {
+                if ($null -eq $hook) { continue }
+                $command = $hook.PSObject.Properties['command']
+                $timeoutProperty = $hook.PSObject.Properties['timeout']
+                $timeout = 0
+                if ($command -and $timeoutProperty -and [string]$command.Value -match $scriptPattern -and
+                    [int]::TryParse([string]$timeoutProperty.Value, [ref]$timeout) -and $timeout -gt 0) {
+                    return ([DateTimeOffset]$ProcessStartUtc.ToUniversalTime()).ToUnixTimeMilliseconds() + ([long]$timeout * 1000) - 3000
+                }
+            }
+        }
+    }
+    return $null
+}
+
+function Register-PluginHookDeadline {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-012 AC-001 (D1): publishes this hook's deadline in MCP_HOOK_DEADLINE_UTC_MS, measured from this
+        process's start, for repl-invoke.ps1 and the child processes the hook starts. An earlier deadline already
+        published by an enclosing hook is kept while it is still ahead; a deadline that has passed is stale and is
+        replaced. Without a registered timeout nothing is published.
+    #>
+    param([Parameter(Mandatory)][string]$HookName)
+
+    $pluginRoot = [string]$env:MCP_PLUGIN_ROOT
+    if ([string]::IsNullOrWhiteSpace($pluginRoot)) { return }
+    $processStartUtc = [System.Diagnostics.Process]::GetCurrentProcess().StartTime.ToUniversalTime()
+    $deadline = Get-PluginHookDeadline -HooksJsonPath (Join-Path (Join-Path $pluginRoot 'hooks') 'hooks.json') -HookName $HookName -ProcessStartUtc $processStartUtc
+    if ($null -eq $deadline) { return }
+    $existing = 0L
+    if ([long]::TryParse([string]$env:MCP_HOOK_DEADLINE_UTC_MS, [ref]$existing) -and
+        $existing -gt [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() -and $existing -lt $deadline) { return }
+    $env:MCP_HOOK_DEADLINE_UTC_MS = [string]$deadline
+}
+
+# TR-MCP-REPL-012 AC-001 (D1): every server call this hook makes ends before the hook's registered budget runs out.
+Register-PluginHookDeadline -HookName $HookName
+
 function ConvertTo-PluginParamsYaml {
     param([Parameter(Mandatory)]$Params)
 
@@ -690,6 +759,21 @@ function Ensure-PluginMarkerFresh {
     }
 }
 
+function Test-PluginPromptIsHostEvent {
+    <#
+    .SYNOPSIS
+        TR-MCP-PLUGIN-013 AC-003 (D4, triage-report-5c7278cd): true when a UserPromptSubmit prompt is made only of host events, Claude
+        Code task notifications (<task-notification>...</task-notification>) and subagent hand-backs (<agent-message ...>...</agent-message>),
+        with nothing but whitespace around them. Such a prompt is not an operator request. Any other text, an unclosed block, or an empty
+        prompt makes it a request.
+    #>
+    param([AllowEmptyString()][string]$Prompt)
+
+    if ([string]::IsNullOrWhiteSpace($Prompt)) { return $false }
+    $rest = [regex]::Replace($Prompt, '(?s)<task-notification>.*?</task-notification>|<agent-message(?:\s[^>]*)?>.*?</agent-message>', '')
+    return ($rest.Length -lt $Prompt.Length) -and [string]::IsNullOrWhiteSpace($rest)
+}
+
 function Test-PluginPromptIsBackgroundAgent {
     <#
     .SYNOPSIS
@@ -754,6 +838,29 @@ function Open-PluginTurn {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
     $cacheDir = Get-PluginCacheDir -StartPath $startPath
+
+    # TR-MCP-PLUGIN-013 AC-003 (D4, triage-report-5c7278cd): a task notification or subagent hand-back is not an operator request. It
+    # opens no turn and supersedes nothing, so the operator's open turn stays current; this runs before the marker refresh so an event
+    # costs no server call. Read-HookInput is memoized, so the turn path below reads the same payload.
+    $eventPrompt = Get-HookPayloadValue -Payload (Read-HookInput) -Name 'prompt'
+    if (Test-PluginPromptIsHostEvent -Prompt $eventPrompt) {
+        $currentTurnFile = Join-Path $cacheDir 'current-turn.yaml'
+        $currentRequestId = if (Test-Path -LiteralPath $currentTurnFile) { [string](Get-YamlScalar -Path $currentTurnFile -Key 'turnRequestId') } else { '' }
+        Write-PluginJson ([ordered]@{
+            hookSpecificOutput = [ordered]@{
+                hookEventName = 'UserPromptSubmit'
+                status = 'system-event'
+                turnRequestId = $currentRequestId
+                additionalContext = if ($currentRequestId) {
+                    "Host event (task notification or subagent hand-back): no session log turn was opened; turn $currentRequestId is unchanged."
+                } else {
+                    'Host event (task notification or subagent hand-back): no session log turn was opened.'
+                }
+            }
+        })
+        return
+    }
+
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
     Ensure-PluginMarkerFresh -StartPath $startPath | Out-Null
     if (Test-Path -LiteralPath $sessionFile) {
@@ -1522,7 +1629,9 @@ switch ($HookName) {
     'session-start' { Start-PluginSession -StartPath $WorkspacePath }
     'session-end' { Invoke-CacheFlushHook }
     'pre-compact' { Invoke-CacheFlushHook }
-    'post-compact' { Start-PluginSession -StartPath $WorkspacePath }
+    # TR-MCP-PLUGIN-012 AC-003 (D2, triage-report-d9bd6fc3): PostCompact starts no session. The SessionStart hook that follows a
+    # compaction (source compact) starts the one session; a second start here minted an empty twin session at every compaction.
+    'post-compact' { Write-PluginJson ([ordered]@{}) }
     'user-prompt-submit' { Open-PluginTurn }
     'stop-gate' { Close-PluginTurnIfNeeded }
     'code-verify' { Invoke-CodeVerify }

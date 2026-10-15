@@ -4440,11 +4440,13 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
         }
     }
 
-    It 'TEST-MCP-REPL-040 supersede prefers the refined server title over a raw prompt-derived local title' {
-        # TR-MCP-REPL-019 (BUG-TRIAGE-086): when the local title equals the
-        # hook's raw default (prompt first line), the supersede fetches the
-        # server-side title through the client passthrough and persists it, so
-        # an agent-refined title survives the supersede.
+    It 'TEST-MCP-REPL-040 supersede omits a raw prompt-derived local title without a server read' {
+        # TR-MCP-REPL-019 AC-001 (BUG-TRIAGE-086; D1, triage-report-124a374c):
+        # when the local title equals the hook's raw default (prompt first line),
+        # the supersede reads nothing from the server and omits the title, so the
+        # server keeps the agent-refined title it stores (additive turn merge,
+        # FR-SUPPORT-015). The server lookup this case used to require read 25
+        # whole sessions and outran the UserPromptSubmit budget.
         $sandbox = New-TurnShimSandbox
         $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
         $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
@@ -4465,10 +4467,10 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
             Invoke-ReplSupersedeCurrentTurnIfInProgress -NextRequestId 'req-20260721T000008Z-next'
 
             $script:t40Submits.Count | Should -Be 1
-            $script:t40QueryCalls.Count | Should -Be 1
+            $script:t40QueryCalls.Count | Should -Be 0
             $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
             [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'canceled'
-            [string](Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -Be 'Refined: login flow retry hardening'
+            (Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -BeNullOrEmpty
         } finally {
             if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
             if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
@@ -4502,6 +4504,7 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
             Invoke-ReplSupersedeCurrentTurnIfInProgress -NextRequestId 'req-20260721T000010Z-next'
 
             $script:t40Submits.Count | Should -Be 1
+            $script:t40QueryCalls.Count | Should -Be 0
             $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
             [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'canceled'
             (Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -BeNullOrEmpty
