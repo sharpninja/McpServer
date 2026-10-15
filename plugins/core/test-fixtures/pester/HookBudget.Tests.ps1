@@ -294,10 +294,13 @@ Describe 'D1 hook budget binding' {
 
         # A pwsh stand-in for qbrain-ai-repl that never contacts a server: it logs each launch as 'method|turn requestId' to
         # D1_REPL_LOG and answers a success envelope echoing the submitted ids, or sleeps 60 s when D1_REPL_MODE is hang.
+        # repl-invoke.ps1 writes the request as UTF-8 with a byte order mark; Windows decodes console input with the OEM code page
+        # unless told otherwise, so the stand-in reads UTF-8, as the SessionLogP2Contracts.Tests.ps1 stand-in does.
         $script:FakeDir = Initialize-D1TempDir -Prefix 'd1-fake-repl-'
         $fakePs1 = Join-Path $script:FakeDir 'qbrain-ai-repl-fake.ps1'
         $fakeBody = @(
             '#!/usr/bin/env -S pwsh -NoLogo -NoProfile -NonInteractive -File'
+            '[Console]::InputEncoding = [System.Text.UTF8Encoding]::new($false); [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)'
             '$stdin = [Console]::In.ReadToEnd()'
             'if ($stdin.Length -gt 0 -and [int][char]$stdin[0] -eq 0xFEFF) { $stdin = $stdin.Substring(1) }'
             '$request = $stdin | ConvertFrom-Json -Depth 64'
