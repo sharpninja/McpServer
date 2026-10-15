@@ -414,13 +414,27 @@ public sealed class ServiceUpdateTests
         Assert.NotEmpty(Directory.GetFiles(f.Backup, "*.tar", SearchOption.AllDirectories));
     }
 
-    /// <summary>GNU tar preserves modes and symlink targets; private archive protects live secrets.</summary>
+    /// <summary>
+    /// GNU tar preserves modes and symlink targets; private archive protects live secrets. On Windows, which has no Unix modes, ACLs or
+    /// xattrs for the helper's tar to carry, the case asserts the archive request through the tar double: the same metadata flags, no
+    /// dereference, and the live state restored (C2, TR-MCP-SERVICEUPDATE-001 per-os-tests).
+    /// </summary>
     [Fact]
     [Trait("Category", "Integration")]
     [Trait("Platform", "Linux")]
-    [SupportedOSPlatform("linux")]
     public void LinuxArchive_UsesPrivateMetadataPreservingCommands()
     {
+        if (OperatingSystem.IsWindows())
+        {
+            using var w = new Fixture();
+            w.OnCopy = () => File.WriteAllText(Path.Combine(w.Data, "state"), "changed");
+            w.Update();
+            Assert.Equal("original", File.ReadAllText(Path.Combine(w.Data, "state")));
+            Assert.Contains("--acls", w.TarArguments);
+            Assert.Contains("--xattrs", w.TarArguments);
+            Assert.DoesNotContain("--dereference", w.TarArguments);
+            return;
+        }
         using var f = new Fixture { RealTar = true };
         File.SetUnixFileMode(f.Env, UnixFileMode.UserRead | UnixFileMode.UserWrite);
         File.CreateSymbolicLink(Path.Combine(f.Data, "link"), "state");
@@ -433,7 +447,7 @@ public sealed class ServiceUpdateTests
         {
             Native("setfacl", "-b", dataFile);
             Native("setfattr", "-x", "user.mcp-test", dataFile);
-            File.SetUnixFileMode(f.Env, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.OtherRead);
+            if (!OperatingSystem.IsWindows()) File.SetUnixFileMode(f.Env, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.OtherRead);
             File.Delete(Path.Combine(f.Data, "link"));
             File.WriteAllText(Path.Combine(f.Data, "link"), "replacement");
             File.WriteAllText(Path.Combine(f.Data, "state"), "changed");
@@ -453,30 +467,52 @@ public sealed class ServiceUpdateTests
         Assert.DoesNotContain("--dereference", f.TarArguments);
     }
 
-    /// <summary>A stale directory link is removed without modifying its external target.</summary>
+    /// <summary>
+    /// A stale directory link is removed without modifying its external target. On Windows File.Delete cannot remove a directory link, so
+    /// the helper's replacement stops at the link with its recovery evidence kept; the target is not followed on either system (C2,
+    /// TR-MCP-SERVICEUPDATE-001 per-os-tests; production runs WindowsServiceHelper on Windows).
+    /// </summary>
     [Fact]
     [Trait("Category", "Integration")]
     [Trait("Platform", "Linux")]
     public void LinuxReplacement_DoesNotFollowSymlinks()
     {
         using var f = new Fixture();
-        Directory.CreateSymbolicLink(Path.Combine(f.Install, "stale"), f.Data);
-        f.Update();
-        Assert.False(Directory.Exists(Path.Combine(f.Install, "stale")));
+        var stale = Path.Combine(f.Install, "stale");
+        Directory.CreateSymbolicLink(stale, f.Data);
+        if (OperatingSystem.IsWindows())
+        {
+            var ex = Assert.ThrowsAny<Exception>(() => f.Update());
+            Assert.Contains(Path.Combine("app", "stale"), ex.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+        else
+        {
+            f.Update();
+            Assert.False(Directory.Exists(stale));
+        }
         Assert.Equal("original", File.ReadAllText(Path.Combine(f.Data, "state")));
     }
 
-    /// <summary>Linux rejects linked data roots and nonexecutable stages before stopping the selected service.</summary>
+    /// <summary>
+    /// Linux rejects linked data roots and nonexecutable stages before stopping the selected service. Windows has no execute bit and the
+    /// helper checks it on Unix only, so there a stage without one is accepted and the update runs; a linked data root is rejected on both
+    /// (C2, TR-MCP-SERVICEUPDATE-001 per-os-tests).
+    /// </summary>
     [Theory]
     [Trait("Category", "Integration")]
     [Trait("Platform", "Linux")]
-    [SupportedOSPlatform("linux")]
     [InlineData(true)]
     [InlineData(false)]
     public void LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(bool symlink)
     {
         using var f = new Fixture();
         if (symlink) { Directory.Delete(f.Data, true); Directory.CreateSymbolicLink(f.Data, f.Stage); }
+        else if (OperatingSystem.IsWindows())
+        {
+            f.Update();
+            Assert.Contains("stop", f.Events);
+            return;
+        }
         else File.SetUnixFileMode(Path.Combine(f.Stage, "QBrainAi.Support.Mcp"), UnixFileMode.UserRead);
         Assert.ThrowsAny<Exception>(() => f.Update());
         Assert.DoesNotContain("stop", f.Events);
@@ -610,20 +646,47 @@ public sealed class ServiceUpdateTests
         Assert.False(called);
     }
 
-    /// <summary>Special stage files are rejected before an apphost read or any service mutation can block on a FIFO.</summary>
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 per-os-tests mock gate (PLAN-SESSIONTRIAGEFIX-001 C2): the stat double reports a registered path as a FIFO,
+    /// so the helper's regular-file guard rejects it on any operating system, while an ordinary file that is not registered stays accepted
+    /// (the negative control: a double that ignored the registration would let the Windows cases pass without reaching the guard).
+    /// </summary>
+    [Fact]
+    public void StatDouble_ReportsRegisteredSpecialFileAsFifo()
+    {
+        using var f = new Fixture();
+        var special = Path.Combine(f.Stage, "pipe");
+        var ordinary = Path.Combine(f.Stage, "ordinary");
+        File.WriteAllText(special, "");
+        File.WriteAllText(ordinary, "");
+        f.SpecialFiles.Add(special);
+        var helper = f.CreateHelper();
+        Assert.ThrowsAny<Exception>(() => Call("LinuxServiceHelper", "RequireRegularFile", helper, special));
+        Call("LinuxServiceHelper", "RequireRegularFile", helper, ordinary);
+    }
+
+    /// <summary>
+    /// Special stage files are rejected before an apphost read or any service mutation can block on a FIFO. Windows has no FIFOs, so there
+    /// the stat double reports the file as one and the same regular-file guard runs (C2, TR-MCP-SERVICEUPDATE-001 per-os-tests).
+    /// </summary>
     [Fact]
     [Trait("Category", "Integration")]
     [Trait("Platform", "Linux")]
     public void LinuxPreflight_RejectsSpecialStageFiles()
     {
-        using var f = new Fixture { InspectRealFileKinds = true };
-        Native("mkfifo", Path.Combine(f.Stage, "pipe"));
+        using var f = new Fixture { InspectRealFileKinds = !OperatingSystem.IsWindows() };
+        var pipe = Path.Combine(f.Stage, "pipe");
+        if (OperatingSystem.IsWindows()) { File.WriteAllText(pipe, ""); f.SpecialFiles.Add(pipe); }
+        else Native("mkfifo", pipe);
         Assert.ThrowsAny<Exception>(() => Call("LinuxServiceHelper", "ValidateStage", f.CreateHelper(), f.Stage, "linux-x64"));
         Assert.ThrowsAny<Exception>(() => f.Update());
         Assert.DoesNotContain("stop", f.Events);
     }
 
-    /// <summary>Apphost and live text inputs reject FIFOs through the regular-file guard before opening them.</summary>
+    /// <summary>
+    /// Apphost and live text inputs reject FIFOs through the regular-file guard before opening them. Windows has no FIFOs, so there the stat
+    /// double reports the input as one and the same guard runs (C2, TR-MCP-SERVICEUPDATE-001 per-os-tests).
+    /// </summary>
     [Theory]
     [Trait("Category", "Integration")]
     [Trait("Platform", "Linux")]
@@ -633,7 +696,7 @@ public sealed class ServiceUpdateTests
     [InlineData("unit")]
     public void LinuxPreflight_RejectsSpecialApphostAndTextInputs(string input)
     {
-        using var f = new Fixture { InspectRealFileKinds = true };
+        using var f = new Fixture { InspectRealFileKinds = !OperatingSystem.IsWindows() };
         var path = input switch
         {
             "apphost" => Path.Combine(f.Stage, "QBrainAi.Support.Mcp"),
@@ -641,8 +704,8 @@ public sealed class ServiceUpdateTests
             "environment" => f.Env,
             _ => Path.Combine(f.Root, "example.service")
         };
-        File.Delete(path);
-        Native("mkfifo", path);
+        if (OperatingSystem.IsWindows()) f.SpecialFiles.Add(path);
+        else { File.Delete(path); Native("mkfifo", path); }
         Assert.ThrowsAny<Exception>(() => Call("LinuxServiceHelper", "RequireRegularFile", f.CreateHelper(), path));
         Assert.ThrowsAny<Exception>(() => f.Update());
         Assert.DoesNotContain("stop", f.Events);
@@ -705,6 +768,8 @@ public sealed class ServiceUpdateTests
         public bool WrongProcess { get; set; }
         public bool RealTar { get; set; }
         public bool InspectRealFileKinds { get; set; }
+        /// <summary>Paths the stat double reports as FIFOs (C2: Windows has no FIFOs, so its cases present one through this seam).</summary>
+        public HashSet<string> SpecialFiles { get; } = new(StringComparer.Ordinal);
         public bool OptionalEnvironment { get; set; }
         public string DropIns { get; set; } = "";
         public string PrivateOwner { get; set; } = "0";
@@ -765,7 +830,7 @@ public sealed class ServiceUpdateTests
             object Result(int code, string output) => Activator.CreateInstance(Contract("ServiceCommandResult"), code, output)!;
             if (command == "id") return Result(0, "0");
             if (command == "stat") return Result(0, args.Contains("%f")
-                ? InspectRealFileKinds ? Native("stat", args.ToArray()) : Directory.Exists(args.Last()) ? "41ed" : "81a4"
+                ? InspectRealFileKinds ? Native("stat", args.ToArray()) : SpecialFiles.Contains(args.Last()) ? "11a4" : Directory.Exists(args.Last()) ? "41ed" : "81a4"
                 : PrivateOwner);
             if (command == "readlink")
             {
