@@ -95,6 +95,7 @@ public sealed partial class PluginSessionLogWorkflowAdapter
 
         var utc = DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ", CultureInfo.InvariantCulture);
         var sessionId = scenario.AgentSourceType + "-" + utc + "-pluginint";
+        ApplyScenarioSessionId(extraEnvironment, scenario.HostKind, sessionId);
         var requestId = "req-" + utc + "-001-pluginint-" + scenario.HostKind.ToString().ToLowerInvariant();
         var queryText = "Canonical pluginint turn for " + scenario.Name;
         var decision = "Decision: persist one action and one decision dialog for " + scenario.Name + ".";
@@ -591,6 +592,25 @@ public sealed partial class PluginSessionLogWorkflowAdapter
             or PluginHostKind.ClaudeCowork
             or PluginHostKind.Copilot
             or PluginHostKind.Grok;
+
+    /// <summary>
+    /// TEST-MCP-PLUGININT-001 AC-001 (PLAN-SESSIONTRIAGEFIX-001 E5, triage-report-914a2812): gives a PowerShell host its scenario session id
+    /// through MCP_SESSION_ID, the plugins' own session-id input (New-ReplPluginSessionId and New-PluginSessionId read it first), so the
+    /// session bootstrap mints is the scenario's and openSession, beginTurn and every later verb persist under it. Node hosts are unchanged;
+    /// their session id travels through the Node path.
+    /// </summary>
+    /// <param name="environment">The extra environment every plugin launch of the scenario receives.</param>
+    /// <param name="hostKind">The scenario's host kind.</param>
+    /// <param name="sessionId">The scenario session id.</param>
+    internal static void ApplyScenarioSessionId(IDictionary<string, string> environment, PluginHostKind hostKind, string sessionId)
+    {
+        ArgumentNullException.ThrowIfNull(environment);
+        ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
+        if (IsPowerShellHost(hostKind))
+        {
+            environment["MCP_SESSION_ID"] = sessionId;
+        }
+    }
 
     private static string ResolvePluginRoot(string repositoryName)
     {
