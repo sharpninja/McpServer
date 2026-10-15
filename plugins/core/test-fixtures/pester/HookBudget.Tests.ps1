@@ -157,6 +157,37 @@ BeforeAll {
             $result.Launches | Should -BeGreaterOrEqual 1 -Because "open turn: $withOpenTurn"
         }
     }
+
+    # TR-MCP-REPL-012 AC-001 (operator decision 2026-10-15 "Scope D1 to the hook process"): a hook owns its process only when the process's
+    # command line names the hook's entry script under the plugin root: hooks/scripts/<hook>.ps1, lib/<hook>.ps1 (hosts that keep their
+    # entries in lib/), or lib/plugin-hook.ps1 started directly; or names the running plugin-hook.ps1 itself (its path is passed in, for a
+    # plugin-hook.ps1 that lives outside the plugin root, as the plugin core's own does). $Decide: param($PluginRoot, $HookName,
+    # $CommandLineArgs, $HookScriptPath) returns a boolean.
+    function Assert-HookOwnership {
+        param([Parameter(Mandatory)][scriptblock]$Decide)
+        $temp = [System.IO.Path]::GetTempPath()
+        $root = [System.IO.Path]::Combine($temp, 'd1-owner-plugin')
+        $other = [System.IO.Path]::Combine($temp, 'd1-owner-other')
+        $coreHook = [System.IO.Path]::Combine($temp, 'd1-owner-core', 'lib-ps', 'plugin-hook.ps1')
+        $runner = @('pwsh', '-NoLogo', '-NoProfile', '-NonInteractive', '-File')
+        (& $Decide $root 'user-prompt-submit' ($runner + @([System.IO.Path]::Combine($root, 'hooks', 'scripts', 'user-prompt-submit.ps1'), '-Params', '{}')) $null) | Should -BeTrue -Because 'the hook entry under hooks/scripts started the process'
+        (& $Decide $root 'user-prompt-submit' ($runner + @([System.IO.Path]::Combine($root, 'lib', 'user-prompt-submit.ps1'))) $null) | Should -BeTrue -Because 'the hook entry under lib/ started the process'
+        (& $Decide $root 'code-verify' ($runner + @([System.IO.Path]::Combine($root, 'lib', 'plugin-hook.ps1'), '-HookName', 'code-verify')) $null) | Should -BeTrue -Because 'plugin-hook.ps1 started the process'
+        (& $Decide $root 'user-prompt-submit' ($runner + @($coreHook, '-HookName', 'user-prompt-submit')) $coreHook) | Should -BeTrue -Because 'the running plugin-hook.ps1 started the process'
+        (& $Decide $root 'user-prompt-submit' ($runner + @($coreHook, '-HookName', 'user-prompt-submit')) $null) | Should -BeFalse -Because 'a plugin-hook.ps1 outside the plugin root counts only as the running script'
+        (& $Decide $root 'user-prompt-submit' ($runner + @([System.IO.Path]::Combine($temp, 'pester-runner.ps1'))) $coreHook) | Should -BeFalse -Because 'a test runner started the process'
+        (& $Decide $root 'user-prompt-submit' ($runner + @([System.IO.Path]::Combine($root, 'hooks', 'scripts', 'session-start.ps1'))) $null) | Should -BeFalse -Because 'another hook''s entry started the process'
+        (& $Decide $root 'user-prompt-submit' ($runner + @([System.IO.Path]::Combine($other, 'hooks', 'scripts', 'user-prompt-submit.ps1'))) $null) | Should -BeFalse -Because 'another plugin root''s entry started the process'
+    }
+
+    # TR-MCP-REPL-012 AC-001: a hook entry leaves MCP_HOOK_DEADLINE_UTC_MS and MCP_MEMORY_REPL_TIMEOUT_SECONDS as it found them. Before and
+    # After hold the two values ($null when unset) captured around one in-process run of the entry.
+    function Assert-HookEnvironmentRestored {
+        param([Parameter(Mandatory)][System.Collections.IDictionary]$Before, [Parameter(Mandatory)][System.Collections.IDictionary]$After)
+        foreach ($name in 'MCP_HOOK_DEADLINE_UTC_MS', 'MCP_MEMORY_REPL_TIMEOUT_SECONDS') {
+            $After[$name] | Should -Be $Before[$name] -Because "$name is left as the entry found it"
+        }
+    }
 }
 
 Describe 'D1 hook budget mock gate' {
@@ -202,6 +233,19 @@ Describe 'D1 hook budget mock gate' {
             $firstLine = @(($QueryText -replace "`r", '') -split "`n")[0].Trim()
             $raw = [string]::IsNullOrWhiteSpace($LocalTitle) -or $LocalTitle.Trim() -in @('User prompt', $firstLine)
             return @{ QueryCalls = 0; SentTitle = $(if ($raw) { $null } else { $LocalTitle }) }
+        }
+        $script:RefOwner = {
+            param($PluginRoot, $HookName, $CommandLineArgs, $HookScriptPath)
+            $entries = @(
+                [System.IO.Path]::Combine($PluginRoot, 'hooks', 'scripts', "$HookName.ps1"),
+                [System.IO.Path]::Combine($PluginRoot, 'lib', "$HookName.ps1"),
+                [System.IO.Path]::Combine($PluginRoot, 'lib', 'plugin-hook.ps1')
+            ) + @($HookScriptPath | Where-Object { $_ }) | ForEach-Object { [System.IO.Path]::GetFullPath($_) }
+            foreach ($argument in @($CommandLineArgs)) {
+                if ([string]::IsNullOrWhiteSpace($argument) -or $argument.StartsWith('-')) { continue }
+                if ($entries -contains [System.IO.Path]::GetFullPath($argument)) { return $true }
+            }
+            return $false
         }
     }
 
@@ -274,6 +318,37 @@ Describe 'D1 hook budget mock gate' {
         # Negative control: stays within budget only by never attempting the server call.
         { Assert-HookWithinBudget -Run { @{ ElapsedMs = 2100; Status = 'turn-opened-degraded'; FailsafeCount = 1; Launches = 0 } } } | Should -Throw
     }
+
+    It 'HookOwnershipAssertion_AcceptsOwnedEntriesAndRejectsForeignOrOtherHook' {
+        Assert-HookOwnership -Decide $script:RefOwner
+        # Negative control: every process counts as the hook's own, the D1 behaviour that left a deadline in the plugins' Pester process.
+        { Assert-HookOwnership -Decide { $true } } | Should -Throw
+        # Negative control: any hook entry under any plugin root counts, whatever the hook's name (reads only the command line, the third
+        # positional argument).
+        { Assert-HookOwnership -Decide { @($args[2] | Where-Object { $_ -match '[\\/]hooks[\\/]scripts[\\/][^\\/]+\.ps1$' }).Count -gt 0 } } | Should -Throw
+        # Negative control: the file name decides and the plugin root (first positional argument) is ignored.
+        { Assert-HookOwnership -Decide { $hook = $args[1]; @($args[2] | Where-Object { [System.IO.Path]::GetFileName($_) -in @("$hook.ps1", 'plugin-hook.ps1') }).Count -gt 0 } } | Should -Throw
+        # Negative control: the running plugin-hook.ps1 (fourth positional argument) is ignored, so it is not recognized outside the plugin root.
+        { Assert-HookOwnership -Decide { & $script:RefOwner $args[0] $args[1] $args[2] $null } } | Should -Throw
+    }
+
+    It 'HookEnvironmentAssertion_AcceptsRestoredAndRejectsLeakedOrRemoved' {
+        $unset = @{ MCP_HOOK_DEADLINE_UTC_MS = $null; MCP_MEMORY_REPL_TIMEOUT_SECONDS = $null }
+        $enclosing = @{ MCP_HOOK_DEADLINE_UTC_MS = '1760000000000'; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '12' }
+        Assert-HookEnvironmentRestored -Before $unset -After @{ MCP_HOOK_DEADLINE_UTC_MS = $null; MCP_MEMORY_REPL_TIMEOUT_SECONDS = $null }
+        Assert-HookEnvironmentRestored -Before $enclosing -After @{ MCP_HOOK_DEADLINE_UTC_MS = '1760000000000'; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '12' }
+        # Negative controls: a deadline left behind, a fetch timeout left behind, an enclosing value removed, an enclosing value changed.
+        { Assert-HookEnvironmentRestored -Before $unset -After @{ MCP_HOOK_DEADLINE_UTC_MS = '1760000007000'; MCP_MEMORY_REPL_TIMEOUT_SECONDS = $null } } | Should -Throw
+        { Assert-HookEnvironmentRestored -Before $unset -After @{ MCP_HOOK_DEADLINE_UTC_MS = $null; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '6' } } | Should -Throw
+        { Assert-HookEnvironmentRestored -Before $enclosing -After @{ MCP_HOOK_DEADLINE_UTC_MS = $null; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '12' } } | Should -Throw
+        { Assert-HookEnvironmentRestored -Before $enclosing -After @{ MCP_HOOK_DEADLINE_UTC_MS = '1760000000000'; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '6' } } | Should -Throw
+        # A variable can be present and empty (.NET 10 keeps empty values): an empty one stays empty, and empty is not unset either way.
+        $empty = @{ MCP_HOOK_DEADLINE_UTC_MS = ''; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '' }
+        Assert-HookEnvironmentRestored -Before $empty -After @{ MCP_HOOK_DEADLINE_UTC_MS = ''; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '' }
+        # Negative controls: an empty variable removed, and an unset variable left present and empty.
+        { Assert-HookEnvironmentRestored -Before $empty -After @{ MCP_HOOK_DEADLINE_UTC_MS = $null; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '' } } | Should -Throw
+        { Assert-HookEnvironmentRestored -Before $unset -After @{ MCP_HOOK_DEADLINE_UTC_MS = ''; MCP_MEMORY_REPL_TIMEOUT_SECONDS = $null } } | Should -Throw
+    }
 }
 
 Describe 'D1 hook budget binding' {
@@ -286,7 +361,7 @@ Describe 'D1 hook budget binding' {
 
         # plugin-hook.ps1 runs a hook when invoked, so only its deadline functions are loaded, from the parsed script.
         $hookAst = [System.Management.Automation.Language.Parser]::ParseFile($script:HookScript, [ref]$null, [ref]$null)
-        foreach ($name in 'Get-PluginHookDeadline', 'Register-PluginHookDeadline') {
+        foreach ($name in 'Test-PluginHookOwnsProcess', 'Get-PluginHookDeadline', 'Register-PluginHookDeadline') {
             $definition = $hookAst.Find({ param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name }, $true)
             if (-not $definition) { throw "plugin-hook.ps1 defines no function $name" }
             . ([scriptblock]::Create($definition.Extent.Text))
@@ -410,6 +485,51 @@ Describe 'D1 hook budget binding' {
             if (-not (Test-Path -LiteralPath $Layout.Log)) { return @() }
             return @([System.IO.File]::ReadAllLines($Layout.Log) | Where-Object { $_ })
         }
+
+        # TR-MCP-REPL-012 AC-001: registers in a process started for the hook: pwsh -File <PluginRoot>/hooks/scripts/<HookName>.ps1, an
+        # entry that loads the shipped deadline functions from plugin-hook.ps1 and prints the deadline it published and its process's start.
+        # Returns @{ Deadline = <string, empty when none>; StartMs = <long> }.
+        function Invoke-D1OwnedRegistration {
+            param([Parameter(Mandatory)][string]$PluginRoot, [Parameter(Mandatory)][string]$HookName)
+            $entry = [System.IO.Path]::Combine($PluginRoot, 'hooks', 'scripts', "$HookName.ps1")
+            [void][System.IO.Directory]::CreateDirectory((Split-Path -Parent $entry))
+            $body = @(
+                '$hookAst = [System.Management.Automation.Language.Parser]::ParseFile($env:D1_HOOK_SCRIPT, [ref]$null, [ref]$null)'
+                'foreach ($name in ''Test-PluginHookOwnsProcess'', ''Get-PluginHookDeadline'', ''Register-PluginHookDeadline'') {'
+                '    $definition = $hookAst.Find({ param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name }, $true)'
+                '    . ([scriptblock]::Create($definition.Extent.Text))'
+                '}'
+                'Register-PluginHookDeadline -HookName $env:D1_HOOK_NAME'
+                '$startMs = ([DateTimeOffset][System.Diagnostics.Process]::GetCurrentProcess().StartTime.ToUniversalTime()).ToUnixTimeMilliseconds()'
+                '''deadline='' + [string]$env:MCP_HOOK_DEADLINE_UTC_MS + '' startMs='' + $startMs'
+                'exit 0'
+            ) -join [Environment]::NewLine
+            [System.IO.File]::WriteAllText($entry, $body, [System.Text.UTF8Encoding]::new($false))
+            $psi = [System.Diagnostics.ProcessStartInfo]::new((Get-Command pwsh -ErrorAction Stop).Source)
+            foreach ($argument in '-NoLogo', '-NoProfile', '-NonInteractive', '-File', $entry) { $psi.ArgumentList.Add($argument) }
+            $psi.UseShellExecute = $false
+            $psi.RedirectStandardOutput = $true
+            $psi.RedirectStandardError = $true
+            [void]$psi.Environment.Remove('MCP_HOOK_DEADLINE_UTC_MS')
+            $psi.Environment['MCP_PLUGIN_ROOT'] = $PluginRoot
+            $psi.Environment['D1_HOOK_SCRIPT'] = $script:HookScript
+            $psi.Environment['D1_HOOK_NAME'] = $HookName
+            $process = [System.Diagnostics.Process]::Start($psi)
+            $stdout = $process.StandardOutput.ReadToEndAsync()
+            $stderr = $process.StandardError.ReadToEndAsync()
+            if (-not $process.WaitForExit(60000)) { $process.Kill($true); throw "$entry did not exit within 60 s" }
+            $match = [regex]::Match([string]$stdout.Result, 'deadline=(\d*) startMs=(\d+)')
+            if (-not $match.Success) { throw "the registration in a process started for the hook printed no result: $($stdout.Result) $($stderr.Result)" }
+            return @{ Deadline = $match.Groups[1].Value; StartMs = [long]$match.Groups[2].Value }
+        }
+
+        # Sets an environment variable of this process, or removes it when Value is $null. Value is untyped on purpose: PowerShell passes
+        # $null to a [string] parameter, or to [Environment]::SetEnvironmentVariable, as an empty string, which .NET 10 keeps as a
+        # present, empty variable rather than removing it.
+        function Write-D1EnvironmentValue {
+            param([Parameter(Mandatory)][string]$Name, $Value)
+            if ($null -eq $Value) { Remove-Item -LiteralPath "Env:$Name" -ErrorAction SilentlyContinue } else { Set-Item -LiteralPath "Env:$Name" -Value $Value }
+        }
     }
 
     AfterAll {
@@ -419,15 +539,49 @@ Describe 'D1 hook budget binding' {
     It 'HookDeadline_RegisteredTimeoutLessMargin_FromProcessStart' {
         Assert-HookDeadline -Compute { param($h, $n, $s) Get-PluginHookDeadline -HooksJsonPath $h -HookName $n -ProcessStartUtc $s }
         $root = Initialize-D1TempDir -Prefix 'd1-set-deadline-'
+        try {
+            [void](Write-D1HooksJson -PluginRoot $root -Timeouts ([ordered]@{ 'user-prompt-submit' = 10 }))
+            # Registered in a process started for the hook, measured from that process's start.
+            $owned = Invoke-D1OwnedRegistration -PluginRoot $root -HookName 'user-prompt-submit'
+            [long]$owned.Deadline | Should -Be ($owned.StartMs + 7000)
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'HookDeadline_NoRegisteredTimeout_NoDeadline' {
+        $root = Initialize-D1TempDir -Prefix 'd1-no-deadline-'
+        $bare = Initialize-D1TempDir -Prefix 'd1-no-hooks-json-'
+        try {
+            [void](Write-D1HooksJson -PluginRoot $root -Timeouts ([ordered]@{ 'user-prompt-submit' = 10 }))
+            # Processes started for a hook: one hooks.json registers no timeout for, and one whose plugin root has no hooks.json.
+            (Invoke-D1OwnedRegistration -PluginRoot $root -HookName 'health-check').Deadline | Should -BeNullOrEmpty
+            (Invoke-D1OwnedRegistration -PluginRoot $bare -HookName 'user-prompt-submit').Deadline | Should -BeNullOrEmpty
+        } finally {
+            Remove-Item -LiteralPath $root, $bare -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'HookOwnership_ShippedFunction_PinnedCommandLines' {
+        Assert-HookOwnership -Decide { param($r, $h, $a, $s) Test-PluginHookOwnsProcess -PluginRoot $r -HookName $h -CommandLineArgs $a -HookScriptPath $s }
+    }
+
+    It 'HookDeadline_ForeignProcess_PublishesNothing' {
+        # This Pester process was not started for the hook: registering here publishes nothing, and an enclosing hook's deadline stays.
+        $root = Initialize-D1TempDir -Prefix 'd1-foreign-'
         $priorRoot = $env:MCP_PLUGIN_ROOT
         $priorDeadline = $env:MCP_HOOK_DEADLINE_UTC_MS
         try {
             [void](Write-D1HooksJson -PluginRoot $root -Timeouts ([ordered]@{ 'user-prompt-submit' = 10 }))
             $env:MCP_PLUGIN_ROOT = $root
             Remove-Item Env:MCP_HOOK_DEADLINE_UTC_MS -ErrorAction SilentlyContinue
+            Test-PluginHookOwnsProcess -PluginRoot $root -HookName 'user-prompt-submit' | Should -BeFalse
             Register-PluginHookDeadline -HookName 'user-prompt-submit'
-            $startMs = ([DateTimeOffset][System.Diagnostics.Process]::GetCurrentProcess().StartTime.ToUniversalTime()).ToUnixTimeMilliseconds()
-            [long]$env:MCP_HOOK_DEADLINE_UTC_MS | Should -Be ($startMs + 7000)
+            $env:MCP_HOOK_DEADLINE_UTC_MS | Should -BeNullOrEmpty
+            $enclosing = [string]([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() + 60000)
+            $env:MCP_HOOK_DEADLINE_UTC_MS = $enclosing
+            Register-PluginHookDeadline -HookName 'user-prompt-submit'
+            $env:MCP_HOOK_DEADLINE_UTC_MS | Should -Be $enclosing
         } finally {
             if ($null -eq $priorRoot) { Remove-Item Env:MCP_PLUGIN_ROOT -ErrorAction SilentlyContinue } else { $env:MCP_PLUGIN_ROOT = $priorRoot }
             if ($null -eq $priorDeadline) { Remove-Item Env:MCP_HOOK_DEADLINE_UTC_MS -ErrorAction SilentlyContinue } else { $env:MCP_HOOK_DEADLINE_UTC_MS = $priorDeadline }
@@ -435,22 +589,55 @@ Describe 'D1 hook budget binding' {
         }
     }
 
-    It 'HookDeadline_NoRegisteredTimeout_NoDeadline' {
-        $root = Initialize-D1TempDir -Prefix 'd1-no-deadline-'
-        $priorRoot = $env:MCP_PLUGIN_ROOT
-        $priorDeadline = $env:MCP_HOOK_DEADLINE_UTC_MS
+    It 'HookEntry_InProcess_RestoresDeadlineAndMemoryTimeout' {
+        # Entries generated from the shipped template (generate-wrappers.ps1) run in this process, with a stand-in plugin-hook.ps1 that
+        # publishes a deadline as an owned hook would and a stand-in memory helper; after each returns, both variables are as they were.
+        $root = Initialize-D1TempDir -Prefix 'd1-entry-'
+        $saved = [ordered]@{}
+        foreach ($name in 'MCP_PLUGIN_ROOT', 'MCP_PLUGIN_HOST', 'MCP_HOOK_DEADLINE_UTC_MS', 'MCP_MEMORY_REPL_TIMEOUT_SECONDS', 'TEMP', 'TMP') { $saved[$name] = [Environment]::GetEnvironmentVariable($name) }
         try {
-            [void](Write-D1HooksJson -PluginRoot $root -Timeouts ([ordered]@{ 'user-prompt-submit' = 10 }))
-            $env:MCP_PLUGIN_ROOT = $root
-            Remove-Item Env:MCP_HOOK_DEADLINE_UTC_MS -ErrorAction SilentlyContinue
-            Register-PluginHookDeadline -HookName 'health-check'
-            $env:MCP_HOOK_DEADLINE_UTC_MS | Should -BeNullOrEmpty
-            $env:MCP_PLUGIN_ROOT = Join-Path $root 'no-plugin-here'
-            Register-PluginHookDeadline -HookName 'user-prompt-submit'
-            $env:MCP_HOOK_DEADLINE_UTC_MS | Should -BeNullOrEmpty
+            $generator = Join-Path $script:RepoRoot 'plugins/core/hooks-templates/generate-wrappers.ps1'
+            $output = & (Get-Command pwsh -ErrorAction Stop).Source -NoLogo -NoProfile -NonInteractive -File $generator -HostName 'claude-code' -PluginRoot $root 2>&1 | Out-String
+            if ($LASTEXITCODE -ne 0) { throw "generate-wrappers.ps1 exited $($LASTEXITCODE): $output" }
+            [void][System.IO.Directory]::CreateDirectory((Join-Path $root 'lib'))
+            [System.IO.File]::WriteAllText((Join-Path $root 'lib/plugin-hook.ps1'), (@(
+                        'param([string]$HookName, [string]$HostName, [string]$CacheMode, [string]$Params, [string]$ParamsPath, [Parameter(ValueFromRemainingArguments = $true)][string[]]$Rest)'
+                        '$env:MCP_HOOK_DEADLINE_UTC_MS = [string]([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() + 30000)'
+                        '[ordered]@{ hookSpecificOutput = [ordered]@{ hookEventName = $HookName; status = ''stand-in''; additionalContext = ''stand-in hook'' } } | ConvertTo-Json -Compress -Depth 5'
+                        'exit 0'
+                    ) -join [Environment]::NewLine), [System.Text.UTF8Encoding]::new($false))
+            [System.IO.File]::WriteAllText((Join-Path $root 'hooks/scripts/memory-context.ps1'), (@(
+                        'function Add-McpRequiredMemoryToHookOutput {'
+                        '    param([string]$HookOutput, [string]$PluginRoot, [string]$DescriptorPath, [scriptblock]$FetchOverride)'
+                        '    return $HookOutput'
+                        '}'
+                    ) -join [Environment]::NewLine), [System.Text.UTF8Encoding]::new($false))
+            # Unset, set by an enclosing hook, and present but empty.
+            $scenarios = @(
+                @{ MCP_HOOK_DEADLINE_UTC_MS = $null; MCP_MEMORY_REPL_TIMEOUT_SECONDS = $null },
+                @{ MCP_HOOK_DEADLINE_UTC_MS = [string]([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() + 120000); MCP_MEMORY_REPL_TIMEOUT_SECONDS = '12' },
+                @{ MCP_HOOK_DEADLINE_UTC_MS = ''; MCP_MEMORY_REPL_TIMEOUT_SECONDS = '' }
+            )
+            foreach ($hook in 'user-prompt-submit', 'session-start') {
+                $entry = [System.IO.Path]::Combine($root, 'hooks', 'scripts', "$hook.ps1")
+                Test-Path -LiteralPath $entry -PathType Leaf | Should -BeTrue -Because "generate-wrappers.ps1 renders $hook"
+                foreach ($scenario in $scenarios) {
+                    $before = @{}
+                    foreach ($name in $scenario.Keys) {
+                        Write-D1EnvironmentValue -Name $name -Value $scenario[$name]
+                        $before[$name] = [Environment]::GetEnvironmentVariable($name)
+                        # The setup holds the state the scenario names; an empty value may read back unset where a platform keeps no
+                        # empty variables, and the entry is then held to that state.
+                        if ($scenario[$name] -eq '') { $before[$name] | Should -BeNullOrEmpty } else { $before[$name] | Should -Be $scenario[$name] -Because "the scenario sets $name" }
+                    }
+                    $null = & $entry -Params '{"prompt":"restore check"}' 2>&1
+                    $after = @{}
+                    foreach ($name in $scenario.Keys) { $after[$name] = [Environment]::GetEnvironmentVariable($name) }
+                    Assert-HookEnvironmentRestored -Before $before -After $after
+                }
+            }
         } finally {
-            if ($null -eq $priorRoot) { Remove-Item Env:MCP_PLUGIN_ROOT -ErrorAction SilentlyContinue } else { $env:MCP_PLUGIN_ROOT = $priorRoot }
-            if ($null -eq $priorDeadline) { Remove-Item Env:MCP_HOOK_DEADLINE_UTC_MS -ErrorAction SilentlyContinue } else { $env:MCP_HOOK_DEADLINE_UTC_MS = $priorDeadline }
+            foreach ($name in $saved.Keys) { Write-D1EnvironmentValue -Name $name -Value $saved[$name] }
             Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
         }
     }

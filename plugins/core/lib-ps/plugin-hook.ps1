@@ -83,18 +83,55 @@ function Get-PluginHookDeadline {
     return $null
 }
 
+function Test-PluginHookOwnsProcess {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-012 AC-001 (D1; operator decision 2026-10-15 "Scope D1 to the hook process"): whether this process
+        was started for the hook, that is, one of its command-line arguments is the hook's entry script under the plugin
+        root: hooks/scripts/<HookName>.ps1, lib/<HookName>.ps1 (hosts that keep their entries in lib/), or
+        lib/plugin-hook.ps1 started directly; or names the running plugin-hook.ps1 itself (HookScriptPath), which can
+        live outside the plugin root, as the plugin core's own does. A hook script run inside a process started for
+        something else, such as a test runner, does not own that process, so no host timeout applies to it.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$PluginRoot,
+        [Parameter(Mandatory)][string]$HookName,
+        [string[]]$CommandLineArgs = [Environment]::GetCommandLineArgs(),
+        [string]$HookScriptPath
+    )
+
+    $comparison = if ($IsWindows) { [System.StringComparison]::OrdinalIgnoreCase } else { [System.StringComparison]::Ordinal }
+    $entries = @(
+        [System.IO.Path]::Combine($PluginRoot, 'hooks', 'scripts', "$HookName.ps1"),
+        [System.IO.Path]::Combine($PluginRoot, 'lib', "$HookName.ps1"),
+        [System.IO.Path]::Combine($PluginRoot, 'lib', 'plugin-hook.ps1')
+    ) + @($HookScriptPath | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) | ForEach-Object { [System.IO.Path]::GetFullPath($_) }
+    foreach ($argument in @($CommandLineArgs)) {
+        if ([string]::IsNullOrWhiteSpace($argument) -or $argument.StartsWith('-')) { continue }
+        $fullPath = $null
+        try { $fullPath = [System.IO.Path]::GetFullPath($argument) } catch { continue }
+        foreach ($entry in $entries) {
+            if ([string]::Equals($fullPath, $entry, $comparison)) { return $true }
+        }
+    }
+    return $false
+}
+
 function Register-PluginHookDeadline {
     <#
     .SYNOPSIS
         TR-MCP-REPL-012 AC-001 (D1): publishes this hook's deadline in MCP_HOOK_DEADLINE_UTC_MS, measured from this
-        process's start, for repl-invoke.ps1 and the child processes the hook starts. An earlier deadline already
-        published by an enclosing hook is kept while it is still ahead; a deadline that has passed is stale and is
-        replaced. Without a registered timeout nothing is published.
+        process's start, for repl-invoke.ps1 and the child processes the hook starts, when this process was started for
+        the hook (Test-PluginHookOwnsProcess); a hook script run inside another process publishes nothing. An earlier
+        deadline already published by an enclosing hook is kept while it is still ahead; a deadline that has passed is
+        stale and is replaced. Without a registered timeout nothing is published. The generated hook entry restores the
+        variable when it returns.
     #>
-    param([Parameter(Mandatory)][string]$HookName)
+    param([Parameter(Mandatory)][string]$HookName, [string]$HookScriptPath)
 
     $pluginRoot = [string]$env:MCP_PLUGIN_ROOT
     if ([string]::IsNullOrWhiteSpace($pluginRoot)) { return }
+    if (-not (Test-PluginHookOwnsProcess -PluginRoot $pluginRoot -HookName $HookName -HookScriptPath $HookScriptPath)) { return }
     $processStartUtc = [System.Diagnostics.Process]::GetCurrentProcess().StartTime.ToUniversalTime()
     $deadline = Get-PluginHookDeadline -HooksJsonPath (Join-Path (Join-Path $pluginRoot 'hooks') 'hooks.json') -HookName $HookName -ProcessStartUtc $processStartUtc
     if ($null -eq $deadline) { return }
@@ -105,7 +142,7 @@ function Register-PluginHookDeadline {
 }
 
 # TR-MCP-REPL-012 AC-001 (D1): every server call this hook makes ends before the hook's registered budget runs out.
-Register-PluginHookDeadline -HookName $HookName
+Register-PluginHookDeadline -HookName $HookName -HookScriptPath $PSCommandPath
 
 function ConvertTo-PluginParamsYaml {
     param([Parameter(Mandatory)]$Params)
