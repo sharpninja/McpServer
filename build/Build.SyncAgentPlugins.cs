@@ -561,21 +561,99 @@ partial class Build
 
         foreach (var vendorDirectory in vendorDirectories)
         {
-            var stableTarget = vendorDirectory / NodeCoreStableVendorFileName;
-            File.Copy(packedPath.ToString(), stableTarget.ToString(), overwrite: true);
-
-            // Remove superseded variants (the legacy versioned names) so exactly one tarball remains.
-            foreach (var variant in Directory.GetFiles(vendorDirectory.ToString(), "sharpninja-mcpserver-plugin-core*.tgz"))
-            {
-                if (!string.Equals(Path.GetFileName(variant), NodeCoreStableVendorFileName, StringComparison.OrdinalIgnoreCase))
-                    File.Delete(variant);
-            }
-
-            RewriteVendorDependencyReference(vendorDirectory.Parent);
-            Log.Information("Refreshed Node plugin core vendor package {Target} (content {Version})", stableTarget, manifestVersion);
+            VendorNodeCoreIntoConsumer(packedPath, vendorDirectory);
+            Log.Information("Refreshed Node plugin core vendor package {Target} (content {Version})", vendorDirectory / NodeCoreStableVendorFileName, manifestVersion);
         }
 
         File.Delete(packedPath.ToString());
+    }
+
+    /// <summary>
+    /// TR-MCP-SYNC-001: vendors the packed plugin core into one consumer. Copies it to the stable vendor file name, removes superseded
+    /// variants (the legacy versioned names) so exactly one tarball remains, rewrites the consumer's package.json reference to the stable
+    /// name, and refreshes the consumer's package-lock.json through npm so npm ci matches the new tarball (AC-002).
+    /// </summary>
+    /// <param name="packedPath">The tarball npm pack produced.</param>
+    /// <param name="vendorDirectory">The consumer's vendor directory.</param>
+    internal static void VendorNodeCoreIntoConsumer(AbsolutePath packedPath, AbsolutePath vendorDirectory)
+    {
+        var stableTarget = vendorDirectory / NodeCoreStableVendorFileName;
+        File.Copy(packedPath.ToString(), stableTarget.ToString(), overwrite: true);
+
+        // Remove superseded variants (the legacy versioned names) so exactly one tarball remains.
+        foreach (var variant in Directory.GetFiles(vendorDirectory.ToString(), "sharpninja-mcpserver-plugin-core*.tgz"))
+        {
+            if (!string.Equals(Path.GetFileName(variant), NodeCoreStableVendorFileName, StringComparison.OrdinalIgnoreCase))
+                File.Delete(variant);
+        }
+
+        RewriteVendorDependencyReference(vendorDirectory.Parent);
+        RefreshVendorLockfile(vendorDirectory.Parent);
+    }
+
+    /// <summary>
+    /// TR-MCP-SYNC-001 AC-002: refreshes a consumer's package-lock.json through npm after the vendor step, once for each dependency name
+    /// its package.json points at the vendored tarball, so the lockfile records the new tarball's integrity and nothing else changes. Only
+    /// npm writes the lockfile; a consumer without a package-lock.json is left alone.
+    /// </summary>
+    /// <param name="consumerRoot">The consumer repository root holding package.json and package-lock.json.</param>
+    internal static void RefreshVendorLockfile(AbsolutePath consumerRoot)
+    {
+        var packageJsonPath = consumerRoot / "package.json";
+        var lockPath = consumerRoot / "package-lock.json";
+        if (!File.Exists(packageJsonPath.ToString()) || !File.Exists(lockPath.ToString()))
+        {
+            Log.Information("No package-lock.json to refresh in {ConsumerRoot}", consumerRoot);
+            return;
+        }
+
+        foreach (var dependencyName in GetVendorDependencyNames(packageJsonPath.ToString()))
+        {
+            ProcessTasks.StartProcess("npm", string.Join(' ', GetVendorLockRefreshArguments(dependencyName)), workingDirectory: consumerRoot.ToString())
+                .AssertZeroExitCode();
+            Log.Information("Refreshed {LockFile} for the vendored {Dependency}", lockPath, dependencyName);
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-SYNC-001 AC-002: the npm arguments that refresh a consumer's lockfile for the vendored core: install the stable vendored
+    /// tarball under the dependency name the consumer's package.json already uses, lockfile only. Installing the bare file: spec would add
+    /// a second dependency named after the tarball's own package, and a plain install --package-lock-only keeps the stale integrity.
+    /// </summary>
+    /// <param name="dependencyName">The consumer's dependency name for the vendored tarball.</param>
+    /// <returns>The npm argument list; no element contains whitespace.</returns>
+    internal static IReadOnlyList<string> GetVendorLockRefreshArguments(string dependencyName)
+    {
+        if (string.IsNullOrWhiteSpace(dependencyName) || dependencyName.Any(char.IsWhiteSpace))
+            throw new ArgumentException("A vendored dependency name must be non-empty and contain no whitespace.", nameof(dependencyName));
+
+        return ["install", "--package-lock-only", "--ignore-scripts", "--no-audit", "--no-fund", $"{dependencyName}@file:vendor/{NodeCoreStableVendorFileName}"];
+    }
+
+    /// <summary>
+    /// TR-MCP-SYNC-001 AC-002: the dependency names in a consumer's package.json (dependencies, devDependencies, optionalDependencies) whose
+    /// spec is the stable vendored tarball, in file order.
+    /// </summary>
+    /// <param name="packageJsonPath">The consumer's package.json.</param>
+    /// <returns>The dependency names pointing at file:vendor/sharpninja-mcpserver-plugin-core.tgz.</returns>
+    internal static IReadOnlyList<string> GetVendorDependencyNames(string packageJsonPath)
+    {
+        var vendorSpec = $"file:vendor/{NodeCoreStableVendorFileName}";
+        using var manifest = JsonDocument.Parse(File.ReadAllText(packageJsonPath));
+        var names = new List<string>();
+        foreach (var section in new[] { "dependencies", "devDependencies", "optionalDependencies" })
+        {
+            if (!manifest.RootElement.TryGetProperty(section, out var entries) || entries.ValueKind != JsonValueKind.Object)
+                continue;
+
+            foreach (var entry in entries.EnumerateObject())
+            {
+                if (entry.Value.ValueKind == JsonValueKind.String && string.Equals(entry.Value.GetString(), vendorSpec, StringComparison.Ordinal))
+                    names.Add(entry.Name);
+            }
+        }
+
+        return names;
     }
 
     /// <summary>Path to the TypeScript compiler inside plugins/core/lib-node.</summary>
