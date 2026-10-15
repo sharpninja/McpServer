@@ -125,6 +125,46 @@ if ('__HOOK_NAME__' -eq 'code-verify') {
     exit $process.ExitCode
 }
 
+if ('__HOOK_NAME__' -eq 'user-prompt-submit') {
+    # TR-MCP-MEMORY-008 AC-002 (PLAN-SESSIONTRIAGEFIX-001 F2, triage-report-f01b3544): the request boundary adds the
+    # plugin's required memories to the hook output, as this entry did before 2026-10-01, keeping the hook's own fields
+    # and exit code. A missing helper or a failed fetch never blocks the prompt, and the fetch keeps to the hook
+    # deadline (TR-MCP-REPL-012 AC-001): with under one second left it is not started, otherwise its timeout is no
+    # longer than the whole seconds left.
+    $hookOutput = & $hookScript @hookArguments @RemainingArguments
+    $hookExit = if (Get-Variable -Name LASTEXITCODE -Scope Global -ErrorAction SilentlyContinue) { $global:LASTEXITCODE } else { 0 }
+    $mergedOutput = ($hookOutput | Out-String).TrimEnd()
+    try {
+        $memoryContextScript = @('hooks/scripts/memory-context.ps1', 'lib/memory-context.ps1') |
+            ForEach-Object { Join-Path $pluginRoot $_ } |
+            Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } |
+            Select-Object -First 1
+        if ($memoryContextScript) {
+            . $memoryContextScript
+            $injectArguments = @{ HookOutput = $mergedOutput; PluginRoot = $pluginRoot }
+            $hookDeadline = 0L
+            if ([long]::TryParse([string]$env:MCP_HOOK_DEADLINE_UTC_MS, [ref]$hookDeadline) -and $hookDeadline -gt 0) {
+                $remainingMs = $hookDeadline - [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+                if ($remainingMs -lt 1000) {
+                    $injectArguments.FetchOverride = { throw 'the hook deadline left no time to fetch required memories' }
+                } else {
+                    $fetchSeconds = [long][Math]::Floor($remainingMs / 1000)
+                    $ownSeconds = 0
+                    if ([int]::TryParse([string]$env:MCP_MEMORY_REPL_TIMEOUT_SECONDS, [ref]$ownSeconds) -and $ownSeconds -gt 0 -and $ownSeconds -lt $fetchSeconds) {
+                        $fetchSeconds = $ownSeconds
+                    }
+                    $env:MCP_MEMORY_REPL_TIMEOUT_SECONDS = [string]$fetchSeconds
+                }
+            }
+            $mergedOutput = Add-McpRequiredMemoryToHookOutput @injectArguments
+        }
+    } catch {
+        [Console]::Error.WriteLine("required-memory injection skipped: $($_.Exception.Message)")
+    }
+    if (-not [string]::IsNullOrWhiteSpace($mergedOutput)) { Write-Output $mergedOutput }
+    exit $hookExit
+}
+
 & $hookScript @hookArguments @RemainingArguments
 if (Get-Variable -Name LASTEXITCODE -Scope Global -ErrorAction SilentlyContinue) {
     exit $global:LASTEXITCODE
