@@ -116,6 +116,71 @@ public sealed class OllamaServerControllerTests
         Assert.Equal(1, launcher.Handles[0].KillCount);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBOLLAMA-002 AC-001 mock gate, case (7) (TR-MCP-QBOLLAMA-002, TR-MCP-NUKE-016; PLAN-SESSIONTRIAGEFIX-001 B13,
+    /// triage-report-680916ed): the resolver assertion accepts hand-built candidate lists in the required order for Linux (each PATH entry's
+    /// ollama, then the test-tools ollama/bin/ollama) and Windows (each PATH entry's ollama.exe, LocalAppData/Programs/Ollama/ollama.exe, then
+    /// the test-tools ollama/ollama.exe), and rejects the Windows layout on Linux, a list without the PATH entries and a list in another order.
+    /// Data: hand-built PATH entries, LocalAppData folders and candidate lists; no file system.
+    /// </summary>
+    [Fact]
+    public void OllamaExecutableCandidatesAssertion_AcceptsPerOsLayoutAndRejectsWindowsLayoutOnLinux()
+    {
+        string[] linuxPath = ["/usr/local/bin", "/usr/bin"];
+        const string linuxAppData = "/home/lab/.local/share";
+        string[] linuxCandidates =
+        [
+            Path.Combine("/usr/local/bin", "ollama"),
+            Path.Combine("/usr/bin", "ollama"),
+            Path.Combine(linuxAppData, "QBrainAi", "test-tools", "ollama", "bin", "ollama"),
+        ];
+        string[] windowsPath = [@"C:\Tools"];
+        const string windowsAppData = @"C:\Users\lab\AppData\Local";
+        string[] windowsCandidates =
+        [
+            Path.Combine(@"C:\Tools", "ollama.exe"),
+            Path.Combine(windowsAppData, "Programs", "Ollama", "ollama.exe"),
+            Path.Combine(windowsAppData, "QBrainAi", "test-tools", "ollama", "ollama.exe"),
+        ];
+
+        AssertCandidatesFor(isWindows: false, linuxPath, linuxAppData, linuxCandidates);
+        AssertCandidatesFor(isWindows: true, windowsPath, windowsAppData, windowsCandidates);
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertCandidatesFor(
+            false, linuxPath, linuxAppData, [linuxCandidates[0], linuxCandidates[1], Path.Combine(linuxAppData, "QBrainAi", "test-tools", "ollama", "ollama.exe")]));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertCandidatesFor(false, linuxPath, linuxAppData, [linuxCandidates[2]]));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertCandidatesFor(
+            false, linuxPath, linuxAppData, [linuxCandidates[2], linuxCandidates[0], linuxCandidates[1]]));
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBOLLAMA-002 AC-001 binding, case (7): the shipped resolver, given the gate's PATH entries and LocalAppData folders, returns the
+    /// candidates the assertion accepts on Linux and on Windows. Data: the same hand-built PATH entries and folders; no file system.
+    /// </summary>
+    [Fact]
+    public void OllamaExecutableCandidates_PerOperatingSystem_UsesTheShippedResolver()
+    {
+        string[] linuxPath = ["/usr/local/bin", "/usr/bin"];
+        const string linuxAppData = "/home/lab/.local/share";
+        string[] windowsPath = [@"C:\Tools"];
+        const string windowsAppData = @"C:\Users\lab\AppData\Local";
+
+        AssertCandidatesFor(isWindows: false, linuxPath, linuxAppData, OllamaExecutableCandidates.For(false, linuxPath, linuxAppData));
+        AssertCandidatesFor(isWindows: true, windowsPath, windowsAppData, OllamaExecutableCandidates.For(true, windowsPath, windowsAppData));
+    }
+
+    // TEST-MCP-QBOLLAMA-002 AC-001, case (7), stated from the requirement: each PATH entry's ollama (ollama.exe on Windows), on Windows Ollama's
+    // install folder, then the portable executable under the test-tools folder (ollama/ollama.exe on Windows; ollama/bin/ollama on Linux).
+    private static void AssertCandidatesFor(bool isWindows, IReadOnlyList<string> pathEntries, string localAppData, IReadOnlyList<string> candidates)
+    {
+        var expected = pathEntries.Select(entry => Path.Combine(entry, isWindows ? "ollama.exe" : "ollama")).ToList();
+        if (isWindows)
+            expected.Add(Path.Combine(localAppData, "Programs", "Ollama", "ollama.exe"));
+        expected.Add(isWindows
+            ? Path.Combine(localAppData, "QBrainAi", "test-tools", "ollama", "ollama.exe")
+            : Path.Combine(localAppData, "QBrainAi", "test-tools", "ollama", "bin", "ollama"));
+        Assert.Equal(expected, candidates);
+    }
+
     private const string ExecutablePath = @"C:\fake\ollama.exe";
 
     private static OllamaServerController Build(

@@ -52,30 +52,14 @@ public sealed class OllamaServerFixture : IAsyncLifetime
         }
     }
 
+    // TR-MCP-QBOLLAMA-002 (PLAN-SESSIONTRIAGEFIX-001 B13): the first existing candidate in the shared resolver's per-OS order, which includes
+    // the portable install the InstallOllama Nuke target provisions (ollama/bin/ollama on Linux).
     private static string? ResolveExecutable()
-    {
-        var candidates = new List<string>();
-
-        var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
-        foreach (var directory in pathVariable.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries))
-        {
-            try
-            {
-                candidates.Add(Path.Combine(directory.Trim(), OperatingSystem.IsWindows() ? "ollama.exe" : "ollama"));
-            }
-            catch (ArgumentException)
-            {
-                // Ignore malformed PATH entries rather than failing discovery.
-            }
-        }
-
-        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        candidates.Add(Path.Combine(localAppData, "Programs", "Ollama", "ollama.exe"));
-        // Matches the portable install location used by the InstallOllama Nuke target.
-        candidates.Add(Path.Combine(localAppData, "QBrainAi", "test-tools", "ollama", "ollama.exe"));
-
-        return candidates.FirstOrDefault(File.Exists);
-    }
+        => OllamaExecutableCandidates.For(
+                OperatingSystem.IsWindows(),
+                (Environment.GetEnvironmentVariable("PATH") ?? string.Empty).Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries),
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData))
+            .FirstOrDefault(File.Exists);
 
     private static IOllamaProcessHandle StartServerProcess(string executablePath)
     {

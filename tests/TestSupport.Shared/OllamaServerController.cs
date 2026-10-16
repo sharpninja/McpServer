@@ -14,6 +14,43 @@ public interface IOllamaProcessHandle : IDisposable
 }
 
 /// <summary>
+/// TR-MCP-QBOLLAMA-002 (TEST-MCP-QBOLLAMA-002 AC-001; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed): the ollama executables the
+/// fixture looks for, in order: each PATH entry's ollama (ollama.exe on Windows), on Windows Ollama's install folder, then the portable
+/// executable the InstallOllama Nuke target provisions under the test-tools folder (ollama/ollama.exe on Windows; ollama/bin/ollama on Linux).
+/// </summary>
+public static class OllamaExecutableCandidates
+{
+    /// <summary>Returns the candidates in the order the fixture checks them.</summary>
+    /// <param name="isWindows">Whether the host is Windows.</param>
+    /// <param name="pathEntries">The PATH entries, already split.</param>
+    /// <param name="localAppData">The LocalApplicationData folder.</param>
+    /// <returns>The ordered candidate paths.</returns>
+    public static IReadOnlyList<string> For(bool isWindows, IEnumerable<string> pathEntries, string localAppData)
+    {
+        ArgumentNullException.ThrowIfNull(pathEntries);
+        var candidates = new List<string>();
+        foreach (var entry in pathEntries)
+        {
+            try
+            {
+                candidates.Add(Path.Combine(entry.Trim(), isWindows ? "ollama.exe" : "ollama"));
+            }
+            catch (ArgumentException)
+            {
+                // Ignore malformed PATH entries rather than failing discovery.
+            }
+        }
+
+        if (isWindows)
+            candidates.Add(Path.Combine(localAppData, "Programs", "Ollama", "ollama.exe"));
+        candidates.Add(isWindows
+            ? Path.Combine(localAppData, "QBrainAi", "test-tools", "ollama", "ollama.exe")
+            : Path.Combine(localAppData, "QBrainAi", "test-tools", "ollama", "bin", "ollama"));
+        return candidates;
+    }
+}
+
+/// <summary>
 /// TR-MCP-QBOLLAMA-002: Outcome of an <see cref="OllamaServerController.EnsureRunningAsync"/> call.
 /// </summary>
 /// <param name="WasAlreadyRunning">True when a server answered the probe before any launch attempt.</param>

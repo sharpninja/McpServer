@@ -938,6 +938,98 @@ public sealed class QuadBrainOpenAiChatServiceTests
             => throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// TEST-MCP-QBOPENAI-001 AC-001 mock gate (FR-MCP-QBOPENAI-001 ac-5 and ac-6; PLAN-SESSIONTRIAGEFIX-001 B13, operator decision 2026-10-15
+    /// "Both rules (Recommended)"): the round outcome assertion accepts a reply returned after one round and the last reply returned after the
+    /// eight-round budget, each with finish reason stop, and rejects empty content, an extra round, a reply other than the last, and a finish
+    /// reason other than stop. Data: hand-built choices and round counts; no orchestration.
+    /// </summary>
+    [Fact]
+    public void ChatRoundOutcomeAssertion_AcceptsFinalAnswerAndRejectsEmptyOrExtraRounds()
+    {
+        AssertChatRoundOutcome(1, "the plain answer", 1, Choice("the plain answer", "stop"));
+        AssertChatRoundOutcome(8, "reply 8", 8, Choice("reply 8", "stop"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertChatRoundOutcome(8, "reply 8", 8, Choice(null, "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertChatRoundOutcome(1, "the plain answer", 2, Choice("the plain answer", "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertChatRoundOutcome(8, "reply 8", 8, Choice("reply 1", "stop")));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertChatRoundOutcome(1, "the plain answer", 1, Choice("the plain answer", "tool_calls")));
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBOPENAI-001 AC-001, FR-MCP-QBOPENAI-001 ac-5: with no tools and no tool_choice, a reply that is not an envelope is the final
+    /// answer after one round. Data: scripted orchestration whose second reply would show a second round.
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_NoToolsNonEnvelopeReply_ReturnsItAfterOneRound()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "the plain answer" },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = "a second round ran" });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "Hello" }] },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertChatRoundOutcome(1, "the plain answer", orchestration.CallCount, Assert.Single(response.Choices));
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBOPENAI-001 AC-001, FR-MCP-QBOPENAI-001 ac-5: with no tools and no tool_choice, an explicit continue envelope still asks for
+    /// another round, and the final envelope that follows is the answer. Data: scripted continue, then final envelopes.
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_NoToolsContinueEnvelope_StillRePrompts()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = """{"intent":"continue","content":"Looking."}""" },
+            new QuadBrainOrchestrationResponse { Status = "committed", Output = """{"intent":"final","content":"done"}""" });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "Hello" }] },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertChatRoundOutcome(2, "done", orchestration.CallCount, Assert.Single(response.Choices));
+        Assert.Contains(QuadBrainOpenAiChatService.ContinueDirective, orchestration.Requests[1].Input, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBOPENAI-001 AC-001, FR-MCP-QBOPENAI-001 ac-6: with a tool offered, eight distinct replies that are not envelopes use the whole
+    /// round budget, and the eighth reply comes back instead of empty content. Data: scripted replies "reply 1" to "reply 9" (a ninth round would
+    /// show the budget overrun).
+    /// </summary>
+    [Fact]
+    public async Task CompleteAsync_RoundsExhaustedWithoutFinal_ReturnsLastArbiterOutput()
+    {
+        var orchestration = new ScriptedOrchestrationService(
+            Enumerable.Range(1, 9).Select(n => new QuadBrainOrchestrationResponse { Status = "committed", Output = $"reply {n}" }).ToArray());
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest
+            {
+                Messages = [new OpenAiChatMessage { Role = "user", Content = "update voice chat" }],
+                Tools = [Tool("read_file")],
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        AssertChatRoundOutcome(8, "reply 8", orchestration.CallCount, Assert.Single(response.Choices));
+    }
+
+    // FR-MCP-QBOPENAI-001 ac-5 and ac-6: the expected number of orchestration rounds ran, and the reply the requirement names came back as
+    // non-empty assistant content with finish reason stop.
+    private static void AssertChatRoundOutcome(int expectedRounds, string expectedContent, int rounds, OpenAiChatChoice choice)
+    {
+        Assert.Equal(expectedRounds, rounds);
+        Assert.Equal("stop", choice.FinishReason);
+        Assert.False(string.IsNullOrWhiteSpace(choice.Message.Content), "The assistant message is empty.");
+        Assert.Equal(expectedContent, choice.Message.Content);
+    }
+
+    private static OpenAiChatChoice Choice(string? content, string finishReason)
+        => new() { Index = 0, Message = new OpenAiChatResponseMessage { Role = "assistant", Content = content }, FinishReason = finishReason };
+
     private static OpenAiToolDefinition Tool(string name)
         => new() { Function = new OpenAiFunctionDefinition { Name = name, Description = $"Run {name}." } };
 

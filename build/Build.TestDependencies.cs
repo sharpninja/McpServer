@@ -16,9 +16,6 @@ partial class Build
     const string PostgresBinariesZipUrl =
         "https://get.enterprisedb.com/postgresql/postgresql-17.5-1-windows-x64-binaries.zip";
 
-    const string OllamaBinariesZipUrl =
-        "https://github.com/ollama/ollama/releases/latest/download/ollama-windows-amd64.zip";
-
     const string OllamaTagsEndpoint = "http://localhost:11434/api/tags";
 
     /// <summary>
@@ -129,62 +126,81 @@ partial class Build
         });
 
     /// <summary>
-    /// Idempotent installer for the local Ollama service used by the QuadBrain Ollama integration
-    /// tests (TEST-MCP-QBOLLAMA-001): installs the portable Ollama binaries when absent (existing
-    /// installation preferred), starts the server on localhost:11434 when not running, and pulls
-    /// the required model (default llama3.2:1b, override with MCP_QUADBRAIN_OLLAMA_MODEL) when it
-    /// is not present. Re-running when everything is in place is a no-op.
+    /// TR-MCP-NUKE-016: idempotent installer for the local Ollama service used by the QuadBrain Ollama integration tests
+    /// (TEST-MCP-QBOLLAMA-001), on Windows and Linux. <see cref="OllamaInstallPlan.Choose"/> decides from what the machine shows: an
+    /// installed ollama (on PATH, or on Windows in LocalAppData/Programs/Ollama) or a previous portable install is used, otherwise the
+    /// operating system's portable release is downloaded into the test-tools folder; the server is started detached on localhost:11434 when
+    /// it does not answer, and the required model (default gemma4:e4b, override with QBRAINAI_QUADBRAIN_OLLAMA_MODEL or
+    /// MCP_QUADBRAIN_OLLAMA_MODEL) is pulled when it is absent. Re-running when everything is in place changes nothing.
     /// </summary>
     public Target InstallOllama => _ => _
-        .Description("Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent)")
+        .Description("Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent; Windows and Linux)")
         .Executes(() =>
         {
-            if (TryGetOllamaTags(out var tags) && tags.Contains($"\"{RequiredOllamaModel}\"", StringComparison.OrdinalIgnoreCase))
+            var model = RequiredOllamaModel;
+            var isWindows = OperatingSystem.IsWindows();
+            var serverAnswers = TryGetOllamaTags(out var tags);
+            var plan = OllamaInstallPlan.Choose(new OllamaInstallFacts(
+                isWindows,
+                serverAnswers,
+                serverAnswers && tags.Contains($"\"{model}\"", StringComparison.OrdinalIgnoreCase),
+                FindInstalledOllama(isWindows),
+                File.Exists(OllamaInstallPlan.PortableExecutable(isWindows, TestToolsDirectory)),
+                TestToolsDirectory,
+                model));
+            Log.Information(
+                "Ollama plan: source {Source}, executable {Executable}, start {Start}, pull {Pull} ({Model}).",
+                plan.Source, plan.Executable, plan.StartServer, plan.PullModel, model);
+            if (plan.Source == OllamaExecutableSource.None)
             {
-                Log.Information("Ollama is running and model {Model} is installed.", RequiredOllamaModel);
+                Log.Information("Ollama is running and model {Model} is installed.", model);
                 return;
             }
 
-            var ollamaExe = EnsureOllamaBinaries();
-            EnsureOllamaServerRunning(ollamaExe);
-
+            if (plan.Source == OllamaExecutableSource.Download)
+                DownloadPortableOllama(plan, isWindows);
+            if (plan.StartServer)
+                EnsureOllamaServerRunning(plan.Executable!);
             if (!TryGetOllamaTags(out tags))
                 throw new InvalidOperationException("Ollama server did not become reachable on localhost:11434.");
-
-            if (!tags.Contains($"\"{RequiredOllamaModel}\"", StringComparison.OrdinalIgnoreCase))
+            if (plan.PullModel && !tags.Contains($"\"{model}\"", StringComparison.OrdinalIgnoreCase))
             {
-                Log.Information("Pulling Ollama model {Model} (this can take a while) ...", RequiredOllamaModel);
-                RunTool(ollamaExe, $"pull {RequiredOllamaModel}");
+                Log.Information("Pulling Ollama model {Model} (this can take a while) ...", model);
+                RunTool(plan.Executable!, $"pull {model}");
             }
 
-            Log.Information("Ollama ready with model {Model}.", RequiredOllamaModel);
+            Log.Information("Ollama ready with model {Model}.", model);
         });
 
-    static string EnsureOllamaBinaries()
+    // TR-MCP-NUKE-016: an installed ollama is the first one on PATH or, on Windows, the one in Ollama's install folder.
+    static string? FindInstalledOllama(bool isWindows)
     {
-        var candidates = new[]
-        {
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Ollama", "ollama.exe"),
-            (string)(TestToolsDirectory / "ollama" / "ollama.exe"),
-        };
-        var existing = candidates.FirstOrDefault(File.Exists);
-        if (existing is not null)
-        {
-            Log.Information("Using existing Ollama binaries: {Path}", existing);
-            return existing;
-        }
+        var name = isWindows ? "ollama.exe" : "ollama";
+        var candidates = (Environment.GetEnvironmentVariable("PATH") ?? string.Empty)
+            .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(directory => Path.Combine(directory.Trim('"'), name))
+            .ToList();
+        if (isWindows)
+            candidates.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Ollama", "ollama.exe"));
+        return candidates.FirstOrDefault(File.Exists);
+    }
 
-        Log.Information("Ollama missing; downloading portable binaries zip ...");
-        var zipPath = Path.Combine(Path.GetTempPath(), "ollama-windows-amd64.zip");
-        DownloadFile(OllamaBinariesZipUrl, zipPath);
+    // TR-MCP-NUKE-016: downloads the operating system's portable release into the test-tools folder and unpacks it under test-tools/ollama
+    // (the zip with ZipFile on Windows; the .tar.zst with GNU tar's --zstd on Linux, which keeps bin/ollama executable).
+    static void DownloadPortableOllama(OllamaInstallPlan plan, bool isWindows)
+    {
         var targetDirectory = TestToolsDirectory / "ollama";
         targetDirectory.CreateDirectory();
-        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, targetDirectory, overwriteFiles: true);
-        var extracted = targetDirectory / "ollama.exe";
-        if (!File.Exists(extracted))
-            throw new InvalidOperationException($"ollama.exe not found under {targetDirectory} after extraction.");
-        Log.Information("Portable Ollama binaries ready: {Path}", extracted);
-        return extracted;
+        var archive = TestToolsDirectory / Path.GetFileName(new Uri(plan.DownloadUrl!).AbsolutePath);
+        Log.Information("Ollama missing; downloading the portable release {Url} ...", plan.DownloadUrl);
+        DownloadFile(plan.DownloadUrl!, archive);
+        if (isWindows)
+            System.IO.Compression.ZipFile.ExtractToDirectory(archive, targetDirectory, overwriteFiles: true);
+        else
+            RunTool("tar", $"--zstd -xf \"{archive}\" -C \"{targetDirectory}\"");
+        if (!File.Exists(plan.Executable))
+            throw new InvalidOperationException($"{plan.Executable} not found after unpacking {archive}.");
+        Log.Information("Portable Ollama ready: {Path}", plan.Executable);
     }
 
     static void EnsureOllamaServerRunning(string ollamaExe)
@@ -193,17 +209,26 @@ partial class Build
             return;
 
         Log.Information("Starting Ollama server (detached) ...");
-        // UseShellExecute detaches the child from this process's console pipes; with handle
-        // inheritance the long-lived server would keep the build's stdout pipe open and hang
-        // any caller that captures build output. The server intentionally outlives the build.
-        var started = Process.Start(new ProcessStartInfo
+        if (OperatingSystem.IsWindows())
         {
-            FileName = ollamaExe,
-            Arguments = "serve",
-            UseShellExecute = true,
-            WindowStyle = ProcessWindowStyle.Hidden,
-        }) ?? throw new InvalidOperationException("Failed to start the Ollama server process.");
-        _ = started;
+            // UseShellExecute detaches the child from this process's console pipes; with handle
+            // inheritance the long-lived server would keep the build's stdout pipe open and hang
+            // any caller that captures build output. The server intentionally outlives the build.
+            var started = Process.Start(new ProcessStartInfo
+            {
+                FileName = ollamaExe,
+                Arguments = "serve",
+                UseShellExecute = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+            }) ?? throw new InvalidOperationException("Failed to start the Ollama server process.");
+            _ = started;
+        }
+        else
+        {
+            // TR-MCP-NUKE-016 on Linux: a child started here inherits this build's output pipes whatever UseShellExecute says, so the
+            // systemd user manager owns the long-lived server instead; it outlives the build as on Windows and holds none of its pipes.
+            RunTool("systemd-run", $"--user --collect --quiet --unit qbrainai-test-ollama \"{ollamaExe}\" serve");
+        }
 
         for (var attempt = 0; attempt < 30; attempt++)
         {
@@ -370,12 +395,15 @@ partial class Build
 
     static void DownloadFile(string url, string destinationPath)
     {
-        using var http = new HttpClient();
-        using var response = http.GetAsync(url).GetAwaiter().GetResult();
+        // TR-MCP-NUKE-016: the portable Ollama releases exceed 1 GB, so the body streams to disk once the headers arrive instead of being
+        // buffered in memory under HttpClient's default 100-second limit.
+        using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(60) };
+        using var response = http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult();
         response.EnsureSuccessStatusCode();
-        using var target = File.Create(destinationPath);
-        response.Content.CopyToAsync(target).GetAwaiter().GetResult();
-        Log.Information("Downloaded {Url} -> {Path} ({Bytes:N0} bytes)", url, destinationPath, target.Length);
+        using (var source = response.Content.ReadAsStream())
+        using (var target = File.Create(destinationPath))
+            source.CopyTo(target);
+        Log.Information("Downloaded {Url} -> {Path} ({Bytes:N0} bytes)", url, destinationPath, new FileInfo(destinationPath).Length);
     }
 
 }

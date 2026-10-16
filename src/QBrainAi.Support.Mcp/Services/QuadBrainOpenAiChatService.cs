@@ -96,10 +96,15 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
         QuadBrainOrchestrationResponse? orchestration = null;
         string? lastInternalSignature = null;
         string? lastDeferred = null;
+        string? lastArbiterOutput = null;
+        // FR-MCP-QBOPENAI-001 ac-5: a request with no tools and no tool_choice takes an Arbiter reply that is not an envelope as its answer.
+        var noToolsOffered = request.Tools is not { Count: > 0 }
+            && (request.ToolChoice is null || request.ToolChoice.Value.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null);
         OpenAiChatResponseMessage message = new() { Role = "assistant" };
         var finishReason = "stop";
 
-        for (var round = 0; round < MaxProcessingRounds; round++)
+        var round = 0;
+        for (; round < MaxProcessingRounds; round++)
         {
             orchestrationInput = BuildPrompt(workingMessages, promptTools, toolChoice);
             orchestration = await _orchestration.ExecuteFullOrchestrationAsync(
@@ -150,6 +155,7 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
                     }
 
                     lastInternalSignature = signature;
+                    lastArbiterOutput = orchestration.Output;
                     workingMessages.Add(new OpenAiChatMessage { Role = "assistant", Content = orchestration.Output });
                     workingMessages.Add(new OpenAiChatMessage { Role = "tool", Content = internalContent });
                     continue;
@@ -163,10 +169,13 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
             var output = string.IsNullOrWhiteSpace(orchestration.Output)
                 ? BuildNoDecisionMessage(orchestration)
                 : orchestration.Output;
+            lastArbiterOutput = output;
             ValidateToolChoiceResult(toolChoice, [], [], orchestration.Output);
             var envelope = QuadBrainArbiterEnvelope.TryParse(output);
 
-            if (toolChoice.Kind != ToolChoiceKind.None && QuadBrainArbiterEnvelope.RequiresAnotherRound(envelope))
+            if (toolChoice.Kind != ToolChoiceKind.None
+                && !(noToolsOffered && envelope is null)
+                && QuadBrainArbiterEnvelope.RequiresAnotherRound(envelope))
             {
                 if (string.Equals(output.Trim(), lastDeferred, StringComparison.Ordinal))
                 {
@@ -190,6 +199,16 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
                 message.Content = output;
             finishReason = "stop";
             break;
+        }
+
+        // FR-MCP-QBOPENAI-001 ac-6: every exit above sets the content or the tool calls, so only a spent round budget arrives here without
+        // them; the last Arbiter output is the answer then, never empty content.
+        if (round == MaxProcessingRounds)
+        {
+            message.Content = QuadBrainArbiterEnvelope.FormatForDisplay(lastArbiterOutput, showIntent: false);
+            if (string.IsNullOrWhiteSpace(message.Content))
+                message.Content = string.IsNullOrWhiteSpace(lastArbiterOutput) ? BuildNoDecisionMessage(orchestration!) : lastArbiterOutput;
+            finishReason = "stop";
         }
 
         var response = CreateResponse(
