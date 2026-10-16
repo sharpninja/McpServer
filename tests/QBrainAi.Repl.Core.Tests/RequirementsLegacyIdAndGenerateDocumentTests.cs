@@ -12,8 +12,10 @@ namespace QBrainAi.Repl.Core.Tests;
 /// PLAN-SESSIONTRIAGEFIX-001 slice B: B7 (triage-report-3bd514bb) stored FR and TEST records whose legacy ids fall
 /// outside the canonical create format are readable, updatable and deletable through the REPL, as TR records already
 /// are, while create keeps the canonical format; B3 (triage-report-c03d190f) generateDocument accepts every documented
-/// format and docType. Data: a RequirementsWorkflow over a RequirementsClient whose handler records requests and
-/// answers with a minimal entry; RequestPayload instances for the validator.
+/// format and docType; B2 (triage-report-b72cfaf4) TR and TEST items report their stored timestamps. Requirements: B7
+/// FR-MCP-TRIAGEREQ-001 ac-2, TR-MCP-TRIAGEREQ-001 AC-001 and TEST-MCP-TRIAGEREQ-001 AC-001; B3 TR-MCP-REQEXPORT-003 AC-001 and
+/// TEST-MCP-REQEXPORT-003 AC-001; B2 TR-MCP-REQ-003 AC-001. Data: a RequirementsWorkflow over a RequirementsClient whose handler
+/// records requests and answers with a minimal entry; RequestPayload instances for the validator.
 /// </summary>
 public sealed class RequirementsLegacyIdAndGenerateDocumentTests
 {
@@ -45,7 +47,7 @@ public sealed class RequirementsLegacyIdAndGenerateDocumentTests
     }
 
     /// <summary>
-    /// B7 binding (FR-SUPPORT-010A, TR-MCP-REQ-* parity with TEST-MCP-TRIAGEREQ-001; triage-report-3bd514bb): get, update and
+    /// B7 binding (FR-MCP-TRIAGEREQ-001 ac-2, TEST-MCP-TRIAGEREQ-001 AC-001; triage-report-3bd514bb): get, update and
     /// delete of a stored FR whose legacy id falls outside the canonical create format reach the FR route, as TR records already
     /// do. Data: RecordingHandler answering the legacy FR; FrUpdateRequestModel.
     /// </summary>
@@ -67,7 +69,7 @@ public sealed class RequirementsLegacyIdAndGenerateDocumentTests
     }
 
     /// <summary>
-    /// B7 binding (TEST-SUPPORT-010A-1; triage-report-3bd514bb): get, update and delete of a stored TEST whose legacy id falls
+    /// B7 binding (FR-MCP-TRIAGEREQ-001 ac-2, TEST-MCP-TRIAGEREQ-001 AC-001; triage-report-3bd514bb): get, update and delete of a stored TEST whose legacy id falls
     /// outside the canonical create format reach the TEST route. Data: RecordingHandler answering the legacy TEST;
     /// TestUpdateRequestModel.
     /// </summary>
@@ -166,7 +168,7 @@ public sealed class RequirementsLegacyIdAndGenerateDocumentTests
     }
 
     /// <summary>
-    /// B3 binding (triage-report-c03d190f; TEST-MCP-REPL-009 documented values): generateDocument accepts every documented format
+    /// B3 binding (triage-report-c03d190f; TR-MCP-REQEXPORT-003 AC-001, TEST-MCP-REQEXPORT-003 AC-001): generateDocument accepts every documented format
     /// with every documented docType. Data: the three formats and nine doc types the REPL documents.
     /// </summary>
     [Theory]
@@ -204,7 +206,7 @@ public sealed class RequirementsLegacyIdAndGenerateDocumentTests
     }
 
     /// <summary>
-    /// B2 mock gate (triage-report-b72cfaf4): the stored-timestamp assertion accepts createdAt and updatedAt that
+    /// B2 mock gate (triage-report-b72cfaf4; TR-MCP-REQ-003 AC-001): the stored-timestamp assertion accepts createdAt and updatedAt that
     /// are the stored values in round-trip format and rejects values that report the time of the read.
     /// Data: two fixed stored timestamps.
     /// </summary>
@@ -219,7 +221,7 @@ public sealed class RequirementsLegacyIdAndGenerateDocumentTests
     }
 
     /// <summary>
-    /// B2 binding (triage-report-b72cfaf4, getTr and getTest): TR and TEST items read through the REPL report the createdAtUtc and
+    /// B2 binding (triage-report-b72cfaf4, getTr and getTest; TR-MCP-REQ-003 AC-001): TR and TEST items read through the REPL report the createdAtUtc and
     /// updatedAtUtc the server sent, and an entry without them reports empty text, never the time of the read. Data: RecordingHandler
     /// answers carrying 2026-10-10T01:02:03Z and 2026-10-11T04:05:06Z, then a TR answer without timestamps.
     /// </summary>

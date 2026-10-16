@@ -63,7 +63,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     }
 
     /// <summary>
-    /// B2 (triage-report-b72cfaf4, getTr and getTest): GetTr and GetTest return the CreatedAtUtc and UpdatedAtUtc stored on the
+    /// B2 (triage-report-b72cfaf4, getTr and getTest; TR-MCP-REQ-003 AC-001): GetTr and GetTest return the CreatedAtUtc and UpdatedAtUtc stored on the
     /// row, and a row that stores none returns null for both, never the time of the read. Data: in-memory SQLite; a TR and a TEST
     /// row whose stored timestamps are set to 2026-10-10T01:02:03Z and 2026-10-11T04:05:06Z, then the TR row's set to empty.
     /// </summary>
