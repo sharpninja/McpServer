@@ -22,7 +22,8 @@ public sealed class MemoryPromoteOperations
     public MemoryPromoteOperations(McpDbContext db, string workspacePath)
     {
         _db = db;
-        _workspacePath = workspacePath;
+        // FR-MCP-PATHNORM-001: stored WorkspaceId values are canonical; compare in the same form.
+        _workspacePath = WorkspaceIdentity.CanonicalizeWorkspaceId(workspacePath);
     }
 
     /// <summary>Promotes a source into a new memory with SourceKind/SourceRef provenance.</summary>

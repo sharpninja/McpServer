@@ -165,8 +165,7 @@ public sealed partial class FwhMcpTools
 
         var canonical = HandoffWorkspacePaths.Canonicalize(workspacePath);
         _workspaceContext.WorkspacePath = canonical;
-        _workspaceContext.SessionsPath = Path.Combine(canonical, "docs", "sessions");
-        _workspaceContext.ExternalDocsPath = Path.Combine(canonical, "docs", "external");
+        _workspaceContext.SetDerivedPaths(canonical);
         if (httpCtx is not null)
         {
             httpCtx.WorkspacePath = canonical;

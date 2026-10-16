@@ -23,6 +23,16 @@ public sealed class WorkspaceTokenService
     private readonly ConcurrentDictionary<string, string> _defaultTokens = new(StringComparer.OrdinalIgnoreCase);
     private readonly ConcurrentDictionary<string, string> _tokenToWorkspace = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, string> _defaultTokenToWorkspace = new(StringComparer.Ordinal);
+    private readonly QBrainAi.Client.IWorkspacePathNormalizer _pathNormalizer;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WorkspaceTokenService"/> class.
+    /// TR-MCP-FED-PATH-001: token keys use the workspace path normalizer (process host by default).
+    /// </summary>
+    public WorkspaceTokenService(QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer = null)
+    {
+        _pathNormalizer = pathNormalizer ?? QBrainAi.Client.WorkspacePathNormalizer.Process;
+    }
 
     /// <summary>
     /// Gets a value indicating whether at least one full-access workspace token has been generated.
@@ -162,6 +172,7 @@ public sealed class WorkspaceTokenService
             .Replace('+', '-')
             .Replace('/', '_');
 
-    private static string Normalize(string path) =>
-        Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+    // TR-MCP-FED-PATH-001: same canonical identity as WorkspaceService, so a token issued for a
+    // workspace resolves back to that workspace on any host.
+    private string Normalize(string path) => _pathNormalizer.Normalize(path);
 }

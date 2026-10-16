@@ -84,7 +84,7 @@ public sealed class MemoryGlobalDefaultWorkspaceTests : IDisposable
         Assert.True(created.Success, created.Error);
         Assert.Null(created.Memory!.WorkspacePath);
         Assert.True(owned.Success, owned.Error);
-        Assert.Equal(_gate.DefaultWorkspacePath, owned.Memory!.WorkspacePath);
+        Assert.Equal(ExpectedWorkspaceKey.Of(_gate.DefaultWorkspacePath), owned.Memory!.WorkspacePath);
 
         var globalRow = await db.Memories.IgnoreQueryFilters()
             .SingleAsync(memory => memory.Id == created.Memory.Id, TestContext.Current.CancellationToken)

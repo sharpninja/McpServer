@@ -1,0 +1,42 @@
+P1.1 + P1.2 receipts (TEST-MCP-FED-PATH-001), 2026-10-07
+Command: dotnet test tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --filter <below> -nologo
+
+== P1.1 RED  (filter WorkspacePathNormalizerTests)
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.LinuxHost_UncSpellings_AreWindowsAndEquivalent [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.Normalize_Blank_Throws(input: "") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.Normalize_Blank_Throws(input: "   ") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.LinuxHost_WindowsDrivePathSpellings_ResolveToOneIdentity(input: "C:\\Users/kingd\\") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.LinuxHost_WindowsDrivePathSpellings_ResolveToOneIdentity(input: "C:\\Users\\kingd") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.LinuxHost_WindowsDrivePathSpellings_ResolveToOneIdentity(input: "C:/Users/kingd") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.WindowsHost_NativePaths_UseHostResolution(input: "C:\\Users\\kingd") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.WindowsHost_NativePaths_UseHostResolution(input: "relative") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.Normalize_TrimsWhitespace [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.WindowsHost_PosixAbsolutePath_StaysPosix [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.LinuxHost_RelativePath_ResolvesAgainstHostWorkingDirectory [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.LinuxHost_PosixAbsolutePath_UsesHostResolution [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.LinuxHost_MixedSeparatorsAndDotSegments_CollapseLexically [FAIL]
+  Failed!  - Failed:    14, Passed:     1, Skipped:     0, Total:    15, Duration: 535 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.1 GREEN (filter WorkspacePathNormalizerTests)
+  Passed!  - Failed:     0, Passed:    17, Skipped:     0, Total:    17, Duration: 167 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.2 RED  (filter WorkspacePathNormalizerTests|TriageServiceTests)
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.GetLeafName_UsesPathPlatformSeparators_OnEitherHost(input: "\\\\srv\\share\\repo", expected: "repo") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.GetLeafName_UsesPathPlatformSeparators_OnEitherHost(input: "C:\\Users\\kingd", expected: "kingd") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.GetLeafName_UsesPathPlatformSeparators_OnEitherHost(input: "/home/sharpninja/github/McpServer", expected: "McpServer") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.GetLeafName_UsesPathPlatformSeparators_OnEitherHost(input: "C:/Users/kingd/", expected: "kingd") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.GetLeafName_Root_ReturnsNormalizedRoot(input: "C:\\") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathNormalizerTests.GetLeafName_Root_ReturnsNormalizedRoot(input: "/") [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitThenLookup_LinuxHost_WindowsWorkspace_RoundTripsByOriginalPath [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_WindowsHost_PosixWorkspace_IsNotReRootedOnDrive [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_LinuxHost_RelativeWorkspace_AnchorsAtHostWorkingDirectory [FAIL]
+  QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_LinuxHost_RoutedReport_PreservesWindowsOriginal [FAIL]
+  Failed!  - Failed:    10, Passed:    49, Skipped:     0, Total:    59, Duration: 9 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== P1.2 GREEN (filter WorkspacePathNormalizerTests|TriageServiceTests|TriageController|TriageMcpTool)
+  Passed!  - Failed:     0, Passed:    76, Skipped:     0, Total:    76, Duration: 8 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+RED cause check P1.1: 16 System.NotImplementedException lines in p1.1-red.log (stub), 0 assertion failures other than ThrowsAny type mismatch from the stub.
+Post-change grep src/QBrainAi.Services/Services/TriageService.cs for Path.GetFullPath|Path.GetFileName|workspacePath.Trim(): no matches.
+

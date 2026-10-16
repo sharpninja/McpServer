@@ -49,7 +49,8 @@ internal static class ProductCqrsHelpers
         if (resolved.Length == 0)
             throw new InvalidOperationException("Workspace path is required for product operations.");
 
-        return resolved;
+        // FR-MCP-PATHNORM-001: compare with stored (canonical) workspace keys in the same form.
+        return WorkspaceIdentity.CanonicalizeWorkspaceId(resolved);
     }
 
     /// <summary>Requires a registered, enabled, non-deleted workspace.</summary>

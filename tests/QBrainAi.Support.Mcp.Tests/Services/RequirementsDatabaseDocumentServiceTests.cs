@@ -402,15 +402,15 @@ public sealed class RequirementsDatabaseDocumentServiceTests
             [],
             []), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(secondWorkspace, Assert.Single(result.Functional).WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(secondWorkspace), Assert.Single(result.Functional).WorkspaceId);
         var second = await service.GetFrAsync("FR-MCP-908", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(second);
         Assert.Equal("Second body", second.Body);
 
         var rows = await fixture.GetRequirementRowsAsync().ConfigureAwait(true);
         Assert.Equal(2, rows.Count(row => row.Kind == "fr" && row.Id == "FR-MCP-908"));
-        Assert.Contains(rows, row => row.WorkspaceId == firstWorkspace && row.Body == "First body");
-        Assert.Contains(rows, row => row.WorkspaceId == secondWorkspace && row.Body == "Second body");
+        Assert.Contains(rows, row => row.WorkspaceId == ExpectedWorkspaceKey.Of(firstWorkspace) && row.Body == "First body");
+        Assert.Contains(rows, row => row.WorkspaceId == ExpectedWorkspaceKey.Of(secondWorkspace) && row.Body == "Second body");
     }
 
     /// <summary>

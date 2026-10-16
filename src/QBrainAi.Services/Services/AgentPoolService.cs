@@ -1122,10 +1122,13 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
     /// Builds a deterministic per-workspace pooled device identifier.
     /// Prevents cross-workspace collisions when folder names are identical.
     /// </summary>
-    private static string BuildPooledDeviceId(string agentName, string workspacePath)
+    private static string BuildPooledDeviceId(string agentName, string workspacePath) =>
+        BuildPooledDeviceId(agentName, workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process);
+
+    /// <summary>TR-MCP-FED-PATH-001: pooled device id from the canonical workspace path.</summary>
+    internal static string BuildPooledDeviceId(string agentName, string workspacePath, QBrainAi.Client.IWorkspacePathNormalizer normalizer)
     {
-        var normalizedWorkspace = Path.GetFullPath(workspacePath)
-            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var normalizedWorkspace = normalizer.Normalize(workspacePath);
         var workspaceHash = Convert.ToHexString(
             System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(normalizedWorkspace)))
             .ToLowerInvariant()[..12];

@@ -792,7 +792,7 @@ public sealed class HandoffDurabilityTests : IDisposable
         Assert.Equal(effectiveVersion, stored.PromptVersion);
         Assert.Equal(effectiveIdentity, stored.TemplateVersion);
         Assert.Equal(
-            HandoffReplayKeys.Create(_workspace, Sha256(content), HandoffPromptDefaults.PromptVersion, force: false, stored.RunId),
+            HandoffReplayKeys.Create(ExpectedWorkspaceKey.Of(_workspace), Sha256(content), HandoffPromptDefaults.PromptVersion, force: false, stored.RunId),
             stored.ReplayIdentity);
     }
 
@@ -877,7 +877,7 @@ public sealed class HandoffDurabilityTests : IDisposable
             TemplateVersion = HandoffPromptDefaults.TemplateId,
             Mode = nameof(HandoffIngestionMode.DraftOnly),
             ReviewState = nameof(HandoffReviewState.None),
-            ReplayIdentity = HandoffReplayKeys.Create(_workspace, Sha256(content), HandoffPromptDefaults.PromptVersion, force: false, runId),
+            ReplayIdentity = HandoffReplayKeys.Create(ExpectedWorkspaceKey.Of(_workspace), Sha256(content), HandoffPromptDefaults.PromptVersion, force: false, runId),
             Succeeded = false,
             ProcessingState = nameof(HandoffProcessingState.Processing),
             ProcessingOwner = processingOwner,

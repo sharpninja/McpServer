@@ -73,7 +73,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
         var result = await service.GenerateWikiAsync(outputRoot, generatedAt, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var request = Assert.Single(orchestrator.Requests);
-        Assert.Equal(workspaceA, request.WorkspacePath);
+        Assert.Equal(ExpectedWorkspaceKey.Of(workspaceA), request.WorkspacePath);
         Assert.Contains(request.Functional, item => item.Title == "A FR");
         Assert.DoesNotContain(request.Functional, item => item.Title == "B FR");
         Assert.Contains(request.Technical, item => item.Id == "TR-MCP-DOCFX-001");

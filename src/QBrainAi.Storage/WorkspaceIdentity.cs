@@ -58,6 +58,31 @@ public static class WorkspaceIdentity
         return LineSanitizer.Sanitize(value);
     }
 
+    /// <summary>
+    /// FR-MCP-PATHNORM-001 / TR-MCP-PATHNORM-001: canonical workspace discriminator for the database
+    /// boundary. Path-shaped values (drive, UNC or POSIX root) become the lexical canonical form;
+    /// opaque ids (hub hash ids, relative values, tagged keys) are returned unchanged and blank
+    /// values become the empty global id. Lexical only: no host file-system resolution.
+    /// </summary>
+    /// <param name="workspaceId">Raw discriminator.</param>
+    /// <returns>Canonical discriminator.</returns>
+    public static string CanonicalizeWorkspaceId(string? workspaceId)
+    {
+        if (string.IsNullOrWhiteSpace(workspaceId))
+            return string.Empty;
+
+        var trimmed = workspaceId.Trim();
+        var rooted =
+            (trimmed.Length >= 3 && char.IsAsciiLetter(trimmed[0]) && trimmed[1] == ':' && trimmed[2] is '/' or '\\') ||
+            trimmed.StartsWith(@"\\", StringComparison.Ordinal) ||
+            trimmed.StartsWith('/');
+        if (!rooted)
+            return workspaceId;
+
+        return LineSanitizer.Sanitize(
+            WorkspaceIdentityPath.NormalizeLexicalPath(trimmed, WorkspaceIdentityPath.DetectPlatform(trimmed)));
+    }
+
     /// <summary>Returns a canonical, case-preserving lexical path without filesystem I/O.</summary>
     public static string NormalizePath(string workspacePath) =>
         WorkspaceIdentityPath.NormalizePath(workspacePath);

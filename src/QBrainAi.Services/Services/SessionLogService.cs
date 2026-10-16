@@ -58,7 +58,7 @@ public sealed class SessionLogService : ISessionLogService
         _submitCommandBudget = (submitOptions?.Value ?? new SessionLogSubmitOptions()).GetSubmitCommandBudget();
     }
 
-    private string ResolveWorkspaceId() => _workspaceContext?.WorkspacePath ?? string.Empty;
+    private string ResolveWorkspaceId() => WorkspaceIdentity.CanonicalizeWorkspaceId(_workspaceContext?.WorkspacePath);
 
     private void SyncDbWorkspaceFromContext()
     {

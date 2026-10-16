@@ -76,7 +76,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
 
         Assert.Equal("planner", result.AgentId);
         await _processManager.Received(1).LaunchAsync(
-            workspacePath,
+            ExpectedWorkspaceKey.Of(workspacePath),
             "planner",
             Arg.Is<string>(command => command != null && command.Contains("--id planner", StringComparison.Ordinal)),
             workspacePath,
@@ -121,9 +121,9 @@ public sealed class AgentServiceRuntimeTests : IDisposable
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-stop"));
         _db.OverrideWorkspaceId(workspacePath);
         SeedDefinitionAndWorkspace(workspacePath, enabled: true, banned: false, launchCommand: "agent");
-        _processManager.StopAsync(workspacePath, "planner", Arg.Any<CancellationToken>())
+        _processManager.StopAsync(ExpectedWorkspaceKey.Of(workspacePath), "planner", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(true));
-        _processManager.GetStatusAsync(workspacePath, "planner", Arg.Any<CancellationToken>())
+        _processManager.GetStatusAsync(ExpectedWorkspaceKey.Of(workspacePath), "planner", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<AgentProcessInfo?>(new AgentProcessInfo
             {
                 AgentId = "planner",
@@ -136,7 +136,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
         var result = await _sut.StopAgentAsync(workspacePath, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result);
-        await _processManager.Received(1).StopAsync(workspacePath, "planner", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await _processManager.Received(1).StopAsync(ExpectedWorkspaceKey.Of(workspacePath), "planner", Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     private void SeedDefinitionAndWorkspace(string workspacePath, bool enabled, bool banned, string launchCommand)

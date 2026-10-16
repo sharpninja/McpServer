@@ -21,7 +21,7 @@ public sealed class HandoffWorkspacePathsTests
     {
         var relative = Path.Combine(".", "nested", "..", "workspace");
         var canonical = HandoffWorkspacePaths.Canonicalize(relative);
-        Assert.Equal(Path.GetFullPath(relative), canonical);
+        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(relative)), canonical);
         Assert.True(Path.IsPathRooted(canonical));
     }
 
