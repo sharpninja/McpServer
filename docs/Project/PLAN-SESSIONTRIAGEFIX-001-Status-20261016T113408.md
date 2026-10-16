@@ -1,6 +1,8 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # PLAN-SESSIONTRIAGEFIX-001 status
 
+> Superseded for current state on 2026-10-16T12:50:35 local by `docs/handoffs/PLAN-SESSIONTRIAGEFIX-001-handoff-20261016T125035.md`; this file remains the 11:34 snapshot, whose slice detail, gate results and projected problems are still accurate.
+
 Status as of 2026-10-16T11:34:08 (local), for the plan in `docs/plans/PLAN-SESSIONTRIAGEFIX-001.md` on branch `fix/session-triage-20261013`.
 
 ## Bottom line
