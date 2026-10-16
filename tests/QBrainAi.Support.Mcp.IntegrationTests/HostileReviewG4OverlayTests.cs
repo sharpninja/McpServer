@@ -43,12 +43,14 @@ public sealed class HostileReviewG4OverlayTests
         }
     }
 
+    // TEST-MCP-102 AC-002 (PLAN-SESSIONTRIAGEFIX-001 B11): a private SQL Server, LocalDB where installed, otherwise a temporary SQL Server
+    // 2025 Developer instance; the database is dropped and the server removed when the case ends.
     private static async Task RoundTripSqlServerAsync()
     {
-        await using var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
+        await using var server = await SqlServerSandbox.CreateAsync().ConfigureAwait(true);
         var databaseName = $"mcp_hr_g4_{Guid.NewGuid():N}";
         var options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlServer($"{localDb.ConnectionString}Database={databaseName};Command Timeout=180;")
+            .UseSqlServer(server.DatabaseConnectionString(databaseName))
             .Options;
         await AssertRoundTripAsync(options, $"sqlserver:{databaseName}").ConfigureAwait(true);
     }

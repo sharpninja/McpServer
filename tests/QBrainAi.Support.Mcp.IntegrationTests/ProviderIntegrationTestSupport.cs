@@ -308,6 +308,312 @@ internal sealed class ProviderWorkspaceSandbox : IAsyncDisposable
     }
 }
 
+/// <summary>TEST-MCP-102 AC-001 (PLAN-SESSIONTRIAGEFIX-001 B11, triage-report-ead2fdaa): where a SQL Server integration case gets its server.</summary>
+internal enum SqlServerSandboxKind
+{
+    /// <summary>No server: the case has nothing to run against.</summary>
+    None,
+
+    /// <summary>A private SQL Server LocalDB instance the harness creates and deletes.</summary>
+    LocalDb,
+
+    /// <summary>A temporary SQL Server 2025 Developer container the harness starts for the case and removes afterwards.</summary>
+    TemporaryInstance,
+
+    /// <summary>An already running server other cases share, such as the endpoint in MCP_TEST_SQLSERVER_CONNECTION.</summary>
+    Shared,
+
+    /// <summary>The case is skipped.</summary>
+    Skip,
+}
+
+/// <summary>
+/// TEST-MCP-102 AC-001 (PLAN-SESSIONTRIAGEFIX-001 B11, triage-report-ead2fdaa): the server a SQL Server integration case uses and, for a
+/// temporary instance, how it is started (operator decisions 2026-10-15: "allow a temporary sql server 2025 dev instance when necessary." and
+/// "Yes, accept for tests (Recommended)": ACCEPT_EULA=Y, MSSQL_PID=Developer, the port on 127.0.0.1, the image never pulled, removed afterwards).
+/// </summary>
+/// <param name="Kind">Where the server comes from.</param>
+/// <param name="Image">Container image of a temporary instance.</param>
+/// <param name="ProductId">MSSQL_PID of a temporary instance.</param>
+/// <param name="AcceptEula">Whether a temporary instance starts with ACCEPT_EULA=Y.</param>
+/// <param name="HostAddress">Host address a temporary instance publishes its port on.</param>
+/// <param name="PullImage">Whether starting a temporary instance may pull its image.</param>
+/// <param name="RemovedAfterCase">Whether the harness removes the server when the case ends.</param>
+internal sealed record SqlServerSandboxPlan(
+    SqlServerSandboxKind Kind,
+    string? Image,
+    string? ProductId,
+    bool AcceptEula,
+    string? HostAddress,
+    bool PullImage,
+    bool RemovedAfterCase)
+{
+    /// <summary>
+    /// TEST-MCP-102 AC-001: chooses the server for this machine: a private LocalDB instance where SqlLocalDB is installed, otherwise a temporary
+    /// SQL Server 2025 Developer instance started with the license accepted, published on 127.0.0.1 and never pulled; either is removed when
+    /// the case ends.
+    /// </summary>
+    /// <param name="localDbInstalled">Whether SqlLocalDB.exe is installed (only Windows has it).</param>
+    /// <returns>The plan the harness starts.</returns>
+    internal static SqlServerSandboxPlan Choose(bool localDbInstalled)
+        => localDbInstalled
+            ? new(SqlServerSandboxKind.LocalDb, null, null, false, null, false, true)
+            : new(SqlServerSandboxKind.TemporaryInstance, "mcr.microsoft.com/mssql/server:2025-latest", "Developer", true, "127.0.0.1", false, true);
+
+    /// <summary>
+    /// TEST-MCP-102 AC-001: asserts a plan the requirement allows: a private LocalDB instance, or a temporary SQL Server 2025 Developer
+    /// instance started with the license accepted, published on 127.0.0.1 and never pulled; either is removed when the case ends. A shared
+    /// server, no server and a skip fail.
+    /// </summary>
+    /// <param name="plan">The plan a SQL Server case is about to use.</param>
+    internal static void AssertAllowed(SqlServerSandboxPlan plan)
+    {
+        ArgumentNullException.ThrowIfNull(plan);
+        Assert.True(
+            plan.Kind is SqlServerSandboxKind.LocalDb or SqlServerSandboxKind.TemporaryInstance,
+            $"SQL Server sandbox kind {plan.Kind} is not allowed: TEST-MCP-102 requires LocalDB or a temporary SQL Server 2025 Developer instance.");
+        Assert.True(plan.RemovedAfterCase, "The SQL Server sandbox must be removed when the case ends (TEST-MCP-102).");
+        if (plan.Kind != SqlServerSandboxKind.TemporaryInstance)
+            return;
+
+        Assert.StartsWith("mcr.microsoft.com/mssql/server:2025", plan.Image ?? string.Empty, StringComparison.Ordinal);
+        Assert.Equal("Developer", plan.ProductId);
+        Assert.True(plan.AcceptEula, "The temporary SQL Server instance starts with ACCEPT_EULA=Y (operator decision 2026-10-15).");
+        Assert.Equal("127.0.0.1", plan.HostAddress);
+        Assert.False(plan.PullImage, "The temporary SQL Server instance never pulls its image (operator decision 2026-10-15).");
+    }
+}
+
+/// <summary>
+/// TEST-MCP-102 AC-001 (PLAN-SESSIONTRIAGEFIX-001 B11, triage-report-ead2fdaa): the private SQL Server a SQL Server integration case runs
+/// against. <see cref="CreateAsync"/> chooses the plan for this machine and asserts it allowed before starting it: a LocalDB instance where
+/// SqlLocalDB is installed, otherwise a temporary SQL Server 2025 Developer container. The databases a case names through
+/// <see cref="DatabaseConnectionString"/> are dropped and the server is removed when the case ends. Cases run one at a time, so at most one
+/// temporary instance exists.
+/// </summary>
+internal sealed class SqlServerSandbox : IAsyncDisposable
+{
+    private static readonly SemaphoreSlim OneCaseAtATime = new(1, 1);
+    private readonly List<string> _databases = [];
+    private readonly SqlLocalDbSandbox? _localDb;
+    private readonly string? _containerName;
+    private bool _disposed;
+
+    private SqlServerSandbox(SqlServerSandboxPlan plan, string connectionString, SqlLocalDbSandbox? localDb, string? containerName)
+    {
+        Plan = plan;
+        ConnectionString = connectionString;
+        _localDb = localDb;
+        _containerName = containerName;
+    }
+
+    /// <summary>Gets the plan this sandbox started.</summary>
+    public SqlServerSandboxPlan Plan { get; }
+
+    /// <summary>Gets the server-level connection string; it ends with a separator so a database can follow.</summary>
+    public string ConnectionString { get; }
+
+    /// <summary>Chooses the server for this machine, asserts the plan allowed (TEST-MCP-102 AC-001), and starts it.</summary>
+    /// <returns>The started sandbox; dispose it to drop its databases and remove the server.</returns>
+    public static async Task<SqlServerSandbox> CreateAsync()
+    {
+        var plan = SqlServerSandboxPlan.Choose(IsLocalDbInstalled());
+        SqlServerSandboxPlan.AssertAllowed(plan);
+        await OneCaseAtATime.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (plan.Kind == SqlServerSandboxKind.LocalDb)
+            {
+                var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(false);
+                return new SqlServerSandbox(plan, localDb.ConnectionString, localDb, null);
+            }
+
+            var (name, connectionString) = await SqlServerContainer.StartAsync(plan).ConfigureAwait(false);
+            return new SqlServerSandbox(plan, connectionString, null, name);
+        }
+        catch
+        {
+            OneCaseAtATime.Release();
+            throw;
+        }
+    }
+
+    /// <summary>Returns the connection string of a uniquely named database on this server and records the database for dropping.</summary>
+    /// <param name="databaseName">Database name of letters, digits and underscores.</param>
+    /// <returns>The database connection string with a 180-second command timeout.</returns>
+    public string DatabaseConnectionString(string databaseName)
+    {
+        if (!System.Text.RegularExpressions.Regex.IsMatch(databaseName, "^[A-Za-z0-9_]+$"))
+            throw new ArgumentException("SQL Server case databases are named with letters, digits and underscores.", nameof(databaseName));
+
+        _databases.Add(databaseName);
+        return $"{ConnectionString}Database={databaseName};Command Timeout=180;";
+    }
+
+    /// <inheritdoc />
+    public async ValueTask DisposeAsync()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+        try
+        {
+            await DropDatabasesAsync().ConfigureAwait(false);
+        }
+        finally
+        {
+            // Both removals are best effort and never throw, so the next case is always released.
+            if (_localDb is not null)
+                await _localDb.DisposeAsync().ConfigureAwait(false);
+            if (_containerName is not null)
+                await SqlServerContainer.RemoveAsync(_containerName).ConfigureAwait(false);
+            OneCaseAtATime.Release();
+        }
+    }
+
+    private async Task DropDatabasesAsync()
+    {
+        if (_databases.Count == 0)
+            return;
+
+        Microsoft.Data.SqlClient.SqlConnection.ClearAllPools();
+        try
+        {
+            await using var connection = new Microsoft.Data.SqlClient.SqlConnection($"{ConnectionString}Database=master;");
+            await connection.OpenAsync().ConfigureAwait(false);
+            foreach (var name in _databases)
+            {
+                await using var drop = connection.CreateCommand();
+                drop.CommandText =
+                    $"IF DB_ID(N'{name}') IS NOT NULL BEGIN ALTER DATABASE [{name}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [{name}]; END";
+                await drop.ExecuteNonQueryAsync().ConfigureAwait(false);
+            }
+        }
+        catch (Microsoft.Data.SqlClient.SqlException)
+        {
+            // Best effort: the server itself is removed next.
+        }
+    }
+
+    private static bool IsLocalDbInstalled()
+        => OperatingSystem.IsWindows()
+            && (Environment.GetEnvironmentVariable("PATH") ?? string.Empty)
+                .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Any(directory => File.Exists(Path.Combine(directory.Trim('"'), "SqlLocalDB.exe")));
+}
+
+/// <summary>
+/// TEST-MCP-102 AC-001 (PLAN-SESSIONTRIAGEFIX-001 B11): starts and removes the temporary SQL Server 2025 Developer container. The generated SA
+/// password reaches docker through the docker process's environment (-e MSSQL_SA_PASSWORD without a value), never its command line, and is
+/// never written to any output.
+/// </summary>
+internal static class SqlServerContainer
+{
+    /// <summary>Starts the container the plan describes, waits until it answers, and returns its name and server-level connection string.</summary>
+    /// <param name="plan">An allowed temporary-instance plan.</param>
+    /// <returns>The container name and the connection string, which ends with a separator.</returns>
+    internal static async Task<(string Name, string ConnectionString)> StartAsync(SqlServerSandboxPlan plan)
+    {
+        ArgumentNullException.ThrowIfNull(plan);
+        var name = $"mcp-sqlsandbox-{Guid.NewGuid():N}";
+        var password = $"Qb1!{Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(16))}a";
+        var run = await RunDockerAsync(
+            [
+                "run", "-d", "--rm", "--pull", "never", "--name", name,
+                "-e", "ACCEPT_EULA=Y", "-e", $"MSSQL_PID={plan.ProductId}", "-e", "MSSQL_SA_PASSWORD",
+                "-p", $"{plan.HostAddress}::1433", plan.Image!,
+            ],
+            password).ConfigureAwait(false);
+        if (run.ExitCode != 0)
+            throw new InvalidOperationException($"docker run for the temporary SQL Server instance failed with exit code {run.ExitCode}: {run.StandardError.Trim()}");
+
+        try
+        {
+            var port = await RunDockerAsync(["port", name, "1433/tcp"], null).ConfigureAwait(false);
+            var mapped = port.StandardOutput
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .First(line => line.StartsWith($"{plan.HostAddress}:", StringComparison.Ordinal));
+            var hostPort = int.Parse(mapped[(mapped.LastIndexOf(':') + 1)..], CultureInfo.InvariantCulture);
+            var connectionString = $"Server={plan.HostAddress},{hostPort};User ID=sa;Password={password};TrustServerCertificate=True;";
+            await WaitUntilReadyAsync(name, connectionString).ConfigureAwait(false);
+            return (name, connectionString);
+        }
+        catch
+        {
+            await RemoveAsync(name).ConfigureAwait(false);
+            throw;
+        }
+    }
+
+    /// <summary>Removes the container (best effort).</summary>
+    /// <param name="name">Container name.</param>
+    /// <returns>A task that completes when docker returns.</returns>
+    internal static async Task RemoveAsync(string name)
+    {
+        try
+        {
+            await RunDockerAsync(["rm", "-f", name], null).ConfigureAwait(false);
+        }
+        catch (InvalidOperationException)
+        {
+            // Best effort: --rm also removes the container when it stops.
+        }
+        catch (System.ComponentModel.Win32Exception)
+        {
+            // Best effort: docker is not startable here.
+        }
+    }
+
+    private static async Task WaitUntilReadyAsync(string name, string connectionString)
+    {
+        var deadline = DateTime.UtcNow.AddMinutes(3);
+        string? lastError = null;
+        while (DateTime.UtcNow < deadline)
+        {
+            try
+            {
+                await using var connection = new Microsoft.Data.SqlClient.SqlConnection($"{connectionString}Database=master;Connect Timeout=5;");
+                await connection.OpenAsync().ConfigureAwait(false);
+                await using var probe = connection.CreateCommand();
+                probe.CommandText = "SELECT 1";
+                await probe.ExecuteScalarAsync().ConfigureAwait(false);
+                return;
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex)
+            {
+                lastError = ex.Message;
+                await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+            }
+        }
+
+        var logs = await RunDockerAsync(["logs", "--tail", "20", name], null).ConfigureAwait(false);
+        throw new InvalidOperationException(
+            $"The temporary SQL Server instance did not accept connections within 3 minutes. Last error: {lastError}\nContainer log tail:\n{logs.StandardOutput}{logs.StandardError}");
+    }
+
+    private static async Task<(int ExitCode, string StandardOutput, string StandardError)> RunDockerAsync(IReadOnlyList<string> arguments, string? saPassword)
+    {
+        var psi = new ProcessStartInfo("docker")
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+        foreach (var argument in arguments)
+            psi.ArgumentList.Add(argument);
+        if (saPassword is not null)
+            psi.Environment["MSSQL_SA_PASSWORD"] = saPassword;
+
+        using var process = Process.Start(psi) ?? throw new InvalidOperationException("docker could not be started.");
+        var stdout = process.StandardOutput.ReadToEndAsync();
+        var stderr = process.StandardError.ReadToEndAsync();
+        await process.WaitForExitAsync().ConfigureAwait(false);
+        return (process.ExitCode, await stdout.ConfigureAwait(false), await stderr.ConfigureAwait(false));
+    }
+}
+
 /// <summary>
 /// Manages a private SQL Server LocalDB instance for integration testing.
 /// </summary>

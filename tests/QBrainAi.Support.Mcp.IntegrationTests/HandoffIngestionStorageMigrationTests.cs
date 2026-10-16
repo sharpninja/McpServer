@@ -40,15 +40,18 @@ public sealed class HandoffIngestionStorageMigrationTests
         }
     }
 
-    /// <summary>SQL Server LocalDB private instance: apply head, round-trip, downgrade, re-upgrade.</summary>
+    /// <summary>
+    /// SQL Server private server (TEST-MCP-102 AC-002; PLAN-SESSIONTRIAGEFIX-001 B11: LocalDB where installed, otherwise a temporary SQL Server
+    /// 2025 Developer instance): apply to the handoff migration, downgrade, re-upgrade, then head and round-trip.
+    /// </summary>
     [Fact]
     public async Task SqlServer_HandoffMigration_DowngradeAndReupgrade()
     {
-        await using var localDb = await SqlLocalDbSandbox.CreateAsync().ConfigureAwait(true);
+        await using var server = await SqlServerSandbox.CreateAsync().ConfigureAwait(true);
         var databaseName = $"mcp_handoff_mig_{Guid.NewGuid():N}";
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseSqlServer(
-                $"{localDb.ConnectionString}Database={databaseName};Command Timeout=180;",
+                server.DatabaseConnectionString(databaseName),
                 sql => sql.MigrationsAssembly("QBrainAi.Storage.SqlServerMigrations"))
             .Options;
         await AssertProviderCycleAsync(
@@ -82,36 +85,83 @@ public sealed class HandoffIngestionStorageMigrationTests
         }
     }
 
+    /// <summary>
+    /// TEST-HANDOFF-007 AC-001 mock gate (FR-HANDOFF-006; PLAN-SESSIONTRIAGEFIX-001 B12, triage-report-61c2a2b2): the handoff cycle assertion
+    /// accepts applied-migration lists where the database stopped at AddHandoffIngestionStorage, the downgrade removed it and the re-upgrade
+    /// restored it, and rejects a downgrade that left it applied, a re-upgrade that did not restore it, and a cycle whose starting point already
+    /// held the forward-only VersionedAuditPayloads migration (a downgrade from there would have to cross it). Data: hand-built migration-id
+    /// lists; no database.
+    /// </summary>
+    [Fact]
+    public void HandoffCycleAssertion_AcceptsReversibleCycleAndRejectsMissingOrForwardOnlyCrossing()
+    {
+        const string preceding = "20260812173052_AddSessionLogTurnPlanFileAndTodoId";
+        const string handoff = "20260816183137_AddHandoffIngestionStorage";
+        const string forwardOnly = "20260929140000_VersionedAuditPayloads";
+        string[] up = ["20260701192324_StoreDateTimeOffsetAsUtcDateTime", preceding, handoff];
+        string[] down = ["20260701192324_StoreDateTimeOffsetAsUtcDateTime", preceding];
+        AssertHandoffCycle(up, down, up, handoff);
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertHandoffCycle(up, up, up, handoff));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertHandoffCycle(up, down, down, handoff));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertHandoffCycle([.. up, forwardOnly], down, up, handoff));
+    }
+
+    // TEST-HANDOFF-007 AC-001: the cycle starts at the handoff migration itself (never past the forward-only VersionedAuditPayloads), the
+    // downgrade removes it, and the re-upgrade restores it.
+    private static void AssertHandoffCycle(IReadOnlyList<string> afterUp, IReadOnlyList<string> afterDown, IReadOnlyList<string> afterReupgrade, string handoffMigration)
+    {
+        Assert.Equal(handoffMigration, afterUp[^1]);
+        Assert.DoesNotContain(afterUp, name => name.EndsWith("_VersionedAuditPayloads", StringComparison.Ordinal));
+        Assert.DoesNotContain(handoffMigration, afterDown);
+        Assert.Contains(handoffMigration, afterReupgrade);
+    }
+
+    /// <summary>
+    /// TEST-HANDOFF-007 AC-003 (FR-HANDOFF-006; PLAN-SESSIONTRIAGEFIX-001 B12, triage-report-61c2a2b2): 20260929140000_VersionedAuditPayloads'
+    /// Down raises NotSupportedException on SQLite, PostgreSQL and SQL Server, the forward-only boundary that migration declares, which is why the
+    /// handoff cycle stops at the handoff migration. Data: the three providers' migration classes; no database.
+    /// </summary>
+    [Fact]
+    public void VersionedAuditPayloads_DownIsForwardOnly_OnEveryProvider()
+    {
+        Migration[] migrations =
+        [
+            new QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations.VersionedAuditPayloads(),
+            new QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations.VersionedAuditPayloads(),
+            new QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations.VersionedAuditPayloads(),
+        ];
+        foreach (var migration in migrations)
+            Assert.Throws<NotSupportedException>(() => migration.DownOperations);
+    }
+
+    // TEST-HANDOFF-007 AC-001 and AC-002 (PLAN-SESSIONTRIAGEFIX-001 B12): the reversible cycle runs on a database migrated only up to the handoff
+    // migration, so it never crosses the forward-only 20260929140000_VersionedAuditPayloads; the database then goes to head, where handoff rows
+    // round-trip.
     private static async Task AssertProviderCycleAsync(
         DbContextOptions<McpDbContext> options,
         string precedingMigration,
         string handoffMigration)
     {
-        using (var db = new McpDbContext(options))
-        {
-            db.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
-            await db.Database.MigrateAsync().ConfigureAwait(true);
-            var applied = await db.Database.GetAppliedMigrationsAsync().ConfigureAwait(true);
-            Assert.Contains(applied, name => name == handoffMigration);
-            await RoundTripAsync(db).ConfigureAwait(true);
-        }
+        var afterUp = await MigrateToAsync(options, handoffMigration).ConfigureAwait(true);
+        var afterDown = await MigrateToAsync(options, precedingMigration).ConfigureAwait(true);
+        var afterReupgrade = await MigrateToAsync(options, handoffMigration).ConfigureAwait(true);
+        AssertHandoffCycle(afterUp, afterDown, afterReupgrade, handoffMigration);
 
-        using (var db = new McpDbContext(options))
-        {
-            db.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
-            await db.GetService<IMigrator>().MigrateAsync(precedingMigration).ConfigureAwait(true);
-            var applied = await db.Database.GetAppliedMigrationsAsync().ConfigureAwait(true);
-            Assert.DoesNotContain(applied, name => name == handoffMigration);
-        }
+        using var db = new McpDbContext(options);
+        db.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
+        await db.Database.MigrateAsync().ConfigureAwait(true);
+        var applied = await db.Database.GetAppliedMigrationsAsync().ConfigureAwait(true);
+        Assert.Contains(applied, name => name == handoffMigration);
+        await RoundTripAsync(db).ConfigureAwait(true);
+    }
 
-        using (var db = new McpDbContext(options))
-        {
-            db.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
-            await db.Database.MigrateAsync().ConfigureAwait(true);
-            var applied = await db.Database.GetAppliedMigrationsAsync().ConfigureAwait(true);
-            Assert.Contains(applied, name => name == handoffMigration);
-            await RoundTripAsync(db).ConfigureAwait(true);
-        }
+    // Migrates one fresh context to the named migration and returns the applied migration ids in order.
+    private static async Task<IReadOnlyList<string>> MigrateToAsync(DbContextOptions<McpDbContext> options, string targetMigration)
+    {
+        using var db = new McpDbContext(options);
+        db.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
+        await db.GetService<IMigrator>().MigrateAsync(targetMigration).ConfigureAwait(true);
+        return (await db.Database.GetAppliedMigrationsAsync().ConfigureAwait(true)).ToList();
     }
 
     private static async Task RoundTripAsync(McpDbContext db)
