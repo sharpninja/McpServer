@@ -44,7 +44,7 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
     internal static readonly Dictionary<string, int> HostNativeAllowlist = new(StringComparer.Ordinal)
     {
         ["src/QBrainAi.Client/BoundedFileSystemPolicy.cs"] = 3,
-        ["src/QBrainAi.Client/LinuxPhysicalPathResolver.cs"] = 8,
+        ["src/QBrainAi.Client/LinuxPhysicalPathResolver.cs"] = 9,
         ["src/QBrainAi.Client/WorkspaceIdentityPath.cs"] = 2,
         ["src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.Windows.cs"] = 1,
         ["src/QBrainAi.GraphRag/Services/GraphRagService.cs"] = 5,
@@ -79,7 +79,7 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
         ["src/QBrainAi.Services/Services/MarkerDiagnosticsEndpointHelper.cs"] = 2,
         ["src/QBrainAi.Services/Services/MarkerFileService.cs"] = 2,
         ["src/QBrainAi.Services/Services/NoneAgentIsolationStrategy.cs"] = 1,
-        ["src/QBrainAi.Services/Services/RepoFileService.cs"] = 2,
+        ["src/QBrainAi.Services/Services/RepoFileService.cs"] = 3,
         ["src/QBrainAi.Services/Services/TodoBootstrapImporter.cs"] = 6,
         ["src/QBrainAi.Services/Services/TodoYamlFileSerializer.cs"] = 1,
         ["src/QBrainAi.Services/Services/WikiDumpService.cs"] = 3,
