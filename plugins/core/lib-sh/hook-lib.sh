@@ -18,6 +18,8 @@
 # on every host (codex deliberately retains it).
 
 HOOK_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./repl-bin.sh
+source "${HOOK_LIB_DIR}/repl-bin.sh"
 
 # ---------------------------------------------------------------------------
 # Environment / cache-dir initialization
@@ -365,8 +367,8 @@ session_start_main() {
         exit 0
     fi
 
-    # Ensure ensure-repl has run (install mcpserver-repl if missing)
-    if ! command -v mcpserver-repl >/dev/null 2>&1; then
+    # Install the REPL only when neither the current nor the 1.x command is on PATH.
+    if ! repl_bin_installed; then
         bash "$HOOK_LIB_DIR/ensure-repl.sh" >&2 || true
     fi
 
@@ -643,7 +645,7 @@ ${query_text_block}"
     # (MCP_PROMPT_REMINDER_BODY from plugin-env.sh) with placeholders
     # __TURN_REQUEST_ID__ and __INTERNAL_TODO_REMINDER__ substituted.
     local body reminder reminder_json
-    body="${MCP_PROMPT_REMINDER_BODY:-session log turn __TURN_REQUEST_ID__ is now active. __INTERNAL_TODO_REMINDER__ The stop-gate hook will auto-close the turn on finalize. PostToolUse/Write|Edit hooks auto-log actions. If you want richer action metadata, POST /mcpserver/sessionlog directly with the workspace API key from AGENTS-README-FIRST.yaml.}"
+    body="${MCP_PROMPT_REMINDER_BODY:-session log turn __TURN_REQUEST_ID__ is now active. __INTERNAL_TODO_REMINDER__ The stop-gate hook will auto-close the turn on finalize. PostToolUse/Write|Edit hooks auto-log actions. If you want richer action metadata, POST /qbrainai/sessionlog directly with the workspace API key from AGENTS-README-FIRST.yaml.}"
     body="${body//__TURN_REQUEST_ID__/$turn_request_id}"
     body="${body//__INTERNAL_TODO_REMINDER__/$internal_todo_reminder}"
     reminder="$(printf '%s\n\n%s' "$required_memory_context" "$body")"

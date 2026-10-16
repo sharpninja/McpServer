@@ -1,0 +1,149 @@
+{
+  "TimestampUtc": "2026-10-10T01:11:39Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "LiveProofPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T19-57-08-01a12350-5000-78f1-a386-e0555d9af922.jsonl",
+    "RolloutSessionId": "01a12350-5000-78f1-a386-e0555d9af922",
+    "TurnId": "01a12350-527b-7540-899c-d5dcc7f89ab8"
+  },
+  "AddProfileFileCount": 19,
+  "MarkerRead": {
+    "Path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "Lines": 397,
+    "KeyAndAuthenticationFiltered": true
+  },
+  "MemoryRead": {
+    "Method": "workflow.memory.list",
+    "EffectiveCount": 13,
+    "ReadAll": true,
+    "Included": [
+      "MEMORY-PROCESS-007",
+      "MEMORY-PROCESS-008"
+    ]
+  },
+  "Claims": [
+    {
+      "Status": "PASS",
+      "Id": "P1",
+      "Evidence": "Unchanged source baseline; named source anchors rechecked"
+    },
+    {
+      "Status": "PASS",
+      "Id": "P2",
+      "Evidence": "Live store 354 FR, 482 TR, 514 TEST; 120 cited canonical ids; 67 P0 ids free"
+    },
+    {
+      "Status": "FAIL",
+      "Id": "P3",
+      "Evidence": "D1 repeated-delivery identity conflicts with per-invocation arrivalSeq"
+    },
+    {
+      "Status": "PASS",
+      "Id": "P4",
+      "Evidence": "Server/client/REPL/MCP/cores/nine hosts/three migrations covered"
+    },
+    {
+      "Status": "FAIL",
+      "Id": "P5",
+      "Evidence": "No traceable same-event key or unsupported disposition for equal-field redelivery"
+    },
+    {
+      "Status": "FAIL",
+      "Id": "P6",
+      "Evidence": "A3 Copilot same-payload two-process gate conflicts with sequence allocation"
+    },
+    {
+      "Status": "FAIL",
+      "Id": "P7",
+      "Evidence": "Classic-Cline named collision test absent from TEST and A8/A9 RED"
+    },
+    {
+      "Status": "FAIL",
+      "Id": "P8",
+      "Evidence": "Pure equal-payload nonce interfaces contradict external arrivalSeq"
+    },
+    {
+      "Status": "PASS",
+      "Id": "P9",
+      "Evidence": "529 of 529 TODO description lines exact; 30 tasks; handoff status/counts accurate"
+    },
+    {
+      "Status": "PASS",
+      "Id": "P10",
+      "Evidence": "10 triage reports live; group worktree failed and main not found as stated"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 94,
+  "Confidence": 96,
+  "PassCount": 5,
+  "FailCount": 5,
+  "UnknownCount": 0,
+  "FailList": [
+    "F-R23-01",
+    "F-R23-02"
+  ],
+  "UnknownList": [],
+  "ImplementerFixes": [
+    "F-R23-01",
+    "F-R23-02"
+  ],
+  "OperatorDecisionFails": [],
+  "Findings": [
+    {
+      "Fix": "Lock stable per-event identity/replay lookup, or D6 unsupported, and propagate tests",
+      "Id": "F-R23-01",
+      "Defect": "Per-invocation arrivalSeq distinguishes equal-field arrivals but also splits two deliveries of one event; pure nonce signatures contradict it",
+      "Locations": [
+        "29",
+        "78-79",
+        "86",
+        "89",
+        "195",
+        "343",
+        "350",
+        "579",
+        "591"
+      ],
+      "Classification": "Implementer plan/TODO edit"
+    },
+    {
+      "Fix": "Name classic-Cline distinct/retry tests in TEST and A8/A9 RED and G6",
+      "Id": "F-R23-02",
+      "Defect": "Named classic-Cline same-field distinct-arrival test occurs only in AC003",
+      "Locations": [
+        "195",
+        "377-378",
+        "589",
+        "591"
+      ],
+      "Classification": "Implementer edit"
+    }
+  ],
+  "HeadSha": "5427c26c7a8cca0ee28ef9f8f15c1d451e177099",
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r23-20261010T005708Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r23-20261010T005708Z.json",
+    "docs/receipts/hv/20261010T005708Z-plan-readiness-r23.request.jsonl",
+    "docs/receipts/hv/20261010T005708Z-plan-readiness-r23.response.jsonl"
+  ],
+  "ReviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T005708Z-plan-r23-hv",
+  "PersistenceProof": {
+    "Verified": true,
+    "Method": "Read-only client.SessionLog.QueryAsync through Codex plugin wrapper; compared completed turn response with Markdown receipt after trimming terminal newlines",
+    "SessionId": "Codex-20261010T004320Z-plugin-session",
+    "RequestId": "req-20261010T005708Z-plan-r23-hv",
+    "TurnStatus": "completed",
+    "ResponseMatchesMarkdown": true,
+    "ResponseLength": 14536,
+    "MarkdownLength": 14536,
+    "AuditActionCount": 4,
+    "AuditDialogCount": 1,
+    "VerifiedAtUtc": "2026-10-10T01:14:27Z"
+  },
+  "FullResult": "# Hostile validator: PLAN-SESSIONTURNREVIEW-001 round 23\n\nTimestampUtc: 2026-10-10T01:09:44Z  \nOverallVerdict: **DISAGREE**  \nAccuracy: **96/100**  \nCompleteness: **94/100**  \nConfidence: **96/100**  \nClaims: **5 PASS, 5 FAIL, 0 UNKNOWN**  \nHEAD: `5427c26c7a8cca0ee28ef9f8f15c1d451e177099`  \nReviewer sessionId: `Codex-20261010T004320Z-plugin-session`  \nReviewer requestId: `req-20261010T005708Z-plan-r23-hv`\n\n## Intake and method\n\n- ValidatorIdentity: Codex CLI, `gpt-6-sol`, reasoning effort `xhigh`. Live proof from this session's rollout `/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T19-57-08-01a12350-5000-78f1-a386-e0555d9af922.jsonl`: `session_meta.payload.id=01a12350-5000-78f1-a386-e0555d9af922`, `cwd` is this worktree, latest `turn_context.payload.model=gpt-6-sol`, `effort=xhigh`, `turn_id=01a12350-527b-7540-899c-d5dcc7f89ab8`. The request JSONL is the runner's launch record.\n- Executed add-profile: read `/home/sharpninja/.claude/skills/add-profile/SKILL.md` and all **19** non-skill profile Markdown files in full. Read all **397** lines of `/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml`, with key lines and Authentication content filtered from output. Called `workflow.memory.list` through the installed Codex plugin wrapper and read all **13** effective MCP memories, including full `MEMORY-PROCESS-007` and `MEMORY-PROCESS-008`. The wrapper's main-workspace call initially returned `False`; using its documented `-CacheRoot` with the worktree Codex cache returned the live main-workspace TODO, requirements, and triage results. No raw API call was used.\n- Read all **649** lines and **529** non-empty lines of the plan source, all **172** handoff lines, the round-22 verdict, and the r1-r21 findings catalog. Re-attacked F-R22-01/02 and swept the plan's context, decisions, plugin matrix, host binding table, C1-C12, BDPv4 gates, P0, all FR/TR/TEST/UC entries and mappings, task allocations, wire contracts, A1-A9, S1-S11, rollout, risks, and verification. This is class-1 plan-readiness review. No implementation, plan, TODO, requirements, triage, memory, settings, or another session-log turn was changed.\n- Runner request and response JSONL: `docs/receipts/hv/20261010T005708Z-plan-readiness-r23.request.jsonl` and `docs/receipts/hv/20261010T005708Z-plan-readiness-r23.response.jsonl`. This Markdown and its matching JSON are reviewer receipts. The full verdict is stored in the reviewer MCP turn; completed-state persistence proof is in the JSON receipt.\n\n## P1-P10\n\n- **P1 PASS, source accuracy.** `git diff --name-only f56dcf70..HEAD` contains only AGENTS, removed handoffs, setup documents, and receipts, with no `src/`, `tests/`, `build/`, or `plugins/` change. The round-22 source-anchored checks therefore remain on the same implementation baseline. I rechecked the named build targets and test directories, `global.json` 10.0.201, package engines (core >=20, three TypeScript hosts >=18), the Cline hook factory's `Date.now().toString()` timestamp and `UserPromptSubmitData` fields, and QB's `AuditOutbox.applyAlias` requirement that `acks` is an array. The findings below concern proposed contracts, not false descriptions of code already at this worktree HEAD. Dated plugin inventory is explicitly rechecked in P0.7.\n- **P2 PASS, requirements accuracy.** The live main-workspace store returned **354 FR, 482 TR, 514 TEST**. Regex extraction found **120 distinct canonical-shaped cited base IDs**: **67** are the explicitly P0-created 21 FR, 23 TR, 23 TEST, all absent from the store; the other **53** exist. The intentionally invalid legacy `FR-SUPPORT-010G` is explicitly renamed to `FR-SUPPORT-016` in P0/S4. The catalog, mapping rows, and use-case coverage include the new and updated FRs. Generated `docs/Project/Requirements-Matrix.md` has the existing cited families, and the live store is authoritative.\n- **P3 FAIL, locked decisions.** D1 promises one token for every distinct message and one token for repeated deliveries of one event. D11 proves only one *registered* Copilot prompt hook. The new per-invocation arrival sequence can give two tokens for two deliveries of the same event. See F-R23-01. D2-D10, D12, partial clearance, licensing, `skipped_duplicate` removal, and C1-C12 are otherwise represented faithfully.\n- **P4 PASS, scope coverage.** Server, client, REPL, MCP tools, PowerShell and Node cores, all nine plugin repos (the required eight plus grok-bot), and SQLite/PostgreSQL/SQL Server migrations each have phase tasks and gates. D6/D7 host capability limits and upgrade handling are stated. The failures below are within covered hosts.\n- **P5 FAIL, decision completeness.** The implementer must choose how an invocation obtains or reuses the sequence of the *same event* while distinguishing a separate event with identical fields, and how the advertised pure nonce functions receive that external sequence. The plan does not lock a traceable event identity or a D6 unsupported disposition for this case. See F-R23-01.\n- **P6 FAIL, executability.** Named build targets and test project directories exist, and the per-slice contract/stubs, RED, mocks-green with negative check, self-review, real green, refactor, and G1-G6 order is specified. But A3's required two-process/same-payload/one-turn Copilot RED expectation cannot pass under its new per-hook-invocation sequence rule while the distinct-equal-payload/two-turn expectation also holds. The gate is logically unsatisfiable as written. See F-R23-01.\n- **P7 FAIL, testability.** The alias after-prune test is now present in TR-008, TEST-008, and A8 RED, and the Copilot equal-field tests are named in the host row. The classic-Cline equal-field test appears only in FR-001-AC003, not in the corresponding TEST statement or A8/A9 RED task. No test specifies the same-event redelivery versus distinct-equal-event discriminator. See F-R23-01 and F-R23-02.\n- **P8 FAIL, internal consistency.** `Get-PluginIngressNonce(host,payload)` and `ingressNonce(host,payload)` are promised pure/equal-payload-equal-nonce, while the Copilot and classic-Cline rows derive different nonces from an external incrementing sequence. A3 requires two processes fed one recorded Copilot payload to mint one turn, whereas the row states one hook invocation allocates one sequence. See F-R23-01. The 30 task dependency order otherwise agrees with the phase order.\n- **P9 PASS, artifact parity.** Live `workflow.todo.get` for `PLAN-SESSIONTURNREVIEW-001` in the main workspace returned `done=false`, the NOT APPROVED note, **529** description entries matching the plan's non-empty lines byte-for-byte (**0** mismatches), and **30** implementationTasks in operator-approval, P0.1-P0.9, A1-A9, S1-S11 order. TechnicalDetails and the handoff describe round-23's reported alias and nonce edits, status, locations, counts, and triage disposition accurately. The omitted classic-Cline executable test is shared plan/TODO content, not a parity mismatch.\n- **P10 PASS, risks.** All **10** full triage report IDs named in the plan's risks or license text returned live main-workspace `workflow.triage.getReport` results. `triage-group-804b21086f3019ab` remains not found in the main workspace and present in the worktree with one report and status `failed`, matching the plan and handoff. Plugin defects are scheduled in A9. No out-of-scope infrastructure or Pi3 work was scored.\n\n## FAIL findings\n\n### F-R23-01: arrival sequence does not distinguish redelivery from a separate identical event\n\n**Plan locations:** D1 and its every-delivery promise, line 29; common nonce rule, lines 78-79; Copilot and classic-Cline rows, lines 86 and 89; FR-MCP-SESSIONTURN-001-AC003, line 195; pure PowerShell nonce interface, line 343; pure Node nonce interface, line 350; A3 RED, line 579; A9 host adoption, line 591. TODO implementationTasks 13, 18, and 19 inherit the host contracts.\n\n**Exact defect:** Round 23 adds `arrivalSeq` for each hook invocation, making two distinct arrivals with equal session, timestamp, and prompt different. The same fields are also all that identify a repeated delivery of one arrival to a new hook process. The plan promises that repeated deliveries of that event reuse one nonce, and A3 expressly tests two independent processes fed the same recorded Copilot payload opening one turn. Under the new rule, those processes allocate different sequence values and mint two turns. Conversely, reusing a sequence by matching the equal payload would collapse the separate messages that round 23 sought to distinguish. D11's one registered hook does not establish a stable event key or prohibit one registered hook from being invoked again. The pure `(host,payload)` nonce signatures also cannot both incorporate a mutable sequence and satisfy their stated equal-payload-equal-nonce contract.\n\n**Evidence and what-if:** For session S, timestamp T, prompt P, two distinct arrivals produce `H(S,T,P,1)` and `H(S,T,P,2)`, as intended. A redelivery of one arrival to two hook processes with the same observed S/T/P also produces `H(S,T,P,1)` and `H(S,T,P,2)` if each invocation increments the counter. The persisted failsafe record supports *drain of that particular record*, but the plan gives a second hook process no traceable key to find that record instead of allocating a new one. This conflicts with lines 29, 195, 343, and A3's two-process RED. The local Cline source `/home/sharpninja/github/cline/apps/vscode/src/core/hooks/hook-factory.ts:224` sets `timestamp` with `Date.now().toString()`; `apps/vscode/proto/cline/hooks.proto:56-60` gives UserPromptSubmit prompt and attachments, with no per-message id. The same issue applies to Copilot under the plan's listed fields. The r14 and r22 findings show recurrence in event identity, not a mere missing hash input.\n\n**Change to PASS:** In P0.2 determine whether each host exposes a stable event identity shared by every delivery/retry of one message and distinct for separate equal-field messages, or an earlier queue event that can carry a durable plugin-generated identity. Lock the source, nonce interface, replay lookup and negative probe in the host rows, FR-001-AC003, TR-001/TR-008, TEST-001/TEST-008/TEST-009, A3/A8/A9 RED, and the TODO description/technicalDetails. If neither traceable mechanism exists, apply already-locked D6 `turn_logging_unsupported` for that host and test zero mint/write; do not promise both invariants. **Implementer plan/TODO edit; no operator decision** under D1, D6, and D11. Weakening one-turn-per-event would instead need an explicit operator decision, which this review does not request.\n\n### F-R23-02: the named classic-Cline collision test is absent from executable coverage\n\n**Plan locations:** FR-MCP-SESSIONTURN-001-AC003 line 195; TEST-MCP-SESSIONTURN-008 and -009 lines 377-378; A8 RED line 589; A9 RED/adoption line 591; TODO implementationTasks 18-19.\n\n**Exact defect:** `Cline_TwoDistinctArrivals_SameTimestampSamePrompt_TwoMints` occurs **only on line 195**. The corresponding TEST statements and the A8/A9 RED lists do not name it or assign it to a host suite. The A8 tests named for repeated handlers cover cline-v2 `runId` and opencode `messageID`, not classic Cline's derived `cl-` nonce. The plan's claim that every changed AC has a named RED and green gate is therefore unfulfilled for this new host case.\n\n**Evidence:** Exact-string search of the 649-line plan returned line 195 only for that test. By contrast, the after-prune alias test occurs at lines 350, 377, and 589, showing the required propagation pattern. The live TODO description reproduces the same omission exactly.\n\n**Change to PASS:** After resolving F-R23-01, name the classic-Cline same-field distinct-arrival and same-event retry/redelivery tests in a TEST-MCP-SESSIONTURN statement, the A8 or A9 RED task that owns the classic-Cline adapter, and the host's G6 suite. Sync the TODO description, task detail where needed, and handoff summary if its claimed test coverage changes. **Implementer edit; no operator decision.**\n\n## Round-22 re-attack and earlier regressions\n\nF-R22-01 is repaired narrowly: the permanent lookup now retains final `acks`, `getAlias` returns the full agreed record before and after pruning/restart, repeated acknowledgement is a no-op, and the exact after-prune test is propagated to TR-008, TEST-008, and A8. The current QB `AuditOutbox.applyAlias` still requires an `acks` array (`audit-outbox.ts:326-330`), and the proposed record meets that shape. This is contract review, not an implementation claim.\n\nF-R22-02 is only partly repaired: the sequence distinguishes separate equal-field invocations, but without a shared event key it breaks repeated-delivery idempotence and contradicts the pure nonce contracts. The classic-Cline named test did not reach the executable task or TEST statement. I rechecked r1-r21 finding titles and their repaired plan locations. No independent older regression was established; the current failure is the same structural event-identity recurrence seen in r14 and r22. MEMORY-PROCESS-008's what-if and propagation audit expose it by comparing two histories with indistinguishable hook payloads: retry of one message and a second distinct equal-field message.\n\n## Verdict and persistence\n\nThe plan is **not ready for operator approval or implementation**. Five claims PASS, five FAIL, none UNKNOWN. Accuracy **96** and completeness **94** are both below the required 98/98, and P3/P5/P6/P7/P8 fail independently. FAIL list: F-R23-01, F-R23-02. UNKNOWN list: none. Both are implementer fixes under already locked decisions; no operator-decision failure is identified. The reviewer turn stores this entire verdict, including the JSON below and both runner paths. The matching JSON receipt records completed-state readback.\n\n=== VERDICT JSON ===\n{\"overallVerdict\":\"DISAGREE\",\"accuracy\":96,\"completeness\":94,\"confidence\":96,\"passCount\":5,\"failCount\":5,\"unknownCount\":0,\"failList\":[\"F-R23-01\",\"F-R23-02\"],\"unknownList\":[],\"implementerFixes\":[\"F-R23-01\",\"F-R23-02\"],\"operatorDecisionFails\":[],\"headSha\":\"5427c26c7a8cca0ee28ef9f8f15c1d451e177099\",\"receiptPaths\":[\"docs/receipts/hv/hostile-validator-plan-readiness-r23-20261010T005708Z.md\",\"docs/receipts/hv/hostile-validator-plan-readiness-r23-20261010T005708Z.json\",\"docs/receipts/hv/20261010T005708Z-plan-readiness-r23.request.jsonl\",\"docs/receipts/hv/20261010T005708Z-plan-readiness-r23.response.jsonl\"],\"reviewerSessionId\":\"Codex-20261010T004320Z-plugin-session\",\"reviewerRequestId\":\"req-20261010T005708Z-plan-r23-hv\"}\n"
+}

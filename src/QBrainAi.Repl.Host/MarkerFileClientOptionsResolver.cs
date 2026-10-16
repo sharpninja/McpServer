@@ -1,0 +1,664 @@
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using QBrainAi.Client;
+
+namespace QBrainAi.Repl.Host;
+
+/// <summary>
+/// Resolves REPL client options from environment variables and the workspace marker file.
+/// </summary>
+public static class MarkerFileClientOptionsResolver
+{
+    private const string MarkerFileName = "AGENTS-README-FIRST.yaml";
+
+    // Cache for verified marker trust to avoid repeating the full discovery + HMAC
+    // signature verification (the "trust chain") on every qbrain-ai-repl --agent-stdio
+    // invocation. Cache lives in ~/.qbrainai/verified-markers.json (or override for tests).
+    // Entries are valid for 24 hours or until the apiKey in the marker file changes.
+    // FR-MCP-REPL-008 / TR-MCP-REPL-009: keyed by (WorkspacePath, Agent) for isolation.
+    private const int VerifiedCacheHours = 24;
+    private static readonly string s_verifiedCacheDir = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".mcpserver");
+    private static readonly string s_verifiedCachePath = Path.Combine(s_verifiedCacheDir, "verified-markers.json");
+    private static readonly JsonSerializerOptions s_cacheJsonOpts = new(JsonSerializerDefaults.Web);
+
+    /// <summary>
+    /// Test hook only. Allows integration tests to redirect the verified marker cache
+    /// file to a temporary directory instead of the real user profile.
+    /// </summary>
+    public static string? CacheDirectoryOverride { get; set; }
+
+    private static string GetVerifiedCachePath()
+    {
+        var dir = CacheDirectoryOverride ?? s_verifiedCacheDir;
+        return Path.Combine(dir, "verified-markers.json");
+    }
+
+    /// <summary>
+    /// Test hook only. Allows tests to simulate a specific agent when callers do
+    /// not pass the production <c>--agent</c> value directly.
+    /// </summary>
+    public static string? AgentOverride { get; set; }
+
+    /// <summary>
+    /// Resolves the canonical per-agent key used for verified marker cache isolation.
+    /// </summary>
+    /// <param name="explicitAgent">Optional explicit agent identifier from <c>--agent</c>.</param>
+    /// <returns>The canonical cache key for the agent.</returns>
+    public static string ResolveAgentKey(string? explicitAgent = null)
+    {
+        var agent = !string.IsNullOrWhiteSpace(explicitAgent)
+            ? explicitAgent
+            : !string.IsNullOrWhiteSpace(AgentOverride)
+                ? AgentOverride
+                : QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_AGENT_NAME")
+                    ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_NAME")
+                    ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_DEFAULT")
+                    ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_PLUGIN_HOST")
+                    ?? "default";
+
+        return CanonicalizeAgentKey(agent);
+    }
+
+    private static string CanonicalizeAgentKey(string? agent)
+    {
+        var normalized = string.IsNullOrWhiteSpace(agent)
+            ? "default"
+            : agent.Trim().ToLowerInvariant();
+
+        return normalized switch
+        {
+            "claude" or "claudecode" or "claude-code" => "claude",
+            "claudecowork" or "claude-cowork" => "cowork",
+            "codex" => "codex",
+            "copilot" => "copilot",
+            "grok" or "grokcode" or "grok-code" => "grok",
+            "cline" or "cline-v2" => "cline",
+            "opencode" or "open-code" => "opencode",
+            _ => SanitizeAgentKey(normalized),
+        };
+    }
+
+    private static string SanitizeAgentKey(string agent)
+    {
+        var builder = new StringBuilder(agent.Length);
+        var lastWasSeparator = false;
+        foreach (var ch in agent)
+        {
+            if (char.IsAsciiLetterOrDigit(ch))
+            {
+                builder.Append(ch);
+                lastWasSeparator = false;
+            }
+            else if (!lastWasSeparator && builder.Length > 0)
+            {
+                builder.Append('-');
+                lastWasSeparator = true;
+            }
+        }
+
+        return builder.ToString().Trim('-') is { Length: > 0 } key ? key : "default";
+    }
+    // FR-MCP-REPL-008 TR-MCP-REPL-009: agent sourced from CLI --agent or shared env precedence for per-agent cache keys.
+    /// <summary>
+    /// Represents a previously verified marker for fast-path trust within TTL.
+    /// Keyed by (WorkspacePath, Agent) so Codex and Claude (etc.) sessions do not mix
+    /// their cached trust state even when operating on the same workspace.
+    /// </summary>
+    private sealed record VerifiedMarkerCacheEntry(
+        string WorkspacePath,
+        string Agent,
+        string ApiKey,
+        string SignatureValue,
+        DateTimeOffset VerifiedAtUtc,
+        DateTimeOffset ExpiresAtUtc);
+
+    /// <summary>
+    /// Builds REPL client options, preferring trusted marker-file settings when available.
+    /// </summary>
+    /// <returns>The resolved client options.</returns>
+    public static QBrainAiClientOptions Resolve()
+    {
+        var configuredServerUrl = QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SERVER_URL");
+        var workspacePath = ResolveWorkspacePath();
+        if (TryLoadTrustedMarker(workspacePath, out var marker))
+        {
+            return new QBrainAiClientOptions
+            {
+                BaseUrl = new Uri(marker.BaseUrl),
+                ApiKey = marker.ApiKey,
+                WorkspacePath = marker.WorkspacePath,
+            };
+        }
+
+        return new QBrainAiClientOptions
+        {
+            BaseUrl = new Uri(configuredServerUrl ?? "http://localhost:7147"),
+            WorkspacePath = workspacePath,
+        };
+    }
+
+    /// <summary>
+    /// Resolves the workspace root used for marker-file discovery.
+    /// </summary>
+    /// <returns>The resolved workspace path.</returns>
+    public static string ResolveWorkspacePath()
+    {
+        var explicitWorkspacePath = QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE_PATH");
+        if (!string.IsNullOrWhiteSpace(explicitWorkspacePath))
+        {
+            return explicitWorkspacePath;
+        }
+
+        explicitWorkspacePath = QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE");
+        if (!string.IsNullOrWhiteSpace(explicitWorkspacePath))
+        {
+            return explicitWorkspacePath;
+        }
+
+        var markerPath = FindMarkerFile(Environment.CurrentDirectory);
+        if (!string.IsNullOrWhiteSpace(markerPath))
+        {
+            return Path.GetDirectoryName(markerPath) ?? Environment.CurrentDirectory;
+        }
+
+        return Environment.CurrentDirectory;
+    }
+
+    /// <summary>
+    /// Attempts to load and verify the trusted marker file for a workspace.
+    /// </summary>
+    /// <param name="workspacePath">The workspace path used as the marker discovery root.</param>
+    /// <param name="marker">The verified marker settings when discovery succeeds.</param>
+    /// <param name="agent">Optional agent identifier for per-agent cache.</param>
+    /// <returns><see langword="true"/> when a valid trusted marker file is found; otherwise, <see langword="false"/>.</returns>
+    public static bool TryLoadTrustedMarker(string workspacePath, out MarkerSettings marker, string? agent = null)
+    {
+        marker = default;
+        var agentKey = ResolveAgentKey(agent);
+
+        var markerPath = FindMarkerFile(workspacePath);
+        if (string.IsNullOrWhiteSpace(markerPath) || !File.Exists(markerPath))
+        {
+            return false;
+        }
+
+        var parsed = ParseMarker(File.ReadAllLines(markerPath));
+        if (parsed is null)
+        {
+            return false;
+        }
+
+        // Prefer cache hit (same rules as TryResolveWithDiagnostics) before re-verifying.
+        if (TryUseCachedVerification(parsed.Value, agentKey, out _))
+        {
+            marker = parsed.Value;
+            return true;
+        }
+
+        if (!VerifyMarkerSignature(parsed.Value))
+        {
+            return false;
+        }
+
+        marker = parsed.Value;
+        SaveVerifiedCacheEntry(parsed.Value, agentKey);
+        return true;
+    }
+
+    /// <summary>
+    /// Walks upward from a starting path to locate the workspace marker file.
+    /// </summary>
+    /// <param name="startPath">The path to begin searching from.</param>
+    /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
+    public static string? FindMarkerFile(string startPath)
+    {
+        return FindMarkerFile(startPath, out _);
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-007: Walks upward from a starting path to locate the workspace
+    /// marker file and reports every directory that was searched.
+    /// </summary>
+    /// <param name="startPath">The path to begin searching from.</param>
+    /// <param name="searchedPaths">Every directory walked in search order.</param>
+    /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
+    public static string? FindMarkerFile(string startPath, out IReadOnlyList<string> searchedPaths)
+    {
+        var searched = new List<string>();
+        var current = new DirectoryInfo(startPath);
+        while (current is not null)
+        {
+            searched.Add(current.FullName);
+            var candidate = Path.Combine(current.FullName, MarkerFileName);
+            if (File.Exists(candidate))
+            {
+                searchedPaths = searched;
+                return candidate;
+            }
+
+            current = current.Parent;
+        }
+
+        searchedPaths = searched;
+        return null;
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-007: Resolves REPL client options with diagnostic surface. Honors
+    /// explicit workspace-path or marker-file overrides. On failure, the
+    /// <paramref name="error"/> string enumerates every directory searched and
+    /// reports whether the marker file was missing or its signature failed to verify.
+    /// </summary>
+    /// <param name="workspacePathOverride">Optional explicit workspace path (CLI <c>--workspace-path</c>).</param>
+    /// <param name="markerPathOverride">Optional explicit marker file path (CLI <c>--marker-file</c>).</param>
+    /// <param name="options">The resolved options on success.</param>
+    /// <param name="error">Diagnostic message on failure.</param>
+    /// <param name="agent">Optional agent identifier (e.g. Codex, ClaudeCode). Used for per-agent cache isolation.</param>
+    /// <returns><see langword="true"/> when resolution succeeds; otherwise <see langword="false"/>.</returns>
+    public static bool TryResolveWithDiagnostics(
+        string? workspacePathOverride,
+        string? markerPathOverride,
+        out QBrainAiClientOptions? options,
+        out string error,
+        string? agent = null)
+    {
+        options = null;
+        error = string.Empty;
+
+        var agentKey = ResolveAgentKey(agent);
+
+        string? markerPath;
+        IReadOnlyList<string> searchedPaths;
+
+        if (!string.IsNullOrWhiteSpace(markerPathOverride))
+        {
+            markerPath = markerPathOverride;
+            searchedPaths = new[] { markerPathOverride };
+            if (!File.Exists(markerPath))
+            {
+                error = $"Marker file not found at explicit path '{markerPath}'. Pass --workspace-path <dir> or place AGENTS-README-FIRST.yaml at that path.";
+                return false;
+            }
+        }
+        else
+        {
+            var searchRoot = !string.IsNullOrWhiteSpace(workspacePathOverride)
+                ? workspacePathOverride
+                : QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE_PATH")
+                    ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE")
+                    ?? Environment.CurrentDirectory;
+
+            markerPath = FindMarkerFile(searchRoot, out searchedPaths);
+            if (markerPath is null)
+            {
+                var pathList = string.Join("; ", searchedPaths);
+                error = $"Marker file '{MarkerFileName}' not found. Searched: {pathList}. To override, pass --workspace-path <dir> or --marker-file <path>.";
+                return false;
+            }
+        }
+
+        var parsed = ParseMarker(File.ReadAllLines(markerPath));
+        if (parsed is null)
+        {
+            error = $"Marker file at '{markerPath}' is malformed: missing required fields (baseUrl/apiKey/workspacePath/signature).";
+            return false;
+        }
+
+        // Use local verified marker cache (24h TTL, invalidated on apiKey change in marker)
+        // to avoid repeating the full marker discovery + signature verification trust chain
+        // on every agent REPL invocation.
+        if (TryUseCachedVerification(parsed.Value, agentKey, out var cachedOptions) && cachedOptions is not null)
+        {
+            options = cachedOptions;
+            return true;
+        }
+
+        if (!VerifyMarkerSignature(parsed.Value))
+        {
+            error = $"Marker file at '{markerPath}' failed HMAC-SHA256 signature verification. Either the marker is stale (server restarted) or has been tampered with. Re-read the file or restart the server.";
+            return false;
+        }
+
+        options = new QBrainAiClientOptions
+        {
+            BaseUrl = new Uri(parsed.Value.BaseUrl),
+            ApiKey = parsed.Value.ApiKey,
+            WorkspacePath = parsed.Value.WorkspacePath,
+        };
+
+        // Persist successful verification for future calls within TTL.
+        SaveVerifiedCacheEntry(parsed.Value, agentKey);
+        return true;
+    }
+
+    internal static MarkerSettings? ParseMarker(IEnumerable<string> lines)
+    {
+        var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var endpoints = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var signature = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var agentPlugins = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        string? currentSection = null;
+
+        foreach (var rawLine in lines)
+        {
+            if (string.IsNullOrWhiteSpace(rawLine))
+            {
+                continue;
+            }
+
+            var line = rawLine.TrimEnd();
+            if (!char.IsWhiteSpace(rawLine[0]))
+            {
+                currentSection = null;
+            }
+
+            if (rawLine.StartsWith("endpoints:", StringComparison.Ordinal))
+            {
+                currentSection = "endpoints";
+                continue;
+            }
+
+            if (rawLine.StartsWith("signature:", StringComparison.Ordinal))
+            {
+                currentSection = "signature";
+                continue;
+            }
+
+            if (rawLine.StartsWith("agent_plugins:", StringComparison.Ordinal))
+            {
+                currentSection = "agent_plugins";
+                continue;
+            }
+
+            if (currentSection is not null && rawLine.StartsWith("  ", StringComparison.Ordinal))
+            {
+                var sectionParts = line.Trim().Split(':', 2);
+                if (sectionParts.Length != 2)
+                {
+                    continue;
+                }
+
+                var key = sectionParts[0].Trim();
+                var value = sectionParts[1].Trim().Trim('"');
+                if (currentSection == "endpoints")
+                {
+                    endpoints[key] = value;
+                }
+                else if (currentSection == "signature")
+                {
+                    signature[key] = value;
+                }
+                else if (currentSection == "agent_plugins"
+                         && (string.Equals(key, "policy", StringComparison.OrdinalIgnoreCase)
+                             || string.Equals(key, "contract_digest", StringComparison.OrdinalIgnoreCase)))
+                {
+                    agentPlugins[key] = value;
+                }
+
+                continue;
+            }
+
+            var parts = line.Split(':', 2);
+            if (parts.Length != 2)
+            {
+                continue;
+            }
+
+            values[parts[0].Trim()] = parts[1].Trim().Trim('"');
+        }
+
+        if (!values.TryGetValue("baseUrl", out var baseUrl)
+            || !values.TryGetValue("apiKey", out var apiKey)
+            || !values.TryGetValue("workspacePath", out var workspacePath)
+            || !values.TryGetValue("port", out var port)
+            || !values.TryGetValue("workspace", out var workspace)
+            || !values.TryGetValue("pid", out var pid)
+            || !values.TryGetValue("startedAt", out var startedAt)
+            || !values.TryGetValue("markerWrittenAtUtc", out var markerWrittenAtUtc)
+            || !values.TryGetValue("serverStartedAtUtc", out var serverStartedAtUtc)
+            || !signature.TryGetValue("canonicalization", out var canonicalization)
+            || !signature.TryGetValue("value", out var signatureValue))
+        {
+            return null;
+        }
+
+        return new MarkerSettings(
+            Port: port,
+            BaseUrl: baseUrl,
+            ApiKey: apiKey,
+            Workspace: workspace,
+            WorkspacePath: workspacePath,
+            Pid: pid,
+            StartedAt: startedAt,
+            MarkerWrittenAtUtc: markerWrittenAtUtc,
+            ServerStartedAtUtc: serverStartedAtUtc,
+            SignatureCanonicalization: canonicalization,
+            SignatureValue: signatureValue,
+            Endpoints: endpoints,
+            AgentPlugins: agentPlugins);
+    }
+
+    internal static bool VerifyMarkerSignature(MarkerSettings marker)
+    {
+        if (!string.Equals(marker.SignatureCanonicalization, "marker-v1", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(marker.ApiKey));
+        var payload = BuildSignaturePayload(marker);
+        var hash = Convert.ToHexString(hmac.ComputeHash(Encoding.UTF8.GetBytes(payload)));
+        return string.Equals(hash, marker.SignatureValue, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string BuildSignaturePayload(MarkerSettings marker)
+    {
+        // FR-MCP-REPL-007 fix: the server's MarkerFileService.AppendPayloadLine
+        // always terminates with a literal LF ('\n'). StringBuilder.AppendLine
+        // honours Environment.NewLine which is CRLF on Windows, so we cannot use
+        // it here - the HMAC payload must be byte-identical to what the server
+        // hashed regardless of which OS the REPL is running on.
+        var builder = new StringBuilder();
+        AppendLfLine(builder, "canonicalization", marker.SignatureCanonicalization);
+        AppendLfLine(builder, "port", marker.Port);
+        AppendLfLine(builder, "baseUrl", marker.BaseUrl);
+        AppendLfLine(builder, "apiKey", marker.ApiKey);
+        AppendLfLine(builder, "workspace", marker.Workspace);
+        AppendLfLine(builder, "workspacePath", marker.WorkspacePath);
+        AppendLfLine(builder, "pid", marker.Pid);
+        AppendLfLine(builder, "startedAt", marker.StartedAt);
+        AppendLfLine(builder, "markerWrittenAtUtc", marker.MarkerWrittenAtUtc);
+        AppendLfLine(builder, "serverStartedAtUtc", marker.ServerStartedAtUtc);
+
+        foreach (var endpointName in new[]
+        {
+            "health",
+            "swagger",
+            "swaggerUi",
+            "mcpTransport",
+            "sessionLog",
+            "sessionLogDialog",
+            "contextSearch",
+            "contextPack",
+            "contextSources",
+            "todo",
+            "repo",
+            "desktop",
+            "gitHub",
+            "tools",
+            "workspace",
+            "serverStartupUtc",
+            "markerFileTimestamp",
+        })
+        {
+            marker.Endpoints.TryGetValue(endpointName, out var endpointValue);
+            AppendLfLine(builder, $"endpoints.{endpointName}", endpointValue ?? string.Empty);
+        }
+
+        marker.AgentPlugins.TryGetValue("policy", out var policy);
+        marker.AgentPlugins.TryGetValue("contract_digest", out var contractDigest);
+        if (policy is not null || contractDigest is not null)
+        {
+            AppendLfLine(builder, "agentPlugins.policy", policy ?? string.Empty);
+            AppendLfLine(builder, "agentPlugins.contractDigest", contractDigest ?? string.Empty);
+        }
+
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// Mirrors the server's <c>MarkerFileService.AppendPayloadLine</c>: writes
+    /// <c>{key}={value}\n</c> with a literal LF, normalising any embedded CRLF
+    /// in <paramref name="value"/> to LF so the HMAC payload matches across
+    /// Linux / macOS / Windows.
+    /// </summary>
+    private static void AppendLfLine(StringBuilder builder, string key, object? value)
+    {
+        builder.Append(key)
+            .Append('=')
+            .Append((value?.ToString() ?? string.Empty).ReplaceLineEndings("\n"))
+            .Append('\n');
+    }
+
+    private static bool TryUseCachedVerification(MarkerSettings current, string agentId, out QBrainAiClientOptions? options)
+    {
+        options = null;
+        try
+        {
+            var cachePath = GetVerifiedCachePath();
+            if (!File.Exists(cachePath))
+                return false;
+
+            var json = File.ReadAllText(cachePath);
+            var entries = JsonSerializer.Deserialize<List<VerifiedMarkerCacheEntry>>(json, s_cacheJsonOpts) ?? new();
+
+            var hit = entries.FirstOrDefault(e =>
+                string.Equals(e.WorkspacePath, current.WorkspacePath, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(e.Agent ?? "default", agentId, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(e.ApiKey, current.ApiKey, StringComparison.Ordinal) &&
+                string.Equals(e.SignatureValue, current.SignatureValue, StringComparison.Ordinal) &&
+                e.ExpiresAtUtc > DateTimeOffset.UtcNow);
+
+            if (hit is null)
+                return false;
+
+            // Cache hit for this exact (workspace + agent) marker within TTL.
+            // Short-circuits the trust chain (marker parse + sig verify) repetition.
+            // The current marker was still read to obtain ApiKey/Signature for matching.
+            // Per-agent keying ensures Codex and Claude (etc.) active sessions on the
+            // same workspace do not mix their cached trust state.
+            options = new QBrainAiClientOptions
+            {
+                BaseUrl = new Uri(current.BaseUrl),
+                ApiKey = current.ApiKey,
+                WorkspacePath = current.WorkspacePath,
+            };
+            return true;
+        }
+        catch
+        {
+            // Best-effort cache; ignore errors and fall through to full verification.
+            return false;
+        }
+    }
+    private static void SaveVerifiedCacheEntry(MarkerSettings verified, string agentId)
+    {
+        try
+        {
+            var cachePath = GetVerifiedCachePath();
+            var dir = Path.GetDirectoryName(cachePath)!;
+            Directory.CreateDirectory(dir);
+
+            var lockPath = cachePath + ".lock";
+            for (var attempt = 0; attempt < 5; attempt++)
+            {
+                try
+                {
+                    using var lockStream = new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                    WriteVerifiedCacheEntryUnderLock(cachePath, verified, agentId);
+                    return;
+                }
+                catch (IOException) when (attempt < 4)
+                {
+                    Thread.Sleep(TimeSpan.FromMilliseconds(50 * (attempt + 1)));
+                }
+            }
+        }
+        catch
+        {
+            // Best effort; do not fail resolution on cache write problems.
+        }
+    }
+
+    private static void WriteVerifiedCacheEntryUnderLock(string cachePath, MarkerSettings verified, string agentId)
+    {
+        List<VerifiedMarkerCacheEntry> entries = new();
+        if (File.Exists(cachePath))
+        {
+            try
+            {
+                var json = File.ReadAllText(cachePath);
+                entries = JsonSerializer.Deserialize<List<VerifiedMarkerCacheEntry>>(json, s_cacheJsonOpts) ?? new();
+            }
+            catch { /* ignore corrupt cache */ }
+        }
+
+        // Remove any prior entry for this (workspace, agent) combination
+        // (treat missing Agent as "default" for backward compat with pre-per-agent caches)
+        entries.RemoveAll(e =>
+            string.Equals(e.WorkspacePath, verified.WorkspacePath, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(e.Agent ?? "default", agentId, StringComparison.OrdinalIgnoreCase));
+
+        var newEntry = new VerifiedMarkerCacheEntry(
+            WorkspacePath: verified.WorkspacePath,
+            Agent: agentId,
+            ApiKey: verified.ApiKey,
+            SignatureValue: verified.SignatureValue,
+            VerifiedAtUtc: DateTimeOffset.UtcNow,
+            ExpiresAtUtc: DateTimeOffset.UtcNow.AddHours(VerifiedCacheHours));
+
+        entries.Add(newEntry);
+
+        // Trim very old entries.
+        var cutoff = DateTimeOffset.UtcNow.AddDays(-7);
+        entries = entries.Where(e => e.ExpiresAtUtc > cutoff).ToList();
+
+        var outJson = JsonSerializer.Serialize(entries, s_cacheJsonOpts);
+        var tempPath = cachePath + ".tmp";
+        File.WriteAllText(tempPath, outJson);
+        File.Move(tempPath, cachePath, overwrite: true);
+    }
+
+    /// <summary>
+    /// Represents the trusted marker values needed to bootstrap a REPL client.
+    /// </summary>
+    /// <param name="Port">The server port recorded in the marker file.</param>
+    /// <param name="BaseUrl">The base server URL recorded in the marker file.</param>
+    /// <param name="ApiKey">The workspace API key recorded in the marker file.</param>
+    /// <param name="Workspace">The workspace name recorded in the marker file.</param>
+    /// <param name="WorkspacePath">The workspace path recorded in the marker file.</param>
+    /// <param name="Pid">The server process identifier recorded in the marker file.</param>
+    /// <param name="StartedAt">The server start timestamp recorded in the marker file.</param>
+    /// <param name="MarkerWrittenAtUtc">The marker write timestamp recorded in the marker file.</param>
+    /// <param name="ServerStartedAtUtc">The server start timestamp in UTC recorded in the marker file.</param>
+    /// <param name="SignatureCanonicalization">The signature canonicalization format.</param>
+    /// <param name="SignatureValue">The marker signature value.</param>
+    /// <param name="Endpoints">The endpoint map recorded in the marker file.</param>
+    /// <param name="AgentPlugins">The signed agent plugin policy/digest values recorded in the marker file.</param>
+    public readonly record struct MarkerSettings(
+        string Port,
+        string BaseUrl,
+        string ApiKey,
+        string Workspace,
+        string WorkspacePath,
+        string Pid,
+        string StartedAt,
+        string MarkerWrittenAtUtc,
+        string ServerStartedAtUtc,
+        string SignatureCanonicalization,
+        string SignatureValue,
+        IReadOnlyDictionary<string, string> Endpoints,
+        IReadOnlyDictionary<string, string> AgentPlugins);
+}

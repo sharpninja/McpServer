@@ -1,0 +1,15 @@
+  Determining projects to restore...
+  Restored src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj (in 513 ms).
+  Restored src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj (in 513 ms).
+  Restored src/QBrainAi.Client/QBrainAi.Client.csproj (in 513 ms).
+  Restored src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj (in 639 ms).
+  QBrainAi.Common.AgentCli -> /tmp/claude-1000/-home-sharpninja-github-McpServer--claude-worktrees-session-20261009/49428485-c8ea-46d7-86c6-58add8faed97/scratchpad/trim-mcpagent-752efeec/bin/QBrainAi.Common.AgentCli/debug/QBrainAi.Common.AgentCli.dll
+  QBrainAi.Client -> /tmp/claude-1000/-home-sharpninja-github-McpServer--claude-worktrees-session-20261009/49428485-c8ea-46d7-86c6-58add8faed97/scratchpad/trim-mcpagent-752efeec/bin/QBrainAi.Client/debug/QBrainAi.Client.dll
+  QBrainAi.Repl.Core -> /tmp/claude-1000/-home-sharpninja-github-McpServer--claude-worktrees-session-20261009/49428485-c8ea-46d7-86c6-58add8faed97/scratchpad/trim-mcpagent-752efeec/bin/QBrainAi.Repl.Core/debug/QBrainAi.Repl.Core.dll
+  QBrainAi.McpAgent -> /tmp/claude-1000/-home-sharpninja-github-McpServer--claude-worktrees-session-20261009/49428485-c8ea-46d7-86c6-58add8faed97/scratchpad/trim-mcpagent-752efeec/bin/QBrainAi.McpAgent/debug/QBrainAi.McpAgent.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:22.73

@@ -1,10 +1,10 @@
-# McpRepl - Shared PowerShell Module for McpServer Agent Plugins
+# McpRepl - Shared PowerShell Module for QBrainAi Agent Plugins
 
-This is the canonical home of the shared PowerShell module used by all PowerShell-based McpServer agent plugins (Grok, Claude, Codex, Copilot, etc.).
+This is the canonical home of the shared PowerShell module used by all PowerShell-based QBrainAi agent plugins (Grok, Claude, Codex, Copilot, etc.).
 
 ## Location
 
-- Source: `tools/powershell/McpRepl` in the main McpServer repository
+- Source: `tools/powershell/McpRepl` in the main QBrainAi repository
 - Published: [PowerShell Gallery - McpRepl](https://www.powershellgallery.com/packages/McpRepl)
 
 ## What it provides
@@ -19,7 +19,7 @@ This is the canonical home of the shared PowerShell module used by all PowerShel
 Plugins should use the `Ensure-McpRepl.ps1` helper:
 
 ```powershell
-$ensure = 'F:\GitHub\McpServer\tools\powershell\Ensure-McpRepl.ps1'
+$ensure = 'F:\GitHub\QBrainAi\tools\powershell\Ensure-McpRepl.ps1'
 if (Test-Path $ensure) { . $ensure }
 Import-Module McpRepl -MinimumVersion 1.0.0
 ```

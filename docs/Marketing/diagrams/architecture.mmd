@@ -21,9 +21,9 @@ graph TB
     subgraph TRANSPORTS["Transport Layer"]
         T1["MCP STDIO"]
         T2["MCP Streamable HTTP\n/mcp-transport"]
-        T3["REST API\n/mcpserver/*"]
+        T3["REST API\n/qbrainai/*"]
     end
-    subgraph MCPSERVER["McpServer"]
+    subgraph MCPSERVER["QBrainAi"]
         direction TB
         C1["Hybrid Context Search\nFTS5 + HNSW Vector"]
         C2["TODO Management\nYAML / SQLite"]

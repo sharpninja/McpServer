@@ -1,7 +1,7 @@
 ---
 pid: 38584
-cwd: "F:\GitHub\McpServer"
-command: "cd F:\\GitHub\\McpServer && ./build.ps1 ValidateTraceability 2>&1 | Select-Object -Last 15"
+cwd: "F:\GitHub\QBrainAi"
+command: "cd F:\\GitHub\\QBrainAi && ./build.ps1 ValidateTraceability 2>&1 | Select-Object -Last 15"
 started_at: 2026-07-08T18:04:37.431Z
 running_for_ms: 4235011  
 ---

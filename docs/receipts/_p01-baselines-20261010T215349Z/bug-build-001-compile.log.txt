@@ -1,0 +1,120 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════
+║ Restore
+╬═══
+​
+11:38:53 [INF] > /home/sharpninja/.dotnet/dotnet restore QBrainAi.sln
+11:38:55 [DBG]   Determining projects to restore...
+11:38:57 [DBG]   Restored tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj (in 190 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Client/QBrainAi.Client.csproj (in 602 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj (in 599 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.TransactionSecurity/QBrainAi.TransactionSecurity.csproj (in 607 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Launcher/QBrainAi.Launcher.csproj (in 10 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.KeyServer/QBrainAi.KeyServer.csproj (in 625 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Subscriber/QBrainAi.Subscriber.csproj (in 625 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj (in 19 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj (in 641 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj (in 575 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj (in 642 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj (in 422 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj (in 5 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj (in 642 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj (in 668 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj (in 15 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj (in 668 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Cqrs.Mvvm/QBrainAi.Cqrs.Mvvm.csproj (in 12 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Cqrs/QBrainAi.Cqrs.csproj (in 34 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.SessionLog.Transcripts/QBrainAi.SessionLog.Transcripts.csproj (in 13 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.ServiceDefaults/QBrainAi.ServiceDefaults.csproj (in 17 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj (in 72 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.QBAgent.Skills/QBrainAi.QBAgent.Skills.csproj (in 9 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj (in 95 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj (in 46 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj (in 5 ms).
+11:38:57 [DBG]   Restored src/QBrainAi.Storage/QBrainAi.Storage.csproj (in 757 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj (in 27 ms).
+11:38:57 [DBG]   Restored tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj (in 46 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj (in 141 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj (in 129 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj (in 130 ms).
+11:38:58 [DBG]   Restored tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj (in 11 ms).
+11:38:58 [DBG]   Restored tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj (in 47 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj (in 214 ms).
+11:38:58 [DBG]   Restored tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj (in 152 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.McpAgent.SampleHost/QBrainAi.McpAgent.SampleHost.csproj (in 372 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.QBAgent.Tools/QBrainAi.QBAgent.Tools.csproj (in 257 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj (in 322 ms).
+11:38:58 [DBG]   Restored tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj (in 192 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.Services/QBrainAi.Services.csproj (in 286 ms).
+11:38:58 [DBG]   Restored src/QBrainAi.GraphRag/QBrainAi.GraphRag.csproj (in 335 ms).
+11:38:58 [DBG]   Restored tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj (in 1 sec).
+11:38:58 [DBG]   Restored src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj (in 1000 ms).
+11:38:58 [DBG]   Restored tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj (in 245 ms).
+11:38:58 [DBG]   Restored tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj (in 1 sec).
+11:38:58 [DBG]   2 of 48 projects are up-to-date for restore.
+​
+╬════════════
+║ Compile
+╬═══
+​
+11:38:58 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:38:59 [DBG] /home/sharpninja/.dotnet/sdk/10.0.201/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file 'src/Compatibility/SharpNinja.McpServer.Client/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj]
+11:38:59 [DBG] 
+11:38:59 [DBG] Build FAILED.
+11:38:59 [DBG] 
+11:38:59 [DBG] /home/sharpninja/.dotnet/sdk/10.0.201/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file 'src/Compatibility/SharpNinja.McpServer.Client/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj]
+11:38:59 [DBG]     0 Warning(s)
+11:38:59 [DBG]     1 Error(s)
+11:38:59 [DBG] 
+11:38:59 [DBG] Time Elapsed 00:00:00.41
+11:38:59 [ERR] Target Compile has thrown an exception
+Nuke.Common.Tooling.ProcessException: Process 'dotnet' exited with code 1.
+   > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+   @ .
+Standard output:
+   /home/sharpninja/.dotnet/sdk/10.0.201/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file 'src/Compatibility/SharpNinja.McpServer.Client/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj]
+   
+   Build FAILED.
+   
+   /home/sharpninja/.dotnet/sdk/10.0.201/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file 'src/Compatibility/SharpNinja.McpServer.Client/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj]
+       0 Warning(s)
+       1 Error(s)
+   
+   Time Elapsed 00:00:00.41
+
+   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38
+   at Nuke.Common.Tooling.ToolTasks.<>c.<GetExitHandler>b__4_0(ToolOptions _, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 27
+   at Nuke.Common.Tooling.ToolTasks.<>c__DisplayClass8_0.<GetExitHandlerInternal>b__3(ToolOptions o, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 22
+   at Nuke.Common.Tooling.ToolTasks.Run[T](T options) in /_/source/Nuke.Tooling/ToolTasks.Run.cs:line 36
+   at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetBuild(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 62
+   at Build.<get_Compile>b__17_1() in build/Build.Compile.cs:line 22
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] Compile: Target Compile has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:04
+Compile            Failed        < 1sec   // ProcessException: Process 'dotnet' exited with code 1.
+───────────────────────────────────────
+Total                              0:05
+═══════════════════════════════════════
+​
+Build failed on 10/10/2026 11:38:59 AM. (╯°□°）╯︵ ┻━┻

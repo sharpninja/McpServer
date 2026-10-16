@@ -73,7 +73,7 @@ static class UseCaseFrTraceabilityLoader
     {
         var candidates = new[]
         {
-            Path.Combine(rootDirectory, "src", "McpServer.Support.Mcp", "mcp.db"),
+            Path.Combine(rootDirectory, "src", "QBrainAi.Support.Mcp", "mcp.db"),
             Path.Combine(rootDirectory, "mcp.db"),
         };
         return candidates.FirstOrDefault(File.Exists);

@@ -1,0 +1,38 @@
+{
+  "type": "result",
+  "payload": {
+    "result": {
+      "originalWorkspacePath": "/home/sharpninja/github/McpServer",
+      "groupId": "triage-group-61c162989ef6c771",
+      "createdUtc": {
+        "nanosecond": 300,
+        "utcDateTime": "2026-10-11T22:47:24.7867333Z",
+        "totalOffsetMinutes": 0,
+        "day": 11,
+        "dateTime": "2026-10-11T22:47:24.7867333",
+        "hour": 22,
+        "timeOfDay": "22:47:24.7867333",
+        "year": 2026,
+        "dayOfWeek": "Sunday",
+        "minute": 47,
+        "localDateTime": "2026-10-11T17:47:24.7867333-05:00",
+        "month": 10,
+        "utcTicks": 639273556447867333,
+        "date": "2026-10-11T00:00:00.0000000",
+        "second": 24,
+        "microsecond": 733,
+        "millisecond": 786,
+        "offset": "00:00:00",
+        "dayOfYear": 284,
+        "ticks": 639273556447867333
+      },
+      "status": "grouped",
+      "reportId": "triage-report-3081edb1d0414e8fb737738438cd3ccd",
+      "workspacePath": "/home/sharpninja/github/McpServer",
+      "title": "HostileReview tables are mapped in McpDbContext but no migration creates them in any provider",
+      "summary": "McpDbContext declares five HostileReview DbSets (HostileReviewRequests and its ArtifactLink, Execution, Finding, and Diagnostic children), but no migration in QBrainAi.Storage.SqliteMigrations, QBrainAi.Storage.PostgreSqlMigrations, or QBrainAi.Storage.SqlServerMigrations (nor the legacy QBrainAi.Storage/Migrations) contains a CreateTable for any HostileReview table, so a database brought up by migrations lacks them and the hostile-review service would fail at its first query (inference: not observed at run time)."
+    },
+    "requestId": "req-20261012T010246Z-9d4a",
+    "deprecated": true
+  }
+}

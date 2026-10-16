@@ -9,9 +9,9 @@ partial class Build
         {
             string[] candidatePaths =
             [
-                SourceDirectory / "McpServer.Support.Mcp" / "appsettings.yaml",
-                SourceDirectory / "McpServer.Support.Mcp" / "appsettings.yml",
-                SourceDirectory / "McpServer.Support.Mcp" / "appsettings.json",
+                SourceDirectory / "QBrainAi.Support.Mcp" / "appsettings.yaml",
+                SourceDirectory / "QBrainAi.Support.Mcp" / "appsettings.yml",
+                SourceDirectory / "QBrainAi.Support.Mcp" / "appsettings.json",
             ];
 
             var configPath = candidatePaths.FirstOrDefault(File.Exists)
@@ -19,7 +19,7 @@ partial class Build
 
             var lines = File.ReadAllLines(configPath);
             var instances = ConfigValidator.ParseInstances(lines)
-                ?? throw new InvalidOperationException("Missing 'Mcp' section in config.");
+                ?? throw new InvalidOperationException("Missing 'QBrainAi' (or legacy 'Mcp') section in config.");
 
             if (instances.Count == 0)
             {

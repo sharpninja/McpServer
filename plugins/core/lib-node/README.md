@@ -1,6 +1,6 @@
-# @sharpninja/mcpserver-plugin-core
+# @qbrainai/qbrain-ai-plugin-core
 
-Canonical TypeScript core for the McpServer Node plugins (cline v1,
+Canonical TypeScript core for the QBrainAi Node plugins (cline v1,
 cline-v2, opencode). Base sources: `mcpserver-cline-v2-plugin/src` (per the
 Phase 2 reconciliation report), with four patches and the opencode
 test-facing helper exports applied:
@@ -34,7 +34,7 @@ test-facing helper exports applied:
   `agentName` / `pluginId` threaded from the config instead of hardcoded
   Cline/OpenCode strings.
 - `runtime/core-config.ts` (new): process-wide config consumed by the
-  modules above; `createMcpServerPluginCore(config)` in `index.ts` is the
+  modules above; `createQBrainAiPluginCore(config)` in `index.ts` is the
   factory.
 
 Config surface: `{ agentName, pluginId, sessionTitle, workspacePath,
@@ -45,7 +45,7 @@ replCommand }`.
 
 - cline v1: `src/index.ts` (MCP SDK `Server`/`StdioServerTransport` wiring,
   the `{content:[{type:'text'}]}` envelope wrap, repl auto-install - the
-  POSIX-only `execSync('which mcpserver-repl')` + bash path should move
+  POSIX-only `execSync('which qbrain-ai-repl')` + bash path should move
   behind a host hook at fan-out) and `src/tools/plugin-helpers.ts`
   (`mcp_cline_status` / `final_response`; consumes the core's
   `getSessionShimState` and `cacheStatus` re-exports).

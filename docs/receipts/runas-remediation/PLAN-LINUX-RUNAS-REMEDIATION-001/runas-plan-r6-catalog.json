@@ -1,0 +1,1351 @@
+[
+  {
+    "id": "FR-MCP-RUNAS-001",
+    "kind": "FR",
+    "operation": "update",
+    "title": "Generic strategy-preserving Linux RunAs",
+    "links": [
+      "TR-MCP-RUNAS-001",
+      "TR-MCP-RUNAS-004",
+      "TR-MCP-RUNAS-005",
+      "TEST-MCP-RUNAS-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Replace helper/Grok-only restriction: selected strategy plus generic identity decorator for every supported caller; explicit helper/workspace/admin precedence, public identity override rejection and local/Windows compatibility.",
+        "tddPhase": "P1",
+        "increment": "I1/I3",
+        "tests": [
+          "Helper_ForwardsRunAs",
+          "LinuxCrossUID_NoLocalSpawn",
+          "CallerRunAsRequirements_DelegatesSelectedOneShot",
+          "CallerRunAsWorkspacePolicy_DelegatesSelectedOneShot",
+          "CallerRunAsVoice_HonorsOrDenies",
+          "CallerRunAsTodo_HonorsOrDenies",
+          "CallerRunAsTriage_HonorsOrDenies",
+          "CallerRunAsPool_HonorsOrDenies",
+          "CallerRunAsBrainSlot_NeverSilentlyLocal"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual-account caller matrix and Windows regression",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Verify actual target UID before launch; MCP UID and NoNewPrivileges unchanged; mismatch/unavailable worker never spawns locally or copies secrets.",
+        "tddPhase": "P1",
+        "increment": "I3",
+        "tests": [
+          "IdentityMismatch_FailsBeforeAgentLaunch",
+          "LinuxCrossUID_NoLocalSpawn",
+          "SameUID_LocalAllStrategies",
+          "WorkerUnavailable_NoFallback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Held runner proc UID and actual CLI PID/hardening receipts",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Authenticate peer before parse; root policy alone authorizes identity/executable/workspace/model; reject injected secrets/env/unpinned paths, bound protocol and clean environment.",
+        "tddPhase": "P2",
+        "increment": "I4/I6",
+        "tests": [
+          "PeerRejectedBeforeParse",
+          "PolicyMismatch_NoLaunch",
+          "DelegatedSecrets_DeniedWithoutValueLeak",
+          "CleanEnvironmentAndApprovedToolPath",
+          "ImmutableExecAliases"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real negative sockets/policy probes and runtime smoke",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC4",
+        "text": "Defaults-only deployed helper completes actual answer with correlated strategy/UID/exit/cleanup, never echo/progress/incomplete accepted.",
+        "tddPhase": "P1",
+        "increment": "I3",
+        "tests": [
+          "Helper_DefaultsOnly_CompletedRealBody",
+          "Helper_EchoOrIncomplete_NotAccepted",
+          "HelperReceiptCorrelation_Required"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Same acceptance harness real Grok arithmetic and MCP help",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC5",
+        "text": "All completion/cancel/disconnect/timeout/output/error/shutdown/crash paths clean descendants and private resources; cleanup failure blocks admission.",
+        "tddPhase": "P2",
+        "increment": "I5",
+        "tests": [
+          "ChildExitStopDrainReadDeleteOrder",
+          "DescendantsAllStopped",
+          "CleanupFailed_BlocksAdmission",
+          "RegistrySiblingUnitsAllStopped",
+          "WorkerCrash_RegistrySweepBeforeAdmission"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual fork/reparent/cgroup/file receipts",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC6",
+        "text": "Journaled Nuke/pkexec worker-first transaction preserves live state and recovers interruptions; rollback never claims goal repaired.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "TransitionRestartAndFailureRollback",
+          "BackupBeforeReplacement",
+          "WorkerVerifiedBeforeMcpEnable",
+          "RecoveryFailed_AdmissionStopped"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Staging fault injection and approved production journal",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC7",
+        "text": "Mock-pass and assertion sensitivity before real implementation; meaningful red/green/refactor and complete current/prior unit zero failures/skips; HV only completed major phases, full durable audit, operator approval.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "GateValidator_RejectsMissingMockRedGreenEvidence",
+          "GateValidator_RejectsFailureSkipEmptyOrMissingScope",
+          "HvScheduler_OnlyCompletedMajorPhase",
+          "AuditReceipt_RequiresFullVerdictAndReadback"
+        ],
+        "verificationPhase": "P3/P4/P5",
+        "evidence": "Actual TDD ledgers/TRX/source hashes and major-phase HV >=98",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "FR-MCP-GROKDEFAULTS-001",
+    "kind": "FR",
+    "operation": "new",
+    "title": "Strategy-scoped defaults and deployed-key migration",
+    "links": [
+      "TR-MCP-GROKDEFAULTS-001",
+      "TEST-MCP-GROKDEFAULTS-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Each selected strategy/alias gets matching path/model, explicit overrides win; other-strategy workspace/caller defaults never leak.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "Helper_CodexOverride_DoesNotInheritGrokExecutable",
+          "ExplicitPath_NotRewritten",
+          "TotalPrecedenceEveryTie",
+          "WorkspacePath_OnlyMatchingStrategy"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real Grok/Codex command parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Preserve programmatic defaults and null/empty/presence; unconfigured secondary Claude and helper unset getter/model auto, same-strategy legacy precedence.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "TriageSecondaryDefault_PreservedWhenUnconfigured",
+          "ProgrammaticTriageDefaultsAndOverrides",
+          "HelperModelAbsent_UsesGrokAuto",
+          "NullEmptyRunAs"
+        ],
+        "verificationPhase": "P1/P3",
+        "evidence": "Binder/object test cases and forward-port parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Bind all enumerated deployed-only unreviewed keys, preserve TODO Grok selection/model/path and voice path with explicit provenance.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "TodoDeployedGrokSelection_Preserved",
+          "DeployedOnlyKeys_BoundOrExplicitlyDenied",
+          "TodoClineCrossUid_DeniedBeforeSpawn"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Deployed-key dry-run and selected-strategy trace",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC4",
+        "text": "Remove only startup RunAs/path overwrites; resolve per-request workspace/admin identity while preserving prompts/BaseUrl.",
+        "tddPhase": "P1",
+        "increment": "I1/I3",
+        "tests": [
+          "Startup_PreservesPromptsAndBaseUrl",
+          "TodoAdminRunAs_AfterOverwriteRemoval",
+          "WorkspaceNullRunAs_PreservesAdmin",
+          "HelperExplicitRunAs_DominatesWorkspaceRecord"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Multiworkspace and absent/null/empty identity cases",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC5",
+        "text": "Retain all legacy/unrelated values and exact ACL/owner/mode/xattrs; no effective change except approved leak/identity correction.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "NoLegacyKeysRemoved",
+          "PreservedUnrelatedConfiguration",
+          "ConfigACLPreserved",
+          "CallerSpecificMigration_NoFlattening"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Object diff plus restored metadata/hash",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "FR-MCP-HELP-011",
+    "kind": "FR",
+    "operation": "update",
+    "title": "Grok default without strategy exclusivity",
+    "links": [
+      "TR-MCP-RUNAS-002",
+      "TEST-MCP-GROKDEFAULTS-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Helper defaults grok-cli, grok-build alias equivalent; explicit selection preserves all five existing strategies/aliases.",
+        "tddPhase": "P1",
+        "increment": "I2",
+        "tests": [
+          "StrategyRegistrationContractTests_AllFiveAndAliases",
+          "Helper_DefaultStrategy_GrokAndAlias"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "HTTP/stdio and real resolver parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Never replace selected Codex/Copilot/one-shot/hosted with Grok; delegated capability/policy denial explicit, no wrong executable.",
+        "tddPhase": "P1",
+        "increment": "I1/I3",
+        "tests": [
+          "Helper_CodexOverride_DoesNotInheritGrokExecutable",
+          "HostedCrossUID_DeniedBeforeSpawn",
+          "SelectedStrategyNeverReplaced"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real delegated Grok/Codex and local five strategies",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "FR-MCP-RUNAS-002",
+    "kind": "FR",
+    "operation": "new",
+    "title": "Full local/remote session substitution",
+    "links": [
+      "TR-MCP-RUNAS-002",
+      "TR-MCP-RUNAS-003",
+      "TEST-MCP-RUNAS-002"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Worker reuses selected CLI implementation/arguments/parser, no duplicated vendor pipeline or hosted/remote recursion dependency.",
+        "tddPhase": "P1",
+        "increment": "I2",
+        "tests": [
+          "SameArgumentsResultsAfterExtraction",
+          "CliComposition_NoServicesHostedOrRemoteDependency"
+        ],
+        "verificationPhase": "P2/P4",
+        "evidence": "Worker composition and real local/remote parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Initial read/stream, send/stream, escape, end/dispose, liveness and actual agent PID preserve batch/interactive semantics.",
+        "tddPhase": "P2",
+        "increment": "I4",
+        "tests": [
+          "RemoteSessionContractTests_AllMembers",
+          "BatchSend_AllowedAfterInitialDespiteNotAlive",
+          "Stream_YieldsExactUnderlyingChunks",
+          "ProcessId_IsAgentNotLauncher"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real deterministic interactive fixture plus Grok/Codex batch",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Cancellation/terminal races and stream abandonment cannot reexecute prompts; End/Dispose idempotent and await verified cleanup.",
+        "tddPhase": "P2",
+        "increment": "I4/I5",
+        "tests": [
+          "CancelCompletion_FirstTerminalWins",
+          "EndDispose_IdempotentWaitsCleanup",
+          "StreamAbandonment_ClosesSession",
+          "NoReconnectPromptReplay"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real cancellation/disconnect/restart faults",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC4",
+        "text": "Result callbacks/parsed JSON/YAML/chunk caps preserved without duplicate delivery or unbounded capture.",
+        "tddPhase": "P2",
+        "increment": "I4/I5",
+        "tests": [
+          "ParsedResult_SemanticallyPreserved",
+          "OutputCallback_NoDoubleDelivery",
+          "OutputCapture_BoundedBeforeGrowth"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual oversize/malformed/multichunk output",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "FR-MCP-RUNAS-003",
+    "kind": "FR",
+    "operation": "new",
+    "title": "Bounded delegated admission and helper reserve",
+    "links": [
+      "TR-MCP-RUNAS-006",
+      "TEST-MCP-RUNAS-003"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Helper reserved lane stays available with general lane occupied; second same-lane session Busy immediately, no queue/retry, max two CLI invocations.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "HelperWhileVoiceOpen_Admitted",
+          "SameLaneSecond_Busy",
+          "LaneCapacity_MaxTwoRunningCli"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real two-account concurrent sessions/count",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Disclose and require approval of open voice blocking general TODO/requirements/parser up to hard lifetime; bounded idle/hard deadlines, local concurrency unchanged.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "GeneralLane_VoiceOpen_TodoBusy",
+          "GeneralLane_VoiceOpen_RequirementsAndPolicyBusy",
+          "IdleAndHardDeadline_ReleaseOnlyAfterCleanup",
+          "LocalConcurrency_Unchanged"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Approved concurrency/deadline smoke",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Cleanup or policy mismatch disables affected admission; public caller cannot steal helper lane or execution identity.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "PublicCallerLaneOverride_Rejected",
+          "CleanupFailed_BlocksAdmission",
+          "PolicyRotationDrains"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual spoof/rotation/recovery probes",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "FR-MCP-SERVICEUPDATE-001",
+    "kind": "FR",
+    "operation": "update",
+    "title": "Nuke-owned cross-platform state-preserving update",
+    "links": [
+      "TR-MCP-SERVICEUPDATE-001",
+      "TR-MCP-SERVICEUPDATE-002",
+      "TEST-MCP-SERVICEUPDATE-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "platform",
+        "text": "Windows updater unchanged; Linux RID/apphost and unsupported-platform preflight preserved; Nuke unprivileged build then fixed pkexec.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "WindowsUpdateService_PathAndRecoveryUnchanged",
+          "PlatformRidAndApphost_Selected",
+          "UnsupportedHost_NoMutation",
+          "NukeUpdateService_InvokesFixedPkexecAfterValidatedPackage"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Windows job and Linux target staging",
+        "isSatisfied": false
+      },
+      {
+        "id": "preserve",
+        "text": "Preserve data/provider/unrelated YAML and exact Unix metadata/units/dropins/env/group/linger state in root-only archive.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "ConfigACLPreserved",
+          "PreservedUnrelatedConfiguration",
+          "RootStateAncestorsNotServiceWritable",
+          "Rollback_RestoresGroupLingerAndUnits"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Actual archive/restore hashes and metadata",
+        "isSatisfied": false
+      },
+      {
+        "id": "lifecycle",
+        "text": "Known prereq release/no pending migrations before stop; backup before replacement, worker before MCP; recover interrupted journal before new transaction.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "RejectPendingMigrationOrWrongApphost",
+          "BackupBeforeReplacement",
+          "WorkerVerifiedBeforeMcpEnable",
+          "TransitionRestartAndFailureRollback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Sanitized attestation digest and journal",
+        "isSatisfied": false
+      },
+      {
+        "id": "validation",
+        "text": "Mock-first/full-unit gates complete; staging/production never accept health-only or incomplete helper, retain full phase-end review evidence.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "GateValidator_RejectsMissingMockRedGreenEvidence",
+          "DeploymentAcceptance_RejectsHealthOnlyOrIncompleteHelper",
+          "AuditReceipt_RequiresFullVerdictAndReadback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "TDD/regression plus actual helper UID/cleanup and HV",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-RUNAS-002",
+    "kind": "TR",
+    "operation": "new",
+    "title": "Shared strategy contracts and worker composition",
+    "links": [
+      "FR-MCP-HELP-011",
+      "FR-MCP-RUNAS-002"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Public strategy/session contracts in Common, SAME four CLI implementations in AgentExecution, aggregate Services hosted registration, CLI-only worker and nonrecursive decorator with XMLDocs/lifetime parity.",
+        "tddPhase": "P1",
+        "increment": "I2",
+        "tests": [
+          "StrategyRegistrationContractTests_AllFiveAndAliases",
+          "SameArgumentsResultsAfterExtraction",
+          "CliComposition_NoServicesHostedOrRemoteDependency",
+          "HTTPStdioRegistrationParity"
+        ],
+        "verificationPhase": "P2/P4",
+        "evidence": "Concrete WorkerComposition test and real parity",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-RUNAS-003",
+    "kind": "TR",
+    "operation": "new",
+    "title": "Strict framed session and internal launch protocol",
+    "links": [
+      "FR-MCP-RUNAS-002"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Versioned strict UTF8/duplicate/unknown/depth/replay limits and public/internal size headroom, base64 chunks, monotonic IDs and launch schemas defined, no raw public argv.",
+        "tddPhase": "P2",
+        "increment": "I4",
+        "tests": [
+          "AgentWorkerFramingContractTests_BoundsAndStrictParsing",
+          "InternalEnvelope_LegalMaxPublicRequestFitsWithHeadroom",
+          "PipeBase64Chunk_WithinFrameCap",
+          "ReplayEpochAndOrder_Rejected"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real byte-level malformed/boundary socket probes",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "All session members, parsed body and exact output forwarding preserve selected behavior; concurrency/cancellation/expiry terminal order and batch cleanup receipt vs interactive nullable receipt defined.",
+        "tddPhase": "P2",
+        "increment": "I4",
+        "tests": [
+          "RemoteSessionContractTests_AllMembers",
+          "ParsedResult_SemanticallyPreserved",
+          "CancelCompletion_FirstTerminalWins",
+          "BatchResultEnd_RequiresCleanupReceipt",
+          "InteractiveResponse_DoesNotClaimCleanup"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual interactive and batch fixture",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-RUNAS-004",
+    "kind": "TR",
+    "operation": "new",
+    "title": "Registry-first launch and verified process supervision",
+    "links": [
+      "FR-MCP-RUNAS-001",
+      "FR-MCP-RUNAS-002"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Broker fsync allocation before manager submission/resource creation, held Ready proc UID/PID/start/cgroup validation before ACK; crash pending-job recovery no local fallback.",
+        "tddPhase": "P2",
+        "increment": "I5",
+        "tests": [
+          "RegistryFirst_BeforeSessionAndInvocationSubmit",
+          "RunnerCrashBetweenRegistrationAndSubmission_Recovery",
+          "NoChildBeforeReadyApproval",
+          "UIDFromHeldProcNotUnitProperty",
+          "FastExit500"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual systemd/process evidence",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Child exit then stop cgroup then drain/parse/delete before batch result; deadline/crash/disconnect cleans siblings; capture receipts before failed-unit reset; failed cleanup stops admission.",
+        "tddPhase": "P2",
+        "increment": "I5",
+        "tests": [
+          "ChildExitStopDrainReadDeleteOrder",
+          "RegistrySiblingUnitsAllStopped",
+          "FailedUnitsResetAfterReceipt",
+          "ManagerLoss_Unhealthy",
+          "OutputCapture_BoundedBeforeGrowth"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual descendants/pipes/pendingjobs/restart failures",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-RUNAS-005",
+    "kind": "TR",
+    "operation": "new",
+    "title": "Root policy, peers, immutable execution and clean environment",
+    "links": [
+      "FR-MCP-RUNAS-001",
+      "FR-MCP-RUNAS-003"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Root-readable policy separate private server config; authenticated peer/socket inherited group before parse/admission; root policy validates profiles and canonical paths; reject env/secrets and public identity.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "PolicyReadableByTarget",
+          "PeerRejectedBeforeParse",
+          "SocketGidAndPermissionGap",
+          "PolicyMismatch_NoLaunch",
+          "DelegatedSecrets_DeniedWithoutValueLeak"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual permissions/peer failure receipts",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Root-owned hash-verified vendor snapshots and closure, clean approved PATH/tools, no target credentials copy or server hardening change; untrusted mutable config cannot broaden policy.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "ImmutableExecAliases",
+          "CleanEnvironmentAndApprovedToolPath",
+          "EditableConfig_CannotBroadenRootPolicy",
+          "RuntimeClosure_UndeclaredDependencyBlocksRollout"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Actual Grok/Codex closure trace, real UID/hardening",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-RUNAS-006",
+    "kind": "TR",
+    "operation": "new",
+    "title": "Reserved/helper-general admission and bounded lifetimes",
+    "links": [
+      "FR-MCP-RUNAS-003"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "One helper and one general lane, authenticated caller maps lane; Busy no queue/retry, voice/general blocking explicitly approved; release slot only after verified cleanup and bounded idle/hard/op deadlines.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "HelperWhileVoiceOpen_Admitted",
+          "SameLaneSecond_Busy",
+          "GeneralLane_VoiceOpen_TodoBusy",
+          "GeneralLane_VoiceOpen_RequirementsAndPolicyBusy",
+          "IdleAndHardDeadline_ReleaseOnlyAfterCleanup",
+          "PublicCallerLaneOverride_Rejected"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Concurrent true UID processes and lifetime receipts",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-SERVICEUPDATE-002",
+    "kind": "TR",
+    "operation": "new",
+    "title": "Privileged release transaction separated from unprivileged Nuke",
+    "links": [
+      "FR-MCP-SERVICEUPDATE-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Nuke validated package invokes bounded fixed pkexec installer, creates verified root libexec/state ancestors, no root repo code/DB access, immutable source/runtime/policy manifest and unprivileged migration attestation.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "NukeUpdateService_InvokesFixedPkexecAfterValidatedPackage",
+          "InstallerCreatesRootLibexecSafely",
+          "RootStateAncestorsNotServiceWritable",
+          "RejectPendingMigrationOrWrongApphost"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual Nuke staging command/digest/ownership",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Fsync state transitions/lock, worker-first enable, retained backup metadata, dual-slot installer/bootstrap recovery, reverse restore exactly known prior release; unsafe recovery stops admission/services.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "TransitionRestartAndFailureRollback",
+          "InstallerSourceHashBootstrapAndRecovery",
+          "WorkerVerifiedBeforeMcpEnable",
+          "Rollback_RestoresGroupLingerAndUnits",
+          "RecoveryFailed_AdmissionStopped"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Actual injected transitions and final transaction receipt",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-RUNAS-001",
+    "kind": "TR",
+    "operation": "update",
+    "title": "Generic execution identity/session worker contract",
+    "links": [
+      "FR-MCP-RUNAS-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Replace helper/Grok-only restriction: selected strategy plus generic identity decorator for every supported caller; explicit helper/workspace/admin precedence, public identity override rejection and local/Windows compatibility.",
+        "tddPhase": "P1",
+        "increment": "I1/I3",
+        "tests": [
+          "Helper_ForwardsRunAs",
+          "LinuxCrossUID_NoLocalSpawn",
+          "CallerRunAsRequirements_DelegatesSelectedOneShot",
+          "CallerRunAsWorkspacePolicy_DelegatesSelectedOneShot",
+          "CallerRunAsVoice_HonorsOrDenies",
+          "CallerRunAsTodo_HonorsOrDenies",
+          "CallerRunAsTriage_HonorsOrDenies",
+          "CallerRunAsPool_HonorsOrDenies",
+          "CallerRunAsBrainSlot_NeverSilentlyLocal"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual-account caller matrix and Windows regression",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Verify actual target UID before launch; MCP UID and NoNewPrivileges unchanged; mismatch/unavailable worker never spawns locally or copies secrets.",
+        "tddPhase": "P1",
+        "increment": "I3",
+        "tests": [
+          "IdentityMismatch_FailsBeforeAgentLaunch",
+          "LinuxCrossUID_NoLocalSpawn",
+          "SameUID_LocalAllStrategies",
+          "WorkerUnavailable_NoFallback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Held runner proc UID and actual CLI PID/hardening receipts",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Authenticate peer before parse; root policy alone authorizes identity/executable/workspace/model; reject injected secrets/env/unpinned paths, bound protocol and clean environment.",
+        "tddPhase": "P2",
+        "increment": "I4/I6",
+        "tests": [
+          "PeerRejectedBeforeParse",
+          "PolicyMismatch_NoLaunch",
+          "DelegatedSecrets_DeniedWithoutValueLeak",
+          "CleanEnvironmentAndApprovedToolPath",
+          "ImmutableExecAliases"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real negative sockets/policy probes and runtime smoke",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC4",
+        "text": "Defaults-only deployed helper completes actual answer with correlated strategy/UID/exit/cleanup, never echo/progress/incomplete accepted.",
+        "tddPhase": "P1",
+        "increment": "I3",
+        "tests": [
+          "Helper_DefaultsOnly_CompletedRealBody",
+          "Helper_EchoOrIncomplete_NotAccepted",
+          "HelperReceiptCorrelation_Required"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Same acceptance harness real Grok arithmetic and MCP help",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC5",
+        "text": "All completion/cancel/disconnect/timeout/output/error/shutdown/crash paths clean descendants and private resources; cleanup failure blocks admission.",
+        "tddPhase": "P2",
+        "increment": "I5",
+        "tests": [
+          "ChildExitStopDrainReadDeleteOrder",
+          "DescendantsAllStopped",
+          "CleanupFailed_BlocksAdmission",
+          "RegistrySiblingUnitsAllStopped",
+          "WorkerCrash_RegistrySweepBeforeAdmission"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual fork/reparent/cgroup/file receipts",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC6",
+        "text": "Journaled Nuke/pkexec worker-first transaction preserves live state and recovers interruptions; rollback never claims goal repaired.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "TransitionRestartAndFailureRollback",
+          "BackupBeforeReplacement",
+          "WorkerVerifiedBeforeMcpEnable",
+          "RecoveryFailed_AdmissionStopped"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Staging fault injection and approved production journal",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC7",
+        "text": "Mock-pass and assertion sensitivity before real implementation; meaningful red/green/refactor and complete current/prior unit zero failures/skips; HV only completed major phases, full durable audit, operator approval.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "GateValidator_RejectsMissingMockRedGreenEvidence",
+          "GateValidator_RejectsFailureSkipEmptyOrMissingScope",
+          "HvScheduler_OnlyCompletedMajorPhase",
+          "AuditReceipt_RequiresFullVerdictAndReadback"
+        ],
+        "verificationPhase": "P3/P4/P5",
+        "evidence": "Actual TDD ledgers/TRX/source hashes and major-phase HV >=98",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-GROKDEFAULTS-001",
+    "kind": "TR",
+    "operation": "new",
+    "title": "Pure caller and strategy scoped settings resolver",
+    "links": [
+      "FR-MCP-GROKDEFAULTS-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Each selected strategy/alias gets matching path/model, explicit overrides win; other-strategy workspace/caller defaults never leak.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "Helper_CodexOverride_DoesNotInheritGrokExecutable",
+          "ExplicitPath_NotRewritten",
+          "TotalPrecedenceEveryTie",
+          "WorkspacePath_OnlyMatchingStrategy"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real Grok/Codex command parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Preserve programmatic defaults and null/empty/presence; unconfigured secondary Claude and helper unset getter/model auto, same-strategy legacy precedence.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "TriageSecondaryDefault_PreservedWhenUnconfigured",
+          "ProgrammaticTriageDefaultsAndOverrides",
+          "HelperModelAbsent_UsesGrokAuto",
+          "NullEmptyRunAs"
+        ],
+        "verificationPhase": "P1/P3",
+        "evidence": "Binder/object test cases and forward-port parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Bind all enumerated deployed-only unreviewed keys, preserve TODO Grok selection/model/path and voice path with explicit provenance.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "TodoDeployedGrokSelection_Preserved",
+          "DeployedOnlyKeys_BoundOrExplicitlyDenied",
+          "TodoClineCrossUid_DeniedBeforeSpawn"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Deployed-key dry-run and selected-strategy trace",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC4",
+        "text": "Remove only startup RunAs/path overwrites; resolve per-request workspace/admin identity while preserving prompts/BaseUrl.",
+        "tddPhase": "P1",
+        "increment": "I1/I3",
+        "tests": [
+          "Startup_PreservesPromptsAndBaseUrl",
+          "TodoAdminRunAs_AfterOverwriteRemoval",
+          "WorkspaceNullRunAs_PreservesAdmin",
+          "HelperExplicitRunAs_DominatesWorkspaceRecord"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Multiworkspace and absent/null/empty identity cases",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC5",
+        "text": "Retain all legacy/unrelated values and exact ACL/owner/mode/xattrs; no effective change except approved leak/identity correction.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "NoLegacyKeysRemoved",
+          "PreservedUnrelatedConfiguration",
+          "ConfigACLPreserved",
+          "CallerSpecificMigration_NoFlattening"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Object diff plus restored metadata/hash",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-SERVICEUPDATE-001",
+    "kind": "TR",
+    "operation": "update",
+    "title": "Platform update preservation and verified binary rollback",
+    "links": [
+      "FR-MCP-SERVICEUPDATE-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "platform",
+        "text": "Windows updater unchanged; Linux RID/apphost and unsupported-platform preflight preserved; Nuke unprivileged build then fixed pkexec.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "WindowsUpdateService_PathAndRecoveryUnchanged",
+          "PlatformRidAndApphost_Selected",
+          "UnsupportedHost_NoMutation",
+          "NukeUpdateService_InvokesFixedPkexecAfterValidatedPackage"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Windows job and Linux target staging",
+        "isSatisfied": false
+      },
+      {
+        "id": "preserve",
+        "text": "Preserve data/provider/unrelated YAML and exact Unix metadata/units/dropins/env/group/linger state in root-only archive.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "ConfigACLPreserved",
+          "PreservedUnrelatedConfiguration",
+          "RootStateAncestorsNotServiceWritable",
+          "Rollback_RestoresGroupLingerAndUnits"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Actual archive/restore hashes and metadata",
+        "isSatisfied": false
+      },
+      {
+        "id": "lifecycle",
+        "text": "Known prereq release/no pending migrations before stop; backup before replacement, worker before MCP; recover interrupted journal before new transaction.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "RejectPendingMigrationOrWrongApphost",
+          "BackupBeforeReplacement",
+          "WorkerVerifiedBeforeMcpEnable",
+          "TransitionRestartAndFailureRollback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Sanitized attestation digest and journal",
+        "isSatisfied": false
+      },
+      {
+        "id": "validation",
+        "text": "Mock-first/full-unit gates complete; staging/production never accept health-only or incomplete helper, retain full phase-end review evidence.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "GateValidator_RejectsMissingMockRedGreenEvidence",
+          "DeploymentAcceptance_RejectsHealthOnlyOrIncompleteHelper",
+          "AuditReceipt_RequiresFullVerdictAndReadback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "TDD/regression plus actual helper UID/cleanup and HV",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TEST-MCP-RUNAS-001",
+    "kind": "TEST",
+    "operation": "update",
+    "title": "TDD and real acceptance for FR-MCP-RUNAS-001",
+    "links": [
+      "FR-MCP-RUNAS-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Replace helper/Grok-only restriction: selected strategy plus generic identity decorator for every supported caller; explicit helper/workspace/admin precedence, public identity override rejection and local/Windows compatibility.",
+        "tddPhase": "P1",
+        "increment": "I1/I3",
+        "tests": [
+          "Helper_ForwardsRunAs",
+          "LinuxCrossUID_NoLocalSpawn",
+          "CallerRunAsRequirements_DelegatesSelectedOneShot",
+          "CallerRunAsWorkspacePolicy_DelegatesSelectedOneShot",
+          "CallerRunAsVoice_HonorsOrDenies",
+          "CallerRunAsTodo_HonorsOrDenies",
+          "CallerRunAsTriage_HonorsOrDenies",
+          "CallerRunAsPool_HonorsOrDenies",
+          "CallerRunAsBrainSlot_NeverSilentlyLocal"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual-account caller matrix and Windows regression",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Verify actual target UID before launch; MCP UID and NoNewPrivileges unchanged; mismatch/unavailable worker never spawns locally or copies secrets.",
+        "tddPhase": "P1",
+        "increment": "I3",
+        "tests": [
+          "IdentityMismatch_FailsBeforeAgentLaunch",
+          "LinuxCrossUID_NoLocalSpawn",
+          "SameUID_LocalAllStrategies",
+          "WorkerUnavailable_NoFallback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Held runner proc UID and actual CLI PID/hardening receipts",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Authenticate peer before parse; root policy alone authorizes identity/executable/workspace/model; reject injected secrets/env/unpinned paths, bound protocol and clean environment.",
+        "tddPhase": "P2",
+        "increment": "I4/I6",
+        "tests": [
+          "PeerRejectedBeforeParse",
+          "PolicyMismatch_NoLaunch",
+          "DelegatedSecrets_DeniedWithoutValueLeak",
+          "CleanEnvironmentAndApprovedToolPath",
+          "ImmutableExecAliases"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real negative sockets/policy probes and runtime smoke",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC4",
+        "text": "Defaults-only deployed helper completes actual answer with correlated strategy/UID/exit/cleanup, never echo/progress/incomplete accepted.",
+        "tddPhase": "P1",
+        "increment": "I3",
+        "tests": [
+          "Helper_DefaultsOnly_CompletedRealBody",
+          "Helper_EchoOrIncomplete_NotAccepted",
+          "HelperReceiptCorrelation_Required"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Same acceptance harness real Grok arithmetic and MCP help",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC5",
+        "text": "All completion/cancel/disconnect/timeout/output/error/shutdown/crash paths clean descendants and private resources; cleanup failure blocks admission.",
+        "tddPhase": "P2",
+        "increment": "I5",
+        "tests": [
+          "ChildExitStopDrainReadDeleteOrder",
+          "DescendantsAllStopped",
+          "CleanupFailed_BlocksAdmission",
+          "RegistrySiblingUnitsAllStopped",
+          "WorkerCrash_RegistrySweepBeforeAdmission"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual fork/reparent/cgroup/file receipts",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC6",
+        "text": "Journaled Nuke/pkexec worker-first transaction preserves live state and recovers interruptions; rollback never claims goal repaired.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "TransitionRestartAndFailureRollback",
+          "BackupBeforeReplacement",
+          "WorkerVerifiedBeforeMcpEnable",
+          "RecoveryFailed_AdmissionStopped"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Staging fault injection and approved production journal",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC7",
+        "text": "Mock-pass and assertion sensitivity before real implementation; meaningful red/green/refactor and complete current/prior unit zero failures/skips; HV only completed major phases, full durable audit, operator approval.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "GateValidator_RejectsMissingMockRedGreenEvidence",
+          "GateValidator_RejectsFailureSkipEmptyOrMissingScope",
+          "HvScheduler_OnlyCompletedMajorPhase",
+          "AuditReceipt_RequiresFullVerdictAndReadback"
+        ],
+        "verificationPhase": "P3/P4/P5",
+        "evidence": "Actual TDD ledgers/TRX/source hashes and major-phase HV >=98",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TEST-MCP-RUNAS-002",
+    "kind": "TEST",
+    "operation": "new",
+    "title": "TDD and real acceptance for FR-MCP-RUNAS-002",
+    "links": [
+      "FR-MCP-RUNAS-002"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Worker reuses selected CLI implementation/arguments/parser, no duplicated vendor pipeline or hosted/remote recursion dependency.",
+        "tddPhase": "P1",
+        "increment": "I2",
+        "tests": [
+          "SameArgumentsResultsAfterExtraction",
+          "CliComposition_NoServicesHostedOrRemoteDependency"
+        ],
+        "verificationPhase": "P2/P4",
+        "evidence": "Worker composition and real local/remote parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Initial read/stream, send/stream, escape, end/dispose, liveness and actual agent PID preserve batch/interactive semantics.",
+        "tddPhase": "P2",
+        "increment": "I4",
+        "tests": [
+          "RemoteSessionContractTests_AllMembers",
+          "BatchSend_AllowedAfterInitialDespiteNotAlive",
+          "Stream_YieldsExactUnderlyingChunks",
+          "ProcessId_IsAgentNotLauncher"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real deterministic interactive fixture plus Grok/Codex batch",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Cancellation/terminal races and stream abandonment cannot reexecute prompts; End/Dispose idempotent and await verified cleanup.",
+        "tddPhase": "P2",
+        "increment": "I4/I5",
+        "tests": [
+          "CancelCompletion_FirstTerminalWins",
+          "EndDispose_IdempotentWaitsCleanup",
+          "StreamAbandonment_ClosesSession",
+          "NoReconnectPromptReplay"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real cancellation/disconnect/restart faults",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC4",
+        "text": "Result callbacks/parsed JSON/YAML/chunk caps preserved without duplicate delivery or unbounded capture.",
+        "tddPhase": "P2",
+        "increment": "I4/I5",
+        "tests": [
+          "ParsedResult_SemanticallyPreserved",
+          "OutputCallback_NoDoubleDelivery",
+          "OutputCapture_BoundedBeforeGrowth"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual oversize/malformed/multichunk output",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TEST-MCP-RUNAS-003",
+    "kind": "TEST",
+    "operation": "new",
+    "title": "TDD and real acceptance for FR-MCP-RUNAS-003",
+    "links": [
+      "FR-MCP-RUNAS-003"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Helper reserved lane stays available with general lane occupied; second same-lane session Busy immediately, no queue/retry, max two CLI invocations.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "HelperWhileVoiceOpen_Admitted",
+          "SameLaneSecond_Busy",
+          "LaneCapacity_MaxTwoRunningCli"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real two-account concurrent sessions/count",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Disclose and require approval of open voice blocking general TODO/requirements/parser up to hard lifetime; bounded idle/hard deadlines, local concurrency unchanged.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "GeneralLane_VoiceOpen_TodoBusy",
+          "GeneralLane_VoiceOpen_RequirementsAndPolicyBusy",
+          "IdleAndHardDeadline_ReleaseOnlyAfterCleanup",
+          "LocalConcurrency_Unchanged"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Approved concurrency/deadline smoke",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Cleanup or policy mismatch disables affected admission; public caller cannot steal helper lane or execution identity.",
+        "tddPhase": "P2",
+        "increment": "I6",
+        "tests": [
+          "PublicCallerLaneOverride_Rejected",
+          "CleanupFailed_BlocksAdmission",
+          "PolicyRotationDrains"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Actual spoof/rotation/recovery probes",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TEST-MCP-GROKDEFAULTS-001",
+    "kind": "TEST",
+    "operation": "new",
+    "title": "TDD and real acceptance for FR-MCP-GROKDEFAULTS-001",
+    "links": [
+      "FR-MCP-GROKDEFAULTS-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "AC1",
+        "text": "Each selected strategy/alias gets matching path/model, explicit overrides win; other-strategy workspace/caller defaults never leak.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "Helper_CodexOverride_DoesNotInheritGrokExecutable",
+          "ExplicitPath_NotRewritten",
+          "TotalPrecedenceEveryTie",
+          "WorkspacePath_OnlyMatchingStrategy"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Real Grok/Codex command parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC2",
+        "text": "Preserve programmatic defaults and null/empty/presence; unconfigured secondary Claude and helper unset getter/model auto, same-strategy legacy precedence.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "TriageSecondaryDefault_PreservedWhenUnconfigured",
+          "ProgrammaticTriageDefaultsAndOverrides",
+          "HelperModelAbsent_UsesGrokAuto",
+          "NullEmptyRunAs"
+        ],
+        "verificationPhase": "P1/P3",
+        "evidence": "Binder/object test cases and forward-port parity",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC3",
+        "text": "Bind all enumerated deployed-only unreviewed keys, preserve TODO Grok selection/model/path and voice path with explicit provenance.",
+        "tddPhase": "P1",
+        "increment": "I1",
+        "tests": [
+          "TodoDeployedGrokSelection_Preserved",
+          "DeployedOnlyKeys_BoundOrExplicitlyDenied",
+          "TodoClineCrossUid_DeniedBeforeSpawn"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Deployed-key dry-run and selected-strategy trace",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC4",
+        "text": "Remove only startup RunAs/path overwrites; resolve per-request workspace/admin identity while preserving prompts/BaseUrl.",
+        "tddPhase": "P1",
+        "increment": "I1/I3",
+        "tests": [
+          "Startup_PreservesPromptsAndBaseUrl",
+          "TodoAdminRunAs_AfterOverwriteRemoval",
+          "WorkspaceNullRunAs_PreservesAdmin",
+          "HelperExplicitRunAs_DominatesWorkspaceRecord"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Multiworkspace and absent/null/empty identity cases",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC5",
+        "text": "Retain all legacy/unrelated values and exact ACL/owner/mode/xattrs; no effective change except approved leak/identity correction.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "NoLegacyKeysRemoved",
+          "PreservedUnrelatedConfiguration",
+          "ConfigACLPreserved",
+          "CallerSpecificMigration_NoFlattening"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Object diff plus restored metadata/hash",
+        "isSatisfied": false
+      }
+    ]
+  },
+  {
+    "id": "TEST-MCP-SERVICEUPDATE-001",
+    "kind": "TEST",
+    "operation": "update",
+    "title": "TDD and real acceptance for FR-MCP-SERVICEUPDATE-001",
+    "links": [
+      "FR-MCP-SERVICEUPDATE-001"
+    ],
+    "acceptanceCriteria": [
+      {
+        "id": "platform",
+        "text": "Windows updater unchanged; Linux RID/apphost and unsupported-platform preflight preserved; Nuke unprivileged build then fixed pkexec.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "WindowsUpdateService_PathAndRecoveryUnchanged",
+          "PlatformRidAndApphost_Selected",
+          "UnsupportedHost_NoMutation",
+          "NukeUpdateService_InvokesFixedPkexecAfterValidatedPackage"
+        ],
+        "verificationPhase": "P4",
+        "evidence": "Windows job and Linux target staging",
+        "isSatisfied": false
+      },
+      {
+        "id": "preserve",
+        "text": "Preserve data/provider/unrelated YAML and exact Unix metadata/units/dropins/env/group/linger state in root-only archive.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "ConfigACLPreserved",
+          "PreservedUnrelatedConfiguration",
+          "RootStateAncestorsNotServiceWritable",
+          "Rollback_RestoresGroupLingerAndUnits"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Actual archive/restore hashes and metadata",
+        "isSatisfied": false
+      },
+      {
+        "id": "lifecycle",
+        "text": "Known prereq release/no pending migrations before stop; backup before replacement, worker before MCP; recover interrupted journal before new transaction.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "RejectPendingMigrationOrWrongApphost",
+          "BackupBeforeReplacement",
+          "WorkerVerifiedBeforeMcpEnable",
+          "TransitionRestartAndFailureRollback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "Sanitized attestation digest and journal",
+        "isSatisfied": false
+      },
+      {
+        "id": "validation",
+        "text": "Mock-first/full-unit gates complete; staging/production never accept health-only or incomplete helper, retain full phase-end review evidence.",
+        "tddPhase": "P3",
+        "increment": "I7",
+        "tests": [
+          "GateValidator_RejectsMissingMockRedGreenEvidence",
+          "DeploymentAcceptance_RejectsHealthOnlyOrIncompleteHelper",
+          "AuditReceipt_RequiresFullVerdictAndReadback"
+        ],
+        "verificationPhase": "P4/P5",
+        "evidence": "TDD/regression plus actual helper UID/cleanup and HV",
+        "isSatisfied": false
+      }
+    ]
+  }
+]

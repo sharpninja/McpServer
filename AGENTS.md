@@ -50,11 +50,11 @@ Key rules:
 - Use `mcp_todo_*` tools for TODO CRUD (query, get, create, update, delete, plan, status, implementation).
 - Use `mcp_requirements_*` tools for FR/TR/TEST queries.
 - Use `mcp_client_invoke` for any sub-client method not covered by a dedicated tool (context search, GitHub, workspace, etc.).
-- Do not make raw HTTP calls to `/mcpserver/*` endpoints when a tool is available.
+- Do not make raw HTTP calls to `/qbrainai/*` endpoints when a tool is available.
 
 ## Context Loading by Task Type
 
-- Agent Help: see marker `## Agent Help (MCP Server issues)` in `AGENTS-README-FIRST.yaml`; API `/mcpserver/agent-help`
+- Agent Help: see marker `## Agent Help (QBrain.AI issues)` in `AGENTS-README-FIRST.yaml`; API `/qbrainai/agent-help`
 - Session logging → `docs/context/session-log-schema.md` + `docs/context/module-bootstrap.md`
 - TODO management → `docs/context/todo-schema.md` + `docs/context/module-bootstrap.md`
 - API integration → `docs/context/api-capabilities.md` (or `GET /swagger/v1/swagger.json`)
@@ -93,6 +93,7 @@ You represent the workspace owner. Your work directly reflects the owner's profe
 - Every commit must be correct, clean, well-described, and complete.
 - Log all commits as actions with type "commit" (SHA, branch, message, files).
 - Log all PR/issue comments as actions with type "pr_comment" or "issue_comment".
+- Always sign PR comments using the same signature convention as commits, identifying the actual authoring agent.
 
 ### Source Attribution
 
@@ -141,7 +142,7 @@ At regular intervals during long sessions (~10 interactions):
 - **MCP** — Model Context Protocol, an open standard for tool-calling between AI agents and context servers.
 - **Workspace** — a project directory registered with the MCP server. All workspaces share a single port; use the `X-Workspace-Path` header to target a specific one.
 - **Marker File** — the `AGENTS-README-FIRST.yaml` file at each workspace root. Contains connection details, auth token, and agent prompt.
-- **API Key** — a per-workspace cryptographic token that rotates on each server restart. Required for all `/mcpserver/*` REST endpoints.
+- **API Key** — a per-workspace cryptographic token that rotates on each server restart. Required for all `/qbrainai/*` REST endpoints.
 - **Streamable HTTP** — the MCP wire protocol transport at `/mcp-transport`. Carries JSON-RPC tool calls over HTTP POST with streaming responses.
 - **Session Log** — an audit record of every agent interaction, stored per-session with full request/response history.
 - **Context Pack** — an ordered set of document chunks retrieved by semantic + full-text hybrid search, scoped to the workspace.

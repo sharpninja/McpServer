@@ -12,7 +12,7 @@ partial class Build
         .Executes(() =>
         {
             // Session-life unit inventory deliberately excludes integration projects.
-            // McpServer.PluginIntegration.Tests stays on PluginSessionLogIntegration / P6, not Nuke Test.
+            // QBrainAi.PluginIntegration.Tests stays on PluginSessionLogIntegration / P6, not Nuke Test.
             var testProjects = Solution.GetAllProjects("*")
                 .Where(p => p.Name.EndsWith(".Tests") || p.Name.EndsWith(".Validation"))
                 .Where(p => !p.Name.Contains("IntegrationTests"))

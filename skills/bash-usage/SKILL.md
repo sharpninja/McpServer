@@ -4,9 +4,9 @@ description: Use when a QBAgent (Quad-Brain) tool call needs a shell on this Win
 license: MIT
 ---
 
-# Bash Usage on the McpServer Windows Host
+# Bash Usage on the QBrainAi Windows Host
 
-This skill governs shell selection for the optional QBAgent (`McpServer.QBAgent`, Quad-Brain)
+This skill governs shell selection for the optional QBAgent (`QBrainAi.QBAgent`, Quad-Brain)
 `run_bash` and `run_powershell` tools. The host OS is Windows 11. PowerShell 7+ (`pwsh.exe`)
 is the primary and always-present shell. Git Bash is optional and only usable when it is
 resolvable on `PATH`.

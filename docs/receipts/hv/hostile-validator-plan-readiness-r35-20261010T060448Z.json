@@ -1,0 +1,147 @@
+{
+  "TimestampUtc": "2026-10-10T06:18:26Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex CLI",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "LiveSessionId": "01a12469-ff8e-7092-adfa-34352c94ec21",
+    "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/10/rollout-2026-10-10T01-04-49-01a12469-ff8e-7092-adfa-34352c94ec21.jsonl",
+    "Proof": "Matching turn_context model and effort; request reviewer metadata and response thread.started agree."
+  },
+  "AddProfileCount": 19,
+  "MarkerReadFull": true,
+  "MemoryReadCount": 15,
+  "EveryMemoryReadFull": true,
+  "MemoryIds": [
+    "MEMORY-FACT-001",
+    "MEMORY-FACT-002",
+    "MEMORY-FACT-003",
+    "MEMORY-FACT-004",
+    "MEMORY-PREFERENCE-001",
+    "MEMORY-PROCESS-002",
+    "MEMORY-PROCESS-003",
+    "MEMORY-PROCESS-004",
+    "MEMORY-PROCESS-005",
+    "MEMORY-PROCESS-006",
+    "MEMORY-PROCESS-007",
+    "MEMORY-PROCESS-008",
+    "MEMORY-REQ-001",
+    "MEMORY-DEVPROCESS-001",
+    "MEMORY-PROCESS-001"
+  ],
+  "PlanLines": 652,
+  "PlanNonemptyLines": 532,
+  "TodoImplementationTasks": 30,
+  "TodoDescriptionParity": true,
+  "HandoffLines": 252,
+  "HeadSha": "e96224c72cc3eccace7e60e46d9bd11c749d9d9e",
+  "Claims": [
+    {
+      "Claim": "P1",
+      "Status": "PASS",
+      "Evidence": "- **P1 PASS — source accuracy.** Read all plan sections end to end against HEAD, the referenced `docs/context` contracts, and the nine local plugin repos. The 29 existing critical-file paths at plan lines 643-652 exist. Source anchors checked include the current prompt-id and Stop-hook reads in the Claude plugin at `lib/plugin-hook.ps1:865,944`, the Claude session environment read at `lib/agent-runtime-header.ps1:165`, the eight-repo sync list and automatic version bump in `Build.SyncAgentPlugins.cs`, the `PluginSessionLogIntegration` server fixture, and the traceability, migration, deploy, and REPL targets. The dated plugin inventory at lines 65-76 matches the local heads, dirty counts, detached/default branches, versions, and core hashes. No stale current-code claim was found. The source-bearing tree under `src/`, `tests/`, `build/`, and `plugins/` has not changed from the plan's `f56dcf70` baseline."
+    },
+    {
+      "Claim": "P2",
+      "Status": "PASS",
+      "Evidence": "- **P2 PASS — requirements.** Live main-workspace `workflow.requirements.effective` reports FR 374, TR 502, TEST 574. The proposed 21 FR, 23 TR, and 23 TEST ids are absent from that store and from the generated `docs/Project` projection; the 27 updated entries represent 33 existing records. The stale `TEST-SUPPORT-023` matrix-only row exists at `Requirements-Matrix.md:474`; the plan correctly allocates new `TEST-SUPPORT-024`. Catalog mapping rows and updated-FR additions name existing or P0-created ids, and P0 explicitly creates the new records before mapping. The round-34 marker-field addition is removed, so no FR-MCP-140 / TR-MCP-SEC-005 / TEST-MCP-189 update is needed."
+    },
+    {
+      "Claim": "P3",
+      "Status": "PASS",
+      "Evidence": "- **P3 PASS — locked decisions.** D1-D12, partial clearance, license preservation/new Apache-2.0 files, removal of `skipped_duplicate`, unsupported-session failsafe option 1, 98/98 scoring, and C1-C12 coordination are propagated to the host table, ACs, tasks, gates, and rollout. The round-36 advisory pre-check and server-only authority faithfully avoid the unsigned marker capability rejected in round 34."
+    },
+    {
+      "Claim": "P4",
+      "Status": "PASS",
+      "Evidence": "- **P4 PASS — scope.** The server, client, REPL, MCP tools, McpAgent, PowerShell and Node cores, eight requested agent plugins plus grok-bot, and SQLite/PostgreSQL/SQL Server migrations have named slices and tests. The A9 and S9 syncs and S10 G4/G6 real-gate cases cover all nine plugins; P0.2, the feature matrix, and unsupported-host cases handle host limitations."
+    },
+    {
+      "Claim": "P5",
+      "Status": "PASS",
+      "Evidence": "- **P5 PASS — decision completeness.** No new operator design ruling is needed to repair the finding: the technical contract and wire text already choose a separate withdrawn-queue check. Other open P0.2 results select pre-specified supported/adapter/unsupported branches; tool installation and deployment approvals are operational gates, not missing design choices."
+    },
+    {
+      "Claim": "P6",
+      "Status": "PASS",
+      "Evidence": "- **P6 PASS — executability.** The named baseline build targets and test projects exist, including `MigrationIntegrationTests`, `PluginSessionLogIntegration`, `ValidateConfig`, `ValidateTraceability`, `InstallReplTool`, `UpdateService`, and `SyncAgentPlugins`. The plan accounts for current missing SDK/Pester/bats/EF tooling in P0.1, the Linux `InstallTestDependencies` skip, and zero-failure/zero-skip gates. Each slice specifies contract/stubs, RED, mocks-green with a negative check, self-review, real green, refactor, and then applicable G1-G6; S10's real-gate tests are placed after S8/S9 clients and against the S10 server fixture. These future gates were inspected for feasibility, not executed as implementation tests in this review-only round."
+    },
+    {
+      "Claim": "P7",
+      "Status": "FAIL",
+      "Evidence": "- **P7 FAIL — testability.** FR-MCP-SESSIONTURN-003-AC004 at plan line 216 requires Stop to evaluate *exactly* the delivered-request ledger, while FR-MCP-SESSIONTURN-005-AC009 at line 234 requires Stop to block a withdrawn request that was never delivered. Both are testable but cannot pass for the same queued-then-withdrawn scenario. A7 at line 590 repeats both assertions (`StopGate_LedgerListsDeliveredSinceLastPass_PlusUnconfirmedCloses` and the withdrawn block) without a case making their relationship explicit. See F-R35-01."
+    },
+    {
+      "Claim": "P8",
+      "Status": "FAIL",
+      "Evidence": "- **P8 FAIL — internal consistency.** The host lifecycle at line 205 and UC-1 at line 480 keep a pre-delivery withdrawal outside the delivered ledger; TR-MCP-SESSIONTURN-006-AC005 at line 351 and the wire contract at line 551 nevertheless require a separate `turn_withdrawn_unclosed` block. The word *exactly* in AC004 and the A7 test contradict that separate check. The 30 tasks and phase dependencies otherwise agree. See F-R35-01."
+    },
+    {
+      "Claim": "P9",
+      "Status": "PASS",
+      "Evidence": "- **P9 PASS — artifact parity.** `workflow.todo.get` in the main workspace worked with the worktree Codex cache: its description matches every non-empty plan line exactly (532/532), and its 30 section-label tasks cover approval, P0.1-P0.9, A1-A9, and S1-S11. Its note still says not approved. TechnicalDetails and handoff explicitly supersede their historical real-marker-activation wording with the round-36 deletion. Handoff lines 11-17, 206-217, and 220 report the current status, counts, locations, and triage disposition accurately."
+    },
+    {
+      "Claim": "P10",
+      "Status": "PASS",
+      "Evidence": "- **P10 PASS — risks.** The five specific main-workspace triage report ids in plan line 630 resolve via live `workflow.triage.getReport` with matching titles; the misplaced restore/clone group resolves in the worktree as `failed`, one grouped report, and not in the main workspace, as the plan states. Source confirms the gated query does not include commit files before `CloneCommit` reads them, and `TodoExecutionService.cs:1474` queries `filesModified` while writers use `FileModified`. The plugin defects are assigned to A9. No plan-scope incidental bug was found unfiled or unscheduled."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 97,
+  "Completeness": 96,
+  "Confidence": 98,
+  "PassCount": 8,
+  "FailCount": 2,
+  "UnknownCount": 0,
+  "FailList": [
+    {
+      "Id": "F-R35-01",
+      "Claims": [
+        "P7",
+        "P8"
+      ],
+      "PlanLocations": [
+        "line 216",
+        "line 234",
+        "line 351",
+        "line 480",
+        "line 590",
+        "lines 551,554"
+      ],
+      "ExactDefect": "Delivered-only ledger omits a never-delivered withdrawn request that Stop must block.",
+      "Evidence": "Plan lines 205,216,234,351,480,551,554,590; r16/r17 ledger findings.",
+      "ChangeToPass": "Keep delivered-only enrollment; add separate withdrawn scan to AC004/A7 test and a pre-delivery withdrawal RED case; sync TODO/handoff.",
+      "Classification": "Implementer edit",
+      "OperatorDecisionRequired": false
+    }
+  ],
+  "UnknownList": [],
+  "ImplementerFixes": [
+    "F-R35-01: reconcile ledger and withdrawn scan, add RED case, sync TODO/handoff."
+  ],
+  "OperatorDecisionFails": [],
+  "ReviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T060737Z-plan-r35-hv",
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r35-20261010T060448Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r35-20261010T060448Z.json",
+    "docs/receipts/hv/20261010T060448Z-plan-readiness-r35.request.jsonl",
+    "docs/receipts/hv/20261010T060448Z-plan-readiness-r35.response.jsonl"
+  ],
+  "MarkdownReceipt": "# Hostile validator: PLAN-SESSIONTURNREVIEW-001, round 35\n\n- TimestampUtc: 2026-10-10T06:18:26Z\n- ValidatorIdentity: Codex CLI, `gpt-6-sol`, reasoning effort `xhigh`. Live proof: `CODEX_SESSION_ID=01a12469-ff8e-7092-adfa-34352c94ec21`; the matching rollout `/home/sharpninja/.codex/sessions/2026/10/10/rollout-2026-10-10T01-04-49-01a12469-ff8e-7092-adfa-34352c94ec21.jsonl` has `turn_context` with `model=gpt-6-sol` and `effort=xhigh`. The runner request JSONL declares the same model and effort, and the response JSONL `thread.started` id matches this live session id.\n- Mandatory first actions: read the add-profile skill and all 19 non-skill Markdown files in `/home/sharpninja/.claude/profile/` in full; read the main-workspace `AGENTS-README-FIRST.yaml` in full; `workflow.memory.list` returned 15 effective MCP memories and every memory text was read in full, including `MEMORY-PROCESS-007`, `MEMORY-PROCESS-008`, and `MEMORY-DEVPROCESS-001`. No marker credential is reproduced in this receipt.\n- Source HEAD: `e96224c72cc3eccace7e60e46d9bd11c749d9d9e`. Plan: 652 lines, 532 non-empty. Main-workspace TODO: 30 implementation tasks, `done=false`, priority high. Handoff: 252 lines, NOT APPROVED.\n- Reviewer sessionId: `Codex-20261010T004320Z-plugin-session`; reviewer requestId: `req-20261010T060737Z-plan-r35-hv`.\n- Runner JSONL: `docs/receipts/hv/20261010T060448Z-plan-readiness-r35.request.jsonl` and `docs/receipts/hv/20261010T060448Z-plan-readiness-r35.response.jsonl`.\n- Secret-handling incident: an initial marker-output filter missed one credential value in the runner response stream. That single occurrence was redacted in the response JSONL in place; a readback found zero remaining occurrences. No credential is present in this Markdown or JSON verdict receipt.\n\n## Verdict\n\n**DISAGREE.** Accuracy **97/100**, completeness **96/100**, confidence **98/100**. Eight claims PASS, two FAIL, zero UNKNOWN. The plan remains NOT APPROVED. The finding is a recurrence of the stop-ledger enrollment inconsistency class previously raised in rounds 16 and 17.\n\n## Claims\n\n- **P1 PASS — source accuracy.** Read all plan sections end to end against HEAD, the referenced `docs/context` contracts, and the nine local plugin repos. The 29 existing critical-file paths at plan lines 643-652 exist. Source anchors checked include the current prompt-id and Stop-hook reads in the Claude plugin at `lib/plugin-hook.ps1:865,944`, the Claude session environment read at `lib/agent-runtime-header.ps1:165`, the eight-repo sync list and automatic version bump in `Build.SyncAgentPlugins.cs`, the `PluginSessionLogIntegration` server fixture, and the traceability, migration, deploy, and REPL targets. The dated plugin inventory at lines 65-76 matches the local heads, dirty counts, detached/default branches, versions, and core hashes. No stale current-code claim was found. The source-bearing tree under `src/`, `tests/`, `build/`, and `plugins/` has not changed from the plan's `f56dcf70` baseline.\n- **P2 PASS — requirements.** Live main-workspace `workflow.requirements.effective` reports FR 374, TR 502, TEST 574. The proposed 21 FR, 23 TR, and 23 TEST ids are absent from that store and from the generated `docs/Project` projection; the 27 updated entries represent 33 existing records. The stale `TEST-SUPPORT-023` matrix-only row exists at `Requirements-Matrix.md:474`; the plan correctly allocates new `TEST-SUPPORT-024`. Catalog mapping rows and updated-FR additions name existing or P0-created ids, and P0 explicitly creates the new records before mapping. The round-34 marker-field addition is removed, so no FR-MCP-140 / TR-MCP-SEC-005 / TEST-MCP-189 update is needed.\n- **P3 PASS — locked decisions.** D1-D12, partial clearance, license preservation/new Apache-2.0 files, removal of `skipped_duplicate`, unsupported-session failsafe option 1, 98/98 scoring, and C1-C12 coordination are propagated to the host table, ACs, tasks, gates, and rollout. The round-36 advisory pre-check and server-only authority faithfully avoid the unsigned marker capability rejected in round 34.\n- **P4 PASS — scope.** The server, client, REPL, MCP tools, McpAgent, PowerShell and Node cores, eight requested agent plugins plus grok-bot, and SQLite/PostgreSQL/SQL Server migrations have named slices and tests. The A9 and S9 syncs and S10 G4/G6 real-gate cases cover all nine plugins; P0.2, the feature matrix, and unsupported-host cases handle host limitations.\n- **P5 PASS — decision completeness.** No new operator design ruling is needed to repair the finding: the technical contract and wire text already choose a separate withdrawn-queue check. Other open P0.2 results select pre-specified supported/adapter/unsupported branches; tool installation and deployment approvals are operational gates, not missing design choices.\n- **P6 PASS — executability.** The named baseline build targets and test projects exist, including `MigrationIntegrationTests`, `PluginSessionLogIntegration`, `ValidateConfig`, `ValidateTraceability`, `InstallReplTool`, `UpdateService`, and `SyncAgentPlugins`. The plan accounts for current missing SDK/Pester/bats/EF tooling in P0.1, the Linux `InstallTestDependencies` skip, and zero-failure/zero-skip gates. Each slice specifies contract/stubs, RED, mocks-green with a negative check, self-review, real green, refactor, and then applicable G1-G6; S10's real-gate tests are placed after S8/S9 clients and against the S10 server fixture. These future gates were inspected for feasibility, not executed as implementation tests in this review-only round.\n- **P7 FAIL — testability.** FR-MCP-SESSIONTURN-003-AC004 at plan line 216 requires Stop to evaluate *exactly* the delivered-request ledger, while FR-MCP-SESSIONTURN-005-AC009 at line 234 requires Stop to block a withdrawn request that was never delivered. Both are testable but cannot pass for the same queued-then-withdrawn scenario. A7 at line 590 repeats both assertions (`StopGate_LedgerListsDeliveredSinceLastPass_PlusUnconfirmedCloses` and the withdrawn block) without a case making their relationship explicit. See F-R35-01.\n- **P8 FAIL — internal consistency.** The host lifecycle at line 205 and UC-1 at line 480 keep a pre-delivery withdrawal outside the delivered ledger; TR-MCP-SESSIONTURN-006-AC005 at line 351 and the wire contract at line 551 nevertheless require a separate `turn_withdrawn_unclosed` block. The word *exactly* in AC004 and the A7 test contradict that separate check. The 30 tasks and phase dependencies otherwise agree. See F-R35-01.\n- **P9 PASS — artifact parity.** `workflow.todo.get` in the main workspace worked with the worktree Codex cache: its description matches every non-empty plan line exactly (532/532), and its 30 section-label tasks cover approval, P0.1-P0.9, A1-A9, and S1-S11. Its note still says not approved. TechnicalDetails and handoff explicitly supersede their historical real-marker-activation wording with the round-36 deletion. Handoff lines 11-17, 206-217, and 220 report the current status, counts, locations, and triage disposition accurately.\n- **P10 PASS — risks.** The five specific main-workspace triage report ids in plan line 630 resolve via live `workflow.triage.getReport` with matching titles; the misplaced restore/clone group resolves in the worktree as `failed`, one grouped report, and not in the main workspace, as the plan states. Source confirms the gated query does not include commit files before `CloneCommit` reads them, and `TodoExecutionService.cs:1474` queries `filesModified` while writers use `FileModified`. The plugin defects are assigned to A9. No plan-scope incidental bug was found unfiled or unscheduled.\n\n## F-R35-01 — delivered ledger excludes a withdrawal that Stop must block\n\n- **Plan locations:** FR-MCP-SESSIONTURN-003-AC004, line 216; FR-MCP-SESSIONTURN-005-AC009, line 234; TR-MCP-SESSIONTURN-006-AC005, line 351; UC-1, line 480; A7 RED list, line 590; wire contract, lines 551 and 554.\n- **Exact defect:** Let R be minted from an `enqueue`, then withdrawn by `popAll` before any `dequeue` or `absorbed_mid_turn` removal. R remains server `in_progress`, but the delivery-only ledger has no R entry. AC004 says the Stop gate evaluates exactly that ledger, which passes; AC009 and TR-006 say Stop blocks on R with `turn_withdrawn_unclosed`. One implementation cannot satisfy both results. The contradiction recurs from the ledger-enrollment problem addressed in round 16, although the queue and ledger now share one atomic file.\n- **Evidence:** Lines 205, 216, 234, 351, 480, 551, 554 and 590 of the 652-line plan source; historical F-R16-01 and F-R17-01 in the round-16/17 receipts. This is a plan defect, not an implementation-history or infrastructure finding.\n- **Change to PASS:** Keep delivery as the only ledger enrollment. Amend AC004 and the A7 ledger test so Stop evaluates the delivered ledger **plus** a separate scan of `withdrawn` queue entries still `in_progress`, as TR-006-AC005 and the wire contract already specify. Add an A7 RED case that mints R, withdraws it before delivery, observes an empty delivered ledger, verifies `turn_withdrawn_unclosed` blocks, then fails R by its original pair and verifies the next Stop passes; include restart and another host session as negative checks. Propagate the corrected AC/test wording to the TODO description and any handoff summary that quotes it.\n- **Classification:** Implementer edit to the plan, its synced TODO, and affected handoff wording. **No operator decision**; the existing technical contract selects the separate-scan option. Enrolling undelivered requests in the delivered ledger would violate D5 and the explicit delivery-only rule.\n\n## Round and phase audit\n\nRound 34 F-R34-01 is repaired: the plan has zero `sessionTurnCompletionGate: enforced`, `marker activation`, or `real-marker` occurrences. The marker-v1 signature and marker writer remain unchanged; local pre-checks are advisory across plugin cores, REPL, and McpAgent; server 400 refusals drive Stop; S10 retains real-gate tests and G4/G6. Re-attacking r1-r33 found no other regression in mint identity, D5 arrival timing, D6 unsupported behavior, C2 alias permanence/final acknowledgements, C3 outcome removal, lossless score handling, three-provider migrations, same-version plugin sync, or HV cadence. Phase-boundary sweep found the A7 withdrawal conflict above; S8/S9 server-double cases precede S10, and S10 owns real gate refusals and all-host cases.\n\nThe reviewer began and updated its own MCP turn through the installed Codex plugin wrapper. A first begin attempt against the main-workspace path failed to save a failsafe payload; the worktree-scoped retry persisted. This is a reviewer-log routing observation only and is not scored against the plan. The complete result is recorded on that worktree-scoped reviewer turn and queried back after completion.\n\nReadback proof: `client.SessionLog.QueryAsync` returned the reviewer turn `completed`, with three verdict/decision dialog items and four actions. Its 10,874-character full-verdict dialog matched the Markdown at the time of logging after the server/YAML round trip normalized eleven em dashes to ASCII hyphens; every other character matched. A fourth dialog item on that completed turn records this proof.\n",
+  "ResponseJsonlSecretRedaction": {
+    "occurrencesRedacted": 1,
+    "remainingOccurrences": 0
+  },
+  "PersistenceProof": {
+    "queryMethod": "client.SessionLog.QueryAsync",
+    "turnStatus": "completed",
+    "initialFullVerdictDialogChars": 10874,
+    "dialogCountAtInitialReadback": 3,
+    "actionCount": 4,
+    "normalizedFullVerdictMatch": true,
+    "roundTripPunctuationChanges": 11,
+    "proofDialogAppendedAfterCompletion": true
+  }
+}

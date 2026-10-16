@@ -1,0 +1,663 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════
+║ Restore
+╬═══
+​
+17:51:02 [INF] > /home/sharpninja/.dotnet/dotnet restore QBrainAi.sln
+17:51:04 [DBG]   Determining projects to restore...
+17:51:07 [DBG]   All projects are up-to-date for restore.
+17:51:08 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj
+17:51:09 [DBG]   Determining projects to restore...
+17:51:09 [DBG]   All projects are up-to-date for restore.
+17:51:09 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj
+17:51:10 [DBG]   Determining projects to restore...
+17:51:11 [DBG]   All projects are up-to-date for restore.
+17:51:11 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj
+17:51:11 [DBG]   Determining projects to restore...
+17:51:12 [DBG]   All projects are up-to-date for restore.
+17:51:12 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj
+17:51:12 [DBG]   Determining projects to restore...
+17:51:14 [DBG]   All projects are up-to-date for restore.
+17:51:14 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj
+17:51:14 [DBG]   Determining projects to restore...
+17:51:16 [DBG]   All projects are up-to-date for restore.
+17:51:16 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj
+17:51:17 [DBG]   Determining projects to restore...
+17:51:18 [DBG]   All projects are up-to-date for restore.
+17:51:18 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj
+17:51:19 [DBG]   Determining projects to restore...
+17:51:19 [DBG]   All projects are up-to-date for restore.
+​
+╬════════════
+║ Compile
+╬═══
+​
+17:51:20 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:51:43 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:51:43 [DBG]   SharpNinja.McpServer.Client -> src/Compatibility/SharpNinja.McpServer.Client/bin/Debug/net10.0/SharpNinja.McpServer.Client.dll
+17:51:43 [DBG] 
+17:51:43 [DBG] Build succeeded.
+17:51:43 [DBG]     0 Warning(s)
+17:51:43 [DBG]     0 Error(s)
+17:51:43 [DBG] 
+17:51:43 [DBG] Time Elapsed 00:00:23.30
+17:51:43 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:51:45 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:51:45 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:51:45 [DBG]   SharpNinja.McpServer.Cqrs.Mvvm -> src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/bin/Debug/net10.0/SharpNinja.McpServer.Cqrs.Mvvm.dll
+17:51:45 [DBG] 
+17:51:45 [DBG] Build succeeded.
+17:51:45 [DBG]     0 Warning(s)
+17:51:45 [DBG]     0 Error(s)
+17:51:45 [DBG] 
+17:51:45 [DBG] Time Elapsed 00:00:01.77
+17:51:45 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:51:46 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:51:46 [DBG]   SharpNinja.McpServer.Cqrs -> src/Compatibility/SharpNinja.McpServer.Cqrs/bin/Debug/net10.0/SharpNinja.McpServer.Cqrs.dll
+17:51:46 [DBG] 
+17:51:46 [DBG] Build succeeded.
+17:51:46 [DBG]     0 Warning(s)
+17:51:46 [DBG]     0 Error(s)
+17:51:46 [DBG] 
+17:51:46 [DBG] Time Elapsed 00:00:00.96
+17:51:46 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:51:48 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:51:48 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:51:50 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:51:50 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:51:51 [DBG]   SharpNinja.McpServer.McpAgent -> src/Compatibility/SharpNinja.McpServer.McpAgent/bin/Debug/net10.0/SharpNinja.McpServer.McpAgent.dll
+17:51:51 [DBG] 
+17:51:51 [DBG] Build succeeded.
+17:51:51 [DBG]     0 Warning(s)
+17:51:51 [DBG]     0 Error(s)
+17:51:51 [DBG] 
+17:51:51 [DBG] Time Elapsed 00:00:03.83
+17:51:51 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:51:52 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:51:52 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:51:52 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+17:51:52 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:51:53 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:51:53 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+17:51:53 [DBG]   SharpNinja.McpServer.QBAgent -> src/Compatibility/SharpNinja.McpServer.QBAgent/bin/Debug/net10.0/SharpNinja.McpServer.QBAgent.dll
+17:51:53 [DBG] 
+17:51:53 [DBG] Build succeeded.
+17:51:53 [DBG]     0 Warning(s)
+17:51:53 [DBG]     0 Error(s)
+17:51:53 [DBG] 
+17:51:53 [DBG] Time Elapsed 00:00:02.45
+17:51:53 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:51:55 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:51:55 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:51:55 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:51:55 [DBG]   SharpNinja.McpServer.Repl.Core -> src/Compatibility/SharpNinja.McpServer.Repl.Core/bin/Debug/net10.0/SharpNinja.McpServer.Repl.Core.dll
+17:51:55 [DBG] 
+17:51:55 [DBG] Build succeeded.
+17:51:55 [DBG]     0 Warning(s)
+17:51:55 [DBG]     0 Error(s)
+17:51:55 [DBG] 
+17:51:55 [DBG] Time Elapsed 00:00:01.43
+17:51:55 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:51:56 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:51:56 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:51:57 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:51:58 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:51:59 [DBG]   SharpNinja.McpServer.Repl -> src/Compatibility/SharpNinja.McpServer.Repl/bin/Debug/net10.0/SharpNinja.McpServer.Repl.dll
+17:51:59 [DBG] 
+17:51:59 [DBG] Build succeeded.
+17:51:59 [DBG]     0 Warning(s)
+17:51:59 [DBG]     0 Error(s)
+17:51:59 [DBG] 
+17:51:59 [DBG] Time Elapsed 00:00:03.27
+17:51:59 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Client/QBrainAi.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:00 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:00 [DBG] 
+17:52:00 [DBG] Build succeeded.
+17:52:00 [DBG]     0 Warning(s)
+17:52:00 [DBG]     0 Error(s)
+17:52:00 [DBG] 
+17:52:00 [DBG] Time Elapsed 00:00:00.65
+17:52:00 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:00 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:00 [DBG] 
+17:52:00 [DBG] Build succeeded.
+17:52:00 [DBG]     0 Warning(s)
+17:52:00 [DBG]     0 Error(s)
+17:52:00 [DBG] 
+17:52:00 [DBG] Time Elapsed 00:00:00.62
+17:52:00 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Cqrs.Mvvm/QBrainAi.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:01 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:52:02 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:52:02 [DBG] 
+17:52:02 [DBG] Build succeeded.
+17:52:02 [DBG]     0 Warning(s)
+17:52:02 [DBG]     0 Error(s)
+17:52:02 [DBG] 
+17:52:02 [DBG] Time Elapsed 00:00:00.89
+17:52:02 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Cqrs/QBrainAi.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:03 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:52:03 [DBG] 
+17:52:03 [DBG] Build succeeded.
+17:52:03 [DBG]     0 Warning(s)
+17:52:03 [DBG]     0 Error(s)
+17:52:03 [DBG] 
+17:52:03 [DBG] Time Elapsed 00:00:00.65
+17:52:03 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.GraphRag/QBrainAi.GraphRag.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:04 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:04 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:52:04 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:04 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:52:04 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:04 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:52:05 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:07 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:52:15 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+17:52:16 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+17:52:16 [DBG] 
+17:52:16 [DBG] Build succeeded.
+17:52:16 [DBG]     0 Warning(s)
+17:52:16 [DBG]     0 Error(s)
+17:52:16 [DBG] 
+17:52:16 [DBG] Time Elapsed 00:00:13.16
+17:52:16 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.KeyServer/QBrainAi.KeyServer.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:17 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:52:17 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:18 [DBG]   QBrainAi.KeyServer -> src/QBrainAi.KeyServer/bin/Debug/net10.0/QBrainAi.KeyServer.dll
+17:52:19 [DBG] 
+17:52:19 [DBG] Build succeeded.
+17:52:19 [DBG]     0 Warning(s)
+17:52:19 [DBG]     0 Error(s)
+17:52:19 [DBG] 
+17:52:19 [DBG] Time Elapsed 00:00:02.24
+17:52:19 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Launcher/QBrainAi.Launcher.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:20 [DBG]   QBrainAi.Launcher -> src/QBrainAi.Launcher/bin/Debug/net10.0-windows/QBrainAi.Launcher.dll
+17:52:20 [DBG] 
+17:52:20 [DBG] Build succeeded.
+17:52:20 [DBG]     0 Warning(s)
+17:52:20 [DBG]     0 Error(s)
+17:52:20 [DBG] 
+17:52:20 [DBG] Time Elapsed 00:00:00.75
+17:52:20 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.McpAgent.SampleHost/QBrainAi.McpAgent.SampleHost.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:21 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:21 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:21 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:21 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:52:22 [DBG]   QBrainAi.McpAgent.SampleHost -> src/QBrainAi.McpAgent.SampleHost/bin/Debug/net10.0/QBrainAi.McpAgent.SampleHost.dll
+17:52:22 [DBG] 
+17:52:22 [DBG] Build succeeded.
+17:52:22 [DBG]     0 Warning(s)
+17:52:22 [DBG]     0 Error(s)
+17:52:22 [DBG] 
+17:52:22 [DBG] Time Elapsed 00:00:01.74
+17:52:22 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:23 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:23 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:23 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:23 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:52:23 [DBG] 
+17:52:23 [DBG] Build succeeded.
+17:52:23 [DBG]     0 Warning(s)
+17:52:23 [DBG]     0 Error(s)
+17:52:23 [DBG] 
+17:52:23 [DBG] Time Elapsed 00:00:01.42
+17:52:23 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.QBAgent.Skills/QBrainAi.QBAgent.Skills.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:24 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+17:52:24 [DBG] 
+17:52:24 [DBG] Build succeeded.
+17:52:24 [DBG]     0 Warning(s)
+17:52:24 [DBG]     0 Error(s)
+17:52:24 [DBG] 
+17:52:24 [DBG] Time Elapsed 00:00:00.60
+17:52:24 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.QBAgent.Tools/QBrainAi.QBAgent.Tools.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:25 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+17:52:25 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:25 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:25 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:26 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:52:26 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+17:52:26 [DBG] 
+17:52:26 [DBG] Build succeeded.
+17:52:26 [DBG]     0 Warning(s)
+17:52:26 [DBG]     0 Error(s)
+17:52:26 [DBG] 
+17:52:26 [DBG] Time Elapsed 00:00:01.30
+17:52:26 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:27 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:27 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+17:52:27 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:27 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:27 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:52:27 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+17:52:28 [DBG]   QBrainAi.QBAgent -> src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+17:52:28 [DBG] 
+17:52:28 [DBG] Build succeeded.
+17:52:28 [DBG]     0 Warning(s)
+17:52:28 [DBG]     0 Error(s)
+17:52:28 [DBG] 
+17:52:28 [DBG] Time Elapsed 00:00:01.69
+17:52:28 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:29 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:29 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:29 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:29 [DBG] 
+17:52:29 [DBG] Build succeeded.
+17:52:29 [DBG]     0 Warning(s)
+17:52:29 [DBG]     0 Error(s)
+17:52:29 [DBG] 
+17:52:29 [DBG] Time Elapsed 00:00:01.13
+17:52:29 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:30 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:52:30 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:30 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:30 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:31 [DBG]   QBrainAi.Repl.Host -> src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+17:52:31 [DBG] 
+17:52:31 [DBG] Build succeeded.
+17:52:31 [DBG]     0 Warning(s)
+17:52:31 [DBG]     0 Error(s)
+17:52:31 [DBG] 
+17:52:31 [DBG] Time Elapsed 00:00:01.85
+17:52:31 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.ServiceDefaults/QBrainAi.ServiceDefaults.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:32 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:32 [DBG] 
+17:52:32 [DBG] Build succeeded.
+17:52:32 [DBG]     0 Warning(s)
+17:52:32 [DBG]     0 Error(s)
+17:52:32 [DBG] 
+17:52:32 [DBG] Time Elapsed 00:00:00.66
+17:52:32 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Services/QBrainAi.Services.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:33 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:52:33 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:33 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:33 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:33 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:33 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:52:34 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:52:34 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:52:34 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+17:52:34 [DBG] 
+17:52:34 [DBG] Build succeeded.
+17:52:34 [DBG]     0 Warning(s)
+17:52:34 [DBG]     0 Error(s)
+17:52:34 [DBG] 
+17:52:34 [DBG] Time Elapsed 00:00:01.63
+17:52:34 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.SessionLog.Transcripts/QBrainAi.SessionLog.Transcripts.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:35 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+17:52:35 [DBG] 
+17:52:35 [DBG] Build succeeded.
+17:52:35 [DBG]     0 Warning(s)
+17:52:35 [DBG]     0 Error(s)
+17:52:35 [DBG] 
+17:52:35 [DBG] Time Elapsed 00:00:00.95
+17:52:35 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:36 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:36 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:36 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:37 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:52:40 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+17:52:40 [DBG] 
+17:52:40 [DBG] Build succeeded.
+17:52:40 [DBG]     0 Warning(s)
+17:52:40 [DBG]     0 Error(s)
+17:52:40 [DBG] 
+17:52:40 [DBG] Time Elapsed 00:00:04.92
+17:52:41 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:42 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:42 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:42 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:42 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:52:46 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+17:52:46 [DBG] 
+17:52:46 [DBG] Build succeeded.
+17:52:46 [DBG]     0 Warning(s)
+17:52:46 [DBG]     0 Error(s)
+17:52:46 [DBG] 
+17:52:46 [DBG] Time Elapsed 00:00:05.23
+17:52:46 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:47 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:47 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:47 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:47 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:52:51 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+17:52:51 [DBG] 
+17:52:51 [DBG] Build succeeded.
+17:52:51 [DBG]     0 Warning(s)
+17:52:51 [DBG]     0 Error(s)
+17:52:51 [DBG] 
+17:52:51 [DBG] Time Elapsed 00:00:05.09
+17:52:51 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Storage/QBrainAi.Storage.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:53 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:53 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:53 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:53 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:52:53 [DBG] 
+17:52:53 [DBG] Build succeeded.
+17:52:53 [DBG]     0 Warning(s)
+17:52:53 [DBG]     0 Error(s)
+17:52:53 [DBG] 
+17:52:53 [DBG] Time Elapsed 00:00:01.22
+17:52:53 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Subscriber/QBrainAi.Subscriber.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:54 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:52:54 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:55 [DBG]   QBrainAi.Subscriber -> src/QBrainAi.Subscriber/bin/Debug/net10.0/QBrainAi.Subscriber.dll
+17:52:55 [DBG] 
+17:52:55 [DBG] Build succeeded.
+17:52:55 [DBG]     0 Warning(s)
+17:52:55 [DBG]     0 Error(s)
+17:52:55 [DBG] 
+17:52:55 [DBG] Time Elapsed 00:00:01.75
+17:52:55 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:52:57 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:52:57 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:52:57 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:52:57 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:52:57 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+17:52:57 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:52:57 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:52:57 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:52:57 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+17:52:57 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:52:57 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+17:52:57 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+17:52:58 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:52:58 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+17:52:58 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+17:53:05 [DBG]   QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+17:53:05 [DBG] 
+17:53:05 [DBG] Build succeeded.
+17:53:05 [DBG]     0 Warning(s)
+17:53:05 [DBG]     0 Error(s)
+17:53:05 [DBG] 
+17:53:05 [DBG] Time Elapsed 00:00:09.38
+17:53:05 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.TransactionSecurity/QBrainAi.TransactionSecurity.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:05 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:53:06 [DBG] 
+17:53:06 [DBG] Build succeeded.
+17:53:06 [DBG]     0 Warning(s)
+17:53:06 [DBG]     0 Error(s)
+17:53:06 [DBG] 
+17:53:06 [DBG] Time Elapsed 00:00:00.66
+17:53:06 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:07 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:53:07 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:53:07 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:07 [DBG]   QBrainAi.KeyServer -> src/QBrainAi.KeyServer/bin/Debug/net10.0/QBrainAi.KeyServer.dll
+17:53:07 [DBG]   QBrainAi.Subscriber -> src/QBrainAi.Subscriber/bin/Debug/net10.0/QBrainAi.Subscriber.dll
+17:53:07 [DBG]   QBrainAi.Acid.IntegrationTests -> tests/QBrainAi.Acid.IntegrationTests/bin/Debug/net10.0/QBrainAi.Acid.IntegrationTests.dll
+17:53:07 [DBG] 
+17:53:07 [DBG] Build succeeded.
+17:53:07 [DBG]     0 Warning(s)
+17:53:07 [DBG]     0 Error(s)
+17:53:07 [DBG] 
+17:53:07 [DBG] Time Elapsed 00:00:01.72
+17:53:08 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:09 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:09 [DBG]   QBrainAi.Client.Tests -> tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll
+17:53:09 [DBG] 
+17:53:09 [DBG] Build succeeded.
+17:53:09 [DBG]     0 Warning(s)
+17:53:09 [DBG]     0 Error(s)
+17:53:09 [DBG] 
+17:53:09 [DBG] Time Elapsed 00:00:01.57
+17:53:09 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:10 [DBG]   QBrainAi.Context.Validation -> tests/QBrainAi.Context.Validation/bin/Debug/net10.0/QBrainAi.Context.Validation.dll
+17:53:10 [DBG] 
+17:53:10 [DBG] Build succeeded.
+17:53:10 [DBG]     0 Warning(s)
+17:53:10 [DBG]     0 Error(s)
+17:53:10 [DBG] 
+17:53:10 [DBG] Time Elapsed 00:00:00.85
+17:53:11 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:12 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:53:12 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:53:12 [DBG]   QBrainAi.Cqrs.Tests -> tests/QBrainAi.Cqrs.Tests/bin/Debug/net10.0/QBrainAi.Cqrs.Tests.dll
+17:53:12 [DBG] 
+17:53:12 [DBG] Build succeeded.
+17:53:12 [DBG]     0 Warning(s)
+17:53:12 [DBG]     0 Error(s)
+17:53:12 [DBG] 
+17:53:12 [DBG] Time Elapsed 00:00:01.40
+17:53:12 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:13 [DBG]   QBrainAi.GitHub.Validation -> tests/QBrainAi.GitHub.Validation/bin/Debug/net10.0/QBrainAi.GitHub.Validation.dll
+17:53:13 [DBG] 
+17:53:13 [DBG] Build succeeded.
+17:53:13 [DBG]     0 Warning(s)
+17:53:13 [DBG]     0 Error(s)
+17:53:13 [DBG] 
+17:53:13 [DBG] Time Elapsed 00:00:00.85
+17:53:13 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:14 [DBG]   QBrainAi.Launcher -> src/QBrainAi.Launcher/bin/Debug/net10.0-windows/QBrainAi.Launcher.dll
+17:53:15 [DBG]   QBrainAi.Launcher.Tests -> tests/QBrainAi.Launcher.Tests/bin/Debug/net10.0-windows/QBrainAi.Launcher.Tests.dll
+17:53:15 [DBG] 
+17:53:15 [DBG] Build succeeded.
+17:53:15 [DBG]     0 Warning(s)
+17:53:15 [DBG]     0 Error(s)
+17:53:15 [DBG] 
+17:53:15 [DBG] Time Elapsed 00:00:01.08
+17:53:15 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:16 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:16 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:53:16 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:53:16 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:53:17 [DBG]   QBrainAi.McpAgent.Tests -> tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll
+17:53:17 [DBG] 
+17:53:17 [DBG] Build succeeded.
+17:53:17 [DBG]     0 Warning(s)
+17:53:17 [DBG]     0 Error(s)
+17:53:17 [DBG] 
+17:53:17 [DBG] Time Elapsed 00:00:01.79
+17:53:17 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:18 [DBG]   QBrainAi.PlanReview.Tests -> tests/QBrainAi.PlanReview.Tests/bin/Debug/net10.0/QBrainAi.PlanReview.Tests.dll
+17:53:18 [DBG] 
+17:53:18 [DBG] Build succeeded.
+17:53:18 [DBG]     0 Warning(s)
+17:53:18 [DBG]     0 Error(s)
+17:53:18 [DBG] 
+17:53:18 [DBG] Time Elapsed 00:00:00.83
+17:53:18 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:19 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:53:19 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+17:53:19 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:53:19 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:53:19 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:53:19 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:20 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:53:20 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:53:20 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:53:20 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:53:20 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+17:53:20 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+17:53:20 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+17:53:20 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+17:53:20 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+17:53:21 [DBG]   QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+17:53:22 [DBG]   QBrainAi.PluginIntegration.Tests -> tests/QBrainAi.PluginIntegration.Tests/bin/Debug/net10.0/QBrainAi.PluginIntegration.Tests.dll
+17:53:22 [DBG] 
+17:53:22 [DBG] Build succeeded.
+17:53:22 [DBG]     0 Warning(s)
+17:53:22 [DBG]     0 Error(s)
+17:53:22 [DBG] 
+17:53:22 [DBG] Time Elapsed 00:00:04.30
+17:53:22 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:23 [DBG]   QBrainAi.ProcessTree.TestHelper -> tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+17:53:23 [DBG] 
+17:53:23 [DBG] Build succeeded.
+17:53:23 [DBG]     0 Warning(s)
+17:53:23 [DBG]     0 Error(s)
+17:53:23 [DBG] 
+17:53:23 [DBG] Time Elapsed 00:00:00.77
+17:53:24 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:25 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:25 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:53:25 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+17:53:25 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:53:25 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:53:25 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+17:53:25 [DBG]   QBrainAi.QBAgent -> src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+17:53:26 [DBG]   QBrainAi.QBAgent.Tests -> tests/QBrainAi.QBAgent.Tests/bin/Debug/net10.0/QBrainAi.QBAgent.Tests.dll
+17:53:26 [DBG] 
+17:53:26 [DBG] Build succeeded.
+17:53:26 [DBG]     0 Warning(s)
+17:53:26 [DBG]     0 Error(s)
+17:53:26 [DBG] 
+17:53:26 [DBG] Time Elapsed 00:00:02.07
+17:53:26 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:27 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:27 [DBG]   QBrainAi.Todo.Validation -> tests/QBrainAi.Todo.Validation/bin/Debug/net10.0/QBrainAi.Todo.Validation.dll
+17:53:27 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:53:28 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:53:29 [DBG]   QBrainAi.Repl.Core.Tests -> tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll
+17:53:29 [DBG] 
+17:53:29 [DBG] Build succeeded.
+17:53:29 [DBG]     0 Warning(s)
+17:53:29 [DBG]     0 Error(s)
+17:53:29 [DBG] 
+17:53:29 [DBG] Time Elapsed 00:00:03.32
+17:53:29 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:31 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:31 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:53:31 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:53:31 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:53:31 [DBG]   QBrainAi.Repl.Host -> src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+17:53:32 [DBG]   QBrainAi.Repl.IntegrationTests -> tests/QBrainAi.Repl.IntegrationTests/bin/Debug/net10.0/QBrainAi.Repl.IntegrationTests.dll
+17:53:32 [DBG] 
+17:53:32 [DBG] Build succeeded.
+17:53:32 [DBG]     0 Warning(s)
+17:53:32 [DBG]     0 Error(s)
+17:53:32 [DBG] 
+17:53:32 [DBG] Time Elapsed 00:00:02.04
+17:53:32 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:33 [DBG]   QBrainAi.Repo.Validation -> tests/QBrainAi.Repo.Validation/bin/Debug/net10.0/QBrainAi.Repo.Validation.dll
+17:53:33 [DBG] 
+17:53:33 [DBG] Build succeeded.
+17:53:33 [DBG]     0 Warning(s)
+17:53:33 [DBG]     0 Error(s)
+17:53:33 [DBG] 
+17:53:33 [DBG] Time Elapsed 00:00:00.90
+17:53:33 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:34 [DBG]   QBrainAi.Review.Tests -> tests/QBrainAi.Review.Tests/bin/Debug/net10.0/QBrainAi.Review.Tests.dll
+17:53:34 [DBG] 
+17:53:34 [DBG] Build succeeded.
+17:53:34 [DBG]     0 Warning(s)
+17:53:34 [DBG]     0 Error(s)
+17:53:34 [DBG] 
+17:53:34 [DBG] Time Elapsed 00:00:00.83
+17:53:34 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:35 [DBG]   QBrainAi.SessionLog.Validation -> tests/QBrainAi.SessionLog.Validation/bin/Debug/net10.0/QBrainAi.SessionLog.Validation.dll
+17:53:35 [DBG] 
+17:53:35 [DBG] Build succeeded.
+17:53:35 [DBG]     0 Warning(s)
+17:53:35 [DBG]     0 Error(s)
+17:53:35 [DBG] 
+17:53:35 [DBG] Time Elapsed 00:00:00.96
+17:53:35 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:37 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+17:53:37 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:53:37 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:53:37 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:37 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:53:37 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:53:37 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:53:37 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:53:37 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:53:37 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:53:37 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+17:53:37 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+17:53:37 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+17:53:38 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+17:53:38 [DBG]   QBrainAi.QBAgent -> src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+17:53:38 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+17:53:38 [DBG]   QBrainAi.Repl.Host -> src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+17:53:38 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+17:53:38 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+17:53:38 [DBG]   QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+17:53:41 [DBG]   QBrainAi.Support.Mcp.IntegrationTests -> tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll
+17:53:41 [DBG] 
+17:53:41 [DBG] Build succeeded.
+17:53:41 [DBG]     0 Warning(s)
+17:53:41 [DBG]     0 Error(s)
+17:53:41 [DBG] 
+17:53:41 [DBG] Time Elapsed 00:00:05.27
+17:53:41 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:43 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:43 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+17:53:43 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+17:53:43 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+17:53:43 [DBG]   QBrainAi.ProcessTree.TestHelper -> tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+17:53:43 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:53:43 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+17:53:43 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+17:53:43 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+17:53:43 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+17:53:43 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:53:43 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+17:53:43 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+17:53:43 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+17:53:43 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+17:53:43 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+17:53:44 [DBG]   QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+17:53:53 [DBG]   QBrainAi.Support.Mcp.Tests -> tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll
+17:53:53 [DBG] 
+17:53:53 [DBG] Build succeeded.
+17:53:53 [DBG]     0 Warning(s)
+17:53:53 [DBG]     0 Error(s)
+17:53:53 [DBG] 
+17:53:53 [DBG] Time Elapsed 00:00:12.16
+17:53:53 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:54 [DBG]   QBrainAi.Todo.Validation -> tests/QBrainAi.Todo.Validation/bin/Debug/net10.0/QBrainAi.Todo.Validation.dll
+17:53:54 [DBG] 
+17:53:54 [DBG] Build succeeded.
+17:53:54 [DBG]     0 Warning(s)
+17:53:54 [DBG]     0 Error(s)
+17:53:54 [DBG] 
+17:53:54 [DBG] Time Elapsed 00:00:00.72
+17:53:54 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:56 [DBG]   QBrainAi.ToolRegistry.Validation -> tests/QBrainAi.ToolRegistry.Validation/bin/Debug/net10.0/QBrainAi.ToolRegistry.Validation.dll
+17:53:56 [DBG] 
+17:53:56 [DBG] Build succeeded.
+17:53:56 [DBG]     0 Warning(s)
+17:53:56 [DBG]     0 Error(s)
+17:53:56 [DBG] 
+17:53:56 [DBG] Time Elapsed 00:00:01.07
+17:53:56 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:53:57 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+17:53:57 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+17:53:57 [DBG]   QBrainAi.Subscriber -> src/QBrainAi.Subscriber/bin/Debug/net10.0/QBrainAi.Subscriber.dll
+17:53:57 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+17:53:57 [DBG]   QBrainAi.KeyServer -> src/QBrainAi.KeyServer/bin/Debug/net10.0/QBrainAi.KeyServer.dll
+17:53:58 [DBG]   QBrainAi.TransactionSecurity.IntegrationTests -> tests/QBrainAi.TransactionSecurity.IntegrationTests/bin/Debug/net10.0/QBrainAi.TransactionSecurity.IntegrationTests.dll
+17:53:58 [DBG] 
+17:53:58 [DBG] Build succeeded.
+17:53:58 [DBG]     0 Warning(s)
+17:53:58 [DBG]     0 Error(s)
+17:53:58 [DBG] 
+17:53:58 [DBG] Time Elapsed 00:00:02.32
+17:53:58 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+17:54:00 [DBG]   QBrainAi.Workspace.Validation -> tests/QBrainAi.Workspace.Validation/bin/Debug/net10.0/QBrainAi.Workspace.Validation.dll
+17:54:00 [DBG] 
+17:54:00 [DBG] Build succeeded.
+17:54:00 [DBG]     0 Warning(s)
+17:54:00 [DBG]     0 Error(s)
+17:54:00 [DBG] 
+17:54:00 [DBG] Time Elapsed 00:00:00.95
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:17
+Compile            Succeeded       2:40
+───────────────────────────────────────
+Total                              2:58
+═══════════════════════════════════════
+​
+Build succeeded on 10/10/2026 5:54:00 PM. ＼（＾ᴗ＾）／

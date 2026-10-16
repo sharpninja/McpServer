@@ -2,15 +2,15 @@
 
 ## Introduction
 
-The REPL Host is a YAML-protocol STDIO transport for the MCP Server that provides an interactive command-line interface for workspace operations. It complements the existing HTTP REST API and MCP STDIO transports with a human-friendly, scriptable interface suitable for automation, debugging, and interactive workflows.
+The REPL Host is a YAML-protocol STDIO transport for the QBrain.AI that provides an interactive command-line interface for workspace operations. It complements the existing HTTP REST API and MCP STDIO transports with a human-friendly, scriptable interface suitable for automation, debugging, and interactive workflows.
 
 ## Architecture
 
 ### Transport Triad
 
-The MCP Server supports three transport mechanisms:
+The QBrain.AI supports three transport mechanisms:
 
-1. **HTTP REST** (`/mcpserver/*` endpoints)
+1. **HTTP REST** (`/qbrainai/*` endpoints)
    - Web-based integration
    - Standard HTTP/JSON semantics
    - Browser and web client compatible
@@ -200,12 +200,12 @@ This ensures consistent security posture across all STDIO-based integrations.
 
 ### Interactive Debugging
 ```bash
-echo "command: todo.list" | dotnet McpServer.Support.Mcp.dll --mode repl
+echo "command: todo.list" | dotnet QBrainAi.Support.Mcp.dll --mode repl
 ```
 
 ### Scripted Automation
 ```bash
-cat commands.yaml | dotnet McpServer.Support.Mcp.dll --mode repl > results.yaml
+cat commands.yaml | dotnet QBrainAi.Support.Mcp.dll --mode repl > results.yaml
 ```
 
 ### CI/CD Integration
@@ -213,13 +213,13 @@ cat commands.yaml | dotnet McpServer.Support.Mcp.dll --mode repl > results.yaml
 # Generate requirements snapshot for PR validation
 echo "command: requirements.generate
 args:
-  doc: all" | dotnet McpServer.Support.Mcp.dll --mode repl
+  doc: all" | dotnet QBrainAi.Support.Mcp.dll --mode repl
 ```
 
 ### Workspace Orchestration
 ```bash
 # Bootstrap and query agent pool state
-cat <<EOF | dotnet McpServer.Support.Mcp.dll --mode repl
+cat <<EOF | dotnet QBrainAi.Support.Mcp.dll --mode repl
 command: bootstrap
 args:
   markerPath: /workspace/AGENTS-README-FIRST.yaml
@@ -301,13 +301,13 @@ The REPL Host is **additive and optional**:
 REPL mode is activated via command-line argument:
 
 ```bash
-dotnet McpServer.Support.Mcp.dll --mode repl
+dotnet QBrainAi.Support.Mcp.dll --mode repl
 ```
 
 Or environment variable:
 
 ```bash
-MCP_HOST_MODE=repl dotnet McpServer.Support.Mcp.dll
+MCP_HOST_MODE=repl dotnet QBrainAi.Support.Mcp.dll
 ```
 
 Default mode remains HTTP hosting with optional STDIO transport when invoked without arguments.

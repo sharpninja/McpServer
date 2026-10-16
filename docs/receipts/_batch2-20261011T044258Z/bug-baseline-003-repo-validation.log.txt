@@ -1,0 +1,73 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  QBrainAi.Repo.Validation -> tests/QBrainAi.Repo.Validation/bin/Debug/net10.0/QBrainAi.Repo.Validation.dll
+Test run for tests/QBrainAi.Repo.Validation/bin/Debug/net10.0/QBrainAi.Repo.Validation.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.05]     QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_NonExistentFile_Returns200Or400 [FAIL]
+[xUnit.net 00:00:01.07]     QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_MissingPath_Returns400 [FAIL]
+[xUnit.net 00:00:01.11]     QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_ValidPath_Returns200Or400 [FAIL]
+[xUnit.net 00:00:01.11]     QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_ExistingFile_Returns200 [FAIL]
+[xUnit.net 00:00:01.12]     QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.List_WithPath_Returns200 [FAIL]
+[xUnit.net 00:00:01.12]     QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_MissingPath_Returns400 [FAIL]
+[xUnit.net 00:00:01.13]     QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.List_RootPath_Returns200WithEntries [FAIL]
+[xUnit.net 00:00:01.13]     QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_NullBody_Returns400 [FAIL]
+  Failed QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_NonExistentFile_Returns200Or400 [21 ms]
+  Error Message:
+   Expected 200 or 400, got 404
+  Stack Trace:
+     at QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_NonExistentFile_Returns200Or400() in tests/QBrainAi.Repo.Validation/AtomicTests/RepoEndpointTests.cs:line 112
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_MissingPath_Returns400 [10 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: BadRequest
+Actual:   NotFound
+  Stack Trace:
+     at QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_MissingPath_Returns400() in tests/QBrainAi.Repo.Validation/AtomicTests/RepoEndpointTests.cs:line 77
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_ValidPath_Returns200Or400 [36 ms]
+  Error Message:
+   Expected 200 or 400, got 404
+  Stack Trace:
+     at QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_ValidPath_Returns200Or400() in tests/QBrainAi.Repo.Validation/AtomicTests/RepoEndpointTests.cs:line 163
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_ExistingFile_Returns200 [5 ms]
+  Error Message:
+   Expected 200 or 400, got 404
+  Stack Trace:
+     at QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.ReadFile_ExistingFile_Returns200() in tests/QBrainAi.Repo.Validation/AtomicTests/RepoEndpointTests.cs:line 95
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.List_WithPath_Returns200 [3 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: OK
+Actual:   NotFound
+  Stack Trace:
+     at QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.List_WithPath_Returns200() in tests/QBrainAi.Repo.Validation/AtomicTests/RepoEndpointTests.cs:line 57
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_MissingPath_Returns400 [4 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: BadRequest
+Actual:   NotFound
+  Stack Trace:
+     at QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_MissingPath_Returns400() in tests/QBrainAi.Repo.Validation/AtomicTests/RepoEndpointTests.cs:line 131
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.List_RootPath_Returns200WithEntries [3 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: OK
+Actual:   NotFound
+  Stack Trace:
+     at QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.List_RootPath_Returns200WithEntries() in tests/QBrainAi.Repo.Validation/AtomicTests/RepoEndpointTests.cs:line 39
+--- End of stack trace from previous location ---
+  Failed QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_NullBody_Returns400 [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: BadRequest
+Actual:   NotFound
+  Stack Trace:
+     at QBrainAi.Repo.Validation.AtomicTests.RepoEndpointTests.WriteFile_NullBody_Returns400() in tests/QBrainAi.Repo.Validation/AtomicTests/RepoEndpointTests.cs:line 146
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     8, Passed:     0, Skipped:     0, Total:     8, Duration: 147 ms - QBrainAi.Repo.Validation.dll (net10.0)

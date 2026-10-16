@@ -1,0 +1,95 @@
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace QBrainAi.Client;
+
+/// <summary>
+/// Configuration options for the QBrain.AI client library. Instances of this class are
+/// passed to <see cref="QBrainAiClient"/>, <see cref="QBrainAiClientFactory"/>, or
+/// <see cref="ServiceCollectionExtensions.AddQBrainAiClient"/> to configure all sub-clients.
+///
+/// <para><see cref="BaseUrl"/> determines the scheme, host, and initial port for API calls.
+/// <see cref="ApiKey"/> provides an optional seed value — the key can also be set (or rotated)
+/// at any time via <see cref="McpClientBase.ApiKey"/> or <see cref="QBrainAiClient.ApiKey"/>.</para>
+/// </summary>
+/// <example>
+/// <code>
+/// var options = new QBrainAiClientOptions
+/// {
+///     BaseUrl = new Uri("http://localhost:7147"),
+///     ApiKey  = "workspace-token-from-marker-file",
+///     Timeout = TimeSpan.FromSeconds(60)
+/// };
+/// var client = QBrainAiClientFactory.Create(options);
+/// </code>
+/// </example>
+public sealed class QBrainAiClientOptions
+{
+    /// <summary>
+    /// Base URL of the QBrain.AI workspace host. The scheme, host, and port are extracted
+    /// to construct per-request URIs. The default value targets <c>http://localhost:7147</c>.
+    /// </summary>
+    /// <remarks>
+    /// The path component is ignored — each sub-client appends its own endpoint paths.
+    /// </remarks>
+    public Uri BaseUrl { get; set; } = new Uri("http://localhost:7147");
+
+    /// <summary>
+    /// Optional seed API key for workspace authentication. When non-null, the value is
+    /// copied to <see cref="McpClientBase.ApiKey"/> at construction time. If left null,
+    /// callers <strong>must</strong> set <see cref="McpClientBase.ApiKey"/> (or
+    /// <see cref="QBrainAiClient.ApiKey"/>) before making any API call, or an
+    /// <see cref="InvalidOperationException"/> will be thrown at call time.
+    ///
+    /// <para>Obtain the key from the <c>AGENTS-README-FIRST.yaml</c> marker file written
+    /// to each workspace root on server startup.</para>
+    /// </summary>
+    public string? ApiKey { get; set; }
+
+    /// <summary>
+    /// Optional JWT bearer token for user authentication. When set, sub-clients send an
+    /// <c>Authorization: Bearer</c> header on every request. This can be used instead of an
+    /// API key when the server accepts authenticated user tokens for the target endpoint.
+    /// </summary>
+    public string? BearerToken { get; set; }
+
+    /// <summary>
+    /// Optional workspace path for multi-tenant routing. When set, sub-clients send an
+    /// <c>X-Workspace-Path</c> header on every request so the server resolves the correct workspace.
+    /// </summary>
+    public string? WorkspacePath { get; set; }
+
+    /// <summary>
+    /// Optional privileged token sent only to the desktop-launch endpoint as
+    /// <c>X-Desktop-Launch-Token</c>. Use this for callers that are explicitly trusted to invoke
+    /// remote desktop launch in addition to normal workspace authentication.
+    /// </summary>
+    public string? DesktopLaunchToken { get; set; }
+
+    /// <summary>
+    /// HTTP request timeout applied to the internally-created <see cref="System.Net.Http.HttpClient"/>
+    /// when using <see cref="QBrainAiClientFactory.Create(QBrainAiClientOptions)"/>.
+    /// Defaults to 30 seconds.
+    /// </summary>
+    /// <remarks>
+    /// If you supply your own <see cref="System.Net.Http.HttpClient"/>, this property is
+    /// ignored — configure the timeout directly on your <see cref="System.Net.Http.HttpClient"/> instead.
+    /// </remarks>
+    public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(300);
+
+    /// <summary>
+    /// Optional logger factory for diagnostic logging. When set, each sub-client creates
+    /// its own <see cref="ILogger"/> via <see cref="ILoggerFactory.CreateLogger(string)"/>.
+    /// When <see langword="null"/>, diagnostic messages are silently discarded.
+    /// </summary>
+    public ILoggerFactory? LoggerFactory { get; set; }
+
+    /// <summary>
+    /// FR-MCP-REPL-007 / TR-MCP-REPL-008: Optional diagnostic message produced when
+    /// credential resolution failed (e.g. marker file missing or signature
+    /// invalid). When <see cref="ApiKey"/> and <see cref="BearerToken"/> are both
+    /// null this message is appended to the "Authentication required" exception so
+    /// callers see the searched paths and failure reason.
+    /// </summary>
+    public string? CredentialDiagnostic { get; set; }
+}

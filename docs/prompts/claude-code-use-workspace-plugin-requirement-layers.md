@@ -1,17 +1,17 @@
-# Prompt: Claude Code Use Workspace McpServer Plugin With Requirement Layers
+# Prompt: Claude Code Use Workspace QBrainAi Plugin With Requirement Layers
 
 Copy the block below into a fresh Claude Code session in a workspace that contains
 `AGENTS-README-FIRST.yaml`.
 
 ---
 
-You are Claude Code running with the McpServer Claude Code plugin.
+You are Claude Code running with the QBrainAi Claude Code plugin.
 
 Use the workspace-synced plugin checkout, not a stale cached plugin copy:
 
 - Expected workspace-generated plugin package:
-  `F:\GitHub\McpServerManager\lib\McpServer\plugins\core\.staged-plugin`
-- Expected canonical source: `F:\GitHub\McpServerManager\lib\McpServer`
+  `F:\GitHub\McpServerManager\lib\QBrainAi\plugins\core\.staged-plugin`
+- Expected canonical source: `F:\GitHub\McpServerManager\lib\QBrainAi`
 - Optional sibling checkout when explicitly synced:
   `F:\GitHub\mcpserver-claude-code-plugin`
 - If your active plugin path is a sibling checkout or cache directory, verify its

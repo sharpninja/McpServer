@@ -1,0 +1,20 @@
+{
+  "TimestampUtc": "2026-10-13T16:45:04.8955864Z",
+  "ReviewerSessionId": "Codex-20261013T153702Z-plugin-session",
+  "ReviewerRequestId": "req-20261013T153316Z-hv-architecture-r1",
+  "ReadMethod": "client.SessionLog.QueryAsync",
+  "StoredTurnStatus": "completed",
+  "PartCount": 12,
+  "ExpectedCharacters": 118741,
+  "StoredCharacters": 118741,
+  "ExactReadbackEquals": true,
+  "StoredSha256": "16eb2acf1f3477c6064faddaf176e8d4bbb8648bea52b5ec3a34f2230282b0e9",
+  "Receipt": "docs/receipts/hv/hostile-validator-architecture-merged-r1-20261013T153316Z.json",
+  "WriteReceipt": "docs/receipts/hv/20261013T153316Z-final-result-write.json",
+  "CompletionReceipt": "docs/receipts/hv/20261013T153316Z-completion-receipt.json",
+  "ProofDialogPresent": true,
+  "CompleteMarkdownResponsePresent": true,
+  "CompletionPersisted": true,
+  "CompletionQueued": false,
+  "CompletionDegraded": false
+}

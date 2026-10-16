@@ -46,7 +46,7 @@ public sealed class MsixHelperTests
     public void GenerateManifest_ContainsExecutable()
     {
         var manifest = MsixHelper.GenerateManifest("TestApp", "CN=Test", "1.0.0.0");
-        Assert.Contains("McpServer.Support.Mcp.exe", manifest);
+        Assert.Contains("QBrainAi.Support.Mcp.exe", manifest);
     }
 
     [Fact]

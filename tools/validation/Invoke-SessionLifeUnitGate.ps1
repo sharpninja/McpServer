@@ -22,7 +22,7 @@ if ($RunId -match '[\\/:]' -or $RunId.Contains('..')) {
 }
 
 # Session-life cumulative unit gate.
-# McpServer.PluginIntegration.Tests is deliberately excluded from Nuke Test unit inventory
+# QBrainAi.PluginIntegration.Tests is deliberately excluded from Nuke Test unit inventory
 # (Build.Test.cs filters PluginIntegration / IntegrationTests). PI remains on
 # PluginSessionLogIntegration / P6. Do not re-add PI to the unit lane without operator say-so.
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).ProviderPath

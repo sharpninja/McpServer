@@ -7,26 +7,26 @@ This guide covers day-to-day usage of `tools/powershell/McpContext.psm1`.
 - Module path: `tools/powershell/McpContext.psm1`
 - This matches the existing MCP PowerShell module pattern used by `tools/powershell/McpSession.psm1` and `tools/powershell/McpTodo.psm1`.
 
-## Getting The Module From MCP Server
+## Getting The Module From QBrain.AI
 
 Store the module in your user profile tools path:
 
-- `$env:UserProfile\McpServer\tools\powershell\McpContext.psm1`
+- `$env:UserProfile\QBrainAi\tools\powershell\McpContext.psm1`
 
 Import directly from server install path:
 
 ```powershell
-Import-Module (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Import-Module (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 Initialize-McpContext
 ```
 
-You can also fetch the module over the MCP Server HTTP endpoint.
+You can also fetch the module over the QBrain.AI HTTP endpoint.
 
-### Load Module From MCP Server URL
+### Load Module From QBrain.AI URL
 
 Endpoint used:
 
-- `GET /mcpserver/repo/file?path=tools/powershell/McpContext.psm1`
+- `GET /qbrainai/repo/file?path=tools/powershell/McpContext.psm1`
 
 PowerShell example (download then import):
 
@@ -55,7 +55,7 @@ if (-not $markerPath) {
 }
 
 $workspacePath = Split-Path $markerPath -Parent
-$destination = Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1"
+$destination = Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1"
 New-Item -ItemType Directory -Path (Split-Path $destination -Parent) -Force | Out-Null
 
 # Read baseUrl + apiKey from the target workspace marker file.
@@ -102,7 +102,7 @@ $headers = @{
 }
 
 $path = [System.Uri]::EscapeDataString("tools/powershell/McpContext.psm1")
-$uri = "$baseUrl/mcpserver/repo/file?path=$path"
+$uri = "$baseUrl/qbrainai/repo/file?path=$path"
 
 # Use Invoke-WebRequest so non-2xx responses still return parseable body text.
 $response = Invoke-WebRequest -Uri $uri -Headers $headers -Method Get -SkipHttpErrorCheck
@@ -171,8 +171,8 @@ $docs = @(
 
 foreach ($doc in $docs) {
 	$encoded = [System.Uri]::EscapeDataString($doc)
-	$response = Invoke-RestMethod -Uri "$baseUrl/mcpserver/repo/file?path=$encoded" -Headers $headers -Method Get
-	$dest = Join-Path (Join-Path $env:UserProfile "McpServer") ($doc -replace '/', '\\')
+	$response = Invoke-RestMethod -Uri "$baseUrl/qbrainai/repo/file?path=$encoded" -Headers $headers -Method Get
+	$dest = Join-Path (Join-Path $env:UserProfile "QBrainAi") ($doc -replace '/', '\\')
 	New-Item -ItemType Directory -Path (Split-Path $dest -Parent) -Force | Out-Null
 	$response.content | Set-Content -Path $dest -Encoding UTF8
 }
@@ -192,7 +192,7 @@ If the file is not present yet in your user profile tools folder, copy it from t
 
 ```powershell
 $sourcePath = "<path-to-McpContext.psm1>"
-Copy-Item $sourcePath (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Copy-Item $sourcePath (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 ```
 
 You can do the same for companion docs:
@@ -290,7 +290,7 @@ Note:
 - `MaxPages` lower-bound validation is `>= 1`.
 - Effective maximum pages is capped by `Mcp:MaxWebsitePages` from server config.
 - If `MaxPages` is greater than configured `Mcp:MaxWebsitePages`, ingestion uses the configured cap.
-- `Import-McpContextUrl` uses SSE (`/mcpserver/context/ingest-website/stream`) by default and prints progress in real time.
+- `Import-McpContextUrl` uses SSE (`/qbrainai/context/ingest-website/stream`) by default and prints progress in real time.
 
 ## Querying
 
@@ -370,15 +370,15 @@ Use the workspace marker file (`AGENTS-README-FIRST.yaml`) for the same workspac
 
 ### Initialize-McpContext not recognized after Import-Module
 
-If `Import-Module (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1")` succeeds but `Initialize-McpContext` is not found, the module file may be empty/corrupt.
+If `Import-Module (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1")` succeeds but `Initialize-McpContext` is not found, the module file may be empty/corrupt.
 
 Recover with:
 
 ```powershell
 $sourcePath = "<path-to-McpContext.psm1>"
-Copy-Item $sourcePath (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Copy-Item $sourcePath (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 Remove-Module McpContext -ErrorAction SilentlyContinue
-Import-Module (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Import-Module (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 Initialize-McpContext -MarkerPath "<workspace-path>\AGENTS-README-FIRST.yaml"
 ```
 
@@ -387,7 +387,7 @@ If the error body is `path not allowed or not found`, use one of these fallbacks
 1. Import directly from user profile path:
 
 ```powershell
-Import-Module (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Import-Module (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 Initialize-McpContext -MarkerPath "<workspace-path>\AGENTS-README-FIRST.yaml"
 ```
 
@@ -395,8 +395,8 @@ Initialize-McpContext -MarkerPath "<workspace-path>\AGENTS-README-FIRST.yaml"
 
 ```powershell
 $sourcePath = "<path-to-McpContext.psm1>"
-Copy-Item $sourcePath (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
-Import-Module (Join-Path $env:UserProfile "McpServer\tools\powershell\McpContext.psm1") -Force
+Copy-Item $sourcePath (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
+Import-Module (Join-Path $env:UserProfile "QBrainAi\tools\powershell\McpContext.psm1") -Force
 Initialize-McpContext -MarkerPath "<workspace-path>\AGENTS-README-FIRST.yaml"
 ```
 

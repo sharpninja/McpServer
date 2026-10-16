@@ -1,0 +1,150 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Controllers
+  commentId: N:QBrainAi.Support.Mcp.Controllers
+  id: QBrainAi.Support.Mcp.Controllers
+  children:
+  - QBrainAi.Support.Mcp.Controllers.ContextController
+  - QBrainAi.Support.Mcp.Controllers.ContextPackRequest
+  - QBrainAi.Support.Mcp.Controllers.ContextSearchRequest
+  - QBrainAi.Support.Mcp.Controllers.GitHubCommentRequest
+  - QBrainAi.Support.Mcp.Controllers.GitHubController
+  - QBrainAi.Support.Mcp.Controllers.GitHubIssueRequest
+  - QBrainAi.Support.Mcp.Controllers.RepoController
+  - QBrainAi.Support.Mcp.Controllers.RepoWriteRequest
+  - QBrainAi.Support.Mcp.Controllers.SessionLogController
+  - QBrainAi.Support.Mcp.Controllers.SyncController
+  - QBrainAi.Support.Mcp.Controllers.TodoController
+  - QBrainAi.Support.Mcp.Controllers.ToolRegistryController
+  - QBrainAi.Support.Mcp.Controllers.WorkspaceController
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.Controllers
+  nameWithType: QBrainAi.Support.Mcp.Controllers
+  fullName: QBrainAi.Support.Mcp.Controllers
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.Controllers.ContextController
+  commentId: T:QBrainAi.Support.Mcp.Controllers.ContextController
+  href: QBrainAi.Support.Mcp.Controllers.ContextController.html
+  name: ContextController
+  nameWithType: ContextController
+  fullName: QBrainAi.Support.Mcp.Controllers.ContextController
+- uid: QBrainAi.Support.Mcp.Controllers.ContextSearchRequest
+  commentId: T:QBrainAi.Support.Mcp.Controllers.ContextSearchRequest
+  parent: QBrainAi.Support.Mcp.Controllers
+  href: QBrainAi.Support.Mcp.Controllers.ContextSearchRequest.html
+  name: ContextSearchRequest
+  nameWithType: ContextSearchRequest
+  fullName: QBrainAi.Support.Mcp.Controllers.ContextSearchRequest
+- uid: QBrainAi.Support.Mcp.Controllers.ContextPackRequest
+  commentId: T:QBrainAi.Support.Mcp.Controllers.ContextPackRequest
+  parent: QBrainAi.Support.Mcp.Controllers
+  href: QBrainAi.Support.Mcp.Controllers.ContextPackRequest.html
+  name: ContextPackRequest
+  nameWithType: ContextPackRequest
+  fullName: QBrainAi.Support.Mcp.Controllers.ContextPackRequest
+- uid: QBrainAi.Support.Mcp.Controllers.GitHubController
+  commentId: T:QBrainAi.Support.Mcp.Controllers.GitHubController
+  href: QBrainAi.Support.Mcp.Controllers.GitHubController.html
+  name: GitHubController
+  nameWithType: GitHubController
+  fullName: QBrainAi.Support.Mcp.Controllers.GitHubController
+- uid: QBrainAi.Support.Mcp.Controllers.GitHubIssueRequest
+  commentId: T:QBrainAi.Support.Mcp.Controllers.GitHubIssueRequest
+  parent: QBrainAi.Support.Mcp.Controllers
+  href: QBrainAi.Support.Mcp.Controllers.GitHubIssueRequest.html
+  name: GitHubIssueRequest
+  nameWithType: GitHubIssueRequest
+  fullName: QBrainAi.Support.Mcp.Controllers.GitHubIssueRequest
+- uid: QBrainAi.Support.Mcp.Controllers.GitHubCommentRequest
+  commentId: T:QBrainAi.Support.Mcp.Controllers.GitHubCommentRequest
+  parent: QBrainAi.Support.Mcp.Controllers
+  href: QBrainAi.Support.Mcp.Controllers.GitHubCommentRequest.html
+  name: GitHubCommentRequest
+  nameWithType: GitHubCommentRequest
+  fullName: QBrainAi.Support.Mcp.Controllers.GitHubCommentRequest
+- uid: QBrainAi.Support.Mcp.Controllers.RepoController
+  commentId: T:QBrainAi.Support.Mcp.Controllers.RepoController
+  href: QBrainAi.Support.Mcp.Controllers.RepoController.html
+  name: RepoController
+  nameWithType: RepoController
+  fullName: QBrainAi.Support.Mcp.Controllers.RepoController
+- uid: QBrainAi.Support.Mcp.Controllers.RepoWriteRequest
+  commentId: T:QBrainAi.Support.Mcp.Controllers.RepoWriteRequest
+  parent: QBrainAi.Support.Mcp.Controllers
+  href: QBrainAi.Support.Mcp.Controllers.RepoWriteRequest.html
+  name: RepoWriteRequest
+  nameWithType: RepoWriteRequest
+  fullName: QBrainAi.Support.Mcp.Controllers.RepoWriteRequest
+- uid: QBrainAi.Support.Mcp.Controllers.SessionLogController
+  commentId: T:QBrainAi.Support.Mcp.Controllers.SessionLogController
+  href: QBrainAi.Support.Mcp.Controllers.SessionLogController.html
+  name: SessionLogController
+  nameWithType: SessionLogController
+  fullName: QBrainAi.Support.Mcp.Controllers.SessionLogController
+- uid: QBrainAi.Support.Mcp.Controllers.SyncController
+  commentId: T:QBrainAi.Support.Mcp.Controllers.SyncController
+  href: QBrainAi.Support.Mcp.Controllers.SyncController.html
+  name: SyncController
+  nameWithType: SyncController
+  fullName: QBrainAi.Support.Mcp.Controllers.SyncController
+- uid: QBrainAi.Support.Mcp.Controllers.TodoController
+  commentId: T:QBrainAi.Support.Mcp.Controllers.TodoController
+  href: QBrainAi.Support.Mcp.Controllers.TodoController.html
+  name: TodoController
+  nameWithType: TodoController
+  fullName: QBrainAi.Support.Mcp.Controllers.TodoController
+- uid: QBrainAi.Support.Mcp.Controllers.ToolRegistryController
+  commentId: T:QBrainAi.Support.Mcp.Controllers.ToolRegistryController
+  href: QBrainAi.Support.Mcp.Controllers.ToolRegistryController.html
+  name: ToolRegistryController
+  nameWithType: ToolRegistryController
+  fullName: QBrainAi.Support.Mcp.Controllers.ToolRegistryController
+- uid: QBrainAi.Support.Mcp.Controllers.WorkspaceController
+  commentId: T:QBrainAi.Support.Mcp.Controllers.WorkspaceController
+  href: QBrainAi.Support.Mcp.Controllers.WorkspaceController.html
+  name: WorkspaceController
+  nameWithType: WorkspaceController
+  fullName: QBrainAi.Support.Mcp.Controllers.WorkspaceController
+- uid: QBrainAi.Support.Mcp.Controllers
+  commentId: N:QBrainAi.Support.Mcp.Controllers
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Controllers
+  nameWithType: QBrainAi.Support.Mcp.Controllers
+  fullName: QBrainAi.Support.Mcp.Controllers
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Controllers
+    name: Controllers
+    href: QBrainAi.Support.Mcp.Controllers.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Controllers
+    name: Controllers
+    href: QBrainAi.Support.Mcp.Controllers.html

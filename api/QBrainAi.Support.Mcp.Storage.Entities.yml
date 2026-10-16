@@ -1,0 +1,151 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Storage.Entities
+  commentId: N:QBrainAi.Support.Mcp.Storage.Entities
+  id: QBrainAi.Support.Mcp.Storage.Entities
+  children:
+  - QBrainAi.Support.Mcp.Storage.Entities.ContextChunkEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.SessionLogActionEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.ToolBucketEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+  - QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.Storage.Entities
+  nameWithType: QBrainAi.Support.Mcp.Storage.Entities
+  fullName: QBrainAi.Support.Mcp.Storage.Entities
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.Storage.Entities.ContextChunkEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.ContextChunkEntity
+  href: QBrainAi.Support.Mcp.Storage.Entities.ContextChunkEntity.html
+  name: ContextChunkEntity
+  nameWithType: ContextChunkEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.ContextChunkEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  parent: QBrainAi.Support.Mcp.Storage.Entities
+  href: QBrainAi.Support.Mcp.Storage.Entities.ContextDocumentEntity.html
+  name: ContextDocumentEntity
+  nameWithType: ContextDocumentEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.ContextDocumentEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.SessionLogActionEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.SessionLogActionEntity
+  href: QBrainAi.Support.Mcp.Storage.Entities.SessionLogActionEntity.html
+  name: SessionLogActionEntity
+  nameWithType: SessionLogActionEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.SessionLogActionEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntity
+  parent: QBrainAi.Support.Mcp.Storage.Entities
+  href: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntity.html
+  name: SessionLogEntity
+  nameWithType: SessionLogEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+  href: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity.html
+  name: SessionLogEntryContextEntity
+  nameWithType: SessionLogEntryContextEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+  parent: QBrainAi.Support.Mcp.Storage.Entities
+  href: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryEntity.html
+  name: SessionLogEntryEntity
+  nameWithType: SessionLogEntryEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+  href: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity.html
+  name: SessionLogEntryTagEntity
+  nameWithType: SessionLogEntryTagEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  href: QBrainAi.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html
+  name: SessionLogProcessingDialogEntity
+  nameWithType: SessionLogProcessingDialogEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.ToolBucketEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.ToolBucketEntity
+  href: QBrainAi.Support.Mcp.Storage.Entities.ToolBucketEntity.html
+  name: ToolBucketEntity
+  nameWithType: ToolBucketEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.ToolBucketEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  parent: QBrainAi.Support.Mcp.Storage.Entities
+  href: QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html
+  name: ToolDefinitionEntity
+  nameWithType: ToolDefinitionEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+  href: QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity.html
+  name: ToolDefinitionTagEntity
+  nameWithType: ToolDefinitionTagEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity
+  commentId: T:QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity
+  parent: QBrainAi.Support.Mcp.Storage.Entities
+  href: QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity.html
+  name: WorkspaceEntity
+  nameWithType: WorkspaceEntity
+  fullName: QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity
+- uid: QBrainAi.Support.Mcp.Storage.Entities
+  commentId: N:QBrainAi.Support.Mcp.Storage.Entities
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Storage.Entities
+  nameWithType: QBrainAi.Support.Mcp.Storage.Entities
+  fullName: QBrainAi.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Storage
+    name: Storage
+    href: QBrainAi.Support.Mcp.Storage.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Storage.Entities
+    name: Entities
+    href: QBrainAi.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Storage
+    name: Storage
+    href: QBrainAi.Support.Mcp.Storage.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Storage.Entities
+    name: Entities
+    href: QBrainAi.Support.Mcp.Storage.Entities.html

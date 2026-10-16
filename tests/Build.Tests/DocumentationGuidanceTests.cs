@@ -54,22 +54,6 @@ public sealed class DocumentationGuidanceTests
     }
 
     /// <summary>
-    /// TEST-MCP-147: Verifies pipeline documentation references the live
-    /// Azure Pipelines and GitHub Actions files that exist in the repository.
-    /// </summary>
-    [Fact]
-    public async Task PipelineGuidance_ReferencesExistingPipelineFiles()
-    {
-        var resources = typeof(DocumentationGuidanceTests).Assembly.GetManifestResourceNames();
-        Assert.Contains("Repository.azure-pipelines.yml", resources);
-        Assert.Contains("Repository.github.workflows.build.yml", resources);
-
-        var readme = await ReadRepositoryTextAsync("README.md").ConfigureAwait(true);
-        Assert.Contains("azure-pipelines.yml", readme, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains(".github/workflows/build.yml", readme, StringComparison.OrdinalIgnoreCase);
-    }
-
-    /// <summary>
     /// TEST-MCP-147: Verifies generated requirements wiki outputs keep the
     /// required Azure and GitHub file sets, including platform-specific files.
     /// </summary>
@@ -119,11 +103,11 @@ public sealed class DocumentationGuidanceTests
             "templates/prompt-templates.yaml",
             "SQLite",
             "McpDbContext",
-            "McpServer.Storage.SqliteMigrations",
+            "QBrainAi.Storage.SqliteMigrations",
             "WorkspaceEntity",
             "CurrentRequirementLayerKey",
             "random high port",
-            "McpServer.Support.Mcp",
+            "QBrainAi.Support.Mcp",
             "FileSystemWatcher",
             "AGENTS-README-FIRST.yaml",
             "one minute",

@@ -1,5 +1,5 @@
 using MemoryBenchLiveSubscription;
-using McpServer.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Services;
 
 var repositoryRoot = args.Length > 0 && !string.IsNullOrWhiteSpace(args[0]) && args[0] != "multiturn"
     ? Path.GetFullPath(args[0])
@@ -121,5 +121,5 @@ static string FindRepositoryRoot()
         directory = directory.Parent;
     }
 
-    throw new InvalidOperationException("Could not locate the McpServer repository root.");
+    throw new InvalidOperationException("Could not locate the QBrainAi repository root.");
 }

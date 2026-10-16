@@ -1,12 +1,12 @@
 ---
 name: git-usage
-description: Use this skill whenever an agent runs the QBAgent git tool in the McpServer workspace so version-control actions stay safe, push only when explicitly asked, and commit messages keep the required Co-Authored-By trailer.
+description: Use this skill whenever an agent runs the QBAgent git tool in the QBrainAi workspace so version-control actions stay safe, push only when explicitly asked, and commit messages keep the required Co-Authored-By trailer.
 license: MIT
 ---
 
 # Git Usage (QBAgent git tool)
 
-Guidance for driving the QBAgent git tool safely inside the McpServer repository. The tool exposes a fixed set of subcommands. This skill defines which are read-only, which mutate the working tree, and which touch a remote, plus project-specific safety rules that override default git habits.
+Guidance for driving the QBAgent git tool safely inside the QBrainAi repository. The tool exposes a fixed set of subcommands. This skill defines which are read-only, which mutate the working tree, and which touch a remote, plus project-specific safety rules that override default git habits.
 
 ## When to Use
 
@@ -17,14 +17,14 @@ Guidance for driving the QBAgent git tool safely inside the McpServer repository
 
 ## When Not to Use
 
-- You only need MCP TODO or session-log operations: use the MCP Server plugin/workflow methods, not git.
+- You only need MCP TODO or session-log operations: use the QBrain.AI plugin/workflow methods, not git.
 - You want to bypass the QBAgent git tool with raw shell git for a destructive action. Prefer the tool's subcommands so the action is auditable.
 
 ## Inputs
 
 - `subcommand`: one of `status`, `diff`, `log`, `branch`, `add`, `commit`, `checkout`, `push`, `reset`.
 - Subcommand arguments, for example: paths for `add`, a message for `commit`, a branch name for `checkout`/`branch`, a ref or mode for `reset`, a remote/branch for `push`.
-- The active workspace repository (the McpServer working tree). Use absolute paths when a path is required.
+- The active workspace repository (the QBrainAi working tree). Use absolute paths when a path is required.
 
 ## Subcommand Reference
 
@@ -56,7 +56,7 @@ Remote action (network, opt-in):
 5. Do not skip hooks or signing. Do not pass `--no-verify`, `--no-gpg-sign`, or equivalent bypasses unless the user explicitly asks. If a hook fails, fix the root cause instead of bypassing it.
 6. Branch before committing on a protected branch. The default branch is `main`. If you are on `main` and the user has not said to commit directly to it, create or switch to a working branch first.
 7. No em-dashes anywhere in commit messages, branch names, or any text this tool writes.
-8. The McpServer tree may be edited by other agents concurrently. Re-run `status` (and re-check file modification times) immediately before staging or committing so you do not capture or clobber another agent's changes.
+8. The QBrainAi tree may be edited by other agents concurrently. Re-run `status` (and re-check file modification times) immediately before staging or committing so you do not capture or clobber another agent's changes.
 
 ## Workflow
 

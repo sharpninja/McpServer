@@ -1,8 +1,8 @@
-# Iteration 6: McpServer.Repl.Host Tool Packaging
+# Iteration 6: QBrainAi.Repl.Host Tool Packaging
 
 ## Overview
 
-Iteration 6 completes the packaging of `McpServer.Repl.Host` as a .NET global tool with the package ID `SharpNinja.McpServer.Repl` and command name `mcpserver-repl`. The implementation includes full interactive mode with Spectre.Console wizards for common workflows.
+Iteration 6 completes the packaging of `QBrainAi.Repl.Host` as a .NET global tool with the package ID `QBrainAI.Repl` and command name `qbrain-ai-repl`. The implementation includes full interactive mode with Spectre.Console wizards for common workflows.
 
 ## Package Configuration
 
@@ -10,11 +10,11 @@ Iteration 6 completes the packaging of `McpServer.Repl.Host` as a .NET global to
 
 ```xml
 <PackAsTool>true</PackAsTool>
-<ToolCommandName>mcpserver-repl</ToolCommandName>
-<PackageId>SharpNinja.McpServer.Repl</PackageId>
+<ToolCommandName>qbrain-ai-repl</ToolCommandName>
+<PackageId>QBrainAI.Repl</PackageId>
 <Version>6.0.0</Version>
 <Authors>SharpNinja</Authors>
-<Description>MCP Server REPL Host - Interactive and STDIO modes for Model Context Protocol integration with workspace session logs, TODO management, and requirements tracking.</Description>
+<Description>QBrain.AI REPL Host - Interactive and STDIO modes for Model Context Protocol integration with workspace session logs, TODO management, and requirements tracking.</Description>
 <PackageTags>mcp;repl;model-context-protocol;session-log;todo;requirements;cli</PackageTags>
 <PackageLicenseExpression>MIT</PackageLicenseExpression>
 <RepositoryUrl>https://github.com/SharpNinja/McpServer</RepositoryUrl>
@@ -120,18 +120,18 @@ This will:
 .\scripts\Install-ReplTool.ps1
 
 # Or manually
-dotnet tool install --global SharpNinja.McpServer.Repl --add-source ./local-packages
+dotnet tool install --global QBrainAI.Repl --add-source ./local-packages
 ```
 
 ### 3. Verify Installation
 
 ```powershell
-mcpserver-repl --version
+qbrain-ai-repl --version
 ```
 
 Expected output:
 ```
-mcpserver-repl version 6.0.0
+qbrain-ai-repl version 6.0.0
 ```
 
 ## Usage
@@ -139,7 +139,7 @@ mcpserver-repl version 6.0.0
 ### Interactive Mode
 
 ```bash
-mcpserver-repl --interactive
+qbrain-ai-repl --interactive
 ```
 
 Launches an interactive wizard with:
@@ -151,7 +151,7 @@ Launches an interactive wizard with:
 ### Agent STDIO Mode
 
 ```bash
-mcpserver-repl --agent-stdio
+qbrain-ai-repl --agent-stdio
 ```
 
 Runs in STDIO mode for:
@@ -162,7 +162,7 @@ Runs in STDIO mode for:
 ### Version Check
 
 ```bash
-mcpserver-repl --version
+qbrain-ai-repl --version
 ```
 
 Displays version information from `AssemblyInformationalVersionAttribute`.
@@ -176,7 +176,7 @@ Displays version information from `AssemblyInformationalVersionAttribute`.
 Example:
 ```powershell
 $env:MCP_SERVER_URL = "http://localhost:5000"
-mcpserver-repl --interactive
+qbrain-ai-repl --interactive
 ```
 
 ## NuGet Configuration
@@ -186,7 +186,7 @@ Updated `NuGet.config` to include the package in local-packages source mapping:
 ```xml
 <packageSource key="local-packages">
   <package pattern="MarkdownServer" />
-  <package pattern="SharpNinja.McpServer.Repl" />
+  <package pattern="QBrainAI.Repl" />
 </packageSource>
 ```
 
@@ -200,7 +200,7 @@ Added `local-packages/` directory to .gitignore to exclude generated NuGet packa
 
 - **System.CommandLine**: Command-line parsing and routing
 - **Spectre.Console**: Rich terminal UI components
-- **McpServer.Client**: MCP server REST API client
+- **QBrainAi.Client**: MCP server REST API client
 - **Microsoft.Extensions.Hosting**: DI container and hosting
 
 ### Components
@@ -233,24 +233,24 @@ Added `local-packages/` directory to .gitignore to exclude generated NuGet packa
    .\scripts\Pack-ReplTool.ps1
    ```
    - Verify package created in `./local-packages/`
-   - Check package filename: `SharpNinja.McpServer.Repl.6.0.0.nupkg`
+   - Check package filename: `QBrainAI.Repl.6.0.0.nupkg`
 
 2. **Install Tool**
    ```powershell
-   dotnet tool install --global SharpNinja.McpServer.Repl --add-source ./local-packages
+   dotnet tool install --global QBrainAI.Repl --add-source ./local-packages
    ```
    - Verify successful installation message
    - Check tool is in global tools list: `dotnet tool list -g`
 
 3. **Verify Version**
    ```powershell
-   mcpserver-repl --version
+   qbrain-ai-repl --version
    ```
-   - Should display: `mcpserver-repl version 6.0.0` (or current version)
+   - Should display: `qbrain-ai-repl version 6.0.0` (or current version)
 
 4. **Test Interactive Mode**
    ```powershell
-   mcpserver-repl --interactive
+   qbrain-ai-repl --interactive
    ```
    - Verify Figlet header displays
    - Check workspace selection menu appears
@@ -258,7 +258,7 @@ Added `local-packages/` directory to .gitignore to exclude generated NuGet packa
 
 5. **Test STDIO Mode**
    ```powershell
-   echo '{"test":"input"}' | mcpserver-repl --agent-stdio
+   echo '{"test":"input"}' | qbrain-ai-repl --agent-stdio
    ```
    - Verify STDIO processing (if server is running)
 
@@ -271,14 +271,14 @@ Added `local-packages/` directory to .gitignore to exclude generated NuGet packa
 dotnet tool list -g
 
 # Reinstall with verbose output
-dotnet tool install --global SharpNinja.McpServer.Repl --add-source ./local-packages --verbosity detailed
+dotnet tool install --global QBrainAI.Repl --add-source ./local-packages --verbosity detailed
 ```
 
 ### Version Mismatch
 
 ```powershell
 # Update to latest version
-dotnet tool update --global SharpNinja.McpServer.Repl --add-source ./local-packages
+dotnet tool update --global QBrainAI.Repl --add-source ./local-packages
 ```
 
 ### Package Not Found

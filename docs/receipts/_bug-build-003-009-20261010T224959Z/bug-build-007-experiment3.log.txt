@@ -1,0 +1,6 @@
+BUG-BUILD-007 experiment 3 2026-10-10T23:20:37Z on LAB-OMARCHY, dotnet 10.0.201
+=== case ensure-fixed (salt bugbuild007f3b385ed1cb1d, env: MSBUILDENSURESTDOUTFORTASKPROCESSES=1, extra args: --disable-build-servers)
+child pid 3011253 exit code 0; output closed within 30 s of exit: True (waited 0 s)
+node 3011291: parent while the child ran = 3011253 (child 3011253); fd1 pipe:[18628176]; fd2 pipe:[18628177]; fd1 and fd2 are pipes this shell reads: True
+salted nodes alive after exit: []
+summary ensure-fixed: nodes seen during the build: 1; output closed within 30 s: True; nodes left: 0

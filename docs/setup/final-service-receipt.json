@@ -2,7 +2,7 @@
   "timestamp": "2026-09-28T21:47:03.3601210Z",
   "tokenRotated": true,
   "mainPID": "580731",
-  "executable": "/opt/mcpserver/app/McpServer.Support.Mcp",
+  "executable": "/opt/mcpserver/app/QBrainAi.Support.Mcp",
   "configurationSha256": "A8ECF6298B42E9BA3D437D8FA9E0097A9379BF832A8135C95E5C3B61A446A9A7",
   "binarySha256": "A28BB995BF487823667E87F7AB829890C742B35D9EE4229715B309352EC58361",
   "productVersion": "1.4.39+6546a59f2baad45d99e717bb8f20b56e06d5911f",

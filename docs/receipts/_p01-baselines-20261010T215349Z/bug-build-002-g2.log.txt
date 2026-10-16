@@ -1,0 +1,1560 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════
+║ Restore
+╬═══
+​
+11:48:54 [INF] > /home/sharpninja/.dotnet/dotnet restore QBrainAi.sln
+11:48:56 [DBG]   Determining projects to restore...
+11:48:58 [DBG]   All projects are up-to-date for restore.
+11:48:58 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj
+11:48:58 [DBG]   Determining projects to restore...
+11:48:59 [DBG]   Restored src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj (in 525 ms).
+11:48:59 [DBG]   1 of 2 projects are up-to-date for restore.
+11:48:59 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj
+11:49:00 [DBG]   Determining projects to restore...
+11:49:01 [DBG]   Restored src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj (in 479 ms).
+11:49:01 [DBG]   2 of 3 projects are up-to-date for restore.
+11:49:01 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj
+11:49:02 [DBG]   Determining projects to restore...
+11:49:02 [DBG]   Restored src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj (in 389 ms).
+11:49:02 [DBG]   1 of 2 projects are up-to-date for restore.
+11:49:02 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj
+11:49:03 [DBG]   Determining projects to restore...
+11:49:04 [DBG]   Restored src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj (in 633 ms).
+11:49:04 [DBG]   4 of 5 projects are up-to-date for restore.
+11:49:04 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj
+11:49:05 [DBG]   Determining projects to restore...
+11:49:08 [DBG]   Restored src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj (in 1.77 sec).
+11:49:08 [DBG]   6 of 7 projects are up-to-date for restore.
+11:49:08 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj
+11:49:09 [DBG]   Determining projects to restore...
+11:49:10 [DBG]   Restored src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj (in 499 ms).
+11:49:10 [DBG]   3 of 4 projects are up-to-date for restore.
+11:49:10 [INF] > /home/sharpninja/.dotnet/dotnet restore src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj
+11:49:11 [DBG]   Determining projects to restore...
+11:49:12 [DBG]   Restored src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj (in 548 ms).
+11:49:12 [DBG]   4 of 5 projects are up-to-date for restore.
+​
+╬════════════
+║ Compile
+╬═══
+​
+11:49:12 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Client/SharpNinja.McpServer.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:30 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:49:31 [DBG]   SharpNinja.McpServer.Client -> src/Compatibility/SharpNinja.McpServer.Client/bin/Debug/net10.0/SharpNinja.McpServer.Client.dll
+11:49:31 [DBG] 
+11:49:31 [DBG] Build succeeded.
+11:49:31 [DBG]     0 Warning(s)
+11:49:31 [DBG]     0 Error(s)
+11:49:31 [DBG] 
+11:49:31 [DBG] Time Elapsed 00:00:18.36
+11:49:31 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/SharpNinja.McpServer.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:32 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:49:33 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:49:33 [DBG]   SharpNinja.McpServer.Cqrs.Mvvm -> src/Compatibility/SharpNinja.McpServer.Cqrs.Mvvm/bin/Debug/net10.0/SharpNinja.McpServer.Cqrs.Mvvm.dll
+11:49:33 [DBG] 
+11:49:33 [DBG] Build succeeded.
+11:49:33 [DBG]     0 Warning(s)
+11:49:33 [DBG]     0 Error(s)
+11:49:33 [DBG] 
+11:49:33 [DBG] Time Elapsed 00:00:02.01
+11:49:33 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Cqrs/SharpNinja.McpServer.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:34 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:49:34 [DBG]   SharpNinja.McpServer.Cqrs -> src/Compatibility/SharpNinja.McpServer.Cqrs/bin/Debug/net10.0/SharpNinja.McpServer.Cqrs.dll
+11:49:34 [DBG] 
+11:49:34 [DBG] Build succeeded.
+11:49:34 [DBG]     0 Warning(s)
+11:49:34 [DBG]     0 Error(s)
+11:49:34 [DBG] 
+11:49:34 [DBG] Time Elapsed 00:00:01.04
+11:49:34 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.McpAgent/SharpNinja.McpServer.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:36 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:49:36 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:49:38 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:49:38 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:49:39 [DBG]   SharpNinja.McpServer.McpAgent -> src/Compatibility/SharpNinja.McpServer.McpAgent/bin/Debug/net10.0/SharpNinja.McpServer.McpAgent.dll
+11:49:39 [DBG] 
+11:49:39 [DBG] Build succeeded.
+11:49:39 [DBG]     0 Warning(s)
+11:49:39 [DBG]     0 Error(s)
+11:49:39 [DBG] 
+11:49:39 [DBG] Time Elapsed 00:00:03.99
+11:49:39 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.QBAgent/SharpNinja.McpServer.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:40 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:49:40 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:49:40 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+11:49:40 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:49:41 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:49:41 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+11:49:41 [DBG]   SharpNinja.McpServer.QBAgent -> src/Compatibility/SharpNinja.McpServer.QBAgent/bin/Debug/net10.0/SharpNinja.McpServer.QBAgent.dll
+11:49:41 [DBG] 
+11:49:41 [DBG] Build succeeded.
+11:49:41 [DBG]     0 Warning(s)
+11:49:41 [DBG]     0 Error(s)
+11:49:41 [DBG] 
+11:49:41 [DBG] Time Elapsed 00:00:02.50
+11:49:41 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Repl.Core/SharpNinja.McpServer.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:43 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:49:43 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:49:43 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:49:43 [DBG]   SharpNinja.McpServer.Repl.Core -> src/Compatibility/SharpNinja.McpServer.Repl.Core/bin/Debug/net10.0/SharpNinja.McpServer.Repl.Core.dll
+11:49:43 [DBG] 
+11:49:43 [DBG] Build succeeded.
+11:49:43 [DBG]     0 Warning(s)
+11:49:43 [DBG]     0 Error(s)
+11:49:43 [DBG] 
+11:49:43 [DBG] Time Elapsed 00:00:01.49
+11:49:43 [INF] > /home/sharpninja/.dotnet/dotnet build src/Compatibility/SharpNinja.McpServer.Repl/SharpNinja.McpServer.Repl.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:44 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:49:44 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:49:45 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:49:46 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:49:47 [DBG]   SharpNinja.McpServer.Repl -> src/Compatibility/SharpNinja.McpServer.Repl/bin/Debug/net10.0/SharpNinja.McpServer.Repl.dll
+11:49:47 [DBG] 
+11:49:47 [DBG] Build succeeded.
+11:49:47 [DBG]     0 Warning(s)
+11:49:47 [DBG]     0 Error(s)
+11:49:47 [DBG] 
+11:49:47 [DBG] Time Elapsed 00:00:03.21
+11:49:47 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Client/QBrainAi.Client.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:48 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:49:48 [DBG] 
+11:49:48 [DBG] Build succeeded.
+11:49:48 [DBG]     0 Warning(s)
+11:49:48 [DBG]     0 Error(s)
+11:49:48 [DBG] 
+11:49:48 [DBG] Time Elapsed 00:00:00.65
+11:49:48 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:48 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:49:48 [DBG] 
+11:49:48 [DBG] Build succeeded.
+11:49:48 [DBG]     0 Warning(s)
+11:49:48 [DBG]     0 Error(s)
+11:49:48 [DBG] 
+11:49:48 [DBG] Time Elapsed 00:00:00.59
+11:49:48 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Cqrs.Mvvm/QBrainAi.Cqrs.Mvvm.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:49 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:49:50 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:49:50 [DBG] 
+11:49:50 [DBG] Build succeeded.
+11:49:50 [DBG]     0 Warning(s)
+11:49:50 [DBG]     0 Error(s)
+11:49:50 [DBG] 
+11:49:50 [DBG] Time Elapsed 00:00:00.82
+11:49:50 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Cqrs/QBrainAi.Cqrs.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:50 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:49:50 [DBG] 
+11:49:50 [DBG] Build succeeded.
+11:49:50 [DBG]     0 Warning(s)
+11:49:50 [DBG]     0 Error(s)
+11:49:50 [DBG] 
+11:49:50 [DBG] Time Elapsed 00:00:00.60
+11:49:50 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.GraphRag/QBrainAi.GraphRag.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:49:52 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:49:52 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:49:52 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:49:52 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:49:52 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:49:52 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:49:52 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:49:55 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:50:03 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+11:50:04 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+11:50:04 [DBG] 
+11:50:04 [DBG] Build succeeded.
+11:50:04 [DBG]     0 Warning(s)
+11:50:04 [DBG]     0 Error(s)
+11:50:04 [DBG] 
+11:50:04 [DBG] Time Elapsed 00:00:13.38
+11:50:04 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.KeyServer/QBrainAi.KeyServer.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:05 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:50:06 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:07 [DBG]   QBrainAi.KeyServer -> src/QBrainAi.KeyServer/bin/Debug/net10.0/QBrainAi.KeyServer.dll
+11:50:07 [DBG] 
+11:50:07 [DBG] Build succeeded.
+11:50:07 [DBG]     0 Warning(s)
+11:50:07 [DBG]     0 Error(s)
+11:50:07 [DBG] 
+11:50:07 [DBG] Time Elapsed 00:00:02.27
+11:50:07 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Launcher/QBrainAi.Launcher.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:08 [DBG]   QBrainAi.Launcher -> src/QBrainAi.Launcher/bin/Debug/net10.0-windows/QBrainAi.Launcher.dll
+11:50:08 [DBG] 
+11:50:08 [DBG] Build succeeded.
+11:50:08 [DBG]     0 Warning(s)
+11:50:08 [DBG]     0 Error(s)
+11:50:08 [DBG] 
+11:50:08 [DBG] Time Elapsed 00:00:00.89
+11:50:08 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.McpAgent.SampleHost/QBrainAi.McpAgent.SampleHost.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:09 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:09 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:09 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:50:09 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:50:10 [DBG]   QBrainAi.McpAgent.SampleHost -> src/QBrainAi.McpAgent.SampleHost/bin/Debug/net10.0/QBrainAi.McpAgent.SampleHost.dll
+11:50:10 [DBG] 
+11:50:10 [DBG] Build succeeded.
+11:50:10 [DBG]     0 Warning(s)
+11:50:10 [DBG]     0 Error(s)
+11:50:10 [DBG] 
+11:50:10 [DBG] Time Elapsed 00:00:01.85
+11:50:10 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:11 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:11 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:11 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:50:11 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:50:11 [DBG] 
+11:50:11 [DBG] Build succeeded.
+11:50:11 [DBG]     0 Warning(s)
+11:50:11 [DBG]     0 Error(s)
+11:50:11 [DBG] 
+11:50:11 [DBG] Time Elapsed 00:00:01.29
+11:50:12 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.QBAgent.Skills/QBrainAi.QBAgent.Skills.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:12 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+11:50:12 [DBG] 
+11:50:12 [DBG] Build succeeded.
+11:50:12 [DBG]     0 Warning(s)
+11:50:12 [DBG]     0 Error(s)
+11:50:12 [DBG] 
+11:50:12 [DBG] Time Elapsed 00:00:00.59
+11:50:12 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.QBAgent.Tools/QBrainAi.QBAgent.Tools.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:14 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:14 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+11:50:14 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:14 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:50:14 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:50:14 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+11:50:14 [DBG] 
+11:50:14 [DBG] Build succeeded.
+11:50:14 [DBG]     0 Warning(s)
+11:50:14 [DBG]     0 Error(s)
+11:50:14 [DBG] 
+11:50:14 [DBG] Time Elapsed 00:00:01.37
+11:50:14 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:15 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+11:50:15 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:15 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:15 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:50:16 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:50:16 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+11:50:16 [DBG]   QBrainAi.QBAgent -> src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+11:50:16 [DBG] 
+11:50:16 [DBG] Build succeeded.
+11:50:16 [DBG]     0 Warning(s)
+11:50:16 [DBG]     0 Error(s)
+11:50:16 [DBG] 
+11:50:16 [DBG] Time Elapsed 00:00:01.85
+11:50:16 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:17 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:17 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:18 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:50:18 [DBG] 
+11:50:18 [DBG] Build succeeded.
+11:50:18 [DBG]     0 Warning(s)
+11:50:18 [DBG]     0 Error(s)
+11:50:18 [DBG] 
+11:50:18 [DBG] Time Elapsed 00:00:01.14
+11:50:18 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:19 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:19 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:19 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:50:19 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:50:20 [DBG]   QBrainAi.Repl.Host -> src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+11:50:20 [DBG] 
+11:50:20 [DBG] Build succeeded.
+11:50:20 [DBG]     0 Warning(s)
+11:50:20 [DBG]     0 Error(s)
+11:50:20 [DBG] 
+11:50:20 [DBG] Time Elapsed 00:00:01.99
+11:50:20 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.ServiceDefaults/QBrainAi.ServiceDefaults.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:21 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:21 [DBG] 
+11:50:21 [DBG] Build succeeded.
+11:50:21 [DBG]     0 Warning(s)
+11:50:21 [DBG]     0 Error(s)
+11:50:21 [DBG] 
+11:50:21 [DBG] Time Elapsed 00:00:00.67
+11:50:21 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Services/QBrainAi.Services.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:22 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:50:22 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:22 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:22 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:50:22 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:22 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:50:22 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:50:22 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:50:23 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+11:50:23 [DBG] 
+11:50:23 [DBG] Build succeeded.
+11:50:23 [DBG]     0 Warning(s)
+11:50:23 [DBG]     0 Error(s)
+11:50:23 [DBG] 
+11:50:23 [DBG] Time Elapsed 00:00:01.61
+11:50:23 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.SessionLog.Transcripts/QBrainAi.SessionLog.Transcripts.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:24 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+11:50:24 [DBG] 
+11:50:24 [DBG] Build succeeded.
+11:50:24 [DBG]     0 Warning(s)
+11:50:24 [DBG]     0 Error(s)
+11:50:24 [DBG] 
+11:50:24 [DBG] Time Elapsed 00:00:00.99
+11:50:24 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:25 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:25 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:25 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:25 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:50:29 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+11:50:29 [DBG] 
+11:50:29 [DBG] Build succeeded.
+11:50:29 [DBG]     0 Warning(s)
+11:50:29 [DBG]     0 Error(s)
+11:50:29 [DBG] 
+11:50:29 [DBG] Time Elapsed 00:00:04.92
+11:50:29 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:30 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:30 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:30 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:31 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:50:34 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+11:50:34 [DBG] 
+11:50:34 [DBG] Build succeeded.
+11:50:34 [DBG]     0 Warning(s)
+11:50:34 [DBG]     0 Error(s)
+11:50:34 [DBG] 
+11:50:34 [DBG] Time Elapsed 00:00:04.85
+11:50:34 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:35 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:35 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:35 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:36 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:50:39 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+11:50:39 [DBG] 
+11:50:39 [DBG] Build succeeded.
+11:50:39 [DBG]     0 Warning(s)
+11:50:39 [DBG]     0 Error(s)
+11:50:39 [DBG] 
+11:50:39 [DBG] Time Elapsed 00:00:04.69
+11:50:39 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Storage/QBrainAi.Storage.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:40 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:40 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:41 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:41 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:50:41 [DBG] 
+11:50:41 [DBG] Build succeeded.
+11:50:41 [DBG]     0 Warning(s)
+11:50:41 [DBG]     0 Error(s)
+11:50:41 [DBG] 
+11:50:41 [DBG] Time Elapsed 00:00:01.23
+11:50:41 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Subscriber/QBrainAi.Subscriber.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:42 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:50:42 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:43 [DBG]   QBrainAi.Subscriber -> src/QBrainAi.Subscriber/bin/Debug/net10.0/QBrainAi.Subscriber.dll
+11:50:43 [DBG] 
+11:50:43 [DBG] Build succeeded.
+11:50:43 [DBG]     0 Warning(s)
+11:50:43 [DBG]     0 Error(s)
+11:50:43 [DBG] 
+11:50:43 [DBG] Time Elapsed 00:00:01.90
+11:50:43 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:45 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:50:45 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:50:45 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:45 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:50:45 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+11:50:45 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:45 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:50:45 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:50:45 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:50:45 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+11:50:45 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+11:50:45 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+11:50:45 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:50:46 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+11:50:46 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+11:50:53 [DBG]   QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+11:50:53 [DBG] 
+11:50:53 [DBG] Build succeeded.
+11:50:53 [DBG]     0 Warning(s)
+11:50:53 [DBG]     0 Error(s)
+11:50:53 [DBG] 
+11:50:53 [DBG] Time Elapsed 00:00:09.70
+11:50:53 [INF] > /home/sharpninja/.dotnet/dotnet build src/QBrainAi.TransactionSecurity/QBrainAi.TransactionSecurity.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:54 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:50:54 [DBG] 
+11:50:54 [DBG] Build succeeded.
+11:50:54 [DBG]     0 Warning(s)
+11:50:54 [DBG]     0 Error(s)
+11:50:54 [DBG] 
+11:50:54 [DBG] Time Elapsed 00:00:00.61
+11:50:54 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:55 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:50:55 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:50:55 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:55 [DBG]   QBrainAi.KeyServer -> src/QBrainAi.KeyServer/bin/Debug/net10.0/QBrainAi.KeyServer.dll
+11:50:55 [DBG]   QBrainAi.Subscriber -> src/QBrainAi.Subscriber/bin/Debug/net10.0/QBrainAi.Subscriber.dll
+11:50:56 [DBG]   QBrainAi.Acid.IntegrationTests -> tests/QBrainAi.Acid.IntegrationTests/bin/Debug/net10.0/QBrainAi.Acid.IntegrationTests.dll
+11:50:56 [DBG] 
+11:50:56 [DBG] Build succeeded.
+11:50:56 [DBG]     0 Warning(s)
+11:50:56 [DBG]     0 Error(s)
+11:50:56 [DBG] 
+11:50:56 [DBG] Time Elapsed 00:00:01.96
+11:50:56 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:57 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:50:58 [DBG]   QBrainAi.Client.Tests -> tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll
+11:50:58 [DBG] 
+11:50:58 [DBG] Build succeeded.
+11:50:58 [DBG]     0 Warning(s)
+11:50:58 [DBG]     0 Error(s)
+11:50:58 [DBG] 
+11:50:58 [DBG] Time Elapsed 00:00:01.70
+11:50:58 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:50:59 [DBG]   QBrainAi.Context.Validation -> tests/QBrainAi.Context.Validation/bin/Debug/net10.0/QBrainAi.Context.Validation.dll
+11:50:59 [DBG] 
+11:50:59 [DBG] Build succeeded.
+11:50:59 [DBG]     0 Warning(s)
+11:50:59 [DBG]     0 Error(s)
+11:50:59 [DBG] 
+11:50:59 [DBG] Time Elapsed 00:00:00.99
+11:50:59 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:01 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:51:01 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:51:01 [DBG]   QBrainAi.Cqrs.Tests -> tests/QBrainAi.Cqrs.Tests/bin/Debug/net10.0/QBrainAi.Cqrs.Tests.dll
+11:51:01 [DBG] 
+11:51:01 [DBG] Build succeeded.
+11:51:01 [DBG]     0 Warning(s)
+11:51:01 [DBG]     0 Error(s)
+11:51:01 [DBG] 
+11:51:01 [DBG] Time Elapsed 00:00:01.54
+11:51:01 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:02 [DBG]   QBrainAi.GitHub.Validation -> tests/QBrainAi.GitHub.Validation/bin/Debug/net10.0/QBrainAi.GitHub.Validation.dll
+11:51:02 [DBG] 
+11:51:02 [DBG] Build succeeded.
+11:51:02 [DBG]     0 Warning(s)
+11:51:02 [DBG]     0 Error(s)
+11:51:02 [DBG] 
+11:51:02 [DBG] Time Elapsed 00:00:01.06
+11:51:03 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:04 [DBG]   QBrainAi.Launcher -> src/QBrainAi.Launcher/bin/Debug/net10.0-windows/QBrainAi.Launcher.dll
+11:51:04 [DBG]   QBrainAi.Launcher.Tests -> tests/QBrainAi.Launcher.Tests/bin/Debug/net10.0-windows/QBrainAi.Launcher.Tests.dll
+11:51:04 [DBG] 
+11:51:04 [DBG] Build succeeded.
+11:51:04 [DBG]     0 Warning(s)
+11:51:04 [DBG]     0 Error(s)
+11:51:04 [DBG] 
+11:51:04 [DBG] Time Elapsed 00:00:01.24
+11:51:04 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:05 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:51:05 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:51:05 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:51:06 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:51:06 [DBG]   QBrainAi.McpAgent.Tests -> tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll
+11:51:06 [DBG] 
+11:51:06 [DBG] Build succeeded.
+11:51:06 [DBG]     0 Warning(s)
+11:51:06 [DBG]     0 Error(s)
+11:51:06 [DBG] 
+11:51:06 [DBG] Time Elapsed 00:00:02.06
+11:51:06 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:07 [DBG]   QBrainAi.PlanReview.Tests -> tests/QBrainAi.PlanReview.Tests/bin/Debug/net10.0/QBrainAi.PlanReview.Tests.dll
+11:51:07 [DBG] 
+11:51:07 [DBG] Build succeeded.
+11:51:07 [DBG]     0 Warning(s)
+11:51:07 [DBG]     0 Error(s)
+11:51:07 [DBG] 
+11:51:07 [DBG] Time Elapsed 00:00:00.90
+11:51:08 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:09 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+11:51:09 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:51:09 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:51:09 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:51:09 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:51:10 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:51:10 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:51:10 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:51:10 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:51:10 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:51:10 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+11:51:10 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+11:51:10 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+11:51:10 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+11:51:10 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+11:51:11 [DBG]   QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+11:51:12 [DBG]   QBrainAi.PluginIntegration.Tests -> tests/QBrainAi.PluginIntegration.Tests/bin/Debug/net10.0/QBrainAi.PluginIntegration.Tests.dll
+11:51:12 [DBG] 
+11:51:12 [DBG] Build succeeded.
+11:51:12 [DBG]     0 Warning(s)
+11:51:12 [DBG]     0 Error(s)
+11:51:12 [DBG] 
+11:51:12 [DBG] Time Elapsed 00:00:04.75
+11:51:13 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:14 [DBG]   QBrainAi.ProcessTree.TestHelper -> tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+11:51:14 [DBG] 
+11:51:14 [DBG] Build succeeded.
+11:51:14 [DBG]     0 Warning(s)
+11:51:14 [DBG]     0 Error(s)
+11:51:14 [DBG] 
+11:51:14 [DBG] Time Elapsed 00:00:00.85
+11:51:14 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:15 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:51:15 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+11:51:15 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:51:15 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:51:15 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:51:15 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+11:51:15 [DBG]   QBrainAi.QBAgent -> src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+11:51:16 [DBG]   QBrainAi.QBAgent.Tests -> tests/QBrainAi.QBAgent.Tests/bin/Debug/net10.0/QBrainAi.QBAgent.Tests.dll
+11:51:16 [DBG] 
+11:51:16 [DBG] Build succeeded.
+11:51:16 [DBG]     0 Warning(s)
+11:51:16 [DBG]     0 Error(s)
+11:51:16 [DBG] 
+11:51:16 [DBG] Time Elapsed 00:00:02.28
+11:51:16 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:17 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:51:18 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:51:18 [DBG]   QBrainAi.Todo.Validation -> tests/QBrainAi.Todo.Validation/bin/Debug/net10.0/QBrainAi.Todo.Validation.dll
+11:51:18 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:51:20 [DBG]   QBrainAi.Repl.Core.Tests -> tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll
+11:51:20 [DBG] 
+11:51:20 [DBG] Build succeeded.
+11:51:20 [DBG]     0 Warning(s)
+11:51:20 [DBG]     0 Error(s)
+11:51:20 [DBG] 
+11:51:20 [DBG] Time Elapsed 00:00:03.09
+11:51:20 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:21 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:51:21 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:51:21 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:51:21 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:51:21 [DBG]   QBrainAi.Repl.Host -> src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+11:51:22 [DBG]   QBrainAi.Repl.IntegrationTests -> tests/QBrainAi.Repl.IntegrationTests/bin/Debug/net10.0/QBrainAi.Repl.IntegrationTests.dll
+11:51:22 [DBG] 
+11:51:22 [DBG] Build succeeded.
+11:51:22 [DBG]     0 Warning(s)
+11:51:22 [DBG]     0 Error(s)
+11:51:22 [DBG] 
+11:51:22 [DBG] Time Elapsed 00:00:02.09
+11:51:22 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:23 [DBG]   QBrainAi.Repo.Validation -> tests/QBrainAi.Repo.Validation/bin/Debug/net10.0/QBrainAi.Repo.Validation.dll
+11:51:23 [DBG] 
+11:51:23 [DBG] Build succeeded.
+11:51:23 [DBG]     0 Warning(s)
+11:51:23 [DBG]     0 Error(s)
+11:51:23 [DBG] 
+11:51:23 [DBG] Time Elapsed 00:00:00.97
+11:51:23 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:24 [DBG]   QBrainAi.Review.Tests -> tests/QBrainAi.Review.Tests/bin/Debug/net10.0/QBrainAi.Review.Tests.dll
+11:51:24 [DBG] 
+11:51:24 [DBG] Build succeeded.
+11:51:24 [DBG]     0 Warning(s)
+11:51:24 [DBG]     0 Error(s)
+11:51:24 [DBG] 
+11:51:24 [DBG] Time Elapsed 00:00:00.93
+11:51:24 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:26 [DBG]   QBrainAi.SessionLog.Validation -> tests/QBrainAi.SessionLog.Validation/bin/Debug/net10.0/QBrainAi.SessionLog.Validation.dll
+11:51:26 [DBG] 
+11:51:26 [DBG] Build succeeded.
+11:51:26 [DBG]     0 Warning(s)
+11:51:26 [DBG]     0 Error(s)
+11:51:26 [DBG] 
+11:51:26 [DBG] Time Elapsed 00:00:01.06
+11:51:26 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:27 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:51:27 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:51:27 [DBG]   QBrainAi.QBAgent.Skills -> src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+11:51:27 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:51:27 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:51:27 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:51:27 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:51:27 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:51:27 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:51:27 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+11:51:27 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:51:27 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+11:51:27 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+11:51:27 [DBG]   QBrainAi.QBAgent.Tools -> src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+11:51:27 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+11:51:28 [DBG]   QBrainAi.Repl.Host -> src/QBrainAi.Repl.Host/bin/Debug/net10.0/QBrainAi.Repl.Host.dll
+11:51:28 [DBG]   QBrainAi.QBAgent -> src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+11:51:28 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+11:51:28 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+11:51:28 [DBG]   QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+11:51:31 [DBG]   QBrainAi.Support.Mcp.IntegrationTests -> tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll
+11:51:31 [DBG] 
+11:51:31 [DBG] Build succeeded.
+11:51:31 [DBG]     0 Warning(s)
+11:51:31 [DBG]     0 Error(s)
+11:51:31 [DBG] 
+11:51:31 [DBG] Time Elapsed 00:00:04.94
+11:51:31 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:32 [DBG]   QBrainAi.ProcessTree.TestHelper -> tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+11:51:32 [DBG]   QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+11:51:32 [DBG]   QBrainAi.Cqrs -> src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+11:51:32 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:51:32 [DBG]   QBrainAi.SessionLog.Transcripts -> src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+11:51:32 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:51:32 [DBG]   QBrainAi.Cqrs.Mvvm -> src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+11:51:32 [DBG]   QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+11:51:33 [DBG]   QBrainAi.Storage -> src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+11:51:33 [DBG]   QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+11:51:33 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:51:33 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+11:51:33 [DBG]   QBrainAi.Services -> src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+11:51:33 [DBG]   QBrainAi.Storage.SqliteMigrations -> src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+11:51:33 [DBG]   QBrainAi.GraphRag -> src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+11:51:33 [DBG]   QBrainAi.Storage.SqlServerMigrations -> src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+11:51:33 [DBG]   QBrainAi.Support.Mcp -> src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+11:51:43 [DBG]   QBrainAi.Support.Mcp.Tests -> tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll
+11:51:43 [DBG] 
+11:51:43 [DBG] Build succeeded.
+11:51:43 [DBG]     0 Warning(s)
+11:51:43 [DBG]     0 Error(s)
+11:51:43 [DBG] 
+11:51:43 [DBG] Time Elapsed 00:00:11.96
+11:51:43 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:44 [DBG]   QBrainAi.Todo.Validation -> tests/QBrainAi.Todo.Validation/bin/Debug/net10.0/QBrainAi.Todo.Validation.dll
+11:51:44 [DBG] 
+11:51:44 [DBG] Build succeeded.
+11:51:44 [DBG]     0 Warning(s)
+11:51:44 [DBG]     0 Error(s)
+11:51:44 [DBG] 
+11:51:44 [DBG] Time Elapsed 00:00:00.69
+11:51:44 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:45 [DBG]   QBrainAi.ToolRegistry.Validation -> tests/QBrainAi.ToolRegistry.Validation/bin/Debug/net10.0/QBrainAi.ToolRegistry.Validation.dll
+11:51:45 [DBG] 
+11:51:45 [DBG] Build succeeded.
+11:51:45 [DBG]     0 Warning(s)
+11:51:45 [DBG]     0 Error(s)
+11:51:45 [DBG] 
+11:51:45 [DBG] Time Elapsed 00:00:01.03
+11:51:45 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:47 [DBG]   QBrainAi.TransactionSecurity -> src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+11:51:47 [DBG]   QBrainAi.ServiceDefaults -> src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+11:51:47 [DBG]   QBrainAi.KeyServer -> src/QBrainAi.KeyServer/bin/Debug/net10.0/QBrainAi.KeyServer.dll
+11:51:47 [DBG]   QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+11:51:47 [DBG]   QBrainAi.Subscriber -> src/QBrainAi.Subscriber/bin/Debug/net10.0/QBrainAi.Subscriber.dll
+11:51:48 [DBG]   QBrainAi.TransactionSecurity.IntegrationTests -> tests/QBrainAi.TransactionSecurity.IntegrationTests/bin/Debug/net10.0/QBrainAi.TransactionSecurity.IntegrationTests.dll
+11:51:48 [DBG] 
+11:51:48 [DBG] Build succeeded.
+11:51:48 [DBG]     0 Warning(s)
+11:51:48 [DBG]     0 Error(s)
+11:51:48 [DBG] 
+11:51:48 [DBG] Time Elapsed 00:00:02.33
+11:51:48 [INF] > /home/sharpninja/.dotnet/dotnet build tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40
+11:51:49 [DBG]   QBrainAi.Workspace.Validation -> tests/QBrainAi.Workspace.Validation/bin/Debug/net10.0/QBrainAi.Workspace.Validation.dll
+11:51:49 [DBG] 
+11:51:49 [DBG] Build succeeded.
+11:51:49 [DBG]     0 Warning(s)
+11:51:49 [DBG]     0 Error(s)
+11:51:49 [DBG] 
+11:51:49 [DBG] Time Elapsed 00:00:01.11
+​
+╬═════════
+║ Test
+╬══
+​
+11:51:49 [INF] > /home/sharpninja/.dotnet/dotnet test tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory TestResults
+11:51:50 [DBG] Test run for tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+11:51:50 [DBG] A total of 1 test files matched the specified pattern.
+11:51:54 [ERR] [xUnit.net 00:00:03.19]     QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump [FAIL]
+11:51:54 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump [145 ms]
+11:51:54 [DBG]   Error Message:
+11:51:54 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/g8-wiki-868cb2c206294572acccae1c7cf3ddc8/docs/Project/wiki'.
+11:51:54 [DBG]   Stack Trace:
+11:51:54 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:51:54 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:51:54 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:51:54 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:51:54 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:51:54 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:51:54 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump() in tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:line 62
+11:51:54 [DBG] --- End of stack trace from previous location ---
+11:52:00 [ERR] [xUnit.net 00:00:09.41]     QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected [FAIL]
+11:52:00 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected [12 ms]
+11:52:00 [DBG]   Error Message:
+11:52:00 [DBG]    Assert.Null() Failure: Value is not null
+11:52:00 [DBG] Expected: null
+11:52:00 [DBG] Actual:   RepoFileReadResult { RelativePath = tmp/repo_external_0ee8bb5856784717b775d52372a0f4d2/outside.txt, Content = , Exists = False }
+11:52:00 [DBG]   Stack Trace:
+11:52:00 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected() in tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:line 77
+11:52:00 [DBG] --- End of stack trace from previous location ---
+11:52:02 [ERR] [xUnit.net 00:00:11.28]     QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags [FAIL]
+11:52:02 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags [12 ms]
+11:52:02 [DBG]   Error Message:
+11:52:02 [DBG]    Assert.Contains() Failure: Sub-string not found
+11:52:02 [DBG] String:    "exec --model model-triage -c model_reasoning_effor"···
+11:52:02 [DBG] Not found: "model_reasoning_effort=\\"xhigh\\""
+11:52:02 [DBG]   Stack Trace:
+11:52:02 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags() in tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:line 61
+11:52:02 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags() in tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:line 71
+11:52:02 [DBG] --- End of stack trace from previous location ---
+11:52:05 [ERR] [xUnit.net 00:00:13.84]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome [FAIL]
+11:52:05 [ERR] [xUnit.net 00:00:13.87]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure [FAIL]
+11:52:05 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome [32 ms]
+11:52:05 [DBG]   Error Message:
+11:52:05 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-7d00d7f0/docs/Project/wiki'.
+11:52:05 [DBG]   Stack Trace:
+11:52:05 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:line 151
+11:52:05 [DBG] --- End of stack trace from previous location ---
+11:52:05 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure [30 ms]
+11:52:05 [DBG]   Error Message:
+11:52:05 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-cb6e0712/docs/Project/wiki'.
+11:52:05 [DBG]   Stack Trace:
+11:52:05 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:line 103
+11:52:05 [DBG] --- End of stack trace from previous location ---
+11:52:05 [ERR] [xUnit.net 00:00:13.98]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "C:/outside/docfx", ···]]]], expectedMessage: "outputRoot") [FAIL]
+11:52:05 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "C:/outside/docfx", ···]]]], expectedMessage: "outputRoot") [2 ms]
+11:52:05 [DBG]   Error Message:
+11:52:05 [DBG]    Assert.Throws() Failure: No exception was thrown
+11:52:05 [DBG] Expected: typeof(System.InvalidOperationException)
+11:52:05 [DBG]   Stack Trace:
+11:52:05 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(Dictionary`2 document, String expectedMessage) in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:line 252
+11:52:05 [DBG]    at InvokeStub_RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(Object, Span`1)
+11:52:05 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+11:52:05 [ERR] [xUnit.net 00:00:13.98]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "targetRoot") [FAIL]
+11:52:05 [ERR] [xUnit.net 00:00:14.01]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput [FAIL]
+11:52:05 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "targetRoot") [2 ms]
+11:52:05 [DBG]   Error Message:
+11:52:05 [DBG]    Assert.Throws() Failure: No exception was thrown
+11:52:05 [DBG] Expected: typeof(System.InvalidOperationException)
+11:52:05 [DBG]   Stack Trace:
+11:52:05 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(Dictionary`2 document, String expectedMessage) in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:line 252
+11:52:05 [DBG]    at InvokeStub_RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(Object, Span`1)
+11:52:05 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+11:52:05 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput [14 ms]
+11:52:05 [DBG]   Error Message:
+11:52:05 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wikiexport-tests-6e3f9528/docs/Project/wiki'.
+11:52:05 [DBG]   Stack Trace:
+11:52:05 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:52:05 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:line 165
+11:52:05 [DBG] --- End of stack trace from previous location ---
+11:52:09 [ERR] [xUnit.net 00:00:18.56]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors [FAIL]
+11:52:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors [1 s]
+11:52:09 [DBG]   Error Message:
+11:52:09 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-786d4cc362aa4c66a7ca37afa69f69e6/legacy-bold/docs/Project/wiki'.
+11:52:09 [DBG]   Stack Trace:
+11:52:09 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:09 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:09 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:09 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:09 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:09 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDatabaseDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:line 1093
+11:52:09 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:line 503
+11:52:09 [DBG] --- End of stack trace from previous location ---
+11:52:10 [ERR] [xUnit.net 00:00:19.25]     QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [FAIL]
+11:52:10 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [3 s]
+11:52:10 [DBG]   Error Message:
+11:52:10 [DBG]    Microsoft.Data.Sqlite.SqliteException : SQLite Error 1: 'table TriageGroups has no column named IsQBrainAiRelated'.
+11:52:10 [DBG]   Stack Trace:
+11:52:10 [DBG]      at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+11:52:10 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()
+11:52:10 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()
+11:52:10 [DBG]    at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+11:52:10 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+11:52:10 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()
+11:52:10 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()
+11:52:10 [DBG]    at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)
+11:52:10 [DBG]    at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)
+11:52:10 [DBG]    at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)
+11:52:10 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.SeedAnchorOnlyTriageTodo(McpDbContext db) in tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs:line 109
+11:52:10 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos() in tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs:line 42
+11:52:10 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:52:10 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+11:52:13 [ERR] [xUnit.net 00:00:22.24]     QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [FAIL]
+11:52:13 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [2 s]
+11:52:13 [DBG]   Error Message:
+11:52:13 [DBG]    Microsoft.Data.Sqlite.SqliteException : SQLite Error 1: 'table TriageGroups has no column named IsQBrainAiRelated'.
+11:52:13 [DBG]   Stack Trace:
+11:52:13 [DBG]      at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+11:52:13 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()
+11:52:13 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()
+11:52:13 [DBG]    at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+11:52:13 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+11:52:13 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()
+11:52:13 [DBG]    at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()
+11:52:13 [DBG]    at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQuery(RelationalCommandParameterObject parameterObject)
+11:52:13 [DBG]    at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters)
+11:52:13 [DBG]    at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw(DatabaseFacade databaseFacade, String sql, Object[] parameters)
+11:52:13 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.SeedWrongWorkspaceTriageTodo(McpDbContext db) in tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs:line 160
+11:52:13 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs:line 74
+11:52:13 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:52:13 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+11:52:13 [ERR] [xUnit.net 00:00:22.70]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure [FAIL]
+11:52:13 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure [1 s]
+11:52:13 [DBG]   Error Message:
+11:52:13 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-f460320d31bd4cfaabf70a9fdb7cc553/stale-link/docs/Project/wiki'.
+11:52:13 [DBG]   Stack Trace:
+11:52:13 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:13 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:13 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:13 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:13 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:13 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDatabaseDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:line 1093
+11:52:13 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:line 555
+11:52:13 [DBG] --- End of stack trace from previous location ---
+11:52:15 [ERR] [xUnit.net 00:00:24.37]     QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [FAIL]
+11:52:15 [ERR] [xUnit.net 00:00:24.39]     QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [FAIL]
+11:52:15 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [12 ms]
+11:52:15 [DBG]   Error Message:
+11:52:15 [DBG]    System.ComponentModel.Win32Exception : An error occurred trying to start process 'sqllocaldb' with working directory 'tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0'. No such file or directory
+11:52:15 [DBG]   Stack Trace:
+11:52:15 [DBG]      at System.Diagnostics.Process.ForkAndExecProcess(ProcessStartInfo startInfo, String resolvedFilename, String[] argv, String[] envp, String cwd, Boolean setCredentials, UInt32 userId, UInt32 groupId, UInt32[] groups, Int32& stdinFd, Int32& stdoutFd, Int32& stderrFd, Boolean usesTerminal, Boolean throwOnNoExec)
+11:52:15 [DBG]    at System.Diagnostics.Process.StartCore(ProcessStartInfo startInfo)
+11:52:15 [DBG]    at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+11:52:15 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.EnsureLocalDbRunning() in tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:line 478
+11:52:15 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently() in tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:line 218
+11:52:15 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:52:15 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+11:52:15 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [10 ms]
+11:52:15 [DBG]   Error Message:
+11:52:15 [DBG]    System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.
+11:52:15 [DBG]   Stack Trace:
+11:52:15 [DBG]      at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor() in tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:line 34
+11:52:15 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently() in tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:line 305
+11:52:15 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:52:15 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+11:52:17 [ERR] [xUnit.net 00:00:26.26]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly [FAIL]
+11:52:17 [ERR] [xUnit.net 00:00:26.28]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace [FAIL]
+11:52:17 [ERR] [xUnit.net 00:00:26.31]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly [FAIL]
+11:52:17 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly [117 ms]
+11:52:17 [DBG]   Error Message:
+11:52:17 [DBG]    System.NotSupportedException : Linux requirements export cleanup rejects nested stale paths before mutation because the kernel lacks a contained atomic delete: 'azure/Old.md'.
+11:52:17 [DBG]   Stack Trace:
+11:52:17 [DBG]      at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.DeleteStaleFilesAsync(WorkspaceExportRoot exportRoot, IReadOnlyCollection`1 cleanRelativeDirectories, IEnumerable`1 expectedFiles, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 624
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(WorkspaceExportRoot exportRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 529
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 499
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 207
+11:52:17 [DBG] --- End of stack trace from previous location ---
+11:52:17 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace [13 ms]
+11:52:17 [DBG]   Error Message:
+11:52:17 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-6ade1fcb/export/canonical'.
+11:52:17 [DBG]   Stack Trace:
+11:52:17 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 604
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 75
+11:52:17 [DBG] --- End of stack trace from previous location ---
+11:52:17 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly [4 ms]
+11:52:17 [DBG]   Error Message:
+11:52:17 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-f9b2aee2/export/canonical-readonly'.
+11:52:17 [DBG]   Stack Trace:
+11:52:17 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 604
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 107
+11:52:17 [DBG] --- End of stack trace from previous location ---
+11:52:17 [ERR] [xUnit.net 00:00:26.45]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata [FAIL]
+11:52:17 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata [48 ms]
+11:52:17 [DBG]   Error Message:
+11:52:17 [DBG]    System.IO.DirectoryNotFoundException : /tmp/mcp-reqdocs-tests-61bfa871/docs/Project/wiki/github
+11:52:17 [DBG]   Stack Trace:
+11:52:17 [DBG]      at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxPathBeneathRoot(SafeFileHandle rootHandle, String relativePath, UInt64 flags, UInt64 mode, String displayPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 891
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.EnumerateLinuxFilesFromPinnedRoot(SafeFileHandle rootHandle, UnixStatx rootIdentity, String root, String directory, WorkspaceTraversalLimits limits, WorkspaceTraversalBudget budget, List`1 entries, List`1 directories, WorkspaceTraversalCancellationState cancellationState) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 669
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.<>c__DisplayClass29_0.<EnumerateLinuxBoundedAsync>b__0(WorkspaceTraversalCancellationState state) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 554
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.<>c__DisplayClass59_0`1.<RunBoundedTraversalWorkerAsync>b__2() in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 1008
+11:52:17 [DBG] --- End of stack trace from previous location ---
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.RunBoundedTraversalWorkerAsync[T](Func`2 operation, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 1080
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.EnumerateLinuxBoundedAsync(String relativeDirectory, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 548
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.EnumerateFilesBoundedAsync(String relativeDirectory, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 479
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.DeleteStaleFilesAsync(WorkspaceExportRoot exportRoot, IReadOnlyCollection`1 cleanRelativeDirectories, IEnumerable`1 expectedFiles, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 587
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(WorkspaceExportRoot exportRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 529
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 499
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 153
+11:52:17 [DBG] --- End of stack trace from previous location ---
+11:52:17 [ERR] [xUnit.net 00:00:26.48]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds [FAIL]
+11:52:17 [ERR] [xUnit.net 00:00:26.57]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria [FAIL]
+11:52:17 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds [10 ms]
+11:52:17 [DBG]   Error Message:
+11:52:17 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-bc68817f/export/canonical-with-matrix'.
+11:52:17 [DBG]   Stack Trace:
+11:52:17 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 604
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 134
+11:52:17 [DBG] --- End of stack trace from previous location ---
+11:52:17 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria [11 ms]
+11:52:17 [DBG]   Error Message:
+11:52:17 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdocs-tests-8ba0c292/docs/Project/wiki'.
+11:52:17 [DBG]   Stack Trace:
+11:52:17 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:52:17 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:line 225
+11:52:17 [DBG] --- End of stack trace from previous location ---
+11:52:19 [ERR] [xUnit.net 00:00:27.96]     QBrainAi.Support.Mcp.Tests.Services.TransactionGatedToolRegistryServiceTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags [FAIL]
+11:52:19 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TransactionGatedToolRegistryServiceTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags [1 s]
+11:52:19 [DBG]   Error Message:
+11:52:19 [DBG]    Assert.NotNull() Failure: Value is null
+11:52:19 [DBG]   Stack Trace:
+11:52:19 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TransactionGatedToolRegistryServiceTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags() in tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedToolRegistryServiceTests.cs:line 115
+11:52:19 [DBG] --- End of stack trace from previous location ---
+11:52:26 [ERR] [xUnit.net 00:00:34.86]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace [FAIL]
+11:52:26 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace [1 s]
+11:52:26 [DBG]   Error Message:
+11:52:26 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-reqdb-tests-440fad15ad88429c85e8c90e6c6a61f5/a/docs/Project/export'.
+11:52:26 [DBG]   Stack Trace:
+11:52:26 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:26 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:26 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:26 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDatabaseDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs:line 1052
+11:52:26 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:line 57
+11:52:26 [DBG] --- End of stack trace from previous location ---
+11:52:32 [ERR] [xUnit.net 00:00:40.95]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [FAIL]
+11:52:32 [ERR] [xUnit.net 00:00:41.11]     QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+11:52:32 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [< 1 ms]
+11:52:32 [DBG]   Error Message:
+11:52:32 [DBG]    System.IO.DirectoryNotFoundException : Could not find a part of the path 'docs/receipts/artifacts/BUG-TRIAGE-139/reviews/eighteenth-input-independent-review-3ce5a814.txt'.
+11:52:32 [DBG]   Stack Trace:
+11:52:32 [DBG]      at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+11:52:32 [DBG]    at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+11:52:32 [DBG]    at System.IO.File.OpenHandle(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)
+11:52:32 [DBG]    at System.IO.File.ReadAllBytes(String path)
+11:52:32 [DBG]    at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact() in tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs:line 64
+11:52:32 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:52:32 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:52:32 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:52:32 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+11:52:32 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [146 ms]
+11:52:32 [DBG]   Error Message:
+11:52:32 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-g3-handoff-d3-c0834bbd8d964be6ac53db7cc0f63c86/markdown'.
+11:52:32 [DBG]   Stack Trace:
+11:52:32 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:32 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:32 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:32 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateAllAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 604
+11:52:32 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport() in tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:line 112
+11:52:32 [DBG] --- End of stack trace from previous location ---
+11:52:32 [ERR] [xUnit.net 00:00:41.51]     QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr [FAIL]
+11:52:32 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr [11 ms]
+11:52:32 [DBG]   Error Message:
+11:52:32 [DBG]    PostgreSQL binaries not found. Run InstallTestDependencies or install PostgreSQL locally. Do not skip.
+11:52:32 [DBG]   Stack Trace:
+11:52:32 [DBG]      at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr() in tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs:line 24
+11:52:32 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:52:32 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:52:32 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:52:32 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+11:52:36 [ERR] [xUnit.net 00:00:45.64]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo [FAIL]
+11:52:36 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo [1 s]
+11:52:36 [DBG]   Error Message:
+11:52:36 [DBG]    Assert.Equal() Failure: Strings differ
+11:52:36 [DBG]            ↓ (pos 0)
+11:52:36 [DBG] Expected: "Q:\\__mcp_unit_test__\\IncidentSource"
+11:52:36 [DBG] Actual:   "/home/sharpninja/github/McpServer/.claude/worktree"···
+11:52:36 [DBG]            ↑ (pos 0)
+11:52:36 [DBG]   Stack Trace:
+11:52:36 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 320
+11:52:36 [DBG] --- End of stack trace from previous location ---
+11:52:41 [ERR] [xUnit.net 00:00:50.17]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly [FAIL]
+11:52:41 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly [21 ms]
+11:52:41 [DBG]   Error Message:
+11:52:41 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-fa09007698484e408800e02b1d7274bc/wiki-output'.
+11:52:41 [DBG]   Stack Trace:
+11:52:41 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:line 131
+11:52:41 [DBG] --- End of stack trace from previous location ---
+11:52:41 [ERR] [xUnit.net 00:00:50.19]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner [FAIL]
+11:52:41 [ERR] [xUnit.net 00:00:50.24]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup [FAIL]
+11:52:41 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner [11 ms]
+11:52:41 [DBG]   Error Message:
+11:52:41 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-675baa33bf394f81b7eefde0bf653974/wiki-output'.
+11:52:41 [DBG]   Stack Trace:
+11:52:41 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:41 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:line 106
+11:52:41 [DBG] --- End of stack trace from previous location ---
+11:52:41 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup [1 s]
+11:52:41 [DBG]   Error Message:
+11:52:41 [DBG]    Assert.Equal() Failure: Strings differ
+11:52:41 [DBG]            ↓ (pos 0)
+11:52:41 [DBG] Expected: "Q:\\__mcp_unit_test__\\IncidentSource"
+11:52:41 [DBG] Actual:   "/home/sharpninja/github/McpServer/.claude/worktree"···
+11:52:41 [DBG]            ↑ (pos 0)
+11:52:41 [DBG]   Stack Trace:
+11:52:41 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 759
+11:52:41 [DBG] --- End of stack trace from previous location ---
+11:52:43 [ERR] [xUnit.net 00:00:52.46]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging [FAIL]
+11:52:43 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging [2 s]
+11:52:43 [DBG]   Error Message:
+11:52:43 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/mcp-wiki-orchestrator-tests-4b8c406e7e3d4e20ab6797d360808038/wiki-output'.
+11:52:43 [DBG]   Stack Trace:
+11:52:43 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:43 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:43 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:43 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:43 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:43 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:line 237
+11:52:43 [DBG] --- End of stack trace from previous location ---
+11:52:45 [ERR] [xUnit.net 00:00:54.09]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup [FAIL]
+11:52:45 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup [32 ms]
+11:52:45 [DBG]   Error Message:
+11:52:45 [DBG]    System.IO.DirectoryNotFoundException : /tmp/mcp-wiki-orchestrator-tests-a86c3cfcd2934a23b14a308ca8f0dd57/wiki-output/azure
+11:52:45 [DBG]   Stack Trace:
+11:52:45 [DBG]      at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxPathBeneathRoot(SafeFileHandle rootHandle, String relativePath, UInt64 flags, UInt64 mode, String displayPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 891
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.EnumerateLinuxFilesFromPinnedRoot(SafeFileHandle rootHandle, UnixStatx rootIdentity, String root, String directory, WorkspaceTraversalLimits limits, WorkspaceTraversalBudget budget, List`1 entries, List`1 directories, WorkspaceTraversalCancellationState cancellationState) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 669
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.<>c__DisplayClass29_0.<EnumerateLinuxBoundedAsync>b__0(WorkspaceTraversalCancellationState state) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 554
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.<>c__DisplayClass59_0`1.<RunBoundedTraversalWorkerAsync>b__2() in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 1008
+11:52:45 [DBG] --- End of stack trace from previous location ---
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.RunBoundedTraversalWorkerAsync[T](Func`2 operation, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 1080
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.EnumerateLinuxBoundedAsync(String relativeDirectory, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 548
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.EnumerateFilesBoundedAsync(String relativeDirectory, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 479
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.DeleteStaleFilesAsync(WorkspaceExportRoot exportRoot, IReadOnlyCollection`1 cleanRelativeDirectories, IEnumerable`1 expectedFiles, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 587
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(WorkspaceExportRoot exportRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 529
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 499
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:45 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:line 189
+11:52:45 [DBG] --- End of stack trace from previous location ---
+11:52:47 [ERR] [xUnit.net 00:00:56.05]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate [FAIL]
+11:52:47 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate [1 s]
+11:52:47 [DBG]   Error Message:
+11:52:47 [DBG]    Assert.Equal() Failure: Values differ
+11:52:47 [DBG] Expected: 1
+11:52:47 [DBG] Actual:   0
+11:52:47 [DBG]   Stack Trace:
+11:52:47 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 165
+11:52:47 [DBG] --- End of stack trace from previous location ---
+11:52:49 [ERR] [xUnit.net 00:00:57.78]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics [FAIL]
+11:52:49 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics [1 s]
+11:52:49 [DBG]   Error Message:
+11:52:49 [DBG]    Assert.Single() Failure: The collection was empty
+11:52:49 [DBG]   Stack Trace:
+11:52:49 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 548
+11:52:49 [DBG] --- End of stack trace from previous location ---
+11:52:52 [ERR] [xUnit.net 00:01:01.38]     QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.ResolveGrokExecutable_ExplicitGrokPath_IsPreserved [FAIL]
+11:52:52 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.ResolveGrokExecutable_ExplicitGrokPath_IsPreserved [< 1 ms]
+11:52:52 [DBG]   Error Message:
+11:52:52 [DBG]    Assert.Equal() Failure: Strings differ
+11:52:52 [DBG]            ↓ (pos 0)
+11:52:52 [DBG] Expected: "C:\\Users\\kingd\\.grok\\bin\\grok.exe"
+11:52:52 [DBG] Actual:   "grok"
+11:52:52 [DBG]            ↑ (pos 0)
+11:52:52 [DBG]   Stack Trace:
+11:52:52 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.ResolveGrokExecutable_ExplicitGrokPath_IsPreserved() in tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs:line 45
+11:52:52 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:52:52 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:52:52 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:52:52 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+11:52:55 [ERR] [xUnit.net 00:01:03.91]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch [FAIL]
+11:52:55 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch [1 s]
+11:52:55 [DBG]   Error Message:
+11:52:55 [DBG]    Assert.Equal() Failure: Values differ
+11:52:55 [DBG] Expected: 1
+11:52:55 [DBG] Actual:   0
+11:52:55 [DBG]   Stack Trace:
+11:52:55 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 118
+11:52:55 [DBG] --- End of stack trace from previous location ---
+11:52:57 [ERR] [xUnit.net 00:01:06.43]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope [FAIL]
+11:52:57 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope [3 s]
+11:52:57 [DBG]   Error Message:
+11:52:57 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/9a0b6f71aa6c4cdeb622dc22d9e33e1f/wiki-di'.
+11:52:57 [DBG]   Stack Trace:
+11:52:57 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:52:57 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:52:57 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:52:57 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:52:57 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:52:57 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope() in tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:line 160
+11:52:57 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope() in tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:line 166
+11:52:57 [DBG] --- End of stack trace from previous location ---
+11:52:58 [ERR] [xUnit.net 00:01:07.12]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning [FAIL]
+11:52:58 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning [1 s]
+11:52:58 [DBG]   Error Message:
+11:52:58 [DBG]    Assert.Equal() Failure: Strings differ
+11:52:58 [DBG]            ↓ (pos 0)
+11:52:58 [DBG] Expected: "completed"
+11:52:58 [DBG] Actual:   "failed"
+11:52:58 [DBG]            ↑ (pos 0)
+11:52:58 [DBG]   Stack Trace:
+11:52:58 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 708
+11:52:58 [DBG] --- End of stack trace from previous location ---
+11:52:59 [ERR] [xUnit.net 00:01:08.08]     QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes [FAIL]
+11:52:59 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes [2 ms]
+11:52:59 [DBG]   Error Message:
+11:52:59 [DBG]    Assert.ThrowsAny() Failure: No exception was thrown
+11:52:59 [DBG] Expected: typeof(System.IO.IOException)
+11:52:59 [DBG]   Stack Trace:
+11:52:59 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes() in tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:line 82
+11:52:59 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes() in tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:line 83
+11:52:59 [DBG] --- End of stack trace from previous location ---
+11:52:59 [ERR] [xUnit.net 00:01:08.60]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBugWithoutQBrainAiWorkspace_StaysInSubmittingWorkspace [FAIL]
+11:52:59 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBugWithoutQBrainAiWorkspace_StaysInSubmittingWorkspace [1 s]
+11:52:59 [DBG]   Error Message:
+11:52:59 [DBG]    Assert.Equal() Failure: Strings differ
+11:52:59 [DBG]            ↓ (pos 0)
+11:52:59 [DBG] Expected: "Q:\\__mcp_unit_test__\\IncidentSource"
+11:52:59 [DBG] Actual:   "/home/sharpninja/github/McpServer/.claude/worktree"···
+11:52:59 [DBG]            ↑ (pos 0)
+11:52:59 [DBG]   Stack Trace:
+11:52:59 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBugWithoutQBrainAiWorkspace_StaysInSubmittingWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 272
+11:52:59 [DBG] --- End of stack trace from previous location ---
+11:53:00 [ERR] [xUnit.net 00:01:08.83]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected [FAIL]
+11:53:00 [ERR] [xUnit.net 00:01:09.03]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected [FAIL]
+11:53:00 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected [310 ms]
+11:53:00 [DBG]   Error Message:
+11:53:00 [DBG]    Assert.Throws() Failure: No exception was thrown
+11:53:00 [DBG] Expected: typeof(System.ArgumentException)
+11:53:00 [DBG]   Stack Trace:
+11:53:00 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected() in tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSessionAttrTests.cs:line 132
+11:53:00 [DBG] --- End of stack trace from previous location ---
+11:53:00 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected [75 ms]
+11:53:00 [DBG]   Error Message:
+11:53:00 [DBG]    Assert.Throws() Failure: No exception was thrown
+11:53:00 [DBG] Expected: typeof(System.ArgumentException)
+11:53:00 [DBG]   Stack Trace:
+11:53:00 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected() in tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSessionAttrTests.cs:line 195
+11:53:00 [DBG] --- End of stack trace from previous location ---
+11:53:00 [ERR] [xUnit.net 00:01:09.17]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected [FAIL]
+11:53:00 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected [51 ms]
+11:53:00 [DBG]   Error Message:
+11:53:00 [DBG]    Assert.Throws() Failure: No exception was thrown
+11:53:00 [DBG] Expected: typeof(System.ArgumentException)
+11:53:00 [DBG]   Stack Trace:
+11:53:00 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected() in tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSessionAttrTests.cs:line 60
+11:53:00 [DBG] --- End of stack trace from previous location ---
+11:53:03 [ERR] [xUnit.net 00:01:12.11]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable [FAIL]
+11:53:03 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable [924 ms]
+11:53:03 [DBG]   Error Message:
+11:53:03 [DBG]    Assert.Equal() Failure: Strings differ
+11:53:03 [DBG]            ↓ (pos 0)
+11:53:03 [DBG] Expected: "backend_unavailable"
+11:53:03 [DBG] Actual:   "internal_server_error"
+11:53:03 [DBG]            ↑ (pos 0)
+11:53:03 [DBG]   Stack Trace:
+11:53:03 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 84
+11:53:03 [DBG] --- End of stack trace from previous location ---
+11:53:05 [ERR] [xUnit.net 00:01:13.76]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBug_RoutesToRegisteredQBrainAiWorkspace [FAIL]
+11:53:05 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBug_RoutesToRegisteredQBrainAiWorkspace [769 ms]
+11:53:05 [DBG]   Error Message:
+11:53:05 [DBG]    Assert.Equal() Failure: Strings differ
+11:53:05 [DBG]            ↓ (pos 0)
+11:53:05 [DBG] Expected: "Q:\\__mcp_unit_test__\\QBrainAi"
+11:53:05 [DBG] Actual:   "/home/sharpninja/github/McpServer/.claude/worktree"···
+11:53:05 [DBG]            ↑ (pos 0)
+11:53:05 [DBG]   Stack Trace:
+11:53:05 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBug_RoutesToRegisteredQBrainAiWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 247
+11:53:05 [DBG] --- End of stack trace from previous location ---
+11:53:06 [ERR] [xUnit.net 00:01:14.98]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace [FAIL]
+11:53:06 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace [507 ms]
+11:53:06 [DBG]   Error Message:
+11:53:06 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/1b6e1cc89fef4365a5d8df0106b5cbc0/wiki-dump'.
+11:53:06 [DBG]   Stack Trace:
+11:53:06 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace() in tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:line 86
+11:53:06 [DBG] --- End of stack trace from previous location ---
+11:53:06 [ERR] [xUnit.net 00:01:15.07]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun [FAIL]
+11:53:06 [ERR] [xUnit.net 00:01:15.46]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior [FAIL]
+11:53:06 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun [659 ms]
+11:53:06 [DBG]   Error Message:
+11:53:06 [DBG]    Assert.Single() Failure: The collection was empty
+11:53:06 [DBG]   Stack Trace:
+11:53:06 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 822
+11:53:06 [DBG] --- End of stack trace from previous location ---
+11:53:06 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior [475 ms]
+11:53:06 [DBG]   Error Message:
+11:53:06 [DBG]    System.IO.DirectoryNotFoundException : Atomic Linux export-root capture could not find '/tmp/wiki-g6/84387a237c6e4a7a98f38acd89e362bf/out-a'.
+11:53:06 [DBG]   Stack Trace:
+11:53:06 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.OpenDirectoryNoCrossDevice(String lexicalPath, Action afterPolicyClassification) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 260
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 80
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenExportRoot(String rootPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 50
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 498
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsWikiExportOrchestrator.ExportAsync(RequirementsWikiExportRequest request, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiExportOrchestrator.cs:line 86
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentService.GenerateWikiAsync(String outputRootPath, Nullable`1 generatedAtUtc, CancellationToken ct, Boolean includeDump) in src/QBrainAi.Services/Requirements/RequirementsDocumentService.cs:line 641
+11:53:06 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior() in tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:line 72
+11:53:06 [DBG] --- End of stack trace from previous location ---
+11:53:06 [ERR] [xUnit.net 00:01:15.69]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups [FAIL]
+11:53:07 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups [619 ms]
+11:53:07 [DBG]   Error Message:
+11:53:07 [DBG]    Assert.Equal() Failure: Values differ
+11:53:07 [DBG] Expected: 1
+11:53:07 [DBG] Actual:   0
+11:53:07 [DBG]   Stack Trace:
+11:53:07 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 220
+11:53:07 [DBG] --- End of stack trace from previous location ---
+11:53:07 [ERR] [xUnit.net 00:01:16.12]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline [FAIL]
+11:53:07 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline [430 ms]
+11:53:07 [DBG]   Error Message:
+11:53:07 [DBG]    System.InvalidOperationException : Sequence contains no elements.
+11:53:07 [DBG]   Stack Trace:
+11:53:07 [DBG]      at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+11:53:07 [DBG]    at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+11:53:07 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline() in tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:line 141
+11:53:07 [DBG] --- End of stack trace from previous location ---
+11:53:09 [ERR] [xUnit.net 00:01:18.03]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [FAIL]
+11:53:09 [ERR] [xUnit.net 00:01:18.03]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [FAIL]
+11:53:09 [ERR] [xUnit.net 00:01:18.05]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost [FAIL]
+11:53:09 [ERR] [xUnit.net 00:01:18.05]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform [FAIL]
+11:53:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [2 ms]
+11:53:09 [DBG]   Error Message:
+11:53:09 [DBG]    System.IO.DirectoryNotFoundException : Could not find a part of the path 'docs/receipts/artifacts/BUG-TRIAGE-139/reviews/sixteenth-independent-review.txt'.
+11:53:09 [DBG]   Stack Trace:
+11:53:09 [DBG]      at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+11:53:09 [DBG]    at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+11:53:09 [DBG]    at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+11:53:09 [DBG]    at System.IO.File.OpenRead(String path)
+11:53:09 [DBG]    at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection() in tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthEvidenceTests.cs:line 56
+11:53:09 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:53:09 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:53:09 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:53:09 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+11:53:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [4 ms]
+11:53:09 [DBG]   Error Message:
+11:53:09 [DBG]    Missing command ledger: docs/receipts/artifacts/BUG-TRIAGE-139/sixteenth-remediation/superseded-command-ledger.tsv
+11:53:09 [DBG]   Stack Trace:
+11:53:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries() in tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthEvidenceTests.cs:line 79
+11:53:09 [DBG] --- End of stack trace from previous location ---
+11:53:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost [14 ms]
+11:53:09 [DBG]   Error Message:
+11:53:09 [DBG]    Assert.Equal() Failure: Collections differ
+11:53:09 [DBG]                                                                                                                                                                                                                                                                                     ↓ (pos 26)
+11:53:09 [DBG] Expected: OrderedIterator<string, string> [···, "BugTriage139SixteenthLinuxTests.SqlitePinnedDataSo"···, "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_"···, "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_"···, "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_"···, "RequirementsFourteenthLinuxNativeTests.OpenFileFor"···]
+11:53:09 [DBG] Actual:   string[]                        [···, "BugTriage139SixteenthLinuxTests.SqlitePinnedDataSo"···, "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_"···, "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_"···, "BugTriage139SixteenthLinuxTests.WorkspaceIdentity_"···]
+11:53:09 [DBG]   Stack Trace:
+11:53:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost() in tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:line 123
+11:53:09 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:53:09 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:53:09 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:53:09 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+11:53:09 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform [1 ms]
+11:53:09 [DBG]   Error Message:
+11:53:09 [DBG]    Assert.NotNull() Failure: Value is null
+11:53:09 [DBG]   Stack Trace:
+11:53:09 [DBG]      at QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform() in tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:line 72
+11:53:09 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:53:09 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+11:53:09 [DBG]    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+11:53:09 [DBG]    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+12:42:04 [ERR] [xUnit.net 00:50:13.21]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker [FAIL]
+12:42:04 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker [48 m 52 s]
+12:42:04 [DBG]   Error Message:
+12:42:04 [DBG]    SQLite FUSE rejection exceeded one second: 00:48:52.5893738.
+12:42:04 [DBG]   Stack Trace:
+12:42:04 [DBG]      at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 175
+12:42:04 [DBG] --- End of stack trace from previous location ---
+12:42:06 [ERR] [xUnit.net 00:50:15.06]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected [FAIL]
+12:42:06 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected [1 s]
+12:42:06 [DBG]   Error Message:
+12:42:06 [DBG]    Assert.Throws() Failure: Exception type was not an exact match
+12:42:06 [DBG] Expected: typeof(System.NotSupportedException)
+12:42:06 [DBG] Actual:   typeof(System.TimeoutException)
+12:42:06 [DBG] ---- System.TimeoutException : SQLite connection opening exceeded the finite timeout of 00:00:00.2500000.
+12:42:06 [DBG]   Stack Trace:
+12:42:06 [DBG]      at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 292
+12:42:06 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 322
+12:42:06 [DBG] --- End of stack trace from previous location ---
+12:42:06 [DBG] ----- Inner Stack Trace -----
+12:42:06 [DBG]    at QBrainAi.Support.Mcp.Storage.SqliteBoundedConnectionOpener.ThrowRequestedCancellation(OpenCancellationKind cancellationKind, TimeSpan timeout, CancellationToken cancellationToken, Exception failure) in src/QBrainAi.Storage/SqliteBoundedConnectionOpener.cs:line 316
+12:42:06 [DBG]    at QBrainAi.Support.Mcp.Storage.SqliteBoundedConnectionOpener.OpenIsolatedAsync(SqliteConnection connection, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/SqliteBoundedConnectionOpener.cs:line 212
+12:52:25 [ERR] [xUnit.net 01:00:33.79]     QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject [FAIL]
+12:52:25 [ERR] [xUnit.net 01:00:33.81]     QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject [FAIL]
+12:52:25 [ERR] [xUnit.net 01:00:34.19]     QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers [FAIL]
+12:52:25 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject [6 ms]
+12:52:25 [DBG]   Error Message:
+12:52:25 [DBG]    Unexpected alias-race failure: System.IO.IOException: Unable to open contained Linux traversal entry '/tmp/mcp-twelfth-root-b0508ea7ec44487991e10a28ea4caa34/wiki/document.md'.
+12:52:25 [DBG]  ---> System.ComponentModel.Win32Exception (17): File exists
+12:52:25 [DBG]    --- End of inner exception stack trace ---
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxPathBeneathRoot(SafeFileHandle rootHandle, String relativePath, UInt64 flags, UInt64 mode, String displayPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 891
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxContainedFileRooted(SafeFileHandle rootHandle, UnixStatx rootIdentity, String relativeFile, String displayPath, Boolean write, Boolean asyncHandle) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 237
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.OpenFileForWrite(String relativePath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 274
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenFileForWrite(String rootPath, String filePath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.cs:line 233
+12:52:25 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+12:52:25 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+12:52:25 [DBG]   Stack Trace:
+12:52:25 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.AssertExpectedAliasRaceRejection(Exception failure) in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 276
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 208
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 221
+12:52:25 [DBG] --- End of stack trace from previous location ---
+12:52:25 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject [3 ms]
+12:52:25 [DBG]   Error Message:
+12:52:25 [DBG]    Unexpected alias-race failure: System.IO.DirectoryNotFoundException: /tmp/mcp-twelfth-root-c6484ba9b9d84892ae9bd5eeb5d90791/wiki/document.md
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxPathBeneathRoot(SafeFileHandle rootHandle, String relativePath, UInt64 flags, UInt64 mode, String displayPath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 891
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxContainedFileRooted(SafeFileHandle rootHandle, UnixStatx rootIdentity, String relativeFile, String displayPath, Boolean write, Boolean asyncHandle) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 227
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.OpenFileForRead(String relativePath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 249
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenFileForRead(String rootPath, String filePath) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.cs:line 222
+12:52:25 [DBG]    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+12:52:25 [DBG]    at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+12:52:25 [DBG]   Stack Trace:
+12:52:25 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.AssertExpectedAliasRaceRejection(Exception failure) in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 276
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 145
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject() in tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:line 158
+12:52:25 [DBG] --- End of stack trace from previous location ---
+12:52:25 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers [9 ms]
+12:52:25 [DBG]   Error Message:
+12:52:25 [DBG]    System.NotSupportedException : Linux physical identity resolution rejected a mount transition, including FUSE and network aliases, under the anchored RESOLVE_NO_XDEV policy.
+12:52:25 [DBG]   Stack Trace:
+12:52:25 [DBG]      at QBrainAi.Client.LinuxPhysicalPathResolver.TryResolveWithNonexistentSuffix(String lexicalPath) in src/QBrainAi.Client/LinuxPhysicalPathResolver.cs:line 104
+12:52:25 [DBG]    at QBrainAi.Client.WorkspaceIdentityPath.ResolveUnixPhysicalPathAsync(String lexicalPath, CancellationToken cancellationToken) in src/QBrainAi.Client/WorkspaceIdentityPath.cs:line 292
+12:52:25 [DBG]    at QBrainAi.Client.WorkspaceIdentityPath.ResolveAsync(String workspacePath, WorkspacePathPlatform platform, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Client/WorkspaceIdentityPath.cs:line 180
+12:52:25 [DBG]    at QBrainAi.Client.WorkspaceIdentityPath.GetStorageKeyAsync(String workspacePath, WorkspacePathPlatform platform, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Client/WorkspaceIdentityPath.cs:line 224
+12:52:25 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers() in tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:line 145
+12:52:25 [DBG] --- End of stack trace from previous location ---
+12:52:28 [ERR] [xUnit.net 01:00:37.15]     QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting [FAIL]
+12:52:29 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting [359 ms]
+12:52:29 [DBG]   Error Message:
+12:52:29 [DBG]    Assert.ThrowsAny() Failure: No exception was thrown
+12:52:29 [DBG] Expected: typeof(System.IO.IOException)
+12:52:29 [DBG]   Stack Trace:
+12:52:29 [DBG]      at QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting() in tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:line 60
+12:52:29 [DBG] --- End of stack trace from previous location ---
+12:52:33 [ERR] [xUnit.net 01:00:41.82]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly [FAIL]
+12:52:34 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly [1 s]
+12:52:34 [DBG]   Error Message:
+12:52:34 [DBG]    System.InvalidOperationException : /usr/bin/mount exited 32: mount: /tmp/mcp-sixteenth-fuse-eda029df93314f309aa85cd27d3b6888/export-root: must be superuser to use mount.
+12:52:34 [DBG]        dmesg(1) may have more information after failed mount system call.
+12:52:34 [DBG] 
+12:52:34 [DBG]   Stack Trace:
+12:52:34 [DBG]      at QBrainAi.Support.Mcp.Tests.Storage.LinuxDelayedFuseFixture.RunProcessAsync(String fileName, IReadOnlyList`1 arguments, TimeSpan timeout) in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 848
+12:52:34 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.LinuxDelayedFuseFixture.BindMountAtAsync(String destination) in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 709
+12:52:34 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.<>c__DisplayClass10_0.<RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly>b__0() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 475
+12:52:34 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.OpenLinuxContainedFileRooted(SafeFileHandle rootHandle, UnixStatx rootIdentity, String relativeFile, String displayPath, Boolean write, Boolean asyncHandle) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 236
+12:52:34 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.WorkspaceExportRoot.WriteTextFileAsync(String relativePath, String content, Encoding encoding, DateTime lastWriteTimeUtc, Boolean readOnly, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.ExportRoot.cs:line 216
+12:52:34 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(WorkspaceExportRoot exportRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 543
+12:52:34 [DBG]    at QBrainAi.Support.Mcp.Requirements.RequirementsDocumentExportWriter.WriteAsync(String outputRoot, String format, String docType, DateTimeOffset generatedAtUtc, IReadOnlyList`1 documents, IReadOnlyCollection`1 cleanRelativeDirectories, CancellationToken ct) in src/QBrainAi.Services/Requirements/RequirementsWikiDocumentRenderer.cs:line 499
+12:52:34 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 481
+12:52:34 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 499
+12:52:34 [DBG] --- End of stack trace from previous location ---
+12:52:35 [ERR] [xUnit.net 01:00:44.65]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly [FAIL]
+12:52:37 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly [1 s]
+12:52:37 [DBG]   Error Message:
+12:52:37 [DBG]    System.InvalidOperationException : /usr/bin/mount exited 32: mount: /tmp/mcp-sixteenth-fuse-fae8c2d6a8c345cf82b73e26456162ad/pinned-root: must be superuser to use mount.
+12:52:37 [DBG]        dmesg(1) may have more information after failed mount system call.
+12:52:37 [DBG] 
+12:52:37 [DBG]   Stack Trace:
+12:52:37 [DBG]      at QBrainAi.Support.Mcp.Tests.Storage.LinuxDelayedFuseFixture.RunProcessAsync(String fileName, IReadOnlyList`1 arguments, TimeSpan timeout) in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 848
+12:52:37 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.LinuxDelayedFuseFixture.BindMountAtAsync(String destination) in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 709
+12:52:37 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.<>c__DisplayClass6_0.<EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly>b__0() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 220
+12:52:37 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.EnumerateFilesBoundedAsync(String rootPath, String directoryPath, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 100
+12:52:37 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 226
+12:52:37 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 246
+12:52:37 [DBG] --- End of stack trace from previous location ---
+12:52:37 [ERR] [xUnit.net 01:00:46.00]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission [FAIL]
+12:52:38 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission [1 s]
+12:52:38 [DBG]   Error Message:
+12:52:38 [DBG]    System.InvalidOperationException : /usr/bin/mount exited 32: mount: /tmp/mcp-sixteenth-fuse-caaba1739ac342c7af2e55deab03a272/admission-root-0: must be superuser to use mount.
+12:52:38 [DBG]        dmesg(1) may have more information after failed mount system call.
+12:52:38 [DBG] 
+12:52:38 [DBG]   Stack Trace:
+12:52:38 [DBG]      at QBrainAi.Support.Mcp.Tests.Storage.LinuxDelayedFuseFixture.RunProcessAsync(String fileName, IReadOnlyList`1 arguments, TimeSpan timeout) in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 848
+12:52:38 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.LinuxDelayedFuseFixture.BindMountAtAsync(String destination) in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:line 709
+12:52:38 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.<>c__DisplayClass7_0.<EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission>b__2() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 286
+12:52:38 [DBG]    at QBrainAi.Support.Mcp.Storage.WorkspaceContainedFileSystem.EnumerateFilesBoundedAsync(String rootPath, String directoryPath, WorkspaceTraversalLimits limits, TimeSpan timeout, CancellationToken cancellationToken) in src/QBrainAi.Storage/WorkspaceContainedFileSystem.BoundedTraversal.cs:line 100
+12:52:38 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 294
+12:52:38 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 314
+12:52:38 [DBG] --- End of stack trace from previous location ---
+12:52:38 [ERR] [xUnit.net 01:00:47.35]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding [FAIL]
+12:52:40 [DBG]   Failed QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding [1 s]
+12:52:40 [DBG]   Error Message:
+12:52:40 [DBG]    Assert.Throws() Failure: No exception was thrown
+12:52:40 [DBG] Expected: typeof(System.NotSupportedException)
+12:52:40 [DBG]   Stack Trace:
+12:52:40 [DBG]      at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.<>c__DisplayClass9_1.<<EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding>b__3>d.MoveNext() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 413
+12:52:40 [DBG] --- End of stack trace from previous location ---
+12:52:40 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 407
+12:52:40 [DBG]    at QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding() in tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:line 447
+12:52:40 [DBG] --- End of stack trace from previous location ---
+12:52:42 [DBG] 
+12:52:42 [DBG] Failed!  - Failed:    63, Passed:  2893, Skipped:     0, Total:  2956, Duration: 1 h - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+12:52:42 [ERR] Target Test has thrown an exception
+Nuke.Common.Tooling.ProcessException: Process 'dotnet' exited with code 1.
+   > /home/sharpninja/.dotnet/dotnet test tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory TestResults
+   @ .
+Error output:
+   [xUnit.net 00:00:03.19]     QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump [FAIL]
+   [xUnit.net 00:00:09.41]     QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected [FAIL]
+   [xUnit.net 00:00:11.28]     QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags [FAIL]
+   [xUnit.net 00:00:13.84]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome [FAIL]
+   [xUnit.net 00:00:13.87]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure [FAIL]
+   [xUnit.net 00:00:13.98]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "C:/outside/docfx", ···]]]], expectedMessage: "outputRoot") [FAIL]
+   [xUnit.net 00:00:13.98]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "targetRoot") [FAIL]
+   [xUnit.net 00:00:14.01]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput [FAIL]
+   [xUnit.net 00:00:18.56]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors [FAIL]
+   [xUnit.net 00:00:19.25]     QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [FAIL]
+   [xUnit.net 00:00:22.24]     QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [FAIL]
+   [xUnit.net 00:00:22.70]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure [FAIL]
+   [xUnit.net 00:00:24.37]     QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [FAIL]
+   [xUnit.net 00:00:24.39]     QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [FAIL]
+   [xUnit.net 00:00:26.26]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly [FAIL]
+   [xUnit.net 00:00:26.28]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace [FAIL]
+   [xUnit.net 00:00:26.31]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly [FAIL]
+   [xUnit.net 00:00:26.45]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata [FAIL]
+   [xUnit.net 00:00:26.48]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds [FAIL]
+   [xUnit.net 00:00:26.57]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria [FAIL]
+   [xUnit.net 00:00:27.96]     QBrainAi.Support.Mcp.Tests.Services.TransactionGatedToolRegistryServiceTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags [FAIL]
+   [xUnit.net 00:00:34.86]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace [FAIL]
+   [xUnit.net 00:00:40.95]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [FAIL]
+   [xUnit.net 00:00:41.11]     QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+   [xUnit.net 00:00:41.51]     QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr [FAIL]
+   [xUnit.net 00:00:45.64]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo [FAIL]
+   [xUnit.net 00:00:50.17]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly [FAIL]
+   [xUnit.net 00:00:50.19]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner [FAIL]
+   [xUnit.net 00:00:50.24]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup [FAIL]
+   [xUnit.net 00:00:52.46]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging [FAIL]
+   [xUnit.net 00:00:54.09]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup [FAIL]
+   [xUnit.net 00:00:56.05]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate [FAIL]
+   [xUnit.net 00:00:57.78]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics [FAIL]
+   [xUnit.net 00:01:01.38]     QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.ResolveGrokExecutable_ExplicitGrokPath_IsPreserved [FAIL]
+   [xUnit.net 00:01:03.91]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch [FAIL]
+   [xUnit.net 00:01:06.43]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope [FAIL]
+   [xUnit.net 00:01:07.12]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning [FAIL]
+   [xUnit.net 00:01:08.08]     QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes [FAIL]
+   [xUnit.net 00:01:08.60]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBugWithoutQBrainAiWorkspace_StaysInSubmittingWorkspace [FAIL]
+   [xUnit.net 00:01:08.83]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected [FAIL]
+   [xUnit.net 00:01:09.03]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected [FAIL]
+   [xUnit.net 00:01:09.17]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected [FAIL]
+   [xUnit.net 00:01:12.11]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable [FAIL]
+   [xUnit.net 00:01:13.76]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBug_RoutesToRegisteredQBrainAiWorkspace [FAIL]
+   [xUnit.net 00:01:14.98]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace [FAIL]
+   [xUnit.net 00:01:15.07]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun [FAIL]
+   [xUnit.net 00:01:15.46]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior [FAIL]
+   [xUnit.net 00:01:15.69]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups [FAIL]
+   [xUnit.net 00:01:16.12]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline [FAIL]
+   [xUnit.net 00:01:18.03]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [FAIL]
+   [xUnit.net 00:01:18.03]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [FAIL]
+   [xUnit.net 00:01:18.05]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost [FAIL]
+   [xUnit.net 00:01:18.05]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform [FAIL]
+   [xUnit.net 00:50:13.21]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker [FAIL]
+   [xUnit.net 00:50:15.06]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected [FAIL]
+   [xUnit.net 01:00:33.79]     QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject [FAIL]
+   [xUnit.net 01:00:33.81]     QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject [FAIL]
+   [xUnit.net 01:00:34.19]     QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers [FAIL]
+   [xUnit.net 01:00:37.15]     QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting [FAIL]
+   [xUnit.net 01:00:41.82]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly [FAIL]
+   [xUnit.net 01:00:44.65]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly [FAIL]
+   [xUnit.net 01:00:46.00]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission [FAIL]
+   [xUnit.net 01:00:47.35]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding [FAIL]
+
+   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38
+   at Nuke.Common.Tooling.ToolTasks.Run[T](T options)
+   at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetTest(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 34
+   at Build.<get_Test>b__135_1() in build/Build.Test.cs:line 46
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] Test: [xUnit.net 00:00:03.19]     QBrainAi.Support.Mcp.Tests.Services.DocsSyncG8OverlayTests.G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump [FAIL]
+[ERR] Test: [xUnit.net 00:00:09.41]     QBrainAi.Support.Mcp.Tests.Services.RepoFileServiceTests.RootedExternalPath_AcrossRepoOperations_IsRejected [FAIL]
+[ERR] Test: [xUnit.net 00:00:11.28]     QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags [FAIL]
+[ERR] Test: [xUnit.net 00:00:13.84]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome [FAIL]
+[ERR] Test: [xUnit.net 00:00:13.87]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure [FAIL]
+[ERR] Test: [xUnit.net 00:00:13.98]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "C:/outside/docfx", ···]]]], expectedMessage: "outputRoot") [FAIL]
+[ERR] Test: [xUnit.net 00:00:13.98]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [["schema"] = "mcp-wiki-export/v1", ["documents"] = [[["id"] = "home", ["title"] = "Home", ["source"] = "generated:home", ["target"] = "Home.md"]], ["navigation"] = [[["document"] = "home"]], ["docfx"] = [["workflows"] = [[["id"] = "docs", ["executable"] = "dotnet", ["arguments"] = ["docfx", "docfx.json"], ["workingDirectory"] = "docs/docfx", ["outputRoot"] = "docs/docfx/_site", ···]]]], expectedMessage: "targetRoot") [FAIL]
+[ERR] Test: [xUnit.net 00:00:14.01]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput [FAIL]
+[ERR] Test: [xUnit.net 00:00:18.56]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors [FAIL]
+[ERR] Test: [xUnit.net 00:00:19.25]     QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos [FAIL]
+[ERR] Test: [xUnit.net 00:00:22.24]     QBrainAi.Support.Mcp.Tests.Storage.RemoveTodoRecordsMigrationTests.Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace [FAIL]
+[ERR] Test: [xUnit.net 00:00:22.70]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure [FAIL]
+[ERR] Test: [xUnit.net 00:00:24.37]     QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [FAIL]
+[ERR] Test: [xUnit.net 00:00:24.39]     QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently [FAIL]
+[ERR] Test: [xUnit.net 00:00:26.26]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_ReplacesExistingReadOnlyFilesAndRestoresReadOnly [FAIL]
+[ERR] Test: [xUnit.net 00:00:26.28]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_WritesCanonicalFilesToWorkspace [FAIL]
+[ERR] Test: [xUnit.net 00:00:26.31]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_MarksExportedMarkdownFilesReadOnly [FAIL]
+[ERR] Test: [xUnit.net 00:00:26.45]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata [FAIL]
+[ERR] Test: [xUnit.net 00:00:26.48]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds [FAIL]
+[ERR] Test: [xUnit.net 00:00:26.57]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria [FAIL]
+[ERR] Test: [xUnit.net 00:00:27.96]     QBrainAi.Support.Mcp.Tests.Services.TransactionGatedToolRegistryServiceTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresPriorToolAndTags [FAIL]
+[ERR] Test: [xUnit.net 00:00:34.86]     QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.ListsAndExports_AreScopedToActiveWorkspace [FAIL]
+[ERR] Test: [xUnit.net 00:00:40.95]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.EighteenthInputReview_IsDurableAndByteExact [FAIL]
+[ERR] Test: [xUnit.net 00:00:41.11]     QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport [FAIL]
+[ERR] Test: [xUnit.net 00:00:41.51]     QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr [FAIL]
+[ERR] Test: [xUnit.net 00:00:45.64]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo [FAIL]
+[ERR] Test: [xUnit.net 00:00:50.17]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly [FAIL]
+[ERR] Test: [xUnit.net 00:00:50.19]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner [FAIL]
+[ERR] Test: [xUnit.net 00:00:50.24]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup [FAIL]
+[ERR] Test: [xUnit.net 00:00:52.46]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging [FAIL]
+[ERR] Test: [xUnit.net 00:00:54.09]     QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportOrchestratorTests.ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup [FAIL]
+[ERR] Test: [xUnit.net 00:00:56.05]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate [FAIL]
+[ERR] Test: [xUnit.net 00:00:57.78]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics [FAIL]
+[ERR] Test: [xUnit.net 00:01:01.38]     QBrainAi.Support.Mcp.Tests.Services.GrokCliAgentExecutionStrategyTests.ResolveGrokExecutable_ExplicitGrokPath_IsPreserved [FAIL]
+[ERR] Test: [xUnit.net 00:01:03.91]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch [FAIL]
+[ERR] Test: [xUnit.net 00:01:06.43]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope [FAIL]
+[ERR] Test: [xUnit.net 00:01:07.12]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning [FAIL]
+[ERR] Test: [xUnit.net 00:01:08.08]     QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_OpenShare_BlocksWritesAndDeletes [FAIL]
+[ERR] Test: [xUnit.net 00:01:08.60]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBugWithoutQBrainAiWorkspace_StaysInSubmittingWorkspace [FAIL]
+[ERR] Test: [xUnit.net 00:01:08.83]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_CommitFilesOutsideRoot_Unmarked_IsRejected [FAIL]
+[ERR] Test: [xUnit.net 00:01:09.03]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.ReplaceTurnSectionAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected [FAIL]
+[ERR] Test: [xUnit.net 00:01:09.17]     QBrainAi.Support.Mcp.Tests.Services.SessionLogSessionAttrTests.SubmitAsync_FilesModifiedOutsideRoot_Unmarked_IsRejected [FAIL]
+[ERR] Test: [xUnit.net 00:01:12.11]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable [FAIL]
+[ERR] Test: [xUnit.net 00:01:13.76]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_QBrainAiPluginBug_RoutesToRegisteredQBrainAiWorkspace [FAIL]
+[ERR] Test: [xUnit.net 00:01:14.98]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace [FAIL]
+[ERR] Test: [xUnit.net 00:01:15.07]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun [FAIL]
+[ERR] Test: [xUnit.net 00:01:15.46]     QBrainAi.Support.Mcp.Tests.Services.WikiDumpG6OverlayTests.WikiExport_WithoutDumpFlag_UnchangedBehavior [FAIL]
+[ERR] Test: [xUnit.net 00:01:15.69]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups [FAIL]
+[ERR] Test: [xUnit.net 00:01:16.12]     QBrainAi.Support.Mcp.Tests.Services.TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline [FAIL]
+[ERR] Test: [xUnit.net 00:01:18.03]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.FifteenthReceipt_IsImmutableAndCurrentIndexDeclaresRejection [FAIL]
+[ERR] Test: [xUnit.net 00:01:18.03]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139SixteenthEvidenceTests.IndirectCells_HaveCompleteExecutableLedgerWithVerifiedBoundaries [FAIL]
+[ERR] Test: [xUnit.net 00:01:18.05]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FifteenthHarnessTests.PlatformNativeTests_CompiledInventoryMatchesHost [FAIL]
+[ERR] Test: [xUnit.net 00:01:18.05]     QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform [FAIL]
+[ERR] Test: [xUnit.net 00:50:13.21]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker [FAIL]
+[ERR] Test: [xUnit.net 00:50:15.06]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests.SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected [FAIL]
+[ERR] Test: [xUnit.net 01:00:33.79]     QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject [FAIL]
+[ERR] Test: [xUnit.net 01:00:33.81]     QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject [FAIL]
+[ERR] Test: [xUnit.net 01:00:34.19]     QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers [FAIL]
+[ERR] Test: [xUnit.net 01:00:37.15]     QBrainAi.Support.Mcp.Tests.Services.BugTriage139EighteenthTraversalTests.EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting [FAIL]
+[ERR] Test: [xUnit.net 01:00:41.82]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly [FAIL]
+[ERR] Test: [xUnit.net 01:00:44.65]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly [FAIL]
+[ERR] Test: [xUnit.net 01:00:46.00]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission [FAIL]
+[ERR] Test: [xUnit.net 01:00:47.35]     QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests.EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding [FAIL]
+[ERR] Test: Target Test has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:18
+Compile            Succeeded       2:37
+Test               Failed         60:52   // ProcessException: Process 'dotnet' exited with code 1.
+───────────────────────────────────────
+Total                             63:48
+═══════════════════════════════════════
+​
+Build failed on 10/10/2026 12:52:42 PM. (╯°□°）╯︵ ┻━┻

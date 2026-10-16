@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mermaid-validate",
+      "runtimeExecutable": "pwsh",
+      "runtimeArgs": ["-NoProfile", "-NonInteractive", "-File", "/tmp/claude-1000/-home-sharpninja-github-McpServer--claude-worktrees-session-20261009/49428485-c8ea-46d7-86c6-58add8faed97/scratchpad/arch/serve.ps1", "-Port", "8787"],
+      "port": 8787,
+      "url": "http://127.0.0.1:8787"
+    }
+  ]
+}

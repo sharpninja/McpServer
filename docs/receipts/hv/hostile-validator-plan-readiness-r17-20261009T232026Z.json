@@ -1,0 +1,187 @@
+{
+  "TimestampUtc": "2026-10-09T23:30:26Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Runtime": "Codex CLI",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "LiveProofPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T18-20-26-01a122f7-c84c-7ec2-b2bc-27dabc27cb26.jsonl",
+    "LiveProof": "Own turn_context model=gpt-6-sol, effort=xhigh, contextTurnId=01a122f7-ca8b-76c1-bb6f-25a7814d035f; CODEX_THREAD_ID=01a122f7-c84c-7ec2-b2bc-27dabc27cb26 matches runner thread.started."
+  },
+  "AddProfile": {
+    "SkillRead": true,
+    "NonSkillMarkdownFileCount": 19,
+    "AllReadInFull": true
+  },
+  "MarkerRead": {
+    "Path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "Lines": 397,
+    "AllReadInFull": true,
+    "SecretLinesFiltered": true,
+    "SignatureAndHealthValidated": true
+  },
+  "MemoryRead": {
+    "Method": "workflow.memory.list",
+    "EffectiveCount": 15,
+    "AllReadInFull": true,
+    "Process008Checklist": [
+      "what-if",
+      "propagation",
+      "recurrence"
+    ],
+    "Process007C9AckUtc": "2026-10-09T23:22:30Z"
+  },
+  "Scope": "Plan readiness of PLAN-SESSIONTURNREVIEW-001; NOT APPROVED",
+  "PlanPath": "/home/sharpninja/.claude/plans/create-a-new-plan-giggly-music.md",
+  "PlanLineCount": 649,
+  "PlanNonEmptyLineCount": 529,
+  "Todo": {
+    "Id": "PLAN-SESSIONTURNREVIEW-001",
+    "WorkspacePath": "/home/sharpninja/github/McpServer",
+    "Done": false,
+    "DescriptionParityMismatches": 0,
+    "ImplementationTaskCount": 30
+  },
+  "HandoffPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/handoffs/sessionturn-review-plan-20261009T022141Z.md",
+  "ClaimResults": [
+    {
+      "Claim": "P1",
+      "Status": "PASS",
+      "Topic": "source accuracy",
+      "Evidence": "No `src/`, `tests/`, `build/` or `plugins/` code changes from the main `develop` checkout inspected in r16; current nine-plugin heads, branches and dirty counts match the plan's dated inventory. Source anchors, route/type/method assertions, named build/test paths and current behavior were rechecked. Plan behavioral contradictions are scored under P3/P5/P8."
+    },
+    {
+      "Claim": "P2",
+      "Status": "PASS",
+      "Topic": "requirements accuracy",
+      "Evidence": "Read-only live MCP/SUPPORT FR/TR/TEST lists returned 1,237 records. All 67 proposed catalog IDs are collision-free; every cited existing canonical ID exists. The plan explicitly identifies invalid legacy citations. Proposed P0 creation and docs/Project FR/TR/TEST mapping edges are consistent."
+    },
+    {
+      "Claim": "P3",
+      "Status": "FAIL",
+      "Topic": "locked decisions",
+      "Evidence": "D5 and D9 require a traceable delivery lifecycle and fail-closed attribution. The held-set dissolution invents delivery without a host event (F-R17-02), and separate-file stop-ledger enrollment cannot satisfy the claimed atomic rule (F-R17-01). Other D1-D12, partial clearance, licensing, 98/98 and `skipped_duplicate` removal are reflected."
+    },
+    {
+      "Claim": "P4",
+      "Status": "PASS",
+      "Topic": "scope",
+      "Evidence": "Server, client, REPL, MCP tools, PowerShell/Node cores, all eight required plugins plus grok-bot, and SQLite/PostgreSQL/SQL Server migrations have concrete phase tasks/tests. Unsupported-host, legacy/failsafe and compatibility paths are included."
+    },
+    {
+      "Claim": "P5",
+      "Status": "FAIL",
+      "Topic": "decision completeness",
+      "Evidence": "C2 expressly leaves the storage/API shape to A8 (F-R17-03). Held-set resolution, cross-file durability and review error mapping are unresolved design choices (F-R17-01/02/04)."
+    },
+    {
+      "Claim": "P6",
+      "Status": "UNKNOWN",
+      "Topic": "executability",
+      "Evidence": "Named build targets/test projects/receipt locations exist. The per-slice BDPv4 order is specified as contract/stubs, RED, mocks-green with a negative check, self-review, real green, refactor, then applicable G1-G6. Full execution is not certifiable in this review-only run: installed .NET SDK is 10.0.111 while `global.json` requires 10.0.201/latestFeature; Pester and bats are absent. P0.1 schedules prerequisites. No gate is claimed green."
+    },
+    {
+      "Claim": "P7",
+      "Status": "FAIL",
+      "Topic": "testability",
+      "Evidence": "A3 asserts unsafe held-set dissolution (F-R17-02); no crash-boundary test proves state/ledger atomic enrollment (F-R17-01); review AC006 promises exact common error codes without mappings/tests for four invalid fields (F-R17-04); C9 lacks a decisive five-collision/sixth-success boundary test (F-R17-05). HV-P0, HV-A, HV-B and slice HV consistently require Codex `gpt-6-sol`/`xhigh` and 98/98."
+    },
+    {
+      "Claim": "P8",
+      "Status": "FAIL",
+      "Topic": "internal consistency",
+      "Evidence": "The 30 tasks and broad dependencies align, but the state/ledger atomicity claim, held transition, C2 implementation choice, review-code list and C9 retry bound disagree across host row, FR/TR, wire, tests and live contract (F-R17-01..05)."
+    },
+    {
+      "Claim": "P9",
+      "Status": "FAIL",
+      "Topic": "artifact parity",
+      "Evidence": "Live TODO `done=false`, 30 implementationTasks; every one of 529 nonempty plan lines equals its TODO description entry ordinally, and tasks match the plan list. Handoff location/status/counts and r16 summary are accurate. Handoff line 113 and plan use a conflicting retry bound, and handoff's present-tense “proposed” C9 status is stale after Codex ACK at 23:22:30Z (F-R17-05). Reconcile plan, TODO technicalDetails and handoff."
+    },
+    {
+      "Claim": "P10",
+      "Status": "PASS",
+      "Topic": "risks",
+      "Evidence": "Read-only `workflow.triage.getReport/getGroup` resolved all plan-scope IDs, including licensing and the worktree-only failed relocation group with one grouped report. Plugin and bridge defects are scheduled in A3/A9. No unfiled plan risk found. Infrastructure repair, Pi3 monitor and historical implementer conduct were excluded."
+    }
+  ],
+  "Findings": [
+    {
+      "Id": "F-R17-01",
+      "Title": "separate files defeat atomic stop-ledger enrollment",
+      "EvidenceAndFix": "Plan locations: host row line 83; FR-MCP-SESSIONTURN-003-AC004 line 213; FR-MCP-SESSIONTURN-005-AC001 line 223; TR-MCP-SESSIONTURN-003 line 345; wire store lines 550-551; A7 line 587. **Defect:** cursor, queue and held sets are in `sessions/<key>/turn-state.yaml`, while stop entries are in separate `stop-ledger.yaml`; line 551 nevertheless promises the ledger entry is added in the same atomic replace that delivers or holds and advances the cursor. A single temp-file rename cannot atomically replace both. If cursor advancement persists and ledger writing fails, restart skips the cause record and the open request is invisible to the stop gate. A7's restart case does not inject a crash between these writes. **To PASS:** store ledger in the same atomic state file, or specify a journal/recovery protocol proving enrollment; propagate the one rule to host row, FR/TR, UC-1, wire, A3/A7, TODO and handoff. Add before/after each persistence-boundary and two-Stop restart RED cases with zero missed blocks. **Classification:** implementer plan/requirement/test edit under D5/D10; no new operator decision.",
+      "Classification": "implementer plan/requirement/test edit under D5/D10; no new operator decision."
+    },
+    {
+      "Id": "F-R17-02",
+      "Title": "held-set dissolution fabricates delivery",
+      "EvidenceAndFix": "Plan locations: host row line 83; FR-MCP-SESSIONTURN-001-AC010 line 202; FR-MCP-SESSIONTURN-007-AC009 line 248; A3 line 579. **Defect:** two equal-content queued requests R1/R2 followed by `popAll` with one matching line are held because the withdrawn identity is unknown. If R1 later closes explicitly, the plan dissolves the set and changes R2 to `delivered`. R2 could have been the request actually withdrawn. No `dequeue` or `absorbed_mid_turn` event proves its delivery. A3's named dissolve test enshrines the guess. The held-head `dequeue` rule also lacks exact FIFO membership and resolution semantics. **Evidence:** line 83 says the short `popAll` changes no candidate state, then promotes the last open candidate; enqueue and dequeue lack a shared identity with remove. **To PASS:** keep survivors unresolved until a traceable host event identifies them, or fail the host closed as `turn_logging_unsupported` under D6. Specify queue membership, cursor, close and recovery transitions; do not mark delivered solely because another candidate closed. Replace the dissolve test with two-equal/one-line-popAll/explicit-close/restart/dequeue tests proving zero wrong-turn writes. Propagate to FR/TR, wire, UC-1, TODO and handoff. **Classification:** implementer contract/test edit under D5/D6/D9; no new operator decision.",
+      "Classification": "implementer contract/test edit under D5/D6/D9; no new operator decision."
+    },
+    {
+      "Id": "F-R17-03",
+      "Title": "C2 all-consumer alias seam is an implementation choice",
+      "EvidenceAndFix": "Plan locations: shared C2 line 119; FR-MCP-SESSIONTURN-001-AC008 line 200; TR-MCP-SESSIONTURN-008 line 350; A8 line 589. **Defect:** C2 expressly calls storage and API shape “A8's implementation choice” while requiring aliases to remain discoverable until every consumer, including QB outbox, acknowledges. The plan fixes no consumer identity/registration, enumeration or lookup signature, per-consumer ack operation, crash order, or cross-repo API. Tests with two consumers cannot supply a stable interface. **Evidence:** lines 119/350/589 and MEMORY-PROCESS-007's A8/QB seam. **To PASS:** specify exported TypeScript signatures and persisted schema for consumer ids, alias discovery, idempotent per-consumer ack and replay before approval; add QB-facing contract fixture and obtain CONTRACT/ACK if C2 changes. Propagate through A8, FR/TR, wire, TODO technicalDetails and handoff. **Classification:** implementer plan edit and peer ACK if amended; no new operator decision.",
+      "Classification": "implementer plan edit and peer ACK if amended; no new operator decision."
+    },
+    {
+      "Id": "F-R17-04",
+      "Title": "review validation lacks promised exact error mapping",
+      "EvidenceAndFix": "Plan locations: FR-MCP-SESSIONREVIEW-003-AC006 line 305; wire Errors line 568; S1 line 595; S8/S9 golden-contract gates. **Defect:** AC006 limits reviewer length, path length, UTC-offset timestamp and nonempty reason, and requires one exact common code per violation across REST/MCP/client/REPL/both cores. The wire list has no code mapped to overlong reviewer, overlong path, missing/invalid timestamp offset or blank reason. S1 defers exact choices to contract creation. **Evidence:** direct comparison of AC006 and exhaustive line 568; no named RED matrix covers those four errors. **To PASS:** choose code(s) and field details for all four inputs now, publish a field-to-code mapping in FR/TR/wire, and name C#/Pester/Jest golden cases asserting the same code and HTTP behavior. Propagate to TODO/handoff. **Classification:** implementer requirement/contract edit; no new operator decision.",
+      "Classification": "implementer requirement/contract edit; no new operator decision."
+    },
+    {
+      "Id": "F-R17-05",
+      "Title": "C9 retry count and ACK status differ",
+      "EvidenceAndFix": "Plan locations: FR-MCP-SESSIONTURN-001-AC001 line 193; TR-MCP-SESSIONTURN-004 AC-006 line 346; A1 line 575; C9 line 126; handoff line 113; TODO technicalDetails. **Defect:** AC001 allows at most five total mint attempts, TR allows five retries and handoff says re-mints at most five times. Live `workflow.memory.get` for MEMORY-PROCESS-007 shows Codex ACK at 2026-10-09T23:22:30Z accepting “five retries after the original attempt”: six total generated-ID attempts. Handoff still says the code is merely proposed. The discrepancy changes whether a sixth available ID succeeds or a 500 `mint_collision_exhausted` is returned. A1 names one retry and exhaustion tests but no boundary case. **To PASS:** state five retries after the initial attempt (six total attempts) consistently in FR/TR/A1/wire/TODO/handoff; record ACK time. Add SQLite/PostgreSQL/SQL Server RED cases for five collisions then success on sixth attempt and six collisions then 500 final/nonretryable, including Node outbox no-retry propagation. If five total is intended, obtain a new C9 peer ACK. **Classification:** implementer propagation/test edit under live ACK; no operator decision unless changing that ACKed bound.",
+      "Classification": "implementer propagation/test edit under live ACK; no operator decision unless changing that ACKed bound."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 93,
+  "Completeness": 88,
+  "Confidence": 96,
+  "PassCount": 4,
+  "FailCount": 5,
+  "UnknownCount": 1,
+  "FailList": [
+    "F-R17-01",
+    "F-R17-02",
+    "F-R17-03",
+    "F-R17-04",
+    "F-R17-05"
+  ],
+  "UnknownList": [
+    "P6: full G1-G6 execution awaits P0.1 toolchain and subsequent implementation gates"
+  ],
+  "ImplementerFixes": [
+    "F-R17-01",
+    "F-R17-02",
+    "F-R17-03",
+    "F-R17-04",
+    "F-R17-05"
+  ],
+  "OperatorDecisionFails": [],
+  "HeadSha": "2d47607ab67c6107f58da3069b2c48a58c2e8ad8",
+  "PriorRound": "r16 DISAGREE 94/90 F-R16-01..03; r1-r15 recurrence checked",
+  "RequestJsonlPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T232026Z-plan-readiness-r17.request.jsonl",
+  "ResponseJsonlPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T232026Z-plan-readiness-r17.response.jsonl",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r17-20261009T232026Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r17-20261009T232026Z.json"
+  ],
+  "ReviewerSessionId": "Codex-20261009T232208Z-plugin-session",
+  "ReviewerRequestId": "req-20261009T232319Z-plan-readiness-r17",
+  "McpPersistenceProof": {
+    "ReadbackMethod": "client.SessionLog.QueryAsync",
+    "ReadbackUtc": "2026-10-09T23:33:52Z",
+    "SessionFound": true,
+    "RequestFound": true,
+    "MarkdownDialogFound": true,
+    "StructuredJsonDialogFound": true,
+    "VerdictMarkerFound": true,
+    "ActionsFound": true,
+    "WritesPersisted": true,
+    "CompletedStateReadback": "2026-10-09T23:34:30Z: client.SessionLog.QueryAsync returned own turn status completed and final Markdown/JSON dialog markers plus five findings"
+  }
+}

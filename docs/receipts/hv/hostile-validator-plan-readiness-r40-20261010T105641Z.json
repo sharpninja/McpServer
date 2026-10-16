@@ -1,0 +1,148 @@
+{
+  "TimestampUtc": "2026-10-10T11:10:22Z",
+  "ValidatorIdentity": {
+    "agent": "Codex CLI",
+    "version": "codex-cli 0.160.1",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "liveProof": "Own rollout /home/sharpninja/.codex/sessions/2026/10/10/rollout-2026-10-10T05-56-42-01a12575-38f8-78f1-a7ea-6fe6d0b9d5db.jsonl has session_meta id 01a12575-38f8-78f1-a7ea-6fe6d0b9d5db and turn_context model=gpt-6-sol effort=xhigh. Response JSONL thread.started matches; request JSONL launch metadata agrees."
+  },
+  "addProfileCount": 19,
+  "markerReadConfirmation": "Read all 397 main-workspace marker lines, suppressing apiKey, api_key and X-Api-Key lines and the entire Authentication block before output; no credential copied.",
+  "memoryReadConfirmation": "workflow.memory.list returned 15 effective MCP memories; all 15 were read in full, including MEMORY-PROCESS-007 and -008. MEMORY-PROCESS-008 what-if, propagation, recurrence and phase-boundary checklist applied.",
+  "artifactAudit": "Plan 653 lines/533 nonempty; live TODO description equals the 533 nonempty lines in order, has 30 tasks and NOT APPROVED note; handoff 273 lines. Nine existing clear-session skills are byte-identical.",
+  "priorRoundAudit": "R39 option A, mixed cases, D6 follow-up TODOs and nine-repo text are present; nine-repo repair creates an S8/S9 boundary gap and the P0.2 read-only repair left its matrix write. R1-R38 receipts scanned for identity, queue, alias, score, marker, migration, sync and gate regressions; no other independently supported regression found. Recurrence: a cross-repo criterion changed without satisfying it in the first dependent slice.",
+  "reviewStandard": "Static P6; no plan step or implementation gate executed because plan is NOT APPROVED. Missing host tools are gated by P0.1.",
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "PASS",
+      "evidence": "Full 653-line plan and 533 nonempty lines reviewed. HEAD matches launch; diff from source baseline has no src, tests, build or plugins files. Code anchors and current nine plugin skills were spot checked."
+    },
+    {
+      "id": "P2",
+      "status": "FAIL",
+      "evidence": "F-R40-02: TEST-MCP-PLUGIN-PSONLY-001 and TEST-MCP-BUGTRIAGE-068 are cited but absent from the live TEST store and P0 creation catalog."
+    },
+    {
+      "id": "P3",
+      "status": "PASS",
+      "evidence": "D1-D12, partial clearance, licensing, skipped_duplicate removal, unsupported-session failsafe option 1 and clear-session option A are reflected. The remaining blocker is the missing blocked-mark mechanism, not a contrary ruling."
+    },
+    {
+      "id": "P4",
+      "status": "PASS",
+      "evidence": "Server, client, REPL, MCP tools, McpAgent, PowerShell and Node cores, six PowerShell hosts, three TypeScript hosts and three storage providers have concrete slices, tests and migration paths."
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "F-R40-04: the clear-session coordinator has no specified signal for a turn the model marks blocked and no precedence when such a turn is also completion-ready."
+    },
+    {
+      "id": "P6",
+      "status": "PASS",
+      "evidence": "Static P6 standard applies while NOT APPROVED. Named build targets and test projects exist; P0.1 gates missing host prerequisites. G1-G6 and per-slice BDPv4 contract/stubs, RED, mocks-green negative check, self-review, real green and refactor order are specified. No implementation gate ran."
+    },
+    {
+      "id": "P7",
+      "status": "FAIL",
+      "evidence": "F-R40-01 all-nine skill parity cannot be satisfied at S8; F-R40-04 blocked selection is not objectively testable. Codex gpt-6-sol xhigh HV-P0, HV-A, HV-B and 98/98 rules are otherwise consistent."
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "F-R40-01: S9 depends on S8 yet S8 leaves three skills stale under the P0 nine-repo requirement. F-R40-03: P0.2 is called read-only while it directs a matrix file write."
+    },
+    {
+      "id": "P9",
+      "status": "FAIL",
+      "evidence": "F-R40-03: TODO task 3 and handoff call P0.2 read-only, conflicting with line 174 matrix write. TODO description otherwise equals 533 nonempty plan lines exactly; 30 implementationTasks and handoff status, counts, locations and triage references match."
+    },
+    {
+      "id": "P10",
+      "status": "PASS",
+      "evidence": "Risk statements align with source and dated observations. Referenced main-workspace triage reports were found; the one misplaced group was found under the worktree with failed status and one grouped report, as disclosed."
+    }
+  ],
+  "Findings": [
+    {
+      "id": "F-R40-01",
+      "claims": [
+        "P7",
+        "P8"
+      ],
+      "location": "Updated existing requirements line 475; P0.4 line 176; G6 lines 104-109; P0.8 line 180; S8 line 613; S9 line 615",
+      "defect": "P0 updates the clear-session byte-parity rule to nine repos. S8 changes only six skills but must clear G6 and slice HV before S9 changes the other three. The nine-file requirement necessarily fails at the S8 boundary.",
+      "evidence": "All nine current skills/clear-session/SKILL.md files have SHA-256 prefix 28588245A3A1. Plan S8 changes six; plan S9 changes three and owns the nine-file parity test; S9 depends on S8.",
+      "fix": "Move the whole nine-skill clear-session change, its updated requirement and RED/green tests to S9 after the Node equivalent exists; revise S8/S9, AC allocation, TEST-005/008/009, G6, TODO details and handoff. Or deliver all nine runtime and skill paths within S8.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R40-02",
+      "claims": [
+        "P2"
+      ],
+      "location": "Requirements catalog line 380; A6 line 589; A7 line 591; P0.4 line 176",
+      "defect": "Two cited TEST-style IDs are neither existing live requirements nor declared P0 creations.",
+      "evidence": "workflow.requirements.getTest returned not_found for TEST-MCP-PLUGIN-PSONLY-001 and TEST-MCP-BUGTRIAGE-068. Neither has a Testing-Requirements.md record. Requirements-Matrix.md:826 holds a stale PSONLY row. The named Pester test labels exist at PluginPowerShellRuntime.Tests.ps1:1315 and :2512.",
+      "fix": "Reconcile and create both TEST records in P0 with valid ACs and FR/TR mappings, update counts and regenerate docs; alternatively remove these requirement-style citations and rename their source test labels in the assigned slices. Follow the operator rule to strengthen valid ACs.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R40-03",
+      "claims": [
+        "P8",
+        "P9"
+      ],
+      "location": "P0.2 line 174; P0.8 line 180; TODO implementationTask 3; handoff lines 234-238",
+      "defect": "P0.2 is labelled read-only in plan, TODO and handoff, yet P0.2 directs writing D6/D7 capability dispositions into docs/AGENT-PLUGIN-FEATURE-MATRIX.md.",
+      "evidence": "Line 174 contains the matrix-write instruction. P0.8 owns adapter TODO creation but no matrix write. TODO task 3 and handoff line 238 repeat read-only.",
+      "fix": "Keep P0.2 to read-only probes and receipts. Assign the feature-matrix write and verification to P0.8, using the P0.2 receipt. Propagate this ownership to TODO technicalDetails and handoff.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R40-04",
+      "claims": [
+        "P5",
+        "P7"
+      ],
+      "location": "Locked decisions line 30; updated TR-MCP-CLEARSESSION-001 line 475; S8 line 613; S9 line 615",
+      "defect": "The selector has no defined durable blocked mark or coordinator input, nor precedence if the same turn is blocked and otherwise completion-ready. It can be completed or failed depending on implementer choice.",
+      "evidence": "Current DTO blockers are only documented as issues preventing progress at UnifiedSessionLogDto.cs:237-240. The plan does not equate that array to a blocked mark or provide a model-supplied original-pair selection input. S8/S9 tests cover blocked and ready turns separately but not the overlap.",
+      "fix": "Define a model-authored blocked-turn signal keyed by original sessionId/requestId pair with nonblank reason; make withdrawn and blocked failure precede ready completion; add ready-plus-blocked cases in S8/S9 and propagate to TR/TEST ACs, policy, skills, TODO and handoff. An explicit blockers-array predicate is another implementer design if fully specified.",
+      "classification": "implementer edit"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 93,
+  "Confidence": 98,
+  "passCount": 5,
+  "failCount": 5,
+  "unknownCount": 0,
+  "failList": [
+    "F-R40-01",
+    "F-R40-02",
+    "F-R40-03",
+    "F-R40-04"
+  ],
+  "unknownList": [],
+  "implementerFixes": [
+    "F-R40-01",
+    "F-R40-02",
+    "F-R40-03",
+    "F-R40-04"
+  ],
+  "operatorDecisionFails": [],
+  "headSha": "ede8c012b0a07bfc6acc3ba5c109efa66bf3ff79",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r40-20261010T105641Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r40-20261010T105641Z.json"
+  ],
+  "requestJsonlPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T105641Z-plan-readiness-r40.request.jsonl",
+  "responseJsonlPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T105641Z-plan-readiness-r40.response.jsonl",
+  "reviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "reviewerRequestId": "req-20261010T105845Z-plan-r40-hv",
+  "persistenceProof": "Read-only client.SessionLog.QueryAsync after CompleteTurn found this reviewer turn completed with a 7960-character response identical to the pre-proof markdown verdict and containing all P1-P10 and F-R40-01 through F-R40-04. A subsequent client.SessionLog.AppendDialogAsync on the same completed turn stored this persistence observation; final QueryAsync readback found status completed, the full response, this observation, and three receipt/decision actions."
+}

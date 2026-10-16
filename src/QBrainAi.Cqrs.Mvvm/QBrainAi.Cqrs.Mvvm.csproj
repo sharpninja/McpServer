@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>QBrainAi.Cqrs.Mvvm</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>QBrainAI.Cqrs.Mvvm</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>MVVM bridge for QBrainAi.Cqrs — provides IRelayCommand implementations that dispatch CQRS commands/queries through the Dispatcher, with ObservableObject base class integration.</Description>
+    <PackageTags>cqrs;mvvm;relay-command;observable;viewmodel</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/sharpninja/McpServer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QBrainAi.Cqrs\QBrainAi.Cqrs.csproj" />
+  </ItemGroup>
+</Project>

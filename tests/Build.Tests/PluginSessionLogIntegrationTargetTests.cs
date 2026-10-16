@@ -43,7 +43,7 @@ public sealed class PluginSessionLogIntegrationTargetTests
         Assert.Contains("!p.Name.Contains(\"PluginIntegration\")", source, StringComparison.Ordinal);
         Assert.Contains("Category!=Integration", source, StringComparison.Ordinal);
         Assert.DoesNotContain(
-            "McpServer.PluginIntegration.Tests",
+            "QBrainAi.PluginIntegration.Tests",
             ExtractTestProjectSelection(source),
             StringComparison.Ordinal);
     }
@@ -62,17 +62,17 @@ public sealed class PluginSessionLogIntegrationTargetTests
         return buildTestSource.Substring(start, end - start + endMark.Length);
     }
     /// <summary>
-    /// P1 red: the solution includes tests/McpServer.PluginIntegration.Tests.
+    /// P1 red: the solution includes tests/QBrainAi.PluginIntegration.Tests.
     /// </summary>
     [Fact]
-    public void Solution_ContainsMcpServerPluginIntegrationTestsProject()
+    public void Solution_ContainsQBrainAiPluginIntegrationTestsProject()
     {
         var repoRoot = FindRepositoryRoot();
-        var sln = File.ReadAllText(Path.Combine(repoRoot, "McpServer.sln"));
-        Assert.Contains("McpServer.PluginIntegration.Tests", sln, StringComparison.Ordinal);
+        var sln = File.ReadAllText(Path.Combine(repoRoot, "QBrainAi.sln"));
+        Assert.Contains("QBrainAi.PluginIntegration.Tests", sln, StringComparison.Ordinal);
         Assert.True(
-            File.Exists(Path.Combine(repoRoot, "tests", "McpServer.PluginIntegration.Tests", "McpServer.PluginIntegration.Tests.csproj")),
-            "tests/McpServer.PluginIntegration.Tests/McpServer.PluginIntegration.Tests.csproj is missing.");
+            File.Exists(Path.Combine(repoRoot, "tests", "QBrainAi.PluginIntegration.Tests", "QBrainAi.PluginIntegration.Tests.csproj")),
+            "tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj is missing.");
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public sealed class PluginSessionLogIntegrationTargetTests
         var catalogPath = Path.Combine(
             repoRoot,
             "tests",
-            "McpServer.PluginIntegration.Tests",
+            "QBrainAi.PluginIntegration.Tests",
             "scenarios",
             "plugin-sessionlog-scenarios.json");
         Assert.True(File.Exists(catalogPath), "plugin-sessionlog-scenarios.json is missing.");
@@ -161,7 +161,7 @@ public sealed class PluginSessionLogIntegrationTargetTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }
@@ -169,6 +169,6 @@ public sealed class PluginSessionLogIntegrationTargetTests
             directory = directory.Parent;
         }
 
-        throw new InvalidOperationException("McpServer.sln not found.");
+        throw new InvalidOperationException("QBrainAi.sln not found.");
     }
 }

@@ -1,0 +1,190 @@
+{
+  "TimestampUtc": "2026-10-09T22:01:00Z",
+  "LaunchTimestampUtc": "2026-10-09T21:45:34Z",
+  "Artifact": "PLAN-SESSIONTURNREVIEW-001",
+  "ArtifactStatus": "NOT APPROVED",
+  "ValidatorIdentity": {
+    "agent": "Codex CLI",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "threadId": "01a122a0-f008-7552-b8a2-0d694982130f",
+    "liveProofPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T16-45-35-01a122a0-f008-7552-b8a2-0d694982130f.jsonl",
+    "liveProofTimestampUtc": "2026-10-09T21:45:37.374Z",
+    "liveProofType": "turn_context"
+  },
+  "AddProfileFileCount": 19,
+  "MarkerReadConfirmation": "Read main AGENTS-README-FIRST.yaml in full, 397 lines; secret line and Authentication block filtered from output.",
+  "MemoryReadConfirmation": "workflow.memory.list read 12 effective worktree and 15 effective main-workspace memories, including PROCESS-006/007/008 and DEVPROCESS-001.",
+  "HeadSha": "d1aedfbd6ffe53eb94455455cdc2107e93cc7db5",
+  "Claims": [
+    {
+      "claim": "P1",
+      "status": "UNKNOWN",
+      "evidence": "HEAD and selected source anchors match; historical transcript counts and host-runtime payload facts were not all independently reproduced."
+    },
+    {
+      "claim": "P2",
+      "status": "PASS",
+      "evidence": "Live main store FR 353 TR 481 TEST 513; 126 cited IDs audited; 67 proposed records absent; no collision; existing IDs sampled and prior round verified."
+    },
+    {
+      "claim": "P3",
+      "status": "FAIL",
+      "evidence": "Plan 83 and 591 retain no-prompt_id hook mint despite D1/D5 bridge-only rule in AC009; prompt representation mismatch has no disposition."
+    },
+    {
+      "claim": "P4",
+      "status": "PASS",
+      "evidence": "Assigned slices cover server, client, REST/MCP, REPL, McpAgent, both plugin cores, nine plugin repos, and SQLite/PostgreSQL/SQL Server migrations."
+    },
+    {
+      "claim": "P5",
+      "status": "FAIL",
+      "evidence": "Ingress and root-ID branches remain incompatible or undefined; see F-R12-01, -04, -05."
+    },
+    {
+      "claim": "P6",
+      "status": "FAIL",
+      "evidence": "Closed-turn evidence block has no accepted remedy; repair after merge conflicts with pre-merge HV-A live gate; named build targets exist statically."
+    },
+    {
+      "claim": "P7",
+      "status": "FAIL",
+      "evidence": "No direct per-record root-ID RED tests, no unequal prompt representation branch case, and otherNotes search differs in TR and wire."
+    },
+    {
+      "claim": "P8",
+      "status": "FAIL",
+      "evidence": "Contradictions at plan 83/201/343/591, 224/227/548, 357/571, and 577/591/633."
+    },
+    {
+      "claim": "P9",
+      "status": "PASS",
+      "evidence": "649 source lines, 529 non-empty; TODO 529 items exact line parity; 30 tasks; done false; handoff round-12 counts and status match."
+    },
+    {
+      "claim": "P10",
+      "status": "PASS",
+      "evidence": "Ten report IDs found; triage group 804b exists in worktree as failed with one report and is absent in main; risks and A9 repairs scheduled."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 94,
+  "Completeness": 90,
+  "Confidence": 97,
+  "PassCount": 4,
+  "FailCount": 5,
+  "UnknownCount": 1,
+  "FailList": [
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "UnknownList": [
+    "P1"
+  ],
+  "Findings": [
+    {
+      "id": "F-R12-01",
+      "claims": [
+        "P3",
+        "P5",
+        "P8"
+      ],
+      "planLocation": "Host binding table 83; TR-MCP-SESSIONTURN-001 AC-006 343; A9 591",
+      "defect": "The no-prompt_id branch still directs the hook to mint using prompt_id.",
+      "fix": "Make the with-id and without-id branch outcomes consistent across row, TR, A3, A9 and tests.",
+      "classification": "implementer_edit"
+    },
+    {
+      "id": "F-R12-02",
+      "claims": [
+        "P6",
+        "P8"
+      ],
+      "planLocation": "FR-MCP-SESSIONTURN-005-AC002 224; AC005 227; UC-3 481; wire 548",
+      "defect": "A closed turn without model evidence is both blocked and warning-only; block has no accepted remedy.",
+      "fix": "Make terminal case warning-only everywhere; block the open refusal under turn_in_progress with action-then-close remedy.",
+      "classification": "implementer_edit"
+    },
+    {
+      "id": "F-R12-03",
+      "claims": [
+        "P7",
+        "P8"
+      ],
+      "planLocation": "TR-MCP-SESSIONREVIEW-002 AC-005 357; TEST-002 384; wire 571; S4 601",
+      "defect": "TR search excludes otherNotes while wire includes it; direct test absent.",
+      "fix": "Align TR and wire and add a named sanitized otherNotes search RED test.",
+      "classification": "implementer_edit"
+    },
+    {
+      "id": "F-R12-04",
+      "claims": [
+        "P5",
+        "P7"
+      ],
+      "planLocation": "FR-MCP-SESSIONTURN-007-AC009 248; C2 119; TR 343/350; wire 549-551; A4/A8 581/589",
+      "defect": "Root-ID requirement is not explicit for aliases, failsafe and ledger records and has no direct per-record RED tests.",
+      "fix": "State the observable root-ID invariant for every record family and name readback/replay RED cases.",
+      "classification": "implementer_edit"
+    },
+    {
+      "id": "F-R12-05",
+      "claims": [
+        "P3",
+        "P5",
+        "P7"
+      ],
+      "planLocation": "Host bridge 83; P0.2(a) 170; FR-MCP-SESSIONTURN-001-AC009 201; A3 579",
+      "defect": "P0 probes unequal transcript and hook prompt bytes but the pairing algorithm handles only equal hashes.",
+      "fix": "Define observable pairing/disposition for unequal representations and test each prompt form and concurrent equal-text messages.",
+      "classification": "implementer_edit"
+    },
+    {
+      "id": "F-R12-06",
+      "claims": [
+        "P6",
+        "P8"
+      ],
+      "planLocation": "A2 577; HV/PR order 153-159; A9 591; rollout 620; live check 633",
+      "defect": "Validator repair/restart is after merge but is required for the pre-merge HV-A live gate.",
+      "fix": "Schedule an authorized pre-HV repair/restart or equivalent validation environment, retaining phase HV before PR/merge.",
+      "classification": "implementer_edit"
+    }
+  ],
+  "ImplementerFixes": [
+    "F-R12-01",
+    "F-R12-02",
+    "F-R12-03",
+    "F-R12-04",
+    "F-R12-05",
+    "F-R12-06"
+  ],
+  "OperatorDecisionFails": [],
+  "Round11": {
+    "F-R11-01": "fixed",
+    "F-R11-02": "partly fixed and reopened as F-R12-01",
+    "F-R11-03": "fixed at observable AC level"
+  },
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r12-20261009T214534Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r12-20261009T214534Z.json"
+  ],
+  "RequestJsonlPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T214534Z-plan-readiness-r12.request.jsonl",
+  "ResponseJsonlPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T214534Z-plan-readiness-r12.response.jsonl",
+  "ReviewerSessionId": "Codex-20261009T032846Z-plugin-session",
+  "ReviewerRequestId": "req-20261009T214725Z-hostile-plan-r12",
+  "PersistenceProof": {
+    "queryMethod": "client.SessionLog.QueryAsync",
+    "readBackUtc": "2026-10-09T22:04:03Z",
+    "turnStatus": "completed",
+    "responseCharacterCount": 16291,
+    "exactMarkdownMatch": true,
+    "actionCount": 3,
+    "dialogCount": 1,
+    "completeTurnReceipt": "code: persisted; persisted: true; degraded: false; queued: false"
+  }
+}

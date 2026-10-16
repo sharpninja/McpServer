@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-10-13T16:36:51.7959919Z",
+  "ReviewerSessionId": "Codex-20261013T153702Z-plugin-session",
+  "ReviewerRequestId": "req-20261013T153316Z-hv-architecture-r1",
+  "ReadMethod": "client.SessionLog.QueryAsync",
+  "StoredTurnStatus": "in_progress",
+  "PartCount": 12,
+  "ExpectedCharacters": 117374,
+  "StoredCharacters": 117374,
+  "ExactReadbackEquals": true,
+  "StoredSha256": "0f8a513cae4a7517b9fd7e6ca2ccb211497fbe98b38378ea44439e17a8d51140",
+  "WriteReceipt": "docs/receipts/hv/20261013T153316Z-full-result-write.json",
+  "ReadbackReceipt": "docs/receipts/hv/20261013T153316Z-reviewer-readback.json",
+  "ReadCorrection": "client.SessionLog.GetAsync is not exposed by the live REPL. Its read-only refusal was corrected to QueryAsync, which returned the own session."
+}

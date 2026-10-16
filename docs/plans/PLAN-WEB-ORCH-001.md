@@ -9,12 +9,12 @@ Request: req-prompterhawk-mcpweb-reqs (failsafe-queued; MCP storage unreachable)
 
 ## Intent
 
-Give mcp-web (`McpServer.Web`, FR-MCP-031) a mission-control UI that covers the same operator goals as Prompter Hawk: one dashboard, many agents, parallel fire-and-forget work, automatic task pickup, recurring jobs, live observability, retry with context, human feedback, permissions, and multi-provider backends.
+Give mcp-web (`QBrainAi.Web`, FR-MCP-031) a mission-control UI that covers the same operator goals as Prompter Hawk: one dashboard, many agents, parallel fire-and-forget work, automatic task pickup, recurring jobs, live observability, retry with context, human feedback, permissions, and multi-provider backends.
 
-This is not a clone of Prompter Hawk. Map their nouns onto MCP Server nouns:
+This is not a clone of Prompter Hawk. Map their nouns onto QBrain.AI nouns:
 
 - Mission -> MCP workspace
-- Agent -> pooled / hosted agent (`/mcpserver/agent-pool`)
+- Agent -> pooled / hosted agent (`/qbrainai/agent-pool`)
 - Task -> MCP TODO (never `TODO.yaml` as source of truth)
 - Task bank -> mcp-web TODO board
 - Live peek -> session log + event stream
@@ -39,7 +39,7 @@ Replay after storage returns: drain `.mcpServer/failsafe/GrokCode/workspaces/*/p
 
 ## Locked product decisions
 
-1. Host: Blazor dashboard in `src/McpServer.Web` (mcp-web). If that project is missing from this solution, restore or recreate it as the FR-MCP-031 host. Do not put this UI in Director.
+1. Host: Blazor dashboard in `src/QBrainAi.Web` (mcp-web). If that project is missing from this solution, restore or recreate it as the FR-MCP-031 host. Do not put this UI in Director.
 2. Data: mcp-web is a client of existing MCP REST/SSE. New REST only when an AC cannot be met by Todo, AgentPool, SessionLog, Events, Workspace policy, Templates, or Memory APIs (TR-WEB-API-001).
 3. Auth: existing pairing and OIDC (FR-MCP-014, FR-MCP-026). No Prompter Hawk magic links.
 4. TODO lanes: tentative (needs operator approve), pending, in_progress, blocked (prereq or policy), feedback_required, recurring, completed. Map onto MCP TODO status/tags; do not invent a second task store.
@@ -63,10 +63,10 @@ Red tests for this phase: none. No product code.
 
 TDD unit tests first (shown red):
 
-- `McpServer.Web.Tests.OrchestrationDashboardTests.RendersCockpit_WithWorkspaceBinding`
-- `McpServer.Web.Tests.AgentFleetPanelTests.ShowsOffIdleWorkingWaiting_FromAgentPoolStatus`
-- `McpServer.Web.Tests.AgentFleetPanelTests.StartStopRecycleStartAllStopAll_CallAgentPoolClient`
-- `McpServer.Web.Tests.OrchestrationDashboardTests.DesktopAndMobileLayout_DoNotClipFleetOrBank`
+- `QBrainAi.Web.Tests.OrchestrationDashboardTests.RendersCockpit_WithWorkspaceBinding`
+- `QBrainAi.Web.Tests.AgentFleetPanelTests.ShowsOffIdleWorkingWaiting_FromAgentPoolStatus`
+- `QBrainAi.Web.Tests.AgentFleetPanelTests.StartStopRecycleStartAllStopAll_CallAgentPoolClient`
+- `QBrainAi.Web.Tests.OrchestrationDashboardTests.DesktopAndMobileLayout_DoNotClipFleetOrBank`
 
 Green: Blazor pages bind `AgentPoolClient` and workspace marker path. No duplicate pool logic.
 
@@ -117,7 +117,7 @@ Tests first:
 ## Validation commands (after approval, per phase)
 
 ```
-pwsh -NoProfile -NonInteractive -File ./build.ps1 Test --filter FullyQualifiedName~McpServer.Web.Tests
+pwsh -NoProfile -NonInteractive -File ./build.ps1 Test --filter FullyQualifiedName~QBrainAi.Web.Tests
 ```
 
 Exit gate for a phase: zero failed, zero skipped in that filter, then the full unit suite for current plus previous web-orch tests. Then hostile validator.
@@ -125,7 +125,7 @@ Exit gate for a phase: zero failed, zero skipped in that filter, then the full u
 ## Failure modes
 
 - Storage 503: keep failsafe; do not treat markdown exports as the store.
-- Missing `McpServer.Web` project: Phase 1 first slice is restore/create the host project with red tests, not a silent pivot to Director.
+- Missing `QBrainAi.Web` project: Phase 1 first slice is restore/create the host project with red tests, not a silent pivot to Director.
 - Operator rejects captain or budgets: drop FR-WEB-012 / FR-WEB-020 by amendment; do not implement them.
 
 ## Stop condition

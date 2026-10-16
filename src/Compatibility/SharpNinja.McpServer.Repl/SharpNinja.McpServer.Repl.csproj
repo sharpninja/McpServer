@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>mcpserver-repl</ToolCommandName>
+    <PackageId>SharpNinja.McpServer.Repl</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>1.x dotnet tool command mcpserver-repl. The canonical command is qbrain-ai-repl on QBrainAI.Repl. Canonical package id is QBrainAI.Repl.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/SharpNinja/McpServer</RepositoryUrl>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RootNamespace>QBrainAi.Repl.Host</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\QBrainAi.Repl.Host\**\*.cs" Exclude="..\..\QBrainAi.Repl.Host\obj\**\*.cs;..\..\QBrainAi.Repl.Host\bin\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="Spectre.Console" />
+    <PackageReference Include="IdentityModel" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
+    <ProjectReference Include="..\..\QBrainAi.Common.AgentCli\QBrainAi.Common.AgentCli.csproj" />
+    <ProjectReference Include="..\..\QBrainAi.Client\QBrainAi.Client.csproj" />
+    <ProjectReference Include="..\..\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj" />
+  </ItemGroup>
+
+</Project>

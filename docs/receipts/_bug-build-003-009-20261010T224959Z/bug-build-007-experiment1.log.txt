@@ -1,0 +1,18 @@
+BUG-BUILD-007 experiment 2026-10-10T23:13:33Z on LAB-OMARCHY, dotnet 10.0.201, project src/QBrainAi.McpAgent
+=== case spawn (salt bugbuild007a5c7b5e84fdda, extra args: )
+child pid 2990793 exit code 0; output closed within 30 s of exit: True (after 0 s)
+salted nodes before: [] seen during build: [2990851] after exit: [2990851]
+node 2990851: parent while the child ran = 2990793 (child = 2990793, match True); now alive True; fd1 pipe:[18522249] held by this shell False; fd2 pipe:[18522250] held by this shell False
+=== case reuse (salt bugbuild007a5c7b5e84fdda, extra args: )
+child pid 2991679 exit code 0; output closed within 30 s of exit: True (after 0 s)
+salted nodes before: [2990851] seen during build: [2990851] after exit: [2990851]
+node 2990851: parent while the child ran = 1082 (child = 2991679, match False); now alive True; fd1 pipe:[18522249] held by this shell False; fd2 pipe:[18522250] held by this shell False
+=== case control (salt bugbuild007be9f8e9a083a3, extra args: --disable-build-servers)
+child pid 2992840 exit code 0; output closed within 30 s of exit: True (after 0 s)
+salted nodes before: [] seen during build: [2992930] after exit: []
+node 2992930: parent while the child ran = 2992840 (child = 2992840, match True); now alive False; fd1  held by this shell False; fd2  held by this shell False
+=== summary
+spawn: output closed within 30 s: True; nodes spawned with the build child as parent: 1
+reuse: output closed within 30 s: True; new nodes: 0
+control: output closed within 30 s: True; salt-B nodes left after exit: 1
+cleanup: stopped salted node 2990851

@@ -44,8 +44,8 @@ public sealed class WarningSuppressionValidationTargetTests
     public void NormalizeGeneratedMigrationTarget_UsesMockCatalogAndAtomicWriter()
     {
         var normalize = RequireNormalizeMethod();
-        var generatedPath = Path.Combine("src", "McpServer.Storage.SqliteMigrations", "Migrations", "Example.Designer.cs");
-        var otherPath = Path.Combine("src", "McpServer.Services", "NotAMigration.cs");
+        var generatedPath = Path.Combine("src", "QBrainAi.Storage.SqliteMigrations", "Migrations", "Example.Designer.cs");
+        var otherPath = Path.Combine("src", "QBrainAi.Services", "NotAMigration.cs");
         var reads = new List<string>();
         var writes = new List<string>();
         var files = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -81,7 +81,7 @@ public sealed class WarningSuppressionValidationTargetTests
     public void NormalizeGeneratedMigrationObsoletePragmas_ReplacesOnlyExactPairsWithBlankLines()
     {
         var normalize = RequireNormalizeMethod();
-        var path = Path.Combine("src", "McpServer.Storage", "Migrations", "McpDbContextModelSnapshot.cs");
+        var path = Path.Combine("src", "QBrainAi.Storage", "Migrations", "McpDbContextModelSnapshot.cs");
         var original = GeneratedDesignerWithExactPragmaPairs();
         string? written = null;
 
@@ -115,9 +115,9 @@ public sealed class WarningSuppressionValidationTargetTests
         var writes = new List<string>();
         var catalog = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            [Path.Combine("src", "McpServer.Storage.SqliteMigrations", "Migrations", "HandWritten.cs")] = "class HandWritten { " + GeneratedObsoleteDisablePragma + " }",
-            [Path.Combine("src", "McpServer.Services", "Example.Designer.cs")] = GeneratedDesignerWithExactPragmaPairs(),
-            [Path.Combine("tests", "McpServer.Support.Mcp.Tests", "McpDbContextModelSnapshot.cs")] = GeneratedDesignerWithExactPragmaPairs(),
+            [Path.Combine("src", "QBrainAi.Storage.SqliteMigrations", "Migrations", "HandWritten.cs")] = "class HandWritten { " + GeneratedObsoleteDisablePragma + " }",
+            [Path.Combine("src", "QBrainAi.Services", "Example.Designer.cs")] = GeneratedDesignerWithExactPragmaPairs(),
+            [Path.Combine("tests", "QBrainAi.Support.Mcp.Tests", "McpDbContextModelSnapshot.cs")] = GeneratedDesignerWithExactPragmaPairs(),
         };
 
         InvokeNormalize(
@@ -137,7 +137,7 @@ public sealed class WarningSuppressionValidationTargetTests
     public void NormalizeGeneratedMigrationObsoletePragmas_IsIdempotent()
     {
         var normalize = RequireNormalizeMethod();
-        var path = Path.Combine("src", "McpServer.Storage.PostgreSqlMigrations", "Migrations", "Example.Designer.cs");
+        var path = Path.Combine("src", "QBrainAi.Storage.PostgreSqlMigrations", "Migrations", "Example.Designer.cs");
         var files = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             [path] = GeneratedDesignerWithExactPragmaPairs(),
@@ -166,7 +166,7 @@ public sealed class WarningSuppressionValidationTargetTests
         var root = CreateTempRoot();
         try
         {
-            var relativePath = "src/McpServer.Storage.SqliteMigrations/Migrations/Example.Designer.cs";
+            var relativePath = "src/QBrainAi.Storage.SqliteMigrations/Migrations/Example.Designer.cs";
             var original = GeneratedDesignerWithExactPragmaPairs();
             WriteFile(root, relativePath, original);
             WriteFile(root, "config/warning-suppression-approvals.json", "[]");
@@ -370,8 +370,8 @@ public sealed class WarningSuppressionValidationTargetTests
         var root = FindRepositoryRoot();
         string[] allowedScopes =
         [
-            "src/McpServer.Services/Models/TodoModels.cs",
-            "src/McpServer.Services/Models/UnifiedSessionLogDto.cs",
+            "src/QBrainAi.Services/Models/TodoModels.cs",
+            "src/QBrainAi.Services/Models/UnifiedSessionLogDto.cs",
         ];
 
         var unexpectedOccurrences = WarningSuppressionScanner.Scan(root)
@@ -393,10 +393,10 @@ public sealed class WarningSuppressionValidationTargetTests
         var root = FindRepositoryRoot();
         string[] migrationRoots =
         [
-            Path.Combine(root, "src", "McpServer.Storage", "Migrations"),
-            Path.Combine(root, "src", "McpServer.Storage.SqliteMigrations"),
-            Path.Combine(root, "src", "McpServer.Storage.SqlServerMigrations"),
-            Path.Combine(root, "src", "McpServer.Storage.PostgreSqlMigrations"),
+            Path.Combine(root, "src", "QBrainAi.Storage", "Migrations"),
+            Path.Combine(root, "src", "QBrainAi.Storage.SqliteMigrations"),
+            Path.Combine(root, "src", "QBrainAi.Storage.SqlServerMigrations"),
+            Path.Combine(root, "src", "QBrainAi.Storage.PostgreSqlMigrations"),
         ];
 
         var occurrences = migrationRoots

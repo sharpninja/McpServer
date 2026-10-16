@@ -13,14 +13,14 @@ public sealed partial class TrimAnalysisWarningInventoryTests
     private static readonly TrimTarget[] TrimTargets =
     [
         new(
-            "McpServer.Cqrs",
+            "QBrainAi.Cqrs",
             TrimTargetKind.Library,
-            Path.Combine("src", "McpServer.Cqrs", "McpServer.Cqrs.csproj"),
+            Path.Combine("src", "QBrainAi.Cqrs", "QBrainAi.Cqrs.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)),
         new(
-            "McpServer.Cqrs.Mvvm",
+            "QBrainAi.Cqrs.Mvvm",
             TrimTargetKind.Library,
-            Path.Combine("src", "McpServer.Cqrs.Mvvm", "McpServer.Cqrs.Mvvm.csproj"),
+            Path.Combine("src", "QBrainAi.Cqrs.Mvvm", "QBrainAi.Cqrs.Mvvm.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)
             {
                 ["IL2026"] = 8,
@@ -29,44 +29,44 @@ public sealed partial class TrimAnalysisWarningInventoryTests
                 ["IL2075"] = 12,
             }),
         new(
-            "McpServer.McpAgent",
+            "QBrainAi.McpAgent",
             TrimTargetKind.Library,
-            Path.Combine("src", "McpServer.McpAgent", "McpServer.McpAgent.csproj"),
+            Path.Combine("src", "QBrainAi.McpAgent", "QBrainAi.McpAgent.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)),
         new(
-            "McpServer.Repl.Core",
+            "QBrainAi.Repl.Core",
             TrimTargetKind.Library,
-            Path.Combine("src", "McpServer.Repl.Core", "McpServer.Repl.Core.csproj"),
+            Path.Combine("src", "QBrainAi.Repl.Core", "QBrainAi.Repl.Core.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)),
         new(
-            "McpServer.Launcher",
+            "QBrainAi.Launcher",
             TrimTargetKind.Executable,
-            Path.Combine("src", "McpServer.Launcher", "McpServer.Launcher.csproj"),
+            Path.Combine("src", "QBrainAi.Launcher", "QBrainAi.Launcher.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)
             {
                 ["IL2026"] = 12,
             }),
         new(
-            "McpServer.McpAgent.SampleHost",
+            "QBrainAi.McpAgent.SampleHost",
             TrimTargetKind.Executable,
-            Path.Combine("src", "McpServer.McpAgent.SampleHost", "McpServer.McpAgent.SampleHost.csproj"),
+            Path.Combine("src", "QBrainAi.McpAgent.SampleHost", "QBrainAi.McpAgent.SampleHost.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)
             {
                 ["IL2104"] = 5,
             }),
         new(
-            "McpServer.QBAgent",
+            "QBrainAi.QBAgent",
             TrimTargetKind.Executable,
-            Path.Combine("src", "McpServer.QBAgent", "McpServer.QBAgent.csproj"),
+            Path.Combine("src", "QBrainAi.QBAgent", "QBrainAi.QBAgent.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)
             {
                 ["IL2026"] = 12,
                 ["IL2104"] = 5,
             }),
         new(
-            "McpServer.Repl.Host",
+            "QBrainAi.Repl.Host",
             TrimTargetKind.Executable,
-            Path.Combine("src", "McpServer.Repl.Host", "McpServer.Repl.Host.csproj"),
+            Path.Combine("src", "QBrainAi.Repl.Host", "QBrainAi.Repl.Host.csproj"),
             new Dictionary<string, int>(StringComparer.Ordinal)
             {
                 ["IL2026"] = 10,
@@ -164,51 +164,39 @@ public sealed partial class TrimAnalysisWarningInventoryTests
 
     private static async Task<ProcessResult> RunDotnetAsync(string[] arguments)
     {
-        var processStartInfo = new ProcessStartInfo("dotnet")
-        {
-            WorkingDirectory = FindRepositoryRoot(),
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
+        var result = await BoundedProcess.RunAsync(
+            BoundedProcess.Dotnet(FindRepositoryRoot(), arguments),
+            TimeSpan.FromMinutes(20),
+            TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        foreach (var argument in arguments)
-        {
-            processStartInfo.ArgumentList.Add(argument);
-        }
-
-        using var process = Process.Start(processStartInfo) ?? throw new InvalidOperationException("Failed to start dotnet.");
-        var stdoutTask = process.StandardOutput.ReadToEndAsync();
-        var stderrTask = process.StandardError.ReadToEndAsync();
-        using var timeout = new CancellationTokenSource(TimeSpan.FromMinutes(20));
-        try
-        {
-            await process.WaitForExitAsync(timeout.Token).ConfigureAwait(false);
-        }
-        catch (OperationCanceledException)
-        {
-            try
-            {
-                process.Kill(entireProcessTree: true);
-            }
-            catch (InvalidOperationException)
-            {
-            }
-
-            throw new TimeoutException($"dotnet timed out after 20 minutes: {string.Join(" ", arguments)}");
-        }
-
-        var output = string.Concat(await stdoutTask.ConfigureAwait(false), Environment.NewLine, await stderrTask.ConfigureAwait(false));
-        return new ProcessResult(process.ExitCode, output);
+        return new ProcessResult(result.ExitCode, string.Concat(result.Stdout, Environment.NewLine, result.Stderr));
     }
 
     /// <summary>
-    /// Best-effort artifact cleanup. Recursive <see cref="Directory.Delete(string, bool)"/> of a
-    /// trimmed self-contained publish tree can block testhost for tens of minutes under AV scan.
+    /// Best-effort artifact cleanup on every OS (TR-MCP-NUKE-010 AC-001, BUG-BUILD-009). On Windows a recursive
+    /// <see cref="Directory.Delete(string, bool)"/> of a trimmed self-contained publish tree can block testhost for
+    /// tens of minutes under AV scan, so the delete runs in a detached cmd.exe there; elsewhere it runs in place.
     /// </summary>
-    private static void TryDeleteArtifacts(string artifactsRoot)
+    internal static void TryDeleteArtifacts(string artifactsRoot)
     {
         if (!Directory.Exists(artifactsRoot))
         {
+            return;
+        }
+
+        if (!OperatingSystem.IsWindows())
+        {
+            try
+            {
+                Directory.Delete(artifactsRoot, recursive: true);
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+
             return;
         }
 
@@ -243,7 +231,7 @@ public sealed partial class TrimAnalysisWarningInventoryTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }
@@ -251,7 +239,7 @@ public sealed partial class TrimAnalysisWarningInventoryTests
             directory = directory.Parent;
         }
 
-        throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
+        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
     }
 
     [GeneratedRegex(@"warning (IL\d{4})", RegexOptions.CultureInvariant)]

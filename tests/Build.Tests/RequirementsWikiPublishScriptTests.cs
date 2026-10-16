@@ -128,11 +128,8 @@ public sealed class RequirementsWikiPublishScriptTests
             psi.ArgumentList.Add(argument);
         }
 
-        using var process = Process.Start(psi) ?? throw new InvalidOperationException("Failed to start pwsh.exe.");
-        var stdout = await process.StandardOutput.ReadToEndAsync().ConfigureAwait(true);
-        var stderr = await process.StandardError.ReadToEndAsync().ConfigureAwait(true);
-        await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        return new ProcessResult(process.ExitCode, stdout, stderr);
+        var result = await BoundedProcess.RunAsync(psi, TimeSpan.FromMinutes(5), TestContext.Current.CancellationToken).ConfigureAwait(true);
+        return new ProcessResult(result.ExitCode, result.Stdout, result.Stderr);
     }
 
     private static string FindRepositoryFile(params string[] segments)

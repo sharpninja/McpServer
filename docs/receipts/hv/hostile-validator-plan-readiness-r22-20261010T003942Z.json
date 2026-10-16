@@ -1,0 +1,142 @@
+{
+  "TimestampUtc": "2026-10-10T00:48:51Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex CLI",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "LiveProofPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T19-39-43-01a12340-5acf-76d0-994e-82990b60c258.jsonl",
+    "LiveSessionId": "01a12340-5acf-76d0-994e-82990b60c258",
+    "ProofFields": "session_meta cwd and latest turn_context model/effort"
+  },
+  "AddProfile": {
+    "SkillRead": true,
+    "NonSkillMarkdownFilesReadInFull": 19
+  },
+  "MarkerRead": {
+    "MainMarkerLinesRead": 397,
+    "ApiKeyAndAuthenticationOutputFiltered": true,
+    "MainAndWorktreeSignatureTrusted": true
+  },
+  "MemoryRead": {
+    "WorkflowMemoryListCalled": true,
+    "EffectiveMemoriesReadInFull": 13,
+    "Process007Read": true,
+    "Process008Read": true
+  },
+  "Scope": {
+    "PlanLines": 649,
+    "NonEmptyPlanLines": 529,
+    "TodoImplementationTasks": 30,
+    "HandoffLines": 170,
+    "PriorRounds": "r1-r21 reviewed",
+    "Round21Finding": "F-R21-01 narrow lookup loss repaired"
+  },
+  "Claims": [
+    {
+      "Claim": "P1",
+      "Status": "PASS",
+      "Evidence": "Whole 649-line plan and source anchors reviewed; no current-code falsehood found."
+    },
+    {
+      "Claim": "P2",
+      "Status": "PASS",
+      "Evidence": "Live 354 FR, 482 TR, 514 TEST; 121 cited base IDs; 67 new IDs with zero collision."
+    },
+    {
+      "Claim": "P3",
+      "Status": "FAIL",
+      "Evidence": "Copilot and classic Cline nonce formulas can violate locked D1; F-R22-02."
+    },
+    {
+      "Claim": "P4",
+      "Status": "PASS",
+      "Evidence": "All server, client, REPL, MCP, core, plugin and migration surfaces covered by phases."
+    },
+    {
+      "Claim": "P5",
+      "Status": "FAIL",
+      "Evidence": "Post-prune AliasRecord and equal-timestamp distinct-arrival designs unresolved; F-R22-01/02."
+    },
+    {
+      "Claim": "P6",
+      "Status": "PASS",
+      "Evidence": "Named commands, targets, gates, receipts and BDPv4 slice order checked; P0.1 prerequisites."
+    },
+    {
+      "Claim": "P7",
+      "Status": "FAIL",
+      "Evidence": "TR-008 named prune/restart case absent from TEST-008 and A8 RED; no equal-timestamp distinct-event RED."
+    },
+    {
+      "Claim": "P8",
+      "Status": "FAIL",
+      "Evidence": "Alias storage/return shape and D1/nonce formulas conflict; 30-task ordering otherwise aligned."
+    },
+    {
+      "Claim": "P9",
+      "Status": "PASS",
+      "Evidence": "TODO description exactly equals 529 non-empty plan lines, 30 tasks match, handoff status/counts/triage accurate."
+    },
+    {
+      "Claim": "P10",
+      "Status": "PASS",
+      "Evidence": "Ten named live triage IDs and grouped report verified; risks filed or scheduled."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 94,
+  "Confidence": 96,
+  "PassCount": 6,
+  "FailCount": 4,
+  "UnknownCount": 0,
+  "FailList": [
+    {
+      "Id": "F-R22-01",
+      "PlanLocation": "C2 119; FR-001-AC008 200; TR-008 AC-007 350; TEST-008 377; A8 RED 589; TODO task 18/technicalDetails",
+      "Defect": "Pruning delivery removes only stored acks yet getAlias promises AliasRecord.acks; repeated acknowledge undefined; test absent from TEST and A8 RED.",
+      "Evidence": "TR-008 lookup has pendingId/requestId/aliasedAtUtc only. QB outbox requires acks array. Named test is only in TR-008.",
+      "Fix": "Permanently retain accurate ack snapshot, atomically update before prune, define post-prune API semantics, and propagate RED to AC/TR/TEST/A8/TODO/handoff.",
+      "Classification": "implementer edit",
+      "OperatorDecisionNeeded": false
+    },
+    {
+      "Id": "F-R22-02",
+      "PlanLocation": "D1 29/78-79; Copilot 86; Cline 89; FR-001-AC003 195; P0.2 170; A3 579; A9 591",
+      "Defect": "Two distinct arrivals with same session/task ID, timestamp and prompt hash to same nonce and merge, violating D1.",
+      "Evidence": "Planned cp-/cl- nonce input fields identical; AC002 merges same nonce. D11 checks registrations only; tests omit equal-field distinct events.",
+      "Fix": "Lock durable per-arrival identity/replay or D6 unsupported; strengthen host rows, P0.2, AC003, TEST, A3/A9, matrix, TODO, handoff.",
+      "Classification": "implementer edit",
+      "OperatorDecisionNeeded": false
+    }
+  ],
+  "UnknownList": [],
+  "ImplementerFixes": [
+    "F-R22-01",
+    "F-R22-02"
+  ],
+  "OperatorDecisionFails": [],
+  "HeadSha": "cf7d6779de39af3bf5255c0e8de907b33a8e10f5",
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r22-20261010T003942Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r22-20261010T003942Z.json",
+    "docs/receipts/hv/20261010T003942Z-plan-readiness-r22.request.jsonl",
+    "docs/receipts/hv/20261010T003942Z-plan-readiness-r22.response.jsonl"
+  ],
+  "ReviewerSessionId": "Codex-20261009T032846Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T004155Z-plan-r22-hv",
+  "PersistenceProof": {
+    "Method": "client.SessionLog.QueryAsync via Codex plugin wrapper",
+    "SessionId": "Codex-20261009T032846Z-plugin-session",
+    "RequestId": "req-20261010T004155Z-plan-r22-hv",
+    "Status": "completed",
+    "FullMarkdownResponseEqualsReceipt": true,
+    "ResponseCharacters": 14143,
+    "ActionCount": 3,
+    "DialogCount": 1,
+    "UpdateTurnReceipt": "persisted",
+    "AppendActionsReceipt": "persisted",
+    "AppendDialogReceipt": "persisted",
+    "CompleteTurnReceipt": "persisted"
+  }
+}

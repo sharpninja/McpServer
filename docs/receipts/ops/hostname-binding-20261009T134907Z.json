@@ -1,0 +1,48 @@
+{
+  "timestampUtc": "20261009T134907Z",
+  "host": "LAB-OMARCHY",
+  "backupDir": "/etc/mcpserver/backup-20261009T134907Z",
+  "steps": {
+    "backup": [
+      {
+        "file": "appsettings.yaml",
+        "sha256": "8DFB89680DB5CF5ADEFF885F3B090224AAE17849DADDC8BBE684DD7DB1051E3C"
+      },
+      {
+        "file": "ethernet.conf",
+        "sha256": "2D38B80163C6950CE1ED795A0DE3C7A8C06CAB49D9EBFBF9F3E1C932869B63E3"
+      },
+      {
+        "file": "federation.conf",
+        "sha256": "6E10D8C81F25E92F62AEFE58C7553DD3DA609E045B1AB36C4982BD0BCD74EA23"
+      },
+      {
+        "file": "federation.env",
+        "sha256": "E70A4AAACF04BF1ECF091E1024021552BE8442A47B41D4BCCAAE848274E72C52"
+      },
+      {
+        "file": "mcpserver.env",
+        "sha256": "C31552C77EC40133D0F9F65A2AA8B470E2C44AF1E0A8B118319FCAEDE937E706"
+      }
+    ],
+    "database": {
+      "serverBefore": "10.42.0.214,1433",
+      "serverAfter": "PAYTON-OMARCHY,1433",
+      "mode": "0600 root:root"
+    },
+    "federation": {
+      "changes": [],
+      "keysWithUnmappedIpLiterals": [],
+      "keys": [
+        "Mcp__Federation__HubAccessToken",
+        "Mcp__Federation__EnrollmentToken",
+        "Mcp__Federation__Signing__SharedSecret"
+      ]
+    },
+    "systemd": {
+      "added": "/etc/systemd/system/mcpserver.service.d/binding.conf",
+      "removed": "/etc/systemd/system/mcpserver.service.d/ethernet.conf",
+      "execStart": "--urls http://0.0.0.0:7147"
+    }
+  }
+}

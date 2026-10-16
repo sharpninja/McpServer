@@ -1,0 +1,67 @@
+{
+  "Projection": {
+    "TraceKind": "Architecture rule execution, not implemented product code",
+    "Before": {
+      "ResponseContentSha256": "same-content-hash",
+      "ProjectedContentSha256": "same-content-hash",
+      "DocumentExists": false,
+      "GraphRagDocumentId": "doc-D",
+      "State": "Projected"
+    },
+    "AfterReconcile": {
+      "ProjectedContentSha256": "same-content-hash",
+      "GraphRagDocumentId": "doc-D",
+      "State": "Pending"
+    },
+    "NextPassSelected": true,
+    "HashEqualityGuardSkipsIngest": true,
+    "Expected": "Reingest the missing document",
+    "ActualSpecified": "Continue without ingest; the row is no longer Projected, so reconciliation does not reset it again",
+    "Locations": [
+      2851,
+      2853,
+      3690,
+      3713,
+      3714,
+      3740
+    ]
+  },
+  "Supersede": {
+    "TraceKind": "Architecture branch trace",
+    "Initial": "A superseded by B, committed",
+    "Later": "B superseded by C, committed",
+    "Retry": "Supersede A with replacement B",
+    "ReplacementNowValid": false,
+    "FirstApplicableBranch": "409 agent_context_supersede_invalid",
+    "UnreachableBranch": "200 unchanged when A already superseded by B",
+    "Locations": [
+      3515,
+      3516,
+      3532,
+      3533,
+      3535,
+      4557,
+      4561
+    ]
+  },
+  "Budget": {
+    "TraceKind": "Architecture arithmetic counterexample",
+    "TokenBudget": 1024,
+    "MandatoryItemTokenCount": 1024,
+    "Rule": "Mandatory tokens equal to budget build",
+    "AddedFindingUtf8Bytes": 256,
+    "BytesPerToken": 4,
+    "UnchargedFindingTokens": 64,
+    "RenderedEstimateAtLeast": 1088,
+    "Locations": [
+      2687,
+      2770,
+      2771,
+      3078,
+      3153,
+      3162,
+      3163
+    ],
+    "Note": "Even if item counts include their headers, a rendered finding is not an item and no charge or reserve is defined for it."
+  }
+}

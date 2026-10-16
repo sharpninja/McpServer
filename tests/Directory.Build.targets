@@ -8,7 +8,7 @@
 
   <!-- TR-MCP-QBOLLAMA-002: shared Ollama server lifecycle policy, linked into the unit project that
        tests it and the integration project whose fixture consumes it. -->
-  <ItemGroup Condition="'$(MSBuildProjectName)' == 'McpServer.Support.Mcp.Tests' Or '$(MSBuildProjectName)' == 'McpServer.Support.Mcp.IntegrationTests'">
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests'">
     <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\OllamaServerController.cs"
              Link="TestSupport.Shared\OllamaServerController.cs" />
   </ItemGroup>

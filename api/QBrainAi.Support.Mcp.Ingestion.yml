@@ -1,0 +1,146 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Ingestion
+  commentId: N:QBrainAi.Support.Mcp.Ingestion
+  id: QBrainAi.Support.Mcp.Ingestion
+  children:
+  - QBrainAi.Support.Mcp.Ingestion.ExternalDocsIngestor
+  - QBrainAi.Support.Mcp.Ingestion.GitHubIngestor
+  - QBrainAi.Support.Mcp.Ingestion.ISyncStatusStore
+  - QBrainAi.Support.Mcp.Ingestion.IngestionCoordinator
+  - QBrainAi.Support.Mcp.Ingestion.IngestionOptions
+  - QBrainAi.Support.Mcp.Ingestion.IssueIngestor
+  - QBrainAi.Support.Mcp.Ingestion.RepoIngestor
+  - QBrainAi.Support.Mcp.Ingestion.SessionLogFileWatcher
+  - QBrainAi.Support.Mcp.Ingestion.SessionLogImportResult
+  - QBrainAi.Support.Mcp.Ingestion.SessionLogIngestor
+  - QBrainAi.Support.Mcp.Ingestion.SyncRunResult
+  - QBrainAi.Support.Mcp.Ingestion.SyncStatusStore
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.Ingestion
+  nameWithType: QBrainAi.Support.Mcp.Ingestion
+  fullName: QBrainAi.Support.Mcp.Ingestion
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.Ingestion.ExternalDocsIngestor
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.ExternalDocsIngestor
+  parent: QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.Support.Mcp.Ingestion.ExternalDocsIngestor.html
+  name: ExternalDocsIngestor
+  nameWithType: ExternalDocsIngestor
+  fullName: QBrainAi.Support.Mcp.Ingestion.ExternalDocsIngestor
+- uid: QBrainAi.Support.Mcp.Ingestion.GitHubIngestor
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.GitHubIngestor
+  parent: QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.Support.Mcp.Ingestion.GitHubIngestor.html
+  name: GitHubIngestor
+  nameWithType: GitHubIngestor
+  fullName: QBrainAi.Support.Mcp.Ingestion.GitHubIngestor
+- uid: QBrainAi.Support.Mcp.Ingestion.IngestionCoordinator
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.IngestionCoordinator
+  parent: QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.Support.Mcp.Ingestion.IngestionCoordinator.html
+  name: IngestionCoordinator
+  nameWithType: IngestionCoordinator
+  fullName: QBrainAi.Support.Mcp.Ingestion.IngestionCoordinator
+- uid: QBrainAi.Support.Mcp.Ingestion.IngestionOptions
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.IngestionOptions
+  href: QBrainAi.Support.Mcp.Ingestion.IngestionOptions.html
+  name: IngestionOptions
+  nameWithType: IngestionOptions
+  fullName: QBrainAi.Support.Mcp.Ingestion.IngestionOptions
+- uid: QBrainAi.Support.Mcp.Ingestion.IssueIngestor
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.IssueIngestor
+  parent: QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.Support.Mcp.Ingestion.IssueIngestor.html
+  name: IssueIngestor
+  nameWithType: IssueIngestor
+  fullName: QBrainAi.Support.Mcp.Ingestion.IssueIngestor
+- uid: QBrainAi.Support.Mcp.Ingestion.ISyncStatusStore
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.ISyncStatusStore
+  parent: QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.Support.Mcp.Ingestion.ISyncStatusStore.html
+  name: ISyncStatusStore
+  nameWithType: ISyncStatusStore
+  fullName: QBrainAi.Support.Mcp.Ingestion.ISyncStatusStore
+- uid: QBrainAi.Support.Mcp.Ingestion.RepoIngestor
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.RepoIngestor
+  parent: QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.Support.Mcp.Ingestion.RepoIngestor.html
+  name: RepoIngestor
+  nameWithType: RepoIngestor
+  fullName: QBrainAi.Support.Mcp.Ingestion.RepoIngestor
+- uid: QBrainAi.Support.Mcp.Ingestion.SessionLogFileWatcher
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.SessionLogFileWatcher
+  href: QBrainAi.Support.Mcp.Ingestion.SessionLogFileWatcher.html
+  name: SessionLogFileWatcher
+  nameWithType: SessionLogFileWatcher
+  fullName: QBrainAi.Support.Mcp.Ingestion.SessionLogFileWatcher
+- uid: QBrainAi.Support.Mcp.Ingestion.SessionLogImportResult
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.SessionLogImportResult
+  href: QBrainAi.Support.Mcp.Ingestion.SessionLogImportResult.html
+  name: SessionLogImportResult
+  nameWithType: SessionLogImportResult
+  fullName: QBrainAi.Support.Mcp.Ingestion.SessionLogImportResult
+- uid: QBrainAi.Support.Mcp.Ingestion.SessionLogIngestor
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.SessionLogIngestor
+  parent: QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.Support.Mcp.Ingestion.SessionLogIngestor.html
+  name: SessionLogIngestor
+  nameWithType: SessionLogIngestor
+  fullName: QBrainAi.Support.Mcp.Ingestion.SessionLogIngestor
+- uid: QBrainAi.Support.Mcp.Ingestion.SyncRunResult
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.SyncRunResult
+  parent: QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.Support.Mcp.Ingestion.SyncRunResult.html
+  name: SyncRunResult
+  nameWithType: SyncRunResult
+  fullName: QBrainAi.Support.Mcp.Ingestion.SyncRunResult
+- uid: QBrainAi.Support.Mcp.Ingestion.SyncStatusStore
+  commentId: T:QBrainAi.Support.Mcp.Ingestion.SyncStatusStore
+  href: QBrainAi.Support.Mcp.Ingestion.SyncStatusStore.html
+  name: SyncStatusStore
+  nameWithType: SyncStatusStore
+  fullName: QBrainAi.Support.Mcp.Ingestion.SyncStatusStore
+- uid: QBrainAi.Support.Mcp.Ingestion
+  commentId: N:QBrainAi.Support.Mcp.Ingestion
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Ingestion
+  nameWithType: QBrainAi.Support.Mcp.Ingestion
+  fullName: QBrainAi.Support.Mcp.Ingestion
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Ingestion
+    name: Ingestion
+    href: QBrainAi.Support.Mcp.Ingestion.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Ingestion
+    name: Ingestion
+    href: QBrainAi.Support.Mcp.Ingestion.html

@@ -19,7 +19,8 @@ internal sealed record ServiceEnvironmentFile(string Path, bool Optional);
 /// <summary>TR-MCP-SERVICEUPDATE-001: updates an existing systemd unit with retained live-state recovery.</summary>
 internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, ServiceCommandResult> run)
 {
-    private const string AppHost = "McpServer.Support.Mcp";
+    private const string AppHost = "QBrainAi.Support.Mcp";
+    private const string LegacyAppHost = "McpServer.Support.Mcp";
     private const UnixFileMode PrivateDirectory = UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute;
     private const UnixFileMode PrivateFile = UnixFileMode.UserRead | UnixFileMode.UserWrite;
     private const string UnitProperties = "LoadState,Type,FragmentPath,DropInPaths,EnvironmentFiles,Environment,PassEnvironment,WorkingDirectory,ExecStart,MainPID,ActiveState,RootDirectory,RootImage,BindPaths,BindReadOnlyPaths,TemporaryFileSystem,PrivateTmp,MountImages,ExtensionImages,ExtensionDirectories";
@@ -112,6 +113,7 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
             EnsureNoLinks(Path.Combine(install, "config", "brain-slots", "quad-brain-slot-assignments.yaml"));
             copyRuntimeConfig();
             Restore(archive, hash, preserved, install);
+            RetargetLegacyExecStart(unit, install);
             Command("systemctl", "daemon-reload");
             Command("systemctl", "start", options.ServiceName);
             var pid = WaitForServiceProcess(options.ServiceName, Path.Combine(install, AppHost));
@@ -172,9 +174,47 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
             throw new InvalidOperationException("Service WorkingDirectory must match the selected install path.");
         var start = Value(unit, "ExecStart");
         var executable = Regex.Match(start, @"^\{ path=(.*?) ; argv\[\]=(.*?) ; ignore_errors=", RegexOptions.CultureInvariant);
-        if (!executable.Success || start.Count(c => c == '{') != 1 || Decode(executable.Groups[1].Value) != Path.Combine(install, AppHost))
+        if (!executable.Success || start.Count(c => c == '{') != 1 || !IsAcceptedAppHost(install, Decode(executable.Groups[1].Value)))
             throw new InvalidOperationException("Service ExecStart must directly run the selected application host.");
         ValidateArguments(ParseWords(executable.Groups[2].Value));
+    }
+
+    /// <summary>Accepts the current host and the 1.x McpServer host under the selected install directory.</summary>
+    private static bool IsAcceptedAppHost(string install, string executable)
+        => string.Equals(executable, Path.Combine(install, AppHost), StringComparison.Ordinal)
+           || string.Equals(executable, Path.Combine(install, LegacyAppHost), StringComparison.Ordinal);
+
+    /// <summary>
+    /// TR-MCP-QBRAIN-006: After files are replaced, a preserved unit or drop-in that still names McpServer.Support.Mcp
+    /// is retargeted at QBrainAi.Support.Mcp before daemon-reload. The effective ExecStart may live in a drop-in.
+    /// </summary>
+    private void RetargetLegacyExecStart(IReadOnlyDictionary<string, string> unit, string install)
+    {
+        var start = Value(unit, "ExecStart");
+        var executable = Regex.Match(start, @"^\{ path=(.*?) ; argv\[\]=", RegexOptions.CultureInvariant);
+        if (!executable.Success)
+            return;
+
+        var legacyPath = Path.Combine(install, LegacyAppHost);
+        if (!string.Equals(Decode(executable.Groups[1].Value), legacyPath, StringComparison.Ordinal))
+            return;
+
+        var candidates = new List<string> { RequiredUnitFile(Value(unit, "FragmentPath")) };
+        candidates.AddRange(ParseWords(Value(unit, "DropInPaths")).Select(RequiredUnitFile));
+        var replaced = false;
+        foreach (var path in candidates.Distinct(StringComparer.Ordinal))
+        {
+            var text = File.ReadAllText(path);
+            var updated = text.Replace(LegacyAppHost, AppHost, StringComparison.Ordinal);
+            if (updated == text)
+                continue;
+
+            File.WriteAllText(path, updated);
+            replaced = true;
+        }
+
+        if (!replaced)
+            throw new InvalidOperationException("Legacy ExecStart could not be retargeted to the deployed application host.");
     }
 
     /// <summary>Fails closed when configuration precedence could point preservation at the wrong live data.</summary>

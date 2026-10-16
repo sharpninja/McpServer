@@ -2,12 +2,12 @@
 
 This document provides:
 
-1. exact C# models for `McpServer`
+1. exact C# models for `QBrainAi`
 2. exact MCP tool contracts
 3. exact plugin updates
 4. a Codex-ready implementation prompt
 
-It is designed to align the MCP Server and Codex plugin with the Byrd Development Process, where planning is rich, TDD is mandatory, implementation is bounded by iteration phase, and validation is explicit and traceable.
+It is designed to align the QBrain.AI and Codex plugin with the Byrd Development Process, where planning is rich, TDD is mandatory, implementation is bounded by iteration phase, and validation is explicit and traceable.
 
 ---
 
@@ -31,7 +31,7 @@ The implementation must satisfy these goals:
 
 This implementation assumes:
 
-- the MCP Server is the trusted persistence and coordination layer
+- the QBrain.AI is the trusted persistence and coordination layer
 - planning produces requirements, testing requirements, and iterative phases before implementation
 - unit tests must be defined before implementation begins
 - validation must prove acceptance criteria and preserve prior iterations
@@ -65,7 +65,7 @@ Recommended aggregates:
 ## 2.2 C# Enums
 
 ````csharp
-namespace McpServer.Domain.Todos;
+namespace QBrainAi.Domain.Todos;
 
 public enum TodoStatus
 {
@@ -118,7 +118,7 @@ public enum TodoCheckpointKind
 ## 2.3 Value Objects
 
 ````csharp
-namespace McpServer.Domain.Todos;
+namespace QBrainAi.Domain.Todos;
 
 public sealed record AcceptanceCriterion(
     string Id,
@@ -181,7 +181,7 @@ public sealed record TodoExecutionPointers(
 ## 2.4 `IterationPhase` Entity
 
 ````csharp
-namespace McpServer.Domain.Todos;
+namespace QBrainAi.Domain.Todos;
 
 public sealed class IterationPhase
 {
@@ -210,7 +210,7 @@ public sealed class IterationPhase
 ## 2.5 `TodoCheckpoint` Entity
 
 ````csharp
-namespace McpServer.Domain.Todos;
+namespace QBrainAi.Domain.Todos;
 
 public sealed class TodoCheckpoint
 {
@@ -236,7 +236,7 @@ public sealed class TodoCheckpoint
 ## 2.6 `TodoItem` Entity
 
 ````csharp
-namespace McpServer.Domain.Todos;
+namespace QBrainAi.Domain.Todos;
 
 public sealed class TodoItem
 {
@@ -307,7 +307,7 @@ public sealed class TodoItem
 Use this if you want first-class plan persistence instead of embedding plan text only in session log.
 
 ````csharp
-namespace McpServer.Domain.Planning;
+namespace QBrainAi.Domain.Planning;
 
 public sealed class PlanArtifact
 {
@@ -335,7 +335,7 @@ These are the most important surfaces for Codex.
 ### `ActiveTodoContext`
 
 ````csharp
-namespace McpServer.Application.Todos.Models;
+namespace QBrainAi.Application.Todos.Models;
 
 public sealed record ActiveTodoContext(
     string TodoId,
@@ -362,7 +362,7 @@ public sealed record ActiveTodoContext(
 ### `TodoDeltaContext`
 
 ````csharp
-namespace McpServer.Application.Todos.Models;
+namespace QBrainAi.Application.Todos.Models;
 
 public sealed record TodoDeltaContext(
     string TodoId,
@@ -380,7 +380,7 @@ public sealed record TodoDeltaContext(
 ## 3. Repository / Persistence Interfaces
 
 ````csharp
-namespace McpServer.Domain.Todos;
+namespace QBrainAi.Domain.Todos;
 
 public interface ITodoRepository
 {
@@ -415,7 +415,7 @@ public interface ITodoCheckpointRepository
 ## 4.1 Planning Service
 
 ````csharp
-namespace McpServer.Application.Planning;
+namespace QBrainAi.Application.Planning;
 
 public interface IPlanDecompositionService
 {
@@ -447,7 +447,7 @@ public sealed record PlanToTodoResult(
 ## 4.2 TODO Context Hydration Service
 
 ````csharp
-namespace McpServer.Application.Todos;
+namespace QBrainAi.Application.Todos;
 
 public interface ITodoContextHydrationService
 {
@@ -469,7 +469,7 @@ public interface ITodoContextHydrationService
 ## 4.3 TODO Progression Rules Service
 
 ````csharp
-namespace McpServer.Application.Todos;
+namespace QBrainAi.Application.Todos;
 
 public interface ITodoProgressionService
 {
@@ -581,7 +581,7 @@ Decompose an approved plan into executable TODO items inside an iteration phase.
       ],
       "requirementIds": ["REQ-101"],
       "relevantFiles": [
-        "src/McpServer.Domain/Todos/TodoItem.cs"
+        "src/QBrainAi.Domain/Todos/TodoItem.cs"
       ],
       "dependsOnTodoIds": []
     }
@@ -662,8 +662,8 @@ Hydrate a single bounded working set for Codex.
     "Earlier design decision: TODOs are the bounded execution unit."
   ],
   "relevantFiles": [
-    "src/McpServer.Domain/Todos/TodoItem.cs",
-    "src/McpServer.Application/Todos/TodoProgressionService.cs"
+    "src/QBrainAi.Domain/Todos/TodoItem.cs",
+    "src/QBrainAi.Application/Todos/TodoProgressionService.cs"
   ],
   "artifactIds": [],
   "acceptanceCriteria": [
@@ -749,10 +749,10 @@ Store test files and commands before implementation begins.
   "unitTestsDefined": true,
   "integrationTestsDefined": false,
   "testFilePaths": [
-    "tests/McpServer.Application.Tests/Todos/TodoProgressionServiceTests.cs"
+    "tests/QBrainAi.Application.Tests/Todos/TodoProgressionServiceTests.cs"
   ],
   "testCommands": [
-    "dotnet test tests/McpServer.Application.Tests"
+    "dotnet test tests/QBrainAi.Application.Tests"
   ]
 }
 ````
@@ -1007,9 +1007,9 @@ Create:
 Contents:
 
 ````md
-# McpServer Codex Usage
+# QBrainAi Codex Usage
 
-Use the MCP Server as the default source of task continuity and execution state.
+Use the QBrain.AI as the default source of task continuity and execution state.
 
 Follow the Byrd Development Process:
 
@@ -1045,7 +1045,7 @@ Contents:
 ````md
 # Workflow Skill
 
-Use this skill for multi-step development work in repositories that use McpServer.
+Use this skill for multi-step development work in repositories that use QBrainAi.
 
 ## Goal
 
@@ -1150,7 +1150,7 @@ Do not use TODOs as loose reminders only.
 Replace the reminder text with a workflow-first message:
 
 ````text
-A session turn is active. Use McpServer as the default source of task continuity and execution state:
+A session turn is active. Use QBrainAi as the default source of task continuity and execution state:
 1. Prefer active TODO and TODO delta context over asking the user for context.
 2. For multi-step work, persist approved plans as TODO items in an iteration phase.
 3. Do not implement before tests are defined.
@@ -1249,7 +1249,7 @@ Implement a TODO-centered execution model aligned to the Byrd Development Proces
 
 Context:
 - Planning must remain rich, but execution must not depend on carrying the full plan in chat context.
-- The MCP Server is the trusted persistence and coordination layer.
+- The QBrain.AI is the trusted persistence and coordination layer.
 - TODOs should become the primary bounded execution unit.
 - Requirements remain the source of truth for why work exists and what completion means.
 - Session Log Turns provide historical evidence and recent execution context.
@@ -1346,7 +1346,7 @@ Example only; adapt to repo conventions.
 
 ````text
 src/
-  McpServer.Domain/
+  QBrainAi.Domain/
     Todos/
       TodoItem.cs
       TodoCheckpoint.cs
@@ -1367,7 +1367,7 @@ src/
       ITodoCheckpointRepository.cs
       IIterationPhaseRepository.cs
 
-  McpServer.Application/
+  QBrainAi.Application/
     Todos/
       ITodoContextHydrationService.cs
       ITodoProgressionService.cs
@@ -1383,7 +1383,7 @@ src/
         PlanStepInput.cs
         PlanToTodoResult.cs
 
-  McpServer.Mcp/
+  QBrainAi.Mcp/
     Tools/
       Todos/
         CreateIterationPhaseTool.cs
@@ -1405,7 +1405,7 @@ src/
 
 ## 12. Final Notes
 
-This design preserves planning fidelity by moving the full plan into persistent structured state and hydrating only the current execution slice for Codex. It aligns the MCP Server and plugin with the Byrd Development Process by making TODOs phase-aware, requirement-linked, TDD-gated, and validation-driven instead of acting as loose reminders.
+This design preserves planning fidelity by moving the full plan into persistent structured state and hydrating only the current execution slice for Codex. It aligns the QBrain.AI and plugin with the Byrd Development Process by making TODOs phase-aware, requirement-linked, TDD-gated, and validation-driven instead of acting as loose reminders.
 
 Use the TODO graph as the execution memory.
 Use requirements as the source of truth.

@@ -1,0 +1,67 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.00]     NukeBuild.Tests.BoundedProcessTests.Dotnet_AppendsDisableBuildServers [FAIL]
+  Failed NukeBuild.Tests.BoundedProcessTests.Dotnet_AppendsDisableBuildServers [33 ms]
+  Error Message:
+   Assert.Equal() Failure: Collections differ
+                                                                        ↓ (pos 4)
+Expected: string[]           ["build", "project.csproj", "-c", "Debug", "--disable-build-servers"]
+Actual:   Collection<string> ["build", "project.csproj", "-c", "Debug"]
+  Stack Trace:
+     at NukeBuild.Tests.BoundedProcessTests.Dotnet_AppendsDisableBuildServers() in tests/Build.Tests/BoundedProcessTests.cs:line 125
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:31.67]     NukeBuild.Tests.BoundedProcessTests.RunAsync_DescendantHoldsOutputAfterChildExits_FailsWithinDrainPeriod [FAIL]
+  Failed NukeBuild.Tests.BoundedProcessTests.RunAsync_DescendantHoldsOutputAfterChildExits_FailsWithinDrainPeriod [30 s]
+  Error Message:
+   Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.IO.IOException)
+  Stack Trace:
+     at NukeBuild.Tests.BoundedProcessTests.RunAsync_DescendantHoldsOutputAfterChildExits_FailsWithinDrainPeriod() in tests/Build.Tests/BoundedProcessTests.cs:line 29
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:32.07]     NukeBuild.Tests.BoundedProcessTests.RunAsync_ChildRunsPastExitTimeout_KillsTreeAndThrowsTimeout [FAIL]
+  Failed NukeBuild.Tests.BoundedProcessTests.RunAsync_ChildRunsPastExitTimeout_KillsTreeAndThrowsTimeout [1 m]
+  Error Message:
+   Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.TimeoutException)
+  Stack Trace:
+     at NukeBuild.Tests.BoundedProcessTests.RunAsync_ChildRunsPastExitTimeout_KillsTreeAndThrowsTimeout() in tests/Build.Tests/BoundedProcessTests.cs:line 55
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:43.76]     NukeBuild.Tests.BoundedProcessTests.RunAsync_CallerCancels_KillsTreeAndStopsWaiting [FAIL]
+  Failed NukeBuild.Tests.BoundedProcessTests.RunAsync_CallerCancels_KillsTreeAndStopsWaiting [11 s]
+  Error Message:
+   The child outlived the cancellation.
+  Stack Trace:
+     at NukeBuild.Tests.BoundedProcessTests.RunAsync_CallerCancels_KillsTreeAndStopsWaiting() in tests/Build.Tests/BoundedProcessTests.cs:line 86
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:43.77]     NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess [FAIL]
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+  Failed NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess [9 ms]
+  Error Message:
+   Read child output and wait for children only through BoundedProcess (TR-MCP-NUKE-009 AC-006):
+RequirementsWikiPublishScriptTests.cs:132: var stdout = await process.StandardOutput.ReadToEndAsync().ConfigureAwait(true);
+RequirementsWikiPublishScriptTests.cs:133: var stderr = await process.StandardError.ReadToEndAsync().ConfigureAwait(true);
+RequirementsWikiPublishScriptTests.cs:134: await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+MigrationAssemblyObsoleteWarningTests.cs:155: var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+MigrationAssemblyObsoleteWarningTests.cs:156: var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+MigrationAssemblyObsoleteWarningTests.cs:157: await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+ServiceUpdateTests.cs:512: var stdout = process.StandardOutput.ReadToEndAsync(); var stderr = process.StandardError.ReadToEndAsync();
+ServiceUpdateTests.cs:513: Assert.True(process.WaitForExit(30000));
+ServiceUpdateTests.cs:652: var stdout = process.StandardOutput.ReadToEndAsync(); var stderr = process.StandardError.ReadToEndAsync();
+ServiceUpdateTests.cs:653: Assert.True(process.WaitForExit(30000));
+TrimAnalysisWarningInventoryTests.cs:180: var stdoutTask = process.StandardOutput.ReadToEndAsync();
+TrimAnalysisWarningInventoryTests.cs:181: var stderrTask = process.StandardError.ReadToEndAsync();
+TrimAnalysisWarningInventoryTests.cs:185: await process.WaitForExitAsync(timeout.Token).ConfigureAwait(false);
+YamlObjectMutationTests.cs:130: var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+YamlObjectMutationTests.cs:131: var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+YamlObjectMutationTests.cs:132: await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+  Stack Trace:
+     at NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess() in tests/Build.Tests/BoundedProcessTests.cs:line 147
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     5, Passed:     1, Skipped:     0, Total:     6, Duration: 1 m 43 s - Build.Tests.dll (net10.0)

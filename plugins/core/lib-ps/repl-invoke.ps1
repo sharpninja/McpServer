@@ -48,7 +48,7 @@ $script:ReplInvokePluginRoot = if ($env:MCP_PLUGIN_ROOT) {
     Split-Path -Parent $PSScriptRoot
 }
 
-# Agent for per-agent REPL cache and isolation. Must be passed to every mcpserver-repl call.
+# Agent for per-agent REPL cache and isolation. Must be passed to every qbrain-ai-repl call.
 # Keep this precedence aligned with the shell resolve-cache-dir counterpart and MarkerFileClientOptionsResolver.ResolveAgentKey.
 $script:AgentName = if ($env:MCP_AGENT_NAME) { $env:MCP_AGENT_NAME }
                    elseif ($env:PLUGIN_AGENT_NAME) { $env:PLUGIN_AGENT_NAME }
@@ -807,7 +807,10 @@ function Invoke-ReplRawCore {
         return (New-McpPluginReplResult -Success $false -Output '' -Error 'MCP_UNTRUSTED: marker refresh failed before REPL request')
     }
 
-    $replCommand = Get-Command mcpserver-repl -ErrorAction SilentlyContinue
+    $replCommand = Get-Command qbrain-ai-repl -ErrorAction SilentlyContinue
+    if (-not $replCommand) {
+        $replCommand = Get-Command mcpserver-repl -ErrorAction SilentlyContinue
+    }
     $replExe = $null
     if ($env:MCP_REPL_EXECUTABLE -and (Test-Path -LiteralPath $env:MCP_REPL_EXECUTABLE)) {
         $replExe = $env:MCP_REPL_EXECUTABLE
@@ -815,7 +818,7 @@ function Invoke-ReplRawCore {
         $replExe = [string]$replCommand.Source
     }
     if ([string]::IsNullOrWhiteSpace($replExe)) {
-        return (New-McpPluginReplResult -Success $false -Output '' -Error 'mcpserver-repl not found on PATH')
+        return (New-McpPluginReplResult -Success $false -Output '' -Error 'qbrain-ai-repl or mcpserver-repl not found on PATH')
     }
 
     $requestId = "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$((Get-Random -Maximum 0xFFFF).ToString('x4'))"
@@ -866,7 +869,7 @@ function Invoke-ReplRawCore {
         $psi.UseShellExecute = $false
         $psi.CreateNoWindow = $true
         Set-ReplProcessWorkspace -StartInfo $psi
-        # mcpserver-repl writes UTF-8 (with BOM). Without explicit encoding,
+        # qbrain-ai-repl writes UTF-8 (with BOM). Without explicit encoding,
         # PowerShell decodes as cp437 and BOM bytes (EF BB BF) become box-
         # drawing glyphs that break the '^type: error' regex anchor.
         $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
@@ -889,7 +892,7 @@ function Invoke-ReplRawCore {
             $copyStream = $null
             $confirmed = Stop-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -TimeoutMs $timeoutMs
             Remove-Item $envFile -ErrorAction SilentlyContinue
-            $timeoutError = "mcpserver-repl timed out after ${timeout}s"
+            $timeoutError = "qbrain-ai-repl timed out after ${timeout}s"
             if (-not $confirmed) { $timeoutError = "$timeoutError; child termination was unconfirmed" }
             return (New-McpPluginReplResult -Success $false -Output '' -Error $timeoutError)
         }
@@ -901,7 +904,7 @@ function Invoke-ReplRawCore {
 
         if (-not (Wait-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -DeadlineMs $workDeadlineMs)) {
             $confirmed = Stop-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -TimeoutMs $timeoutMs
-            $timeoutError = "mcpserver-repl timed out after ${timeout}s"
+            $timeoutError = "qbrain-ai-repl timed out after ${timeout}s"
             if (-not $confirmed) { $timeoutError = "$timeoutError; child termination was unconfirmed" }
             return (New-McpPluginReplResult -Success $false -Output '' -Error $timeoutError)
         }
@@ -915,7 +918,7 @@ function Invoke-ReplRawCore {
             $null = [string]$stderrTask.Result
         }
 
-        # mcpserver-repl writes a UTF-8 BOM before the YAML doc and may
+        # qbrain-ai-repl writes a UTF-8 BOM before the YAML doc and may
         # interleave logger 'info:' lines on stdout — strip BOM and ignore
         # leading log noise so the regex anchor matches the real header.
         $output = $output -replace "[\uFEFF]", ''

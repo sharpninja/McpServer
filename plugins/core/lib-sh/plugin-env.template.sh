@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# plugin-env.template.sh - canonical host-knob surface for the McpServer
+# plugin-env.template.sh - canonical host-knob surface for the QBrainAi
 # plugin core (Phase 2, plugins/core). Each plugin repo ships lib/plugin-env.sh
 # generated from this template (set MCP_PLUGIN_HOST before sourcing, or copy
 # the matching case branch). Core libraries read ONLY the neutral names
@@ -64,11 +64,11 @@ _plugin_env_first_dir() {
 }
 
 # Reminder body shared by the Claude-family + copilot + grok hosts.
-_PLUGIN_ENV_REMINDER_CLAUDE='session log turn __TURN_REQUEST_ID__ is now active. __INTERNAL_TODO_REMINDER__ The stop-gate hook will auto-close the turn on finalize. PostToolUse/Write|Edit hooks auto-log actions. If you want richer action metadata, POST /mcpserver/sessionlog directly with the workspace API key from AGENTS-README-FIRST.yaml.'
+_PLUGIN_ENV_REMINDER_CLAUDE='session log turn __TURN_REQUEST_ID__ is now active. __INTERNAL_TODO_REMINDER__ The stop-gate hook will auto-close the turn on finalize. PostToolUse/Write|Edit hooks auto-log actions. If you want richer action metadata, POST /qbrainai/sessionlog directly with the workspace API key from AGENTS-README-FIRST.yaml.'
 
 _PLUGIN_ENV_REMINDER_COWORK='session log turn __TURN_REQUEST_ID__ is now active. Use the installed mcpserver connector/skills for MCP work. __INTERNAL_TODO_REMINDER__ The stop-gate hook will auto-close the turn when hooks are available; if MCP is unavailable, preserve local handoff/failsafe files for later import.'
 
-_PLUGIN_ENV_REMINDER_CODEX='A session log turn is active. Use McpServer as the default source of task continuity:
+_PLUGIN_ENV_REMINDER_CODEX='A session log turn is active. Use QBrainAi as the default source of task continuity:
 1. Prefer session/task state and recent checkpoints over asking the user for context.
 2. __INTERNAL_TODO_REMINDER__
 3. For attached Android validation, use adb_step for screenshot -> inspect -> act -> screenshot loops.

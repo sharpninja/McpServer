@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Sets up a Keycloak realm for McpServer with OIDC clients and GitHub Identity Provider.
+    Sets up a Keycloak realm for QBrainAi with OIDC clients and GitHub Identity Provider.
 
 .DESCRIPTION
     Creates the 'mcpserver' realm in Keycloak with:
@@ -28,8 +28,8 @@
 .PARAMETER GitHubClientSecret
     GitHub OAuth App Client Secret. Required if GitHubClientId is provided.
 
-.PARAMETER McpServerUrl
-    The MCP Server base URL for redirect URIs. Default: http://localhost:7147
+.PARAMETER QBrainAiUrl
+    The QBrain.AI base URL for redirect URIs. Default: http://localhost:7147
 
 .EXAMPLE
     ./Setup-McpKeycloak.ps1
@@ -44,7 +44,7 @@ param(
     [string]$RealmName = "mcpserver",
     [string]$GitHubClientId = "",
     [string]$GitHubClientSecret = "",
-    [string]$McpServerUrl = "http://localhost:7147"
+    [string]$QBrainAiUrl = "http://localhost:7147"
 )
 
 $ErrorActionPreference = "Stop"
@@ -93,7 +93,7 @@ function Invoke-KeycloakApi {
     }
 }
 
-Write-Host "`n🔐 McpServer Keycloak Realm Setup" -ForegroundColor Magenta
+Write-Host "`n🔐 QBrainAi Keycloak Realm Setup" -ForegroundColor Magenta
 Write-Host "   Keycloak: $KeycloakUrl" -ForegroundColor Gray
 Write-Host "   Realm:    $RealmName" -ForegroundColor Gray
 Write-Host ""
@@ -108,8 +108,8 @@ Write-Info "Creating realm '$RealmName'..."
 $realm = @{
     realm                    = $RealmName
     enabled                  = $true
-    displayName              = "MCP Server"
-    displayNameHtml          = "<h3>MCP Server</h3>"
+    displayName              = "QBrain.AI"
+    displayNameHtml          = "<h3>QBrain.AI</h3>"
     registrationAllowed      = $false
     loginWithEmailAllowed    = $true
     duplicateEmailsAllowed   = $false
@@ -139,7 +139,7 @@ Write-Step "Realm '$RealmName' ready"
 Write-Info "Creating realm roles..."
 $roles = @("admin", "agent-manager", "viewer")
 foreach ($role in $roles) {
-    $roleBody = @{ name = $role; description = "McpServer $role role" }
+    $roleBody = @{ name = $role; description = "QBrainAi $role role" }
     Invoke-KeycloakApi -Method Post -Path "/admin/realms/$RealmName/roles" -Body $roleBody -Token $token | Out-Null
 }
 Write-Step "Roles created: $($roles -join ', ')"
@@ -148,8 +148,8 @@ Write-Step "Roles created: $($roles -join ', ')"
 Write-Info "Creating API client 'mcp-server-api'..."
 $apiClient = @{
     clientId                  = "mcp-server-api"
-    name                      = "MCP Server API"
-    description               = "Confidential client for MCP Server JWT Bearer validation"
+    name                      = "QBrain.AI API"
+    description               = "Confidential client for QBrain.AI JWT Bearer validation"
     enabled                   = $true
     protocol                  = "openid-connect"
     publicClient              = $false
@@ -181,8 +181,8 @@ $directorClient = @{
     serviceAccountsEnabled    = $false
     standardFlowEnabled       = $true
     directAccessGrantsEnabled = $false
-    redirectUris              = @("http://localhost:*", "$McpServerUrl/*")
-    webOrigins                = @("http://localhost:*", $McpServerUrl)
+    redirectUris              = @("http://localhost:*", "$QBrainAiUrl/*")
+    webOrigins                = @("http://localhost:*", $QBrainAiUrl)
     attributes                = @{
         "oauth2.device.authorization.grant.enabled" = "true"
         "oauth2.device.polling.interval"            = "5"

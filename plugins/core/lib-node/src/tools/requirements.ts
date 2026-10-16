@@ -1027,7 +1027,7 @@ async function generateDocumentHttpFallback(
   if (typeof fetchFn !== 'function' || !apiKey || !workspacePath || !baseUrl) return null;
 
   const docType = typedDocType(args.docType);
-  const url = `${baseUrl.replace(/\/$/, '')}/mcpserver/requirements/generate?doc=${encodeURIComponent(
+  const url = `${baseUrl.replace(/\/$/, '')}/qbrainai/requirements/generate?doc=${encodeURIComponent(
     docType,
   )}&format=${encodeURIComponent(format)}`;
 

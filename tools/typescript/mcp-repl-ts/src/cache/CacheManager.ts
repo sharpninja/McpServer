@@ -21,7 +21,7 @@ export interface FlushResult {
 
 /**
  * Returns Base64URL encoding of workspacePath, matching V4CacheManager.GetScopedCachePath
- * in @sharpninja/mcpserver-agent-core (TR-MCP-AGENT-PARITY-013).
+ * in @qbrainai/qbrain-ai-agent-core (TR-MCP-AGENT-PARITY-013).
  */
 function getWorkspaceKeyV4(workspacePath: string): string {
   return Buffer.from(workspacePath)

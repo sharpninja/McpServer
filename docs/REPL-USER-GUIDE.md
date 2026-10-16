@@ -18,7 +18,7 @@ REPL TODO, session-log, requirements, and memory mutations persist without keyse
 .\scripts\Install-ReplTool.ps1
 
 # Or install manually
-dotnet tool install --global SharpNinja.McpServer.Repl --add-source ./local-packages
+dotnet tool install --global QBrainAI.Repl --add-source ./local-packages
 ```
 
 ### Update Existing Installation
@@ -27,7 +27,7 @@ dotnet tool install --global SharpNinja.McpServer.Repl --add-source ./local-pack
 .\scripts\Install-ReplTool.ps1 -Update
 
 # Or manually
-dotnet tool update --global SharpNinja.McpServer.Repl --add-source ./local-packages
+dotnet tool update --global QBrainAI.Repl --add-source ./local-packages
 ```
 
 ### Uninstall
@@ -36,13 +36,13 @@ dotnet tool update --global SharpNinja.McpServer.Repl --add-source ./local-packa
 .\scripts\Install-ReplTool.ps1 -Uninstall
 
 # Or manually
-dotnet tool uninstall --global SharpNinja.McpServer.Repl
+dotnet tool uninstall --global QBrainAI.Repl
 ```
 
 ### Verify Installation
 
 ```bash
-mcpserver-repl --version
+qbrain-ai-repl --version
 ```
 
 ## Usage Modes
@@ -52,7 +52,7 @@ mcpserver-repl --version
 Interactive mode provides a guided wizard interface with menus and prompts:
 
 ```bash
-mcpserver-repl --interactive
+qbrain-ai-repl --interactive
 ```
 
 #### Interactive Features
@@ -68,10 +68,10 @@ mcpserver-repl --interactive
 Agent STDIO mode implements the MCP protocol over standard input/output for programmatic integration:
 
 ```bash
-mcpserver-repl --agent-stdio
+qbrain-ai-repl --agent-stdio
 ```
 
-When a workspace marker declares `agent_plugins.policy: required`, agents should normally use their required plugin wrapper instead of invoking `mcpserver-repl --agent-stdio` directly. Direct REPL use is for plugin implementation, plugin diagnostics, and fallback investigation after plugin verification fails.
+When a workspace marker declares `agent_plugins.policy: required`, agents should normally use their required plugin wrapper instead of invoking `qbrain-ai-repl --agent-stdio` directly. Direct REPL use is for plugin implementation, plugin diagnostics, and fallback investigation after plugin verification fails.
 
 #### STDIO Features
 
@@ -89,7 +89,7 @@ Set the MCP server URL via environment variable (defaults to `http://localhost:7
 
 ```powershell
 $env:MCP_SERVER_URL = "http://localhost:7147"
-mcpserver-repl --interactive
+qbrain-ai-repl --interactive
 ```
 
 ### Workspace Path
@@ -271,7 +271,7 @@ payload:
 
 ### workflow.memory.*
 
-Durable agent memories for the active workspace. Prefer these methods over raw `/mcpserver/memory` when the plugin or REPL is available. See `docs/context/memory.md`.
+Durable agent memories for the active workspace. Prefer these methods over raw `/qbrainai/memory` when the plugin or REPL is available. See `docs/context/memory.md`.
 
 **Common Methods:**
 - `workflow.memory.list` — Effective / Global / Workspace list
@@ -394,7 +394,7 @@ payload:
 
 ### client.*
 
-Generic passthrough to all `McpServerClient` sub-clients. Enables dynamic invocation of any server API without compile-time knowledge.
+Generic passthrough to all `QBrainAiClient` sub-clients. Enables dynamic invocation of any server API without compile-time knowledge.
 
 **Supported Sub-Clients:**
 - `client.context.*` — Context search and pack operations

@@ -8,7 +8,7 @@ Fully implemented production `SessionLogWorkflow` for iteration 2 with real `Ses
 
 ### Core Components
 
-#### 1. **SessionLogWorkflow** (`src/McpServer.Repl.Core/SessionLogWorkflow.cs`)
+#### 1. **SessionLogWorkflow** (`src/QBrainAi.Repl.Core/SessionLogWorkflow.cs`)
 - **Thread-safe state management**: Uses `SemaphoreSlim` for concurrent access protection
 - **Real SessionLogClient operations**: Maps to `SubmitAsync`, `AppendDialogAsync`, and `QueryAsync`
 - **Turn lifecycle enforcement**: Implements state machine (in_progress → completed/failed)
@@ -34,7 +34,7 @@ Fully implemented production `SessionLogWorkflow` for iteration 2 with real `Ses
   - `QueryAsync`: Query session log history
   - `AppendDialogAsync`: Append dialog items to turn
 
-#### 5. **SessionLogModels.cs** (`src/McpServer.Repl.Core/SessionLogModels.cs`)
+#### 5. **SessionLogModels.cs** (`src/QBrainAi.Repl.Core/SessionLogModels.cs`)
 - **DialogItem**: Concrete implementation of `IDialogItem`
 - **SessionAction**: Concrete implementation of `ISessionAction`
 - **SessionLogStateSnapshot**: Concrete implementation of `ISessionLogState` for snapshots
@@ -42,7 +42,7 @@ Fully implemented production `SessionLogWorkflow` for iteration 2 with real `Ses
 
 ### Test Infrastructure
 
-#### 1. **SessionLogTestHelpers.cs** (`tests/McpServer.Repl.Core.Tests/SessionLogTestHelpers.cs`)
+#### 1. **SessionLogTestHelpers.cs** (`tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs`)
 - **FakeSessionLogState**: In-memory state tracker for turn lifecycle validation
 - **StubSessionLogClient**: Stub implementation of `ISessionLogClientAdapter` for testing
 
@@ -129,14 +129,14 @@ All operations throw structured exceptions:
 ## Files Created/Modified
 
 ### Created
-1. `src/McpServer.Repl.Core/SessionLogWorkflow.cs` - Production implementation
-2. `src/McpServer.Repl.Core/SessionLogModels.cs` - Concrete model implementations
-3. `tests/McpServer.Repl.Core.Tests/SessionLogTestHelpers.cs` - Test infrastructure
-4. `tests/McpServer.Repl.Core.Tests/SessionLogWorkflowProductionTests.cs` - Production tests
+1. `src/QBrainAi.Repl.Core/SessionLogWorkflow.cs` - Production implementation
+2. `src/QBrainAi.Repl.Core/SessionLogModels.cs` - Concrete model implementations
+3. `tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs` - Test infrastructure
+4. `tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowProductionTests.cs` - Production tests
 
 ### Modified
-1. `tests/McpServer.Repl.Core.Tests/SessionLogWorkflowMockValidationTests.cs` - Removed duplicate StubSessionLogClient
-2. `tests/McpServer.Repl.Core.Tests/SessionLogWorkflowTests.cs` - Removed duplicate FakeSessionLogState
+1. `tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowMockValidationTests.cs` - Removed duplicate StubSessionLogClient
+2. `tests/QBrainAi.Repl.Core.Tests/SessionLogWorkflowTests.cs` - Removed duplicate FakeSessionLogState
 
 ## Verification
 

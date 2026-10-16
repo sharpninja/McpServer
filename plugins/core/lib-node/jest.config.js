@@ -1,5 +1,5 @@
 /**
- * Jest config for @sharpninja/mcpserver-plugin-core.
+ * Jest config for @qbrainai/qbrain-ai-plugin-core.
  *
  * The package ships as CommonJS ("type": "commonjs"), but the source uses
  * ESM-style explicit ".js" import suffixes (NodeNext-flavored). Under the

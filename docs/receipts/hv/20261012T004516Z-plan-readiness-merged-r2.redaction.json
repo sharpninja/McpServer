@@ -1,0 +1,164 @@
+{
+  "TimestampUtc": "2026-10-12T01:29:29.2658733Z",
+  "MarkerKeyValuesChecked": 2,
+  "Replacement": "[REDACTED:api-key]",
+  "Method": "Replace exact marker values and long key assignments; active JSONL offsets preserved with leading JSON whitespace, no trailing padding.",
+  "Files": [
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.commands.jsonl",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.complete-write.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.diagram-inventory.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.memories.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.persistence.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.proposed-requirement-ids.txt",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.redaction.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.request.jsonl",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.requirements-Fr.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.requirements-Test.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.requirements-Tr.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.response.jsonl",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.response.jsonl.stderr.log",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.session-preflight.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.session-readback.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.todos.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.triage-report-3081edb1d0414e8fb737738438cd3ccd.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.triage-report-c03d190f194b4a76a4923ca626adbb41.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.triage-report-cdf116adf956449fb0a8e576bd572f26.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "20261012T004516Z-plan-readiness-merged-r2.triage-report-f4d47e1f85b746de8ce3f5926103711f.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "hostile-validator-plan-readiness-merged-r2-20261012T004516Z.json",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    },
+    {
+      "File": "hostile-validator-plan-readiness-merged-r2-20261012T004516Z.md",
+      "Changed": false,
+      "JsonlLinesRedacted": 0,
+      "RemainingKnownKeys": 0,
+      "RemainingLongKeyAssignments": 0
+    }
+  ],
+  "RemainingKnownKeys": 0.0,
+  "RemainingLongKeyAssignments": 0.0
+}

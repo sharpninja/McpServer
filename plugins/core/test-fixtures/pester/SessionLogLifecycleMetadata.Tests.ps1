@@ -231,13 +231,13 @@ Describe 'FR-MCP-SESSIONLIFE-002 and FR-MCP-SESSIONLIFE-005 metadata and stop ho
                 markerFilePath = $markerSnapshot.markerFilePath
                 markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
             })
-            Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: kept response`ninterpretation: noted interpretation`ntags:`n  - life`ncontextList:`n  - src/McpServer.Services/Services/SessionLogService.cs`n"
+            Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "response: kept response`ninterpretation: noted interpretation`ntags:`n  - life`ncontextList:`n  - src/QBrainAi.Services/Services/SessionLogService.cs`n"
             $script:LastInvokeReplMethodSuccess | Should -BeTrue
             $script:PersistCalls | Should -Be 1
             $script:LastPersistResponse | Should -Be 'kept response'
             $script:LastPersistInterpretation | Should -Be 'noted interpretation'
             $script:LastPersistTags | Should -Contain 'life'
-            $script:LastPersistContext | Should -Contain 'src/McpServer.Services/Services/SessionLogService.cs'
+            $script:LastPersistContext | Should -Contain 'src/QBrainAi.Services/Services/SessionLogService.cs'
             $script:LastReplPersistenceDetails.persisted | Should -BeFalse
         } finally {
             Set-Location -LiteralPath $priorLocation

@@ -7,18 +7,18 @@ trigger:
       - develop
   paths:
     include:
-      - src/McpServer.Support.Mcp/**
-      - src/McpServer.Client/**
-      - src/McpServer.Director/**
-      - src/McpServer.McpAgent/**
-      - src/McpServer.Repl.Core/**
-      - src/McpServer.UI.Core/**
-      - src/McpServer.Cqrs/**
-      - src/McpServer.Cqrs.Mvvm/**
-      - src/McpServer.Web/**
-      - tests/McpServer.Support.Mcp.Tests/**
-      - tests/McpServer.Client.Tests/**
-      - tests/McpServer.Cqrs.Tests/**
+      - src/QBrainAi.Support.Mcp/**
+      - src/QBrainAi.Client/**
+      - src/QBrainAi.Director/**
+      - src/QBrainAi.McpAgent/**
+      - src/QBrainAi.Repl.Core/**
+      - src/QBrainAi.UI.Core/**
+      - src/QBrainAi.Cqrs/**
+      - src/QBrainAi.Cqrs.Mvvm/**
+      - src/QBrainAi.Web/**
+      - tests/QBrainAi.Support.Mcp.Tests/**
+      - tests/QBrainAi.Client.Tests/**
+      - tests/QBrainAi.Cqrs.Tests/**
       - tests/Build.Tests/**
       - build/**
       - build.ps1
@@ -28,8 +28,8 @@ trigger:
       - index.md
       - toc.yml
       - README.md
-      - scripts/Start-McpServer.ps1
-      - scripts/Package-McpServerMsix.ps1
+      - scripts/Start-QBrainAi.ps1
+      - scripts/Package-QBrainAiMsix.ps1
       - scripts/Migrate-McpTodoStorage.ps1
       - scripts/Test-McpMultiInstance.ps1
       - scripts/Validate-McpConfig.ps1
@@ -44,18 +44,18 @@ pr:
       - develop
   paths:
     include:
-      - src/McpServer.Support.Mcp/**
-      - src/McpServer.Client/**
-      - src/McpServer.Director/**
-      - src/McpServer.McpAgent/**
-      - src/McpServer.Repl.Core/**
-      - src/McpServer.UI.Core/**
-      - src/McpServer.Cqrs/**
-      - src/McpServer.Cqrs.Mvvm/**
-      - src/McpServer.Web/**
-      - tests/McpServer.Support.Mcp.Tests/**
-      - tests/McpServer.Client.Tests/**
-      - tests/McpServer.Cqrs.Tests/**
+      - src/QBrainAi.Support.Mcp/**
+      - src/QBrainAi.Client/**
+      - src/QBrainAi.Director/**
+      - src/QBrainAi.McpAgent/**
+      - src/QBrainAi.Repl.Core/**
+      - src/QBrainAi.UI.Core/**
+      - src/QBrainAi.Cqrs/**
+      - src/QBrainAi.Cqrs.Mvvm/**
+      - src/QBrainAi.Web/**
+      - tests/QBrainAi.Support.Mcp.Tests/**
+      - tests/QBrainAi.Client.Tests/**
+      - tests/QBrainAi.Cqrs.Tests/**
       - tests/Build.Tests/**
       - build/**
       - build.ps1
@@ -65,8 +65,8 @@ pr:
       - index.md
       - toc.yml
       - README.md
-      - scripts/Start-McpServer.ps1
-      - scripts/Package-McpServerMsix.ps1
+      - scripts/Start-QBrainAi.ps1
+      - scripts/Package-QBrainAiMsix.ps1
       - scripts/Migrate-McpTodoStorage.ps1
       - scripts/Test-McpMultiInstance.ps1
       - scripts/Validate-McpConfig.ps1
@@ -76,12 +76,12 @@ pr:
 
 variables:
   BuildConfiguration: Release
-  TestProject: tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj
-  ServerProject: src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj
-  ClientProject: src/McpServer.Client/McpServer.Client.csproj
-  PublishArtifactName: mcp-server-publish
-  DocsArtifactName: mcp-server-docs
-  MsixArtifactName: mcp-server-msix
+  TestProject: tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj
+  ServerProject: src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj
+  ClientProject: src/QBrainAi.Client/QBrainAi.Client.csproj
+  PublishArtifactName: qbrain-ai-publish
+  DocsArtifactName: qbrain-ai-docs
+  MsixArtifactName: qbrain-ai-msix
   PackageArtifactName: mcp-packages-nupkg
   RequirementsWikiZip: docs/requirements/requirements-wiki-documents.zip
   AzureWikiRepositoryUrl: ''
@@ -139,7 +139,7 @@ jobs:
           testResultsFormat: VSTest
           testResultsFiles: TestResults/**/*.trx
           failTaskOnFailedTests: true
-          testRunTitle: McpServer.Support.Mcp.Tests ($(BuildConfiguration))
+          testRunTitle: QBrainAi.Support.Mcp.Tests ($(BuildConfiguration))
 
       - task: PowerShell@2
         displayName: Compute package version
@@ -167,7 +167,7 @@ jobs:
             Write-Host "##vso[task.setvariable variable=PackageVersion;isOutput=true]$version"
 
       - task: PowerShell@2
-        displayName: Publish MCP Server
+        displayName: Publish QBrain.AI
         inputs:
           pwsh: true
           targetType: filePath
@@ -177,7 +177,7 @@ jobs:
       - task: PublishPipelineArtifact@1
         displayName: Upload MCP publish artifact
         inputs:
-          targetPath: $(Build.SourcesDirectory)/artifacts/mcp-server
+          targetPath: $(Build.SourcesDirectory)/artifacts/qbrain-ai
           artifact: $(PublishArtifactName)
 
   # Disabled (see docs-quality job below)
@@ -387,7 +387,7 @@ jobs:
   #           $source = "$(Pipeline.Workspace)/$(DocsArtifactName)"
   #           az storage blob upload-batch --account-name "$(DocsStorageAccount)" --destination '$web' --source $source --overwrite true
 
-  # Shared module publishing (McpRepl to PSGallery, @sharpninja/mcp-repl to npm).
+  # Shared module publishing (McpRepl to PSGallery, @qbrainai/qbrain-ai-repl to npm).
   # The Queue-SharedModulePublish.ps1 script handles variable registration + value
   # injection. The job is deliberately decoupled (no dependsOn) and non-blocking
   # (continueOnError + always() guards).
@@ -477,7 +477,7 @@ jobs:
           versionSpec: '20.x'
 
       - task: PowerShell@2
-        displayName: Publish @sharpninja/mcp-repl to npm
+        displayName: Publish @qbrainai/qbrain-ai-repl to npm
         condition: always()
         continueOnError: true
         env:
@@ -545,7 +545,7 @@ jobs:
           & $octo release deploy --project $project --version $version --deployTo Development --progress --no-prompt
           if ($LASTEXITCODE -ne 0) { Write-Warning "octopus deploy Development exit $LASTEXITCODE (release still created)" }
         displayName: Octopus LEGION2 release
-        condition: and(succeeded(), ne(variables['SkipOctopus'], 'true'))
+        condition: and(succeeded(), eq(variables['AllowLegionDeploy'], 'true'))
         env:
           OCTOPUS_API_KEY: $(OCTOPUS_API_KEY)
           OCTOPUS_URL: $(OCTOPUS_URL)

@@ -3,7 +3,7 @@
     Bulk-ingest requirements markdown into MCP Requirements endpoints.
 .DESCRIPTION
     Reads Functional/Technical/Testing/Mapping markdown files and POSTs them to
-    /mcpserver/requirements/ingest, which parses and upserts FR/TR/TEST/mapping.
+    /qbrainai/requirements/ingest, which parses and upserts FR/TR/TEST/mapping.
     You can also use -UseServerDefaults to let the server read configured files.
 .PARAMETER McpUrl
     Base URL of the MCP server (default: http://localhost:7147).
@@ -61,7 +61,7 @@ function Invoke-Ingest {
     )
 
     $json = $Payload | ConvertTo-Json -Depth 8
-    return Invoke-RestMethod -Uri "$Url/mcpserver/requirements/ingest" -Method Post -Headers $Headers -ContentType "application/json" -Body $json
+    return Invoke-RestMethod -Uri "$Url/qbrainai/requirements/ingest" -Method Post -Headers $Headers -ContentType "application/json" -Body $json
 }
 
 $headers = @{}

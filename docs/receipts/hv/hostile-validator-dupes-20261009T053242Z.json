@@ -1,0 +1,235 @@
+{
+  "TimestampUtc": "2026-10-09T05:49:45Z",
+  "ValidatorIdentity": {
+    "agent": "Codex CLI",
+    "version": "0.160.1",
+    "model": "gpt-6-sol",
+    "effort": "xhigh",
+    "liveProof": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T00-32-43-01a11f26-4089-7d71-bdfe-3554e88e622e.jsonl",
+    "sessionMetaId": "01a11f26-4089-7d71-bdfe-3554e88e622e",
+    "turnContext": "model=gpt-6-sol; effort=xhigh; collaboration reasoning_effort=xhigh"
+  },
+  "AddProfileCount": 19,
+  "MarkerTrust": "Test-MarkerSignature=True; Invoke-FullBootstrap=True; fresh /health nonce echoed; status Healthy",
+  "WorkClass": "class 2",
+  "SurfaceC": "N/A",
+  "SurfaceD": "PLAN-SESSIONTURNREVIEW-001 NOT APPROVED and unexecuted",
+  "Scope": "ClaudeCode result after the operator 2026-10-09T05:27:05Z duplicate-triage prompt, plus named previous-review remediation only",
+  "ImplementerTranscript": "/home/sharpninja/.claude/projects/-home-sharpninja-github-McpServer--claude-worktrees-session-20261009/49428485-c8ea-46d7-86c6-58add8faed97.jsonl",
+  "GroupInventory": "Codex QueryGroupsAsync: 38 groups; all titles and summaries read; seven two-report groups opened (45 total report summaries read); all nine filed reports opened individually",
+  "Items": [
+    {
+      "id": "F1",
+      "status": "PASS",
+      "evidence": "ClaudeCode conceded the prefiling search omission in live turn req-20261009T052705Z-prompt-226f (decision/action 1). Transcript lines 1549-1709 have no QueryGroupsAsync before filing; lines 1711-1852 have no triage submit invocation. The current 38-group query contains only the nine previously filed reports."
+    },
+    {
+      "id": "F2",
+      "status": "PASS",
+      "evidence": "Codex client.Triage.QueryGroupsAsync returned 38 groups. I read all 38 titles and summaries and opened all seven groups with reportCount=2 to read both reports (45 reports total), then GetReportAsync for each of the nine. The 29 other groups do not state the same defect as any of the nine; the older twin-turn group is related to bd1f but concerns duplicate registration, not validator environment detection."
+    },
+    {
+      "id": "F3",
+      "status": "PASS",
+      "evidence": "GetGroupAsync triage-group-56053b8fdbc844b6: d3bcb648 and 1a283182 describe duplicate hook registration and repeated turns. GetReportAsync bd1f4386 describes Test-PluginEnabled dependence on CLAUDE_PLUGIN_ROOT in validation/repair. The latter can recreate the former symptom, but is a separate defective decision path."
+    },
+    {
+      "id": "F4",
+      "status": "FAIL",
+      "evidence": "The relationship is overstated as fewer distinct failures. 41d7 is SessionQuery omitting Commits.Files (TransactionGatedSessionLogService.cs:441-457); 53dc is CopyTurnScalars/CloneTurn omitting PlanFile/TodoId (:645-663, :698-725). They have separate causes and data loss targets. 953f is a separate revive soft-delete defect. 36d2 and ed3b share an API but have distinct ordinal versus slash-key causes. The nine are nine distinct defect reports, with related symptoms but no true duplicate pair.",
+      "classification": "curable",
+      "remedy": "State nine distinct causes, describe related symptoms without collapsing cause-level failures, and keep each report identifiable."
+    },
+    {
+      "id": "F5",
+      "status": "FAIL",
+      "evidence": "No triage mutation was made, which was prudent. The proposed merges would conflate distinct repair sites: 41d7/53dc and bd1f/twin-turn. The operator ordered no duplicate submissions, not a merger of nonduplicates. The 53dc summary still falsely claims every rollback resets existing values to None; RestoreSessionGraph (:475-486) reuses an existing target and RestoreTurnGraph (:513-523) never assigns those fields. A factual report correction does not depend on merge approval.",
+      "classification": "curable",
+      "remedy": "Withdraw the merge recommendation, correct 53dc effect text through the supported triage route, and read back the corrected report. Keep the nine separate unless an operator later requests thematic grouping."
+    },
+    {
+      "id": "F6",
+      "status": "FAIL",
+      "evidence": "The completed dedc turn contains the handoff edit, SHA 2a2c0baa, branch, message, filesModified, eleven decisions with matching dialog/actions, and four hv_result parts. Stripping each part header and concatenating the bodies is ordinally exact to the 12,212-character keep-moving Markdown receipt. However the commit object has no filesChanged value: log18.ps1 submitted files, while SessionLogCommitDto requires filesChanged (src/QBrainAi.Client/Models/SessionLogModels.cs:307-308). QueryAsync returns sha/branch/message/author/timestamp only. Thus the claimed commit-file audit is incomplete.",
+      "classification": "curable",
+      "remedy": "Patch the own completed dedc turn through the supported session-log client with filesChanged for commit 2a2c0baa and read back. If the completed turn is immutable, add an explicit corrective audit in the current turn and report that the original commit object remains incomplete."
+    },
+    {
+      "id": "F7",
+      "status": "UNKNOWN",
+      "evidence": "Claude transcript lines 1122-1123 prove del1.ps1 selected a stored decision, printed len=578, invoked client.SessionLog.DeleteTurnItemAsync, and got exit=1; req-20261009T041855Z-af2e reports McpNotFoundException for designDecisions on req-20261009T023330Z-prompt-6b42. The selected value was never printed in that tool result and was later removed from the live turn. Thus its claimed FR/TR/TEST substring cannot be independently confirmed from the retained call receipt. The %2F route explanation remains inference."
+    },
+    {
+      "id": "F8",
+      "status": "PASS",
+      "evidence": "Git verifies nine named earlier commits lack a model/confidence trailer. Commit 2908d22af99dfd57d455ff887e26115145223eec contains exactly four keep-moving receipt files, textual Signed: claude-opus-5-5-high@ClaudeCode and correctness 98%, accuracy 98%, completeness 97%; origin/worktree-session-20261009 equals HEAD. The textual signature meets the marker model-effort@agent plus three-confidence convention. Git %G? is N, so it is not cryptographically signed; the marker names a model attestation rather than a GPG key. The confidence percentages are self-assessment, not validation; 97 completeness cannot satisfy the separate hostile 98/98 gate."
+    },
+    {
+      "id": "F9",
+      "status": "PASS",
+      "evidence": "Live client.SessionLog.QueryAsync found exactly one turn whose queryText contains the 05:27 prompt: req-20261009T052705Z-prompt-226f. It has six decisions, six exact decision dialogs, six design_decision actions and one action/commit for 2908d22a. The audit decision at 05:27:39Z precedes the 05:27:59Z query; commit decision at 05:32:08Z precedes the 05:32:15Z commit. The turn was still in_progress at the review cut, before the implementer final response."
+    },
+    {
+      "id": "F10",
+      "status": "FAIL",
+      "evidence": "Claude transcript line 1750 is a user-facing assistant text message beginning Querying every existing triage group rather than a UTC timestamp. Line 1848 is timestamped. The universal every-message claim fails.",
+      "classification": "operator_decision",
+      "remedy": "Historical chat text cannot be changed. Timestamp later replies and obtain an explicit operator waiver if this result is to be accepted despite the breach."
+    },
+    {
+      "id": "B1",
+      "status": "FAIL",
+      "evidence": "The concession and evidence are frank, but the implementer knowingly left 53dc inaccurate and treated its correction as dependent on an operator merge decision. The false store summary remained in GetReportAsync at review time.",
+      "classification": "curable",
+      "remedy": "Correct the report effect text now and read it back; state the original error plainly."
+    },
+    {
+      "id": "B2",
+      "status": "FAIL",
+      "evidence": "The audit uses one user-visible failure/fewer distinct failures for 41d7 and 53dc despite separate code causes; it treats thematic relation as a reason to merge. The slash decoding theory is correctly labeled inference. The restore-existing-turn reset assertion in 53dc is not supported by :475-523.",
+      "classification": "curable",
+      "remedy": "Separate observed code defects, inferred runtime impacts, and thematic relations in the report and triage correction."
+    },
+    {
+      "id": "B3",
+      "status": "PASS",
+      "evidence": "In this result the audit decision was logged at 05:27:39Z before read-only QueryGroupsAsync at 05:27:59Z; report-level comparisons preceded any proposed queue change, and none was made."
+    },
+    {
+      "id": "B4",
+      "status": "PASS",
+      "evidence": "Transcript lines 1711-1852 contain no Python invocation. The word Python appears only inside the written hostile-review brief."
+    },
+    {
+      "id": "B5",
+      "status": "PASS",
+      "evidence": "log17.ps1, log18.ps1 and commit-km.ps1 build session payloads from ordered PowerShell dictionaries and use the plugin YAML serializer. No hand-built JSON/YAML payload was used in this result."
+    },
+    {
+      "id": "B6",
+      "status": "PASS",
+      "evidence": "Session writes use Claude plugin client.SessionLog.PatchTurnAsync/CompleteTurnAsync. Triage audit uses plugin read methods. No direct TODO, requirement, triage, or session-log storage edit in the scoped result."
+    },
+    {
+      "id": "B7",
+      "status": "PASS",
+      "evidence": "The live ClaudeCode session has one exact prompt-matching turn, req-20261009T052705Z-prompt-226f, among 109 turns."
+    },
+    {
+      "id": "B8",
+      "status": "PASS",
+      "evidence": "All six scoped decisions have rationale, alternatives, rejected choices, affected requirements, exact decision dialog and design_decision action. Governed audit and commit decisions precede their acts; retrospective concessions are labeled as such."
+    },
+    {
+      "id": "B9",
+      "status": "FAIL",
+      "evidence": "Transcript line 1750 lacks a UTC prefix. It is an assistant text message, not a tool result or private thought.",
+      "classification": "operator_decision",
+      "remedy": "The historical message cannot be repaired; timestamp future replies and request an explicit waiver for accepting this result."
+    },
+    {
+      "id": "B10",
+      "status": "PASS",
+      "evidence": "Thirteen scoped Bash tool calls either launch pwsh or perform read-only searches, Git inspection, polling, and date checks. Write/Edit tools are separate. No scoped Bash redirection writes or Bash git mutation occurred."
+    },
+    {
+      "id": "B11",
+      "status": "FAIL",
+      "evidence": "The new commit has the marker textual signature, and the earlier missing signatures are conceded. However rich commit audit requires file linkage. Both dedc and 226f commit objects lack filesChanged because the scripts submitted files; the dedc turn is completed. Immediate persistence of the exact commit record is not established.",
+      "classification": "curable",
+      "remedy": "Use the documented filesChanged field in supported MCP session-log patching and verify QueryAsync persistence; record any completed-turn limitation without changing unrelated turns."
+    },
+    {
+      "id": "D1",
+      "status": "PASS",
+      "evidence": "Live workflow.todo.get returns PLAN-SESSIONTURNREVIEW-001 done=false and note beginning NOT APPROVED. Git shows this result committed only four HV receipt files, with no product implementation."
+    },
+    {
+      "id": "C",
+      "status": "N/A",
+      "evidence": "Class-2 operator action and audit; no product implementation or requirement completion claimed."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 91,
+  "Completeness": 88,
+  "Confidence": 97,
+  "ScoreReason": "Separate defects were called fewer failures, two unsupported merge recommendations remained, the false 53dc effect was left in triage, a commit file field was omitted from audit, one user-facing message lacked a UTC prefix, and the exact slash-bearing item text was not retained in the failed-call receipt.",
+  "FailList": [
+    "F4",
+    "F5",
+    "F6",
+    "F10",
+    "B1",
+    "B2",
+    "B9",
+    "B11"
+  ],
+  "UnknownList": [
+    "F7"
+  ],
+  "CurableFails": [
+    "F4",
+    "F5",
+    "F6",
+    "B1",
+    "B2",
+    "B11"
+  ],
+  "OperatorDecisionFails": [
+    "F10",
+    "B9"
+  ],
+  "ReviewerSessionId": "Codex-20261009T053357Z-plugin-session",
+  "ReviewerRequestId": "req-20261009T053401Z-hostile-dupes",
+  "HeadSha": "2908d22af99dfd57d455ff887e26115145223eec",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-dupes-20261009T053242Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-dupes-20261009T053242Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T053242Z-dupes-20261009.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T053242Z-dupes-20261009.response.jsonl"
+  ],
+  "VerdictJson": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 91,
+    "completeness": 88,
+    "confidence": 97,
+    "passCount": 13,
+    "failCount": 8,
+    "unknownCount": 1,
+    "failList": [
+      "F4",
+      "F5",
+      "F6",
+      "F10",
+      "B1",
+      "B2",
+      "B9",
+      "B11"
+    ],
+    "unknownList": [
+      "F7"
+    ],
+    "curableFails": [
+      "F4",
+      "F5",
+      "F6",
+      "B1",
+      "B2",
+      "B11"
+    ],
+    "operatorDecisionFails": [
+      "F10",
+      "B9"
+    ],
+    "headSha": "2908d22af99dfd57d455ff887e26115145223eec",
+    "receiptPaths": [
+      "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-dupes-20261009T053242Z.md",
+      "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-dupes-20261009T053242Z.json",
+      "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T053242Z-dupes-20261009.request.jsonl",
+      "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T053242Z-dupes-20261009.response.jsonl"
+    ],
+    "reviewerSessionId": "Codex-20261009T053357Z-plugin-session",
+    "reviewerRequestId": "req-20261009T053401Z-hostile-dupes"
+  }
+}

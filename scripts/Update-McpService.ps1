@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Updates or restores the installed MCP Server Windows service in-place while preserving configuration and data.
+    Updates or restores the installed QBrain.AI Windows service in-place while preserving configuration and data.
 
 .DESCRIPTION
     Stops the service, publishes the latest build, restores preserved files
@@ -9,10 +9,10 @@
     Run this script elevated (e.g. gsudo .\Update-McpService.ps1).
 
 .PARAMETER ServiceName
-    The Windows service name. Default: McpServer.
+    The Windows service name. Default: QBrainAi.
 
 .PARAMETER InstallPath
-    Service installation directory. Default: C:\ProgramData\McpServer.
+    Service installation directory. Default: C:\ProgramData\QBrainAi.
 
 .PARAMETER Port
     HTTP port for health check. Default: 7147.
@@ -32,18 +32,18 @@
 
 .PARAMETER BackupArchive
     Optional path to a specific backup zip created by this script. When omitted with -Restore,
-    the newest archive in %USERPROFILE%\McpServer-Backups is used.
+    the newest archive in %USERPROFILE%\QBrainAi-Backups is used.
 
 .EXAMPLE
     gsudo .\Update-McpService.ps1
-    gsudo .\Update-McpService.ps1 -SkipBuild -PublishSource E:\github\McpServer\_publish
+    gsudo .\Update-McpService.ps1 -SkipBuild -PublishSource E:\github\QBrainAi\_publish
     gsudo .\Update-McpService.ps1 -Restore
-    gsudo .\Update-McpService.ps1 -Restore -BackupArchive C:\Users\kingd\McpServer-Backups\McpServer-backup-20260309-160925552.zip
+    gsudo .\Update-McpService.ps1 -Restore -BackupArchive C:\Users\kingd\QBrainAi-Backups\QBrainAi-backup-20260309-160925552.zip
 #>
 [CmdletBinding(DefaultParameterSetName = 'Update')]
 param(
-    [string]$ServiceName = 'McpServer',
-    [string]$InstallPath = 'C:\ProgramData\McpServer',
+    [string]$ServiceName = 'QBrainAi',
+    [string]$InstallPath = 'C:\ProgramData\QBrainAi',
     [int]$Port = 7147,
     [Parameter(ParameterSetName = 'Update')]
     [switch]$SkipBuild,
@@ -62,16 +62,16 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference    = 'SilentlyContinue'
 
 $RepoRoot    = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$ProjectDir  = Join-Path $RepoRoot 'src\McpServer.Support.Mcp'
-$ProjectFile = Join-Path $ProjectDir 'McpServer.Support.Mcp.csproj'
-$LauncherProjectDir  = Join-Path $RepoRoot 'src\McpServer.Launcher'
-$LauncherProjectFile = Join-Path $LauncherProjectDir 'McpServer.Launcher.csproj'
-$ExeName     = 'McpServer.Support.Mcp.exe'
-$LauncherExeName = 'McpServer.Launcher.exe'
+$ProjectDir  = Join-Path $RepoRoot 'src\QBrainAi.Support.Mcp'
+$ProjectFile = Join-Path $ProjectDir 'QBrainAi.Support.Mcp.csproj'
+$LauncherProjectDir  = Join-Path $RepoRoot 'src\QBrainAi.Launcher'
+$LauncherProjectFile = Join-Path $LauncherProjectDir 'QBrainAi.Launcher.csproj'
+$ExeName     = 'QBrainAi.Support.Mcp.exe'
+$LauncherExeName = 'QBrainAi.Launcher.exe'
 $Timestamp   = Get-Date -Format 'yyyyMMdd-HHmmssfff'
-$BackupDir   = Join-Path $env:TEMP "McpServer-update-backup-$Timestamp"
-$ArchiveDir  = Join-Path $env:USERPROFILE 'McpServer-Backups'
-$ArchivePath = Join-Path $ArchiveDir "McpServer-backup-$Timestamp.zip"
+$BackupDir   = Join-Path $env:TEMP "QBrainAi-update-backup-$Timestamp"
+$ArchiveDir  = Join-Path $env:USERPROFILE 'QBrainAi-Backups'
+$ArchivePath = Join-Path $ArchiveDir "QBrainAi-backup-$Timestamp.zip"
 $DeploymentManifestName = '.mcpservice-deployment.json'
 
 # Files to preserve across updates (glob patterns relative to InstallPath).
@@ -124,7 +124,7 @@ function Publish-LauncherSidecar {
         New-Item -ItemType Directory -Path $DestinationDirectory -Force | Out-Null
     }
 
-    $launcherStageDir = Join-Path $env:TEMP "McpServer-launcher-stage"
+    $launcherStageDir = Join-Path $env:TEMP "QBrainAi-launcher-stage"
     if (Test-Path $launcherStageDir) { Remove-Item $launcherStageDir -Recurse -Force }
 
     dotnet publish $ProjectFile -c Release --self-contained -r win-x64 `
@@ -232,7 +232,7 @@ function Ensure-ServiceRegistration {
         throw "Deployment is missing $ExecutableName under $InstallRoot."
     }
 
-    $displayName = 'MCP Server'
+    $displayName = 'QBrain.AI'
     $description = 'MCP Model Context Protocol Server'
     $binPath = Get-ServiceImagePath -InstallRoot $InstallRoot -ExecutableName $ExecutableName -Port $Port
     $svc = Get-Service -Name $Name -ErrorAction SilentlyContinue
@@ -583,7 +583,7 @@ function Resolve-BackupArchivePath {
         return $resolved
     }
 
-    $latest = Get-ChildItem -Path $ArchiveDirectory -Filter 'McpServer-backup-*.zip' -File -ErrorAction SilentlyContinue |
+    $latest = Get-ChildItem -Path $ArchiveDirectory -Filter 'QBrainAi-backup-*.zip' -File -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTimeUtc -Descending |
         Select-Object -First 1
 
@@ -817,7 +817,7 @@ if ($Restore) {
     Write-Step "1/8  Stopping service '$ServiceName' ..."
     Stop-InstalledService -Name $ServiceName -ProcessName $serviceProcessName | Out-Null
 
-    $preRestoreArchivePath = Join-Path $ArchiveDir "McpServer-pre-restore-$Timestamp.zip"
+    $preRestoreArchivePath = Join-Path $ArchiveDir "QBrainAi-pre-restore-$Timestamp.zip"
     Write-Step "2/8  Backing up current config and data files ..."
     $backupSummary = Backup-PreservedState -InstallRoot $InstallPath -BackupRoot $BackupDir -ArchivePath $preRestoreArchivePath
     Write-Host "  Data folder: $($backupSummary.ConfiguredDataFolder)" -ForegroundColor DarkGray
@@ -831,7 +831,7 @@ if ($Restore) {
         Write-Host "  Archived current state to: $($backupSummary.ArchivePath)" -ForegroundColor DarkGray
     }
 
-    $restoreExtractDir = Join-Path $env:TEMP "McpServer-restore-$Timestamp"
+    $restoreExtractDir = Join-Path $env:TEMP "QBrainAi-restore-$Timestamp"
     Write-Step "3/8  Extracting restore archive ..."
     if (Test-Path $restoreExtractDir) {
         Remove-Item -Path $restoreExtractDir -Recurse -Force -ErrorAction SilentlyContinue
@@ -940,7 +940,7 @@ else {
     if (-not (Test-Path $ProjectFile)) {
         Write-Error "Project file not found: $ProjectFile"
     }
-    $stageDir = Join-Path $env:TEMP "McpServer-publish-stage"
+    $stageDir = Join-Path $env:TEMP "QBrainAi-publish-stage"
     if (Test-Path $stageDir) { Remove-Item $stageDir -Recurse -Force }
     dotnet publish $ProjectFile -c Release --self-contained -r win-x64 `
         /p:PublishSingleFile=true `

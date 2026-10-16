@@ -14,10 +14,10 @@ partial class Build
             var catalog = new List<string>();
             string[] roots =
             [
-                "src/McpServer.Storage/Migrations",
-                "src/McpServer.Storage.SqliteMigrations",
-                "src/McpServer.Storage.SqlServerMigrations",
-                "src/McpServer.Storage.PostgreSqlMigrations",
+                "src/QBrainAi.Storage/Migrations",
+                "src/QBrainAi.Storage.SqliteMigrations",
+                "src/QBrainAi.Storage.SqlServerMigrations",
+                "src/QBrainAi.Storage.PostgreSqlMigrations",
             ];
 
             foreach (var relativeRoot in roots)

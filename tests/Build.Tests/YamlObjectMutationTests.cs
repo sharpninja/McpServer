@@ -112,26 +112,17 @@ public sealed class YamlObjectMutationTests
 
     private static async Task<(int ExitCode, string Stdout, string Stderr)> RunPowerShellAsync(string command)
     {
-        using var process = new Process();
-        process.StartInfo = new ProcessStartInfo
-        {
-            FileName = "pwsh",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-        };
-        process.StartInfo.ArgumentList.Add("-NoLogo");
-        process.StartInfo.ArgumentList.Add("-NoProfile");
-        process.StartInfo.ArgumentList.Add("-NonInteractive");
-        process.StartInfo.ArgumentList.Add("-Command");
-        process.StartInfo.ArgumentList.Add(command);
+        var startInfo = new ProcessStartInfo("pwsh");
+        startInfo.ArgumentList.Add("-NoLogo");
+        startInfo.ArgumentList.Add("-NoProfile");
+        startInfo.ArgumentList.Add("-NonInteractive");
+        startInfo.ArgumentList.Add("-Command");
+        startInfo.ArgumentList.Add(command);
 
-        process.Start();
-        var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
-        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
-        await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await BoundedProcess.RunAsync(startInfo, TimeSpan.FromMinutes(5), TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
 
-        return (process.ExitCode, await stdoutTask.ConfigureAwait(true), await stderrTask.ConfigureAwait(true));
+        return (result.ExitCode, result.Stdout, result.Stderr);
     }
 
     private static string EscapePowerShellSingleQuotedString(string value)
@@ -150,7 +141,7 @@ public sealed class YamlObjectMutationTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }
@@ -158,6 +149,6 @@ public sealed class YamlObjectMutationTests
             directory = directory.Parent;
         }
 
-        throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
+        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
     }
 }

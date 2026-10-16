@@ -1,12 +1,12 @@
 ---
 name: mcp-requirements-traceability
-description: Use this skill when adding, updating, mapping, or auditing MCP Server FR/TR/TEST requirements and acceptance criteria, or when making ./build.ps1 ValidateTraceability pass; it covers the workflow.requirements.* plugin methods, the requirement ID grammar, and the rule that every FR must map to at least one TR and one TEST and that all IDs appear in docs/Project/*.md.
+description: Use this skill when adding, updating, mapping, or auditing QBrain.AI FR/TR/TEST requirements and acceptance criteria, or when making ./build.ps1 ValidateTraceability pass; it covers the workflow.requirements.* plugin methods, the requirement ID grammar, and the rule that every FR must map to at least one TR and one TEST and that all IDs appear in docs/Project/*.md.
 license: MIT
 ---
 
 # MCP Requirements Traceability
 
-Manage MCP Server functional (FR), technical (TR), and test (TEST) requirements,
+Manage QBrain.AI functional (FR), technical (TR), and test (TEST) requirements,
 their FR -> TR/TEST mappings, and structured acceptance criteria. The requirements
 database is the source of truth; the Markdown files under `docs/Project/` are
 import/export projections that `./build.ps1 ValidateTraceability` reads. Keep both
@@ -34,7 +34,7 @@ in sync so the build stays green.
 - The workspace marker / API key from `AGENTS-README-FIRST.yaml` (read once per session).
 - A requirement `area` (and `subarea` for TR), plus `title`, `description`, `priority`.
 - For mappings: an `frId` and the `trIds` / `testIds` to link.
-- For validation: the five Markdown files under `F:\GitHub\McpServer\docs\Project\`.
+- For validation: the five Markdown files under `F:\GitHub\QBrainAi\docs\Project\`.
 
 ## Critical Rules
 

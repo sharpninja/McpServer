@@ -1,0 +1,295 @@
+[
+  {
+    "draftLabel": "UC-RUNAS-D01",
+    "operation": "new",
+    "title": "Get completed help as the configured operator",
+    "actors": [
+      "Operator",
+      "Agent Helper",
+      "worker"
+    ],
+    "frLinks": [
+      "FR-MCP-RUNAS-001",
+      "FR-MCP-HELP-011"
+    ],
+    "acLinks": [
+      "FR-MCP-RUNAS-001/AC1",
+      "FR-MCP-RUNAS-001/AC2",
+      "FR-MCP-RUNAS-001/AC4",
+      "FR-MCP-HELP-011/AC1"
+    ],
+    "tddPhase": "P1/P2",
+    "tests": [
+      "Helper_DefaultsOnly_CompletedRealBody",
+      "HelperReceiptCorrelation_Required"
+    ],
+    "verificationPhase": "P4/P5",
+    "precondition": "Approved root policy and authenticated target CLI",
+    "basicFlow": "Operator submits ordinary helper prompt without overrides; helper resolves Grok and sharpninja; generic worker verifies UID; answer and cleanup correlated",
+    "alternativeAndExceptionFlow": "Unavailable worker, identity mismatch, incomplete answer or echo: fail without local fallback",
+    "postcondition": "Completed actual answer and verified cleanup, MCP identity unchanged",
+    "canonicalUseCaseId": null
+  },
+  {
+    "draftLabel": "UC-RUNAS-D02",
+    "operation": "new",
+    "title": "Explicitly select a different strategy without default leakage",
+    "actors": [
+      "Operator",
+      "caller",
+      "strategy resolver"
+    ],
+    "frLinks": [
+      "FR-MCP-GROKDEFAULTS-001",
+      "FR-MCP-HELP-011",
+      "FR-MCP-RUNAS-002"
+    ],
+    "acLinks": [
+      "FR-MCP-GROKDEFAULTS-001/AC1",
+      "FR-MCP-GROKDEFAULTS-001/AC2",
+      "FR-MCP-HELP-011/AC2",
+      "FR-MCP-RUNAS-002/AC1"
+    ],
+    "tddPhase": "P1",
+    "tests": [
+      "Helper_CodexOverride_DoesNotInheritGrokExecutable",
+      "SelectedStrategyNeverReplaced"
+    ],
+    "verificationPhase": "P4",
+    "precondition": "Registered strategy and permitted local/profile execution",
+    "basicFlow": "Select Codex or another existing strategy; scoped defaults resolve; same selected implementation executes",
+    "alternativeAndExceptionFlow": "Unknown alias/config duplicate or unsupported crossUID capability/policy: named failure, not Grok replacement",
+    "postcondition": "Selected identity/path/model and semantics retained",
+    "canonicalUseCaseId": null
+  },
+  {
+    "draftLabel": "UC-RUNAS-D03",
+    "operation": "new",
+    "title": "Execute supported callers with workspace/admin identity",
+    "actors": [
+      "Operator",
+      "TODO",
+      "voice",
+      "triage",
+      "pool",
+      "requirements",
+      "workspace-policy"
+    ],
+    "frLinks": [
+      "FR-MCP-RUNAS-001",
+      "FR-MCP-GROKDEFAULTS-001"
+    ],
+    "acLinks": [
+      "FR-MCP-RUNAS-001/AC1",
+      "FR-MCP-GROKDEFAULTS-001/AC3",
+      "FR-MCP-GROKDEFAULTS-001/AC4"
+    ],
+    "tddPhase": "P1",
+    "tests": [
+      "TodoDeployedGrokSelection_Preserved",
+      "TodoAdminRunAs_AfterOverwriteRemoval",
+      "CallerRunAsRequirements_DelegatesSelectedOneShot",
+      "CallerRunAsWorkspacePolicy_DelegatesSelectedOneShot"
+    ],
+    "verificationPhase": "P4",
+    "precondition": "Per-request workspace context and approved profile",
+    "basicFlow": "Resolve operation workspace, preserve null/empty semantics and explicit admin fallback, invoke generic selected strategy",
+    "alternativeAndExceptionFlow": "Active denied feature blocks rollout absent named approval; no public UID override or wrong-account retry",
+    "postcondition": "All matrix callers either execute desired UID or explicitly fail before launch",
+    "canonicalUseCaseId": null
+  },
+  {
+    "draftLabel": "UC-RUNAS-D04",
+    "operation": "new",
+    "title": "Use full delegated conversation and cancel safely",
+    "actors": [
+      "Operator",
+      "remote session adapter",
+      "selected strategy"
+    ],
+    "frLinks": [
+      "FR-MCP-RUNAS-002",
+      "FR-MCP-RUNAS-001"
+    ],
+    "acLinks": [
+      "FR-MCP-RUNAS-002/AC2",
+      "FR-MCP-RUNAS-002/AC3",
+      "FR-MCP-RUNAS-002/AC4",
+      "FR-MCP-RUNAS-001/AC5"
+    ],
+    "tddPhase": "P2",
+    "tests": [
+      "RemoteSessionContractTests_AllMembers",
+      "CancelCompletion_FirstTerminalWins",
+      "EndDispose_IdempotentWaitsCleanup",
+      "StreamAbandonment_ClosesSession"
+    ],
+    "verificationPhase": "P4",
+    "precondition": "Established authenticated session",
+    "basicFlow": "Read/stream initial response, send/stream subsequent prompt, escape/end/dispose; preserve batch/interactive result/PID",
+    "alternativeAndExceptionFlow": "Concurrent op Busy; cancellation/disconnect closes descendants; no resume or prompt replay",
+    "postcondition": "Correct result semantics and session cleanup receipt",
+    "canonicalUseCaseId": null
+  },
+  {
+    "draftLabel": "UC-RUNAS-D05",
+    "operation": "new",
+    "title": "Reject unauthorized or malformed delegated launch",
+    "actors": [
+      "Unauthorized peer",
+      "MCP caller",
+      "root policy"
+    ],
+    "frLinks": [
+      "FR-MCP-RUNAS-001",
+      "FR-MCP-RUNAS-003"
+    ],
+    "acLinks": [
+      "FR-MCP-RUNAS-001/AC3",
+      "FR-MCP-RUNAS-003/AC3"
+    ],
+    "tddPhase": "P2",
+    "tests": [
+      "PeerRejectedBeforeParse",
+      "PolicyMismatch_NoLaunch",
+      "DelegatedSecrets_DeniedWithoutValueLeak",
+      "PublicCallerLaneOverride_Rejected"
+    ],
+    "verificationPhase": "P4",
+    "precondition": "Restricted socket and readable immutable policy",
+    "basicFlow": "Authorized peer submits allowed framed request; validate schema/profile/runtime before launch",
+    "alternativeAndExceptionFlow": "Wrong peer, injected identity/env/secret, malformed/oversize/replayed frame or mutable path rejected without value leakage",
+    "postcondition": "No unauthorized launch, safe typed failure and preserved audit",
+    "canonicalUseCaseId": null
+  },
+  {
+    "draftLabel": "UC-RUNAS-D06",
+    "operation": "new",
+    "title": "Recover worker and descendant resources after failure",
+    "actors": [
+      "Worker supervisor",
+      "operator",
+      "systemd"
+    ],
+    "frLinks": [
+      "FR-MCP-RUNAS-001",
+      "FR-MCP-RUNAS-003"
+    ],
+    "acLinks": [
+      "FR-MCP-RUNAS-001/AC5",
+      "FR-MCP-RUNAS-003/AC3"
+    ],
+    "tddPhase": "P2",
+    "tests": [
+      "WorkerCrash_RegistrySweepBeforeAdmission",
+      "RegistrySiblingUnitsAllStopped",
+      "FailedUnitsResetAfterReceipt",
+      "CleanupFailed_BlocksAdmission"
+    ],
+    "verificationPhase": "P4",
+    "precondition": "Persisted registry and running invocation/session units",
+    "basicFlow": "Record launch before submission; on exit/crash stop all registered units, capture receipts, drain/read/delete, restart admission only after proof",
+    "alternativeAndExceptionFlow": "Manager unavailable or cleanup unknown: unhealthy and retain resources, operator recovery required",
+    "postcondition": "No leaked descendant/files or false cleanup success",
+    "canonicalUseCaseId": null
+  },
+  {
+    "draftLabel": "UC-RUNAS-D07",
+    "operation": "new",
+    "title": "Admit help while general work is busy",
+    "actors": [
+      "Operator",
+      "helper",
+      "voice",
+      "TODO",
+      "broker lanes"
+    ],
+    "frLinks": [
+      "FR-MCP-RUNAS-003"
+    ],
+    "acLinks": [
+      "FR-MCP-RUNAS-003/AC1",
+      "FR-MCP-RUNAS-003/AC2"
+    ],
+    "tddPhase": "P2",
+    "tests": [
+      "HelperWhileVoiceOpen_Admitted",
+      "SameLaneSecond_Busy",
+      "GeneralLane_VoiceOpen_TodoBusy",
+      "GeneralLane_VoiceOpen_RequirementsAndPolicyBusy"
+    ],
+    "verificationPhase": "P4",
+    "precondition": "Named approval of general-lane blocking and configured deadlines",
+    "basicFlow": "General voice holds its slot; helper uses reserved slot independently",
+    "alternativeAndExceptionFlow": "Second helper/general gets immediate Busy; open voice blocks general TODO/requirements/parser up to approved hard limit",
+    "postcondition": "At most two CLI invocations, helper not starved, release only after cleanup",
+    "canonicalUseCaseId": null
+  },
+  {
+    "draftLabel": "UC-RUNAS-D08",
+    "operation": "new",
+    "title": "Deploy or roll back a verified release using Nuke",
+    "actors": [
+      "Administrator",
+      "Nuke",
+      "fixed installer",
+      "services"
+    ],
+    "frLinks": [
+      "FR-MCP-SERVICEUPDATE-001",
+      "FR-MCP-RUNAS-001",
+      "FR-MCP-GROKDEFAULTS-001"
+    ],
+    "acLinks": [
+      "FR-MCP-SERVICEUPDATE-001/platform",
+      "FR-MCP-SERVICEUPDATE-001/preserve",
+      "FR-MCP-SERVICEUPDATE-001/lifecycle",
+      "FR-MCP-SERVICEUPDATE-001/validation",
+      "FR-MCP-RUNAS-001/AC6",
+      "FR-MCP-GROKDEFAULTS-001/AC5"
+    ],
+    "tddPhase": "P3",
+    "tests": [
+      "NukeUpdateService_InvokesFixedPkexecAfterValidatedPackage",
+      "TransitionRestartAndFailureRollback",
+      "ConfigACLPreserved",
+      "RecoveryFailed_AdmissionStopped"
+    ],
+    "verificationPhase": "P4/P5",
+    "precondition": "Known prerequisite schema/host release, approved source/test/artifact digest, administrator auth",
+    "basicFlow": "Unprivileged Nuke builds tested bundle, fixed elevation locks journal, backs up, verifies worker then MCP, merges approved configuration, verifies real goal",
+    "alternativeAndExceptionFlow": "Any transition/crash resumes or rolls back exact known state; unsafe recovery stops admission/services, retains evidence",
+    "postcondition": "Accepted verified release or verified old-state restore, no data/schema mutation",
+    "canonicalUseCaseId": null
+  },
+  {
+    "draftLabel": "UC-RUNAS-D09",
+    "operation": "new",
+    "title": "Review major-phase evidence without per-increment HV",
+    "actors": [
+      "Operator",
+      "developer",
+      "Claude reviewer"
+    ],
+    "frLinks": [
+      "FR-MCP-RUNAS-001",
+      "FR-MCP-SERVICEUPDATE-001"
+    ],
+    "acLinks": [
+      "FR-MCP-RUNAS-001/AC7",
+      "FR-MCP-SERVICEUPDATE-001/validation"
+    ],
+    "tddPhase": "P3",
+    "tests": [
+      "GateValidator_RejectsMissingMockRedGreenEvidence",
+      "HvScheduler_OnlyCompletedMajorPhase",
+      "AuditReceipt_RequiresFullVerdictAndReadback"
+    ],
+    "verificationPhase": "P1/P2/P3/P4/P5",
+    "precondition": "Every increment evidence retained and major phase complete",
+    "basicFlow": "Developer validates mocks then real red/green/refactor and full regressions per increment; completed phase provides immutable scope and full evidence to Claude",
+    "alternativeAndExceptionFlow": "Missing AC/test/UC link, skipped/failed/empty suite, incomplete receipts/audit or sub98 verdict blocks next phase",
+    "postcondition": "Major-phase review complete with >=98 scores and durable full verdict/readback, no HV inside increments",
+    "canonicalUseCaseId": null
+  }
+]

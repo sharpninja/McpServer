@@ -219,7 +219,7 @@ public sealed class BuildTargetTests
 
         try
         {
-            var repoRoot = Path.Combine(root, "McpServer");
+            var repoRoot = Path.Combine(root, "QBrainAi");
             var pluginRoot = Path.Combine(root, "mcpserver-codex-plugin");
             Directory.CreateDirectory(repoRoot);
             Directory.CreateDirectory(pluginRoot);
@@ -247,7 +247,7 @@ public sealed class BuildTargetTests
 
         try
         {
-            var repoRoot = Path.Combine(root, "workspace", "lib", "McpServer");
+            var repoRoot = Path.Combine(root, "workspace", "lib", "QBrainAi");
             var pluginParent = Path.Combine(root, "plugins");
             var claudeRoot = Path.Combine(pluginParent, "mcpserver-claude-code-plugin");
             var codexRoot = Path.Combine(pluginParent, "mcpserver-codex-plugin");
@@ -283,7 +283,7 @@ public sealed class BuildTargetTests
     public void QBAgentProject_IsConfiguredAsDotNetTool()
     {
         var repoRoot = FindRepositoryRoot();
-        var projectPath = Path.Combine(repoRoot, "src", "McpServer.QBAgent", "McpServer.QBAgent.csproj");
+        var projectPath = Path.Combine(repoRoot, "src", "QBrainAi.QBAgent", "QBrainAi.QBAgent.csproj");
         var properties = XDocument.Load(projectPath)
             .Descendants("PropertyGroup")
             .Elements()
@@ -293,11 +293,11 @@ public sealed class BuildTargetTests
         Assert.Equal("true", properties["IsPackable"]);
         Assert.Equal("true", properties["PackAsTool"]);
         Assert.Equal("qbagent", properties["ToolCommandName"]);
-        Assert.Equal("SharpNinja.McpServer.QBAgent", properties["PackageId"]);
+        Assert.Equal("QBrainAI.QBAgent", properties["PackageId"]);
     }
 
     /// <summary>
-    /// PackQBAgentTool must pack McpServer.QBAgent.csproj only. Depending on solution Compile
+    /// PackQBAgentTool must pack QBrainAi.QBAgent.csproj only. Depending on solution Compile
     /// builds every test project and fails when testhosts lock those outputs.
     /// </summary>
     [Fact]
@@ -305,7 +305,7 @@ public sealed class BuildTargetTests
     {
         var source = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "build", "Build.PackQBAgentTool.cs"));
         Assert.DoesNotContain("DependsOn(Compile)", source, StringComparison.Ordinal);
-        Assert.Contains("McpServer.QBAgent.csproj", source, StringComparison.Ordinal);
+        Assert.Contains("QBrainAi.QBAgent.csproj", source, StringComparison.Ordinal);
         Assert.DoesNotContain("TestsDirectory", source, StringComparison.Ordinal);
     }
 
@@ -428,8 +428,8 @@ public sealed class BuildTargetTests
         var installReplTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.InstallReplTool.cs"));
 
         Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("EnumerateFiles(SourceDirectory.ToString(), \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
-        Assert.Contains("EnumerateFiles(TestsDirectory.ToString(), \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("EnumerateFiles(sourceDirectory, \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("EnumerateFiles(testsDirectory, \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
         Assert.Contains("!path.EndsWith(Path.Combine(\"Build.Tests\", \"Build.Tests.csproj\"), StringComparison.OrdinalIgnoreCase)", compileTarget, StringComparison.Ordinal);
         Assert.DoesNotContain(".SetProjectFile(Solution)", compileTarget, StringComparison.Ordinal);
         Assert.Contains(".SetProperty(\"PackageVersion\", buildVersion)", compileTarget, StringComparison.Ordinal);
@@ -450,16 +450,20 @@ public sealed class BuildTargetTests
     [Fact]
     public void InstallReplTool_ParsesInstalledGlobalToolVersion()
     {
+        // TR-MCP-NUKE-007 AC-001 (BUG-BUILD-004): dotnet prints package ids in lowercase; QBrainAI.Repl (qbrain-ai-repl) and the
+        // 1.x alias SharpNinja.McpServer.Repl (mcpserver-repl, TR-MCP-QBRAIN-003) are different tools.
         const string output = """
             Package Id                    Version      Commands
             ---------------------------------------------------
-            sharpninja.mcpserver.repl     6.1.1        mcpserver-repl
+            qbrainai.repl                 6.1.1        qbrain-ai-repl
+            sharpninja.mcpserver.repl     1.4.41       mcpserver-repl
             other.tool                    1.0.0        other
             """;
 
-        var version = Build.GetInstalledGlobalToolVersion(output, "SharpNinja.McpServer.Repl");
+        var version = Build.GetInstalledGlobalToolVersion(output, "QBrainAI.Repl");
 
         Assert.Equal("6.1.1", version);
+        Assert.Equal("1.4.41", Build.GetInstalledGlobalToolVersion(output, "SharpNinja.McpServer.Repl"));
         Assert.Null(Build.GetInstalledGlobalToolVersion(output, "missing.tool"));
     }
 
@@ -721,6 +725,33 @@ public sealed class BuildTargetTests
                 Directory.Delete(destination, true);
         }
     }
+
+    /// <summary>Windows UpdateService validates a complete stage before it stops the live service.</summary>
+    [Fact]
+    public void UpdateService_StagesBaselineConfigurationBeforeStoppingWindowsService()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.UpdateService.cs"));
+        const string stageCall = "WindowsServiceHelper.EnsureBaselineConfiguration(stageDir, baselineConfigPath);";
+        const string stopCall = "WindowsServiceHelper.StopService(serviceName, serviceProcessName);";
+        const string backupCall = "WindowsServiceHelper.BackupPreservedState(installPath, backupDir, archivePath);";
+        const string copyCall = "WindowsServiceHelper.CopyDirectory(stageDir, installPath);";
+
+        Assert.Contains(stageCall, source, StringComparison.Ordinal);
+        Assert.Contains(stopCall, source, StringComparison.Ordinal);
+        Assert.Contains(backupCall, source, StringComparison.Ordinal);
+        Assert.Contains(copyCall, source, StringComparison.Ordinal);
+        Assert.True(
+            source.IndexOf(stageCall, StringComparison.Ordinal) < source.IndexOf(stopCall, StringComparison.Ordinal),
+            "The complete publish stage must be validated before the service is stopped.");
+        Assert.True(
+            source.IndexOf(stopCall, StringComparison.Ordinal) < source.IndexOf(backupCall, StringComparison.Ordinal),
+            "The live service must stop before its mutable state is backed up.");
+        Assert.True(
+            source.IndexOf(backupCall, StringComparison.Ordinal) < source.IndexOf(copyCall, StringComparison.Ordinal),
+            "Backup must complete before published files replace the live installation.");
+    }
+
 
     /// <summary>
     /// TEST-NUKE-002: BackupPreservedState tolerates a first-time install where the

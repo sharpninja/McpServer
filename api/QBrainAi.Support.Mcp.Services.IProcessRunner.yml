@@ -1,0 +1,263 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Services.IProcessRunner
+  commentId: T:QBrainAi.Support.Mcp.Services.IProcessRunner
+  id: IProcessRunner
+  parent: QBrainAi.Support.Mcp.Services
+  children:
+  - QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync(System.String,System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IProcessRunner
+  nameWithType: IProcessRunner
+  fullName: QBrainAi.Support.Mcp.Services.IProcessRunner
+  type: Interface
+  source:
+    id: IProcessRunner
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\IProcessRunner.cs
+    startLine: 5
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: 'TR-PLANNED-CORE-013: Abstraction for running external processes, enabling testability.'
+  example: []
+  syntax:
+    content: public interface IProcessRunner
+    content.vb: Public Interface IProcessRunner
+- uid: QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync(System.String,System.String,System.Threading.CancellationToken)
+  id: RunAsync(System.String,System.String,System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.IProcessRunner
+  langs:
+  - csharp
+  - vb
+  name: RunAsync(string, string, CancellationToken)
+  nameWithType: IProcessRunner.RunAsync(string, string, CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync(string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: RunAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\IProcessRunner.cs
+    startLine: 12
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: 'TR-PLANNED-CORE-013: Run an external process and return its result.'
+  example: []
+  syntax:
+    content: Task<ProcessRunResult> RunAsync(string fileName, string arguments, CancellationToken ct = default)
+    parameters:
+    - id: fileName
+      type: System.String
+      description: Executable file name.
+    - id: arguments
+      type: System.String
+      description: Command-line arguments.
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.ProcessRunResult}
+      description: Process run result with exit code, stdout, and stderr.
+    content.vb: Function RunAsync(fileName As String, arguments As String, ct As CancellationToken = Nothing) As Task(Of ProcessRunResult)
+  overload: QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync*
+  nameWithType.vb: IProcessRunner.RunAsync(String, String, CancellationToken)
+  fullName.vb: QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync(String, String, System.Threading.CancellationToken)
+  name.vb: RunAsync(String, String, CancellationToken)
+references:
+- uid: QBrainAi.Support.Mcp.Services
+  commentId: N:QBrainAi.Support.Mcp.Services
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Services
+  nameWithType: QBrainAi.Support.Mcp.Services
+  fullName: QBrainAi.Support.Mcp.Services
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Services
+    name: Services
+    href: QBrainAi.Support.Mcp.Services.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Services
+    name: Services
+    href: QBrainAi.Support.Mcp.Services.html
+- uid: QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync
+  href: QBrainAi.Support.Mcp.Services.IProcessRunner.html#QBrainAi_Support_Mcp_Services_IProcessRunner_RunAsync_System_String_System_String_System_Threading_CancellationToken_
+  name: RunAsync
+  nameWithType: IProcessRunner.RunAsync
+  fullName: QBrainAi.Support.Mcp.Services.IProcessRunner.RunAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.ProcessRunResult}
+  commentId: T:System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.ProcessRunResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<ProcessRunResult>
+  nameWithType: Task<ProcessRunResult>
+  fullName: System.Threading.Tasks.Task<QBrainAi.Support.Mcp.Services.ProcessRunResult>
+  nameWithType.vb: Task(Of ProcessRunResult)
+  fullName.vb: System.Threading.Tasks.Task(Of QBrainAi.Support.Mcp.Services.ProcessRunResult)
+  name.vb: Task(Of ProcessRunResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: QBrainAi.Support.Mcp.Services.ProcessRunResult
+    name: ProcessRunResult
+    href: QBrainAi.Support.Mcp.Services.ProcessRunResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: QBrainAi.Support.Mcp.Services.ProcessRunResult
+    name: ProcessRunResult
+    href: QBrainAi.Support.Mcp.Services.ProcessRunResult.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

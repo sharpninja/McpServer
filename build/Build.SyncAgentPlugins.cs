@@ -164,8 +164,9 @@ partial class Build
 
     /// <summary>
     /// Resolves the directory that contains official sibling plugin repos.
-    /// Walks up from a git worktree under .worktrees (or .mcpServer/worktrees)
-    /// to the checkout parent that holds mcpserver-*-plugin siblings.
+    /// Walks up from a git worktree under .worktrees, or under a dot-folder of the checkout such as
+    /// .claude/worktrees or .mcpServer/worktrees, to the checkout parent that holds mcpserver-*-plugin siblings
+    /// (TR-MCP-NUKE-006).
     /// </summary>
     internal static string? ResolveOfficialPluginSiblingParent(string rootDirectory)
     {
@@ -190,7 +191,7 @@ partial class Build
                 || string.Equals(current.Name, "worktrees", StringComparison.OrdinalIgnoreCase))
             {
                 var checkoutRoot = parent;
-                if (string.Equals(checkoutRoot.Name, ".mcpServer", StringComparison.OrdinalIgnoreCase))
+                if (checkoutRoot.Name.StartsWith('.'))
                     checkoutRoot = checkoutRoot.Parent ?? checkoutRoot;
                 return checkoutRoot.Parent?.FullName ?? parent.FullName;
             }
@@ -495,7 +496,7 @@ partial class Build
         var content = File.ReadAllText(fullPath);
         return Regex.IsMatch(
             content,
-            @"(\bbash\b|\blib-sh\b|\blib-node\b|(?<!\$)\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|mcpserver-repl --agent-stdio|repl_invoke)",
+            @"(\bbash\b|\blib-sh\b|\blib-node\b|(?<!\$)\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|qbrain-ai-repl --agent-stdio|repl_invoke)",
             RegexOptions.IgnoreCase);
     }
 
@@ -547,7 +548,7 @@ partial class Build
 
         // TR-MCP-SYNC-001: npm pack derives the tarball name from package.json, so a mismatch here
         // means the pack ran against a different manifest than the one this sync read. Fail loudly.
-        var expectedPackedFileName = $"sharpninja-mcpserver-plugin-core-{manifestVersion}.tgz";
+        var expectedPackedFileName = GetExpectedNodeCorePackFileName(nodeCoreRoot.ToString());
         if (!string.Equals(packedFileName, expectedPackedFileName, StringComparison.OrdinalIgnoreCase))
         {
             throw new InvalidOperationException(
@@ -610,6 +611,26 @@ partial class Build
                 "npm ci completed but plugins/core/lib-node/node_modules/typescript/bin/tsc is still missing.",
                 GetNodePluginCoreTscPath(nodeCoreRoot));
         }
+    }
+
+    /// <summary>
+    /// TR-MCP-SYNC-001 (BUG-BUILD-010): the tarball file name npm pack is expected to produce for the Node plugin core. npm names
+    /// the tarball from the manifest name and version, dropping a scope's leading @ and turning its / into -, so the expected name
+    /// is derived from package.json rather than written down; a hardcoded name broke every sync after the package was renamed.
+    /// </summary>
+    /// <param name="nodeCoreRoot">Node plugin core source directory holding package.json.</param>
+    /// <returns>The expected packed tarball file name.</returns>
+    internal static string GetExpectedNodeCorePackFileName(string nodeCoreRoot)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(nodeCoreRoot);
+        var manifestPath = Path.Combine(nodeCoreRoot, "package.json");
+        using var manifest = JsonDocument.Parse(File.ReadAllText(manifestPath));
+        var name = manifest.RootElement.TryGetProperty("name", out var value) ? value.GetString() : null;
+        if (string.IsNullOrWhiteSpace(name))
+            throw new InvalidOperationException($"package.json at {manifestPath} declares no name.");
+
+        var fileStem = (name.StartsWith('@') ? name[1..] : name).Replace('/', '-');
+        return $"{fileStem}-{ReadNodeCorePackageVersion((AbsolutePath)nodeCoreRoot)}.tgz";
     }
 
     /// <summary>Reads the version declared by plugins/core/lib-node/package.json.</summary>

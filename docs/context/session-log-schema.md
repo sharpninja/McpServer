@@ -11,14 +11,14 @@ succeed. Workspace-stamp repair remains fail-closed.
 
 ## Endpoints
 
-- `POST /mcpserver/sessionlog` — create or update a session log
-- `GET /mcpserver/sessionlog?limit=N&offset=M&planFile=&todoId=&turnStatus=&staleOlderThanHours=` — query recent session logs; optional exact `planFile` and `todoId` filters after the same normalize/expand rules as persist; optional `turnStatus` plus `staleOlderThanHours` list sessions that still have matching turns older than N hours (BUG-TRIAGE-121). The query is read-only and does not cancel or complete those turns.
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/begin` - first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
-- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` - stream reasoning dialog (incremental persist; not a full-session upsert)
+- `POST /qbrainai/sessionlog` — create or update a session log
+- `GET /qbrainai/sessionlog?limit=N&offset=M&planFile=&todoId=&turnStatus=&staleOlderThanHours=` — query recent session logs; optional exact `planFile` and `todoId` filters after the same normalize/expand rules as persist; optional `turnStatus` plus `staleOlderThanHours` list sessions that still have matching turns older than N hours (BUG-TRIAGE-121). The query is read-only and does not cancel or complete those turns.
+- `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/begin` - first persist of a turn; body `SessionLifecycleBeginRequest` requires `planFile` and `todoId` (`None` when none)
+- `POST /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog` - stream reasoning dialog (incremental persist; not a full-session upsert)
 
 ## Submit acknowledgement (FR-MCP-SESSIONLIFE-003)
 
-`POST /mcpserver/sessionlog` returns a durable-write receipt only after the storage service
+`POST /qbrainai/sessionlog` returns a durable-write receipt only after the storage service
 has completed its awaited save. The receipt retains `id`, `sourceType`, and `sessionId`,
 and adds `persisted: true`, `degraded: false`, and `queued: false`. It includes `requestId`
 for a single-turn submission; zero-turn and multi-turn submissions return a null request ID.
@@ -53,7 +53,7 @@ Forward-only. Do not mass-close historical `in_progress` turns. Recurrence of co
 Operator listing of stale open turns (sessions that contain at least one matching turn; inspect `turns[].status` and `turns[].timestamp`; complete or fail individually):
 
 ```
-GET /mcpserver/sessionlog?turnStatus=in_progress&staleOlderThanHours=24
+GET /qbrainai/sessionlog?turnStatus=in_progress&staleOlderThanHours=24
 ```
 
 MCP tool `sessionlog_query` with the same fields: `turnStatus=in_progress`, `staleOlderThanHours=24` (any positive hour count). Omit either field to relax that half of the filter. Mass close is out of scope.

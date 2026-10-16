@@ -1,6 +1,6 @@
 # Web UI Requirements
 
-This document tracks functional and technical requirements for the browser-based interfaces of McpServer, including the Pairing UI and the Management Dashboard.
+This document tracks functional and technical requirements for the browser-based interfaces of QBrainAi, including the Pairing UI and the Management Dashboard.
 
 ## Functional Requirements
 
@@ -10,6 +10,6 @@ The server shall provide a browser-based login flow for authorized users to retr
 
 **Covered by:** `PairingHtml`, `PairingOptions`, `PairingSessionService`
 
-### FR-MCP-031 McpServer Management Web UI
+### FR-MCP-031 QBrainAi Management Web UI
 
-A web-based management UI for McpServer providing workspace management, agent configuration, session log viewing, todo management, and system health monitoring. Integrates with the platform-wide open-source .NET OIDC provider for authentication. *(Planned - tracked as high-priority TODO.)*
+A web-based management UI for QBrainAi providing workspace management, agent configuration, session log viewing, todo management, and system health monitoring. Integrates with the platform-wide open-source .NET OIDC provider for authentication. *(Planned - tracked as high-priority TODO.)*

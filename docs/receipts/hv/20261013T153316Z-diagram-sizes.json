@@ -1,0 +1,2102 @@
+[
+  {
+    "Index": 1,
+    "Line": 26,
+    "Kind": "flowchart LR",
+    "Heading": "## 2. System context",
+    "Width": 3522.484375,
+    "Height": 521.5,
+    "MinimumPagesAt8PtNoMargins": 3.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-1.svg"
+  },
+  {
+    "Index": 2,
+    "Line": 318,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.1 Request pipeline (CQRS behaviors)",
+    "Width": 633.7431030273438,
+    "Height": 1161.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-2.svg"
+  },
+  {
+    "Index": 3,
+    "Line": 334,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.2 Storage and errors",
+    "Width": 704.5442504882812,
+    "Height": 1092.109375,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-3.svg"
+  },
+  {
+    "Index": 4,
+    "Line": 350,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.2 Storage and errors",
+    "Width": 1234.8358154296875,
+    "Height": 1477.109375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-4.svg"
+  },
+  {
+    "Index": 5,
+    "Line": 369,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.2 Storage and errors",
+    "Width": 616.692138671875,
+    "Height": 985.890625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-5.svg"
+  },
+  {
+    "Index": 6,
+    "Line": 389,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.3 Session log (namespace `QBrainAi.Support.Mcp.SessionLog`)",
+    "Width": 422.6444091796875,
+    "Height": 1173.96875,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-6.svg"
+  },
+  {
+    "Index": 7,
+    "Line": 404,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.3 Session log (namespace `QBrainAi.Support.Mcp.SessionLog`)",
+    "Width": 750.2398071289062,
+    "Height": 2546.546875,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-7.svg"
+  },
+  {
+    "Index": 8,
+    "Line": 443,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.5 Agent context",
+    "Width": 563.8582763671875,
+    "Height": 1380.15625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-8.svg"
+  },
+  {
+    "Index": 9,
+    "Line": 459,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.5 Agent context",
+    "Width": 482.15032958984375,
+    "Height": 1256.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-9.svg"
+  },
+  {
+    "Index": 10,
+    "Line": 472,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.5 Agent context",
+    "Width": 587.5509643554688,
+    "Height": 1258.953125,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-10.svg"
+  },
+  {
+    "Index": 11,
+    "Line": 489,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.6 Plugin core functions (PowerShell, `plugins/core/lib-ps`, owner PluginCorePowerShell)",
+    "Width": 1589.00537109375,
+    "Height": 928.25,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-11.svg"
+  },
+  {
+    "Index": 12,
+    "Line": 506,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.6 Plugin core functions (PowerShell, `plugins/core/lib-ps`, owner PluginCorePowerShell)",
+    "Width": 788.435302734375,
+    "Height": 602.609375,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-12.svg"
+  },
+  {
+    "Index": 13,
+    "Line": 517,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.6 Plugin core functions (PowerShell, `plugins/core/lib-ps`, owner PluginCorePowerShell)",
+    "Width": 523.5640869140625,
+    "Height": 811.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-13.svg"
+  },
+  {
+    "Index": 14,
+    "Line": 527,
+    "Kind": "flowchart TD",
+    "Heading": "#### 3.5.6 Plugin core functions (PowerShell, `plugins/core/lib-ps`, owner PluginCorePowerShell)",
+    "Width": 600.372802734375,
+    "Height": 1191.109375,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-14.svg"
+  },
+  {
+    "Index": 15,
+    "Line": 565,
+    "Kind": "stateDiagram-v2",
+    "Heading": "### 4.1 Components and data",
+    "Width": 1500.015625,
+    "Height": 912.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-15.svg"
+  },
+  {
+    "Index": 16,
+    "Line": 608,
+    "Kind": "flowchart TD",
+    "Heading": "#### MintSessionTurnCommand: mint a turn at ingress [FR-MCP-SESSIONTURN-001]",
+    "Width": 1024.9675903320312,
+    "Height": 1466.359375,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-16.svg"
+  },
+  {
+    "Index": 17,
+    "Line": 626,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: InsertMintedTurnWithRetry (insert step of MintSessionTurnCommand, rerun by SerializableWrite)",
+    "Width": 785.4810791015625,
+    "Height": 1116.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-17.svg"
+  },
+  {
+    "Index": 18,
+    "Line": 647,
+    "Kind": "flowchart TD",
+    "Heading": "#### SubmitSessionLogCommand: submit a session log with per-turn outcomes [FR-MCP-SESSIONTURN-004]",
+    "Width": 1079.92138671875,
+    "Height": 1803.671875,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-18.svg"
+  },
+  {
+    "Index": 19,
+    "Line": 667,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: EvaluateSubmittedTurn (loop body of SubmitSessionLogCommand)",
+    "Width": 1278.1529541015625,
+    "Height": 695.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-19.svg"
+  },
+  {
+    "Index": 20,
+    "Line": 695,
+    "Kind": "flowchart TD",
+    "Heading": "#### UpsertSessionTurnCommand: append or merge one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-006, FR-MCP-SESSIONTURN-007]",
+    "Width": 766.2902221679688,
+    "Height": 1536.25,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-20.svg"
+  },
+  {
+    "Index": 21,
+    "Line": 720,
+    "Kind": "flowchart TD",
+    "Heading": "#### PatchSessionTurnCommand: change named fields of one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-007]",
+    "Width": 766.2902221679688,
+    "Height": 1393.0625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-21.svg"
+  },
+  {
+    "Index": 22,
+    "Line": 745,
+    "Kind": "flowchart TD",
+    "Heading": "#### ReplaceSessionTurnCommand: replace one turn [FR-MCP-SESSIONTURN-004, FR-SUPPORT-016]",
+    "Width": 771.3566284179688,
+    "Height": 1378.0625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-22.svg"
+  },
+  {
+    "Index": 23,
+    "Line": 764,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: PrepareReplacementTurn (body step of ReplaceSessionTurnCommand, before TurnWritePipeline)",
+    "Width": 314.55206298828125,
+    "Height": 728.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-23.svg"
+  },
+  {
+    "Index": 24,
+    "Line": 780,
+    "Kind": "flowchart TD",
+    "Heading": "#### CompleteSessionTurnCommand: complete one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONCLASS-002]",
+    "Width": 771.3566284179688,
+    "Height": 1035.0625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-24.svg"
+  },
+  {
+    "Index": 25,
+    "Line": 802,
+    "Kind": "flowchart TD",
+    "Heading": "#### FailSessionTurnCommand: fail one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONCLASS-002]",
+    "Width": 766.2902221679688,
+    "Height": 1011.0625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-25.svg"
+  },
+  {
+    "Index": 26,
+    "Line": 824,
+    "Kind": "flowchart TD",
+    "Heading": "#### OpenSessionLogCommand: open (ensure) a session [FR-MCP-SESSIONTURN-001, FR-MCP-SESSIONTURN-007]",
+    "Width": 817.435302734375,
+    "Height": 511.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-26.svg"
+  },
+  {
+    "Index": 27,
+    "Line": 840,
+    "Kind": "flowchart TD",
+    "Heading": "#### AppendTurnDialogCommand: append processing dialog to one turn [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-007]",
+    "Width": 817.435302734375,
+    "Height": 963.078125,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-27.svg"
+  },
+  {
+    "Index": 28,
+    "Line": 858,
+    "Kind": "flowchart TD",
+    "Heading": "#### SetTurnTitleCommand: retitle one turn [FR-MCP-SESSIONTURN-003, FR-MCP-SESSIONTURN-007]",
+    "Width": 681.2255859375,
+    "Height": 581.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-28.svg"
+  },
+  {
+    "Index": 29,
+    "Line": 874,
+    "Kind": "flowchart TD",
+    "Heading": "#### SetSessionTitleCommand: retitle a session [FR-MCP-SESSIONTURN-007]",
+    "Width": 701.4007568359375,
+    "Height": 566.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-29.svg"
+  },
+  {
+    "Index": 30,
+    "Line": 892,
+    "Kind": "flowchart TD",
+    "Heading": "#### Policy TerminalTurnOutcomeGuard: terminal-turn outcome guard (`ITerminalTurnOutcomeGuard`) [FR-MCP-SESSIONTURN-004]",
+    "Width": 554.2952270507812,
+    "Height": 1283.734375,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-30.svg"
+  },
+  {
+    "Index": 31,
+    "Line": 915,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process ApplyArrivalBridgeRecord: process a transcript record in the arrival bridge [FR-MCP-SESSIONTURN-001, FR-MCP-SESSIONTURN-002]",
+    "Width": 1193.0,
+    "Height": 2108.25,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-31.svg"
+  },
+  {
+    "Index": 32,
+    "Line": 945,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ApplyEnqueueRecord (enqueue step of ApplyArrivalBridgeRecord)",
+    "Width": 1058.8704833984375,
+    "Height": 770.828125,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-32.svg"
+  },
+  {
+    "Index": 33,
+    "Line": 961,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ApplyDequeueRecord (dequeue step of ApplyArrivalBridgeRecord)",
+    "Width": 517.4352416992188,
+    "Height": 790.640625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-33.svg"
+  },
+  {
+    "Index": 34,
+    "Line": 974,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ApplyRemoveRecord (remove step of ApplyArrivalBridgeRecord)",
+    "Width": 587.4097900390625,
+    "Height": 1239.1875,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-34.svg"
+  },
+  {
+    "Index": 35,
+    "Line": 997,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process OpenTurnFromPromptHook: open a turn from the prompt hook (hosts without a bridge) [FR-MCP-SESSIONTURN-001, FR-MCP-SESSIONTURN-002, FR-MCP-SESSIONTURN-003]",
+    "Width": 724.0764770507812,
+    "Height": 1597.828125,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-35.svg"
+  },
+  {
+    "Index": 36,
+    "Line": 1017,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: OpenTurnUnderLock (the open of OpenTurnFromPromptHook, inside one Update-TurnState change)",
+    "Width": 988.1408081054688,
+    "Height": 2276.8125,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-36.svg"
+  },
+  {
+    "Index": 37,
+    "Line": 1054,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process BindVerbToTurn: bind a session-log verb to its turn [FR-MCP-SESSIONTURN-007]",
+    "Width": 1250.34228515625,
+    "Height": 1399.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-37.svg"
+  },
+  {
+    "Index": 38,
+    "Line": 1076,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ResolveVerbHostSession (host session step of BindVerbToTurn)",
+    "Width": 595.015869140625,
+    "Height": 1348.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-38.svg"
+  },
+  {
+    "Index": 39,
+    "Line": 1092,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ResolveVerbTarget (target step of BindVerbToTurn)",
+    "Width": 1367.8701171875,
+    "Height": 941.046875,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-39.svg"
+  },
+  {
+    "Index": 40,
+    "Line": 1118,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process PersistTurnWriteWithReceipt: persist a turn write with a truthful receipt (dispatches SubmitSessionLogCommand with the one bound turn, AppendTurnDialogCommand, or SetTurnTitleCommand through the REPL) [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-005]",
+    "Width": 1040.95703125,
+    "Height": 2515.75,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-40.svg"
+  },
+  {
+    "Index": 41,
+    "Line": 1145,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: SendBoundWrite (send step of PersistTurnWriteWithReceipt, for the evidence write and the bound write, and of the drain's ReplayBoundRecord)",
+    "Width": 1200.5018310546875,
+    "Height": 1658.0625,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-41.svg"
+  },
+  {
+    "Index": 42,
+    "Line": 1168,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: MapSubmitOutcome (submit answer step of SendBoundWrite)",
+    "Width": 744.857177734375,
+    "Height": 1338.3125,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-42.svg"
+  },
+  {
+    "Index": 43,
+    "Line": 1198,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process DrainFailsafe: drain the failsafe [FR-MCP-SESSIONTURN-001, FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-005]",
+    "Width": 427.6997985839844,
+    "Height": 349.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-43.svg"
+  },
+  {
+    "Index": 44,
+    "Line": 1209,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: DrainOneFailsafeRecord (loop body of DrainFailsafe)",
+    "Width": 1076.436767578125,
+    "Height": 2344.125,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-44.svg"
+  },
+  {
+    "Index": 45,
+    "Line": 1236,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ReplayBoundRecord (bound record step of DrainOneFailsafeRecord)",
+    "Width": 1207.7020263671875,
+    "Height": 1688.375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-45.svg"
+  },
+  {
+    "Index": 46,
+    "Line": 1267,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process EvaluateStopGate: evaluate the Stop gate [FR-MCP-SESSIONTURN-005]",
+    "Width": 709.1646118164062,
+    "Height": 1881.859375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-46.svg"
+  },
+  {
+    "Index": 47,
+    "Line": 1287,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: EvaluateTurnAtStop (loop body of EvaluateStopGate)",
+    "Width": 1358.9029541015625,
+    "Height": 1372.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-47.svg"
+  },
+  {
+    "Index": 48,
+    "Line": 1305,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: EvaluateOpenTurnAtStop (open turn step of EvaluateTurnAtStop)",
+    "Width": 1316.59423828125,
+    "Height": 1513.890625,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-48.svg"
+  },
+  {
+    "Index": 49,
+    "Line": 1327,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process ValidateHookRegistration: validate and repair hook registration [FR-MCP-SESSIONTURN-001]",
+    "Width": 577.299072265625,
+    "Height": 1643.046875,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-49.svg"
+  },
+  {
+    "Index": 50,
+    "Line": 1350,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process StartHostSession: start a host session [FR-MCP-SESSIONTURN-001, FR-MCP-SESSIONTURN-007]",
+    "Width": 636.5926513671875,
+    "Height": 3285.9375,
+    "MinimumPagesAt8PtNoMargins": 3.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-50.svg"
+  },
+  {
+    "Index": 51,
+    "Line": 1377,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process EndHostSession: end a host session [FR-MCP-SESSIONTURN-007]",
+    "Width": 294.0,
+    "Height": 824.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-51.svg"
+  },
+  {
+    "Index": 52,
+    "Line": 1393,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process SyncAgentPluginsAtVersion: sync the agent plugins at a fixed version [TR-MCP-NUKE-003 under FR-MCP-BUILD-001]",
+    "Width": 593.0509643554688,
+    "Height": 1421.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-52.svg"
+  },
+  {
+    "Index": 53,
+    "Line": 1408,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: SyncOneAgentPlugin (loop body of SyncAgentPluginsAtVersion)",
+    "Width": 602.0509643554688,
+    "Height": 1769.234375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-53.svg"
+  },
+  {
+    "Index": 54,
+    "Line": 1428,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process RunArrivalBridge: arrival bridge lifecycle (claude-code, claude-cowork) [FR-MCP-SESSIONTURN-001]",
+    "Width": 538.3795166015625,
+    "Height": 1231.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-54.svg"
+  },
+  {
+    "Index": 55,
+    "Line": 1441,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: TailTranscriptRecords (loop of RunArrivalBridge)",
+    "Width": 724.0991821289062,
+    "Height": 1430.53125,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-55.svg"
+  },
+  {
+    "Index": 56,
+    "Line": 1476,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit MintSessionTurnCommand and process each response",
+    "Width": 1927.0,
+    "Height": 1274.0,
+    "MinimumPagesAt8PtNoMargins": 4.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-56.svg"
+  },
+  {
+    "Index": 57,
+    "Line": 1516,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: PrepareHookMint (prompt hook steps before the mint call)",
+    "Width": 745.0,
+    "Height": 937.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-57.svg"
+  },
+  {
+    "Index": 58,
+    "Line": 1543,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ApplyMintOutcome (plugin step after Resolve-MintOutcome)",
+    "Width": 466.0,
+    "Height": 790.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-58.svg"
+  },
+  {
+    "Index": 59,
+    "Line": 1566,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit SubmitSessionLogCommand and process the per-turn outcomes",
+    "Width": 2272.5,
+    "Height": 1115.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-59.svg"
+  },
+  {
+    "Index": 60,
+    "Line": 1600,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit SubmitSessionLogCommand from a plugin verb and process each response",
+    "Width": 1681.5,
+    "Height": 1023.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-60.svg"
+  },
+  {
+    "Index": 61,
+    "Line": 1632,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit UpsertSessionTurnCommand and process each response",
+    "Width": 1805.5,
+    "Height": 1396.0,
+    "MinimumPagesAt8PtNoMargins": 4.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-61.svg"
+  },
+  {
+    "Index": 62,
+    "Line": 1673,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit PatchSessionTurnCommand and process each response",
+    "Width": 1788.5,
+    "Height": 1203.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-62.svg"
+  },
+  {
+    "Index": 63,
+    "Line": 1709,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit ReplaceSessionTurnCommand and process each response",
+    "Width": 1847.5,
+    "Height": 1203.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-63.svg"
+  },
+  {
+    "Index": 64,
+    "Line": 1745,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: close a turn from a plugin verb (completeTurn or failTurn through SubmitSessionLogCommand) and process each response",
+    "Width": 1008.0,
+    "Height": 1305.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-64.svg"
+  },
+  {
+    "Index": 65,
+    "Line": 1785,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ReceiveCloseAnswer (close answer step of the close sequence)",
+    "Width": 638.0,
+    "Height": 739.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-65.svg"
+  },
+  {
+    "Index": 66,
+    "Line": 1809,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit CompleteSessionTurnCommand and process each response",
+    "Width": 1792.5,
+    "Height": 1062.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-66.svg"
+  },
+  {
+    "Index": 67,
+    "Line": 1842,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit FailSessionTurnCommand and process each response",
+    "Width": 1744.5,
+    "Height": 1062.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-67.svg"
+  },
+  {
+    "Index": 68,
+    "Line": 1875,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit OpenSessionLogCommand and process each response",
+    "Width": 1727.0,
+    "Height": 930.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-68.svg"
+  },
+  {
+    "Index": 69,
+    "Line": 1905,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit AppendTurnDialogCommand from a plugin verb and process each response",
+    "Width": 2553.0,
+    "Height": 1207.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-69.svg"
+  },
+  {
+    "Index": 70,
+    "Line": 1943,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit SetTurnTitleCommand from a plugin verb and process each response",
+    "Width": 2531.5,
+    "Height": 1207.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-70.svg"
+  },
+  {
+    "Index": 71,
+    "Line": 1981,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit SetSessionTitleCommand and process each response",
+    "Width": 1493.5,
+    "Height": 694.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-71.svg"
+  },
+  {
+    "Index": 72,
+    "Line": 2006,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: replay the failsafe (process DrainFailsafe) and process each response",
+    "Width": 677.0,
+    "Height": 391.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-72.svg"
+  },
+  {
+    "Index": 73,
+    "Line": 2022,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ReplayOneFailsafeRecord (loop body of the DrainFailsafe sequence)",
+    "Width": 432.0,
+    "Height": 1169.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-73.svg"
+  },
+  {
+    "Index": 74,
+    "Line": 2054,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: SendDrainedRecord (send step of ReplayOneFailsafeRecord)",
+    "Width": 1118.0,
+    "Height": 1383.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-74.svg"
+  },
+  {
+    "Index": 75,
+    "Line": 2102,
+    "Kind": "stateDiagram-v2",
+    "Heading": "### 5.1 Data model",
+    "Width": 871.15625,
+    "Height": 1183.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-75.svg"
+  },
+  {
+    "Index": 76,
+    "Line": 2136,
+    "Kind": "flowchart TD",
+    "Heading": "#### RecordSessionTurnReviewCommand: record a review [FR-MCP-SESSIONREVIEW-001, -002, -003, -004, -005, -006, -007, FR-SUPPORT-016]",
+    "Width": 999.93994140625,
+    "Height": 2160.765625,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-76.svg"
+  },
+  {
+    "Index": 77,
+    "Line": 2167,
+    "Kind": "flowchart TD",
+    "Heading": "#### ResetSessionTurnReviewCommand: reset a review section [FR-SUPPORT-016, FR-MCP-SESSIONREVIEW-001]",
+    "Width": 736.46435546875,
+    "Height": 1576.84375,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-77.svg"
+  },
+  {
+    "Index": 78,
+    "Line": 2191,
+    "Kind": "flowchart TD",
+    "Heading": "#### GetSessionLogQuery: read one session with its turns and reviews [FR-MCP-SESSIONREVIEW-001, FR-MCP-SESSIONREVIEW-004]",
+    "Width": 703.9788818359375,
+    "Height": 590.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-78.svg"
+  },
+  {
+    "Index": 79,
+    "Line": 2210,
+    "Kind": "flowchart TD",
+    "Heading": "#### QuerySessionLogsQuery: query sessions and turns with their reviews [FR-MCP-SESSIONREVIEW-001, FR-MCP-SESSIONREVIEW-004]",
+    "Width": 517.7176513671875,
+    "Height": 818.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-79.svg"
+  },
+  {
+    "Index": 80,
+    "Line": 2230,
+    "Kind": "flowchart TD",
+    "Heading": "#### Policy RequestClassification: request classification and the Chore flip [FR-MCP-SESSIONCLASS-001, FR-MCP-SESSIONREVIEW-006]",
+    "Width": 578.5509643554688,
+    "Height": 1272.640625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-80.svg"
+  },
+  {
+    "Index": 81,
+    "Line": 2249,
+    "Kind": "flowchart TD",
+    "Heading": "#### Policy ReviewValidation: validate a review record and derive its status [FR-MCP-SESSIONREVIEW-003, -006, -007, FR-MCP-SESSIONCLASS-003]",
+    "Width": 1137.7496337890625,
+    "Height": 1747.484375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-81.svg"
+  },
+  {
+    "Index": 82,
+    "Line": 2274,
+    "Kind": "flowchart TD",
+    "Heading": "#### Policy HvVerdictMapping: HV verdict mapping (server) [FR-MCP-SESSIONREVIEW-005]",
+    "Width": 649.3607177734375,
+    "Height": 1828.25,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-82.svg"
+  },
+  {
+    "Index": 83,
+    "Line": 2293,
+    "Kind": "flowchart TD",
+    "Heading": "#### Policy CompletionPolicy: the completion rule [FR-MCP-SESSIONCLASS-002, FR-MCP-SESSIONCLASS-004]",
+    "Width": 444.625,
+    "Height": 2222.578125,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-83.svg"
+  },
+  {
+    "Index": 84,
+    "Line": 2321,
+    "Kind": "flowchart TD",
+    "Heading": "#### Policy CompletionGate: server enforcement of the completion rule [FR-MCP-SESSIONCLASS-002, -003, -004]",
+    "Width": 556.692138671875,
+    "Height": 1097.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-84.svg"
+  },
+  {
+    "Index": 85,
+    "Line": 2341,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process ConvertHvReceiptToReview: convert a hostile-validation receipt into a review write (plugin), then policy HvVerdictMapping [FR-MCP-SESSIONREVIEW-005]",
+    "Width": 627.9808349609375,
+    "Height": 1359.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-85.svg"
+  },
+  {
+    "Index": 86,
+    "Line": 2359,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process ClearSession: clear a session (clear-session coordinator) [TR-MCP-CLEARSESSION-001 under FR-MCP-CLEARSESSION-001]",
+    "Width": 276.0,
+    "Height": 635.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-86.svg"
+  },
+  {
+    "Index": 87,
+    "Line": 2370,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ClearOneOpenTurn (loop body of ClearSession)",
+    "Width": 801.96875,
+    "Height": 1652.0625,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-87.svg"
+  },
+  {
+    "Index": 88,
+    "Line": 2391,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ReportCloseReceipt (receipt step of ClearOneOpenTurn)",
+    "Width": 1113.3016357421875,
+    "Height": 478.71875,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-88.svg"
+  },
+  {
+    "Index": 89,
+    "Line": 2407,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process AdvisoryCompletionPrecheck: advisory completion pre-check (plugins, REPL, McpAgent) [FR-MCP-SESSIONCLASS-004]",
+    "Width": 342.78125,
+    "Height": 681.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-89.svg"
+  },
+  {
+    "Index": 90,
+    "Line": 2421,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process PreserveReviewScoreLexemes: lossless score handling in the REPL [FR-MCP-SESSIONREVIEW-004]",
+    "Width": 559.0703125,
+    "Height": 923.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-90.svg"
+  },
+  {
+    "Index": 91,
+    "Line": 2436,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit RecordSessionTurnReviewCommand and process each response",
+    "Width": 1066.0,
+    "Height": 1020.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-91.svg"
+  },
+  {
+    "Index": 92,
+    "Line": 2469,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ServeReviewWrite (server step of the recordReview sequence)",
+    "Width": 1215.0,
+    "Height": 1423.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-92.svg"
+  },
+  {
+    "Index": 93,
+    "Line": 2507,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit ResetSessionTurnReviewCommand and process each response",
+    "Width": 2016.0,
+    "Height": 1145.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-93.svg"
+  },
+  {
+    "Index": 94,
+    "Line": 2541,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit a classification through SubmitSessionLogCommand from the plugin updateTurn verb (policy RequestClassification) and process each response",
+    "Width": 2465.5,
+    "Height": 1357.0,
+    "MinimumPagesAt8PtNoMargins": 4.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-94.svg"
+  },
+  {
+    "Index": 95,
+    "Line": 2583,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit GetSessionLogQuery and process the response",
+    "Width": 1488.0,
+    "Height": 877.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-95.svg"
+  },
+  {
+    "Index": 96,
+    "Line": 2607,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit QuerySessionLogsQuery and process the response",
+    "Width": 2478.5,
+    "Height": 786.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-96.svg"
+  },
+  {
+    "Index": 97,
+    "Line": 2828,
+    "Kind": "erDiagram",
+    "Heading": "### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities.AgentContext`)",
+    "Width": 1190.7890625,
+    "Height": 510.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-97.svg"
+  },
+  {
+    "Index": 98,
+    "Line": 2840,
+    "Kind": "erDiagram",
+    "Heading": "### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities.AgentContext`)",
+    "Width": 532.9818115234375,
+    "Height": 285.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-98.svg"
+  },
+  {
+    "Index": 99,
+    "Line": 2849,
+    "Kind": "erDiagram",
+    "Heading": "### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities.AgentContext`)",
+    "Width": 478.4375,
+    "Height": 470.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-99.svg"
+  },
+  {
+    "Index": 100,
+    "Line": 2859,
+    "Kind": "erDiagram",
+    "Heading": "### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities.AgentContext`)",
+    "Width": 645.890625,
+    "Height": 470.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-100.svg"
+  },
+  {
+    "Index": 101,
+    "Line": 2869,
+    "Kind": "erDiagram",
+    "Heading": "### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities.AgentContext`)",
+    "Width": 441.96875,
+    "Height": 491.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-101.svg"
+  },
+  {
+    "Index": 102,
+    "Line": 2878,
+    "Kind": "erDiagram",
+    "Heading": "### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities.AgentContext`)",
+    "Width": 452.203125,
+    "Height": 470.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-102.svg"
+  },
+  {
+    "Index": 103,
+    "Line": 2887,
+    "Kind": "stateDiagram-v2",
+    "Heading": "### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities.AgentContext`)",
+    "Width": 1824.359375,
+    "Height": 860.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-103.svg"
+  },
+  {
+    "Index": 104,
+    "Line": 2914,
+    "Kind": "stateDiagram-v2",
+    "Heading": "### 6.3 Entities (namespace `QBrainAi.Support.Mcp.Storage.Entities.AgentContext`)",
+    "Width": 1605.0,
+    "Height": 1060.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-104.svg"
+  },
+  {
+    "Index": 105,
+    "Line": 3028,
+    "Kind": "flowchart TD",
+    "Heading": "#### GetAgentContextStatusQuery: get status [FR-MCP-AGENTCONTEXT-008, -009]",
+    "Width": 335.671875,
+    "Height": 663.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-105.svg"
+  },
+  {
+    "Index": 106,
+    "Line": 3051,
+    "Kind": "flowchart TD",
+    "Heading": "#### BuildAgentContextPackageCommand: build a context package [FR-MCP-AGENTCONTEXT-001, -002]",
+    "Width": 1347.0257568359375,
+    "Height": 1169.109375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-106.svg"
+  },
+  {
+    "Index": 107,
+    "Line": 3075,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ReadBuildInputs (reads of BuildAgentContextPackageCommand, before its SerializableWrite)",
+    "Width": 892.3590698242188,
+    "Height": 1290.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-107.svg"
+  },
+  {
+    "Index": 108,
+    "Line": 3094,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: SavePackage (SerializableWrite of BuildAgentContextPackageCommand, after ReadBuildInputs and PackageAssembler)",
+    "Width": 1792.1033935546875,
+    "Height": 1266.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-108.svg"
+  },
+  {
+    "Index": 109,
+    "Line": 3123,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: FillBudgetWithCandidates (loop of PackageAssembler, for BuildAgentContextPackageCommand and ReplayAgentContextPackageQuery)",
+    "Width": 1089.39697265625,
+    "Height": 1614.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-109.svg"
+  },
+  {
+    "Index": 110,
+    "Line": 3144,
+    "Kind": "flowchart TD",
+    "Heading": "#### GetAgentContextPackageQuery: get a package [FR-MCP-AGENTCONTEXT-001]",
+    "Width": 576.0,
+    "Height": 955.640625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-110.svg"
+  },
+  {
+    "Index": 111,
+    "Line": 3162,
+    "Kind": "flowchart TD",
+    "Heading": "#### QueryAgentContextPackagesQuery: query packages [FR-MCP-AGENTCONTEXT-001]",
+    "Width": 472.1015625,
+    "Height": 803.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-111.svg"
+  },
+  {
+    "Index": 112,
+    "Line": 3178,
+    "Kind": "flowchart TD",
+    "Heading": "#### ReplayAgentContextPackageQuery: replay a package [FR-MCP-AGENTCONTEXT-001]",
+    "Width": 889.72119140625,
+    "Height": 1615.28125,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-112.svg"
+  },
+  {
+    "Index": 113,
+    "Line": 3206,
+    "Kind": "flowchart TD",
+    "Heading": "#### SubmitAgentResponseCommand: submit a response [FR-MCP-AGENTCONTEXT-003]",
+    "Width": 1038.998291015625,
+    "Height": 1681.859375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-113.svg"
+  },
+  {
+    "Index": 114,
+    "Line": 3236,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ReadSubmissionInputs (reads of SubmitAgentResponseCommand, before its SerializableWrite)",
+    "Width": 940.9600830078125,
+    "Height": 986.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-114.svg"
+  },
+  {
+    "Index": 115,
+    "Line": 3256,
+    "Kind": "flowchart TD",
+    "Heading": "#### GetAgentResponseQuery: get a response [FR-MCP-AGENTCONTEXT-003]",
+    "Width": 498.82373046875,
+    "Height": 969.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-115.svg"
+  },
+  {
+    "Index": 116,
+    "Line": 3273,
+    "Kind": "flowchart TD",
+    "Heading": "#### QueryAgentResponsesQuery: query responses [FR-MCP-AGENTCONTEXT-003, -004]",
+    "Width": 606.0,
+    "Height": 1368.71875,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-116.svg"
+  },
+  {
+    "Index": 117,
+    "Line": 3299,
+    "Kind": "flowchart TD",
+    "Heading": "#### RunDeterministicGradeCommand: run the deterministic grade [FR-MCP-AGENTCONTEXT-004]",
+    "Width": 1016.8278198242188,
+    "Height": 2067.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-117.svg"
+  },
+  {
+    "Index": 118,
+    "Line": 3327,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: CheckOneEvidenceItem (loop body of RunDeterministicGradeCommand)",
+    "Width": 1110.130126953125,
+    "Height": 1405.625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-118.svg"
+  },
+  {
+    "Index": 119,
+    "Line": 3356,
+    "Kind": "flowchart TD",
+    "Heading": "#### RecordModelGradeCommand: record a model grade from an HV review [FR-MCP-AGENTCONTEXT-004]",
+    "Width": 1117.6495361328125,
+    "Height": 1368.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-119.svg"
+  },
+  {
+    "Index": 120,
+    "Line": 3380,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ReadModelGradeInputs (reads of RecordModelGradeCommand, before its SerializableWrite)",
+    "Width": 638.6688232421875,
+    "Height": 1040.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-120.svg"
+  },
+  {
+    "Index": 121,
+    "Line": 3396,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: CheckGradeTarget (response, claim, HV request, and item checks of ReadModelGradeInputs)",
+    "Width": 1271.07373046875,
+    "Height": 1711.859375,
+    "MinimumPagesAt8PtNoMargins": 4.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-121.svg"
+  },
+  {
+    "Index": 122,
+    "Line": 3415,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: SaveModelGrade (SerializableWrite of RecordModelGradeCommand, after ReadModelGradeInputs)",
+    "Width": 931.5347290039062,
+    "Height": 1254.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-122.svg"
+  },
+  {
+    "Index": 123,
+    "Line": 3442,
+    "Kind": "flowchart TD",
+    "Heading": "#### DecideAgentResponseTrustCommand: decide trust (internal, after every grade) [FR-MCP-AGENTCONTEXT-004]",
+    "Width": 571.7332763671875,
+    "Height": 1342.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-123.svg"
+  },
+  {
+    "Index": 124,
+    "Line": 3461,
+    "Kind": "flowchart TD",
+    "Heading": "#### RejectAgentResponseCommand: reject a response [FR-MCP-AGENTCONTEXT-005]",
+    "Width": 1054.0859375,
+    "Height": 1299.4375,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-124.svg"
+  },
+  {
+    "Index": 125,
+    "Line": 3488,
+    "Kind": "flowchart TD",
+    "Heading": "#### SupersedeAgentResponseCommand: supersede a response [FR-MCP-AGENTCONTEXT-005]",
+    "Width": 1360.12890625,
+    "Height": 1616.0,
+    "MinimumPagesAt8PtNoMargins": 4.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-125.svg"
+  },
+  {
+    "Index": 126,
+    "Line": 3519,
+    "Kind": "flowchart TD",
+    "Heading": "#### EvaluateStalenessCommand: evaluate staleness [FR-MCP-AGENTCONTEXT-005]",
+    "Width": 524.2481689453125,
+    "Height": 684.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-126.svg"
+  },
+  {
+    "Index": 127,
+    "Line": 3532,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: EvaluateOneResponseStaleness (loop body of EvaluateStalenessCommand)",
+    "Width": 694.1451416015625,
+    "Height": 1100.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-127.svg"
+  },
+  {
+    "Index": 128,
+    "Line": 3555,
+    "Kind": "flowchart TD",
+    "Heading": "#### CreateAgentContextRelationshipCommand: create a relationship [FR-MCP-AGENTCONTEXT-006]",
+    "Width": 731.5870971679688,
+    "Height": 1271.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-128.svg"
+  },
+  {
+    "Index": 129,
+    "Line": 3579,
+    "Kind": "flowchart TD",
+    "Heading": "#### DeleteAgentContextRelationshipCommand: delete a relationship [FR-MCP-AGENTCONTEXT-006]",
+    "Width": 546.1082763671875,
+    "Height": 834.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-129.svg"
+  },
+  {
+    "Index": 130,
+    "Line": 3596,
+    "Kind": "flowchart TD",
+    "Heading": "#### QueryAgentContextRelationshipsQuery: query relationships [FR-MCP-AGENTCONTEXT-006]",
+    "Width": 790.34375,
+    "Height": 1186.140625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-130.svg"
+  },
+  {
+    "Index": 131,
+    "Line": 3619,
+    "Kind": "flowchart TD",
+    "Heading": "#### RetrieveAgentContextCandidatesQuery: retrieve candidate context [FR-MCP-AGENTCONTEXT-007]",
+    "Width": 998.484375,
+    "Height": 3815.234375,
+    "MinimumPagesAt8PtNoMargins": 3.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-131.svg"
+  },
+  {
+    "Index": 132,
+    "Line": 3660,
+    "Kind": "flowchart TD",
+    "Heading": "#### ProjectAgentResponsesCommand: project responses into GraphRAG [FR-MCP-AGENTCONTEXT-007]",
+    "Width": 539.4105834960938,
+    "Height": 732.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-132.svg"
+  },
+  {
+    "Index": 133,
+    "Line": 3671,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ProjectOneResponse (loop body of ProjectAgentResponsesCommand)",
+    "Width": 1279.8724365234375,
+    "Height": 2197.75,
+    "MinimumPagesAt8PtNoMargins": 4.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-133.svg"
+  },
+  {
+    "Index": 134,
+    "Line": 3699,
+    "Kind": "flowchart TD",
+    "Heading": "#### GetAgentContextPilotReportQuery: pilot report [FR-MCP-AGENTCONTEXT-009]",
+    "Width": 469.48779296875,
+    "Height": 1237.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-134.svg"
+  },
+  {
+    "Index": 135,
+    "Line": 3723,
+    "Kind": "flowchart TD",
+    "Heading": "#### CreateAgentContextHvRequestCommand: create an HV request for a range of turns [FR-MCP-AGENTCONTEXT-004]",
+    "Width": 1070.6517333984375,
+    "Height": 1313.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-135.svg"
+  },
+  {
+    "Index": 136,
+    "Line": 3748,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: SelectHvRequestItems (turn, range, and item selection inside the SerializableWrite delegate of CreateAgentContextHvRequestCommand)",
+    "Width": 869.5127563476562,
+    "Height": 1245.359375,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-136.svg"
+  },
+  {
+    "Index": 137,
+    "Line": 3768,
+    "Kind": "flowchart TD",
+    "Heading": "#### GetAgentContextHvRequestQuery: get an HV request [FR-MCP-AGENTCONTEXT-004]",
+    "Width": 526.66748046875,
+    "Height": 682.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-137.svg"
+  },
+  {
+    "Index": 138,
+    "Line": 3783,
+    "Kind": "flowchart TD",
+    "Heading": "#### QueryAgentContextHvRequestsQuery: query HV requests [FR-MCP-AGENTCONTEXT-004]",
+    "Width": 472.1015625,
+    "Height": 827.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-138.svg"
+  },
+  {
+    "Index": 139,
+    "Line": 3810,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process RunStatelessInvocation: run a stateless invocation (plugin process) [FR-MCP-AGENTCONTEXT-009]",
+    "Width": 1211.2646484375,
+    "Height": 1004.203125,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-139.svg"
+  },
+  {
+    "Index": 140,
+    "Line": 3832,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ResolveInvocationTurn (Mode, host, trigger, and turn checks of RunStatelessInvocation, before the build)",
+    "Width": 1227.7283935546875,
+    "Height": 1283.421875,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-140.svg"
+  },
+  {
+    "Index": 141,
+    "Line": 3854,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: FailInvocation (refusal and canceled close of RunStatelessInvocation)",
+    "Width": 794.1405639648438,
+    "Height": 535.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-141.svg"
+  },
+  {
+    "Index": 142,
+    "Line": 3867,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: AnswerAndSubmit (model answer, submission, and grade request of RunStatelessInvocation)",
+    "Width": 857.513427734375,
+    "Height": 1601.421875,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-142.svg"
+  },
+  {
+    "Index": 143,
+    "Line": 3904,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: RequestPipeline (every Phase C dispatch)",
+    "Width": 1612.0,
+    "Height": 1025.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-143.svg"
+  },
+  {
+    "Index": 144,
+    "Line": 3938,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit GetAgentContextStatusQuery",
+    "Width": 1422.0,
+    "Height": 865.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-144.svg"
+  },
+  {
+    "Index": 145,
+    "Line": 3967,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit BuildAgentContextPackageCommand",
+    "Width": 1538.5,
+    "Height": 1200.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-145.svg"
+  },
+  {
+    "Index": 146,
+    "Line": 4003,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction)",
+    "Width": 1235.5,
+    "Height": 1149.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-146.svg"
+  },
+  {
+    "Index": 147,
+    "Line": 4036,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence)",
+    "Width": 1401.0,
+    "Height": 1211.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-147.svg"
+  },
+  {
+    "Index": 148,
+    "Line": 4071,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit GetAgentContextPackageQuery",
+    "Width": 1374.5,
+    "Height": 700.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-148.svg"
+  },
+  {
+    "Index": 149,
+    "Line": 4094,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit QueryAgentContextPackagesQuery",
+    "Width": 1437.0,
+    "Height": 653.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-149.svg"
+  },
+  {
+    "Index": 150,
+    "Line": 4118,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit ReplayAgentContextPackageQuery",
+    "Width": 1576.0,
+    "Height": 1213.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-150.svg"
+  },
+  {
+    "Index": 151,
+    "Line": 4156,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit SubmitAgentResponseCommand",
+    "Width": 1521.0,
+    "Height": 1573.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-151.svg"
+  },
+  {
+    "Index": 152,
+    "Line": 4201,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction)",
+    "Width": 1091.5,
+    "Height": 962.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-152.svg"
+  },
+  {
+    "Index": 153,
+    "Line": 4232,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit GetAgentResponseQuery",
+    "Width": 1269.5,
+    "Height": 730.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-153.svg"
+  },
+  {
+    "Index": 154,
+    "Line": 4257,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit QueryAgentResponsesQuery",
+    "Width": 1510.0,
+    "Height": 776.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-154.svg"
+  },
+  {
+    "Index": 155,
+    "Line": 4283,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit RunDeterministicGradeCommand",
+    "Width": 1479.0,
+    "Height": 1490.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-155.svg"
+  },
+  {
+    "Index": 156,
+    "Line": 4324,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit RecordModelGradeCommand from an HV review",
+    "Width": 1090.5,
+    "Height": 795.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-156.svg"
+  },
+  {
+    "Index": 157,
+    "Line": 4351,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence)",
+    "Width": 1456.0,
+    "Height": 1765.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-157.svg"
+  },
+  {
+    "Index": 158,
+    "Line": 4401,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction)",
+    "Width": 1290.0,
+    "Height": 1792.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-158.svg"
+  },
+  {
+    "Index": 159,
+    "Line": 4451,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit RejectAgentResponseCommand",
+    "Width": 1469.0,
+    "Height": 1120.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-159.svg"
+  },
+  {
+    "Index": 160,
+    "Line": 4486,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit SupersedeAgentResponseCommand",
+    "Width": 1524.0,
+    "Height": 1598.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-160.svg"
+  },
+  {
+    "Index": 161,
+    "Line": 4533,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit EvaluateStalenessCommand",
+    "Width": 1278.0,
+    "Height": 902.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-161.svg"
+  },
+  {
+    "Index": 162,
+    "Line": 4564,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit CreateAgentContextRelationshipCommand",
+    "Width": 1797.0,
+    "Height": 1170.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-162.svg"
+  },
+  {
+    "Index": 163,
+    "Line": 4602,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit DeleteAgentContextRelationshipCommand",
+    "Width": 1197.0,
+    "Height": 738.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-163.svg"
+  },
+  {
+    "Index": 164,
+    "Line": 4626,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit QueryAgentContextRelationshipsQuery",
+    "Width": 1492.0,
+    "Height": 653.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-164.svg"
+  },
+  {
+    "Index": 165,
+    "Line": 4650,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit RetrieveAgentContextCandidatesQuery",
+    "Width": 1434.0,
+    "Height": 1096.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-165.svg"
+  },
+  {
+    "Index": 166,
+    "Line": 4684,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence)",
+    "Width": 816.5,
+    "Height": 906.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-166.svg"
+  },
+  {
+    "Index": 167,
+    "Line": 4714,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit ProjectAgentResponsesCommand",
+    "Width": 1334.0,
+    "Height": 902.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-167.svg"
+  },
+  {
+    "Index": 168,
+    "Line": 4745,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence)",
+    "Width": 953.5,
+    "Height": 1620.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-168.svg"
+  },
+  {
+    "Index": 169,
+    "Line": 4800,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: stateless invocation end to end (process RunStatelessInvocation)",
+    "Width": 1396.5,
+    "Height": 1261.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-169.svg"
+  },
+  {
+    "Index": 170,
+    "Line": 4839,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence)",
+    "Width": 1538.0,
+    "Height": 1184.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-170.svg"
+  },
+  {
+    "Index": 171,
+    "Line": 4877,
+    "Kind": "sequenceDiagram",
+    "Heading": "##### Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence)",
+    "Width": 1145.5,
+    "Height": 888.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-171.svg"
+  },
+  {
+    "Index": 172,
+    "Line": 4906,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit GetAgentContextPilotReportQuery",
+    "Width": 1359.0,
+    "Height": 653.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-172.svg"
+  },
+  {
+    "Index": 173,
+    "Line": 4930,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit CreateAgentContextHvRequestCommand",
+    "Width": 1708.0,
+    "Height": 1451.0,
+    "MinimumPagesAt8PtNoMargins": 4.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-173.svg"
+  },
+  {
+    "Index": 174,
+    "Line": 4971,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit GetAgentContextHvRequestQuery",
+    "Width": 1291.5,
+    "Height": 607.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-174.svg"
+  },
+  {
+    "Index": 175,
+    "Line": 4992,
+    "Kind": "sequenceDiagram",
+    "Heading": "#### Sequence: submit QueryAgentContextHvRequestsQuery",
+    "Width": 1416.0,
+    "Height": 653.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-175.svg"
+  },
+  {
+    "Index": 176,
+    "Line": 5018,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.1 Overview",
+    "Width": 701.7176513671875,
+    "Height": 3645.90625,
+    "MinimumPagesAt8PtNoMargins": 3.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-176.svg"
+  },
+  {
+    "Index": 177,
+    "Line": 5070,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.2 Use case: Log each user request as exactly one turn (plan UC-1) [FR-MCP-SESSIONTURN-001, -002, -003, -007, -008]",
+    "Width": 1155.15185546875,
+    "Height": 2490.375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-177.svg"
+  },
+  {
+    "Index": 178,
+    "Line": 5093,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.3 Use case: Persist session-log writes with truthful receipts (plan UC-2) [FR-MCP-SESSIONTURN-004]",
+    "Width": 998.69873046875,
+    "Height": 1138.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-178.svg"
+  },
+  {
+    "Index": 179,
+    "Line": 5109,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.4 Use case: Close every request turn before stopping (plan UC-3) [FR-MCP-SESSIONTURN-005, -006]",
+    "Width": 1065.83935546875,
+    "Height": 1569.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-179.svg"
+  },
+  {
+    "Index": 180,
+    "Line": 5127,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.5 Use case: Classify a request (plan UC-4) [FR-MCP-SESSIONCLASS-001, FR-MCP-SESSIONREVIEW-006]",
+    "Width": 634.30810546875,
+    "Height": 1251.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-180.svg"
+  },
+  {
+    "Index": 181,
+    "Line": 5141,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.6 Use case: Complete or fail a turn under the completion gate (plan UC-5) [FR-MCP-SESSIONCLASS-002, -003, -004]",
+    "Width": 1182.4207763671875,
+    "Height": 1713.734375,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-181.svg"
+  },
+  {
+    "Index": 182,
+    "Line": 5160,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.7 Use case: Record an agent self-review (plan UC-6) [FR-MCP-SESSIONREVIEW-001, -002, -003, -006, -008, FR-SUPPORT-016]",
+    "Width": 1240.1551513671875,
+    "Height": 1593.0,
+    "MinimumPagesAt8PtNoMargins": 4.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-182.svg"
+  },
+  {
+    "Index": 183,
+    "Line": 5177,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.8 Use case: Record a hostile validation review with receipts (plan UC-7) [FR-MCP-SESSIONREVIEW-002, -005]",
+    "Width": 1146.9364013671875,
+    "Height": 1297.1875,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-183.svg"
+  },
+  {
+    "Index": 184,
+    "Line": 5194,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.9 Use case: Configure review pass thresholds (plan UC-8) [FR-MCP-SESSIONREVIEW-007]",
+    "Width": 959.57373046875,
+    "Height": 438.078125,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-184.svg"
+  },
+  {
+    "Index": 185,
+    "Line": 5206,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.10 Use case: Read review scores losslessly (plan UC-9) [FR-MCP-SESSIONREVIEW-004]",
+    "Width": 721.47998046875,
+    "Height": 231.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-185.svg"
+  },
+  {
+    "Index": 186,
+    "Line": 5217,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.11 Use case: Build a context package for a request [FR-MCP-AGENTCONTEXT-001, -002]",
+    "Width": 1325.43310546875,
+    "Height": 1377.25,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-186.svg"
+  },
+  {
+    "Index": 187,
+    "Line": 5236,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.12 Use case: Submit and grade an agent response [FR-MCP-AGENTCONTEXT-003, -004]",
+    "Width": 1214.22998046875,
+    "Height": 1693.421875,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-187.svg"
+  },
+  {
+    "Index": 188,
+    "Line": 5258,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.13 Use case: Retrieve trusted prior context [FR-MCP-AGENTCONTEXT-007]",
+    "Width": 1197.12060546875,
+    "Height": 549.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-188.svg"
+  },
+  {
+    "Index": 189,
+    "Line": 5271,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.14 Use case: Maintain relationships, staleness, and supersession [FR-MCP-AGENTCONTEXT-005, -006]",
+    "Width": 1191.88623046875,
+    "Height": 973.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-189.svg"
+  },
+  {
+    "Index": 190,
+    "Line": 5289,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.15 Use case: Run a stateless or pilot invocation [FR-MCP-AGENTCONTEXT-008, -009]",
+    "Width": 1131.22998046875,
+    "Height": 1893.921875,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-190.svg"
+  },
+  {
+    "Index": 191,
+    "Line": 5309,
+    "Kind": "flowchart LR",
+    "Heading": "### 7.16 Use case: Project responses into GraphRAG [FR-MCP-AGENTCONTEXT-007]",
+    "Width": 820.27685546875,
+    "Height": 1314.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-191.svg"
+  },
+  {
+    "Index": 192,
+    "Line": 5326,
+    "Kind": "flowchart TD",
+    "Heading": "### 8.1 Phase order",
+    "Width": 276.0,
+    "Height": 826.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-192.svg"
+  },
+  {
+    "Index": 193,
+    "Line": 5357,
+    "Kind": "flowchart LR",
+    "Heading": "### 8.3 Bounded contexts (Phase 4 work packages)",
+    "Width": 1241.0625,
+    "Height": 715.142822265625,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-193.svg"
+  },
+  {
+    "Index": 194,
+    "Line": 5407,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process RunPlanPhases: run the four phases",
+    "Width": 525.15625,
+    "Height": 1093.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-194.svg"
+  },
+  {
+    "Index": 195,
+    "Line": 5422,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: RunOnePlanPhase (loop body of RunPlanPhases)",
+    "Width": 514.6234741210938,
+    "Height": 945.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-195.svg"
+  },
+  {
+    "Index": 196,
+    "Line": 5435,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ValidateAndApprove (used by RunOnePlanPhase and RunPlanPhases)",
+    "Width": 518.833740234375,
+    "Height": 982.3125,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-196.svg"
+  },
+  {
+    "Index": 197,
+    "Line": 5450,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: RunPhase4WorkPackages (loop of RunPlanPhases)",
+    "Width": 333.796875,
+    "Height": 848.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-197.svg"
+  },
+  {
+    "Index": 198,
+    "Line": 5463,
+    "Kind": "flowchart TD",
+    "Heading": "#### Process RunDomainCodingAgent: one Phase 4 work package",
+    "Width": 517.4352416992188,
+    "Height": 705.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-198.svg"
+  },
+  {
+    "Index": 199,
+    "Line": 5474,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ImplementBoundedContext (loop of RunDomainCodingAgent)",
+    "Width": 494.0,
+    "Height": 373.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-199.svg"
+  },
+  {
+    "Index": 200,
+    "Line": 5484,
+    "Kind": "flowchart TD",
+    "Heading": "##### Nested activity: ImplementationPass (loop body of ImplementBoundedContext)",
+    "Width": 661.88427734375,
+    "Height": 2040.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-200.svg"
+  },
+  {
+    "Index": 201,
+    "Line": 5589,
+    "Kind": "erDiagram",
+    "Heading": "### A.1 References between the groups",
+    "Width": 1477.804931640625,
+    "Height": 1001.0,
+    "MinimumPagesAt8PtNoMargins": 2.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-201.svg"
+  },
+  {
+    "Index": 202,
+    "Line": 5620,
+    "Kind": "erDiagram",
+    "Heading": "### A.2 Sessions and turns (Phases A and B)",
+    "Width": 487.734375,
+    "Height": 1244.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-202.svg"
+  },
+  {
+    "Index": 203,
+    "Line": 5657,
+    "Kind": "erDiagram",
+    "Heading": "### A.3 Turn records",
+    "Width": 652.53125,
+    "Height": 817.25,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-203.svg"
+  },
+  {
+    "Index": 204,
+    "Line": 5691,
+    "Kind": "erDiagram",
+    "Heading": "### A.4 Requirements, TODOs, and use cases (existing entities the plan references)",
+    "Width": 787.734375,
+    "Height": 1076.5,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-204.svg"
+  },
+  {
+    "Index": 205,
+    "Line": 5753,
+    "Kind": "erDiagram",
+    "Heading": "### A.5 Packages and their build inputs (Phase C)",
+    "Width": 757.28125,
+    "Height": 1076.5,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-205.svg"
+  },
+  {
+    "Index": 206,
+    "Line": 5803,
+    "Kind": "erDiagram",
+    "Heading": "### A.6 Package omissions and findings (Phase C)",
+    "Width": 620.125,
+    "Height": 526.25,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-206.svg"
+  },
+  {
+    "Index": 207,
+    "Line": 5831,
+    "Kind": "erDiagram",
+    "Heading": "### A.7 Responses and evidence (Phase C)",
+    "Width": 1142.375,
+    "Height": 547.625,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-207.svg"
+  },
+  {
+    "Index": 208,
+    "Line": 5870,
+    "Kind": "erDiagram",
+    "Heading": "### A.8 Grades (Phase C)",
+    "Width": 1112.671875,
+    "Height": 358.0,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-208.svg"
+  },
+  {
+    "Index": 209,
+    "Line": 5900,
+    "Kind": "erDiagram",
+    "Heading": "### A.9 HV requests (Phase C)",
+    "Width": 705.375,
+    "Height": 396.5,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-209.svg"
+  },
+  {
+    "Index": 210,
+    "Line": 5929,
+    "Kind": "erDiagram",
+    "Heading": "### A.10 Relationships, the GraphRAG projection, and retrieval stores (Phase C)",
+    "Width": 859.0520629882812,
+    "Height": 1045.75,
+    "MinimumPagesAt8PtNoMargins": 1.0,
+    "Svg": "docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-210.svg"
+  }
+]

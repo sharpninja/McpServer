@@ -1,0 +1,24 @@
+P1.R retrofit receipts, R4-R5 and aggregate (BDP v4 per plan section 2a), 2026-10-07
+
+== R4 MockData: WorkspacePathDomainSitesMockDataTests
+  Passed!  - Failed:     0, Passed:     9, Skipped:     0, Total:     9, Duration: 176 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== R4 Real: WorkspacePathDomainSitesRealTests + TodoServiceResolver|TodoServiceFactory|EfTodoService|TodoExecution|HostileReview|AgentPool|GitHubWorkspaceToken|RequirementsDatabase suites
+  Passed!  - Failed:     0, Passed:   159, Skipped:     0, Total:   159, Duration: 15 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== R5 MockData: WorkspacePathGetFullPathRatchetMockDataTests (2 invariants + 4 scripted failure/acceptance paths)
+  Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 75 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== R5 Real: WorkspacePathGetFullPathRatchetRealTests (repository src/ scan)
+  Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 704 ms - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== AGGREGATE step 2: filter FullyQualifiedName~MockDataTests (7 classes)
+  Passed!  - Failed:     0, Passed:    69, Skipped:     0, Total:    69, Duration: 4 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+== AGGREGATE step 3: filter FullyQualifiedName~RealTests (7 classes)
+  Passed!  - Failed:     0, Passed:    67, Skipped:     0, Total:    67, Duration: 4 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+
+Count reconciliation: 65 shared contract cases; MockData 69 = 65 + 4 ratchet evaluator paths; Real 67 = 65 + 2 concrete-normalizer checks (null host, process normalizer).
+R4 seams (production default = WorkspacePathNormalizer.Process, behaviour unchanged): TodoServiceResolver optional ctor normalizer; internal static TodoServiceFactory.NormalizeWorkspaceRoot, EfTodoService.NormalizeFixedWorkspacePath, TodoExecutionService.NormalizeWorkspacePath(path, n), RequirementsDatabaseDocumentService.NormalizeRequestWorkspacePath, HostileReviewService.IsSameWorkspace, AgentPoolService.BuildPooledDeviceId(agent, path, n), FileGitHubWorkspaceTokenStore.NormalizeWorkspacePath(path, n).
+R5: ratchet evaluation extracted (Count, IdentityOffenders, AllowlistViolations); file renamed WorkspacePathGetFullPathRatchetTests.cs -> WorkspacePathGetFullPathRatchetContractTests.cs.
+

@@ -67,7 +67,7 @@ Contributing: missing `eol=lf` in `.gitattributes` for `plugins/core/lib-sh/*.sh
 
 Codex post-patch result (via their shim after manual patch, before this root fix landed): PASSED. After this change, official synced plugins should no longer require local patches for the same reason.
 
-## Files Changed (relative to McpServer workspace)
+## Files Changed (relative to QBrainAi workspace)
 - `plugins/core/lib-sh/repl-invoke.sh`
 - `plugins/core/.staged-plugin/lib/repl-invoke.sh` (for dev parity; ignored in git)
 - `.gitattributes`

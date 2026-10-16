@@ -5,7 +5,7 @@ import { cacheDelete, cacheWrite } from '../cache/cache-manager.js';
  * Shim for the workflow.sessionlog.* MCP tool family.
  *
  * Original bug: every workflow.sessionlog.* method routed straight through
- * ReplBridge.invoke() to mcpserver-repl, which only knows the generic
+ * ReplBridge.invoke() to qbrain-ai-repl, which only knows the generic
  * client.<Name>.<MethodName> shape. Server replied with method_not_found
  * and handleSessionTool threw — every session tool call failed.
  *
@@ -308,7 +308,7 @@ async function querySessionHistoryHttpFallback(
   const baseUrl = process.env.MCPSERVER_BASE_URL ?? process.env.MCP_SERVER_URL;
   if (typeof fetchFn !== 'function' || !apiKey || !workspacePath || !baseUrl) return null;
 
-  const url = new URL(`${baseUrl.replace(/\/$/, '')}/mcpserver/sessionlog`);
+  const url = new URL(`${baseUrl.replace(/\/$/, '')}/qbrainai/sessionlog`);
   for (const key of ['agent', 'model', 'text', 'from', 'to', 'limit', 'offset']) {
     const value = args[key];
     if (value !== undefined && value !== null && String(value).length > 0) {

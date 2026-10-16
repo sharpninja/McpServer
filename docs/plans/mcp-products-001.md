@@ -14,7 +14,7 @@ A Product is the missing grouping: a workspace belongs to zero or more products.
 
 ## Value
 
-One product (for example McpServer plus its plugins) can share a requirement catalog across repos while each workspace remains the owner of its own rows. Agents reason across related repositories through provenance-tagged reads.
+One product (for example QBrainAi plus its plugins) can share a requirement catalog across repos while each workspace remains the owner of its own rows. Agents reason across related repositories through provenance-tagged reads.
 
 ## Locked decisions
 
@@ -26,7 +26,7 @@ One product (for example McpServer plus its plugins) can share a requirement cat
 
 4. **Membership.** A product has exactly one owner workspace (`OwnerWorkspaceId` = creator). The owner adds and removes member workspace IDs. A member may leave itself. Only the owner may rename, disable, or soft-delete the product. Adding a workspace requires that workspace to be registered, enabled, and not soft-deleted. No invite tokens in v1.
 
-5. **Consent.** Joining (being added) is the consent. After that, `GET /mcpserver/requirements/effective` defaults to product union. `listFr` / `getFr` / create / update / delete stay local. Effective accepts `productScope=local|product` (default `product`) so callers can preview local-only.
+5. **Consent.** Joining (being added) is the consent. After that, `GET /qbrainai/requirements/effective` defaults to product union. `listFr` / `getFr` / create / update / delete stay local. Effective accepts `productScope=local|product` (default `product`) so callers can preview local-only.
 
 6. **Identity collisions.** The same FR id in two workspaces is two records. Effective and context results carry `originWorkspaceId` (and origin workspace name). Composite identity is `(originWorkspaceId, kind, id)`. Never merge or overwrite on id alone.
 
@@ -36,7 +36,7 @@ One product (for example McpServer plus its plugins) can share a requirement cat
 
 9. **Use case ProductKey.** Registered `Product.Key` values are `PROD-*` strings (example `PROD-MCPSERVER`). `UseCaseEntity.ProductKey` remains an unconstrained hook in v1 (preserves `FR-MCP-USECASE-009`). Product CRUD uniqueness is among non-deleted `PROD-*` keys. v1 does not require a registered Product before setting a use-case ProductKey.
 
-10. **Authorization.** All product routes stay behind `/mcpserver/*` API-key auth. The caller's API key still binds to one workspace. That workspace may read sibling requirements only if it is an active member of a shared product. A leaked workspace key cannot list all products or dump non-member workspaces.
+10. **Authorization.** All product routes stay behind `/qbrainai/*` API-key auth. The caller's API key still binds to one workspace. That workspace may read sibling requirements only if it is an active member of a shared product. A leaked workspace key cannot list all products or dump non-member workspaces.
 
 11. **Storage.** Products and memberships are host-global tables (no workspace EF query filter). Authorization is in CQRS handlers. Soft-delete on products and memberships. Append-only audit on every product mutation (`TR-MCP-DB-004`). Multi-provider migrations for SQLite, PostgreSQL, and SQL Server. Turn-transaction gating on mutating product commands, matching other domain writes.
 
@@ -75,7 +75,7 @@ Create these in the MCP requirements store, map FR to TR and TEST, then export `
 
 - **TR-MCP-PRODUCT-MODEL-001** Entities `ProductEntity`, `ProductWorkspaceMembershipEntity`; host-global; soft-delete; unique `Key` matching `^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$`; FK to `Workspaces`; audit rows; migrations apply on SQLite, PostgreSQL, SQL Server without re-adding unrelated columns.
 - **TR-MCP-PRODUCT-SHARE-001** CQRS query path (private helper only) ignores workspace query filter only for member `WorkspaceId`s of the caller's products; layer filter uses origin catalog; results include `originWorkspaceId`.
-- **TR-MCP-PRODUCT-API-001** CQRS commands/queries in `McpServer.Support.Mcp/Products/`. REST `/mcpserver/products`, MCP `product_*`, `ProductClient`, REPL `client.Products`, and plugin descriptors dispatch those handlers only. Effective endpoint gains `productScope`.
+- **TR-MCP-PRODUCT-API-001** CQRS commands/queries in `QBrainAi.Support.Mcp/Products/`. REST `/qbrainai/products`, MCP `product_*`, `ProductClient`, REPL `client.Products`, and plugin descriptors dispatch those handlers only. Effective endpoint gains `productScope`.
 - **TR-MCP-PRODUCT-AUTH-001** Authorization lives in CQRS handlers (or a helper used only by those handlers); transaction gating on mutating product commands.
 - **TR-MCP-PRODUCT-CTX-001** Context indexer/search path for `product-requirements` chunks derived from the CQRS share helper, not from sibling `ContextDocument` rows.
 
@@ -102,15 +102,15 @@ After store create: `requirements_generate` `doc=all` `format=markdown` (and wik
 
 **REST** (`X-Api-Key` + workspace resolution unchanged)
 
-- `POST /mcpserver/products` body `{ key: "PROD-MCPSERVER", name, description? }` -> product (caller is owner)
-- `GET /mcpserver/products` -> products the caller owns or is a member of
-- `GET /mcpserver/products/{key}`
-- `PATCH /mcpserver/products/{key}` name/description (owner)
-- `DELETE /mcpserver/products/{key}` soft-delete (owner)
-- `GET /mcpserver/products/{key}/members`
-- `PUT /mcpserver/products/{key}/members/{workspaceId}` add (owner)
-- `DELETE /mcpserver/products/{key}/members/{workspaceId}` remove (owner, or self-leave)
-- `GET /mcpserver/requirements/effective?layerKey=&productScope=product|local`
+- `POST /qbrainai/products` body `{ key: "PROD-MCPSERVER", name, description? }` -> product (caller is owner)
+- `GET /qbrainai/products` -> products the caller owns or is a member of
+- `GET /qbrainai/products/{key}`
+- `PATCH /qbrainai/products/{key}` name/description (owner)
+- `DELETE /qbrainai/products/{key}` soft-delete (owner)
+- `GET /qbrainai/products/{key}/members`
+- `PUT /qbrainai/products/{key}/members/{workspaceId}` add (owner)
+- `DELETE /qbrainai/products/{key}/members/{workspaceId}` remove (owner, or self-leave)
+- `GET /qbrainai/requirements/effective?layerKey=&productScope=product|local`
 
 **DTO additions**
 
@@ -119,11 +119,11 @@ After store create: `requirements_generate` `doc=all` `format=markdown` (and wik
 
 **MCP tools** (STDIO / streamable HTTP): `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`. `requirements_effective` gains `productScope`.
 
-**Client:** `McpServerClient.Products` (`ProductClient`) + JSON context registrations + `ENDPOINTS.md`.
+**Client:** `QBrainAiClient.Products` (`ProductClient`) + JSON context registrations + `ENDPOINTS.md`.
 
 **REPL:** `client.Products.*` allow-listed like `client.UseCases`.
 
-**CQRS (mandatory):** commands/queries/handlers live under `McpServer.Support.Mcp/Products/` (`ICommand` / `IQuery` / handlers / `Dispatcher` / `Result<T>`), registered on HTTP and STDIO hosts the same way use cases are. Controllers, MCP tools, REPL, and `ProductClient` only dispatch. New public `IProductService`-style facades are forbidden. Private helpers are allowed only when called from handlers (for example membership authorization or the share query). This is `FR-MCP-029` / `TR-MCP-CQRS-*`, not optional.
+**CQRS (mandatory):** commands/queries/handlers live under `QBrainAi.Support.Mcp/Products/` (`ICommand` / `IQuery` / handlers / `Dispatcher` / `Result<T>`), registered on HTTP and STDIO hosts the same way use cases are. Controllers, MCP tools, REPL, and `ProductClient` only dispatch. New public `IProductService`-style facades are forbidden. Private helpers are allowed only when called from handlers (for example membership authorization or the share query). This is `FR-MCP-029` / `TR-MCP-CQRS-*`, not optional.
 
 ## Data model
 
@@ -186,10 +186,10 @@ Each implementation slice: write AC-covering unit tests first (shown red), mocks
 
 **Red tests first**
 
-- `tests/McpServer.Support.Mcp.Tests/Storage/ProductEntityTests.cs`
-- `tests/McpServer.Support.Mcp.Tests/Products/CreateProductCommandHandlerTests.cs`
-- `tests/McpServer.Support.Mcp.Tests/Products/AddProductMemberCommandHandlerTests.cs`
-- `tests/McpServer.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Storage/ProductEntityTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Products/CreateProductCommandHandlerTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Products/AddProductMemberCommandHandlerTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs`
 
 Named cases: accept `PROD-MCPSERVER`; reject `mcpserver` / empty / missing prefix (400); unique key; owner add/remove; self-leave; reject unknown workspace; soft-delete hides product; non-owner cannot add.
 
@@ -197,7 +197,7 @@ Named cases: accept `PROD-MCPSERVER`; reject `mcpserver` / empty / missing prefi
 
 **Green:** entities, migrations, CQRS commands/queries/handlers for product CRUD and membership. Private helper only if a handler calls it. No public `IProductService`. Audit emission from handlers.
 
-**Gate:** `dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~Product`
+**Gate:** `dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~Product`
 
 **Hostile checkpoint H1-green** before Phase 2.
 
@@ -205,7 +205,7 @@ Named cases: accept `PROD-MCPSERVER`; reject `mcpserver` / empty / missing prefi
 
 **Red tests first**
 
-- `tests/McpServer.Support.Mcp.Tests/Products/GetProductEffectiveRequirementsQueryHandlerTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Products/GetProductEffectiveRequirementsQueryHandlerTests.cs`
 - Extend existing effective-requirements tests so a workspace with zero products is unchanged.
 
 Named cases: union; `productScope=local`; collision two origins; layer miss excludes; leave drops sibling; outsider cannot share.
@@ -222,8 +222,8 @@ Named cases: union; `productScope=local`; collision two origins; layer miss excl
 
 **Red tests first**
 
-- `tests/McpServer.Support.Mcp.Tests/Controllers/ProductsControllerTests.cs`
-- `tests/McpServer.Client.Tests/ProductClientTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Controllers/ProductsControllerTests.cs`
+- `tests/QBrainAi.Client.Tests/ProductClientTests.cs`
 - MCP/REPL allow-list tests following the use-case CQRS dispatch pattern
 - Plugin descriptor tests if Node descriptors are generated in this repo
 
@@ -239,7 +239,7 @@ Named cases: union; `productScope=local`; collision two origins; layer miss excl
 
 **Red tests first**
 
-- `tests/McpServer.Support.Mcp.Tests/Products/ProductRequirementContextTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Products/ProductRequirementContextTests.cs`
 
 Named cases: member pack contains sibling FR text + origin; does not contain sibling source path chunks; non-member pack does not contain sibling FR.
 

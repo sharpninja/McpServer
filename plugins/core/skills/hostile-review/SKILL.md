@@ -16,4 +16,4 @@ method: workflow.hostileReview.query
 
 Native MCP tools: `hostile_review_submit`, `hostile_review_status`, `hostile_review_get`, `hostile_review_query`.
 Director: `hostile-review-submit`, `hostile-review-status`, `hostile-review-get`, `hostile-review-query`.
-REST: `POST /mcpserver/hostile-review/submit`, `GET /mcpserver/hostile-review/{id}/status`, `GET /mcpserver/hostile-review/{id}`, `POST /mcpserver/hostile-review/query`.
+REST: `POST /qbrainai/hostile-review/submit`, `GET /qbrainai/hostile-review/{id}/status`, `GET /qbrainai/hostile-review/{id}`, `POST /qbrainai/hostile-review/query`.

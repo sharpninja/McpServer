@@ -1,0 +1,41 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.12]     NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_UnscopedPackage_FollowsNpmNaming [FAIL]
+[xUnit.net 00:00:01.13]     NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_ManifestWithoutName_Throws [FAIL]
+[xUnit.net 00:00:01.13]     NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_ScopedPackage_FollowsNpmNaming [FAIL]
+  Failed NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_UnscopedPackage_FollowsNpmNaming [100 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "plain-core-1.2.3.tgz"
+Actual:   "sharpninja-mcpserver-plugin-core-1.2.3.tgz"
+           ↑ (pos 0)
+  Stack Trace:
+     at NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_UnscopedPackage_FollowsNpmNaming() in tests/Build.Tests/SyncAgentPluginsPackNameTests.cs:line 40
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_ManifestWithoutName_Throws [3 ms]
+  Error Message:
+   Assert.Throws() Failure: No exception was thrown
+Expected: typeof(System.InvalidOperationException)
+  Stack Trace:
+     at NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_ManifestWithoutName_Throws() in tests/Build.Tests/SyncAgentPluginsPackNameTests.cs:line 57
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_ScopedPackage_FollowsNpmNaming [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "qbrainai-qbrain-ai-plugin-core-0.2.0.tgz"
+Actual:   "sharpninja-mcpserver-plugin-core-0.2.0.tgz"
+           ↑ (pos 0)
+  Stack Trace:
+     at NukeBuild.Tests.SyncAgentPluginsPackNameTests.ExpectedPackFileName_ScopedPackage_FollowsNpmNaming() in tests/Build.Tests/SyncAgentPluginsPackNameTests.cs:line 23
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     3, Passed:     3, Skipped:     0, Total:     6, Duration: 136 ms - Build.Tests.dll (net10.0)

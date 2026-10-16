@@ -1,0 +1,482 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto
+  commentId: T:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto
+  id: WorkspaceInfoDto
+  parent: QBrainAi.Support.Mcp.Models
+  children:
+  - QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  - QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Project
+  - QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  - QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  langs:
+  - csharp
+  - vb
+  name: WorkspaceInfoDto
+  nameWithType: WorkspaceInfoDto
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto
+  type: Class
+  source:
+    id: WorkspaceInfoDto
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 90
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Models
+  summary: 'FR-SUPPORT-010: Workspace section of UnifiedModel.'
+  example: []
+  syntax:
+    content: public sealed class WorkspaceInfoDto
+    content.vb: Public NotInheritable Class WorkspaceInfoDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Project
+  commentId: P:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Project
+  id: Project
+  parent: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto
+  langs:
+  - csharp
+  - vb
+  name: Project
+  nameWithType: WorkspaceInfoDto.Project
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Project
+  type: Property
+  source:
+    id: Project
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 93
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Models
+  summary: Project name.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("project")]
+
+      public string? Project { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("project")>
+
+      Public Property Project As String
+  overload: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Project*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: project
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  commentId: P:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  id: TargetFramework
+  parent: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto
+  langs:
+  - csharp
+  - vb
+  name: TargetFramework
+  nameWithType: WorkspaceInfoDto.TargetFramework
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  type: Property
+  source:
+    id: TargetFramework
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 97
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Models
+  summary: Target framework (e.g. .NET 9).
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("targetFramework")]
+
+      public string? TargetFramework { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("targetFramework")>
+
+      Public Property TargetFramework As String
+  overload: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: targetFramework
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  commentId: P:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  id: Repository
+  parent: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto
+  langs:
+  - csharp
+  - vb
+  name: Repository
+  nameWithType: WorkspaceInfoDto.Repository
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  type: Property
+  source:
+    id: Repository
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 101
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Models
+  summary: Repository URL or name.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("repository")]
+
+      public string? Repository { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("repository")>
+
+      Public Property Repository As String
+  overload: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Repository*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: repository
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  commentId: P:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  id: Branch
+  parent: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto
+  langs:
+  - csharp
+  - vb
+  name: Branch
+  nameWithType: WorkspaceInfoDto.Branch
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  type: Property
+  source:
+    id: Branch
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 105
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Models
+  summary: Git branch name.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("branch")]
+
+      public string? Branch { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("branch")>
+
+      Public Property Branch As String
+  overload: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Branch*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: branch
+references:
+- uid: QBrainAi.Support.Mcp.Models
+  commentId: N:QBrainAi.Support.Mcp.Models
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Models
+  nameWithType: QBrainAi.Support.Mcp.Models
+  fullName: QBrainAi.Support.Mcp.Models
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Models
+    name: Models
+    href: QBrainAi.Support.Mcp.Models.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Models
+    name: Models
+    href: QBrainAi.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Project*
+  commentId: Overload:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Project
+  href: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.html#QBrainAi_Support_Mcp_Models_WorkspaceInfoDto_Project
+  name: Project
+  nameWithType: WorkspaceInfoDto.Project
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Project
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework*
+  commentId: Overload:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  href: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.html#QBrainAi_Support_Mcp_Models_WorkspaceInfoDto_TargetFramework
+  name: TargetFramework
+  nameWithType: WorkspaceInfoDto.TargetFramework
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Repository*
+  commentId: Overload:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  href: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.html#QBrainAi_Support_Mcp_Models_WorkspaceInfoDto_Repository
+  name: Repository
+  nameWithType: WorkspaceInfoDto.Repository
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Repository
+- uid: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Branch*
+  commentId: Overload:QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  href: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.html#QBrainAi_Support_Mcp_Models_WorkspaceInfoDto_Branch
+  name: Branch
+  nameWithType: WorkspaceInfoDto.Branch
+  fullName: QBrainAi.Support.Mcp.Models.WorkspaceInfoDto.Branch

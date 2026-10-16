@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://sharpninja.github.io/mcpserver/schemas/repl-yaml-message.schema.json",
-  "title": "McpServer REPL YAML/JSON request envelope",
-  "description": "JSON Schema for request envelopes submitted to mcpserver-repl. Direct stdio callers should send single-line JSON. YAML callers should validate the parsed document against this schema before submitting to the REPL or endpoint fallbacks.",
+  "$id": "https://sharpninja.github.io/qbrainai/schemas/repl-yaml-message.schema.json",
+  "title": "QBrainAi REPL YAML/JSON request envelope",
+  "description": "JSON Schema for request envelopes submitted to qbrain-ai-repl. Direct stdio callers should send single-line JSON. YAML callers should validate the parsed document against this schema before submitting to the REPL or endpoint fallbacks.",
   "type": "object",
   "required": ["type", "payload"],
   "additionalProperties": false,

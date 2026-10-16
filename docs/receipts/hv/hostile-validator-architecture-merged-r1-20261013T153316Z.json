@@ -1,0 +1,1670 @@
+{
+  "TimestampUtc": "2026-10-13T16:32:01.6875452Z",
+  "Review": "Architecture gate round 1; one review; no time limit; architecture is authority",
+  "HeadSha": "bff6a7aadc2c138f89d99b8b77993cd603aa0d43",
+  "Branch": "worktree-session-20261009",
+  "PriorHeadSha": "845a87dfeb05ac2f1acfdf0596a3a5e0dc32326b",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "Role": "Independent HOSTILE VALIDATOR",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "ThreadId": "01a135e5-8784-77d0-a22d-9f6ef406b911",
+    "CliVersion": "0.160.1",
+    "MetadataPath": "/home/sharpninja/.codex/sessions/2026/10/13/rollout-2026-10-13T10-33-17-01a135e5-8784-77d0-a22d-9f6ef406b911.jsonl",
+    "TurnContextTimestamp": "2026-10-13T15:33:21.229Z",
+    "TurnId": "01a135e5-8ad1-7bf2-8d66-e0c80d2e732d",
+    "WorkingDirectory": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009",
+    "Proof": {
+      "timestamp": "2026-10-13T15:33:21.229Z",
+      "ordinal": 7,
+      "type": "turn_context",
+      "payload": {
+        "turn_id": "01a135e5-8ad1-7bf2-8d66-e0c80d2e732d",
+        "root_turn_id": "01a135e5-8ad1-7bf2-8d66-e0c80d2e732d",
+        "disabled_plugin_ids": [],
+        "cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009",
+        "workspace_roots": [
+          "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009"
+        ],
+        "current_date": "2026-10-13",
+        "timezone": "US/Central",
+        "approval_policy": "on-request",
+        "approvals_reviewer": "auto_review",
+        "sandbox_policy": {
+          "type": "workspace-write",
+          "network_access": true,
+          "exclude_tmpdir_env_var": false,
+          "exclude_slash_tmp": false
+        },
+        "permission_profile": {
+          "type": "managed",
+          "file_system": {
+            "type": "restricted",
+            "entries": [
+              {
+                "path": {
+                  "type": "special",
+                  "value": {
+                    "kind": "root"
+                  }
+                },
+                "access": "read"
+              },
+              {
+                "path": {
+                  "type": "path",
+                  "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009"
+                },
+                "access": "write"
+              },
+              {
+                "path": {
+                  "type": "special",
+                  "value": {
+                    "kind": "slash_tmp"
+                  }
+                },
+                "access": "write"
+              },
+              {
+                "path": {
+                  "type": "special",
+                  "value": {
+                    "kind": "tmpdir"
+                  }
+                },
+                "access": "write"
+              },
+              {
+                "path": {
+                  "type": "path",
+                  "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/.git"
+                },
+                "access": "read",
+                "missing_path_behavior": "skip"
+              },
+              {
+                "path": {
+                  "type": "path",
+                  "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/.agents"
+                },
+                "access": "read",
+                "missing_path_behavior": "skip"
+              },
+              {
+                "path": {
+                  "type": "path",
+                  "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/.codex"
+                },
+                "access": "read",
+                "missing_path_behavior": "skip"
+              },
+              {
+                "path": {
+                  "type": "path",
+                  "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/.aws"
+                },
+                "access": "read",
+                "missing_path_behavior": "skip"
+              }
+            ]
+          },
+          "network": "enabled"
+        },
+        "file_system_sandbox_policy": {
+          "kind": "restricted",
+          "entries": [
+            {
+              "path": {
+                "type": "special",
+                "value": {
+                  "kind": "root"
+                }
+              },
+              "access": "read"
+            },
+            {
+              "path": {
+                "type": "path",
+                "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009"
+              },
+              "access": "write"
+            },
+            {
+              "path": {
+                "type": "special",
+                "value": {
+                  "kind": "slash_tmp"
+                }
+              },
+              "access": "write"
+            },
+            {
+              "path": {
+                "type": "special",
+                "value": {
+                  "kind": "tmpdir"
+                }
+              },
+              "access": "write"
+            },
+            {
+              "path": {
+                "type": "path",
+                "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/.git"
+              },
+              "access": "read",
+              "missing_path_behavior": "skip"
+            },
+            {
+              "path": {
+                "type": "path",
+                "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/.agents"
+              },
+              "access": "read",
+              "missing_path_behavior": "skip"
+            },
+            {
+              "path": {
+                "type": "path",
+                "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/.codex"
+              },
+              "access": "read",
+              "missing_path_behavior": "skip"
+            },
+            {
+              "path": {
+                "type": "path",
+                "path": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/.aws"
+              },
+              "access": "read",
+              "missing_path_behavior": "skip"
+            }
+          ]
+        },
+        "model": "gpt-6-astra",
+        "comp_hash": "3000",
+        "collaboration_mode": {
+          "mode": "default",
+          "settings": {
+            "model": "gpt-6-astra",
+            "reasoning_effort": "max",
+            "developer_instructions": null
+          }
+        },
+        "multi_agent_version": "v2",
+        "realtime_active": false,
+        "effort": "max",
+        "summary": "none"
+      }
+    }
+  },
+  "Startup": {
+    "AddProfileSkill": "/home/sharpninja/.claude/skills/add-profile/SKILL.md",
+    "AddProfileCount": 20,
+    "AllNonSkillProfileMarkdownReadInFull": true,
+    "OperatorRulings20261011ReadInFull": true,
+    "Marker": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "MarkerReadInFull": true,
+    "MemoryMethod": "workflow.memory.list",
+    "MemoryWorkspace": "/home/sharpninja/github/McpServer",
+    "MemoryCount": 15,
+    "EveryMemoryReadInFull": true,
+    "MemoryReceipt": "docs/receipts/hv/20261013T153316Z-memories.json",
+    "Wrapper": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1",
+    "ParamsObject": true,
+    "CacheRoot": "/tmp/hv-architecture-20261013T153316Z/cache",
+    "NoClaudeWrapperSessionLogCalls": true
+  },
+  "Scope": {
+    "Authority": "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md",
+    "Derived": [
+      "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md",
+      "docs/Stateless-Agent-Context-Management.md"
+    ],
+    "Excluded": [
+      "P0.1 baseline fix quality and its HVs",
+      "plugin repository commits themselves",
+      "analyzer branch chore itself",
+      "implementer earlier conduct"
+    ],
+    "Mutations": "Only own review receipts and own MCP reviewer turn. No product edits, commits, pushes, deletions or changes to other MCP records."
+  },
+  "OperatorReadings": [
+    "Opus as Octopus is reasonable and explicitly stated in the process rules.",
+    "One complete activity per CQRS unit, split into parent/nested diagrams, is a reasonable reading of the diagram directives.",
+    "Catalog and work by domain is reasonably implemented as organization aligned to section 8.3, without authorizing derived-only design decisions."
+  ],
+  "Claims": [
+    {
+      "Id": "R4",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F6"
+      ],
+      "Evidence": "13 of 14 R4 findings are resolved for their original counterexamples; R4-F8 is not. Earlier unresolved R3-F6 likewise remains. New dependency/projection failures are recorded separately."
+    },
+    {
+      "Id": "A1",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F1"
+      ],
+      "Evidence": "Exact stateless copies pass for sections 3.5, 6, 7.11-7.16 and 8. Architecture authority fails on the derived-only alias contract."
+    },
+    {
+      "Id": "A2",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F1"
+      ],
+      "Evidence": "The shared component organization is substantial, but shared alias access/delivery remains outside section 3.5.6 and defers its API to the plan."
+    },
+    {
+      "Id": "A3",
+      "Status": "PASS",
+      "FindingIds": [],
+      "Evidence": "The declared RootNamespace+folder rule, separate request/handler files, one type per file and new PascalCase test names agree with the analyzer worktree. Storage RootNamespace is QBrainAi.Support.Mcp.Storage there. Existing underscore names are historical source anchors, not new tests."
+    },
+    {
+      "Id": "A4",
+      "Status": "UNKNOWN",
+      "FindingIds": [],
+      "Evidence": "All 210 source blocks rendered twice with Mermaid 11.17.2/CLI 11.17.0, exit 0. At 8pt their bounding boxes fit at most three full letter pages, sequences landscape and others best orientation; three representative PNGs were inspected. The complete standard is not proven: the source has no renderer/pagination settings, and the independent render used ELK configuration plus Mermaid native sequences, which does not establish the literal dagre-for-sequences claim. The archived render recipe and actual page images must establish the requested renderer/font/routing standard; do not infer that proof from parse success or bounding boxes. Behavioral contradictions are scored under M3/M4."
+    },
+    {
+      "Id": "A5",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F4",
+        "AR1-F9"
+      ],
+      "Evidence": "Live requirement snapshots and the catalog show extensive named reconciliation/test churn. The tool-audit loss is not an approved host limitation, and the turn-level decision contradicts the shared transaction contract."
+    },
+    {
+      "Id": "A6",
+      "Status": "PASS",
+      "FindingIds": [],
+      "Evidence": "The eleven catalog domains have bounded-context ownership, records, updated records, AC ownership, mappings and test churn. Domain work follows the section 8.3 context TODOs; coordinator decisions appear in the derived organization. The 102 proposed record count reconciles."
+    },
+    {
+      "Id": "M1",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F2",
+        "AR1-F3"
+      ],
+      "Evidence": "All attached-plan topics are represented; Off/Pilot/Stateless, fail-invocation, HV turn ranges, default sources and token estimation are stated choices. Trust-chain and binding defects prevent the promised trustworthy package/response behavior."
+    },
+    {
+      "Id": "M2",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F1",
+        "AR1-F8"
+      ],
+      "Evidence": "The entity/DTO/options/endpoint catalog is broad and includes REST aliases, MCP/client/REPL/PowerShell surfaces and errors. The alias public contract is absent from the authority, and model-grade verdict/runtime evidence acceptance is incomplete."
+    },
+    {
+      "Id": "M3",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F5",
+        "AR1-F6"
+      ],
+      "Evidence": "CQRS units, policies, processes, activities, sequences, use cases and entity diagrams are indexed. Some sequences and nested activity lead-ins prescribe different behavior from their units/policies."
+    },
+    {
+      "Id": "M4",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F4",
+        "AR1-F5",
+        "AR1-F6"
+      ],
+      "Evidence": "Verified live REST/MCP shape distinctions, lifecycle payload whitelist, and terminal-submit guard at develop a8d3934b. Most R4 fidelity fixes hold, but the PowerShell port loses existing audit behavior and conflicting completion/recovery branches remain."
+    },
+    {
+      "Id": "M5",
+      "Status": "FAIL",
+      "FindingIds": [
+        "AR1-F2",
+        "AR1-F3",
+        "AR1-F7",
+        "AR1-F8",
+        "AR1-F9"
+      ],
+      "Evidence": "Concrete counterexamples break dependency freshness, whole-turn identity, projection cleanup, grade verification, and transaction scope. Cited live database uniqueness, GraphRAG allocation and dispatcher/workspace source anchors were checked."
+    },
+    {
+      "Id": "M6",
+      "Status": "PASS",
+      "FindingIds": [],
+      "Evidence": "Four phases cover requirements, whole-plan seams/stubs, mock TDD, then owned contexts. The declared dependency and merge order is acyclic; context TODOs and gates are named. NOT APPROVED and the freeze remain explicit with only the operator-authorized analyzer exception."
+    },
+    {
+      "Id": "M7",
+      "Status": "PASS",
+      "FindingIds": [],
+      "Evidence": "Sections 8.4-8.5 and plan process rules use native Nuke builds/tests, direct infrastructure-only Build.Tests, Octopus for releases only, and Windows WSMan worktrees under F:/GitHub/McpServer/.worktrees. GitHub Actions/Azure Pipelines are not forward gates; historical/product mentions are distinguished."
+    },
+    {
+      "Id": "M8",
+      "Status": "PASS",
+      "FindingIds": [],
+      "Evidence": "Remote develop is a8d3934bc6238dc8e27f71c1d0561b55f48e88d4. Five named commits are consecutive parent-child, single-file publications; local remote reflog records each as update by push with no ancestry rewrite. Retained worktree/branch exist. Branch document blob ae14d3d1fc3afffa38fce8bb35ae3f17909d9dc0 differs from published 5f3ed62630d4c8a6594fd34a151cfb72c8efe51d. No push performed in this review."
+    },
+    {
+      "Id": "M9",
+      "Status": "PASS",
+      "FindingIds": [],
+      "Evidence": "Read-only main-workspace snapshots contain 353 FR, 487 TR and 512 TEST records. All 30 FR/39 TR/33 TEST proposed IDs are free. Owner/contributor rules and domain ownership lists resolve duplicate ownership; the specific changed-AC holes of R4-F12 now name owning TEST statements and cases. Phase C full AC text remains the explicitly authorized P0 catalog task."
+    },
+    {
+      "Id": "M10",
+      "Status": "PASS",
+      "FindingIds": [],
+      "Evidence": "All three documents have Apache-2.0 SPDX headers and zero en/em dash characters. Diff check passes; key-assignment scan reports zero in the reviewed documents and commit diff. Reviewer receipt exposure was separately corrected, not attributed to the reviewed artifacts."
+    },
+    {
+      "Id": "M11",
+      "Status": "PASS",
+      "FindingIds": [],
+      "Evidence": "lib-ps is the one designed core; existing Invoke-McpPlugin.ps1 and plugin-hook.ps1 are real entry points with explicit planned additions. Host adapters contain only the permitted bindings. Pester/Nuke gates, retirement ordering and cross-agent ACK condition are named. Forward HV rules specify gpt-6-astra/max with no review time bound. The behavioral loss is separately a FAIL under M4/A5."
+    }
+  ],
+  "PriorFindings": [
+    {
+      "Id": "R4-F1",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "3042-3043,3059-3060",
+      "Evidence": "Same stored Overflow returns 422 on retry and concurrent create, never 200.",
+      "Regression": "None found in the original overflow counterexample."
+    },
+    {
+      "Id": "R4-F2",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "2725,3291",
+      "Evidence": "CitedSha256 and independently computed Sha256 are separate and compared.",
+      "Regression": "AR1-F2 is a separate dependency-status hole."
+    },
+    {
+      "Id": "R4-F3",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "2721,3291-3338",
+      "Evidence": "Command evidence is replaced by Receipt; commit evidence checks existence and ancestry.",
+      "Regression": "None found in these evidence oracles."
+    },
+    {
+      "Id": "R4-F4",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "2677,3716",
+      "Evidence": "HV creation locks candidate response StatusVersion values in sorted order and re-reads status.",
+      "Regression": "None found in create versus reject/supersede or overlapping ranges."
+    },
+    {
+      "Id": "R4-F5",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "457,3253,3269,3696",
+      "Evidence": "Status-bearing reads use read-only effective freshness; only EvaluateStaleness persists it.",
+      "Regression": "AR1-F2: the shared rule still misses transitive response trust changes."
+    },
+    {
+      "Id": "R4-F6",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "3347",
+      "Evidence": "Review completes, runner freezes receipts, then same reviewer thread resumes only to submit grades.",
+      "Regression": "AR1-F8 concerns verification completeness, not the repaired receipt timing."
+    },
+    {
+      "Id": "R4-F7",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "242-243,1261",
+      "Evidence": "OpenCode forwards event({event}) for session.idle and no invented session.idle hook. Confirmed real plugin event entry.",
+      "Regression": "AR1-F4: tool-audit hooks are separately dropped."
+    },
+    {
+      "Id": "R4-F8",
+      "Resolution": "NOT RESOLVED",
+      "EvidenceLocation": "905-985,991,1015,1873",
+      "Evidence": "Per-content multiset popAll and system removals are corrected; final mint refusal retention still contradicts the nested activity.",
+      "Regression": "AR1-F6; first-ingress identity persistence also conflicts."
+    },
+    {
+      "Id": "R4-F9",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "sections 4.2,4.5,5.2,5.5",
+      "Evidence": "REST dialog totalDialogCount versus MCP success/totalDialogItems, query shapes and lifecycle whitelist are distinguished and match a8d3934b.",
+      "Regression": "AR1-F5 is a separate completion predicate inconsistency."
+    },
+    {
+      "Id": "R4-F10",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "5349,section 8.2",
+      "Evidence": "Existing routes keep delegating behavior; neutral stubs apply only to new units and new storage types stay unregistered until implemented.",
+      "Regression": "None found in the phase-two baseline rule."
+    },
+    {
+      "Id": "R4-F11",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "5349,5502,5523",
+      "Evidence": "No plugin adoption in Phase 2. Core and sync precede host adoption; G6 uses six hosts before adoption and all nine after.",
+      "Regression": "Semantic audit loss AR1-F4 remains despite executable ordering."
+    },
+    {
+      "Id": "R4-F12",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "plan 307,309,331-333,474-490,1190",
+      "Evidence": "Changed old ACs now have TEST ownership and named cases. Examples FR-MCP-SESSIONLIFE-001-AC002 and TR-MCP-SESSIONLIFE-002-AC002 appear in TEST-SESSIONTURN-001 and -003.",
+      "Regression": "No original missing-owner counterexample remains."
+    },
+    {
+      "Id": "R4-F13",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "5528; plan 1422-1439",
+      "Evidence": "Forward deploy/rollback uses the Nuke UpdateService route; no forward sh -c script is designed.",
+      "Regression": "None found in the former shell inconsistency."
+    },
+    {
+      "Id": "R4-F14",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "5393,5399; plan 152-155",
+      "Evidence": "Marker A9 server work is SessionTurnLogging; wrapper generator and PluginIntegration/GrokBot work are PluginCorePowerShell; host glue is HostPluginAdoption.",
+      "Regression": "None found in the former ownership gaps."
+    },
+    {
+      "Id": "R3-F5",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "242-243",
+      "Evidence": "Inherited OpenCode hook defect addressed as R4-F7.",
+      "Regression": "Tool-audit regression separately AR1-F4."
+    },
+    {
+      "Id": "R3-F6",
+      "Resolution": "NOT RESOLVED",
+      "EvidenceLocation": "991,1015",
+      "Evidence": "Inherited Phase A diagram fidelity defect remains through R4-F8.",
+      "Regression": "AR1-F6."
+    },
+    {
+      "Id": "R3-F7",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "3716",
+      "Evidence": "Inherited create/reject HV item race addressed as R4-F4.",
+      "Regression": "None found in that race."
+    },
+    {
+      "Id": "R3-F10",
+      "Resolution": "RESOLVED",
+      "EvidenceLocation": "2725,3291,457,3253,3269",
+      "Evidence": "Inherited evidence-hash and direct freshness defects addressed as R4-F2/R4-F5.",
+      "Regression": "AR1-F2 identifies an additional dependent-response invalidation failure."
+    }
+  ],
+  "Findings": [
+    {
+      "Id": "AR1-F1",
+      "Title": "The alias API is still designed only in the derived plan",
+      "Claims": [
+        "A1",
+        "A2",
+        "M2"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:251",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:483",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:547",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1143",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1234",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:811"
+      ],
+      "Defect": "C2 defers its interface to TR-MCP-SESSIONTURN-008 AC-007. Only the plan defines four public PowerShell alias functions and the consumer-delivery data model. The architecture has no shared alias-access component in section 3.5.6 with those contracts and its test seam.",
+      "Evidence": [
+        "Architecture line 251 says the interface is locked in TR-MCP-SESSIONTURN-008 AC-007. The architecture contains no Register-McpAliasConsumer, Get-McpUnacknowledgedAlias, Get-McpAlias, or Confirm-McpAliasAcknowledged definition.",
+        "Plan line 811 defines all four signatures, null/ambiguous lookup outcomes, permanent lookup entries, prunable delivery entries, and the consumer set captured at alias commit. Live writes and replay both consume the alias journal, so this is shared behavior, not merely a catalog label."
+      ],
+      "SpecificChange": "Move the complete alias model and four function contracts, error/return behavior, immutable host binding, atomicity and replay rules into one section 3.5.6 component owned by PluginCorePowerShell with one named Pester test seam. Make every alias caller reference it and derive AC-007 from it. No public contract may remain defined only in the plan.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Architecture restructuring left an explicit design dependency on the plan."
+    },
+    {
+      "Id": "AR1-F2",
+      "Title": "A trusted response can depend on a response that is no longer trusted",
+      "Claims": [
+        "M1",
+        "M5"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:457",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:463",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2719",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3047",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3440",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5972"
+      ],
+      "Defect": "IResponseStalenessRule compares dependency hashes but never evaluates the effective trust/status of a PriorResponse dependency. PriorResponse and Package hashes are immutable content hashes. Dependency rejection, supersession, demotion, or staleness therefore does not invalidate descendants.",
+      "Evidence": [
+        "Counterexample: trusted B is included in the package that produces trusted A. Reject B, or change a file that B depends on. B becomes Rejected or effectively Stale, but its ContentSha256 and the package ContentSha256 do not change. Every hash tested for A still matches; lines 464-465 return Fresh and A remains eligible for trusted retrieval.",
+        "The rule explicitly special-cases deleted/superseded requirements, but has no corresponding prior-response status or recursive dependency check. Read-time freshness added for R4-F5 fixes direct changed-file reads but not this chain."
+      ],
+      "SpecificChange": "Extend the one shared staleness rule to validate effective trust and freshness of PriorResponse dependencies, including dependencies reached through packages. Define cycle handling and per-read memoization. Cover B becoming stale, rejected, superseded, or demoted while A content is unchanged; queries must exclude A immediately and EvaluateStaleness must persist the dependent invalidation.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "The R4 direct-read fix is present; its shared rule still admits an invalid trusted dependency chain."
+    },
+    {
+      "Id": "AR1-F3",
+      "Title": "Package recovery and supersession discard part of the turn key",
+      "Claims": [
+        "M1",
+        "M5"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:175",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2682",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2683",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3158",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3159",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3486",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3803",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3806",
+        "src/QBrainAi.Storage/McpDbContext.cs:391 at a8d3934b",
+        "src/QBrainAi.Storage/McpDbContext.cs:404 at a8d3934b"
+      ],
+      "Defect": "The architecture declares the turn identity to be Agent + SessionId + RequestId, but recovery queries only requestId, invocation idempotency uses only requestId, and the supersede guard compares only requestId. Legacy turns with the same requestId in different sessions remain legal.",
+      "Evidence": [
+        "The live database has a unique session key (WorkspaceId, SourceType, SessionId) and a unique turn key (SessionLogId, RequestId). The new workspace-wide minted-id index explicitly excludes legacy rows (Addendum A.2).",
+        "Two legal turns with the same requestId can have distinct Built packages through the public build API. The fallback at line 3806 selects the newest package by requestId without the bound session/agent. Supersede at line 3486 likewise accepts a replacement belonging to the other turn. A workspace-wide idempotency key of requestId also collides for such roots."
+      ],
+      "SpecificChange": "Carry and check the full immutable turn key at recovery, submission binding, and supersession. Add an agent filter to package queries, require all three root fields when recovering the bound package, and derive a bounded deterministic invocation idempotency key from the full root. Test same requestId in two legacy sessions and two agents, including wrong-package recovery and cross-turn supersession refusal.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "The new root-id reconciliation is correct in the entities but incomplete at operational uses."
+    },
+    {
+      "Id": "AR1-F4",
+      "Title": "The PowerShell port removes working tool-audit behavior",
+      "Claims": [
+        "A5",
+        "M4"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:137",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:243",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:255",
+        "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md:811",
+        "/home/sharpninja/github/mcpserver-cline-v2-plugin/src/plugin.ts:250",
+        "/home/sharpninja/github/mcpserver-opencode-plugin/src/plugin.ts:226",
+        "PLAN-SESSIONTURNREVIEW-001: approved description, C6"
+      ],
+      "Defect": "The host-limit row drops beforeTool/afterTool and tool.execute.before/after solely because the PowerShell core has no audit hook. That is an unimplemented port, not a host infrastructure limitation. It contradicts C6 and removes behavior the approved Phase A contract preserved.",
+      "Evidence": [
+        "At cline-v2 e776d942, lines 250-275 call core.appendToolAction before and after a tool. At opencode 36ed34d9, lines 226-254 do the same. The approved live TODO description and current architecture C6 require tool runs as tool_call/tool_result dialog items; QB-AGENT-001 owns the later tool_execution taxonomy, not permission to discard these existing records.",
+        "The adapter allowlist excludes these hooks. The architecture lists the removal as a limitation but supplies neither an operator decision allowing it nor a replacement audit path and its parity tests."
+      ],
+      "SpecificChange": "Port the shared existing tool-audit behavior into the PowerShell core, define its hook input/output and error contract once, forward all four native hooks through the logic-free adapters, and preserve the tool_call/tool_result records under the bound turn identity. Carry the affected host/core tests and requirement reconciliation in that same change before retiring the Node path.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "PowerShell convergence currently deletes supported behavior; the operator authorized a port, not this deletion."
+    },
+    {
+      "Id": "AR1-F5",
+      "Title": "The replace sequence permits a completion-gate bypass",
+      "Claims": [
+        "M3",
+        "M4"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1466",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1732",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1734",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2314",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2323"
+      ],
+      "Defect": "CompletionGate correctly applies to every Replace carrying completed or failed, including an already-terminal turn. The common sequence rule and Replace sequence narrow it to a status transition and recommend replacing without moving to a terminal status.",
+      "Evidence": [
+        "A PUT of an already completed turn that omits its reviews is a replacement, not an additive enrichment. Lines 2314 and 2323 require re-gating it. Lines 1466 and 1732 do not, so following that sequence resets required review evidence while preserving completed.",
+        "This is a conflicting executable branch, not a wording preference: the two definitions yield different responses to the same request."
+      ],
+      "SpecificChange": "Use the exact CompletionGate predicate in the common sequence rule and Replace sequence: a transition into completed/failed OR a Replace carrying either status. Show an already-completed replacement missing reviews returning the gate refusal. Keep additive terminal enrichment exempt. Add the corresponding negative case to the owning TEST statement.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "A holistic Phase B diagram inconsistency remains after the round-4 surface corrections."
+    },
+    {
+      "Id": "AR1-F6",
+      "Title": "First-ingress and mint-recovery instructions still contradict each other",
+      "Claims": [
+        "R4",
+        "M3",
+        "M4"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:991",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:992",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1015",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1026",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1345",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1873"
+      ],
+      "Defect": "The nested mint activity says every answered mint clears the write-ahead record, while the authoritative retry rule retains final refusals with drainAttempts=1. The open-session sequence records mcpSessionId only after confirmed open, while first-ingress and SessionStart persist it before calling open so an outage cannot change the binding.",
+      "Evidence": [
+        "For a final validation_error answer, line 991 keeps the record for bounded replay/quarantine; line 1015 clears it. This is the same final-refusal recovery defect R4-F8 required removing.",
+        "For the first open timing out, lines 992/1026 retain the chosen MCP session identity, but line 1873 does not record it. Retrying under a newly generated identity can split the host session and strand its bound records."
+      ],
+      "SpecificChange": "Make all activities, lead-ins, and sequences use the shared classification and one lifecycle rule: success/merged-terminal/equal-field fail-close clear as specified; outage retains; final refusal retains and counts the first attempt. Persist the selected MCP session identity before the first open and reuse it after every outage. Add exact first-ingress outage and final-refusal readback cases.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "R4-F8 and its inherited R3-F6 remain NOT RESOLVED despite correct branches elsewhere."
+    },
+    {
+      "Id": "AR1-F7",
+      "Title": "Overlapping projection passes can orphan GraphRAG documents",
+      "Claims": [
+        "M5"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2819",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2821",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3657",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3658",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4761",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4764",
+        "src/QBrainAi.GraphRag/Services/GraphRagService.cs:354 at a8d3934b"
+      ],
+      "Defect": "The deduplication rule preserves an overlapping document only when the row is Projected. A rejection during two concurrent ingests makes both saves Pending and lets the second overwrite the only stored document id. A post-ingest save exhaustion or failed duplicate cleanup also has no durable cleanup record.",
+      "Evidence": [
+        "Concrete interleaving: passes P1/P2 both read Trusted with no projection and ingest D1/D2; Reject commits; P1 stores Pending+D1; P2 sees Pending, not Projected, and stores Pending+D2. The next pass deletes D2 and loses every reference to D1.",
+        "The cited live IngestTextAsync allocates adhoc-<new Guid> on every call. The single GraphRagDocumentId column cannot retain both pending cleanup obligations. The four-attempt 409 path after external ingest similarly exits without defining how the new document is recovered."
+      ],
+      "SpecificChange": "Define durable per-response projection ownership or an outbox/operation record before ingest, with idempotent completion and a durable set of documents awaiting deletion. Preserve cleanup obligations in every row state and after failed saves/deletes. Test two ingests plus rejection, save exhaustion after ingest, and duplicate-delete failure; later passes must remove every untrusted/orphan document.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "The overlapping-Projected fix handles the happy interleaving but loses the reject/cleanup interleavings."
+    },
+    {
+      "Id": "AR1-F8",
+      "Title": "The model-grade acceptance checks do not fully establish the claimed evidence",
+      "Claims": [
+        "M2",
+        "M5"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2808",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2811",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2813",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3718"
+      ],
+      "Defect": "runtime_identity requires every turn_context to match but requires no turn_context to exist. A rollout containing only the matching session_meta passes that predicate without proving model or effort. Separately, verdict_match compares scores/findings but defines no verdict consistency rule for its required DISAGREE-with-passing-scores negative case.",
+      "Evidence": [
+        "An empty set satisfies the universal test at line 2811. Matching request_meta, thread.started and session_meta identifiers are declarations/bindings, not the required live model/effort evidence.",
+        "Line 2813 requires ModelGradeDisagreeVerdictPassingScoresRefusedVerdictMatch, but neither check 5 nor the per-response grades schema at line 3718 contains the predicate or per-entry verdict semantics needed to produce that refusal. This is especially ambiguous for a range with mixed passing and failing responses."
+      ],
+      "SpecificChange": "Require at least one review-run turn_context and bind its model/effort and thread to the completed review being graded; refuse missing runtime context explicitly. Define per-response verdict semantics and the batch overall verdict, validate their consistency with scores/findings, and make the named negative test match that rule without preventing legitimate failing grades or mixed ranges from being recorded.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "Live identity comparison is present, but missing evidence can still pass; the required verdict negative case has no defined acceptance rule."
+    },
+    {
+      "Id": "AR1-F9",
+      "Title": "Single-turn transaction scope still includes a shared session write",
+      "Claims": [
+        "A5",
+        "M5"
+      ],
+      "Locations": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:152",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:292",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:332",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2125"
+      ],
+      "Defect": "The locked turn-level decision isolates the turn and moves the session summary to a separate post-commit write. The shared SerializableWrite definition and Phase B write contract still read and write the common session row inside every single-turn transaction while promising different turns never conflict.",
+      "Evidence": [
+        "Two different turns in one session address the same session row under the stated Serializable delegate. Concurrent updates to that shared row require serialization and can consume the same bounded transient-conflict retries the architecture exposes as 409.",
+        "Line 152 explicitly makes summary refresh a separate write whose failure cannot fail the turn. Lines 332 and 2125 do not identify any other permitted session-row mutation or reconcile their in-transaction write with that decision."
+      ],
+      "SpecificChange": "Make the one shared transaction contract match the locked decision: locate/validate the parent as needed, but mutate only the target turn and its children inside a single-turn transaction; specify the session summary update as a separate post-commit operation with its own non-failing outcome. Define the provider-specific locking/read strategy and test concurrent writes to different turns plus a failed summary refresh.",
+      "Classification": "Implementer edit",
+      "OperatorDecision": null,
+      "Regression": "The round-5 turn-level reconciliation was not propagated consistently into the shared component and review units."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 91,
+  "Completeness": 89,
+  "Confidence": 98,
+  "ScoreRationale": "These are functional-review scores, not a fraction of claims. The architecture covers the requested system broadly, but nine material findings affect approval authority, supported host behavior, trust, identity, lifecycle and concurrency. It cannot meet the 98/98 all-PASS gate.",
+  "PassCount": 8,
+  "FailCount": 9,
+  "UnknownCount": 1,
+  "FailList": [
+    "R4",
+    "A1",
+    "A2",
+    "A5",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5"
+  ],
+  "UnknownList": [
+    "A4"
+  ],
+  "ImplementerFixes": [
+    "AR1-F1",
+    "AR1-F2",
+    "AR1-F3",
+    "AR1-F4",
+    "AR1-F5",
+    "AR1-F6",
+    "AR1-F7",
+    "AR1-F8",
+    "AR1-F9"
+  ],
+  "OperatorDecisionFails": [],
+  "UnknownEvidenceNeeded": [
+    {
+      "Claim": "A4",
+      "Location": "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5537",
+      "Evidence": "210 parses/renders and feasible page bounds verified; literal renderer selection and complete page-level conformance not established by the unversioned implementer rendering assertion.",
+      "SpecificChange": "Archive the reproducible per-diagram renderer, font, routing, orientation and pagination recipe with the resulting page images. Reconcile the literal dagre sequence requirement with the supported Mermaid sequence renderer and validate that declared recipe.",
+      "Classification": "Implementer evidence and architecture clarification; no operator decision FAIL is asserted."
+    }
+  ],
+  "ReviewerSessionId": "Codex-20261013T153702Z-plugin-session",
+  "ReviewerRequestId": "req-20261013T153316Z-hv-architecture-r1",
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-architecture-merged-r1-20261013T153316Z.md",
+    "docs/receipts/hv/hostile-validator-architecture-merged-r1-20261013T153316Z.json"
+  ],
+  "RunnerRequestJsonl": "docs/receipts/hv/20261013T153316Z-architecture-merged-r1.request.jsonl",
+  "RunnerResponseJsonl": "docs/receipts/hv/20261013T153316Z-architecture-merged-r1.response.jsonl",
+  "EvidenceArtifacts": [
+    "20261013T153316Z-review-commands.jsonl",
+    "20261013T153316Z-derived-equality.json",
+    "20261013T153316Z-catalog-audit.json",
+    "20261013T153316Z-diagram-page-check.json",
+    "20261013T153316Z-mermaid-wrap-config.json",
+    "20261013T153316Z-diagram-fonts.css",
+    "20261013T153316Z-live-requirements-fr.json",
+    "20261013T153316Z-live-requirements-tr.json",
+    "20261013T153316Z-live-requirements-test.json",
+    "20261013T153316Z-approved-todo.json",
+    "20261013T153316Z-redaction-proof.json"
+  ],
+  "ValidationLimits": [
+    "This is a review of proposed architecture, not execution of the future production tests. No product build/test was run because this turn makes no product change.",
+    "Commands are retained verbatim with observed exit codes. For compound read commands, ExitCode is the final native exit status or caught PowerShell exception; per-subcommand statuses appear when explicitly printed. A few pre-ledger startup/preflight commands are documented in the runner stream.",
+    "Parser/analyzer rejected two later exploratory commands before execution (PowerShell brace expansion and an unused variable); corrected commands then ran. An initial beginTurn attempt used an incorrect failsafe override and was corrected; the own turn was subsequently persisted.",
+    "The first full marker read appeared unredacted in the runner output. Three occurrences were replaced in place with the required redaction marker and padding; the credential is not repeated in this result.",
+    "A first rsvg PNG conversion omitted HTML labels and was not accepted as visual evidence. Chromium-backed Mermaid PNGs for blocks 94, 133 and 210 were then rendered and inspected.",
+    "Pagination verification uses full letter page area, with recorded wrapping/font controls; no margin specification was supplied. It does not claim to have inspected the implementer scratch renders.",
+    "Historical force-command flags cannot be inferred from Git objects. The actual observed publication updates are consecutive fast-forwards without an ancestry rewrite, as confirmed by local update-by-push reflog entries."
+  ],
+  "Commands": [
+    {
+      "TimestampUtc": "2026-10-13T15:36:52.9717071Z",
+      "Command": "[IO.Directory]::CreateDirectory('/tmp/hv-architecture-20261013T153316Z/cache') | Out-Null; [IO.Directory]::CreateDirectory('/tmp/hv-architecture-20261013T153316Z/failsafe') | Out-Null",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:37:01.0656184Z",
+      "Command": "$wrapperArgs = Get-HvWrapperArgument; & /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.memory.list -ParamsObject @{}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:37:30.9476479Z",
+      "Command": "Import-Module powershell-yaml; $memoryRecord = Get-Content docs/receipts/hv/20261013T153316Z-review-commands.jsonl | ConvertFrom-Json | Where-Object Command -Like '*workflow.memory.list*' | Select-Object -Last 1; $memoryEnvelope = ConvertFrom-Yaml $memoryRecord.Output; $memoryEnvelope.payload.result.items | ForEach-Object { [pscustomobject]@{Id=$_.id;Scope=$_.scope;Version=$_.version;Length=$_.text.Length} } | ConvertTo-Json; $memoryEnvelope.payload.result.items | ConvertTo-Json -Depth 20 | Set-Content docs/receipts/hv/20261013T153316Z-memories.json; $state = ConvertFrom-Yaml (Get-Content -Raw /tmp/hv-architecture-20261013T153316Z/cache/session-state.yaml); $state | Select-Object agent,sessionId,status,markerFilePath,markerLastWriteUtc,lastUpdated | ConvertTo-Json; $wrapperArgs = Get-HvWrapperArgument; & /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.sessionlog.beginTurn -ParamsObject @{requestId='req-20261013T153316Z-hv-architecture-r1';queryTitle='Hostile architecture review round 1';queryText='Independently review architecture authority, round-4 findings and claims A1-A6/M1-M11 at bff6a7aadc2c138f89d99b8b77993cd603aa0d43. Read-only review except own receipts and this reviewer turn. Live rollout confirms Codex CLI gpt-6-astra effort max. Full request is docs/receipts/hv/20261013T153316Z-architecture-merged-r1.request.jsonl.'}",
+      "ExitCode": 1,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:37:48.1853603Z",
+      "Command": "rg -n 'env:.*FAILSAFE|env:.*MODEL|New-ReplPluginSessionId' /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/lib/resolve-cache-dir.ps1 /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/lib/repl-invoke.ps1; Get-Content docs/receipts/hv/20261013T153316Z-memories.json -Raw | ConvertFrom-Json | Select-Object id,scope,version,@{n='Length';e={$_.text.Length}} | ConvertTo-Json; Get-Content docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json -Raw | ConvertFrom-Json | Select-Object -ExpandProperty Findings | ConvertTo-Json -Depth 10",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:38:10.9670241Z",
+      "Command": "$wrapperArgs = Get-HvWrapperArgument; & /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.sessionlog.beginTurn -ParamsObject @{requestId='req-20261013T153316Z-hv-architecture-r1';queryTitle='Hostile architecture review round 1';queryText='Independent architecture review at bff6a7aadc2c138f89d99b8b77993cd603aa0d43. Claims R4, A1-A6 and M1-M11. Codex CLI gpt-6-astra at max proved by live turn_context. Full ask: docs/receipts/hv/20261013T153316Z-architecture-merged-r1.request.jsonl.'}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:38:28.3653635Z",
+      "Command": "$memories = Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json; $memories | Where-Object id -NE 'MEMORY-PROCESS-007' | ForEach-Object { 'MEMORY: ' + $_.id + ' scope=' + $_.scope; $_.text }; $coord = $memories | Where-Object id -EQ 'MEMORY-PROCESS-007'; 'MEMORY-PROCESS-007 chars 0..23999'; $coord.text.Substring(0,24000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:38:43.9052423Z",
+      "Command": "$memories=Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json; ($memories | Where-Object id -EQ 'MEMORY-DEVPROCESS-001').text; ($memories | Where-Object id -EQ 'MEMORY-PROCESS-001').text",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:38:44.809289Z",
+      "Command": "$coord=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json | Where-Object id -EQ 'MEMORY-PROCESS-007').text; 'MEMORY-PROCESS-007 chars 24000..47999'; $coord.Substring(24000,24000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:38:53.0040452Z",
+      "Command": "$coord=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json | Where-Object id -EQ 'MEMORY-PROCESS-007').text; 'MEMORY-PROCESS-007 chars 48000..71999'; $coord.Substring(48000,24000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:38:53.974439Z",
+      "Command": "$coord=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json | Where-Object id -EQ 'MEMORY-PROCESS-007').text; 'MEMORY-PROCESS-007 chars 72000..95999'; $coord.Substring(72000,24000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:39:06.9357143Z",
+      "Command": "$coord=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json | Where-Object id -EQ 'MEMORY-PROCESS-007').text; 'MEMORY-PROCESS-007 chars 78000..81999'; $coord.Substring(78000,4000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:39:07.8150963Z",
+      "Command": "$coord=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json | Where-Object id -EQ 'MEMORY-PROCESS-007').text; 'MEMORY-PROCESS-007 chars 96000..119999'; $coord.Substring(96000,24000)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:39:08.73039Z",
+      "Command": "$coord=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json | Where-Object id -EQ 'MEMORY-PROCESS-007').text; 'MEMORY-PROCESS-007 chars 120000..128513'; $coord.Substring(120000,8514)",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:39:38.0943529Z",
+      "Command": "$coord=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-memories.json | ConvertFrom-Json | Where-Object id -EQ 'MEMORY-PROCESS-007').text; $coord.Substring(0,1000); $coord.Substring(82000,4000); $wrapperArgs = Get-HvWrapperArgument; & /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.sessionlog.appendDialog -ParamsObject @{dialogItems=@(@{role='model';category='decision';content='Review scope: architecture is the authority; plan and stateless document are checked for derivation only. Alternatives rejected: treating plan design as authoritative or accepting implementer self-review as evidence. Read add-profile skill and all 20 non-skill profile markdown files in full, main marker in full, and all 15 live MCP memories (including 128514-character coordination memory). Own live turn_context confirms gpt-6-astra/max. Isolated cache /tmp/hv-architecture-20261013T153316Z/cache. Initial begin failed due to wrong failsafe override name; corrected documented MCPSERVER_FAILSAFE_DIR/MCP_FAILSAFE_DIR and same request persisted.'})}; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1 -End 115",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:39:58.2395021Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 116 -End 165",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:39:59.1173521Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 166 -End 224",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:40:12.9501206Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 225 -End 295",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:40:13.8753469Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 296 -End 383",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:40:27.1507756Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 241 -End 262; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 300 -End 328",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:40:37.4817232Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 329 -End 430",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:40:52.2402722Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 431 -End 482",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:41:05.5166604Z",
+      "Command": "Get-Content docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json -Raw | ConvertFrom-Json | Select-Object -ExpandProperty PriorFindings | ConvertTo-Json -Depth 10; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 483 -End 505",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:41:17.92054Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 504 -End 595; rg -n '^#{1,4} ' docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md; rg -n '^#{1,3} ' docs/Stateless-Agent-Context-Management.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:41:35.9677139Z",
+      "Command": "git diff --stat 845a87df..HEAD; git diff --name-only 845a87df..HEAD; git branch --all --list '*netanalyzers*'; git worktree list --porcelain; rg -n 'render|landscape|ELK|elk|dagre|letter|pages|mermaid' docs/architecture/SessionTurn-Review-AgentContext-Architecture.md | Select-Object -Last 18; Get-Command mmdc -ErrorAction SilentlyContinue | Select-Object Source; rg --files docs/receipts | Select-String 'recon|diagram|architecture-merged-r1' | Select-Object -First 45",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:42:03.3874528Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 596 -End 903",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:47:07.5597076Z",
+      "Command": "$wrapperArgs=Get-HvWrapperArgument; & /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.sessionlog.appendDialog -ParamsObject @{dialogItems=@(@{role='model';category='decision';content='Architecture review continuation. Startup requirements completed: add-profile skill and 20 profile Markdown files read in full; main workspace marker read in full; workflow.memory.list returned 15 memories, all content read. Live session turn_context proves model gpt-6-astra and effort max. Architecture is authority and derived plan/stateless document are checked only for conformance. Reviewed architecture lines 1-903, all R4 findings and earlier unresolved findings. Investigating possible host tool-audit loss, deferred shared alias contracts, and concurrency/DRY issues; these are hypotheses pending source checks. No edits to reviewed artifacts or other MCP records. Only own reviewer turn and review receipts are modified.'})}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:47:18.9273481Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 903 -End 1181",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:47:18.9952237Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1182 -End 1454",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:47:18.8863613Z",
+      "Command": "rg -n 'mmdc|mermaid|node_modules|puppeteer|playwright' docs/receipts/hv/*r4* docs/receipts/hv/*20261012*",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:47:26.9628458Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1070 -End 1321",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:47:37.2661516Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1322 -End 1594",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:47:47.3675444Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1595 -End 1835",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:47:47.439235Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1836 -End 2087",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:48:01.0255233Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2088 -End 2430",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:48:01.0097173Z",
+      "Command": "Get-ChildItem docs/receipts/hv -File -Filter '*r4*' | Select-Object Name; rg -n -g '*.ps1' -g '*.json' -g '*.md' --max-columns 450 --max-columns-preview 'mmdc|node_modules|mermaid.*parse|puppeteer' docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json; Get-ChildItem /tmp -Directory | Select-Object Name",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:48:12.1359326Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2184 -End 2430",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:48:27.1495281Z",
+      "Command": "Get-ChildItem /tmp -Directory | Where-Object Name -Match 'mermaid|hv-|architecture|diagram' | Select-Object -ExpandProperty FullName; (Get-Content docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json -Raw | ConvertFrom-Json).PSObject.Properties.Name; rg -n 'mermaid|puppeteer|mmdc|node_modules' docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:48:36.5694603Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2430 -End 2664",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:48:36.5401306Z",
+      "Command": "$prior=Get-Content docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json -Raw | ConvertFrom-Json; $prior.Commands | Where-Object { ($_ | ConvertTo-Json -Depth 10 -Compress) -match 'mermaid|workflow.requirements|workflow.todo|puppeteer' } | ConvertTo-Json -Depth 15; Get-ChildItem /tmp/hv-mermaid-20261011 -Name",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:48:51.1644509Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 77 -End 89; Get-Content /tmp/hv-mermaid-20261011/puppeteer.json -Raw; Get-Content /tmp/hv-mermaid-20261011/node_modules/@mermaid-js/mermaid-cli/package.json -Raw | ConvertFrom-Json | Select-Object name,version; Get-Content /tmp/hv-mermaid-20261011/node_modules/mermaid/package.json -Raw | ConvertFrom-Json | Select-Object name,version; rg -n 'ELK|dagre|fontSize|letter|landscape|render' docs/architecture/SessionTurn-Review-AgentContext-Architecture.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:49:34.5487979Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2664 -End 2771",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:49:43.3275022Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2772 -End 2935",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:49:34.9459517Z",
+      "Command": "Import-Module powershell-yaml; $wrapperArgs=Get-HvWrapperArgument; foreach($kind in @('Fr','Tr','Test')) { $raw=& /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method ('workflow.requirements.list'+$kind) -ParamsObject @{}; $obj=ConvertFrom-Yaml -Yaml ($raw -join \"`n\"); $json=$obj | ConvertTo-Json -Depth 100; Protect-HvText -Text $json | Set-Content -LiteralPath ('docs/receipts/hv/20261013T153316Z-live-requirements-'+$kind.ToLowerInvariant()+'.json') -Encoding utf8; [pscustomobject]@{Kind=$kind;Count=$obj.payload.result.totalCount;Items=@($obj.payload.result.items).Count;EnvelopeType=$obj.type} | ConvertTo-Json -Compress }; $raw=& /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.todo.get -ParamsObject @{id='PLAN-SESSIONTURNREVIEW-001'}; $obj=ConvertFrom-Yaml -Yaml ($raw -join \"`n\"); $json=$obj | ConvertTo-Json -Depth 100; Protect-HvText -Text $json | Set-Content -LiteralPath docs/receipts/hv/20261013T153316Z-approved-todo.json -Encoding utf8; $obj.payload.result | Select-Object id,title,done,dependsOn | ConvertTo-Json -Depth 10",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:50:16.3848453Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2936 -End 3036",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:50:24.8910616Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3037 -End 3286",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:50:24.9045744Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3287 -End 3435",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:50:32.3297614Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3321 -End 3354; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3436 -End 3610",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:49:19.3786329Z",
+      "Command": "$renderConfig=@{layout='elk';theme='default';themeVariables=@{fontSize='16px'};flowchart=@{defaultRenderer='elk';curve='linear';htmlLabels=$true};er=@{layoutDirection='TB'};sequence=@{useMaxWidth=$false;diagramMarginX=16;diagramMarginY=16}}; $renderConfig | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath docs/receipts/hv/20261013T153316Z-mermaid-config.json -Encoding utf8; & node /tmp/hv-mermaid-20261011/node_modules/@mermaid-js/mermaid-cli/src/cli.js -i docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -o docs/receipts/hv/20261013T153316Z-rendered-architecture.md -a docs/receipts/hv/20261013T153316Z-diagrams -j 4 -p /tmp/hv-mermaid-20261011/puppeteer.json -c docs/receipts/hv/20261013T153316Z-mermaid-config.json",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:51:02.8441886Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3611 -End 3791",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:51:28.4569037Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3792 -End 4033",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:51:53.3895798Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 447 -End 482; rg -n --max-columns 500 --max-columns-preview 'transitive|recursive|prior response.*(stale|reject)|depende.*response.*status|Register-McpAliasConsumer|Resolve-McpRequestIdAlias|Acknowledge-McpAlias|alias.*function|token.*header|header.*token' docs/architecture/SessionTurn-Review-AgentContext-Architecture.md; $obj=Get-Content docs/receipts/hv/20261013T153316Z-approved-todo.json -Raw | ConvertFrom-Json; $obj.payload.result.PSObject.Properties.Name; $obj.payload.result.description | Measure-Object -Character",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:52:32.9948462Z",
+      "Command": "$a=Get-Content docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Raw; $s=Get-Content docs/Stateless-Agent-Context-Management.md -Raw; $sections=@(@{Name='3.5';Start='### 3.5';EndA='## 4.';EndS='## 6.'},@{Name='6';Start='## 6.';EndA='## 7.';EndS='## 7.'},@{Name='7.11-7.16';Start='### 7.11';EndA='## 8.';EndS='## 8.'},@{Name='8.1-8.6';Start='### 8.1';EndA='## 9.';EndS=$null}); $results=foreach($section in $sections){$ai=$a.IndexOf($section.Start,[StringComparison]::Ordinal);$si=$s.IndexOf($section.Start,[StringComparison]::Ordinal);$ae=$a.IndexOf($section.EndA,$ai,[StringComparison]::Ordinal);$se=if($section.EndS){$s.IndexOf($section.EndS,$si,[StringComparison]::Ordinal)}else{$s.Length};$av=$a.Substring($ai,$ae-$ai).TrimEnd();$sv=$s.Substring($si,$se-$si).TrimEnd(); [pscustomobject]@{Section=$section.Name;Equal=[string]::Equals($av,$sv,[StringComparison]::Ordinal);ArchitectureChars=$av.Length;StatelessChars=$sv.Length;ArchitectureSha256=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($av))).ToLowerInvariant();StatelessSha256=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($sv))).ToLowerInvariant()}}; $results | ConvertTo-Json -Depth 6 | Tee-Object -FilePath docs/receipts/hv/20261013T153316Z-derived-equality.json; rg -n '^##|^<!--' docs/Stateless-Agent-Context-Management.md | Select-Object -First 12; git log --format='%H %P %s' --no-patch 99da6af8 51d2482e 63d4743d 33a5a954 a8d3934b; foreach($commit in @('99da6af8','51d2482e','63d4743d','33a5a954','a8d3934b')){git diff-tree --no-commit-id --name-only -r $commit}; git ls-remote origin refs/heads/develop; git rev-parse HEAD:docs/Stateless-Agent-Context-Management.md a8d3934b:docs/Stateless-Agent-Context-Management.md; git worktree list --porcelain",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:52:45.00024Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 4336 -End 4600",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:52:45.0265981Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 4034 -End 4335",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:52:56.7210489Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 4601 -End 4835",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:52:56.8467431Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 4836 -End 5074",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:53:47.2314231Z",
+      "Command": "$path='docs/architecture/SessionTurn-Review-AgentContext-Architecture.md';$lines=Get-Content $path;$blocks=@();$heading='';for($i=0;$i -lt $lines.Count;$i++){if($lines[$i] -match '^#{1,6} '){$heading=$lines[$i]};if($lines[$i] -eq '```mermaid'){$blocks+= [pscustomobject]@{Index=$blocks.Count+1;Line=$i+1;Kind=$lines[$i+1];Heading=$heading}}};$stats=foreach($b in $blocks){$file='docs/receipts/hv/20261013T153316Z-diagrams/20261013T153316Z-rendered-architecture-'+$b.Index+'.svg';[xml]$svg=Get-Content $file -Raw;$v=$svg.DocumentElement.GetAttribute('viewBox').Split(' ',[StringSplitOptions]::RemoveEmptyEntries);$w=[double]::Parse($v[2],[Globalization.CultureInfo]::InvariantCulture);$h=[double]::Parse($v[3],[Globalization.CultureInfo]::InvariantCulture);$seq=$b.Kind -eq 'sequenceDiagram';$pw=if($seq){1056}else{816};$ph=if($seq){816}else{1056};$pages=[Math]::Ceiling($w*2/3/$pw)*[Math]::Ceiling($h*2/3/$ph);[pscustomobject]@{Index=$b.Index;Line=$b.Line;Kind=$b.Kind;Heading=$b.Heading;Width=$w;Height=$h;MinimumPagesAt8PtNoMargins=$pages;Svg=$file}};$stats | ConvertTo-Json -Depth 5 | Set-Content docs/receipts/hv/20261013T153316Z-diagram-sizes.json -Encoding utf8;$stats | Where-Object MinimumPagesAt8PtNoMargins -GT 3 | Format-List; [pscustomobject]@{Charts=$stats.Count;OverThreePages=@($stats | Where-Object MinimumPagesAt8PtNoMargins -GT 3).Count;Largest=@($stats | Sort-Object MinimumPagesAt8PtNoMargins -Descending | Select-Object -First 8)} | ConvertTo-Json -Depth 6; Get-Command rsvg-convert,magick,convert,inkscape -ErrorAction SilentlyContinue | Select-Object Name,Source",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:54:00.5589005Z",
+      "Command": "rg --files --hidden .claude docs tools /tmp/hv-mermaid-20261011 -g '*config*.json' -g '*diagram*.ps1' -g '*render*.ps1' -g '*mermaid*.ps1' -g '!node_modules/**' -g '!*.svg' -g '!*.jsonl' | Select-Object -First 45; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 5075 -End 5323",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:54:30.9636023Z",
+      "Command": "rg -n --max-columns 900 --max-columns-preview 'Register-McpAlias|Resolve-McpRequest|Acknowledge-Mcp|AliasConsumer|alias.*API|alias.*function' docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:54:31.0404559Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 5324 -End 5404",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:54:31.0774623Z",
+      "Command": "Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 1 -End 120",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:54:40.7472636Z",
+      "Command": "$line=(Get-Content docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md)[810]; $line -split '(?=AC-00[6-9]|AC-01[0-2])' | Select-Object -Skip 1; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 247 -End 262; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 5405 -End 5534",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:58:57.9655684Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 5535 -End 5980",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:59:13.4410704Z",
+      "Command": "Get-ChildItem /home/sharpninja/github -Directory -Filter '*plugin*' | Select-Object -ExpandProperty FullName; rg -n '^#{1,5} ' docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md; Get-Content -Raw docs/receipts/hv/20261013T153316Z-approved-todo.json | ConvertFrom-Json | Select-Object -Property id,title,done,technicalDetails,implementationTasks,functionalRequirements,technicalRequirements,dependsOn | ConvertTo-Json -Depth 25",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:59:13.5432373Z",
+      "Command": "Get-Content -Raw docs/receipts/hv/20261013T153316Z-review-tools.ps1; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 1 -End 170; Get-HvLine -Path docs/Stateless-Agent-Context-Management.md -Start 1 -End 24",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:59:30.4445452Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 233 -End 260; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 405 -End 482; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2797 -End 2815",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:59:30.4652177Z",
+      "Command": "Get-HvLine -Path /home/sharpninja/github/McpServer/.claude/worktrees/agentcontext-doc-20261011/src/QBrainAi.Storage/McpDbContext.cs -Start 380 -End 465; rg -n 'beforeTool|afterTool|tool.execute|session.idle|PluginHook|pretooluse|posttooluse' /home/sharpninja/github/mcpserver-cline-v2-plugin/src /home/sharpninja/github/mcpserver-opencode-plugin/src; rg -n 'pretooluse|posttooluse|tool_call|tool_result|BeforeTool|AfterTool' plugins/core/lib-ps/plugin-hook.ps1",
+      "ExitCode": 1,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:59:30.4828534Z",
+      "Command": "$snap = Get-Content -Raw docs/receipts/hv/20261013T153316Z-approved-todo.json | ConvertFrom-Json; $snap.PSObject.Properties.Name; $snap.data.PSObject.Properties.Name; Get-Content docs/receipts/hv/20261013T153316Z-live-requirements-fr.json -TotalCount 18; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 221 -End 258",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:59:51.6612968Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3028 -End 3048; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3150 -End 3163; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3780 -End 3810; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 809 -End 812",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:59:51.7966998Z",
+      "Command": "Get-HvLine -Path /home/sharpninja/github/mcpserver-cline-v2-plugin/src/plugin.ts -Start 245 -End 280; Get-HvLine -Path /home/sharpninja/github/mcpserver-opencode-plugin/src/plugin.ts -Start 180 -End 260; rg -n 'tool_call|tool_result|auditTool|beforeTool|afterTool' plugins/core/lib-node/src -g '*.ts'; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 241 -End 244; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 250 -End 256",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T15:59:51.6427801Z",
+      "Command": "$entries = Get-Content docs/receipts/hv/20261013T153316Z-review-commands.jsonl | ConvertFrom-Json; $entries | Where-Object { $_.Command -match 'appendDialog|beginTurn' } | Select-Object -Last 2 -ExpandProperty Command; $snap = Get-Content -Raw docs/receipts/hv/20261013T153316Z-approved-todo.json | ConvertFrom-Json; $snap.payload.result.PSObject.Properties.Name; $snap.payload.result | Select-Object id,title,done,technicalDetails,implementationTasks,functionalRequirements,technicalRequirements,dependsOn | ConvertTo-Json -Depth 15; rg -n 'sessionLog|appendDialog|query' /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/skills/session/SKILL.md",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:00:08.1340715Z",
+      "Command": "$wrapperArgs=Get-HvWrapperArgument; & /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.sessionlog.appendDialog -ParamsObject @{dialogItems=@(@{role='model';category='decision';content='Independent verification update: architecture read through Addendum A; all 210 Mermaid blocks rendered with Mermaid 11.17.2 and CLI 11.17.0, exit 0. Exact copies of architecture 3.5, 6, 7.11-7.16 and 8 in the stateless document verified equal. origin/develop is a8d3934bc6238dc8e27f71c1d0561b55f48e88d4; five named publication commits are parent-child consecutive and each modifies only the stateless document; retained worktree and branch verified. Model identity is own gpt-6-astra/max turn_context. Material issues under verification: prior-response dependency status is not incorporated in staleness checks; alias public functions are specified only in derived plan; package recovery and supersession use requestId without full turn key. Alternatives considered: accept prose assertions or infer missing guards; rejected because architecture is required to be decision complete. Reviewing live store and sources before final findings. No product changes.'})}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:00:19.962058Z",
+      "Command": "Get-HvLine -Path /home/sharpninja/github/mcpserver-cline-v2-plugin/src/plugin.ts -Start 245 -End 280; Get-HvLine -Path /home/sharpninja/github/mcpserver-opencode-plugin/src/plugin.ts -Start 180 -End 260; rg -n 'tool_call|tool_result|auditTool' plugins/core/lib-node/src -g '*.ts'; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 241 -End 243; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 250 -End 256",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:00:36.5188399Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2310 -End 2327; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1459 -End 1470; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1725 -End 1739; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2650 -End 2658; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3107 -End 3135",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:00:47.8496832Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 274 -End 326; rg -n 'IDE0130|CA1707|MA0048|dotnet_analyzer|namespace' /home/sharpninja/github/McpServer/.claude/worktrees/netanalyzers-all/.editorconfig; rg -n 'RootNamespace|AssemblyName' src -g '*csproj'; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2110 -End 2127",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:01:03.1159589Z",
+      "Command": "rg -n 'RootNamespace|CA1707|MA0048|AnalysisMode|EnableNETAnalyzers' /home/sharpninja/github/McpServer/.claude/worktrees/netanalyzers-all/src/QBrainAi.Storage/QBrainAi.Storage.csproj /home/sharpninja/github/McpServer/.claude/worktrees/netanalyzers-all/Directory.Build.props /home/sharpninja/github/McpServer/.claude/worktrees/netanalyzers-all/.editorconfig; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2815 -End 2826; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3650 -End 3697; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 4750 -End 4775; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3480 -End 3490",
+      "ExitCode": 2,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:01:28.9582298Z",
+      "Command": "$cfg=Get-Content -Raw docs/receipts/hv/20261013T153316Z-mermaid-config.json | ConvertFrom-Json -AsHashtable; $cfg.sequence.wrap=$true; $cfg.sequence.width=180; $cfg.sequence.messageFontSize=16; $cfg.sequence.noteFontSize=16; $cfg.sequence.actorFontSize=16; $cfg | ConvertTo-Json -Depth 10 | Set-Content docs/receipts/hv/20261013T153316Z-mermaid-wrap-config.json; $blocks=[regex]::Matches((Get-Content -Raw docs/architecture/SessionTurn-Review-AgentContext-Architecture.md),'(?ms)^```mermaid\\r?\\n(.*?)^```'); $selected=@(56,61,94,121,125,133,173,182); $renderText=foreach($index in $selected){ '# Original block '+$index; $blocks[$index-1].Value; '' }; $renderText | Set-Content docs/receipts/hv/20261013T153316Z-selected-diagrams.md; & node /tmp/hv-mermaid-20261011/node_modules/@mermaid-js/mermaid-cli/src/cli.js -i docs/receipts/hv/20261013T153316Z-selected-diagrams.md -o docs/receipts/hv/20261013T153316Z-wrapped-diagrams.md -a docs/receipts/hv/20261013T153316Z-wrapped-svg -j 4 -p /tmp/hv-mermaid-20261011/puppeteer.json -c docs/receipts/hv/20261013T153316Z-mermaid-wrap-config.json",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:01:52.9047172Z",
+      "Command": "$planLines=[IO.File]::ReadAllLines((Resolve-Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md)); $domain=''; $subsection=''; $rows=@(); for($n=220; $n -lt 1287; $n++){ $line=$planLines[$n]; if($line -match '^### Domain: (.+)'){ $domain=$Matches[1] }; if($line -match '^#### (.+)'){ $subsection=$Matches[1] }; if($line -match '^- ((?:FR|TR|TEST)-[A-Z0-9-]+)\\b'){ $rows += [pscustomobject]@{Line=$n+1;Domain=$domain;Section=$subsection;Id=$Matches[1];Text=$line} } }; $live=@{}; foreach($kind in @('fr','tr','test')){ $doc=Get-Content -Raw ('docs/receipts/hv/20261013T153316Z-live-requirements-'+$kind+'.json') | ConvertFrom-Json; foreach($item in $doc.payload.result.items){$live[$item.id]=$item} }; $newRows=@($rows | Where-Object Section -in @('Functional requirements','Technical requirements','Testing requirements')); $report=[ordered]@{NewDefinitionCount=$newRows.Count;NewDefinitions=$newRows | Select-Object Line,Domain,Section,Id;Collisions=@($newRows | Where-Object {$live.ContainsKey($_.Id)} | Select-Object Line,Id);Rows=$rows}; $report | ConvertTo-Json -Depth 20 | Set-Content docs/receipts/hv/20261013T153316Z-catalog-audit.json; $report.NewDefinitions | Group-Object Section | Select-Object Name,Count; $report.Collisions | ConvertTo-Json; $rows | Where-Object Section -EQ 'Updated existing requirements' | Select-Object Line,Domain,Id | Format-Table -AutoSize; $newRows | Group-Object Id | Where-Object Count -GT 1 | Select-Object Name,Count",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:02:19.952184Z",
+      "Command": "Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 311 -End 334; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 472 -End 491; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 612 -End 618; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 735 -End 751; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 823 -End 830; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 913 -End 918; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 989 -End 996",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:02:32.4421668Z",
+      "Command": "$prior=Get-Content -Raw docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json | ConvertFrom-Json; $prior.Findings | Where-Object {($_ | ConvertTo-Json -Depth 10) -match 'R4-F12'} | ConvertTo-Json -Depth 15; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 1065 -End 1071; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 1139 -End 1145; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 1192 -End 1197; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 106 -End 119; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 70 -End 103",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:03:18.2258491Z",
+      "Command": "$original=@(56,61,94,121,125,133,173,182); $reports=Get-ChildItem docs/receipts/hv/20261013T153316Z-wrapped-svg -Filter '*.svg' | Sort-Object Name | ForEach-Object { [xml]$svg=Get-Content -Raw $_.FullName; $view=$svg.svg.viewBox.Split(' '); $i=[int]([regex]::Match($_.BaseName,'-(\\d+)$').Groups[1].Value)-1; [pscustomobject]@{Block=$original[$i];Width=[double]$view[2];Height=[double]$view[3];File=$_.Name} }; $reports | ConvertTo-Json | Set-Content docs/receipts/hv/20261013T153316Z-diagrams-wrapped-sizes.json; $reports | Format-List; & rsvg-convert -w 1000 -o docs/receipts/hv/20261013T153316Z-projection-diagram.png docs/receipts/hv/20261013T153316Z-wrapped-svg/20261013T153316Z-wrapped-diagrams-6.svg",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:04:43.4898229Z",
+      "Command": "$audit=Get-Content -Raw docs/receipts/hv/20261013T153316Z-catalog-audit.json | ConvertFrom-Json; $new=@($audit.NewDefinitions | Where-Object { $_.Id -notmatch '-AC\\d+$' }); $audit.NewDefinitionCount=$new.Count; $audit.NewDefinitions=$new; $audit | ConvertTo-Json -Depth 25 | Set-Content docs/receipts/hv/20261013T153316Z-catalog-audit.json; $new | Group-Object Section | Select-Object Name,Count; $old=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-approved-todo.json | ConvertFrom-Json).payload.result.description; [regex]::Matches($old,'(?m)^.*(?:tool_call|beforeTool|afterTool|appendToolAction|C6 Action types|tool.execute).*$') | ForEach-Object Value; foreach($id in @('FR-MCP-SESSIONLIFE-001-AC002','TR-MCP-SESSIONLIFE-002-AC002')){ $audit.Rows | Where-Object { $_.Section -eq 'Testing requirements' -and $_.Text.Contains($id) } | ForEach-Object { '{0}: {1}: {2}' -f $_.Line,$_.Id,([regex]::Match($_.Text,'.{0,120}'+[regex]::Escape($id)+'.{0,350}').Value) } }; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 329 -End 340; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2680 -End 2693; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3049 -End 3064",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:04:54.3093128Z",
+      "Command": "Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 261 -End 270; $old=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-approved-todo.json | ConvertFrom-Json).payload.result.description; foreach($pattern in @('C6 Action types','beforeTool','afterTool','tool_execution','tool_call')){ $hits=[regex]::Matches($old,'.{0,140}'+[regex]::Escape($pattern)+'.{0,500}'); $hits | Select-Object -First 3 | ForEach-Object Value }; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 1241 -End 1287",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:05:19.9370771Z",
+      "Command": "$base='/home/sharpninja/github/McpServer/.claude/worktrees/agentcontext-doc-20261011'; Get-HvLine -Path ($base+'/src/QBrainAi.Support.Mcp/Controllers/SessionLogController.cs') -Start 40 -End 140; rg -n 'Http(Get|Post|Patch|Put|Delete)|return (Ok|NotFound|BadRequest)|Route\\(' ($base+'/src/QBrainAi.Support.Mcp/Controllers/SessionLogController.cs'); Get-HvLine -Path ($base+'/src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs') -Start 90 -End 155; Get-HvLine -Path ($base+'/src/QBrainAi.Services/Services/SessionLogService.cs') -Start 1590 -End 1636",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:05:19.9417785Z",
+      "Command": "$base='/home/sharpninja/github/McpServer/.claude/worktrees/agentcontext-doc-20261011'; Get-HvLine -Path ($base+'/src/QBrainAi.Cqrs/Dispatcher.cs') -Start 80 -End 112; Get-HvLine -Path ($base+'/src/QBrainAi.GraphRag/Services/GraphRagService.cs') -Start 342 -End 379; rg -n 'scope|DeleteDocumentAsync|QueryAsync' ($base+'/src/QBrainAi.GraphRag/Services/GraphRagService.cs'); Get-HvLine -Path ($base+'/src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs') -Start 322 -End 371; Get-HvLine -Path ($base+'/src/QBrainAi.Storage/McpDbContext.cs') -Start 19 -End 56",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:05:56.7921752Z",
+      "Command": "$planLines=[IO.File]::ReadAllLines((Resolve-Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md)); $domain=''; $subsection=''; $rows=@(); for($n=220; $n -lt 1287; $n++){ $line=$planLines[$n]; if($line -match '^### Domain: (.+)'){ $domain=$Matches[1] }; if($line -match '^#### (.+)'){ $subsection=$Matches[1] }; if($line -match '^(?:- )?((?:FR|TR|TEST)-[A-Z0-9-]+)\\b'){ $rows += [pscustomobject]@{Line=$n+1;Domain=$domain;Section=$subsection;Id=$Matches[1];Text=$line} } }; $live=@{}; foreach($kind in @('fr','tr','test')){ $doc=Get-Content -Raw ('docs/receipts/hv/20261013T153316Z-live-requirements-'+$kind+'.json') | ConvertFrom-Json; foreach($item in $doc.payload.result.items){$live[$item.id]=$item} }; $newRows=@($rows | Where-Object {$_.Section -in @('Functional requirements','Technical requirements','Testing requirements') -and $_.Id -notmatch '-AC\\d+$'}); $report=[ordered]@{NewDefinitionCount=$newRows.Count;NewDefinitions=$newRows | Select-Object Line,Domain,Section,Id;Collisions=@($newRows | Where-Object {$live.ContainsKey($_.Id)} | Select-Object Line,Id);Rows=$rows}; $report | ConvertTo-Json -Depth 25 | Set-Content docs/receipts/hv/20261013T153316Z-catalog-audit.json; $report.NewDefinitions | Group-Object Section | Select-Object Name,Count; 'Collision count: '+$report.Collisions.Count; foreach($id in @('FR-MCP-115','FR-MCP-PLUGININT-001','FR-MCP-SESSIONLIFE-001','TR-MCP-TXN-001','FR-SUPPORT-012','TR-MCP-NUKE-002')){ $live[$id] | Select-Object id,title,description,statement,acceptanceCriteria | ConvertTo-Json -Depth 8 }; foreach($plugin in (Get-ChildItem /home/sharpninja/github -Directory -Filter 'mcpserver-*-plugin')){ '{0}: {1}' -f $plugin.Name,(& git -C $plugin.FullName rev-parse HEAD) }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:06:08.5190047Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2694 -End 2705; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3064 -End 3105; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 162 -End 177; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 1453 -End 1460; rg -n 'Summary|summary|session row' docs/architecture/SessionTurn-Review-AgentContext-Architecture.md | Where-Object {$_ -match '^1[456][0-9]:'}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:06:43.8050716Z",
+      "Command": "rg -n 'overallVerdict|AGREE|DISAGREE|time bound|timeout|time limit|no time' docs/architecture/SessionTurn-Review-AgentContext-Architecture.md | Where-Object {$_ -match '^2[6789][0-9][0-9]:|^3[347][0-9][0-9]:'}; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3710 -End 3723; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3338 -End 3355; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3799 -End 3806; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 986 -End 994; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1009 -End 1018",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:06:58.4021194Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1867 -End 1887; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1017 -End 1047; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 3436 -End 3445; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2711 -End 2724; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2659 -End 2665",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:08:09.850341Z",
+      "Command": "$files=@('docs/architecture/SessionTurn-Review-AgentContext-Architecture.md','docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md','docs/Stateless-Agent-Context-Management.md'); foreach($file in $files){ $body=Get-Content -Raw $file; [pscustomobject]@{Path=$file;Spdx=$body.StartsWith('<!-- SPDX-License-Identifier: Apache-2.0 -->');EnDash=([regex]::Matches($body,[string][char]0x2013)).Count;EmDash=([regex]::Matches($body,[string][char]0x2014)).Count;SecretAssignmentMatches=([regex]::Matches($body,'(?i)(?:apiKey|api_key|X-Api-Key)[\"'']?\\s*[:=]\\s*[\"'']?[A-Za-z0-9_+/=.-]{20,}')).Count} | ConvertTo-Json -Compress }; & git diff --check 845a87df..HEAD; 'Diff check exit: '+$LASTEXITCODE",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:07:36.7806049Z",
+      "Command": "$files=@('docs/architecture/SessionTurn-Review-AgentContext-Architecture.md','docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md','docs/Stateless-Agent-Context-Management.md'); foreach($file in $files){ $body=Get-Content -Raw $file; [pscustomobject]@{Path=$file;Spdx=$body.StartsWith('<!-- SPDX-License-Identifier: Apache-2.0 -->');EnDash=([regex]::Matches($body,[string][char]0x2013)).Count;EmDash=([regex]::Matches($body,[string][char]0x2014)).Count;SecretAssignmentMatches=([regex]::Matches($body,'(?i)(?:apiKey|api_key|X-Api-Key)[\"'']?\\s*[:=]\\s*[\"'']?[A-Za-z0-9_+/=.-]{20,}')).Count} | ConvertTo-Json -Compress }; & git diff --check 845a87df..HEAD; 'Diff check exit: '+$LASTEXITCODE; $diff=& git diff 845a87df..HEAD; 'Commit diff key-assignment matches: '+([regex]::Matches(($diff -join \"`n\"),'(?i)(?:apiKey|api_key|X-Api-Key)[\"'']?\\s*[:=]\\s*[\"'']?[A-Za-z0-9_+/=.-]{20,}')).Count; $patterns='.{0,100}(?:dotnet test|dotnet build|sh -c|Invoke-Pester|npm test|pytest|GitHub Actions|Azure Pipelines|WSMan|F:/GitHub/McpServer/.worktrees|gpt-6-sol|xhigh|ultra|time bound|timeoutMinutes).{0,250}'; foreach($f in $files[0..1]){ $lines=Get-Content $f; for($i=0;$i -lt $lines.Count;$i++){ foreach($m in [regex]::Matches($lines[$i],$patterns)){ '{0}:{1}: {2}' -f $f,($i+1),$m.Value } } }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:09:24.9800724Z",
+      "Command": "Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 132 -End 161; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 177 -End 198; Get-HvLine -Path docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md -Start 1184 -End 1191",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:09:24.9884073Z",
+      "Command": "$files=@('docs/architecture/SessionTurn-Review-AgentContext-Architecture.md','docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md'); $patterns='.{0,60}(?:dotnet test|dotnet build|sh -c|GitHub Actions|Azure Pipelines|WSMan|F:/GitHub/McpServer/.worktrees|gpt-6-sol|no time bound).{0,200}'; foreach($f in $files){ $lines=Get-Content $f; for($i=0;$i -lt $lines.Count;$i++){ foreach($m in [regex]::Matches($lines[$i],$patterns)){ '{0}:{1}: {2}' -f $f,($i+1),$m.Value } } }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:08:44.9312191Z",
+      "Command": "'text.sequenceNumber { font-size: 16px !important; }' | Set-Content docs/receipts/hv/20261013T153316Z-diagram-fonts.css; & node /tmp/hv-mermaid-20261011/node_modules/@mermaid-js/mermaid-cli/src/cli.js -i docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -o docs/receipts/hv/20261013T153316Z-rendered-wrap-all.md -a docs/receipts/hv/20261013T153316Z-wrapped-all-svg -j 4 -p /tmp/hv-mermaid-20261011/puppeteer.json -c docs/receipts/hv/20261013T153316Z-mermaid-wrap-config.json -C docs/receipts/hv/20261013T153316Z-diagram-fonts.css",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:10:52.0512237Z",
+      "Command": "rg --files docs/receipts -g '*stateless*' -g '*publish*' -g '*agentcontext*'; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 5499 -End 5533; $base='/home/sharpninja/github/McpServer/.claude/worktrees/agentcontext-doc-20261011'; Get-HvLine -Path ($base+'/build/Build.TestDependencies.cs') -Start 62 -End 78; Get-HvLine -Path ($base+'/tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs') -Start 76 -End 91; Get-HvLine -Path ($base+'/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs') -Start 60 -End 75",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:11:16.9374699Z",
+      "Command": "$prior=Get-Content -Raw docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json | ConvertFrom-Json; $prior.Claims | Where-Object Id -EQ M8 | ConvertTo-Json -Depth 12; rg -n '99da6af8|51d2482e|63d4743d|33a5a954|a8d3934b' /home/sharpninja/github/McpServer/.git/logs/refs/remotes/origin/develop | Select-Object -Last 9; & git log -5 --format='%H %P %s' origin/develop; & git status --short",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:12:01.6290262Z",
+      "Command": "$blocks=[regex]::Matches((Get-Content -Raw docs/architecture/SessionTurn-Review-AgentContext-Architecture.md),'(?ms)^```mermaid\\r?\\n(.*?)^```'); $metrics=Get-ChildItem docs/receipts/hv/20261013T153316Z-wrapped-all-svg -Filter '*.svg' | ForEach-Object { [xml]$svg=Get-Content -Raw $_.FullName; $view=$svg.svg.viewBox.Split(' '); $i=[int]([regex]::Match($_.BaseName,'-(\\d+)$').Groups[1].Value)-1; $kind=$blocks[$i].Groups[1].Value.Split(\"`n\")[0].Trim(); $width=[double]$view[2]*2/3; $height=[double]$view[3]*2/3; $land=[Math]::Ceiling($width/1056)*[Math]::Ceiling($height/816); $portrait=[Math]::Ceiling($width/816)*[Math]::Ceiling($height/1056); $min=if($kind -eq 'sequenceDiagram'){$land}else{[Math]::Min($land,$portrait)}; [pscustomobject]@{Block=$i+1;Kind=$kind;Width=[double]$view[2];Height=[double]$view[3];PortraitPages=$portrait;LandscapePages=$land;MinimumPagesAt8Point=$min} }; $metrics | Sort-Object Block | ConvertTo-Json | Set-Content docs/receipts/hv/20261013T153316Z-diagram-page-check.json; 'Blocks: '+$metrics.Count; 'Maximum pages with sequence landscape, others best orientation: '+($metrics | Measure-Object MinimumPagesAt8Point -Maximum).Maximum; $metrics | Where-Object MinimumPagesAt8Point -GT 3 | Format-List; Get-ChildItem plugins/core/lib-ps -Name '*McpPlugin*'; Get-Content plugins/core/lib-ps/plugin-hook.ps1 -TotalCount 20",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:12:25.6330393Z",
+      "Command": "$blocks=[regex]::Matches((Get-Content -Raw docs/architecture/SessionTurn-Review-AgentContext-Architecture.md),'(?ms)^```mermaid\\r?\\n(.*?)^```'); foreach($i in @(94,133,210)){ $src='docs/receipts/hv/20261013T153316Z-visual-'+$i+'.mmd'; $out='docs/receipts/hv/20261013T153316Z-visual-'+$i+'.png'; $blocks[$i-1].Groups[1].Value | Set-Content $src; & node /tmp/hv-mermaid-20261011/node_modules/@mermaid-js/mermaid-cli/src/cli.js -i $src -o $out -p /tmp/hv-mermaid-20261011/puppeteer.json -c docs/receipts/hv/20261013T153316Z-mermaid-wrap-config.json -C docs/receipts/hv/20261013T153316Z-diagram-fonts.css -w 1800 -H 2400; 'Block '+$i+' PNG exit: '+$LASTEXITCODE }",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:14:08.4457677Z",
+      "Command": "$scriptPath='docs/receipts/hv/20261013T153316Z-redact-receipts.ps1'; $parseTokens=$null; $parseErrors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $scriptPath),[ref]$parseTokens,[ref]$parseErrors); $findings=@(Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error); [pscustomobject]@{ParserErrors=$parseErrors.Count;AnalyzerVersion=(Get-Module PSScriptAnalyzer).Version.ToString();AnalyzerFindings=$findings.Count} | ConvertTo-Json; if($parseErrors.Count -or $findings.Count){$parseErrors; $findings | Format-List; throw 'Redactor failed preflight'}; & $scriptPath",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:15:45.3669485Z",
+      "Command": "Get-Content -Raw /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/skills/session/SKILL.md; Get-Content -Raw docs/context/session-log-schema.md; Get-Content docs/receipts/hv/20261013T153316Z-redaction-proof.json | ConvertFrom-Json | Select-Object -ExpandProperty Files | Where-Object Redactions -GT 0 | ConvertTo-Json; Get-Content docs/receipts/hv/20261013T153316Z-review-commands.jsonl -Tail 5 | ConvertFrom-Json | Select-Object TimestampUtc,ExitCode,@{Name='CommandStart';Expression={$_.Command.Substring(0,[Math]::Min(80,$_.Command.Length))}} | Format-List",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:16:03.8394971Z",
+      "Command": "rg -n 'C2 alias|alias journal|aliases.yaml|Get-McpAlias|Resolve-MintOutcome' docs/architecture/SessionTurn-Review-AgentContext-Architecture.md | ForEach-Object { if($_.Length -gt 900){ $_.Substring(0,900) } else {$_} }; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 486 -End 505; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1084 -End 1113; Get-HvLine -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 1159 -End 1174",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:21:23.024676Z",
+      "Command": "$wrapperArgs=Get-HvWrapperArgument; & /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.sessionlog.updateTurn -ParamsObject @{interpretation='Independent architecture gate round 1. Authority is the architecture; derived documents checked for agreement. Review only; no implementation changes.';designDecisions=@('DISAGREE is required by material functional contradictions. Do not infer absent guards or accept implementer self-review as proof. Alternatives rejected: AGREE based on document breadth or treating derived plan contracts as architecture authority.','Treat Opus as Octopus, one activity per CQRS unit with immediately following nested subdiagrams, and domain catalog reorganization as reasonable stated readings. No operator decision is required for the identified corrections.','PowerShell-only review automation parsed and analyzed with PSScriptAnalyzer 1.25.0. Mermaid invoked only as the expressly permitted library/tool from PowerShell. Initial marker credential exposure in the runner response was corrected by length-preserving redaction of own receipts.');contextList=@('docs/architecture/SessionTurn-Review-AgentContext-Architecture.md','docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md','docs/Stateless-Agent-Context-Management.md','docs/receipts/hv/hostile-validator-plan-readiness-merged-r4-20261012T034439Z.json','docs/receipts/hv/20261013T153316Z-review-commands.jsonl','docs/receipts/hv/20261013T153316Z-catalog-audit.json')}; & /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/Invoke-CodexMcpPlugin.ps1 @wrapperArgs -Command Invoke -Method workflow.sessionlog.appendActions -ParamsObject @{actions=@(@{order=1;type='design_decision';status='completed';description='Architecture authority enforced; derived-only alias API and functional counterexamples require DISAGREE. Alternatives rejected: trusting implementer claims or inventing missing architectural guards.';filePath='docs/architecture/SessionTurn-Review-AgentContext-Architecture.md'},@{order=2;type='create';status='completed';description='Created independent Mermaid rendering, exact-copy, live-store and source verification receipts; 210 blocks rendered, 102 proposed IDs free, 353 FR/487 TR/512 TEST read-only snapshot.';filePath='docs/receipts/hv/20261013T153316Z-catalog-audit.json'},@{order=3;type='edit';status='completed';description='Redacted three occurrences of the marker credential in this reviewer runner response stream; preserved byte lengths and active append position. Parser and PSScriptAnalyzer 1.25.0 passed.';filePath='docs/receipts/hv/20261013T153316Z-architecture-merged-r1.response.jsonl'})}",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:29:28.6136049Z",
+      "Command": "$scriptPath='docs/receipts/hv/20261013T153316Z-write-verdict.ps1'; $parseTokens=$null; $parseErrors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $scriptPath),[ref]$parseTokens,[ref]$parseErrors); $findings=@(Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error); [pscustomobject]@{ParserErrors=$parseErrors.Count;AnalyzerVersion=(Get-Module PSScriptAnalyzer).Version.ToString();AnalyzerFindings=$findings.Count} | ConvertTo-Json; if($parseErrors.Count -or $findings.Count){$parseErrors; $findings | Format-List; throw 'Verdict writer failed preflight'}; & $scriptPath",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:30:34.6888446Z",
+      "Command": "$record=(Get-Content -Raw docs/receipts/hv/20261013T153316Z-live-requirements-fr.json | ConvertFrom-Json).payload.result.items | Where-Object id -EQ 'FR-MCP-TRIAGESTORE-001'; $record | Select-Object id,description,acceptanceCriteria | ConvertTo-Json -Depth 8; $lines=Get-Content docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md; foreach($lineNo in @(309,349,364,1143,1165)){ $line=$lines[$lineNo-1]; if($lineNo -eq 309){ foreach($m in [regex]::Matches($line,'FR-MCP-TRIAGESTORE-001.{0,500}')){ '309: '+$m.Value } }else{ '{0}: {1}' -f $lineNo,$line } }; $doc=Get-Content -Raw docs/receipts/hv/hostile-validator-architecture-merged-r1-20261013T153316Z.json | ConvertFrom-Json; $doc | Select-Object OverallVerdict,Accuracy,Completeness,PassCount,FailCount,UnknownCount | ConvertTo-Json; $doc.ValidatorIdentity | Select-Object Agent,Model,Effort,ThreadId,TurnId,WorkingDirectory,TurnContextTimestamp | ConvertTo-Json",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    },
+    {
+      "TimestampUtc": "2026-10-13T16:31:13.5104868Z",
+      "Command": "rg -n 'class ProcessingDialogItemDto|record ProcessingDialogItemDto|MaxLength|StringLength' src/QBrainAi.Services/Models/UnifiedSessionLogDto.cs src/QBrainAi.Client/Models/SessionLogModels.cs; rg -n 'case \"get\"|queryHistory|GetAsync|sessionId' /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/skills/session/SKILL.md | Select-Object -Last 15; $diff=(& git diff 845a87df..HEAD) -join \"`n\"; $keyPattern=[regex]::new('(?i)(?:apiKey|api_key|X-Api-Key)[\"'']?\\s*[:=]\\s*[\"'']?[A-Za-z0-9_+/=.-]{20,}',[Text.RegularExpressions.RegexOptions]::None,[TimeSpan]::FromSeconds(5)); [ordered]@{DiffCharacters=$diff.Length;KeyAssignmentMatches=$keyPattern.Matches($diff).Count;CheckedUtc=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json | Set-Content docs/receipts/hv/20261013T153316Z-commit-hygiene.json; Get-Content docs/receipts/hv/20261013T153316Z-commit-hygiene.json; Get-Content -Raw /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.118.0/lib/repl-invoke.ps1 | Select-String -Pattern 'function Invoke-ReplQuerySessionHistory' -Context 0,1",
+      "ExitCode": 0,
+      "ParserErrors": 0,
+      "AnalyzerVersion": "1.25.0",
+      "AnalyzerFindings": 0
+    }
+  ],
+  "CommandLedger": "docs/receipts/hv/20261013T153316Z-review-commands.jsonl",
+  "PersistenceProof": {
+    "VerifiedInitialPayload": {
+      "TimestampUtc": "2026-10-13T16:36:51.7959919Z",
+      "ReviewerSessionId": "Codex-20261013T153702Z-plugin-session",
+      "ReviewerRequestId": "req-20261013T153316Z-hv-architecture-r1",
+      "ReadMethod": "client.SessionLog.QueryAsync",
+      "StoredTurnStatus": "in_progress",
+      "PartCount": 12,
+      "ExpectedCharacters": 117374,
+      "StoredCharacters": 117374,
+      "ExactReadbackEquals": true,
+      "StoredSha256": "0f8a513cae4a7517b9fd7e6ca2ccb211497fbe98b38378ea44439e17a8d51140",
+      "WriteReceipt": "docs/receipts/hv/20261013T153316Z-full-result-write.json",
+      "ReadbackReceipt": "docs/receipts/hv/20261013T153316Z-reviewer-readback.json",
+      "ReadCorrection": "client.SessionLog.GetAsync is not exposed by the live REPL. Its read-only refusal was corrected to QueryAsync, which returned the own session."
+    },
+    "Meaning": "The initial full review payload was read back byte-for-byte before this audit annotation was added. The final receipt is persisted again with a distinct FINAL-PAYLOAD prefix; the following proof file records its exact readback and terminal reviewer-turn status.",
+    "FinalReadbackReceipt": "docs/receipts/hv/20261013T153316Z-final-persistence-proof.json",
+    "CompletionReceipt": "docs/receipts/hv/20261013T153316Z-completion-receipt.json"
+  }
+}

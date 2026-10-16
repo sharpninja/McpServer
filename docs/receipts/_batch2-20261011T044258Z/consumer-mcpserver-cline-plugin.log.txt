@@ -1,0 +1,54 @@
+
+changed 1 package, and audited 367 packages in 2s
+
+64 packages are looking for funding
+  run `npm fund` for details
+
+47 vulnerabilities (3 low, 6 moderate, 36 high, 2 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn install-scripts   esbuild@0.27.7 (postinstall: node install.js)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+
+> @sharpninja/mcpserver-cline-plugin@1.119.0 build
+> tsc
+
+
+> @sharpninja/mcpserver-cline-plugin@1.119.0 test
+> jest
+
+PASS tests/skills.test.ts
+FAIL tests/memory-skill.test.ts
+  ● cline memory skill and descriptor › exposes executable wrapper scripts for workflow.memory.*
+
+    ENOENT: no such file or directory, open '/home/sharpninja/github/mcpserver-cline-plugin/hooks/scripts/memory-context.ps1'
+
+      52 |     const helperPath = path.join(root, 'hooks', 'scripts', 'memory-context.ps1');
+      53 |     const invoke = fs.readFileSync(invokePath, 'utf8');
+    > 54 |     const helper = fs.readFileSync(helperPath, 'utf8');
+         |                       ^
+      55 |     expect(invoke).toContain('memory-context.ps1');
+      56 |     expect(invoke).toContain('Resolve-McpMemoryWorkflowMethod');
+      57 |     expect(helper).toContain('memory-descriptor.json');
+
+      at Object.<anonymous> (tests/memory-skill.test.ts:54:23)
+
+PASS tests/smoke.test.ts
+required-memory injection skipped: mcp unavailable
+required-memory injection skipped: MCP_MEMORY_FETCH_ERROR is set
+PASS tests/memory-injection.test.ts
+PASS tests/plugin-helpers.test.ts
+
+Test Suites: 1 failed, 4 passed, 5 total
+Tests:       1 failed, 31 passed, 32 total
+Snapshots:   0 total
+Time:        4.25 s
+Ran all test suites.

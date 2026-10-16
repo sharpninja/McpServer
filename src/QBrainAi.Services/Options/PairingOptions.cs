@@ -1,0 +1,20 @@
+namespace QBrainAi.Support.Mcp.Options;
+
+/// <summary>
+/// Options for the <c>/pair</c> web login flow and API key management.
+/// Bound from <c>Mcp</c> configuration section.
+/// </summary>
+public sealed class PairingOptions
+{
+    /// <summary>Configuration section name.</summary>
+    public const string SectionName = "Mcp";
+
+    /// <summary>The server API key. When non-empty, mutating endpoints require this key.</summary>
+    public string ApiKey { get; set; } = "";
+
+    /// <summary>
+    /// Users permitted to authenticate at <c>/pair</c> to view the API key.
+    /// Empty list disables the pairing page.
+    /// </summary>
+    public List<PairingUser> PairingUsers { get; } = [];
+}

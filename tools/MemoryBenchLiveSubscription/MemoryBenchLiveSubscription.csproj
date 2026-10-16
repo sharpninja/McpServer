@@ -9,6 +9,6 @@
     <RootNamespace>MemoryBenchLiveSubscription</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\McpServer.Services\McpServer.Services.csproj" />
+    <ProjectReference Include="..\..\src\QBrainAi.Services\QBrainAi.Services.csproj" />
   </ItemGroup>
 </Project>

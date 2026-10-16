@@ -322,7 +322,7 @@ async function graphragHttpFallback(
   const baseUrl = process.env.MCPSERVER_BASE_URL ?? process.env.MCP_SERVER_URL;
   if (typeof fetchFn !== 'function' || !apiKey || !workspacePath || !baseUrl) return null;
 
-  const root = `${baseUrl.replace(/\/$/, '')}/mcpserver/graphrag`;
+  const root = `${baseUrl.replace(/\/$/, '')}/qbrainai/graphrag`;
   const headers: Record<string, string> = {
     'X-Api-Key': apiKey,
     'X-Workspace-Path': workspacePath,

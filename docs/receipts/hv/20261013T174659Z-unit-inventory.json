@@ -1,0 +1,344 @@
+[
+  {
+    "Unit": "MintSessionTurnCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 2,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "SubmitSessionLogCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 2,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "UpsertSessionTurnCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "PatchSessionTurnCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "ReplaceSessionTurnCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 2,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "CompleteSessionTurnCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "FailSessionTurnCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "OpenSessionLogCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "AppendTurnDialogCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "SetTurnTitleCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "SetSessionTitleCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "RecordSessionTurnReviewCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "ResetSessionTurnReviewCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "GetSessionLogQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "QuerySessionLogsQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "GetAgentContextStatusQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "BuildAgentContextPackageCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 4,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "GetAgentContextPackageQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "QueryAgentContextPackagesQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "ReplayAgentContextPackageQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "SubmitAgentResponseCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 2,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "GetAgentResponseQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "QueryAgentResponsesQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "RunDeterministicGradeCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 2,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "RecordModelGradeCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 4,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "DecideAgentResponseTrustCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": false,
+    "Internal": true
+  },
+  {
+    "Unit": "RejectAgentResponseCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "SupersedeAgentResponseCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "EvaluateStalenessCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 2,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "CreateAgentContextRelationshipCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "DeleteAgentContextRelationshipCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "QueryAgentContextRelationshipsQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "RetrieveAgentContextCandidatesQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "ProjectAgentResponsesCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 3,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "GetAgentContextPilotReportQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "CreateAgentContextHvRequestCommand",
+    "HandlerDeclared": true,
+    "ActivityCount": 2,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "GetAgentContextHvRequestQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  },
+  {
+    "Unit": "QueryAgentContextHvRequestsQuery",
+    "HandlerDeclared": true,
+    "ActivityCount": 1,
+    "HasResponse": true,
+    "HasErrorContract": true,
+    "SequenceNamed": true,
+    "Internal": false
+  }
+]

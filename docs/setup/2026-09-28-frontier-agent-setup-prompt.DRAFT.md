@@ -1,4 +1,4 @@
-# DRAFT: Frontier-agent MCP Server setup prompt
+# DRAFT: Frontier-agent QBrain.AI setup prompt
 
 Status: draft for MCP-SETUPPROMPT-001  
 Audience: a frontier coding agent acting for an operator  
@@ -8,7 +8,7 @@ Session log: not available during setup. Persist progress only via the choices m
 
 ## Copy-paste agent prompt
 
-You are setting up MCP Server for an operator. Your job is to obtain, install, configure, and verify a working host without inventing tribal knowledge.
+You are setting up QBrain.AI for an operator. Your job is to obtain, install, configure, and verify a working host without inventing tribal knowledge.
 
 ### Hard rules
 
@@ -38,7 +38,7 @@ Ask these questions one group at a time. Collect follow-ups for each answer.
 
 #### A. Agents used
 
-- Which agents will talk to this MCP Server? (multi-select: Grok Bot / GrokCode, Codex, Claude Code, Claude Cowork, Cline, Copilot, OpenCode, Cursor other, Other)
+- Which agents will talk to this QBrain.AI? (multi-select: Grok Bot / GrokCode, Codex, Claude Code, Claude Cowork, Cline, Copilot, OpenCode, Cursor other, Other)
 - For each selected agent: preferred plugin identity name (must match host truth -- see playbooks; do not invent identities), plugin root path if known, and whether a local skill mirror exists (path if known).
 - Record **one agent playbook ID per selected family** in `playbooks.agents[]` (array). Also set `playbooks.agentCombo` to `agent-single` or `agent-multi`.
 
@@ -60,7 +60,7 @@ Ask these questions one group at a time. Collect follow-ups for each answer.
 
 - Choose one: `WindowsService` | `systemd` | `linux-publish-swap` | `other`
 - Follow-ups:
-  - WindowsService: service name (default `McpServer`), install path (default `C:\ProgramData\McpServer`), port (default `7147`), **runAs** (supported by `UpdateService` today: `LocalSystem` only). If operator wants NetworkService/custom: stop with `WINDOWS_RUNAS_UNSUPPORTED` -- UpdateService/EnsureServiceRegistration sets ImagePath/start mode only and does not provision alternate accounts/credentials.
+  - WindowsService: service name (default `QBrainAi`), install path (default `C:\ProgramData\QBrainAi`), port (default `7147`), **runAs** (supported by `UpdateService` today: `LocalSystem` only). If operator wants NetworkService/custom: stop with `WINDOWS_RUNAS_UNSUPPORTED` -- UpdateService/EnsureServiceRegistration sets ImagePath/start mode only and does not provision alternate accounts/credentials.
   - systemd: **blocked pending validation** (no `sd_notify` / `Type=notify`). Stop with `SYSTEMD_PENDING_VALIDATION` or redirect to `other` (`service-other`) / stop-only. Do **not** redirect to `linux-publish-swap` (also blocked).
   - linux-publish-swap: **blocked pending inventory/validation** (`LINUX_PUBLISH_SWAP_PENDING_VALIDATION`). Prior draft recipes were not executable end-to-end; do not select this as the primary service playbook until a validated lifecycle lands. Redirect to `other` only with operator-owned, tested commands, or stop.
   - other: describe exactly (IIS, Docker, manual console, Scheduled Task, etc.). On Linux, this is the only non-blocked service kind until publish-swap is validated.
@@ -68,7 +68,7 @@ Ask these questions one group at a time. Collect follow-ups for each answer.
 #### E. Host, workspace, and plugin roots
 
 - Host OS: `windows` | `linux` (typed field; do not infer solely from service kind)
-- MCP workspace path (example on lab: `F:\github\McpServer`)
+- MCP workspace path (example on lab: `F:\github\QBrainAi`)
 - Plugin root(s) for selected agents (example: `F:\github\mcpserver-grok-plugin`)
 - Endpoint: scheme/host/port (default port `7147` unless intake overrides); record as `endpoint.port` / `endpoint.baseUrl`
 - Product/version pin if known (GitVersion / deployment version string)
@@ -124,10 +124,10 @@ workspacePath: <path>
 service:
   kind: windowsService|systemd|linux-publish-swap|other
   name: <string>                 # Windows service / unit name
-  installPath: <path>            # e.g. C:\ProgramData\McpServer or /opt/mcpserver
+  installPath: <path>            # e.g. C:\ProgramData\QBrainAi or /opt/mcpserver
   port: 7147
   runAs: LocalSystem|<linux-user>|unsupported
-  executable: <string or null>   # Windows: McpServer.Support.Mcp.exe
+  executable: <string or null>   # Windows: QBrainAi.Support.Mcp.exe
   runtimeDir: <path or null>     # Linux publish-swap: directory containing DLL + appsettings.yaml (often <installPath>/current)
   details: {}
 playbooks:
@@ -155,17 +155,17 @@ Must include:
 ```markdown
 # setup-implementation.plan (example)
 ## Summary
-- host.os: windows; endpoint.port: 7147; workspace: F:\github\McpServer
+- host.os: windows; endpoint.port: 7147; workspace: F:\github\QBrainAi
 - agents: [agent-grok / GrokCode]; storage: storage-mssql (provider sqlserver); service: service-windowsService
 ## Obtain
 - [ ] Clone/pull workspace + mcpserver-grok-plugin -> evidence: git rev-parse HEAD
-- [ ] `./build.ps1 InstallReplTool` -> evidence: `mcpserver-repl --version`
+- [ ] `./build.ps1 InstallReplTool` -> evidence: `qbrain-ai-repl --version`
 ## Configure-before-start (required before UpdateService)
-- [ ] Write installed/staged `C:\ProgramData\McpServer\appsettings.yaml`: Provider=sqlserver; Omit empty SqlServer.ConnectionString; set `Mcp:RepoRoot` + primary `Workspaces[]` entry to workspacePath (replace lab-specific defaults)
+- [ ] Write installed/staged `C:\ProgramData\QBrainAi\appsettings.yaml`: Provider=sqlserver; Omit empty SqlServer.ConnectionString; set `Mcp:RepoRoot` + primary `Workspaces[]` entry to workspacePath (replace lab-specific defaults)
 - [ ] Bind secret into **service** identity env as `Mcp__Database__SqlServer__ConnectionString` (machine/service env), validate name present without printing value
 - [ ] Plugin env prepared: MCP_PLUGIN_ROOT / MCP_AGENT_NAME=GrokCode / MCP_WORKSPACE_PATH
 ## Install (starts service)
-- [ ] Elevated: `./build.ps1 UpdateService --service-name McpServer --install-path C:\ProgramData\McpServer --port 7147`
+- [ ] Elevated: `./build.ps1 UpdateService --service-name QBrainAi --install-path C:\ProgramData\QBrainAi --port 7147`
 - [ ] Evidence: `.mcpservice-deployment.json`; exe; StartName LocalSystem; ImagePath exact exe+urls
 ## Verify (fail-closed)
 - [ ] GET /health with nonce -> 200 + byte-for-byte nonce; storage field reachable
@@ -189,8 +189,8 @@ Canonical families from `AGENTS-README-FIRST.yaml` / lab plugin repos. Prefer to
 - Plugin: `mcpserver-grok-plugin` (lab: `F:\github\mcpserver-grok-plugin`; skills may live under `%USERPROFILE%\.grok\skills`)
 - Canonical identity: `GrokCode` (`PLUGIN_AGENT_NAME` / `MCP_AGENT_NAME`) -- do not accept a preferred alias that disagrees with host truth
 - Env: `MCP_PLUGIN_ROOT`, `GROK_PLUGIN_ROOT`; `MCP_WORKSPACE_PATH`
-- PATH: prepend `$HOME/.dotnet/tools` or `%USERPROFILE%\.dotnet\tools` so `mcpserver-repl` resolves (REPL itself comes from Phase 1 `./build.ps1 InstallReplTool` only -- do not also run plugin `ensure-repl` in the ordinary dry-run)
-- **Acquire (preferred):** after server can serve the tool registry, `GET /mcpserver/tools/search?keyword=mcpserver-grok-plugin`, select the result whose `name` exactly equals `mcpserver-grok-plugin`; if missing, **POST** `/mcpserver/tools/buckets/official/install?toolName=mcpserver-grok-plugin` (authenticated; search is GET, install is POST), search again, then execute the returned `commandTemplate` with `targetParent` = plugin parent directory. Root hints are fallback verification only.
+- PATH: prepend `$HOME/.dotnet/tools` or `%USERPROFILE%\.dotnet\tools` so `qbrain-ai-repl` resolves (REPL itself comes from Phase 1 `./build.ps1 InstallReplTool` only -- do not also run plugin `ensure-repl` in the ordinary dry-run)
+- **Acquire (preferred):** after server can serve the tool registry, `GET /qbrainai/tools/search?keyword=mcpserver-grok-plugin`, select the result whose `name` exactly equals `mcpserver-grok-plugin`; if missing, **POST** `/qbrainai/tools/buckets/official/install?toolName=mcpserver-grok-plugin` (authenticated; search is GET, install is POST), search again, then execute the returned `commandTemplate` with `targetParent` = plugin parent directory. Root hints are fallback verification only.
 - **Skills mirror (Obtain/Configure evidence when intake `skillMirror` is set):** copy or symlink MCP skills from `pluginRoot\skills\` into the operator `skillMirror` path (lab: `%USERPROFILE%\.grok\skills`). Record mirrored skill names as evidence. Do **not** publish private add-profile / operator-only profiles into public repos.
 - **Activate:** set env; after server up, run the Grok plugin trust/marker bootstrap that performs signature verification + `/health` nonce echo against `endpoint.baseUrl` (not a vague "root exists" check). Record nonce/signature pass in evidence.
 - **Smoke:** `. "$env:MCP_PLUGIN_ROOT\lib\repl-invoke.ps1"`; `Invoke-ReplMethod -Method 'workflow.todo.query' -ParamsYaml 'done: false'` must return `type: result`
@@ -201,7 +201,7 @@ Canonical families from `AGENTS-README-FIRST.yaml` / lab plugin repos. Prefer to
 - Plugin: `mcpserver-codex-plugin`
 - Canonical identity: `Codex`
 - Env: `CODEX_PLUGIN_ROOT`, `PLUGIN_AGENT_NAME=Codex`, `MCP_WORKSPACE_PATH`
-- **Acquire:** GET search exact name `mcpserver-codex-plugin`; if missing **POST** `/mcpserver/tools/buckets/official/install?toolName=mcpserver-codex-plugin`; search again; run returned `commandTemplate` with `targetParent`
+- **Acquire:** GET search exact name `mcpserver-codex-plugin`; if missing **POST** `/qbrainai/tools/buckets/official/install?toolName=mcpserver-codex-plugin`; search again; run returned `commandTemplate` with `targetParent`
 - **Trust evidence (do not invent Status fields):** use the plugin marker/trust bootstrap helper that actually returns signature+nonce success (e.g. `Invoke-FullBootstrap` / marker-resolver path used by the Codex plugin). `Invoke-CodexMcpPlugin.ps1 -Command Status` reports session/queue metadata and is **not** by itself proof of workspacePath, marker signature, nonce, or health version -- do not claim those fields from Status.
 - **Smoke:** after trust bootstrap succeeds against `endpoint.baseUrl`, `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method workflow.todo.query -Params "done: false"` expecting `type: result`. Record the endpoint used.
 - Remember Codex native hooks may be unreliable; prefer explicit plugin invokes for mutations
@@ -314,7 +314,7 @@ Common keys (non-secret shapes only in manifest):
 
 #### `storage-sqlite`
 
-- Local file via `Sqlite:DataSource` (example Windows: `C:\ProgramData\McpServer\mcp.db`; Linux: `/var/lib/mcpserver/mcp.db`)
+- Local file via `Sqlite:DataSource` (example Windows: `C:\ProgramData\QBrainAi\mcp.db`; Linux: `/var/lib/mcpserver/mcp.db`)
 - Single-writer expectations: prefer dedicated data directory writable by the service account
 - Multi-agent: caution `SQLITE_MULTI_AGENT` -- redirect toward MSSQL/PostgreSQL when concurrent independent writers are intended; allow continue only with operator-acknowledged risk note in `unsupportedFlags` (not a categorical hard refuse without topology evidence)
 
@@ -327,14 +327,14 @@ Common keys (non-secret shapes only in manifest):
 - Commands (from repo root, Administrator / gsudo):
   - `pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService --service-name <name> --install-path <path> --port <port>`
   - Equivalent: `gsudo .\scripts\Update-McpService.ps1 -ServiceName <name> -InstallPath <path> -Port <port>`
-- Defaults: service name `McpServer`, install path `C:\ProgramData\McpServer`, port `7147`, main exe **`McpServer.Support.Mcp.exe`** (also launcher `McpServer.Launcher.exe`)
+- Defaults: service name `QBrainAi`, install path `C:\ProgramData\QBrainAi`, port `7147`, main exe **`QBrainAi.Support.Mcp.exe`** (also launcher `QBrainAi.Launcher.exe`)
 - **Config authority / order (critical):**
   1. **Fresh install** (no `installPath\appsettings.yaml` yet): write the desired `appsettings.yaml` (Provider + non-secret settings; **omit** empty connection-string keys) into the repo staging copy that UpdateService will publish, **and** place the same file at `installPath\appsettings.yaml` before/with first deploy so restore preserves the intended config. Bind secrets via environment variables that overlay the **same** primary keys (see storage playbooks) under the service account **before** first start expectations.
   2. **Upgrade** (existing install): UpdateService **backs up and restores** `installPath\appsettings.yaml`. Edit the **installed** `installPath\appsettings.yaml` (or restore target) for provider changes -- do not assume a repo-only edit survives. Secrets remain out of band on the same primary env keys.
   3. UpdateService stops -> publish -> restore preserved yaml -> register ImagePath -> **starts immediately**. Therefore provider + secret env must be correct **before** that start, not in a later "Configure after Install" improvisation.
   4. **Config-before-start is non-negotiable for dry-runs:** stage Provider, omit-empty connection-string keys, service-identity secret env binding, and rewrite `Mcp:RepoRoot` + primary `Mcp:Workspaces` for the fresh host (remove/disable foreign drive-letter lab defaults) **before** elevating UpdateService. Do not assume lab yaml Workspaces are valid on a new host.
-- **Do not** use raw `sc.exe` / `New-Service` pointing at `publish\McpServer.exe` as the normal path -- that binary name is wrong and skips the deployment guard
-- Rollback: `gsudo .\scripts\Update-McpService.ps1 -Restore` (optional `-BackupArchive`); backups under `%USERPROFILE%\McpServer-Backups`
+- **Do not** use raw `sc.exe` / `New-Service` pointing at `publish\QBrainAi.exe` as the normal path -- that binary name is wrong and skips the deployment guard
+- Rollback: `gsudo .\scripts\Update-McpService.ps1 -Restore` (optional `-BackupArchive`); backups under `%USERPROFILE%\QBrainAi-Backups`
 - Health: service Running + `/health` nonce + storage reachable + MCP smoke
 
 #### `service-systemd`
@@ -353,7 +353,7 @@ Common keys (non-secret shapes only in manifest):
 - Operator description drives the plan (Docker, console, Task Scheduler, etc.)
 - Plan must spell exact start/stop/log/health commands in PowerShell
 - If description is too vague, ask one clarifying round before writing the plan
-- Scheduled Task / Docker examples must target `McpServer.Support.Mcp` (not `McpServer.exe`) and still require verify gates
+- Scheduled Task / Docker examples must target `QBrainAi.Support.Mcp` (not `QBrainAi.exe`) and still require verify gates
 
 ### Conflict table (refuse, caution, or redirect)
 
@@ -380,12 +380,12 @@ Common keys (non-secret shapes only in manifest):
 
 Typical steps (branch in plan); all via `pwsh` unless installing `pwsh` itself:
 
-1. Confirm git remotes / clone `McpServer` to `workspacePath` if missing
+1. Confirm git remotes / clone `QBrainAi` to `workspacePath` if missing
 2. Clone/pull selected agent plugin repos into `pluginRoot` paths (prefer tool-registry official bucket per AGENTS contract)
 3. Ensure PowerShell 7 (`pwsh`). **Pre-PowerShell exception (Linux example, one-time):** install PowerShell using the vendor script, then switch entirely to `pwsh`. On Windows, install/repair PowerShell 7 via documented Microsoft channels if missing.
 4. Ensure `dotnet` SDK/runtime as required. **REPL acquisition (pin ONE primary path for the dry-run; do not thrash versions):**
-   - **Primary (required default):** from workspace root run `./build.ps1 InstallReplTool` (Nuke target DependsOn PackReplTool). PackageId is **`SharpNinja.McpServer.Repl`**; ToolCommandName / executable is **`mcpserver-repl`**. Verify: `mcpserver-repl --version`. Do **not** `dotnet tool install -g mcpserver-repl` (command name is not the PackageId). Do **not** use plugin `ensure-repl` / GitHub-release / Codex `setup.sh` as the ordinary dry-run path (those dual paths thrash versions and Codex bash conflicts with PowerShell-only).
-   - **Secondary / non-default only** (local-feed policy understood, and recorded as non-default in the plan): run Pack first (`./build.ps1 PackReplTool` or `scripts\Pack-ReplTool.ps1`) so `local-packages` has the nupkg, **then** either `scripts\Install-ReplTool.ps1` or `dotnet tool install -g SharpNinja.McpServer.Repl` (with version/source). Plain `Install-ReplTool.ps1` without Pack fails on an empty feed. Record which path was used in obtain evidence.
+   - **Primary (required default):** from workspace root run `./build.ps1 InstallReplTool` (Nuke target DependsOn PackReplTool). PackageId is **`QBrainAI.Repl`**; ToolCommandName / executable is **`qbrain-ai-repl`**. Verify: `qbrain-ai-repl --version`. Do **not** `dotnet tool install -g qbrain-ai-repl` (command name is not the PackageId). Do **not** use plugin `ensure-repl` / GitHub-release / Codex `setup.sh` as the ordinary dry-run path (those dual paths thrash versions and Codex bash conflicts with PowerShell-only).
+   - **Secondary / non-default only** (local-feed policy understood, and recorded as non-default in the plan): run Pack first (`./build.ps1 PackReplTool` or `scripts\Pack-ReplTool.ps1`) so `local-packages` has the nupkg, **then** either `scripts\Install-ReplTool.ps1` or `dotnet tool install -g QBrainAI.Repl` (with version/source). Plain `Install-ReplTool.ps1` without Pack fails on an empty feed. Record which path was used in obtain evidence.
 5. Storage prerequisites per storage playbook
 6. Record obtain evidence in the plan checklist
 
@@ -393,7 +393,7 @@ Typical steps (branch in plan); all via `pwsh` unless installing `pwsh` itself:
 
 **Execution order (WindowsService):** complete Phase 3 configure-before-start items (Provider, omit-empty connection keys, service secret env, RepoRoot/Workspaces rewrite) **before** any UpdateService elevation. Phase numbers are section labels; on Windows the configure-before-start work precedes Install because UpdateService starts the service at the end of deploy.
 
-1. Windows: elevated `./build.ps1 UpdateService` (or `scripts\Update-McpService.ps1`) with real `--service-name` / `--install-path` / `--port`; expect `McpServer.Support.Mcp.exe` + `.mcpservice-deployment.json`. **Only after** Phase 3 config/secrets/workspace yaml+env are staged for that installPath.
+1. Windows: elevated `./build.ps1 UpdateService` (or `scripts\Update-McpService.ps1`) with real `--service-name` / `--install-path` / `--port`; expect `QBrainAi.Support.Mcp.exe` + `.mcpservice-deployment.json`. **Only after** Phase 3 config/secrets/workspace yaml+env are staged for that installPath.
 2. Linux: do not run blocked `linux-publish-swap` / `systemd` playbooks. `service-other` only with operator-owned commands already recorded in the plan.
 3. Do not treat install as complete until binaries and (Windows) deployment manifest are in place
 4. Storage/workspace configuration must already be applied for the start that Install triggers
@@ -415,7 +415,7 @@ Run in order; stop on first hard failure. Session-log bootstrap must **not** be 
 2. **Endpoint:** live port/baseUrl must equal manifest. Listener checks use manifest port, count matches, and (Windows) join OwningProcess to service PID (step 3). Never mask failures.
 3. **Service identity (Windows) - exact ImagePath + StartName + PID join:**
    - `Get-Service` Status must equal `Running` (capture object; do not use empty-pipeline `$?`).
-   - Win32_Service PathName must match the **strict canonical UpdateService form** with **balanced quotes on both tokens** and **no trailing/duplicate args**: `"<installPath>\McpServer.Support.Mcp.exe" --urls "http://+:<port>"`. Quoting is atomic (both exe and URL fully quoted -- UpdateService always quotes). Reject optional/unbalanced quotes, unquoted paths (especially with spaces), `.exe.old`, prefix ports (`71470`), exe-as-later-arg, and duplicate `--urls`. Compare captured exe via GetFullPath equality and URL string equality.
+   - Win32_Service PathName must match the **strict canonical UpdateService form** with **balanced quotes on both tokens** and **no trailing/duplicate args**: `"<installPath>\QBrainAi.Support.Mcp.exe" --urls "http://+:<port>"`. Quoting is atomic (both exe and URL fully quoted -- UpdateService always quotes). Reject optional/unbalanced quotes, unquoted paths (especially with spaces), `.exe.old`, prefix ports (`71470`), exe-as-later-arg, and duplicate `--urls`. Compare captured exe via GetFullPath equality and URL string equality.
    - StartName must be LocalSystem / NT AUTHORITY\SYSTEM. Existing alternate accounts are not fixed by UpdateService -> fail.
    - ProcessId > 0; listeners on manifest port must have OwningProcess equal to that PID.
    - Files: exe, `.mcpservice-deployment.json` with approved `generatedBy`, `appsettings.yaml`, no legacy `appsettings.json`.
@@ -456,7 +456,7 @@ Run in order; stop on first hard failure. Session-log bootstrap must **not** be 
 - [ ] Intake complete (agents, process, storage, service, host, workspace/plugins, endpoint)
 - [ ] `setup-choices.manifest` written (typed multi-agent + host/port fields)
 - [ ] `setup-implementation.plan` written and acknowledged
-- [ ] Obtain complete (`./build.ps1 InstallReplTool` primary; PackageId SharpNinja.McpServer.Repl; command mcpserver-repl)
+- [ ] Obtain complete (`./build.ps1 InstallReplTool` primary; PackageId QBrainAI.Repl; command qbrain-ai-repl)
 - [ ] Configure-before-start complete (Provider + omit-empty connection keys + secret env binding + RepoRoot/Workspaces rewrite for foreign Workspaces) BEFORE service start
 - [ ] Install complete (Windows: UpdateService; or `service-other` with operator-owned commands only -- NOT linux-publish-swap / systemd)
 - [ ] Verify smoke green (nonce, endpoint, provider, workspace, per-agent)
@@ -471,7 +471,7 @@ Run in order; stop on first hard failure. Session-log bootstrap must **not** be 
 - Full process-drift enforcement (see MCP-PROCESS-001); setup only records process choice
 - Claiming a validated product systemd unit (blocked pending validation)
 - Claiming a validated linux-publish-swap lifecycle (blocked pending inventory)
-- MSIX packaging (./build.ps1 PackageMsix / Package-McpServerMsix.ps1) as a setup path
+- MSIX packaging (./build.ps1 PackageMsix / Package-QBrainAiMsix.ps1) as a setup path
 - Keycloak / IdP helper scripts as part of ordinary setup
 - Maintainer SyncAgentPlugins / plugin-core sync during operator first-install
 
@@ -480,11 +480,11 @@ Run in order; stop on first hard failure. Session-log bootstrap must **not** be 
 When the operator's answers match the PAYTON-LEGION2 lab:
 
 - Host OS: windows
-- Workspace: `F:\github\McpServer`
+- Workspace: `F:\github\QBrainAi`
 - Grok plugin: `F:\github\mcpserver-grok-plugin`
 - Identity: `GrokCode`
 - Storage: often sqlserver to a Desktop SQL host (`Provider: sqlserver`, not PG-shaped keys)
-- Service: Windows Service via `./build.ps1 UpdateService` -> `C:\ProgramData\McpServer\McpServer.Support.Mcp.exe`
+- Service: Windows Service via `./build.ps1 UpdateService` -> `C:\ProgramData\QBrainAi\QBrainAi.Support.Mcp.exe`
 - Endpoint port: 7147
 - Still run full intake; do not skip questions because this pattern is familiar
 
@@ -512,8 +512,8 @@ Do **not** treat any prior publish-swap/unit snippets as an approved product pat
 # After pwsh + PowerShell.MCP exist:
 $env:PATH = "$HOME/.dotnet/tools:$env:PATH"
 # Clone into operator-chosen paths (dedicated dirs only; never chown /opt itself)
-# PRIMARY: From workspace: ./build.ps1 InstallReplTool ; mcpserver-repl --version
-# PackageId SharpNinja.McpServer.Repl -- never dotnet tool install -g mcpserver-repl
+# PRIMARY: From workspace: ./build.ps1 InstallReplTool ; qbrain-ai-repl --version
+# PackageId QBrainAI.Repl -- never dotnet tool install -g qbrain-ai-repl
 # Secondary only after PackReplTool: scripts\Install-ReplTool.ps1 (non-default; empty feed fails)
 ```
 
@@ -529,11 +529,11 @@ Use when `host.os: windows`. Use **PowerShell 7** (`pwsh`) through **mandatory P
 ### Reference Windows pattern (example / lab)
 
 - OS: Windows 11 / Windows Server with required .NET runtime
-- Workspace: `F:\github\McpServer`
+- Workspace: `F:\github\QBrainAi`
 - Grok plugin: `F:\github\mcpserver-grok-plugin`
 - Identity: `GrokCode`
 - Storage: often `sqlserver`; SQLite/PostgreSQL valid when chosen
-- Service: `./build.ps1 UpdateService` -> `C:\ProgramData\McpServer`
+- Service: `./build.ps1 UpdateService` -> `C:\ProgramData\QBrainAi`
 - Port: 7147
 - Shell: `pwsh`; elevate only for UpdateService
 
@@ -553,14 +553,14 @@ $env:PATH = "$env:USERPROFILE\.dotnet\tools;$env:PATH"
 
 New-Item -ItemType Directory -Force -Path F:\github | Out-Null
 Set-Location F:\github
-if (-not (Test-Path .\McpServer\.git)) { git clone <McpServer-remote> McpServer }
+if (-not (Test-Path .\QBrainAi\.git)) { git clone <QBrainAi-remote> QBrainAi }
 if (-not (Test-Path .\mcpserver-grok-plugin\.git)) { git clone <plugin-remote> mcpserver-grok-plugin }
 
-Set-Location F:\github\McpServer
+Set-Location F:\github\QBrainAi
 # PRIMARY REPL path (pin this; do not also run plugin ensure-repl):
 ./build.ps1 InstallReplTool
-mcpserver-repl --version
-# PackageId SharpNinja.McpServer.Repl -- NOT: dotnet tool install -g mcpserver-repl
+qbrain-ai-repl --version
+# PackageId QBrainAI.Repl -- NOT: dotnet tool install -g qbrain-ai-repl
 # Secondary only: PackReplTool / Pack-ReplTool.ps1 FIRST, then Install-ReplTool.ps1 (non-default)
 ```
 
@@ -574,9 +574,9 @@ MSSQL prerequisites:
 SQLite:
 
 ```powershell
-$dataDir = 'C:\ProgramData\McpServer'
+$dataDir = 'C:\ProgramData\QBrainAi'
 New-Item -ItemType Directory -Force -Path $dataDir | Out-Null
-# details.dataSource example: C:\ProgramData\McpServer\mcp.db
+# details.dataSource example: C:\ProgramData\QBrainAi\mcp.db
 # ACL for service account
 ```
 
@@ -585,21 +585,21 @@ New-Item -ItemType Directory -Force -Path $dataDir | Out-Null
 **Only after** Configure-before-start: stage Provider + omit-empty connection keys + RepoRoot/Workspaces rewrite into the repo/service `appsettings.yaml`, bind service-identity secrets, then:
 
 ```powershell
-Set-Location F:\github\McpServer
+Set-Location F:\github\QBrainAi
 # Elevated:
-# sudo --chdir . pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService --service-name McpServer --install-path C:\ProgramData\McpServer --port 7147
+# sudo --chdir . pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService --service-name QBrainAi --install-path C:\ProgramData\QBrainAi --port 7147
 # or:
-# gsudo .\scripts\Update-McpService.ps1 -ServiceName McpServer -InstallPath C:\ProgramData\McpServer -Port 7147
+# gsudo .\scripts\Update-McpService.ps1 -ServiceName QBrainAi -InstallPath C:\ProgramData\QBrainAi -Port 7147
 
-Get-Service -Name McpServer | Format-List Status, StartType, Name
-Test-Path 'C:\ProgramData\McpServer\McpServer.Support.Mcp.exe'
-Test-Path 'C:\ProgramData\McpServer\.mcpservice-deployment.json'
-Test-Path 'C:\ProgramData\McpServer\appsettings.yaml'
+Get-Service -Name QBrainAi | Format-List Status, StartType, Name
+Test-Path 'C:\ProgramData\QBrainAi\QBrainAi.Support.Mcp.exe'
+Test-Path 'C:\ProgramData\QBrainAi\.mcpservice-deployment.json'
+Test-Path 'C:\ProgramData\QBrainAi\appsettings.yaml'
 # Rollback if needed:
 # gsudo .\scripts\Update-McpService.ps1 -Restore
 ```
 
-Do **not** document raw `sc.exe create` against `publish\McpServer.exe` as a normal alternative.
+Do **not** document raw `sc.exe create` against `publish\QBrainAi.exe` as a normal alternative.
 
 ### Configure-before-start (Windows) -- required BEFORE UpdateService
 
@@ -610,7 +610,7 @@ $env:MCP_PLUGIN_ROOT = 'F:\github\mcpserver-grok-plugin'
 $env:GROK_PLUGIN_ROOT = $env:MCP_PLUGIN_ROOT
 $env:MCP_AGENT_NAME = 'GrokCode'
 $env:PLUGIN_AGENT_NAME = 'GrokCode'
-$env:MCP_WORKSPACE_PATH = 'F:\github\McpServer'
+$env:MCP_WORKSPACE_PATH = 'F:\github\QBrainAi'
 $env:PATH = "$env:USERPROFILE\.dotnet\tools;$env:PATH"
 # Optional Grok skills mirror (when intake skillMirror set):
 # Copy-Item / New-Item -ItemType SymbolicLink from $env:MCP_PLUGIN_ROOT\skills\* -> $skillMirror
@@ -621,9 +621,9 @@ Example non-secret `appsettings.yaml` database + workspace block for SQL Server 
 
 ```yaml
 Mcp:
-  RepoRoot: F:\github\McpServer
+  RepoRoot: F:\github\QBrainAi
   Workspaces:
-    - Path: F:\github\McpServer
+    - Path: F:\github\QBrainAi
       IsPrimary: true
       IsEnabled: true
       # Remove or disable unrelated lab defaults (foreign drive letters) on fresh hosts.
@@ -645,7 +645,7 @@ pwsh -NoProfile -Command {
   $env:GROK_PLUGIN_ROOT = $env:MCP_PLUGIN_ROOT
   $env:MCP_AGENT_NAME = 'GrokCode'
   $env:PLUGIN_AGENT_NAME = 'GrokCode'
-  $env:MCP_WORKSPACE_PATH = 'F:\github\McpServer'
+  $env:MCP_WORKSPACE_PATH = 'F:\github\QBrainAi'
   $env:PATH = "$env:USERPROFILE\.dotnet\tools;$env:PATH"
   . "$env:MCP_PLUGIN_ROOT\lib\repl-invoke.ps1"
   Invoke-ReplMethod -Method 'workflow.todo.query' -ParamsYaml 'done: false'
@@ -655,14 +655,14 @@ pwsh -NoProfile -Command {
 ### Verify (Windows)
 
 ```powershell
-$name = 'McpServer'    # manifest.service.name
+$name = 'QBrainAi'    # manifest.service.name
 $port = 7147           # manifest.endpoint.port
-$install = 'C:\ProgramData\McpServer'
+$install = 'C:\ProgramData\QBrainAi'
 
 $svc = Get-Service -Name $name -ErrorAction Stop
 if ($svc.Status -ne 'Running') { throw "Service status=$($svc.Status)" }
 $wmi = Get-CimInstance Win32_Service -Filter "Name='$name'"
-$expectedExe = [IO.Path]::GetFullPath((Join-Path $install 'McpServer.Support.Mcp.exe'))
+$expectedExe = [IO.Path]::GetFullPath((Join-Path $install 'QBrainAi.Support.Mcp.exe'))
 $expectedUrls = "http://+:$port"
 # Strict canonical UpdateService ImagePath: BOTH exe and --urls value fully quoted, balanced, no trailing junk.
 # Rejects unbalanced quotes, unquoted paths with spaces, .exe.old, 71470, exe-as-later-arg, duplicate --urls.

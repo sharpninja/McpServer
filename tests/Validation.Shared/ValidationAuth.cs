@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json;
 
-namespace McpServer.Validation;
+namespace QBrainAi.Validation;
 
 internal static class ValidationAuth
 {
@@ -156,7 +156,7 @@ internal static class ValidationAuth
 
         try
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "/mcpserver/workspace");
+            using var request = new HttpRequestMessage(HttpMethod.Get, "/qbrainai/workspace");
             request.Headers.Add(ApiKeyHeaderName, bootstrapKey);
             using var response = await client.SendAsync(request).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
@@ -344,8 +344,8 @@ internal static class ValidationAuth
         var current = new DirectoryInfo(AppContext.BaseDirectory);
         while (current is not null)
         {
-            if (File.Exists(Path.Combine(current.FullName, "McpServer.sln"))
-                || File.Exists(Path.Combine(current.FullName, "McpServer.slnx")))
+            if (File.Exists(Path.Combine(current.FullName, "QBrainAi.sln"))
+                || File.Exists(Path.Combine(current.FullName, "QBrainAi.slnx")))
             {
                 return current.FullName;
             }

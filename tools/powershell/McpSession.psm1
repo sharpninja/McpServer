@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    MCP Session Log PowerShell module - cmdlets for the /mcpserver/sessionlog API.
+    MCP Session Log PowerShell module - cmdlets for the /qbrainai/sessionlog API.
 
 .DESCRIPTION
     Provides exported cmdlets to initialize MCP session-log connectivity, create session-log
@@ -297,7 +297,7 @@ function Initialize-McpSession {
         and throws before any follow-on MCP usage can occur.
 
         This function does not create a session-log record, does not POST to
-        /mcpserver/sessionlog, and does not return a session object. Its only return value is
+        /qbrainai/sessionlog, and does not return a session object. Its only return value is
         the session-slug string that later commands may reuse when New-McpSessionLog is called.
 
     .PARAMETER Agent
@@ -382,7 +382,7 @@ function Initialize-McpSession {
     $script:McpSessionModel = $Model.Trim()
     if ($signatureVerified) {
         Set-McpPendingTrustBootstrapNote `
-            -Message "Agent successfully trusted MCP Server at $verifiedAtUtc via nonce and signature verification." `
+            -Message "Agent successfully trusted QBrain.AI at $verifiedAtUtc via nonce and signature verification." `
             -RecordedAtUtc $verifiedAtUtc
     } else {
         Set-McpPendingTrustBootstrapNote `
@@ -483,7 +483,7 @@ function New-McpSessionLog {
         Create a new session object, POST it to the server, and persist it locally.
 
     .DESCRIPTION
-        Constructs a new session-log object, immediately POSTs it to /mcpserver/sessionlog,
+        Constructs a new session-log object, immediately POSTs it to /qbrainai/sessionlog,
         then persists the created session to the local session-state files used by the module.
         The returned object is the session object that subsequent exported cmdlets expect when
         you want to work against a specific session explicitly.
@@ -554,7 +554,7 @@ function Update-McpSessionLog {
     .DESCRIPTION
         Resolves the session object, recalculates lastUpdated, turnCount, and totalTokens,
         applies optional scalar updates such as -Status and -Title, and POSTs the full session
-        payload to /mcpserver/sessionlog. If -Session is omitted, the function loads the
+        payload to /qbrainai/sessionlog. If -Session is omitted, the function loads the
         current session from the local session-state cache.
 
         When the resulting session status is completed, the function removes the local session
@@ -610,7 +610,7 @@ function Get-McpSessionLog {
         Query recent session-log records from the server.
 
     .DESCRIPTION
-        Sends a read-only request to /mcpserver/sessionlog using the current module
+        Sends a read-only request to /qbrainai/sessionlog using the current module
         connection headers. This function does not create, update, or delete local session
         state files.
 
@@ -630,7 +630,7 @@ function Get-McpSessionLog {
         [int]$Offset = 0
     )
     Assert-Initialized
-    $uri = "$($script:McpBaseUrl)/mcpserver/sessionlog?limit=$Limit&offset=$Offset"
+    $uri = "$($script:McpBaseUrl)/qbrainai/sessionlog?limit=$Limit&offset=$Offset"
     return Invoke-RestMethod -Uri $uri -Headers $script:McpHeaders
 }
 
@@ -1133,7 +1133,7 @@ function Send-McpDialog {
 
     .DESCRIPTION
         Resolves the target session, constructs a single dialog item payload, and POSTs that
-        item to /mcpserver/sessionlog/{sourceType}/{sessionId}/{requestId}/dialog. If -Session
+        item to /qbrainai/sessionlog/{sourceType}/{sessionId}/{requestId}/dialog. If -Session
         is omitted, the function resolves the current persisted session from local state. This
         function does not modify the local turn object and does not rewrite local session-state
         files.
@@ -1176,7 +1176,7 @@ function Send-McpDialog {
         category  = $Category
     }
 
-    $uri = "$($script:McpBaseUrl)/mcpserver/sessionlog/$($Session.sourceType)/$($Session.sessionId)/$RequestId/dialog"
+    $uri = "$($script:McpBaseUrl)/qbrainai/sessionlog/$($Session.sourceType)/$($Session.sessionId)/$RequestId/dialog"
     $body = ConvertTo-Json @($item) -Depth 5
     Invoke-RestMethod -Uri $uri -Method Post -Headers $script:McpHeaders -Body $body | Out-Null
 }
@@ -1600,7 +1600,7 @@ function Push-SessionLog {
 
     $payload = Get-McpSessionSerializableObject -Session $Session
     $body = $payload | ConvertTo-Json -Depth 12
-    Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/sessionlog" -Method Post -Headers $script:McpHeaders -Body $body | Out-Null
+    Invoke-RestMethod -Uri "$($script:McpBaseUrl)/qbrainai/sessionlog" -Method Post -Headers $script:McpHeaders -Body $body | Out-Null
 }
 
 # ─── Exports ─────────────────────────────────────────────────────────────────

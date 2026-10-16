@@ -8,7 +8,7 @@
 
 ## Context (Why This Work Exists)
 
-The McpServer value proposition is *durable, workspace-scoped continuity* across AI coding agents: every user message opens a session-log turn, every code edit is build-verified and recorded, TODOs and requirements stay in sync, GraphRAG knowledge accumulates, and outages never lose data (failsafe YAML cache + recovery).
+The QBrainAi value proposition is *durable, workspace-scoped continuity* across AI coding agents: every user message opens a session-log turn, every code edit is build-verified and recorded, TODOs and requirements stay in sync, GraphRAG knowledge accumulates, and outages never lose data (failsafe YAML cache + recovery).
 
 Today this contract is only *partially* realized. The eight official plugins (`mcpserver-*-plugin`) have drifted:
 
@@ -21,7 +21,7 @@ Today this contract is only *partially* realized. The eight official plugins (`m
 - Test coverage and documentation quality (ENFORCEMENT.md, READMEs, validation plans) vary widely.
 - No single "parity harness" exists that can prove "if you run the same 100-turn workload through any plugin you get equivalent durable artifacts."
 
-Result: Developers who switch agents (or teams that standardize on different ones) experience inconsistent audit quality, occasional lost turns on outage, weaker build gates, and incomplete TODO/requirements provenance. This directly threatens the viability of the entire McpServer continuity story.
+Result: Developers who switch agents (or teams that standardize on different ones) experience inconsistent audit quality, occasional lost turns on outage, weaker build gates, and incomplete TODO/requirements provenance. This directly threatens the viability of the entire QBrainAi continuity story.
 
 Empirical confirmation (from feature matrix + component audit 2026-05-28):
 - Only 4/8 plugins have full hook surfaces.
@@ -50,7 +50,7 @@ When complete, the AGENT-PLUGIN-FEATURE-MATRIX.md will show "Full (or host-nativ
 ## Draft Functional Requirements (to insert into docs/Project/Functional-Requirements.md and wiki copies)
 
 ## FR-MCP-AGENT-PARITY-001
-**Agent Plugin Operational Parity v1.0** — Every officially supported agent plugin (claude-code, claude-cowork, cline, cline-v2, codex, copilot, grok, opencode) SHALL deliver equivalent fidelity to the full AGENTS-README-FIRST contract and the McpServer workflow surfaces (sessionlog, todo, requirements, graphrag, workspace) so that developers obtain the same session continuity, build verification, outage resilience, and provenance guarantees regardless of which supported agent they use for a given workspace.
+**Agent Plugin Operational Parity v1.0** — Every officially supported agent plugin (claude-code, claude-cowork, cline, cline-v2, codex, copilot, grok, opencode) SHALL deliver equivalent fidelity to the full AGENTS-README-FIRST contract and the QBrainAi workflow surfaces (sessionlog, todo, requirements, graphrag, workspace) so that developers obtain the same session continuity, build verification, outage resilience, and provenance guarantees regardless of which supported agent they use for a given workspace.
 
 The server, REPL, and plugin ecosystem SHALL treat divergence in observable contract outcomes (missing turns, lost cache entries on reconnect, bypassed build gates, incomplete TODO/FR linkage, failed marker trust) as a first-class defect.
 
@@ -64,7 +64,7 @@ The server, REPL, and plugin ecosystem SHALL treat divergence in observable cont
 ## Draft Technical Requirements (to insert into docs/Project/Technical-Requirements.md)
 
 ## TR-MCP-AGENT-PARITY-010
-**Shared Enforcement + Bootstrap Core Library (v1.0)** — A new package `@sharpninja/mcpserver-agent-core` (or equivalent under the McpServer org) SHALL implement:
+**Shared Enforcement + Bootstrap Core Library (v1.0)** — A new package `@qbrainai/qbrain-ai-agent-core` (or equivalent under the QBrainAi org) SHALL implement:
 - Marker discovery (upward search for AGENTS-README-FIRST.yaml)
 - HMAC-SHA256 signature verification using the workspace apiKey
 - Nonce health challenge against /health?nonce=
@@ -228,13 +228,13 @@ All new tests must be added under `tests/AgentPluginParity/` (harness + golden w
 - **Phases 3-10:** For each plugin, add the per-plugin integration tests and make them pass the harness before merging the plugin adoption PR.
 - **Phase 11:** Add/execute the full CI matrix and human validation.
 
-All tests for the current phase + every previous phase must be green (plus the full existing McpServer test suite) before any implementation code for that phase is written.
+All tests for the current phase + every previous phase must be green (plus the full existing QBrainAi test suite) before any implementation code for that phase is written.
 
 This TDD plan, combined with the Test Acceptance Criteria already in the TODO technicalDetails, constitutes the complete testing strategy for the parity effort.
 
 ## Phases (Byrd Process — Tests First, Mocks Validated, All-Tests-Green Gates)
 
-**Rule for every phase exit:** The entire test suite (new tests for this phase + all previous phases + the full existing McpServer + plugin suites) must be green. No implementation code for a phase is written until its acceptance-criteria unit tests pass against mocks/stubs.
+**Rule for every phase exit:** The entire test suite (new tests for this phase + all previous phases + the full existing QBrainAi + plugin suites) must be green. No implementation code for a phase is written until its acceptance-criteria unit tests pass against mocks/stubs.
 
 ### Phase 0 — Planning Artifacts + Failing Test Stubs + TODO Bootstrap (PLAN phase of this work)
 
@@ -267,7 +267,7 @@ This TDD plan, combined with the Test Acceptance Criteria already in the TODO te
 ### Phase 2 — Cross-Cutting Updates (AGENTS-README-FIRST prompt, parity harness, docs)
 
 - Implement the full parity harness (TR-030) against the new core (first target: a mock plugin).
-- Update the AGENTS-README-FIRST.yaml template/prompt text (in McpServer) with the exact minimum per-agent prompt additions required for enforcement in hook-poor hosts.
+- Update the AGENTS-README-FIRST.yaml template/prompt text (in QBrainAi) with the exact minimum per-agent prompt additions required for enforcement in hook-poor hosts.
 - Update AGENT-PLUGIN-AVAILABILITY.md and the feature matrix with "Parity v1 target" columns.
 - Add golden workload YAML artifacts under tests/AgentPluginParity/goldens/.
 - Gate: Harness runs and produces consistent artifacts against the core mock; docs updated.

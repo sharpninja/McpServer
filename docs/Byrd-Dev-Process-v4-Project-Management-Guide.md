@@ -1,8 +1,8 @@
 # Project Management Guide
 
-## Byrd Dev Process v4 on McpServer — Astra, Sol, and Grok
+## Byrd Dev Process v4 on QBrainAi — Astra, Sol, and Grok
 
-Audience: the human coordinator (project lead) running AI-assisted delivery in a McpServer workspace.
+Audience: the human coordinator (project lead) running AI-assisted delivery in a QBrainAi workspace.
 Canonical process reference: `docs/Development-Process-draft-v4.md` in [sharpninja/McpServer](https://github.com/sharpninja/mcpserver). In-repo aliases `Byrd Dev Process`, `BDP`, and `BDPv4` all resolve to that file, per `CODEX-HANDOFF.md`.
 
 Version 4 — three named personas with separated authority, their durable persona prompts (§11), and concrete launch commands (§12).
@@ -259,7 +259,7 @@ grok -p "$(cat ./prompts/hostile-MCP-TODOPROGRESSION-001.md)" \
 
 ### 6.5 Transcript ingestion
 
-`McpServer.SessionLog.Transcripts` normalizes transcripts for Codex, Grok, Claude, Cline, Copilot, and OpenCode, and `/mcpserver/sessionlog` supports transcript import with full-text search. Policy: import at the end of every unattended run. An Astra-planned, Sol-implemented, Grok-validated slice must read as one continuous project history under three personas.
+`QBrainAi.SessionLog.Transcripts` normalizes transcripts for Codex, Grok, Claude, Cline, Copilot, and OpenCode, and `/qbrainai/sessionlog` supports transcript import with full-text search. Policy: import at the end of every unattended run. An Astra-planned, Sol-implemented, Grok-validated slice must read as one continuous project history under three personas.
 
 ---
 
@@ -441,7 +441,7 @@ is PASS. DISAGREE is a successful outcome; honesty is the deliverable.
 {
   "TimestampUtc": "2026-09-19T02:30:00Z",
   "ValidatorIdentity": "GrokSubagentHostile",
-  "Workspace": "F:\\GitHub\\McpServer",
+  "Workspace": "F:\\GitHub\\QBrainAi",
   "Plan": "docs/<plan>.md#<section>",
   "UntrustedImplementerReceipt": "docs/receipts/sol-<ID>-<utc>.md",
   "LiveBase": "http://localhost:7147",
@@ -480,7 +480,7 @@ Missing receipt, implementer-authored receipt, or DISAGREE means no completion c
 [ ] Grok: OverallVerdict AGREE for the full claim pack
 [ ] TODOs set Complete with doneSummary only after AGREE
 [ ] Requirements docs and Requirements-Matrix updated
-[ ] Transcripts imported to /mcpserver/sessionlog for all three personas
+[ ] Transcripts imported to /qbrainai/sessionlog for all three personas
 [ ] Coordinator: deployed Dev → Staging → Production via ./build.ps1 UpdateService;
     /health verified; Grok confirms health and UI proof
 [ ] Requirement-defect retro logged; guidelines updated by the persona that drifted
@@ -925,8 +925,8 @@ Flag surfaces move. Re-check `codex exec --help` and `grok --help` after an upgr
 - Hostile validator contract (adversarial Grok sub-agent, receipt schema, AGREE gate) — `docs/McpServer-UseCase-Extension-Design-v3.0.md` §6.1, and existing receipts under `docs/receipts/hostile-validator-*.json`
 - `skills/byrd-tdd-process/SKILL.md`, `skills/mcp-todo/SKILL.md`, `AGENTS.md` (Byrd Test Gate, identity rule 11), `CLAUDE.md`, `CODEX-HANDOFF.md`, `templates/prompt-templates.yaml`
 - TODO-Centered Byrd Development Process Implementation Spec — `docs/byrd-todo-execution-spec.md`
-- Agent execution strategies and marker activation text — `src/McpServer.Services/Services/CodexCliAgentExecutionStrategy.cs`, `GrokCliAgentExecutionStrategy.cs`, `MarkerFileService.cs`, `build/Build.SyncAgentPlugins.cs`
-- Repository capabilities, build targets, CI/CD — [McpServer README](https://github.com/sharpninja/mcpserver)
+- Agent execution strategies and marker activation text — `src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs`, `GrokCliAgentExecutionStrategy.cs`, `MarkerFileService.cs`, `build/Build.SyncAgentPlugins.cs`
+- Repository capabilities, build targets, CI/CD — [QBrainAi README](https://github.com/sharpninja/mcpserver)
 - Codex CLI — [developer command reference](https://developers.openai.com/codex/cli/reference), [non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode)
 - Grok Build — [overview](https://docs.x.ai/build/overview), [CLI reference](https://docs.x.ai/build/cli/reference)
 - Test-Driven Development — [Martin Fowler](https://martinfowler.com/bliki/TestDrivenDevelopment.html)

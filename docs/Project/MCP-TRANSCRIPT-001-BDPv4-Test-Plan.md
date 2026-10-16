@@ -9,8 +9,8 @@ This plan governs the multi-agent transcript ingestion implementation for `MCP-T
 - `TranscriptSourceKind`: `Auto`, `Claude`, `Codex`, `Grok`, `Cline`, `Copilot`, `OpenCode`.
 - `TranscriptCompatibilityProfile`: `None`, `Claude`, `Codex`, `Grok`.
 - Shared contracts: `ITranscriptBundleDetector`, `ITranscriptSourceAdapter`, `ITranscriptProfileProjector`, `ITranscriptIngestionService`.
-- HTTP path ingestion: `POST /mcpserver/sessionlog/ingest/path`.
-- HTTP upload ingestion: `POST /mcpserver/sessionlog/ingest/upload`.
+- HTTP path ingestion: `POST /qbrainai/sessionlog/ingest/path`.
+- HTTP upload ingestion: `POST /qbrainai/sessionlog/ingest/upload`.
 - Typed client methods: `IngestTranscriptPathAsync` and `IngestTranscriptUploadAsync`.
 - REPL methods: `repl.sessionlog.ingestTranscripts` and `repl.sessionlog.normalizeTranscripts`.
 - MCP tools: `sessionlog_ingest_path` and `sessionlog_normalize_path` with required `workspacePath`.
@@ -21,7 +21,7 @@ The neutral model must preserve native identity, ordering, timestamps, source ro
 
 ## Sanitized Fixture Inventory
 
-The initial fixture set lives under `tests/McpServer.Support.Mcp.Tests/Fixtures/Transcripts` and is intentionally small so Slice 1 tests can stay fast.
+The initial fixture set lives under `tests/QBrainAi.Support.Mcp.Tests/Fixtures/Transcripts` and is intentionally small so Slice 1 tests can stay fast.
 
 - Claude: `claude/basic.jsonl` covers user/assistant turns and a tool-use/tool-result pair.
 - Codex: `codex/basic.jsonl` covers request/response events, tool call/result, reasoning, usage, and workspace metadata.

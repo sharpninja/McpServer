@@ -119,7 +119,7 @@ looking shortcuts.
 ### Level 3 — AI as a process-bound teammate (the normal, everyday mode)
 
 This is where we work. The AI operates **inside a defined process** with
-persistent external context (the MCP Server: requirements, TODOs, session logs,
+persistent external context (the QBrain.AI: requirements, TODOs, session logs,
 research endpoints) and runs the **Plan → TDD → Code → Iterate** cycle. You stop
 being the author of every line and become the **experienced coordinator**:
 you design, you approve plans, you steer in real time, you spot the dead-ends
@@ -178,7 +178,7 @@ Level 3 has persistent context. Agents that have **strong early successes** grow
 more confident in the requirements and the process, and their effectiveness
 *increases over time* — "a distinct departure from the declining performance of
 models in environments that do not reinforce process, discovery, and
-accountability." The MCP Server's logs let an agent reuse known solutions to
+accountability." The QBrain.AI's logs let an agent reuse known solutions to
 problems the team already solved. You cannot get that flywheel from a stateless
 chat window.
 
@@ -341,7 +341,7 @@ Skeptics are right to distrust an AI that you simply ask to "go build the
 thing." The Byrd process does not ask you to trust the model; it asks you to
 trust the **system around the model** — and it earns that trust deterministically.
 
-The **MCP Server** is the shared context layer that both Human (through its UIs)
+The **QBrain.AI** is the shared context layer that both Human (through its UIs)
 and AI use to plan, research, audit, and manage the lifecycle. When an agent
 enters a workspace it runs a short, deterministic **trust handshake** before it
 does anything stateful:
@@ -419,7 +419,7 @@ That is Level 3.
   mocks before implementing the real code that satisfies them without mocks.
 - **Full-suite regression gate:** a Byrd augmentation — the entire test suite
   (new plus prior work) must be green before a phase can exit.
-- **MCP Server:** the shared, persistent context layer used by both Human and AI
+- **QBrain.AI:** the shared, persistent context layer used by both Human and AI
   for planning, research, auditing, TODOs, session logs, and requirements.
 - **Trust handshake:** the deterministic health + signature + nonce check an
   agent runs before doing stateful work in a workspace.

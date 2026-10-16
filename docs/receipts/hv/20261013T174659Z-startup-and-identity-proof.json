@@ -1,0 +1,237 @@
+{
+  "Agent": "Codex",
+  "Model": "gpt-6-astra",
+  "Effort": "max",
+  "ThreadId": "01a1365f-f247-7621-a64e-943e8cfd3cf6",
+  "LiveTurnContext": [
+    {
+      "Timestamp": "2026-10-13T17:47:03.017Z",
+      "TurnId": "01a1365f-f48e-78c1-9019-f23836bb2511",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009"
+    },
+    {
+      "Timestamp": "2026-10-13T18:03:45.244Z",
+      "TurnId": "01a1365f-f48e-78c1-9019-f23836bb2511",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009"
+    }
+  ],
+  "AddProfileSkill": "/home/sharpninja/.claude/skills/add-profile/SKILL.md",
+  "ProfileCount": 20,
+  "Profiles": [
+    {
+      "Path": "/home/sharpninja/.claude/profile/accuracy-first-verify-sources.md",
+      "Bytes": 1207,
+      "Sha256": "d9bd665c6229e1d29a77ec7ef42b96dc52678817d5e88b711f20cdfd320f5e96"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/adversarial-review-global.md",
+      "Bytes": 7722,
+      "Sha256": "2fa01939e3d7f626c514ac63fe9ce760f0b798e2ced31b86b4d2e26dc430bb49"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/approve-before-execute.md",
+      "Bytes": 2269,
+      "Sha256": "a61fd0a5faca21ac172474f0a0a7084cdac70e8cd7eb3a7bc2c6d26560e4cab4"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/bring-the-receipts.md",
+      "Bytes": 2056,
+      "Sha256": "e425710866d9d7e50f38adc6da393d52721dd5482bea08eaa246d70691f76f31"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/hostile-on-goal-state.md",
+      "Bytes": 1734,
+      "Sha256": "480984f745566769a4d6479028ba311d4550105336540f49916d635fc77dae87"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/hostile-ops-vs-requirements.md",
+      "Bytes": 2050,
+      "Sha256": "a73ea4a7b125d94b6d2a64f20a160cda12eb235a918fb034a5e56fce97203602"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/hostile-phase-gates.md",
+      "Bytes": 1317,
+      "Sha256": "ee448e9fd9e0f1c12e13277a89696482e57752ce0a4ec0fe5ef9b4093c754b9c"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/hv-jsonl-and-session-log.md",
+      "Bytes": 4208,
+      "Sha256": "8a8cb1500fe6c35b2f267064ec47ce290e54c9f39713303729733b88ee073b52"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/lab-authorization.md",
+      "Bytes": 2183,
+      "Sha256": "e7575409948ff11c59dc86d6d6db943dc541592f579323838607e540868c575f"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/log-decisions-as-conclusions.md",
+      "Bytes": 2060,
+      "Sha256": "df2973f5353b194413c22722c3819a323ab12e1e6a9dfab70f87a7bd7910e07a"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/never-skip-explicit-actions.md",
+      "Bytes": 2957,
+      "Sha256": "577b1375c11d764018f076df858c779e61602a2e19d7e3b1b36c967f94c2c84e"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/no-attitude-honesty-tell.md",
+      "Bytes": 1357,
+      "Sha256": "4730b15f8b99dcc5acf0796dc343ff915c037892bf9fffeaf90fa1f551b578bd"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/no-python-lab.md",
+      "Bytes": 1096,
+      "Sha256": "dc7e5d396873cd1f4899797e9914a76d3f9f748fd790e604cf0a913a5fcd895d"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/no-shortcuts-precision-over-convenience.md",
+      "Bytes": 2030,
+      "Sha256": "e2a25d7d577df221b69e7059e71beeeda91872c43447e4e2d5bf449ce4505392"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/operator-rulings-2026-10-11.md",
+      "Bytes": 7802,
+      "Sha256": "c8fdef77d2a550987b5ee134d93677ffc4b1aedacfa9b176f0fd20a4442a2cc1"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/philosophical-dialogue-mode.md",
+      "Bytes": 1230,
+      "Sha256": "0c43a1a1899b36f6f73af3b9a8091a5c05d26bf36b163048f8cdb46b09a0737f"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/PROFILE.md",
+      "Bytes": 18480,
+      "Sha256": "a929c28d1df2e7bfe4db91c0e82fa27f2e4c1b5312d4e8e2e25f85a392b88a7a"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/requirement-change-plan-first.md",
+      "Bytes": 2215,
+      "Sha256": "64a5558b0bc9c321d0cb3d206f73b16a680ca12e8d8390431d126ff02d8cf9f9"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/session-turn-title-summary.md",
+      "Bytes": 1196,
+      "Sha256": "15dee8bb21bc8fb948403078bea6c525411161558e290a1c2a3ecf3b5e33bd95"
+    },
+    {
+      "Path": "/home/sharpninja/.claude/profile/user-payton-byrd.md",
+      "Bytes": 1519,
+      "Sha256": "c47927c3086b462a9ee5031f8a8df94697b7b384afe9590324d81a8246d8dbda"
+    }
+  ],
+  "Marker": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+  "MarkerReadInFull": true,
+  "MarkerTrusted": true,
+  "MemoryCount": 15,
+  "Memories": [
+    {
+      "Id": "MEMORY-FACT-001",
+      "Version": 1,
+      "Characters": 37,
+      "Sha256": "24991c6f998f3ea3bb50683cc56fbb53cb17f308a92d2795ec0eef40230e8e04",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-FACT-002",
+      "Version": 2,
+      "Characters": 240,
+      "Sha256": "7cc48d9e7c94cafef33af6602a2acab920cbcf26010325519aea2cb095fdafed",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-FACT-003",
+      "Version": 1,
+      "Characters": 455,
+      "Sha256": "21f0206f6e95f774e1292b8832961b0a78f765def131188998b05cf80ba2a3dc",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-FACT-004",
+      "Version": 1,
+      "Characters": 1254,
+      "Sha256": "03e77ff424a1b8fde3edc443f0f9896094b3829eb4cc982c3b8d88b0a65a95d0",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PREFERENCE-001",
+      "Version": 1,
+      "Characters": 53,
+      "Sha256": "2994cc83c08d24936dfb691ce6c209e10b338652500f246448e70603f42c6f56",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PROCESS-002",
+      "Version": 3,
+      "Characters": 1761,
+      "Sha256": "7c032bb78a248180bf06288b193f7a88bcb440a9e33ec76b61c707b5f4a4e1c0",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PROCESS-003",
+      "Version": 2,
+      "Characters": 1336,
+      "Sha256": "83d148da6bc0cc372c7129740ac506b05fcf98acd8cf9f7d1502c0a9190dbdc8",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PROCESS-004",
+      "Version": 1,
+      "Characters": 281,
+      "Sha256": "c1aee5454435153c1ffd21a3c5b12f119eb6dacb9422b8569f5ae6f9b446da92",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PROCESS-005",
+      "Version": 1,
+      "Characters": 226,
+      "Sha256": "632b06861056790988ded69c07c3ce878299ac0e5b44c49ef33ec6a7a04e9758",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PROCESS-006",
+      "Version": 1,
+      "Characters": 556,
+      "Sha256": "c117cc7e492456c0784b05c33c75248258372854db0cc8b31df96e505d229c3c",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PROCESS-007",
+      "Version": 70,
+      "Characters": 128514,
+      "Sha256": "e5bd91b1a4dc31d002c979468b7cb40051b9d9ab0c47238e14e083b51943ad78",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PROCESS-008",
+      "Version": 7,
+      "Characters": 7344,
+      "Sha256": "f114d5a6fb63edc64ed1b78155d71dc67b1ee3c0834308de94c92b85df158ea7",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-REQ-001",
+      "Version": 1,
+      "Characters": 119,
+      "Sha256": "8170fa6276739453e911db577b0dcf0a94c7d4796c3177c0c271e43a848c4d22",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-DEVPROCESS-001",
+      "Version": 3,
+      "Characters": 20129,
+      "Sha256": "34d3c89a0550dafc687b1a90de266cb22b88ad63a453bc11917f9d10a2f0a06a",
+      "ReadInFull": true
+    },
+    {
+      "Id": "MEMORY-PROCESS-001",
+      "Version": 2,
+      "Characters": 1006,
+      "Sha256": "e8523c27bb91a708d2236d0416ed0ee881a9368ec884cb7a5d596ad0ffce9a50",
+      "ReadInFull": true
+    }
+  ]
+}

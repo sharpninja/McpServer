@@ -3,7 +3,7 @@ export interface ReplResponse {
     payload: Record<string, unknown>;
 }
 /**
- * Persistent bridge to mcpserver-repl --agent-stdio.
+ * Persistent bridge to qbrain-ai-repl --agent-stdio.
  * Multiplexes concurrent JSON-over-STDIO requests by requestId.
  */
 export declare class ReplBridge {
