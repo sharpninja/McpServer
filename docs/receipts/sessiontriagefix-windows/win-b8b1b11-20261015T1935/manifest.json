@@ -1,0 +1,15 @@
+{
+  "runId": "win-b8b1b11-20261015T1935",
+  "worktreeHeadAtCopy": "c30b72612c63ae13b0c95fff8ab017e8ff71b487",
+  "copiedLocal": "2026-10-15T19:39:37",
+  "files": [
+    {
+      "remotePath": "F:\\GitHub\\McpServer\\.worktrees\\triage-fixes-20261015\\TestResults\\win-b8b1b11-20261015T1935\\targeted\\QBrainAi.Support.Mcp.IntegrationTests\\QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "relative": "win-b8b1b11-20261015T1935/targeted/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "bytes": 21940,
+      "sha256": "0b9d7d2bde432eb4d4434abaeac3722d4de0641be1b6c51f5216ab4d26304753",
+      "remoteSha256": "0b9d7d2bde432eb4d4434abaeac3722d4de0641be1b6c51f5216ab4d26304753",
+      "keyLikeValue": false
+    }
+  ]
+}
