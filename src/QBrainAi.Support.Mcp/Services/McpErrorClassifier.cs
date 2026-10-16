@@ -1,6 +1,7 @@
 using System.Data.Common;
 using QBrainAi.Support.Mcp.Requirements;
 using QBrainAi.Support.Mcp.Storage;
+using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -110,6 +111,17 @@ public static class McpErrorClassifier
                 StatusCode: 504);
         }
 
+        // TR-MCP-TRIAGEERR-001 AC-004 (PLAN-SESSIONTRIAGEFIX-001 A7 follow-up, triage-report-905c3ac1b6af4d57b9c24c2383642379): EF Core's
+        // execution strategy reports a transient database error inside an InvalidOperationException (the SQL Server provider's default
+        // strategy does so for deadlock 1205); the failure keeps the classification of the database error it carries, as
+        // StorageBackendUnavailability already reads the same wrapper (TR-MCP-HEALTH-003).
+        if (exception.GetType() == typeof(InvalidOperationException)
+            && exception.InnerException is { } wrapped
+            && wrapped is DbUpdateException or DbException)
+        {
+            return Classify(wrapped);
+        }
+
         if (exception is DbUpdateException dbUpdate)
         {
             var inner = InnermostMessage(dbUpdate);
@@ -179,6 +191,9 @@ public static class McpErrorClassifier
         for (var current = exception; current is not null; current = current.InnerException!)
         {
             if (current is SqliteException sqlite && sqlite.SqliteErrorCode is 5 or 6)
+                return true;
+            // TR-MCP-TRIAGEERR-001 AC-004: a SQL Server deadlock by its error number, whatever the language of the server's message.
+            if (current is SqlException { Number: 1205 })
                 return true;
             if (current.Message.Contains("SQLITE_BUSY", StringComparison.OrdinalIgnoreCase)
                 || current.Message.Contains("deadlock", StringComparison.OrdinalIgnoreCase))

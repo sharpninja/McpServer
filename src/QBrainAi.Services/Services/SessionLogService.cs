@@ -390,6 +390,20 @@ public sealed class SessionLogService : ISessionLogService
         return false;
     }
 
+    /// <summary>
+    /// FR-SUPPORT-016 ac-6 and TR-SUPPORT-CORE-016 ac-4 (PLAN-SESSIONTRIAGEFIX-001 A7 follow-up, triage-report-905c3ac1b6af4d57b9c24c2383642379):
+    /// opens the serializable transaction a turn write reads its turn and writes its items in, on a relational provider when no transaction
+    /// is open, as <see cref="SubmitAsync"/> does, so writes to one turn committed at the same moment never store the same ordinal: SQLite
+    /// takes its write lock before the read (a waiting writer gets busy), and SQL Server and PostgreSQL refuse the losing writer with a
+    /// deadlock or a serialization failure, each of which the server's error classifier reports as retryable. Null when there is nothing to open.
+    /// </summary>
+    private async Task<IDbContextTransaction?> BeginTurnWriteTransactionAsync(CancellationToken cancellationToken)
+        => _db.Database.IsRelational()
+            && _db.Database.CurrentTransaction is null
+            && System.Transactions.Transaction.Current is null
+                ? await _db.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken).ConfigureAwait(false)
+                : null;
+
     /// <inheritdoc />
     public async Task<bool> IsUnchangedAsync(string sourceType, string sessionId, string contentHash, CancellationToken cancellationToken = default)
     {
@@ -429,6 +443,9 @@ public sealed class SessionLogService : ISessionLogService
         // BUG-SESSIONLOG-WS-001..004: child sets carry no workspace query filter,
         // so isolation comes from the explicit parent-session predicate here.
         var currentWorkspaceId = _db.CurrentWorkspaceId;
+
+        // FR-SUPPORT-016 ac-6: the read of the turn's ordinals and the write of the new items share one transaction.
+        await using var transaction = await BeginTurnWriteTransactionAsync(cancellationToken).ConfigureAwait(false);
         var entry = await _db.SessionLogTurns
             .Include(e => e.ProcessingDialog)
             .FirstOrDefaultAsync(e =>
@@ -457,6 +474,9 @@ public sealed class SessionLogService : ISessionLogService
         }
 
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        if (transaction is not null)
+            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+
         _logger.LogDebug("Appended {Count} dialog items to {SourceType}/{SessionId}/{RequestId}",
             items.Count, sourceType, sessionId, requestId);
         await PublishChangeSafeAsync(
@@ -736,6 +756,8 @@ public sealed class SessionLogService : ISessionLogService
             throw new ArgumentException(requestIdError, nameof(turn));
         ValidateListElements(turn);
 
+        // FR-SUPPORT-016 ac-6: the read of the turn's ordinals and the write of the new items share one transaction.
+        await using var transaction = await BeginTurnWriteTransactionAsync(cancellationToken).ConfigureAwait(false);
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
             ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
 
@@ -772,13 +794,14 @@ public sealed class SessionLogService : ISessionLogService
 
         RefreshSessionSummaryFromTurns(session);
 
+        var retriedInFreshTransaction = false;
         try
         {
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (DbUpdateException ex) when (IsSessionLogTurnUniqueRace(ex))
         {
-            // TEST-MCP-SESSIONLIFE-005: two first inserts of the same request id.
+            // FR-MCP-SESSIONLIFE-005 ac-5 and TEST-MCP-SESSIONLIFE-004 ac-1: two first inserts of the same request id.
             // Retry once as an update of the row that won the race.
             _logger.LogWarning(
                 "UNIQUE constraint race for turn {SourceType}/{SessionId}/{RequestId}, retrying as update",
@@ -787,6 +810,16 @@ public sealed class SessionLogService : ISessionLogService
                 turn.RequestId);
             _db.ChangeTracker.Clear();
 
+            // TR-SUPPORT-CORE-016 ac-4: a failed statement aborts a PostgreSQL transaction, so the retry runs in a fresh one.
+            if (transaction is not null)
+            {
+                await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+                retriedInFreshTransaction = true;
+            }
+
+            await using var retryTransaction = retriedInFreshTransaction
+                ? await BeginTurnWriteTransactionAsync(cancellationToken).ConfigureAwait(false)
+                : null;
             session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Session not found after turn unique race: {sourceType}/{sessionId}");
             var raced = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId)
@@ -804,8 +837,13 @@ public sealed class SessionLogService : ISessionLogService
             StampTurnChildren(raced, session.WorkspaceId);
             RefreshSessionSummaryFromTurns(session);
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            if (retryTransaction is not null)
+                await retryTransaction.CommitAsync(cancellationToken).ConfigureAwait(false);
             persistedTurn = raced;
         }
+
+        if (transaction is not null && !retriedInFreshTransaction)
+            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
 
         await PublishChangeSafeAsync(
             ChangeEventActions.Updated,
@@ -817,7 +855,7 @@ public sealed class SessionLogService : ISessionLogService
     }
 
     /// <summary>
-    /// TEST-MCP-SESSIONLIFE-005: true when SQLite rejected a new SessionLogTurns row
+    /// FR-MCP-SESSIONLIFE-005 ac-5 and TEST-MCP-SESSIONLIFE-004 ac-1: true when the store rejected a new SessionLogTurns row
     /// because the session and request id were already stored.
     /// </summary>
     private static bool IsSessionLogTurnUniqueRace(DbUpdateException ex)
@@ -869,6 +907,8 @@ public sealed class SessionLogService : ISessionLogService
             throw new ArgumentException(requestIdError, nameof(turn));
         ValidateListElements(turn);
 
+        // FR-SUPPORT-016 ac-6: the read of the turn and the write of its replaced items share one transaction.
+        await using var transaction = await BeginTurnWriteTransactionAsync(cancellationToken).ConfigureAwait(false);
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
             ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
 
@@ -897,6 +937,9 @@ public sealed class SessionLogService : ISessionLogService
         RefreshSessionSummaryFromTurns(session);
 
         await SaveChangesBudgetedAsync(cancellationToken).ConfigureAwait(false);
+        if (transaction is not null)
+            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+
         await PublishChangeSafeAsync(
             ChangeEventActions.Updated,
             $"{sourceType}/{sessionId}",
@@ -987,6 +1030,8 @@ public sealed class SessionLogService : ISessionLogService
         ValidateTurnIdentifiers(sourceType, sessionId, requestId);
         ValidateListElements(payload);
 
+        // FR-SUPPORT-016 ac-6: the read of the turn and the write of the section's items share one transaction.
+        await using var transaction = await BeginTurnWriteTransactionAsync(cancellationToken).ConfigureAwait(false);
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
         var turnEntity = session?.Turns.FirstOrDefault(t => t.RequestId == requestId);
         if (session is null || turnEntity is null)
@@ -1006,6 +1051,9 @@ public sealed class SessionLogService : ISessionLogService
             _db.ChangeTracker.Clear();
             throw;
         }
+
+        if (transaction is not null)
+            await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
         await PublishChangeSafeAsync(
             ChangeEventActions.Updated,
             $"{sourceType}/{sessionId}",

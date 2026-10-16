@@ -2561,8 +2561,56 @@ public sealed class SessionLogServiceTests : IDisposable
         => BuildSqliteSut(connection, WorkspacePath, useServiceWorkspaceContext);
 
     /// <summary>
-    /// TEST-MCP-SESSIONLIFE-005: a unique SessionLogTurns race on the first insert
-    /// retries once and updates the row that won, leaving a single request id.
+    /// TEST-MCP-SESSIONLIFE-004 ac-1 and TEST-SUPPORT-024 AC-005 mock gate (FR-MCP-SESSIONLIFE-005 ac-5, TR-MCP-SESSIONLIFE-005, TR-SUPPORT-CORE-016
+    /// ac-4; PLAN-SESSIONTRIAGEFIX-001 A7 follow-up, operator decision 2026-10-16 "Keep retry, revert ac-1 (Recommended)"): the unique-race
+    /// outcome assertion accepts a returned turn id, one forced rival row, one rollback of the service's transaction and one stored turn row
+    /// carrying the retried writer's text; it rejects a race whose transaction was never rolled back (no retry ran), a race that was never
+    /// forced, two stored rows, a row that kept the rival's text, and no turn id. Data: hand-built outcomes; no database.
+    /// </summary>
+    [Fact]
+    public void UniqueRaceAssertion_AcceptsOneRetriedUpdateAndRejectsMissingRetryOrDuplicate()
+    {
+        var retried = new UniqueRaceOutcome(TurnId: 7, RivalInserts: 1, Rollbacks: 1, StoredQueryTexts: WinnerOnly, WinnerText: "winner text");
+        AssertUniqueRaceRetried(retried);
+
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertUniqueRaceRetried(retried with { Rollbacks = 0 }));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertUniqueRaceRetried(retried with { RivalInserts = 0 }));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertUniqueRaceRetried(retried with { StoredQueryTexts = WinnerAndRival }));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertUniqueRaceRetried(retried with { StoredQueryTexts = RivalOnly }));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertUniqueRaceRetried(retried with { TurnId = 0 }));
+    }
+
+    private static readonly string[] WinnerOnly = ["winner text"];
+    private static readonly string[] WinnerAndRival = ["winner text", "rival"];
+    private static readonly string[] RivalOnly = ["rival"];
+
+    // TEST-MCP-SESSIONLIFE-004 ac-1: the race was forced once, the service rolled its transaction back once and retried, and the retry
+    // updated the one stored turn row with the retried writer's text.
+    private static void AssertUniqueRaceRetried(UniqueRaceOutcome outcome)
+    {
+        Assert.True(outcome.TurnId > 0, $"turn id {outcome.TurnId}");
+        Assert.Equal(1, outcome.RivalInserts);
+        Assert.Equal(1, outcome.Rollbacks);
+        var stored = Assert.Single(outcome.StoredQueryTexts);
+        Assert.Equal(outcome.WinnerText, stored);
+    }
+
+    /// <summary>TEST-MCP-SESSIONLIFE-004 ac-1: what one forced unique race on a first insert left behind.</summary>
+    /// <param name="TurnId">The id UpsertTurnAsync returned.</param>
+    /// <param name="RivalInserts">How many times the rival row was forced into the service's transaction.</param>
+    /// <param name="Rollbacks">How many times the service rolled its transaction back.</param>
+    /// <param name="StoredQueryTexts">The query text of every stored turn row with the raced request id.</param>
+    /// <param name="WinnerText">The query text the retried writer sent.</param>
+    internal sealed record UniqueRaceOutcome(long TurnId, int RivalInserts, int Rollbacks, IReadOnlyList<string> StoredQueryTexts, string WinnerText);
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLIFE-004 ac-1 and TEST-SUPPORT-024 AC-005 binding (FR-MCP-SESSIONLIFE-005 ac-5, TR-MCP-SESSIONLIFE-005, TR-SUPPORT-CORE-016
+    /// ac-4; PLAN-SESSIONTRIAGEFIX-001 A7 follow-up, operator decision 2026-10-16 "Keep retry, revert ac-1 (Recommended)"): a unique
+    /// SessionLogTurns race on the first insert retries once, in a fresh transaction, and updates the row that won, leaving a single request id.
+    /// UpsertTurnAsync serializes its read and write, so no second connection can win the race inside its transaction; the race is forced
+    /// through the service's own connection instead (the rival row inside its transaction, so the save fails on the unique index, then the same
+    /// row committed after the service rolls back), a path no production caller reaches today. Data: a file SQLite database, the session of
+    /// CreateTestDto and one new request id.
     /// </summary>
     [Fact]
     public async Task UpsertTurnAsync_UniqueSessionLogTurnsRace_RetriesOnceAndUpdates()
@@ -2584,10 +2632,10 @@ public sealed class SessionLogServiceTests : IDisposable
                 }
             }
 
-            var interceptor = new RivalTurnInsertInterceptor();
+            var race = new RivalTurnRace();
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
-            var (sut, db) = BuildSqliteSut(connection, WorkspacePath, interceptor: interceptor);
+            var (sut, db) = BuildSqliteSut(connection, WorkspacePath, interceptors: [race.Save, race.Rollback]);
             using (db)
             {
                 var turn = new UnifiedRequestEntryDto
@@ -2606,20 +2654,128 @@ public sealed class SessionLogServiceTests : IDisposable
                     turn,
                     TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-                Assert.True(turnId > 0);
-                Assert.Equal(1, interceptor.Inserts);
-                var rows = await db.SessionLogTurns
+                var stored = await db.SessionLogTurns
                     .IgnoreQueryFilters()
                     .Where(item => item.RequestId == turn.RequestId)
+                    .Select(item => item.QueryText ?? string.Empty)
                     .ToListAsync(TestContext.Current.CancellationToken)
                     .ConfigureAwait(true);
-                var stored = Assert.Single(rows);
-                Assert.Equal("winner text", stored.QueryText);
+                AssertUniqueRaceRetried(new UniqueRaceOutcome(turnId, race.Inserts, race.Rollbacks, stored, "winner text"));
             }
         }
         finally
         {
             TryDelete(databasePath);
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLIFE-004 ac-1: forces the first-insert unique race through the service's own connection. On the first save that adds a
+    /// turn it inserts the same turn inside the service's transaction, so the save fails on the unique index; after the service rolls that
+    /// transaction back it commits the same row on that connection outside any transaction, as the writer that won.
+    /// </summary>
+    private sealed class RivalTurnRace
+    {
+        private (string WorkspaceId, long SessionLogId, string RequestId)? _rival;
+
+        /// <summary>Initializes the save and rollback interceptors that share this race.</summary>
+        public RivalTurnRace()
+        {
+            Save = new ForceOnSave(this);
+            Rollback = new CommitAfterRollback(this);
+        }
+
+        /// <summary>The save interceptor that forces the unique violation.</summary>
+        public SaveChangesInterceptor Save { get; }
+
+        /// <summary>The transaction interceptor that commits the winning row after the rollback.</summary>
+        public DbTransactionInterceptor Rollback { get; }
+
+        /// <summary>How many times the rival row was forced into the service's transaction.</summary>
+        public int Inserts { get; private set; }
+
+        /// <summary>How many times the service rolled its transaction back.</summary>
+        public int Rollbacks { get; private set; }
+
+        private void Force(DbContextEventData eventData)
+        {
+            if (Inserts > 0 || eventData.Context is not { } context)
+                return;
+
+            var added = context.ChangeTracker
+                .Entries<SessionLogTurnEntity>()
+                .FirstOrDefault(entry => entry.State == EntityState.Added);
+            if (added is null)
+                return;
+
+            _rival = (added.Entity.WorkspaceId ?? string.Empty, added.Entity.SessionLogId, added.Entity.RequestId ?? string.Empty);
+            var transaction = context.Database.CurrentTransaction is { } current
+                ? Microsoft.EntityFrameworkCore.Storage.DbContextTransactionExtensions.GetDbTransaction(current)
+                : null;
+            InsertRival(context, (SqliteTransaction?)transaction);
+            Inserts++;
+        }
+
+        private void CommitWinner(TransactionEndEventData eventData)
+        {
+            Rollbacks++;
+            if (_rival is null || eventData.Context is not { } context)
+                return;
+
+            InsertRival(context, transaction: null);
+            _rival = null;
+        }
+
+        private void InsertRival(DbContext context, SqliteTransaction? transaction)
+        {
+            var (workspaceId, sessionLogId, requestId) = _rival!.Value;
+            using var command = ((SqliteConnection)context.Database.GetDbConnection()).CreateCommand();
+            command.Transaction = transaction;
+            command.CommandText = """
+                INSERT INTO SessionLogTurns (WorkspaceId, SessionLogId, RequestId, PlanFile, TodoId, QueryText)
+                VALUES ($ws, $sid, $rid, 'None', 'None', 'rival')
+                """;
+            command.Parameters.AddWithValue("$ws", workspaceId);
+            command.Parameters.AddWithValue("$sid", sessionLogId);
+            command.Parameters.AddWithValue("$rid", requestId);
+            command.ExecuteNonQuery();
+        }
+
+        private sealed class ForceOnSave(RivalTurnRace race) : SaveChangesInterceptor
+        {
+            /// <inheritdoc />
+            public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+            {
+                race.Force(eventData);
+                return result;
+            }
+
+            /// <inheritdoc />
+            public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+                DbContextEventData eventData,
+                InterceptionResult<int> result,
+                CancellationToken cancellationToken = default)
+            {
+                race.Force(eventData);
+                return base.SavingChangesAsync(eventData, result, cancellationToken);
+            }
+        }
+
+        private sealed class CommitAfterRollback(RivalTurnRace race) : DbTransactionInterceptor
+        {
+            /// <inheritdoc />
+            public override void TransactionRolledBack(System.Data.Common.DbTransaction transaction, TransactionEndEventData eventData)
+                => race.CommitWinner(eventData);
+
+            /// <inheritdoc />
+            public override Task TransactionRolledBackAsync(
+                System.Data.Common.DbTransaction transaction,
+                TransactionEndEventData eventData,
+                CancellationToken cancellationToken = default)
+            {
+                race.CommitWinner(eventData);
+                return Task.CompletedTask;
+            }
         }
     }
 
@@ -2635,69 +2791,16 @@ public sealed class SessionLogServiceTests : IDisposable
         }
     }
 
-    /// <summary>Inserts the racing turn on a second connection before the first save.</summary>
-    private sealed class RivalTurnInsertInterceptor : SaveChangesInterceptor
-    {
-        /// <summary>How many rival rows this interceptor inserted.</summary>
-        public int Inserts { get; private set; }
-
-        /// <inheritdoc />
-        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
-        {
-            InsertRival(eventData);
-            return result;
-        }
-
-        /// <inheritdoc />
-        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
-            DbContextEventData eventData,
-            InterceptionResult<int> result,
-            CancellationToken cancellationToken = default)
-        {
-            InsertRival(eventData);
-            return base.SavingChangesAsync(eventData, result, cancellationToken);
-        }
-
-        private void InsertRival(DbContextEventData eventData)
-        {
-            if (Inserts > 0 || eventData.Context is null)
-                return;
-
-            var added = eventData.Context.ChangeTracker
-                .Entries<SessionLogTurnEntity>()
-                .FirstOrDefault(entry => entry.State == EntityState.Added);
-            if (added is null)
-                return;
-
-            var connectionString = eventData.Context.Database.GetConnectionString();
-            if (string.IsNullOrWhiteSpace(connectionString))
-                return;
-
-            using var connection = new SqliteConnection(connectionString);
-            connection.Open();
-            using var command = connection.CreateCommand();
-            command.CommandText = """
-                INSERT INTO SessionLogTurns (WorkspaceId, SessionLogId, RequestId, PlanFile, TodoId, QueryText)
-                VALUES ($ws, $sid, $rid, 'None', 'None', 'rival')
-                """;
-            command.Parameters.AddWithValue("$ws", added.Entity.WorkspaceId ?? string.Empty);
-            command.Parameters.AddWithValue("$sid", added.Entity.SessionLogId);
-            command.Parameters.AddWithValue("$rid", added.Entity.RequestId ?? string.Empty);
-            command.ExecuteNonQuery();
-            Inserts++;
-        }
-    }
-
     private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(
         SqliteConnection connection,
         string workspacePath,
         bool useServiceWorkspaceContext = true,
-        SaveChangesInterceptor? interceptor = null)
+        IInterceptor[]? interceptors = null)
     {
         var builder = new DbContextOptionsBuilder<McpDbContext>()
             .UseSqlite(connection);
-        if (interceptor is not null)
-            builder.AddInterceptors(interceptor);
+        if (interceptors is not null)
+            builder.AddInterceptors(interceptors);
         var options = builder.Options;
         var workspaceContext = new WorkspaceContext { WorkspacePath = workspacePath };
         var db = new McpDbContext(options, workspaceContext);
