@@ -1,6 +1,8 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # Handoff: worktree session-20261009 (branch worktree-session-20261009), 2026-10-13T16:55:06 local
 
+> Superseded on 2026-10-16T12:50:35 local by `docs/handoffs/session-20261009-worktree-handoff-20261016T125035.md`. Its git, pull request, worktree and session-log facts are stale; this file remains the record of 2026-10-13.
+
 Prepared by ClaudeCode (model claude-opus-5-5) for Payton Byrd at the operator's request "write a COMPLETE handoff for this worktree." All times are local US/Central (-05:00) in .NET "s" form unless marked Z. Facts marked "measured" were read from the live system between 16:40 and 17:08 today; facts marked "earlier" come from this session's earlier work and were not re-measured for this file.
 
 Scope: this project workstream only. Operator profile maintenance is a separate effort and is not part of this handoff (operator, 2026-10-13: "The project handoff and profile maintenance are completely different efforts.").
