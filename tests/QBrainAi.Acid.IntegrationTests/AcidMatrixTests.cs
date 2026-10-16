@@ -1,3 +1,4 @@
+using QBrainAi.TransactionSecurity.IntegrationTests;
 using QBrainAi.TransactionSecurity.Models;
 using QBrainAi.TransactionSecurity.Options;
 using QBrainAi.TransactionSecurity.Services;
@@ -350,6 +351,41 @@ public sealed class CoordinatorOutcomeMatrixTests
         Assert.Equal("bypassed", result.Status);
     }
 
+    /// <summary>
+    /// TEST-MCP-ACID-006 AC-002 (FR-MCP-173 ac-1, TR-MCP-TXNKEY-001 ac-3; PLAN-SESSIONTRIAGEFIX-001 A12, triage-report-ff1be8ee): with
+    /// transactions enabled and required for mutations, a general-agent operation (todo.update) answers bypassed and runs its mutation, and
+    /// neither collaborator records it: the key server holds no signed manifest and the subscriber no transaction for its id. A
+    /// brain-slot.invoke turn on the same harness first shows that both records exist for a gated transaction. Data: the in-process key
+    /// server and subscriber (AllMock).
+    /// </summary>
+    [Fact]
+    public async Task Coordinator_GeneralAgentOperation_Bypassed()
+    {
+        using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
+        await harness.RegisterPartiesAsync().ConfigureAwait(true);
+        var gated = await harness.Coordinator.ExecuteAsync(
+            Request("txn-co-gated", sequence: 1, mutating: true),
+            _ => Task.FromResult(new TurnMutationResult { Success = true, ResultJson = "{}" }),
+            CancellationToken.None).ConfigureAwait(true);
+        Assert.Equal("committed", gated.Status);
+        Assert.NotNull(await harness.KeyServer.GetManifestAsync("txn-co-gated", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.NotNull(await harness.Subscriber.GetTransactionStatusAsync("txn-co-gated", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        var applied = false;
+        var general = Request("txn-co-general", sequence: 2, mutating: true);
+        general.OperationName = "todo.update";
+
+        var result = await harness.Coordinator.ExecuteAsync(
+            general,
+            _ => { applied = true; return Task.FromResult(new TurnMutationResult { Success = true }); },
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Equal("bypassed", result.Status);
+        Assert.True(result.MutationApplied);
+        Assert.True(applied);
+        Assert.Null(await harness.KeyServer.GetManifestAsync("txn-co-general", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.Null(await harness.Subscriber.GetTransactionStatusAsync("txn-co-general", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
     /// <summary>A failed mutation aborts and rolls back.</summary>
     [Fact]
     public async Task Coordinator_MutationFails_Aborted()
@@ -447,7 +483,7 @@ public sealed class CoordinatorOutcomeMatrixTests
         {
             TransactionId = transactionId,
             TurnId = $"turn-{transactionId}",
-            OperationName = "todo.update",
+            OperationName = TransactionOperationScope.BrainSlotInvoke,
             OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
             PublisherPartyId = AcidTransactionHarness.PublisherPartyId,
             SubscriberPartyId = AcidTransactionHarness.SubscriberPartyId,

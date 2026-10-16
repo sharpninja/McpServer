@@ -84,9 +84,15 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         Assert.Empty(factory.InvokedRoles);
     }
 
-    /// <summary>TEST-MCP-QBLIVEINT-001: AoT completion survives a rejected session-log dialog transaction.</summary>
+    /// <summary>
+    /// TEST-MCP-QBLIVEINT-001 AC-001 (FR-MCP-173 ac-1, FR-MCP-QBEXEC-003; PLAN-SESSIONTRIAGEFIX-001 A11, triage-report-fe344399): with a
+    /// coordinator that rejects every sessionlog.dialog transaction, the AoT completion returns the arbiter content, the coordinator records no
+    /// sessionlog.dialog operation and rejects none, and the brain-interaction dialog persists on the seeded turn, because FR-MCP-173 routes every
+    /// session-log write around the coordinator. Renamed from ChatCompletions_RealOrchestration_AotLoggerTransactionRejected_ReturnsArbiterContent,
+    /// which expected the coordinator to see that write. Data: four seeded slots, a recording chat client, a seeded QBAgent session and turn.
+    /// </summary>
     [Fact]
-    public async Task ChatCompletions_RealOrchestration_AotLoggerTransactionRejected_ReturnsArbiterContent()
+    public async Task ChatCompletions_RealOrchestration_AotLoggerDialog_PersistsWithoutCoordinator()
     {
         var chatFactory = new RecordingChatClientFactory("arbiter decision despite rejected logger transaction");
         var coordinator = new DialogRejectingTurnTransactionCoordinator();
@@ -104,8 +110,62 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         Assert.Equal("stop", choice.FinishReason);
         Assert.Equal("arbiter decision despite rejected logger transaction", choice.Message.Content);
         Assert.Contains(BrainSlotRoles.ArbiterOfTruth, chatFactory.InvokedRoles);
-        Assert.Contains("sessionlog.dialog", coordinator.OperationNames);
-        Assert.True(coordinator.RejectedDialogTransactionCount > 0);
+        var persistedDialog = await ReadTurnDialogAsync(seedClient, "QBAgent-20260627T011500Z-aot-logger-reject", "req-20260627T011500Z-aot-logger-reject").ConfigureAwait(true);
+        AssertAotDialogOutcome(coordinator.OperationNames, coordinator.RejectedDialogTransactionCount, persistedDialog);
+    }
+
+    // TEST-MCP-QBLIVEINT-001 AC-001: the dialog item texts stored on one turn, read back through GET qbrainai/sessionlog/{agent}/{sessionId}.
+    private static async Task<IReadOnlyList<string>> ReadTurnDialogAsync(HttpClient client, string sessionId, string turnId)
+    {
+        var response = await client.GetAsync(new Uri($"qbrainai/sessionlog/{SourceType}/{sessionId}", UriKind.Relative)).ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(response.StatusCode == HttpStatusCode.OK, $"Expected the session read to answer OK, got {response.StatusCode}: {json}");
+        using var document = JsonDocument.Parse(json);
+        var items = new List<string>();
+        foreach (var turn in document.RootElement.GetProperty("turns").EnumerateArray())
+        {
+            if (!string.Equals(turn.GetProperty("requestId").GetString(), turnId, StringComparison.Ordinal)
+                || !turn.TryGetProperty("processingDialog", out var dialog)
+                || dialog.ValueKind != JsonValueKind.Array)
+            {
+                continue;
+            }
+
+            foreach (var item in dialog.EnumerateArray())
+            {
+                if (item.TryGetProperty("content", out var content) && content.ValueKind == JsonValueKind.String)
+                    items.Add(content.GetString()!);
+            }
+        }
+
+        return items;
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBLIVEINT-001 AC-001 mock gate (FR-MCP-173 ac-1, FR-MCP-QBEXEC-003; PLAN-SESSIONTRIAGEFIX-001 A11, triage-report-fe344399): the
+    /// AoT dialog outcome assertion accepts a recorded outcome with no sessionlog.dialog operation at the coordinator, no rejected dialog
+    /// transaction and a persisted brain-interaction dialog item, and rejects a recorded sessionlog.dialog operation, a rejected count above
+    /// zero, no persisted dialog, and a persisted dialog without a brain-interaction item. Data: hand-built operation lists and dialog texts;
+    /// no host.
+    /// </summary>
+    [Fact]
+    public void AotDialogOutcomeAssertion_AcceptsBypassedPersistedDialogAndRejectsCoordinatorOrMissingDialog()
+    {
+        string[] persisted = ["[ArbiterOfTruth] prompt:\ndo it", "[ArbiterOfTruth] output:\nthe arbiter decision"];
+        AssertAotDialogOutcome(["brain-slot.invoke"], 0, persisted);
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertAotDialogOutcome(["brain-slot.invoke", "sessionlog.dialog"], 0, persisted));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertAotDialogOutcome(["brain-slot.invoke"], 1, persisted));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertAotDialogOutcome(["brain-slot.invoke"], 0, []));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertAotDialogOutcome(["brain-slot.invoke"], 0, ["an unrelated note"]));
+    }
+
+    // TEST-MCP-QBLIVEINT-001 AC-001: the AoT dialog never reached the coordinator, nothing was rejected, and a brain-interaction dialog item
+    // (BrainInteractionSessionLogger writes "[<role>] prompt:" and "[<role>] output:") persisted on the turn.
+    private static void AssertAotDialogOutcome(IReadOnlyCollection<string> operationNames, int rejectedDialogTransactions, IReadOnlyCollection<string> persistedDialog)
+    {
+        Assert.DoesNotContain("sessionlog.dialog", operationNames);
+        Assert.Equal(0, rejectedDialogTransactions);
+        Assert.Contains(persistedDialog, item => item.StartsWith('[') && item.Contains("] prompt:", StringComparison.Ordinal));
     }
 
     private static CustomWebApplicationFactory BuildFactory(

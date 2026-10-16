@@ -1,3 +1,4 @@
+using QBrainAi.TransactionSecurity.IntegrationTests;
 using QBrainAi.TransactionSecurity.Models;
 
 namespace QBrainAi.Acid.IntegrationTests;
@@ -22,7 +23,7 @@ public sealed class AcidRunningInstanceTests
             {
                 TransactionId = "txn-running-commit",
                 TurnId = "turn-running-commit",
-                OperationName = "todo.update",
+                OperationName = TransactionOperationScope.BrainSlotInvoke,
                 OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
                 PublisherPartyId = AcidTransactionHarness.PublisherPartyId,
                 SubscriberPartyId = AcidTransactionHarness.SubscriberPartyId,

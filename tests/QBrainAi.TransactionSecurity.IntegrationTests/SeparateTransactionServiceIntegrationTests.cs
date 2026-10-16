@@ -346,7 +346,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
             {
                 TransactionId = "txn-http-pubsub-host",
                 TurnId = "turn-http-pubsub-host",
-                OperationName = "todo.update",
+                OperationName = TransactionOperationScope.BrainSlotInvoke,
                 OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
                 PublisherPartyId = PublisherPartyId,
                 SubscriberPartyId = SubscriberPartyId,
@@ -420,7 +420,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
             {
                 TransactionId = "txn-http-pubsub-blocking-ack",
                 TurnId = "turn-http-pubsub-blocking-ack",
-                OperationName = "todo.update",
+                OperationName = TransactionOperationScope.BrainSlotInvoke,
                 OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
                 PublisherPartyId = PublisherPartyId,
                 SubscriberPartyId = SubscriberPartyId,
@@ -509,7 +509,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
             {
                 TransactionId = "txn-http-pubsub-rollback",
                 TurnId = "turn-http-pubsub-rollback",
-                OperationName = "todo.update",
+                OperationName = TransactionOperationScope.BrainSlotInvoke,
                 OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
                 PublisherPartyId = PublisherPartyId,
                 SubscriberPartyId = SubscriberPartyId,

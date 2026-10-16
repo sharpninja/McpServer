@@ -24,6 +24,10 @@
     <ProjectReference Include="..\..\src\QBrainAi.TransactionSecurity\QBrainAi.TransactionSecurity.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <!-- PLAN-SESSIONTRIAGEFIX-001 A12: one coordinator-gated operation constant for the TransactionSecurity and Acid integration tests. -->
+    <Compile Include="..\QBrainAi.TransactionSecurity.IntegrationTests\TransactionOperationScope.cs" Link="TransactionOperationScope.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 </Project>

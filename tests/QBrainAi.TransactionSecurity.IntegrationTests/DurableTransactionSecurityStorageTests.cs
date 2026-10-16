@@ -622,6 +622,20 @@ public sealed class DurableTransactionSecurityStorageTests
         Assert.Equal(pending.Manifest.TransactionId, replayedRequest.Manifest.TransactionId);
     }
 
+    /// <summary>
+    /// TEST-MCP-159 AC-001 mock gate (FR-MCP-173 ac-2; PLAN-SESSIONTRIAGEFIX-001 A12, triage-report-ff1be8ee): the coordinator-gated assertion
+    /// accepts brain-slot.invoke, the operation this project's coordinator tests send, and rejects todo.update and sessionlog.dialog
+    /// (general-agent operations FR-MCP-173 ac-1 routes around) and an empty name. Data: operation names only; no coordinator.
+    /// </summary>
+    [Fact]
+    public void TransactionOperationScopeAssertion_AcceptsBrainSlotAndRejectsGeneralAgentOperations()
+    {
+        TransactionOperationScope.AssertCoordinatorGated(TransactionOperationScope.BrainSlotInvoke);
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => TransactionOperationScope.AssertCoordinatorGated("todo.update"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => TransactionOperationScope.AssertCoordinatorGated("sessionlog.dialog"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => TransactionOperationScope.AssertCoordinatorGated(string.Empty));
+    }
+
     /// <summary>A rolled-back coordinator mutation cancels the durable pending commit so recovery replay cannot commit it later.</summary>
     [Fact]
     public async Task TurnCoordinator_WithDurablePubSub_WhenSubscriberUnavailableAfterRollback_DoesNotReplayRolledBackCommit()
@@ -659,7 +673,7 @@ public sealed class DurableTransactionSecurityStorageTests
                 {
                     TransactionId = TransactionId,
                     TurnId = "turn-pubsub-rollback-cancel",
-                    OperationName = "todo.update",
+                    OperationName = TransactionOperationScope.BrainSlotInvoke,
                     OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
                     PublisherPartyId = PublisherPartyId,
                     SubscriberPartyId = SubscriberPartyId,
@@ -739,7 +753,7 @@ public sealed class DurableTransactionSecurityStorageTests
                 {
                     TransactionId = TransactionId,
                     TurnId = "turn-pubsub-timeout-rollback-cancel",
-                    OperationName = "todo.update",
+                    OperationName = TransactionOperationScope.BrainSlotInvoke,
                     OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
                     PublisherPartyId = PublisherPartyId,
                     SubscriberPartyId = SubscriberPartyId,

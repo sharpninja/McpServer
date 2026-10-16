@@ -1,3 +1,4 @@
+using QBrainAi.TransactionSecurity.IntegrationTests;
 using QBrainAi.TransactionSecurity.Models;
 
 namespace QBrainAi.Acid.IntegrationTests;
@@ -11,6 +12,20 @@ namespace QBrainAi.Acid.IntegrationTests;
 [Trait("Category", "Integration")]
 public sealed class AcidFullLifecycleTests
 {
+    /// <summary>
+    /// TEST-MCP-ACID-001 AC-001 mock gate (FR-MCP-173 ac-2; PLAN-SESSIONTRIAGEFIX-001 A12, triage-report-ff1be8ee): the coordinator-gated
+    /// assertion accepts brain-slot.invoke, the operation this project's lifecycle tests send, and rejects todo.update and sessionlog.dialog
+    /// (general-agent operations FR-MCP-173 ac-1 routes around) and an empty name. Data: operation names only; no coordinator.
+    /// </summary>
+    [Fact]
+    public void AcidOperationScopeAssertion_AcceptsBrainSlotAndRejectsGeneralAgentOperations()
+    {
+        TransactionOperationScope.AssertCoordinatorGated(TransactionOperationScope.BrainSlotInvoke);
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => TransactionOperationScope.AssertCoordinatorGated("todo.update"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => TransactionOperationScope.AssertCoordinatorGated("sessionlog.dialog"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => TransactionOperationScope.AssertCoordinatorGated(string.Empty));
+    }
+
     /// <summary>Happy path: coordinator signs, applies the mutation, and the subscriber commits the diffgram.</summary>
     [Fact]
     public async Task FullLifecycle_HappyPath_Commits()
@@ -202,7 +217,7 @@ public sealed class AcidFullLifecycleTests
         {
             TransactionId = transactionId,
             TurnId = $"turn-{transactionId}",
-            OperationName = "todo.update",
+            OperationName = TransactionOperationScope.BrainSlotInvoke,
             OperationBodyJson = "{\"id\":\"PLAN-TURNTRANSACTIONS-001\"}",
             PublisherPartyId = AcidTransactionHarness.PublisherPartyId,
             SubscriberPartyId = AcidTransactionHarness.SubscriberPartyId,
