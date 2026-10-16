@@ -27,7 +27,7 @@ public sealed class WorkspaceServiceAccessor
         _todoResolver = todoResolver ?? throw new ArgumentNullException(nameof(todoResolver));
         _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         ArgumentNullException.ThrowIfNull(ingestionOptions);
-        _defaultWorkspacePath = Path.GetFullPath(ingestionOptions.Value.RepoRoot ?? ".");
+        _defaultWorkspacePath = HandoffWorkspacePaths.Canonicalize(ingestionOptions.Value.RepoRoot ?? ".");
     }
 
     /// <summary>

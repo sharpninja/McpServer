@@ -76,7 +76,7 @@ public sealed class ProductRequirementContextTests : IDisposable
         Assert.True(result.IsSuccess, result.Error);
         Assert.Contains(result.Value!, c =>
             c.Content.Contains("SIBLING-FR-BODY-UNIQUE", StringComparison.Ordinal)
-            && c.OriginWorkspaceId == Sibling
+            && c.OriginWorkspaceId == ExpectedWorkspaceKey.Of(Sibling)
             && c.SourceType == "product-requirements");
     }
 

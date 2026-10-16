@@ -100,8 +100,11 @@ public sealed class WorkspaceTokenServiceTests
         var token = _sut.GenerateToken(@"C:\projects\test");
         var result = _sut.ResolveWorkspaceByToken(token);
         Assert.NotNull(result);
-        Assert.Equal(Path.GetFullPath(@"C:\projects\test"), result, ignoreCase: true);
+        // TR-MCP-FED-PATH-001: the canonical identity, not host Path.GetFullPath (which on a Linux
+        // runner prefixes the working directory to a Windows path).
+        Assert.Equal(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(@"C:\projects\test"), result, ignoreCase: true);
     }
+
 
     [Fact]
     public void ResolveWorkspaceByToken_ReturnsNull_ForUnknownToken()

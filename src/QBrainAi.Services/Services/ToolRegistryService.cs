@@ -229,10 +229,17 @@ public sealed class ToolRegistryService : IToolRegistryService
         return new ToolScope(normalizedPath, normalizedPath ?? string.Empty);
     }
 
-    private static string? NormalizeWorkspacePath(string? path)
+    private static string? NormalizeWorkspacePath(string? path) =>
+        NormalizeWorkspacePath(path, QBrainAi.Client.WorkspacePathNormalizer.Process);
+
+    /// <summary>
+    /// FR-MCP-PATHNORM-001 (plan P1.4d): canonical tool workspace scope by path syntax, so a Windows
+    /// workspace on a Linux hub is not resolved against the hub's working directory.
+    /// </summary>
+    internal static string? NormalizeWorkspacePath(string? path, QBrainAi.Client.IWorkspacePathNormalizer normalizer)
     {
-        if (string.IsNullOrWhiteSpace(path)) return null;
-        return Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+        ArgumentNullException.ThrowIfNull(normalizer);
+        return string.IsNullOrWhiteSpace(path) ? null : normalizer.Normalize(path);
     }
 
     private static void ApplyScope(ToolDefinitionEntity entity, ToolScope scope)

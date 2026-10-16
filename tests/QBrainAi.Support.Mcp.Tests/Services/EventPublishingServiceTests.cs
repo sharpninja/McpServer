@@ -92,7 +92,7 @@ public sealed class EventPublishingServiceTests : IDisposable
                 e != null &&
                 e.Category == ChangeEventCategories.Workspace &&
                 e.Action == ChangeEventActions.Created &&
-                e.EntityId == Path.GetFullPath(workspacePath)),
+                e.EntityId == ExpectedWorkspaceKey.Of(Path.GetFullPath(workspacePath))),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 

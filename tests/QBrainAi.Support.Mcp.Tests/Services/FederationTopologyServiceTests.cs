@@ -61,7 +61,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
         var workspaces = await sut.ListWorkspacesAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
         var workspace = Assert.Single(workspaces);
-        Assert.True(string.Equals(_workspacePath, workspace.WorkspacePath,
+        Assert.True(string.Equals(ExpectedWorkspaceKey.Of(_workspacePath), workspace.WorkspacePath,
             OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
         Assert.NotEmpty(workspace.GlobalWorkspaceId);
     }

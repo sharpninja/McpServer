@@ -97,7 +97,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             .IgnoreQueryFilters()
             .SingleAsync(row => row.Id == "TODO-FIXED-001", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        Assert.Equal(workspacePath, record.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(workspacePath), record.WorkspaceId);
     }
 
     /// <summary>

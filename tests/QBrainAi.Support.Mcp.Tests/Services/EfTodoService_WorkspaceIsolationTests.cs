@@ -166,8 +166,8 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
             .ConfigureAwait(true);
 
         Assert.Equal(2, rows.Count);
-        Assert.Contains(rows, row => row.WorkspaceId == _workspaceA && row.Title == "bitnet plan");
-        Assert.Contains(rows, row => row.WorkspaceId == _workspaceB && row.Title == "truckmate plan");
+        Assert.Contains(rows, row => row.WorkspaceId == ExpectedWorkspaceKey.Of(_workspaceA) && row.Title == "bitnet plan");
+        Assert.Contains(rows, row => row.WorkspaceId == ExpectedWorkspaceKey.Of(_workspaceB) && row.Title == "truckmate plan");
     }
 
     /// <summary>
@@ -231,9 +231,9 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
         var audit = await ctx.TodoAuditHistory.IgnoreQueryFilters().SingleAsync(i => i.TodoId == "LEGACY-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var metadata = await ctx.TodoDocumentMetadata.IgnoreQueryFilters().SingleAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(_workspaceA, item.WorkspaceId);
-        Assert.Equal(_workspaceA, audit.WorkspaceId);
-        Assert.Equal(_workspaceA, metadata.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(_workspaceA), item.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(_workspaceA), audit.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(_workspaceA), metadata.WorkspaceId);
     }
 
     private void UseWorkspaceA() => _workspace.CurrentWorkspacePath = _workspaceA;

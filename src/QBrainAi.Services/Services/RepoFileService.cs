@@ -18,6 +18,7 @@ public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
     private readonly IWriteAuditLog _auditLog;
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<RepoFileService> _logger;
+    private readonly QBrainAi.Client.IWorkspacePathNormalizer _pathNormalizer;
 
 
     /// <summary>TR-PLANNED-CORE-013, TR-MCP-MT-001: Constructor. Uses WorkspaceContext for workspace-aware path resolution.</summary>
@@ -26,9 +27,12 @@ public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
     /// <param name="auditLog">Audit log for recording write operations.</param>
     /// <param name="logger">Logger instance.</param>
     /// <param name="eventBus">Optional in-process bus for publishing repo change events.</param>
+    /// <param name="pathNormalizer">TR-MCP-FED-PATH-001: path normalizer; defaults to the process host.</param>
     public RepoFileService(IOptions<IngestionOptions> options, WorkspaceContext workspaceContext,
-        IWriteAuditLog auditLog, ILogger<RepoFileService> logger, IChangeEventBus? eventBus = null)
+        IWriteAuditLog auditLog, ILogger<RepoFileService> logger, IChangeEventBus? eventBus = null,
+        QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer = null)
     {
+        _pathNormalizer = pathNormalizer ?? QBrainAi.Client.WorkspacePathNormalizer.Process;
         _logger = logger;
         _options = options?.Value ?? new IngestionOptions();
         _workspaceContext = workspaceContext;
@@ -288,6 +292,15 @@ public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
         fullPath = null!;
         if (IsPathTraversal(relativePath))
             return false;
+
+        // FR-MCP-FED-PATH-001-AC4: a foreign-platform workspace (e.g. a Windows proxy's workspace
+        // on a Linux hub) has no files on this host; resolving it would re-root it onto a host path.
+        var workspaceRoot = _workspaceContext.WorkspacePath ?? _options.RepoRoot;
+        if (string.IsNullOrWhiteSpace(workspaceRoot) ||
+            !_pathNormalizer.IsHostNative(workspaceRoot))
+        {
+            return false;
+        }
 
         var repoRoot = GetRepoRoot();
         var candidate = Path.GetFullPath(Path.Combine(repoRoot, relativePath));
