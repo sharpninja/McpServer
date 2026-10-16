@@ -33,7 +33,7 @@ public abstract class WorkspacePathNormalizerContractTests
         var result = normalizer.Normalize(@"C:\Users\kingd");
 
         Assert.DoesNotContain(LinuxWorkingDirectory, result, StringComparison.Ordinal);
-        Assert.Equal(@"C:\Users\kingd", result);
+        Assert.Equal("C:/Users/kingd", result);
         Assert.Equal(WorkspacePathPlatform.Windows, normalizer.DetectPlatform(@"C:\Users\kingd"));
         host.DidNotReceive().NormalizeNativePath(Arg.Any<string>());
     }
@@ -48,7 +48,7 @@ public abstract class WorkspacePathNormalizerContractTests
     [InlineData(@"C:\Users/kingd\")]
     public void LinuxHost_WindowsDrivePathSpellings_ResolveToOneIdentity(string input)
     {
-        Assert.Equal(@"C:\Users\kingd", CreateSut(LinuxHost()).Normalize(input));
+        Assert.Equal("C:/Users/kingd", CreateSut(LinuxHost()).Normalize(input));
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public abstract class WorkspacePathNormalizerContractTests
         var backslash = normalizer.Normalize(@"\\srv\share\x");
         var forward = normalizer.Normalize("//srv/share/x");
 
-        Assert.Equal(@"\\srv\share\x", backslash);
+        Assert.Equal("//srv/share/x", backslash);
         Assert.Equal(backslash, forward);
         Assert.Equal(WorkspacePathPlatform.Windows, normalizer.DetectPlatform("//srv/share/x"));
         host.DidNotReceive().NormalizeNativePath(Arg.Any<string>());
@@ -78,7 +78,7 @@ public abstract class WorkspacePathNormalizerContractTests
     public void LinuxHost_MixedSeparatorsAndDotSegments_CollapseLexically()
     {
         Assert.Equal(
-            @"C:\Users\kingd\repo\x",
+            "C:/Users/kingd/repo/x",
             CreateSut(LinuxHost()).Normalize(@"C:\Users/kingd\\repo/.\y\..\x"));
     }
 
@@ -138,8 +138,8 @@ public abstract class WorkspacePathNormalizerContractTests
     /// host-native and use host resolution.
     /// </summary>
     [Theory]
-    [InlineData(@"C:\Users\kingd", @"C:\Users\kingd")]
-    [InlineData("relative", @"C:\svc\relative")]
+    [InlineData(@"C:\Users\kingd", "C:/Users/kingd")]
+    [InlineData("relative", "C:/svc/relative")]
     public void WindowsHost_NativePaths_UseHostResolution(string input, string expected)
     {
         var host = WindowsHost();
@@ -154,7 +154,7 @@ public abstract class WorkspacePathNormalizerContractTests
     [Fact]
     public void Normalize_TrimsWhitespace()
     {
-        Assert.Equal(@"C:\Users\kingd", CreateSut(LinuxHost()).Normalize(@"  C:\Users\kingd  "));
+        Assert.Equal("C:/Users/kingd", CreateSut(LinuxHost()).Normalize(@"  C:\Users\kingd  "));
     }
 
     /// <summary>TR-MCP-FED-PATH-001: Blank input is rejected.</summary>
@@ -186,7 +186,7 @@ public abstract class WorkspacePathNormalizerContractTests
 
     /// <summary>TR-MCP-FED-PATH-001: The leaf name of a bare root is the root itself.</summary>
     [Theory]
-    [InlineData(@"C:\", @"C:\")]
+    [InlineData(@"C:\", "C:/")]
     [InlineData("/", "/")]
     public void GetLeafName_Root_ReturnsNormalizedRoot(string input, string expected)
     {
@@ -214,7 +214,7 @@ public abstract class WorkspacePathNormalizerContractTests
     /// derives /home/x/docs/sessions (not /home/x\docs\sessions).
     /// </summary>
     [Theory]
-    [InlineData(@"C:\Users\kingd", @"C:\Users\kingd\docs\sessions")]
+    [InlineData(@"C:\Users\kingd", "C:/Users/kingd/docs/sessions")]
     [InlineData("/home/sharpninja/github/McpServer", "/home/sharpninja/github/McpServer/docs/sessions")]
     public void Combine_UsesRootPlatformSyntax_OnEitherHost(string root, string expected)
     {
@@ -226,7 +226,7 @@ public abstract class WorkspacePathNormalizerContractTests
     [Fact]
     public void Combine_CollapsesDotSegments()
     {
-        Assert.Equal(@"C:\Users\kingd\b", CreateSut(LinuxHost()).Combine(@"C:\Users\kingd", "a", "..", "b"));
+        Assert.Equal("C:/Users/kingd/b", CreateSut(LinuxHost()).Combine(@"C:\Users\kingd", "a", "..", "b"));
     }
 
     /// <summary>TR-MCP-FED-PATH-001: A rooted segment replaces the root, as Path.Combine does.</summary>

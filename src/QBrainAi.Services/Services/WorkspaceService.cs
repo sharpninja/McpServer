@@ -539,10 +539,7 @@ public sealed class WorkspaceService : IWorkspaceService
             // Resolve relative paths against ContentRoot (not CWD) so the synthesized
             // workspace path matches what token seeding (NormalizeWorkspacePathForToken)
             // stores. In test hosts CWD can diverge from ContentRoot.
-            var absolute = (Path.IsPathRooted(repoRoot)
-                    ? Path.GetFullPath(repoRoot)
-                    : Path.GetFullPath(Path.Combine(_env.ContentRootPath, repoRoot)))
-                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var absolute = ResolveRepoRootWorkspacePath(repoRoot, _env.ContentRootPath, _pathNormalizer);
             if (!configured.Any(w => string.Equals(NormalizePath(w.WorkspacePath), absolute, StringComparison.OrdinalIgnoreCase)))
             {
                 var todoRel = McpInstanceResolver.GetEffectiveMcpValue(_configuration, instanceName: null, "TodoFilePath");
@@ -646,6 +643,20 @@ public sealed class WorkspaceService : IWorkspaceService
     /// </summary>
     private string NormalizePath(string path) =>
         string.IsNullOrWhiteSpace(path) ? string.Empty : _pathNormalizer.Normalize(path);
+
+    /// <summary>
+    /// FR-MCP-PATHNORM-001 (plan P1.4d): canonical path of the implicit RepoRoot workspace. An absolute
+    /// RepoRoot is used as given; a relative one resolves under the content root (not the process
+    /// working directory), so it matches token seeding and configured entries.
+    /// </summary>
+    internal static string ResolveRepoRootWorkspacePath(
+        string repoRoot,
+        string contentRootPath,
+        IWorkspacePathNormalizer normalizer)
+    {
+        ArgumentNullException.ThrowIfNull(normalizer);
+        return normalizer.Combine(contentRootPath, repoRoot.Trim());
+    }
 
     private string? NormalizeOptionalPath(string? path) =>
         string.IsNullOrWhiteSpace(path) ? null : _pathNormalizer.Normalize(path);

@@ -62,7 +62,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
         var all = await probe.Ctx.TodoItems.IgnoreQueryFilters().AsNoTracking().ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, all.Count);
         var wsIds = string.Join("|", all.Select(r => $"[{r.WorkspaceId}]"));
-        Assert.All(all, r => Assert.True(r.WorkspaceId == ws, $"expected [{ws}] got {wsIds}"));
+        Assert.All(all, r => Assert.True(r.WorkspaceId == ExpectedWorkspaceKey.Of(ws), $"expected [{ExpectedWorkspaceKey.Of(ws)}] got {wsIds}"));
         Assert.Contains(all, r => r.Id == "ALPHA-001");
         Assert.Contains(all, r => r.Id == "ALPHA-002");
     }
@@ -154,8 +154,8 @@ public sealed class TodoBootstrapImporterTests : IDisposable
         using var probe = NewReadScope();
         var all = await probe.Ctx.TodoItems.IgnoreQueryFilters().AsNoTracking().ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, all.Count);
-        Assert.Contains(all, r => r.WorkspaceId == bitnetWs && r.Id == sharedId && r.Title == "BitNet-side integration");
-        Assert.Contains(all, r => r.WorkspaceId == truckMateWs && r.Id == sharedId && r.Title == "TruckMate-side integration");
+        Assert.Contains(all, r => r.WorkspaceId == ExpectedWorkspaceKey.Of(bitnetWs) && r.Id == sharedId && r.Title == "BitNet-side integration");
+        Assert.Contains(all, r => r.WorkspaceId == ExpectedWorkspaceKey.Of(truckMateWs) && r.Id == sharedId && r.Title == "TruckMate-side integration");
     }
 
     /// <summary>
@@ -207,7 +207,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
             .ConfigureAwait(true);
         Assert.Contains("Top-level note A", noteRows);
         Assert.Contains("Top-level note B", noteRows);
-        Assert.Equal(ws, meta.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(ws), meta.WorkspaceId);
     }
 
     private string CreateWorkspaceDir(string name)

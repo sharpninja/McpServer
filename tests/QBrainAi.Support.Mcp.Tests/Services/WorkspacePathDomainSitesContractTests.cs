@@ -58,7 +58,7 @@ public abstract class WorkspacePathDomainSitesContractTests
 
         sut.Resolve(context);
 
-        factory.Received(1).CreateForWorkspace(@"C:\Users\kingd\repo", context);
+        factory.Received(1).CreateForWorkspace("C:/Users/kingd/repo", context);
     }
 
     /// <summary><see cref="TodoServiceFactory"/>: workspace and default roots by path syntax.</summary>
@@ -68,7 +68,7 @@ public abstract class WorkspacePathDomainSitesContractTests
         var windows = Normalizer(WindowsHost);
 
         Assert.Equal("/home/sharpninja/github/RideAudit", TodoServiceFactory.NormalizeWorkspaceRoot("/home/sharpninja/github/RideAudit/", windows));
-        Assert.Equal(@"C:\svc", TodoServiceFactory.NormalizeWorkspaceRoot(null, windows));
+        Assert.Equal("C:/svc", TodoServiceFactory.NormalizeWorkspaceRoot(null, windows));
     }
 
     /// <summary><see cref="EfTodoService"/>: fixed workspace path by path syntax; blank stays unset.</summary>
@@ -77,7 +77,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var linux = Normalizer(LinuxHub);
 
-        Assert.Equal(@"C:\Users\kingd\repo", EfTodoService.NormalizeFixedWorkspacePath("C:/Users/kingd/repo", linux));
+        Assert.Equal("C:/Users/kingd/repo", EfTodoService.NormalizeFixedWorkspacePath("C:/Users/kingd/repo", linux));
         Assert.Null(EfTodoService.NormalizeFixedWorkspacePath("  ", linux));
     }
 
@@ -87,7 +87,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var linux = Normalizer(LinuxHub);
 
-        Assert.Equal(@"C:\Users\kingd\repo", TodoExecutionService.NormalizeWorkspacePath("C:/Users/kingd/repo", linux));
+        Assert.Equal("C:/Users/kingd/repo", TodoExecutionService.NormalizeWorkspacePath("C:/Users/kingd/repo", linux));
         Assert.Throws<ArgumentException>(() => TodoExecutionService.NormalizeWorkspacePath(" ", linux));
     }
 
@@ -120,8 +120,8 @@ public abstract class WorkspacePathDomainSitesContractTests
     [Fact]
     public void AgentPool_DeviceId_HashesCanonicalWorkspace()
     {
-        Assert.Equal("agent-pool-codex@cc136810e4f7", AgentPoolService.BuildPooledDeviceId("codex", "C:/Users/kingd/repo", Normalizer(LinuxHub)));
-        Assert.Equal("agent-pool-codex@cc136810e4f7", AgentPoolService.BuildPooledDeviceId("codex", @"C:\Users\kingd\repo", Normalizer(LinuxHub)));
+        Assert.Equal("agent-pool-codex@19080a7b3c66", AgentPoolService.BuildPooledDeviceId("codex", "C:/Users/kingd/repo", Normalizer(LinuxHub)));
+        Assert.Equal("agent-pool-codex@19080a7b3c66", AgentPoolService.BuildPooledDeviceId("codex", @"C:\Users\kingd\repo", Normalizer(LinuxHub)));
         Assert.Equal("agent-pool-codex@d5731a58e39a", AgentPoolService.BuildPooledDeviceId("codex", "/home/sharpninja/github/RideAudit/", Normalizer(WindowsHost)));
     }
 
@@ -133,6 +133,39 @@ public abstract class WorkspacePathDomainSitesContractTests
 
         Assert.Equal("/home/sharpninja/github/RideAudit", FileGitHubWorkspaceTokenStore.NormalizeWorkspacePath("/home/sharpninja/github/RideAudit/", windows));
         Assert.Throws<ArgumentException>(() => FileGitHubWorkspaceTokenStore.NormalizeWorkspacePath("", windows));
+    }
+
+    /// <summary>
+    /// Plan P1.4d: <see cref="ToolRegistryService"/> scopes a tool to the canonical workspace path; a
+    /// Windows workspace on a Linux hub is not resolved against the hub's working directory.
+    /// </summary>
+    [Fact]
+    public void ToolRegistry_LinuxHub_WindowsWorkspacePath()
+    {
+        var linux = Normalizer(LinuxHub);
+
+        Assert.Equal("C:/Users/kingd/repo", ToolRegistryService.NormalizeWorkspacePath(@"C:\Users\kingd\repo\", linux));
+        Assert.Null(ToolRegistryService.NormalizeWorkspacePath("  ", linux));
+    }
+
+    /// <summary>Plan P1.4d: <see cref="AgentService"/> agent-workspace paths use the canonical form.</summary>
+    [Fact]
+    public void AgentWorkspace_LinuxHub_WindowsWorkspacePath()
+    {
+        Assert.Equal("C:/Users/kingd/repo", AgentService.NormalizeWorkspacePath(@"C:\Users\kingd\repo\", Normalizer(LinuxHub)));
+    }
+
+    /// <summary>
+    /// Plan P1.4d: <see cref="WorkspaceService"/> synthesizes the RepoRoot workspace in canonical form
+    /// (absolute as given, relative under the content root), so it matches configured entries.
+    /// </summary>
+    [Fact]
+    public void WorkspaceRepoRoot_WindowsHost_CanonicalPath()
+    {
+        var windows = Normalizer(WindowsHost);
+
+        Assert.Equal("C:/Users/kingd/repo", WorkspaceService.ResolveRepoRootWorkspacePath(@"C:\Users\kingd\repo\", @"C:\svc", windows));
+        Assert.Equal("C:/svc/repo", WorkspaceService.ResolveRepoRootWorkspacePath("repo", @"C:\svc", windows));
     }
 }
 

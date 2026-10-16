@@ -27,7 +27,7 @@ public sealed class RemoveProductMemberCommandHandler(McpDbContext db)
             if (keyError is not null)
                 return Result<ProductDto>.Failure(keyError);
 
-            var target = (command.MemberWorkspaceId ?? string.Empty).Trim();
+            var target = WorkspaceIdentity.CanonicalizeWorkspaceId((command.MemberWorkspaceId ?? string.Empty).Trim());
             if (target.Length == 0)
                 return Result<ProductDto>.Failure(ProductResultCodes.BadRequestMsg("Member workspace id is required."));
 

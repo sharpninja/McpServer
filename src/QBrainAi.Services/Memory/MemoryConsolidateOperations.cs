@@ -18,7 +18,8 @@ public sealed partial class MemoryConsolidateOperations
     public MemoryConsolidateOperations(McpDbContext db, string workspacePath)
     {
         _db = db;
-        _workspacePath = workspacePath;
+        // FR-MCP-PATHNORM-001: stored WorkspaceId values are canonical; filter and lock in the same form.
+        _workspacePath = WorkspaceIdentity.CanonicalizeWorkspaceId(workspacePath);
     }
 
     /// <summary>Plans or applies a consolidate merge for the active workspace.</summary>

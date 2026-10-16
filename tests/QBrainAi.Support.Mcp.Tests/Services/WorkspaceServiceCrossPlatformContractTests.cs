@@ -58,7 +58,7 @@ public abstract class WorkspaceServiceCrossPlatformContractTests
 
         Assert.True(result.Success, result.Error);
         var stored = await db.Workspaces.SingleAsync(w => w.Name == "repo", TestContext.Current.CancellationToken);
-        Assert.Equal(@"C:\Users\kingd\repo", stored.WorkspaceId);
+        Assert.Equal("C:/Users/kingd/repo", stored.WorkspaceId);
     }
 
     /// <summary>

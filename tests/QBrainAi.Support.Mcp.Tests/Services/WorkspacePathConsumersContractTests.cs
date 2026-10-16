@@ -47,7 +47,7 @@ public abstract class WorkspacePathConsumersContractTests
     {
         var linux = Normalizer(LinuxHub);
 
-        Assert.Equal(@"C:\Users\kingd", HandoffWorkspacePaths.Canonicalize(@"C:\Users\kingd", linux));
+        Assert.Equal("C:/Users/kingd", HandoffWorkspacePaths.Canonicalize(@"C:\Users\kingd", linux));
         Assert.Equal("/opt/mcpserver/app/ws", HandoffWorkspacePaths.Canonicalize("ws", linux));
     }
 
@@ -114,7 +114,7 @@ public abstract class WorkspacePathConsumersContractTests
     /// </summary>
     [Theory]
     [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", "/home/sharpninja/github/RideAudit/docs/sessions", "/home/sharpninja/github/RideAudit/docs/external")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", @"C:\Users\kingd\repo\docs\sessions", @"C:\Users\kingd\repo\docs\external")]
+    [InlineData(LinuxHub, @"C:\Users\kingd\repo", "C:/Users/kingd/repo/docs/sessions", "C:/Users/kingd/repo/docs/external")]
     public void DerivedPaths_ForeignWorkspace_UseWorkspaceSyntax(WorkspacePathPlatform host, string root, string sessions, string external)
     {
         var ctx = new WorkspaceContext();

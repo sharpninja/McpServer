@@ -88,7 +88,7 @@ public sealed class WorkspaceServiceGitRemoteTests : IDisposable
                 req != null
                 && req.FileName == "git"
                 && req.Arguments.Contains("config --get remote.origin.url", StringComparison.Ordinal)
-                && req.Arguments.Contains(workspacePath, StringComparison.Ordinal)),
+                && req.Arguments.Contains(ExpectedWorkspaceKey.Of(workspacePath), StringComparison.Ordinal)),
             Arg.Any<CancellationToken>());
     }
 

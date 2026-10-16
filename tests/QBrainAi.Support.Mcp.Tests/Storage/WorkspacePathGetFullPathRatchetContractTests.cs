@@ -31,6 +31,10 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
         "src/QBrainAi.Services/Services/HostileReviewService.cs",
         "src/QBrainAi.Services/Services/AgentPoolService.cs",
         "src/QBrainAi.Services/Services/SessionLogWorkspaceAttributionValidator.cs",
+        // Plan P1.4d: tool scope, agent workspaces and the accessor default route through the normalizer.
+        "src/QBrainAi.Services/Services/ToolRegistryService.cs",
+        "src/QBrainAi.Services/Services/AgentService.cs",
+        "src/QBrainAi.Services/Services/WorkspaceServiceAccessor.cs",
     ];
 
     /// <summary>
@@ -64,7 +68,6 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
         ["src/QBrainAi.Services/Requirements/RequirementsWikiPathSecurity.cs"] = 8,
         ["src/QBrainAi.Services/Services/AgentHelp/AgentHelpPinnedPathResolver.cs"] = 5,
         ["src/QBrainAi.Services/Services/AgentProcessManager.cs"] = 1,
-        ["src/QBrainAi.Services/Services/AgentService.cs"] = 1,
         ["src/QBrainAi.Services/Services/AuditedAgentCliClient.cs"] = 4,
         ["src/QBrainAi.Services/Services/CloneAgentIsolationStrategy.cs"] = 1,
         ["src/QBrainAi.Services/Services/EfTodoService.cs"] = 1,
@@ -79,12 +82,10 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
         ["src/QBrainAi.Services/Services/RepoFileService.cs"] = 2,
         ["src/QBrainAi.Services/Services/TodoBootstrapImporter.cs"] = 6,
         ["src/QBrainAi.Services/Services/TodoYamlFileSerializer.cs"] = 1,
-        ["src/QBrainAi.Services/Services/ToolRegistryService.cs"] = 1,
         ["src/QBrainAi.Services/Services/WikiDumpService.cs"] = 3,
         ["src/QBrainAi.Services/Services/WorkspacePolicyDirectiveParser.cs"] = 3,
         ["src/QBrainAi.Services/Services/WorkspaceProcessManager.cs"] = 1,
-        ["src/QBrainAi.Services/Services/WorkspaceService.cs"] = 4,
-        ["src/QBrainAi.Services/Services/WorkspaceServiceAccessor.cs"] = 1,
+        ["src/QBrainAi.Services/Services/WorkspaceService.cs"] = 2,
         ["src/QBrainAi.Services/Services/WorktreeAgentIsolationStrategy.cs"] = 1,
         ["src/QBrainAi.SessionLog.Transcripts/OpenCodeSqliteUtilities.cs"] = 1,
         ["src/QBrainAi.SessionLog.Transcripts/TranscriptBundleDetector.cs"] = 1,

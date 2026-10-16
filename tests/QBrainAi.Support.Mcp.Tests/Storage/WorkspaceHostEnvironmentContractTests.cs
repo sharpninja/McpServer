@@ -19,7 +19,7 @@ public abstract class WorkspaceHostEnvironmentContractTests
     protected static string NativeSample => OperatingSystem.IsWindows() ? @"C:\svc\.\repo" : "/srv/./repo";
 
     /// <summary>Expected canonical form of <see cref="NativeSample"/>.</summary>
-    protected static string NativeSampleExpected => OperatingSystem.IsWindows() ? @"C:\svc\repo" : "/srv/repo";
+    protected static string NativeSampleExpected => OperatingSystem.IsWindows() ? "C:/svc/repo" : "/srv/repo";
 
     /// <summary>Creates the host environment under test.</summary>
     protected abstract IWorkspaceHostEnvironment CreateHost();

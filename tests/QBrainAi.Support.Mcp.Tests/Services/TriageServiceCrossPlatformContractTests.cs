@@ -54,11 +54,11 @@ public abstract class TriageServiceCrossPlatformContractTests : IDisposable
 
         var result = await sut.SubmitReportAsync(Report("linux-hub-windows-path", windowsWorkspace), TestContext.Current.CancellationToken);
 
-        Assert.Equal(@"C:\Users\kingd", result.WorkspacePath);
-        using var db = CreateDb(@"C:\Users\kingd");
+        Assert.Equal("C:/Users/kingd", result.WorkspacePath);
+        using var db = CreateDb("C:/Users/kingd");
         var report = await db.TriageReports.SingleAsync(TestContext.Current.CancellationToken);
-        Assert.Equal(@"C:\Users\kingd", report.OriginalWorkspacePath);
-        Assert.Equal(@"C:\Users\kingd", report.WorkspaceId);
+        Assert.Equal("C:/Users/kingd", report.OriginalWorkspacePath);
+        Assert.Equal("C:/Users/kingd", report.WorkspaceId);
     }
 
     /// <summary>
@@ -104,8 +104,8 @@ public abstract class TriageServiceCrossPlatformContractTests : IDisposable
         var submitted = await CreateService(@"C:\Users\kingd", linux)
             .SubmitReportAsync(Report("linux-hub-roundtrip", @"C:\Users\kingd"), TestContext.Current.CancellationToken);
 
-        var report = await CreateService(@"C:\Users\kingd", linux).GetReportAsync(submitted.ReportId, TestContext.Current.CancellationToken);
-        var groups = await CreateService(@"C:\Users\kingd", linux).QueryGroupsAsync(
+        var report = await CreateService("C:/Users/kingd", linux).GetReportAsync(submitted.ReportId, TestContext.Current.CancellationToken);
+        var groups = await CreateService("C:/Users/kingd", linux).QueryGroupsAsync(
             workspacePath: "C:/Users/kingd",
             cancellationToken: TestContext.Current.CancellationToken);
 
@@ -137,7 +137,7 @@ public abstract class TriageServiceCrossPlatformContractTests : IDisposable
         Assert.Equal("/home/sharpninja/github/QBrainAi", result.WorkspacePath);
         using var db = CreateDb(hubProduct);
         var report = await db.TriageReports.SingleAsync(TestContext.Current.CancellationToken);
-        Assert.Equal(@"C:\Users\kingd", report.OriginalWorkspacePath);
+        Assert.Equal("C:/Users/kingd", report.OriginalWorkspacePath);
         Assert.Equal("/home/sharpninja/github/QBrainAi", report.EffectiveWorkspacePath);
     }
 

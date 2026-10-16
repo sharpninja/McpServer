@@ -72,7 +72,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Owner, "layer-1", "product"), _ctx);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.Contains(result.Value!.Functional, f => f.Id == "FR-SIB-001" && f.WorkspaceId == Sibling);
+        Assert.Contains(result.Value!.Functional, f => f.Id == "FR-SIB-001" && f.WorkspaceId == ExpectedWorkspaceKey.Of(Sibling));
         Assert.Contains(
             result.Value.Functional,
             f => f.Id == "FR-OWNER-001"
@@ -83,9 +83,9 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
             f => f.Id == "FR-SIB-001"
                  && f.AcceptanceCriteria is not null
                  && f.AcceptanceCriteria.Any(c => c.Id == "ac-sib-1" && c.Text == "Sibling AC must travel with the union"));
-        Assert.Contains(result.Value.Technical, t => t.Id == "TR-SIB-001" && t.WorkspaceId == Sibling);
-        Assert.Contains(result.Value.Testing, t => t.Id == "TEST-SIB-001" && t.WorkspaceId == Sibling);
-        Assert.Contains(result.Value.Mappings, m => m.FrId == "FR-SIB-001" && m.WorkspaceId == Sibling);
+        Assert.Contains(result.Value.Technical, t => t.Id == "TR-SIB-001" && t.WorkspaceId == ExpectedWorkspaceKey.Of(Sibling));
+        Assert.Contains(result.Value.Testing, t => t.Id == "TEST-SIB-001" && t.WorkspaceId == ExpectedWorkspaceKey.Of(Sibling));
+        Assert.Contains(result.Value.Mappings, m => m.FrId == "FR-SIB-001" && m.WorkspaceId == ExpectedWorkspaceKey.Of(Sibling));
         Assert.Contains(result.Value.ProductKeys ?? [], k => k == "PROD-MCPSERVER");
     }
 
@@ -99,7 +99,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Owner, "layer-1", "local"), _ctx);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == Sibling);
+        Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == ExpectedWorkspaceKey.Of(Sibling));
         Assert.Contains(result.Value.Functional, f => f.Id == "FR-OWNER-001");
         Assert.Contains(
             result.Value.Functional,
@@ -136,8 +136,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
         Assert.True(result.IsSuccess, result.Error);
         var collisions = result.Value!.Functional.Where(f => f.Id == "FR-SHARE-001").ToArray();
         Assert.Equal(2, collisions.Length);
-        Assert.Contains(collisions, f => f.WorkspaceId == Owner);
-        Assert.Contains(collisions, f => f.WorkspaceId == Sibling);
+        Assert.Contains(collisions, f => f.WorkspaceId == ExpectedWorkspaceKey.Of(Owner));
+        Assert.Contains(collisions, f => f.WorkspaceId == ExpectedWorkspaceKey.Of(Sibling));
     }
 
     /// <summary>Missing origin layer key excludes the sibling row.</summary>
@@ -168,7 +168,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Sibling, "layer-1", "product"), _ctx);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == Owner);
+        Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == ExpectedWorkspaceKey.Of(Owner));
         Assert.Contains(result.Value.Functional, f => f.Id == "FR-SIB-001");
     }
 
@@ -182,8 +182,8 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Outsider, "layer-1", "product"), _ctx);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == Owner);
-        Assert.DoesNotContain(result.Value.Functional, f => f.WorkspaceId == Sibling);
+        Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == ExpectedWorkspaceKey.Of(Owner));
+        Assert.DoesNotContain(result.Value.Functional, f => f.WorkspaceId == ExpectedWorkspaceKey.Of(Sibling));
         Assert.Contains(result.Value.Functional, f => f.Id == "FR-OUT-001");
     }
 
@@ -203,7 +203,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Owner, "layer-1", "product"), _ctx);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.Contains(result.Value!.Functional, f => f.Id == "FR-SIB-001" && f.WorkspaceId == Sibling);
+        Assert.Contains(result.Value!.Functional, f => f.Id == "FR-SIB-001" && f.WorkspaceId == ExpectedWorkspaceKey.Of(Sibling));
     }
 
     /// <summary>Zero-product workspace stays local-only even with productScope=product.</summary>
@@ -215,7 +215,7 @@ public sealed class GetProductEffectiveRequirementsQueryHandlerTests : IDisposab
             .HandleAsync(new GetProductEffectiveRequirementsQuery(Outsider, "layer-1", "product"), _ctx);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == Owner);
+        Assert.DoesNotContain(result.Value!.Functional, f => f.WorkspaceId == ExpectedWorkspaceKey.Of(Owner));
         Assert.Contains(result.Value.Functional, f => f.Id == "FR-OUT-001");
     }
 

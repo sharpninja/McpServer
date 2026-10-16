@@ -58,7 +58,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         var result = await CreateService().ValidateAsync(new WorkspaceValidationRequest(), TestContext.Current.CancellationToken);
         Assert.True(result.Success);
         Assert.Equal(WorkspaceValidationRuleRegistry.Version, result.RuleRegistryVersion);
-        Assert.Equal(_workspace, result.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(_workspace), result.WorkspaceId);
         Assert.Equal(48, result.StaleTurnThresholdHours);
         Assert.NotEqual(default, result.RunUtc);
         Assert.NotNull(result.Findings);

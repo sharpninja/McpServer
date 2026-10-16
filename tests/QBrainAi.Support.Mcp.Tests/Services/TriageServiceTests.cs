@@ -244,11 +244,11 @@ public sealed class TriageServiceTests : IDisposable
             AffectedPaths = [UnitTestPaths.Combine("mcpserver-codex-plugin", "lib", "repl-invoke.sh")],
         }, cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.Equal(QBrainAiWorkspace, result.WorkspacePath);
+        Assert.Equal(ExpectedWorkspaceKey.Of(QBrainAiWorkspace), result.WorkspacePath);
         using var db = CreateDb(QBrainAiWorkspace);
         var report = await db.TriageReports.SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
-        Assert.Equal(QBrainAiWorkspace, report.WorkspaceId);
-        Assert.Equal(PrimaryWorkspace, report.OriginalWorkspacePath);
+        Assert.Equal(ExpectedWorkspaceKey.Of(QBrainAiWorkspace), report.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(PrimaryWorkspace), report.OriginalWorkspacePath);
     }
 
     /// <summary>
@@ -269,7 +269,7 @@ public sealed class TriageServiceTests : IDisposable
             Component = "mcpserver-grok-plugin",
         }, cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.Equal(PrimaryWorkspace, result.WorkspacePath);
+        Assert.Equal(ExpectedWorkspaceKey.Of(PrimaryWorkspace), result.WorkspacePath);
         using var db = CreateDb(PrimaryWorkspace);
         Assert.Equal(1, await db.TriageReports.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
@@ -317,7 +317,7 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Contains("pwsh.exe", researchRequest.Prompt, StringComparison.Ordinal);
         Assert.Contains("Do not hard-code", researchRequest.Prompt, StringComparison.Ordinal);
         Assert.Contains(submit.GroupId, researchRequest.GroupJson, StringComparison.Ordinal);
-        Assert.Equal(PrimaryWorkspace, researchRequest.WorkspacePath);
+        Assert.Equal(ExpectedWorkspaceKey.Of(PrimaryWorkspace), researchRequest.WorkspacePath);
         await todo.Received(1).CreateAsync(
             Arg.Is<TodoCreateRequest>(request =>
                 request != null &&
@@ -756,7 +756,7 @@ public sealed class TriageServiceTests : IDisposable
 
         Assert.Equal(1, processed.ProcessedGroups);
         Assert.NotNull(researchRequest);
-        Assert.Equal(PrimaryWorkspace, researchRequest.WorkspacePath);
+        Assert.Equal(ExpectedWorkspaceKey.Of(PrimaryWorkspace), researchRequest.WorkspacePath);
         await todo.Received(1).CreateAsync(
             Arg.Is<TodoCreateRequest>(request =>
                 request != null &&

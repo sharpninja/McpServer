@@ -16,38 +16,40 @@ internal sealed class ScriptedWorkspacePathNormalizer : IWorkspacePathNormalizer
     private static readonly Row[] Rows =
     [
         // Simulated Linux hub (cwd /opt/mcpserver/app).
-        new(Posix, @"C:\Users\kingd", Win, @"C:\Users\kingd", "kingd", false),
-        new(Posix, "C:/Users/kingd", Win, @"C:\Users\kingd", "kingd", false),
-        new(Posix, @"C:\Users/kingd\", Win, @"C:\Users\kingd", "kingd", false),
-        new(Posix, "C:/Users/kingd/", Win, @"C:\Users\kingd", "kingd", false),
-        new(Posix, @"\\srv\share\x", Win, @"\\srv\share\x", "x", false),
-        new(Posix, "//srv/share/x", Win, @"\\srv\share\x", "x", false),
-        new(Posix, @"\\srv\share\repo", Win, @"\\srv\share\repo", "repo", false),
-        new(Posix, @"C:\Users/kingd\\repo/.\y\..\x", Win, @"C:\Users\kingd\repo\x", "x", false),
+        new(Posix, @"C:\Users\kingd", Win, "C:/Users/kingd", "kingd", false),
+        new(Posix, "C:/Users/kingd", Win, "C:/Users/kingd", "kingd", false),
+        new(Posix, @"C:\Users/kingd\", Win, "C:/Users/kingd", "kingd", false),
+        new(Posix, "C:/Users/kingd/", Win, "C:/Users/kingd", "kingd", false),
+        new(Posix, @"\\srv\share\x", Win, "//srv/share/x", "x", false),
+        new(Posix, "//srv/share/x", Win, "//srv/share/x", "x", false),
+        new(Posix, @"\\srv\share\repo", Win, "//srv/share/repo", "repo", false),
+        new(Posix, @"C:\Users/kingd\\repo/.\y\..\x", Win, "C:/Users/kingd/repo/x", "x", false),
         new(Posix, "/home/sharpninja/github/McpServer", Posix, "/home/sharpninja/github/McpServer", "McpServer", true),
         new(Posix, "relative/x", Posix, "/opt/mcpserver/app/relative/x", "x", true),
         new(Posix, "relative", Posix, "/opt/mcpserver/app/relative", "relative", true),
         new(Posix, "/home/x", Posix, "/home/x", "x", true),
-        new(Posix, @"C:\", Win, @"C:\", @"C:\", false),
+        new(Posix, @"C:\", Win, "C:/", "C:/", false),
         new(Posix, "/", Posix, "/", "/", true),
         // Consumer fixtures (TriageService).
         new(Posix, "workspaces/rel", Posix, "/opt/mcpserver/app/workspaces/rel", "rel", true),
         new(Posix, "/home/sharpninja/github/QBrainAi", Posix, "/home/sharpninja/github/QBrainAi", "QBrainAi", true),
         // Consumer fixtures (WorkspaceService, HandoffWorkspacePaths, attribution validator, WorkspaceContext).
-        new(Posix, @"C:\Users\kingd\repo", Win, @"C:\Users\kingd\repo", "repo", false),
+        new(Posix, @"C:\Users\kingd\repo", Win, "C:/Users/kingd/repo", "repo", false),
         new(Posix, "ws", Posix, "/opt/mcpserver/app/ws", "ws", true),
         // Domain-site fixtures (R4: todo resolver/factory, EF todo, execution, agent pool).
-        new(Posix, "C:/Users/kingd/repo", Win, @"C:\Users\kingd\repo", "repo", false),
+        new(Posix, "C:/Users/kingd/repo", Win, "C:/Users/kingd/repo", "repo", false),
         new(Posix, "/home/sharpninja/github/McpServer/", Posix, "/home/sharpninja/github/McpServer", "McpServer", true),
+        // Domain-site fixtures (P1.4d: tool registry, agent workspaces).
+        new(Posix, @"C:\Users\kingd\repo\", Win, "C:/Users/kingd/repo", "repo", false),
 
         // Simulated Windows host (cwd C:\svc).
         new(Win, "/home/sharpninja/github/McpServer", Posix, "/home/sharpninja/github/McpServer", "McpServer", false),
         new(Win, "/home/x", Posix, "/home/x", "x", false),
-        new(Win, @"C:\Users\kingd", Win, @"C:\Users\kingd", "kingd", true),
-        new(Win, "C:/Users/kingd/", Win, @"C:\Users\kingd", "kingd", true),
-        new(Win, "relative", Win, @"C:\svc\relative", "relative", true),
-        new(Win, @"\\srv\share\repo", Win, @"\\srv\share\repo", "repo", true),
-        new(Win, "//srv/share/x", Win, @"\\srv\share\x", "x", true),
+        new(Win, @"C:\Users\kingd", Win, "C:/Users/kingd", "kingd", true),
+        new(Win, "C:/Users/kingd/", Win, "C:/Users/kingd", "kingd", true),
+        new(Win, "relative", Win, "C:/svc/relative", "relative", true),
+        new(Win, @"\\srv\share\repo", Win, "//srv/share/repo", "repo", true),
+        new(Win, "//srv/share/x", Win, "//srv/share/x", "x", true),
         // Consumer fixtures (TriageService).
         new(Win, "/home/sharpninja/github/RideAudit", Posix, "/home/sharpninja/github/RideAudit", "RideAudit", false),
         // Consumer fixtures (WorkspaceService, WorkspaceTokenService, RepoFileService).
@@ -57,36 +59,40 @@ internal sealed class ScriptedWorkspacePathNormalizer : IWorkspacePathNormalizer
         new(Win, "/home/sharpninja/github/McpServer/", Posix, "/home/sharpninja/github/McpServer", "McpServer", false),
         new(Win, "/__mcp_unit_test__repo", Posix, "/__mcp_unit_test__repo", "__mcp_unit_test__repo", false),
         // Domain-site fixtures (R4: factory default root, hostile review, requirements, token store).
-        new(Win, ".", Win, @"C:\svc", "svc", true),
+        new(Win, ".", Win, "C:/svc", "svc", true),
         new(Win, "/home/sharpninja/github/RideAuditOther", Posix, "/home/sharpninja/github/RideAuditOther", "RideAuditOther", false),
     ];
 
     private static readonly CombineRow[] CombineRows =
     [
-        new(@"C:\Users\kingd", ["docs", "sessions"], @"C:\Users\kingd\docs\sessions"),
+        new(@"C:\Users\kingd", ["docs", "sessions"], "C:/Users/kingd/docs/sessions"),
         new("/home/sharpninja/github/McpServer", ["docs", "sessions"], "/home/sharpninja/github/McpServer/docs/sessions"),
-        new(@"C:\Users\kingd", ["a", "..", "b"], @"C:\Users\kingd\b"),
+        new(@"C:\Users\kingd", ["a", "..", "b"], "C:/Users/kingd/b"),
         new(@"C:\Users\kingd", ["/srv/other"], "/srv/other"),
 
         // Consumer fixtures: WorkspaceContext / middleware derived paths.
         new("/home/sharpninja/github/RideAudit", ["docs", "sessions"], "/home/sharpninja/github/RideAudit/docs/sessions"),
         new("/home/sharpninja/github/RideAudit", ["docs", "external"], "/home/sharpninja/github/RideAudit/docs/external"),
-        new(@"C:\Users\kingd\repo", ["docs", "sessions"], @"C:\Users\kingd\repo\docs\sessions"),
-        new(@"C:\Users\kingd\repo", ["docs", "external"], @"C:\Users\kingd\repo\docs\external"),
+        new(@"C:\Users\kingd\repo", ["docs", "sessions"], "C:/Users/kingd/repo/docs/sessions"),
+        new(@"C:\Users\kingd\repo", ["docs", "external"], "C:/Users/kingd/repo/docs/external"),
 
         // Consumer fixtures: attribution validator (POSIX root on a Windows host).
         new("/home/sharpninja/github/RideAudit", ["docs/readme.md"], "/home/sharpninja/github/RideAudit/docs/readme.md"),
         new("/home/sharpninja/github/RideAudit", ["src/../src/b.cs"], "/home/sharpninja/github/RideAudit/src/b.cs"),
         new("/home/sharpninja/github/RideAudit", ["/home/sharpninja/github/RideAudit/src/a.cs"], "/home/sharpninja/github/RideAudit/src/a.cs"),
-        new("/home/sharpninja/github/RideAudit", [@"C:\home\sharpninja\github\RideAudit\src\a.cs"], @"C:\home\sharpninja\github\RideAudit\src\a.cs"),
+        new("/home/sharpninja/github/RideAudit", [@"C:\home\sharpninja\github\RideAudit\src\a.cs"], "C:/home/sharpninja/github/RideAudit/src/a.cs"),
         new("/home/sharpninja/github/RideAudit", ["/home/sharpninja/github/RideAuditOther/a.cs"], "/home/sharpninja/github/RideAuditOther/a.cs"),
 
         // Consumer fixtures: attribution validator (Windows root on a Linux hub).
-        new(@"C:\Users\kingd\repo", ["docs/readme.md"], @"C:\Users\kingd\repo\docs\readme.md"),
-        new(@"C:\Users\kingd\repo", ["src/../src/b.cs"], @"C:\Users\kingd\repo\src\b.cs"),
-        new(@"C:\Users\kingd\repo", ["C:/Users/kingd/repo/src/a.cs"], @"C:\Users\kingd\repo\src\a.cs"),
-        new(@"C:\Users\kingd\repo", [@"/opt/mcpserver/app/C:\Users\kingd\repo/src/a.cs"], @"/opt/mcpserver/app/C:\Users\kingd\repo/src/a.cs"),
-        new(@"C:\Users\kingd\repo", [@"C:\Users\kingd\repoOther\a.cs"], @"C:\Users\kingd\repoOther\a.cs"),
+        new("C:/Users/kingd/repo", ["docs/readme.md"], "C:/Users/kingd/repo/docs/readme.md"),
+        new("C:/Users/kingd/repo", ["src/../src/b.cs"], "C:/Users/kingd/repo/src/b.cs"),
+        new("C:/Users/kingd/repo", ["C:/Users/kingd/repo/src/a.cs"], "C:/Users/kingd/repo/src/a.cs"),
+        new("C:/Users/kingd/repo", [@"/opt/mcpserver/app/C:\Users\kingd\repo/src/a.cs"], @"/opt/mcpserver/app/C:\Users\kingd\repo/src/a.cs"),
+        new("C:/Users/kingd/repo", [@"C:\Users\kingd\repoOther\a.cs"], "C:/Users/kingd/repoOther/a.cs"),
+
+        // Domain-site fixtures (P1.4d: WorkspaceService relative RepoRoot under the content root).
+        new(@"C:\svc", ["repo"], "C:/svc/repo"),
+        new(@"C:\svc", [@"C:\Users\kingd\repo\"], "C:/Users/kingd/repo"),
     ];
 
     private readonly IWorkspaceHostEnvironment _host;

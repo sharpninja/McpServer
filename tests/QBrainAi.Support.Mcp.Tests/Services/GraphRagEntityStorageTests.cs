@@ -82,7 +82,7 @@ public sealed class GraphRagEntityStorageTests : IDisposable
         await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stored = await _db.GraphEntities.FirstAsync(e => e.Id == entity.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(WorkspaceA, stored.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspaceA), stored.WorkspaceId);
     }
 
     /// <summary>

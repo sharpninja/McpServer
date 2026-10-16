@@ -25,8 +25,8 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
             _fx.CallContext);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.Contains(ProductHandlerTestContext.Member, result.Value!.MemberWorkspaceIds);
-        Assert.Contains(ProductHandlerTestContext.Owner, result.Value.MemberWorkspaceIds);
+        Assert.Contains(ExpectedWorkspaceKey.Of(ProductHandlerTestContext.Member), result.Value!.MemberWorkspaceIds);
+        Assert.Contains(ExpectedWorkspaceKey.Of(ProductHandlerTestContext.Owner), result.Value.MemberWorkspaceIds);
     }
 
     /// <summary>Unknown workspace ids are rejected.</summary>
@@ -70,8 +70,8 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
             _fx.CallContext);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.DoesNotContain(ProductHandlerTestContext.Member, result.Value!.MemberWorkspaceIds);
-        Assert.Contains(ProductHandlerTestContext.Owner, result.Value.MemberWorkspaceIds);
+        Assert.DoesNotContain(ExpectedWorkspaceKey.Of(ProductHandlerTestContext.Member), result.Value!.MemberWorkspaceIds);
+        Assert.Contains(ExpectedWorkspaceKey.Of(ProductHandlerTestContext.Owner), result.Value.MemberWorkspaceIds);
     }
 
     /// <summary>A member may leave itself.</summary>
@@ -86,7 +86,7 @@ public sealed class AddProductMemberCommandHandlerTests : IDisposable
             _fx.CallContext);
 
         Assert.True(result.IsSuccess, result.Error);
-        Assert.DoesNotContain(ProductHandlerTestContext.Member, result.Value!.MemberWorkspaceIds);
+        Assert.DoesNotContain(ExpectedWorkspaceKey.Of(ProductHandlerTestContext.Member), result.Value!.MemberWorkspaceIds);
     }
 
     /// <summary>A member cannot remove another workspace.</summary>

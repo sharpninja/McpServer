@@ -808,7 +808,7 @@ public sealed class SessionLogServiceTests : IDisposable
             .IgnoreQueryFilters()
             .FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        Assert.Equal(WorkspacePath, stored.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), stored.WorkspaceId);
     }
 
     /// <summary>
@@ -841,25 +841,25 @@ public sealed class SessionLogServiceTests : IDisposable
         var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var turn = await _db.SessionLogTurns.IgnoreQueryFilters().FirstAsync(t => t.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(WorkspacePath, turn.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), turn.WorkspaceId);
 
         var action = await _db.SessionLogActions.IgnoreQueryFilters().FirstAsync(a => a.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(WorkspacePath, action.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), action.WorkspaceId);
 
         var tag = await _db.SessionLogTurnTags.IgnoreQueryFilters().FirstAsync(t => t.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(WorkspacePath, tag.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), tag.WorkspaceId);
 
         var context = await _db.SessionLogTurnContexts.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(WorkspacePath, context.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), context.WorkspaceId);
 
         var dialog = await _db.SessionLogProcessingDialogs.IgnoreQueryFilters().FirstAsync(d => d.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(WorkspacePath, dialog.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), dialog.WorkspaceId);
 
         var commit = await _db.SessionLogCommits.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(WorkspacePath, commit.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), commit.WorkspaceId);
 
         var stringList = await _db.SessionLogTurnStringLists.IgnoreQueryFilters().FirstAsync(s => s.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(WorkspacePath, stringList.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), stringList.WorkspaceId);
     }
 
     /// <summary>
@@ -915,20 +915,20 @@ public sealed class SessionLogServiceTests : IDisposable
 
         var item = Assert.Single(query.Items);
         Assert.Equal(sessionId, item.SessionId);
-        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), db.CurrentWorkspaceId);
 
         db.OverrideWorkspaceId(string.Empty);
         var fetched = await sut.GetAsync("Codex", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(fetched);
         Assert.Equal(sessionId, fetched!.SessionId);
-        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), db.CurrentWorkspaceId);
 
         db.OverrideWorkspaceId(string.Empty);
         var unchanged = await sut.IsUnchangedAsync("Codex", sessionId, "hash-stale-query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(unchanged);
-        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), db.CurrentWorkspaceId);
     }
 
     /// <summary>
@@ -974,7 +974,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, turn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(turnId > 0);
-        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), db.CurrentWorkspaceId);
 
         db.OverrideWorkspaceId(string.Empty);
         var dialogCount = await sut.AppendProcessingDialogAsync(
@@ -985,7 +985,7 @@ public sealed class SessionLogServiceTests : IDisposable
             .ConfigureAwait(true);
 
         Assert.Equal(1, dialogCount);
-        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), db.CurrentWorkspaceId);
     }
 
     /// <summary>
@@ -1573,7 +1573,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 .Select(d => d.SessionLogTurn!.SessionLog!.WorkspaceId)
                 .ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var owner = Assert.Single(dialogOwners);
-            Assert.Equal(WorkspacePath, owner);
+            Assert.Equal(ExpectedWorkspaceKey.Of(WorkspacePath), owner);
         }
     }
 
@@ -1783,14 +1783,14 @@ public sealed class SessionLogServiceTests : IDisposable
         EnsureWorkspaceRow(connection, DriftedWorkspacePath);
         ExecuteSql(connection,
             $"UPDATE SessionLogTurns SET WorkspaceId = @ws WHERE SessionLogId IN (SELECT Id FROM SessionLogs WHERE SessionId = @sid)",
-            ("@ws", DriftedWorkspacePath), ("@sid", sessionId));
+            ("@ws", ExpectedWorkspaceKey.Of(DriftedWorkspacePath)), ("@sid", sessionId));
         if (driftGrandchildren)
         {
             foreach (var table in new[] { "SessionLogCommits", "SessionLogTurnStringLists", "SessionLogActions", "SessionLogTurnTags" })
             {
                 ExecuteSql(connection,
                     $"UPDATE {table} SET WorkspaceId = @ws WHERE SessionLogTurnId IN (SELECT t.Id FROM SessionLogTurns t JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = @sid)",
-                    ("@ws", DriftedWorkspacePath), ("@sid", sessionId));
+                    ("@ws", ExpectedWorkspaceKey.Of(DriftedWorkspacePath)), ("@sid", sessionId));
             }
         }
     }

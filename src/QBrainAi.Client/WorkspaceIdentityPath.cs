@@ -618,7 +618,7 @@ public static class WorkspaceIdentityPath
         string lexicalPath,
         CancellationToken cancellationToken)
     {
-        var existingAncestor = lexicalPath;
+        var existingAncestor = ToNativePath(lexicalPath, WorkspacePathPlatform.Windows);
         var suffix = new Stack<string>();
         for (var depth = 0; depth < MaxAncestorDepth; depth++)
         {
@@ -691,7 +691,7 @@ public static class WorkspaceIdentityPath
             }
 
             suffix.Push(segment);
-            existingAncestor = NormalizeWindowsLexicalPath(parent);
+            existingAncestor = ToNativePath(NormalizeWindowsLexicalPath(parent), WorkspacePathPlatform.Windows);
         }
 
         throw new IOException(
@@ -909,7 +909,8 @@ public static class WorkspaceIdentityPath
         if (string.Equals(normalizedRoot, normalizedCandidate, comparison))
             return true;
 
-        var separator = platform == WorkspacePathPlatform.Windows ? (char)92 : '/';
+        // TR-MCP-PATHNORM-001: normalized Windows paths use '/' like POSIX paths.
+        const char separator = '/';
         var rootWithSeparator = normalizedRoot.EndsWith(separator)
             ? normalizedRoot
             : normalizedRoot + separator;
@@ -981,6 +982,8 @@ public static class WorkspaceIdentityPath
     /// <summary>Identifies UNC/device paths whose native open depends on remote I/O.</summary>
     private static bool IsRemoteWindowsPath(string path)
     {
+        // TR-MCP-PATHNORM-001: //server/share is the canonical UNC spelling; treat both spellings alike.
+        path = path.Replace('/', (char)92);
         const string deviceUncPrefix = @"\\?\UNC\";
         const string devicePrefix = @"\\?\";
         if (path.StartsWith(deviceUncPrefix, StringComparison.OrdinalIgnoreCase))
@@ -990,17 +993,59 @@ public static class WorkspaceIdentityPath
                !path.StartsWith(devicePrefix, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// FR-MCP-PATHNORM-001 / TR-MCP-PATHNORM-001: canonical Windows lexical form uses '/' (drive
+    /// C:/x, UNC //server/share/x). Win32 device prefixes are stripped to the drive or UNC form. The
+    /// root parser works on backslashes internally; only the emitted form changes. Values with no drive,
+    /// UNC or root (opaque identifiers, relative values) keep the backslash form.
+    /// </summary>
     private static string NormalizeWindowsLexicalPath(string path)
     {
-        var normalized = path.Replace('/', (char)92);
+        var normalized = StripWindowsDevicePrefix(path.Replace('/', (char)92));
         var root = GetWindowsRoot(normalized, out var remainder);
         var segments = CollapseSegments(
             remainder.Split((char)92, StringSplitOptions.RemoveEmptyEntries),
             rooted: root.Length > 0);
-        if (segments.Count == 0)
-            return root.Length > 0 ? root : ".";
+        var backslashForm = segments.Count == 0
+            ? (root.Length > 0 ? root : ".")
+            : root + string.Join((char)92, segments);
+        return root.Length > 0 ? backslashForm.Replace((char)92, '/') : backslashForm;
+    }
 
-        return root + string.Join((char)92, segments);
+    /// <summary>Strips \\?\X: and \\?\UNC\ device prefixes to the drive or \\server form.</summary>
+    private static string StripWindowsDevicePrefix(string backslashPath)
+    {
+        const string deviceUncPrefix = @"\\?\UNC\";
+        const string devicePrefix = @"\\?\";
+        if (backslashPath.StartsWith(deviceUncPrefix, StringComparison.OrdinalIgnoreCase))
+            return @"\\" + backslashPath[deviceUncPrefix.Length..];
+
+        if (backslashPath.StartsWith(devicePrefix, StringComparison.OrdinalIgnoreCase) &&
+            backslashPath.Length >= devicePrefix.Length + 2 &&
+            char.IsAsciiLetter(backslashPath[devicePrefix.Length]) &&
+            backslashPath[devicePrefix.Length + 1] == ':')
+        {
+            return backslashPath[devicePrefix.Length..];
+        }
+
+        return backslashPath;
+    }
+
+    /// <summary>
+    /// TR-MCP-PATHNORM-001 (plan P1.4c): native spelling of a canonical path for host APIs that do not
+    /// accept '/' (Win32 device and long-path forms, cmd.exe built-ins). On a Windows host a
+    /// Windows-platform path switches to backslashes; POSIX-platform paths and non-Windows hosts are
+    /// returned unchanged.
+    /// </summary>
+    /// <param name="path">Canonical (or already native) path.</param>
+    /// <param name="platform">Platform the path belongs to.</param>
+    /// <returns>The host-native spelling.</returns>
+    public static string ToNativePath(string path, WorkspacePathPlatform platform)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        return OperatingSystem.IsWindows() && platform == WorkspacePathPlatform.Windows
+            ? path.Replace('/', (char)92)
+            : path;
     }
 
     private static string NormalizeCaseSensitiveLexicalPath(string path)
@@ -1120,6 +1165,13 @@ public static class WorkspaceIdentityPath
 
     private static string NormalizeLocalAdministrativeShareAlias(string path)
     {
+        // TR-MCP-PATHNORM-001: accept //host/C$ as well as \\host\C$.
+        if (path.StartsWith("//", StringComparison.Ordinal))
+        {
+            var aliased = NormalizeLocalAdministrativeShareAlias(path.Replace('/', (char)92));
+            return aliased.StartsWith(@"\\", StringComparison.Ordinal) ? path : aliased;
+        }
+
         if (path.Length < 2 ||
             path[0] != (char)92 ||
             path[1] != (char)92 ||
