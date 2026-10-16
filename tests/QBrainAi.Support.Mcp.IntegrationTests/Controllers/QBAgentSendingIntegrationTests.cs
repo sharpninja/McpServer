@@ -81,7 +81,9 @@ public sealed class QBAgentSendingIntegrationTests
             """
             {"tool_calls":[{"name":"write_file","arguments":{"path":"examples/hello.cpp","content":"#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}\n"}}]}
             """,
-            "QBAgent action complete: wrote examples/hello.cpp with the Hello World C++ program and can compile it with g++ examples/hello.cpp -o hello.");
+            // triage-report-76cc478c (PLAN-SESSIONTRIAGEFIX-001 B10, operator decision 2026-10-15 "Fix all 31"): the final answer is an arbiter final
+            // envelope, as its siblings use since B5; a non-envelope reply loops when tools are offered.
+            "{\"intent\":\"final\",\"content\":\"QBAgent action complete: wrote examples/hello.cpp with the Hello World C++ program and can compile it with g++ examples/hello.cpp -o hello.\"}");
         using var factory = BuildFactory(
             orchestration,
             new RecordingExecutor(),
@@ -114,9 +116,7 @@ public sealed class QBAgentSendingIntegrationTests
         Assert.Contains("int main", writtenContent, StringComparison.Ordinal);
         Assert.Contains("std::cout", writtenContent, StringComparison.Ordinal);
         Assert.Equal(2, orchestration.Calls);
-        Assert.Contains(orchestration.Inputs, input => input.Contains("tool:", StringComparison.OrdinalIgnoreCase)
-            && input.Contains("examples/hello.cpp", StringComparison.OrdinalIgnoreCase)
-            && input.Contains("written", StringComparison.OrdinalIgnoreCase));
+        Assert.Contains(orchestration.Inputs, IsWriteFileResultInput);
         Assert.Contains("wrote examples/hello.cpp", text, StringComparison.Ordinal);
         Assert.Contains("g++ examples/hello.cpp -o hello", text, StringComparison.Ordinal);
 
@@ -136,6 +136,31 @@ public sealed class QBAgentSendingIntegrationTests
         Assert.Contains("\"model\":\"QuadBrain\"", transcript, StringComparison.Ordinal);
         Assert.Contains("\"endpoint\":\"QBrainAi /v1/chat/completions\"", transcript, StringComparison.Ordinal);
     }
+
+    /// <summary>
+    /// TEST-MCP-QBAGENTINT-001 mock gate (PLAN-SESSIONTRIAGEFIX-001 B10, triage-report-76cc478c; operator decision 2026-10-15 "Accept either
+    /// prefix"): the write_file result predicate accepts a second orchestration input whose tool message is untagged ("tool:") or id-tagged
+    /// ("tool [call_0]:") and names examples/hello.cpp and written, and rejects the first-round prompt, an input without a tool message, a
+    /// result for another path and a result without written. Data: hand-built orchestration inputs; no server.
+    /// </summary>
+    [Fact]
+    public void WriteFileResultInputPredicate_AcceptsEitherToolPrefixAndRejectsMissingParts()
+    {
+        const string request = "user: Create Hello World in C++\nassistant: write_file {\"path\":\"examples/hello.cpp\"}\n";
+        Assert.True(IsWriteFileResultInput(request + "tool [call_0]: {\"path\":\"examples/hello.cpp\",\"written\":true}"));
+        Assert.True(IsWriteFileResultInput(request + "tool: {\"path\":\"examples/hello.cpp\",\"written\":true}"));
+        Assert.False(IsWriteFileResultInput("user: Create Hello World in C++\n\nAvailable tools. To call one, respond with ONLY a JSON object of the form\n- write_file: Create or overwrite a workspace file with the full given content."));
+        Assert.False(IsWriteFileResultInput(request + "result: {\"path\":\"examples/hello.cpp\",\"written\":true}"));
+        Assert.False(IsWriteFileResultInput("user: Create Hello World in C++\nassistant: write_file {\"path\":\"src/other.cpp\"}\ntool [call_0]: {\"path\":\"src/other.cpp\",\"written\":true}"));
+        Assert.False(IsWriteFileResultInput(request + "tool [call_0]: {\"path\":\"examples/hello.cpp\",\"ok\":true}"));
+    }
+
+    // triage-report-76cc478c (PLAN-SESSIONTRIAGEFIX-001 B10, operator decision 2026-10-15 "Accept either prefix"): the second orchestration
+    // input carries the write_file result, whose tool message the prompt names "tool:" or, since 55fae924, "tool [<tool_call_id>]:".
+    private static bool IsWriteFileResultInput(string input)
+        => (input.Contains("tool:", StringComparison.OrdinalIgnoreCase) || input.Contains("tool [", StringComparison.OrdinalIgnoreCase))
+            && input.Contains("examples/hello.cpp", StringComparison.OrdinalIgnoreCase)
+            && input.Contains("written", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// TEST-MCP-QBAGENTINT-002: A failed required external tool must stop the agent from fabricating completion.

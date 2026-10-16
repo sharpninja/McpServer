@@ -250,15 +250,44 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
         using (var scope = factory.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            var docs = await db.Documents.IgnoreQueryFilters().Where(d => d.SourceType == "external-web" && d.SourceKey == "https://example.com/docs").ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-            Assert.Single(docs);
-            Assert.Equal("HASH-2", docs[0].ContentHash);
+            // TR-MCP-INGEST-003 AC-001 (PLAN-SESSIONTRIAGEFIX-001 B14, triage-report-61ef731c): the upsert soft-deletes an earlier version of the
+            // source (McpDbContext.ApplySoftDeletes, FR-MCP-105), so only live rows of this host's workspace count.
+            var workspaceId = _factory.WorkspacePath;
+            var rows = await db.Documents.IgnoreQueryFilters()
+                .Where(d => d.WorkspaceId == workspaceId && d.SourceType == "external-web" && d.SourceKey == "https://example.com/docs")
+                .Select(d => new { IsDeleted = EF.Property<bool>(d, "IsDeleted"), d.ContentHash })
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            AssertOneLiveDocument(rows.Select(r => (r.IsDeleted, r.ContentHash)).ToList(), "HASH-2");
         }
 
         var sourcesResponse = await client.GetAsync(new Uri("/qbrainai/context/sources", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         sourcesResponse.EnsureSuccessStatusCode();
         var sourcesJson = await sourcesResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("https://example.com/docs", sourcesJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TR-MCP-INGEST-003 AC-001 mock gate (FR-MCP-065, FR-MCP-105; PLAN-SESSIONTRIAGEFIX-001 B14, triage-report-61ef731c): the live-document
+    /// assertion accepts rows where exactly one document for the source key is live and carries the expected hash while earlier versions are
+    /// soft-deleted, and rejects two live documents, no live document, and a live document with an older hash. Data: hand-built
+    /// (IsDeleted, ContentHash) rows; no host.
+    /// </summary>
+    [Fact]
+    public void LiveDocumentAssertion_AcceptsOneLiveAmongSoftDeletedAndRejectsTwoLiveOrNone()
+    {
+        AssertOneLiveDocument([(true, "HASH-1"), (false, "HASH-2")], "HASH-2");
+        AssertOneLiveDocument([(false, "HASH-2")], "HASH-2");
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertOneLiveDocument([(false, "HASH-1"), (false, "HASH-2")], "HASH-2"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertOneLiveDocument([(true, "HASH-1"), (true, "HASH-2")], "HASH-2"));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertOneLiveDocument([(true, "HASH-2"), (false, "HASH-1")], "HASH-2"));
+    }
+
+    // TR-MCP-INGEST-003 AC-001: one live document per source key in the workspace, with the newest content hash; earlier versions stay as
+    // soft-deleted rows (McpDbContext.ApplySoftDeletes), so they are counted out rather than expected to be gone.
+    private static void AssertOneLiveDocument(IReadOnlyList<(bool IsDeleted, string ContentHash)> rows, string expectedHash)
+    {
+        var live = Assert.Single(rows, row => !row.IsDeleted);
+        Assert.Equal(expectedHash, live.ContentHash);
     }
 
     [Fact]
