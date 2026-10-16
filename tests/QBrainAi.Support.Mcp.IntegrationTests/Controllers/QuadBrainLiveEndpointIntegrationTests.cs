@@ -30,7 +30,8 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
     [Fact]
     public async Task ChatCompletions_RealOrchestration_ReturnsArbiterContent()
     {
-        // triage-report-76cc478c (with B5): the Arbiter answers with a final envelope; a non-envelope reply loops when tools are offered.
+        // triage-report-76cc478c (with B5): the Arbiter answers with a final envelope. This request offers no tools and no tool_choice: before
+        // B13 the absent tool_choice resolved to auto and re-prompted a non-envelope reply; FR-MCP-QBOPENAI-001 ac-5 now takes it as the answer.
         var factory = new RecordingChatClientFactory("{\"intent\":\"final\",\"content\":\"the live arbiter decision\"}");
         using var app = BuildFactory(factory);
         using var seedClient = SeedClient(app);
