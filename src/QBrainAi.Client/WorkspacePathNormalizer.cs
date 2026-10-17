@@ -133,6 +133,16 @@ public sealed class WorkspacePathNormalizer : IWorkspacePathNormalizer
                 continue;
             }
 
+            // A leading single backslash is rooted on Windows: it replaces the path but keeps the
+            // current drive, so Combine("C:/content", "\\repo") is "C:/repo", not "C:/content/repo".
+            if (trimmed.StartsWith('\\') && TryGetWindowsDriveRoot(current, out var driveRoot))
+            {
+                current = WorkspaceIdentityPath.NormalizeLexicalPath(
+                    driveRoot + trimmed.TrimStart('\\'),
+                    WorkspacePathPlatform.Windows);
+                continue;
+            }
+
             // '/' is a separator in both syntaxes; lexical normalization of the root's own
             // platform collapses it (and any dot segments) into canonical form.
             current = WorkspaceIdentityPath.NormalizeLexicalPath(
@@ -162,6 +172,18 @@ public sealed class WorkspacePathNormalizer : IWorkspacePathNormalizer
         (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2])) ||
         path.StartsWith(@"\\", StringComparison.Ordinal) ||
         path.StartsWith("//", StringComparison.Ordinal);
+
+    private static bool TryGetWindowsDriveRoot(string path, out string driveRoot)
+    {
+        if (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2]))
+        {
+            driveRoot = path[..3];
+            return true;
+        }
+
+        driveRoot = string.Empty;
+        return false;
+    }
 
     private static bool IsSeparator(char value) => value is '/' or '\\';
 }

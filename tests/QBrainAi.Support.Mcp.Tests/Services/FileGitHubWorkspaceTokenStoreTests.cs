@@ -48,6 +48,29 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
     }
 
     [Fact]
+    public async Task LegacyBackslashEntry_IsReadUpsertedAndDeletedAsCanonicalKey()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var storePath = Path.Combine(_tempRoot, "github-token-store.json");
+        await _sut.UpsertAsync("C:/legacy/repo", "gho_legacy", ct: ct).ConfigureAwait(true);
+        var json = await File.ReadAllTextAsync(storePath, ct).ConfigureAwait(true);
+        Assert.Contains("C:/legacy/repo", json, StringComparison.Ordinal);
+        await File.WriteAllTextAsync(storePath, json.Replace("C:/legacy/repo", "C:\\\\legacy\\\\repo", StringComparison.Ordinal), ct).ConfigureAwait(true);
+
+        var record = await _sut.GetAsync("C:\\legacy\\repo", ct).ConfigureAwait(true);
+        Assert.NotNull(record);
+        Assert.Equal("gho_legacy", record.AccessToken);
+
+        await _sut.UpsertAsync("C:\\legacy\\repo", "gho_new", ct: ct).ConfigureAwait(true);
+        var after = await File.ReadAllTextAsync(storePath, ct).ConfigureAwait(true);
+        Assert.Single(System.Text.RegularExpressions.Regex.Matches(after, "workspacePath", System.Text.RegularExpressions.RegexOptions.IgnoreCase));
+        Assert.Contains("C:/legacy/repo", after, StringComparison.Ordinal);
+
+        Assert.True(await _sut.DeleteAsync("C:\\legacy\\repo", ct).ConfigureAwait(true));
+        Assert.Null(await _sut.GetAsync("C:/legacy/repo", ct).ConfigureAwait(true));
+    }
+
+    [Fact]
     public async Task UpsertAsync_SecondWriteReplacesToken()
     {
         var workspacePath = Path.Combine(_tempRoot, "workspace-b");

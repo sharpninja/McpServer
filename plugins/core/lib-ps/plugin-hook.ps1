@@ -978,6 +978,7 @@ function Get-PluginStopEnforcementDecision {
         [Parameter(Mandatory)][string]$CacheDir
     )
 
+    $script:StopOverrideGate = $null
     if (-not (Test-Path -LiteralPath $EvidencePath)) { return $null }
 
     $edits = 0
@@ -991,6 +992,7 @@ function Get-PluginStopEnforcementDecision {
         $acceptFailure = Join-Path $CacheDir 'turn-accept-failure.marker'
         if (Test-Path -LiteralPath $acceptFailure) {
             Remove-Item -LiteralPath $acceptFailure -Force
+            $script:StopOverrideGate = 'failure'
             return 'allow'
         }
 
@@ -1009,6 +1011,7 @@ function Get-PluginStopEnforcementDecision {
             $acceptAudit = Join-Path $CacheDir 'turn-accept-incomplete-audit.marker'
             if (Test-Path -LiteralPath $acceptAudit) {
                 Remove-Item -LiteralPath $acceptAudit -Force
+                $script:StopOverrideGate = 'audit'
                 return 'allow'
             }
 
@@ -1125,6 +1128,7 @@ function Get-PluginTurnPersistenceProof {
 }
 
 function Close-PluginTurnIfNeeded {
+    $overrideGate = $null
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
     $cacheDir = Get-PluginCacheDir -StartPath $startPath
@@ -1170,10 +1174,15 @@ function Close-PluginTurnIfNeeded {
     if ($evidencePath) {
         $enforcement = Get-PluginStopEnforcementDecision -EvidencePath $evidencePath -CacheDir $cacheDir
         if ($enforcement -eq 'allow') {
-            Write-PluginJson ([ordered]@{})
-            return
-        }
-        if ($enforcement) {
+            # An override bypasses only its own gate. An in_progress turn must still be completed
+            # below, so a consumed marker does not leave an unaudited stale turn for the next session.
+            $overrideTurnInProgress = (Test-Path -LiteralPath $turnFile) -and ((Get-YamlScalar -Path $turnFile -Key 'status') -eq 'in_progress')
+            if (-not $overrideTurnInProgress) {
+                Write-PluginJson ([ordered]@{})
+                return
+            }
+            $overrideGate = $script:StopOverrideGate
+        } elseif ($enforcement) {
             Write-PluginJson ([ordered]@{ decision = 'block'; reason = $enforcement })
             return
         }
@@ -1264,7 +1273,7 @@ function Close-PluginTurnIfNeeded {
 
     $edits = [int]((Get-YamlScalar -Path $turnFile -Key 'codeEdits') ?? '0')
     $buildStatus = Get-YamlScalar -Path $turnFile -Key 'lastBuildStatus'
-    if ($edits -gt 0 -and $buildStatus -eq 'failed') {
+    if ($edits -gt 0 -and $buildStatus -eq 'failed' -and $overrideGate -ne 'failure') {
         $acceptFailure = Join-Path $cacheDir 'turn-accept-failure.marker'
         if (Test-Path -LiteralPath $acceptFailure) {
             Remove-Item -LiteralPath $acceptFailure -Force
@@ -1284,7 +1293,7 @@ function Close-PluginTurnIfNeeded {
     # completed code-edit turn recorded only via commits is not falsely blocked (BUG-TRIAGE-071).
     $auditCommits = Get-YamlScalar -Path $turnFile -Key 'auditCommits'
     $hasAuditSchema = $null -ne $auditActions -or $null -ne $auditFiles -or $null -ne $auditDialog -or $null -ne $auditDecisions -or $null -ne $auditCommits
-    if ($edits -gt 0 -and $hasAuditSchema) {
+    if ($edits -gt 0 -and $hasAuditSchema -and $overrideGate -ne 'audit') {
         $auditTotal = [int](($auditActions ?? '0')) + [int](($auditFiles ?? '0')) + [int](($auditDialog ?? '0')) + [int](($auditDecisions ?? '0')) + [int](($auditCommits ?? '0'))
         if ($auditTotal -le 0) {
             $acceptAudit = Join-Path $cacheDir 'turn-accept-incomplete-audit.marker'
