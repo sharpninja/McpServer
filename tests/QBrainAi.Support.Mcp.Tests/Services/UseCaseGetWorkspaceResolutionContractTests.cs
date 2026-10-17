@@ -17,7 +17,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class UseCaseGetWorkspaceResolutionContractTests
 {
-    private const string CanonicalWorkspaceId = @"F:\GitHub\TruckMate";
+    private const string CanonicalWorkspaceId = "F:/GitHub/TruckMate";
 
     /// <summary>Correct canonical workspace output satisfies every contract assertion.</summary>
     [Fact]

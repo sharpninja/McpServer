@@ -47,6 +47,18 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.File;
 
+if (WorkspacePathRekeyCommand.TryParse(args, out var rekeyCommand, out var rekeyError))
+{
+    if (rekeyCommand is null)
+    {
+        Console.Error.WriteLine(rekeyError ?? WorkspacePathRekeyCommand.Usage);
+        Environment.ExitCode = 1;
+        return;
+    }
+    Environment.ExitCode = await WorkspacePathRekeyCommand.RunAsync(rekeyCommand, default).ConfigureAwait(false);
+    return;
+}
+
 if (IsStdioTransportRequested(args))
 {
     await McpStdioHost.RunAsync(args, default).ConfigureAwait(false);

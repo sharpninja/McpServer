@@ -1744,3 +1744,6 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [ ] The five FR and eight TR headings exist in the requirements documents.
   - [ ] No docs/receipts/hv file in this change records OverallVerdict AGREE for Phase 1.
+
+- TEST-MCP-PATHNORM-001: P1.5 tests use disposable database fixtures only. Cover drive/UNC/device/dot/case and opaque/global/POSIX literals; canonical/derived key collision preflight before mutation; successful mandatory backup and backup failure; dry-run explicit copy selection and unchanged database bytes; table/workspace counts and secret-free output; composite foreign-key graph; manual triage key retention and reproducible triage/handoff/federation remapping; rollback and cancellation; idempotent second run; startup rejection before canonical queries/migrations/backfills and acceptance after conversion; command parser and offline execution. Retain requirements/test-first red receipt and independent mock negative controls, then production-bound and applicable unit-suite receipts with zero skips.
+  Scope: layer-1+

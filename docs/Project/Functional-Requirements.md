@@ -2940,3 +2940,8 @@ Scope: layer-1+
 - [ ] Existing FR-MCP-*, TR-MCP-*, and TEST-MCP-* IDs are not renamed. The QBrain ids are additions.
 - [ ] The hostname PAYTON-LEGION2 and the lab name LAB-OMARCHY still appear where they identify that host and that lab.
 
+
+## FR-MCP-PATHNORM-001 Canonical workspace identities and explicit P1.5 rekey
+
+P1.5 acceptance criteria (pending validation): reuse P1.4 Windows lexical normalization preserving case; reject every distinct-old-key convergence before any mutation; preserve opaque/global/POSIX ids. Maintenance command requires verified backup for apply, uses one database transaction with rollback and row/FK/uniqueness validation, and is idempotent. Dry-run connects only to an explicitly named database copy distinct from configured store, changes no data, and reports old-to-new mappings and per-table/workspace counts without secrets. Rekey workspace columns plus reproducible triage, handoff, and federation keys and references. Manual triage GroupKey/GroupId remain unchanged and are counted in the report. Token-store keys use a retained backup. Startup refuses legacy keys before canonical EF queries, migrations or backfills and points to --workspace-path-rekey. Deployment and live database migration remain held.
+Scope: layer-1+

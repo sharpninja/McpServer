@@ -205,3 +205,28 @@ No column stores a `windows:` storage key directly.
 - Baseline build: `dotnet build QBrainAi.sln -c Debug` exit 0, 0 errors, 00:01:56.51 (2026-10-07, `artifacts-local/baseline-build.log`).
 - Hub probe output: section 1.1 (2026-10-07).
 - Prior evidence: 2026-10-06 session (workspace equivalence 55/55 ids, 9 field diffs; per-table row inventory).
+
+## P1.5 execution contract (Payton, 2026-10-16)
+
+This slice uses branch `feature/p1-5-workspace-rekey-20261016`, based on develop `36783b79`. No deployment, live apply, service operations, merge, rebase, or root-checkout edits are part of the slice.
+
+- Policy A supersedes the separator-only description above: reuse P1.4 Windows lexical normalization, including device prefix removal and dot-segment handling; preserve case. Inventory both legacy and canonical values. Abort before database mutation if distinct old keys converge.
+- Preserve manual triage GroupKey and GroupId. Their random GUID is not stored, so SHA-256(workspacePath|manual|GUID) cannot be recomputed. Recompute a triage key only when its original digest can be reproduced using a stored report fingerprint; report the retained count. Rekey its workspace columns regardless.
+- `--dry-run` requires an explicit `--copy-database` (SQLite file or server catalog), different from the configured database. It connects only to that copy, uses a read-only planning path, and reports mappings and per-table/per-workspace counts. It never creates a backup or rewrites the token store. Copy creation/restoration is an operator step, outside this command.
+- Apply requires a new `--backup-path`, a successful provider backup and verification before any DML, and an offline database. Perform preflight, updates, and validation in one transaction. Keep unique indexes active, defer/suspend FKs only within the transaction, validate them before commit, and preserve row counts. A second apply reports no changes.
+- Recompute handoff replay and federation identities from persisted inputs; propagate changed identities to referring columns. Token-store key rewrite uses an independent retained file backup after database commit; report a file failure explicitly so a retry can finish it.
+- The startup guard runs before migrations/backfills for HTTP and STDIO, uses raw database reads to avoid EF conversion of legacy keys, and throws an actionable error pointing to `--workspace-path-rekey`.
+- Requirements: FR-MCP-PATHNORM-001, TR-MCP-PATHNORM-001, TEST-MCP-PATHNORM-001. Tests first, including observed red per this task's explicit direction; normalization expectations use literal fixtures and negative controls. Then implementation, focused tests, and the plan's unit-project gate. No requirements/plan done state is asserted by publishing the draft PR.
+
+Test coverage contract: Windows drive/UNC/device/dot/case boundaries; unchanged POSIX/opaque/global values; convergence with canonical targets; backup refusal/failure; dry-run copy selection and unchanged bytes; composite FK graph; retained manual triage keys; derived triage/handoff/federation keys; rollback; second-run no-op; startup rejection and canonical startup acceptance; secret-free reports.
+
+
+### P1.5 validation and operator documentation (2026-10-17)
+
+- Interface and provider prerequisites: [workspace-path-rekey.md](../workspace-path-rekey.md).
+- Raw-read startup validation is in the shared migration coordinator before migration history adoption, migrations, pending-migration checks, and backfills. The PR #81 regression proves a legacy row is invisible to a canonical EF predicate until explicit rekeying.
+- Historical triage migration fixtures now perform the explicit, backed-up rekey before later migrations and canonical queries. The use-case fixture uses the approved forward-slash canonical literal.
+- Native-path contract cases run on every host and assert that host's documented spelling; no platform skip counts as passing.
+- Host-native backup/copy/report/token filenames are reviewed in the existing GetFullPath allowlist. Workspace identity normalization continues to use the P1.4 lexical policy.
+- Dependency repair is limited to central Xml/Pkcs 10.0.13 pins. NuGet audit and warnings-as-errors remain enabled.
+- Publishing a draft PR does not mark this plan, its requirements, or deployment/rehearsal gates complete.
