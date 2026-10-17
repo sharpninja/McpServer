@@ -1,0 +1,347 @@
+{
+  "overallVerdict": "DISAGREE",
+  "accuracy": 90,
+  "completeness": 82,
+  "confidence": 95,
+  "passCount": 1,
+  "failCount": 10,
+  "unknownCount": 1,
+  "failList": [
+    {
+      "id": "F01",
+      "title": "The output activity has no independent flush timer",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1395",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1425",
+        "FR-MCP-HVPIPE-008-AC001",
+        "FR-MCP-HVPIPE-008-AC003"
+      ],
+      "defectEvidenceAndRequiredChange": "The live flush prose promises a maximum interval, but StreamReviewerOutput only tests that interval after a new line (amendment 1395, 1425-1437). A small line followed by silence never triggers an append. FR-MCP-HVPIPE-008-AC001 and AC003 reject this trace. The activity and sequence need a timer-triggered flush independently of line arrival.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F02",
+      "title": "Notification cursor, inbox and delivery are not crash-consistent",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1453",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1471",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1480",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2200",
+        "FR-MCP-HVPIPE-017",
+        "FR-MCP-HVPIPE-020"
+      ],
+      "defectEvidenceAndRequiredChange": "WatchHvNotifications persists its cursor and inbox in two files (1471), while its diagram claims one atomic replacement (1480). A crash after cursor advancement loses the notification. A fast completion can also be consumed before SubmitHvFromPlugin records its returned request in submitted (1453, 1461), then permanently ignored. UC-HV-07 (2200) promises exactly-once model delivery, contrary to the at-least-once rule and with no atomic delivery acknowledgment. The design needs a single recoverable cursor/inbox state and submission reconciliation, explicit deduplication and honest delivery guarantees, plus crash and fast-completion criteria.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F03",
+      "title": "Configuration changes do not schedule the promised NONCE",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:632",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:941",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1372",
+        "FR-MCP-HVPIPE-001-AC005",
+        "FR-MCP-HVPIPE-003"
+      ],
+      "defectEvidenceAndRequiredChange": "UpdateHvReviewerCommand promises automatic NONCE after a configuration change (632), but HvWorkerHost requests NONCE only at startup (1372-1389). The claim path consumes only ProbeRequestedUtc (941), which update does not set. The promise needs a durable configuration-change probe request and polling/restart coverage.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F04",
+      "title": "An old probe can qualify a new reviewer configuration",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:484",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:632",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1016",
+        "FR-MCP-HVPIPE-003-AC001"
+      ],
+      "defectEvidenceAndRequiredChange": "A probe started for configuration A can finish after PATCH changes the reviewer to configuration B, then CloseHvRunOutputCommand unconditionally marks B Online (632, 1016). No captured reviewer configuration version exists on HvRun (484-490), nor does the probe close compare one. Readiness must bind to the configuration actually probed; add a stale-probe race criterion.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F05",
+      "title": "Probe failures enter a request-only retry policy",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:484",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1045",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1346",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1395",
+        "FR-MCP-HVPIPE-003-AC003",
+        "FR-MCP-HVPIPE-009"
+      ],
+      "defectEvidenceAndRequiredChange": "FailHvRunCommand always calls the review-request-only HvRetryDecision (1045-1067, 1346), although a Probe has no HvRequestId (484) and a failed launch or nonzero probe exit uses this same command (1395). The probe failure and shutdown outcomes require an explicit branch, with offline/incident and retry semantics tested.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F06",
+      "title": "Reviewer-turn verification accepts an incomplete or open audit turn",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:166",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:544",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:553",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1283",
+        "FR-MCP-HVPIPE-010",
+        "FR-MCP-HVPIPE-008-AC010"
+      ],
+      "defectEvidenceAndRequiredChange": "V-6 accepts a reviewer turn containing only the compact hv_verdict (1283, 553). It does not require the entire result or a closed Chore turn, as P-06 and the brief require (544). A persisted summary-only or open turn can pass finalization. Verification and negative criteria must check the complete result and required terminal state.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F07",
+      "title": "The stored result contains its own unspecified content hash",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:494",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:562",
+        "FR-MCP-HVPIPE-011",
+        "FR-MCP-HVPIPE-015"
+      ],
+      "defectEvidenceAndRequiredChange": "HvEvidence stores the result document with only responseLog removed (494), while that document contains evidence.result.sha256 (562), and its Sha256 hashes the decompressed stored bytes (494). No exclusion/projection defines a hashable payload without its own hash. Define one canonical stored payload and add its digest to the returned envelope, with a named hash/round-trip case.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F08",
+      "title": "Incident filing writes before the audit hard-stop guard",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:369",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1156",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1165",
+        "FR-MCP-HVPIPE-018-AC002"
+      ],
+      "defectEvidenceAndRequiredChange": "FileHvIncidentCommand calls the writing triage service before AuditLedgerGuard (1156, 1163-1171), contrary to the hard-stop rule that no HV unit writes while the ledger is unavailable (369, FR-MCP-HVPIPE-018-AC002). Its diagram also puts Filed and notification writes after an edge labeled committed. The guard and audited triage write need an enforceable ordering/transaction boundary, and the diagram must put local outcome and notification inside the transaction.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F09",
+      "title": "P1 misstates the live requirement satisfaction flag",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2509",
+        "REMED-HVPIPELINE-001/P1",
+        "FR-MCP-HOSTILEREVIEW-003/acceptanceCriteria[3]",
+        "docs/receipts/hv/hv-r1-related-requirements.json:82"
+      ],
+      "defectEvidenceAndRequiredChange": "P1 states that FR-MCP-HOSTILEREVIEW-003 criterion 4 is satisfied (amendment 2509; REMED-HVPIPELINE-001 P1). The live requirement read has isSatisfied false (hv-r1-related-requirements.json:82-84). Correct the factual claim in both artifacts, retaining the independently verified missing-worker defect. Do not change the store to fit the claim.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F10",
+      "title": "The retained model-grade contract cannot execute inside finalization",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:183",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:187",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1100",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3383",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3386",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3410",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3445"
+      ],
+      "defectEvidenceAndRequiredChange": "A-05 leaves the foundation model-grade input and guards incompatible with its new caller (amendment 183, 1100, 1178; foundation 3383, 3386, 3410, 3426, 3445). The request must be Open in the retained foundation contract, but finalization calls it while Finalizing. The old DTO still requires removed receipt paths and thread fields; its pre-write staleness dispatch expects no transaction, whereas the new call is inside one. Replace the complete internal grade contract, guards, side effects, and diagrams, including responsibility for completing the outer request. A-09 also names section 3.1 for a check actually in 6.3 (foundation 2842).",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F11",
+      "title": "Response findings cannot satisfy or survive the result contract",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:498",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:551",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:562",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1285",
+        "FR-MCP-HVPIPE-015",
+        "FR-MCP-HVPIPE-021"
+      ],
+      "defectEvidenceAndRequiredChange": "The response finding wire shape (551) has only claimId, check, outcome, whereas V-8 (1285) requires category, location, evidence and remediation on every finding. HvFinding (498) has no response scope or response id, and the result's responseGrades omit findings (562) while its failures promise every FAIL and UNKNOWN (564). Define a lossless response finding contract and result projection, with negative tests for missing remediation and positive failing-grade persistence.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F12",
+      "title": "A legitimate mid-review response closure invalidates the reviewer",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:182",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:544",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1280",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1285",
+        "FR-MCP-HVPIPE-021-AC003"
+      ],
+      "defectEvidenceAndRequiredChange": "ResponseStatusTransition may close a Pending response during review (182, 480; FR-MCP-HVPIPE-021-AC003), while the accepted request is immutable (544). V-3/V-8 bind against the current Pending set (1280, 1285). A reviewer legitimately grading the admitted response after it closes is rejected and taken Offline. Bind reviewer output to the accepted set and define how closed items are ignored at commit, with reject/supersede races covered.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F13",
+      "title": "Overall verdict predicates contradict one another",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:173",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1281",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2840",
+        "FR-MCP-HVPIPE-010",
+        "FR-MCP-HVPIPE-021"
+      ],
+      "defectEvidenceAndRequiredChange": "V-4 makes overall AGREE an iff over holistic and turn verdicts, omitting response grades (1281), while importing the foundation verdict_match iff over response grades (foundation 2840). These rules disagree for mixed turn/response outcomes and R-31 forbids every FAIL/UNKNOWN (173). Define one overall predicate over all applicable verdicts and findings and propagate it to the foundation replacement and criteria.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F14",
+      "title": "No command owns the run-start state and metadata",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:486",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:941",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:971",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1283",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1329",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1395"
+      ],
+      "defectEvidenceAndRequiredChange": "No unit persists HvRun StartedUtc, ProcessId or the Claimed-to-Running transition. The run declares these fields (486), V-6 and ReadinessProbeVerdict use StartedUtc, Claim only starts the request (941), heartbeat only renews it (971), and RunReviewerProcess starts the OS process without a fenced run-start write (1395-1405). Define the owning command and its ordering/crash outcomes, with start/provenance tests.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F15",
+      "title": "Successful output close can discard an accepted cancellation",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:170",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:787",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1016",
+        "FR-MCP-HVPIPE-008-AC005",
+        "FR-MCP-HVPIPE-008-AC006"
+      ],
+      "defectEvidenceAndRequiredChange": "Cancel can commit CancelRequested after the last heartbeat and before successful process exit; CloseHvRunOutputCommand then overwrites it with Finalizing without checking cancellation (1016). This loses an accepted cancellation. R-28 also refuses repeat cancel of Canceled (170), while CancelHvRequestCommand returns 200 for it (787). Define consistent repeat semantics and the serialized cancel/close/finalize outcomes, with each interleaving tested.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F16",
+      "title": "Evidence removal leaves entity fields and read outcomes undefined",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:492",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:753",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:859",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:880",
+        "FR-MCP-HVPIPE-019-AC004"
+      ],
+      "defectEvidenceAndRequiredChange": "RemoveHvEvidenceCommand writes RemovedBy and RemovalReason to output chunks (859, 873), but their entity has neither field (492). GetHvRequestQuery's lastOutput and StreamHvRunOutputQuery still decompress removed payloads without a removed-evidence outcome (753, 880-893), unlike FR-MCP-HVPIPE-019-AC004. Define the retained fields and post-removal behavior on every payload-reading surface, with named cases.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F17",
+      "title": "VI-05 understates the possible append rate",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1395",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2500",
+        "FR-MCP-HVPIPE-008-AC002"
+      ],
+      "defectEvidenceAndRequiredChange": "VI-05's asserted maximum of 14400 appends per run hour (2500) is false under R-12 and the byte-triggered flush (1395): multiple OutputFlushBytes batches can arrive within one interval. State a valid measurement workload and account for byte-triggered writes and audit overhead; do not call this an interval-imposed bound.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F18",
+      "title": "The artifact-worker repair has no contract for its existing requirements",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:167",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1372",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2486",
+        "PLAN-HVPIPELINE-001/H3",
+        "FR-MCP-HOSTILEREVIEW-002/acceptanceCriteria[3]",
+        "FR-MCP-HOSTILEREVIEW-003/acceptanceCriteria[3]"
+      ],
+      "defectEvidenceAndRequiredChange": "H3 promises P1 to P3 fixed using HvWorkerHost (167, 2486), but the host and claim/failure/finalization contracts only service HvRequest. The live FR-MCP-HOSTILEREVIEW-003 AC4 separately requires configured/default AgentPool behavior, distinct request/attempt/pool-job/model-execution/accepted-result identities, internal-only cancellation and one accepted terminal result. FR-MCP-HOSTILEREVIEW-002 AC4 prohibits raw artifact/prompt storage, unlike turn HV's complete brief log. No artifact queue adapter, units, identity mapping, retention boundary, or tests integrate these unchanged requirements. Define that separate-context contract and its H0 mocks/H3 production cases before approval, sharing only compatible execution primitives.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F19",
+      "title": "Abrupt worker death has no guaranteed reviewer-process cleanup",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:298",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1444",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1870",
+        "src/QBrainAi.Common.AgentCli/DefaultProcessSpawner.cs:12",
+        "FR-MCP-HVPIPE-007-AC003",
+        "FR-MCP-HVPIPE-008-AC011"
+      ],
+      "defectEvidenceAndRequiredChange": "W-03 and sequence 17.7 assume the reviewer process is gone when the worker crashes (298, 1870). The reused IProcessSpawner starts an ordinary process and provides explicit Kill only (DefaultProcessSpawner.cs:12-16,48-51). A killed worker cannot call Kill or observe stale_fence; lease expiry fences database writes but does not stop its child. No owner-death containment or recovery outcome is specified. Define and test abrupt worker death with a surviving reviewer and descendants, without imposing a review deadline.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F20",
+      "title": "Plugin idempotency keys exceed their limit and omit invocation identity",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:453",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:471",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1453",
+        "FR-MCP-HVPIPE-005-AC005",
+        "FR-MCP-HVPIPE-020"
+      ],
+      "defectEvidenceAndRequiredChange": "The plugin idempotency key embeds the full requestId plus a fixed 20-character prefix/suffix overhead (1453), but requestId may be 256 and IdempotencyKey only 128 (453, 471). A valid requestId above 108 characters produces an invalid key. It also omits the full submitting session identity and contextFormat, although the payload fingerprint includes them. Define a bounded canonical key over the full invocation identity and test maximum-length and cross-session calls.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F21",
+      "title": "A late verification failure can undo successful finalization",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:338",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1045",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1100",
+        "FR-MCP-HVPIPE-010",
+        "FR-MCP-HVPIPE-012"
+      ],
+      "defectEvidenceAndRequiredChange": "A late verification failure can overwrite successful finalization. FailHvRunCommand accepts null WorkerId and the released stored fence (1045), checks only FencedLease, and writes Failed plus request retry state (1046). Finalize may commit Succeeded/Completed first (1100) without changing that released fence. Unlike finalization, Fail does not re-check OutputClosed/Finalizing and versions in its transaction. A finalizer that read the earlier state can therefore undo completion. Add state/version-conditional failure acceptance and idempotent terminal behavior, with a concurrent success/verification-failure test.",
+      "classification": "implementer edit"
+    }
+  ],
+  "unknownList": [
+    {
+      "id": "U01",
+      "title": "No-force push flags are not proven",
+      "location": [
+        "git reflog refs/remotes/origin/docs/hv-architecture-amendment-20261016",
+        "docs/receipts/hv/hv-r1-hygiene.json"
+      ],
+      "evidenceAndRequiredChange": "Nine signed effort commits and eight adjacent recorded push transitions are verified linear and fast-forward. A reflog's update-by-push message does not prove which flags were used. The absolute claim that every push used no force flag needs the original push command/output or a server audit. Do not invent that evidence.",
+      "classification": "implementer evidence"
+    },
+    {
+      "id": "U02",
+      "title": "Real acceptance-test phase ownership is incomplete",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2352",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2354",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2448",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2465",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2470",
+        "PLAN-HVPIPELINE-001/phases H0-H6"
+      ],
+      "evidenceAndRequiredChange": "The catalog has named tests for all 114 FR acceptance criteria, but no complete real-binding AC-to-phase allocation is supplied. In particular, H1 owns live reviewer/plugin qualification while the worker arrives H3 and streams H6; H5 watcher and H6 stream delivery are parallel, with no explicit activation/rollback contract. Component mocks can be correct, but they do not prove that these production acceptance cases can run in the owning phase. Provide the exact phase and prerequisite binding for each criterion and distinguish H1 adapter tests from later server-launched/live-stream cases. This is an evidence/plan edit, not a request to lower or waive a gate.",
+      "classification": "implementer plan edit"
+    }
+  ],
+  "implementerFixes": [
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "F05",
+    "F06",
+    "F07",
+    "F08",
+    "F09",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F20",
+    "F21",
+    "U01",
+    "U02"
+  ],
+  "operatorDecisionFails": [],
+  "headSha": "d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T091907-amendment1-r1.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T091907-amendment1-r1.response.jsonl"
+  ],
+  "reviewerSessionId": "Codex-20261017T142241Z-hv-amendment1-r1",
+  "reviewerRequestId": "req-20261017T142304Z-hv-amendment1-r1"
+}
