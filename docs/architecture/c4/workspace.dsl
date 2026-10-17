@@ -45,8 +45,13 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
                 txsec = component "Transaction Security" "Turn transaction coordinator, diffgram protector, pub/sub replay worker, gated service decorators (TransactionGated*)." "QBrainAi.TransactionSecurity"
                 tools = component "Tool Registry, Templates and Products" "Tool registry and buckets, prompt templates, products and workspace sharing." "QBrainAi.Services, Support.Mcp/Products"
                 storage = component "Storage and Providers" "EF Core DbContext, provider strategies for SQLite, PostgreSQL, SQL Server, migration and encryption coordinators, startup bootstrap." "QBrainAi.Storage and *Migrations"
+                mcpDbContext = component "McpDbContext" "Main EF Core context: 71 entity types (workspaces, session logs, tools and agents, TODOs, requirements and use cases, memory and graph, triage, federation, handoff, hostile review). Workspace foreign keys, soft-delete filters and workspace query filters. Detail in data/ef-entity-model.md." "EF Core DbContext (QBrainAi.Storage/McpDbContext.cs)"
+                identityDbContext = component "McpIdentityDbContext" "ASP.NET Core Identity context: 7 framework entity types (McpUser, IdentityRole, user and role claims, logins, tokens, user roles). SQL Server only, schema by EnsureCreated, no migrations." "IdentityDbContext<McpUser> (Support.Mcp/Identity)"
+                txDbContext = component "TransactionSecurityDbContext" "Internal context for transaction security state: 10 entity types (key server parties, keys, sequences, nonces, manifests, subscriber transactions, audit events, pub/sub messages). SQLite only, EnsureCreated, no migrations." "EF Core DbContext (QBrainAi.TransactionSecurity)"
+                migrations = component "Provider Migration Assemblies" "Per-provider migrations and model snapshots: legacy 28 in QBrainAi.Storage, plus 41 each in the SQLite, SQL Server and PostgreSQL migration projects. Applied by McpDatabaseMigrationCoordinator (MigrateAsync)." "EF Core migrations (QBrainAi.Storage.*Migrations)"
             }
 
+            txDb = container "Transaction State Database" "Optional SQLite file for transaction security state (pub/sub broker, sequences, nonces, manifests, audit) when a database path is configured; otherwise state is in memory." "SQLite file" "Database"
             db = container "MCP Database" "Relational store for TODOs, session logs, requirements, memory, graph, federation, identity and audit data. Default file mcp.db in /data." "SQLite (default), PostgreSQL or SQL Server via EF Core" "Database"
             vector = container "Vector Index" "HNSW index file used for semantic search, at /data/vector.idx." "HnswIndex file, ONNX embeddings" "Database"
             repoFs = container "Workspace Files" "Mounted repository: AGENTS-README-FIRST marker, docs/Project/TODO.yaml, docs/sessions, requirements docs." "Filesystem (/workspace)" "Database"
@@ -301,6 +306,15 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
         qbrain.server.workspace -> qbrain.repoFs "Marker file and projections" "File I/O" "H"
         qbrain.server.storage -> qbrain.server.workspace "Workspace query filter" "In-process" "H"
         qbrain.server.storage -> qbrain.db "SQL" "EF Core" "H"
+        qbrain.server.storage -> qbrain.server.mcpDbContext "Configures via provider strategies; applies migrations at startup" "In-process" "H"
+        qbrain.server.mcpDbContext -> qbrain.db "SQL (SQLite, SQL Server or PostgreSQL)" "EF Core" "H"
+        qbrain.server.mcpDbContext -> qbrain.server.workspace "Workspace foreign key and query filter (Workspace table)" "In-process" "H"
+        qbrain.server.migrations -> qbrain.db "Applies schema migrations" "EF Core Migrate" "H"
+        qbrain.server.migrations -> qbrain.server.mcpDbContext "Provides migrations and model snapshot per provider" "In-process" "H"
+        qbrain.server.identity -> qbrain.server.identityDbContext "ASP.NET Identity stores" "In-process" "H"
+        qbrain.server.identityDbContext -> qbrain.db "Identity tables (SQL Server connection string; same database as main is configuration, unconfirmed)" "EF Core (SQL Server)" "M"
+        qbrain.server.txsec -> qbrain.server.txDbContext "State store when a database path is configured" "In-process" "H"
+        qbrain.server.txDbContext -> qbrain.txDb "SQL" "EF Core (SQLite)" "H"
         qbrain.server.tools -> qbrain.server.storage "Persists products" "In-process" "H"
 
         # REPL components
@@ -335,6 +349,11 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
 
         component qbrain.server "ServerComponents" "C4 level 3: MCP Context Server (QBrainAi.Support.Mcp plus referenced libraries)." {
             include *
+            autolayout tb
+        }
+
+        component qbrain.server "DataLayerComponents" "C4 level 3: data layer of the MCP Context Server (DbContexts, migrations and the databases). Entity detail in data/ef-entity-model.md." {
+            include qbrain.server.storage qbrain.server.mcpDbContext qbrain.server.identityDbContext qbrain.server.txDbContext qbrain.server.migrations qbrain.server.identity qbrain.server.txsec qbrain.server.workspace qbrain.db qbrain.txDb
             autolayout tb
         }
 

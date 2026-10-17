@@ -7,17 +7,17 @@ graph LR
     subgraph 10 ["QBrain.AI"]
       style 10 fill:#ffffff,stroke:#0b4884,color:#0b4884
 
-      subgraph 38 ["Key Server"]
-        style 38 fill:#ffffff,stroke:#2e6295,color:#2e6295
+      subgraph 43 ["Key Server"]
+        style 43 fill:#ffffff,stroke:#2e6295,color:#2e6295
 
-        39["<div style='font-weight: bold'>Key Server Endpoints</div><div style='font-size: 70%; margin-top: 0px'>[Component: Minimal APIs]</div><div style='font-size: 80%; margin-top:10px'>POST<br />/qbrainai/keyserver/parties,<br />GET parties/{id}/keys/{id},<br />POST manifests/sign and<br />verify, GET manifests/report.</div>"]
-        style 39 fill:#85bbf0,stroke:#5d82a8,color:#000000
-        40["<div style='font-weight: bold'>Party Registry and Manifest Service</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.TransactionSecurity]</div><div style='font-size: 80%; margin-top:10px'>IKeyServerPartyRegistry,<br />IKeyServerManifestService,<br />key provisioning.</div>"]
-        style 40 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        44["<div style='font-weight: bold'>Key Server Endpoints</div><div style='font-size: 70%; margin-top: 0px'>[Component: Minimal APIs]</div><div style='font-size: 80%; margin-top:10px'>POST<br />/qbrainai/keyserver/parties,<br />GET parties/{id}/keys/{id},<br />POST manifests/sign and<br />verify, GET manifests/report.</div>"]
+        style 44 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        45["<div style='font-weight: bold'>Party Registry and Manifest Service</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.TransactionSecurity]</div><div style='font-size: 80%; margin-top:10px'>IKeyServerPartyRegistry,<br />IKeyServerManifestService,<br />key provisioning.</div>"]
+        style 45 fill:#85bbf0,stroke:#5d82a8,color:#000000
       end
 
     end
 
-    39-. "<div>Calls</div><div style='font-size: 70%'>[In-process]</div>" .->40
+    44-. "<div>Calls</div><div style='font-size: 70%'>[In-process]</div>" .->45
 
   end

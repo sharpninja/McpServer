@@ -4,35 +4,35 @@ graph LR
   subgraph diagram ["Deployment View: QBrain.AI - WindowsService"]
     style diagram fill:#ffffff,stroke:#ffffff
 
-    subgraph 63 ["Windows host"]
-      style 63 fill:#ffffff,stroke:#444444,color:#444444
+    subgraph 68 ["Windows host"]
+      style 68 fill:#ffffff,stroke:#444444,color:#444444
 
-      subgraph 64 ["Windows Service QBrainAi"]
-        style 64 fill:#ffffff,stroke:#444444,color:#444444
+      subgraph 69 ["Windows Service QBrainAi"]
+        style 69 fill:#ffffff,stroke:#444444,color:#444444
 
-        65["<div style='font-weight: bold'>MCP Context Server</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core, .NET 9 (QBrainAi.Support.Mcp)]</div><div style='font-size: 80%; margin-top:10px'>Single ASP.NET Core host<br />exposing REST, MCP HTTP<br />transport, pairing UI,<br />identity and background<br />workers.</div>"]
-        style 65 fill:#438dd5,stroke:#2e6295,color:#ffffff
+        70["<div style='font-weight: bold'>MCP Context Server</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core, .NET 9 (QBrainAi.Support.Mcp)]</div><div style='font-size: 80%; margin-top:10px'>Single ASP.NET Core host<br />exposing REST, MCP HTTP<br />transport, pairing UI,<br />identity and background<br />workers.</div>"]
+        style 70 fill:#438dd5,stroke:#2e6295,color:#ffffff
       end
 
-      subgraph 66 ["Windows Service QBrainAiKeyServer"]
-        style 66 fill:#ffffff,stroke:#444444,color:#444444
+      subgraph 71 ["Windows Service QBrainAiKeyServer"]
+        style 71 fill:#ffffff,stroke:#444444,color:#444444
 
-        67["<div style='font-weight: bold'>Key Server</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core minimal API (QBrainAi.KeyServer)]</div><div style='font-size: 80%; margin-top:10px'>Optional standalone host of<br />the in-memory key server<br />(InMemoryKeyServerService):<br />registers parties, serves<br />public keys, signs and<br />verifies transaction<br />manifests. The MCP Context<br />Server and REPL embed the<br />same services in-process by<br />default.</div>"]
-        style 67 fill:#438dd5,stroke:#2e6295,color:#ffffff
+        72["<div style='font-weight: bold'>Key Server</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core minimal API (QBrainAi.KeyServer)]</div><div style='font-size: 80%; margin-top:10px'>Optional standalone host of<br />the in-memory key server<br />(InMemoryKeyServerService):<br />registers parties, serves<br />public keys, signs and<br />verifies transaction<br />manifests. The MCP Context<br />Server and REPL embed the<br />same services in-process by<br />default.</div>"]
+        style 72 fill:#438dd5,stroke:#2e6295,color:#ffffff
       end
 
-      subgraph 68 ["Interactive desktop session"]
-        style 68 fill:#ffffff,stroke:#444444,color:#444444
+      subgraph 73 ["Interactive desktop session"]
+        style 73 fill:#ffffff,stroke:#444444,color:#444444
 
-        69["<div style='font-weight: bold'>Desktop Launcher</div><div style='font-size: 70%; margin-top: 0px'>[Container: Console exe, Win32 P/Invoke (QBrainAi.Launcher)]</div><div style='font-size: 80%; margin-top:10px'>Windows helper that launches<br />a process on the interactive<br />desktop using<br />CreateProcessWithTokenW;<br />takes JSON argument and<br />returns JSON on stdout.</div>"]
-        style 69 fill:#438dd5,stroke:#2e6295,color:#ffffff
+        74["<div style='font-weight: bold'>Desktop Launcher</div><div style='font-size: 70%; margin-top: 0px'>[Container: Console exe, Win32 P/Invoke (QBrainAi.Launcher)]</div><div style='font-size: 80%; margin-top:10px'>Windows helper that launches<br />a process on the interactive<br />desktop using<br />CreateProcessWithTokenW;<br />takes JSON argument and<br />returns JSON on stdout.</div>"]
+        style 74 fill:#438dd5,stroke:#2e6295,color:#ffffff
       end
 
-      subgraph 70 ["Workspace directories"]
-        style 70 fill:#ffffff,stroke:#444444,color:#444444
+      subgraph 75 ["Workspace directories"]
+        style 75 fill:#ffffff,stroke:#444444,color:#444444
 
-        71[("<div style='font-weight: bold'>Workspace Files</div><div style='font-size: 70%; margin-top: 0px'>[Container: Filesystem (/workspace)]</div><div style='font-size: 80%; margin-top:10px'>Mounted repository:<br />AGENTS-README-FIRST marker,<br />docs/Project/TODO.yaml,<br />docs/sessions, requirements<br />docs.</div>")]
-        style 71 fill:#438dd5,stroke:#2e6295,color:#ffffff
+        76[("<div style='font-weight: bold'>Workspace Files</div><div style='font-size: 70%; margin-top: 0px'>[Container: Filesystem (/workspace)]</div><div style='font-size: 80%; margin-top:10px'>Mounted repository:<br />AGENTS-README-FIRST marker,<br />docs/Project/TODO.yaml,<br />docs/sessions, requirements<br />docs.</div>")]
+        style 76 fill:#438dd5,stroke:#2e6295,color:#ffffff
       end
 
     end
