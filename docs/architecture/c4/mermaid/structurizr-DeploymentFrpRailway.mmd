@@ -1,0 +1,26 @@
+graph LR
+  linkStyle default fill:#ffffff
+
+  subgraph diagram ["Deployment View: QBrain.AI - FrpRelay"]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    subgraph 84 ["Railway"]
+      style 84 fill:#ffffff,stroke:#444444,color:#444444
+
+      subgraph 85 ["Container frps"]
+        style 85 fill:#ffffff,stroke:#444444,color:#444444
+
+        86["<div style='font-weight: bold'>FRP Relay</div><div style='font-size: 70%; margin-top: 0px'>[Container: frp, Docker (infra/frp)]</div><div style='font-size: 80%; margin-top:10px'>Self-hosted frps server<br />(Railway or local compose)<br />tunnelling the server port.</div>"]
+        style 86 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      end
+
+    end
+
+    subgraph 87 ["Local MCP host"]
+      style 87 fill:#ffffff,stroke:#444444,color:#444444
+
+      88["<div style='font-weight: bold'>MCP Context Server</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core, .NET 9 (QBrainAi.Support.Mcp)]</div><div style='font-size: 80%; margin-top:10px'>Single ASP.NET Core host<br />exposing REST, MCP HTTP<br />transport, pairing UI,<br />identity and background<br />workers.</div>"]
+      style 88 fill:#438dd5,stroke:#2e6295,color:#ffffff
+    end
+
+  end

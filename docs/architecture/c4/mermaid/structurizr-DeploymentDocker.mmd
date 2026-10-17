@@ -1,0 +1,35 @@
+graph LR
+  linkStyle default fill:#ffffff
+
+  subgraph diagram ["Deployment View: QBrain.AI - DockerCompose"]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    subgraph 60 ["Docker host"]
+      style 60 fill:#ffffff,stroke:#444444,color:#444444
+
+      subgraph 61 ["Container qbrain-ai"]
+        style 61 fill:#ffffff,stroke:#444444,color:#444444
+
+        62["<div style='font-weight: bold'>MCP Context Server</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core, .NET 9 (QBrainAi.Support.Mcp)]</div><div style='font-size: 80%; margin-top:10px'>Single ASP.NET Core host<br />exposing REST, MCP HTTP<br />transport, pairing UI,<br />identity and background<br />workers.</div>"]
+        style 62 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      end
+
+      subgraph 63 ["Named volume qbrain-ai-data"]
+        style 63 fill:#ffffff,stroke:#444444,color:#444444
+
+        64[("<div style='font-weight: bold'>MCP Database</div><div style='font-size: 70%; margin-top: 0px'>[Container: SQLite (default), PostgreSQL or SQL Server via EF Core]</div><div style='font-size: 80%; margin-top:10px'>Relational store for TODOs,<br />session logs, requirements,<br />memory, graph, federation,<br />identity and audit data.<br />Default file mcp.db in /data.</div>")]
+        style 64 fill:#438dd5,stroke:#2e6295,color:#ffffff
+        65[("<div style='font-weight: bold'>Vector Index</div><div style='font-size: 70%; margin-top: 0px'>[Container: HnswIndex file, ONNX embeddings]</div><div style='font-size: 80%; margin-top:10px'>HNSW index file used for<br />semantic search, at<br />/data/vector.idx.</div>")]
+        style 65 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      end
+
+      subgraph 66 ["Bind mount /workspace"]
+        style 66 fill:#ffffff,stroke:#444444,color:#444444
+
+        67[("<div style='font-weight: bold'>Workspace Files</div><div style='font-size: 70%; margin-top: 0px'>[Container: Filesystem (/workspace)]</div><div style='font-size: 80%; margin-top:10px'>Mounted repository:<br />AGENTS-README-FIRST marker,<br />docs/Project/TODO.yaml,<br />docs/sessions, requirements<br />docs.</div>")]
+        style 67 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      end
+
+    end
+
+  end

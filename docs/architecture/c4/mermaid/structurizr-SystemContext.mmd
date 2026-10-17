@@ -1,0 +1,38 @@
+graph LR
+  linkStyle default fill:#ffffff
+
+  subgraph diagram ["System Context View: QBrain.AI"]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    1["<div style='font-weight: bold'>Developer / Operator</div><div style='font-size: 70%; margin-top: 0px'>[Person]</div><div style='font-size: 80%; margin-top:10px'>Human who pairs agents with<br />workspaces, manages TODOs,<br />requirements and reviews<br />through Swagger, /pair and<br />the REPL.</div>"]
+    style 1 fill:#08427b,stroke:#052e56,color:#ffffff
+    10["<div style='font-weight: bold'>QBrain.AI</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Workspace-scoped context,<br />memory, TODO, requirements,<br />session-log, triage and<br />agent-orchestration platform<br />for AI coding agents<br />(formerly McpServer).</div>"]
+    style 10 fill:#1168bd,stroke:#0b4884,color:#ffffff
+    2["<div style='font-weight: bold'>AI Coding Agent</div><div style='font-size: 70%; margin-top: 0px'>[Person]</div><div style='font-size: 80%; margin-top:10px'>Codex, Claude Code, Grok,<br />Copilot, Cline, OpenCode and<br />similar agents that read the<br />marker file and call<br />QBrain.AI for context, TODOs<br />and session logs.</div>"]
+    style 2 fill:#08427b,stroke:#052e56,color:#ffffff
+    3["<div style='font-weight: bold'>GitHub</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Issues, pull requests and<br />repositories reached through<br />the gh CLI.</div>"]
+    style 3 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    4["<div style='font-weight: bold'>LLM Providers and Agent CLIs</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>grok-cli, codex-cli, copilot<br />CLI and OpenAI-compatible<br />endpoints used as brain slots<br />and hosted agents.</div>"]
+    style 4 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    5["<div style='font-weight: bold'>Tunnel Providers</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Cloudflare tunnel, ngrok and<br />a self-hosted FRP server that<br />expose the local server port.</div>"]
+    style 5 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    6["<div style='font-weight: bold'>Parseable</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Optional log ingestion<br />service for Serilog events.</div>"]
+    style 6 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    7["<div style='font-weight: bold'>Hugging Face</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Hosts the all-MiniLM-L6-v2<br />ONNX model and vocab,<br />auto-downloaded for<br />embeddings.</div>"]
+    style 7 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    8["<div style='font-weight: bold'>External OIDC Provider</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Optional external identity<br />provider used instead of the<br />embedded Duende<br />IdentityServer.</div>"]
+    style 8 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    9["<div style='font-weight: bold'>Federated QBrain.AI Instance</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Upstream or peer QBrain.AI<br />server used for federation of<br />TODOs, session logs and<br />GraphRAG.</div>"]
+    style 9 fill:#999999,stroke:#6b6b6b,color:#ffffff
+
+    10-. "<div>Downloads embedding model</div><div style='font-size: 70%'>[HTTPS]</div>" .->7
+    10-. "<div>Delegates authentication<br />(optional)</div><div style='font-size: 70%'>[OIDC]</div>" .->8
+    10-. "<div>Federates TODOs, session<br />logs, GraphRAG</div><div style='font-size: 70%'>[HTTPS, signed envelopes]</div>" .->9
+    1-. "<div>Manages workspaces, TODOs,<br />requirements and reviews</div><div style='font-size: 70%'>[HTTPS (Swagger, /pair), REPL]</div>" .->10
+    2-. "<div>Reads context, updates TODOs,<br />appends session logs</div><div style='font-size: 70%'>[MCP over STDIO or HTTP, REST, YAML STDIO REPL]</div>" .->10
+    10-. "<div>Syncs issues, reads and<br />writes PRs</div><div style='font-size: 70%'>[gh CLI]</div>" .->3
+    10-. "<div>Invokes brain slots and<br />hosted agents</div><div style='font-size: 70%'>[CLI process or OpenAI-compatible HTTPS]</div>" .->4
+    10-. "<div>Exposes local port</div><div style='font-size: 70%'>[cloudflared, ngrok, frpc]</div>" .->5
+    10-. "<div>Ships logs (optional)</div><div style='font-size: 70%'>[HTTPS JSON ingest]</div>" .->6
+
+  end
