@@ -25,6 +25,8 @@ public static class McpDatabaseMigrationCoordinator
         ArgumentNullException.ThrowIfNull(dbContext);
         ArgumentNullException.ThrowIfNull(providerOptions);
 
+        // TR-MCP-PATHNORM-001: legacy keys must be rejected before migrations issue canonical queries.
+        await ValidateWorkspaceKeysBeforeMigrationAsync(dbContext, cancellationToken).ConfigureAwait(false);
         await AdoptLegacyHistoryAsync(dbContext, cancellationToken).ConfigureAwait(false);
         await dbContext.Database.MigrateAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -43,11 +45,21 @@ public static class McpDatabaseMigrationCoordinator
             return;
         }
 
+        await ValidateWorkspaceKeysBeforeMigrationAsync(dbContext, cancellationToken).ConfigureAwait(false);
         var pending = (await dbContext.Database.GetPendingMigrationsAsync(cancellationToken).ConfigureAwait(false)).ToArray();
         if (pending.Length > 0)
             throw new InvalidOperationException(
                 "Database migrations must be applied by the schema administrator before runtime startup. Pending: "
                 + string.Join(", ", pending));
+    }
+
+    private static async Task ValidateWorkspaceKeysBeforeMigrationAsync(McpDbContext dbContext, CancellationToken cancellationToken)
+    {
+        // Provider existence probes are raw infrastructure reads. A missing server catalog must
+        // remain eligible for normal first-start creation by MigrateAsync.
+        var creator = dbContext.GetService<Microsoft.EntityFrameworkCore.Storage.IRelationalDatabaseCreator>();
+        if (await creator.ExistsAsync(cancellationToken).ConfigureAwait(false))
+            await WorkspacePathRekeyGuard.ValidateStartupAsync(dbContext.Database.GetDbConnection(), cancellationToken).ConfigureAwait(false);
     }
 
     private static async Task AdoptLegacyHistoryAsync(McpDbContext dbContext, CancellationToken cancellationToken)

@@ -34,7 +34,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
     /// TodoItems before the TodoRecords table is dropped.
     /// </summary>
     [Fact]
-    public void Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos()
+    public async Task Migrate_RemoveTodoRecords_BackfillsAnchorOnlyTriageTodos()
     {
         using (var db = CreateContext())
         {
@@ -44,6 +44,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
+            await RekeyLegacyFixtureAsync();
             db.Database.Migrate();
 
             var todo = db.TodoItems
@@ -66,7 +67,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
     /// service workspace get a non-destructive canonical copy in the triage workspace.
     /// </summary>
     [Fact]
-    public void Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace()
+    public async Task Migrate_RepairTriageCreatedTodoWorkspace_CopiesWrongWorkspaceTodoToTriageWorkspace()
     {
         using (var db = CreateContext())
         {
@@ -76,6 +77,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
+            await RekeyLegacyFixtureAsync();
             db.Database.Migrate();
 
             var todo = db.TodoItems
@@ -99,6 +101,21 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
     }
 
     private McpDbContext CreateContext() => new(_options);
+
+    /// <summary>TEST-MCP-PATHNORM-001: explicitly rekey historical raw fixtures before canonical EF predicates or later migrations run.</summary>
+    private async Task RekeyLegacyFixtureAsync()
+    {
+        var backup = Path.Combine(Path.GetTempPath(), $"p15-migration-{Guid.NewGuid():N}.db");
+        try
+        {
+            await QBrainAi.Support.Mcp.DatabaseMaintenance.WorkspacePathRekey.RunAsync(
+                _connection, false, backup, TestContext.Current.CancellationToken);
+        }
+        finally
+        {
+            if (File.Exists(backup)) File.Delete(backup);
+        }
+    }
 
     private void SeedAnchorOnlyTriageTodo(McpDbContext db)
     {
