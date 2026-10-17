@@ -1,0 +1,45 @@
+graph LR
+  linkStyle default fill:#ffffff
+
+  subgraph diagram ["Component View: QBrain.AI - REPL Host"]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    2["<div style='font-weight: bold'>AI Coding Agent</div><div style='font-size: 70%; margin-top: 0px'>[Person]</div><div style='font-size: 80%; margin-top:10px'>Codex, Claude Code, Grok,<br />Copilot, Cline, OpenCode and<br />similar agents that read the<br />marker file and call<br />QBrain.AI for context, TODOs<br />and session logs.</div>"]
+    style 2 fill:#08427b,stroke:#052e56,color:#ffffff
+
+    subgraph 10 ["QBrain.AI"]
+      style 10 fill:#ffffff,stroke:#0b4884,color:#0b4884
+
+      subgraph 42 ["REPL Host"]
+        style 42 fill:#ffffff,stroke:#2e6295,color:#2e6295
+
+        43["<div style='font-weight: bold'>Agent STDIO Handler</div><div style='font-size: 70%; margin-top: 0px'>[Component: AgentStdioHandler, AgentStdioProtocol]</div><div style='font-size: 80%; margin-top:10px'>Reads YAML envelopes on<br />STDIN, writes responses;<br />modes --agent-stdio and<br />--interactive.</div>"]
+        style 43 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        44["<div style='font-weight: bold'>REPL Command Dispatcher</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Repl.Core]</div><div style='font-size: 80%; margin-top:10px'>Routes commands to workflows,<br />validates YAML messages,<br />mutation policy.</div>"]
+        style 44 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        45["<div style='font-weight: bold'>Workflows</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Repl.Core]</div><div style='font-size: 80%; margin-top:10px'>Todo, SessionLog, Memory,<br />Requirements, GraphRag,<br />Handoff, HostileReview,<br />Triage, WorkspaceValidation,<br />AgentHelp,<br />TranscriptIngestion<br />workflows.</div>"]
+        style 45 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        46["<div style='font-weight: bold'>Marker and Trust Bootstrap</div><div style='font-size: 70%; margin-top: 0px'>[Component: MarkerFileClientOptionsResolver, TrustBootstrapService]</div><div style='font-size: 80%; margin-top:10px'>Finds AGENTS-README-FIRST<br />marker, resolves workspace<br />and client options, trust<br />state, auth rotation.</div>"]
+        style 46 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        47["<div style='font-weight: bold'>QBrainAi.Client</div><div style='font-size: 70%; margin-top: 0px'>[Component: HttpClient library]</div><div style='font-size: 80%; margin-top:10px'>Typed REST client (about 40<br />clients: Todo, SessionLog,<br />Context, Memory, GraphRag,<br />Federation, Tunnel, ...).</div>"]
+        style 47 fill:#85bbf0,stroke:#5d82a8,color:#000000
+      end
+
+      11["<div style='font-weight: bold'>MCP Context Server</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core, .NET 9 (QBrainAi.Support.Mcp)]</div><div style='font-size: 80%; margin-top:10px'>Single ASP.NET Core host<br />exposing REST, MCP HTTP<br />transport, pairing UI,<br />identity and background<br />workers.</div>"]
+      style 11 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      37[("<div style='font-weight: bold'>Workspace Files</div><div style='font-size: 70%; margin-top: 0px'>[Container: Filesystem (/workspace)]</div><div style='font-size: 80%; margin-top:10px'>Mounted repository:<br />AGENTS-README-FIRST marker,<br />docs/Project/TODO.yaml,<br />docs/sessions, requirements<br />docs.</div>")]
+      style 37 fill:#438dd5,stroke:#2e6295,color:#ffffff
+    end
+
+    2-. "<div>Calls MCP tools</div><div style='font-size: 70%'>[MCP HTTP /mcp-transport]</div>" .->11
+    11-. "<div>Reads docs, writes<br />projections and session logs</div><div style='font-size: 70%'>[File I/O]</div>" .->37
+    47-. "<div>REST requests</div><div style='font-size: 70%'>[HTTP/JSON]</div>" .->11
+    2-. "<div>YAML envelopes</div><div style='font-size: 70%'>[STDIO]</div>" .->43
+    43-. "<div>Parsed command</div><div style='font-size: 70%'>[In-process]</div>" .->44
+    44-. "<div>Dispatch</div><div style='font-size: 70%'>[In-process]</div>" .->45
+    45-. "<div>Calls</div><div style='font-size: 70%'>[In-process]</div>" .->47
+    46-. "<div>Supplies endpoint and<br />credentials</div><div style='font-size: 70%'>[In-process]</div>" .->47
+    46-. "<div>Reads marker file</div><div style='font-size: 70%'>[File I/O]</div>" .->37
+    47-. "<div>REST</div><div style='font-size: 70%'>[HTTP/JSON]</div>" .->11
+
+  end
