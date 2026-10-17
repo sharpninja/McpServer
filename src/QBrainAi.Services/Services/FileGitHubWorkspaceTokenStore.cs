@@ -150,13 +150,37 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
             EnsureRestrictedFilePermissions(path);
             var json = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
             var doc = JsonSerializer.Deserialize(json, GitHubTokenStoreJsonContext.Default.GitHubTokenStoreDocument);
-            return doc ?? new GitHubTokenStoreDocument();
+            return CanonicalizeLegacyEntries(doc ?? new GitHubTokenStoreDocument());
         }
         catch (JsonException ex)
         {
             _logger.LogWarning(ex, "GitHub token store is invalid JSON at {Path}. Using empty store.", path);
             return new GitHubTokenStoreDocument();
         }
+    }
+
+    /// <summary>
+    /// Entries persisted before the forward-slash key change (for example <c>C:\repo</c>) are rewritten to the
+    /// canonical key on read, so lookups, upserts and deletes see one entry per workspace. When two entries
+    /// collapse to the same key the most recently updated one wins. The document is persisted on the next write.
+    /// </summary>
+    private static GitHubTokenStoreDocument CanonicalizeLegacyEntries(GitHubTokenStoreDocument doc)
+    {
+        var merged = new List<GitHubTokenStoreEntry>(doc.Entries.Count);
+        foreach (var entry in doc.Entries)
+        {
+            if (!string.IsNullOrWhiteSpace(entry.WorkspacePath))
+                entry.WorkspacePath = NormalizeWorkspacePath(entry.WorkspacePath);
+
+            var index = merged.FindIndex(e => string.Equals(e.WorkspacePath, entry.WorkspacePath, StringComparison.OrdinalIgnoreCase));
+            if (index < 0)
+                merged.Add(entry);
+            else if (entry.UpdatedAtUtc > merged[index].UpdatedAtUtc)
+                merged[index] = entry;
+        }
+
+        doc.Entries = merged;
+        return doc;
     }
 
     private async Task WriteUnlockedAsync(GitHubTokenStoreDocument doc, CancellationToken ct)
