@@ -1,0 +1,115 @@
+{
+  "purpose": "Server audit of every update to the effort branch, to prove no push used force (HV round 1 unknown U01)",
+  "readUtc": "2026-10-17T16:00:27.0115366Z",
+  "readLocal": "2026-10-17T11:00:27",
+  "command": "gh api --paginate repos/sharpninja/McpServer/activity?ref=refs%2Fheads%2Fdocs%2Fhv-architecture-amendment-20261016&per_page=100",
+  "repository": "sharpninja/McpServer",
+  "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+  "entryCount": 10,
+  "countsByType": {
+    "branch_creation": 1,
+    "push": 9
+  },
+  "entries": [
+    {
+      "id": 46756800940,
+      "activityType": "branch_creation",
+      "timestampUtc": "2026-10-16T19:54:08Z",
+      "timestampLocal": "2026-10-16T14:54:08",
+      "before": "0000000000000000000000000000000000000000",
+      "after": "31af8c597e3570a2469a48a238a4aa76107f30bb",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46761710122,
+      "activityType": "push",
+      "timestampUtc": "2026-10-16T20:52:02Z",
+      "timestampLocal": "2026-10-16T15:52:02",
+      "before": "31af8c597e3570a2469a48a238a4aa76107f30bb",
+      "after": "99cb42b24a442377a776aebd58e9df6894c2ce40",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46762976355,
+      "activityType": "push",
+      "timestampUtc": "2026-10-16T21:07:20Z",
+      "timestampLocal": "2026-10-16T16:07:20",
+      "before": "99cb42b24a442377a776aebd58e9df6894c2ce40",
+      "after": "9fd6b653b2522212ad8151091e3a8cdec25e75bd",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46765499077,
+      "activityType": "push",
+      "timestampUtc": "2026-10-16T21:40:04Z",
+      "timestampLocal": "2026-10-16T16:40:04",
+      "before": "9fd6b653b2522212ad8151091e3a8cdec25e75bd",
+      "after": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46820358054,
+      "activityType": "push",
+      "timestampUtc": "2026-10-17T13:35:52Z",
+      "timestampLocal": "2026-10-17T08:35:52",
+      "before": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "after": "bd6e37b33f043b1ede3a1feeaf7073d357ea21cf",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46820417271,
+      "activityType": "push",
+      "timestampUtc": "2026-10-17T13:36:45Z",
+      "timestampLocal": "2026-10-17T08:36:45",
+      "before": "bd6e37b33f043b1ede3a1feeaf7073d357ea21cf",
+      "after": "f5fd5ab24ad00b09053daf07ed3c0d850f70498d",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46821378338,
+      "activityType": "push",
+      "timestampUtc": "2026-10-17T13:51:25Z",
+      "timestampLocal": "2026-10-17T08:51:25",
+      "before": "f5fd5ab24ad00b09053daf07ed3c0d850f70498d",
+      "after": "31904493381cfef56c57790950e23e72f3ecc39b",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46821753827,
+      "activityType": "push",
+      "timestampUtc": "2026-10-17T13:57:14Z",
+      "timestampLocal": "2026-10-17T08:57:14",
+      "before": "31904493381cfef56c57790950e23e72f3ecc39b",
+      "after": "0a449314528c5bfc07e9b386c97034716e2ddbd4",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46823032126,
+      "activityType": "push",
+      "timestampUtc": "2026-10-17T14:16:08Z",
+      "timestampLocal": "2026-10-17T09:16:08",
+      "before": "0a449314528c5bfc07e9b386c97034716e2ddbd4",
+      "after": "d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    },
+    {
+      "id": 46828548698,
+      "activityType": "push",
+      "timestampUtc": "2026-10-17T15:36:15Z",
+      "timestampLocal": "2026-10-17T10:36:15",
+      "before": "d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+      "after": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016",
+      "actor": "sharpninja"
+    }
+  ]
+}
