@@ -1,0 +1,219 @@
+graph TB
+  linkStyle default fill:#ffffff
+
+  subgraph diagram ["Component View: QBrain.AI - MCP Context Server"]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    2["<div style='font-weight: bold'>AI Coding Agent</div><div style='font-size: 70%; margin-top: 0px'>[Person]</div><div style='font-size: 80%; margin-top:10px'>Codex, Claude Code, Grok,<br />Copilot, Cline, OpenCode and<br />similar agents that read the<br />marker file and call<br />QBrain.AI for context, TODOs<br />and session logs.</div>"]
+    style 2 fill:#08427b,stroke:#052e56,color:#ffffff
+
+    3["<div style='font-weight: bold'>GitHub</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Issues, pull requests and<br />repositories reached through<br />the gh CLI.</div>"]
+    style 3 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    4["<div style='font-weight: bold'>LLM Providers and Agent CLIs</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>grok-cli, codex-cli, copilot<br />CLI and OpenAI-compatible<br />endpoints used as brain slots<br />and hosted agents.</div>"]
+    style 4 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    5["<div style='font-weight: bold'>Tunnel Providers</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Cloudflare tunnel, ngrok and<br />a self-hosted FRP server that<br />expose the local server port.</div>"]
+    style 5 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    7["<div style='font-weight: bold'>Hugging Face</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Hosts the all-MiniLM-L6-v2<br />ONNX model and vocab,<br />auto-downloaded for<br />embeddings.</div>"]
+    style 7 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    8["<div style='font-weight: bold'>External OIDC Provider</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Optional external identity<br />provider used instead of the<br />embedded Duende<br />IdentityServer.</div>"]
+    style 8 fill:#999999,stroke:#6b6b6b,color:#ffffff
+    9["<div style='font-weight: bold'>Federated QBrain.AI Instance</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Upstream or peer QBrain.AI<br />server used for federation of<br />TODOs, session logs and<br />GraphRAG.</div>"]
+    style 9 fill:#999999,stroke:#6b6b6b,color:#ffffff
+
+    subgraph 10 ["QBrain.AI"]
+      style 10 fill:#ffffff,stroke:#0b4884,color:#0b4884
+
+      subgraph 11 ["MCP Context Server"]
+        style 11 fill:#ffffff,stroke:#2e6295,color:#2e6295
+
+        12["<div style='font-weight: bold'>REST Controllers</div><div style='font-size: 70%; margin-top: 0px'>[Component: ASP.NET Core MVC (Controllers/*)]</div><div style='font-size: 80%; margin-top:10px'>About 36 controllers: todo,<br />session log, requirements,<br />use cases, memory, context,<br />GraphRAG, handoff, hostile<br />review, triage, agent pool,<br />workspace, federation,<br />tunnel, GitHub, repo, voice,<br />products.</div>"]
+        style 12 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        13["<div style='font-weight: bold'>MCP HTTP Transport</div><div style='font-size: 70%; margin-top: 0px'>[Component: ModelContextProtocol.AspNetCore (MapMcp)]</div><div style='font-size: 80%; margin-top:10px'>MCP server endpoint at<br />/mcp-transport.</div>"]
+        style 13 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        14["<div style='font-weight: bold'>MCP STDIO Host</div><div style='font-size: 70%; margin-top: 0px'>[Component: McpStdioHost]</div><div style='font-size: 80%; margin-top:10px'>Same executable started with<br />--transport stdio; runs MCP<br />over stdin/stdout with its<br />own service registrations<br />(not a separate container).</div>"]
+        style 14 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        15["<div style='font-weight: bold'>MCP Tool Surface</div><div style='font-size: 70%; margin-top: 0px'>[Component: MCP tools (McpStdio/*), shared by HTTP and STDIO transports]</div><div style='font-size: 80%; margin-top:10px'>FwhMcpTools.* and<br />QBrainAiMcpTools: tool<br />wrappers over context, todo,<br />session log, requirements,<br />memory, handoff, hostile<br />review, triage, use cases,<br />workspace validation.</div>"]
+        style 15 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        16["<div style='font-weight: bold'>Pairing and API Key</div><div style='font-size: 70%; margin-top: 0px'>[Component: Minimal APIs, WorkspaceTokenService, PairingSessionService]</div><div style='font-size: 80%; margin-top:10px'>/pair, /pair/key, /pair/qr,<br />/api-key issue workspace<br />tokens and QR pairing.</div>"]
+        style 16 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        17["<div style='font-weight: bold'>Request Pipeline</div><div style='font-size: 70%; margin-top: 0px'>[Component: ASP.NET Core middleware]</div><div style='font-size: 80%; margin-top:10px'>Workspace resolution,<br />workspace auth, federation<br />and interaction logging<br />middleware, JWT bearer auth,<br />health checks, Swagger.</div>"]
+        style 17 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        18["<div style='font-weight: bold'>Identity</div><div style='font-size: 70%; margin-top: 0px'>[Component: Duende IdentityServer, IOidcProviderStrategy]</div><div style='font-size: 80%; margin-top:10px'>Embedded Duende<br />IdentityServer with ASP.NET<br />Identity, device flow, or<br />external OIDC via strategy.</div>"]
+        style 18 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        19["<div style='font-weight: bold'>Workspace Service</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services]</div><div style='font-size: 80%; margin-top:10px'>Resolves workspaces and<br />marker files, readiness,<br />process manager, policy,<br />projection writer.</div>"]
+        style 19 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        20["<div style='font-weight: bold'>TODO Service</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services (EfTodoService, TodoExecutionService)]</div><div style='font-size: 80%; margin-top:10px'>EF-backed TODOs, creation,<br />update, validation,<br />execution, YAML bootstrap<br />import, GitHub issue sync.</div>"]
+        style 20 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        21["<div style='font-weight: bold'>Session Log Service</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services, QBrainAi.SessionLog.Transcripts]</div><div style='font-size: 80%; margin-top:10px'>Sessions, turns, actions,<br />dialogs, sanitizing,<br />turn-context validation, file<br />watcher import, transcript<br />ingestion.</div>"]
+        style 21 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        22["<div style='font-weight: bold'>Requirements and Use Cases</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services (Requirements, UseCases)]</div><div style='font-size: 80%; margin-top:10px'>FR/TR/TEST documents,<br />traceability, use case CQRS,<br />FR coverage gate, recovery<br />runs.</div>"]
+        style 22 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        23["<div style='font-weight: bold'>Memory Service</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services (Memory)]</div><div style='font-size: 80%; margin-top:10px'>Layered memory with<br />consolidate, promote,<br />explore, competitive ops,<br />session-log hook, bench<br />harness.</div>"]
+        style 23 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        24["<div style='font-weight: bold'>Context Search and Ingestion</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services, QBrainAi.Storage (Indexing)]</div><div style='font-size: 80%; margin-top:10px'>FTS5, vector and hybrid<br />search; ingestors for repo,<br />GitHub issues, external docs,<br />websites and session logs;<br />embeddings and chunker.</div>"]
+        style 24 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        25["<div style='font-weight: bold'>GraphRAG</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.GraphRag]</div><div style='font-size: 80%; margin-top:10px'>CQRS commands and queries,<br />internal fallback or<br />external-command backend,<br />federated GraphRAG, global<br />corpus seeder.</div>"]
+        style 25 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        26["<div style='font-weight: bold'>Triage, Handoff and Hostile Review</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services]</div><div style='font-size: 80%; margin-top:10px'>Triage queue worker and<br />research runner, handoff<br />ingestion, hostile review<br />director and service.</div>"]
+        style 26 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        27["<div style='font-weight: bold'>Brain Slots and Quad Brain</div><div style='font-size: 70%; margin-top: 0px'>[Component: Support.Mcp/Services, config/brain-slots]</div><div style='font-size: 80%; margin-top:10px'>Brain slot registry,<br />credential resolution, CLI<br />and OpenAI chat clients,<br />quad-brain orchestration and<br />OpenAI-compatible controller.</div>"]
+        style 27 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        28["<div style='font-weight: bold'>Agent Pool and Processes</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services, QBrainAi.McpAgent hosting]</div><div style='font-size: 80%; margin-top:10px'>Agent pool, health monitor,<br />process manager, execution<br />strategies (codex, copilot,<br />grok, hosted, one-shot),<br />branch and isolation<br />strategies.</div>"]
+        style 28 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        29["<div style='font-weight: bold'>Federation</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services (Federation*)]</div><div style='font-size: 80%; margin-top:10px'>Registry, topology, envelope<br />signing, proxy, queued<br />replay, fanout sync, conflict<br />and outbox.</div>"]
+        style 29 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        30["<div style='font-weight: bold'>Tunnel Registry</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services (TunnelRegistry, *TunnelProvider)]</div><div style='font-size: 80%; margin-top:10px'>Starts and tracks Cloudflare,<br />ngrok or FRP tunnels.</div>"]
+        style 30 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        31["<div style='font-weight: bold'>GitHub Integration</div><div style='font-size: 70%; margin-top: 0px'>[Component: GitHubCliService]</div><div style='font-size: 80%; margin-top:10px'>gh CLI wrapper, workspace<br />token store, issue-todo sync.</div>"]
+        style 31 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        32["<div style='font-weight: bold'>Transaction Security</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.TransactionSecurity]</div><div style='font-size: 80%; margin-top:10px'>Turn transaction coordinator,<br />diffgram protector, pub/sub<br />replay worker, gated service<br />decorators<br />(TransactionGated*).</div>"]
+        style 32 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        33["<div style='font-weight: bold'>Tool Registry, Templates and Products</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Services, Support.Mcp/Products]</div><div style='font-size: 80%; margin-top:10px'>Tool registry and buckets,<br />prompt templates, products<br />and workspace sharing.</div>"]
+        style 33 fill:#85bbf0,stroke:#5d82a8,color:#000000
+        34["<div style='font-weight: bold'>Storage and Providers</div><div style='font-size: 70%; margin-top: 0px'>[Component: QBrainAi.Storage and *Migrations]</div><div style='font-size: 80%; margin-top:10px'>EF Core DbContext, provider<br />strategies for SQLite,<br />PostgreSQL, SQL Server,<br />migration and encryption<br />coordinators, startup<br />bootstrap.</div>"]
+        style 34 fill:#85bbf0,stroke:#5d82a8,color:#000000
+      end
+
+      35[("<div style='font-weight: bold'>MCP Database</div><div style='font-size: 70%; margin-top: 0px'>[Container: SQLite (default), PostgreSQL or SQL Server via EF Core]</div><div style='font-size: 80%; margin-top:10px'>Relational store for TODOs,<br />session logs, requirements,<br />memory, graph, federation,<br />identity and audit data.<br />Default file mcp.db in /data.</div>")]
+      style 35 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      36[("<div style='font-weight: bold'>Vector Index</div><div style='font-size: 70%; margin-top: 0px'>[Container: HnswIndex file, ONNX embeddings]</div><div style='font-size: 80%; margin-top:10px'>HNSW index file used for<br />semantic search, at<br />/data/vector.idx.</div>")]
+      style 36 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      37[("<div style='font-weight: bold'>Workspace Files</div><div style='font-size: 70%; margin-top: 0px'>[Container: Filesystem (/workspace)]</div><div style='font-size: 80%; margin-top:10px'>Mounted repository:<br />AGENTS-README-FIRST marker,<br />docs/Project/TODO.yaml,<br />docs/sessions, requirements<br />docs.</div>")]
+      style 37 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      41["<div style='font-weight: bold'>Transaction Subscriber</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core minimal API (QBrainAi.Subscriber)]</div><div style='font-size: 80%; margin-top:10px'>Optional standalone<br />subscriber host<br />(AddHttpTransactionSubscriber):<br />receives diffgram commits<br />over HTTP and verifies<br />manifests through the Key<br />Server. Default server<br />configuration uses an<br />in-process subscriber<br />instead.</div>"]
+      style 41 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      42["<div style='font-weight: bold'>REPL Host</div><div style='font-size: 70%; margin-top: 0px'>[Container: Console app, .NET 9, System.CommandLine (QBrainAi.Repl.Host)]</div><div style='font-size: 80%; margin-top:10px'>Per-agent YAML-over-STDIO and<br />interactive REPL that proxies<br />workflows (todo, session log,<br />memory, requirements,<br />GraphRAG, handoff, triage) to<br />the server REST API.</div>"]
+      style 42 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      53["<div style='font-weight: bold'>Desktop Launcher</div><div style='font-size: 70%; margin-top: 0px'>[Container: Console exe, Win32 P/Invoke (QBrainAi.Launcher)]</div><div style='font-size: 80%; margin-top:10px'>Windows helper that launches<br />a process on the interactive<br />desktop using<br />CreateProcessWithTokenW;<br />takes JSON argument and<br />returns JSON on stdout.</div>"]
+      style 53 fill:#438dd5,stroke:#2e6295,color:#ffffff
+      54["<div style='font-weight: bold'>FRP Relay</div><div style='font-size: 70%; margin-top: 0px'>[Container: frp, Docker (infra/frp)]</div><div style='font-size: 80%; margin-top:10px'>Self-hosted frps server<br />(Railway or local compose)<br />tunnelling the server port.</div>"]
+      style 54 fill:#438dd5,stroke:#2e6295,color:#ffffff
+    end
+
+    2-. "<div>Sends YAML commands</div><div style='font-size: 70%'>[STDIO]</div>" .->42
+    2-. "<div>MCP calls</div><div style='font-size: 70%'>[MCP HTTP /mcp-transport]</div>" .->13
+    2-. "<div>MCP calls when launched with<br />--transport stdio</div><div style='font-size: 70%'>[MCP STDIO]</div>" .->14
+    42-. "<div>REST requests</div><div style='font-size: 70%'>[HTTP/JSON]</div>" .->17
+    17-. "<div>Authenticates JWT bearer<br />tokens (UseAuthentication)</div><div style='font-size: 70%'>[In-process]</div>" .->18
+    17-. "<div>Authenticated,<br />workspace-resolved requests</div><div style='font-size: 70%'>[In-process]</div>" .->12
+    17-. "<div>Resolves workspace and<br />populates WorkspaceContext</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    17-. "<div>Validates workspace tokens</div><div style='font-size: 70%'>[In-process]</div>" .->16
+    17-. "<div>Federation proxy and routing</div><div style='font-size: 70%'>[In-process]</div>" .->29
+    17-. "<div>Optional DbContext lookup for<br />workspace resolution</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    18-. "<div>Identity tables via separate<br />McpIdentityDbContext (SQL<br />Server connection string)</div><div style='font-size: 70%'>[EF Core]</div>" .->35
+    18-. "<div>External OIDC (optional)</div><div style='font-size: 70%'>[HTTPS]</div>" .->8
+    14-. "<div>Registers the same tool<br />classes as the HTTP transport</div><div style='font-size: 70%'>[In-process]</div>" .->15
+    13-. "<div>Dispatches tool calls</div><div style='font-size: 70%'>[In-process]</div>" .->15
+    15-. "<div>Uses</div><div style='font-size: 70%'>[In-process]</div>" .->20
+    15-. "<div>Uses</div><div style='font-size: 70%'>[In-process]</div>" .->21
+    15-. "<div>Uses</div><div style='font-size: 70%'>[In-process]</div>" .->22
+    15-. "<div>Uses (via gated service)</div><div style='font-size: 70%'>[In-process]</div>" .->23
+    15-. "<div>Uses</div><div style='font-size: 70%'>[In-process]</div>" .->24
+    15-. "<div>Uses</div><div style='font-size: 70%'>[In-process]</div>" .->26
+    15-. "<div>Resolves workspace</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    15-. "<div>Mutations through gated<br />services and turn coordinator</div><div style='font-size: 70%'>[In-process]</div>" .->32
+    15-. "<div>Uses</div><div style='font-size: 70%'>[In-process]</div>" .->25
+    15-. "<div>Uses</div><div style='font-size: 70%'>[In-process]</div>" .->31
+    15-. "<div>Desktop launch</div><div style='font-size: 70%'>[In-process]</div>" .->28
+    15-. "<div>Prompt templates</div><div style='font-size: 70%'>[In-process]</div>" .->33
+    15-. "<div>Sync status and DbContext</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    12-. "<div>Resolves workspace, policy<br />and validation</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    12-. "<div>Mutations go through gated<br />services and turn coordinator</div><div style='font-size: 70%'>[In-process]</div>" .->32
+    12-. "<div>TODO queries, execution and<br />prompts</div><div style='font-size: 70%'>[In-process]</div>" .->20
+    12-. "<div>Session logs and transcript<br />ingestion</div><div style='font-size: 70%'>[In-process]</div>" .->21
+    12-. "<div>Requirements, use cases and<br />recovery</div><div style='font-size: 70%'>[In-process]</div>" .->22
+    12-. "<div>Memory operations</div><div style='font-size: 70%'>[In-process]</div>" .->23
+    12-. "<div>Context search, pack, repo<br />files</div><div style='font-size: 70%'>[In-process]</div>" .->24
+    12-. "<div>GraphRAG queries and commands</div><div style='font-size: 70%'>[In-process]</div>" .->25
+    12-. "<div>Triage, handoff, hostile<br />review</div><div style='font-size: 70%'>[In-process]</div>" .->26
+    12-. "<div>Brain slots and<br />OpenAI-compatible quad brain<br />endpoint</div><div style='font-size: 70%'>[In-process]</div>" .->27
+    12-. "<div>Agent pool and desktop launch</div><div style='font-size: 70%'>[In-process]</div>" .->28
+    12-. "<div>Federation endpoints</div><div style='font-size: 70%'>[In-process]</div>" .->29
+    12-. "<div>Tunnel control</div><div style='font-size: 70%'>[In-process]</div>" .->30
+    12-. "<div>GitHub operations</div><div style='font-size: 70%'>[In-process]</div>" .->31
+    12-. "<div>Registry, templates, products</div><div style='font-size: 70%'>[In-process]</div>" .->33
+    12-. "<div>Workspace token for QuadBrain<br />endpoint</div><div style='font-size: 70%'>[In-process]</div>" .->16
+    12-. "<div>Direct DbContext use</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    16-. "<div>Renders pairing pages from<br />templates</div><div style='font-size: 70%'>[In-process]</div>" .->33
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->20
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->21
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->23
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->22
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->25
+    32-. "<div>Workspace scope for gated<br />mutations</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->33
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->31
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->24
+    32-. "<div>Gated delegate</div><div style='font-size: 70%'>[In-process]</div>" .->28
+    32-. "<div>Audit and state via DbContext</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    32-. "<div>Optional HTTP diffgram commit<br />when<br />TurnTransactionOptions.PubSubTransport=Http<br />(default Direct, in-process)</div><div style='font-size: 70%'>[HTTP/JSON]</div>" .->41
+    20-. "<div>Issue sync</div><div style='font-size: 70%'>[In-process]</div>" .->31
+    20-. "<div>Workspace scope</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    20-. "<div>Requirement linkage</div><div style='font-size: 70%'>[In-process]</div>" .->22
+    20-. "<div>Federated TODO service</div><div style='font-size: 70%'>[In-process]</div>" .->29
+    20-. "<div>Prompt templates</div><div style='font-size: 70%'>[In-process]</div>" .->33
+    20-. "<div>Imports TODO.yaml</div><div style='font-size: 70%'>[File I/O]</div>" .->37
+    20-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    21-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    21-. "<div>Workspace scope</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    21-. "<div>Federated session log service</div><div style='font-size: 70%'>[In-process]</div>" .->29
+    21-. "<div>Watches docs/sessions</div><div style='font-size: 70%'>[File I/O]</div>" .->37
+    22-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    22-. "<div>Workspace scope</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    23-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    25-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    25-. "<div>Hybrid search, embeddings,<br />vector index</div><div style='font-size: 70%'>[In-process]</div>" .->24
+    25-. "<div>Federated GraphRAG</div><div style='font-size: 70%'>[In-process]</div>" .->29
+    25-. "<div>Workspace scope</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    24-. "<div>Persists FTS and ingestion<br />state</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    24-. "<div>Workspace scope</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    24-. "<div>Issue and repo ingestion</div><div style='font-size: 70%'>[In-process]</div>" .->31
+    24-. "<div>Session log ingestion</div><div style='font-size: 70%'>[In-process]</div>" .->21
+    24-. "<div>Embedding model download</div><div style='font-size: 70%'>[HTTPS]</div>" .->7
+    24-. "<div>Index read/write</div><div style='font-size: 70%'>[File I/O]</div>" .->36
+    24-. "<div>Repo and docs ingestion</div><div style='font-size: 70%'>[File I/O]</div>" .->37
+    26-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    26-. "<div>Workspace scope</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    26-. "<div>Creates TODOs</div><div style='font-size: 70%'>[In-process]</div>" .->20
+    26-. "<div>Runs research through agent<br />execution strategies</div><div style='font-size: 70%'>[In-process]</div>" .->28
+    26-. "<div>Prompt templates</div><div style='font-size: 70%'>[In-process]</div>" .->33
+    26-. "<div>Sanitizes handoff content</div><div style='font-size: 70%'>[In-process]</div>" .->21
+    27-. "<div>Turn transactions and gated<br />mutations</div><div style='font-size: 70%'>[In-process]</div>" .->32
+    27-. "<div>Context admission using<br />chunker and embeddings</div><div style='font-size: 70%'>[In-process]</div>" .->24
+    27-. "<div>Logs brain interactions</div><div style='font-size: 70%'>[In-process]</div>" .->21
+    27-. "<div>Internal tool: TODOs</div><div style='font-size: 70%'>[In-process]</div>" .->20
+    27-. "<div>Internal tool: requirements</div><div style='font-size: 70%'>[In-process]</div>" .->22
+    27-. "<div>Internal tool: GraphRAG</div><div style='font-size: 70%'>[In-process]</div>" .->25
+    27-. "<div>Internal tool: desktop launch</div><div style='font-size: 70%'>[In-process]</div>" .->28
+    27-. "<div>Workspace scope</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    27-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    27-. "<div>CLI or HTTP chat</div><div style='font-size: 70%'>[Process, HTTPS]</div>" .->4
+    28-. "<div>Prompt templates</div><div style='font-size: 70%'>[In-process]</div>" .->33
+    28-. "<div>Todo prompts</div><div style='font-size: 70%'>[In-process]</div>" .->20
+    28-. "<div>Workspace scope</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    28-. "<div>Workspace token for hosted<br />agents</div><div style='font-size: 70%'>[In-process]</div>" .->16
+    28-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    28-. "<div>Runs agent CLIs</div><div style='font-size: 70%'>[Process]</div>" .->4
+    28-. "<div>Desktop spawn</div><div style='font-size: 70%'>[Process]</div>" .->53
+    29-. "<div>Applies operations inside<br />turn transactions</div><div style='font-size: 70%'>[In-process]</div>" .->32
+    29-. "<div>Push service reads TODOs</div><div style='font-size: 70%'>[In-process]</div>" .->20
+    29-. "<div>Push service reads session<br />logs</div><div style='font-size: 70%'>[In-process]</div>" .->21
+    29-. "<div>Outbox and ops</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    29-. "<div>Sync, proxy, replay</div><div style='font-size: 70%'>[HTTPS]</div>" .->9
+    30-. "<div>Process manager for frpc</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    30-. "<div>Provider clients</div><div style='font-size: 70%'>[Process]</div>" .->5
+    30-. "<div>frpc</div><div style='font-size: 70%'>[frp]</div>" .->54
+    31-. "<div>Workspace scope for tokens</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    31-. "<div>gh CLI</div><div style='font-size: 70%'>[Process]</div>" .->3
+    19-. "<div>Persists</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    19-. "<div>Workspace tokens for process<br />manager</div><div style='font-size: 70%'>[In-process]</div>" .->16
+    19-. "<div>Accessor resolves TODO<br />service</div><div style='font-size: 70%'>[In-process]</div>" .->20
+    19-. "<div>Policy writes session log</div><div style='font-size: 70%'>[In-process]</div>" .->21
+    19-. "<div>Process manager registers<br />federation</div><div style='font-size: 70%'>[In-process]</div>" .->29
+    19-. "<div>Marker file and projections</div><div style='font-size: 70%'>[File I/O]</div>" .->37
+    34-. "<div>Workspace query filter</div><div style='font-size: 70%'>[In-process]</div>" .->19
+    34-. "<div>SQL</div><div style='font-size: 70%'>[EF Core]</div>" .->35
+    33-. "<div>Persists products</div><div style='font-size: 70%'>[In-process]</div>" .->34
+    42-. "<div>Reads marker file</div><div style='font-size: 70%'>[File I/O]</div>" .->37
+
+  end
