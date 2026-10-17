@@ -222,3 +222,14 @@ Five deployment environments, each backed by a file in the repo. No environment 
 - Not modeled because no evidence: Kubernetes, Helm, Azure or other cloud hosting of the server, a Railway MCP server service. src/QBrainAi.ServiceDefaults/RailwayConnectionStringBuilder.cs is a generic PostgreSQL connection helper, not a deployment of this system; it is not used by this system's hosts.
 - Subscriber has no UseWindowsService call and no compose service in the repo, so it is not placed in any deployment view.
 
+
+## Data layer (EF Core entity model), added in a follow-up commit
+Source commit unchanged: 36783b79. Full per-entity detail is in data/ef-entity-model.md; ER diagrams are in data/ef-er-*.mmd.
+- McpDbContext (H): src/QBrainAi.Storage/McpDbContext.cs (class line 19, 71 DbSet properties, OnModelCreating line 324, ConfigureConventions line 316); src/QBrainAi.Storage/McpDbContextFactory.cs (design-time factory). 71 entity classes in src/QBrainAi.Storage/Entities.
+- McpIdentityDbContext (H): src/QBrainAi.Support.Mcp/Identity/McpIdentityDbContext.cs, McpUser.cs; UseSqlServer in Identity/IdentityServerExtensions.cs line 25-26; EnsureCreatedAsync in Identity/IdentityServerSeeder.cs line 55. Seven entity types are the framework default (M, not read from a snapshot).
+- TransactionSecurityDbContext (H): src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs (class line 1396, UseSqlite line 609, EnsureCreated line 613); path options in Options/TransactionSecurityOptions.cs line 228 and Services/TransactionSecurityServiceCollectionExtensions.cs lines 127-129.
+- Transaction State Database container (H): SQLite file opened by SqliteTransactionSecurityStateStore only when a path is configured (PubSubDatabasePath or DatabasePath); otherwise in memory.
+- Provider Migration Assemblies (H): src/QBrainAi.Storage/Migrations (28), src/QBrainAi.Storage.SqliteMigrations/Migrations (41), src/QBrainAi.Storage.SqlServerMigrations/Migrations (41), src/QBrainAi.Storage.PostgreSqlMigrations/Migrations (41); MigrationsAssembly set in src/QBrainAi.Storage/Database/*McpDatabaseProviderStrategy.cs; MigrateAsync in Database/McpDatabaseMigrationCoordinator.cs line 29.
+- Relationship storage -> McpDbContext, McpDbContext -> db, migrations -> db, identity -> McpIdentityDbContext, txsec -> TransactionSecurityDbContext (H): DbContext registration and constructor use in the files above.
+- Relationship McpIdentityDbContext -> db (M): the connection string is configuration; whether it is the same database as McpDbContext is unconfirmed. Its provider (SQL Server) is H.
+- Entity counts (H, cross-checked four ways in data/ef-entity-model.md): 71 + 10 + 7 = 88 entity types, 119 + 1 + 6 = 126 relationships. 8 McpDbContext entities are missing from the provider model snapshots (M for their table names and relationships).

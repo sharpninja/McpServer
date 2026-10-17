@@ -3,7 +3,8 @@
 Commit: 36783b79d061303bfb3e17abe685640a953491af (fetched 2026-10-17). Generated on LAB-OMARCHY by reverse engineering the code; this directory is documentation only and changes no code. Re-run the validate and export commands after editing workspace.dsl, from this directory.
 
 ## Files
-- workspace.dsl: Structurizr DSL (11 views: SystemContext, Containers, ServerComponents, ReplComponents, QBAgentComponents, KeyServerComponents, plus five deployment views DockerCompose, WindowsService, LinuxSystemd, FrpRelay, FrpRelayLocal).
+- workspace.dsl: Structurizr DSL (12 views: SystemContext, DataLayerComponents, Containers, ServerComponents, ReplComponents, QBAgentComponents, KeyServerComponents, plus five deployment views DockerCompose, WindowsService, LinuxSystemd, FrpRelay, FrpRelayLocal).
+- data/: EF Core entity model. ef-entity-model.md (per DbContext: entities, keys, relationships, evidence paths, providers, migrations), ef-er-*.mmd (Mermaid ER diagrams, one per DbContext, McpDbContext split into 6 areas), ef-er-diagram.mmd (index).
 - evidence.md: file-path evidence and confidence per element.
 - mermaid/: Mermaid export of each view (structurizr-*.mmd).
 
@@ -13,7 +14,7 @@ Use the pinned CLI image, because structurizr/cli:latest is an end-of-life stub 
     docker run --rm -v "$PWD:/usr/local/structurizr" structurizr/cli:2025.11.09 validate -workspace workspace.dsl
     docker run --rm --user 1000:1000 -v "$PWD:/usr/local/structurizr" structurizr/cli:2025.11.09 export -workspace workspace.dsl -format mermaid -output mermaid
 
-Result after the DI trace and deployment steps: validate exit 0, export wrote 11 .mmd files. Structurizr has moved to the consolidated structurizr/structurizr tooling; not tried.
+Result after the DI trace and deployment steps: validate exit 0, export wrote 12 .mmd files (with the DataLayerComponents view). Structurizr has moved to the consolidated structurizr/structurizr tooling; not tried.
 
 ## Resolved by the DI trace (evidence.md, Step A and Step B)
 1. Transport sharing: RESOLVED. /mcp-transport (HTTP) and McpStdio both call WithToolsFromAssembly(typeof(FwhMcpTools).Assembly), so the tool set is identical. STDIO is the same executable started with --transport stdio (Program.cs:50-52), not a separate container. Modeled as the MCP STDIO Host component.

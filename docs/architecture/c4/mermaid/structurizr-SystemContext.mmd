@@ -25,14 +25,14 @@ graph LR
     9["<div style='font-weight: bold'>Federated QBrain.AI Instance</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Upstream or peer QBrain.AI<br />server used for federation of<br />TODOs, session logs and<br />GraphRAG.</div>"]
     style 9 fill:#999999,stroke:#6b6b6b,color:#ffffff
 
+    10-. "<div>Downloads embedding model</div><div style='font-size: 70%'>[HTTPS]</div>" .->7
+    10-. "<div>Delegates authentication<br />(optional)</div><div style='font-size: 70%'>[OIDC]</div>" .->8
+    10-. "<div>Federates TODOs, session<br />logs, GraphRAG</div><div style='font-size: 70%'>[HTTPS, signed envelopes]</div>" .->9
     1-. "<div>Manages workspaces, TODOs,<br />requirements and reviews</div><div style='font-size: 70%'>[HTTPS (Swagger, /pair), REPL]</div>" .->10
     2-. "<div>Reads context, updates TODOs,<br />appends session logs</div><div style='font-size: 70%'>[MCP over STDIO or HTTP, REST, YAML STDIO REPL]</div>" .->10
     10-. "<div>Syncs issues, reads and<br />writes PRs</div><div style='font-size: 70%'>[gh CLI]</div>" .->3
     10-. "<div>Invokes brain slots and<br />hosted agents</div><div style='font-size: 70%'>[CLI process or OpenAI-compatible HTTPS]</div>" .->4
     10-. "<div>Exposes local port</div><div style='font-size: 70%'>[cloudflared, ngrok, frpc]</div>" .->5
     10-. "<div>Ships logs (optional)</div><div style='font-size: 70%'>[HTTPS JSON ingest]</div>" .->6
-    10-. "<div>Downloads embedding model</div><div style='font-size: 70%'>[HTTPS]</div>" .->7
-    10-. "<div>Delegates authentication<br />(optional)</div><div style='font-size: 70%'>[OIDC]</div>" .->8
-    10-. "<div>Federates TODOs, session<br />logs, GraphRAG</div><div style='font-size: 70%'>[HTTPS, signed envelopes]</div>" .->9
 
   end

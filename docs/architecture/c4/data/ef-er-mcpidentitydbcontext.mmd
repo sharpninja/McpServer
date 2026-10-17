@@ -1,0 +1,60 @@
+%% McpIdentityDbContext ER (default ASP.NET Core Identity schema for IdentityDbContext<McpUser>; no migrations, created by EnsureCreatedAsync, SQL Server only)
+erDiagram
+    McpUser {
+        string Id PK
+        string UserName
+        string NormalizedUserName
+        string Email
+        string NormalizedEmail
+        bool EmailConfirmed
+        string PasswordHash
+        string SecurityStamp
+        string ConcurrencyStamp
+        string PhoneNumber
+        bool PhoneNumberConfirmed
+        bool TwoFactorEnabled
+        DateTimeOffset LockoutEnd
+        bool LockoutEnabled
+        int AccessFailedCount
+        string DisplayName "McpUser extension"
+    }
+    IdentityRole {
+        string Id PK
+        string Name
+        string NormalizedName
+        string ConcurrencyStamp
+    }
+    IdentityUserRole {
+        string UserId PK,FK
+        string RoleId PK,FK
+    }
+    IdentityUserClaim {
+        int Id PK
+        string UserId FK
+        string ClaimType
+        string ClaimValue
+    }
+    IdentityUserLogin {
+        string LoginProvider PK
+        string ProviderKey PK
+        string ProviderDisplayName
+        string UserId FK
+    }
+    IdentityUserToken {
+        string UserId PK,FK
+        string LoginProvider PK
+        string Name PK
+        string Value
+    }
+    IdentityRoleClaim {
+        int Id PK
+        string RoleId FK
+        string ClaimType
+        string ClaimValue
+    }
+    McpUser ||--o{ IdentityUserRole : "UserId"
+    IdentityRole ||--o{ IdentityUserRole : "RoleId"
+    McpUser ||--o{ IdentityUserClaim : "UserId"
+    McpUser ||--o{ IdentityUserLogin : "UserId"
+    McpUser ||--o{ IdentityUserToken : "UserId"
+    IdentityRole ||--o{ IdentityRoleClaim : "RoleId"

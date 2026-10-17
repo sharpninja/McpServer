@@ -1,0 +1,185 @@
+%% McpDbContext ER: sessionlog (generated from develop 36783b79; EF model snapshot plus McpDbContext.cs)
+erDiagram
+    SessionLog {
+        long Id PK
+        string AgentDefinitionId FK
+        string AgentExecutablePath 
+        string AgentExecutableVersion 
+        string AgentSessionId 
+        string AgentSessionTranscriptFile 
+        string Branch 
+        string ContentHash 
+        double CopilotAvgSuccessScore 
+        int CopilotCompletedCount 
+        int CopilotInProgressCount 
+        int CopilotTotalNetPremiumRequests 
+        int CopilotTotalNetTokens 
+        string CursorSessionLabel 
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        bool IsDeleted 
+        DateTime LastUpdated 
+        string Model 
+        string Project 
+        string Repository 
+        string SessionId 
+        string SourceFilePath 
+        string SourceType 
+        DateTime Started 
+        string Status 
+        string TargetFramework 
+        string Title 
+        int TotalTokens 
+        int TurnCount 
+        string WorkspaceId FK
+    }
+    SessionLogTurn {
+        long Id PK
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        string FailureNote 
+        string Interpretation 
+        bool IsDeleted 
+        bool IsPremium 
+        string Model 
+        string ModelProvider 
+        string OriginalEntryJson 
+        string PlanFile 
+        string QueryText 
+        string QueryTitle 
+        string RawContextJson 
+        string RequestId 
+        string Response 
+        double Score 
+        long SessionLogId FK
+        string Status 
+        DateTime Timestamp 
+        string TodoId 
+        int TokenCount 
+        string WorkspaceId FK
+    }
+    SessionLogAction {
+        long Id PK
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        string Description 
+        string FilePath 
+        bool IsDeleted 
+        int Order 
+        long SessionLogTurnId FK
+        string Status 
+        string Type 
+        string WorkspaceId FK
+    }
+    SessionLogTurnTag {
+        long Id PK
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        bool IsDeleted 
+        long SessionLogTurnId FK
+        string Tag 
+        string WorkspaceId FK
+    }
+    SessionLogTag {
+        long Id PK
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        bool IsDeleted 
+        long SessionLogId FK
+        string Tag 
+        string WorkspaceId FK
+    }
+    SessionLogTurnContext {
+        long Id PK
+        string ContextItem 
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        bool IsDeleted 
+        int Ordinal 
+        long SessionLogTurnId FK
+        string WorkspaceId FK
+    }
+    SessionLogProcessingDialog {
+        long Id PK
+        string Category 
+        string Content 
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        bool IsDeleted 
+        int Ordinal 
+        string Role 
+        long SessionLogTurnId FK
+        DateTime Timestamp 
+        string WorkspaceId FK
+    }
+    SessionLogCommit {
+        long Id PK
+        string Author 
+        string Branch 
+        DateTime CommitTimestamp 
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        bool IsDeleted 
+        string Message 
+        int Ordinal 
+        long SessionLogTurnId FK
+        string Sha 
+        string WorkspaceId FK
+    }
+    SessionLogCommitFile {
+        long Id PK
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        bool IsDeleted 
+        int Ordinal 
+        string Path 
+        long SessionLogCommitId FK
+        string WorkspaceId FK
+    }
+    SessionLogTurnStringList {
+        long Id PK
+        string DeleteReason 
+        DateTime DeletedAtUtc 
+        string DeletedBy 
+        bool IsDeleted 
+        string ListType 
+        int Ordinal 
+        long SessionLogTurnId FK
+        string Value 
+        string WorkspaceId FK
+    }
+    AgentDefinition {
+        string stub_from_other_diagram
+    }
+    Workspace {
+        string stub_from_other_diagram
+    }
+    SessionLogTurn ||--o{ SessionLogAction : "SessionLogTurnId"
+    Workspace ||--o{ SessionLogAction : "WorkspaceId"
+    SessionLogTurn ||--o{ SessionLogCommit : "SessionLogTurnId"
+    Workspace ||--o{ SessionLogCommit : "WorkspaceId"
+    SessionLogCommit ||--o{ SessionLogCommitFile : "SessionLogCommitId"
+    Workspace ||--o{ SessionLogCommitFile : "WorkspaceId"
+    AgentDefinition ||--o{ SessionLog : "AgentDefinitionId"
+    Workspace ||--o{ SessionLog : "WorkspaceId"
+    SessionLogTurn ||--o{ SessionLogProcessingDialog : "SessionLogTurnId"
+    Workspace ||--o{ SessionLogProcessingDialog : "WorkspaceId"
+    SessionLog ||--o{ SessionLogTag : "SessionLogId"
+    Workspace ||--o{ SessionLogTag : "WorkspaceId"
+    SessionLogTurn ||--o{ SessionLogTurnContext : "SessionLogTurnId"
+    Workspace ||--o{ SessionLogTurnContext : "WorkspaceId"
+    SessionLog ||--o{ SessionLogTurn : "SessionLogId"
+    Workspace ||--o{ SessionLogTurn : "WorkspaceId"
+    SessionLogTurn ||--o{ SessionLogTurnStringList : "SessionLogTurnId"
+    Workspace ||--o{ SessionLogTurnStringList : "WorkspaceId"
+    SessionLogTurn ||--o{ SessionLogTurnTag : "SessionLogTurnId"
+    Workspace ||--o{ SessionLogTurnTag : "WorkspaceId"
