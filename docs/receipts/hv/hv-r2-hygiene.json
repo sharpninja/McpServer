@@ -1,0 +1,1122 @@
+{
+  "TimestampUtc": "2026-10-18T03:42:28.4626504+00:00",
+  "CommitCount": 13,
+  "Signatures": [
+    {
+      "Sha": "31af8c597e3570a2469a48a238a4aa76107f30bb",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "99cb42b24a442377a776aebd58e9df6894c2ce40",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "9fd6b653b2522212ad8151091e3a8cdec25e75bd",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "bd6e37b33f043b1ede3a1feeaf7073d357ea21cf",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "f5fd5ab24ad00b09053daf07ed3c0d850f70498d",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "31904493381cfef56c57790950e23e72f3ecc39b",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "0a449314528c5bfc07e9b386c97034716e2ddbd4",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "3fba1b1336a92767904e344dbe9d531200049a0d",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "168478c3c5d96b08e965ac9e63d78feb26e359e1",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    },
+    {
+      "Sha": "6c848a4e56f8dee101672dcca1435d600c21eb41",
+      "SignedIdentity": "claude-opus-5-5-xhigh@ClaudeCode",
+      "RequiredSignature": true
+    }
+  ],
+  "UniqueReviewedBlobs": 170,
+  "SecretScans": [
+    {
+      "Location": "commit:31af8c597e3570a2469a48a238a4aa76107f30bb",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "31af8c597e3570a2469a48a238a4aa76107f30bb:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:99cb42b24a442377a776aebd58e9df6894c2ce40",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "99cb42b24a442377a776aebd58e9df6894c2ce40:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:9fd6b653b2522212ad8151091e3a8cdec25e75bd",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "9fd6b653b2522212ad8151091e3a8cdec25e75bd:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "6dbc384323c036a57c37fd9eaf2259879c1d956f:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:bd6e37b33f043b1ede3a1feeaf7073d357ea21cf",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "bd6e37b33f043b1ede3a1feeaf7073d357ea21cf:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:f5fd5ab24ad00b09053daf07ed3c0d850f70498d",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "f5fd5ab24ad00b09053daf07ed3c0d850f70498d:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:31904493381cfef56c57790950e23e72f3ecc39b",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "31904493381cfef56c57790950e23e72f3ecc39b:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:0a449314528c5bfc07e9b386c97034716e2ddbd4",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "0a449314528c5bfc07e9b386c97034716e2ddbd4:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "d3a0beb10b0879f20fb307f205a3bff25ac3a441:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/20261017T091907-amendment1-r1.request.jsonl",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/20261017T091907-amendment1-r1.response.jsonl",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/20261017T091907-amendment1-r1.rollout.jsonl",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/20261017T091907-amendment1-r1.selfreview.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-ancestry.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-audit-20261017T142638Z.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-audit-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-claude-help.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-claude-version.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-cline-help.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-cline-operator-source.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-cline-version.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-codex-help.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-codex-version.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-commands.jsonl",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-copilot-help.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-copilot-version.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-actions-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-actions.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-check.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-complete-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-complete.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-dialog-parts.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-history-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-history.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-own-query-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-own-query.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-001-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-002-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-003-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-004-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-005-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-006-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-007-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-008-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-009-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-010-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-011-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-012-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-013-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-014-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-015-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-016-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-017-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-018-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-019-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-020-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-021-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-022-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-023-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-024-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-025-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-026-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-027-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-028-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-029-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-030-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-031-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-032-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-033-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-034-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-035-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-036-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-037-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-038-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-039-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-040-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-041-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-042-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-043-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-044-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-045-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-046-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-047-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-048-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-049-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-050-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-051-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-052-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-053-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-054-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-055-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-056-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-057-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-058-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-059-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-060-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-061-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-062-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-063-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-064-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-065-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-066-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-067-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-068-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-069-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-070-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-071-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-072-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-073-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-074-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-075-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-part-076-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-proof-supplement-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-update-params.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-final-update.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-findings-in-progress.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-findings-second-pass.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-git.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-grok-help.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-grok-version.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-history-initial.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-hygiene.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-identity.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-mappings-selected.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-observations.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-params-PLAN-HVPIPELINE-001.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-params-PLAN-SESSIONTRIAGEFIX-001.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-params-PLAN-SESSIONTURNREVIEW-001.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-params-REMED-HVPIPELINE-001.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-params-requirements-Fr.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-params-requirements-mappings.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-params-review-decisions-actions.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-params-startup-audit.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-persistence-proof.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-plugin-begin.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-plugin-start.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-plugin-status-after-start.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-plugin-status.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-pr81-facts.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-pr81-review-comments.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-pr81-reviews.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-pr81.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-probe-hash-check.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-probe-inventory.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-process-correction.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-push-reflog.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-redaction-report.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-related-requirements.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-remote-head.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-requirement-comparison.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-requirements-selected.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-shell-command-transcript.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-static.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-store-PLAN-HVPIPELINE-001.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-store-PLAN-SESSIONTRIAGEFIX-001.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-store-PLAN-SESSIONTURNREVIEW-001.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-store-REMED-HVPIPELINE-001.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-store-requirements-Fr.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-store-requirements-Test.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-store-requirements-Tr.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-store-requirements-mappings.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d:docs/receipts/hv/hv-r1-verdict-final.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:3fba1b1336a92767904e344dbe9d531200049a0d",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "3fba1b1336a92767904e344dbe9d531200049a0d:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "3fba1b1336a92767904e344dbe9d531200049a0d:docs/receipts/diagrams/amendment1-r2-20261017T111405/mermaid-render.html",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "3fba1b1336a92767904e344dbe9d531200049a0d:docs/receipts/diagrams/amendment1-r2-20261017T111405/survey.txt",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "3fba1b1336a92767904e344dbe9d531200049a0d:docs/receipts/hv/20261017T110027-amendment1.push-audit.json",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:168478c3c5d96b08e965ac9e63d78feb26e359e1",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "168478c3c5d96b08e965ac9e63d78feb26e359e1:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "commit:6c848a4e56f8dee101672dcca1435d600c21eb41",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "6c848a4e56f8dee101672dcca1435d600c21eb41:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "PLAN-HVPIPELINE-001",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    },
+    {
+      "Location": "REMED-HVPIPELINE-001",
+      "KnownCredentialMatches": 0,
+      "CredentialPatternMatches": 0
+    }
+  ],
+  "SecretScanProblems": [],
+  "PushEntries": 13,
+  "PushTypes": [
+    {
+      "Name": "branch_creation",
+      "Count": 1
+    },
+    {
+      "Name": "push",
+      "Count": 12
+    }
+  ],
+  "PriorPushAuditMatches": [
+    {
+      "Id": 46756800940,
+      "Match": true
+    },
+    {
+      "Id": 46761710122,
+      "Match": true
+    },
+    {
+      "Id": 46762976355,
+      "Match": true
+    },
+    {
+      "Id": 46765499077,
+      "Match": true
+    },
+    {
+      "Id": 46820358054,
+      "Match": true
+    },
+    {
+      "Id": 46820417271,
+      "Match": true
+    },
+    {
+      "Id": 46821378338,
+      "Match": true
+    },
+    {
+      "Id": 46821753827,
+      "Match": true
+    },
+    {
+      "Id": 46823032126,
+      "Match": true
+    },
+    {
+      "Id": 46828548698,
+      "Match": true
+    }
+  ],
+  "Spdx": true,
+  "ForbiddenDashes": 0,
+  "TableRows": 0,
+  "DiagramReceiptFiles": [
+    {
+      "Name": "mermaid-render.html",
+      "Length": 102617
+    },
+    {
+      "Name": "survey.txt",
+      "Length": 4922
+    }
+  ],
+  "GitStatusExit": 0,
+  "GitStatus": [
+    "?? docs/receipts/hv/20261017T221717-amendment1-r2.request.jsonl",
+    "?? docs/receipts/hv/20261017T221717-amendment1-r2.response.jsonl",
+    "?? docs/receipts/hv/20261017T221717-amendment1-r2.selfreview.md",
+    "?? docs/receipts/hv/hv-r2-catalog-comparison.json",
+    "?? docs/receipts/hv/hv-r2-cli-claude-help.txt",
+    "?? docs/receipts/hv/hv-r2-cli-claude-version.txt",
+    "?? docs/receipts/hv/hv-r2-cli-cline-help.txt",
+    "?? docs/receipts/hv/hv-r2-cli-cline-version.txt",
+    "?? docs/receipts/hv/hv-r2-cli-codex-exec-help.txt",
+    "?? docs/receipts/hv/hv-r2-cli-codex-help.txt",
+    "?? docs/receipts/hv/hv-r2-cli-codex-version.txt",
+    "?? docs/receipts/hv/hv-r2-cli-copilot-help.txt",
+    "?? docs/receipts/hv/hv-r2-cli-copilot-version.txt",
+    "?? docs/receipts/hv/hv-r2-cli-grok-help.txt",
+    "?? docs/receipts/hv/hv-r2-cli-grok-version.txt",
+    "?? docs/receipts/hv/hv-r2-commands.jsonl",
+    "?? docs/receipts/hv/hv-r2-foundation-hash.json",
+    "?? docs/receipts/hv/hv-r2-git-changed-paths.txt",
+    "?? docs/receipts/hv/hv-r2-git-effort-log.txt",
+    "?? docs/receipts/hv/hv-r2-git-source-diff.txt",
+    "?? docs/receipts/hv/hv-r2-github-activity.txt",
+    "?? docs/receipts/hv/hv-r2-github-pr81-comments.txt",
+    "?? docs/receipts/hv/hv-r2-github-pr81-reviews.txt",
+    "?? docs/receipts/hv/hv-r2-github-pr81.txt",
+    "?? docs/receipts/hv/hv-r2-operator-quote-check.json",
+    "?? docs/receipts/hv/hv-r2-phase-continuity.json",
+    "?? docs/receipts/hv/hv-r2-probe-hash-check.json",
+    "?? docs/receipts/hv/hv-r2-provenance-summary.json",
+    "?? docs/receipts/hv/hv-r2-session-initial-history.json",
+    "?? docs/receipts/hv/hv-r2-source-problems-1.txt",
+    "?? docs/receipts/hv/hv-r2-source-problems-2.txt",
+    "?? docs/receipts/hv/hv-r2-source-problems-3.txt",
+    "?? docs/receipts/hv/hv-r2-source-problems-4.txt",
+    "?? docs/receipts/hv/hv-r2-source-searches.json",
+    "?? docs/receipts/hv/hv-r2-store-PLAN-HVPIPELINE-001.json",
+    "?? docs/receipts/hv/hv-r2-store-PLAN-HVPIPELINE-001.txt",
+    "?? docs/receipts/hv/hv-r2-store-PLAN-SESSIONTRIAGEFIX-001.json",
+    "?? docs/receipts/hv/hv-r2-store-PLAN-SESSIONTRIAGEFIX-001.txt",
+    "?? docs/receipts/hv/hv-r2-store-PLAN-SESSIONTURNREVIEW-001.json",
+    "?? docs/receipts/hv/hv-r2-store-PLAN-SESSIONTURNREVIEW-001.txt",
+    "?? docs/receipts/hv/hv-r2-store-REMED-HVPIPELINE-001.json",
+    "?? docs/receipts/hv/hv-r2-store-REMED-HVPIPELINE-001.txt",
+    "?? docs/receipts/hv/hv-r2-store-related-mappings.json",
+    "?? docs/receipts/hv/hv-r2-store-related.json",
+    "?? docs/receipts/hv/hv-r2-store-requirements-fr.json",
+    "?? docs/receipts/hv/hv-r2-store-requirements-fr.txt",
+    "?? docs/receipts/hv/hv-r2-store-requirements-mappings.json",
+    "?? docs/receipts/hv/hv-r2-store-requirements-mappings.txt",
+    "?? docs/receipts/hv/hv-r2-store-requirements-test.json",
+    "?? docs/receipts/hv/hv-r2-store-requirements-test.txt",
+    "?? docs/receipts/hv/hv-r2-store-requirements-tr.json",
+    "?? docs/receipts/hv/hv-r2-store-requirements-tr.txt",
+    "?? docs/receipts/hv/hv-r2-validator-identity.json"
+  ]
+}

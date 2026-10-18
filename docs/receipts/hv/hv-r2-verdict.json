@@ -1,0 +1,301 @@
+{
+  "overallVerdict": "DISAGREE",
+  "accuracy": 94,
+  "completeness": 89,
+  "confidence": 97,
+  "passCount": 4,
+  "failCount": 9,
+  "unknownCount": 0,
+  "countBasis": "AM1 to AM13; 12 distinct implementer findings",
+  "failList": [
+    {
+      "claim": "AM1",
+      "findings": [
+        "R2-F01",
+        "R2-F02",
+        "R2-F04",
+        "R2-F05",
+        "R2-F06",
+        "R2-F08",
+        "R2-F11"
+      ]
+    },
+    {
+      "claim": "AM2",
+      "findings": [
+        "R2-F01",
+        "R2-F03",
+        "R2-F05",
+        "R2-F06",
+        "R2-F07",
+        "R2-F08",
+        "R2-F09",
+        "R2-F10"
+      ]
+    },
+    {
+      "claim": "AM3",
+      "findings": [
+        "R2-F01",
+        "R2-F02",
+        "R2-F03",
+        "R2-F05",
+        "R2-F07",
+        "R2-F08",
+        "R2-F09",
+        "R2-F10"
+      ]
+    },
+    {
+      "claim": "AM5",
+      "findings": [
+        "R2-F06",
+        "R2-F08",
+        "R2-F10"
+      ]
+    },
+    {
+      "claim": "AM7",
+      "findings": [
+        "R2-F07"
+      ]
+    },
+    {
+      "claim": "AM8",
+      "findings": [
+        "R2-F06",
+        "R2-F10",
+        "R2-F11",
+        "R2-F12"
+      ]
+    },
+    {
+      "claim": "AM9",
+      "findings": [
+        "R2-F03",
+        "R2-F04",
+        "R2-F12"
+      ]
+    },
+    {
+      "claim": "AM10",
+      "findings": [
+        "R2-F03",
+        "R2-F04",
+        "R2-F07",
+        "R2-F11",
+        "R2-F12"
+      ]
+    },
+    {
+      "claim": "AM13",
+      "findings": [
+        "R2-F01",
+        "R2-F02",
+        "R2-F03",
+        "R2-F04",
+        "R2-F05",
+        "R2-F06",
+        "R2-F07",
+        "R2-F09",
+        "R2-F10",
+        "R2-F11",
+        "R2-F12"
+      ]
+    }
+  ],
+  "unknownList": [],
+  "implementerFixes": [
+    {
+      "id": "R2-F01",
+      "defect": "A stale failing probe can disable a newer configuration",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1046",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1085",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2519",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2520"
+      ],
+      "changeToPass": "Apply the current-configuration guard before every probe readiness or probe-request mutation, including failure, shutdown and expiry paths. Preserve newer readiness and pending work. Add named stale nonzero/launch/shutdown/expiry cases and propagate their outcomes to diagrams and TEST records."
+    },
+    {
+      "id": "R2-F02",
+      "defect": "A corrupt probe is automatically retried after restart",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1046",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1085",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1446",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2516",
+        "docs/receipts/hv/20261017T221717-amendment1-r2.selfreview.md:7"
+      ],
+      "changeToPass": "Persist and honor the distinction between initial qualification and a failed probe awaiting explicit retry, or otherwise make the startup predicate exclude the latter. Specify configuration-change, shutdown and lease-recovery behavior without reopening the corrupt-probe loop. Add a restart regression case to FR/TR/TEST-003."
+    },
+    {
+      "id": "R2-F03",
+      "defect": "The artifact worker has no complete lease and terminal-state protocol",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:331",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1578",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1580",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1604",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1621",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1644",
+        "FR-MCP-HOSTILEREVIEW-003/criterion 4"
+      ],
+      "changeToPass": "Finish the separate-context contract: define attempt storage and DTO fields, renewal and host scheduling, terminal attempt/request writes and lease release, idempotent completion ordering, and a sweep that rechecks active state/expiry and never changes an accepted request. State caller handling for every command result. Add long-running renewal, completion-versus-sweep, duplicate late completion, cancellation and restart tests in H0/H3, without a reviewer deadline or raw artifact retention."
+    },
+    {
+      "id": "R2-F04",
+      "defect": "P5 assigns the artifact worker the wrong selection rule and phase",
+      "location": [
+        "REMED-HVPIPELINE-001/implementationTasks/P5",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1581",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2736",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2764",
+        "PLAN-HVPIPELINE-001/problems pulled into the plan"
+      ],
+      "changeToPass": "Split P5 into the foundation text/configuration retirement and the separate artifact-worker correction. Use the stored configured/default AgentPool rule for the latter, assign its production change and named test to H3 after the mock gate, and reconcile both TODOs and sections 20/21."
+    },
+    {
+      "id": "R2-F05",
+      "defect": "Overall-verdict verification still races a response leaving review",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:173",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1146",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1148",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1355",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2649",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2840"
+      ],
+      "changeToPass": "Bind validation of the emitted overall verdict to immutable review inputs. If an effective commit-time result is also wanted, define it separately and do not label a correct reviewer output invalid because state changed later. Cover a score-only DISAGREE response closing before verification and between verification and commit."
+    },
+    {
+      "id": "R2-F06",
+      "defect": "Closed and disabled response results have contradictory persistence shapes",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:567",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1148",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2632",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2645",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2648"
+      ],
+      "changeToPass": "Retain every response FAIL/UNKNOWN as a scoped HvFinding even when its grade is not applied, and define all result dispositions including NotGraded and its reason. Propagate the canonical shape to DTOs, activities, sequences, use cases and store tests. Test closed-response removal and Mode Off result round trips."
+    },
+    {
+      "id": "R2-F07",
+      "defect": "A-05 leaves active foundation sequences and incompatible grader errors",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:20",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:183",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1236",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1239",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4373",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4402",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4452"
+      ],
+      "changeToPass": "Explicitly replace or retire every affected foundation model-grade sequence and associated retained caller/check references. Choose one grader-mismatch contract, propagate its status/retryability and caller handling, and remove obsolete receipt/Open/public-grade behavior from the set of foundation clauses that still govern."
+    },
+    {
+      "id": "R2-F08",
+      "defect": "Internal evidence reads bypass the audit-read contract",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:161",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:371",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1146",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1172",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1403",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1469",
+        "FR-MCP-HVPIPE-018-AC003"
+      ],
+      "changeToPass": "Use a canonical audited evidence-read boundary for public and internal readers, recording access before bytes are consumed and refusing it when the ledger cannot be written. Define how launch, probe and finalizer callers handle that refusal. Add internal-read ledger-failure cases, including no launch after an unauditable brief read."
+    },
+    {
+      "id": "R2-F09",
+      "defect": "Finalizer callers collapse failed writes into successful failure transitions",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1086",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1147",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1157",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1163",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1497"
+      ],
+      "changeToPass": "Dispatch every Fail/finalizer result explicitly, preserve unchanged states and audit_unavailable, return already_completed/not_finalizable as appropriate, and restart retries through the request-state check. Make worker/sweep/activity/sequence exits agree. Add refusal and concurrent-finalization outcome tests. The original R1 F21 overwrite is fixed and remains credited separately."
+    },
+    {
+      "id": "R2-F10",
+      "defect": "Codec failure has no complete result-commit or read continuation",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:352",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:596",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1148",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1149",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1194",
+        "FR-MCP-HVPIPE-011-AC003"
+      ],
+      "changeToPass": "Specify rollback and caller behavior for result-codec failure, including bounded recovery/incident attribution consistent with existing policies. Define and propagate corrupt-read status/code and audited refusal on each payload-reading surface. Add named result-compression and corrupted-read cases without converting a server fault into reviewer blame."
+    },
+    {
+      "id": "R2-F11",
+      "defect": "Three TEST records drop cases required by their FR criteria",
+      "location": [
+        "TEST-MCP-HVPIPE-003/AC003 and description",
+        "TEST-MCP-HVPIPE-010/AC003 and description",
+        "TEST-MCP-HVPIPE-011/AC003 and description",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2516",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2575",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2585",
+        "docs/receipts/hv/20261017T221717-amendment1-r2.selfreview.md:17"
+      ],
+      "changeToPass": "Update these three TEST criteria and descriptions through the requirements workflow to retain both named cases. Correct the inventory count and make the equality checker derive every case from every parenthetical test group, distinguishing enum/alias tokens from test names. Re-read all 63 records and mapping edges and report the actual comparison."
+    },
+    {
+      "id": "R2-F12",
+      "defect": "Production acceptance is assigned before its implementation dependency",
+      "location": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2579",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2596",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2678",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2680",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2713",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2718",
+        "PLAN-HVPIPELINE-001/HvStorageSchema,H3,H7",
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2736"
+      ],
+      "changeToPass": "Move each whole criterion to a phase where its complete production behavior exists, or split the criterion with explicit phase-specific assertions and named tests while preserving all original behavior. Put the no-record Review case in H7 and the migration guard/admission behavior after H2. Name the P7 traceability verification. Synchronize section 19.4 and both TODO projections; retain the correct H1 harness and H6/H5 ordering."
+    }
+  ],
+  "operatorDecisionFails": [],
+  "round1Closure": {
+    "F01": "PASS",
+    "F02": "PASS",
+    "F03": "PASS",
+    "F04": "FAIL",
+    "F05": "PASS",
+    "F06": "PASS",
+    "F07": "PASS",
+    "F08": "PASS",
+    "F09": "PASS",
+    "F10": "FAIL",
+    "F11": "FAIL",
+    "F12": "FAIL",
+    "F13": "PASS",
+    "F14": "PASS",
+    "F15": "PASS",
+    "F16": "PASS",
+    "F17": "PASS",
+    "F18": "FAIL",
+    "F19": "PASS",
+    "F20": "PASS",
+    "F21": "PASS",
+    "U01": "PASS",
+    "U02": "FAIL"
+  },
+  "headSha": "6c848a4e56f8dee101672dcca1435d600c21eb41",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T221717-amendment1-r2.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T221717-amendment1-r2.response.jsonl"
+  ],
+  "reviewerSessionId": "Codex-20261018T031720Z-hv-amendment1-r2",
+  "reviewerRequestId": "req-20261018T031720Z-hv-amendment1-r2"
+}

@@ -1,0 +1,577 @@
+{
+  "TimestampUtc": "2026-10-18T03:40:35.7693217+00:00",
+  "BindingCount": 133,
+  "CatalogCount": 133,
+  "Missing": [],
+  "Duplicate": [],
+  "Undefined": [],
+  "Bindings": [
+    {
+      "Criterion": "FR-MCP-HVPIPE-001-AC001",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-001-AC002",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-001-AC003",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-001-AC004",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-001-AC005",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-001-AC006",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-002-AC001",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-002-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-002-AC003",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-002-AC004",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-002-AC005",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-002-AC006",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-002-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-002-AC008",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-003-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-003-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-003-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-003-AC004",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-003-AC005",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-003-AC006",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-003-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-003-AC008",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-004-AC001",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-004-AC002",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-004-AC003",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-004-AC004",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-004-AC005",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-004-AC006",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-005-AC001",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-005-AC002",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-005-AC003",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-005-AC005",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-005-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-005-AC006",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-006-AC001",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-006-AC002",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-006-AC003",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-006-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC004",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC006",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC008",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC009",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-007-AC005",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC003",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC004",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC005",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC007",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC008",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC009",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC010",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC011",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-008-AC012",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-009-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-009-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-009-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-009-AC004",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-009-AC005",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-009-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-009-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC001",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC003",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC004",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC008",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC009",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC005",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC006",
+      "Phase": "H1"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-010-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-011-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-011-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-011-AC005",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-011-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-011-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-011-AC004",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-012-AC001",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-012-AC004",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-012-AC005",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-012-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-012-AC008",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-012-AC002",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-012-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-012-AC007",
+      "Phase": "HvStorageSchema"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-013-AC001",
+      "Phase": "H2"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-013-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-013-AC003",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-014-AC001",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-014-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-015-AC001",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-015-AC002",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-015-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-015-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-016-AC001",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-016-AC003",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-016-AC004",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-016-AC005",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-016-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-017-AC001",
+      "Phase": "HvSharedComponents"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-017-AC002",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-017-AC003",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-017-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-017-AC005",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-017-AC006",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-017-AC007",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-018-AC001",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-018-AC002",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-018-AC003",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-018-AC005",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-018-AC004",
+      "Phase": "H3"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-019-AC001",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-019-AC002",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-019-AC003",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-019-AC004",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-019-AC005",
+      "Phase": "H6"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-020-AC001",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-020-AC002",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-020-AC003",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-020-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-020-AC005",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-020-AC006",
+      "Phase": "H5"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-021-AC001",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-021-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-021-AC003",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-021-AC005",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-021-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-021-AC007",
+      "Phase": "H7"
+    },
+    {
+      "Criterion": "FR-MCP-HVPIPE-021-AC004",
+      "Phase": "H5"
+    }
+  ],
+  "D09Continuity": [
+    {
+      "Id": "FR-MCP-SESSIONLIFE-004",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-005",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HOSTILEREVIEW-002",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HOSTILEREVIEW-003",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HOSTILEREVIEW-002",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HOSTILEREVIEW-003",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-002",
+      "Equal": true
+    },
+    {
+      "Id": "related-mappings",
+      "Equal": true,
+      "Count": 11
+    }
+  ]
+}
