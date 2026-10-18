@@ -1499,7 +1499,7 @@ flowchart TD
 
 ### 16.2 Process RunReviewerProcess: one attempt, live [FR-MCP-HVPIPE-008, -016]
 
-Runs one claimed run. It builds the brief (section 13.3: the accepted request read from the `Request` evidence inside the run envelope, after AuditLedgerGuard `RecordRead` records that read, or the probe brief with its nonce, which reads no evidence); a refused read starts no process and ends the attempt without another write, so the lease expiry recovers it (W-02, W-12). It asks the reviewer's adapter for the launch (section 16.3), starts the process with the workspace as its working directory and its plugin as a host session of its own (R-24), inside a containment bound to the worker process, so the reviewer and every descendant end when the worker dies, however abruptly (W-03; the containment, for example a process group or job object, is the adapter's, section 16.3), records the start (RecordHvRunStartCommand), and appends the `hv_brief` record as sequence 1. While the process runs it has four concurrent duties and no time limit (R-11, P-02): every line the adapter delivers goes into a buffer that is appended (AppendHvRunOutputCommand) when `OutputFlushBytes` accumulate; a flush timer appends a buffer that is not empty once `OutputFlushInterval` has passed since its first line, whether or not another line arrives, so a single line followed by silence is still appended within the interval (R-12); a heartbeat every `HeartbeatInterval` (RecordHvRunHeartbeatCommand) renews the lease and reads cancellation; and the process exit is awaited. `stale_fence` from any unit kills the process and ends the attempt without another write (W-03); `audit_unavailable` kills the process and ends the attempt (W-12); `evidence_corrupt` from an append (its round trip failed and nothing was saved) kills the process and fails the run with `evidence_corrupt` (FailHvRunCommand: a server fault, so a server incident and the reviewer unchanged, and the request through policy HvRetryDecision), and so does a non-retryable `conflict` from an append (a different batch under a stored sequence, or a sequence out of order), because the log's integrity can no longer be shown; a retryable `conflict` repeats the same unit call with the same sequence. Every append carries the records the adapter's extraction completed with that batch. On exit the remaining buffer is appended, the adapter's provenance lines are appended (section 16.3), and the run is closed (exit code 0, CloseHvRunOutputCommand, then FinalizeHvRequestCommand for a review whose request is `Finalizing`; a close that finds the request `CancelRequested` ends it `Canceled` instead, R-28; exit code 0 is not evidence of a review, R-11) or failed (FailHvRunCommand with `reviewer_exited_nonzero`, or `reviewer_launch_failed` when the process never started). A cancellation read at a heartbeat kills the process and fails the run with `canceled`, which policy HvRetryDecision turns into the request's `Canceled` (R-28). Killing the process, here and in the diagrams, ends the reviewer's whole process tree, descendants included, also when the root process has already exited; and when the root exits while a descendant still holds its output pipes, the worker ends that descendant before it reads the output to its end. Without that, a descendant that outlives the reviewer would hold the run open forever, because no time limit ends a run (P-02); P14 is the same defect class in the plugin core (FR-MCP-HVPIPE-008-AC011).
+Runs one claimed run. It builds the brief (section 13.3: the accepted request read from the `Request` evidence inside the run envelope, after AuditLedgerGuard `RecordRead` records that read, or the probe brief with its nonce, which reads no evidence); a refused read starts no process and ends the attempt without another write, so the lease expiry recovers it (W-02, W-12); a `Request` evidence that fails to decompress starts no process and fails the run with `evidence_corrupt` (FailHvRunCommand: a server fault, so a server incident and the reviewer unchanged, and the request through policy HvRetryDecision, whose attempts bound the retries, FR-MCP-HVPIPE-011-AC009). It asks the reviewer's adapter for the launch (section 16.3), starts the process with the workspace as its working directory and its plugin as a host session of its own (R-24), inside a containment bound to the worker process, so the reviewer and every descendant end when the worker dies, however abruptly (W-03; the containment, for example a process group or job object, is the adapter's, section 16.3), records the start (RecordHvRunStartCommand), and appends the `hv_brief` record as sequence 1. While the process runs it has four concurrent duties and no time limit (R-11, P-02): every line the adapter delivers goes into a buffer that is appended (AppendHvRunOutputCommand) when `OutputFlushBytes` accumulate; a flush timer appends a buffer that is not empty once `OutputFlushInterval` has passed since its first line, whether or not another line arrives, so a single line followed by silence is still appended within the interval (R-12); a heartbeat every `HeartbeatInterval` (RecordHvRunHeartbeatCommand) renews the lease and reads cancellation; and the process exit is awaited. `stale_fence` from any unit kills the process and ends the attempt without another write (W-03); `audit_unavailable` kills the process and ends the attempt (W-12); `evidence_corrupt` from an append (its round trip failed and nothing was saved) kills the process and fails the run with `evidence_corrupt` (FailHvRunCommand: a server fault, so a server incident and the reviewer unchanged, and the request through policy HvRetryDecision), and so does a non-retryable `conflict` from an append (a different batch under a stored sequence, or a sequence out of order), because the log's integrity can no longer be shown; a retryable `conflict` repeats the same unit call with the same sequence. Every append carries the records the adapter's extraction completed with that batch. On exit the remaining buffer is appended, the adapter's provenance lines are appended (section 16.3), and the run is closed (exit code 0, CloseHvRunOutputCommand, then FinalizeHvRequestCommand for a review whose request is `Finalizing`; a close that finds the request `CancelRequested` ends it `Canceled` instead, R-28; exit code 0 is not evidence of a review, R-11) or failed (FailHvRunCommand with `reviewer_exited_nonzero`, or `reviewer_launch_failed` when the process never started). A cancellation read at a heartbeat kills the process and fails the run with `canceled`, which policy HvRetryDecision turns into the request's `Canceled` (R-28). Killing the process, here and in the diagrams, ends the reviewer's whole process tree, descendants included, also when the root process has already exited; and when the root exits while a descendant still holds its output pipes, the worker ends that descendant before it reads the output to its end. Without that, a descendant that outlives the reviewer would hold the run open forever, because no time limit ends a run (P-02); P14 is the same defect class in the plugin core (FR-MCP-HVPIPE-008-AC011).
 
 ```mermaid
 flowchart TD
@@ -1508,7 +1508,9 @@ flowchart TD
     RR -->|"audit unavailable"| END10(["attempt ended before launch, no further write; the lease expires"])
     RR -->|recorded| B["Build the brief: accepted request in the run envelope"]
     KD -->|Probe| BP["Build the probe brief with its nonce"]
-    B --> L[["Reviewer adapter BuildLaunch"]]
+    B -->|"Request evidence fails to decompress"| FB[["FailHvRunCommand evidence_corrupt: server incident, reviewer unchanged"]]
+    FB --> END11(["attempt ended before launch: request Queued, Failed, or Canceled"])
+    B -->|"brief built"| L[["Reviewer adapter BuildLaunch"]]
     BP --> L
     L --> ST{"Process started?"}
     ST -->|no| FL[["FailHvRunCommand reviewer_launch_failed"]]
@@ -1618,38 +1620,59 @@ The HostileReview subsystem keeps its own bounded context, queue, entities, and 
 - Host: a hosted `BackgroundService` of its own per workspace application (`src/QBrainAi.Services/HostileReview/Execution/HostileReviewWorkerHost.cs`), not HvWorkerHost, looping on a wake-up or `PollInterval`: ExpireHostileReviewLeasesCommand, then ClaimHostileReviewAttemptCommand until it returns null or `MaximumConcurrentReviews` attempts run, running each claimed attempt with a renewal every `RenewalInterval` (RenewHostileReviewAttemptCommand) until the reviewer exits, and then completing it. It reads the lease, renewal, and attempt options `HostileReviewWorkerOptions` already declares (`LeaseDuration`, `RenewalInterval`, `MaximumAttempts`, `PollInterval`, `MaximumConcurrentReviews`), which nothing reads today (P1). It shares with this pipeline only the reviewer adapters' launch builder, live-line path, and containment (section 16.3) and FencedLease (section 11.1).
 - Agent: the agent, model, and effort configured for hostile review when they are configured, and otherwise the pooled default agent with its default model and effort (FR-MCP-HOSTILEREVIEW-003 criterion 4, store text); P5's part for this worker removes the single-reviewer pin of `HostileReviewWorkerOptions.Validate` in H3 for this rule. HV's reviewer pool, round-robin, and NONCE do not apply.
 - No time limit: an artifact review runs until the reviewer exits, with no execution timeout (P-02, R-11); the options' `ExecutionTimeout` is not read. Liveness is the attempt's lease, renewed while the reviewer runs.
-- Storage (the subsystem keeps its entities and their single-column keys, R-25; in `src/QBrainAi.Storage/Entities/`): `HostileReviewAttemptEntity` (table `HostileReviewAttempts`, key `AttemptId` (128), with `WorkspaceId` and the root id `RequestId`): `AttemptNumber` (int), `PoolJobId` (128), `ExecutionId` (128, null until the reviewer process starts), `Status` (16: `Claimed`, `Running`, `Succeeded`, `Failed`, `Abandoned`, `Canceled`), `LeaseOwner` (256), `LeaseExpiresUtc`, `FenceToken` (long), `ClaimedUtc`, `EndedUtc`, `FailureCode` (64, sanitized), `IsDeleted`; unique filtered (`WorkspaceId`, `RequestId`) where `Status` is `Claimed` or `Running`, one live attempt per request. `HostileReviewRequestEntity` gains `AcceptedResultId` (128, set once, a key of its own, with the request's existing `Verdict` and findings as the accepted result), `AttemptCount` (int), and `IsDeleted`; its `Status` takes `Queued`, `Running`, `Completed`, and `Failed`. The existing execution row (`HostileReviewExecutionEntity`) is the model execution, one per launched process.
+- Storage (the subsystem keeps its entities and their single-column keys, R-25; in `src/QBrainAi.Storage/Entities/`): `HostileReviewAttemptEntity` (table `HostileReviewAttempts`, key `AttemptId` (128), with `WorkspaceId` and the root id `RequestId`, a foreign key to the request like the subsystem's execution and diagnostic rows, `HostileReviewExecutionEntity.cs:63-65`): `AttemptNumber` (int), `PoolJobId` (128), `ExecutionId` (128, null until the reviewer process starts), `Status` (16: `Claimed`, `Running`, `Succeeded`, `Failed`, `Abandoned`, `Canceled`), `LeaseOwner` (256), `LeaseExpiresUtc`, `FenceToken` (long), `ClaimedUtc`, `EndedUtc`, `FailureCode` (64, sanitized), `IsDeleted`; unique filtered (`WorkspaceId`, `RequestId`) where `Status` is `Claimed` or `Running`, one live attempt per request. `HostileReviewRequestEntity` gains `AcceptedResultId` (128, set once, a key of its own, with the request's existing `Verdict` and findings as the accepted result), `AttemptCount` (int), and `IsDeleted`; its `Status` takes `Queued`, `Running`, `Completed`, and `Failed`. The existing execution row (`HostileReviewExecutionEntity`) is the model execution, one per launched process.
 - Internal result types (`src/QBrainAi.Services/HostileReview/Execution/`): `HostileReviewAttemptClaim { attemptId, requestId, attemptNumber, poolJobId, fenceToken, leaseExpiresUtc }`; `HostileReviewRenewResult { leaseExpiresUtc }`; `HostileReviewAttemptOutcome { kind (Success, Failure, Canceled), executionId, verdict, findings, failureCode, diagnostics, counted }` (the parsed result and sanitized diagnostics only; never an artifact, a prompt, or an output line); `HostileReviewAttemptResult { status (accepted, alreadyAccepted, requeued, failed), acceptedResultId }`; `HostileReviewSweepResult { abandonedAttemptIds }`.
 - Identities, distinct as criterion 4 requires: the request (`RequestId`); one attempt per claim (`AttemptId`, with lease, fence, and attempt number); the AgentPool job that runs it (`PoolJobId`); one model execution per launched process (`ExecutionId`, the execution row with model, effort, agent, prompt template and version, run id, and times, criteria 1 to 3); and the one accepted terminal result (`AcceptedResultId`).
 - Storage boundary (FR-MCP-HOSTILEREVIEW-002 criterion 4): the worker assembles the prompt in memory from links it reauthorizes at dispatch, reads the reviewer's output lines only to parse the result, and stores neither the prompt nor any output line nor any artifact content: only normalized identity, type, version or content hash, the parsed result, and sanitized diagnostics reach queue rows, notifications, logs, receipts, or result metadata.
-- Links (P3): every artifact type FR-MCP-HOSTILEREVIEW-002 lists resolves through its supported workspace-scoped service, the stored hash is of the resolved content (never of its id), and the limits of criterion 4 refuse more than 64 links, an artifact over 1 MiB decoded, aggregate input over 8 MiB, or uninspectable content.
+- Links (P3): every artifact type FR-MCP-HOSTILEREVIEW-002 lists resolves through its supported workspace-scoped service, the stored hash is of the resolved content (never of its id), and the limits of criterion 4 refuse more than 64 links, an artifact over 1 MiB decoded, aggregate input over 8 MiB, or uninspectable content. A link that fails its reauthorization at dispatch (missing, unauthorized, stale, or ambiguous, criteria 1, 2, and 4), or whose resolved content now exceeds a limit, launches no process: the attempt completes as a failure whose sanitized diagnostic names the link's normalized identity and the code, and no link is ever left out of a prompt silently.
 - Execution: bounded at-least-once across process loss (an expired lease abandons the attempt and a new one runs, up to `MaximumAttempts` counted attempts); the reviewer runs contained with its worker (W-03), and a stopped attempt ends its whole process tree (section 16.2). Cancellation is internal: a graceful host or workspace shutdown ends the attempt `Canceled` with `worker_shutdown`, which is not counted, and the existing authorized AgentPool cancellation of its pool job ends it `Canceled` with `canceled`, which is counted (counted attempts are a request's attempts except those that ended `worker_shutdown`, as for HV, policy HvRetryDecision); either way the request is queued again while counted attempts remain and otherwise fails; there is no public cancel mutation.
 - Caller handling of every result: Claim null waits for the next wake-up; Renew `stale_fence` (the sweep took the attempt over) stops the reviewer and ends the attempt with no further write; Renew or Complete 503 `audit_unavailable` stops the reviewer and leaves the attempt to the lease expiry; a retryable `conflict` repeats the same call; Complete `accepted`, `alreadyAccepted`, `requeued`, `failed`, and `stale_fence` end the attempt.
 - Audit (P4): every unit below calls AuditLedgerGuard first, and the HostileReview entities gain `IsDeleted` in H3, so each of their writes reaches the ledger and an unwritable ledger stops the unit.
 - One accepted terminal result (P2): only CompleteHostileReviewAttemptCommand writes a result, and only while the request has none; a duplicate or late completion returns the accepted result and changes nothing, even when its fence is stale, and the sweep never changes a request that has an accepted result, replacing `AcceptReviewerOutputAsync`'s unfenced overwrite.
-- Named tests (H0 against mocks, H3 production, recorded on TEST-MCP-HOSTILEREVIEW-002 and -003 in H0 after approval, D-09): `HostileReviewWorkerUsesConfiguredOrPooledDefaultAgent`, `HostileReviewIdentitiesDistinctRequestAttemptPoolJobExecutionResult`, `HostileReviewAttemptRerunsAfterProcessLossBounded`, `HostileReviewDuplicateOrLateCompletionOneAcceptedResult`, `HostileReviewCancellationInternalOnly`, `HostileReviewLongRunRenewsLeaseNoTimeLimit`, `HostileReviewCompletionVersusSweepOneOutcome`, `HostileReviewSweepNeverChangesAcceptedRequest`, `HostileReviewShutdownRequeuesUncounted` (FR-MCP-HOSTILEREVIEW-003 criterion 4); `HostileReviewStoresNoRawArtifactPromptOrOutput`, `HostileReviewLinkLimitsRefused`, `HostileReviewEveryListedArtifactTypeResolvesWithContentHash` (FR-MCP-HOSTILEREVIEW-002 criterion 4 and P3).
+- Named tests (H0 against mocks, H3 production, recorded on TEST-MCP-HOSTILEREVIEW-002 and -003 in H0 after approval, D-09): `HostileReviewWorkerUsesConfiguredOrPooledDefaultAgent`, `HostileReviewIdentitiesDistinctRequestAttemptPoolJobExecutionResult`, `HostileReviewAttemptRerunsAfterProcessLossBounded`, `HostileReviewDuplicateOrLateCompletionOneAcceptedResult`, `HostileReviewCancellationInternalOnly`, `HostileReviewLongRunRenewsLeaseNoTimeLimit`, `HostileReviewCompletionVersusSweepOneOutcome`, `HostileReviewSweepNeverChangesAcceptedRequest`, `HostileReviewShutdownRequeuesUncounted` (FR-MCP-HOSTILEREVIEW-003 criterion 4); `HostileReviewStoresNoRawArtifactPromptOrOutput`, `HostileReviewLinkLimitsRefused`, `HostileReviewEveryListedArtifactTypeResolvesWithContentHash`, `HostileReviewDispatchRefusedLinkFailsWithDiagnosticNeverOmitted` (FR-MCP-HOSTILEREVIEW-002 criteria 2 and 4 and P3).
 
 ```mermaid
 flowchart TD
     S(["HostileReviewWorkerHost starts"]) --> W["Wait for a wake-up or PollInterval"]
     W --> SD{"Shutting down?"}
-    SD -->|yes| SC[["CompleteHostileReviewAttemptCommand Canceled, uncounted, for each own running attempt"]]
+    SD -->|yes| SC[["For each own running attempt: stop its process tree, then CompleteHostileReviewAttemptCommand Canceled worker_shutdown, uncounted"]]
     SC --> END(["stopped"])
     SD -->|no| EX[["ExpireHostileReviewLeasesCommand"]]
-    EX --> CL[["ClaimHostileReviewAttemptCommand"]]
+    EX -->|audit_unavailable| W
+    EX -->|"sweep result"| CAP{"Fewer than MaximumConcurrentReviews own attempts running?"}
+    CAP -->|no| W
+    CAP -->|yes| CL[["ClaimHostileReviewAttemptCommand"]]
     CL -->|"null or audit_unavailable"| W
-    CL -->|attempt| RUN["Reauthorize the links, assemble the prompt in memory, launch the selected agent contained with the worker"]
-    RUN --> LOOP{"Next event?"}
-    LOOP -->|"renewal timer"| RN[["RenewHostileReviewAttemptCommand"]]
+    CL -->|"retryable conflict"| CL
+    CL -->|attempt| RA[["RunHostileReviewAttempt, started for this attempt"]]
+    RA --> CAP
+```
+
+##### Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost)
+
+```mermaid
+flowchart TD
+    S(["RunHostileReviewAttempt: claim"]) --> LK{"Every link reauthorized and within the limits?"}
+    LK -->|no| CF[["CompleteHostileReviewAttemptCommand: failure with the link's sanitized diagnostic"]]
+    CF --> END1(["attempt ended, no process launched"])
+    LK -->|yes| RUN["Assemble the prompt in memory; launch the selected agent contained with the worker"]
+    RUN --> ST{"Process started?"}
+    ST -->|no| CN[["CompleteHostileReviewAttemptCommand: failure, launch failed"]]
+    CN --> END2(["attempt ended"])
+    ST -->|yes| LOOP{"Next event?"}
+    LOOP -->|"renewal timer"| RN[["RenewHostileReviewAttemptCommand, the ExecutionId on its first call"]]
     RN -->|renewed| LOOP
+    RN -->|"retryable conflict"| RN
     RN -->|"stale_fence or audit_unavailable"| KL["Stop the reviewer's process tree; no further write"]
-    KL --> CL
+    KL --> END3(["attempt ended: the sweep or the lease expiry decides it"])
     LOOP -->|"pool job canceled"| KC["Stop the reviewer's process tree"]
     KC --> CC[["CompleteHostileReviewAttemptCommand Canceled, counted"]]
-    CC --> CL
+    CC --> END4(["attempt ended"])
     LOOP -->|"reviewer exited"| PR["Read the output lines only to parse the result; store none of them"]
     PR --> CO[["CompleteHostileReviewAttemptCommand with the parsed result or the failure"]]
-    CO --> CL
+    CO -->|"retryable conflict"| CO
+    CO -->|"accepted, alreadyAccepted, requeued, failed, or stale_fence"| END5(["attempt ended"])
+    CO -->|audit_unavailable| END6(["attempt ended: left to the lease expiry"])
 ```
 
 #### ClaimHostileReviewAttemptCommand: claim the next queued artifact review [FR-MCP-HOSTILEREVIEW-003]
@@ -1693,7 +1716,7 @@ flowchart TD
 #### CompleteHostileReviewAttemptCommand: accept one terminal result [FR-MCP-HOSTILEREVIEW-003]
 
 - Handler: `CompleteHostileReviewAttemptCommand(string WorkspacePath, string AttemptId, string WorkerId, long FenceToken, HostileReviewAttemptOutcome Outcome) : ICommand<HostileReviewAttemptResult>`; internal.
-- Delegate (SerializableWrite with AuditLedgerGuard), in this order: a request that already has an accepted result returns `alreadyAccepted` with it and writes nothing, whatever the caller's fence; then FencedLease `Guard` (`stale_fence`: nothing changed); the attempt must be `Claimed` or `Running`; the execution row with its metadata when the outcome names one; then by outcome: a success writes the result once (`AcceptedResultId`, `Verdict`, findings), makes the attempt `Succeeded` with `EndedUtc` and the request `Completed`, and releases the lease (`accepted`); a failure makes the attempt `Failed` with its sanitized code and releases the lease, and the request returns to `Queued` while counted attempts remain (`requeued`) and otherwise becomes `Failed` (`failed`); a cancellation makes the attempt `Canceled` with `worker_shutdown` (not counted) or `canceled` (counted) as the outcome says, and the request is decided as for a failure.
+- Delegate (SerializableWrite with AuditLedgerGuard), in this order: a request that already has an accepted result returns `alreadyAccepted` with it and writes nothing, whatever the caller's fence; then FencedLease `Guard` (`stale_fence`: nothing changed); the attempt must be `Claimed` or `Running`; the execution row with its metadata when the outcome names one; then by outcome: a success writes the result once (`AcceptedResultId`, `Verdict`, findings), makes the attempt `Succeeded` with `EndedUtc` and the request `Completed`, and releases the lease (`accepted`); a failure makes the attempt `Failed` with its sanitized code, stores the outcome's sanitized diagnostics as the request's existing diagnostic rows (`HostileReviewDiagnosticEntity`, code and message, `src/QBrainAi.Storage/Entities/HostileReviewDiagnosticEntity.cs:23-31`), and releases the lease, and the request returns to `Queued` while counted attempts remain (`requeued`) and otherwise becomes `Failed` (`failed`); a cancellation makes the attempt `Canceled` with `worker_shutdown` (not counted) or `canceled` (counted) as the outcome says, and the request is decided as for a failure.
 - Results: `accepted`; `alreadyAccepted`; `requeued`; `failed`; `stale_fence`; 409 `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
 ```mermaid
@@ -1709,7 +1732,7 @@ flowchart TD
     O -->|success| OK["Record the execution; write the result once and set AcceptedResultId; attempt Succeeded; request Completed"]
     OK --> RL1[["FencedLease Release"]]
     RL1 --> R1(["accepted"])
-    O -->|"failure or cancellation"| FA["Record the execution when launched; attempt Failed, or Canceled counted or not"]
+    O -->|"failure or cancellation"| FA["Record the execution when launched; attempt Failed with its diagnostics stored, or Canceled counted or not"]
     FA --> RL2[["FencedLease Release"]]
     RL2 --> F{"Counted attempts below MaximumAttempts?"}
     F -->|yes| RQ["Request Queued again"]
@@ -1987,37 +2010,44 @@ sequenceDiagram
     else claimed
         DB-->>H: run Claimed, request Running, hv_started
         H-->>W: claim with fence token
-        W->>AD: BuildLaunch and start the process inside a containment bound to the worker
-        alt launch failed
-            W->>H: FailHvRunCommand reviewer_launch_failed
-            Note over W,H: ref the execution failure sequence, 17.8
-        else started
-            W->>H: RecordHvRunStartCommand with the process id
-            H->>DB: run Running, StartedUtc, ProcessId
-            W->>H: AppendHvRunOutputCommand sequence 1, the hv_brief record
-            Note over W,AD: ref StreamOneAttempt (below)
-            alt stale fence or audit unavailable during the run
-                W->>AD: kill the process
-                Note over W: attempt ends without another write, the lease expires later, 17.9
-            else cancel requested
-                W->>AD: kill the process
-                W->>H: FailHvRunCommand canceled
-            else evidence_corrupt or a non-retryable conflict from an append
-                W->>AD: kill the process
-                W->>H: FailHvRunCommand evidence_corrupt, a server incident, the reviewer unchanged
-            else exited with a nonzero code
-                W->>H: FailHvRunCommand reviewer_exited_nonzero
-            else exited with code 0
-                W->>H: AppendHvRunOutputCommand, the remaining lines and the hv_provenance lines
-                W->>H: CloseHvRunOutputCommand with the chunk count
-                alt request CancelRequested at close
-                    H-->>W: run Canceled, request Canceled, turns released
-                else stale fence or audit unavailable
-                    H-->>W: stale_fence or 503 audit_unavailable
+        W->>DB: AuditLedgerGuard RecordRead, then the Request evidence for the brief
+        alt read refused
+            Note over W: attempt ends before launch without another write, the lease expires later, 17.9
+        else Request evidence fails to decompress
+            W->>H: FailHvRunCommand evidence_corrupt, a server incident, the reviewer unchanged
+        else brief built
+            W->>AD: BuildLaunch and start the process inside a containment bound to the worker
+            alt launch failed
+                W->>H: FailHvRunCommand reviewer_launch_failed
+                Note over W,H: ref the execution failure sequence, 17.8
+            else started
+                W->>H: RecordHvRunStartCommand with the process id
+                H->>DB: run Running, StartedUtc, ProcessId
+                W->>H: AppendHvRunOutputCommand sequence 1, the hv_brief record
+                Note over W,AD: ref StreamOneAttempt (below)
+                alt stale fence or audit unavailable during the run
+                    W->>AD: kill the process
                     Note over W: attempt ends without another write, the lease expires later, 17.9
-                else
-                    H-->>W: request Finalizing
-                    Note over W,H: ref FinalizeOneRequest (below)
+                else cancel requested
+                    W->>AD: kill the process
+                    W->>H: FailHvRunCommand canceled
+                else evidence_corrupt or a non-retryable conflict from an append
+                    W->>AD: kill the process
+                    W->>H: FailHvRunCommand evidence_corrupt, a server incident, the reviewer unchanged
+                else exited with a nonzero code
+                    W->>H: FailHvRunCommand reviewer_exited_nonzero
+                else exited with code 0
+                    W->>H: AppendHvRunOutputCommand, the remaining lines and the hv_provenance lines
+                    W->>H: CloseHvRunOutputCommand with the chunk count
+                    alt request CancelRequested at close
+                        H-->>W: run Canceled, request Canceled, turns released
+                    else stale fence or audit unavailable
+                        H-->>W: stale_fence or 503 audit_unavailable
+                        Note over W: attempt ends without another write, the lease expires later, 17.9
+                    else
+                        H-->>W: request Finalizing
+                        Note over W,H: ref FinalizeOneRequest (below)
+                    end
                 end
             end
         end
@@ -2459,7 +2489,7 @@ flowchart LR
 
 ### 18.5 UC-HV-04 Run a review live [FR-MCP-HVPIPE-007, -008]
 
-Actors: HV worker, reviewer agent, server. Trigger: a `Queued` request whose reviewer is eligible and has capacity. Preconditions: UC-HV-03 completed. Main flow: the worker claims the request with a lease and a fence (ClaimHvRunCommand); it launches the reviewer with the brief (RunReviewerProcess) and records the brief as the log's first record; every line the reviewer writes is appended within the flush interval (AppendHvRunOutputCommand) and is visible on the output stream while the reviewer runs (S-22); progress records set the request's progress and ETA (R-18); heartbeats renew the lease (RecordHvRunHeartbeatCommand); the reviewer reviews each turn and the whole set, logs its own `Chore` turn holding its result, and emits its verdict record last; on exit with code 0 the worker appends the provenance and closes the output (CloseHvRunOutputCommand), and the request becomes `Finalizing`. Alternates: the assignee is no longer eligible and the claim reassigns round-robin; a cancel arrives and the worker stops the reviewer (UC-HV-08); the reviewer fails to start or exits nonzero (UC-HV-09); the worker loses its lease and its writes are refused as stale, so it stops (UC-HV-09); no reviewer is eligible and the request waits `Queued` with an unknown ETA; the reviewer runs for any length of time without a timeout (P-02). Postconditions: the attempt's complete log is stored, compressed, contiguous, and hashed. Invariants: I-05, I-06.
+Actors: HV worker, reviewer agent, server. Trigger: a `Queued` request whose reviewer is eligible and has capacity. Preconditions: UC-HV-03 completed. Main flow: the worker claims the request with a lease and a fence (ClaimHvRunCommand); it launches the reviewer with the brief (RunReviewerProcess) and records the brief as the log's first record; every line the reviewer writes is appended within the flush interval (AppendHvRunOutputCommand) and is visible on the output stream while the reviewer runs (S-22); progress records set the request's progress and ETA (R-18); heartbeats renew the lease (RecordHvRunHeartbeatCommand); the reviewer reviews each turn and the whole set, logs its own `Chore` turn holding its result, and emits its verdict record last; on exit with code 0 the worker appends the provenance and closes the output (CloseHvRunOutputCommand), and the request becomes `Finalizing`. Alternates: the assignee is no longer eligible and the claim reassigns round-robin; a cancel arrives and the worker stops the reviewer (UC-HV-08); the reviewer fails to start or exits nonzero (UC-HV-09); the stored accepted request fails to decompress when the brief is built, so no reviewer starts and the attempt fails with `evidence_corrupt` as a server fault (UC-HV-09); the worker loses its lease and its writes are refused as stale, so it stops (UC-HV-09); no reviewer is eligible and the request waits `Queued` with an unknown ETA; the reviewer runs for any length of time without a timeout (P-02). Postconditions: the attempt's complete log is stored, compressed, contiguous, and hashed. Invariants: I-05, I-06.
 
 ```mermaid
 flowchart LR
@@ -2474,6 +2504,7 @@ flowchart LR
     E3(("Launch failure or nonzero exit: UC-HV-09")) -. extend .-> U
     E4(("Lease lost: stale fence, worker stops")) -. extend .-> U
     E5(("No eligible reviewer: waits Queued, ETA unknown")) -. extend .-> U
+    E6(("Accepted request corrupt at the brief: no launch, server fault, UC-HV-09")) -. extend .-> U
 ```
 
 ### 18.6 UC-HV-05 Finalize the HV result [FR-MCP-HVPIPE-010, -011, -012, -014, -021]
@@ -2491,6 +2522,7 @@ flowchart LR
     E3(("Audit unavailable: stays Finalizing for the sweep")) -. extend .-> U
     E4(("Already finalized: stored outcome")) -. extend .-> U
     E5(("Agent context Off: responses NotGraded")) -. extend .-> U
+    E6(("Result compression failed: rolled back, attempt fails evidence_corrupt")) -. extend .-> U
 ```
 
 ### 18.7 UC-HV-06 Watch an HV live [FR-MCP-HVPIPE-015, -016]
@@ -2540,7 +2572,7 @@ flowchart LR
 
 ### 18.10 UC-HV-09 Recover from failures [FR-MCP-HVPIPE-007, -009]
 
-Actors: HV worker, triage, server. Trigger: an execution failure (launch failure, nonzero exit, invalid output, failed verification, missing reviewer turn, runtime identity mismatch) or a dead worker. Main flow: the failure is recorded on the attempt (FailHvRunCommand); a failure attributable to the reviewer marks it `Offline` until a NONCE passes (S-15); an incident is recorded and filed through the triage endpoint with a deduplication key (FileHvIncidentCommand, S-26); the request returns to `Queued` and the next claim assigns the next eligible reviewer. Alternates: attempts are spent and the request fails, releasing its turns; triage is unreachable and the filing is retried at each sweep; a worker died and its expired leases are swept (ExpireHvRunLeasesCommand), its runs abandoned and fenced out; a graceful shutdown ends runs with `worker_shutdown`, which is not counted as an attempt; the audit ledger is unavailable and the failed run cannot be recorded until it returns, after which the lease expiry recovers it. Postconditions: no failure is silent, no incident group is duplicated, and no reviewer is used again before it proves itself. Invariants: I-05.
+Actors: HV worker, triage, server. Trigger: an execution failure (launch failure, nonzero exit, invalid output, failed verification, missing reviewer turn, runtime identity mismatch, corrupt stored evidence) or a dead worker. Main flow: the failure is recorded on the attempt (FailHvRunCommand); a failure attributable to the reviewer marks it `Offline` until a NONCE passes (S-15); an incident is recorded and filed through the triage endpoint with a deduplication key (FileHvIncidentCommand, S-26); the request returns to `Queued` and the next claim assigns the next eligible reviewer. Alternates: attempts are spent and the request fails, releasing its turns; triage is unreachable and the filing is retried at each sweep; a worker died and its expired leases are swept (ExpireHvRunLeasesCommand), its runs abandoned and fenced out; a graceful shutdown ends runs with `worker_shutdown`, which is not counted as an attempt; the audit ledger is unavailable and the failed run cannot be recorded until it returns, after which the lease expiry recovers it. Postconditions: no failure is silent, no incident group is duplicated, and no reviewer is used again before it proves itself. Invariants: I-05.
 
 ```mermaid
 flowchart LR
@@ -2700,6 +2732,7 @@ Problem domains (the foundation's rule of 2026-10-13, "Dividing the new reqs int
   - AC006 Given a finalized request, when its `Result` evidence is read back, then the stored payload holds no `evidence.result` digest, its SHA-256 equals `ResultSha256`, and the returned document's `evidence.result.sha256` equals that value (H7: `ResultEvidenceDigestExcludesItselfAndRoundTrips`).
   - AC007 Given a result document whose compression fails its round trip inside the finalization transaction, when finalized, then the transaction rolls back and nothing of the result is visible, and the run fails with `evidence_corrupt` as a server fault (an incident `hv-server-evidence_corrupt`, the reviewer unchanged) through policy HvRetryDecision, so the request's attempts bound the retries (H7: `ResultCompressionFailureFailsRunAsServerFault`).
   - AC008 Given a stored payload that fails to decompress, when GetHvRequestQuery returns its last output, GetHvResultQuery assembles the result, GetHvEvidenceQuery decompresses it, or the output stream sends it, then the read is recorded first, each query answers 500 `evidence_corrupt` before its first byte or ends its body incomplete after it, and the stream sends `hv_stream_error` with `evidence_corrupt` and ends (H6: `CorruptStoredPayloadReadAnswersEvidenceCorrupt`).
+  - AC009 Given a claimed review run whose `Request` evidence fails to decompress, when the worker builds its brief, then the read is recorded first, no reviewer process starts, and the run fails with `evidence_corrupt` as a server fault (an incident `hv-server-evidence_corrupt`, the reviewer unchanged) through policy HvRetryDecision, so the request's attempts bound the retries (H3: `CorruptRequestEvidenceAtBriefFailsRunAsServerFault`).
 - FR-MCP-HVPIPE-012 Atomic finalization and turn finality. Sources S-06, S-07, S-23, R-04, R-15. UC-HV-05, UC-HV-12. TR: FinalizeHvRequestCommand, CommitFinalResult, HvTurnFreeze, A-07, A-08, A-11.
   - AC001 Given a fault injected after each write of CommitFinalResult (W-06), when finalization runs, then nothing of the result is visible after the rollback, the request stays `Finalizing`, and the next sweep finalizes it, on three providers (`FinalizeFaultAfterEachWriteNothingVisibleThreeProviders`).
   - AC002 Given an admitted turn, when any turn write, review write, review reset, section write, dialog append, title change, or session replace or delete targets it from any origin but `HvFinalization`, then 409 `turn_immutable` with `hv_pending`, and after finalization with `hv_final` (`FrozenTurnEveryWritePathRefused`).
@@ -2791,7 +2824,7 @@ Every criterion's test is written in H0 and proven there against mocks with its 
 - FR-MCP-HVPIPE-008: AC001 and AC002 H3; AC003 H6 (the chunk is stored while the gate is closed from H3; the line is observed on the output stream from H6), also live check; AC004 and AC005 H3; AC006 H7; AC007 H2; AC008 to AC010 H1 and live check (AC010 after P11, P14, and P15 are fixed, section 20.4); AC011 and AC012 H3.
 - FR-MCP-HVPIPE-009: AC001 to AC005 and AC007 H3; AC006 H7.
 - FR-MCP-HVPIPE-010: AC001 to AC004 and AC007 to AC010 H7 (AC007's review half is V-8's refusal, which exists only in H7); AC005 and AC006 H1.
-- FR-MCP-HVPIPE-011: AC001, AC003, and AC005 H3; AC002, AC006, and AC007 H7; AC004 and AC008 H6.
+- FR-MCP-HVPIPE-011: AC001, AC003, AC005, and AC009 H3; AC002, AC006, and AC007 H7; AC004 and AC008 H6.
 - FR-MCP-HVPIPE-012: AC001, AC004 to AC006, AC008, and AC009 H7; AC002 and AC007 H2 (AC007's migration is built in HvStorageSchema, and its write-guard and admission assertions need H2); AC003 H3.
 - FR-MCP-HVPIPE-013: AC001 H2; AC002 and AC003 H7.
 - FR-MCP-HVPIPE-014: AC001 and AC002 H7.
@@ -2909,15 +2942,15 @@ On 2026-10-16 the operator asked the drafting agent to settle every decision it 
 - Section 11, the shared components, each drawn once: FencedLease, GzipCodec, AuditLedgerGuard, AgentIdentity, TurnSnapshotBuilder, RequirementReferenceExtractor, NotificationOutbox, OrderedEventReplay.
 - Section 14, units of work: ListHvReviewersQuery, GetHvReviewerQuery, UpdateHvReviewerCommand, StartHvReviewerNonceCommand; SubmitHvRequestCommand (nested activities AdmitRequestChecks and InsertAdmittedRequest), GetHvRequestQuery, QueryHvRequestsQuery, CancelHvRequestCommand; GetHvResultQuery, GetHvEvidenceQuery, RemoveHvEvidenceCommand, StreamHvRunOutputQuery, StreamHvNotificationsQuery, QueryHvNotificationsQuery, QueryHvIncidentsQuery; ClaimHvRunCommand, RecordHvRunStartCommand, RecordHvRunHeartbeatCommand, AppendHvRunOutputCommand, CloseHvRunOutputCommand, FailHvRunCommand, ExpireHvRunLeasesCommand, FinalizeHvRequestCommand (nested activities ReadFinalizationInputs and CommitFinalResult), FileHvIncidentCommand; section 14.5, the amended internal RecordModelGradeCommand.
 - Section 15, policies: HvScopeResolution, HvAdmissionEligibility, HvReviewerEligibility, RoundRobinAssignment, HvTurnFreeze, HvFinalVerification (nested activities VerifyLogAndBinding and VerifyVerdictAndReviewer), ReadinessProbeVerdict, HvProbeOutcome, HvRetryDecision.
-- Section 16, processes: HvWorkerHost, RunReviewerProcess (nested activity StreamReviewerOutput), SubmitHvFromPlugin, WatchHvNotifications, and HostileReviewWorkerHost with its internal units ClaimHostileReviewAttemptCommand, RenewHostileReviewAttemptCommand, CompleteHostileReviewAttemptCommand, and ExpireHostileReviewLeasesCommand (section 16.7).
+- Section 16, processes: HvWorkerHost, RunReviewerProcess (nested activity StreamReviewerOutput), SubmitHvFromPlugin, WatchHvNotifications, and HostileReviewWorkerHost (nested activity RunHostileReviewAttempt) with its internal units ClaimHostileReviewAttemptCommand, RenewHostileReviewAttemptCommand, CompleteHostileReviewAttemptCommand, and ExpireHostileReviewLeasesCommand (section 16.7).
 - Section 17, sequences: 17.1 to 17.15, with the nested sequences StreamOneAttempt and FinalizeOneRequest after 17.7.
 - Section 18, use cases: the overview and UC-HV-01 to UC-HV-12.
 - Section 20: the delivery order.
-- Addendum B, entity diagrams by functionality: B.1 references between the groups, B.2 reviewer pool, B.3 requests and membership, B.4 runs and output, B.5 results and findings, B.6 evidence, B.7 notifications and incidents, B.8 changed foundation entities.
+- Addendum B, entity diagrams by functionality: B.1 references between the groups, B.2 reviewer pool, B.3 requests and membership, B.4 runs and output, B.5 results and findings, B.6 evidence, B.7 notifications and incidents, B.8 changed foundation entities, B.9 HostileReview worker storage.
 
 ## Addendum B. Entity diagrams with relationships
 
-Grouped by functionality, the foundation's rule (Addendum A, "Grouping"): each entity's columns appear in exactly one group; an entity of another group appears without columns only as a relationship target. Solid lines are database foreign keys (each the composite (`WorkspaceId`, parent key)); dotted lines are logical references by root ids, enforced by the units. Diagrams draw key columns and the columns this amendment adds; section 12 lists every column.
+Grouped by functionality, the foundation's rule (Addendum A, "Grouping"): each entity's columns appear in exactly one group; an entity of another group appears without columns only as a relationship target. Solid lines are database foreign keys (each the composite (`WorkspaceId`, parent key)); dotted lines are logical references by root ids, enforced by the units. Diagrams draw key columns and the columns this amendment adds; section 12 lists every column of the HV entities, and section 16.7 those of the HostileReview worker (B.9, whose single-column foreign keys are that subsystem's own).
 
 ### B.1 References between the groups
 
@@ -3149,4 +3182,43 @@ erDiagram
     }
     HvRequest ||..o{ SessionLogTurn : "HvRequestId while Pending or Final"
     HvRequest |o--o{ AgentResponseGrade : "model grades"
+```
+
+### B.9 HostileReview worker storage (section 16.7)
+
+The HostileReview subsystem keeps its single-column keys (R-25), so its solid lines are foreign keys on `RequestId` alone, as its existing execution and diagnostic rows have (`src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs:63-65`, `HostileReviewDiagnosticEntity.cs:33-35`). Not drawn: `HostileReviewAttempt` `LeaseOwner`, `LeaseExpiresUtc`, `ClaimedUtc`, `EndedUtc`, `FailureCode`, `IsDeleted`, and its unique filtered (`WorkspaceId`, `RequestId`) where `Status` is `Claimed` or `Running`; the other columns of the request, execution, and diagnostic rows, which exist today (`src/QBrainAi.Storage/Entities/HostileReviewRequestEntity.cs:8-85`).
+
+```mermaid
+erDiagram
+    HostileReviewRequest {
+        string RequestId PK
+        string WorkspaceId
+        string Status
+        string AcceptedResultId
+        int AttemptCount
+        bool IsDeleted
+    }
+    HostileReviewAttempt {
+        string AttemptId PK
+        string RequestId FK
+        string WorkspaceId
+        int AttemptNumber
+        string PoolJobId
+        string ExecutionId
+        string Status
+        long FenceToken
+    }
+    HostileReviewExecution {
+        string ExecutionId PK
+        string RequestId FK
+    }
+    HostileReviewDiagnostic {
+        long DiagnosticId PK
+        string RequestId FK
+        string Code
+    }
+    HostileReviewRequest ||--o{ HostileReviewAttempt : "attempts"
+    HostileReviewRequest ||--o{ HostileReviewExecution : "model executions"
+    HostileReviewRequest ||--o{ HostileReviewDiagnostic : "sanitized diagnostics"
+    HostileReviewExecution |o..o| HostileReviewAttempt : "ExecutionId, one per launched process"
 ```
