@@ -1,0 +1,12 @@
+type: result
+payload:
+  requestId: req-20261018T065905Z-6dbf
+  result:
+    turnId: 2256
+    agent: Codex
+    sessionId: Codex-20261018T062121Z-plugin-session
+    requestId: req-20261018T062156Z-amendment1-r3
+
+---
+
+
