@@ -1672,7 +1672,7 @@ The HostileReview subsystem keeps its own bounded context, queue, entities, and 
 - No time limit: an artifact review runs until the reviewer exits, with no execution timeout (P-02, R-11); the options' `ExecutionTimeout` is not read. Liveness is the attempt's lease, renewed while the reviewer runs.
 - Storage (the subsystem keeps its entities and their single-column keys, R-25; in `src/QBrainAi.Storage/Entities/`): `HostileReviewAttemptEntity` (table `HostileReviewAttempts`, key `AttemptId` (128), with `WorkspaceId` and the root id `RequestId`, a foreign key to the request like the subsystem's execution and diagnostic rows, `HostileReviewExecutionEntity.cs:63-65`): `AttemptNumber` (int), `PoolJobId` (128), `ExecutionId` (128, written only by CompleteHostileReviewAttemptCommand together with the execution row it names, so it never names a row that does not exist; null for an attempt that launched no process, was abandoned, or whose provenance showed no model or effort), `Status` (16: `Claimed`, `Running`, `Succeeded`, `Failed`, `Abandoned`, `Canceled`), `LeaseOwner` (256), `LeaseExpiresUtc`, `FenceToken` (long), `ClaimedUtc`, `EndedUtc`, `FailureCode` (64, sanitized), `IsDeleted`; unique filtered (`WorkspaceId`, `RequestId`) where `Status` is `Claimed` or `Running`, one live attempt per request. `HostileReviewRequestEntity` gains `AcceptedResultId` (128, set once, a key of its own, with the request's existing `Verdict` and findings as the accepted result), `AttemptCount` (int), and `IsDeleted`; its `Status` takes `Queued`, `Running`, `Completed`, and `Failed`. The existing execution row (`HostileReviewExecutionEntity`) is the model execution, one per launched process whose provenance shows its model and effort, written at its completion.
 - Internal result types (`src/QBrainAi.Services/HostileReview/Execution/`): `HostileReviewAttemptClaim { attemptId, requestId, attemptNumber, poolJobId, fenceToken, leaseExpiresUtc }`; `HostileReviewRenewResult { leaseExpiresUtc }`; `HostileReviewAttemptOutcome { kind (Success, Failure, Canceled), execution, verdict, findings, failureCode, diagnostics, counted }` (the parsed result and sanitized diagnostics only; never an artifact, a prompt, or an output line; `execution` null when no process started or its provenance showed no model or effort; `diagnostics` stored whatever the `kind`); `HostileReviewExecutionMetadata { executionId, reviewerAgent, model, effort, sourceSurface, promptTemplateId, promptVersion, startedUtc, endedUtc, inputTokens, outputTokens }` (the columns of `HostileReviewExecutionEntity`, `src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs:10-61`, filled as the next item states); `HostileReviewAttemptResult { status (accepted, alreadyAccepted, requeued, failed), acceptedResultId }`; `HostileReviewSweepResult { abandonedAttemptIds }`.
-- Execution metadata (FR-MCP-HOSTILEREVIEW-003 criteria 1 to 3), produced by the worker for every launched process and carried as the outcome's `execution` only when its provenance shows the model and effort: `executionId`, created when the worker launches the process; `reviewerAgent` and `sourceSurface`, the selected agent and its adapter's id; `promptTemplateId` and `promptVersion`, the worker's prompt template; `startedUtc` and `endedUtc`, the process start and exit as the worker observed them; `model` and `effort`, the values actually used, read after the exit by the adapter's `ReadProvenance` (section 16.3, the source V-7 reads for HV, P-04), never the configured ones; `inputTokens` and `outputTokens` when the CLI reports them, otherwise null with the diagnostic `token_metadata_unavailable` (criterion 3: omitted with a diagnostic, never fabricated). Because criteria 1 and 2 record the model and effort actually used, an agent with no reviewer adapter (section 16.3 has one per reviewer id), or whose adapter has no provenance source for them (Cline today, L-04 and D-06), launches no process and completes the attempt as a failure with `runtime_identity_unavailable`, and a run whose provenance shows no model or effort completes as the same failure, with its execution id, agent, and times in the diagnostic, no execution row, and the attempt's `ExecutionId` null. The diagnostics of every outcome, success included (for example `token_metadata_unavailable` beside an accepted result), are stored by the completion.
+- Execution metadata (FR-MCP-HOSTILEREVIEW-003 criteria 1 to 3), produced by the worker for every launched process and carried as the outcome's `execution` only when its provenance shows the model and effort: `executionId`, created when the worker launches the process; `reviewerAgent` and `sourceSurface`, the selected agent and its adapter's id; `promptTemplateId` and `promptVersion`, the worker's prompt template; `startedUtc` and `endedUtc`, the process start and exit as the worker observed them; `model` and `effort`, the values actually used, read after the exit by the adapter's `ReadProvenance` (section 16.3, the source V-7 reads for HV, P-04), never the configured ones; `inputTokens` and `outputTokens` when the CLI reports them, otherwise null with the diagnostic `token_metadata_unavailable` (criterion 3: omitted with a diagnostic, never fabricated). Because criteria 1 and 2 record the model and effort actually used, an agent with no reviewer adapter (section 16.3 has one per reviewer id), or whose adapter has no provenance source for them (Cline today, L-04 and D-06), launches no process and completes the attempt as a failure with `runtime_identity_unavailable`, and a run whose provenance shows no model or effort completes as the same failure, with its execution id, agent, and times in the diagnostic, no execution row, and the attempt's `ExecutionId` null. None of this depends on a renewal: a process that exits before its first renewal is completed from `Claimed` with the same writes (`HostileReviewFastExitRecordsExecutionAndTerminalFields`, `HostileReviewLaunchWithoutProvenanceLeavesNoExecutionRow`). The diagnostics of every outcome, success included (for example `token_metadata_unavailable` beside an accepted result), are stored by the completion.
 - Identities, distinct as criterion 4 requires: the request (`RequestId`); one attempt per claim (`AttemptId`, with lease, fence, and attempt number); the AgentPool job that runs it (`PoolJobId`); one model execution per launched process whose provenance shows its model and effort (`ExecutionId`, which is the run id criterion 2 names, the execution row with model, effort, agent, prompt template and version, and times, criteria 1 to 3); and the one accepted terminal result (`AcceptedResultId`).
 - Storage boundary (FR-MCP-HOSTILEREVIEW-002 criterion 4): the worker assembles the prompt in memory from links it reauthorizes at dispatch, reads the reviewer's output lines only to parse the result, and stores neither the prompt nor any output line nor any artifact content: only normalized identity, type, version or content hash, the parsed result, and sanitized diagnostics reach queue rows, notifications, logs, receipts, or result metadata.
 - Links (P3): every artifact type FR-MCP-HOSTILEREVIEW-002 lists resolves through its supported workspace-scoped service, the stored hash is of the resolved content (never of its id), and the limits of criterion 4 refuse more than 64 links, an artifact over 1 MiB decoded, aggregate input over 8 MiB, or uninspectable content. A link that fails its reauthorization at dispatch (missing, unauthorized, stale, or ambiguous, criteria 1, 2, and 4), or whose resolved content now exceeds a limit, launches no process: the attempt completes as a failure whose sanitized diagnostic names the link's normalized identity and the code, and no link is ever left out of a prompt silently.
@@ -1931,6 +1931,7 @@ sequenceDiagram
         W->>AD: launch with the probe brief
         AD-->>W: live lines, the hv_probe record, then exit
         W->>DB: AppendHvRunOutputCommand for each batch, then the hv_provenance lines
+        Note over W,DB: the probe runs through RunReviewerProcess, 16.2, so its start, heartbeats, and appends, each append through AppendBatch, have the outcomes drawn in 17.7, a stale fence or audit refusal ends the attempt for the lease expiry, and an integrity refusal fails the probe evidence_corrupt as in the V-1 branch below
         W->>DB: on exit 0 CloseHvRunOutputCommand, with RecordRead of the chunks committed, the chunks read and ReadinessProbeVerdict decided before its transaction, then policy HvProbeOutcome in it, otherwise FailHvRunCommand with policy HvProbeOutcome
         alt reviewer reconfigured while the probe ran
             DB-->>W: run Failed probe_stale_configuration, readiness and the newer probe request unchanged
@@ -2083,7 +2084,7 @@ sequenceDiagram
     participant DB
     participant AD
     W->>H: ClaimHvRunCommand
-    H->>DB: SerializableWrite: oldest Queued request, eligible reviewer with capacity, FencedLease Claim
+    H->>DB: SerializableWrite: the oldest claimable Queued request in the order of 14.4, a reviewer with capacity, FencedLease Claim
     alt nothing claimable
         H-->>W: null
     else claimed
@@ -2102,35 +2103,47 @@ sequenceDiagram
                 Note over W,H: failed ends the attempt with the state written, stale_fence or audit_unavailable ends it with no further write
             else started
                 W->>H: RecordHvRunStartCommand with the process id
-                H->>DB: run Running, StartedUtc, ProcessId
-                W->>H: AppendHvRunOutputCommand sequence 1, the hv_brief record
-                Note over W,H: every append, sequence 1 and the final flush included, goes through AppendBatch, 16.2, whose refusals are the branches below
-                Note over W,AD: ref StreamOneAttempt (below)
-                alt stale fence or audit unavailable during the run
+                alt stale fence or audit unavailable at the start
+                    H-->>W: stale_fence or 503 audit_unavailable
                     W->>AD: kill the process
                     Note over W: attempt ends without another write, the lease expires later, 17.9
-                else cancel requested
-                    W->>AD: kill the process
-                    W->>H: FailHvRunCommand canceled
-                else evidence_corrupt, a non-retryable conflict, or a 400 validation_error from an append
-                    W->>AD: kill the process
-                    W->>H: FailHvRunCommand evidence_corrupt, a server incident, the reviewer unchanged
-                else exited with a nonzero code
-                    W->>H: FailHvRunCommand reviewer_exited_nonzero
-                else exited with code 0
-                    W->>H: AppendHvRunOutputCommand, the remaining lines and the hv_provenance lines
-                    W->>H: CloseHvRunOutputCommand with the chunk count
-                    alt request CancelRequested at close
-                        H-->>W: run Canceled, request Canceled, turns released
-                    else 409 conflict with details.field chunkCount
-                        H-->>W: conflict, chunkCount
-                        Note over W,H: the worker appends what is missing and closes again
-                    else stale fence or audit unavailable
-                        H-->>W: stale_fence or 503 audit_unavailable
+                else retryable conflict at the start
+                    H-->>W: 409 conflict, retryable true
+                    Note over W,H: the worker repeats the same call with the same process id
+                else start recorded
+                    H->>DB: run Running, StartedUtc, ProcessId
+                    W->>H: AppendHvRunOutputCommand sequence 1, the hv_brief record
+                    Note over W,H: every append, sequence 1 and the final flush included, goes through AppendBatch, 16.2, whose refusals are the branches below
+                    Note over W,AD: ref StreamOneAttempt (below)
+                    alt stale fence or audit unavailable during the run
+                        W->>AD: kill the process
                         Note over W: attempt ends without another write, the lease expires later, 17.9
-                    else
-                        H-->>W: request Finalizing
-                        Note over W,H: ref FinalizeOneRequest (below)
+                    else cancel requested
+                        W->>AD: kill the process
+                        W->>H: FailHvRunCommand canceled
+                    else evidence_corrupt, a non-retryable conflict, or a 400 validation_error from an append
+                        W->>AD: kill the process
+                        W->>H: FailHvRunCommand evidence_corrupt, a server incident, the reviewer unchanged
+                    else exited with a nonzero code
+                        W->>H: FailHvRunCommand reviewer_exited_nonzero
+                    else exited with code 0
+                        W->>H: AppendHvRunOutputCommand, the remaining lines and the hv_provenance lines
+                        W->>H: CloseHvRunOutputCommand with the chunk count
+                        alt request CancelRequested at close
+                            H-->>W: run Canceled, request Canceled, turns released
+                        else 409 conflict with details.field chunkCount
+                            H-->>W: conflict, chunkCount
+                            Note over W,H: the worker appends what is missing and closes again
+                        else retryable conflict at the close
+                            H-->>W: 409 conflict, retryable true
+                            Note over W,H: the worker repeats the same close
+                        else stale fence or audit unavailable
+                            H-->>W: stale_fence or 503 audit_unavailable
+                            Note over W: attempt ends without another write, the lease expires later, 17.9
+                        else
+                            H-->>W: request Finalizing
+                            Note over W,H: ref FinalizeOneRequest (below)
+                        end
                     end
                 end
             end
@@ -2173,6 +2186,9 @@ sequenceDiagram
                 H-->>W: lease extended, cancelRequested false
             else cancel requested
                 H-->>W: cancelRequested true
+            else retryable conflict
+                H-->>W: 409 conflict, retryable true
+                W->>H: the same heartbeat again
             else stale fence or audit unavailable
                 H-->>W: stale_fence or 503 audit_unavailable
             end
@@ -2271,7 +2287,7 @@ sequenceDiagram
                 H->>DB: LastFilingError, retried at the next sweep
             end
         end
-        W->>H: ClaimHvRunCommand reassigns the Queued request to the next eligible reviewer with capacity
+        W->>H: ClaimHvRunCommand reassigns the Queued request to the next eligible reviewer with capacity, or writes nothing and leaves it waiting when none has capacity
         Note over Caller,H: later, after the cause is fixed: StartHvReviewerNonceCommand, 17.3
     end
 ```
@@ -2539,7 +2555,7 @@ flowchart LR
 
 ### 18.3 UC-HV-02 NONCE a reviewer [FR-MCP-HVPIPE-003]
 
-Actors: operator or any agent, HV worker, reviewer agent. Trigger: a reviewer is `Unverified` (startup or a launch change, requested by the worker) or `Offline` after its cause was fixed (requested by a caller, S-15). Preconditions: the reviewer is enabled. Main flow: the caller requests a NONCE (StartHvReviewerNonceCommand); the worker claims the probe (ClaimHvRunCommand), launches the reviewer with a probe brief carrying a fresh nonce (RunReviewerProcess), streams its output (AppendHvRunOutputCommand), appends the adapter's provenance, and closes the run (CloseHvRunOutputCommand); policy ReadinessProbeVerdict passes: the nonce is echoed, the provenance shows the expected model and effort, and the reviewer logged its own turn; the reviewer becomes `Online` with its resolved model and effort. Alternates: a probe already requested or running is reported without a second probe; a disabled reviewer is refused with 409 `hv_reviewer_disabled`; the probe fails (wrong nonce, wrong or missing provenance, no reviewer turn, launch failure, nonzero exit) and the reviewer stays or becomes `Offline` with an incident filed through triage (UC-HV-09); the probe's stored log fails its integrity check, a server fault, and a server incident is filed while the reviewer's readiness is unchanged; the reviewer is reconfigured while the probe runs, and the old probe, whether it closes, fails, ends with a shutdown, or loses its lease, changes nothing of the reviewer while the newer probe request waits (HvProbeOutcome); the worker dies during a probe of the current configuration and the sweep requests it again; the worker restarts after a probe settled on a server fault and requests no new probe until a caller asks. Postconditions: the reviewer's readiness reflects a probe of this moment (S-27); `reviewer_online` or `reviewer_offline` is announced. Invariants: only a passing NONCE moves a reviewer to `Online` (R-10).
+Actors: operator or any agent, HV worker, reviewer agent. Trigger: a reviewer is `Unverified` (startup or a launch change, requested by the worker) or `Offline` after its cause was fixed (requested by a caller, S-15). Preconditions: the reviewer is enabled. Main flow: the caller requests a NONCE (StartHvReviewerNonceCommand); the worker claims the probe (ClaimHvRunCommand), launches the reviewer with a probe brief carrying a fresh nonce (RunReviewerProcess), streams its output (AppendHvRunOutputCommand), appends the adapter's provenance, and closes the run (CloseHvRunOutputCommand); policy ReadinessProbeVerdict passes: the nonce is echoed, the provenance shows the expected model and effort, and the reviewer logged its own turn; the reviewer becomes `Online` with its resolved model and effort. Alternates: a probe already requested or running is reported without a second probe; a disabled reviewer is refused with 409 `hv_reviewer_disabled`; the probe fails (wrong nonce, wrong or missing provenance, no reviewer turn, launch failure, nonzero exit) and the reviewer stays or becomes `Offline` with an incident filed through triage (UC-HV-09); the probe's stored log fails its integrity check, a server fault, and a server incident is filed while the reviewer's readiness is unchanged; the reviewer is reconfigured while the probe runs, and the old probe, whether it closes, fails, ends with a shutdown, or loses its lease, changes nothing of the reviewer while the newer probe request waits (HvProbeOutcome); the worker dies during a probe of the current configuration and the sweep requests it again; the worker restarts after a probe settled on a server fault and requests no new probe until a caller asks; a startup NONCE request refused while the audit ledger is down is made again at the worker's next iteration, unless the reviewer was disabled meanwhile. Postconditions: the reviewer's readiness reflects a probe of this moment (S-27); `reviewer_online` or `reviewer_offline` is announced. Invariants: only a passing NONCE moves a reviewer to `Online` (R-10).
 
 ```mermaid
 flowchart LR
@@ -2580,7 +2596,7 @@ flowchart LR
 
 ### 18.5 UC-HV-04 Run a review live [FR-MCP-HVPIPE-007, -008]
 
-Actors: HV worker, reviewer agent, server. Trigger: a `Queued` request whose reviewer is eligible and has capacity. Preconditions: UC-HV-03 completed. Main flow: the worker claims the request with a lease and a fence (ClaimHvRunCommand); it launches the reviewer with the brief (RunReviewerProcess) and records the brief as the log's first record; every line the reviewer writes is appended within the flush interval (AppendHvRunOutputCommand) and is visible on the output stream while the reviewer runs (S-22); progress records set the request's progress and ETA (R-18); heartbeats renew the lease (RecordHvRunHeartbeatCommand); the reviewer reviews each turn and the whole set, logs its own `Chore` turn holding its result, and emits its verdict record last; on exit with code 0 the worker appends the provenance and closes the output (CloseHvRunOutputCommand), and the request becomes `Finalizing`. Alternates: the assignee is no longer eligible and the claim reassigns round-robin to an eligible reviewer with capacity, skipping one at its `MaxConcurrentRuns`, or writes nothing and the request waits when none has capacity; a cancel arrives and the worker stops the reviewer (UC-HV-08); the reviewer fails to start or exits nonzero (UC-HV-09); the stored accepted request fails to decompress when the brief is built, so no reviewer starts and the attempt fails with `evidence_corrupt` as a server fault (UC-HV-09); the worker loses its lease and its writes are refused as stale, so it stops (UC-HV-09); no reviewer is eligible and the request waits `Queued` with an unknown ETA; the reviewer runs for any length of time without a timeout (P-02). Postconditions: the attempt's complete log is stored, compressed, contiguous, and hashed. Invariants: I-05, I-06.
+Actors: HV worker, reviewer agent, server. Trigger: a `Queued` request whose reviewer is eligible and has capacity. Preconditions: UC-HV-03 completed. Main flow: the worker claims the request with a lease and a fence (ClaimHvRunCommand); it launches the reviewer with the brief (RunReviewerProcess) and records the brief as the log's first record; every line the reviewer writes is appended within the flush interval (AppendHvRunOutputCommand) and is visible on the output stream while the reviewer runs (S-22); progress records set the request's progress and ETA (R-18); heartbeats renew the lease (RecordHvRunHeartbeatCommand); the reviewer reviews each turn and the whole set, logs its own `Chore` turn holding its result, and emits its verdict record last; on exit with code 0 the worker appends the provenance and closes the output (CloseHvRunOutputCommand), and the request becomes `Finalizing`. Alternates: the assignee is no longer eligible and the claim reassigns round-robin to an eligible reviewer with capacity, skipping one at its `MaxConcurrentRuns`, or writes nothing and the request waits when none has capacity; the assignee is still eligible but at its `MaxConcurrentRuns`, and the request keeps it and waits while later requests are claimed; a cancel arrives and the worker stops the reviewer (UC-HV-08); the reviewer fails to start or exits nonzero (UC-HV-09); the stored accepted request fails to decompress when the brief is built, so no reviewer starts and the attempt fails with `evidence_corrupt` as a server fault (UC-HV-09); the worker loses its lease and its writes are refused as stale, so it stops (UC-HV-09); no reviewer is eligible and the request waits `Queued` with an unknown ETA; the reviewer runs for any length of time without a timeout (P-02). Postconditions: the attempt's complete log is stored, compressed, contiguous, and hashed. Invariants: I-05, I-06.
 
 ```mermaid
 flowchart LR
@@ -2778,12 +2794,12 @@ Problem domains (the foundation's rule of 2026-10-13, "Dividing the new reqs int
   - AC001 Given a submission, when it commits, then the worker is woken and claims it without a manual trigger, and when the wake-up is lost (a crash after the commit, W-01) the next poll claims it (`SubmitWakesWorkerAutoStart`).
   - AC002 Given two workers claiming at once, when both run, then exactly one run is claimed per request, on three providers (W-11, `ClaimConcurrentWorkersOneRunPerRequestThreeProviders`).
   - AC003 Given a run whose lease expired before its process started, while it ran, or after its process exited but before its close committed (W-02, W-03, W-04), when the sweep runs, then the run is `Abandoned`, its fence token is incremented, its output stays stored as evidence (L-02), and the request is `Queued` with attempts left; on its last counted attempt it is `Failed`, and with a cancel requested it is `Canceled`, each ended request with its turns `None`, its `Pending` responses `Closed` with `request_ended`, and `hv_failed` or `hv_canceled` appended, exactly as after FailHvRunCommand (`LeaseExpiryAbandonsFencesAndRequeues`, `LeaseExpiryEndsRequestLikeFailedRun`).
-  - AC004 Given a worker whose lease was taken over, when it appends, heartbeats, closes, or fails, then each answers `stale_fence` and nothing changes (`StaleFenceEveryWorkerWriteRefusedNothingChanged`).
+  - AC004 Given a worker whose lease was taken over, when it records its start, appends, heartbeats, closes, or fails, then each answers `stale_fence` and nothing changes (`StaleFenceEveryWorkerWriteRefusedNothingChanged`).
   - AC005 Given a request `Finalizing` when the server restarted (W-05), when the sweep runs, then FinalizeHvRequestCommand finalizes it once (`SweepFinalizesFinalizingRequestOnce`).
   - AC006 Given a graceful shutdown during a run, when the worker stops, then the run ends `worker_shutdown`, no incident exists, the reviewer is unchanged, and the attempt is not counted (`GracefulShutdownNotCountedNoIncident`).
   - AC007 Given two registered workspaces, each with queued requests, when each workspace's worker claims, then no run or request crosses workspaces (`WorkerClaimsOnlyItsWorkspace`).
   - AC008 Given a reviewer that has started a descendant, when its worker process is killed abruptly, then the reviewer and every descendant end without any call by the dead worker and without a time limit, and after the lease expires the request is queued again (H3, a scripted fake reviewer and a worker process the test kills: `WorkerDeathEndsReviewerTreeAndRequeues`).
-  - AC009 Given a claimed run, when its process starts, then RecordHvRunStartCommand makes it `Running` with `StartedUtc` and `ProcessId` before the `hv_brief` append; given a crash between the process start and that commit, then the run stays `Claimed`, the reviewer ends with its worker, and the lease expiry queues a new attempt (H3: `RunStartRecordedBeforeBriefAndCrashRecovered`).
+  - AC009 Given a claimed run, when its process starts, then RecordHvRunStartCommand makes it `Running` with `StartedUtc` and `ProcessId` before the `hv_brief` append; given a crash between the process start and that commit, then the run stays `Claimed`, the reviewer ends with its worker, and the lease expiry queues a new attempt; given RecordHvRunStartCommand or RecordHvRunHeartbeatCommand answered with a retryable `conflict`, then the worker repeats the same call, and a repeated start with the same process id after its commit returns the stored start and writes nothing (H3: `RunStartRecordedBeforeBriefAndCrashRecovered`, `RunStartAndHeartbeatRetryableConflictRepeated`).
   - AC010 Given two sweeps that both read run R of a request as expired, the first abandoning R and requeuing the request, and a new run of that request claimed before the second sweep's transaction, when the second sweep runs, then FencedLease `Expire` skips R, R is abandoned once with one server incident, the request keeps its new run and stays `Running`, and policy HvRetryDecision was applied once (H3: `SecondSweepSkipsRunAlreadyTakenOver`).
   - AC011 Given a run abandoned by one sweep and a later run of the same request finalized `Completed`, when a second sweep that had read the first run as expired runs, then the request stays `Completed` with its result, no turn is released, and neither `hv_failed` nor `hv_canceled` is appended (H7: `LateSweepNeverRevivesCompletedRequest`).
 - FR-MCP-HVPIPE-008 Execution lifecycle: true live output, heartbeats, no time limit, cancellation. Sources S-18, S-22, P-02, R-11, R-12, R-28. UC-HV-04, UC-HV-08. TR: RunReviewerProcess, StreamReviewerOutput, IHvReviewerAdapter live lines and launch barrier, AppendHvRunOutputCommand, CancelHvRequestCommand.
