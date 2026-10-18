@@ -1499,7 +1499,7 @@ flowchart TD
 
 ### 16.2 Process RunReviewerProcess: one attempt, live [FR-MCP-HVPIPE-008, -016]
 
-Runs one claimed run. It builds the brief (section 13.3: the accepted request read from the `Request` evidence inside the run envelope, after AuditLedgerGuard `RecordRead` records that read, or the probe brief with its nonce, which reads no evidence); a refused read starts no process and ends the attempt without another write, so the lease expiry recovers it (W-02, W-12). It asks the reviewer's adapter for the launch (section 16.3), starts the process with the workspace as its working directory and its plugin as a host session of its own (R-24), inside a containment bound to the worker process, so the reviewer and every descendant end when the worker dies, however abruptly (W-03; the containment, for example a process group or job object, is the adapter's, section 16.3), records the start (RecordHvRunStartCommand), and appends the `hv_brief` record as sequence 1. While the process runs it has four concurrent duties and no time limit (R-11, P-02): every line the adapter delivers goes into a buffer that is appended (AppendHvRunOutputCommand) when `OutputFlushBytes` accumulate; a flush timer appends a buffer that is not empty once `OutputFlushInterval` has passed since its first line, whether or not another line arrives, so a single line followed by silence is still appended within the interval (R-12); a heartbeat every `HeartbeatInterval` (RecordHvRunHeartbeatCommand) renews the lease and reads cancellation; and the process exit is awaited. `stale_fence` from any unit kills the process and ends the attempt without another write (W-03); `audit_unavailable` kills the process and ends the attempt (W-12); `evidence_corrupt` from an append (its round trip failed and nothing was saved) kills the process and fails the run with `evidence_corrupt` (FailHvRunCommand: a server fault, so a server incident and the reviewer unchanged, and the request through policy HvRetryDecision); a retryable `conflict` repeats the same unit call with the same sequence. Every append carries the records the adapter's extraction completed with that batch. On exit the remaining buffer is appended, the adapter's provenance lines are appended (section 16.3), and the run is closed (exit code 0, CloseHvRunOutputCommand, then FinalizeHvRequestCommand for a review whose request is `Finalizing`; a close that finds the request `CancelRequested` ends it `Canceled` instead, R-28; exit code 0 is not evidence of a review, R-11) or failed (FailHvRunCommand with `reviewer_exited_nonzero`, or `reviewer_launch_failed` when the process never started). A cancellation read at a heartbeat kills the process and fails the run with `canceled`, which policy HvRetryDecision turns into the request's `Canceled` (R-28). Killing the process, here and in the diagrams, ends the reviewer's whole process tree, descendants included, also when the root process has already exited; and when the root exits while a descendant still holds its output pipes, the worker ends that descendant before it reads the output to its end. Without that, a descendant that outlives the reviewer would hold the run open forever, because no time limit ends a run (P-02); P14 is the same defect class in the plugin core (FR-MCP-HVPIPE-008-AC011).
+Runs one claimed run. It builds the brief (section 13.3: the accepted request read from the `Request` evidence inside the run envelope, after AuditLedgerGuard `RecordRead` records that read, or the probe brief with its nonce, which reads no evidence); a refused read starts no process and ends the attempt without another write, so the lease expiry recovers it (W-02, W-12). It asks the reviewer's adapter for the launch (section 16.3), starts the process with the workspace as its working directory and its plugin as a host session of its own (R-24), inside a containment bound to the worker process, so the reviewer and every descendant end when the worker dies, however abruptly (W-03; the containment, for example a process group or job object, is the adapter's, section 16.3), records the start (RecordHvRunStartCommand), and appends the `hv_brief` record as sequence 1. While the process runs it has four concurrent duties and no time limit (R-11, P-02): every line the adapter delivers goes into a buffer that is appended (AppendHvRunOutputCommand) when `OutputFlushBytes` accumulate; a flush timer appends a buffer that is not empty once `OutputFlushInterval` has passed since its first line, whether or not another line arrives, so a single line followed by silence is still appended within the interval (R-12); a heartbeat every `HeartbeatInterval` (RecordHvRunHeartbeatCommand) renews the lease and reads cancellation; and the process exit is awaited. `stale_fence` from any unit kills the process and ends the attempt without another write (W-03); `audit_unavailable` kills the process and ends the attempt (W-12); `evidence_corrupt` from an append (its round trip failed and nothing was saved) kills the process and fails the run with `evidence_corrupt` (FailHvRunCommand: a server fault, so a server incident and the reviewer unchanged, and the request through policy HvRetryDecision), and so does a non-retryable `conflict` from an append (a different batch under a stored sequence, or a sequence out of order), because the log's integrity can no longer be shown; a retryable `conflict` repeats the same unit call with the same sequence. Every append carries the records the adapter's extraction completed with that batch. On exit the remaining buffer is appended, the adapter's provenance lines are appended (section 16.3), and the run is closed (exit code 0, CloseHvRunOutputCommand, then FinalizeHvRequestCommand for a review whose request is `Finalizing`; a close that finds the request `CancelRequested` ends it `Canceled` instead, R-28; exit code 0 is not evidence of a review, R-11) or failed (FailHvRunCommand with `reviewer_exited_nonzero`, or `reviewer_launch_failed` when the process never started). A cancellation read at a heartbeat kills the process and fails the run with `canceled`, which policy HvRetryDecision turns into the request's `Canceled` (R-28). Killing the process, here and in the diagrams, ends the reviewer's whole process tree, descendants included, also when the root process has already exited; and when the root exits while a descendant still holds its output pipes, the worker ends that descendant before it reads the output to its end. Without that, a descendant that outlives the reviewer would hold the run open forever, because no time limit ends a run (P-02); P14 is the same defect class in the plugin core (FR-MCP-HVPIPE-008-AC011).
 
 ```mermaid
 flowchart TD
@@ -1523,7 +1523,7 @@ flowchart TD
     RUN -->|"cancel requested"| K2["Kill the process"]
     K2 --> FC[["FailHvRunCommand canceled"]]
     FC --> END3(["attempt ended: request Canceled"])
-    RUN -->|"evidence_corrupt from an append"| K3["Kill the process"]
+    RUN -->|"evidence_corrupt or a non-retryable conflict from an append"| K3["Kill the process"]
     K3 --> FE[["FailHvRunCommand evidence_corrupt: server incident, reviewer unchanged"]]
     FE --> END7(["attempt ended: request Queued, Failed, or Canceled"])
     RUN -->|"exited"| FLS[["AppendHvRunOutputCommand: remaining lines, then the adapter's hv_provenance lines"]]
@@ -1551,7 +1551,7 @@ flowchart TD
     AP -->|appended| E
     AP -->|"retryable conflict"| AP
     AP -->|"stale_fence or audit_unavailable"| X1(["stop: stale fence or audit failure"])
-    AP -->|evidence_corrupt| X4(["stop: evidence_corrupt from the append"])
+    AP -->|"evidence_corrupt or non-retryable conflict"| X4(["stop: the log's integrity fails, evidence_corrupt"])
     E -->|"heartbeat timer"| HB[["RecordHvRunHeartbeatCommand"]]
     HB -->|"renewed, no cancel"| E
     HB -->|"cancelRequested"| X2(["stop: cancel requested"])
@@ -1842,12 +1842,12 @@ sequenceDiagram
         W->>AD: launch with the probe brief
         AD-->>W: live lines, the hv_probe record, then exit
         W->>DB: AppendHvRunOutputCommand for each batch, then the hv_provenance lines
-        W->>DB: CloseHvRunOutputCommand, policy ReadinessProbeVerdict
+        W->>DB: on exit 0 CloseHvRunOutputCommand with RecordRead of the chunks and policy HvProbeOutcome with ReadinessProbeVerdict, otherwise FailHvRunCommand with policy HvProbeOutcome
         alt reviewer reconfigured while the probe ran
             DB-->>W: run Failed probe_stale_configuration, readiness and the newer probe request unchanged
         else probe passed
             DB-->>W: reviewer Online, notification reviewer_online
-        else nonce, provenance, or reviewer turn failed
+        else nonce, provenance, or reviewer turn failed, or the launch failed or the process exited nonzero
             DB-->>W: reviewer Offline, incident Pending, notification reviewer_offline
             W->>TG: FileHvIncidentCommand at the next sweep
         else stored chunks fail V-1
@@ -2002,7 +2002,7 @@ sequenceDiagram
             else cancel requested
                 W->>AD: kill the process
                 W->>H: FailHvRunCommand canceled
-            else evidence_corrupt from an append
+            else evidence_corrupt or a non-retryable conflict from an append
                 W->>AD: kill the process
                 W->>H: FailHvRunCommand evidence_corrupt, a server incident, the reviewer unchanged
             else exited with a nonzero code
@@ -2050,8 +2050,8 @@ sequenceDiagram
                 W->>H: the same append again
             else stale fence or audit unavailable
                 H-->>W: stale_fence or 503 audit_unavailable
-            else round trip failed
-                H-->>W: 500 evidence_corrupt, nothing saved
+            else round trip failed, or a non-retryable conflict
+                H-->>W: 500 evidence_corrupt or 409 conflict retryable false, nothing saved
             end
         else the heartbeat timer fires
             W->>H: RecordHvRunHeartbeatCommand
@@ -2694,7 +2694,7 @@ Problem domains (the foundation's rule of 2026-10-13, "Dividing the new reqs int
 - FR-MCP-HVPIPE-011 Evidence completeness, GZIP at rest, round-trip verification. Sources S-13, S-30, R-12, R-14. UC-HV-04, UC-HV-05, UC-HV-10. TR: GzipCodec, HvEvidence, HvRunOutputChunk, V-1.
   - AC001 Given an accepted request and a run's lines, when stored, then every payload is a GZIP member that decompresses to the exact bytes, and no uncompressed copy is stored (`EvidenceStoredGzipOnlyRoundTripExact`).
   - AC002 Given a chunk whose bytes, SHA-256, or chain hash was altered, or a missing sequence, when finalized, then `evidence_corrupt` and nothing is committed (`FinalizeCorruptOrTruncatedLogRefused`).
-  - AC003 Given a compression whose round trip fails, when admitted or appended, then 500 `evidence_corrupt` and nothing is saved (`CompressionRoundTripFailureNothingSaved`); for an append, the worker stops the reviewer and fails the run with `evidence_corrupt`, so an incident `hv-server-evidence_corrupt` is `Pending`, the reviewer is unchanged, and the request goes through policy HvRetryDecision (`AppendEvidenceCorruptFailsRunAsServerFault`).
+  - AC003 Given a compression whose round trip fails, when admitted or appended, then 500 `evidence_corrupt` and nothing is saved (`CompressionRoundTripFailureNothingSaved`); for an append, and for an append answered with a non-retryable `conflict`, the worker stops the reviewer and fails the run with `evidence_corrupt`, so an incident `hv-server-evidence_corrupt` is `Pending`, the reviewer is unchanged, and the request goes through policy HvRetryDecision (`AppendEvidenceCorruptFailsRunAsServerFault`).
   - AC004 Given a finalized run, when the response log is downloaded compressed and read back as one GZIP stream (VI-07), then decompression yields every stored line in order and its SHA-256 chain equals the run's (`ResponseLogDownloadMultiMemberGzipMatchesChain`).
   - AC005 Given a reviewer output of any size, when appended, then no limit truncates it (`OutputHasNoSizeLimitNeverTruncated`).
   - AC006 Given a finalized request, when its `Result` evidence is read back, then the stored payload holds no `evidence.result` digest, its SHA-256 equals `ResultSha256`, and the returned document's `evidence.result.sha256` equals that value (H7: `ResultEvidenceDigestExcludesItselfAndRoundTrips`).
