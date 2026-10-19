@@ -20,6 +20,8 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
         peer = softwareSystem "Federated QBrain.AI Instance" "Upstream or peer QBrain.AI server used for federation of TODOs, session logs and GraphRAG." "External"
 
         qbrain = softwareSystem "QBrain.AI" "Workspace-scoped context, memory, TODO, requirements, session-log, triage and agent-orchestration platform for AI coding agents (formerly McpServer)." {
+            !docs documentation
+            !adrs decisions
 
             server = container "MCP Context Server" "Single ASP.NET Core host exposing REST, MCP HTTP transport, pairing UI, identity and background workers." "ASP.NET Core, .NET 9 (QBrainAi.Support.Mcp)" "Server" {
                 api = component "REST Controllers" "About 36 controllers: todo, session log, requirements, use cases, memory, context, GraphRAG, handoff, hostile review, triage, agent pool, workspace, federation, tunnel, GitHub, repo, voice, products." "ASP.NET Core MVC (Controllers/*)"
@@ -77,75 +79,6 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
             frps = container "FRP Relay" "Self-hosted frps server (Railway or local compose) tunnelling the server port." "frp, Docker (infra/frp)" "Infrastructure"
         }
 
-
-        # Deployment environments (evidence: see evidence.md, section Deployment)
-        dockerEnv = deploymentEnvironment "DockerCompose" {
-            deploymentNode "Docker host" "Any host running Docker Compose (docker-compose.mcp.yml)." "Docker Engine" {
-                deploymentNode "Container qbrain-ai" "Image qbrain-ai:latest built from Dockerfile (multi-stage, aspnet:9.0). Port 7147, /health healthcheck, restart unless-stopped, env_file .env." "Docker container" {
-                    dockerServer = containerInstance qbrain.server
-                }
-                deploymentNode "Named volume qbrain-ai-data" "Mounted at /data. Holds mcp.db (Mcp__DataSource) and vector.idx (VectorIndex__IndexPath)." "Docker volume" {
-                    dockerDb = containerInstance qbrain.db
-                    dockerVector = containerInstance qbrain.vector
-                }
-                deploymentNode "Bind mount /workspace" "Host path from MCP_WORKSPACE (default current dir) mounted read-only at /workspace." "Docker bind mount (ro)" {
-                    dockerRepo = containerInstance qbrain.repoFs
-                }
-            }
-        }
-
-        winEnv = deploymentEnvironment "WindowsService" {
-            deploymentNode "Windows host" "Interactive Windows machine. Install path default C:\\ProgramData\\QBrainAi (scripts/Update-McpService.ps1)." "Windows" {
-                deploymentNode "Windows Service QBrainAi" "Service name from --service-name, default QBrainAi (Program.cs ResolveWindowsServiceName, UseWindowsService). Deployed only by scripts/Update-McpService.ps1 or build UpdateService; WindowsServiceDeploymentGuard checks .mcpservice-deployment.json hashes." "Windows Service (QBrainAi.Support.Mcp.exe)" {
-                    winServer = containerInstance qbrain.server
-                }
-                deploymentNode "Windows Service QBrainAiKeyServer" "Optional standalone key server host (QBrainAi.KeyServer Program.cs UseWindowsService)." "Windows Service" {
-                    winKeys = containerInstance qbrain.keyserver
-                }
-                deploymentNode "Interactive desktop session" "Needed because the launcher uses CreateProcessWithTokenW to start processes on the user desktop." "Windows desktop" {
-                    winLauncher = containerInstance qbrain.launcher
-                }
-                deploymentNode "Workspace directories" "Repositories with AGENTS-README-FIRST markers, docs/Project/TODO.yaml and docs/sessions." "NTFS" {
-                    winRepo = containerInstance qbrain.repoFs
-                }
-            }
-        }
-
-        linuxEnv = deploymentEnvironment "LinuxSystemd" {
-            deploymentNode "Linux host" "Installer docs/setup/install-local-service.ps1 is written for one named host (PAYTON-OMARCHY, database McpServer_Omarchy). Treat as an example, not a generic target." "Linux with systemd" {
-                deploymentNode "systemd unit mcpserver.service" "Runs /opt/mcpserver/app/McpServer.Support.Mcp --urls http://localhost:7147 as user mcpserver, EnvironmentFile /etc/mcpserver/mcpserver.env, Restart=on-failure." "systemd service" {
-                    linuxServer = containerInstance qbrain.server
-                }
-                deploymentNode "Docker container sql-server-developer" "Existing SQL Server container; installer creates database McpServer_Omarchy and a dedicated login on 127.0.0.1,1433." "Docker container, SQL Server" {
-                    linuxDb = containerInstance qbrain.db
-                }
-                deploymentNode "Workspace directory" "ACL-granted workspace /home/sharpninja/github/McpServer for the mcpserver account." "ext4 with POSIX ACLs" {
-                    linuxRepo = containerInstance qbrain.repoFs
-                }
-            }
-        }
-
-        frpEnv = deploymentEnvironment "FrpRelay" {
-            deploymentNode "Railway" "infra/frp/railway: service variables FRP_TOKEN, FRPS_BIND_PORT (7000), FRPS_VHOST_HTTP_PORT (8080); TCP proxy for the bind port; optional TCP range 7147-7160." "Railway" {
-                deploymentNode "Container frps" "alpine:3.20 image with frps v0.61.1, entrypoint.sh renders frps.toml from frps.toml.template." "Docker container (infra/frp/railway/Dockerfile)" {
-                    railwayFrps = containerInstance qbrain.frps
-                }
-            }
-            deploymentNode "Local MCP host" "Runs the server with Mcp:Tunnel:Provider=frp; frpc started by FrpTunnelProvider." "Any host running the server" {
-                frpServer = containerInstance qbrain.server
-            }
-        }
-
-        frpLocalEnv = deploymentEnvironment "FrpRelayLocal" {
-            deploymentNode "Docker host" "Local dev relay from infra/frp/local/docker-compose.frps.yml; publishes 7000 and 8080." "Docker Engine" {
-                deploymentNode "Container frps" "Built from ../railway Dockerfile, restart unless-stopped." "Docker container" {
-                    localFrps = containerInstance qbrain.frps
-                }
-            }
-            deploymentNode "Local MCP host" "Server with frp tunnel provider." "Any host running the server" {
-                localFrpServer = containerInstance qbrain.server
-            }
-        }
 
         # Context level
         developer -> qbrain "Manages workspaces, TODOs, requirements and reviews" "HTTPS (Swagger, /pair), REPL"
@@ -334,9 +267,86 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
 
         # Key server components
         qbrain.keyserver.ksApi -> qbrain.keyserver.ksRegistry "Calls" "In-process"
+
+        # Deployment environments (evidence: see evidence.md, section Deployment)
+        dockerEnv = deploymentEnvironment "DockerCompose" {
+            deploymentNode "Docker host" "Any host running Docker Compose (docker-compose.mcp.yml)." "Docker Engine" {
+                deploymentNode "Container qbrain-ai" "Image qbrain-ai:latest built from Dockerfile (multi-stage, aspnet:9.0). Port 7147, /health healthcheck, restart unless-stopped, env_file .env." "Docker container" {
+                    dockerServer = containerInstance qbrain.server
+                }
+                deploymentNode "Named volume qbrain-ai-data" "Mounted at /data. Holds mcp.db (Mcp__DataSource) and vector.idx (VectorIndex__IndexPath)." "Docker volume" {
+                    dockerDb = containerInstance qbrain.db
+                    dockerVector = containerInstance qbrain.vector
+                }
+                deploymentNode "Bind mount /workspace" "Host path from MCP_WORKSPACE (default current dir) mounted read-only at /workspace." "Docker bind mount (ro)" {
+                    dockerRepo = containerInstance qbrain.repoFs
+                }
+            }
+        }
+
+        winEnv = deploymentEnvironment "WindowsService" {
+            deploymentNode "Windows host" "Interactive Windows machine. Install path default C:\\ProgramData\\QBrainAi (scripts/Update-McpService.ps1)." "Windows" {
+                deploymentNode "Windows Service QBrainAi" "Service name from --service-name, default QBrainAi (Program.cs ResolveWindowsServiceName, UseWindowsService). Deployed only by scripts/Update-McpService.ps1 or build UpdateService; WindowsServiceDeploymentGuard checks .mcpservice-deployment.json hashes." "Windows Service (QBrainAi.Support.Mcp.exe)" {
+                    winServer = containerInstance qbrain.server
+                }
+                deploymentNode "Windows Service QBrainAiKeyServer" "Optional standalone key server host (QBrainAi.KeyServer Program.cs UseWindowsService)." "Windows Service" {
+                    winKeys = containerInstance qbrain.keyserver
+                }
+                deploymentNode "Subscriber process (optional)" "Console host of QBrainAi.Subscriber (Program.cs calls AddHttpTransactionSubscriber; no UseWindowsService). It is the only caller of the standalone key server (HttpKeyServerManifestService, KeyServerBaseUrl) and receives diffgram commits from the server when TurnTransactionOptions.PubSubTransport is Http." "Console process" {
+                    winSubscriber = containerInstance qbrain.subscriber
+                }
+                deploymentNode "Interactive desktop session" "Needed because the launcher uses CreateProcessWithTokenW to start processes on the user desktop." "Windows desktop" {
+                    winLauncher = containerInstance qbrain.launcher
+                }
+                deploymentNode "Workspace directories" "Repositories with AGENTS-README-FIRST markers, docs/Project/TODO.yaml and docs/sessions." "NTFS" {
+                    winRepo = containerInstance qbrain.repoFs
+                }
+            }
+        }
+
+        linuxEnv = deploymentEnvironment "LinuxSystemd" {
+            deploymentNode "Linux host" "Installer docs/setup/install-local-service.ps1 is written for one named host (PAYTON-OMARCHY, database McpServer_Omarchy). Treat as an example, not a generic target." "Linux with systemd" {
+                deploymentNode "systemd unit mcpserver.service" "Runs /opt/mcpserver/app/McpServer.Support.Mcp --urls http://localhost:7147 as user mcpserver, EnvironmentFile /etc/mcpserver/mcpserver.env, Restart=on-failure." "systemd service" {
+                    linuxServer = containerInstance qbrain.server
+                }
+                deploymentNode "Docker container sql-server-developer" "Existing SQL Server container; installer creates database McpServer_Omarchy and a dedicated login on 127.0.0.1,1433." "Docker container, SQL Server" {
+                    linuxDb = containerInstance qbrain.db
+                }
+                deploymentNode "Workspace directory" "ACL-granted workspace /home/sharpninja/github/McpServer for the mcpserver account." "ext4 with POSIX ACLs" {
+                    linuxRepo = containerInstance qbrain.repoFs
+                }
+            }
+        }
+
+        frpEnv = deploymentEnvironment "FrpRelay" {
+            deploymentNode "Railway" "infra/frp/railway: service variables FRP_TOKEN, FRPS_BIND_PORT (7000), FRPS_VHOST_HTTP_PORT (8080); TCP proxy for the bind port; optional TCP range 7147-7160." "Railway" {
+                deploymentNode "Container frps" "alpine:3.20 image with frps v0.61.1, entrypoint.sh renders frps.toml from frps.toml.template." "Docker container (infra/frp/railway/Dockerfile)" {
+                    railwayFrps = containerInstance qbrain.frps
+                }
+            }
+            deploymentNode "Local MCP host" "Runs the server with Mcp:Tunnel:Provider=frp; frpc started by FrpTunnelProvider." "Any host running the server" {
+                frpServer = containerInstance qbrain.server
+            }
+        }
+
+        frpLocalEnv = deploymentEnvironment "FrpRelayLocal" {
+            deploymentNode "Docker host" "Local dev relay from infra/frp/local/docker-compose.frps.yml; publishes 7000 and 8080." "Docker Engine" {
+                deploymentNode "Container frps" "Built from ../railway Dockerfile, restart unless-stopped." "Docker container" {
+                    localFrps = containerInstance qbrain.frps
+                }
+            }
+            deploymentNode "Local MCP host" "Server with frp tunnel provider." "Any host running the server" {
+                localFrpServer = containerInstance qbrain.server
+            }
+        }
     }
 
     views {
+        properties {
+            # TR-MCP-NUKE-017 AC-2: no metadata line (title, description, render date) in exported SVG, so renders are byte-identical across runs.
+            "structurizr.metadata" "false"
+        }
+
         systemContext qbrain "SystemContext" "C4 level 1: QBrain.AI and its users and external systems." {
             include *
             autolayout lr
@@ -398,6 +408,15 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
         }
 
         styles {
+            # TR-MCP-NUKE-017 AC-5 (amended 2026-10-19): names render at 1.4 x fontSize, descriptions and labels at
+            # 1 x, and the metadata line stays visible at 0.7 x (hiding it is an inspection error): a 2:1 spread
+            # that fits the 8 to 16 pt band.
+            element "Element" {
+                fontSize 24
+            }
+            relationship "Relationship" {
+                fontSize 24
+            }
             element "Person" {
                 shape person
                 background #08427b
@@ -423,5 +442,9 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
                 color #000000
             }
         }
+    }
+
+    configuration {
+        scope softwaresystem
     }
 }

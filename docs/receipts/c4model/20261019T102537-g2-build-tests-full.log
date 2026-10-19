@@ -1,0 +1,23 @@
+LocalStart: 20261019T102537 Command: dotnet test /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/Build.Tests.csproj -c Debug --logger trx;LogFileName=20261019T102537-g2-build-tests-full.trx --results-directory /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/docs/receipts/c4model ExitCode: 1 
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build/bin/Debug/_build.dll
+  Build.Tests -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:14.89]     NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess [FAIL]
+  Failed NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess [8 ms]
+  Error Message:
+   Read child output and wait for children only through BoundedProcess (TR-MCP-NUKE-009 AC-006):
+OfficialPluginCoreSyncTestSupport.cs:71: var standardOutput = process.StandardOutput.ReadToEndAsync(cancellationToken);
+OfficialPluginCoreSyncTestSupport.cs:72: var standardError = process.StandardError.ReadToEndAsync(cancellationToken);
+OfficialPluginCoreSyncTestSupport.cs:73: await process.WaitForExitAsync(cancellationToken).ConfigureAwait(true);
+  Stack Trace:
+     at NukeBuild.Tests.BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess() in /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/BoundedProcessTests.cs:line 147
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+Results File: /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/docs/receipts/c4model/20261019T102537-g2-build-tests-full.trx
+
+Failed!  - Failed:     1, Passed:   408, Skipped:     0, Total:   409, Duration: 4 m 59 s - Build.Tests.dll (net10.0)
