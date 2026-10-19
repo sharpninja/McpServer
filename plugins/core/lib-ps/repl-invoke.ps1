@@ -12,7 +12,10 @@
     client.SessionLog.SubmitAsync route.
 
     Two usage modes:
-      1. Script entry: pwsh -File repl-invoke.ps1 -Method <m> [-ParamsYaml <y>]
+      1. Script entry: pwsh -File repl-invoke.ps1 -Method <m> [-ParamsPath <file> | -ParamsYaml <y>]
+         A launcher in another process passes -ParamsPath (repl-params-transfer.ps1): a Windows command line
+         is limited to 32,767 characters, so params text never travels as an argument
+         (triage-report-821fe2da58284b4ea21604cb2da2fccb). -ParamsYaml remains for in-process callers.
       2. Dot-source for Invoke-ReplMethod cmdlet:
              . .\repl-invoke.ps1
              Invoke-ReplMethod -Method workflow.sessionlog.completeTurn ...
@@ -20,10 +23,19 @@
 [CmdletBinding()]
 param(
     [string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
 
 $ErrorActionPreference = 'Stop'
+
+. (Join-Path $PSScriptRoot 'repl-params-transfer.ps1')
+if ($PSBoundParameters.ContainsKey('ParamsPath')) {
+    if ($PSBoundParameters.ContainsKey('ParamsYaml')) {
+        throw 'repl-invoke.ps1: pass -ParamsPath or -ParamsYaml, not both.'
+    }
+    $ParamsYaml = Read-McpReplParamsFile -Path $ParamsPath
+}
 
 $shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
 Import-Module $shimModule -Force -ErrorAction Stop

@@ -3,7 +3,8 @@
 .SYNOPSIS
 Runs the shipped dispatcher behind real public wrappers with only external boundaries stubbed.
 #>
-param([string]$Method, [string]$ParamsYaml)
+param([string]$Method, [string]$ParamsYaml, [string]$ParamsPath)
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 $requestedMethod = $Method
 $requestedParams = $ParamsYaml
 . (Join-Path $PSScriptRoot 'repl-implementation.ps1')

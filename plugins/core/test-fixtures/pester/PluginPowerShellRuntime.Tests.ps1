@@ -1434,8 +1434,10 @@ contextList:
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 
 [System.IO.File]::WriteAllText($env:MCP_CAPTURE_METHOD_PATH, $Method, [System.Text.UTF8Encoding]::new($false))
 [System.IO.File]::WriteAllText($env:MCP_CAPTURE_PARAMS_PATH, $ParamsYaml, [System.Text.UTF8Encoding]::new($false))
@@ -1749,8 +1751,10 @@ param(
 [CmdletBinding()]
 param(
     [string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 
 [pscustomobject]@{
     host = $env:MCP_PLUGIN_HOST
@@ -1809,8 +1813,10 @@ param(
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -1932,8 +1938,10 @@ function Invoke-FullBootstrap {
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -2044,8 +2052,10 @@ throw "Unexpected method $Method"
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -2136,8 +2146,10 @@ Write-McpYamlObject -Path (Join-Path $env:TEST_ACTIVE_CACHE 'current-turn.yaml')
 [CmdletBinding()]
 param(
     [string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 
 [pscustomobject]@{
     method = $Method
@@ -2479,8 +2491,10 @@ function Test-MarkerSignature { param([string]$MarkerFile); return $true }
 [CmdletBinding()]
 param(
     [string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 $ErrorActionPreference = 'Stop'
 $log = Join-Path $env:MCP_CACHE_DIR_OVERRIDE 'open-session.log'
 Add-Content -LiteralPath $log -Value $Method
@@ -2646,8 +2660,10 @@ exit 0
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
+if ($ParamsPath) { $ParamsYaml = [System.IO.File]::ReadAllText($ParamsPath) }
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -3028,7 +3044,11 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
 
             $content = [System.IO.File]::ReadAllText($first)
             $content | Should -Match 'id: "001"'
-            $content | Should -Match 'timestamp: "\d{4}-\d{2}-\d{2}T'
+            # Built from objects: the serializer decides quoting; assert the parsed value (ISO 8601 UTC string).
+        if (-not (Get-Command ConvertFrom-Yaml -ErrorAction SilentlyContinue)) { Import-Module powershell-yaml -ErrorAction Stop }
+        $record = ConvertFrom-Yaml -Yaml $content -Ordered
+        $record['timestamp'] | Should -BeOfType [string]
+        $record['timestamp'] | Should -Match '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$'
             $content | Should -Match 'method: workflow\.todo\.create'
             $content | Should -Match 'params:'
             $content | Should -Match 'title: First'
@@ -3046,6 +3066,7 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
         [void][System.IO.Directory]::CreateDirectory($libCopy)
         Copy-Item -LiteralPath (Join-Path $script:LibRoot 'cache-manager.ps1') -Destination $libCopy
         Copy-Item -LiteralPath (Join-Path $script:LibRoot 'resolve-cache-dir.ps1') -Destination $libCopy
+        Copy-Item -LiteralPath (Join-Path $script:LibRoot 'yaml-object-mutation.ps1') -Destination $libCopy
         [System.IO.File]::WriteAllText(
             (Join-Path $libCopy 'repl-invoke.ps1'),
             "param([string]`$Method, [string]`$ParamsYaml)`nAdd-Content -LiteralPath '$($workRoot.Replace("'", "''"))\replay.log' -Value `"`$Method|`$ParamsYaml`"`n"
@@ -3075,6 +3096,7 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
         [void][System.IO.Directory]::CreateDirectory($libCopy)
         Copy-Item -LiteralPath (Join-Path $script:LibRoot 'cache-manager.ps1') -Destination $libCopy
         Copy-Item -LiteralPath (Join-Path $script:LibRoot 'resolve-cache-dir.ps1') -Destination $libCopy
+        Copy-Item -LiteralPath (Join-Path $script:LibRoot 'yaml-object-mutation.ps1') -Destination $libCopy
         [System.IO.File]::WriteAllText(
             (Join-Path $libCopy 'repl-invoke.ps1'),
             "param([string]`$Method)`nif (`$Method -eq 'workflow.todo.fail') { throw 'replay failed' }`n"

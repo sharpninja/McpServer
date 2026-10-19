@@ -36,6 +36,7 @@ $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'marker-resolver.ps1')
 . (Join-Path $script:ScriptDir 'yaml-object-mutation.ps1')
 . (Join-Path $script:ScriptDir 'plan-todo-map.ps1')
+. (Join-Path $script:ScriptDir 'repl-params-transfer.ps1')
 . (Join-Path $script:ScriptDir 'agent-runtime-header.ps1')
 Import-McpYamlSerializer
 
@@ -355,15 +356,22 @@ function Invoke-PluginOpenSession {
         (Get-Location).ProviderPath
     ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
     if ($workspace) { $psi.WorkingDirectory = $workspace }
-    foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync', '-ParamsYaml', $ParamsYaml)) {
-        $psi.ArgumentList.Add($argument)
+    # Params travel in a file, never on the child command line (32,767-character limit on Windows).
+    $paramsTransfer = New-McpReplParamsTransfer -ParamsText $ParamsYaml
+    try {
+        foreach ($argument in @('-NoLogo', '-NoProfile', '-NonInteractive', '-File', $repl, '-Method', 'client.SessionLog.OpenSessionAsync') + @($paramsTransfer.Arguments)) {
+            $psi.ArgumentList.Add($argument)
+        }
+        $process = [System.Diagnostics.Process]::Start($psi)
+        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+        $stderrTask = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit()
+        try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { }
+        try { $null = $stderrTask.GetAwaiter().GetResult() } catch { }
     }
-    $process = [System.Diagnostics.Process]::Start($psi)
-    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
-    $stderrTask = $process.StandardError.ReadToEndAsync()
-    $process.WaitForExit()
-    try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { }
-    try { $null = $stderrTask.GetAwaiter().GetResult() } catch { }
+    finally {
+        Remove-McpReplParamsTransfer -Transfer $paramsTransfer
+    }
     $script:LastPluginReplExitCode = [int]$process.ExitCode
     return ($process.ExitCode -eq 0)
 }

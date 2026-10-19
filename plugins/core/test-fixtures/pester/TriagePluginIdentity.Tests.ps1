@@ -112,6 +112,7 @@ Describe 'TRIAGEPLUGIN identity and timeouts' {
     }
 
     It 'CacheScope.BackgroundOpenSession_DoesNotRebindRootActiveSession' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
         $pathFn = [regex]::Match($script:ReplInvokeSource, '(?ms)^function Get-ReplOpenSessionStatePath \{.*?^\}').Value
         $writeFn = [regex]::Match($script:ReplInvokeSource, '(?ms)^function Write-ReplStickySessionState \{.*?^\}').Value
         $pathFn | Should -Not -BeNullOrEmpty

@@ -59,7 +59,9 @@ function Get-PendingParamsYaml {
     if (-not $Document.Contains('params') -or $null -eq $Document['params']) { return '' }
     $params = $Document['params']
     if ($params -is [System.Collections.IDictionary] -and $params.Count -eq 0) { return '' }
-    return (ConvertTo-Yaml -Data $params -Options WithIndentedSequences)
+    # The serializer ends its text with a line break; replay the params in the same form they were written
+    # (TEST-MCP-PLUGIN-PSONLY-001 replays "title: First", not "title: First" plus a line break).
+    return (ConvertTo-Yaml -Data $params -Options WithIndentedSequences).TrimEnd("`r", "`n")
 }
 
 $cacheDir = Resolve-McpCacheDir

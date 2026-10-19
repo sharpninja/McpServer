@@ -31,6 +31,7 @@ $ErrorActionPreference = 'Stop'
 $shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
 Import-Module $shimModule -ErrorAction Stop
 . (Join-Path $PSScriptRoot 'yaml-object-mutation.ps1')
+. (Join-Path $PSScriptRoot 'repl-params-transfer.ps1')
 
 $script:McpPluginParamsObjectBound = $PSBoundParameters.ContainsKey('ParamsObject')
 if ($script:McpPluginParamsObjectBound -and ($PSBoundParameters.ContainsKey('Params') -or $PSBoundParameters.ContainsKey('ParamsPath'))) {
@@ -331,7 +332,14 @@ switch ($script:McpPluginInvocation.Command) {
         } else {
             Read-OptionalText -Inline $script:McpPluginInvocation.Params -HasInline:$($PSBoundParameters.ContainsKey('Params')) -Path $script:McpPluginInvocation.ParamsPath -AllowRedirectedInput
         }
-        Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))
+        # Params travel in a file, never on the child command line (32,767-character limit on Windows).
+        $paramsTransfer = New-McpReplParamsTransfer -ParamsText ($paramsText ?? '')
+        try {
+            Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments (@('-Method', $script:McpPluginInvocation.Method) + @($paramsTransfer.Arguments))
+        }
+        finally {
+            Remove-McpReplParamsTransfer -Transfer $paramsTransfer
+        }
     }
     'CompleteTurn' {
         $responseText = Read-OptionalText -Inline $script:McpPluginInvocation.Response -HasInline:$($PSBoundParameters.ContainsKey('Response')) -Path $script:McpPluginInvocation.ResponsePath -AllowRedirectedInput
