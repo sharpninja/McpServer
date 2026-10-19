@@ -134,11 +134,13 @@ public abstract class WorkspacePathNormalizerContractTests
     }
 
     /// <summary>
-    /// FR-MCP-FED-PATH-001: Windows drive paths and relative paths on a Windows host are
-    /// host-native and use host resolution.
+    /// FR-MCP-FED-PATH-001: Windows drive paths, UNC paths, and relative paths on a Windows host are
+    /// host-native and use host resolution; a UNC path is absolute and never resolved under the working
+    /// directory (C:\svc).
     /// </summary>
     [Theory]
     [InlineData(@"C:\Users\kingd", "C:/Users/kingd")]
+    [InlineData(@"\\srv\share\repo", "//srv/share/repo")]
     [InlineData("relative", "C:/svc/relative")]
     public void WindowsHost_NativePaths_UseHostResolution(string input, string expected)
     {
@@ -234,6 +236,53 @@ public abstract class WorkspacePathNormalizerContractTests
     public void Combine_RootedSegment_ReplacesRoot()
     {
         Assert.Equal("/srv/other", CreateSut(LinuxHost()).Combine(@"C:\Users\kingd", "/srv/other"));
+    }
+
+    /// <summary>
+    /// TR-MCP-FED-PATH-001 (PR #81 finding P12): a segment with one leading backslash is root-relative on
+    /// Windows. It keeps the current root's drive and replaces the rest of the path, on a Linux hub and on
+    /// a Windows host. Data: literal drive roots; named test of Architecture Amendment 1 (section 20.4).
+    /// </summary>
+    [Theory]
+    [InlineData(false, "C:/content", @"\repo", null, "C:/repo")]
+    [InlineData(true, @"C:\content\deep", @"\repo", "sub", "C:/repo/sub")]
+    public void CombineResolvesRootRelativeWindowsSegmentAgainstDrive(bool windowsHost, string root, string segment, string? next, string expected)
+    {
+        AssertRootRelativeCombine(CreateSut(windowsHost ? WindowsHost() : LinuxHost()), root, segment, next, expected);
+    }
+
+    /// <summary>
+    /// TR-MCP-FED-PATH-001 (PR #82 review): a root-relative Windows segment on a UNC root keeps the
+    /// server and share (//srv/share/), so Combine(\\srv\share\content, \repo) is //srv/share/repo and
+    /// never //srv/share/content/repo. Data: literal UNC roots, including a bare share, on the Linux hub
+    /// (where the root is a foreign Windows path) and on a Windows host (where it is host-native).
+    /// </summary>
+    [Theory]
+    [InlineData(false, @"\\srv\share\content", @"\repo", null, "//srv/share/repo")]
+    [InlineData(false, "//srv/share/content", @"\repo", "sub", "//srv/share/repo/sub")]
+    [InlineData(false, @"\\srv\share", @"\repo", null, "//srv/share/repo")]
+    [InlineData(true, @"\\srv\share\content", @"\repo", null, "//srv/share/repo")]
+    [InlineData(true, "//srv/share/content", @"\repo", "sub", "//srv/share/repo/sub")]
+    [InlineData(true, @"\\srv\share", @"\repo", null, "//srv/share/repo")]
+    public void CombineResolvesRootRelativeWindowsSegmentAgainstUncShare(bool windowsHost, string root, string segment, string? next, string expected)
+    {
+        AssertRootRelativeCombine(CreateSut(windowsHost ? WindowsHost() : LinuxHost()), root, segment, next, expected);
+    }
+
+    /// <summary>
+    /// TR-MCP-FED-PATH-001: shared assertion of the root-relative Combine cases; the MockData negative
+    /// controls send deliberately wrong results through this same assertion.
+    /// </summary>
+    /// <param name="normalizer">Normalizer under test.</param>
+    /// <param name="root">Workspace root.</param>
+    /// <param name="segment">Root-relative segment.</param>
+    /// <param name="next">Optional following relative segment.</param>
+    /// <param name="expected">Expected combined path.</param>
+    protected static void AssertRootRelativeCombine(IWorkspacePathNormalizer normalizer, string root, string segment, string? next, string expected)
+    {
+        ArgumentNullException.ThrowIfNull(normalizer);
+        string[] segments = next is null ? [segment] : [segment, next];
+        Assert.Equal(expected, normalizer.Combine(root, segments));
     }
 
     /// <summary>Simulated Linux hub: POSIX host, working directory /opt/mcpserver/app.</summary>

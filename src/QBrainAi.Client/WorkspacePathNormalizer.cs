@@ -133,6 +133,17 @@ public sealed class WorkspacePathNormalizer : IWorkspacePathNormalizer
                 continue;
             }
 
+            // A leading single backslash is rooted on Windows: it replaces the path but keeps the
+            // current volume (the drive, or the UNC server and share), so Combine("C:/content", "\\repo")
+            // is "C:/repo" and Combine("//srv/share/content", "\\repo") is "//srv/share/repo".
+            if (trimmed.StartsWith('\\') && TryGetWindowsVolumeRoot(current, out var volumeRoot))
+            {
+                current = WorkspaceIdentityPath.NormalizeLexicalPath(
+                    volumeRoot + trimmed.TrimStart('\\'),
+                    WorkspacePathPlatform.Windows);
+                continue;
+            }
+
             // '/' is a separator in both syntaxes; lexical normalization of the root's own
             // platform collapses it (and any dot segments) into canonical form.
             current = WorkspaceIdentityPath.NormalizeLexicalPath(
@@ -162,6 +173,30 @@ public sealed class WorkspacePathNormalizer : IWorkspacePathNormalizer
         (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2])) ||
         path.StartsWith(@"\\", StringComparison.Ordinal) ||
         path.StartsWith("//", StringComparison.Ordinal);
+
+    // TR-MCP-FED-PATH-001: the volume root a root-relative Windows segment keeps: "C:/" for a drive
+    // path, "//server/share/" for a UNC path (either separator). Other paths have none.
+    private static bool TryGetWindowsVolumeRoot(string path, out string volumeRoot)
+    {
+        if (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2]))
+        {
+            volumeRoot = path[..3];
+            return true;
+        }
+
+        if (path.Length > 2 && IsSeparator(path[0]) && IsSeparator(path[1]))
+        {
+            var parts = path[2..].Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length >= 2)
+            {
+                volumeRoot = "//" + parts[0] + "/" + parts[1] + "/";
+                return true;
+            }
+        }
+
+        volumeRoot = string.Empty;
+        return false;
+    }
 
     private static bool IsSeparator(char value) => value is '/' or '\\';
 }
