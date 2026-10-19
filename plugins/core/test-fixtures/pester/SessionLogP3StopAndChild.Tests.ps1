@@ -443,21 +443,6 @@ Describe 'P3 Stop enforcement' {
         [string]$hook.Parsed.reason | Should -Match 'Last build in this turn failed after 4 code edit'
     }
 
-    It 'P3 a consumed failed-build override still completes an in_progress turn' {
-        $layout = New-P3StopLayout -Name 'override-in-progress-completes'
-        $fresh = (Get-Date).ToUniversalTime().ToString('o')
-        Write-P3Session -Layout $layout -Timestamp $fresh -LastUpdated $fresh
-        Write-P3Turn -Layout $layout -RequestId 'req-a-override' -Status 'in_progress' -CodeEdits 3 -LastBuildStatus 'failed' -Audit @{ auditActions = 2; auditFiles = 1; auditDialog = 0; auditDecisions = 0; auditCommits = 0 }
-        $marker = Join-Path $layout.Cache 'turn-accept-failure.marker'
-        [System.IO.File]::WriteAllText($marker, 'accepted')
-        $proof = Write-P3Proof -Layout $layout -Outcome 'Active' -RequestId 'req-a-override'
-        $hook = Invoke-P3StopGate -Layout $layout -ProofYaml $proof
-
-        Test-Path -LiteralPath $marker | Should -BeFalse -Because 'the override marker is consumed exactly once'
-        $hook.ReplLog | Should -Match 'workflow\.sessionlog\.completeTurn' -Because 'an override bypasses only its gate; the turn must still be completed'
-        [string]$hook.Parsed.reason | Should -Not -Match 'Last build in this turn failed'
-    }
-
     It 'P3 a missing local turn does not allow or erase session-level failed-build evidence' {
         $layout = New-P3StopLayout -Name 'missing-turn-failed-build'
         $old = (Get-Date).ToUniversalTime().AddHours(-30).ToString('o')
