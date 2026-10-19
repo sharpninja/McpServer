@@ -134,11 +134,13 @@ public abstract class WorkspacePathNormalizerContractTests
     }
 
     /// <summary>
-    /// FR-MCP-FED-PATH-001: Windows drive paths and relative paths on a Windows host are
-    /// host-native and use host resolution.
+    /// FR-MCP-FED-PATH-001: Windows drive paths, UNC paths, and relative paths on a Windows host are
+    /// host-native and use host resolution; a UNC path is absolute and never resolved under the working
+    /// directory (C:\svc).
     /// </summary>
     [Theory]
     [InlineData(@"C:\Users\kingd", "C:/Users/kingd")]
+    [InlineData(@"\\srv\share\repo", "//srv/share/repo")]
     [InlineData("relative", "C:/svc/relative")]
     public void WindowsHost_NativePaths_UseHostResolution(string input, string expected)
     {
@@ -253,15 +255,18 @@ public abstract class WorkspacePathNormalizerContractTests
     /// TR-MCP-FED-PATH-001 (PR #82 review): a root-relative Windows segment on a UNC root keeps the
     /// server and share (//srv/share/), so Combine(\\srv\share\content, \repo) is //srv/share/repo and
     /// never //srv/share/content/repo. Data: literal UNC roots, including a bare share, on the Linux hub
-    /// where the root is a foreign Windows path.
+    /// (where the root is a foreign Windows path) and on a Windows host (where it is host-native).
     /// </summary>
     [Theory]
-    [InlineData(@"\\srv\share\content", @"\repo", null, "//srv/share/repo")]
-    [InlineData("//srv/share/content", @"\repo", "sub", "//srv/share/repo/sub")]
-    [InlineData(@"\\srv\share", @"\repo", null, "//srv/share/repo")]
-    public void CombineResolvesRootRelativeWindowsSegmentAgainstUncShare(string root, string segment, string? next, string expected)
+    [InlineData(false, @"\\srv\share\content", @"\repo", null, "//srv/share/repo")]
+    [InlineData(false, "//srv/share/content", @"\repo", "sub", "//srv/share/repo/sub")]
+    [InlineData(false, @"\\srv\share", @"\repo", null, "//srv/share/repo")]
+    [InlineData(true, @"\\srv\share\content", @"\repo", null, "//srv/share/repo")]
+    [InlineData(true, "//srv/share/content", @"\repo", "sub", "//srv/share/repo/sub")]
+    [InlineData(true, @"\\srv\share", @"\repo", null, "//srv/share/repo")]
+    public void CombineResolvesRootRelativeWindowsSegmentAgainstUncShare(bool windowsHost, string root, string segment, string? next, string expected)
     {
-        AssertRootRelativeCombine(CreateSut(LinuxHost()), root, segment, next, expected);
+        AssertRootRelativeCombine(CreateSut(windowsHost ? WindowsHost() : LinuxHost()), root, segment, next, expected);
     }
 
     /// <summary>
