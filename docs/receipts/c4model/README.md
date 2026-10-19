@@ -55,6 +55,10 @@ Chronological receipts for docs/plans/PLAN-C4MODEL-001.md (BDPv4). File names st
 - 20261019T150348-p3-gate-g3-r1.log and 20261019T150432-p3-gate-g3-r2.log: gate G3 after the operator cleared deleting the 22 retired originals ("Delete all 22 (Recommended)"): validate passed, 0 inspection errors, 213 renders, 0 page, link or render findings; AC-3 red only for documents not yet converted (435 fences, 4 Marketing .mmd files). SHA-256 of all 213 renders identical across the two runs.
 - Migration tools (D9, outside the repository): ~/.cache/c4-migration/Convert-EfErToDsl.ps1 (entities, run with -AreaChunkSizes AGENTS=3), New-C4Views.ps1 and Update-HubSizes.ps1 with hub-sizes.json (21 hubs at group size 2). Each was checked by PSScriptAnalyzer with 0 findings and dry-run first.
 
+## View key probe (D5 amendment)
+
+- 2026-10-19T15:09:42, scratch probe workspace with dynamic views keyed SD-PROBE-001.alt1 and SD-PROBE-001-alt2, pinned structurizr/cli inspect: "View keys can only contain the following characters: a-zA-Z0-9_- at line 8 ... dynamic * "SD-PROBE-001.alt1"". D5 branch and loop keys use a hyphen (operator answer "Hyphen (Recommended)").
+
 ## Order note
 
 AC-5 was amended on 2026-10-19 (operator answer "Show it; widen AC-5 to 2:1"). The requirement and the contract fixtures were changed first, but the production constant was edited before the rules mock gate was rerun. The mock gate uses a scripted mock that does not read the constant, so its result is unaffected; the deviation from the step order is recorded here.
