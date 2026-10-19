@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ModelContextProtocol.Server;
 using NSubstitute;
 using Xunit;
@@ -459,11 +460,15 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
     /// <summary>
     /// TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation. The failure
     /// message carries the whole exception text so a different startup failure is diagnosable.
+    /// The default logging providers are cleared: on Windows the host adds the Event Log provider,
+    /// and an account without Event Log write access (PAYTON-LEGION2 lab-wsman) failed startup with
+    /// "Cannot open log for source '.NET Runtime'" before options validation could report.
     /// </summary>
     [Fact]
     public async Task HostileReviewWorker_InvalidOptions_FailStartup()
     {
         var builder = Host.CreateApplicationBuilder();
+        builder.Logging.ClearProviders();
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["Mcp:HostileReviewWorker:LeaseDuration"] = "00:01:00",
