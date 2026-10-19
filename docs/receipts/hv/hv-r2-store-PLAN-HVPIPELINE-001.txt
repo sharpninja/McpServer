@@ -1,0 +1,111 @@
+type: result
+payload:
+  requestId: req-20261018T032113Z-a032
+  result:
+    id: PLAN-HVPIPELINE-001
+    title: 'Plan: durable multi-agent hostile validation pipeline (BDPv4), derived from architecture Amendment 1'
+    section: HostileValidation
+    priority: high
+    done: false
+    description:
+    - 'Status: NOT APPROVED. Plan persisted at the operator request "write plan to high todo" (Cline session message 478). Authorization covers documentation and plan persistence only; no implementation until the operator approves this plan; the standing code freeze applies. Never mark this TODO or any step done without the full applicable suite green and a hostile AGREE at 98/98.'
+    - "Architecture (the authority; this plan derives from it and cites it): docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md on branch docs/hv-architecture-amendment-20261016 (pushed to origin, based on develop 36783b79): commit 31af8c597e3570a2469a48a238a4aa76107f30bb (the amendment), commit 99cb42b24a442377a776aebd58e9df6894c2ce40 (verified reviewer facts and what-if fixes, 2026-10-16T15:52 local), commit 9fd6b653b2522212ad8151091e3a8cdec25e75bd (operator correction: the audit log is never purged, 2026-10-16T16:07 local), commit 6dbc384323c036a57c37fd9eaf2259879c1d956f (decisions settled from the operator's instructions, requirement records created, 2026-10-16T16:40 local), commit bd6e37b33f043b1ede3a1feeaf7073d357ea21cf (pull request 81 findings P10 to P15, D-04 settled, D-07 opened, 2026-10-17T08:35 local), commit f5fd5ab24ad00b09053daf07ed3c0d850f70498d (P15 names a plan-created requirement as such, 2026-10-17T08:36 local), and commit 31904493381cfef56c57790950e23e72f3ecc39b (pre-HV holistic review fixes and FR-MCP-HVPIPE-008-AC011, the reviewer's whole process tree ended, 2026-10-17T08:51 local), commit 0a449314528c5bfc07e9b386c97034716e2ddbd4 (FR-MCP-HVPIPE-012-AC007, turns already HV-reviewed migrate Final, 2026-10-17T08:57 local), commit d3a0beb10b0879f20fb307f205a3bff25ac3a441 (D-07 and D-08 settled by the operator, 2026-10-17T09:16 local), commit caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d (hostile validation round 1 receipts, DISAGREE 90/82, 2026-10-17T10:36 local), commit 3fba1b1336a92767904e344dbe9d531200049a0d (round 1 remediation: F01 to F21, U01, U02, and the self-review fixes, 2026-10-17T11:25 local), commit 168478c3c5d96b08e965ac9e63d78feb26e359e1 (the P11, P14, and P15 tests named on TEST-MCP-SESSIONLIFE-002, the TEST both requirements map to, 2026-10-17T11:32 local), and commit 6c848a4e56f8dee101672dcca1435d600c21eb41 (D-09 settled by the operator, 2026-10-17T17:59 local). It amends the foundation docs/architecture/SessionTurn-Review-AgentContext-Architecture.md (PLAN-SESSIONTURNREVIEW-001)."
+    - 'Settled requirements: S-01 to S-33, every operator statement of the HV planning conversation, verbatim in amendment section 3, with the standing HV rules P-01 to P-07: five reviewers Cline, Copilot, Claude, Codex, Grok with endpoints and REPL management (S-02); per-turn scores, an overall holistic review, results in the database (S-03, S-10, S-21); review final and no updates to a reviewed turn (S-06, S-07); Unnecessary turns included (S-09); session id means all turns (S-11); standard result payload with the complete request, complete JSONL log, and failures with remediation (S-13); context field and FR/TR/AC/UC references (S-14); failures triaged and reviewer offline until resolved (S-15); refuse with context when no reviewer (S-16); round-robin excluding the submitter (S-17) and, by D-05, the author of the reviewed turns; running, output, ETA, cancel, live SSE endpoints (S-18); completion notification stream (S-19); no force flag (S-20); output captured live and streamed, operator-confirmed gap P8 (S-22); single transaction at end (S-23); auto-start (S-24); verdict only, no TODO automation (S-25); incidents through the triage endpoint (S-26); NONCE means the agent is available and can execute an HV (S-27); self-review not relevant to HV (S-28); database audit, retain until told, no roles, audit failure a hard stop (S-29); GZIP logs (S-30); worktree from develop (S-31).'
+    - "Design: amendment sections 4 to 19: HostileValidation bounded context; resolutions R-01 to R-31 (R-31 the one overall-verdict predicate); 24 units of work (RecordHvRunStartCommand among them) and the amended internal RecordModelGradeCommand (section 14.5), 8 new policies (HvRetryDecision decides and writes a request outcome for a failed run, an expired lease, and a cancel found at close; HvReviewerEligibility excludes the submitter and the author), 5 processes (HvWorkerHost, RunReviewerProcess, SubmitHvFromPlugin, WatchHvNotifications, and HostileReviewWorkerHost with its 3 internal units, section 16.7) plus the reviewer adapter contract (one record-extraction function for the worker and finalization, a verified write barrier per CLI, provenance sources per CLI) and Director commands, 8 shared components (FencedLease, GzipCodec, AuditLedgerGuard, AgentIdentity, TurnSnapshotBuilder, RequirementReferenceExtractor, NotificationOutbox, OrderedEventReplay); 13 new entities, each evidence item stored once in the evidence tables while the append-only audit ledger keeps its own history of every write, never purged by an evidence removal (operator 2026-10-16: \"Purging stale data doesn't include removing it from the audit log. That's the opposite of an audit log.\"); 12 use cases UC-HV-01 to UC-HV-12; invariants I-01 to I-13; crash windows W-01 to W-12, each proved by a named acceptance criterion."
+    - 'Foundation amendments A-01 to A-12 (single grader removed, HV request superseded, model grades only from finalization, hostile reviews pipeline-only, frozen and final turns, HvFinalization origin, turn HvState columns): a change to the approved PLAN-SESSIONTURNREVIEW-001 that needs its own new hostile validation before either plan executes them (operator decision D-03).'
+    - "Delivery (amendment section 20): the operator four-phase structure with the handoff dependency order. H0 = Phases 1 to 3 for the whole HV catalog: the requirement records FR, TR, TEST -MCP-HVPIPE-001..021 and their 21 mappings (created 2026-10-16 as pending, read back with 0 mismatches) updated to the approved text, and the use cases UC-HV-01..12 created, through the plugin workflows; interfaces, DTOs, entities, options, and stubs compiling and unregistered; every test of the 133 acceptance criteria written from the criteria and proven against mocks with negative controls before production code (BDPv4 green mock gate); implementation worktree cut from develop at Phase 2 start. Phase 4 contexts in merge order: HvStorageSchema, HvSharedComponents, H1 HvReviewerPool, H2 HvAdmission, H3 HvExecution, H7 HvFinalization, H4 HvRestSurfaces, then H6 HvStreamsAndOperations and H5 HvClientParity (H6 first, because H5's plugin watcher and client streams consume H6's streams), then integration, live checks, independent validation, operator approval. Dependency: PLAN-SESSIONTURNREVIEW-001 delivers the foundation components the HV contexts call (SharedComponents, SessionTurnLogging, TurnReviews, ResponsesAndTrust, PluginCorePowerShell) or their Phase 2 seams."
+    - "Gates (amendment section 20.2): G1 to G6 through Nuke only, zero failures and zero skips, full current and prior unit suite before leaving a context; three-provider cases in G3; live check on a separate server instance (NONCE every reviewer, each reviewer's turn logging behind its write barrier, session-scope HV, output observed live, worker killed and recovered, cancel, finalize, result and evidence read, writes to reviewed turns refused), never on the live server; no GitHub Actions or Azure Pipelines; releases through Octopus."
+    - 'Discipline: each slice stops at Validating; the coordinator decides completion; every HV of this plan by the reviewer the operator names, never of the requester family (P-01), unbounded review time (P-02), 98/98 with no FAIL or UNKNOWN (P-05), request and response jsonl and the entire result in the session log; the new pipeline does not validate its own plan until its live check passed and the operator approves the switch.'
+    - "Problems pulled in: REMED-HVPIPELINE-001 (the single problems TODO, operator 2026-10-16). P5 and P7 in H0; P6, P8, and P9 in H1 (P8 proven only by FR-MCP-HVPIPE-008-AC003, a line observable on the stream before the reviewer exits; P9 by the one table of highest efforts in the shared launch builder); P4 in HvSharedComponents (AuditLedgerGuard) and HvStorageSchema (IsDeleted on every HV entity); P1, P2, P3 in H3 (D-02 settled: the HostileReview subsystem stays separate; the worker FR-MCP-HOSTILEREVIEW-003 already specifies is built as its own HostileReviewWorkerHost to the contract of amendment section 16.7, sharing only the reviewer adapters and FencedLease, its named tests recorded on TEST-MCP-HOSTILEREVIEW-002 and -003, and P2 and P3 are fixed in that subsystem). P10 to P15 (the Codex review of pull request 81, added 2026-10-17) sit in code other plans own or have redesigned (P10, P12, P13 the federation plan, P10 and P13 being its undelivered P1.5; P11, P15 the stop path the foundation's slice A7 rewrites; P14 FR-MCP-SESSIONLIFE-004); by D-07 (operator 2026-10-17: \"D-07 B: this plan fixes all six (P10 to P15) itself.\") this plan fixes them under the owners' approved designs: P10, P12, P13 in HvStorageSchema before any HV entity (P10 and P13 as the federation plan's P1.5: rekey maintenance command, startup guard, token-store rewrite, its D5 and D7; H0 imports FR, TR, TEST-MCP-PATHNORM-001 into this store), P11, P14, P15 in H1 in the PowerShell plugin core synced to every plugin, before FR-MCP-HVPIPE-008-AC010 is bound (P11 and P15 to the foundation's stop gate, FR-MCP-SESSIONTURN-005, through FR-MCP-SESSIONLIFE-005 criteria 2 and 1, the hook's FR-MCP-SESSIONLIFE-004 citations corrected; P14 through FR-MCP-SESSIONLIFE-004 criterion 1); each fix has a named test (amendment section 20.4); a fix an owner already delivered is proven by the named test, not rewritten (DRY)."
+    - 'Verification items (amendment section 20.5; probe receipts in /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/, 78 files copied with SHA-256 checks): settled on 2026-10-16: VI-01 runtime model and effort per CLI (Codex rollout, Claude transcript, Grok session store, Copilot JSON stream record both; Cline records the model only, so it cannot pass a NONCE, D-06); VI-02 Copilot runs unattended with -p and JSON output and needs a configured model; VI-03 write barriers (Codex read-only and Grok plan exercised, Copilot --available-tools structural, Claude and Cline plan modes not accepted); VI-06 turn order is ascending turn row Id; VI-07 multi-member GZIP reads back exactly; VI-08 highest efforts Codex max, Claude max, Grok xhigh, Cline xhigh, Copilot max. Open for H1: whether each plugin logs its turn behind its barrier (VI-03, VI-04), verified in the live check on a separate instance; the Copilot model and its max effort (VI-02); the SQLite cost measurement (VI-05).'
+    - "Decisions (amendment section 22), settled 2026-10-16 from the operator's instructions at the operator's request: D-01 exclusion by agent family, not model vendor; D-02 the HostileReview subsystem stays separate; D-05 the author of the reviewed turns is excluded as well as the submitter (S-28, P-07); D-06 Cline stays unqualified until it records a run's effort (P-04 fails closed). Settled by the operator on 2026-10-17: D-04 (\"2. A\"), the reviewer of the HV of the amendment and this plan is Codex gpt-6-astra at effort max; D-07 (\"D-07 B\"), this plan fixes P10 to P15 itself under the owning plans' approved designs; D-08 (\"HV ids keep the UTC yyyyMMddTHHmmssZ stamp: timestamps are UTC in the data and local only for display.\"); D-09 (\"B\"), the existing records the problem fixes touch (TEST-MCP-HOSTILEREVIEW-002 and -003, FR-MCP-SESSIONLIFE-004 and -005, TEST-MCP-SESSIONLIFE-002, the PATHNORM-001 import) change in H0 after the plan is approved, not before, because FR-MCP-HOSTILEREVIEW-003 criterion 4 cites the paused PLAN-SESSIONTRIAGEFIX-001. Still the operator's: D-03 approval of the foundation amendments A-01 to A-12 with this plan."
+    - "Hostile validation round 1 (gate amendment1-r1, Codex gpt-6-astra max per D-04, 2026-10-17T09:19:08 to 10:30:46 local): OverallVerdict DISAGREE, accuracy 90, completeness 82; findings F01 to F21 and unknowns U01 and U02, all implementer fixes; receipts docs/receipts/hv/20261017T091907-amendment1-r1.request.jsonl and .response.jsonl and hostile-validator-amendment1-r1-20261017T091907.md and .json (commit caaa41b0); the entire result on session-log turn req-20261017T141158Z-prompt-3cb4. Remediated in commits 3fba1b13 and 168478c3, with U01 closed by the server push audit docs/receipts/hv/20261017T110027-amendment1.push-audit.json (push 9, force_push 0) and U02 by amendment section 19.4. Round 2 waits for the operator's confirmation of the projected problems (profile 7.5)."
+    - "Amendment validation done (not an HV): lint PASSED at 2026-10-17T11:13:15 local and again at 17:58:41 after D-09 (no dashes, no tables, every cross reference, AC, error code, crash window, verification item, invariant, standing rule, problem, decision, and diagram index entry resolved; 133 acceptance criteria with 157 test names, every criterion named; 15 problems, 9 decisions); every criterion bound to exactly one phase (section 19.4, 133 of 133, 2026-10-17T11:13:16 local); the 63 requirement records equal section 19.1 field by field (2026-10-17T11:21:56 local, 63 of 63, after one updateBatch of 38 records); the foundation's SHA-256 at 36783b79 equals the amendment's claim; 100 Mermaid diagrams rendered with Mermaid 12 in headless chromium at 2026-10-17T11:14:05 local, 0 failures, 0 font-band conflicts, 8 pt text, sequences landscape, 35 tiled across 2 to 6 letter pages (receipts docs/receipts/diagrams/amendment1-r2-20261017T111405). Not done: a passing hostile validation of the amendment (round 2 and later), the operator's decision D-03, the use cases, any implementation."
+    technicalDetails: []
+    implementationTasks:
+    - task: H0.1 Obtain the operator's decision D-03 (D-04, D-07, D-08, and D-09 settled by the operator 2026-10-17; D-01, D-02, D-05, D-06 settled 2026-10-16 from the operator's instructions)
+      done: false
+    - task: H0.2 Approve foundation amendments A-01 to A-12 and re-validate PLAN-SESSIONTURNREVIEW-001 (hostile validation by the operator-named reviewer)
+      done: false
+    - task: 'H0.3 Hostile validation of Amendment 1 and this plan at 98/98 (reviewer per D-04: Codex gpt-6-astra max; request and response jsonl, entire result in the session log); round 1 DISAGREE 90/82 on 2026-10-17 (receipts caaa41b0), remediated in 3fba1b13 and 168478c3; round 2 after the operator confirms the projected problems'
+      done: false
+    - task: H0.4 Update FR/TR/TEST-MCP-HVPIPE-001..021 and their mappings (created 2026-10-16, pending) to the approved text; create use cases UC-HV-01..12; import FR/TR/TEST-MCP-PATHNORM-001 into this store and strengthen the acceptance criteria P10 to P15 are fixed through, each with a named test, and record the HostileReview worker tests on TEST-MCP-HOSTILEREVIEW-002 and -003, all only after the plan is approved (D-09); all through the plugin workflows
+      done: false
+    - task: 'H0.5 Record verification items VI-01 to VI-08 (settled items recorded 2026-10-16; open: VI-02 Copilot model and effort, VI-03 and VI-04 plugin logging behind each barrier, VI-05 SQLite cost)'
+      done: false
+    - task: 'H0.6 Phase 2: implementation worktree from develop; interfaces, DTOs, entities, options, stubs compiling and unregistered'
+      done: false
+    - task: 'H0.7 Phase 3: tests of all 133 acceptance criteria (and the named tests of the P10 to P15 fixes and of the HostileReview worker) against mocks with negative controls; green mock gate before production code; each then binds to production in the phase amendment section 19.4 names'
+      done: false
+    - task: "HvStorageSchema: first P10, P12, P13 (rekey maintenance command with startup guard and token-store rewrite under the federation plan's D5 and D7; normalizer root-relative segment); then entities, three-provider migrations (Up, Down, Up), turn HvState columns with the A-11 rule for already reviewed turns, grade change, dump policies, federation domain; the audit ledger stays append-only (I-13)"
+      done: false
+    - task: 'HvSharedComponents: FencedLease, GzipCodec, AuditLedgerGuard, AgentIdentity, TurnSnapshotBuilder, RequirementReferenceExtractor, NotificationOutbox, OrderedEventReplay'
+      done: false
+    - task: 'H1 HvReviewerPool: options and seeding, AgentIdentity golden contract, adapters with true live lines (P8), record extraction and write barriers, one table of highest efforts (P9), Copilot qualification (P6), plugin core fixes P11, P14, P15 synced to every plugin before FR-MCP-HVPIPE-008-AC010 is bound, NONCE units and probe verdict'
+      done: false
+    - task: 'H2 HvAdmission: submit with scope, eligibility (submitter and author excluded), round-robin, snapshots, freeze guard in TurnWritePipeline, queries, cancel'
+      done: false
+    - task: 'H3 HvExecution: worker host, claim, start, heartbeat, append, close, fail, lease expiry, incident filing, retry decision, worker-bound containment; the HostileReview worker as its own HostileReviewWorkerHost sharing only the reviewer adapters and FencedLease (P1, section 16.7) with P2 and P3'
+      done: false
+    - task: 'H7 HvFinalization: verification V-1 to V-8, atomic finalization, grade and review caller changes, ConvertHvReceiptToReview retired'
+      done: false
+    - task: 'H4 HvRestSurfaces: HostileValidationController and error mapping'
+      done: false
+    - task: 'H6 HvStreamsAndOperations: output and notification streams, notification poll, incident query, evidence retrieval and removal, read audit rows, operations docs'
+      done: false
+    - task: 'H5 HvClientParity (after H6): client, REPL verbs and policy, MCP tools, Director commands, plugin submit verb and notification watcher synced to every plugin'
+      done: false
+    - task: Integration, live checks on a separate instance, independent validation, operator approval
+      done: false
+    - task: REMED-HVPIPELINE-001 P1 to P15 resolved as amendment section 20.4 and decision D-07 assign them
+      done: false
+    dependsOn:
+    - PLAN-SESSIONTURNREVIEW-001
+    functionalRequirements:
+    - FR-MCP-HVPIPE-001
+    - FR-MCP-HVPIPE-002
+    - FR-MCP-HVPIPE-003
+    - FR-MCP-HVPIPE-004
+    - FR-MCP-HVPIPE-005
+    - FR-MCP-HVPIPE-006
+    - FR-MCP-HVPIPE-007
+    - FR-MCP-HVPIPE-008
+    - FR-MCP-HVPIPE-009
+    - FR-MCP-HVPIPE-010
+    - FR-MCP-HVPIPE-011
+    - FR-MCP-HVPIPE-012
+    - FR-MCP-HVPIPE-013
+    - FR-MCP-HVPIPE-014
+    - FR-MCP-HVPIPE-015
+    - FR-MCP-HVPIPE-016
+    - FR-MCP-HVPIPE-017
+    - FR-MCP-HVPIPE-018
+    - FR-MCP-HVPIPE-019
+    - FR-MCP-HVPIPE-020
+    - FR-MCP-HVPIPE-021
+    technicalRequirements:
+    - TR-MCP-HVPIPE-001
+    - TR-MCP-HVPIPE-002
+    - TR-MCP-HVPIPE-003
+    - TR-MCP-HVPIPE-004
+    - TR-MCP-HVPIPE-005
+    - TR-MCP-HVPIPE-006
+    - TR-MCP-HVPIPE-007
+    - TR-MCP-HVPIPE-008
+    - TR-MCP-HVPIPE-009
+    - TR-MCP-HVPIPE-010
+    - TR-MCP-HVPIPE-011
+    - TR-MCP-HVPIPE-012
+    - TR-MCP-HVPIPE-013
+    - TR-MCP-HVPIPE-014
+    - TR-MCP-HVPIPE-015
+    - TR-MCP-HVPIPE-016
+    - TR-MCP-HVPIPE-017
+    - TR-MCP-HVPIPE-018
+    - TR-MCP-HVPIPE-019
+    - TR-MCP-HVPIPE-020
+    - TR-MCP-HVPIPE-021
+  deprecated: true
+
+---
+

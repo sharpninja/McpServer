@@ -1,0 +1,15 @@
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.appendActions
+    agent: Codex
+    sessionId: Codex-20261017T142241Z-hv-amendment1-r1
+    requestId: req-20261017T142304Z-hv-amendment1-r1
+    failsafePath: ""
+    message: Session log persist confirmed a durable write for request 'req-20261017T142304Z-hv-amendment1-r1'.
+    childStderr: ""

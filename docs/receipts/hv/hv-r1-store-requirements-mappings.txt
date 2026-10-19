@@ -1,0 +1,3285 @@
+type: result
+payload:
+  requestId: req-20261017T142519Z-dc48
+  result:
+    items:
+    - frId: FR-HANDOFF-001
+      trId: TR-HANDOFF-CONTRACT-001
+      createdAt: 2026-10-17T14:25:20.9277122+00:00
+    - frId: FR-HANDOFF-001
+      trId: TR-HANDOFF-SECURITY-001
+      createdAt: 2026-10-17T14:25:20.9285820+00:00
+    - frId: FR-HANDOFF-001
+      testId: TEST-HANDOFF-001
+      createdAt: 2026-10-17T14:25:20.9287168+00:00
+    - frId: FR-HANDOFF-001
+      testId: TEST-HANDOFF-002
+      createdAt: 2026-10-17T14:25:20.9288268+00:00
+    - frId: FR-HANDOFF-002
+      trId: TR-HANDOFF-AGENT-001
+      createdAt: 2026-10-17T14:25:20.9289290+00:00
+    - frId: FR-HANDOFF-002
+      trId: TR-HANDOFF-CONTRACT-001
+      createdAt: 2026-10-17T14:25:20.9290383+00:00
+    - frId: FR-HANDOFF-002
+      testId: TEST-HANDOFF-003
+      createdAt: 2026-10-17T14:25:20.9291366+00:00
+    - frId: FR-HANDOFF-003
+      trId: TR-HANDOFF-VALIDATE-001
+      createdAt: 2026-10-17T14:25:20.9292545+00:00
+    - frId: FR-HANDOFF-003
+      testId: TEST-HANDOFF-004
+      createdAt: 2026-10-17T14:25:20.9293539+00:00
+    - frId: FR-HANDOFF-004
+      trId: TR-HANDOFF-MODES-001
+      createdAt: 2026-10-17T14:25:20.9294593+00:00
+    - frId: FR-HANDOFF-004
+      trId: TR-HANDOFF-VALIDATE-001
+      createdAt: 2026-10-17T14:25:20.9295595+00:00
+    - frId: FR-HANDOFF-004
+      testId: TEST-HANDOFF-004
+      createdAt: 2026-10-17T14:25:20.9296576+00:00
+    - frId: FR-HANDOFF-005
+      trId: TR-HANDOFF-MODES-001
+      createdAt: 2026-10-17T14:25:20.9297571+00:00
+    - frId: FR-HANDOFF-005
+      trId: TR-HANDOFF-TODO-001
+      createdAt: 2026-10-17T14:25:20.9298551+00:00
+    - frId: FR-HANDOFF-005
+      testId: TEST-HANDOFF-005
+      createdAt: 2026-10-17T14:25:20.9299542+00:00
+    - frId: FR-HANDOFF-006
+      trId: TR-HANDOFF-AUDIT-001
+      createdAt: 2026-10-17T14:25:20.9300526+00:00
+    - frId: FR-HANDOFF-006
+      testId: TEST-HANDOFF-007
+      createdAt: 2026-10-17T14:25:20.9301440+00:00
+    - frId: FR-HANDOFF-007
+      trId: TR-HANDOFF-SURFACE-001
+      createdAt: 2026-10-17T14:25:20.9302595+00:00
+    - frId: FR-HANDOFF-007
+      testId: TEST-HANDOFF-006
+      createdAt: 2026-10-17T14:25:20.9303632+00:00
+    - frId: FR-LOC-001
+      trId: TR-LOC-001
+      createdAt: 2026-10-17T14:25:20.9304487+00:00
+    - frId: FR-MCP-001
+      trId: TR-MCP-CFG-001
+      createdAt: 2026-10-17T14:25:20.9305432+00:00
+    - frId: FR-MCP-001
+      trId: TR-MCP-CFG-002
+      createdAt: 2026-10-17T14:25:20.9306381+00:00
+    - frId: FR-MCP-002
+      trId: TR-MCP-API-001
+      createdAt: 2026-10-17T14:25:20.9307207+00:00
+    - frId: FR-MCP-002
+      trId: TR-MCP-DATA-001
+      createdAt: 2026-10-17T14:25:20.9307922+00:00
+    - frId: FR-MCP-003
+      trId: TR-MCP-DATA-001
+      createdAt: 2026-10-17T14:25:20.9308623+00:00
+    - frId: FR-MCP-003
+      trId: TR-MCP-INGEST-001
+      createdAt: 2026-10-17T14:25:20.9309418+00:00
+    - frId: FR-MCP-004
+      trId: TR-MCP-DATA-002
+      createdAt: 2026-10-17T14:25:20.9310139+00:00
+    - frId: FR-MCP-004
+      trId: TR-MCP-DATA-003
+      createdAt: 2026-10-17T14:25:20.9310840+00:00
+    - frId: FR-MCP-005
+      trId: TR-MCP-API-001
+      createdAt: 2026-10-17T14:25:20.9311540+00:00
+    - frId: FR-MCP-005
+      trId: TR-MCP-INGEST-001
+      createdAt: 2026-10-17T14:25:20.9312706+00:00
+    - frId: FR-MCP-006
+      trId: TR-MCP-INGEST-001
+      createdAt: 2026-10-17T14:25:20.9313447+00:00
+    - frId: FR-MCP-006
+      trId: TR-MCP-INGEST-002
+      createdAt: 2026-10-17T14:25:20.9314162+00:00
+    - frId: FR-MCP-007
+      trId: TR-MCP-ARCH-001
+      createdAt: 2026-10-17T14:25:20.9314947+00:00
+    - frId: FR-MCP-008
+      trId: TR-MCP-OPS-001
+      createdAt: 2026-10-17T14:25:20.9315669+00:00
+    - frId: FR-MCP-009
+      trId: TR-MCP-MT-001
+      createdAt: 2026-10-17T14:25:20.9316404+00:00
+    - frId: FR-MCP-009
+      trId: TR-MCP-WS-002
+      createdAt: 2026-10-17T14:25:20.9317146+00:00
+    - frId: FR-MCP-009
+      trId: TR-MCP-WS-004
+      createdAt: 2026-10-17T14:25:20.9317858+00:00
+    - frId: FR-MCP-011
+      trId: TR-MCP-WS-003
+      createdAt: 2026-10-17T14:25:20.9318572+00:00
+    - frId: FR-MCP-011
+      trId: TR-MCP-WS-007
+      createdAt: 2026-10-17T14:25:20.9319291+00:00
+    - frId: FR-MCP-012
+      trId: TR-MCP-TR-001
+      createdAt: 2026-10-17T14:25:20.9319989+00:00
+    - frId: FR-MCP-012
+      trId: TR-MCP-TR-002
+      createdAt: 2026-10-17T14:25:20.9320682+00:00
+    - frId: FR-MCP-012
+      trId: TR-MCP-TR-003
+      createdAt: 2026-10-17T14:25:20.9321378+00:00
+    - frId: FR-MCP-013
+      trId: TR-MCP-MT-002
+      createdAt: 2026-10-17T14:25:20.9322184+00:00
+    - frId: FR-MCP-013
+      trId: TR-MCP-SEC-001
+      createdAt: 2026-10-17T14:25:20.9322905+00:00
+    - frId: FR-MCP-014
+      trId: TR-MCP-SEC-002
+      createdAt: 2026-10-17T14:25:20.9323631+00:00
+    - frId: FR-MCP-015
+      trId: TR-MCP-TUN-001
+      createdAt: 2026-10-17T14:25:20.9324432+00:00
+    - frId: FR-MCP-015
+      trId: TR-MCP-TUN-002
+      createdAt: 2026-10-17T14:25:20.9325230+00:00
+    - frId: FR-MCP-015
+      trId: TR-MCP-TUN-003
+      createdAt: 2026-10-17T14:25:20.9326067+00:00
+    - frId: FR-MCP-016
+      trId: TR-MCP-HTTP-001
+      createdAt: 2026-10-17T14:25:20.9326984+00:00
+    - frId: FR-MCP-017
+      trId: TR-MCP-SVC-001
+      createdAt: 2026-10-17T14:25:20.9327737+00:00
+    - frId: FR-MCP-018
+      trId: TR-MCP-WS-005
+      createdAt: 2026-10-17T14:25:20.9328535+00:00
+    - frId: FR-MCP-019
+      trId: TR-MCP-WS-006
+      createdAt: 2026-10-17T14:25:20.9329249+00:00
+    - frId: FR-MCP-020
+      trId: TR-MCP-WS-007
+      createdAt: 2026-10-17T14:25:20.9329941+00:00
+    - frId: FR-MCP-021
+      trId: TR-MCP-WS-008
+      createdAt: 2026-10-17T14:25:20.9330649+00:00
+    - frId: FR-MCP-022
+      trId: TR-MCP-TR-003
+      createdAt: 2026-10-17T14:25:20.9331344+00:00
+    - frId: FR-MCP-023
+      trId: TR-MCP-REQ-001
+      createdAt: 2026-10-17T14:25:20.9332152+00:00
+    - frId: FR-MCP-024
+      trId: TR-MCP-INGEST-002
+      createdAt: 2026-10-17T14:25:20.9332903+00:00
+    - frId: FR-MCP-025
+      trId: TR-MCP-WS-009
+      createdAt: 2026-10-17T14:25:20.9333620+00:00
+    - frId: FR-MCP-026
+      trId: TR-MCP-AUTH-001
+      createdAt: 2026-10-17T14:25:20.9334329+00:00
+    - frId: FR-MCP-026
+      trId: TR-MCP-AUTH-002
+      createdAt: 2026-10-17T14:25:20.9335153+00:00
+    - frId: FR-MCP-026
+      trId: TR-MCP-AUTH-003
+      createdAt: 2026-10-17T14:25:20.9335891+00:00
+    - frId: FR-MCP-027
+      trId: TR-MCP-AGENT-001
+      createdAt: 2026-10-17T14:25:20.9336614+00:00
+    - frId: FR-MCP-027
+      trId: TR-MCP-AGENT-002
+      createdAt: 2026-10-17T14:25:20.9337334+00:00
+    - frId: FR-MCP-027
+      trId: TR-MCP-AGENT-003
+      createdAt: 2026-10-17T14:25:20.9338050+00:00
+    - frId: FR-MCP-028
+      trId: TR-MCP-AGENT-001
+      createdAt: 2026-10-17T14:25:20.9340164+00:00
+    - frId: FR-MCP-028
+      trId: TR-MCP-AGENT-003
+      createdAt: 2026-10-17T14:25:20.9341466+00:00
+    - frId: FR-MCP-028
+      trId: TR-MCP-AGENT-008
+      createdAt: 2026-10-17T14:25:20.9342326+00:00
+    - frId: FR-MCP-029
+      trId: TR-MCP-CQRS-001
+      createdAt: 2026-10-17T14:25:20.9343056+00:00
+    - frId: FR-MCP-029
+      trId: TR-MCP-CQRS-002
+      createdAt: 2026-10-17T14:25:20.9343766+00:00
+    - frId: FR-MCP-029
+      trId: TR-MCP-CQRS-003
+      createdAt: 2026-10-17T14:25:20.9344496+00:00
+    - frId: FR-MCP-029
+      trId: TR-MCP-CQRS-004
+      createdAt: 2026-10-17T14:25:20.9345197+00:00
+    - frId: FR-MCP-029
+      trId: TR-MCP-CQRS-005
+      createdAt: 2026-10-17T14:25:20.9345904+00:00
+    - frId: FR-MCP-030
+      trId: TR-MCP-DIR-001
+      createdAt: 2026-10-17T14:25:20.9346610+00:00
+    - frId: FR-MCP-030
+      trId: TR-MCP-DIR-002
+      createdAt: 2026-10-17T14:25:20.9347330+00:00
+    - frId: FR-MCP-030
+      trId: TR-MCP-DIR-003
+      createdAt: 2026-10-17T14:25:20.9348030+00:00
+    - frId: FR-MCP-031
+      trId: TR-MCP-WS-UI-001
+      createdAt: 2026-10-17T14:25:20.9349043+00:00
+    - frId: FR-MCP-032
+      trId: TR-MCP-GH-005
+      createdAt: 2026-10-17T14:25:20.9349775+00:00
+    - frId: FR-MCP-033
+      trId: TR-MCP-POL-001
+      createdAt: 2026-10-17T14:25:20.9350499+00:00
+    - frId: FR-MCP-034
+      trId: TR-MCP-COMP-001
+      createdAt: 2026-10-17T14:25:20.9351377+00:00
+    - frId: FR-MCP-035
+      trId: TR-MCP-COMP-002
+      createdAt: 2026-10-17T14:25:20.9352235+00:00
+    - frId: FR-MCP-036
+      trId: TR-MCP-AUDIT-001
+      createdAt: 2026-10-17T14:25:20.9352979+00:00
+    - frId: FR-MCP-037
+      trId: TR-MCP-DIR-003
+      createdAt: 2026-10-17T14:25:20.9353692+00:00
+    - frId: FR-MCP-038
+      trId: TR-MCP-COMP-003
+      createdAt: 2026-10-17T14:25:20.9354422+00:00
+    - frId: FR-MCP-038
+      trId: TR-MCP-DTO-001
+      createdAt: 2026-10-17T14:25:20.9355193+00:00
+    - frId: FR-MCP-039
+      trId: TR-MCP-CTX-001
+      createdAt: 2026-10-17T14:25:20.9355900+00:00
+    - frId: FR-MCP-040
+      trId: TR-MCP-REQ-002
+      createdAt: 2026-10-17T14:25:20.9356718+00:00
+    - frId: FR-MCP-040
+      trId: TR-MCP-REQ-003
+      createdAt: 2026-10-17T14:25:20.9357773+00:00
+    - frId: FR-MCP-040
+      testId: TEST-MCP-REQ-003
+      createdAt: 2026-10-17T14:25:20.9358809+00:00
+    - frId: FR-MCP-041
+      trId: TR-MCP-REQ-002
+      createdAt: 2026-10-17T14:25:20.9359916+00:00
+    - frId: FR-MCP-041
+      trId: TR-MCP-REQ-003
+      createdAt: 2026-10-17T14:25:20.9360939+00:00
+    - frId: FR-MCP-042
+      trId: TR-MCP-HTTP-001
+      createdAt: 2026-10-17T14:25:20.9361903+00:00
+    - frId: FR-MCP-042
+      trId: TR-MCP-REQ-003
+      createdAt: 2026-10-17T14:25:20.9362926+00:00
+    - frId: FR-MCP-043
+      trId: TR-MCP-MT-001
+      createdAt: 2026-10-17T14:25:20.9363837+00:00
+    - frId: FR-MCP-043
+      trId: TR-MCP-MT-002
+      createdAt: 2026-10-17T14:25:20.9364754+00:00
+    - frId: FR-MCP-043
+      trId: TR-MCP-SEC-001
+      createdAt: 2026-10-17T14:25:20.9365755+00:00
+    - frId: FR-MCP-044
+      trId: TR-MCP-MT-003
+      createdAt: 2026-10-17T14:25:20.9366666+00:00
+    - frId: FR-MCP-045
+      trId: TR-MCP-TODO-002
+      createdAt: 2026-10-17T14:25:20.9367490+00:00
+    - frId: FR-MCP-046
+      trId: TR-MCP-AGENT-005
+      createdAt: 2026-10-17T14:25:20.9368215+00:00
+    - frId: FR-MCP-046
+      trId: TR-MCP-VOICE-001
+      createdAt: 2026-10-17T14:25:20.9368949+00:00
+    - frId: FR-MCP-046
+      trId: TR-MCP-VOICE-002
+      createdAt: 2026-10-17T14:25:20.9369662+00:00
+    - frId: FR-MCP-046
+      trId: TR-MCP-VOICE-003
+      createdAt: 2026-10-17T14:25:20.9370373+00:00
+    - frId: FR-MCP-047
+      trId: TR-MCP-DESKTOP-001
+      createdAt: 2026-10-17T14:25:20.9371092+00:00
+    - frId: FR-MCP-048
+      trId: TR-MCP-CFG-004
+      createdAt: 2026-10-17T14:25:20.9371805+00:00
+    - frId: FR-MCP-049
+      trId: TR-MCP-TPL-001
+      createdAt: 2026-10-17T14:25:20.9372632+00:00
+    - frId: FR-MCP-049
+      trId: TR-MCP-TPL-002
+      createdAt: 2026-10-17T14:25:20.9373348+00:00
+    - frId: FR-MCP-049
+      trId: TR-MCP-TPL-003
+      createdAt: 2026-10-17T14:25:20.9374052+00:00
+    - frId: FR-MCP-049
+      trId: TR-MCP-TPL-004
+      createdAt: 2026-10-17T14:25:20.9374764+00:00
+    - frId: FR-MCP-050
+      trId: TR-MCP-AGENT-008
+      createdAt: 2026-10-17T14:25:20.9375580+00:00
+    - frId: FR-MCP-050
+      trId: TR-MCP-AGENT-009
+      createdAt: 2026-10-17T14:25:20.9376323+00:00
+    - frId: FR-MCP-050
+      trId: TR-MCP-AGENT-010
+      createdAt: 2026-10-17T14:25:20.9377075+00:00
+    - frId: FR-MCP-050
+      trId: TR-MCP-AGENT-011
+      createdAt: 2026-10-17T14:25:20.9377820+00:00
+    - frId: FR-MCP-050
+      trId: TR-MCP-AGENT-012
+      createdAt: 2026-10-17T14:25:20.9378565+00:00
+    - frId: FR-MCP-051
+      trId: TR-MCP-CFG-005
+      createdAt: 2026-10-17T14:25:20.9379548+00:00
+    - frId: FR-MCP-052
+      trId: TR-MCP-AGENT-004
+      createdAt: 2026-10-17T14:25:20.9380496+00:00
+    - frId: FR-MCP-052
+      trId: TR-MCP-AGENT-005
+      createdAt: 2026-10-17T14:25:20.9381261+00:00
+    - frId: FR-MCP-053
+      trId: TR-MCP-AGENT-005
+      createdAt: 2026-10-17T14:25:20.9382083+00:00
+    - frId: FR-MCP-053
+      trId: TR-MCP-API-002
+      createdAt: 2026-10-17T14:25:20.9382846+00:00
+    - frId: FR-MCP-053
+      trId: TR-MCP-API-003
+      createdAt: 2026-10-17T14:25:20.9383699+00:00
+    - frId: FR-MCP-054
+      trId: TR-MCP-AGENT-005
+      createdAt: 2026-10-17T14:25:20.9384840+00:00
+    - frId: FR-MCP-054
+      trId: TR-MCP-API-003
+      createdAt: 2026-10-17T14:25:20.9385820+00:00
+    - frId: FR-MCP-055
+      trId: TR-MCP-AGENT-004
+      createdAt: 2026-10-17T14:25:20.9386810+00:00
+    - frId: FR-MCP-055
+      trId: TR-MCP-API-002
+      createdAt: 2026-10-17T14:25:20.9387600+00:00
+    - frId: FR-MCP-056
+      trId: TR-MCP-API-002
+      createdAt: 2026-10-17T14:25:20.9388351+00:00
+    - frId: FR-MCP-056
+      trId: TR-MCP-TPL-006
+      createdAt: 2026-10-17T14:25:20.9389363+00:00
+    - frId: FR-MCP-057
+      trId: TR-MCP-API-003
+      createdAt: 2026-10-17T14:25:20.9390398+00:00
+    - frId: FR-MCP-057
+      trId: TR-MCP-DIR-004
+      createdAt: 2026-10-17T14:25:20.9391322+00:00
+    - frId: FR-MCP-058
+      trId: TR-MCP-API-003
+      createdAt: 2026-10-17T14:25:20.9392285+00:00
+    - frId: FR-MCP-058
+      trId: TR-MCP-VOICE-004
+      createdAt: 2026-10-17T14:25:20.9393093+00:00
+    - frId: FR-MCP-059
+      trId: TR-MCP-ARCH-002
+      createdAt: 2026-10-17T14:25:20.9394012+00:00
+    - frId: FR-MCP-059
+      trId: TR-MCP-MT-001
+      createdAt: 2026-10-17T14:25:20.9394934+00:00
+    - frId: FR-MCP-059
+      trId: TR-MCP-TUN-001
+      createdAt: 2026-10-17T14:25:20.9395695+00:00
+    - frId: FR-MCP-060
+      trId: TR-MCP-DIR-005
+      createdAt: 2026-10-17T14:25:20.9396449+00:00
+    - frId: FR-MCP-060
+      trId: TR-MCP-DIR-006
+      createdAt: 2026-10-17T14:25:20.9397196+00:00
+    - frId: FR-MCP-060
+      trId: TR-MCP-DIR-007
+      createdAt: 2026-10-17T14:25:20.9397968+00:00
+    - frId: FR-MCP-060
+      trId: TR-MCP-DIR-008
+      createdAt: 2026-10-17T14:25:20.9398724+00:00
+    - frId: FR-MCP-061
+      trId: TR-MCP-LOG-002
+      createdAt: 2026-10-17T14:25:20.9399468+00:00
+    - frId: FR-MCP-061
+      trId: TR-MCP-TODO-003
+      createdAt: 2026-10-17T14:25:20.9400230+00:00
+    - frId: FR-MCP-062
+      trId: TR-MCP-EVT-001
+      createdAt: 2026-10-17T14:25:20.9400994+00:00
+    - frId: FR-MCP-062
+      trId: TR-MCP-EVT-002
+      createdAt: 2026-10-17T14:25:20.9401742+00:00
+    - frId: FR-MCP-062
+      trId: TR-MCP-EVT-003
+      createdAt: 2026-10-17T14:25:20.9402660+00:00
+    - frId: FR-MCP-062
+      trId: TR-MCP-EVT-004
+      createdAt: 2026-10-17T14:25:20.9403416+00:00
+    - frId: FR-MCP-062
+      trId: TR-MCP-EVT-005
+      createdAt: 2026-10-17T14:25:20.9404188+00:00
+    - frId: FR-MCP-063
+      trId: TR-MCP-GH-001
+      createdAt: 2026-10-17T14:25:20.9404932+00:00
+    - frId: FR-MCP-063
+      trId: TR-MCP-GH-002
+      createdAt: 2026-10-17T14:25:20.9405714+00:00
+    - frId: FR-MCP-063
+      trId: TR-MCP-GH-003
+      createdAt: 2026-10-17T14:25:20.9406614+00:00
+    - frId: FR-MCP-063
+      trId: TR-MCP-GH-004
+      createdAt: 2026-10-17T14:25:20.9407363+00:00
+    - frId: FR-MCP-064
+      trId: TR-MCP-DOC-001
+      createdAt: 2026-10-17T14:25:20.9408153+00:00
+    - frId: FR-MCP-064
+      testId: TEST-MCP-147
+      createdAt: 2026-10-17T14:25:20.9408912+00:00
+    - frId: FR-MCP-065
+      trId: TR-MCP-API-001
+      createdAt: 2026-10-17T14:25:20.9409676+00:00
+    - frId: FR-MCP-065
+      trId: TR-MCP-INGEST-003
+      createdAt: 2026-10-17T14:25:20.9410444+00:00
+    - frId: FR-MCP-066
+      trId: TR-MCP-AGENT-006
+      createdAt: 2026-10-17T14:25:20.9411199+00:00
+    - frId: FR-MCP-066
+      trId: TR-MCP-AGENT-007
+      createdAt: 2026-10-17T14:25:20.9411953+00:00
+    - frId: FR-MCP-067
+      trId: TR-MCP-HTTP-002
+      createdAt: 2026-10-17T14:25:20.9412894+00:00
+    - frId: FR-MCP-068
+      trId: TR-MCP-CFG-006
+      createdAt: 2026-10-17T14:25:20.9413651+00:00
+    - frId: FR-MCP-069
+      trId: TR-MCP-GH-005
+      createdAt: 2026-10-17T14:25:20.9414436+00:00
+    - frId: FR-MCP-069
+      trId: TR-MCP-TODO-003
+      createdAt: 2026-10-17T14:25:20.9415220+00:00
+    - frId: FR-MCP-070
+      trId: TR-MCP-GH-006
+      createdAt: 2026-10-17T14:25:20.9415978+00:00
+    - frId: FR-MCP-070
+      trId: TR-MCP-TODO-004
+      createdAt: 2026-10-17T14:25:20.9416775+00:00
+    - frId: FR-MCP-071
+      trId: TR-MCP-GH-007
+      createdAt: 2026-10-17T14:25:20.9417518+00:00
+    - frId: FR-MCP-072
+      trId: TR-MCP-TODO-005
+      createdAt: 2026-10-17T14:25:20.9418284+00:00
+    - frId: FR-MCP-072
+      trId: TR-MCP-TODO-006
+      createdAt: 2026-10-17T14:25:20.9419068+00:00
+    - frId: FR-MCP-073
+      trId: TR-MCP-LOG-003
+      createdAt: 2026-10-17T14:25:20.9419861+00:00
+    - frId: FR-MCP-075
+      trId: TR-MCP-AGENT-013
+      createdAt: 2026-10-17T14:25:20.9420639+00:00
+    - frId: FR-MCP-076
+      trId: TR-MCP-AGENT-014
+      createdAt: 2026-10-17T14:25:20.9421404+00:00
+    - frId: FR-MCP-076
+      trId: TR-MCP-SEC-003
+      createdAt: 2026-10-17T14:25:20.9422293+00:00
+    - frId: FR-MCP-077
+      trId: TR-MCP-CFG-007
+      createdAt: 2026-10-17T14:25:20.9423124+00:00
+    - frId: FR-MCP-077
+      trId: TR-MCP-SEC-004
+      createdAt: 2026-10-17T14:25:20.9423880+00:00
+    - frId: FR-MCP-078
+      trId: TR-GRAPHRAG-ADHOC-001
+      createdAt: 2026-10-17T14:25:20.9424674+00:00
+    - frId: FR-MCP-079
+      trId: TR-GRAPHRAG-ADHOC-002
+      createdAt: 2026-10-17T14:25:20.9425477+00:00
+    - frId: FR-MCP-080
+      trId: TR-GRAPHRAG-ADHOC-003
+      createdAt: 2026-10-17T14:25:20.9426291+00:00
+    - frId: FR-MCP-081
+      trId: TR-MCP-BYRD-001
+      createdAt: 2026-10-17T14:25:20.9427047+00:00
+    - frId: FR-MCP-081
+      trId: TR-MCP-BYRD-003
+      createdAt: 2026-10-17T14:25:20.9427803+00:00
+    - frId: FR-MCP-082
+      trId: TR-MCP-BYRD-001
+      createdAt: 2026-10-17T14:25:20.9428576+00:00
+    - frId: FR-MCP-082
+      trId: TR-MCP-BYRD-002
+      createdAt: 2026-10-17T14:25:20.9429333+00:00
+    - frId: FR-MCP-082
+      trId: TR-MCP-BYRD-003
+      createdAt: 2026-10-17T14:25:20.9430089+00:00
+    - frId: FR-MCP-083
+      trId: TR-MCP-BYRD-004
+      createdAt: 2026-10-17T14:25:20.9430842+00:00
+    - frId: FR-MCP-084
+      trId: TR-MCP-REQ-004
+      createdAt: 2026-10-17T14:25:20.9431609+00:00
+    - frId: FR-MCP-084
+      trId: TR-MCP-REQ-005
+      createdAt: 2026-10-17T14:25:20.9432454+00:00
+    - frId: FR-MCP-084
+      testId: TEST-MCP-106
+      createdAt: 2026-10-17T14:25:20.9433221+00:00
+    - frId: FR-MCP-084
+      testId: TEST-MCP-107
+      createdAt: 2026-10-17T14:25:20.9433970+00:00
+    - frId: FR-MCP-084
+      testId: TEST-MCP-108
+      createdAt: 2026-10-17T14:25:20.9434732+00:00
+    - frId: FR-MCP-084
+      testId: TEST-MCP-109
+      createdAt: 2026-10-17T14:25:20.9435482+00:00
+    - frId: FR-MCP-085
+      trId: TR-MCP-QA-001
+      createdAt: 2026-10-17T14:25:20.9436228+00:00
+    - frId: FR-MCP-085
+      trId: TR-MCP-QA-002
+      createdAt: 2026-10-17T14:25:20.9436976+00:00
+    - frId: FR-MCP-085
+      trId: TR-MCP-QA-003
+      createdAt: 2026-10-17T14:25:20.9437730+00:00
+    - frId: FR-MCP-085
+      trId: TR-MCP-QA-006
+      createdAt: 2026-10-17T14:25:20.9438472+00:00
+    - frId: FR-MCP-085
+      trId: TR-MCP-QA-007
+      createdAt: 2026-10-17T14:25:20.9439214+00:00
+    - frId: FR-MCP-085
+      trId: TR-MCP-QA-008
+      createdAt: 2026-10-17T14:25:20.9439958+00:00
+    - frId: FR-MCP-085
+      testId: TEST-MCP-110
+      createdAt: 2026-10-17T14:25:20.9440722+00:00
+    - frId: FR-MCP-085
+      testId: TEST-MCP-117
+      createdAt: 2026-10-17T14:25:20.9441470+00:00
+    - frId: FR-MCP-085
+      testId: TEST-MCP-119
+      createdAt: 2026-10-17T14:25:20.9442343+00:00
+    - frId: FR-MCP-086
+      trId: TR-MCP-QA-001
+      createdAt: 2026-10-17T14:25:20.9443116+00:00
+    - frId: FR-MCP-086
+      trId: TR-MCP-QA-003
+      createdAt: 2026-10-17T14:25:20.9443869+00:00
+    - frId: FR-MCP-086
+      trId: TR-MCP-QA-006
+      createdAt: 2026-10-17T14:25:20.9444614+00:00
+    - frId: FR-MCP-086
+      trId: TR-MCP-QA-007
+      createdAt: 2026-10-17T14:25:20.9445359+00:00
+    - frId: FR-MCP-086
+      trId: TR-MCP-QA-008
+      createdAt: 2026-10-17T14:25:20.9446102+00:00
+    - frId: FR-MCP-086
+      trId: TR-MCP-QA-022
+      createdAt: 2026-10-17T14:25:20.9446860+00:00
+    - frId: FR-MCP-086
+      testId: TEST-MCP-111
+      createdAt: 2026-10-17T14:25:20.9447612+00:00
+    - frId: FR-MCP-086
+      testId: TEST-MCP-117
+      createdAt: 2026-10-17T14:25:20.9448359+00:00
+    - frId: FR-MCP-086
+      testId: TEST-MCP-128
+      createdAt: 2026-10-17T14:25:20.9449120+00:00
+    - frId: FR-MCP-087
+      trId: TR-MCP-QA-005
+      createdAt: 2026-10-17T14:25:20.9449869+00:00
+    - frId: FR-MCP-087
+      trId: TR-MCP-QA-006
+      createdAt: 2026-10-17T14:25:20.9450610+00:00
+    - frId: FR-MCP-087
+      trId: TR-MCP-QA-011
+      createdAt: 2026-10-17T14:25:20.9451345+00:00
+    - frId: FR-MCP-087
+      testId: TEST-MCP-112
+      createdAt: 2026-10-17T14:25:20.9452192+00:00
+    - frId: FR-MCP-087
+      testId: TEST-MCP-116
+      createdAt: 2026-10-17T14:25:20.9452967+00:00
+    - frId: FR-MCP-088
+      trId: TR-MCP-QA-002
+      createdAt: 2026-10-17T14:25:20.9453711+00:00
+    - frId: FR-MCP-088
+      trId: TR-MCP-QA-007
+      createdAt: 2026-10-17T14:25:20.9454461+00:00
+    - frId: FR-MCP-088
+      testId: TEST-MCP-113
+      createdAt: 2026-10-17T14:25:20.9455224+00:00
+    - frId: FR-MCP-089
+      trId: TR-MCP-QA-004
+      createdAt: 2026-10-17T14:25:20.9455967+00:00
+    - frId: FR-MCP-089
+      trId: TR-MCP-QA-018
+      createdAt: 2026-10-17T14:25:20.9456716+00:00
+    - frId: FR-MCP-089
+      trId: TR-MCP-QA-019
+      createdAt: 2026-10-17T14:25:20.9457454+00:00
+    - frId: FR-MCP-089
+      trId: TR-MCP-QA-031
+      createdAt: 2026-10-17T14:25:20.9458206+00:00
+    - frId: FR-MCP-089
+      trId: TR-MCP-QA-032
+      createdAt: 2026-10-17T14:25:20.9458946+00:00
+    - frId: FR-MCP-089
+      trId: TR-MCP-QA-033
+      createdAt: 2026-10-17T14:25:20.9459689+00:00
+    - frId: FR-MCP-089
+      trId: TR-MCP-QA-034
+      createdAt: 2026-10-17T14:25:20.9460428+00:00
+    - frId: FR-MCP-089
+      testId: TEST-MCP-114
+      createdAt: 2026-10-17T14:25:20.9461184+00:00
+    - frId: FR-MCP-089
+      testId: TEST-MCP-127
+      createdAt: 2026-10-17T14:25:20.9461931+00:00
+    - frId: FR-MCP-089
+      testId: TEST-MCP-133
+      createdAt: 2026-10-17T14:25:20.9462778+00:00
+    - frId: FR-MCP-089
+      testId: TEST-MCP-134
+      createdAt: 2026-10-17T14:25:20.9463526+00:00
+    - frId: FR-MCP-089
+      testId: TEST-MCP-135
+      createdAt: 2026-10-17T14:25:20.9464277+00:00
+    - frId: FR-MCP-090
+      trId: TR-MCP-QA-001
+      createdAt: 2026-10-17T14:25:20.9465015+00:00
+    - frId: FR-MCP-090
+      trId: TR-MCP-QA-006
+      createdAt: 2026-10-17T14:25:20.9465745+00:00
+    - frId: FR-MCP-090
+      trId: TR-MCP-QA-018
+      createdAt: 2026-10-17T14:25:20.9466475+00:00
+    - frId: FR-MCP-090
+      trId: TR-MCP-QA-019
+      createdAt: 2026-10-17T14:25:20.9467217+00:00
+    - frId: FR-MCP-090
+      testId: TEST-MCP-115
+      createdAt: 2026-10-17T14:25:20.9467961+00:00
+    - frId: FR-MCP-090
+      testId: TEST-MCP-125
+      createdAt: 2026-10-17T14:25:20.9468702+00:00
+    - frId: FR-MCP-091
+      trId: TR-MCP-QA-011
+      createdAt: 2026-10-17T14:25:20.9469438+00:00
+    - frId: FR-MCP-091
+      trId: TR-MCP-QA-022
+      createdAt: 2026-10-17T14:25:20.9470184+00:00
+    - frId: FR-MCP-091
+      testId: TEST-MCP-116
+      createdAt: 2026-10-17T14:25:20.9470926+00:00
+    - frId: FR-MCP-091
+      testId: TEST-MCP-128
+      createdAt: 2026-10-17T14:25:20.9471663+00:00
+    - frId: FR-MCP-092
+      trId: TR-MCP-QA-009
+      createdAt: 2026-10-17T14:25:20.9472630+00:00
+    - frId: FR-MCP-092
+      testId: TEST-MCP-118
+      createdAt: 2026-10-17T14:25:20.9473414+00:00
+    - frId: FR-MCP-093
+      trId: TR-MCP-QA-001
+      createdAt: 2026-10-17T14:25:20.9474152+00:00
+    - frId: FR-MCP-093
+      trId: TR-MCP-QA-003
+      createdAt: 2026-10-17T14:25:20.9474886+00:00
+    - frId: FR-MCP-093
+      testId: TEST-MCP-119
+      createdAt: 2026-10-17T14:25:20.9475638+00:00
+    - frId: FR-MCP-094
+      trId: TR-MCP-QA-007
+      createdAt: 2026-10-17T14:25:20.9476530+00:00
+    - frId: FR-MCP-094
+      trId: TR-MCP-QA-010
+      createdAt: 2026-10-17T14:25:20.9477325+00:00
+    - frId: FR-MCP-094
+      trId: TR-MCP-QA-012
+      createdAt: 2026-10-17T14:25:20.9478064+00:00
+    - frId: FR-MCP-094
+      testId: TEST-MCP-120
+      createdAt: 2026-10-17T14:25:20.9478807+00:00
+    - frId: FR-MCP-094
+      testId: TEST-MCP-121
+      createdAt: 2026-10-17T14:25:20.9479547+00:00
+    - frId: FR-MCP-095
+      trId: TR-MCP-QA-014
+      createdAt: 2026-10-17T14:25:20.9480291+00:00
+    - frId: FR-MCP-095
+      trId: TR-MCP-QA-015
+      createdAt: 2026-10-17T14:25:20.9481022+00:00
+    - frId: FR-MCP-095
+      testId: TEST-MCP-122
+      createdAt: 2026-10-17T14:25:20.9481754+00:00
+    - frId: FR-MCP-095
+      testId: TEST-MCP-123
+      createdAt: 2026-10-17T14:25:20.9482616+00:00
+    - frId: FR-MCP-096
+      trId: TR-MCP-QA-017
+      createdAt: 2026-10-17T14:25:20.9483369+00:00
+    - frId: FR-MCP-096
+      testId: TEST-MCP-132
+      createdAt: 2026-10-17T14:25:20.9484101+00:00
+    - frId: FR-MCP-097
+      trId: TR-MCP-QA-016
+      createdAt: 2026-10-17T14:25:20.9484966+00:00
+    - frId: FR-MCP-097
+      trId: TR-MCP-QA-023
+      createdAt: 2026-10-17T14:25:20.9485886+00:00
+    - frId: FR-MCP-097
+      trId: TR-MCP-QA-024
+      createdAt: 2026-10-17T14:25:20.9486664+00:00
+    - frId: FR-MCP-097
+      testId: TEST-MCP-124
+      createdAt: 2026-10-17T14:25:20.9487406+00:00
+    - frId: FR-MCP-097
+      testId: TEST-MCP-129
+      createdAt: 2026-10-17T14:25:20.9488145+00:00
+    - frId: FR-MCP-098
+      trId: TR-MCP-QA-018
+      createdAt: 2026-10-17T14:25:20.9488880+00:00
+    - frId: FR-MCP-098
+      trId: TR-MCP-QA-019
+      createdAt: 2026-10-17T14:25:20.9489632+00:00
+    - frId: FR-MCP-098
+      trId: TR-MCP-QA-020
+      createdAt: 2026-10-17T14:25:20.9490366+00:00
+    - frId: FR-MCP-098
+      trId: TR-MCP-QA-021
+      createdAt: 2026-10-17T14:25:20.9491100+00:00
+    - frId: FR-MCP-098
+      testId: TEST-MCP-125
+      createdAt: 2026-10-17T14:25:20.9491837+00:00
+    - frId: FR-MCP-098
+      testId: TEST-MCP-126
+      createdAt: 2026-10-17T14:25:20.9492680+00:00
+    - frId: FR-MCP-098
+      testId: TEST-MCP-127
+      createdAt: 2026-10-17T14:25:20.9493433+00:00
+    - frId: FR-MCP-099
+      trId: TR-MCP-QA-022
+      createdAt: 2026-10-17T14:25:20.9494165+00:00
+    - frId: FR-MCP-099
+      trId: TR-MCP-QA-023
+      createdAt: 2026-10-17T14:25:20.9494893+00:00
+    - frId: FR-MCP-099
+      trId: TR-MCP-QA-024
+      createdAt: 2026-10-17T14:25:20.9495634+00:00
+    - frId: FR-MCP-099
+      testId: TEST-MCP-129
+      createdAt: 2026-10-17T14:25:20.9496372+00:00
+    - frId: FR-MCP-100
+      trId: TR-MCP-QA-025
+      createdAt: 2026-10-17T14:25:20.9497103+00:00
+    - frId: FR-MCP-100
+      trId: TR-MCP-QA-026
+      createdAt: 2026-10-17T14:25:20.9497840+00:00
+    - frId: FR-MCP-100
+      testId: TEST-MCP-130
+      createdAt: 2026-10-17T14:25:20.9498586+00:00
+    - frId: FR-MCP-101
+      trId: TR-MCP-QA-027
+      createdAt: 2026-10-17T14:25:20.9499316+00:00
+    - frId: FR-MCP-101
+      trId: TR-MCP-QA-028
+      createdAt: 2026-10-17T14:25:20.9500046+00:00
+    - frId: FR-MCP-101
+      testId: TEST-MCP-131
+      createdAt: 2026-10-17T14:25:20.9500790+00:00
+    - frId: FR-MCP-102
+      trId: TR-MCP-QA-029
+      createdAt: 2026-10-17T14:25:20.9501517+00:00
+    - frId: FR-MCP-102
+      trId: TR-MCP-QA-030
+      createdAt: 2026-10-17T14:25:20.9502434+00:00
+    - frId: FR-MCP-102
+      testId: TEST-MCP-132
+      createdAt: 2026-10-17T14:25:20.9503216+00:00
+    - frId: FR-MCP-103
+      trId: TR-MCP-FED-001
+      createdAt: 2026-10-17T14:25:20.9503972+00:00
+    - frId: FR-MCP-103
+      trId: TR-MCP-FED-MEMORY-001
+      createdAt: 2026-10-17T14:25:20.9504755+00:00
+    - frId: FR-MCP-103
+      trId: TR-MCP-FED-SESSIONLOG-001
+      createdAt: 2026-10-17T14:25:20.9505550+00:00
+    - frId: FR-MCP-103
+      testId: TEST-MCP-136
+      createdAt: 2026-10-17T14:25:20.9506288+00:00
+    - frId: FR-MCP-103
+      testId: TEST-MCP-MEMORY-FED-001
+      createdAt: 2026-10-17T14:25:20.9507094+00:00
+    - frId: FR-MCP-103
+      testId: TEST-MCP-SESSIONLOG-FED-001
+      createdAt: 2026-10-17T14:25:20.9507909+00:00
+    - frId: FR-MCP-104
+      trId: TR-MCP-BYRD-005
+      createdAt: 2026-10-17T14:25:20.9508655+00:00
+    - frId: FR-MCP-104
+      trId: TR-MCP-TPL-007
+      createdAt: 2026-10-17T14:25:20.9509393+00:00
+    - frId: FR-MCP-104
+      testId: TEST-MCP-137
+      createdAt: 2026-10-17T14:25:20.9510140+00:00
+    - frId: FR-MCP-104
+      testId: TEST-MCP-141
+      createdAt: 2026-10-17T14:25:20.9510875+00:00
+    - frId: FR-MCP-105
+      trId: TR-MCP-DB-001
+      createdAt: 2026-10-17T14:25:20.9511600+00:00
+    - frId: FR-MCP-105
+      trId: TR-MCP-DB-002
+      createdAt: 2026-10-17T14:25:20.9512468+00:00
+    - frId: FR-MCP-105
+      trId: TR-MCP-DB-003
+      createdAt: 2026-10-17T14:25:20.9513222+00:00
+    - frId: FR-MCP-105
+      trId: TR-MCP-DB-004
+      createdAt: 2026-10-17T14:25:20.9513956+00:00
+    - frId: FR-MCP-105
+      trId: TR-MCP-DB-005
+      createdAt: 2026-10-17T14:25:20.9514679+00:00
+    - frId: FR-MCP-105
+      trId: TR-MCP-DB-006
+      createdAt: 2026-10-17T14:25:20.9515472+00:00
+    - frId: FR-MCP-105
+      trId: TR-MCP-DB-DTO-001
+      createdAt: 2026-10-17T14:25:20.9516246+00:00
+    - frId: FR-MCP-105
+      testId: TEST-MCP-102
+      createdAt: 2026-10-17T14:25:20.9516980+00:00
+    - frId: FR-MCP-105
+      testId: TEST-MCP-138
+      createdAt: 2026-10-17T14:25:20.9517713+00:00
+    - frId: FR-MCP-105
+      testId: TEST-MCP-139
+      createdAt: 2026-10-17T14:25:20.9518445+00:00
+    - frId: FR-MCP-105
+      testId: TEST-MCP-140
+      createdAt: 2026-10-17T14:25:20.9519191+00:00
+    - frId: FR-MCP-105
+      testId: TEST-MCP-DB-006
+      createdAt: 2026-10-17T14:25:20.9519938+00:00
+    - frId: FR-MCP-106
+      trId: TR-MCP-PLUGIN-008
+      createdAt: 2026-10-17T14:25:20.9520682+00:00
+    - frId: FR-MCP-106
+      trId: TR-MCP-PLUGIN-011
+      createdAt: 2026-10-17T14:25:20.9521430+00:00
+    - frId: FR-MCP-106
+      trId: TR-MCP-PLUGIN-012
+      createdAt: 2026-10-17T14:25:20.9522356+00:00
+    - frId: FR-MCP-106
+      trId: TR-MCP-PLUGIN-013
+      createdAt: 2026-10-17T14:25:20.9523142+00:00
+    - frId: FR-MCP-106
+      testId: TEST-MCP-142
+      createdAt: 2026-10-17T14:25:20.9523880+00:00
+    - frId: FR-MCP-106
+      testId: TEST-MCP-PLUGIN-011
+      createdAt: 2026-10-17T14:25:20.9524651+00:00
+    - frId: FR-MCP-106
+      testId: TEST-MCP-PLUGIN-012
+      createdAt: 2026-10-17T14:25:20.9525442+00:00
+    - frId: FR-MCP-106
+      testId: TEST-MCP-PLUGIN-013
+      createdAt: 2026-10-17T14:25:20.9526216+00:00
+    - frId: FR-MCP-107
+      trId: TR-MCP-PLAN-001
+      createdAt: 2026-10-17T14:25:20.9526953+00:00
+    - frId: FR-MCP-107
+      testId: TEST-MCP-143
+      createdAt: 2026-10-17T14:25:20.9527697+00:00
+    - frId: FR-MCP-108
+      trId: TR-MCP-TODO-009
+      createdAt: 2026-10-17T14:25:20.9528438+00:00
+    - frId: FR-MCP-108
+      testId: TEST-MCP-144
+      createdAt: 2026-10-17T14:25:20.9529170+00:00
+    - frId: FR-MCP-109
+      trId: TR-MCP-BATCH-109
+      createdAt: 2026-10-17T14:25:20.9529913+00:00
+    - frId: FR-MCP-109
+      trId: TR-MCP-SCHEMA-109
+      createdAt: 2026-10-17T14:25:20.9530678+00:00
+    - frId: FR-MCP-109
+      trId: TR-MCP-STDIO-109
+      createdAt: 2026-10-17T14:25:20.9531432+00:00
+    - frId: FR-MCP-109
+      testId: TEST-MCP-145
+      createdAt: 2026-10-17T14:25:20.9532253+00:00
+    - frId: FR-MCP-109
+      testId: TEST-MCP-146
+      createdAt: 2026-10-17T14:25:20.9533007+00:00
+    - frId: FR-MCP-110
+      trId: TR-MCP-NUKE-001
+      createdAt: 2026-10-17T14:25:20.9533755+00:00
+    - frId: FR-MCP-110
+      testId: TEST-MCP-148
+      createdAt: 2026-10-17T14:25:20.9534496+00:00
+    - frId: FR-MCP-111
+      trId: TR-MCP-SKILLS-001
+      createdAt: 2026-10-17T14:25:20.9535248+00:00
+    - frId: FR-MCP-111
+      trId: TR-MCP-SKILLS-002
+      createdAt: 2026-10-17T14:25:20.9535994+00:00
+    - frId: FR-MCP-111
+      trId: TR-MCP-SKILLS-003
+      createdAt: 2026-10-17T14:25:20.9536756+00:00
+    - frId: FR-MCP-111
+      testId: TEST-MCP-149
+      createdAt: 2026-10-17T14:25:20.9537524+00:00
+    - frId: FR-MCP-111
+      testId: TEST-MCP-150
+      createdAt: 2026-10-17T14:25:20.9538261+00:00
+    - frId: FR-MCP-111
+      testId: TEST-MCP-151
+      createdAt: 2026-10-17T14:25:20.9538994+00:00
+    - frId: FR-MCP-112
+      trId: TR-MCP-REQEXPORT-001
+      createdAt: 2026-10-17T14:25:20.9539762+00:00
+    - frId: FR-MCP-112
+      trId: TR-MCP-REQEXPORT-002
+      createdAt: 2026-10-17T14:25:20.9540546+00:00
+    - frId: FR-MCP-112
+      trId: TR-MCP-REQEXPORT-003
+      createdAt: 2026-10-17T14:25:20.9541316+00:00
+    - frId: FR-MCP-112
+      trId: TR-MCP-REQEXPORT-004
+      createdAt: 2026-10-17T14:25:20.9542170+00:00
+    - frId: FR-MCP-112
+      testId: TEST-MCP-152
+      createdAt: 2026-10-17T14:25:20.9542945+00:00
+    - frId: FR-MCP-112
+      testId: TEST-MCP-REQEXPORT-002
+      createdAt: 2026-10-17T14:25:20.9543745+00:00
+    - frId: FR-MCP-112
+      testId: TEST-MCP-REQEXPORT-003
+      createdAt: 2026-10-17T14:25:20.9544535+00:00
+    - frId: FR-MCP-112
+      testId: TEST-MCP-REQWS-001
+      createdAt: 2026-10-17T14:25:20.9545300+00:00
+    - frId: FR-MCP-113
+      trId: TR-MCP-BATCH-001
+      createdAt: 2026-10-17T14:25:20.9546059+00:00
+    - frId: FR-MCP-113
+      trId: TR-MCP-BATCHTS-001
+      createdAt: 2026-10-17T14:25:20.9546812+00:00
+    - frId: FR-MCP-113
+      testId: TEST-MCP-153
+      createdAt: 2026-10-17T14:25:20.9547543+00:00
+    - frId: FR-MCP-114
+      trId: TR-MCP-TODO-010
+      createdAt: 2026-10-17T14:25:20.9548285+00:00
+    - frId: FR-MCP-114
+      testId: TEST-MCP-154
+      createdAt: 2026-10-17T14:25:20.9549035+00:00
+    - frId: FR-MCP-115
+      trId: TR-MCP-PLUGIN-009
+      createdAt: 2026-10-17T14:25:20.9549799+00:00
+    - frId: FR-MCP-115
+      testId: TEST-MCP-155
+      createdAt: 2026-10-17T14:25:20.9550534+00:00
+    - frId: FR-MCP-116
+      trId: TR-MCP-GH-008
+      createdAt: 2026-10-17T14:25:20.9551264+00:00
+    - frId: FR-MCP-116
+      testId: TEST-MCP-156
+      createdAt: 2026-10-17T14:25:20.9552076+00:00
+    - frId: FR-MCP-117
+      trId: TR-MCP-PLUGIN-010
+      createdAt: 2026-10-17T14:25:20.9552857+00:00
+    - frId: FR-MCP-117
+      testId: TEST-MCP-157
+      createdAt: 2026-10-17T14:25:20.9553597+00:00
+    - frId: FR-MCP-118
+      trId: TR-MCP-CRYPTO-001
+      createdAt: 2026-10-17T14:25:20.9554368+00:00
+    - frId: FR-MCP-118
+      trId: TR-MCP-KEYSERVER-001
+      createdAt: 2026-10-17T14:25:20.9555266+00:00
+    - frId: FR-MCP-118
+      testId: TEST-MCP-158
+      createdAt: 2026-10-17T14:25:20.9556014+00:00
+    - frId: FR-MCP-118
+      testId: TEST-MCP-160
+      createdAt: 2026-10-17T14:25:20.9556751+00:00
+    - frId: FR-MCP-118
+      testId: TEST-MCP-166
+      createdAt: 2026-10-17T14:25:20.9557489+00:00
+    - frId: FR-MCP-119
+      trId: TR-MCP-CRYPTO-001
+      createdAt: 2026-10-17T14:25:20.9558279+00:00
+    - frId: FR-MCP-119
+      trId: TR-MCP-SUBSCRIBER-001
+      createdAt: 2026-10-17T14:25:20.9559283+00:00
+    - frId: FR-MCP-119
+      testId: TEST-MCP-159
+      createdAt: 2026-10-17T14:25:20.9560133+00:00
+    - frId: FR-MCP-119
+      testId: TEST-MCP-160
+      createdAt: 2026-10-17T14:25:20.9560872+00:00
+    - frId: FR-MCP-119
+      testId: TEST-MCP-167
+      createdAt: 2026-10-17T14:25:20.9561631+00:00
+    - frId: FR-MCP-120
+      trId: TR-MCP-TXN-001
+      createdAt: 2026-10-17T14:25:20.9562519+00:00
+    - frId: FR-MCP-120
+      testId: TEST-MCP-161
+      createdAt: 2026-10-17T14:25:20.9563284+00:00
+    - frId: FR-MCP-120
+      testId: TEST-MCP-168
+      createdAt: 2026-10-17T14:25:20.9564025+00:00
+    - frId: FR-MCP-120
+      testId: TEST-MCP-ACID-001
+      createdAt: 2026-10-17T14:25:20.9564807+00:00
+    - frId: FR-MCP-120
+      testId: TEST-MCP-ACID-002
+      createdAt: 2026-10-17T14:25:20.9565580+00:00
+    - frId: FR-MCP-120
+      testId: TEST-MCP-ACID-006
+      createdAt: 2026-10-17T14:25:20.9566353+00:00
+    - frId: FR-MCP-121
+      trId: TR-MCP-TXN-001
+      createdAt: 2026-10-17T14:25:20.9567091+00:00
+    - frId: FR-MCP-121
+      trId: TR-MCP-TXNAUDIT-001
+      createdAt: 2026-10-17T14:25:20.9567884+00:00
+    - frId: FR-MCP-121
+      testId: TEST-MCP-161
+      createdAt: 2026-10-17T14:25:20.9568628+00:00
+    - frId: FR-MCP-121
+      testId: TEST-MCP-169
+      createdAt: 2026-10-17T14:25:20.9569364+00:00
+    - frId: FR-MCP-122
+      trId: TR-MCP-TXNBYRD-001
+      createdAt: 2026-10-17T14:25:20.9570139+00:00
+    - frId: FR-MCP-122
+      testId: TEST-MCP-164
+      createdAt: 2026-10-17T14:25:20.9570879+00:00
+    - frId: FR-MCP-123
+      trId: TR-MCP-QUAD-001
+      createdAt: 2026-10-17T14:25:20.9571620+00:00
+    - frId: FR-MCP-123
+      testId: TEST-MCP-163
+      createdAt: 2026-10-17T14:25:20.9572437+00:00
+    - frId: FR-MCP-123
+      testId: TEST-MCP-170
+      createdAt: 2026-10-17T14:25:20.9573194+00:00
+    - frId: FR-MCP-123
+      testId: TEST-MCP-171
+      createdAt: 2026-10-17T14:25:20.9573935+00:00
+    - frId: FR-MCP-124
+      trId: TR-MCP-TXNDIAGRAMS-001
+      createdAt: 2026-10-17T14:25:20.9574717+00:00
+    - frId: FR-MCP-124
+      testId: TEST-MCP-162
+      createdAt: 2026-10-17T14:25:20.9575457+00:00
+    - frId: FR-MCP-124
+      testId: TEST-MCP-165
+      createdAt: 2026-10-17T14:25:20.9576206+00:00
+    - frId: FR-MCP-125
+      trId: TR-MCP-TXNCOMPAT-001
+      createdAt: 2026-10-17T14:25:20.9576981+00:00
+    - frId: FR-MCP-125
+      testId: TEST-MCP-163
+      createdAt: 2026-10-17T14:25:20.9577719+00:00
+    - frId: FR-MCP-126
+      trId: TR-MCP-TXNAIUNIT-001
+      createdAt: 2026-10-17T14:25:20.9578494+00:00
+    - frId: FR-MCP-126
+      testId: TEST-MCP-164
+      createdAt: 2026-10-17T14:25:20.9579240+00:00
+    - frId: FR-MCP-127
+      trId: TR-MCP-TXNDIAGRAMS-001
+      createdAt: 2026-10-17T14:25:20.9580018+00:00
+    - frId: FR-MCP-127
+      testId: TEST-MCP-166
+      createdAt: 2026-10-17T14:25:20.9580756+00:00
+    - frId: FR-MCP-127
+      testId: TEST-MCP-167
+      createdAt: 2026-10-17T14:25:20.9581489+00:00
+    - frId: FR-MCP-127
+      testId: TEST-MCP-168
+      createdAt: 2026-10-17T14:25:20.9582317+00:00
+    - frId: FR-MCP-128
+      trId: TR-MCP-TXNARCH-001
+      createdAt: 2026-10-17T14:25:20.9583095+00:00
+    - frId: FR-MCP-128
+      trId: TR-MCP-TXNDESIGN-001
+      createdAt: 2026-10-17T14:25:20.9583865+00:00
+    - frId: FR-MCP-128
+      testId: TEST-MCP-172
+      createdAt: 2026-10-17T14:25:20.9584601+00:00
+    - frId: FR-MCP-128
+      testId: TEST-MCP-173
+      createdAt: 2026-10-17T14:25:20.9585350+00:00
+    - frId: FR-MCP-129
+      trId: TR-MCP-QUAD-001
+      createdAt: 2026-10-17T14:25:20.9586089+00:00
+    - frId: FR-MCP-129
+      trId: TR-MCP-QUAD-002
+      createdAt: 2026-10-17T14:25:20.9586835+00:00
+    - frId: FR-MCP-129
+      trId: TR-MCP-QUAD-003
+      createdAt: 2026-10-17T14:25:20.9587574+00:00
+    - frId: FR-MCP-129
+      testId: TEST-MCP-174
+      createdAt: 2026-10-17T14:25:20.9588325+00:00
+    - frId: FR-MCP-129
+      testId: TEST-MCP-175
+      createdAt: 2026-10-17T14:25:20.9589060+00:00
+    - frId: FR-MCP-129
+      testId: TEST-MCP-176
+      createdAt: 2026-10-17T14:25:20.9589794+00:00
+    - frId: FR-MCP-129
+      testId: TEST-MCP-177
+      createdAt: 2026-10-17T14:25:20.9590527+00:00
+    - frId: FR-MCP-129
+      testId: TEST-MCP-178
+      createdAt: 2026-10-17T14:25:20.9591277+00:00
+    - frId: FR-MCP-130
+      trId: TR-MCP-QUAD-003
+      createdAt: 2026-10-17T14:25:20.9592093+00:00
+    - frId: FR-MCP-130
+      testId: TEST-MCP-178
+      createdAt: 2026-10-17T14:25:20.9592852+00:00
+    - frId: FR-MCP-130
+      testId: TEST-MCP-179
+      createdAt: 2026-10-17T14:25:20.9593608+00:00
+    - frId: FR-MCP-131
+      trId: TR-MCP-QUAD-004
+      createdAt: 2026-10-17T14:25:20.9594352+00:00
+    - frId: FR-MCP-131
+      trId: TR-MCP-QUAD-005
+      createdAt: 2026-10-17T14:25:20.9595092+00:00
+    - frId: FR-MCP-131
+      trId: TR-MCP-QUAD-007
+      createdAt: 2026-10-17T14:25:20.9595830+00:00
+    - frId: FR-MCP-131
+      testId: TEST-MCP-174
+      createdAt: 2026-10-17T14:25:20.9596600+00:00
+    - frId: FR-MCP-131
+      testId: TEST-MCP-180
+      createdAt: 2026-10-17T14:25:20.9597336+00:00
+    - frId: FR-MCP-131
+      testId: TEST-MCP-181
+      createdAt: 2026-10-17T14:25:20.9598072+00:00
+    - frId: FR-MCP-131
+      testId: TEST-MCP-183
+      createdAt: 2026-10-17T14:25:20.9598806+00:00
+    - frId: FR-MCP-132
+      trId: TR-MCP-AUTH-010
+      createdAt: 2026-10-17T14:25:20.9599559+00:00
+    - frId: FR-MCP-132
+      trId: TR-MCP-AUTH-011
+      createdAt: 2026-10-17T14:25:20.9600301+00:00
+    - frId: FR-MCP-132
+      testId: TEST-MCP-AUTH-010
+      createdAt: 2026-10-17T14:25:20.9601063+00:00
+    - frId: FR-MCP-132
+      testId: TEST-MCP-AUTH-011
+      createdAt: 2026-10-17T14:25:20.9601823+00:00
+    - frId: FR-MCP-132
+      testId: TEST-MCP-AUTH-012
+      createdAt: 2026-10-17T14:25:20.9602702+00:00
+    - frId: FR-MCP-133
+      trId: TR-MCP-HEALTH-002
+      createdAt: 2026-10-17T14:25:20.9603468+00:00
+    - frId: FR-MCP-133
+      testId: TEST-MCP-HEALTH-002
+      createdAt: 2026-10-17T14:25:20.9604244+00:00
+    - frId: FR-MCP-133
+      testId: TEST-MCP-HEALTH-003
+      createdAt: 2026-10-17T14:25:20.9605019+00:00
+    - frId: FR-MCP-134
+      trId: TR-MCP-QUAD-003
+      createdAt: 2026-10-17T14:25:20.9605772+00:00
+    - frId: FR-MCP-134
+      trId: TR-MCP-QUAD-005
+      createdAt: 2026-10-17T14:25:20.9606517+00:00
+    - frId: FR-MCP-134
+      trId: TR-MCP-QUAD-006
+      createdAt: 2026-10-17T14:25:20.9607259+00:00
+    - frId: FR-MCP-134
+      testId: TEST-MCP-181
+      createdAt: 2026-10-17T14:25:20.9607991+00:00
+    - frId: FR-MCP-134
+      testId: TEST-MCP-182
+      createdAt: 2026-10-17T14:25:20.9608746+00:00
+    - frId: FR-MCP-134
+      testId: TEST-MCP-184
+      createdAt: 2026-10-17T14:25:20.9609480+00:00
+    - frId: FR-MCP-134
+      testId: TEST-MCP-185
+      createdAt: 2026-10-17T14:25:20.9610209+00:00
+    - frId: FR-MCP-135
+      trId: TR-MCP-QUAD-005
+      createdAt: 2026-10-17T14:25:20.9610955+00:00
+    - frId: FR-MCP-135
+      trId: TR-MCP-QUAD-007
+      createdAt: 2026-10-17T14:25:20.9611708+00:00
+    - frId: FR-MCP-135
+      testId: TEST-MCP-183
+      createdAt: 2026-10-17T14:25:20.9612603+00:00
+    - frId: FR-MCP-135
+      testId: TEST-MCP-184
+      createdAt: 2026-10-17T14:25:20.9613343+00:00
+    - frId: FR-MCP-135
+      testId: TEST-MCP-185
+      createdAt: 2026-10-17T14:25:20.9614073+00:00
+    - frId: FR-MCP-136
+      trId: TR-MCP-AGENT-015
+      createdAt: 2026-10-17T14:25:20.9614833+00:00
+    - frId: FR-MCP-136
+      trId: TR-MCP-TXN-001
+      createdAt: 2026-10-17T14:25:20.9615573+00:00
+    - frId: FR-MCP-136
+      trId: TR-MCP-TXNAUDIT-001
+      createdAt: 2026-10-17T14:25:20.9616337+00:00
+    - frId: FR-MCP-136
+      testId: TEST-MCP-186
+      createdAt: 2026-10-17T14:25:20.9617071+00:00
+    - frId: FR-MCP-137
+      trId: TR-MCP-AGENT-016
+      createdAt: 2026-10-17T14:25:20.9617839+00:00
+    - frId: FR-MCP-137
+      testId: TEST-MCP-187
+      createdAt: 2026-10-17T14:25:20.9618576+00:00
+    - frId: FR-MCP-138
+      trId: TR-MCP-AIUNIT-001
+      createdAt: 2026-10-17T14:25:20.9619423+00:00
+    - frId: FR-MCP-138
+      testId: TEST-MCP-AIUNIT-001
+      createdAt: 2026-10-17T14:25:20.9620232+00:00
+    - frId: FR-MCP-139
+      trId: TR-MCP-QUALITY-001
+      createdAt: 2026-10-17T14:25:20.9621000+00:00
+    - frId: FR-MCP-139
+      testId: TEST-MCP-AIUNIT-002
+      createdAt: 2026-10-17T14:25:20.9621771+00:00
+    - frId: FR-MCP-140
+      trId: TR-MCP-SEC-005
+      createdAt: 2026-10-17T14:25:20.9622716+00:00
+    - frId: FR-MCP-140
+      testId: TEST-MCP-189
+      createdAt: 2026-10-17T14:25:20.9623473+00:00
+    - frId: FR-MCP-141
+      trId: TR-MCP-SVC-002
+      createdAt: 2026-10-17T14:25:20.9624214+00:00
+    - frId: FR-MCP-141
+      trId: TR-MCP-TUN-004
+      createdAt: 2026-10-17T14:25:20.9624949+00:00
+    - frId: FR-MCP-141
+      testId: TEST-MCP-190
+      createdAt: 2026-10-17T14:25:20.9625680+00:00
+    - frId: FR-MCP-141
+      testId: TEST-MCP-191
+      createdAt: 2026-10-17T14:25:20.9626430+00:00
+    - frId: FR-MCP-142
+      trId: TR-MCP-QB-001
+      createdAt: 2026-10-17T14:25:20.9627163+00:00
+    - frId: FR-MCP-142
+      testId: TEST-MCP-193
+      createdAt: 2026-10-17T14:25:20.9627896+00:00
+    - frId: FR-MCP-143
+      trId: TR-MCP-CLIENT-001
+      createdAt: 2026-10-17T14:25:20.9628648+00:00
+    - frId: FR-MCP-143
+      trId: TR-MCP-HEALTH-003
+      createdAt: 2026-10-17T14:25:20.9629408+00:00
+    - frId: FR-MCP-143
+      trId: TR-MCP-REPL-018
+      createdAt: 2026-10-17T14:25:20.9630145+00:00
+    - frId: FR-MCP-143
+      trId: TR-MCP-REPL-019
+      createdAt: 2026-10-17T14:25:20.9630884+00:00
+    - frId: FR-MCP-143
+      trId: TR-MCP-REPL-020
+      createdAt: 2026-10-17T14:25:20.9631618+00:00
+    - frId: FR-MCP-143
+      trId: TR-MCP-SYNC-001
+      createdAt: 2026-10-17T14:25:20.9632469+00:00
+    - frId: FR-MCP-143
+      testId: TEST-MCP-194
+      createdAt: 2026-10-17T14:25:20.9633211+00:00
+    - frId: FR-MCP-143
+      testId: TEST-MCP-REPL-040
+      createdAt: 2026-10-17T14:25:20.9633970+00:00
+    - frId: FR-MCP-170
+      trId: TR-MCP-PERSIST-001
+      createdAt: 2026-10-17T14:25:20.9634724+00:00
+    - frId: FR-MCP-170
+      trId: TR-MCP-PERSIST-004
+      createdAt: 2026-10-17T14:25:20.9635490+00:00
+    - frId: FR-MCP-170
+      testId: TEST-MCP-195
+      createdAt: 2026-10-17T14:25:20.9636221+00:00
+    - frId: FR-MCP-170
+      testId: TEST-MCP-196
+      createdAt: 2026-10-17T14:25:20.9636951+00:00
+    - frId: FR-MCP-171
+      trId: TR-MCP-PERSIST-002
+      createdAt: 2026-10-17T14:25:20.9637701+00:00
+    - frId: FR-MCP-171
+      testId: TEST-MCP-195
+      createdAt: 2026-10-17T14:25:20.9638440+00:00
+    - frId: FR-MCP-172
+      trId: TR-MCP-PERSIST-003
+      createdAt: 2026-10-17T14:25:20.9639192+00:00
+    - frId: FR-MCP-172
+      testId: TEST-MCP-195
+      createdAt: 2026-10-17T14:25:20.9639918+00:00
+    - frId: FR-MCP-173
+      trId: TR-MCP-TXNKEY-001
+      createdAt: 2026-10-17T14:25:20.9640665+00:00
+    - frId: FR-MCP-173
+      testId: TEST-MCP-221
+      createdAt: 2026-10-17T14:25:20.9641405+00:00
+    - frId: FR-MCP-173
+      testId: TEST-MCP-QBLIVEINT-001
+      createdAt: 2026-10-17T14:25:20.9642274+00:00
+    - frId: FR-MCP-ACKRECOVERY-001
+      trId: TR-MCP-ACKRECOVERY-001
+      createdAt: 2026-10-17T14:25:20.9643139+00:00
+    - frId: FR-MCP-ACKRECOVERY-001
+      testId: TEST-MCP-ACKRECOVERY-001
+      createdAt: 2026-10-17T14:25:20.9644005+00:00
+    - frId: FR-MCP-AGENT-PARITY-001
+      trId: TR-MCP-AGENT-PARITY-010
+      createdAt: 2026-10-17T14:25:20.9644871+00:00
+    - frId: FR-MCP-AGENT-PARITY-002
+      trId: TR-MCP-AGENT-PARITY-011
+      createdAt: 2026-10-17T14:25:20.9645725+00:00
+    - frId: FR-MCP-AUDIT-001
+      trId: TR-MCP-AUDIT-002
+      createdAt: 2026-10-17T14:25:20.9646499+00:00
+    - frId: FR-MCP-AUDIT-001
+      trId: TR-MCP-AUDIT-003
+      createdAt: 2026-10-17T14:25:20.9647290+00:00
+    - frId: FR-MCP-AUDIT-001
+      trId: TR-MCP-AUDIT-004
+      createdAt: 2026-10-17T14:25:20.9648058+00:00
+    - frId: FR-MCP-AUDIT-001
+      trId: TR-MCP-DB-004
+      createdAt: 2026-10-17T14:25:20.9648813+00:00
+    - frId: FR-MCP-AUDIT-001
+      testId: TEST-MCP-AUDIT-001
+      createdAt: 2026-10-17T14:25:20.9649611+00:00
+    - frId: FR-MCP-AUDIT-001
+      testId: TEST-MCP-AUDIT-002
+      createdAt: 2026-10-17T14:25:20.9650425+00:00
+    - frId: FR-MCP-AUDIT-001
+      testId: TEST-MCP-AUDIT-003
+      createdAt: 2026-10-17T14:25:20.9651227+00:00
+    - frId: FR-MCP-AUDITACTION-001
+      trId: TR-MCP-AUDITACTION-001
+      createdAt: 2026-10-17T14:25:20.9652144+00:00
+    - frId: FR-MCP-AUDITACTION-001
+      testId: TEST-MCP-AUDITACTION-001
+      createdAt: 2026-10-17T14:25:20.9653032+00:00
+    - frId: FR-MCP-BATCH-001
+      trId: TR-MCP-BATCH-001
+      createdAt: 2026-10-17T14:25:20.9653902+00:00
+    - frId: FR-MCP-BATCH-001
+      testId: TEST-MCP-BATCH-001
+      createdAt: 2026-10-17T14:25:20.9654880+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-001
+      createdAt: 2026-10-17T14:25:20.9655737+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-002
+      createdAt: 2026-10-17T14:25:20.9656510+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-005
+      createdAt: 2026-10-17T14:25:20.9657271+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-006
+      createdAt: 2026-10-17T14:25:20.9658033+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-007
+      createdAt: 2026-10-17T14:25:20.9658806+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-008
+      createdAt: 2026-10-17T14:25:20.9659574+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-009
+      createdAt: 2026-10-17T14:25:20.9660338+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-010
+      createdAt: 2026-10-17T14:25:20.9661105+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-011
+      createdAt: 2026-10-17T14:25:20.9661881+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-012
+      createdAt: 2026-10-17T14:25:20.9662999+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-015
+      createdAt: 2026-10-17T14:25:20.9664024+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-016
+      createdAt: 2026-10-17T14:25:20.9665164+00:00
+    - frId: FR-MCP-CLEARSESSION-001
+      trId: TR-MCP-CLEARSESSION-001
+      createdAt: 2026-10-17T14:25:20.9666381+00:00
+    - frId: FR-MCP-CLEARSESSION-001
+      testId: TEST-MCP-CLEARSESSION-001
+      createdAt: 2026-10-17T14:25:20.9667637+00:00
+    - frId: FR-MCP-DOCFXWIKI-001
+      trId: TR-MCP-DOCFXWIKI-001
+      createdAt: 2026-10-17T14:25:20.9668798+00:00
+    - frId: FR-MCP-DOCFXWIKI-001
+      testId: TEST-MCP-DOCFXWIKI-001
+      createdAt: 2026-10-17T14:25:20.9669952+00:00
+    - frId: FR-MCP-FAILSAFE-001
+      trId: TR-MCP-FAILSAFE-001
+      createdAt: 2026-10-17T14:25:20.9671086+00:00
+    - frId: FR-MCP-FAILSAFE-001
+      testId: TEST-MCP-FAILSAFE-001
+      createdAt: 2026-10-17T14:25:20.9672341+00:00
+    - frId: FR-MCP-FILETOOLS-001
+      trId: TR-MCP-FILETOOLS-001
+      createdAt: 2026-10-17T14:25:20.9673484+00:00
+    - frId: FR-MCP-FILETOOLS-001
+      testId: TEST-MCP-FILETOOLS-001
+      createdAt: 2026-10-17T14:25:20.9674572+00:00
+    - frId: FR-MCP-FILETOOLS-001
+      testId: TEST-MCP-FILETOOLSINT-001
+      createdAt: 2026-10-17T14:25:20.9675674+00:00
+    - frId: FR-MCP-HELP-001
+      trId: TR-MCP-HELP-002
+      createdAt: 2026-10-17T14:25:20.9676509+00:00
+    - frId: FR-MCP-HELP-001
+      trId: TR-MCP-HELP-007
+      createdAt: 2026-10-17T14:25:20.9677135+00:00
+    - frId: FR-MCP-HELP-001
+      testId: TEST-MCP-HELP-004
+      createdAt: 2026-10-17T14:25:20.9677771+00:00
+    - frId: FR-MCP-HELP-001
+      testId: TEST-MCP-HELP-005
+      createdAt: 2026-10-17T14:25:20.9678414+00:00
+    - frId: FR-MCP-HELP-002
+      trId: TR-MCP-HELP-004
+      createdAt: 2026-10-17T14:25:20.9679034+00:00
+    - frId: FR-MCP-HELP-002
+      testId: TEST-MCP-HELP-002
+      createdAt: 2026-10-17T14:25:20.9679668+00:00
+    - frId: FR-MCP-HELP-002
+      testId: TEST-MCP-HELP-SEC-001
+      createdAt: 2026-10-17T14:25:20.9680319+00:00
+    - frId: FR-MCP-HELP-002
+      testId: TEST-MCP-HELP-SEC-002
+      createdAt: 2026-10-17T14:25:20.9680980+00:00
+    - frId: FR-MCP-HELP-002
+      testId: TEST-MCP-HELP-SEC-003
+      createdAt: 2026-10-17T14:25:20.9681626+00:00
+    - frId: FR-MCP-HELP-002
+      testId: TEST-MCP-HELP-SEC-004
+      createdAt: 2026-10-17T14:25:20.9682372+00:00
+    - frId: FR-MCP-HELP-002
+      testId: TEST-MCP-HELP-SEC-005
+      createdAt: 2026-10-17T14:25:20.9683045+00:00
+    - frId: FR-MCP-HELP-002
+      testId: TEST-MCP-HELP-SEC-006
+      createdAt: 2026-10-17T14:25:20.9683701+00:00
+    - frId: FR-MCP-HELP-003
+      trId: TR-MCP-HELP-003
+      createdAt: 2026-10-17T14:25:20.9684323+00:00
+    - frId: FR-MCP-HELP-003
+      testId: TEST-MCP-HELP-001
+      createdAt: 2026-10-17T14:25:20.9684955+00:00
+    - frId: FR-MCP-HELP-003
+      testId: TEST-MCP-HELP-005
+      createdAt: 2026-10-17T14:25:20.9685599+00:00
+    - frId: FR-MCP-HELP-004
+      trId: TR-MCP-HELP-005
+      createdAt: 2026-10-17T14:25:20.9686218+00:00
+    - frId: FR-MCP-HELP-004
+      testId: TEST-MCP-HELP-003
+      createdAt: 2026-10-17T14:25:20.9686869+00:00
+    - frId: FR-MCP-HELP-004
+      testId: TEST-MCP-HELP-SEC-006
+      createdAt: 2026-10-17T14:25:20.9687518+00:00
+    - frId: FR-MCP-HELP-005
+      trId: TR-MCP-HELP-006
+      createdAt: 2026-10-17T14:25:20.9688144+00:00
+    - frId: FR-MCP-HELP-005
+      trId: TR-MCP-HELP-008
+      createdAt: 2026-10-17T14:25:20.9688761+00:00
+    - frId: FR-MCP-HELP-005
+      testId: TEST-MCP-HELP-004
+      createdAt: 2026-10-17T14:25:20.9689392+00:00
+    - frId: FR-MCP-HELP-006
+      trId: TR-MCP-HELP-009
+      createdAt: 2026-10-17T14:25:20.9690006+00:00
+    - frId: FR-MCP-HELP-006
+      testId: TEST-MCP-HELP-006
+      createdAt: 2026-10-17T14:25:20.9690652+00:00
+    - frId: FR-MCP-HELP-007
+      trId: TR-MCP-HELP-009
+      createdAt: 2026-10-17T14:25:20.9691270+00:00
+    - frId: FR-MCP-HELP-007
+      testId: TEST-MCP-HELP-007
+      createdAt: 2026-10-17T14:25:20.9691916+00:00
+    - frId: FR-MCP-HELP-008
+      trId: TR-MCP-HELP-002
+      createdAt: 2026-10-17T14:25:20.9692628+00:00
+    - frId: FR-MCP-HELP-008
+      testId: TEST-MCP-HELP-SEC-007
+      createdAt: 2026-10-17T14:25:20.9693287+00:00
+    - frId: FR-MCP-HELP-009
+      trId: TR-MCP-HELP-009
+      createdAt: 2026-10-17T14:25:20.9693909+00:00
+    - frId: FR-MCP-HELP-009
+      testId: TEST-MCP-HELP-008
+      createdAt: 2026-10-17T14:25:20.9694543+00:00
+    - frId: FR-MCP-HELP-010
+      trId: TR-MCP-HELP-001
+      createdAt: 2026-10-17T14:25:20.9695161+00:00
+    - frId: FR-MCP-HELP-010
+      testId: TEST-MCP-HELP-004
+      createdAt: 2026-10-17T14:25:20.9695801+00:00
+    - frId: FR-MCP-HELP-011
+      trId: TR-MCP-HELP-010
+      createdAt: 2026-10-17T14:25:20.9696417+00:00
+    - frId: FR-MCP-HELP-011
+      testId: TEST-MCP-HELP-008
+      createdAt: 2026-10-17T14:25:20.9697049+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-001
+      trId: TR-MCP-HOSTILEREVIEW-001
+      createdAt: 2026-10-17T14:25:20.9697744+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-001
+      testId: TEST-MCP-HOSTILEREVIEW-001
+      createdAt: 2026-10-17T14:25:20.9698461+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-002
+      trId: TR-MCP-HOSTILEREVIEW-002
+      createdAt: 2026-10-17T14:25:20.9699157+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-002
+      testId: TEST-MCP-HOSTILEREVIEW-002
+      createdAt: 2026-10-17T14:25:20.9699979+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-003
+      trId: TR-MCP-HOSTILEREVIEW-003
+      createdAt: 2026-10-17T14:25:20.9700927+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-003
+      testId: TEST-MCP-HOSTILEREVIEW-003
+      createdAt: 2026-10-17T14:25:20.9701691+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-004
+      trId: TR-MCP-HOSTILEREVIEW-004
+      createdAt: 2026-10-17T14:25:20.9702505+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-004
+      testId: TEST-MCP-HOSTILEREVIEW-004
+      createdAt: 2026-10-17T14:25:20.9703211+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-005
+      trId: TR-MCP-HOSTILEREVIEW-005
+      createdAt: 2026-10-17T14:25:20.9703907+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-005
+      testId: TEST-MCP-HOSTILEREVIEW-005
+      createdAt: 2026-10-17T14:25:20.9704631+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-006
+      trId: TR-MCP-HOSTILEREVIEW-006
+      createdAt: 2026-10-17T14:25:20.9705327+00:00
+    - frId: FR-MCP-HOSTILEREVIEW-006
+      testId: TEST-MCP-HOSTILEREVIEW-006
+      createdAt: 2026-10-17T14:25:20.9706032+00:00
+    - frId: FR-MCP-HVPIPE-001
+      trId: TR-MCP-HVPIPE-001
+      createdAt: 2026-10-17T14:25:20.9706669+00:00
+    - frId: FR-MCP-HVPIPE-001
+      testId: TEST-MCP-HVPIPE-001
+      createdAt: 2026-10-17T14:25:20.9707314+00:00
+    - frId: FR-MCP-HVPIPE-002
+      trId: TR-MCP-HVPIPE-002
+      createdAt: 2026-10-17T14:25:20.9707953+00:00
+    - frId: FR-MCP-HVPIPE-002
+      testId: TEST-MCP-HVPIPE-002
+      createdAt: 2026-10-17T14:25:20.9708609+00:00
+    - frId: FR-MCP-HVPIPE-003
+      trId: TR-MCP-HVPIPE-003
+      createdAt: 2026-10-17T14:25:20.9709276+00:00
+    - frId: FR-MCP-HVPIPE-003
+      testId: TEST-MCP-HVPIPE-003
+      createdAt: 2026-10-17T14:25:20.9710213+00:00
+    - frId: FR-MCP-HVPIPE-004
+      trId: TR-MCP-HVPIPE-004
+      createdAt: 2026-10-17T14:25:20.9711348+00:00
+    - frId: FR-MCP-HVPIPE-004
+      testId: TEST-MCP-HVPIPE-004
+      createdAt: 2026-10-17T14:25:20.9712641+00:00
+    - frId: FR-MCP-HVPIPE-005
+      trId: TR-MCP-HVPIPE-005
+      createdAt: 2026-10-17T14:25:20.9713712+00:00
+    - frId: FR-MCP-HVPIPE-005
+      testId: TEST-MCP-HVPIPE-005
+      createdAt: 2026-10-17T14:25:20.9715013+00:00
+    - frId: FR-MCP-HVPIPE-006
+      trId: TR-MCP-HVPIPE-006
+      createdAt: 2026-10-17T14:25:20.9716255+00:00
+    - frId: FR-MCP-HVPIPE-006
+      testId: TEST-MCP-HVPIPE-006
+      createdAt: 2026-10-17T14:25:20.9717466+00:00
+    - frId: FR-MCP-HVPIPE-007
+      trId: TR-MCP-HVPIPE-007
+      createdAt: 2026-10-17T14:25:20.9718744+00:00
+    - frId: FR-MCP-HVPIPE-007
+      testId: TEST-MCP-HVPIPE-007
+      createdAt: 2026-10-17T14:25:20.9719817+00:00
+    - frId: FR-MCP-HVPIPE-008
+      trId: TR-MCP-HVPIPE-008
+      createdAt: 2026-10-17T14:25:20.9720861+00:00
+    - frId: FR-MCP-HVPIPE-008
+      testId: TEST-MCP-HVPIPE-008
+      createdAt: 2026-10-17T14:25:20.9721686+00:00
+    - frId: FR-MCP-HVPIPE-009
+      trId: TR-MCP-HVPIPE-009
+      createdAt: 2026-10-17T14:25:20.9722648+00:00
+    - frId: FR-MCP-HVPIPE-009
+      testId: TEST-MCP-HVPIPE-009
+      createdAt: 2026-10-17T14:25:20.9723467+00:00
+    - frId: FR-MCP-HVPIPE-010
+      trId: TR-MCP-HVPIPE-010
+      createdAt: 2026-10-17T14:25:20.9724263+00:00
+    - frId: FR-MCP-HVPIPE-010
+      testId: TEST-MCP-HVPIPE-010
+      createdAt: 2026-10-17T14:25:20.9725074+00:00
+    - frId: FR-MCP-HVPIPE-011
+      trId: TR-MCP-HVPIPE-011
+      createdAt: 2026-10-17T14:25:20.9725876+00:00
+    - frId: FR-MCP-HVPIPE-011
+      testId: TEST-MCP-HVPIPE-011
+      createdAt: 2026-10-17T14:25:20.9727060+00:00
+    - frId: FR-MCP-HVPIPE-012
+      trId: TR-MCP-HVPIPE-012
+      createdAt: 2026-10-17T14:25:20.9727868+00:00
+    - frId: FR-MCP-HVPIPE-012
+      testId: TEST-MCP-HVPIPE-012
+      createdAt: 2026-10-17T14:25:20.9728677+00:00
+    - frId: FR-MCP-HVPIPE-013
+      trId: TR-MCP-HVPIPE-013
+      createdAt: 2026-10-17T14:25:20.9729479+00:00
+    - frId: FR-MCP-HVPIPE-013
+      testId: TEST-MCP-HVPIPE-013
+      createdAt: 2026-10-17T14:25:20.9730283+00:00
+    - frId: FR-MCP-HVPIPE-014
+      trId: TR-MCP-HVPIPE-014
+      createdAt: 2026-10-17T14:25:20.9731068+00:00
+    - frId: FR-MCP-HVPIPE-014
+      testId: TEST-MCP-HVPIPE-014
+      createdAt: 2026-10-17T14:25:20.9731878+00:00
+    - frId: FR-MCP-HVPIPE-015
+      trId: TR-MCP-HVPIPE-015
+      createdAt: 2026-10-17T14:25:20.9732794+00:00
+    - frId: FR-MCP-HVPIPE-015
+      testId: TEST-MCP-HVPIPE-015
+      createdAt: 2026-10-17T14:25:20.9733608+00:00
+    - frId: FR-MCP-HVPIPE-016
+      trId: TR-MCP-HVPIPE-016
+      createdAt: 2026-10-17T14:25:20.9734397+00:00
+    - frId: FR-MCP-HVPIPE-016
+      testId: TEST-MCP-HVPIPE-016
+      createdAt: 2026-10-17T14:25:20.9735200+00:00
+    - frId: FR-MCP-HVPIPE-017
+      trId: TR-MCP-HVPIPE-017
+      createdAt: 2026-10-17T14:25:20.9735997+00:00
+    - frId: FR-MCP-HVPIPE-017
+      testId: TEST-MCP-HVPIPE-017
+      createdAt: 2026-10-17T14:25:20.9736801+00:00
+    - frId: FR-MCP-HVPIPE-018
+      trId: TR-MCP-HVPIPE-018
+      createdAt: 2026-10-17T14:25:20.9737589+00:00
+    - frId: FR-MCP-HVPIPE-018
+      testId: TEST-MCP-HVPIPE-018
+      createdAt: 2026-10-17T14:25:20.9738406+00:00
+    - frId: FR-MCP-HVPIPE-019
+      trId: TR-MCP-HVPIPE-019
+      createdAt: 2026-10-17T14:25:20.9739189+00:00
+    - frId: FR-MCP-HVPIPE-019
+      testId: TEST-MCP-HVPIPE-019
+      createdAt: 2026-10-17T14:25:20.9739996+00:00
+    - frId: FR-MCP-HVPIPE-020
+      trId: TR-MCP-HVPIPE-020
+      createdAt: 2026-10-17T14:25:20.9740781+00:00
+    - frId: FR-MCP-HVPIPE-020
+      testId: TEST-MCP-HVPIPE-020
+      createdAt: 2026-10-17T14:25:20.9741597+00:00
+    - frId: FR-MCP-HVPIPE-021
+      trId: TR-MCP-HVPIPE-021
+      createdAt: 2026-10-17T14:25:20.9742496+00:00
+    - frId: FR-MCP-HVPIPE-021
+      testId: TEST-MCP-HVPIPE-021
+      createdAt: 2026-10-17T14:25:20.9743324+00:00
+    - frId: FR-MCP-HYGIENE-001
+      trId: TR-MCP-HYGIENE-001
+      createdAt: 2026-10-17T14:25:20.9744126+00:00
+    - frId: FR-MCP-HYGIENE-001
+      testId: TEST-MCP-HYGIENE-001
+      createdAt: 2026-10-17T14:25:20.9744958+00:00
+    - frId: FR-MCP-HYGIENE-002
+      trId: TR-MCP-HYGIENE-002
+      createdAt: 2026-10-17T14:25:20.9745749+00:00
+    - frId: FR-MCP-HYGIENE-002
+      testId: TEST-MCP-HYGIENE-002
+      createdAt: 2026-10-17T14:25:20.9746568+00:00
+    - frId: FR-MCP-HYGIENE-003
+      trId: TR-MCP-HYGIENE-003
+      createdAt: 2026-10-17T14:25:20.9747370+00:00
+    - frId: FR-MCP-HYGIENE-003
+      testId: TEST-MCP-HYGIENE-003
+      createdAt: 2026-10-17T14:25:20.9748195+00:00
+    - frId: FR-MCP-HYGIENE-004
+      trId: TR-MCP-HYGIENE-004
+      createdAt: 2026-10-17T14:25:20.9749011+00:00
+    - frId: FR-MCP-HYGIENE-004
+      testId: TEST-MCP-HYGIENE-004
+      createdAt: 2026-10-17T14:25:20.9749831+00:00
+    - frId: FR-MCP-HYGIENE-005
+      trId: TR-MCP-HYGIENE-005
+      createdAt: 2026-10-17T14:25:20.9750632+00:00
+    - frId: FR-MCP-HYGIENE-005
+      testId: TEST-MCP-HYGIENE-005
+      createdAt: 2026-10-17T14:25:20.9751457+00:00
+    - frId: FR-MCP-LIVE-CODEX-20260603T2014Z
+      trId: TR-MCP-REQ-005
+      createdAt: 2026-10-17T14:25:20.9752376+00:00
+    - frId: FR-MCP-LIVE-CODEX-20260603T2014Z
+      testId: TEST-MCP-REQACPLUGIN-LIVE
+      createdAt: 2026-10-17T14:25:20.9753308+00:00
+    - frId: FR-MCP-LIVE-CODEX-20260603T2015Z
+      trId: TR-MCP-REQ-005
+      createdAt: 2026-10-17T14:25:20.9754155+00:00
+    - frId: FR-MCP-LIVE-CODEX-20260603T2015Z
+      testId: TEST-MCP-REQACPLUGIN-LIVE
+      createdAt: 2026-10-17T14:25:20.9755088+00:00
+    - frId: FR-MCP-LLMSTRATEGY-001
+      trId: TR-MCP-LLMSTRATEGY-001
+      createdAt: 2026-10-17T14:25:20.9755924+00:00
+    - frId: FR-MCP-LLMSTRATEGY-001
+      testId: TEST-MCP-LLMSTRATEGY-001
+      createdAt: 2026-10-17T14:25:20.9756783+00:00
+    - frId: FR-MCP-MARKER-004
+      trId: TR-MCP-MARKER-004
+      createdAt: 2026-10-17T14:25:20.9757569+00:00
+    - frId: FR-MCP-MARKER-004
+      testId: TEST-MCP-MARKER-004
+      createdAt: 2026-10-17T14:25:20.9758388+00:00
+    - frId: FR-MCP-MEMORY-001
+      trId: TR-MCP-MEMORY-001
+      createdAt: 2026-10-17T14:25:20.9759171+00:00
+    - frId: FR-MCP-MEMORY-001
+      testId: TEST-MCP-MEMORY-001
+      createdAt: 2026-10-17T14:25:20.9759975+00:00
+    - frId: FR-MCP-MEMORY-002
+      trId: TR-MCP-MEMORY-002
+      createdAt: 2026-10-17T14:25:20.9760757+00:00
+    - frId: FR-MCP-MEMORY-002
+      testId: TEST-MCP-MEMORY-002
+      createdAt: 2026-10-17T14:25:20.9761572+00:00
+    - frId: FR-MCP-MEMORY-003
+      trId: TR-MCP-MEMORY-003
+      createdAt: 2026-10-17T14:25:20.9762464+00:00
+    - frId: FR-MCP-MEMORY-003
+      testId: TEST-MCP-MEMORY-003
+      createdAt: 2026-10-17T14:25:20.9763286+00:00
+    - frId: FR-MCP-MEMORY-004
+      trId: TR-MCP-MEMORY-004
+      createdAt: 2026-10-17T14:25:20.9764073+00:00
+    - frId: FR-MCP-MEMORY-004
+      testId: TEST-MCP-MEMORY-004
+      createdAt: 2026-10-17T14:25:20.9764898+00:00
+    - frId: FR-MCP-MEMORY-004
+      testId: TEST-MCP-MEMORY-006
+      createdAt: 2026-10-17T14:25:20.9765704+00:00
+    - frId: FR-MCP-MEMORY-005
+      trId: TR-MCP-MEMORY-005
+      createdAt: 2026-10-17T14:25:20.9766489+00:00
+    - frId: FR-MCP-MEMORY-005
+      testId: TEST-MCP-MEMORY-005
+      createdAt: 2026-10-17T14:25:20.9767302+00:00
+    - frId: FR-MCP-MEMORY-006
+      trId: TR-MCP-MEMORY-006
+      createdAt: 2026-10-17T14:25:20.9768091+00:00
+    - frId: FR-MCP-MEMORY-006
+      trId: TR-MCP-MEMORY-007
+      createdAt: 2026-10-17T14:25:20.9768876+00:00
+    - frId: FR-MCP-MEMORY-006
+      testId: TEST-MCP-MEMORY-008
+      createdAt: 2026-10-17T14:25:20.9769678+00:00
+    - frId: FR-MCP-MEMORY-007
+      trId: TR-MCP-MEMORY-007
+      createdAt: 2026-10-17T14:25:20.9770517+00:00
+    - frId: FR-MCP-MEMORY-007
+      testId: TEST-MCP-MEMORY-007
+      createdAt: 2026-10-17T14:25:20.9771330+00:00
+    - frId: FR-MCP-MEMORY-007
+      testId: TEST-MCP-MEMORY-009
+      createdAt: 2026-10-17T14:25:20.9772213+00:00
+    - frId: FR-MCP-MEMORY-008
+      trId: TR-MCP-FED-MEMORY-001
+      createdAt: 2026-10-17T14:25:20.9773031+00:00
+    - frId: FR-MCP-MEMORY-008
+      testId: TEST-MCP-MEMORY-FED-001
+      createdAt: 2026-10-17T14:25:20.9773870+00:00
+    - frId: FR-MCP-PLUGIN-BATCH-001
+      trId: TR-MCP-BATCH-001
+      createdAt: 2026-10-17T14:25:20.9774682+00:00
+    - frId: FR-MCP-PLUGIN-BATCH-001
+      testId: TEST-MCP-BATCH-001
+      createdAt: 2026-10-17T14:25:20.9775517+00:00
+    - frId: FR-MCP-PLUGINCORE-001
+      trId: TR-MCP-PLUGINCORE-001
+      createdAt: 2026-10-17T14:25:20.9776346+00:00
+    - frId: FR-MCP-PLUGINCORE-001
+      testId: TEST-MCP-PLUGINCORE-001
+      createdAt: 2026-10-17T14:25:20.9777205+00:00
+    - frId: FR-MCP-PLUGINCORE-003
+      trId: TR-MCP-PLUGINCORE-003
+      createdAt: 2026-10-17T14:25:20.9778029+00:00
+    - frId: FR-MCP-PLUGINCORE-003
+      testId: TEST-MCP-PLUGINCORE-003
+      createdAt: 2026-10-17T14:25:20.9778872+00:00
+    - frId: FR-MCP-PLUGINCORE-004
+      trId: TR-MCP-PLUGINCORE-004
+      createdAt: 2026-10-17T14:25:20.9779696+00:00
+    - frId: FR-MCP-PLUGINCORE-004
+      trId: TR-MCP-PLUGINCORE-005
+      createdAt: 2026-10-17T14:25:20.9780526+00:00
+    - frId: FR-MCP-PLUGINCORE-004
+      testId: TEST-MCP-PLUGINCORE-004
+      createdAt: 2026-10-17T14:25:20.9781371+00:00
+    - frId: FR-MCP-PLUGINCORE-004
+      testId: TEST-MCP-PLUGINCORE-005
+      createdAt: 2026-10-17T14:25:20.9782321+00:00
+    - frId: FR-MCP-PLUGIN-HEADER-001
+      trId: TR-MCP-PLUGIN-HEADER-001
+      createdAt: 2026-10-17T14:25:20.9783203+00:00
+    - frId: FR-MCP-PLUGIN-HEADER-001
+      testId: TEST-MCP-PLUGIN-HEADER-002
+      createdAt: 2026-10-17T14:25:20.9784094+00:00
+    - frId: FR-MCP-PLUGIN-HEADER-001
+      testId: TEST-MCP-PLUGIN-HEADER-003
+      createdAt: 2026-10-17T14:25:20.9784970+00:00
+    - frId: FR-MCP-PLUGIN-HEADER-001
+      testId: TEST-MCP-PLUGIN-HEADER-004
+      createdAt: 2026-10-17T14:25:20.9785847+00:00
+    - frId: FR-MCP-PLUGIN-HEADER-001
+      testId: TEST-MCP-PLUGIN-HEADER-005
+      createdAt: 2026-10-17T14:25:20.9786726+00:00
+    - frId: FR-MCP-PLUGININT-001
+      trId: TR-MCP-PLUGININT-001
+      createdAt: 2026-10-17T14:25:20.9787553+00:00
+    - frId: FR-MCP-PLUGININT-001
+      testId: TEST-MCP-PLUGININT-001
+      createdAt: 2026-10-17T14:25:20.9788383+00:00
+    - frId: FR-MCP-PLUGIN-SKILLS-001
+      trId: TR-MCP-PLUGIN-SKILLS-001
+      createdAt: 2026-10-17T14:25:20.9789251+00:00
+    - frId: FR-MCP-PRODUCT-001
+      trId: TR-MCP-PRODUCT-API-001
+      createdAt: 2026-10-17T14:25:20.9790059+00:00
+    - frId: FR-MCP-PRODUCT-001
+      trId: TR-MCP-PRODUCT-AUTH-001
+      createdAt: 2026-10-17T14:25:20.9790890+00:00
+    - frId: FR-MCP-PRODUCT-001
+      trId: TR-MCP-PRODUCT-MODEL-001
+      createdAt: 2026-10-17T14:25:20.9791717+00:00
+    - frId: FR-MCP-PRODUCT-001
+      testId: TEST-MCP-PRODUCT-001
+      createdAt: 2026-10-17T14:25:20.9792620+00:00
+    - frId: FR-MCP-PRODUCT-001
+      testId: TEST-MCP-PRODUCT-003
+      createdAt: 2026-10-17T14:25:20.9793447+00:00
+    - frId: FR-MCP-PRODUCT-001
+      testId: TEST-MCP-PRODUCT-004
+      createdAt: 2026-10-17T14:25:20.9794276+00:00
+    - frId: FR-MCP-PRODUCT-001
+      testId: TEST-MCP-PRODUCT-005
+      createdAt: 2026-10-17T14:25:20.9795098+00:00
+    - frId: FR-MCP-PRODUCT-002
+      trId: TR-MCP-PRODUCT-AUTH-001
+      createdAt: 2026-10-17T14:25:20.9795923+00:00
+    - frId: FR-MCP-PRODUCT-002
+      trId: TR-MCP-PRODUCT-MODEL-001
+      createdAt: 2026-10-17T14:25:20.9796763+00:00
+    - frId: FR-MCP-PRODUCT-002
+      testId: TEST-MCP-PRODUCT-001
+      createdAt: 2026-10-17T14:25:20.9797578+00:00
+    - frId: FR-MCP-PRODUCT-002
+      testId: TEST-MCP-PRODUCT-003
+      createdAt: 2026-10-17T14:25:20.9798386+00:00
+    - frId: FR-MCP-PRODUCT-003
+      trId: TR-MCP-PRODUCT-API-001
+      createdAt: 2026-10-17T14:25:20.9799207+00:00
+    - frId: FR-MCP-PRODUCT-003
+      trId: TR-MCP-PRODUCT-SHARE-001
+      createdAt: 2026-10-17T14:25:20.9800050+00:00
+    - frId: FR-MCP-PRODUCT-003
+      testId: TEST-MCP-PRODUCT-002
+      createdAt: 2026-10-17T14:25:20.9800866+00:00
+    - frId: FR-MCP-PRODUCT-003
+      testId: TEST-MCP-PRODUCT-004
+      createdAt: 2026-10-17T14:25:20.9801687+00:00
+    - frId: FR-MCP-PRODUCT-004
+      trId: TR-MCP-PRODUCT-AUTH-001
+      createdAt: 2026-10-17T14:25:20.9802632+00:00
+    - frId: FR-MCP-PRODUCT-004
+      trId: TR-MCP-PRODUCT-SHARE-001
+      createdAt: 2026-10-17T14:25:20.9803480+00:00
+    - frId: FR-MCP-PRODUCT-004
+      testId: TEST-MCP-PRODUCT-002
+      createdAt: 2026-10-17T14:25:20.9804300+00:00
+    - frId: FR-MCP-PRODUCT-004
+      testId: TEST-MCP-PRODUCT-003
+      createdAt: 2026-10-17T14:25:20.9805111+00:00
+    - frId: FR-MCP-PRODUCT-005
+      trId: TR-MCP-PRODUCT-CTX-001
+      createdAt: 2026-10-17T14:25:20.9805961+00:00
+    - frId: FR-MCP-PRODUCT-005
+      testId: TEST-MCP-PRODUCT-006
+      createdAt: 2026-10-17T14:25:20.9806892+00:00
+    - frId: FR-MCP-QBAGENT-001
+      trId: TR-MCP-QBAGENT-001
+      createdAt: 2026-10-17T14:25:20.9807701+00:00
+    - frId: FR-MCP-QBAGENT-001
+      testId: TEST-MCP-QBAGENT-001
+      createdAt: 2026-10-17T14:25:20.9808523+00:00
+    - frId: FR-MCP-QBAGENT-001
+      testId: TEST-MCP-QBAGENTINT-001
+      createdAt: 2026-10-17T14:25:20.9809357+00:00
+    - frId: FR-MCP-QBEXEC-001
+      trId: TR-MCP-QBEXEC-001
+      createdAt: 2026-10-17T14:25:20.9810156+00:00
+    - frId: FR-MCP-QBEXEC-001
+      testId: TEST-MCP-QBEXEC-001
+      createdAt: 2026-10-17T14:25:20.9810960+00:00
+    - frId: FR-MCP-QBEXEC-002
+      trId: TR-MCP-QBEXEC-002
+      createdAt: 2026-10-17T14:25:20.9811746+00:00
+    - frId: FR-MCP-QBEXEC-002
+      testId: TEST-MCP-QBEXEC-002
+      createdAt: 2026-10-17T14:25:20.9812753+00:00
+    - frId: FR-MCP-QBEXEC-003
+      trId: TR-MCP-QBEXEC-003
+      createdAt: 2026-10-17T14:25:20.9813583+00:00
+    - frId: FR-MCP-QBEXEC-003
+      testId: TEST-MCP-QBEXEC-003
+      createdAt: 2026-10-17T14:25:20.9814397+00:00
+    - frId: FR-MCP-QBOLLAMA-002
+      trId: TR-MCP-QBOLLAMA-002
+      createdAt: 2026-10-17T14:25:20.9815255+00:00
+    - frId: FR-MCP-QBOLLAMA-002
+      testId: TEST-MCP-QBOLLAMA-001
+      createdAt: 2026-10-17T14:25:20.9816105+00:00
+    - frId: FR-MCP-QBOLLAMA-002
+      testId: TEST-MCP-QBOLLAMA-002
+      createdAt: 2026-10-17T14:25:20.9816943+00:00
+    - frId: FR-MCP-QBOPENAI-001
+      trId: TR-MCP-QBOPENAI-001
+      createdAt: 2026-10-17T14:25:20.9817750+00:00
+    - frId: FR-MCP-QBOPENAI-001
+      testId: TEST-MCP-QBINT-001
+      createdAt: 2026-10-17T14:25:20.9818554+00:00
+    - frId: FR-MCP-QBOPENAI-001
+      testId: TEST-MCP-QBLIVEINT-001
+      createdAt: 2026-10-17T14:25:20.9819385+00:00
+    - frId: FR-MCP-QBOPENAI-001
+      testId: TEST-MCP-QBOPENAI-001
+      createdAt: 2026-10-17T14:25:20.9820225+00:00
+    - frId: FR-MCP-QBPROGRESS-001
+      trId: TR-MCP-QBPROGRESS-001
+      createdAt: 2026-10-17T14:25:20.9821060+00:00
+    - frId: FR-MCP-QBPROGRESS-001
+      testId: TEST-MCP-QBPROGRESS-001
+      createdAt: 2026-10-17T14:25:20.9821911+00:00
+    - frId: FR-MCP-QBRAIN-001
+      trId: TR-MCP-QBRAIN-001
+      createdAt: 2026-10-17T14:25:20.9822833+00:00
+    - frId: FR-MCP-QBRAIN-001
+      trId: TR-MCP-QBRAIN-006
+      createdAt: 2026-10-17T14:25:20.9823648+00:00
+    - frId: FR-MCP-QBRAIN-001
+      trId: TR-MCP-QBRAIN-007
+      createdAt: 2026-10-17T14:25:20.9824431+00:00
+    - frId: FR-MCP-QBRAIN-001
+      trId: TR-MCP-QBRAIN-008
+      createdAt: 2026-10-17T14:25:20.9825211+00:00
+    - frId: FR-MCP-QBRAIN-001
+      testId: TEST-MCP-QBRAIN-001
+      createdAt: 2026-10-17T14:25:20.9826104+00:00
+    - frId: FR-MCP-QBRAIN-001
+      testId: TEST-MCP-QBRAIN-006
+      createdAt: 2026-10-17T14:25:20.9826936+00:00
+    - frId: FR-MCP-QBRAIN-001
+      testId: TEST-MCP-QBRAIN-007
+      createdAt: 2026-10-17T14:25:20.9827777+00:00
+    - frId: FR-MCP-QBRAIN-002
+      trId: TR-MCP-QBRAIN-005
+      createdAt: 2026-10-17T14:25:20.9828566+00:00
+    - frId: FR-MCP-QBRAIN-002
+      trId: TR-MCP-QBRAIN-007
+      createdAt: 2026-10-17T14:25:20.9829353+00:00
+    - frId: FR-MCP-QBRAIN-002
+      trId: TR-MCP-QBRAIN-008
+      createdAt: 2026-10-17T14:25:20.9830195+00:00
+    - frId: FR-MCP-QBRAIN-002
+      testId: TEST-MCP-QBRAIN-005
+      createdAt: 2026-10-17T14:25:20.9831031+00:00
+    - frId: FR-MCP-QBRAIN-002
+      testId: TEST-MCP-QBRAIN-007
+      createdAt: 2026-10-17T14:25:20.9831844+00:00
+    - frId: FR-MCP-QBRAIN-003
+      trId: TR-MCP-QBRAIN-001
+      createdAt: 2026-10-17T14:25:20.9832870+00:00
+    - frId: FR-MCP-QBRAIN-003
+      trId: TR-MCP-QBRAIN-002
+      createdAt: 2026-10-17T14:25:20.9833715+00:00
+    - frId: FR-MCP-QBRAIN-003
+      trId: TR-MCP-QBRAIN-008
+      createdAt: 2026-10-17T14:25:20.9834532+00:00
+    - frId: FR-MCP-QBRAIN-003
+      testId: TEST-MCP-QBRAIN-001
+      createdAt: 2026-10-17T14:25:20.9835335+00:00
+    - frId: FR-MCP-QBRAIN-003
+      testId: TEST-MCP-QBRAIN-002
+      createdAt: 2026-10-17T14:25:20.9836206+00:00
+    - frId: FR-MCP-QBRAIN-004
+      trId: TR-MCP-QBRAIN-003
+      createdAt: 2026-10-17T14:25:20.9837013+00:00
+    - frId: FR-MCP-QBRAIN-004
+      trId: TR-MCP-QBRAIN-005
+      createdAt: 2026-10-17T14:25:20.9837789+00:00
+    - frId: FR-MCP-QBRAIN-004
+      trId: TR-MCP-QBRAIN-008
+      createdAt: 2026-10-17T14:25:20.9838605+00:00
+    - frId: FR-MCP-QBRAIN-004
+      testId: TEST-MCP-QBRAIN-003
+      createdAt: 2026-10-17T14:25:20.9839420+00:00
+    - frId: FR-MCP-QBRAIN-004
+      testId: TEST-MCP-QBRAIN-005
+      createdAt: 2026-10-17T14:25:20.9840237+00:00
+    - frId: FR-MCP-QBRAIN-005
+      trId: TR-MCP-QBRAIN-004
+      createdAt: 2026-10-17T14:25:20.9841024+00:00
+    - frId: FR-MCP-QBRAIN-005
+      trId: TR-MCP-QBRAIN-006
+      createdAt: 2026-10-17T14:25:20.9841803+00:00
+    - frId: FR-MCP-QBRAIN-005
+      trId: TR-MCP-QBRAIN-007
+      createdAt: 2026-10-17T14:25:20.9842722+00:00
+    - frId: FR-MCP-QBRAIN-005
+      trId: TR-MCP-QBRAIN-008
+      createdAt: 2026-10-17T14:25:20.9843530+00:00
+    - frId: FR-MCP-QBRAIN-005
+      testId: TEST-MCP-QBRAIN-004
+      createdAt: 2026-10-17T14:25:20.9844341+00:00
+    - frId: FR-MCP-QBRAIN-005
+      testId: TEST-MCP-QBRAIN-006
+      createdAt: 2026-10-17T14:25:20.9845146+00:00
+    - frId: FR-MCP-QBRAIN-005
+      testId: TEST-MCP-QBRAIN-007
+      createdAt: 2026-10-17T14:25:20.9845949+00:00
+    - frId: FR-MCP-QBSEED-001
+      trId: TR-MCP-QBSEED-002
+      createdAt: 2026-10-17T14:25:20.9846747+00:00
+    - frId: FR-MCP-QBSEED-001
+      testId: TEST-MCP-QBSEED-001
+      createdAt: 2026-10-17T14:25:20.9847560+00:00
+    - frId: FR-MCP-QBSKILLS-001
+      trId: TR-MCP-QBSKILLS-001
+      createdAt: 2026-10-17T14:25:20.9848576+00:00
+    - frId: FR-MCP-QBSKILLS-001
+      testId: TEST-MCP-QBSKILLS-001
+      createdAt: 2026-10-17T14:25:20.9849522+00:00
+    - frId: FR-MCP-QBSKILLS-001
+      testId: TEST-MCP-QBSKILLS-002
+      createdAt: 2026-10-17T14:25:20.9850372+00:00
+    - frId: FR-MCP-QBSKILLS-002
+      trId: TR-MCP-QBSKILLS-003
+      createdAt: 2026-10-17T14:25:20.9851170+00:00
+    - frId: FR-MCP-QBSKILLS-002
+      testId: TEST-MCP-QBSKILLS-003
+      createdAt: 2026-10-17T14:25:20.9852060+00:00
+    - frId: FR-MCP-QBSKILLS-003
+      trId: TR-MCP-QBSKILLS-002
+      createdAt: 2026-10-17T14:25:20.9852896+00:00
+    - frId: FR-MCP-QBSKILLS-003
+      testId: TEST-MCP-QBSKILLS-002
+      createdAt: 2026-10-17T14:25:20.9853741+00:00
+    - frId: FR-MCP-QBTOOLS-001
+      trId: TR-MCP-QBTOOLS-001
+      createdAt: 2026-10-17T14:25:20.9854541+00:00
+    - frId: FR-MCP-QBTOOLS-001
+      testId: TEST-MCP-QBTOOLS-001
+      createdAt: 2026-10-17T14:25:20.9855353+00:00
+    - frId: FR-MCP-QBTOOLS-001
+      testId: TEST-MCP-QBTOOLSINT-001
+      createdAt: 2026-10-17T14:25:20.9856181+00:00
+    - frId: FR-MCP-QBTOOLS-002
+      trId: TR-MCP-QBTOOLS-002
+      createdAt: 2026-10-17T14:25:20.9856986+00:00
+    - frId: FR-MCP-QBTOOLS-002
+      testId: TEST-MCP-QBTOOLS-007
+      createdAt: 2026-10-17T14:25:20.9857801+00:00
+    - frId: FR-MCP-QBTOOLS-003
+      trId: TR-MCP-QBTOOLS-003
+      createdAt: 2026-10-17T14:25:20.9858592+00:00
+    - frId: FR-MCP-QBTOOLS-003
+      testId: TEST-MCP-QBTOOLS-003
+      createdAt: 2026-10-17T14:25:20.9859402+00:00
+    - frId: FR-MCP-QBTOOLS-004
+      trId: TR-MCP-QBTOOLS-004
+      createdAt: 2026-10-17T14:25:20.9860209+00:00
+    - frId: FR-MCP-QBTOOLS-004
+      testId: TEST-MCP-QBTOOLS-002
+      createdAt: 2026-10-17T14:25:20.9861026+00:00
+    - frId: FR-MCP-QBTOOLS-005
+      trId: TR-MCP-QBTOOLS-005
+      createdAt: 2026-10-17T14:25:20.9861819+00:00
+    - frId: FR-MCP-QBTOOLS-005
+      testId: TEST-MCP-QBTOOLS-006
+      createdAt: 2026-10-17T14:25:20.9862752+00:00
+    - frId: FR-MCP-QBTOOLS-006
+      trId: TR-MCP-QBTOOLS-006
+      createdAt: 2026-10-17T14:25:20.9863552+00:00
+    - frId: FR-MCP-QBTOOLS-006
+      trId: TR-MCP-QBTOOLS-007
+      createdAt: 2026-10-17T14:25:20.9864348+00:00
+    - frId: FR-MCP-QBTOOLS-006
+      testId: TEST-MCP-QBTOOLS-004
+      createdAt: 2026-10-17T14:25:20.9865161+00:00
+    - frId: FR-MCP-QBTOOLS-006
+      testId: TEST-MCP-QBTOOLS-005
+      createdAt: 2026-10-17T14:25:20.9865986+00:00
+    - frId: FR-MCP-QBTOOLS-007
+      trId: TR-MCP-QBTOOLS-008
+      createdAt: 2026-10-17T14:25:20.9866778+00:00
+    - frId: FR-MCP-QBTOOLS-007
+      testId: TEST-MCP-QBTOOLSINT-001
+      createdAt: 2026-10-17T14:25:20.9867601+00:00
+    - frId: FR-MCP-QUAD-SESSION-001
+      trId: TR-MCP-QUAD-SESSION-001
+      createdAt: 2026-10-17T14:25:20.9868445+00:00
+    - frId: FR-MCP-QUAD-SESSION-001
+      testId: TEST-MCP-QUAD-SESSION-001
+      createdAt: 2026-10-17T14:25:20.9869320+00:00
+    - frId: FR-MCP-REPL-001
+      trId: TR-MCP-REPL-001
+      createdAt: 2026-10-17T14:25:20.9870077+00:00
+    - frId: FR-MCP-REPL-001
+      trId: TR-MCP-REPL-002
+      createdAt: 2026-10-17T14:25:20.9870833+00:00
+    - frId: FR-MCP-REPL-002
+      trId: TR-MCP-REPL-003
+      createdAt: 2026-10-17T14:25:20.9871588+00:00
+    - frId: FR-MCP-REPL-003
+      trId: TR-MCP-REPL-004
+      createdAt: 2026-10-17T14:25:20.9872453+00:00
+    - frId: FR-MCP-REPL-003
+      trId: TR-MCP-REPL-005
+      createdAt: 2026-10-17T14:25:20.9873217+00:00
+    - frId: FR-MCP-REPL-004
+      trId: TR-MCP-REPL-006
+      createdAt: 2026-10-17T14:25:20.9873975+00:00
+    - frId: FR-MCP-REPL-005
+      trId: TR-MCP-REPL-007
+      createdAt: 2026-10-17T14:25:20.9874736+00:00
+    - frId: FR-MCP-REPL-006
+      trId: TR-MCP-REPL-006
+      createdAt: 2026-10-17T14:25:20.9875509+00:00
+    - frId: FR-MCP-REPL-006
+      testId: TEST-MCP-REPL-006
+      createdAt: 2026-10-17T14:25:20.9876286+00:00
+    - frId: FR-MCP-REPL-007
+      trId: TR-MCP-REPL-008
+      createdAt: 2026-10-17T14:25:20.9877042+00:00
+    - frId: FR-MCP-REPL-007
+      testId: TEST-MCP-REPL-007-1
+      createdAt: 2026-10-17T14:25:20.9877836+00:00
+    - frId: FR-MCP-REPL-007
+      testId: TEST-MCP-REPL-007-2
+      createdAt: 2026-10-17T14:25:20.9878640+00:00
+    - frId: FR-MCP-REPL-007
+      testId: TEST-MCP-REPL-007-3
+      createdAt: 2026-10-17T14:25:20.9879492+00:00
+    - frId: FR-MCP-REPL-008
+      trId: TR-MCP-REPL-009
+      createdAt: 2026-10-17T14:25:20.9880452+00:00
+    - frId: FR-MCP-REPL-008
+      testId: TEST-MCP-REPL-018
+      createdAt: 2026-10-17T14:25:20.9881240+00:00
+    - frId: FR-MCP-REPL-009
+      trId: TR-MCP-REPL-010
+      createdAt: 2026-10-17T14:25:20.9882091+00:00
+    - frId: FR-MCP-REPL-009
+      trId: TR-MCP-REPL-011
+      createdAt: 2026-10-17T14:25:20.9882878+00:00
+    - frId: FR-MCP-REPL-009
+      trId: TR-MCP-REPL-012
+      createdAt: 2026-10-17T14:25:20.9883787+00:00
+    - frId: FR-MCP-REPL-009
+      trId: TR-MCP-REPL-013
+      createdAt: 2026-10-17T14:25:20.9884575+00:00
+    - frId: FR-MCP-REPL-009
+      testId: TEST-MCP-REPL-025
+      createdAt: 2026-10-17T14:25:20.9885375+00:00
+    - frId: FR-MCP-REPL-009
+      testId: TEST-MCP-REPL-026
+      createdAt: 2026-10-17T14:25:20.9886193+00:00
+    - frId: FR-MCP-REPL-009
+      testId: TEST-MCP-REPL-027
+      createdAt: 2026-10-17T14:25:20.9886980+00:00
+    - frId: FR-MCP-REPL-009
+      testId: TEST-MCP-REPL-028
+      createdAt: 2026-10-17T14:25:20.9887765+00:00
+    - frId: FR-MCP-REPL-010
+      trId: TR-MCP-REPL-014
+      createdAt: 2026-10-17T14:25:20.9888525+00:00
+    - frId: FR-MCP-REPL-010
+      trId: TR-MCP-REPL-015
+      createdAt: 2026-10-17T14:25:20.9889571+00:00
+    - frId: FR-MCP-REPL-010
+      testId: TEST-MCP-REPL-029
+      createdAt: 2026-10-17T14:25:20.9890565+00:00
+    - frId: FR-MCP-REPL-010
+      testId: TEST-MCP-REPL-030
+      createdAt: 2026-10-17T14:25:20.9891673+00:00
+    - frId: FR-MCP-REPL-011
+      trId: TR-MCP-REPL-016
+      createdAt: 2026-10-17T14:25:20.9892896+00:00
+    - frId: FR-MCP-REPL-011
+      trId: TR-MCP-REPL-017
+      createdAt: 2026-10-17T14:25:20.9893972+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-031
+      createdAt: 2026-10-17T14:25:20.9895033+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-032
+      createdAt: 2026-10-17T14:25:20.9896168+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-033
+      createdAt: 2026-10-17T14:25:20.9897168+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-034
+      createdAt: 2026-10-17T14:25:20.9897971+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-035
+      createdAt: 2026-10-17T14:25:20.9898752+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-036
+      createdAt: 2026-10-17T14:25:20.9899535+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-037
+      createdAt: 2026-10-17T14:25:20.9900327+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-038
+      createdAt: 2026-10-17T14:25:20.9901109+00:00
+    - frId: FR-MCP-REPL-011
+      testId: TEST-MCP-REPL-039
+      createdAt: 2026-10-17T14:25:20.9901891+00:00
+    - frId: FR-MCP-REQAC-001
+      trId: TR-MCP-REQAC-001
+      createdAt: 2026-10-17T14:25:20.9902862+00:00
+    - frId: FR-MCP-REQAC-001
+      trId: TR-MCP-REQAC-002
+      createdAt: 2026-10-17T14:25:20.9903650+00:00
+    - frId: FR-MCP-REQAC-001
+      testId: TEST-MCP-REQAC-001
+      createdAt: 2026-10-17T14:25:20.9904447+00:00
+    - frId: FR-MCP-REQAC-001
+      testId: TEST-MCP-REQAC-002
+      createdAt: 2026-10-17T14:25:20.9905236+00:00
+    - frId: FR-MCP-REQAC-001
+      testId: TEST-MCP-REQAC-003
+      createdAt: 2026-10-17T14:25:20.9906026+00:00
+    - frId: FR-MCP-REQAC-002
+      trId: TR-MCP-REQAC-001
+      createdAt: 2026-10-17T14:25:20.9906803+00:00
+    - frId: FR-MCP-REQAC-002
+      testId: TEST-MCP-REQAC-004
+      createdAt: 2026-10-17T14:25:20.9907593+00:00
+    - frId: FR-MCP-REQAC-PLUGIN-001
+      trId: TR-MCP-REQAC-PLUGIN-001
+      createdAt: 2026-10-17T14:25:20.9908434+00:00
+    - frId: FR-MCP-REQAC-PLUGIN-001
+      testId: TEST-MCP-REQAC-PLUGIN-BASH
+      createdAt: 2026-10-17T14:25:20.9909305+00:00
+    - frId: FR-MCP-REQAC-PLUGIN-001
+      testId: TEST-MCP-REQAC-PLUGIN-TS
+      createdAt: 2026-10-17T14:25:20.9910185+00:00
+    - frId: FR-MCP-REQACPLUGIN-001
+      trId: TR-MCP-REQACPLUGIN-001
+      createdAt: 2026-10-17T14:25:20.9911103+00:00
+    - frId: FR-MCP-REQACPLUGIN-001
+      testId: TEST-MCP-REQACPLUGIN-BASH
+      createdAt: 2026-10-17T14:25:20.9911974+00:00
+    - frId: FR-MCP-REQACPLUGIN-001
+      testId: TEST-MCP-REQACPLUGIN-LIVE
+      createdAt: 2026-10-17T14:25:20.9913010+00:00
+    - frId: FR-MCP-REQACPLUGIN-001
+      testId: TEST-MCP-REQACPLUGIN-TS
+      createdAt: 2026-10-17T14:25:20.9913877+00:00
+    - frId: FR-MCP-REQACPLUGIN-002
+      trId: TR-MCP-REQACPLUGIN-002
+      createdAt: 2026-10-17T14:25:20.9914767+00:00
+    - frId: FR-MCP-REQACPLUGIN-002
+      testId: TEST-MCP-REQACPLUGIN-002
+      createdAt: 2026-10-17T14:25:20.9915632+00:00
+    - frId: FR-MCP-REQRECOVERY-001
+      trId: TR-MCP-REQRECOVERY-001
+      createdAt: 2026-10-17T14:25:20.9916465+00:00
+    - frId: FR-MCP-REQRECOVERY-001
+      testId: TEST-MCP-REQRECOVERY-001
+      createdAt: 2026-10-17T14:25:20.9917337+00:00
+    - frId: FR-MCP-REQSCOPE-001
+      trId: TR-MCP-REQSCOPE-001
+      createdAt: 2026-10-17T14:25:20.9918140+00:00
+    - frId: FR-MCP-REQSCOPE-002
+      trId: TR-MCP-REQSCOPE-002
+      createdAt: 2026-10-17T14:25:20.9918951+00:00
+    - frId: FR-MCP-REQSCOPE-003
+      trId: TR-MCP-REQSCOPE-003
+      createdAt: 2026-10-17T14:25:20.9919755+00:00
+    - frId: FR-MCP-REQSCOPE-004
+      trId: TR-MCP-REQSCOPE-004
+      createdAt: 2026-10-17T14:25:20.9920619+00:00
+    - frId: FR-MCP-RUNAS-001
+      trId: TR-MCP-HELP-001
+      createdAt: 2026-10-17T14:25:20.9921411+00:00
+    - frId: FR-MCP-RUNAS-001
+      trId: TR-MCP-HELP-010
+      createdAt: 2026-10-17T14:25:20.9922403+00:00
+    - frId: FR-MCP-RUNAS-001
+      trId: TR-MCP-RUNAS-001
+      createdAt: 2026-10-17T14:25:20.9923235+00:00
+    - frId: FR-MCP-RUNAS-001
+      testId: TEST-MCP-HELP-004
+      createdAt: 2026-10-17T14:25:20.9924019+00:00
+    - frId: FR-MCP-RUNAS-001
+      testId: TEST-MCP-HELP-005
+      createdAt: 2026-10-17T14:25:20.9924801+00:00
+    - frId: FR-MCP-RUNAS-001
+      testId: TEST-MCP-RUNAS-001
+      createdAt: 2026-10-17T14:25:20.9925590+00:00
+    - frId: FR-MCP-SESSIONATTR-001
+      trId: TR-MCP-SESSIONATTR-001
+      createdAt: 2026-10-17T14:25:20.9926439+00:00
+    - frId: FR-MCP-SESSIONATTR-001
+      testId: TEST-MCP-SESSIONATTR-001
+      createdAt: 2026-10-17T14:25:20.9927291+00:00
+    - frId: FR-MCP-SESSIONEND-001
+      trId: TR-MCP-SESSIONEND-001
+      createdAt: 2026-10-17T14:25:20.9928122+00:00
+    - frId: FR-MCP-SESSIONEND-001
+      testId: TEST-MCP-SESSIONEND-001
+      createdAt: 2026-10-17T14:25:20.9928970+00:00
+    - frId: FR-MCP-SESSIONLIFE-001
+      trId: TR-MCP-SESSIONLIFE-001
+      createdAt: 2026-10-17T14:25:20.9929821+00:00
+    - frId: FR-MCP-SESSIONLIFE-001
+      testId: TEST-MCP-SESSIONLIFE-001
+      createdAt: 2026-10-17T14:25:20.9930699+00:00
+    - frId: FR-MCP-SESSIONLIFE-002
+      trId: TR-MCP-SESSIONLIFE-002
+      createdAt: 2026-10-17T14:25:20.9931545+00:00
+    - frId: FR-MCP-SESSIONLIFE-002
+      testId: TEST-MCP-SESSIONLIFE-002
+      createdAt: 2026-10-17T14:25:20.9932499+00:00
+    - frId: FR-MCP-SESSIONLIFE-003
+      trId: TR-MCP-SESSIONLIFE-003
+      createdAt: 2026-10-17T14:25:20.9933364+00:00
+    - frId: FR-MCP-SESSIONLIFE-003
+      testId: TEST-MCP-SESSIONLIFE-002
+      createdAt: 2026-10-17T14:25:20.9934226+00:00
+    - frId: FR-MCP-SESSIONLIFE-003
+      testId: TEST-MCP-SESSIONLIFE-004
+      createdAt: 2026-10-17T14:25:20.9935091+00:00
+    - frId: FR-MCP-SESSIONLIFE-004
+      trId: TR-MCP-SESSIONLIFE-004
+      createdAt: 2026-10-17T14:25:20.9935981+00:00
+    - frId: FR-MCP-SESSIONLIFE-004
+      testId: TEST-MCP-SESSIONLIFE-002
+      createdAt: 2026-10-17T14:25:20.9936843+00:00
+    - frId: FR-MCP-SESSIONLIFE-004
+      testId: TEST-MCP-SESSIONLIFE-004
+      createdAt: 2026-10-17T14:25:20.9937690+00:00
+    - frId: FR-MCP-SESSIONLIFE-004
+      testId: TEST-MCP-SESSIONLIFE-005
+      createdAt: 2026-10-17T14:25:20.9938534+00:00
+    - frId: FR-MCP-SESSIONLIFE-005
+      trId: TR-MCP-SESSIONLIFE-005
+      createdAt: 2026-10-17T14:25:20.9939367+00:00
+    - frId: FR-MCP-SESSIONLIFE-005
+      testId: TEST-MCP-SESSIONLIFE-002
+      createdAt: 2026-10-17T14:25:20.9940226+00:00
+    - frId: FR-MCP-SESSIONLIFE-005
+      testId: TEST-MCP-SESSIONLIFE-004
+      createdAt: 2026-10-17T14:25:20.9941073+00:00
+    - frId: FR-MCP-SESSIONLOGCTX-001
+      trId: TR-MCP-SESSIONLOG-006
+      createdAt: 2026-10-17T14:25:20.9941908+00:00
+    - frId: FR-MCP-SESSIONLOGCTX-001
+      testId: TEST-MCP-SESSIONLOG-006
+      createdAt: 2026-10-17T14:25:20.9942861+00:00
+    - frId: FR-MCP-SESSIONLOGSAN-001
+      trId: TR-MCP-SESSIONLOGSAN-001
+      createdAt: 2026-10-17T14:25:20.9943725+00:00
+    - frId: FR-MCP-SESSIONLOGSAN-001
+      trId: TR-MCP-SESSIONLOGSAN-002
+      createdAt: 2026-10-17T14:25:20.9944580+00:00
+    - frId: FR-MCP-SESSIONLOGSAN-001
+      testId: TEST-MCP-SESSIONLOGSAN-001
+      createdAt: 2026-10-17T14:25:20.9945492+00:00
+    - frId: FR-MCP-SESSIONLOGSAN-001
+      testId: TEST-MCP-SESSIONLOGSAN-002
+      createdAt: 2026-10-17T14:25:20.9946364+00:00
+    - frId: FR-MCP-STRICTCOUNT-001
+      trId: TR-MCP-STRICTCOUNT-001
+      createdAt: 2026-10-17T14:25:20.9947192+00:00
+    - frId: FR-MCP-STRICTCOUNT-001
+      testId: TEST-MCP-STRICTCOUNT-001
+      createdAt: 2026-10-17T14:25:20.9948036+00:00
+    - frId: FR-MCP-SUBLOG-001
+      trId: TR-MCP-SUBLOG-001
+      createdAt: 2026-10-17T14:25:20.9948820+00:00
+    - frId: FR-MCP-SUBLOG-001
+      testId: TEST-MCP-SUBLOG-001
+      createdAt: 2026-10-17T14:25:20.9949614+00:00
+    - frId: FR-MCP-TEMPVOL-001
+      trId: TR-MCP-TEMPVOL-001
+      createdAt: 2026-10-17T14:25:20.9950396+00:00
+    - frId: FR-MCP-TEMPVOL-001
+      testId: TEST-MCP-TEMPVOL-001
+      createdAt: 2026-10-17T14:25:20.9951200+00:00
+    - frId: FR-MCP-TESTRESOURCE-001
+      trId: TR-MCP-TESTRESOURCE-001
+      createdAt: 2026-10-17T14:25:20.9952131+00:00
+    - frId: FR-MCP-TESTRESOURCE-001
+      testId: TEST-MCP-164
+      createdAt: 2026-10-17T14:25:20.9952953+00:00
+    - frId: FR-MCP-TESTRESOURCE-001
+      testId: TEST-MCP-TESTRESOURCE-001
+      createdAt: 2026-10-17T14:25:20.9953821+00:00
+    - frId: FR-MCP-TODO-CLOSE-001
+      trId: TR-MCP-TODO-CLOSE-001
+      createdAt: 2026-10-17T14:25:20.9954641+00:00
+    - frId: FR-MCP-TODO-CLOSE-001
+      testId: TEST-MCP-TODO-CLOSE-001
+      createdAt: 2026-10-17T14:25:20.9955550+00:00
+    - frId: FR-MCP-TRANSCRIPT-001
+      trId: TR-MCP-TRANSCRIPT-001
+      createdAt: 2026-10-17T14:25:20.9956511+00:00
+    - frId: FR-MCP-TRANSCRIPT-001
+      trId: TR-MCP-TRANSCRIPT-002
+      createdAt: 2026-10-17T14:25:20.9957579+00:00
+    - frId: FR-MCP-TRANSCRIPT-001
+      trId: TR-MCP-TRANSCRIPT-006
+      createdAt: 2026-10-17T14:25:20.9958719+00:00
+    - frId: FR-MCP-TRANSCRIPT-001
+      testId: TEST-MCP-TRANSCRIPT-001
+      createdAt: 2026-10-17T14:25:20.9959870+00:00
+    - frId: FR-MCP-TRANSCRIPT-001
+      testId: TEST-MCP-TRANSCRIPT-003
+      createdAt: 2026-10-17T14:25:20.9961066+00:00
+    - frId: FR-MCP-TRANSCRIPT-001
+      testId: TEST-MCP-TRANSCRIPT-007
+      createdAt: 2026-10-17T14:25:20.9962327+00:00
+    - frId: FR-MCP-TRANSCRIPT-002
+      trId: TR-MCP-TRANSCRIPT-001
+      createdAt: 2026-10-17T14:25:20.9963464+00:00
+    - frId: FR-MCP-TRANSCRIPT-002
+      trId: TR-MCP-TRANSCRIPT-002
+      createdAt: 2026-10-17T14:25:20.9964589+00:00
+    - frId: FR-MCP-TRANSCRIPT-002
+      trId: TR-MCP-TRANSCRIPT-003
+      createdAt: 2026-10-17T14:25:20.9965757+00:00
+    - frId: FR-MCP-TRANSCRIPT-002
+      testId: TEST-MCP-TRANSCRIPT-001
+      createdAt: 2026-10-17T14:25:20.9966884+00:00
+    - frId: FR-MCP-TRANSCRIPT-002
+      testId: TEST-MCP-TRANSCRIPT-002
+      createdAt: 2026-10-17T14:25:20.9967922+00:00
+    - frId: FR-MCP-TRANSCRIPT-002
+      testId: TEST-MCP-TRANSCRIPT-003
+      createdAt: 2026-10-17T14:25:20.9969003+00:00
+    - frId: FR-MCP-TRANSCRIPT-002
+      testId: TEST-MCP-TRANSCRIPT-009
+      createdAt: 2026-10-17T14:25:20.9970111+00:00
+    - frId: FR-MCP-TRANSCRIPT-003
+      trId: TR-MCP-TRANSCRIPT-003
+      createdAt: 2026-10-17T14:25:20.9971175+00:00
+    - frId: FR-MCP-TRANSCRIPT-003
+      trId: TR-MCP-TRANSCRIPT-004
+      createdAt: 2026-10-17T14:25:20.9972294+00:00
+    - frId: FR-MCP-TRANSCRIPT-003
+      testId: TEST-MCP-TRANSCRIPT-002
+      createdAt: 2026-10-17T14:25:20.9973192+00:00
+    - frId: FR-MCP-TRANSCRIPT-003
+      testId: TEST-MCP-TRANSCRIPT-004
+      createdAt: 2026-10-17T14:25:20.9974027+00:00
+    - frId: FR-MCP-TRANSCRIPT-004
+      trId: TR-MCP-TRANSCRIPT-004
+      createdAt: 2026-10-17T14:25:20.9974836+00:00
+    - frId: FR-MCP-TRANSCRIPT-004
+      testId: TEST-MCP-TRANSCRIPT-005
+      createdAt: 2026-10-17T14:25:20.9975677+00:00
+    - frId: FR-MCP-TRANSCRIPT-005
+      trId: TR-MCP-TRANSCRIPT-005
+      createdAt: 2026-10-17T14:25:20.9976493+00:00
+    - frId: FR-MCP-TRANSCRIPT-005
+      testId: TEST-MCP-TRANSCRIPT-006
+      createdAt: 2026-10-17T14:25:20.9977319+00:00
+    - frId: FR-MCP-TRANSCRIPT-005
+      testId: TEST-MCP-TRANSCRIPT-010
+      createdAt: 2026-10-17T14:25:20.9978147+00:00
+    - frId: FR-MCP-TRANSCRIPT-006
+      trId: TR-MCP-TRANSCRIPT-006
+      createdAt: 2026-10-17T14:25:20.9978963+00:00
+    - frId: FR-MCP-TRANSCRIPT-006
+      trId: TR-MCP-TRANSCRIPT-007
+      createdAt: 2026-10-17T14:25:20.9979767+00:00
+    - frId: FR-MCP-TRANSCRIPT-006
+      testId: TEST-MCP-TRANSCRIPT-007
+      createdAt: 2026-10-17T14:25:20.9980598+00:00
+    - frId: FR-MCP-TRANSCRIPT-006
+      testId: TEST-MCP-TRANSCRIPT-008
+      createdAt: 2026-10-17T14:25:20.9981427+00:00
+    - frId: FR-MCP-TRANSCRIPT-007
+      trId: TR-MCP-TRANSCRIPT-007
+      createdAt: 2026-10-17T14:25:20.9982391+00:00
+    - frId: FR-MCP-TRANSCRIPT-007
+      testId: TEST-MCP-TRANSCRIPT-008
+      createdAt: 2026-10-17T14:25:20.9983350+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      trId: TR-MCP-TRANSCRIPT-002
+      createdAt: 2026-10-17T14:25:20.9984170+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      trId: TR-MCP-TRANSCRIPT-003
+      createdAt: 2026-10-17T14:25:20.9984987+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      trId: TR-MCP-TRANSCRIPT-008
+      createdAt: 2026-10-17T14:25:20.9985810+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      trId: TR-MCP-TRANSCRIPT-009
+      createdAt: 2026-10-17T14:25:20.9986618+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      testId: TEST-MCP-TRANSCRIPT-001
+      createdAt: 2026-10-17T14:25:20.9987445+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      testId: TEST-MCP-TRANSCRIPT-009
+      createdAt: 2026-10-17T14:25:20.9988281+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      testId: TEST-MCP-TRANSCRIPT-010
+      createdAt: 2026-10-17T14:25:20.9989121+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      testId: TEST-MCP-TRANSCRIPT-011
+      createdAt: 2026-10-17T14:25:20.9989946+00:00
+    - frId: FR-MCP-TRANSCRIPT-008
+      testId: TEST-MCP-TRANSCRIPT-012
+      createdAt: 2026-10-17T14:25:20.9990770+00:00
+    - frId: FR-MCP-TRANSCRIPT-009
+      trId: TR-MCP-TRANSCRIPT-010
+      createdAt: 2026-10-17T14:25:20.9991573+00:00
+    - frId: FR-MCP-TRANSCRIPT-009
+      testId: TEST-MCP-TRANSCRIPT-013
+      createdAt: 2026-10-17T14:25:20.9992512+00:00
+    - frId: FR-MCP-TRANSCRIPT-SEARCH-001
+      trId: TR-MCP-TRANSCRIPT-SEARCH-001
+      createdAt: 2026-10-17T14:25:20.9993417+00:00
+    - frId: FR-MCP-TRANSCRIPT-SEARCH-001
+      testId: TEST-MCP-TRANSCRIPT-SEARCH-001
+      createdAt: 2026-10-17T14:25:20.9994327+00:00
+    - frId: FR-MCP-TRIAGE-001
+      trId: TR-MCP-TRIAGE-001
+      createdAt: 2026-10-17T14:25:20.9995097+00:00
+    - frId: FR-MCP-TRIAGE-001
+      testId: TEST-MCP-TRIAGE-001
+      createdAt: 2026-10-17T14:25:20.9995973+00:00
+    - frId: FR-MCP-TRIAGE-002
+      trId: TR-MCP-TRIAGE-002
+      createdAt: 2026-10-17T14:25:20.9996735+00:00
+    - frId: FR-MCP-TRIAGE-002
+      testId: TEST-MCP-TRIAGE-002
+      createdAt: 2026-10-17T14:25:20.9997517+00:00
+    - frId: FR-MCP-TRIAGE-003
+      trId: TR-MCP-TRIAGE-003
+      createdAt: 2026-10-17T14:25:20.9998281+00:00
+    - frId: FR-MCP-TRIAGE-003
+      testId: TEST-MCP-TRIAGE-003
+      createdAt: 2026-10-17T14:25:20.9999081+00:00
+    - frId: FR-MCP-TRIAGE-004
+      trId: TR-MCP-TRIAGE-004
+      createdAt: 2026-10-17T14:25:20.9999840+00:00
+    - frId: FR-MCP-TRIAGE-004
+      trId: TR-MCP-TRIAGE-005
+      createdAt: 2026-10-17T14:25:21.0000654+00:00
+    - frId: FR-MCP-TRIAGE-004
+      testId: TEST-MCP-BUGTRIAGE-043
+      createdAt: 2026-10-17T14:25:21.0001453+00:00
+    - frId: FR-MCP-TRIAGE-004
+      testId: TEST-MCP-TRIAGE-004
+      createdAt: 2026-10-17T14:25:21.0002394+00:00
+    - frId: FR-MCP-TRIAGE-004
+      testId: TEST-MCP-TRIAGE-005
+      createdAt: 2026-10-17T14:25:21.0003204+00:00
+    - frId: FR-MCP-TRIAGE-004
+      testId: TEST-MCP-TRIAGE-006
+      createdAt: 2026-10-17T14:25:21.0003996+00:00
+    - frId: FR-MCP-TRIAGEERR-001
+      trId: TR-MCP-TRIAGEERR-001
+      createdAt: 2026-10-17T14:25:21.0004803+00:00
+    - frId: FR-MCP-TRIAGEERR-001
+      testId: TEST-MCP-TRIAGEERR-001
+      createdAt: 2026-10-17T14:25:21.0005658+00:00
+    - frId: FR-MCP-TRIAGEHELP-001
+      trId: TR-MCP-TRIAGEHELP-001
+      createdAt: 2026-10-17T14:25:21.0006467+00:00
+    - frId: FR-MCP-TRIAGEHELP-001
+      testId: TEST-MCP-TRIAGEHELP-001
+      createdAt: 2026-10-17T14:25:21.0007320+00:00
+    - frId: FR-MCP-TRIAGEPLUGIN-001
+      trId: TR-MCP-TRIAGEPLUGIN-001
+      createdAt: 2026-10-17T14:25:21.0008154+00:00
+    - frId: FR-MCP-TRIAGEPLUGIN-001
+      testId: TEST-MCP-TRIAGEPLUGIN-001
+      createdAt: 2026-10-17T14:25:21.0009018+00:00
+    - frId: FR-MCP-TRIAGEPLUGIN-001
+      testId: TEST-MCP-TRIAGEPLUGIN-002
+      createdAt: 2026-10-17T14:25:21.0009863+00:00
+    - frId: FR-MCP-TRIAGEPLUGIN-001
+      testId: TEST-MCP-TRIAGEPLUGIN-003
+      createdAt: 2026-10-17T14:25:21.0010708+00:00
+    - frId: FR-MCP-TRIAGEPLUGIN-001
+      testId: TEST-MCP-TRIAGEPLUGIN-004
+      createdAt: 2026-10-17T14:25:21.0011552+00:00
+    - frId: FR-MCP-TRIAGEPLUGIN-001
+      testId: TEST-MCP-TRIAGEPLUGIN-005
+      createdAt: 2026-10-17T14:25:21.0012583+00:00
+    - frId: FR-MCP-TRIAGEREQ-001
+      trId: TR-MCP-TRIAGEREQ-001
+      createdAt: 2026-10-17T14:25:21.0013400+00:00
+    - frId: FR-MCP-TRIAGEREQ-001
+      testId: TEST-MCP-TRIAGEREQ-001
+      createdAt: 2026-10-17T14:25:21.0014227+00:00
+    - frId: FR-MCP-TRIAGESCHEMA-001
+      trId: TR-MCP-TRIAGESCHEMA-001
+      createdAt: 2026-10-17T14:25:21.0015122+00:00
+    - frId: FR-MCP-TRIAGESCHEMA-001
+      testId: TEST-MCP-TRIAGESCHEMA-001
+      createdAt: 2026-10-17T14:25:21.0015836+00:00
+    - frId: FR-MCP-TRIAGESTORE-001
+      trId: TR-MCP-TRIAGESTORE-001
+      createdAt: 2026-10-17T14:25:21.0016493+00:00
+    - frId: FR-MCP-TRIAGESTORE-001
+      testId: TEST-MCP-TRIAGESTORE-001
+      createdAt: 2026-10-17T14:25:21.0017161+00:00
+    - frId: FR-MCP-TRIAGESTORE-001
+      testId: TEST-MCP-TRIAGESTORE-002
+      createdAt: 2026-10-17T14:25:21.0017839+00:00
+    - frId: FR-MCP-TRIAGESTORE-001
+      testId: TEST-MCP-TRIAGESTORE-003
+      createdAt: 2026-10-17T14:25:21.0018504+00:00
+    - frId: FR-MCP-TRIAGESTORE-001
+      testId: TEST-MCP-TRIAGESTORE-004
+      createdAt: 2026-10-17T14:25:21.0019166+00:00
+    - frId: FR-MCP-TRIAGESTORE-001
+      testId: TEST-MCP-TRIAGESTORE-005
+      createdAt: 2026-10-17T14:25:21.0019832+00:00
+    - frId: FR-MCP-TRIAGESTORE-001
+      testId: TEST-MCP-TRIAGESTORE-006
+      createdAt: 2026-10-17T14:25:21.0020511+00:00
+    - frId: FR-MCP-TRIAGESTORE-001
+      testId: TEST-MCP-TRIAGESTORE-007
+      createdAt: 2026-10-17T14:25:21.0021173+00:00
+    - frId: FR-MCP-TRIAGESTORE-002
+      trId: TR-MCP-TRIAGESTORE-002
+      createdAt: 2026-10-17T14:25:21.0021826+00:00
+    - frId: FR-MCP-TRIAGESTORE-002
+      testId: TEST-MCP-TRIAGESTORE-007
+      createdAt: 2026-10-17T14:25:21.0022591+00:00
+    - frId: FR-MCP-TRIAGETODO-001
+      trId: TR-MCP-TRIAGETODO-001
+      createdAt: 2026-10-17T14:25:21.0023249+00:00
+    - frId: FR-MCP-TRIAGETODO-001
+      testId: TEST-MCP-TRIAGETODO-001
+      createdAt: 2026-10-17T14:25:21.0023906+00:00
+    - frId: FR-MCP-TRIAGETODO-001
+      testId: TEST-MCP-TRIAGETODO-002
+      createdAt: 2026-10-17T14:25:21.0024565+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-001
+      createdAt: 2026-10-17T14:25:21.0025187+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-002
+      createdAt: 2026-10-17T14:25:21.0025890+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-003
+      createdAt: 2026-10-17T14:25:21.0026519+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-005
+      createdAt: 2026-10-17T14:25:21.0027147+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-001
+      createdAt: 2026-10-17T14:25:21.0027789+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-002
+      createdAt: 2026-10-17T14:25:21.0028442+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-004
+      createdAt: 2026-10-17T14:25:21.0029082+00:00
+    - frId: FR-MCP-USECASE-002
+      trId: TR-MCP-USECASE-001
+      createdAt: 2026-10-17T14:25:21.0029709+00:00
+    - frId: FR-MCP-USECASE-002
+      trId: TR-MCP-USECASE-002
+      createdAt: 2026-10-17T14:25:21.0030332+00:00
+    - frId: FR-MCP-USECASE-002
+      testId: TEST-MCP-USECASE-001
+      createdAt: 2026-10-17T14:25:21.0030986+00:00
+    - frId: FR-MCP-USECASE-003
+      trId: TR-MCP-USECASE-001
+      createdAt: 2026-10-17T14:25:21.0031609+00:00
+    - frId: FR-MCP-USECASE-003
+      trId: TR-MCP-USECASE-002
+      createdAt: 2026-10-17T14:25:21.0032296+00:00
+    - frId: FR-MCP-USECASE-003
+      trId: TR-MCP-USECASE-006
+      createdAt: 2026-10-17T14:25:21.0032935+00:00
+    - frId: FR-MCP-USECASE-003
+      testId: TEST-MCP-USECASE-001
+      createdAt: 2026-10-17T14:25:21.0033587+00:00
+    - frId: FR-MCP-USECASE-003
+      testId: TEST-MCP-USECASE-005
+      createdAt: 2026-10-17T14:25:21.0034235+00:00
+    - frId: FR-MCP-USECASE-004
+      trId: TR-MCP-USECASE-002
+      createdAt: 2026-10-17T14:25:21.0034866+00:00
+    - frId: FR-MCP-USECASE-004
+      testId: TEST-MCP-USECASE-001
+      createdAt: 2026-10-17T14:25:21.0035517+00:00
+    - frId: FR-MCP-USECASE-005
+      trId: TR-MCP-USECASE-004
+      createdAt: 2026-10-17T14:25:21.0036150+00:00
+    - frId: FR-MCP-USECASE-005
+      testId: TEST-MCP-USECASE-003
+      createdAt: 2026-10-17T14:25:21.0036794+00:00
+    - frId: FR-MCP-USECASE-006
+      trId: TR-MCP-USECASE-006
+      createdAt: 2026-10-17T14:25:21.0037419+00:00
+    - frId: FR-MCP-USECASE-006
+      testId: TEST-MCP-USECASE-005
+      createdAt: 2026-10-17T14:25:21.0038073+00:00
+    - frId: FR-MCP-USECASE-007
+      trId: TR-MCP-USECASE-005
+      createdAt: 2026-10-17T14:25:21.0038703+00:00
+    - frId: FR-MCP-USECASE-007
+      trId: TR-MCP-USECASE-007
+      createdAt: 2026-10-17T14:25:21.0039330+00:00
+    - frId: FR-MCP-USECASE-007
+      trId: TR-MCP-USECASE-010
+      createdAt: 2026-10-17T14:25:21.0039964+00:00
+    - frId: FR-MCP-USECASE-007
+      testId: TEST-MCP-USECASE-008
+      createdAt: 2026-10-17T14:25:21.0040618+00:00
+    - frId: FR-MCP-USECASE-007
+      testId: TEST-MCP-USECASE-010
+      createdAt: 2026-10-17T14:25:21.0041265+00:00
+    - frId: FR-MCP-USECASE-007
+      testId: TEST-MCP-USECASE-011
+      createdAt: 2026-10-17T14:25:21.0041911+00:00
+    - frId: FR-MCP-USECASE-008
+      trId: TR-MCP-USECASE-008
+      createdAt: 2026-10-17T14:25:21.0042617+00:00
+    - frId: FR-MCP-USECASE-008
+      testId: TEST-MCP-USECASE-009
+      createdAt: 2026-10-17T14:25:21.0043274+00:00
+    - frId: FR-MCP-USECASE-009
+      trId: TR-MCP-USECASE-008
+      createdAt: 2026-10-17T14:25:21.0043925+00:00
+    - frId: FR-MCP-USECASE-009
+      testId: TEST-MCP-USECASE-009
+      createdAt: 2026-10-17T14:25:21.0044572+00:00
+    - frId: FR-MCP-USECASE-010
+      trId: TR-MCP-USECASE-009
+      createdAt: 2026-10-17T14:25:21.0045207+00:00
+    - frId: FR-MCP-USECASE-010
+      testId: TEST-MCP-USECASE-005
+      createdAt: 2026-10-17T14:25:21.0045859+00:00
+    - frId: FR-MCP-USECASE-011
+      trId: TR-MCP-USECASE-015
+      createdAt: 2026-10-17T14:25:21.0046670+00:00
+    - frId: FR-MCP-USECASE-011
+      testId: TEST-MCP-USECASE-015
+      createdAt: 2026-10-17T14:25:21.0047716+00:00
+    - frId: FR-MCP-USECASE-011
+      testId: TEST-MCP-USECASE-017
+      createdAt: 2026-10-17T14:25:21.0048383+00:00
+    - frId: FR-MCP-USECASE-012
+      trId: TR-MCP-USECASE-011
+      createdAt: 2026-10-17T14:25:21.0049033+00:00
+    - frId: FR-MCP-USECASE-012
+      trId: TR-MCP-USECASE-012
+      createdAt: 2026-10-17T14:25:21.0049662+00:00
+    - frId: FR-MCP-USECASE-012
+      trId: TR-MCP-USECASE-013
+      createdAt: 2026-10-17T14:25:21.0050467+00:00
+    - frId: FR-MCP-USECASE-012
+      trId: TR-MCP-USECASE-016
+      createdAt: 2026-10-17T14:25:21.0051203+00:00
+    - frId: FR-MCP-USECASE-012
+      testId: TEST-MCP-USECASE-013
+      createdAt: 2026-10-17T14:25:21.0051867+00:00
+    - frId: FR-MCP-USECASE-012
+      testId: TEST-MCP-USECASE-014
+      createdAt: 2026-10-17T14:25:21.0052959+00:00
+    - frId: FR-MCP-USECASE-012
+      testId: TEST-MCP-USECASE-016
+      createdAt: 2026-10-17T14:25:21.0053664+00:00
+    - frId: FR-MCP-USECASE-013
+      trId: TR-MCP-USECASE-013
+      createdAt: 2026-10-17T14:25:21.0054296+00:00
+    - frId: FR-MCP-USECASE-013
+      trId: TR-MCP-USECASE-014
+      createdAt: 2026-10-17T14:25:21.0054927+00:00
+    - frId: FR-MCP-USECASE-013
+      testId: TEST-MCP-USECASE-012
+      createdAt: 2026-10-17T14:25:21.0055645+00:00
+    - frId: FR-MCP-USECASE-013
+      testId: TEST-MCP-USECASE-014
+      createdAt: 2026-10-17T14:25:21.0056293+00:00
+    - frId: FR-MCP-USECASE-014
+      trId: TR-MCP-USECASE-013
+      createdAt: 2026-10-17T14:25:21.0056922+00:00
+    - frId: FR-MCP-USECASE-014
+      trId: TR-MCP-USECASE-014
+      createdAt: 2026-10-17T14:25:21.0057549+00:00
+    - frId: FR-MCP-USECASE-014
+      testId: TEST-MCP-USECASE-012
+      createdAt: 2026-10-17T14:25:21.0058196+00:00
+    - frId: FR-MCP-USECASE-014
+      testId: TEST-MCP-USECASE-014
+      createdAt: 2026-10-17T14:25:21.0058835+00:00
+    - frId: FR-MCP-USECASE-015
+      trId: TR-MCP-USECASE-017
+      createdAt: 2026-10-17T14:25:21.0059457+00:00
+    - frId: FR-MCP-USECASE-015
+      testId: TEST-MCP-USECASE-018
+      createdAt: 2026-10-17T14:25:21.0060095+00:00
+    - frId: FR-MCP-USECASE-016
+      trId: TR-MCP-USECASE-018
+      createdAt: 2026-10-17T14:25:21.0060729+00:00
+    - frId: FR-MCP-USECASE-016
+      testId: TEST-MCP-USECASE-019
+      createdAt: 2026-10-17T14:25:21.0061372+00:00
+    - frId: FR-MCP-USECASE-017
+      trId: TR-MCP-USECASE-019
+      createdAt: 2026-10-17T14:25:21.0062120+00:00
+    - frId: FR-MCP-USECASE-017
+      testId: TEST-MCP-USECASE-020
+      createdAt: 2026-10-17T14:25:21.0062791+00:00
+    - frId: FR-MCP-VERIFYPOLICY-001
+      trId: TR-MCP-VERIFYPOLICY-001
+      createdAt: 2026-10-17T14:25:21.0063469+00:00
+    - frId: FR-MCP-VERIFYPOLICY-001
+      testId: TEST-MCP-VERIFYPOLICY-001
+      createdAt: 2026-10-17T14:25:21.0064152+00:00
+    - frId: FR-MCP-VERIFYWRAP-001
+      trId: TR-MCP-VERIFYWRAP-001
+      createdAt: 2026-10-17T14:25:21.0064800+00:00
+    - frId: FR-MCP-VERIFYWRAP-001
+      testId: TEST-MCP-VERIFYWRAP-001
+      createdAt: 2026-10-17T14:25:21.0065464+00:00
+    - frId: FR-MCP-WIKIEXPORT-001
+      trId: TR-MCP-WIKIEXPORT-001
+      createdAt: 2026-10-17T14:25:21.0066127+00:00
+    - frId: FR-MCP-WIKIEXPORT-001
+      testId: TEST-MCP-WIKIEXPORT-001
+      createdAt: 2026-10-17T14:25:21.0066794+00:00
+    - frId: FR-MCP-WIKIEXPORT-002
+      trId: TR-MCP-WIKIEXPORT-002
+      createdAt: 2026-10-17T14:25:21.0067440+00:00
+    - frId: FR-MCP-WIKIEXPORT-002
+      testId: TEST-MCP-WIKIEXPORT-002
+      createdAt: 2026-10-17T14:25:21.0068101+00:00
+    - frId: FR-MCP-WIKIEXPORT-003
+      trId: TR-MCP-WIKIEXPORT-003
+      createdAt: 2026-10-17T14:25:21.0068765+00:00
+    - frId: FR-MCP-WIKIEXPORT-003
+      testId: TEST-MCP-WIKIEXPORT-003
+      createdAt: 2026-10-17T14:25:21.0069430+00:00
+    - frId: FR-MCP-WIKIEXPORT-004
+      trId: TR-MCP-WIKIEXPORT-004
+      createdAt: 2026-10-17T14:25:21.0070081+00:00
+    - frId: FR-MCP-WIKIEXPORT-004
+      testId: TEST-MCP-WIKIEXPORT-004
+      createdAt: 2026-10-17T14:25:21.0070754+00:00
+    - frId: FR-MCP-WIKIEXPORT-005
+      trId: TR-MCP-WIKIEXPORT-005
+      createdAt: 2026-10-17T14:25:21.0071414+00:00
+    - frId: FR-MCP-WIKIEXPORT-005
+      testId: TEST-MCP-WIKIEXPORT-005
+      createdAt: 2026-10-17T14:25:21.0072176+00:00
+    - frId: FR-MCP-WORKSPACE-LAYER-001
+      trId: TR-MCP-MT-003
+      createdAt: 2026-10-17T14:25:21.0072841+00:00
+    - frId: FR-MCP-XAGENT-001
+      trId: TR-MCP-XAGENT-001
+      createdAt: 2026-10-17T14:25:21.0073460+00:00
+    - frId: FR-MCP-XAGENT-001
+      testId: TEST-MCP-XAGENT-001
+      createdAt: 2026-10-17T14:25:21.0074110+00:00
+    - frId: FR-SUPPORT-010
+      trId: TR-MCP-API-001
+      createdAt: 2026-10-17T14:25:21.0074713+00:00
+    - frId: FR-SUPPORT-010
+      trId: TR-MCP-ARCH-001
+      createdAt: 2026-10-17T14:25:21.0075309+00:00
+    - frId: FR-SUPPORT-010
+      trId: TR-MCP-DATA-001
+      createdAt: 2026-10-17T14:25:21.0075918+00:00
+    - frId: FR-SUPPORT-010
+      trId: TR-MCP-INGEST-001
+      createdAt: 2026-10-17T14:25:21.0076524+00:00
+    - frId: FR-SUPPORT-010A
+      trId: TR-MCP-MT-003A
+      createdAt: 2026-10-17T14:25:21.0077128+00:00
+    - frId: FR-SUPPORT-010A
+      testId: TEST-SUPPORT-010A-1
+      createdAt: 2026-10-17T14:25:21.0077758+00:00
+    - frId: FR-SUPPORT-010A
+      testId: TEST-SUPPORT-010A-2
+      createdAt: 2026-10-17T14:25:21.0078390+00:00
+    - frId: FR-SUPPORT-010B
+      testId: TEST-SUPPORT-010B-1
+      createdAt: 2026-10-17T14:25:21.0079019+00:00
+    - frId: FR-SUPPORT-010B
+      testId: TEST-SUPPORT-010B-2
+      createdAt: 2026-10-17T14:25:21.0079642+00:00
+    - frId: FR-SUPPORT-010C
+      trId: TR-MCP-MT-003A
+      createdAt: 2026-10-17T14:25:21.0080245+00:00
+    - frId: FR-SUPPORT-010C
+      testId: TEST-SUPPORT-010C-1
+      createdAt: 2026-10-17T14:25:21.0080886+00:00
+    - frId: FR-SUPPORT-010C
+      testId: TEST-SUPPORT-010C-2
+      createdAt: 2026-10-17T14:25:21.0081513+00:00
+    - frId: FR-SUPPORT-010C
+      testId: TEST-SUPPORT-010C-3
+      createdAt: 2026-10-17T14:25:21.0082211+00:00
+    - frId: FR-SUPPORT-010E
+      trId: TR-SUPPORT-010E
+      createdAt: 2026-10-17T14:25:21.0082837+00:00
+    - frId: FR-SUPPORT-010E
+      testId: TEST-SUPPORT-010E
+      createdAt: 2026-10-17T14:25:21.0083472+00:00
+    - frId: FR-SUPPORT-010F
+      trId: TR-SUPPORT-010F
+      createdAt: 2026-10-17T14:25:21.0084600+00:00
+    - frId: FR-SUPPORT-010F
+      testId: TEST-SUPPORT-010F
+      createdAt: 2026-10-17T14:25:21.0085262+00:00
+    - frId: FR-SUPPORT-011
+      trId: TR-MCP-MT-003A
+      createdAt: 2026-10-17T14:25:21.0085930+00:00
+    - frId: FR-SUPPORT-011
+      trId: TR-MCP-MT-004
+      createdAt: 2026-10-17T14:25:21.0086539+00:00
+    - frId: FR-SUPPORT-011
+      testId: TEST-SUPPORT-010A-1
+      createdAt: 2026-10-17T14:25:21.0087165+00:00
+    - frId: FR-SUPPORT-011
+      testId: TEST-SUPPORT-010A-2
+      createdAt: 2026-10-17T14:25:21.0087788+00:00
+    - frId: FR-SUPPORT-012
+      trId: TR-MCP-SESSIONLOG-001
+      createdAt: 2026-10-17T14:25:21.0088404+00:00
+    - frId: FR-SUPPORT-012
+      trId: TR-MCP-SESSIONLOG-002
+      createdAt: 2026-10-17T14:25:21.0089037+00:00
+    - frId: FR-SUPPORT-012
+      trId: TR-MCP-SESSIONLOG-003
+      createdAt: 2026-10-17T14:25:21.0089654+00:00
+    - frId: FR-SUPPORT-012
+      trId: TR-MCP-SESSIONLOG-005
+      createdAt: 2026-10-17T14:25:21.0090265+00:00
+    - frId: FR-SUPPORT-012
+      trId: TR-SUPPORT-LOG-010
+      createdAt: 2026-10-17T14:25:21.0090866+00:00
+    - frId: FR-SUPPORT-012
+      testId: TEST-MCP-SESSIONLOG-001
+      createdAt: 2026-10-17T14:25:21.0091509+00:00
+    - frId: FR-SUPPORT-012
+      testId: TEST-MCP-SESSIONLOG-002
+      createdAt: 2026-10-17T14:25:21.0092219+00:00
+    - frId: FR-SUPPORT-012
+      testId: TEST-MCP-SESSIONLOG-003
+      createdAt: 2026-10-17T14:25:21.0092863+00:00
+    - frId: FR-SUPPORT-012
+      testId: TEST-MCP-SESSIONLOG-005
+      createdAt: 2026-10-17T14:25:21.0093492+00:00
+    - frId: FR-SUPPORT-012
+      testId: TEST-SUPPORT-010B-1
+      createdAt: 2026-10-17T14:25:21.0094117+00:00
+    - frId: FR-SUPPORT-012
+      testId: TEST-SUPPORT-010B-2
+      createdAt: 2026-10-17T14:25:21.0094728+00:00
+    - frId: FR-SUPPORT-013
+      trId: TR-MCP-HTTP-002
+      createdAt: 2026-10-17T14:25:21.0095321+00:00
+    - frId: FR-SUPPORT-013
+      testId: TEST-SUPPORT-010C-1
+      createdAt: 2026-10-17T14:25:21.0095944+00:00
+    - frId: FR-SUPPORT-013
+      testId: TEST-SUPPORT-010C-2
+      createdAt: 2026-10-17T14:25:21.0096558+00:00
+    - frId: FR-SUPPORT-013
+      testId: TEST-SUPPORT-010C-3
+      createdAt: 2026-10-17T14:25:21.0097175+00:00
+    - frId: FR-SUPPORT-014
+      trId: TR-SUPPORT-CORE-014
+      createdAt: 2026-10-17T14:25:21.0097785+00:00
+    - frId: FR-SUPPORT-014
+      testId: TEST-SUPPORT-014
+      createdAt: 2026-10-17T14:25:21.0098400+00:00
+    - frId: FR-SUPPORT-015
+      trId: TR-SUPPORT-010F
+      createdAt: 2026-10-17T14:25:21.0099027+00:00
+    - frId: FR-SUPPORT-015
+      trId: TR-SUPPORT-CORE-015
+      createdAt: 2026-10-17T14:25:21.0099634+00:00
+    - frId: FR-SUPPORT-015
+      testId: TEST-SUPPORT-015
+      createdAt: 2026-10-17T14:25:21.0100237+00:00
+    - frId: FR-SUPPORT-016
+      trId: TR-SUPPORT-CORE-016
+      createdAt: 2026-10-17T14:25:21.0100856+00:00
+    - frId: FR-SUPPORT-016
+      testId: TEST-SUPPORT-024
+      createdAt: 2026-10-17T14:25:21.0101471+00:00
+    - frId: FR-TEST-002
+      trId: TR-TEST-001
+      createdAt: 2026-10-17T14:25:21.0102106+00:00
+    - frId: FR-TRIAGE-001
+      trId: TR-TRIAGE-CLIENT-001
+      createdAt: 2026-10-17T14:25:21.0102732+00:00
+    - frId: FR-TRIAGE-001
+      testId: TEST-TRIAGE-001
+      createdAt: 2026-10-17T14:25:21.0103342+00:00
+    - frId: FR-TRIAGE-002
+      trId: TR-TRIAGE-CLIENT-002
+      createdAt: 2026-10-17T14:25:21.0103957+00:00
+    - frId: FR-TRIAGE-002
+      testId: TEST-TRIAGE-002
+      createdAt: 2026-10-17T14:25:21.0104555+00:00
+    - frId: FR-WEB-001
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0105134+00:00
+    - frId: FR-WEB-001
+      trId: TR-WEB-UI-001
+      createdAt: 2026-10-17T14:25:21.0105713+00:00
+    - frId: FR-WEB-001
+      trId: TR-WEB-UI-002
+      createdAt: 2026-10-17T14:25:21.0106286+00:00
+    - frId: FR-WEB-001
+      testId: TEST-WEB-001
+      createdAt: 2026-10-17T14:25:21.0106868+00:00
+    - frId: FR-WEB-002
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0107448+00:00
+    - frId: FR-WEB-002
+      trId: TR-WEB-TODO-001
+      createdAt: 2026-10-17T14:25:21.0108033+00:00
+    - frId: FR-WEB-002
+      trId: TR-WEB-UI-001
+      createdAt: 2026-10-17T14:25:21.0108605+00:00
+    - frId: FR-WEB-002
+      testId: TEST-WEB-002
+      createdAt: 2026-10-17T14:25:21.0109181+00:00
+    - frId: FR-WEB-003
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0109766+00:00
+    - frId: FR-WEB-003
+      trId: TR-WEB-UI-002
+      createdAt: 2026-10-17T14:25:21.0110351+00:00
+    - frId: FR-WEB-003
+      testId: TEST-WEB-003
+      createdAt: 2026-10-17T14:25:21.0110931+00:00
+    - frId: FR-WEB-004
+      trId: TR-WEB-TODO-001
+      createdAt: 2026-10-17T14:25:21.0111518+00:00
+    - frId: FR-WEB-004
+      trId: TR-WEB-UI-002
+      createdAt: 2026-10-17T14:25:21.0112200+00:00
+    - frId: FR-WEB-004
+      testId: TEST-WEB-004
+      createdAt: 2026-10-17T14:25:21.0112803+00:00
+    - frId: FR-WEB-005
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0113386+00:00
+    - frId: FR-WEB-005
+      trId: TR-WEB-SESS-001
+      createdAt: 2026-10-17T14:25:21.0113969+00:00
+    - frId: FR-WEB-005
+      trId: TR-WEB-TODO-001
+      createdAt: 2026-10-17T14:25:21.0114547+00:00
+    - frId: FR-WEB-005
+      testId: TEST-WEB-005
+      createdAt: 2026-10-17T14:25:21.0115134+00:00
+    - frId: FR-WEB-006
+      trId: TR-WEB-SCHED-001
+      createdAt: 2026-10-17T14:25:21.0115719+00:00
+    - frId: FR-WEB-006
+      trId: TR-WEB-TODO-001
+      createdAt: 2026-10-17T14:25:21.0116298+00:00
+    - frId: FR-WEB-006
+      testId: TEST-WEB-006
+      createdAt: 2026-10-17T14:25:21.0116877+00:00
+    - frId: FR-WEB-007
+      trId: TR-WEB-CTX-001
+      createdAt: 2026-10-17T14:25:21.0117467+00:00
+    - frId: FR-WEB-007
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0118049+00:00
+    - frId: FR-WEB-007
+      testId: TEST-WEB-007
+      createdAt: 2026-10-17T14:25:21.0118624+00:00
+    - frId: FR-WEB-008
+      trId: TR-WEB-CTX-001
+      createdAt: 2026-10-17T14:25:21.0119200+00:00
+    - frId: FR-WEB-008
+      trId: TR-WEB-SESS-001
+      createdAt: 2026-10-17T14:25:21.0119792+00:00
+    - frId: FR-WEB-008
+      trId: TR-WEB-TODO-001
+      createdAt: 2026-10-17T14:25:21.0120375+00:00
+    - frId: FR-WEB-008
+      testId: TEST-WEB-008
+      createdAt: 2026-10-17T14:25:21.0120954+00:00
+    - frId: FR-WEB-009
+      trId: TR-WEB-OBS-001
+      createdAt: 2026-10-17T14:25:21.0121533+00:00
+    - frId: FR-WEB-009
+      trId: TR-WEB-SESS-001
+      createdAt: 2026-10-17T14:25:21.0122192+00:00
+    - frId: FR-WEB-009
+      testId: TEST-WEB-009
+      createdAt: 2026-10-17T14:25:21.0122777+00:00
+    - frId: FR-WEB-010
+      trId: TR-WEB-GIT-001
+      createdAt: 2026-10-17T14:25:21.0123355+00:00
+    - frId: FR-WEB-010
+      trId: TR-WEB-OBS-001
+      createdAt: 2026-10-17T14:25:21.0123948+00:00
+    - frId: FR-WEB-010
+      testId: TEST-WEB-010
+      createdAt: 2026-10-17T14:25:21.0124522+00:00
+    - frId: FR-WEB-011
+      trId: TR-WEB-SESS-001
+      createdAt: 2026-10-17T14:25:21.0125108+00:00
+    - frId: FR-WEB-011
+      trId: TR-WEB-TODO-001
+      createdAt: 2026-10-17T14:25:21.0125692+00:00
+    - frId: FR-WEB-011
+      testId: TEST-WEB-011
+      createdAt: 2026-10-17T14:25:21.0126283+00:00
+    - frId: FR-WEB-012
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0126862+00:00
+    - frId: FR-WEB-012
+      trId: TR-WEB-TODO-001
+      createdAt: 2026-10-17T14:25:21.0127439+00:00
+    - frId: FR-WEB-012
+      testId: TEST-WEB-012
+      createdAt: 2026-10-17T14:25:21.0128016+00:00
+    - frId: FR-WEB-013
+      trId: TR-WEB-API-001
+      createdAt: 2026-10-17T14:25:21.0128607+00:00
+    - frId: FR-WEB-013
+      trId: TR-WEB-SEC-002
+      createdAt: 2026-10-17T14:25:21.0129186+00:00
+    - frId: FR-WEB-013
+      testId: TEST-WEB-013
+      createdAt: 2026-10-17T14:25:21.0129761+00:00
+    - frId: FR-WEB-014
+      trId: TR-WEB-API-001
+      createdAt: 2026-10-17T14:25:21.0130338+00:00
+    - frId: FR-WEB-014
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0130925+00:00
+    - frId: FR-WEB-014
+      testId: TEST-WEB-014
+      createdAt: 2026-10-17T14:25:21.0131502+00:00
+    - frId: FR-WEB-015
+      trId: TR-WEB-GIT-001
+      createdAt: 2026-10-17T14:25:21.0132148+00:00
+    - frId: FR-WEB-015
+      trId: TR-WEB-SESS-001
+      createdAt: 2026-10-17T14:25:21.0132739+00:00
+    - frId: FR-WEB-015
+      testId: TEST-WEB-015
+      createdAt: 2026-10-17T14:25:21.0133330+00:00
+    - frId: FR-WEB-016
+      trId: TR-WEB-PRIV-001
+      createdAt: 2026-10-17T14:25:21.0133917+00:00
+    - frId: FR-WEB-016
+      trId: TR-WEB-SEC-001
+      createdAt: 2026-10-17T14:25:21.0134493+00:00
+    - frId: FR-WEB-016
+      testId: TEST-WEB-016
+      createdAt: 2026-10-17T14:25:21.0135067+00:00
+    - frId: FR-WEB-017
+      trId: TR-WEB-UI-002
+      createdAt: 2026-10-17T14:25:21.0135932+00:00
+    - frId: FR-WEB-017
+      testId: TEST-WEB-017
+      createdAt: 2026-10-17T14:25:21.0136516+00:00
+    - frId: FR-WEB-018
+      trId: TR-WEB-TODO-001
+      createdAt: 2026-10-17T14:25:21.0137098+00:00
+    - frId: FR-WEB-018
+      testId: TEST-WEB-018
+      createdAt: 2026-10-17T14:25:21.0137674+00:00
+    - frId: FR-WEB-019
+      trId: TR-WEB-CTX-001
+      createdAt: 2026-10-17T14:25:21.0138350+00:00
+    - frId: FR-WEB-019
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0138934+00:00
+    - frId: FR-WEB-019
+      testId: TEST-WEB-019
+      createdAt: 2026-10-17T14:25:21.0139510+00:00
+    - frId: FR-WEB-020
+      trId: TR-WEB-BUDGET-001
+      createdAt: 2026-10-17T14:25:21.0140104+00:00
+    - frId: FR-WEB-020
+      trId: TR-WEB-ORCH-001
+      createdAt: 2026-10-17T14:25:21.0140782+00:00
+    - frId: FR-WEB-020
+      testId: TEST-WEB-020
+      createdAt: 2026-10-17T14:25:21.0141363+00:00
+    totalCount: 1092
+  deprecated: true
+
+---

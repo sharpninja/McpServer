@@ -1,0 +1,1251 @@
+FILE src/QBrainAi.Services/Services/HostileReviewServiceCollectionExtensions.cs
+1: using Microsoft.Extensions.DependencyInjection;
+2: using Microsoft.Extensions.DependencyInjection.Extensions;
+3: using QBrainAi.Support.Mcp.Options;
+4: 
+5: namespace QBrainAi.Support.Mcp.Services;
+6: 
+7: /// <summary>TR-MCP-HOSTILEREVIEW-006: Registers the hostile-review queue-and-record pipeline.</summary>
+8: public static class HostileReviewServiceCollectionExtensions
+9: {
+10:     /// <summary>Adds hostile-review services.</summary>
+11:     public static IServiceCollection AddHostileReviewServices(this IServiceCollection services)
+12:     {
+13:         ArgumentNullException.ThrowIfNull(services);
+14:         services.AddOptions<HostileReviewWorkerOptions>()
+15:             .BindConfiguration(HostileReviewWorkerOptions.SectionName)
+16:             .Validate(
+17:                 options =>
+18:                 {
+19:                     try
+20:                     {
+21:                         options.Validate();
+22:                         return true;
+23:                     }
+24:                     catch (InvalidOperationException)
+25:                     {
+26:                         return false;
+27:                     }
+28:                 },
+29:                 "HostileReviewWorker options failed startup validation.")
+30:             .ValidateOnStart();
+31:         services.TryAddSingleton(TimeProvider.System);
+32:         services.AddScoped<HostileReviewService>(sp =>
+33:         {
+34:             var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<HostileReviewWorkerOptions>>().Value;
+35:             var db = sp.GetRequiredService<QBrainAi.Support.Mcp.Storage.McpDbContext>();
+36:             return new HostileReviewService(db, options, sp.GetService<TimeProvider>());
+37:         });
+38:         services.AddScoped<IHostileReviewService>(sp => sp.GetRequiredService<HostileReviewService>());
+39:         services.AddScoped<IHostileReviewWorker>(sp => sp.GetRequiredService<HostileReviewService>());
+40:         services.AddScoped<QBrainAi.Cqrs.Mvvm.IHostileReviewDirectorExecutor, HostileReviewDirectorExecutor>();
+41:         return services;
+42:     }
+43: }
+44: 
+45: 
+46: 
+47: 
+48: 
+49: 
+50: 
+FILE src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs
+1: namespace QBrainAi.Support.Mcp.Options;
+2: 
+3: /// <summary>TR-MCP-HOSTILEREVIEW-003: Hosted hostile-review worker options. Invalid relationships fail startup.</summary>
+4: public sealed class HostileReviewWorkerOptions
+5: {
+6:     /// <summary>Configuration section name.</summary>
+7:     public const string SectionName = "Mcp:HostileReviewWorker";
+8: 
+9:     /// <summary>When false the worker does not claim work.</summary>
+10:     public bool Enabled { get; set; } = true;
+11: 
+12:     /// <summary>Explicit pooled agent name. Must be Astra.</summary>
+13:     public string AgentName { get; set; } = "Astra";
+14: 
+15:     /// <summary>Required model id. Must be gpt-6-astra.</summary>
+16:     public string RequiredModel { get; set; } = "gpt-6-astra";
+17: 
+18:     /// <summary>Required effort. Must be xhigh.</summary>
+19:     public string RequiredEffort { get; set; } = "xhigh";
+20: 
+21:     /// <summary>Maximum active queued reviews.</summary>
+22:     public int MaximumActiveQueue { get; set; } = 200;
+23: 
+24:     /// <summary>Maximum concurrent reviews.</summary>
+25:     public int MaximumConcurrentReviews { get; set; } = 1;
+26: 
+27:     /// <summary>Poll interval.</summary>
+28:     public TimeSpan PollInterval { get; set; } = TimeSpan.FromSeconds(2);
+29: 
+30:     /// <summary>Lease duration.</summary>
+31:     public TimeSpan LeaseDuration { get; set; } = TimeSpan.FromMinutes(5);
+32: 
+33:     /// <summary>Lease renewal interval. Must be less than <see cref="LeaseDuration"/>.</summary>
+34:     public TimeSpan RenewalInterval { get; set; } = TimeSpan.FromSeconds(60);
+35: 
+36:     /// <summary>Maximum attempts per request.</summary>
+37:     public int MaximumAttempts { get; set; } = 3;
+38: 
+39:     /// <summary>Base retry delay.</summary>
+40:     public TimeSpan RetryDelay { get; set; } = TimeSpan.FromSeconds(5);
+41: 
+42:     /// <summary>Retry delay cap.</summary>
+43:     public TimeSpan RetryDelayCap { get; set; } = TimeSpan.FromSeconds(60);
+44: 
+45:     /// <summary>Execution timeout.</summary>
+46:     public TimeSpan ExecutionTimeout { get; set; } = TimeSpan.FromMinutes(30);
+47: 
+48:     /// <summary>Maximum artifact links.</summary>
+49:     public int MaximumLinks { get; set; } = 64;
+50: 
+51:     /// <summary>Per-artifact decoded limit in bytes.</summary>
+52:     public int MaximumArtifactBytes { get; set; } = 1 * 1024 * 1024;
+53: 
+54:     /// <summary>Aggregate resolved input limit in bytes.</summary>
+55:     public int MaximumAggregateBytes { get; set; } = 8 * 1024 * 1024;
+56: 
+57:     /// <summary>Reviewer output limit in bytes.</summary>
+58:     public int MaximumOutputBytes { get; set; } = 2 * 1024 * 1024;
+59: 
+60:     /// <summary>Maximum JSON depth.</summary>
+61:     public int MaximumJsonDepth { get; set; } = 32;
+62: 
+63:     /// <summary>Maximum serialized submit payload in bytes.</summary>
+64:     public int MaximumSubmitBytes { get; set; } = 1 * 1024 * 1024;
+65: 
+66:     /// <summary>Throws when option relationships are invalid.</summary>
+67:     public void Validate()
+68:     {
+69:         if (RenewalInterval >= LeaseDuration)
+70:             throw new InvalidOperationException("HostileReviewWorker RenewalInterval must be less than LeaseDuration.");
+71:         if (MaximumActiveQueue < 1)
+72:             throw new InvalidOperationException("HostileReviewWorker MaximumActiveQueue must be at least 1.");
+73:         if (MaximumConcurrentReviews < 1)
+74:             throw new InvalidOperationException("HostileReviewWorker MaximumConcurrentReviews must be at least 1.");
+75:         if (MaximumAttempts < 1)
+76:             throw new InvalidOperationException("HostileReviewWorker MaximumAttempts must be at least 1.");
+77:         if (!string.Equals(AgentName, "Astra", StringComparison.Ordinal))
+78:             throw new InvalidOperationException("HostileReviewWorker AgentName must be Astra.");
+79:         if (!string.Equals(RequiredModel, "gpt-6-astra", StringComparison.Ordinal))
+80:             throw new InvalidOperationException("HostileReviewWorker RequiredModel must be gpt-6-astra.");
+81:         if (!string.Equals(RequiredEffort, "xhigh", StringComparison.Ordinal))
+82:             throw new InvalidOperationException("HostileReviewWorker RequiredEffort must be xhigh.");
+83:     }
+84: }
+85: 
+86: 
+87: 
+88: 
+89: 
+90: 
+91: 
+92: 
+93: 
+94: 
+95: 
+96: 
+97: 
+98: 
+99: 
+100: 
+FILE src/QBrainAi.Services/Services/HostileReviewService.cs
+196:     public async Task<HostileReviewResult> AcceptReviewerOutputAsync(string requestId, HostileReviewerOutput output, CancellationToken cancellationToken = default)
+197:     {
+198:         ArgumentNullException.ThrowIfNull(output);
+199:         var entity = await LoadAsync(requestId, cancellationToken).ConfigureAwait(false);
+200:         if (entity is null)
+201:             return NotFound(requestId);
+202: 
+203:         if (!string.Equals(output.Model, HostileReviewPromptDefaults.RequiredModel, StringComparison.Ordinal)
+204:             || !string.Equals(output.Effort, HostileReviewPromptDefaults.RequiredEffort, StringComparison.Ordinal))
+205:         {
+206:             entity.Status = "Failed";
+207:             entity.LastErrorCode = "ModelUnavailable";
+208:             entity.UpdatedUtc = _time.GetUtcNow();
+209:             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+210:             var failed = Map(entity);
+211:             failed.ErrorCode = "ModelUnavailable";
+212:             failed.Success = false;
+213:             return failed;
+214:         }
+215: 
+216:         if (!AllowedVerdicts.Contains(output.Verdict))
+217:         {
+218:             entity.Status = "Failed";
+219:             entity.LastErrorCode = "malformed_output";
+220:             entity.UpdatedUtc = _time.GetUtcNow();
+221:             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+222:             var failed = Map(entity);
+223:             failed.ErrorCode = "malformed_output";
+224:             failed.Success = false;
+225:             return failed;
+226:         }
+227: 
+228:         var now = _time.GetUtcNow();
+229:         entity.Executions.Add(new HostileReviewExecutionEntity
+230:         {
+231:             ExecutionId = $"hrex-{Guid.NewGuid():N}",
+232:             RequestId = entity.RequestId,
+233:             WorkspaceId = entity.WorkspaceId,
+234:             ReviewerAgent = output.ReviewerAgent,
+235:             Model = output.Model,
+236:             Effort = output.Effort,
+237:             SourceSurface = output.SourceSurface,
+238:             PromptTemplateId = output.PromptTemplateId,
+239:             PromptVersion = output.PromptVersion,
+240:             StartedUtc = now,
+241:             EndedUtc = now,
+242:             InputTokens = output.InputTokens,
+243:             OutputTokens = output.OutputTokens,
+244:         });
+245: 
+246:         foreach (var finding in output.Findings)
+247:         {
+248:             var category = AllowedCategories.Contains(finding.Category) ? finding.Category : "uncertainty";
+249:             entity.Findings.Add(new HostileReviewFindingEntity
+250:             {
+251:                 RequestId = entity.RequestId,
+252:                 WorkspaceId = entity.WorkspaceId,
+253:                 Category = category,
+254:                 Severity = string.IsNullOrWhiteSpace(finding.Severity) ? "medium" : finding.Severity,
+255:                 ArtifactId = finding.ArtifactId,
+256:                 Location = finding.Location,
+257:                 RequirementId = finding.RequirementId,
+258:                 EvidenceSummary = finding.EvidenceSummary,
+259:                 Recommendation = finding.Recommendation,
+260:             });
+261:         }
+262: 
+263:         entity.Verdict = output.Verdict.ToUpperInvariant();
+264:         entity.QualityDisclosure = output.RequestQuality.Disclosure;
+265:         entity.QualityScopeClarity = output.RequestQuality.ScopeClarity;
+266:         entity.QualityObjectiveClarity = output.RequestQuality.ObjectiveClarity;
+267:         entity.QualityConfidence = output.RequestQuality.Confidence;
+268:         entity.QualityEnoughContext = output.RequestQuality.EnoughContext;
+269:         entity.Status = "Succeeded";
+270:         entity.UpdatedUtc = now;
+271:         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+272:         return Map(entity);
+273:     }
+274: 
+275:     private async Task<HostileReviewRequestEntity?> LoadAsync(string requestId, CancellationToken cancellationToken)
+276:         => await _db.HostileReviewRequests
+277:             .Include(item => item.Links)
+278:             .Include(item => item.Executions)
+279:             .Include(item => item.Findings)
+280:             .Include(item => item.Diagnostics)
+281:             .FirstOrDefaultAsync(item => item.RequestId == requestId, cancellationToken)
+282:             .ConfigureAwait(false);
+283: 
+284:     private static HostileReviewResult NotFound(string requestId)
+285:         => new()
+286:         {
+287:             Success = false,
+288:             HttpStatus = 404,
+289:             ErrorCode = "not_found",
+290:             Error = "Hostile review request was not found.",
+291:             RequestId = requestId,
+292:         };
+293: 
+294:     private (bool Resolved, string? Hash, string? DiagnosticCode, string? DiagnosticMessage) ResolveLink(HostileReviewArtifactLink link)
+295:     {
+296:         var type = string.IsNullOrWhiteSpace(link.ArtifactType) ? "todo" : link.ArtifactType.Trim();
+297:         var id = link.ArtifactId ?? string.Empty;
+298:         if (!string.Equals(type, "todo", StringComparison.OrdinalIgnoreCase) || string.IsNullOrWhiteSpace(id))
+299:             return (false, null, "artifact_missing", "The artifact was not found through a supported MCP store.");
+300: 
+301:         var matches = _db.TodoItems.IgnoreQueryFilters()
+302:             .Where(item => item.Id == id || item.Title == id)
+303:             .ToList();
+304:         if (matches.Count == 0)
+305:             return (false, null, "artifact_missing", "The artifact was not found through the TODO store.");
+306:         if (matches.Count > 1)
+307:             return (false, null, "artifact_ambiguous", "The artifact locator matched more than one TODO.");
+308:         var todo = matches[0];
+309:         if (!string.Equals(todo.WorkspaceId, _workspaceId, StringComparison.OrdinalIgnoreCase))
+310:             return (false, null, "artifact_unauthorized", "The artifact is not authorized in this workspace.");
+311: 
+312:         var hash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(todo.Id))).ToLowerInvariant();
+313:         return (true, hash, null, null);
+314:     }
+315: 
+316:     private static HostileReviewResult Map(HostileReviewRequestEntity entity)
+317:         => new()
+318:         {
+319:             Success = entity.HttpStatus is 0 or 200 && entity.LastErrorCode is null,
+320:             HttpStatus = entity.HttpStatus == 0 ? 200 : entity.HttpStatus,
+FILE src/QBrainAi.Storage/McpDbContext.cs
+1500:             TodoPath = "docs/todo.yaml",
+1501:             IsEnabled = true,
+1502:             DateTimeCreated = now,
+1503:             DateTimeModified = now,
+1504:         };
+1505:     }
+1506: 
+1507:     private void AppendAuditRows()
+1508:     {
+1509:         if (!IsAuditTableAvailable())
+1510:             return;
+1511: 
+1512:         var now = DateTimeOffset.UtcNow;
+1513:         var auditRows = ChangeTracker.Entries()
+1514:             .Where(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted)
+1515:             .Where(IsDurableAuditableEntry)
+1516:             .Select(e => CreateAuditRow(e, now))
+1517:             .Where(e => e is not null)
+1518:             .Select(e => e!)
+1519:             .ToArray();
+1520: 
+1521:         if (auditRows.Length == 0)
+1522:             return;
+1523: 
+1524:         DataAuditLogs.AddRange(auditRows);
+1525:     }
+1526: 
+1527:     private bool IsAuditTableAvailable()
+1528:     {
+1529:         try
+1530:         {
+1531:             _ = DataAuditLogs.IgnoreQueryFilters().Any();
+1532:             return true;
+1533:         }
+1534:         catch (DbException ex) when (IsWorkspaceBootstrapSchemaUnavailable(ex))
+1535:         {
+1536:             return false;
+1537:         }
+1538:     }
+1539: 
+1540:     private static DataAuditLogEntity? CreateAuditRow(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, DateTimeOffset now)
+1541:     {
+1542:         var action = entry.State switch
+1543:         {
+1544:             EntityState.Added => "create",
+1545:             EntityState.Deleted => "delete",
+1610:         var property = entry.Properties.FirstOrDefault(p => p.Metadata.Name == nameof(WorkspaceEntity.WorkspaceId));
+1611:         return property?.CurrentValue as string ?? property?.OriginalValue as string;
+1612:     }
+1613: 
+1614:     private static bool TryGetSoftDeleteValue(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+1615:     {
+1616:         var property = entry.Properties.FirstOrDefault(p => p.Metadata.Name == "IsDeleted");
+1617:         return property?.CurrentValue is true;
+1618:     }
+1619: 
+1620:     private static bool IsDurableAuditableEntry(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+1621:     {
+1622:         return entry.Entity is not DataAuditLogEntity
+1623:             && entry.Entity is not WorkspaceEntity { WorkspaceId: "" }
+1624:             && entry.Metadata.GetTableName() is not null
+1625:             && entry.Metadata.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal)
+1626:             && entry.Properties.Any(p => p.Metadata.Name == "IsDeleted");
+1627:     }
+1628: 
+1629:     private static bool IsPersistentEntityEntry(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+1630:     {
+1631:         return entry.Metadata.GetTableName() is not null
+1632:             && entry.Metadata.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal);
+1633:     }
+1634: 
+1635:     private static void SetShadowValue(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, string propertyName, object? value)
+1636:     {
+1637:         var property = entry.Properties.FirstOrDefault(p => p.Metadata.Name == propertyName);
+1638:         if (property is not null)
+1639:             property.CurrentValue = value;
+1640:     }
+FILE src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs
+18: internal sealed class OneShotCliAgentExecutionStrategy(
+19:     IProcessEnvironmentService processEnvironment,
+20:     IProcessSpawner processSpawner,
+21:     ILogger<OneShotCliAgentExecutionStrategy> logger) : IAgentExecutionStrategy
+22: {
+23:     private const string CodexHighestReasoningEffortConfig = "model_reasoning_effort=\"xhigh\"";
+24:     private const string ClaudeHighestEffort = "max";
+25:     private const string ClineHighestThinkingLevel = "xhigh";
+26:     private const string GrokHighestEffort = "max";
+27: 
+28:     /// <inheritdoc />
+29:     public string Name => AgentExecutionStrategyNames.OneShotCli;
+30: 
+31:     /// <inheritdoc />
+32:     public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+33:         AgentExecutionSessionRequest request,
+34:         CancellationToken cancellationToken = default)
+35:     {
+36:         ArgumentNullException.ThrowIfNull(request);
+37:         cancellationToken.ThrowIfCancellationRequested();
+38:         return ValueTask.FromResult<IAgentExecutionSession>(
+39:             new OneShotCliAgentExecutionSession(request, processEnvironment, processSpawner, logger));
+40:     }
+41: 
+42:     private sealed class OneShotCliAgentExecutionSession(
+43:         AgentExecutionSessionRequest request,
+44:         IProcessEnvironmentService processEnvironment,
+45:         IProcessSpawner processSpawner,
+46:         ILogger logger) : IAgentExecutionSession
+47:     {
+48:         private ISpawnedProcess? _process;
+49: 
+50:         public bool IsAlive => _process is { HasExited: false };
+51: 
+52:         public int? ProcessId => _process?.Id;
+53: 
+54:         public async Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+55:             await RunPromptAsync(request.InitialPrompt, cancellationToken).ConfigureAwait(false);
+56: 
+57:         public async IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(
+58:             [EnumeratorCancellation] CancellationToken cancellationToken = default)
+59:         {
+60:             var result = await ReadInitialResponseAsync(cancellationToken).ConfigureAwait(false);
+61:             if (!string.IsNullOrWhiteSpace(result.Body))
+62:                 yield return result.Body;
+63:         }
+64: 
+65:         public async Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+66:             await RunPromptAsync(prompt, cancellationToken).ConfigureAwait(false);
+67: 
+68:         public async IAsyncEnumerable<string> SendStreamingAsync(
+69:             string prompt,
+70:             [EnumeratorCancellation] CancellationToken cancellationToken = default)
+71:         {
+72:             var result = await SendAsync(prompt, cancellationToken).ConfigureAwait(false);
+73:             if (!string.IsNullOrWhiteSpace(result.Body))
+74:                 yield return result.Body;
+75:         }
+76: 
+77:         public Task SendEscapeAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+78: 
+79:         public Task EndAsync(TimeSpan timeout)
+80:         {
+238:             switch (agent)
+239:             {
+240:                 case "codex":
+241:                     AddCodexArguments(psi, options, workingDirectory, outputPath);
+242:                     break;
+243: 
+244:                 case "claude":
+245:                     AddClaudeArguments(psi, options, workingDirectory);
+246:                     break;
+247: 
+248:                 case "grok":
+249:                     promptFilePath = Path.Combine(tempDirectory, $"oneshot-prompt-{Guid.NewGuid():N}.txt");
+250:                     await File.WriteAllTextAsync(promptFilePath, prompt, cancellationToken).ConfigureAwait(false);
+251:                     AddGrokArguments(psi, workingDirectory, promptFilePath);
+252:                     writePromptToStandardInput = false;
+253:                     break;
+254: 
+255:                 case "cline":
+256:                     AddClineArguments(psi, workingDirectory, prompt);
+257:                     writePromptToStandardInput = false;
+258:                     break;
+259: 
+260:                 default:
+261:                     throw new NotSupportedException($"Unsupported one-shot CLI agent '{agent}'.");
+262:             }
+263: 
+264:             processEnvironment.ApplyAll(psi, options.RunAs, options.GitHubToken);
+265:             psi.FileName = processEnvironment.ResolveExecutable(psi, agentPath);
+266:             WrapWindowsCommandShim(psi);
+267: 
+268:             foreach (var (key, value) in options.EnvironmentVariables)
+269:             {
+270:                 psi.Environment[key] = value;
+271:             }
+272: 
+273:             return new OneShotLaunch(psi, writePromptToStandardInput, promptFilePath);
+274:         }
+275: 
+276:         private static void AddCodexArguments(
+277:             ProcessStartInfo psi,
+278:             AgentCliClientOptions options,
+279:             string workingDirectory,
+280:             string outputPath)
+281:         {
+282:             psi.ArgumentList.Add("exec");
+283:             if (!IsAutoModel(options.Model))
+284:             {
+285:                 psi.ArgumentList.Add("--model");
+286:                 psi.ArgumentList.Add(options.Model);
+287:             }
+288: 
+289:             psi.ArgumentList.Add("-c");
+290:             psi.ArgumentList.Add(CodexHighestReasoningEffortConfig);
+291:             psi.ArgumentList.Add("--sandbox");
+292:             psi.ArgumentList.Add("read-only");
+293:             psi.ArgumentList.Add("--color");
+294:             psi.ArgumentList.Add("never");
+295:             psi.ArgumentList.Add("--skip-git-repo-check");
+296:             psi.ArgumentList.Add("-C");
+297:             psi.ArgumentList.Add(workingDirectory);
+298:             psi.ArgumentList.Add("-o");
+299:             psi.ArgumentList.Add(outputPath);
+300:             psi.ArgumentList.Add("-");
+301:         }
+302: 
+303:         private static void AddClaudeArguments(
+304:             ProcessStartInfo psi,
+305:             AgentCliClientOptions options,
+306:             string workingDirectory)
+307:         {
+308:             psi.ArgumentList.Add("-p");
+309:             psi.ArgumentList.Add("--permission-mode");
+310:             psi.ArgumentList.Add("plan");
+311:             psi.ArgumentList.Add("--add-dir");
+312:             psi.ArgumentList.Add(workingDirectory);
+313:             psi.ArgumentList.Add("--model");
+314:             psi.ArgumentList.Add(IsAutoModel(options.Model) ? "opus" : options.Model);
+315:             psi.ArgumentList.Add("--effort");
+316:             psi.ArgumentList.Add(ClaudeHighestEffort);
+317:         }
+318: 
+319:         private static void AddGrokArguments(
+320:             ProcessStartInfo psi,
+321:             string workingDirectory,
+322:             string promptFilePath)
+323:         {
+324:             psi.ArgumentList.Add("--prompt-file");
+325:             psi.ArgumentList.Add(promptFilePath);
+326:             psi.ArgumentList.Add("--cwd");
+327:             psi.ArgumentList.Add(workingDirectory);
+328:             psi.ArgumentList.Add("--permission-mode");
+329:             psi.ArgumentList.Add("plan");
+330:             psi.ArgumentList.Add("--output-format");
+331:             psi.ArgumentList.Add("plain");
+332:             psi.ArgumentList.Add("--effort");
+333:             psi.ArgumentList.Add(GrokHighestEffort);
+334:             psi.ArgumentList.Add("--reasoning-effort");
+335:             psi.ArgumentList.Add(GrokHighestEffort);
+336:         }
+337: 
+338:         private static void AddClineArguments(
+339:             ProcessStartInfo psi,
+340:             string workingDirectory,
+341:             string prompt)
+342:         {
+343:             psi.ArgumentList.Add("-p");
+344:             psi.ArgumentList.Add("-c");
+345:             psi.ArgumentList.Add(workingDirectory);
+FILE src/QBrainAi.Services/Services/CopilotCliAgentExecutionStrategy.cs
+1: using QBrainAi.Common.AgentCli;
+2: 
+3: namespace QBrainAi.Support.Mcp.Services;
+4: 
+5: internal sealed class CopilotCliAgentExecutionStrategy(IAgentCliClient copilotClient) : IAgentExecutionStrategy
+6: {
+7:     public string Name => AgentExecutionStrategyNames.CopilotCli;
+8: 
+9:     public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+10:         AgentExecutionSessionRequest request,
+11:         CancellationToken cancellationToken = default)
+12:     {
+13:         ArgumentNullException.ThrowIfNull(request);
+14:         cancellationToken.ThrowIfCancellationRequested();
+15: 
+16:         var session = copilotClient.CreateInteractiveSession(request.InitialPrompt, request.Options);
+17:         return ValueTask.FromResult<IAgentExecutionSession>(new CopilotCliAgentExecutionSession(session));
+18:     }
+19: 
+20:     private sealed class CopilotCliAgentExecutionSession(AgentCliInteractiveSession session) : IAgentExecutionSession
+21:     {
+22:         public bool IsAlive => session.IsAlive;
+23: 
+24:         public int? ProcessId => session.ProcessId;
+25: 
+26:         public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+27:             session.ReadInitialResponseAsync(cancellationToken);
+28: 
+29:         public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default) =>
+30:             session.ReadInitialResponseStreamingAsync(cancellationToken);
+31: 
+32:         public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+33:             session.SendAsync(prompt, cancellationToken);
+34: 
+35:         public IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default) =>
+36:             session.SendStreamingAsync(prompt, cancellationToken);
+37: 
+38:         public Task SendEscapeAsync(CancellationToken cancellationToken = default) =>
+39:             session.SendEscapeAsync(cancellationToken);
+40: 
+41:         public Task EndAsync(TimeSpan timeout) => session.EndAsync(timeout);
+42: 
+43:         public ValueTask DisposeAsync() => session.DisposeAsync();
+44:     }
+45: }
+FILE src/QBrainAi.Support.Mcp/Controllers/EventStreamController.cs
+1: using System.Text.Json;
+2: using QBrainAi.Support.Mcp.Notifications;
+3: using QBrainAi.Support.Mcp.Services;
+4: using QBrainAi.Support.Mcp.Storage;
+5: using Microsoft.AspNetCore.Mvc;
+6: using Microsoft.Extensions.Logging;
+7: 
+8: namespace QBrainAi.Support.Mcp.Controllers;
+9: 
+10: /// <summary>
+11: /// FR-MCP-045: Server-Sent Events stream for REST clients to receive change notifications.
+12: /// </summary>
+13: [Route("qbrainai/events")]
+14: [Route("mcpserver/events")]
+15: [ApiController]
+16: public sealed class EventStreamController : ControllerBase
+17: {
+18:     private static readonly JsonSerializerOptions s_jsonOptions = new()
+19:     {
+20:         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+21:     };
+22: 
+23:     /// <summary>
+24:     /// Opens an SSE stream of workspace change events.
+25:     /// Optionally filter by category (e.g. <c>?category=todo</c>).
+FILE src/QBrainAi.Storage/WorkspaceKeyConversion.cs
+1: using Microsoft.EntityFrameworkCore;
+2: using Microsoft.EntityFrameworkCore.ChangeTracking;
+3: using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+4: 
+5: namespace QBrainAi.Support.Mcp.Storage;
+6: 
+7: /// <summary>
+8: /// FR-MCP-PATHNORM-001 / TR-MCP-PATHNORM-001: persisted workspace keys (every <c>WorkspaceId</c>,
+9: /// <c>OwnerWorkspaceId</c> and entity <c>WorkspacePath</c> column) are stored in the lexical canonical
+10: /// form from <see cref="WorkspaceIdentity.CanonicalizeWorkspaceId"/>. The converter applies on writes
+11: /// and, on relational providers, to query parameters compared with these properties, so a predicate
+12: /// built from a caller's raw path (<c>Q:\ws</c>) matches the stored canonical row (<c>Q:/ws</c>). The
+13: /// comparer makes the change tracker treat both spellings as one key.
+14: /// </summary>
+15: internal static class WorkspaceKeyConversion
+16: {
+17:     private static readonly HashSet<string> PropertyNames = new(StringComparer.Ordinal)
+18:     {
+19:         "WorkspaceId",
+20:         "OwnerWorkspaceId",
+21:         "WorkspacePath",
+22:     };
+23: 
+24:     private static readonly ValueConverter<string, string> Converter = new(
+25:         value => WorkspaceIdentity.CanonicalizeWorkspaceId(value),
+26:         value => value);
+27: 
+28:     private static readonly ValueComparer<string> Comparer = new(
+29:         (left, right) => left == null
+30:             ? right == null
+31:             : right != null && WorkspaceIdentity.CanonicalizeWorkspaceId(left) == WorkspaceIdentity.CanonicalizeWorkspaceId(right),
+32:         value => value == null ? 0 : WorkspaceIdentity.CanonicalizeWorkspaceId(value).GetHashCode(StringComparison.Ordinal),
+33:         value => value);
+34: 
+35:     /// <summary>Applies the canonical converter and comparer to every workspace-key property in the model.</summary>
+FILE src/QBrainAi.Client/WorkspacePathNormalizer.cs
+120:     public string Combine(string rootPath, params string[] segments)
+121:     {
+122:         ArgumentNullException.ThrowIfNull(segments);
+123:         var current = Normalize(rootPath);
+124:         foreach (var segment in segments)
+125:         {
+126:             if (string.IsNullOrWhiteSpace(segment))
+127:                 continue;
+128: 
+129:             var trimmed = segment.Trim();
+130:             if (IsWindowsRooted(trimmed) || trimmed.StartsWith('/'))
+131:             {
+132:                 current = Normalize(trimmed);
+133:                 continue;
+134:             }
+135: 
+136:             // '/' is a separator in both syntaxes; lexical normalization of the root's own
+137:             // platform collapses it (and any dot segments) into canonical form.
+138:             current = WorkspaceIdentityPath.NormalizeLexicalPath(
+139:                 current.TrimEnd('/', '\\') + "/" + trimmed,
+140:                 DetectTrimmed(current));
+141:         }
+142: 
+143:         return current;
+144:     }
+145: 
+146:     /// <inheritdoc />
+147:     public bool IsHostNative(string workspacePath) =>
+148:         DetectPlatform(workspacePath) == _host.Platform;
+149: 
+150:     private WorkspacePathPlatform DetectTrimmed(string path)
+151:     {
+152:         if (IsWindowsRooted(path))
+153:             return WorkspacePathPlatform.Windows;
+154: 
+155:         if (path.StartsWith('/'))
+156:             return WorkspacePathPlatform.CaseSensitive;
+157: 
+158:         return _host.Platform;
+159:     }
+160: 
+161:     private static bool IsWindowsRooted(string path) =>
+162:         (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2])) ||
+163:         path.StartsWith(@"\\", StringComparison.Ordinal) ||
+164:         path.StartsWith("//", StringComparison.Ordinal);
+165: 
+166:     private static bool IsSeparator(char value) => value is '/' or '\\';
+167: }
+168: 
+169: /// <summary>
+170: /// TR-MCP-FED-PATH-001: <see cref="IWorkspaceHostEnvironment"/> backed by the running process.
+171: /// </summary>
+172: public sealed class SystemWorkspaceHostEnvironment : IWorkspaceHostEnvironment
+173: {
+174:     /// <summary>Shared instance for the current process.</summary>
+175:     public static SystemWorkspaceHostEnvironment Instance { get; } = new();
+FILE src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs
+45:     {
+46:         var normalized = NormalizeWorkspacePath(workspacePath);
+47: 
+48:         await _gate.WaitAsync(ct).ConfigureAwait(false);
+49:         try
+50:         {
+51:             using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
+52:             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
+53:             var match = doc.Entries.FirstOrDefault(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase));
+54:             if (match is null)
+55:                 return null;
+56: 
+57:             try
+58:             {
+85:         try
+86:         {
+87:             using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
+88:             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
+89:             var existing = doc.Entries.FirstOrDefault(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase));
+90:             if (existing is null)
+91:             {
+92:                 doc.Entries.Add(new GitHubTokenStoreEntry
+93:                 {
+94:                     WorkspacePath = normalized,
+95:                     AccessTokenProtected = encrypted,
+120:         await _gate.WaitAsync(ct).ConfigureAwait(false);
+121:         try
+122:         {
+123:             using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
+124:             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
+125:             var removed = doc.Entries.RemoveAll(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase)) > 0;
+126:             if (removed)
+127:                 await WriteUnlockedAsync(doc, ct).ConfigureAwait(false);
+128:             return removed;
+129:         }
+130:         finally
+131:         {
+132:             _gate.Release();
+133:         }
+134:     }
+135: 
+136:     /// <summary>Disposes synchronization resources.</summary>
+137:     public void Dispose()
+138:     {
+139:         _gate.Dispose();
+140:     }
+141: 
+142:     private async Task<GitHubTokenStoreDocument> ReadUnlockedAsync(CancellationToken ct)
+143:     {
+144:         var path = ResolveStorePath();
+145:         if (!File.Exists(path))
+146:             return new GitHubTokenStoreDocument();
+147: 
+148:         try
+149:         {
+150:             EnsureRestrictedFilePermissions(path);
+317:     private static string NormalizeWorkspacePath(string workspacePath) =>
+318:         NormalizeWorkspacePath(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process);
+319: 
+320:     /// <summary>TR-MCP-FED-PATH-001: token-store key from the canonical workspace path.</summary>
+321:     internal static string NormalizeWorkspacePath(string workspacePath, QBrainAi.Client.IWorkspacePathNormalizer normalizer)
+322:     {
+323:         if (string.IsNullOrWhiteSpace(workspacePath))
+324:             throw new ArgumentException("Workspace path is required.", nameof(workspacePath));
+325: 
+326:         return normalizer.Normalize(workspacePath);
+327:     }
+328: 
+329: }
+330: 
+FILE src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs
+1: using System.ComponentModel.DataAnnotations;
+2: using System.ComponentModel.DataAnnotations.Schema;
+3: 
+4: namespace QBrainAi.Support.Mcp.Storage.Entities;
+5: 
+6: /// <summary>TR-MCP-HOSTILEREVIEW-003: Reviewer execution metadata. Token counts are omitted when not supplied.</summary>
+7: public sealed class HostileReviewExecutionEntity
+8: {
+9:     /// <summary>Execution identifier.</summary>
+10:     [Key]
+11:     [StringLength(128)]
+12:     public required string ExecutionId { get; set; }
+13: 
+14:     /// <summary>Parent request id.</summary>
+15:     [Required]
+16:     [StringLength(128)]
+17:     public required string RequestId { get; set; }
+18: 
+19:     /// <summary>Workspace discriminator.</summary>
+20:     [Required]
+21:     [StringLength(1024)]
+22:     public required string WorkspaceId { get; set; }
+23: 
+24:     /// <summary>Reviewer agent identity.</summary>
+25:     [Required]
+26:     [StringLength(128)]
+27:     public required string ReviewerAgent { get; set; }
+28: 
+29:     /// <summary>Model string actually used.</summary>
+30:     [Required]
+31:     [StringLength(128)]
+32:     public required string Model { get; set; }
+33: 
+34:     /// <summary>Effort level actually used.</summary>
+35:     [Required]
+36:     [StringLength(32)]
+37:     public required string Effort { get; set; }
+38: 
+39:     /// <summary>Plugin or source surface.</summary>
+40:     [StringLength(64)]
+41:     public string? SourceSurface { get; set; }
+42: 
+43:     /// <summary>Prompt template id.</summary>
+44:     [StringLength(128)]
+45:     public string? PromptTemplateId { get; set; }
+46: 
+47:     /// <summary>Prompt version.</summary>
+48:     [StringLength(128)]
+49:     public string? PromptVersion { get; set; }
+50: 
+51:     /// <summary>UTC start.</summary>
+52:     public DateTimeOffset StartedUtc { get; set; }
+53: 
+54:     /// <summary>UTC end.</summary>
+55:     public DateTimeOffset? EndedUtc { get; set; }
+56: 
+57:     /// <summary>Input tokens when the reviewer surface supplied them; otherwise null (never fabricated).</summary>
+58:     public int? InputTokens { get; set; }
+59: 
+60:     /// <summary>Output tokens when supplied; otherwise null.</summary>
+61:     public int? OutputTokens { get; set; }
+62: 
+63:     /// <summary>Parent request.</summary>
+64:     [ForeignKey(nameof(RequestId))]
+65:     public HostileReviewRequestEntity? Request { get; set; }
+66: }
+67: 
+68: 
+69: 
+70: 
+FILE src/QBrainAi.Client/Models/SessionLogModels.cs
+1: using System;
+2: using System.Collections.Generic;
+3: using System.Text.Json.Serialization;
+4: 
+5: namespace QBrainAi.Client.Models;
+6: 
+7: /// <summary>Unified session log DTO for submit and query.</summary>
+8: public sealed class UnifiedSessionLogDto
+9: {
+10:     /// <summary>Agent source type (e.g. Copilot, Cursor, Cline).</summary>
+11:     [JsonPropertyName("sourceType")]
+12:     public string? SourceType { get; set; }
+13: 
+14:     /// <summary>Stable session identifier.</summary>
+15:     [JsonPropertyName("sessionId")]
+16:     public string? SessionId { get; set; }
+17: 
+18:     /// <summary>Optional linked agent definition identifier resolved from the source type.</summary>
+19:     [JsonPropertyName("agentDefinitionId")]
+20:     public string? AgentDefinitionId { get; set; }
+21: 
+22:     /// <summary>Provider-native agent session identifier for the session header.</summary>
+23:     [JsonPropertyName("agentSessionId")]
+24:     public string? AgentSessionId { get; set; }
+25: 
+26:     /// <summary>Provider-native transcript file path for the session header.</summary>
+27:     [JsonPropertyName("agentSessionTranscriptFile")]
+28:     public string? AgentSessionTranscriptFile { get; set; }
+29: 
+30:     /// <summary>Agent executable path captured in the session header.</summary>
+31:     [JsonPropertyName("agentExecutablePath")]
+32:     public string? AgentExecutablePath { get; set; }
+33: 
+34:     /// <summary>Agent executable version captured in the session header.</summary>
+35:     [JsonPropertyName("agentExecutableVersion")]
+36:     public string? AgentExecutableVersion { get; set; }
+37: 
+38:     /// <summary>Session title.</summary>
+39:     [JsonPropertyName("title")]
+40:     public string? Title { get; set; }
+41: 
+42:     /// <summary>AI model used.</summary>
+43:     [JsonPropertyName("model")]
+44:     public string? Model { get; set; }
+45: 
+46:     /// <summary>Session start time (ISO 8601).</summary>
+47:     [JsonPropertyName("started")]
+48:     public string? Started { get; set; }
+49: 
+50:     /// <summary>Last activity time (ISO 8601).</summary>
+51:     [JsonPropertyName("lastUpdated")]
+52:     public string? LastUpdated { get; set; }
+53: 
+54:     /// <summary>Session status (in_progress, completed).</summary>
+55:     [JsonPropertyName("status")]
+56:     public string? Status { get; set; }
+57: 
+58:     /// <summary>Number of turns.</summary>
+59:     [JsonPropertyName("turnCount")]
+60:     public int TurnCount { get; set; }
+61: 
+62:     /// <summary>Workspace metadata.</summary>
+63:     [JsonPropertyName("workspace")]
+64:     public WorkspaceInfoDto? Workspace { get; set; }
+65: 
+66:     /// <summary>Request turns.</summary>
+67:     [JsonPropertyName("turns")]
+68:     public List<UnifiedRequestEntryDto>? Turns { get; set; }
+69: 
+70:     /// <summary>FR-MCP-TRIAGESTORE-001: session-scoped tags persisted and returned on query.</summary>
+71:     [JsonPropertyName("tags")]
+72:     public List<string>? Tags { get; set; }
+73: 
+74:     /// <summary>Total tokens across all turns.</summary>
+75:     [JsonPropertyName("totalTokens")]
+76:     public int? TotalTokens { get; set; }
+77: 
+78:     /// <summary>Optional Cursor session label.</summary>
+79:     [JsonPropertyName("cursorSessionLabel")]
+80:     public string? CursorSessionLabel { get; set; }
+81: 
+82:     /// <summary>Optional Copilot statistics.</summary>
+83:     [JsonPropertyName("copilotStatistics")]
+84:     public CopilotStatisticsDto? CopilotStatistics { get; set; }
+85: }
+FILE plugins/core/lib-ps/plugin-hook.ps1
+971:     .SYNOPSIS
+972:         FR-MCP-SESSIONLIFE-004: failed-build and incomplete-audit before any allow or recency write.
+973:     .DESCRIPTION
+974:         Returns 'allow' for an operator override, a block reason, or $null when the evidence does not block.
+975:     #>
+976:     param(
+977:         [Parameter(Mandatory)][string]$EvidencePath,
+978:         [Parameter(Mandatory)][string]$CacheDir
+979:     )
+980: 
+981:     if (-not (Test-Path -LiteralPath $EvidencePath)) { return $null }
+982: 
+983:     $edits = 0
+984:     $editsText = Get-YamlScalar -Path $EvidencePath -Key 'codeEdits'
+985:     if ($editsText) {
+986:         $parsedEdits = 0
+987:         if ([int]::TryParse($editsText, [ref]$parsedEdits)) { $edits = $parsedEdits }
+988:     }
+989:     $buildStatus = Get-YamlScalar -Path $EvidencePath -Key 'lastBuildStatus'
+990:     if ($edits -gt 0 -and $buildStatus -eq 'failed') {
+991:         $acceptFailure = Join-Path $CacheDir 'turn-accept-failure.marker'
+992:         if (Test-Path -LiteralPath $acceptFailure) {
+993:             Remove-Item -LiteralPath $acceptFailure -Force
+994:             return 'allow'
+995:         }
+996: 
+997:         return "Last build in this turn failed after $edits code edit(s)."
+998:     }
+999: 
+1000:     $auditActions = Get-YamlScalar -Path $EvidencePath -Key 'auditActions'
+1001:     $auditFiles = Get-YamlScalar -Path $EvidencePath -Key 'auditFiles'
+1002:     $auditDialog = Get-YamlScalar -Path $EvidencePath -Key 'auditDialog'
+1003:     $auditDecisions = Get-YamlScalar -Path $EvidencePath -Key 'auditDecisions'
+1004:     $auditCommits = Get-YamlScalar -Path $EvidencePath -Key 'auditCommits'
+1005:     $hasAuditSchema = $null -ne $auditActions -or $null -ne $auditFiles -or $null -ne $auditDialog -or $null -ne $auditDecisions -or $null -ne $auditCommits
+1006:     if ($edits -gt 0 -and $hasAuditSchema) {
+1007:         $auditTotal = [int](($auditActions ?? '0')) + [int](($auditFiles ?? '0')) + [int](($auditDialog ?? '0')) + [int](($auditDecisions ?? '0')) + [int](($auditCommits ?? '0'))
+1008:         if ($auditTotal -le 0) {
+1009:             $acceptAudit = Join-Path $CacheDir 'turn-accept-incomplete-audit.marker'
+1010:             if (Test-Path -LiteralPath $acceptAudit) {
+1011:                 Remove-Item -LiteralPath $acceptAudit -Force
+1012:                 return 'allow'
+1013:             }
+1014: 
+1015:             return 'audit is incomplete for a completed code-edit turn'
+1016:         }
+1017:     }
+1041: function Get-PluginTurnPersistenceProof {
+1042:     <#
+1043:     .SYNOPSIS
+1044:         FR-MCP-SESSIONLIFE-004: exact-turn proof through client.SessionLog.GetAsync.
+1045:     .DESCRIPTION
+1046:         Calls the typed session client once via the plugin bridge. Only an exact
+1047:         completed identity is Kind Reconcile. Missing, unavailable, workspace
+1048:         mismatch, and identity mismatch fail closed.
+1049:     #>
+1050:     param(
+1051:         [string]$WorkspacePath,
+1052:         [string]$Agent,
+1053:         [string]$SessionId,
+1054:         [string]$RequestId
+1055:     )
+1056: 
+1057:     $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+1058:         agent = $Agent
+1059:         sessionId = $SessionId
+1060:         requestId = $RequestId
+1061:         workspacePath = $WorkspacePath
+1062:     })
+1063:     $raw = $null
+1064:     try {
+1065:         $raw = @(Invoke-PluginRepl -Method 'client.SessionLog.GetAsync' -ParamsYaml $paramsYaml)
+1066:     } catch {
+1067:         # No proof document. Keep the historical stale pin instead of inventing a server outcome.
+1068:         return [pscustomobject]@{ Kind = 'Active' }
+1069:     }
+1070: 
+1071:     $text = ($raw | ForEach-Object { [string]$_ }) -join "`n"
+1072:     if ([string]::IsNullOrWhiteSpace($text)) {
+1073:         return [pscustomobject]@{ Kind = 'Active' }
+1074:     }
+1075: 
+1076:     $document = $null
+1077:     try {
+1078:         $document = ConvertFrom-Yaml -Yaml $text -Ordered -ErrorAction Stop
+1079:     } catch {
+1080:         return [pscustomobject]@{ Kind = 'Active' }
+1081:     }
+1082: 
+1083:     $payload = Get-PluginMapValue -Map $document -Key 'payload'
+1084:     $result = Get-PluginMapValue -Map $payload -Key 'result'
+1085:     if ($null -eq $result) {
+1086:         return [pscustomobject]@{ Kind = 'Active' }
+1087:     }
+1088: 
+1089:     $proofWorkspace = [string](Get-PluginMapValue -Map $result -Key 'workspacePath')
+1090:     $workspaceCandidates = @($WorkspacePath, $env:MCP_WORKSPACE_PATH, $env:MCPSERVER_WORKSPACE_PATH) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+1091:     $workspaceMatch = $false
+1092:     foreach ($candidate in $workspaceCandidates) {
+1093:         if (Test-PluginPathMatch -Left $proofWorkspace -Right $candidate) { $workspaceMatch = $true; break }
+1094:     }
+1095:     if (-not $workspaceMatch) {
+1096:         return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative turn workspace does not match the local workspace' }
+1097:     }
+1098: 
+1099:     $proofAgent = [string](Get-PluginMapValue -Map $result -Key 'sourceType')
+1100:     $proofSession = [string](Get-PluginMapValue -Map $result -Key 'sessionId')
+1101:     $proofRequest = [string](Get-PluginMapValue -Map $result -Key 'requestId')
+1102:     $agentMatch = [string]::Equals($proofAgent.Trim(), ([string]$Agent).Trim(), [System.StringComparison]::OrdinalIgnoreCase)
+1103:     $sessionMatch = [string]::Equals($proofSession.Trim(), ([string]$SessionId).Trim(), [System.StringComparison]::Ordinal)
+1104:     $requestMatch = [string]::Equals($proofRequest.Trim(), ([string]$RequestId).Trim(), [System.StringComparison]::Ordinal)
+1105:     if (-not $agentMatch -or -not $sessionMatch -or -not $requestMatch) {
+1106:         return [pscustomobject]@{ Kind = 'Block'; Reason = "identity-changed: authoritative turn '$proofRequest' is not local turn '$RequestId'" }
+1107:     }
+1108: 
+1109:     $outcome = ([string](Get-PluginMapValue -Map $result -Key 'outcome')).Trim()
+1110:     $serverStatus = ([string](Get-PluginMapValue -Map $result -Key 'serverStatus')).Trim()
+1111:     if ($outcome -eq 'Missing') {
+1112:         return [pscustomobject]@{ Kind = 'Block'; Reason = "authoritative turn is missing for $RequestId" }
+1113:     }
+1114:     if ($outcome -eq 'Unavailable') {
+1115:         return [pscustomobject]@{ Kind = 'Block'; Reason = "authoritative session query is unavailable for $RequestId" }
+1116:     }
+1160:             $sessionAgeStale = $updatedStale
+1161:         }
+1162:     }
+1163: 
+1164:     $evidencePath = $null
+1165:     if (Test-Path -LiteralPath $turnFile) {
+1166:         $evidencePath = $turnFile
+1167:     } elseif (Test-Path -LiteralPath $sessionFile) {
+1168:         $evidencePath = $sessionFile
+1169:     }
+1170:     if ($evidencePath) {
+1171:         $enforcement = Get-PluginStopEnforcementDecision -EvidencePath $evidencePath -CacheDir $cacheDir
+1172:         if ($enforcement -eq 'allow') {
+1173:             Write-PluginJson ([ordered]@{})
+1174:             return
+1175:         }
+1176:         if ($enforcement) {
+1177:             Write-PluginJson ([ordered]@{ decision = 'block'; reason = $enforcement })
+1178:             return
+1245:             Write-PluginJson ([ordered]@{})
+1246:             return
+1247:         }
+1248: 
+1249:         $response = 'Auto-closed by PowerShell stop gate.'
+1250:         $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+1251:             response = $response
+1252:         })
+1253:         $completeOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml
+1254:         if ($script:LastPluginReplExitCode -ne 0) {
+1255:             Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'workflow.sessionlog.completeTurn failed; current turn remains in_progress'; output = (($completeOutput | Out-String).Trim()) })
+1256:             return
+1257:         }
+1258:         $status = Get-YamlScalar -Path $turnFile -Key 'status'
+1259:         if ($status -ne 'completed') {
+1260:             Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'workflow.sessionlog.completeTurn did not mark the current turn completed' })
+1261:             return
+1262:         }
+1263:     }
+1264: 
+1265:     $edits = [int]((Get-YamlScalar -Path $turnFile -Key 'codeEdits') ?? '0')
+FILE plugins/core/lib-ps/repl-invoke.ps1
+710: function Stop-ReplChildTree {
+711:     <#
+712:     .SYNOPSIS
+713:         Close stdin, kill the child process tree, and await owned pipe closure.
+714:     .DESCRIPTION
+715:         Process.WaitForExit waits only for the root process after Kill(true). Redirected stdout
+716:         and stderr remain open while a killed descendant is still exiting, so require those
+717:         drain tasks to complete inside the same cleanup reserve before confirming termination.
+718:     #>
+719:     param(
+720:         $Process,
+721:         $StdoutTask,
+722:         $StderrTask,
+723:         [int]$WaitMs = 500
+724:     )
+725: 
+726:     if ($null -eq $Process) { return $true }
+727:     try {
+728:         $Process.StandardInput.BaseStream.Dispose()
+729:     } catch {
+730:     }
+731:     try {
+732:         $Process.StandardInput.Dispose()
+733:     } catch {
+734:     }
+735:     try {
+736:         if (-not $Process.HasExited) {
+737:             $Process.Kill($true)
+738:         }
+739:     } catch {
+740:     }
+741: 
+742:     $cleanup = [System.Diagnostics.Stopwatch]::StartNew()
+743:     do {
+744:         $rootExited = $false
+745:         try { $rootExited = $Process.HasExited } catch { $rootExited = $true }
+746:         $stdoutClosed = -not $StdoutTask -or $StdoutTask.IsCompleted
+747:         $stderrClosed = -not $StderrTask -or $StderrTask.IsCompleted
+748:         if ($rootExited -and $stdoutClosed -and $stderrClosed) {
+749:             return $true
+750:         }
+FILE docs/plans/2026-10-07-federation-fixes.md
+166: - **Mechanism (decision D5).** Recommended: an explicit maintenance command `--workspace-path-rekey` in `QBrainAi.Support.Mcp` modelled on `McpDatabaseEncryptionTransitionCommand` (`DatabaseMaintenance/`), not an automatic startup EF migration, because (a) hash columns need C# SHA-256, (b) the local store is 1.86M rows and the operator should control when it runs, (c) it needs a backup, dry-run and report. Options: `--dry-run`, `--backup-path` (required unless `--dry-run`), `--report-path`, `--instance`. Plus a **startup guard**: the server refuses to start with a clear error if any `Workspaces.WorkspaceId` is a Windows-shaped value containing `\`, so a P1.4 build never runs against an un-rekeyed store.
+167: - **Algorithm (one transaction per database).**
+168:   1. Build the mapping table `old -> new` from `Workspaces` (Windows-shaped ids only) and from every distinct Windows-shaped value in the kind-A columns.
+169:   2. Suspend foreign-key enforcement for the transaction (decision D6): SQLite `PRAGMA defer_foreign_keys = ON`; SQL Server `ALTER TABLE ... NOCHECK CONSTRAINT` on the affected tables, then `WITH CHECK CHECK CONSTRAINT` (re-validates every row); PostgreSQL `ALTER CONSTRAINT ... DEFERRABLE` plus `SET CONSTRAINTS ALL DEFERRED`, restored to `NOT DEFERRABLE` after.
+170:   3. One set-based `UPDATE ... FROM mapping` per kind-A column (about 60 statements, not per row).
+171:   4. Recompute kind-C values in C#: triage `GroupKey`/`GroupId` from the new effective path and stored `Fingerprint` (and repoint `TriageReports.GroupId`, `TriageResearchRuns.GroupId`); `HandoffIngestionRuns.ReplayIdentity`; federation `GlobalWorkspaceId`/`CanonicalWorkspaceId` from `ProxyId` and the new storage key, and on a hub the matching hash-keyed `Workspaces` row and its children.
+172:   5. Rewrite `FileGitHubWorkspaceTokenStore` keys (file, after the database commit, with a backup copy of the file).
+173:   6. Validate: zero Windows-shaped values containing `\` in kind-A columns; per-table row counts unchanged; per-workspace row counts unchanged under the mapping; full FK validation; unique indexes intact. Write the report (mapping, counts before and after).
+174: - **Rollback.** Restore the backup taken in step 0 (the command refuses to run without one). The report's mapping allows an audit of every changed id.
+175: - **Legacy fallback (decision D7).** TR-MCP-PATHNORM-001 currently says "legacy-key lookup fallback during transition". Recommended replacement: no fallback in lookups; the startup guard plus the mandatory rekey guarantee no legacy ids remain, and incoming backslash request paths are normalized to `/` by `IWorkspacePathNormalizer` anyway. A fallback would keep two identities alive and make the hub/proxy mapping ambiguous. TR-MCP-PATHNORM-001 is updated if the operator approves.
+FILE docs/handoffs/federation-fixes-handoff-20261016T121400.md
+14: - Phase P1 (path handling and forward-slash workspace keys) is partly delivered. P1.1 to P1.3, the P1.R test retrofit, and P1.4a to P1.4d are committed. P1.4 has never passed its three-suite gate. P1.5 (the rekey command and startup guard) has not started. Phases P2, P3 and P4 have not started.
+15: - The work is merged into `develop`: PR #79 (`claude/federation-fixes-20261016-rebased` into `develop`) was merged by the operator at 2026-10-16T12:24:11 (17:24:12Z) as merge commit `ebf84590`. All federation branches and worktrees were then removed locally and on origin (section 2). There is no federation branch; start the next increment on a new branch from `origin/develop`.
+16: - Do not deploy `develop` to any server whose database still holds backslash workspace ids (both PAYTON-LEGION2 and the LAB-OMARCHY hub do). Without P1.5, rows keyed `C:\...` stop matching the canonical `C:/...` keys this build reads and writes (decision D7: no dual-key fallback).
+95: ## 8. Requirements, TODOs, triage, memory
+96: 
+97: - Requirements (earlier, MCP store, workspace `F:\GitHub\McpServer`): FR/TR/TEST-MCP-FED-PATH-001, -FED-ROUTE-001, -FED-WSSYNC-001, -FED-BACKFILL-001, and FR/TR/TEST-MCP-PATHNORM-001 (updated for D5 to D7).
+98: - TODOs (measured 12:13 through `todo_get`): `IMPL-FEDPATH-001`, `IMPL-FEDROUTE-001`, `IMPL-FEDWSSYNC-001`, `IMPL-FEDBACKFILL-001` are all Done false, each with only "Requirements registered" done. The `IMPL-FEDPATH-001` note is stale: it still says "Next: P1.4a" and should be updated through MCP to point at this handoff. `PLAN-PATHNORM-001` is not in the local store (it was created on the LAB-OMARCHY hub; not re-measured); session turns 007 and 008 reference it.
+99: - Triage (earlier): groups `triage-group-18acf2d8a0adfecd` (no backfill on enrollment), `triage-group-d708a0e30a2b7195` (workspace field drift), `triage-group-bfc69ceba9e9f1fb` (Windows path mangling on the hub), whose background research failed; reports `triage-report-430f89a36197402ea514069a09740afd` (requirements_create returns an empty WorkspaceId), `triage-report-4635ba853ac74942996858c1981d3a81` (stale docs/wiki.yaml source after the rebrand), `triage-report-a5fb0faedc244cc5b3c480bfdb884cf4` (SQL Server migration tests time out under parallel load).
+FILE CLAUDE.md
+251: - TODO validation result.
+252: - Requirements validation result.
+253: - Triage validation result.
+254: - Process current working directory validation result.
+255: - Any remaining mismatch, unavailable surface, or failure.
+SEARCH src: AcceptReviewerOutputAsync|LeaseDuration|RenewalInterval|MaximumAttempts|MaximumConcurrentReviews
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:25:    public int MaximumConcurrentReviews { get; set; } = 1;
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:31:    public TimeSpan LeaseDuration { get; set; } = TimeSpan.FromMinutes(5);
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:33:    /// <summary>Lease renewal interval. Must be less than <see cref="LeaseDuration"/>.</summary>
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:34:    public TimeSpan RenewalInterval { get; set; } = TimeSpan.FromSeconds(60);
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:37:    public int MaximumAttempts { get; set; } = 3;
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:69:        if (RenewalInterval >= LeaseDuration)
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:70:            throw new InvalidOperationException("HostileReviewWorker RenewalInterval must be less than LeaseDuration.");
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:73:        if (MaximumConcurrentReviews < 1)
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:74:            throw new InvalidOperationException("HostileReviewWorker MaximumConcurrentReviews must be at least 1.");
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:75:        if (MaximumAttempts < 1)
+src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:76:            throw new InvalidOperationException("HostileReviewWorker MaximumAttempts must be at least 1.");
+src/QBrainAi.Services/Services/IHostileReviewService.cs:25:    Task<HostileReviewResult> AcceptReviewerOutputAsync(string requestId, HostileReviewerOutput output, CancellationToken cancellationToken = default);
+src/QBrainAi.Services/Services/HostileReviewService.cs:196:    public async Task<HostileReviewResult> AcceptReviewerOutputAsync(string requestId, HostileReviewerOutput output, CancellationToken cancellationToken = default)
+SEARCH src/QBrainAi.Repl.Core/GenericClientPassthrough.cs: Task<.*SessionLog|Unsupported task result|AwaitTaskResultAsync
+110:                return await AwaitTaskResultAsync(task, method.ReturnType).ConfigureAwait(false);
+243:    private static async Task<object?> AwaitTaskResultAsync(Task task, Type taskType)
+485:            case Task<SessionLogMutationResult> typedTask:
+487:            case Task<SessionLogQueryResult> typedTask:
+489:            case Task<SessionLogSubmitResult> typedTask:
+491:            case Task<SessionLogTurnSubmitResult> typedTask:
+493:            case Task<SessionLogWorkspaceStampRepairResult> typedTask:
+640:            throw new InvalidOperationException($"Unsupported task result type: {taskType.FullName ?? taskType.Name}");
+SEARCH src: workspace-path-rekey|backslash.*key|UPDATE.*WorkspaceId|REPLACE.*WorkspaceId
+SEARCH src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs: Highest.*Effort|ReasoningEffort|xhigh
+21:    internal const string HighestReasoningEffortConfig = "model_reasoning_effort=\"xhigh\"";
+49:        arguments.Add(HighestReasoningEffortConfig);
+262:            psi.ArgumentList.Add(HighestReasoningEffortConfig);
+SEARCH src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs: Highest.*Effort|ReasoningEffort
+25:    private const string HighestEffort = "high";
+82:            "--effort", HighestEffort,
+83:            "--reasoning-effort", HighestEffort,
+SEARCH docs/architecture/SessionTurn-Review-AgentContext-Architecture.md: ModelGrader|configured grader|no grading worker|HvRequest:MaxTurns|reviewer_independent|Sequence: submit RecordModelGradeCommand|ConvertHvReceiptToReview|FR-MCP-SESSIONTURN-005|Close-PluginTurnIfNeeded
+98:- Unsupported-session failsafe (operator, 2026-10-10: "If QBrain is truly not available, use the failsafe already in the plugin." and, choosing between a failsafe capture and a warn-only Stop, "1"): when a host session fails closed under D6 (`unsupportedSince`), the model's session-log writes for a turn that was already open at that moment go to the plugin's existing failsafe instead of being refused (reviews excepted: they keep their no-failsafe rule and are recorded after the drain through the original pair), so the Stop gate's remedy stays accepted; the captured records drain at the next SessionStart through the trusted recovery flow with the turn's original pair (C5); every mint and every write for any other turn stays refused (FR-MCP-SESSIONTURN-005-AC001).
+99:- Clear-session closing rule (operator, 2026-10-10, choosing option A over leaving blocked and withdrawn turns open: "A"): clear-session completes each turn that meets the completion policy, fails each withdrawn turn (reason "withdrawn before delivery") and each turn the model marks blocked (with its blocker reason; `failed` requires `requestClass` only, FR-MCP-SESSIONCLASS-002-AC002), and leaves every other turn in progress, reported by requestId with its exact missing items, never fabricating reviews (TR-MCP-CLEARSESSION-001-AC001). Definition (catalog cross-reference, not a change to the decision): "marked blocked" means the turn's `blockers` section (the existing decision-list field, FR-MCP-SESSIONTURN-006-AC001) holds at least one nonblank model-authored entry, read by the clear-session coordinator for that turn by its original (`sessionId`, `requestId`) pair, and the first entry is the fail reason; precedence per turn: withdrawn -> `failTurn` ("withdrawn before delivery"); else blocked -> `failTurn` with the blocker reason (blocked takes precedence over a ready completion); else meets the completion policy -> `completeTurn`; else stays in progress, reported with its exact missing items. Close prerequisites (catalog cross-reference, not a change to the decision): before clear-session fails a withdrawn or blocked turn, the model writes by that turn's original pair, within the same clear-session run and before its session-end step, every prerequisite the plugin and the server require for that close, in the Stop gate remedy order (FR-MCP-SESSIONTURN-005-AC009): a designDecision when the turn has no model evidence (FR-MCP-SESSIONTURN-005-AC002), then a `requestClass` when it is missing or `Unclassified`, judged from the turn's `queryText`; the coordinator then fails the turn with its reason (TR-MCP-CLEARSESSION-001-AC001).
+132:- Trust: a response is trusted only when its latest deterministic grade and its latest model grade both reach correctness and completeness of at least the trust thresholds (configurable only upward from a floor of 0.98: a value below 0.98 fails startup, and every grade and trust decision applies max(configured, 0.98), inclusive) with zero FAIL and zero UNKNOWN findings; model grades come only from the configured grader (default Codex, `gpt-6-astra`, `max`, the plan's HV reviewer).
+136:- Model grade (operator, round-1 finding F3 and the follow-ups, verbatim: "Server grading worker (Recommended)", then "We are going to add an HV pipeline in the future, but not in this effort." and "Agents will specify a range of session turns to be HV, the HV agent will mark the grade you have been working."): this effort builds no grading worker or HV pipeline. An agent creates an HV request for a range of session-log turns (CreateAgentContextHvRequestCommand); the HV agent (the plan's Codex gpt-6-astra max reviewer, launched as every HV is) reviews that range and then, in a grade-only continuation of its own reviewer thread (`codex exec resume`) after the runner freezes the review receipts, records a model grade for each agent response in it (RecordModelGradeCommand; retry-safe, because an equal resubmission returns the stored grade), which the server accepts only from the configured grader, only for a response inside an open HV request, and only after the eight receipt, reviewer, and runtime-identity checks of the architecture document section 6.3 pass (`receipt_path`, `request_meta`, `verdict_block`, `verdict_binding`, `verdict_match`, `reviewer_turn`, `reviewer_independent`, and `runtime_identity`, which reads the reviewer's own rollout receipt and requires its recorded runtime model and effort to equal the configured grader's; otherwise 422 `agent_context_receipt_unverified` naming the check). Until a response has such a grade it stays `Grading` and is never trusted.
+189:- Hosted agents: the hosted agent's `mcp_client_invoke` (`src/QBrainAi.McpAgent/Hosting/McpHostedAgentToolAdapter.cs:170-173`) reaches `client.AgentContext.*` once `AGENTCONTEXT` joins the passthrough allow-list, under the same units, ModeGateBehavior, and REPL client policy as any agent; RecordModelGradeCommand accepts only the configured grader, so a hosted agent cannot record a model grade; the ACID profile is unchanged (FR-MCP-136 AC 3).
+229:- Nonce: computed from the event itself, never from the hook process, so every delivery of one event yields the same nonce; a value outside `^[A-Za-z0-9._:-]{1,64}$` is replaced by the 64 lowercase hex characters of its SHA-256. Equal-field rule (copilot and classic cline, whose nonce hashes event fields with no per-message id): under `turn-open.lock`, a new prompt-hook invocation whose nonce already has a failsafe mint record or a `pending-<nonce>` turn in that host session, or whose mint returns `merged`, cannot be told apart from a separate message with equal session, timestamp, and prompt, so it mints and binds nothing and the host session fails closed under D6 exactly as the bridge does for an unattributable record (`unsupportedSince: { causeNonce, causeOperation: prompt_hook, reason: indistinguishable_arrival }` with the session-level envelope; every session-log verb then reports `turn_logging_unsupported` and writes nothing to the server until the session ends, except that writes for a turn already open at that moment go to the plugin failsafe under the unsupported-session failsafe rule, FR-MCP-SESSIONTURN-005-AC001; its open turns are listed at the next SessionStart). A network retry or failsafe replay of a stored mint record is a drain of that record, not a new invocation, and reuses its nonce without failing closed.
+230:- Unsupported-session rule (D6; operator option 1 of 2026-10-10): every check that makes a host session report `turn_logging_unsupported` after one of its requests was delivered records `unsupportedSince` with the session-level envelope in `turn-state.yaml` in the same atomic replace that makes the session unsupported, with `reason` set to that check's code: `queue_removal_ambiguous` (bridge), `indistinguishable_arrival` (equal-field rule), `arrival_bridge_format_unrecognized` (an unknown queue operation, a record missing a required field, or a transcript shorter than `appliedThroughOffset`), `duplicate_prompt_hook` (the copilot or classic-cline single-registration check starts failing; the first verb or hook in that host session that observes it records it), or, for any other D6 check, its own reason code; plus `causeOffset` or `causeNonce` where the cause has one, else `detectedAtUtc`. Whatever the reason, the unsupported-session failsafe of FR-MCP-SESSIONTURN-005-AC001 then applies: writes for a turn of that host session still in progress when `unsupportedSince` was recorded (a delivered open request, or a `withdrawn` queue entry still `in_progress`, addressed by its original pair; a minted request still `queued` is not covered and stays a warning) are captured, and every mint and every other write is refused. The state lasts until the host session ends, or until a SessionStart clears its cause where the cause's own rule allows (the bridge restarting on a valid transcript); the captured records drain at that SessionStart. A host that is unsupported from its first event mints nothing, has no open turn, and records no `unsupportedSince`.
+233:- Queued-message arrival on every host (D5, D6): P0.2 records, per host, whether a message sent while a turn is running reaches an arrival mechanism at enqueue. Where the prompt event itself fires at enqueue for a message the host takes into the running turn, it is the arrival mechanism; a prompt event that fires at enqueue for a message the host runs as its own later turn is not, because a prompt-hook mint is delivered at once (TR-MCP-SESSIONTURN-001 AC-005) and would move the write target and the stop ledger to a request the model has not received (D2; FR-MCP-SESSIONTURN-005-AC001), so P0.2 records that result as only when processed. The only queue adapter this plan specifies is the claude-code/claude-cowork arrival bridge. For every other host whose P0.2 result is only when processed (under the rule above) (codex excepted: that result stops P0, because every HV reviewer persists its own turn through the Codex plugin), the host is unsupported for turn logging in this plan (`turn_logging_unsupported`, D6), whether or not it has a separate enqueue or message-queue event; when it has one, P0.2 records that event's observed payload, and P0.8 files a traced follow-up TODO proposing the host's adapter (payload, nonce, correlation, lifecycle, replay, tests) for operator approval; until that adapter is specified, approved, and delivered, the host stays `turn_logging_unsupported` in this plan and its `<Host>P02NotPassedTurnLoggingUnsupportedZeroMintsZeroWrites` case applies.
+235:- claude-code: nonce: the bridge's `q-` enqueue nonce (the bridge is the only minter, FR-MCP-SESSIONTURN-001-AC009); hook key payload `session_id`; verb key env `CLAUDE_CODE_SESSION_ID` read at verb start in shell, PowerShell, and hook subprocesses (equals `session_id`; those subprocesses see the updated value after `/clear`); stdio MCP verbs use the live-session rule; payloads carrying `agent_id` are subagent events (system events, no turn); the subagent's own Bash and PowerShell verbs carry the parent's `CLAUDE_CODE_SESSION_ID` and bind to the parent's write target; stop uses payload `stop_hook_active`. Arrival bridge (D5), the only minter on claude-code (known-good single source of truth: the host transcript is one ordered log written by one producer, so the bridge needs no key shared with the hook, which the host does not provide: Claude Code's `queue-operation` records carry no `promptId` although its user records do): started by SessionStart with the payload `transcript_path`, it applies `queue-operation` lines in file order. Every `enqueue` takes a queue position, so FIFO `dequeue` stays exact. An `enqueue` whose `content` the system-event classifier marks as a system event is added as `{ kind: system, enqueueOffset, enqueueTimestamp, promptSha256, state: queued }` with the session-level envelope `{ workspacePath, agent, mcpSessionId, hostSessionKey }` (it has no nonce or requestId, and none is ever invented for it) and is never minted. An `enqueue` whose `content` the classifier accepts as a user request: mint with nonce `q-` + SHA-256(`session_id` LF the record's starting byte offset in the transcript LF enqueue `timestamp` LF `content`) truncated to 62 hex characters (the offset is unique per record and identical on replay, so two distinct records with equal timestamp and content get two nonces), and add `{ kind: request, requestId, nonce, enqueueOffset, enqueueTimestamp, promptSha256, state: queued, stateOffset, mintedAtUtc }` with the root-id envelope to the queue in `sessions/<key>/turn-state.yaml`. `dequeue` (no content) removes the head of the host session's `queued` entries: a `kind: request` head becomes `delivered` and the write target; a `kind: system` head is removed and delivers nothing. `remove` and `popAll` records that match a `kind: system` entry drop it without a turn. `remove` with reason `absorbed_mid_turn`: the `queued` entry whose `promptSha256` equals the record's `content` hash (both written by the same producer) becomes `delivered` and the write target when exactly one queued entry has that hash. `remove` with any other or no reason: the matching `queued` entry becomes `withdrawn` when exactly one queued entry has that content hash. `popAll`: when, for every content line it carries, the number of lines with that content equals the number of queued entries with that content hash, those entries become `withdrawn`. Fail-closed rule (D6): a `remove` carries `commandUuid` and `deliveryId` (Claude Code 2.1.293), which also appear on the delivered message's `queued_command` attachment, but `enqueue` and `dequeue` carry no key shared with it, so a `remove` that matches two or more queued entries, or a `popAll` that carries fewer lines of a content than there are queued entries with that content, cannot be attributed (a `popAll` whose line count equals the matching entry count withdraws them all, because every candidate is withdrawn). The bridge never guesses: at the first such record it stops before it without advancing `appliedThroughOffset`, sets `turn-state.yaml` `unsupportedSince: { causeOffset, causeOperation, reason: queue_removal_ambiguous }`, and from then on every session-log verb in that host session reports `turn_logging_unsupported` and writes nothing to the server until the session ends, except that writes for a turn already open at that moment go to the plugin failsafe (FR-MCP-SESSIONTURN-005-AC001). Turns that are open at that moment are left exactly as they are on the server, the stop gate blocks on each only until the model's close of it is captured in the plugin failsafe and then warns `queue_removal_ambiguous` listing them (FR-MCP-SESSIONTURN-005-AC001), and the next SessionStart for the agent lists them with their original (MCP `sessionId`, `requestId`) pairs for closing through the trusted recovery flow (FR-MCP-SESSIONTURN-005-AC006). P0.2 records the `remove` identity fields; the bridge never uses them to pair with an `enqueue`. Only `queue-operation` lines are arrival records; every other record type is ignored by design. A `queue-operation` with an unknown operation or a missing required field is never skipped: the bridge stops before it without advancing `appliedThroughOffset`, records warning `arrival_bridge_format_unrecognized` and, after a delivered request, `unsupportedSince` with that reason and the record's `causeOffset` in the same atomic replace (unsupported-session rule), and the host session reports `turn_logging_unsupported` on every session-log verb (D6) until a verified adapter handles that shape, while writes for a turn already open go to the plugin failsafe (FR-MCP-SESSIONTURN-005-AC001). Each record's state change and the advance of `appliedThroughOffset` past it are one atomic replace of `turn-state.yaml` (temp file, flush, rename, under `turn-open.lock`); records that start below `appliedThroughOffset` are skipped, so a restart never re-applies a record; the server mint for `enqueue` happens before that replace and is idempotent (same nonce, `merged`). Records are applied by whichever process holds `turn-open.lock`: the bridge, or a session-log verb, which first records the transcript length at the moment the invocation starts and, after taking the lock, applies every pending record that ends at or before that length, never a record appended later, before it binds (FR-MCP-SESSIONTURN-007-AC006), so a verb started after a `dequeue` line was written binds to that request, and a `dequeue` appended after the verb started never retargets it (D2). The prompt hook on claude-code and claude-cowork neither mints nor claims; it classifies system events and starts no turn. P0.2 verifies that every user prompt (in each prompt form of FR-MCP-SESSIONTURN-001-AC009) produces an `enqueue` record, that `dequeue` always takes the head, and that a request's `dequeue` (or its `remove` with `absorbed_mid_turn`) is in the transcript before that request's first tool call starts (section 3.1, Late `dequeue` on claude-code); if any fails, claude-code is `turn_logging_unsupported` (D6) until an adapter with a traceable key exists, recorded in the feature matrix.
+283:- Stop gate: blocks `turn_in_progress` for a delivered-ledger turn still in_progress (FR-MCP-SESSIONTURN-003-AC004), blocks `turn_withdrawn_unclosed` through the separate scan of `withdrawn` entries still in_progress, and only warns for a minted request still `queued` although its server turn is in_progress (`StopGateQueuedInProgressServerTurnNoBlockBeforeDeliveryWarns`); in a host session with `unsupportedSince`, a turn whose close is captured as an `unsupported_session` failsafe record is warned with the cause instead, and before that its remedy names only the missing model evidence, the missing `requestClass` (from S8/S9), and the close call, the terminal reviews being judged at the drain, FR-MCP-SESSIONTURN-005-AC001; outside `unsupportedSince`, a turn whose model close is held in the ordinary failsafe by a transport outage is warned as degraded persistence instead, and its ledger entry stays until the server confirms the close), `session_turn_completion_gate` (a turn whose most recent close the server refused with that code, recorded locally from the server response; such a turn is still in progress; no marker condition, FR-MCP-SESSIONTURN-005-AC003), failed build after edits (existing; read from the `lastBuildStatus` of this host session's `turns/<requestId>.yaml` files, where code-verify writes it, section 4.1), stale session (existing); blocks `turn_withdrawn_unclosed` (a withdrawn queued request still in_progress); warns on exactly the FR-MCP-SESSIONTURN-005-AC005 list (process EvaluateStopGate, section 4.4), whose retained failsafe records are a mint refused for a final reason, queued or quarantined, and an `open-failed` queue entry, each naming the prompt, and every quarantined record of an open turn with its reason; re-evaluates on every Stop, including `stop_hook_active=true`, blocking again while turns are open and recording `stop_gate_overridden_by_host` if the host stops anyway; passes with `{}` and clears closed entries. Auto-close removed. Block text: `session_turn_stop_gate: <n> turn(s) are not closed correctly:` then one line per turn `<id> (<code>): <remedy>`, then `The stop gate never closes turns for you.`; each turn's remedy accumulates every unmet prerequisite of that turn, in this order: for a turn whose most recent close the server refused with `session_turn_completion_gate`, the server's missing items first (in place of the locally computed `requestClass` and review items); at least one model-authored action, designDecision, or commit (FR-MCP-SESSIONTURN-005-AC002); `requestClass` (from S8/S9, when the plugin's requestClass and recordReview verbs ship); the terminal reviews the completion gate names (from S8/S9, when the plugin's requestClass and recordReview verbs ship, gate order; before S10 the server accepts those writes, so following the remedy literally still passes); then the single close call valid for its status: `workflow.sessionlog.failTurn` with reason 'withdrawn before delivery' for a withdrawn request, otherwise `workflow.sessionlog.completeTurn` (or `failTurn` if the work failed), passing requestId <id>. Following a turn's remedy literally makes the next Stop pass for that turn, including a Code turn that lacks both model evidence and terminal reviews (`StopGateEachRemedyFollowedLiterallyNextStopPasses`, `StopGateCodeTurnMissingEvidenceAndReviewsAccumulatedRemedyNextStopPasses`).
+1140:#### Process PersistTurnWriteWithReceipt: persist a turn write with a truthful receipt (dispatches SubmitSessionLogCommand with the one bound turn, AppendTurnDialogCommand, or SetTurnTitleCommand through the REPL) [FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-005]
+1144:- Close verbs first: `completeTurn` and `failTurn` call `Test-ModelEvidence` and are refused locally with `turn_missing_model_evidence` when the turn has no model-authored action, design decision, or commit (hook invocations excluded; FR-MCP-SESSIONTURN-005-AC002). A close that carries evidence sends it first as an additive non-transition write, verified against the sanitized read projection (section 3.1), and sends the transition only after that write is confirmed, so a gate refusal loses nothing (FR-MCP-SESSIONCLASS-004-AC003, from S8); a refused evidence write stops the close.
+1214:#### Process DrainFailsafe: drain the failsafe [FR-MCP-SESSIONTURN-001, FR-MCP-SESSIONTURN-004, FR-MCP-SESSIONTURN-005]
+1223:  - Not drained, no attempt counted: an `unsupported_session` record of a host session that is still live with `unsupportedSince` (FR-MCP-SESSIONTURN-005-AC001, section 3.1). It drains only after that host session has ended or a SessionStart cleared its cause (a post-compact or other SessionStart of the live session keeps it), and only while its turn is still in progress.
+1291:#### Process EvaluateStopGate: evaluate the Stop gate [FR-MCP-SESSIONTURN-005]
+1295:- Blocks: `turn_in_progress`, `turn_withdrawn_unclosed`, `session_turn_completion_gate`, the reduced unsupported-session remedy, and the existing failed-build and stale-session blocks (FR-MCP-SESSIONTURN-005-AC007, section 3.4); the failed-build block reads `lastBuildStatus` from this host session's `turns/<requestId>.yaml` files, where code-verify writes it (section 4.1).
+1297:- Warnings: exactly the FR-MCP-SESSIONTURN-005-AC005 list, each drawn in one of the two diagrams below. Per turn: model-canceled turns; a turn closed without model evidence by another surface; degraded persistence (a model close, or the plugin's `canceled` close of a package failure, held by an outage, naming that failure); a withdrawn close held by an outage; a captured unsupported-session close (naming the `unsupportedSince` reason and the captured records); and queued undelivered requests. Per host session: each `unsupportedSince` reason (`queue_removal_ambiguous`, `indistinguishable_arrival`, `duplicate_prompt_hook`, `arrival_bridge_format_unrecognized`, or any other) naming the open turns of its fail-closed host session and their captured records; retained failsafe records (a mint refused for a final reason, queued or quarantined, and an `open-failed` queue entry, each naming the prompt; every quarantined record of an open turn with its reason, process DrainFailsafe); `duplicate_delivery_suspected`; `nonce_source_missing` and `turn-open-contended` naming the prompt (section 3.1); `arrival_bridge_format_unrecognized`; an earlier `stop_gate_overridden_by_host`; a live bridge host session whose arrival bridge is not running; and a turn in progress in the legacy `current-turn.yaml`. Open turns of ended host sessions are not a Stop warning, because a Stop never blocks or warns on another host session's turns (FR-MCP-SESSIONTURN-005-AC001); the next SessionStart lists them with their pairs (process StartHostSession, FR-MCP-SESSIONTURN-005-AC006).
+1317:Each terminal below records one finding for the turn, and the loop continues with the next turn. A turn the server reports terminal leaves the open list and becomes eligible to clear; a `canceled` or `cancelled` turn is warned as model-canceled (a plugin `canceled` close names the package failure), and another terminal turn on which `Test-ModelEvidence` finds no model evidence is warned as closed without model evidence by another surface. A turn already open when this host session's `unsupportedSince` was recorded (a delivered open request or a withdrawn entry) is warned with the `unsupportedSince` reason when its close is captured in the failsafe (drained at the SessionStart after the host session ends or its cause is cleared, where the server gate judges it, FR-MCP-SESSIONTURN-005-AC001, AC003), and otherwise blocked with the reduced remedy of `Get-CloseRemedy` (missing model evidence and the close call, from S8 also `requestClass`, never the reviews).
+1380:- Output: the session open, the bridge, the drain, the Mode cache (from Phase C), and the open turns listed with their pairs: this host session's, the open turns of this agent's ended host sessions in the workspace (FR-MCP-SESSIONTURN-005-AC006), and a turn in progress in the legacy `current-turn.yaml` (addressable by explicit requestId). The listing is SessionStart `hookSpecificOutput`; a PostCompact run lists nothing and emits no `additionalContext` (FR-MCP-115, TR-MCP-PLUGIN-009, TEST-MCP-155 kept).
+2162:- Surfaces: `PUT /qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}` with section `agentReview` or `hostileReview` (aliases `agent-review`, `agent_review`, `hostile-review`, `hostile_review`, case-insensitive; a known non-review section stays on the existing section-replace handler, `SessionLogController.cs:576-601`); MCP `sessionlog_record_review(agent, sessionId, requestId, kind, reviewJson, workspacePath)` and MCP `sessionlog_replace_section` with a review section or alias, whose `sectionJson` is read as the same `SessionLogTurnReviewInput` body; client `RecordTurnReviewAsync`; REPL and plugin `workflow.sessionlog.recordReview` (plugin also accepts `hvReceiptPath`, mapped locally by process ConvertHvReceiptToReview; hostile kind accepts `hvVerdict`). Both MCP tools dispatch this command: today `sessionlog_replace_section` calls the service member directly (`src/QBrainAi.Support.Mcp/McpStdio/FwhMcpTools.SessionLog.cs:203-228`) and would skip the policies, the workspace behavior, and `hvVerdict`; every non-review section keeps that direct call (`McpSectionToolsReviewSectionDispatchReviewUnits`).
+2365:#### Process ConvertHvReceiptToReview: convert a hostile-validation receipt into a review write (plugin), then policy HvVerdictMapping [FR-MCP-SESSIONREVIEW-005]
+2466:`A` is the model or the clear-session coordinator, `P` the plugin's `recordReview` verb, `R` `qbrain-ai-repl`, and `S` the surface: `SessionLogController` (PUT on the review section), or the MCP tool `sessionlog_record_review` or `sessionlog_replace_section` with a review section. The verb carries the kind and the review input or `hvReceiptPath`, with an optional `requestId` or original pair. Process BindVerbToTurn binds it: an unqualified `recordReview` binds to the write target even when that turn is closed (FR-MCP-SESSIONTURN-004-AC004), and a binding refusal is `request_unknown`, `request_ambiguous`, `host_session_unknown`, or `host_session_ambiguous`, with nothing sent. A host session reported `turn_logging_unsupported` refuses the review, which is recorded after the drain through the original pair. Before any write the plugin refuses an invalid receipt with its exact code (process ConvertHvReceiptToReview) and an invalid score lexeme with `review_score_format`, `review_score_precision`, or `review_score_out_of_range` (`Protect-ReplLosslessScalars`); the REPL normalizer calls `ScoreLexeme`, so the lexemes reach the server unchanged. A review is never captured in the failsafe (an older review must never overwrite a newer one, section 3.1, "Retryable answers"), so a transport outage or a retryable 503 (`backend_unavailable`, or a busy store's `persistence_error` with `retryable: true`) is reported with its code and `retryable: true`, not queued, exit 1, and the model records the review again after the drain (section 5.2, RecordSessionTurnReviewCommand). The server side, with each answer and the plugin's report of it, is the nested sequence ServeReviewWrite.
+2481:    else receipt invalid (ConvertHvReceiptToReview)
+2666:- A response becomes trusted only when a deterministic evidence grade and an independent model grade both reach correctness and completeness of at least 98 percent with zero FAIL and zero UNKNOWN findings. The model grade is recorded by the HV agent for the responses of an HV request that names a range of session-log turns; this effort has no grading worker or HV pipeline (operator, 2026-10-11). Rejected, stale, and superseded responses are kept for audit and never retrieved as trusted context.
+2673:  - The FR-MCP-HOSTILEREVIEW queue (requests with resolved artifact links, `src/QBrainAi.Services/Services/HostileReviewService.cs:290`, executions, findings, and its server-owned worker): separate. An HV request of this phase is a turn range an external HV agent grades, because this effort builds no grading worker (section 3.1); only RecordModelGradeCommand, after its eight checks, records a model grade, so a hostile review result is never one. The worker's identity (agent `Astra`, model `gpt-6-astra`, effort `xhigh`, enforced at startup, `src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:13,16,19,77-82`) and `ModelGrader:*` (section 6.2) are separate option sets, so neither constrains the other; FR-MCP-HOSTILEREVIEW-003 is unchanged by this phase.
+2691:- `ModelGrader:AgentName` (default `Codex`), `ModelGrader:RequiredModel` (default `gpt-6-astra`), `ModelGrader:RequiredEffort` (default `max`), `ModelGrader:ReceiptRoot` (workspace-relative, default `docs/receipts/hv`): a model grade from any other grader, or whose receipts are outside the receipt root or do not verify, is refused.
+2692:- `HvRequest:MaxTurns` (int, default 200, 1..2000): the largest turn range one HV request may name.
+2694:- Validation failures (startup): an unknown `Mode`, `TokenBudget`, `BytesPerToken`, `HvRequest:MaxTurns`, thresholds outside their ranges, an empty `RuleSources`, an empty grader identity, or an empty `ModelGrader:ReceiptRoot`. These ranges are enforced at server start by `Validate()` with `ValidateOnStart()` and proven by its G2 cases; they are not a G5 (`ValidateConfig`) check, an exclusion TR-MCP-NUKE-004 states (section 8.4).
+2803:- `ReviewerAgent` (64, required for `Model`: the `ModelGrader:AgentName` the `reviewer_turn` check located the turn with), `ReviewerSessionId`, `ReviewerRequestId` (256, required for `Model`): the reviewer's own session-log turn that holds its entire result, by its full turn key, so the reference stays exact after a configuration change; `VerdictJsonSha256` (64): the hash of the verdict block the grade was verified against, over its stored normal form.
+2804:- `RequestJsonlPath`, `ResponseJsonlPath` (2048, required for `Model`, workspace-relative under `ModelGrader:ReceiptRoot`), `RequestJsonlSha256`, `ResponseJsonlSha256` (64): the receipts and their hashes as verified when the grade was recorded.
+2805:- `RolloutJsonlPath` (2048, required for `Model`, under `ModelGrader:ReceiptRoot`), `RolloutJsonlSha256` (64), `ReviewerThreadId` (64, required for `Model`): the reviewer's own Codex rollout receipt (after the review execution completes, the HV runner freezes a copy of that thread's rollout file next to the request and response jsonl, redacted by the receipt rule, before any grade is submitted) and the thread id it records; check 8 (`runtime_identity`) verifies them against that frozen copy, so the later grade-submission continuation of the same thread (RecordModelGradeCommand, two-step protocol) never changes the receipt it is checked against.
+2829:- An `Open` request accepts grades from any later review run of the configured grader that passes the eight checks below, so an abandoned or failed review is recovered by running the review again for the same `hvRequestId`; an item already `Graded` keeps its grade, and a different grade for it is 409 `conflict` with `retryable: false` (`HvRequestReviewRerunAfterAbandonPendingItemsGradedRequestCompletes`).
+2836:1. `receipt_path`: both jsonl paths resolve inside the workspace under `ModelGrader:ReceiptRoot`.
+2837:2. `request_meta`: the request jsonl's first line is a JSON object with `type` `hv_request_meta` whose `reviewer.agent` contains `ModelGrader:AgentName`, `reviewer.model` equals `ModelGrader:RequiredModel`, and `reviewer.effort` equals `ModelGrader:RequiredEffort` (the HV runner writes exactly this object), and the request jsonl's body record names the `hvRequestId`.
+2841:6. `reviewer_turn`: TurnLocator (section 3.5.3) finds the turn with agent `ModelGrader:AgentName`, `reviewerSessionId`, and `reviewerRequestId` in the workspace, the turn was created at or after the HV request's `CreatedUtc`, and its stored result contains the same verdict block byte for byte, both compared in their stored normal form (the receipt's block passes through ContentHasher's normalization, since the store saved the turn in that form, `ModelGradeVerdictWithEmDashReviewerTurnMatchesInNormalForm`), where the stored result is the turn's response followed by its processingDialog parts in part order with each part's header line removed (the HV protocol stores the entire result on the reviewer's own turn and splits a long result into ordered parts; `ModelGradeVerdictSplitAcrossDialogPartsRejoinedAndAccepted`).
+2842:7. `reviewer_independent`: the reviewer's MCP session is neither the session the HV request reviews nor the session that submitted the response; independence is a separate review session and execution, not a different agent name, so an independently launched Codex reviewer grades a Codex-authored response (`ModelGradeCodexResponseIndependentCodexReviewerSessionAccepted`).
+2843:8. `runtime_identity`: the rollout receipt at `rolloutJsonlPath` resolves under `ModelGrader:ReceiptRoot`; its `session_meta` record's `id` equals `reviewerThreadId` and the `thread_id` of the response jsonl's `thread.started` event; it holds at least one `turn_context` record before the record of the completed review turn whose verdict check 3 read, and every `turn_context` record in it has `model` equal to `ModelGrader:RequiredModel` and `effort` equal to `ModelGrader:RequiredEffort`, so a rollout without live runtime context is refused (`ModelGradeRolloutWithoutTurnContextRefusedRuntimeIdentity`); and the verdict JSON names the same `reviewerThreadId`. The declared `request_meta` alone never satisfies this check (`ModelGradeLaunchMetaCorrectRolloutTurnContextOtherModelOrEffortRefusedRuntimeIdentity`, `ModelGradeRolloutThreadDiffersFromResponseStreamRefusedRuntimeIdentity`).
+3018:- 400 `agent_context_hv_request_invalid` (unknown session, an unknown or out-of-order range, a range over `HvRequest:MaxTurns`, or a range with no agent response; `HvRequestUnknownSessionBadRangeOverMaxTurnsOrNoResponse400HvRequestInvalid`).
+3032:- 422 `agent_context_receipt_unverified` with `details.check` naming the failed check: `receipt_path`, `request_meta`, `verdict_block`, `verdict_binding`, `verdict_match`, `reviewer_turn`, `reviewer_independent`, or `runtime_identity` (each check's case is listed in section 6.3, receipt and reviewer verification).
+3379:- Caller: the HV agent (the configured grader, launched as every HV is), in two steps of one reviewer thread, because a `codex exec` run cannot hold its own completed-turn receipt while it is still running. Step 1, the review: the HV runner launches the reviewer (`codex exec -m <RequiredModel> -c model_reasoning_effort="<RequiredEffort>" --json -`), which reviews the turns of an HV request (CreateAgentContextHvRequestCommand), emits its `=== VERDICT JSON ===`, and stores its entire result on its own session-log turn; when the run completes the runner freezes the request, response, and rollout jsonl receipts (section 6.3). Step 2, the grade-only continuation: the runner resumes the same thread (`codex exec resume <reviewerThreadId> -m <RequiredModel> -c model_reasoning_effort="<RequiredEffort>" --json -`) with a prompt naming the frozen receipt paths, and the HV agent submits one grade per item through `New-McpAgentContextRecordModelGradeParams`, copied from its own verdict; the continuation reviews nothing and changes no receipt. A continuation that fails or is interrupted is resumed again with the same prompt: a resubmitted grade equal to the stored one returns it (200), so retries are safe (`ModelGradeTwoStepProtocolReviewThenContinuationSubmits`, `ModelGradeRetrySameSubmission200Existing`). There is no grading worker or HV pipeline in this effort (operator, 2026-10-11): the runner is the existing HV runner and both steps run the configured grader.
+3386:The handler's validation checks that `hvRequestId`, the request, response, and rollout jsonl paths, `reviewerSessionId`, `reviewerRequestId`, and `reviewerThreadId` are present (otherwise `agent_context_receipt_paths_required`), that every finding has a claimId and a check with outcome PASS, FAIL, or UNKNOWN (otherwise `validation_error`), and that the grader agent, model, and effort equal the configured grader. The insert takes a `grd-` key from ReadableKeyAllocator through IdempotentCreate and stores the grade with `hvRequestId`, its findings, the receipt paths and hashes, the thresholds in force, and `RecordedUtc`. The 200 is a retry of the continuation; the 422 names the failed check. One decision holds the three request checks (receipt fields, findings, and the configured grader agent, model, and effort), each refusal on its own edge. The reads are drawn as one call of the nested activity ReadModelGradeInputs and the SerializableWrite with its delegate as one call of the nested activity SaveModelGrade, both below, whose edges are their returns. One 409 `conflict` terminal stands for both conflict answers: `retryable: false` for a different grade already stored for this response and HV request, and `retryable: true` when SerializableWrite or ReadableKeyAllocator is exhausted after four attempts.
+3395:    V -->|"not the configured grader"| E7(["403 agent_context_grader_not_allowed"])
+3410:No transaction is open. The gradable check runs in this order: the response is neither `Rejected` nor `Superseded`, the HV request is `Open`, and the response is an item of it. The eight checks are `receipt_path`, `request_meta`, `verdict_block`, `verdict_binding`, `verdict_match`, `reviewer_turn`, `reviewer_independent`, and `runtime_identity` (section 6.3); they read the frozen receipt files and the reviewer's own session-log turn and compare normal forms (ContentHasher, `ModelGradeVerdictWithEmDashReviewerTurnMatchesInNormalForm`). After every read-only check, the receipt, reviewer, and runtime-identity checks included (section 3.1, Database-only delegates), the dispatched EvaluateStalenessCommand persists `Stale` when a dependency changed; a `Stale` response stays gradable and DecideAgentResponseTrustCommand leaves it `Stale`. ScoreVerdict counts the PASS, FAIL, and UNKNOWN findings at `max(configured, 0.98)`. The diagram draws the response, claim, HV request, and item checks as one call of the nested activity CheckGradeTarget below.
+3772:- Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; blank fields, or TurnLocator `InvalidIdentifier`), `agent_context_hv_request_invalid` (an unknown session, an endpoint turn not in the session, from after to, a range longer than `HvRequest:MaxTurns`, or a range with no gradable agent response, `HvRequestUnknownSessionBadRangeOverMaxTurnsOrNoResponse400HvRequestInvalid`); 409 `agent_context_disabled`, `conflict` with `retryable: false` (the idempotency key reused with other inputs), `conflict` with `retryable: true` (SerializableWrite or ReadableKeyAllocator `hvr-` exhausted after four attempts); REPL only (ClientMutationPolicy, before any server call): `transaction_degraded`, `mutation_not_transactional`.
+3799:It runs inside the delegate, after the key lookup, and reads only the database; a refusal rolls the transaction back and is returned unchanged. TurnLocator finds the session by `agent` and `sessionId`, then each endpoint turn by its `requestId`. One `agent_context_hv_request_invalid` terminal stands for the unknown session (`SessionNotFound`), the range refusals (an endpoint turn not in the session, from after to, or a range longer than `HvRequest:MaxTurns`), and a range with no gradable agent response; each edge names its case.
+4373:#### Sequence: submit RecordModelGradeCommand from an HV review
+4375:`Agent` is the agent that asks for the review; `Runner` is the existing HV runner; `Reviewer` is the HV agent (the configured grader, Codex `gpt-6-astra` `max`, one reviewer thread, in two steps). In step 1 the reviewer reviews the turns and responses, emits the VERDICT JSON with its `overallVerdict`, a `grades` entry per response carrying that response's `verdict`, and its own thread id, and stores its entire result on its own session-log turn; when that run completes, the runner freezes the request, response, and rollout jsonl receipts under the receipt root.
+4452:Every read here runs outside a transaction, in the order of the unit's checks (section 6.5): the stored grade (IdempotentCreate on the natural key `ResponseId`, `HvRequestId`, kind `Model`, policy `Conflict`, read-only, so a retry after the request completed or the response was rejected still returns the stored grade), the response, each finding's `claimId`, the HV request, the response's status, the HV request's status, the item, and the eight receipt, reviewer, and runtime-identity checks of section 6.3 over the receipt files and the reviewer's own session-log turn. A failed check is answered with `details.check`; the reviewer makes its submission equal its verdict entry and its turn, or reruns the HV on the configured grader. EvaluateStalenessCommand then persists `Stale` when a dependency of the response or its package changed, so the trust decision in the SerializableWrite never trusts it (a `Stale` response stays gradable, and the decision leaves it `Stale`); when that dispatch's own write exhausts its four attempts, the grade answers 409 `conflict` with `retryable: true` and saves nothing. The response's `StatusVersion` and the HV request's state that the SerializableWrite re-checks are the ones read after that dispatch.
+5160:### 7.4 Use case: Close every request turn before stopping (plan UC-3) [FR-MCP-SESSIONTURN-005, -006]
+5162:UC-3 Close every request turn before stopping. Actors: model, host Stop hook. Basic flow: model records actions/decisions (incl. via `designDecisions`) and closes each turn (a `completed` or `failed` close requires model evidence, Test-ModelEvidence); Stop hook (process EvaluateStopGate) finds all closed with evidence and passes, clearing the ledger. Alternate: a turn is open (including one whose close the plugin refused for missing model evidence) or its most recent close was refused by the server's completion gate, the Stop hook blocks with the reason and the accepted remedy (Get-CloseRemedy); a turn closed without evidence by another surface is only warned and never closes turns itself. Alternate: the host session failed closed under D6 (`unsupportedSince`) while a turn was open; the Stop hook blocks with the reduced remedy (only the missing model evidence, the missing `requestClass` from S8/S9, and the close call; the terminal reviews are judged at the drain), the model's evidence and close for that turn are captured in the plugin failsafe (reviews are refused and recorded after the drain through the original pair), the next Stop warns instead of blocking, and a later SessionStart drains the captured records with the turn's original pair through the trusted recovery flow (a post-compact SessionStart of the still-live host session drains none of them). Alternate: a model close held in the failsafe by a transport outage, or the package-failure `canceled` close of a stateless or pilot invocation (section 7.15) held there, is warned as degraded persistence (naming the package failure for the `canceled` close, which never needs model evidence) and never blocks; its ledger entry stays until the drain confirms the close. Alternate: a contended turn-open lock or a final mint refusal at prompt time left no turn, and the Stop hook warns naming the prompt. Alternate: the failsafe quarantine holds a record of an open turn, and the Stop hook warns and never blocks (section 3.1, "Failsafe drain"). A missing agent-context response submission (section 7.12) is not a Stop-gate item. Realizes FR-MCP-SESSIONTURN-005, -006; updated FR-MCP-SESSIONLIFE-005, FR-MCP-CLEARSESSION-001.
+5230:UC-7 Record a hostile validation review with receipts. Actors: hostile reviewer (Codex CLI, gpt-6-astra, max), coordinator agent. Basic flow: at each HV point of "Execution organization" once its gates are green (D10), the coordinator writes the HV brief and launches the Codex reviewer; the runner records the request and response jsonl; the reviewer writes its markdown and JSON receipts and stores its entire result on its own session-log turn; from the Phase 4 live-check deploy on, the coordinator records `hostileReview` from the receipt (accuracy/completeness mapped, receipt paths set) and backfills the Phase 4 context verdicts by original pair before the phase-wide Phase 4 HV; for every HV point before that deploy, it records the verdict on the work package's coordinating turn (dialog and designDecisions with the receipt paths) and with `RecordValidationResultAsync`. Alternate: DISAGREE with passing scores recorded as Other with notes; missing receipt paths rejected; a retryable answer to the review write is reported with its code and `retryable: true`, exit 1, never queued, and the coordinator records the review again after the drain (as in UC-6, section 5.2); `hvVerdict` sent together with an explicit `status` is refused with 400 `validation_error` naming `status`; a run whose live model or effort is not gpt-6-astra/max is not accepted as HV (an HV-protocol rule: the coordinator checks the reviewer's recorded model and effort in its receipts before recording any verdict, so process ConvertHvReceiptToReview and the plugin do not check it); from the Phase 4 live-check deploy on, Code or Docs turns of a work package that completed before its HV carry `Other` "pending HV <gate>" and receive the verdict through `recordReview`, each addressed by its original (`sessionId`, `requestId`) pair (FR-MCP-SESSIONREVIEW-002-AC002). The reviewer's brief is a user prompt and opens its own turn, because the prompt hook classifies a background agent only by the host's subagent markers, never by prompt text (section 5.4; this replaces FR-MCP-TRIAGEPLUGIN-001's text-detected background-brief reuse); the HostileReview subsystem (FR-MCP-HOSTILEREVIEW-001 to -006, its `xhigh` worker, and its AGREE, DISAGREE, or UNKNOWN verdicts) is separate: its results are not HV receipts for this use case and are not judged by its `max` rule (section 5.4; FR-MCP-HOSTILEREVIEW-003 is unchanged). Realizes FR-MCP-SESSIONREVIEW-002, -005 (-005 updated with that separation); updated FR-MCP-TRIAGEPLUGIN-001.
+5237:    U -. include .-> I2(("Map the receipt to a review (process ConvertHvReceiptToReview)"))
+5302:    E2(("Unconfigured grader: 403")) -. extend .-> U
+5607:  - processes (5.4): ConvertHvReceiptToReview, ClearSession (nested activities ClearOneOpenTurn, and ReportCloseReceipt after it), AdvisoryCompletionPrecheck, PreserveReviewScoreLexemes;
+SEARCH src/QBrainAi.Repl.Core/RequirementsWorkflow.cs: DateTime.*Now|CreatedAt|UpdatedAt
+938:    public DateTimeOffset SelectedAt { get; set; } = DateTimeOffset.UtcNow;
+963:    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+964:    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+1021:    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+1022:    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+1085:    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+1086:    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+1133:    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+1185:        GeneratedAt = (generatedAt ?? DateTimeOffset.UtcNow).ToString("o");
+1222:        IngestedAt = DateTimeOffset.UtcNow.ToString("o");

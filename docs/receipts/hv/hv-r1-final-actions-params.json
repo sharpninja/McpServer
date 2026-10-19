@@ -1,0 +1,19 @@
+{
+  "requestId": "req-20261017T142304Z-hv-amendment1-r1",
+  "actions": [
+    {
+      "order": 100,
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md",
+      "description": "Round 1 verdict DISAGREE: accuracy 90, completeness 82, confidence 95. All 21 findings require implementer edits, two evidence/plan questions remain UNKNOWN, and no new operator decision is required. Full reasoning, alternatives (rejecting polish-only and unsupported claims), evidence and every requested result field are preserved in explicitly ordered dialog parts and verified by live query."
+    },
+    {
+      "order": 101,
+      "type": "validation",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r1-persistence-proof.json",
+      "description": "Read-back matched every one of 76 complete-result parts in my own MCP turn, without a failsafe acknowledgment. No product code, TODO, requirements or other-agent turn was changed."
+    }
+  ]
+}

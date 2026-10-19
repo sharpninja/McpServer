@@ -1,0 +1,18 @@
+{
+  "TimestampUtc": "2026-10-18T03:19:30.2590222+00:00",
+  "TimestampLocal": "2026-10-17T22:19:30",
+  "Agent": "Codex",
+  "Model": "gpt-6-astra",
+  "Effort": "max",
+  "ContextTimestamp": "2026-10-18T03:17:20.316Z",
+  "ThreadId": "01a14d03-848a-79a0-866c-a35a86178e27",
+  "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/17/rollout-2026-10-17T22-17-18-01a14d03-848a-79a0-866c-a35a86178e27.jsonl",
+  "AddProfileFileCount": 1,
+  "AddProfileFullRead": true,
+  "MarkerReadInFull": true,
+  "MarkerValuesEmitted": false,
+  "CachePath": "/tmp/hv-r2-codex-01a14d03-848a-79a0-866c-a35a86178e27",
+  "PluginWrapper": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/Invoke-CodexMcpPlugin.ps1",
+  "SessionId": "Codex-20261018T031720Z-hv-amendment1-r2",
+  "RequestId": "req-20261018T031720Z-hv-amendment1-r2"
+}

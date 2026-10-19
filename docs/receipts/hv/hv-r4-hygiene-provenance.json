@@ -1,0 +1,186 @@
+{
+  "TimestampUtc": "2026-10-18T08:22:50.3708627+00:00",
+  "Head": "437695dc16b928ee0c8b50e611231aa1903aa083",
+  "CommitCount": 21,
+  "Signatures": [
+    {
+      "Sha": "437695dc16b928ee0c8b50e611231aa1903aa083",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "4c5208c7f6d8bbedff692d1739c4f434baed4e01",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "ecdab88b5446423d30a4c2748caf38277fa35b95",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "9e6822246e0e13f51612c638bc72d148954ccc18",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "92df2c49d7f06f359190b8574dd5545d7174e294",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "ab082d18054caedade5c13cc42c4a7278c284af6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "67297000747bcfacc481bc8891c35f8fe4aff65f",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "cef5fcaabec866b83d114a7c0ebfb260499119ea",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "6c848a4e56f8dee101672dcca1435d600c21eb41",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "168478c3c5d96b08e965ac9e63d78feb26e359e1",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "3fba1b1336a92767904e344dbe9d531200049a0d",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "0a449314528c5bfc07e9b386c97034716e2ddbd4",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 94%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "31904493381cfef56c57790950e23e72f3ecc39b",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "f5fd5ab24ad00b09053daf07ed3c0d850f70498d",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "bd6e37b33f043b1ede3a1feeaf7073d357ea21cf",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 95%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "9fd6b653b2522212ad8151091e3a8cdec25e75bd",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 95%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "99cb42b24a442377a776aebd58e9df6894c2ce40",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "HasRequiredSignature": true
+    },
+    {
+      "Sha": "31af8c597e3570a2469a48a238a4aa76107f30bb",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 88%, accuracy 92%, completeness 88%"
+      ],
+      "HasRequiredSignature": true
+    }
+  ],
+  "UniqueBlobsScanned": 346,
+  "KnownSecretFindings": [],
+  "CredentialPatternCandidates": [],
+  "FoundationSha256": "6E5D4F418E78CF9A76AB366F64D4F24002C09E3C3F024502ED89D77C6E77295E",
+  "FoundationHashMatches": true,
+  "AmendmentSpdx": true,
+  "ForbiddenDashes": 0,
+  "Tables": 0,
+  "MermaidCount": 105,
+  "RuntimeContexts": [
+    {
+      "Timestamp": "2026-10-18T07:52:14.621Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a14dff-3460-7c42-bc45-42dc952fc93c",
+      "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016"
+    },
+    {
+      "Timestamp": "2026-10-18T08:03:31.224Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a14dff-3460-7c42-bc45-42dc952fc93c",
+      "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016"
+    },
+    {
+      "Timestamp": "2026-10-18T08:17:35.472Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max",
+      "TurnId": "01a14dff-3460-7c42-bc45-42dc952fc93c",
+      "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016"
+    }
+  ]
+}
