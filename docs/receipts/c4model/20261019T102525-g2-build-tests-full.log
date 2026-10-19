@@ -1,0 +1,4 @@
+LocalStart: 20261019T102525 Command: dotnet test /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/Build.Tests.csproj -c Debug --logger trx;LogFileName=20261019T102525-g2-build-tests-full.trx --results-directory /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/docs/receipts/c4model ExitCode: 1 
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build/Build.ArchitectureDiagrams.cs(12,19): error CS0649: Field 'Build.WhatIf' is never assigned to, and will always have its default value false [/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build/_build.csproj]

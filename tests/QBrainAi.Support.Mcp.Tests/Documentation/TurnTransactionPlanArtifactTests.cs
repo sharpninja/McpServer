@@ -175,6 +175,81 @@ public sealed class TurnTransactionPlanArtifactTests
         Assert.Contains("Explicitly Deferred", audit, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TEST-MCP-165 (TR-MCP-TXNDIAGRAMS-001), BDPv4 mock gate: the C4 view assertion accepts a fixture plan whose
+    /// six imported diagrams are rendered views of the workspace, using fixture text and a fixture render set.
+    /// </summary>
+    [Fact]
+    public void ImportedDiagramViewContract_AcceptsConvertedFixture()
+        => AssertImportedDiagramViews(BuildConvertedPlanFixture(), BuildWorkspaceFixture(), _ => true);
+
+    /// <summary>
+    /// TEST-MCP-165 (TR-MCP-TXNDIAGRAMS-001), BDPv4 negative controls: the C4 view assertion rejects a fixture plan
+    /// that keeps a Mermaid fence, lacks an image link or View line, a workspace without a view declaration for an
+    /// imported ID, and a missing render.
+    /// </summary>
+    [Fact]
+    public void ImportedDiagramViewContract_RejectsDeviations()
+    {
+        var plan = BuildConvertedPlanFixture();
+        var workspace = BuildWorkspaceFixture();
+
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertImportedDiagramViews(
+            plan.Replace("View: AD-AOT-001", "View: AD-AOT-001\n\n```mermaid\nflowchart TD\n```", StringComparison.Ordinal), workspace, _ => true));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertImportedDiagramViews(
+            plan.Replace("(../architecture/c4/rendered/SD-DIFFGRAM-001.svg)", "(../architecture/c4/rendered/OTHER.svg)", StringComparison.Ordinal), workspace, _ => true));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertImportedDiagramViews(
+            plan.Replace("View: ARCH-QUAD-001", "View:", StringComparison.Ordinal), workspace, _ => true));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertImportedDiagramViews(
+            plan, workspace.Replace("\"AD-WEIGHT-001\"", "\"AD-WEIGHT-002\"", StringComparison.Ordinal), _ => true));
+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => AssertImportedDiagramViews(
+            plan, workspace, id => id != "AD-CURIOSITY-001"));
+    }
+
+    /// <summary>
+    /// TEST-MCP-165 (TR-MCP-TXNDIAGRAMS-001): asserts that the plan has no Mermaid fence and that each imported
+    /// diagram section keeps its heading, imported-section reference and repo annotations, links exactly one
+    /// rendered view named by its ID, states the view key, and that the workspace declares that view and its
+    /// render exists.
+    /// </summary>
+    private static void AssertImportedDiagramViews(string planText, string workspaceDsl, Func<string, bool> renderExists)
+    {
+        Assert.Equal(0, CountOccurrences(planText, "```mermaid"));
+        foreach (var diagramId in DiagramIds)
+        {
+            var section = ExtractDiagramSection(planText, diagramId);
+
+            Assert.Contains("### " + diagramId + " ", section, StringComparison.Ordinal);
+            Assert.Contains("Imported section:", section, StringComparison.Ordinal);
+            Assert.Contains("Repo annotations:", section, StringComparison.Ordinal);
+            Assert.Equal(1, CountOccurrences(section, "](../architecture/c4/rendered/" + diagramId + ".svg)"));
+            Assert.Contains("View: " + diagramId + "\n", section.Replace("\r\n", "\n", StringComparison.Ordinal), StringComparison.Ordinal);
+            Assert.Matches(
+                new System.Text.RegularExpressions.Regex(
+                    @"(?m)^\s*(custom|dynamic|systemContext|container|component|deployment|systemLandscape|filtered|image)\b[^\r\n{]*""" + System.Text.RegularExpressions.Regex.Escape(diagramId) + @""""),
+                workspaceDsl);
+            Assert.True(renderExists(diagramId), "Missing render for " + diagramId + ".");
+        }
+    }
+
+    private static string BuildConvertedPlanFixture()
+    {
+        var builder = new System.Text.StringBuilder("# Fixture plan\n\n## Imported Diagrams\n\n");
+        foreach (var diagramId in DiagramIds)
+        {
+            builder.Append("### ").Append(diagramId).Append(" Fixture title\n\n")
+                .Append("Imported section: 3.x Fixture.\n\n")
+                .Append("![").Append(diagramId).Append(" Fixture title](../architecture/c4/rendered/").Append(diagramId).Append(".svg)\n\n")
+                .Append("View: ").Append(diagramId).Append("\n\n")
+                .Append("Repo annotations:\n\n- `").Append(diagramId).Append("-BR-X`: fixture branch.\n\n");
+        }
+
+        return builder.Append("## Next section\n").ToString();
+    }
+
+    private static string BuildWorkspaceFixture()
+        => string.Join("\n", DiagramIds.Select(id => "        custom \"" + id + "\" \"" + id + " title\" \"fixture\" {\n            include *\n        }"));
+
     private static string ReadTransactionPlan()
         => File.ReadAllText(Path.Combine(FindRepoRoot(), "docs", "Project", "Quad-Model-Transactional-Diffgram-Plan.md"));
 

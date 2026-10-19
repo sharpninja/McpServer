@@ -27,6 +27,7 @@
         "AiCodeReview",
         "AiProjectReview",
         "AiWarningSuppressionReview",
+        "ArchitectureDiagrams",
         "BenchMemory",
         "BuildAgent",
         "BuildTrustedThirdParty",
@@ -154,6 +155,10 @@
         "CertificatePath": {
           "type": "string",
           "description": "Code signing certificate path"
+        },
+        "ChromiumPath": {
+          "type": "string",
+          "description": "TR-MCP-NUKE-017: Chromium-family browser used to render Structurizr views (default: autodetect)"
         },
         "Configuration": {
           "type": "string",
@@ -289,6 +294,10 @@
         "UseCaseSqlitePath": {
           "type": "string",
           "description": "Optional path to workspace SQLite DB for UseCaseFrLinks Realizes coverage (FR-MCP-USECASE-010)"
+        },
+        "WhatIf": {
+          "type": "boolean",
+          "description": "TR-MCP-NUKE-017 AC-6: report what would change and write nothing (honored by ArchitectureDiagrams)"
         },
         "WorkspacePath": {
           "type": "string",
