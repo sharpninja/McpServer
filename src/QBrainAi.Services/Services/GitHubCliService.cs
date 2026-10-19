@@ -779,12 +779,20 @@ public sealed class GitHubCliService : IGitHubCliService
         return record.AccessToken;
     }
 
+    /// <summary>
+    /// TR-MCP-GH-004 with FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: the host-native workspace is the gh working
+    /// directory; a foreign-platform workspace (a Windows path on a POSIX host, a POSIX path on Windows) is an
+    /// identity only and is never opened on the host, so gh runs without a working directory and safe.directory.
+    /// </summary>
     private string? ResolveWorkingDirectory()
     {
         var workingDirectory = _workspaceAccessor?.GetWorkspacePath();
-        return string.IsNullOrWhiteSpace(workingDirectory)
-            ? null
-            : Path.GetFullPath(workingDirectory);
+        if (string.IsNullOrWhiteSpace(workingDirectory))
+            return null;
+
+        return QBrainAi.Client.WorkspacePathNormalizer.Process.IsHostNative(workingDirectory)
+            ? Path.GetFullPath(workingDirectory)
+            : null;
     }
 
     private GitHubIssueDetail? ParseIssueDetail(string? json)
