@@ -88,7 +88,7 @@ interface IArchitectureDiagramRules
         IEnumerable<TrackedTextFile> markdownFiles,
         IEnumerable<string> renderedRelativePaths);
 
-    /// <summary>AC-5: letter-page and 8 to 12 pt text standard for one rendered view.</summary>
+    /// <summary>AC-5: letter-page and 8 to 16 pt text standard for one rendered view.</summary>
     IReadOnlyList<ArchitectureDiagramFinding> FindPageProblems(string viewKey, string svg);
 
     /// <summary>AC-2: every view key of an exported workspace JSON document, in document order.</summary>

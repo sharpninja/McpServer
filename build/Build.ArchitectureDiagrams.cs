@@ -19,7 +19,7 @@ partial class Build
     /// TR-MCP-NUKE-017 (FR-MCP-BUILD-001): Validates docs/architecture/c4/workspace.dsl with the pinned Structurizr CLI,
     /// renders every view to docs/architecture/c4/rendered/&lt;viewKey&gt;.svg, and fails when any documentation diagram
     /// does not come from that one workspace (Mermaid fences or .mmd files, dangling view links, missing or orphan
-    /// renders, renders outside the 8 to 12 pt letter-page standard). --what-if writes nothing.
+    /// renders, renders outside the 8 to 16 pt letter-page standard). --what-if writes nothing.
     /// </summary>
     public Target ArchitectureDiagrams => _ => _
         .Executes(() =>
