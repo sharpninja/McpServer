@@ -31,7 +31,10 @@ internal static class SimulatedWorkspaceHosts
         return host;
     }
 
-    /// <summary>Simulated Windows host: working directory C:\svc.</summary>
+    /// <summary>
+    /// Simulated Windows host: working directory C:\svc. Drive paths and UNC paths (two leading
+    /// separators) are absolute, as on Windows; any other path resolves under the working directory.
+    /// </summary>
     public static IWorkspaceHostEnvironment Windows()
     {
         var host = Substitute.For<IWorkspaceHostEnvironment>();
@@ -40,7 +43,9 @@ internal static class SimulatedWorkspaceHosts
         host.NormalizeNativePath(Arg.Any<string>()).Returns(call =>
         {
             var path = call.Arg<string>()!;
-            var full = path.Length >= 2 && path[1] == ':' ? path : WindowsWorkingDirectory + @"\" + path;
+            var absolute = (path.Length >= 2 && path[1] == ':') ||
+                (path.Length >= 2 && (path[0] is '/' or '\\') && (path[1] is '/' or '\\'));
+            var full = absolute ? path : WindowsWorkingDirectory + @"\" + path;
             return WorkspaceIdentityPath.NormalizeLexicalPath(full, WorkspacePathPlatform.Windows);
         });
         return host;
