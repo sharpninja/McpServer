@@ -17,9 +17,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 public sealed class Decompose4nfBackfillMigrationTests : IDisposable
 {
     private const string PreSliceMigration = "20260628194717_RepairTriageCreatedTodoWorkspace";
-    // FR-MCP-PATHNORM-001: raw-SQL seeds hold the canonical stored key form that the
-    // workspace-key converter gives the LINQ predicates below.
-    private static readonly string WorkspacePath = ExpectedWorkspaceKey.Of(@"Q:\__mcp_unit_test__\QBrainAi");
+    private const string WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi";
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
 

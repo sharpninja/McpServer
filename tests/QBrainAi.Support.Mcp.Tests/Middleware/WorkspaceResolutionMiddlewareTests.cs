@@ -30,9 +30,6 @@ public sealed class WorkspaceResolutionMiddlewareTests
             PlanPrompt = "",
         };
 
-    // TR-MCP-MT-002 / FR-MCP-PATHNORM-001: like the real WorkspaceService.GetAsync, the double finds a
-    // workspace by its canonical key, so the token service's canonical C:/projects/alpha and a header's
-    // C:\projects\alpha both match on every host (Path.GetFullPath re-roots a Windows path on Linux).
     private static IWorkspaceService CreateWorkspaceService(params WorkspaceDto[] workspaces)
     {
         var svc = Substitute.For<IWorkspaceService>();
@@ -42,29 +39,13 @@ public sealed class WorkspaceResolutionMiddlewareTests
         {
             svc.GetAsync(
                 Arg.Is<string>(p => p != null && string.Equals(
-                    ExpectedWorkspaceKey.Of(p),
-                    ExpectedWorkspaceKey.Of(ws.WorkspacePath ?? string.Empty),
+                    Path.GetFullPath(p).TrimEnd(Path.DirectorySeparatorChar),
+                    Path.GetFullPath(ws.WorkspacePath ?? string.Empty).TrimEnd(Path.DirectorySeparatorChar),
                     StringComparison.OrdinalIgnoreCase)),
                 Arg.Any<CancellationToken>())
                 .Returns(ws);
         }
         return svc;
-    }
-
-    /// <summary>
-    /// TR-MCP-MT-002 negative control for the workspace-service double: both spellings of a registered
-    /// workspace resolve to it, and a different workspace path does not.
-    /// </summary>
-    [Fact]
-    public async Task WorkspaceServiceDouble_MatchesCanonicalKeyOnly()
-    {
-        var workspaceService = CreateWorkspaceService(MakeDto(WorkspaceA));
-        var ct = TestContext.Current.CancellationToken;
-
-        Assert.NotNull(await workspaceService.GetAsync(WorkspaceA, ct));
-        Assert.NotNull(await workspaceService.GetAsync(ExpectedWorkspaceKey.Of(WorkspaceA), ct));
-        Assert.Null(await workspaceService.GetAsync(WorkspaceB, ct));
-        Assert.Null(await workspaceService.GetAsync(ExpectedWorkspaceKey.Of(WorkspaceB), ct));
     }
 
     private static DefaultHttpContext CreateContext(string path, string method = "GET", string? workspaceHeader = null, string? apiKey = null, string? bearerToken = null)

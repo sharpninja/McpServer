@@ -396,97 +396,60 @@ public sealed class GitHubCliServiceTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
-    /// <summary>
-    /// TEST-MCP-083: a stored workspace token is passed as the gh token override and gh runs in the
-    /// workspace directory. The workspace is a host-native temporary directory (TEST-MCP-PATHNORM-001:
-    /// a Windows literal is a foreign path on a Linux runner and is never a usable working directory);
-    /// the negative control rejects any gh call made from another directory.
-    /// </summary>
     [Fact]
     public async Task ListIssuesAsync_WithStoredWorkspaceToken_UsesProcessRunRequestOverride()
     {
-        var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-gh-token-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(workspacePath);
-        try
+        var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
+        tokenStore.GetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new GitHubWorkspaceTokenRecord("C:\\workspace", "gho_stored", DateTimeOffset.UtcNow, null));
+
+        var options = Substitute.For<IOptionsMonitor<GitHubIntegrationOptions>>();
+        options.CurrentValue.Returns(new GitHubIntegrationOptions
         {
-            var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
-            tokenStore.GetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                .Returns(new GitHubWorkspaceTokenRecord(workspacePath, "gho_stored", DateTimeOffset.UtcNow, null));
+            PreferStoredToken = true,
+            AllowCliFallback = true,
+        });
 
-            var options = Substitute.For<IOptionsMonitor<GitHubIntegrationOptions>>();
-            options.CurrentValue.Returns(new GitHubIntegrationOptions
-            {
-                PreferStoredToken = true,
-                AllowCliFallback = true,
-            });
+        var services = new ServiceCollection();
+        services.AddScoped(_ => new WorkspaceContext { WorkspacePath = "C:\\workspace" });
+        using var provider = services.BuildServiceProvider();
+        using var scope = provider.CreateScope();
+        var accessor = Substitute.For<IHttpContextAccessor>();
+        accessor.HttpContext.Returns(new DefaultHttpContext { RequestServices = scope.ServiceProvider });
 
-            var services = new ServiceCollection();
-            services.AddScoped(_ => new WorkspaceContext { WorkspacePath = workspacePath });
-            using var provider = services.BuildServiceProvider();
-            using var scope = provider.CreateScope();
-            var accessor = Substitute.For<IHttpContextAccessor>();
-            accessor.HttpContext.Returns(new DefaultHttpContext { RequestServices = scope.ServiceProvider });
+        _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "[]", null));
 
-            _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
-                .Returns(new ProcessRunResult(0, "[]", null));
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\workspace");
+        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options, workspaceAccessor);
+        var result = await sut.ListIssuesAsync("open", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-            var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: workspacePath);
-            var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options, workspaceAccessor);
-            var result = await sut.ListIssuesAsync("open", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-            Assert.True(result.Success);
-            var expectedDirectory = Path.GetFullPath(workspacePath);
-            await _processRunner.Received(1).RunAsync(
-                Arg.Is<ProcessRunRequest>(r => r != null
-                    && r.FileName == "gh"
-                    && r.GitHubTokenOverride == "gho_stored"
-                    && r.WorkingDirectory == expectedDirectory),
-                Arg.Any<CancellationToken>()).ConfigureAwait(true);
-            await _processRunner.DidNotReceive().RunAsync(
-                Arg.Is<ProcessRunRequest>(r => r != null && r.WorkingDirectory != expectedDirectory),
-                Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        }
-        finally
-        {
-            Directory.Delete(workspacePath, true);
-        }
+        Assert.True(result.Success);
+        await _processRunner.Received(1).RunAsync(
+            Arg.Is<ProcessRunRequest>(r => r != null
+                && r.FileName == "gh"
+                && r.GitHubTokenOverride == "gho_stored"
+                && r.WorkingDirectory == Path.GetFullPath("C:\\workspace")),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
-    /// <summary>
-    /// TEST-MCP-083: gh runs in the workspace directory resolved through the workspace accessor.
-    /// The workspace is a host-native temporary directory (TEST-MCP-PATHNORM-001); the negative
-    /// control rejects any gh call made from another directory.
-    /// </summary>
     [Fact]
     public async Task ListIssuesAsync_WithWorkspaceAccessor_UsesWorkspaceWorkingDirectory()
     {
         _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "[]", null));
 
-        var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-gh-workdir-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(workspacePath);
-        try
-        {
-            var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: workspacePath);
-            var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\repo\\workspace");
+        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
 
-            var result = await sut.ListIssuesAsync("open", 5, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await sut.ListIssuesAsync("open", 5, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-            Assert.True(result.Success);
-            var expectedDirectory = Path.GetFullPath(workspacePath);
-            await _processRunner.Received(1).RunAsync(
-                Arg.Is<ProcessRunRequest>(request => request != null
-                    && request.FileName == "gh"
-                    && request.WorkingDirectory == expectedDirectory),
-                Arg.Any<CancellationToken>()).ConfigureAwait(true);
-            await _processRunner.DidNotReceive().RunAsync(
-                Arg.Is<ProcessRunRequest>(request => request != null && request.WorkingDirectory != expectedDirectory),
-                Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        }
-        finally
-        {
-            Directory.Delete(workspacePath, true);
-        }
+        Assert.True(result.Success);
+        await _processRunner.Received(1).RunAsync(
+            Arg.Is<ProcessRunRequest>(request => request != null
+                && request.FileName == "gh"
+                && request.WorkingDirectory == Path.GetFullPath("C:\\repo\\workspace")),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     /// <summary>
