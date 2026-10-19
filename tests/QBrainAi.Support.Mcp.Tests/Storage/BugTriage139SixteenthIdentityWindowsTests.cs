@@ -8,6 +8,8 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-USECASE-020-AC001: Real Windows worker-lifecycle coverage for physical identity.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
 public sealed class BugTriage139SixteenthIdentityWindowsTests
 {
     /// <summary>

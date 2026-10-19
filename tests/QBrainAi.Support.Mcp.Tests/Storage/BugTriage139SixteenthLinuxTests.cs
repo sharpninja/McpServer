@@ -10,6 +10,8 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-USECASE-020-AC001: Native Linux alias, replacement, and worker-lifecycle coverage.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
 public sealed class BugTriage139SixteenthLinuxTests
 {
     /// <summary>

@@ -12,6 +12,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-USECASE-018: Fourteenth-review consumer and native coverage for bounded physical identity.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
 public sealed class WorkspaceIdentityFourteenthNativeTests
 {
     /// <summary>

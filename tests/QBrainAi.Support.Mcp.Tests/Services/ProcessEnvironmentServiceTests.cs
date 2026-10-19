@@ -8,15 +8,16 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>
 /// Verifies service-launched agent processes inherit user CLI install paths needed by triage agents.
+/// The cases exercise Windows profile and PATH resolution, so they are integration tests that run on
+/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
 /// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
 public sealed class ProcessEnvironmentServiceTests
 {
     [Fact]
     public void ApplyRunAsEnvironment_IncludesGrokBinWhenProfileContainsGrokInstall()
     {
-        if (!OperatingSystem.IsWindows())
-            return;
-
         var originalPublic = Environment.GetEnvironmentVariable("PUBLIC");
         var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-process-env-{Guid.NewGuid():N}");
         var userName = "mcp-grok-user";
@@ -54,9 +55,6 @@ public sealed class ProcessEnvironmentServiceTests
     [Fact]
     public void ResolveExecutable_FindsGrokFromInjectedUserPath()
     {
-        if (!OperatingSystem.IsWindows())
-            return;
-
         var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-grok-bin-{Guid.NewGuid():N}");
         var grokBin = Path.Combine(tempRoot, ".grok", "bin");
         var grokExe = Path.Combine(grokBin, "grok.exe");
@@ -95,9 +93,6 @@ public sealed class ProcessEnvironmentServiceTests
     [Fact]
     public void ResolveExecutable_SkipsMicrosoftWindowsAppsAliasDirectory()
     {
-        if (!OperatingSystem.IsWindows())
-            return;
-
         var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-winapps-alias-{Guid.NewGuid():N}");
         var aliasDir = Path.Combine(tempRoot, "AppData", "Local", "Microsoft", "WindowsApps");
         var portableDir = Path.Combine(tempRoot, "tools", "ngrok");
@@ -136,9 +131,6 @@ public sealed class ProcessEnvironmentServiceTests
     [Fact]
     public void ResolveExecutable_DoesNotSkipProgramFilesWindowsAppsPackageRoot()
     {
-        if (!OperatingSystem.IsWindows())
-            return;
-
         var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-msix-root-{Guid.NewGuid():N}");
         var msixDir = Path.Combine(tempRoot, "Program Files", "WindowsApps", "Contoso.Ngrok_1.0.0_x64");
         var msixExe = Path.Combine(msixDir, "ngrok.exe");

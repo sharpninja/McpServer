@@ -7,6 +7,9 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// predicates. A remote UNC path is rejected before any native open whichever separator spells it
 /// (the canonical form is <c>//server/share</c>), and the local administrative share alias resolves to
 /// the drive form from either spelling. BDP v4 (plan section 2a): MockData fixture then Real fixture.
+/// The scripted MockData fixture is a unit test on every host; the Real fixture resolves through the
+/// Windows filesystem, so it is an integration test that runs on Windows hosts only (TR-MCP-USECASE-018
+/// AC-006, TR-MCP-NUKE-019), without a skip.
 /// </summary>
 public abstract class WorkspaceRemotePathContractTests
 {
@@ -19,8 +22,6 @@ public abstract class WorkspaceRemotePathContractTests
     [InlineData("//192.0.2.1/pathnorm-share/child")]
     public async Task RemoteUnc_EitherSpelling_IsRejected(string path)
     {
-        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows physical resolution only runs on a Windows host.");
-
         await Assert.ThrowsAsync<NotSupportedException>(() => ResolveWindowsAsync(path));
     }
 
@@ -30,8 +31,6 @@ public abstract class WorkspaceRemotePathContractTests
     [InlineData("//localhost/C$/Windows")]
     public async Task LocalAdministrativeShare_EitherSpelling_ResolvesToDrive(string path)
     {
-        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows physical resolution only runs on a Windows host.");
-
         Assert.Equal("C:/Windows", await ResolveWindowsAsync(path), ignoreCase: true);
     }
 }
@@ -59,7 +58,12 @@ public sealed class WorkspaceRemotePathMockDataTests : WorkspaceRemotePathContra
     }
 }
 
-/// <summary>BDP v4 step 3: the remote-path contract against <see cref="WorkspaceIdentityPath"/>.</summary>
+/// <summary>
+/// BDP v4 step 3: the remote-path contract against <see cref="WorkspaceIdentityPath"/>, which resolves
+/// through the Windows filesystem: an integration test on Windows hosts (TR-MCP-USECASE-018 AC-006).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
 public sealed class WorkspaceRemotePathRealTests : WorkspaceRemotePathContractTests
 {
     /// <inheritdoc />

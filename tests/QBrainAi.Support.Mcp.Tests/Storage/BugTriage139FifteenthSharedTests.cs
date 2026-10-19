@@ -4,6 +4,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-USECASE-019/020: Host-independent native containment evidence.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
 public sealed class BugTriage139FifteenthSharedTests
 {
     /// <summary>

@@ -184,11 +184,23 @@ public sealed class IngestionAllowlistContractTests
     }
 
     /// <summary>
+    /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): every xUnit skip form (a <c>Skip =</c>
+    /// attribute argument, <c>SkipException</c>, <c>Assert.Skip</c>, <c>Assert.SkipWhen</c>,
+    /// <c>Assert.SkipUnless</c>, skippable facts or theories), matched against code whose strings and
+    /// comments were removed by <see cref="UnitSuitePlatformScanner.StripCommentsAndStrings"/>.
+    /// </summary>
+    internal static readonly Regex SkipPattern = new(
+        @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\s*\.\s*Skip(?:When|Unless)?\b|\bSkippable(?:Fact|Theory)\b",
+        RegexOptions.CultureInvariant);
+
+    /// <summary>
     /// Verifies active test source files do not hide incomplete work with xUnit skip mechanics.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: Byrd Development Process V4 validation discipline.
-    /// Test data: all C# source files under the repository <c>tests</c> folder.
+    /// Requirement coverage: Byrd Development Process V4 validation discipline; TR-MCP-USECASE-018 (AC-006),
+    /// TR-MCP-USECASE-019 (AC-008): platform-specific tests neither skip nor silently return.
+    /// Test data: all C# source files under the repository <c>tests</c> folder, with strings and comments
+    /// removed so scripted sources that mention a skip are not counted.
     /// This data is used to make progress visible: active validation suites must
     /// pass or fail directly instead of silently skipping unfinished behavior.
     /// </remarks>
@@ -196,10 +208,6 @@ public sealed class IngestionAllowlistContractTests
     public void TestSources_DoNotDeclareSkippedXunitTests()
     {
         var testsRoot = FindDirectoryFromRepoRoot("tests");
-        var skipPattern = new Regex(
-            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\.Skip\b|\bSkippable(?:Fact|Theory)\b",
-            RegexOptions.CultureInvariant);
-
         var offenders = new List<string>();
 
         foreach (var path in Directory.EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories))
@@ -210,13 +218,14 @@ public sealed class IngestionAllowlistContractTests
                 continue;
             }
 
-            int lineNumber = 0;
-            foreach (var line in File.ReadLines(path))
+            var code = UnitSuitePlatformScanner.StripCommentsAndStrings(File.ReadAllText(path))
+                .Replace("\r\n", "\n", StringComparison.Ordinal)
+                .Split('\n');
+            for (var index = 0; index < code.Length; index++)
             {
-                lineNumber++;
-                if (skipPattern.IsMatch(line))
+                if (SkipPattern.IsMatch(code[index]))
                 {
-                    offenders.Add($"{Path.GetRelativePath(testsRoot, path)}:{lineNumber}");
+                    offenders.Add($"{Path.GetRelativePath(testsRoot, path)}:{index + 1}");
                 }
             }
         }
@@ -226,6 +235,46 @@ public sealed class IngestionAllowlistContractTests
         Assert.True(
             offenders.Count == 0,
             "Byrd V4 requires test gates to show direct progress; remove skip mechanics or move deferred work to MCP TODO state. Offenders: " + string.Join(", ", offenders));
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 (AC-006), BDPv4 mock gate for <see cref="SkipPattern"/>: scripted lines, stripped of
+    /// strings and comments as the guard does, match exactly when they hold a skip form.
+    /// </summary>
+    /// <param name="line">Scripted source line.</param>
+    /// <param name="expected">Whether the guard must count it.</param>
+    [Theory]
+    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", true)]
+    [InlineData("Assert.SkipWhen(true, \"w\");", true)]
+    [InlineData("Assert.Skip(\"s\");", true)]
+    [InlineData("[Fact(Skip = \"later\")]", true)]
+    [InlineData("[Theory(DisplayName = \"x\", Skip = \"later\")]", true)]
+    [InlineData("throw new SkipException(\"x\");", true)]
+    [InlineData("[SkippableFact]", true)]
+    [InlineData("Assert.Contains(\"skip=3\", query);", false)]
+    [InlineData("var text = \"Assert.SkipUnless(true)\";", false)]
+    [InlineData("// Assert.Skip(\"x\");", false)]
+    [InlineData("Assert.Skipped(result);", false)]
+    public void SkipPattern_MatchesEverySkipFormOutsideLiterals(string line, bool expected)
+    {
+        Assert.Equal(expected, SkipPattern.IsMatch(UnitSuitePlatformScanner.StripCommentsAndStrings(line)));
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 (AC-006) negative controls: the pattern this guard used before 2026-10-19 missed
+    /// <c>Assert.SkipUnless</c> and <c>Assert.SkipWhen</c>, and matching without stripping literals counts a
+    /// skip that only appears inside a string.
+    /// </summary>
+    [Fact]
+    public void SkipGuardNegativeControls_AreRejectedInsidePassingHarness()
+    {
+        var previous = new Regex(
+            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\.Skip\b|\bSkippable(?:Fact|Theory)\b",
+            RegexOptions.CultureInvariant);
+        Assert.DoesNotMatch(previous, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+        Assert.DoesNotMatch(previous, "Assert.SkipWhen(true, \"w\");");
+        Assert.Matches(SkipPattern, "var text = \"Assert.SkipUnless(true)\";");
+        Assert.DoesNotMatch(SkipPattern, UnitSuitePlatformScanner.StripCommentsAndStrings("var text = \"Assert.SkipUnless(true)\";"));
     }
 
     /// <summary>

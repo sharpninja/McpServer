@@ -4,6 +4,8 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-USECASE-019/020: Windows-only native identity and SQLite boundary evidence.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
 public sealed class BugTriage139FifteenthWindowsNativeTests
 {
     /// <summary>

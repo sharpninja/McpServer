@@ -12,6 +12,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// bounded streaming requirements snapshots.
 /// </summary>
 [Collection(nameof(QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
 public sealed class RequirementsTwelfthAdversarialReviewTests
 {
     /// <summary>Traversal must reject a file count beyond its explicit limit.</summary>

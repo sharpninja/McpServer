@@ -14,6 +14,8 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
 /// <see cref="ProcessRunner"/>.
 /// </summary>
 [Collection(RepositoryRootProcessStateCollection.Name)]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
 public sealed class BugTriage139SixteenthWindowsProcessTests
 {
     /// <summary>

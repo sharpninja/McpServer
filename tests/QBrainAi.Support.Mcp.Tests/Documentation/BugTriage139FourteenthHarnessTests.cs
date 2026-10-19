@@ -7,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
 /// TEST-MCP-USECASE-018: Fourteenth-review external-artifact repository-root regressions.
 /// </summary>
 [Collection(RepositoryRootProcessStateCollection.Name)]
+[Trait("Category", "Integration")]
 public sealed class BugTriage139FourteenthHarnessTests
 {
     /// <summary>

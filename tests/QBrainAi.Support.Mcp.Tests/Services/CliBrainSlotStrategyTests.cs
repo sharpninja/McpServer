@@ -371,18 +371,6 @@ public sealed class CliBrainSlotStrategyTests
     }
 
     [Fact]
-    public void DefaultSharedTempDirectory_Windows_IsUnderCommonApplicationData()
-    {
-        if (!OperatingSystem.IsWindows())
-            return;
-
-        var directory = Path.GetFullPath(CliBrainSlotChatClient.DefaultSharedTempDirectory());
-        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("quadbrain-cli", directory, StringComparison.OrdinalIgnoreCase);
-    }
-
-    [Fact]
     public async Task ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -744,5 +732,25 @@ public sealed class CliBrainSlotStrategyTests
             StandardError.Dispose();
             _stdin.Dispose();
         }
+    }
+}
+
+/// <summary>
+/// TEST-MCP-QBCLI-001: the default shared CLI temp directory on a Windows host lives under the machine's
+/// common application data folder. Windows-only behavior, so an integration test on Windows hosts
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class CliBrainSlotWindowsTempDirectoryTests
+{
+    /// <summary>The default shared temp directory is under CommonApplicationData and named for quadbrain-cli.</summary>
+    [Fact]
+    public void DefaultSharedTempDirectory_Windows_IsUnderCommonApplicationData()
+    {
+        var directory = Path.GetFullPath(CliBrainSlotChatClient.DefaultSharedTempDirectory());
+        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("quadbrain-cli", directory, StringComparison.OrdinalIgnoreCase);
     }
 }

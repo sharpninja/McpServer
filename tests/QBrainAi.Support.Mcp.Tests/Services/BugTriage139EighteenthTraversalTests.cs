@@ -10,6 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// contained requirements snapshot traversal.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
 public sealed class BugTriage139EighteenthTraversalTests
 {
     /// <summary>

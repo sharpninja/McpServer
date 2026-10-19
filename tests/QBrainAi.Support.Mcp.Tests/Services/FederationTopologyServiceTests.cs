@@ -28,42 +28,57 @@ public sealed class FederationTopologyServiceTests : IDisposable
         if (Directory.Exists(_workspacePath))
             Directory.Delete(_workspacePath, recursive: true);
     }
-    /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
-    [Fact]
-    public async Task EnrollAsync_PersistsProxyAndWorkspaceInventory()
+    /// <summary>
+    /// Enrollment persists the proxy and hosted workspaces for hub inventory. The stored workspace key of a
+    /// real host directory is compared with the host's path comparison, so the cases live in the Windows
+    /// and Linux integration classes below (operator 2026-10-19: "Integration + Platform (Recommended)";
+    /// TR-MCP-USECASE-018 AC-006).
+    /// </summary>
+    /// <param name="workspaceComparison">The running host's path comparison.</param>
+    internal static async Task AssertEnrollmentPersistsInventoryAsync(StringComparison workspaceComparison)
     {
-        using var provider = CreateProvider();
-        var sut = provider.GetRequiredService<IFederationTopologyService>();
-
-        var response = await sut.EnrollAsync(new FederationEnrollmentRequest
+        var workspacePath = Path.Combine(
+            Path.GetTempPath(), "QBrainAi.Tests", nameof(FederationTopologyServiceTests), Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(workspacePath);
+        try
         {
-            ProxyId = "PAYTON-LEGION2",
-            DisplayName = "PAYTON-LEGION2",
-            BaseUrl = "http://payton-legion2:7147/",
-            Workspaces =
-            [
-                new FederationWorkspaceRegistrationRequest
-                {
-                    WorkspaceName = "QBrainAi",
-                    WorkspacePath = _workspacePath,
-                },
-            ],
-        }, CancellationToken.None).ConfigureAwait(true);
+            using var provider = CreateProvider();
+            var sut = provider.GetRequiredService<IFederationTopologyService>();
 
-        Assert.True(response.Accepted);
-        Assert.Equal("PAYTON-LEGION2", response.ProxyId);
-        Assert.Equal(5, response.HeartbeatSeconds);
+            var response = await sut.EnrollAsync(new FederationEnrollmentRequest
+            {
+                ProxyId = "PAYTON-LEGION2",
+                DisplayName = "PAYTON-LEGION2",
+                BaseUrl = "http://payton-legion2:7147/",
+                Workspaces =
+                [
+                    new FederationWorkspaceRegistrationRequest
+                    {
+                        WorkspaceName = "QBrainAi",
+                        WorkspacePath = workspacePath,
+                    },
+                ],
+            }, CancellationToken.None).ConfigureAwait(true);
 
-        var proxies = await sut.ListProxiesAsync(CancellationToken.None).ConfigureAwait(true);
-        var proxy = Assert.Single(proxies);
-        Assert.Equal("PAYTON-LEGION2", proxy.ProxyId);
-        Assert.Equal(1, proxy.WorkspaceCount);
+            Assert.True(response.Accepted);
+            Assert.Equal("PAYTON-LEGION2", response.ProxyId);
+            Assert.Equal(5, response.HeartbeatSeconds);
 
-        var workspaces = await sut.ListWorkspacesAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
-        var workspace = Assert.Single(workspaces);
-        Assert.True(string.Equals(ExpectedWorkspaceKey.Of(_workspacePath), workspace.WorkspacePath,
-            OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
-        Assert.NotEmpty(workspace.GlobalWorkspaceId);
+            var proxies = await sut.ListProxiesAsync(CancellationToken.None).ConfigureAwait(true);
+            var proxy = Assert.Single(proxies);
+            Assert.Equal("PAYTON-LEGION2", proxy.ProxyId);
+            Assert.Equal(1, proxy.WorkspaceCount);
+
+            var workspaces = await sut.ListWorkspacesAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
+            var workspace = Assert.Single(workspaces);
+            Assert.True(string.Equals(ExpectedWorkspaceKey.Of(workspacePath), workspace.WorkspacePath, workspaceComparison));
+            Assert.NotEmpty(workspace.GlobalWorkspaceId);
+        }
+        finally
+        {
+            if (Directory.Exists(workspacePath))
+                Directory.Delete(workspacePath, recursive: true);
+        }
     }
 
     /// <summary>Cached topology status is refreshed from durable storage when status is requested.</summary>
@@ -315,7 +330,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         Assert.Equal(1, queued.ConflictCount);
     }
 
-    private static ServiceProvider CreateProvider(params IFederationStateAdapter[] adapters)
+    internal static ServiceProvider CreateProvider(params IFederationStateAdapter[] adapters)
     {
         var services = new ServiceCollection();
         services.AddOptions();
@@ -377,4 +392,32 @@ public sealed class FederationTopologyServiceTests : IDisposable
         public bool IsEcho(FederationStateOperation operation)
             => false;
     }
+}
+
+/// <summary>
+/// Hub-and-spoke enrollment on a Windows host: the stored key of a real host directory matches with the
+/// Windows path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class FederationTopologyServiceWindowsTests
+{
+    /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
+    [Fact]
+    public Task EnrollAsync_PersistsProxyAndWorkspaceInventory() =>
+        FederationTopologyServiceTests.AssertEnrollmentPersistsInventoryAsync(StringComparison.OrdinalIgnoreCase);
+}
+
+/// <summary>
+/// Hub-and-spoke enrollment on a Linux host: the stored key of a real host directory matches with the
+/// case-sensitive path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
+public sealed class FederationTopologyServiceLinuxTests
+{
+    /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
+    [Fact]
+    public Task EnrollAsync_PersistsProxyAndWorkspaceInventory() =>
+        FederationTopologyServiceTests.AssertEnrollmentPersistsInventoryAsync(StringComparison.Ordinal);
 }

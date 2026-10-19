@@ -6,6 +6,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TEST-HANDOFF-002: handle containment, UNC normalization, and bounded reads.</summary>
+[Trait("Category", "Integration")]
 public sealed class HandoffContainedFileReaderTests
 {
     /// <summary>P1-6: \\?\UNC\ is normalized to a UNC path, not a local drive-looking remnant.</summary>

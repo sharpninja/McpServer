@@ -474,22 +474,25 @@ public sealed class GitHubCliServiceTests
     /// <summary>
     /// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: a foreign-platform workspace (a Windows path on a POSIX host, a
     /// POSIX path on Windows) is an identity only and is never opened on the host, so gh runs with no working directory
-    /// and no command-scoped safe.directory.
+    /// and no command-scoped safe.directory. Which path is foreign depends on the running host, so the cases live in the
+    /// Windows and Linux integration classes below (operator 2026-10-19: "Integration + Platform (Recommended)";
+    /// TR-MCP-USECASE-018 AC-006).
     /// </summary>
-    [Fact]
-    public async Task ListIssuesAsync_WithForeignWorkspace_RunsWithoutWorkingDirectory()
+    /// <param name="foreignWorkspacePath">A workspace path of the other platform than the running host.</param>
+    internal static async Task AssertForeignWorkspaceRunsWithoutWorkingDirectoryAsync(string foreignWorkspacePath)
     {
-        _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
+        var processRunner = Substitute.For<IProcessRunner>();
+        processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "[]", null));
 
-        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: ForeignWorkspacePath());
-        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: foreignWorkspacePath);
+        var sut = new GitHubCliService(processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
 
         var result = await sut.ListIssuesAsync("open", 5, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
-        await _processRunner.Received(1).RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await _processRunner.DidNotReceive().RunAsync(
+        await processRunner.Received(1).RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await processRunner.DidNotReceive().RunAsync(
             Arg.Is<ProcessRunRequest>(request => OpensWorkspaceOnHost(request)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
@@ -508,7 +511,7 @@ public sealed class GitHubCliServiceTests
         Assert.False(UsesHostWorkspace(new ProcessRunRequest("gh", "issue list"), host));
         Assert.False(UsesHostWorkspace(new ProcessRunRequest("git", "status", WorkingDirectory: Path.GetFullPath(host)), host));
 
-        var reRooted = Path.Combine(Directory.GetCurrentDirectory(), ForeignWorkspacePath().Replace('\\', '/'));
+        var reRooted = Path.Combine(Directory.GetCurrentDirectory(), "C:/foreign/workspace");
         Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest("gh", "issue list", WorkingDirectory: reRooted)));
         Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest(
             "gh",
@@ -526,9 +529,6 @@ public sealed class GitHubCliServiceTests
         => request != null
            && (request.WorkingDirectory is not null
                || (request.EnvironmentVariables?.ContainsKey("GIT_CONFIG_COUNT") ?? false));
-
-    private static string ForeignWorkspacePath()
-        => OperatingSystem.IsWindows() ? "/srv/foreign/workspace" : @"C:\foreign\workspace";
 
     private static string CreateHostWorkspace()
     {
@@ -608,4 +608,32 @@ public sealed class GitHubCliServiceTests
            && key == "safe.directory"
            && request.EnvironmentVariables.TryGetValue("GIT_CONFIG_VALUE_0", out var value)
            && value == Path.GetFullPath(workspacePath);
+}
+
+/// <summary>
+/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Windows host: a POSIX workspace path is foreign there
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class GitHubCliServiceWindowsTests
+{
+    /// <summary>gh runs with no working directory and no safe.directory for a POSIX workspace.</summary>
+    [Fact]
+    public Task ListIssuesAsync_WithForeignWorkspace_RunsWithoutWorkingDirectory() =>
+        GitHubCliServiceTests.AssertForeignWorkspaceRunsWithoutWorkingDirectoryAsync("/srv/foreign/workspace");
+}
+
+/// <summary>
+/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Linux host: a Windows drive workspace path is foreign
+/// there (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
+public sealed class GitHubCliServiceLinuxTests
+{
+    /// <summary>gh runs with no working directory and no safe.directory for a Windows drive workspace.</summary>
+    [Fact]
+    public Task ListIssuesAsync_WithForeignWorkspace_RunsWithoutWorkingDirectory() =>
+        GitHubCliServiceTests.AssertForeignWorkspaceRunsWithoutWorkingDirectoryAsync(@"C:\foreign\workspace");
 }

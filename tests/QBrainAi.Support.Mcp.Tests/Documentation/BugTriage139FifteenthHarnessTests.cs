@@ -7,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
 /// TEST-MCP-USECASE-019: Fifteenth-review consumer and deterministic-build contract tests.
 /// </summary>
 [Collection(RepositoryRootProcessStateCollection.Name)]
+[Trait("Category", "Integration")]
 public sealed class BugTriage139FifteenthHarnessTests
 {
 
