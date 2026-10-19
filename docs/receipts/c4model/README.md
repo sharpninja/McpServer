@@ -33,6 +33,16 @@ Chronological receipts for docs/plans/PLAN-C4MODEL-001.md (BDPv4). File names st
 - 20261019T141209-g1d-mockgate-migration-keys.log with TestResults/c4model-20261019T1411-g1d (not committed; generated): BDPv4 mock gate for tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs before the Decompose4nf test was changed. MigrationKeyAssertionsMockGateTests: 6 passed (the parent key accepted; child canonical respelling, mixed keys, empty child table, rekeyed parent and a second workspace rejected). Suite: 4647 total, 4627 passed, the same 4 PR 82 and PR 83 failures, 16 Windows-only cases not executed. The memory-bench JSON files were rewritten again (bench_workspace_id only) and restored to HEAD.
 - 20261019T141810-g4-provider-decompose4nf-bound.log with TestResults/c4model-20261019T1418-g4b-provider (not committed; generated): after the four workspace-filtered queries were replaced by unfiltered reads plus MigrationKeyAssertions raw-SQL key checks, ./build.ps1 MigrationIntegrationTests --test-run-id c4model-20261019T1418-g4b-provider: QBrainAi.Support.Mcp.Tests 52 passed, Build.Tests 16 passed, 0 failed, 0 skipped, exit 0. The P5 provider gate is green on LAB-OMARCHY.
 
+## P3 renderer: content fitted (TR-MCP-NUKE-017 AC-2)
+
+- 20261019T142210-p3-baseline-render.log: ./build.ps1 ArchitectureDiagrams on the P2 workspace: validate passed, 0 inspection errors, 12 views rendered, all 12 over the AC-5 page (even KeyServerComponents at 1866 x 1166). Screenshot inspection showed the export's viewBox is the whole paper with about 400 units of empty margin: the renderer did not fit the content, which AC-2 requires. The viewer crops (margin 50) only in its PNG export.
+- 20261019T142400-p3-spacing-100.log: autolayout separations lowered from the default 300 to 100 in every view: sizes dropped (ServerComponents 20750 x 9320 to 9795 x 6633) but all 12 still overflowed.
+- 20261019T142851-g1-mockgate-svgfit.log and .trx: BDPv4 mock gate for ISvgContentFitter before production code: 17 passed (10 contract scenarios against a scripted fitter, 1 coverage fact, 6 wrong fitters rejected: no margin, no clamp, inward rounding, every viewBox text replaced, empty content accepted, culture formatting).
+- 20261019T142951-g2-bind-svgfit.log and .trx: the same contract bound to the production SvgContentFitter: 28 passed.
+- 20261019T143000-p3-fitted-render.log: with the content measured in Chromium and cropped by SvgContentFitter, 4 views meet AC-5 (KeyServerComponents 1180 x 638, DeploymentFrpRailway 1434 x 638, DeploymentFrpLocal 1406 x 638, DeploymentLinuxSystemd 1469 x 1250); 8 still need splitting per functional group.
+- 20261019T143051-p3-fitted-render-r2.log: a second run; SHA-256 of all 12 renders identical to the first run (AC-2 byte-identical renders).
+- 20261019T143121-g2-build-tests-full-r4.log and .trx: full Build.Tests: 460 passed, 0 failed, 0 skipped.
+
 ## Order note
 
 AC-5 was amended on 2026-10-19 (operator answer "Show it; widen AC-5 to 2:1"). The requirement and the contract fixtures were changed first, but the production constant was edited before the rules mock gate was rerun. The mock gate uses a scripted mock that does not read the constant, so its result is unaffected; the deviation from the step order is recorded here.

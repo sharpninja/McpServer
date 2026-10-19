@@ -349,62 +349,62 @@ workspace "QBrain.AI (McpServer) - reverse engineered from origin/develop" "C4 m
 
         systemContext qbrain "SystemContext" "C4 level 1: QBrain.AI and its users and external systems." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         container qbrain "Containers" "C4 level 2: deployable and runtime units of QBrain.AI." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         component qbrain.server "ServerComponents" "C4 level 3: MCP Context Server (QBrainAi.Support.Mcp plus referenced libraries)." {
             include *
-            autolayout tb
+            autolayout tb 100 100
         }
 
         component qbrain.server "DataLayerComponents" "C4 level 3: data layer of the MCP Context Server (DbContexts, migrations and the databases). Entity detail in data/ef-entity-model.md." {
             include qbrain.server.storage qbrain.server.mcpDbContext qbrain.server.identityDbContext qbrain.server.txDbContext qbrain.server.migrations qbrain.server.identity qbrain.server.txsec qbrain.server.workspace qbrain.db qbrain.txDb
-            autolayout tb
+            autolayout tb 100 100
         }
 
         component qbrain.repl "ReplComponents" "C4 level 3: REPL Host." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         component qbrain.qbagent "QBAgentComponents" "C4 level 3: QBAgent." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         component qbrain.keyserver "KeyServerComponents" "C4 level 3: Key Server." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         deployment qbrain "DockerCompose" "DeploymentDocker" "Deployment: Docker Compose (docker-compose.mcp.yml and Dockerfile)." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         deployment qbrain "WindowsService" "DeploymentWindowsService" "Deployment: Windows service (Update-McpService.ps1, UseWindowsService)." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         deployment qbrain "LinuxSystemd" "DeploymentLinuxSystemd" "Deployment: Linux systemd unit created by docs/setup/install-local-service.ps1." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         deployment qbrain "FrpRelay" "DeploymentFrpRailway" "Deployment: FRP relay on Railway (infra/frp/railway)." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         deployment qbrain "FrpRelayLocal" "DeploymentFrpLocal" "Deployment: FRP relay via local Docker Compose (infra/frp/local)." {
             include *
-            autolayout lr
+            autolayout lr 100 100
         }
 
         styles {
