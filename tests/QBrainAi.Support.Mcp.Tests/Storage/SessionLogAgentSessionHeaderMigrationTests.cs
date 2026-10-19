@@ -207,7 +207,6 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// reapplies without error (idempotent). Does not run the full migration chain.
     /// </summary>
     [Fact]
-    [Trait("Category", "Integration")]
     public void SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()
     {
         var sql = CaptureUpSql(new SqlServerHeaderMigration(), "Microsoft.EntityFrameworkCore.SqlServer");
@@ -298,7 +297,6 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// (Program Files PostgreSQL or MCP_TEST_POSTGRES_CONNECTION). Does not Skip.
     /// </summary>
     [Fact]
-    [Trait("Category", "Integration")]
     public void PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()
     {
         var sql = CaptureUpSql(new PostgreSqlHeaderMigration(), "Npgsql.EntityFrameworkCore.PostgreSQL");

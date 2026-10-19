@@ -257,10 +257,6 @@
           "type": "boolean",
           "description": "Fail when UseCaseFrLinks Realizes coverage findings are non-empty (default false)"
         },
-        "TestDbEnvFile": {
-          "type": "string",
-          "description": "Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)"
-        },
         "TestRunId": {
           "type": "string",
           "description": "Session-life gate run id. Test and MigrationIntegrationTests then write TestResults/<id> inventory and per-project TRX files"

@@ -18,7 +18,6 @@ public sealed class EphemeralPostgresFixtureTests
     /// local binaries or data directory. The comparison never prints the connection string.
     /// </summary>
     [Fact]
-    [Trait("Category", "Integration")]
     public void EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr()
     {
         var external = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");

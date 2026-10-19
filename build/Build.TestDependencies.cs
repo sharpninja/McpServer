@@ -36,68 +36,27 @@ partial class Build
         (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "QBrainAi" / "test-tools";
 
     /// <summary>
-    /// TR-MCP-NUKE-018 AC-1: test-database env file read on non-Windows hosts when a provider connection
-    /// variable is not already set; defaults to ~/.config/qbrain-test/test-db.env.
-    /// </summary>
-    [Parameter("Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)")]
-    readonly string TestDbEnvFile = string.Empty;
-
-    /// <summary>
-    /// Idempotent installer for the provider integration-test dependencies. On Windows: SQL Server
-    /// LocalDB (elevated MSI install when missing) and PostgreSQL server binaries (existing
-    /// installation preferred; otherwise the portable EDB binaries zip is downloaded to a
-    /// user-scoped tools directory, no elevation required). On other hosts (TR-MCP-NUKE-018): the
-    /// PostgreSQL and SQL Server endpoints come from the test-database env file and the dedicated
-    /// qbrain-test containers, and must accept connections. Re-running when everything is already
-    /// present is a no-op.
+    /// Idempotent installer for the provider integration-test dependencies:
+    /// SQL Server LocalDB (elevated MSI install when missing) and PostgreSQL server binaries
+    /// (existing installation preferred; otherwise the portable EDB binaries zip is downloaded
+    /// to a user-scoped tools directory, no elevation required). Re-running when everything is
+    /// already present is a no-op.
     /// </summary>
     public Target InstallTestDependencies => _ => _
-        .Description("Ensure provider integration-test servers: LocalDB and PostgreSQL binaries on Windows; qbrain-test containers and env file elsewhere (idempotent)")
+        .Description("Ensure SQL Server LocalDB and PostgreSQL binaries exist for provider integration tests (idempotent)")
         .Executes(() =>
         {
-            if (!OperatingSystem.IsWindows())
-            {
-                ProvisionProviderTestServers();
-                return;
-            }
-
             EnsureSqlLocalDb();
             var pgBin = EnsurePostgresBinaries();
             Log.Information("Test dependencies ready. LocalDB: OK; PostgreSQL binaries: {PgBin}", pgBin);
         });
 
     /// <summary>
-    /// TR-MCP-NUKE-018 AC-1 to AC-4: provisions the provider test endpoints through the production
-    /// provisioner and the real host boundary, logs each action (names only, never values), and fails
-    /// the target with every error when any endpoint is unavailable (no skip).
-    /// </summary>
-    void ProvisionProviderTestServers()
-    {
-        var envFile = string.IsNullOrWhiteSpace(TestDbEnvFile)
-            ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ProviderTestNames.DefaultEnvFileRelativeToHome)
-            : Path.GetFullPath(TestDbEnvFile);
-        var result = new LinuxProviderTestProvisioner().Provision(envFile, new SystemProviderTestHost());
-        foreach (var action in result.Actions)
-            Log.Information("Provider test provisioning: {Action}", action);
-
-        if (!result.Succeeded)
-        {
-            foreach (var error in result.Errors)
-                Log.Error("Provider test provisioning: {Error}", error);
-            throw new InvalidOperationException("Provider test provisioning failed: " + string.Join("; ", result.Errors));
-        }
-
-        Log.Information("Test dependencies ready: {Postgres} and {SqlServer} accept connections.", ProviderTestNames.PostgresVariable, ProviderTestNames.SqlServerVariable);
-    }
-
-    /// <summary>
     /// Runs the <c>Category=Integration</c> tests living inside the unit-test projects, including
     /// the provider migration tests (SQLite in-memory, PostgreSQL, SQL Server LocalDB). The
     /// PostgreSQL tests boot their own ephemeral cluster with generated credentials on a free port
     /// via their xUnit class fixture (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>); SQL Server
-    /// tests use an ad-hoc LocalDB database (auto-started) on Windows. On other hosts both
-    /// providers use the endpoints InstallTestDependencies provisions (TR-MCP-NUKE-018 AC-6), and a
-    /// provisioning failure fails this target before any test runs. Integration tests run only through
+    /// tests use an ad-hoc LocalDB database (auto-started). Integration tests run only through
     /// this target: the default <c>Test</c> target excludes the category. The dedicated
     /// <c>*.IntegrationTests</c> projects remain separate (their classes carry the same trait).
     /// </summary>
