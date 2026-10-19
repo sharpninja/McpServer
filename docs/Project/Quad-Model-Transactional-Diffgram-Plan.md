@@ -59,25 +59,21 @@ The Mermaid source in this section is preserved from the imported document. Repo
 
 Imported section: 3.1 Normal Turn Transaction.
 
-```mermaid
-flowchart TD
-    A[User Request / Turn Starts] --> B{Active Subscriber Present?}
-    B -->|No| C[Enter Degraded Mode]
-    B -->|Yes| D[Start Transaction + Transaction Manifest]
-    D --> E[3PKS Signs Manifest]
-    E --> F[Creativity + Logic + Curiosity Process]
-    F --> G[AoT Arbitrates]
-    G --> H{AoT Approves Final Diffgram?}
-    H -->|No| I[Reconciliation Process]
-    I --> J{All 3 Models Agree?}
-    J -->|Yes| K[Combined Argument to AoT]
-    J -->|No| L[Abort + Rollback]
-    K --> H
-    H -->|Yes| M[Final Diffgram Published]
-    M --> N[Subscriber Verifies + Commits]
-    N --> O[Transaction Committed]
-    O --> P[Response Returned]
-```
+![AD-TXN-001 Normal Turn Transaction (1 of 4: subscriber check and manifest signing)](../architecture/c4/rendered/AD-TXN-001.svg)
+
+View: AD-TXN-001
+
+![AD-TXN-001 Normal Turn Transaction (2 of 4: role processing and AoT decision)](../architecture/c4/rendered/AD-TXN-001-part2.svg)
+
+View: AD-TXN-001-part2
+
+![AD-TXN-001 Normal Turn Transaction (3 of 4: AD-TXN-001-BR-AOT-APPROVED)](../architecture/c4/rendered/AD-TXN-001-BR-AOT-APPROVED.svg)
+
+View: AD-TXN-001-BR-AOT-APPROVED
+
+![AD-TXN-001 Normal Turn Transaction (4 of 4: AD-TXN-001-BR-AOT-REJECTED and AD-TXN-001-BR-ROLLBACK)](../architecture/c4/rendered/AD-TXN-001-BR-AOT-REJECTED.svg)
+
+View: AD-TXN-001-BR-AOT-REJECTED
 
 Repo annotations:
 
@@ -91,25 +87,21 @@ Repo annotations:
 
 Imported section: 3.2 Curiosity Engine Flow.
 
-```mermaid
-flowchart TD
-    A[Monitor Cache + Logs + Traces] --> B{Frustration Detected?}
-    B -->|Yes| C[Targeted Research]
-    B -->|No| D{Struggle or Novel Concept?}
-    D -->|Yes| E[Value Ranking]
-    E --> F{High Value?}
-    F -->|Yes| G[Research + Code Experiments]
-    G --> H{External Help Needed?}
-    H -->|Yes| I[Call External + Inject Context]
-    H -->|No| J[Local Research]
-    I --> K[Judgment + AoT Review]
-    J --> K
-    K --> L{Approved?}
-    L -->|Yes| M[Inject into Cache + GraphRAG]
-    L -->|No| N[Discard]
-    M --> O{Weight Update?}
-    O -->|Yes| P[Dual-Control Weight Update]
-```
+![AD-CURIOSITY-001 Curiosity Engine Flow (1 of 4: monitoring and frustration)](../architecture/c4/rendered/AD-CURIOSITY-001.svg)
+
+View: AD-CURIOSITY-001
+
+![AD-CURIOSITY-001 Curiosity Engine Flow (2 of 4: value ranking and research)](../architecture/c4/rendered/AD-CURIOSITY-001-part2.svg)
+
+View: AD-CURIOSITY-001-part2
+
+![AD-CURIOSITY-001 Curiosity Engine Flow (3 of 4: external or local research and AoT review)](../architecture/c4/rendered/AD-CURIOSITY-001-part3.svg)
+
+View: AD-CURIOSITY-001-part3
+
+![AD-CURIOSITY-001 Curiosity Engine Flow (4 of 4: admission and weight update)](../architecture/c4/rendered/AD-CURIOSITY-001-part4.svg)
+
+View: AD-CURIOSITY-001-part4
 
 Repo annotations:
 
@@ -123,25 +115,29 @@ Repo annotations:
 
 Imported section: 3.3 Three-Party Diffgram Exchange.
 
-```mermaid
-sequenceDiagram
-    participant P as Publisher (QBrain.AI)
-    participant T as 3PKS
-    participant S as Subscriber
+![SD-DIFFGRAM-001 Three-Party Diffgram Exchange (1 of 3: messages 1 and 2)](../architecture/c4/rendered/SD-DIFFGRAM-001.svg)
 
-    P->>T: Public Keys + Diffgram SHA
-    T->>T: Sign Transaction Manifest
-    T-->>S: Encrypted SHA + Encrypted Diffgram
+View: SD-DIFFGRAM-001
 
-    S->>S: Decrypt SHA (3PKS Pub + Own Priv)
-    S->>S: Verify SHA
-    alt Invalid
-        S->>S: Abort Transaction
-    else Valid
-        S->>S: Decrypt Diffgram (Publisher Pub + Own Priv)
-        S->>S: Commit
-    end
-```
+![SD-DIFFGRAM-001 Three-Party Diffgram Exchange (2 of 3: messages 3 and 4)](../architecture/c4/rendered/SD-DIFFGRAM-001-part2.svg)
+
+View: SD-DIFFGRAM-001-part2
+
+![SD-DIFFGRAM-001 Three-Party Diffgram Exchange (3 of 3: message 5)](../architecture/c4/rendered/SD-DIFFGRAM-001-part3.svg)
+
+View: SD-DIFFGRAM-001-part3
+
+![SD-DIFFGRAM-001 alt Invalid: message 6](../architecture/c4/rendered/SD-DIFFGRAM-001-BR-INVALID.svg)
+
+View: SD-DIFFGRAM-001-BR-INVALID
+
+![SD-DIFFGRAM-001 else Valid (1 of 2: message 7)](../architecture/c4/rendered/SD-DIFFGRAM-001-BR-VALID.svg)
+
+View: SD-DIFFGRAM-001-BR-VALID
+
+![SD-DIFFGRAM-001 else Valid (2 of 2: message 8)](../architecture/c4/rendered/SD-DIFFGRAM-001-BR-VALID-part2.svg)
+
+View: SD-DIFFGRAM-001-BR-VALID-part2
 
 Repo annotations:
 
@@ -155,18 +151,13 @@ Repo annotations:
 
 Imported section: 3.4 AoT Reconciliation Process.
 
-```mermaid
-flowchart TD
-    A[AoT Rejects] --> B[Open Reconciliation]
-    B --> C[Model Refines + Additional Reasoning]
-    C --> D[Other Two Models Weigh In]
-    D --> E{All Three Agree?}
-    E -->|Yes| F[Combined Argument to AoT]
-    E -->|No| G[Rejection Stands]
-    F --> H{AoT Accepts?}
-    H -->|Yes| I[Approve Revised Result]
-    H -->|No| G
-```
+![AD-AOT-001 AoT Reconciliation Process (1 of 2: rejection to the agreement check)](../architecture/c4/rendered/AD-AOT-001.svg)
+
+View: AD-AOT-001
+
+![AD-AOT-001 AoT Reconciliation Process (2 of 2: combined argument and AoT decision)](../architecture/c4/rendered/AD-AOT-001-part2.svg)
+
+View: AD-AOT-001-part2
 
 Repo annotations:
 
@@ -179,19 +170,13 @@ Repo annotations:
 
 Imported section: 3.5 Weight Redistribution Safety.
 
-```mermaid
-flowchart TD
-    A[Curiosity Proposes Update] --> B[AoT Review]
-    B --> C{AoT Approves?}
-    C -->|Yes| D{Human/Admin Approval?}
-    D -->|Yes| E[Create Snapshot]
-    E --> F[Run Safety Gates]
-    F --> G{Gates Passed?}
-    G -->|Yes| H[Apply Update + Quarantine]
-    G -->|No| I[Reject]
-    D -->|No| I
-    C -->|No| I
-```
+![AD-WEIGHT-001 Weight Redistribution Safety (1 of 2: proposal and approvals)](../architecture/c4/rendered/AD-WEIGHT-001.svg)
+
+View: AD-WEIGHT-001
+
+![AD-WEIGHT-001 Weight Redistribution Safety (2 of 2: snapshot, gates and update)](../architecture/c4/rendered/AD-WEIGHT-001-part2.svg)
+
+View: AD-WEIGHT-001-part2
 
 Repo annotations:
 
@@ -206,29 +191,25 @@ Repo annotations:
 
 Imported section: 3.6 High-Level System Architecture.
 
-```mermaid
-flowchart TB
-    subgraph QBrain.AI
-        CR[Creativity]
-        LG[Logic]
-        CM[Curiosity Engine]
-        AM[Arbiter of Truth]
-        Cache[Shared Cache]
-    end
+![ARCH-QUAD-001 High-Level System Architecture (1 of 5: user)](../architecture/c4/rendered/ARCH-QUAD-001.svg)
 
-    subgraph External
-        PubSub[ACID Pub-Sub]
-        KeyServer[3PKS]
-        Sub[Subscriber]
-    end
+View: ARCH-QUAD-001
 
-    User --> AM
-    AM --> CR & LG & CM
-    CR & LG & CM --> Cache
-    Cache --> PubSub
-    KeyServer --> PubSub
-    Sub --> PubSub
-```
+![ARCH-QUAD-001 High-Level System Architecture (2 of 5: routing)](../architecture/c4/rendered/ARCH-QUAD-001-part2.svg)
+
+View: ARCH-QUAD-001-part2
+
+![ARCH-QUAD-001 High-Level System Architecture (3 of 5: shared cache)](../architecture/c4/rendered/ARCH-QUAD-001-part3.svg)
+
+View: ARCH-QUAD-001-part3
+
+![ARCH-QUAD-001 High-Level System Architecture (4 of 5: cache to pub-sub)](../architecture/c4/rendered/ARCH-QUAD-001-part4.svg)
+
+View: ARCH-QUAD-001-part4
+
+![ARCH-QUAD-001 High-Level System Architecture (5 of 5: external parties)](../architecture/c4/rendered/ARCH-QUAD-001-part5.svg)
+
+View: ARCH-QUAD-001-part5
 
 Repo annotations:
 

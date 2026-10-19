@@ -19,25 +19,30 @@ public sealed class TurnTransactionPlanArtifactTests
     ];
 
     /// <summary>
-    /// TEST-MCP-165: Validates that the imported plan keeps all six stable
-    /// Mermaid diagram IDs, one Mermaid block per ID, source-section text, and
-    /// repo annotations.
+    /// TEST-MCP-165 (TR-MCP-TXNDIAGRAMS-001), real repository: asserts through AssertImportedDiagramViews that the
+    /// imported plan docs/Project/Quad-Model-Transactional-Diffgram-Plan.md has no Mermaid fence and that each of the
+    /// six imported diagram sections keeps its heading, imported-section reference and repo annotations, links exactly
+    /// one rendered view named by its ID and states that view key; that the workspace text, read from
+    /// docs/architecture/c4/workspace.dsl and every .dsl file under docs/architecture/c4/model and
+    /// docs/architecture/c4/views, declares each view by its ID; and that the render of each view exists as the .svg
+    /// file named by the ID under docs/architecture/c4/rendered.
     /// </summary>
     [Fact]
-    public void ImportedPlan_PreservesAllSixMermaidDiagramIds()
+    public void ImportedPlan_DiagramsAreWorkspaceViews()
     {
-        var text = ReadTransactionPlan();
+        var c4Root = Path.Combine(FindRepoRoot(), "docs", "architecture", "c4");
+        string[] dslFiles =
+        [
+            Path.Combine(c4Root, "workspace.dsl"),
+            .. Directory.EnumerateFiles(Path.Combine(c4Root, "model"), "*.dsl", SearchOption.AllDirectories).Order(StringComparer.Ordinal),
+            .. Directory.EnumerateFiles(Path.Combine(c4Root, "views"), "*.dsl", SearchOption.AllDirectories).Order(StringComparer.Ordinal),
+        ];
+        var workspaceDsl = string.Join("\n", dslFiles.Select(File.ReadAllText));
 
-        Assert.Equal(DiagramIds.Length, CountOccurrences(text, "```mermaid"));
-        foreach (var diagramId in DiagramIds)
-        {
-            var section = ExtractDiagramSection(text, diagramId);
-
-            Assert.Contains("### " + diagramId + " ", section, StringComparison.Ordinal);
-            Assert.Equal(1, CountOccurrences(section, "```mermaid"));
-            Assert.Contains("Imported section:", section, StringComparison.Ordinal);
-            Assert.Contains("Repo annotations:", section, StringComparison.Ordinal);
-        }
+        AssertImportedDiagramViews(
+            ReadTransactionPlan(),
+            workspaceDsl,
+            diagramId => File.Exists(Path.Combine(c4Root, "rendered", diagramId + ".svg")));
     }
 
     /// <summary>

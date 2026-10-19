@@ -486,6 +486,7 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
         # EF Core entity model (D5): Entity elements and foreign keys
         !include model/entities.dsl
         !include model/mkt.dsl
+        !include model/qmd.dsl
 
         # Deployment environments (evidence: see evidence.md, section Deployment)
         dockerEnv = deploymentEnvironment "DockerCompose" {
@@ -569,6 +570,7 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
         # Static C4 views (levels 1 to 3): neighbourhood views sized to the AC-5 letter page.
         !include views/c4.dsl
         !include views/mkt.dsl
+        !include views/qmd.dsl
 
         deployment qbrain "DockerCompose" "DeploymentDocker" "Deployment: Docker Compose container and its data volume (docker-compose.mcp.yml and Dockerfile)." {
             include dockerEnv.dockerHost.dockerContainerNode dockerEnv.dockerHost.dockerVolumeNode
