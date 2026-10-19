@@ -26,7 +26,8 @@ public sealed class WorkspacePathNormalizerRealTests : WorkspacePathNormalizerCo
     /// Windows path). Integration of the production normalizer with
     /// <see cref="SystemWorkspaceHostEnvironment"/>; the same behaviour is proven against mocked
     /// data by the contract tests (WindowsHost_PosixAbsolutePath_StaysPosix and
-    /// LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory).
+    /// LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory). FR-MCP-PATHNORM-001: the
+    /// Windows path comes back in its canonical '/' spelling (<see cref="ExpectedWorkspaceKey"/>).
     /// </summary>
     [Fact]
     public void ProcessNormalizer_ForeignAbsolutePath_IsNotReRooted()
@@ -35,7 +36,7 @@ public sealed class WorkspacePathNormalizerRealTests : WorkspacePathNormalizerCo
 
         var result = WorkspacePathNormalizer.Process.Normalize(foreign);
 
-        Assert.Equal(foreign, result);
+        Assert.Equal(ExpectedWorkspaceKey.Of(foreign), result);
         Assert.DoesNotContain(Environment.CurrentDirectory, result, StringComparison.OrdinalIgnoreCase);
     }
 }

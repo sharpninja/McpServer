@@ -21,16 +21,16 @@ public sealed class WorkspaceServiceAccessorTests
         var accessor = CreateAccessor(@"F:\outer-default");
         using (accessor.PushWorkspace(@"F:\first"))
         {
-            Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\first")), accessor.GetWorkspacePath());
+            Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\first"), accessor.GetWorkspacePath());
             using (accessor.PushWorkspace(@"F:\second"))
             {
-                Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\second")), accessor.GetWorkspacePath());
+                Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\second"), accessor.GetWorkspacePath());
             }
 
-            Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\first")), accessor.GetWorkspacePath());
+            Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\first"), accessor.GetWorkspacePath());
         }
 
-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\outer-default")), accessor.GetWorkspacePath());
+        Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\outer-default"), accessor.GetWorkspacePath());
     }
 
     /// <summary>Parallel async flows must not observe each other's workspace override.</summary>
@@ -48,7 +48,7 @@ public sealed class WorkspaceServiceAccessorTests
                     await Task.Yield();
                     observed[0] = accessor.GetWorkspacePath();
                     await Task.Delay(25, ct);
-                    Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\alpha")), accessor.GetWorkspacePath());
+                    Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\alpha"), accessor.GetWorkspacePath());
                 }
             }, ct),
             Task.Run(async () =>
@@ -58,13 +58,30 @@ public sealed class WorkspaceServiceAccessorTests
                     await Task.Yield();
                     observed[1] = accessor.GetWorkspacePath();
                     await Task.Delay(25, ct);
-                    Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\beta")), accessor.GetWorkspacePath());
+                    Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\beta"), accessor.GetWorkspacePath());
                 }
             }, ct));
 
-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\alpha")), observed[0]);
-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\beta")), observed[1]);
-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\default-ws")), accessor.GetWorkspacePath());
+        Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\alpha"), observed[0]);
+        Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\beta"), observed[1]);
+        Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\default-ws"), accessor.GetWorkspacePath());
+    }
+
+    /// <summary>
+    /// TEST-HANDOFF-006 / TEST-MCP-PATHNORM-001 negative control: the pushed workspace is never
+    /// returned in the caller's backslash spelling or re-rooted under the process working directory,
+    /// on any host.
+    /// </summary>
+    [Fact]
+    public void PushWorkspace_NegativeControl_RawOrReRootedSpellingIsNotReturned()
+    {
+        var accessor = CreateAccessor(@"F:\outer-default");
+        using (accessor.PushWorkspace(@"F:\first"))
+        {
+            var actual = accessor.GetWorkspacePath();
+            Assert.NotEqual(@"F:\first", actual);
+            Assert.DoesNotContain(Environment.CurrentDirectory, actual, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     private static WorkspaceServiceAccessor CreateAccessor(string defaultRoot)

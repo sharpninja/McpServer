@@ -6,7 +6,8 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-PATHNORM-001 / TR-MCP-PATHNORM-001 (plan P1.4c): the native boundary. Canonical Windows
 /// paths use '/', and <c>ToNativePath</c> gives the backslash spelling only where a Windows host API
 /// does not accept '/' (Win32 device or long-path forms, <c>cmd.exe</c> built-ins). It changes nothing
-/// for POSIX-platform paths or on a non-Windows host. BDP v4 (plan section 2a): MockData then Real.
+/// for POSIX-platform paths. The non-Windows-host case runs on every host in
+/// <see cref="WorkspaceNativePathHostContractTests"/>. BDP v4 (plan section 2a): MockData then Real.
 /// </summary>
 public abstract class WorkspaceNativePathContractTests
 {
@@ -33,15 +34,6 @@ public abstract class WorkspaceNativePathContractTests
     public void PosixPath_IsUnchanged(string path)
     {
         Assert.Equal(path, ToNativePath(path, WorkspacePathPlatform.CaseSensitive));
-    }
-
-    /// <summary>On a non-Windows host nothing is rewritten, whatever the platform tag.</summary>
-    [Fact]
-    public void NonWindowsHost_IsUnchanged()
-    {
-        Assert.SkipWhen(OperatingSystem.IsWindows(), "Applies to non-Windows hosts only.");
-
-        Assert.Equal("C:/Users/kingd/repo", ToNativePath("C:/Users/kingd/repo", WorkspacePathPlatform.Windows));
     }
 }
 

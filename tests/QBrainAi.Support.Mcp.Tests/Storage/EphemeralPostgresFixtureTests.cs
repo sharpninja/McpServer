@@ -4,8 +4,11 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 
 /// <summary>
 /// TR-MCP-QUALITY / G1 provider diagnosis: proves <see cref="EphemeralPostgresFixture"/>
-/// fail-closed initdb evidence captures sanitized invocation, stdout, and stderr.
+/// fail-closed initdb evidence captures sanitized invocation, stdout, and stderr. Category
+/// Integration: it runs PostgreSQL's initdb or adopts an external server, so it runs in
+/// MigrationIntegrationTests.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class EphemeralPostgresFixtureTests
 {
     /// <summary>

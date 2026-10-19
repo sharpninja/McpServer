@@ -204,9 +204,11 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// <summary>
     /// TR-MCP-TRIAGESCHEMA-001: captured SqlServer Up() SQL applies on a disposable LocalDB
     /// SessionLogs table that is missing the four header columns and SessionLogTags, then
-    /// reapplies without error (idempotent). Does not run the full migration chain.
+    /// reapplies without error (idempotent). Does not run the full migration chain. Category
+    /// Integration: it needs a SQL Server instance, so it runs in MigrationIntegrationTests.
     /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public void SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()
     {
         var sql = CaptureUpSql(new SqlServerHeaderMigration(), "Microsoft.EntityFrameworkCore.SqlServer");
@@ -294,9 +296,11 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// TR-MCP-TRIAGESCHEMA-001: captured Postgres Up() SQL applies on a disposable local
     /// SessionLogs table that is missing the four header columns and SessionLogTags, then
     /// reapplies without error (idempotent). Uses <see cref="EphemeralPostgresFixture"/>
-    /// (Program Files PostgreSQL or MCP_TEST_POSTGRES_CONNECTION). Does not Skip.
+    /// (Program Files PostgreSQL or MCP_TEST_POSTGRES_CONNECTION). Does not Skip. Category
+    /// Integration: it needs a PostgreSQL server, so it runs in MigrationIntegrationTests.
     /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public void PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()
     {
         var sql = CaptureUpSql(new PostgreSqlHeaderMigration(), "Npgsql.EntityFrameworkCore.PostgreSQL");

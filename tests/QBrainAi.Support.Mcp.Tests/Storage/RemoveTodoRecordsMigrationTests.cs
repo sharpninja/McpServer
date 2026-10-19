@@ -14,8 +14,12 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 public sealed class RemoveTodoRecordsMigrationTests : IDisposable
 {
     private const string PreviousMigration = "20260628102336_AddTriageRunAgentStreams";
-    private const string WorkspacePath = "Q:\\__mcp_unit_test__\\QBrainAi";
-    private const string StaleAnchorWorkspacePath = "C:\\ProgramData\\QBrainAi";
+
+    // FR-MCP-PATHNORM-001: seeds hold the canonical stored key form; LINQ predicates are canonicalized
+    // by the workspace-key converter while raw-SQL seeds are not, and pre-existing backslash rows are
+    // rewritten by the federation P1.5 rekey command, not by these migrations.
+    private static readonly string WorkspacePath = ExpectedWorkspaceKey.Of(@"Q:\__mcp_unit_test__\QBrainAi");
+    private static readonly string StaleAnchorWorkspacePath = ExpectedWorkspaceKey.Of(@"C:\ProgramData\QBrainAi");
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _options;
 
@@ -89,6 +93,43 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
             Assert.True(db.TodoItems
                 .IgnoreQueryFilters()
                 .Any(item => item.WorkspaceId == StaleAnchorWorkspacePath && item.Id == "BUG-TRIAGE-124"));
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004 negative control: without a triage group naming the TODO, the backfill
+    /// falls back to the stale anchor workspace, and the triage-workspace lookup the backfill test
+    /// relies on rejects that outcome.
+    /// </summary>
+    [Fact]
+    public void Migrate_RemoveTodoRecords_NegativeControl_StaleAnchorBackfillIsRejected()
+    {
+        var now = new DateTimeOffset(2026, 6, 28, 12, 0, 0, TimeSpan.Zero);
+        using (var db = CreateContext())
+        {
+            db.GetService<IMigrator>().Migrate(PreviousMigration);
+            SeedWorkspace(db, StaleAnchorWorkspacePath, "Deployed service workspace", now);
+            SeedWorkspace(db, WorkspacePath, "QBrainAi", now);
+            db.Database.ExecuteSqlRaw(
+                """
+                INSERT INTO "TodoRecords" ("WorkspaceId", "TodoId", "CreatedAtUtc", "UpdatedAtUtc", "IsDeleted")
+                VALUES ({0}, {1}, {2}, {2}, 0);
+                """,
+                StaleAnchorWorkspacePath,
+                "BUG-TRIAGE-125",
+                now);
+        }
+
+        using (var db = CreateContext())
+        {
+            db.Database.Migrate();
+
+            Assert.Throws<InvalidOperationException>(() => db.TodoItems
+                .IgnoreQueryFilters()
+                .Single(item => item.WorkspaceId == WorkspacePath && item.Id == "BUG-TRIAGE-125"));
+            Assert.True(db.TodoItems
+                .IgnoreQueryFilters()
+                .Any(item => item.WorkspaceId == StaleAnchorWorkspacePath && item.Id == "BUG-TRIAGE-125"));
         }
     }
 

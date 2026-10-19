@@ -456,7 +456,10 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
         Assert.All(queue, item => Assert.DoesNotContain(raw, item.RenderedPrompt ?? string.Empty, StringComparison.Ordinal));
     }
 
-    /// <summary>TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation.</summary>
+    /// <summary>
+    /// TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation. The failure
+    /// message carries the whole exception text so a different startup failure is diagnosable.
+    /// </summary>
     [Fact]
     public async Task HostileReviewWorker_InvalidOptions_FailStartup()
     {
@@ -472,7 +475,9 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
         builder.Services.AddHostileReviewServices();
         using var host = builder.Build();
         var ex = await Assert.ThrowsAnyAsync<Exception>(() => host.StartAsync(TestContext.Current.CancellationToken));
-        Assert.Contains("HostileReviewWorker", ex.ToString(), StringComparison.Ordinal);
+        var text = ex.ToString();
+        if (!text.Contains("HostileReviewWorker", StringComparison.Ordinal))
+            Assert.Fail("Startup failed without naming HostileReviewWorker: " + text);
     }
 
     private HostileReviewService CreateService()
