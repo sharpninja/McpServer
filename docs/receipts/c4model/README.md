@@ -28,6 +28,11 @@ Chronological receipts for docs/plans/PLAN-C4MODEL-001.md (BDPv4). File names st
 - 20261019T121059-g4-negative-missing-envfile.log: ./build.ps1 InstallTestDependencies --test-db-env-file pointing at a missing file fails (exit 255) and names the file (TR-MCP-NUKE-018 AC-3).
 - 20261019T121113-g4-negative-migration-missing-envfile.log: ./build.ps1 MigrationIntegrationTests with the same missing file: InstallTestDependencies Failed, MigrationIntegrationTests NotRun, exit 255; no test is skipped (TR-MCP-NUKE-018 AC-6).
 
+## Decompose4nf SQLite test (operator answer "Fix test here (Recommended)")
+
+- 20261019T141209-g1d-mockgate-migration-keys.log with TestResults/c4model-20261019T1411-g1d (not committed; generated): BDPv4 mock gate for tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs before the Decompose4nf test was changed. MigrationKeyAssertionsMockGateTests: 6 passed (the parent key accepted; child canonical respelling, mixed keys, empty child table, rekeyed parent and a second workspace rejected). Suite: 4647 total, 4627 passed, the same 4 PR 82 and PR 83 failures, 16 Windows-only cases not executed. The memory-bench JSON files were rewritten again (bench_workspace_id only) and restored to HEAD.
+- 20261019T141810-g4-provider-decompose4nf-bound.log with TestResults/c4model-20261019T1418-g4b-provider (not committed; generated): after the four workspace-filtered queries were replaced by unfiltered reads plus MigrationKeyAssertions raw-SQL key checks, ./build.ps1 MigrationIntegrationTests --test-run-id c4model-20261019T1418-g4b-provider: QBrainAi.Support.Mcp.Tests 52 passed, Build.Tests 16 passed, 0 failed, 0 skipped, exit 0. The P5 provider gate is green on LAB-OMARCHY.
+
 ## Order note
 
 AC-5 was amended on 2026-10-19 (operator answer "Show it; widen AC-5 to 2:1"). The requirement and the contract fixtures were changed first, but the production constant was edited before the rules mock gate was rerun. The mock gate uses a scripted mock that does not read the constant, so its result is unaffected; the deviation from the step order is recorded here.

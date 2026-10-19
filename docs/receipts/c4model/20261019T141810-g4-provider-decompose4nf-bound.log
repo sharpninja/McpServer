@@ -1,0 +1,76 @@
+LocalStart: 2026-10-19T14:18:10
+Command: ./build.ps1 MigrationIntegrationTests --test-run-id c4model-20261019T1418-g4b-provider
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════════════════════
+║ InstallTestDependencies
+╬═══════════════════
+​
+14:18:15 [INF] Provider test provisioning: load MCP_TEST_POSTGRES_CONNECTION from /home/sharpninja/.config/qbrain-test/test-db.env
+14:18:15 [INF] Provider test provisioning: endpoint localhost:55432 reachable
+14:18:15 [INF] Provider test provisioning: load MCP_TEST_SQLSERVER_CONNECTION from /home/sharpninja/.config/qbrain-test/test-db.env
+14:18:15 [INF] Provider test provisioning: endpoint localhost:51433 reachable
+14:18:15 [INF] Test dependencies ready: MCP_TEST_POSTGRES_CONNECTION and MCP_TEST_SQLSERVER_CONNECTION accept connections.
+​
+╬══════════════════════════════
+║ MigrationIntegrationTests
+╬═════════════════════
+​
+14:18:15 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --filter Category=Integration --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/TestResults/c4model-20261019T1418-g4b-provider/provider/QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx
+14:18:16 [DBG]   Determining projects to restore...
+14:18:18 [DBG]   All projects are up-to-date for restore.
+14:18:20 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+14:18:20 [DBG]   QBrainAi.ProcessTree.TestHelper -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+14:18:20 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+14:18:20 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+14:18:20 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+14:18:20 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+14:18:20 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+14:18:20 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+14:18:20 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+14:18:21 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+14:18:21 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+14:18:22 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+14:18:22 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+14:18:22 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+14:18:22 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+14:18:23 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+14:18:24 [DBG]   QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+14:18:25 [DBG]   QBrainAi.Support.Mcp.Tests -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll
+14:18:25 [DBG] Test run for /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+14:18:25 [DBG] A total of 1 test files matched the specified pattern.
+14:19:00 [DBG] Results File: /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/TestResults/c4model-20261019T1418-g4b-provider/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx
+14:19:00 [DBG] 
+14:19:00 [DBG] Passed!  - Failed:     0, Passed:    52, Skipped:     0, Total:    52, Duration: 31 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+14:19:00 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/Build.Tests.csproj --filter Category=Integration --verbosity minimal --results-directory /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/TestResults/c4model-20261019T1418-g4b-provider/provider/Build.Tests --logger trx;LogFileName=Build.Tests.trx
+14:19:01 [DBG]   Determining projects to restore...
+14:19:02 [DBG]   All projects are up-to-date for restore.
+14:19:02 [DBG]   _build -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build/bin/Debug/_build.dll
+14:19:03 [DBG]   Build.Tests -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+14:19:03 [DBG] Test run for /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+14:19:03 [DBG] A total of 1 test files matched the specified pattern.
+14:19:08 [DBG] Results File: /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/TestResults/c4model-20261019T1418-g4b-provider/provider/Build.Tests/Build.Tests.trx
+14:19:08 [DBG] 
+14:19:08 [DBG] Passed!  - Failed:     0, Passed:    16, Skipped:     0, Total:    16, Duration: 2 s - Build.Tests.dll (net10.0)
+​
+═════════════════════════════════════════════════
+Target                       Status      Duration
+─────────────────────────────────────────────────
+InstallTestDependencies      Succeeded     < 1sec
+MigrationIntegrationTests    Succeeded       0:52
+─────────────────────────────────────────────────
+Total                                        0:52
+═════════════════════════════════════════════════
+​
+Build succeeded on 10/19/2026 2:19:08 PM. ＼（＾ᴗ＾）／
+LocalEnd: 2026-10-19T14:19:08
+ExitCode: 0
