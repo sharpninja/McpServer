@@ -236,6 +236,50 @@ public abstract class WorkspacePathNormalizerContractTests
         Assert.Equal("/srv/other", CreateSut(LinuxHost()).Combine(@"C:\Users\kingd", "/srv/other"));
     }
 
+    /// <summary>
+    /// TR-MCP-FED-PATH-001 (PR #81 finding P12): a segment with one leading backslash is root-relative on
+    /// Windows. It keeps the current root's drive and replaces the rest of the path, on a Linux hub and on
+    /// a Windows host. Data: literal drive roots; named test of Architecture Amendment 1 (section 20.4).
+    /// </summary>
+    [Theory]
+    [InlineData(false, "C:/content", @"\repo", null, "C:/repo")]
+    [InlineData(true, @"C:\content\deep", @"\repo", "sub", "C:/repo/sub")]
+    public void CombineResolvesRootRelativeWindowsSegmentAgainstDrive(bool windowsHost, string root, string segment, string? next, string expected)
+    {
+        AssertRootRelativeCombine(CreateSut(windowsHost ? WindowsHost() : LinuxHost()), root, segment, next, expected);
+    }
+
+    /// <summary>
+    /// TR-MCP-FED-PATH-001 (PR #82 review): a root-relative Windows segment on a UNC root keeps the
+    /// server and share (//srv/share/), so Combine(\\srv\share\content, \repo) is //srv/share/repo and
+    /// never //srv/share/content/repo. Data: literal UNC roots, including a bare share, on the Linux hub
+    /// where the root is a foreign Windows path.
+    /// </summary>
+    [Theory]
+    [InlineData(@"\\srv\share\content", @"\repo", null, "//srv/share/repo")]
+    [InlineData("//srv/share/content", @"\repo", "sub", "//srv/share/repo/sub")]
+    [InlineData(@"\\srv\share", @"\repo", null, "//srv/share/repo")]
+    public void CombineResolvesRootRelativeWindowsSegmentAgainstUncShare(string root, string segment, string? next, string expected)
+    {
+        AssertRootRelativeCombine(CreateSut(LinuxHost()), root, segment, next, expected);
+    }
+
+    /// <summary>
+    /// TR-MCP-FED-PATH-001: shared assertion of the root-relative Combine cases; the MockData negative
+    /// controls send deliberately wrong results through this same assertion.
+    /// </summary>
+    /// <param name="normalizer">Normalizer under test.</param>
+    /// <param name="root">Workspace root.</param>
+    /// <param name="segment">Root-relative segment.</param>
+    /// <param name="next">Optional following relative segment.</param>
+    /// <param name="expected">Expected combined path.</param>
+    protected static void AssertRootRelativeCombine(IWorkspacePathNormalizer normalizer, string root, string segment, string? next, string expected)
+    {
+        ArgumentNullException.ThrowIfNull(normalizer);
+        string[] segments = next is null ? [segment] : [segment, next];
+        Assert.Equal(expected, normalizer.Combine(root, segments));
+    }
+
     /// <summary>Simulated Linux hub: POSIX host, working directory /opt/mcpserver/app.</summary>
     protected static IWorkspaceHostEnvironment LinuxHost() => SimulatedWorkspaceHosts.Linux();
 

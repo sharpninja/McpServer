@@ -93,6 +93,13 @@ internal sealed class ScriptedWorkspacePathNormalizer : IWorkspacePathNormalizer
         // Domain-site fixtures (P1.4d: WorkspaceService relative RepoRoot under the content root).
         new(@"C:\svc", ["repo"], "C:/svc/repo"),
         new(@"C:\svc", [@"C:\Users\kingd\repo\"], "C:/Users/kingd/repo"),
+
+        // Root-relative Windows segments (PR #81 P12, PR #82 review): keep the drive or the UNC share.
+        new("C:/content", [@"\repo"], "C:/repo"),
+        new(@"C:\content\deep", [@"\repo", "sub"], "C:/repo/sub"),
+        new(@"\\srv\share\content", [@"\repo"], "//srv/share/repo"),
+        new("//srv/share/content", [@"\repo", "sub"], "//srv/share/repo/sub"),
+        new(@"\\srv\share", [@"\repo"], "//srv/share/repo"),
     ];
 
     private readonly IWorkspaceHostEnvironment _host;

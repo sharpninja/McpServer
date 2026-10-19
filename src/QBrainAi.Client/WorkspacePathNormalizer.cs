@@ -134,11 +134,12 @@ public sealed class WorkspacePathNormalizer : IWorkspacePathNormalizer
             }
 
             // A leading single backslash is rooted on Windows: it replaces the path but keeps the
-            // current drive, so Combine("C:/content", "\\repo") is "C:/repo", not "C:/content/repo".
-            if (trimmed.StartsWith('\\') && TryGetWindowsDriveRoot(current, out var driveRoot))
+            // current volume (the drive, or the UNC server and share), so Combine("C:/content", "\\repo")
+            // is "C:/repo" and Combine("//srv/share/content", "\\repo") is "//srv/share/repo".
+            if (trimmed.StartsWith('\\') && TryGetWindowsVolumeRoot(current, out var volumeRoot))
             {
                 current = WorkspaceIdentityPath.NormalizeLexicalPath(
-                    driveRoot + trimmed.TrimStart('\\'),
+                    volumeRoot + trimmed.TrimStart('\\'),
                     WorkspacePathPlatform.Windows);
                 continue;
             }
@@ -173,15 +174,27 @@ public sealed class WorkspacePathNormalizer : IWorkspacePathNormalizer
         path.StartsWith(@"\\", StringComparison.Ordinal) ||
         path.StartsWith("//", StringComparison.Ordinal);
 
-    private static bool TryGetWindowsDriveRoot(string path, out string driveRoot)
+    // TR-MCP-FED-PATH-001: the volume root a root-relative Windows segment keeps: "C:/" for a drive
+    // path, "//server/share/" for a UNC path (either separator). Other paths have none.
+    private static bool TryGetWindowsVolumeRoot(string path, out string volumeRoot)
     {
         if (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2]))
         {
-            driveRoot = path[..3];
+            volumeRoot = path[..3];
             return true;
         }
 
-        driveRoot = string.Empty;
+        if (path.Length > 2 && IsSeparator(path[0]) && IsSeparator(path[1]))
+        {
+            var parts = path[2..].Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length >= 2)
+            {
+                volumeRoot = "//" + parts[0] + "/" + parts[1] + "/";
+                return true;
+            }
+        }
+
+        volumeRoot = string.Empty;
         return false;
     }
 

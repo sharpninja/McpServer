@@ -38,12 +38,4 @@ public sealed class WorkspacePathNormalizerRealTests : WorkspacePathNormalizerCo
         Assert.Equal(foreign, result);
         Assert.DoesNotContain(Environment.CurrentDirectory, result, StringComparison.OrdinalIgnoreCase);
     }
-
-    /// <summary>TR-MCP-FED-PATH-001: A root-relative Windows segment keeps the drive and replaces the path.</summary>
-    [Fact]
-    public void Combine_RootRelativeWindowsSegment_KeepsDriveAndReplacesPath()
-    {
-        Assert.Equal("C:/repo", CreateSut(SimulatedWorkspaceHosts.Linux()).Combine("C:/content", @"\repo"));
-        Assert.Equal("C:/repo/sub", CreateSut(SimulatedWorkspaceHosts.Windows()).Combine(@"C:\content\deep", @"\repo", "sub"));
-    }
 }
