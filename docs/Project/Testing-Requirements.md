@@ -1744,3 +1744,221 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [ ] The five FR and eight TR headings exist in the requirements documents.
   - [ ] No docs/receipts/hv file in this change records OverallVerdict AGREE for Phase 1.
+
+## TEST-MCP-TODOTASK-001 Task contract and turn-link tests
+
+Verify TODO parent validity; FR and matching AC coverage; TR constraints; exact status values; failed Task remediation; successful Task immutability; idempotent turn-owned Task association; and associated turn/session queries. Include relational FK rejection tests and requirement-AC edit regression coverage.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Tests cover every acceptance criterion of FR-MCP-TODOTASK-001 and TR-MCP-TODOTASK-001 with positive and applicable negative cases.
+
+## TEST-MCP-TODOPLAN-001 Plan specialization, ordering and traceability tests
+
+Verify that Plans are TODO specializations in the same entity; requirements and documentation are grouped; Task order round-trips; and FR/AC trace queries are consistent from Plan down and Task up.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Tests cover every acceptance criterion of FR-MCP-TODOPLAN-001 and TR-MCP-TODOPLAN-001.
+
+## TEST-MCP-TODOGRAPH-001 TODO details GraphRAG hydration tests
+
+Verify GraphRAG reference persistence and inline content hydration through the TODO details endpoint for both ordinary TODOs and Plans.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Tests cover every acceptance criterion of FR-MCP-TODOGRAPH-001 and TR-MCP-TODOGRAPH-001.
+
+## TEST-MCP-TASKGROUP-001 Task group ordering, sequencing and calculated status tests
+
+Verify parent-scoped group keys and Task order, Plan compatibility, shared plugin sequencing and advancement past failures. Cover all-success Completed, outstanding-blocker Blocked, any-failure Failing, simultaneous Failure and blockers yielding Failing, and status recalculation after remediation or dependency completion. Add empty and mixed-state cases when their final policy is locked.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Tests cover every acceptance criterion of FR-MCP-TASKGROUP-001 and TR-MCP-TASKGROUP-001.
+- [ ] **AC-002:** Aggregate tests include a failed Task plus an outstanding blocked Task and verify Failing takes precedence.
+
+## TEST-MCP-TASKDEP-001 Task dispatch dependencies and plugin inspection tests
+
+Verify Task and Task Group prerequisite references, dispatch refusal while prerequisites are incomplete, dispatch eligibility once they complete, incomplete-dependency reporting by Task and by group, and consistent Blocked/Failing group calculations.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Tests cover every acceptance criterion of FR-MCP-TASKDEP-001 and TR-MCP-TASKDEP-001 with both Task and Task Group prerequisite targets.
+
+## TEST-MCP-ACIDENTITY-001 AC identity and reference-preservation regression tests
+
+Verify persisted AC primary keys before and after text, evidence, satisfaction and order edits; verify unchanged criteria survive additions and requirement metadata updates; verify Task references stay on the original AC rows; and verify referenced removal rejection is atomic. Exercise single and batch requirement update paths and other criterion-update entry points that share the mutation logic.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Regression tests fail against the existing delete/reinsert implementation by comparing original and resulting persisted AC keys.
+- [ ] **AC-002:** Relational tests retain the same Task-to-AC links across successful edits and reject referenced removal without partial changes.
+- [ ] **AC-003:** Tests cover every acceptance criterion of FR-MCP-ACIDENTITY-001 and TR-MCP-ACIDENTITY-001.
+
+## TEST-MCP-TASKASSIGN-001 Session assignment cardinality and FIFO dispatch coverage
+
+Verify delegation from one agent to a receiving session, multiple retained group assignments, retrieval by session ID, per-session A/B/C receipt-order dispatch, persisted ordering after reload and concurrent dispatch ordering. Verify workspace/session isolation and rejection of invalid or ambiguous references. Confirm assignment and group retrieval leave Task lifecycle, calculated Group status and member Task dependency gates intact.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Tests assign at least three groups to one session and verify none is overwritten and dispatch follows receipt order.
+- [ ] **AC-002:** Tests cover separate session queues, reload, concurrent assignment/dispatch ordering and rejected missing, cross-workspace or ambiguous references.
+- [ ] **AC-003:** Plugin contract tests cover session-ID work requests returning Task Group IDs, and regression tests preserve Task dependencies and calculated group status.
+- [ ] **AC-004:** Tests cover every acceptance criterion in FR-MCP-TASKASSIGN-001 and TR-MCP-TASKASSIGN-001.
+
+## TEST-MCP-TODOTASK-002 Task lifecycle, remediation and immutable success
+
+TaskLifecycleContractTests: invalid creation, exhaustive transitions, Ready edit reset, immutable Started definition, success evidence completeness, Failure remediation history, correction links, stale versions and successful Task cascade/reorder protection. Run the same contracts against an independent fake first and the relational implementation second.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-TODOTASK-002 and TR-MCP-TODOTASK-002 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-TODOPLAN-002 Plan composition, requirement coverage and bidirectional trace queries
+
+PlanTraceabilityContractTests: same-entity specialization, mixed explicit/derived coverage, zero/one group membership, wrong-parent rejection, multiple FR/AC coverage, ordinal atomicity, identity stability, bidirectional filters, evidence coverage, pagination and guarded TODO deletion.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-TODOPLAN-002 and TR-MCP-TODOPLAN-002 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-TASKGROUP-002 Complete group-state calculation and ordered eligible Task sequencing
+
+TaskGroupStateContractTests and TaskSequenceContractTests: independent exhaustive group-state oracle, all skip conditions, later eligible work after failure, one-start concurrency, resume, no-task reasons, self-assignment and sealed membership.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-TASKGROUP-002 and TR-MCP-TASKGROUP-002 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-TASKDEP-002 Dependency graph validity and complete blocker inspection
+
+TaskDependencyContractTests: zero/multiple/cross-TODO prerequisites; Task and Group predicates; empty group; direct and expanded cycles; concurrent edge writes; group membership changes; direct/transitive inspection with paths and pages; missing data; dependency changes during active attempts.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-TASKDEP-002 and TR-MCP-TASKDEP-002 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-TASKASSIGN-002 FIFO assignment ownership, retries and work-request outcomes
+
+TaskAssignmentContractTests: multi-group FIFO, assignment idempotency, exclusive ownership, parallel requests, persisted NoWork replay, no auto-claim, blocked/failing queue head, release/reassignment, unfinished earlier dispatch, closed session recovery and ambiguous identity.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-TASKASSIGN-002 and TR-MCP-TASKASSIGN-002 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-TASKTURN-001 Idempotent turn attribution and execution-session history
+
+TaskTurnAttributionContractTests: null/same/conflict and concurrency; wrong scope; one turn per Task attribution; multiple turns/Sessions; atomic dispatch; legacy migration; late audit on Success; stable pagination and no duplicated audit events.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-TASKTURN-001 and TR-MCP-TASKTURN-001 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-TODOGRAPH-002 Typed GraphRAG references and bounded inline hydration
+
+TodoGraphHydrationContractTests: four kinds, both TODO kinds, metadata-only list and explicit opt-out, missing references, partial failure, max count, Unicode truncation, total budget, timeout/cancellation, ordering, atomic invalid update and unchanged attempt snapshots.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-TODOGRAPH-002 and TR-MCP-TODOGRAPH-002 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-ACIDENTITY-002 Stable criterion matching, explicit removal and atomic reconciliation
+
+AcceptanceCriterionIdentityContractTests: field/metadata/reorder updates, command-level no-delete evidence, adding/removing rows, omit-vs-remove semantics, duplicates and rename rejection, import/copy/resurrection, migration preflight and multi-requirement batch rollback.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-ACIDENTITY-002 and TR-MCP-ACIDENTITY-002 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-TASKAPI-001 Consistent workflow interfaces, compatibility and release gates
+
+**Supersession notice:** TEST-MCP-TASKAPI-002 supplies the authoritative database-provider expectations. Do not implement SQLite-only or retained-YAML-runtime assertions from the earlier provider wording; retain the remaining tests below.
+
+TaskWorkflowSurfaceContractTests and TaskWorkflowMigrationTests: parity of every operation, exact enums and error codes, stale versions, retry conflicts, unsupported provider, additive TODO compatibility, checklist preservation, explicit promotion, stable-AC-first migration and no fabricated history. Run ./build.ps1 Test, ./build.ps1 Compile, ./build.ps1 ValidateTraceability and affected integration/plugin suites at the release gate.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The named tests cover every AC in FR-MCP-TASKAPI-001 and TR-MCP-TASKAPI-001 with positive, negative and atomic-failure cases.
+- [ ] **AC-002:** The contract suite first passes against an independent behavioral fake, then the same assertions pass against the production implementation.
+- [ ] **AC-003:** The current and prior iteration validation scope passes with zero failures and zero skipped tests; unimplemented scope remains pending rather than represented by skipped tests.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TEST-MCP-TASKAPI-002 Authoritative database-provider compatibility tests
+
+Test the existing database-only TODO configuration contract and run Task workflow relational invariants and migration checks against SQLite, SQL Server and PostgreSQL. Verify that the legacy TodoStorage sqlite alias follows the configured database backend, the removed yaml provider is rejected and TODO.yaml is a projection. Replace any SQLite-only/YAML-runtime assumptions from TEST-MCP-TASKAPI-001 with these expectations while retaining its other surface, migration, promotion and retry tests.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Tests cover all five ACs of TR-MCP-TASKAPI-002 on the specified configured backends.
+- [ ] **AC-002:** Backend-specific migration and concurrency tests enforce the same domain outcomes without weakening FK or atomicity checks.
+- [ ] **AC-003:** The executed provider validation gate has zero failures and zero skips; an unavailable test backend is a gate blocker, not a passing skipped test.
+
+**Notes:** Tests TR-MCP-TASKAPI-002 and the provider-compatible portions of FR-MCP-TASKAPI-001; explicit correction preserves prior saved AC identities.

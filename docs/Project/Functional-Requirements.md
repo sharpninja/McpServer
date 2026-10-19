@@ -2940,3 +2940,273 @@ Scope: layer-1+
 - [ ] Existing FR-MCP-*, TR-MCP-*, and TEST-MCP-* IDs are not renamed. The QBrain ids are additions.
 - [ ] The hostname PAYTON-LEGION2 and the lab name LAB-OMARCHY still appear where they identify that host and that lab.
 
+
+## FR-MCP-TODOTASK-001 TODO child Tasks with requirement coverage and execution traceability
+
+A unit of work is called a Task and is the child of one TODO. Each Task maps to at least one FR and at least one AC belonging to each mapped FR. Tasks also relate to TRs that constrain their implementation. Task statuses are Planning, Ready, Started, Success and Failure. A failed Task can be remediated; a successful Task cannot be changed. Session Log Turns associate to a Task through an idempotent update to a Task foreign key on the turn. Tasks query that foreign key to find associated turns and their sessions.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** The unit-of-work domain name is Task, and every Task has exactly one existing TODO parent.
+- [ ] **AC-002:** Every Task maps to at least one FR and at least one AC belonging to each mapped FR.
+- [ ] **AC-003:** Tasks relate to TRs as constraints on how the Task is implemented.
+- [ ] **AC-004:** The only Task status values are Planning, Ready, Started, Success and Failure.
+- [ ] **AC-005:** A Task in Failure may be remediated; a Task in Success may not be changed.
+- [ ] **AC-006:** A Session Log Turn maps to a Task through a Task foreign key updated on the turn; repeating the same association has no additional effect.
+- [ ] **AC-007:** A Task retrieves associated turns by querying the turn Task foreign key, with associated Sessions reachable through the turns.
+
+**Notes:** Operator-defined 2026-10-17. Failure retains the spelling from the original status list; Failed refers to that state. Exact transition rules, remediation entry state, success validation policy, and conflicting turn reassignment behavior remain to be specified. The latest turn-owned FK requirement refines the earlier general session/turn relationship requirement.
+
+## FR-MCP-TODOPLAN-001 Plans specialize TODOs and organize traceable ordered Tasks
+
+A Plan is a specialization of TODO stored in the same entity. It groups requirements and documentation into an ordered set of child Tasks. Work is traceable by FR or AC both from Plan down to Tasks and from Task up to its Plan.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Plans use the same persisted TODO entity, with a specialization discriminator.
+- [ ] **AC-002:** A Plan groups requirements and documentation and retains the order of its child Tasks.
+- [ ] **AC-003:** Traceability from a Plan can identify its Tasks that map to a specified FR or AC.
+- [ ] **AC-004:** Traceability from a Task can identify its FR/AC mappings and its parent Plan when that TODO is a Plan.
+
+**Notes:** Operator-defined 2026-10-17. Task order is required; execution scheduling and dependency behavior have not yet been specified.
+
+## FR-MCP-TODOGRAPH-001 Inline GraphRAG reference hydration in TODO details
+
+The shared TODO entity stores GraphRAG references. When a TODO is loaded through the TODO details endpoint, the referenced GraphRAG content can be rehydrated inline in the response. The capability also applies to Plan specializations of TODO.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** GraphRAG references persist as part of a TODO and remain available on subsequent loads.
+- [ ] **AC-002:** The TODO details endpoint can return rehydrated referenced GraphRAG content inline.
+- [ ] **AC-003:** Ordinary TODOs and Plans both support the GraphRAG reference and inline hydration capability.
+
+**Notes:** Operator-defined 2026-10-17. Reference target kinds, hydration defaults and limits, missing-reference behavior, and GraphRAG failure behavior remain to be specified.
+
+## FR-MCP-TASKGROUP-001 Ordered Task groups, calculated status and agent sequencing
+
+Tasks can be grouped using a group key defined in their parent TODO and ordered within that group. The shared plugin core exposes an agent tool to sequence through a Task group and may advance past failed Tasks. Group status is always calculated from the whole group, never manually assigned. Any failed Task makes the group Failing, which takes precedence over Blocked. Otherwise outstanding dependency-blocked Tasks make the group Blocked. A group of all successful Tasks is Completed; not-started and incomplete groups are Unstarted and Incomplete respectively. Plans inherit these TODO capabilities.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** A TODO defines group keys and its Tasks can reference those groups.
+- [ ] **AC-002:** Task order persists within each group and group membership resolves within its parent TODO.
+- [ ] **AC-003:** The shared plugin core exposes an agent tool for sequencing through Tasks in a specified group.
+- [ ] **AC-004:** Plans support TODO-defined groups and their ordered Tasks.
+- [ ] **AC-005:** An agent can advance to later Tasks while an earlier failed Task remains unresolved.
+- [ ] **AC-006:** Group status is always calculated from the entire group; clients cannot assign it independently of its Tasks and dependencies.
+- [ ] **AC-007:** Any Task in Failure makes the group Failing, including when another outstanding Task is blocked.
+- [ ] **AC-008:** With no failed Tasks, any outstanding dependency-blocked Task makes the group Blocked.
+- [ ] **AC-009:** A nonempty group whose Tasks are all Success is Completed.
+- [ ] **AC-010:** Unstarted and Incomplete reflect the remaining aggregate Task states; the documented empty/mixed-state defaults are distinguished from explicit operator decisions.
+
+**Notes:** Operator confirmed advancement past failures and Failing precedence over Blocked on 2026-10-17. Stated design defaults: empty groups are Unstarted; groups with all Tasks in Planning/Ready are Unstarted unless blocked; Success mixed with Planning/Ready is Incomplete. The mixed-state default was presented for optional clarification and has not received an explicit answer. Exact sequencing selection/advance and ownership semantics remain under specification.
+
+## FR-MCP-TASKDEP-001 Task dependency dispatch gates and agent inspection
+
+A Task may have a blocking dependency on another Task or a Task Group. Uncompleted blocking dependencies prevent dispatch of that Task to an agent. The shared plugin core exposes a tool accepting a Task ID or Task Group ID and returning the dependencies that are not completed. A Task Group with outstanding blocked Tasks reports Blocked unless a failed Task gives the group the higher-precedence Failing status.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** A Task can reference a Task or Task Group as a blocking dependency.
+- [ ] **AC-002:** A Task with an uncompleted blocking dependency is not dispatched to an agent.
+- [ ] **AC-003:** The shared plugin core provides dependency inspection for either a Task ID or Task Group ID and reports dependencies that are not completed.
+- [ ] **AC-004:** Outstanding blocked member Tasks contribute Blocked to the calculated group state, with Failing taking precedence.
+
+**Notes:** Operator-defined 2026-10-17. Completion interpretation stated in the conversation: prerequisite Task Success or prerequisite group Completed. Dependency cardinality, direct/transitive report scope, group identifier shape, and sequencing behavior around a blocked Task remain under specification.
+
+## FR-MCP-ACIDENTITY-001 Stable acceptance-criterion identity during updates
+
+Acceptance criteria retain their persisted identity across updates. Existing AC rows must be updated in place; deleting and recreating them is unacceptable. Edits to criterion text, evidence, satisfaction or order preserve the existing row and its Task references. Only genuinely new criteria create new rows. Removal of a referenced criterion is rejected rather than breaking its Task links.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Updating an existing acceptance criterion retains its persisted primary key and updates the original row in place.
+- [ ] **AC-002:** Text, evidence, satisfaction and ordering edits do not delete and recreate criterion rows or replace their Task references.
+- [ ] **AC-003:** Adding a new criterion inserts that criterion while preserving existing criterion rows and identities.
+- [ ] **AC-004:** Removing a criterion with Task references is rejected without leaving broken links.
+
+**Notes:** Explicit operator correction on 2026-10-17. This tightens TR-MCP-TODOTASK-001: link preservation alone is insufficient if achieved by replacing AC rows. Implement before introducing Task-to-AC foreign keys.
+
+## FR-MCP-TASKASSIGN-001 Session-based Task Group assignment and FIFO work dispatch
+
+An agent can assign a Task Group to another agent through the receiving agent session. Multiple Task Groups may be assigned to one session without replacing earlier assignments. An agent requests new work from the shared plugin using its session ID and receives one Task Group ID. Assigned Task Groups are dispatched in the order that the receiving session received them, forming a per-session FIFO queue. Assignment and group dispatch preserve the existing Task dependency gates and calculated Task Group status rules.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** An agent can assign an existing Task Group to another agent by identifying the receiving session.
+- [ ] **AC-002:** Assigning a second or subsequent Task Group to a session preserves its earlier assignments.
+- [ ] **AC-003:** A plugin work request accepts the requesting session ID and returns a Task Group ID assigned to that session.
+- [ ] **AC-004:** If groups A, B and C are received by a session in that order, their new-work dispatch order is A, B, C.
+- [ ] **AC-005:** Receiving and dispatching a Task Group does not bypass member Task dependencies or manually set the calculated group status.
+
+**Notes:** Operator-defined across three messages on 2026-10-17: session-based delegation/work requests, multiple groups per session, then receipt-order dispatch. The session-to-many-groups cardinality and FIFO rule are confirmed. Group-to-session exclusivity, reassignment/release, retry semantics, progression after dispatch, session-end cleanup, and empty-queue behavior remain under specification. The proposed no-assigned-work response versus automatic unassigned-group claiming was asked but has not received an explicit answer.
+
+## FR-MCP-TODOTASK-002 Task lifecycle, remediation and immutable success
+
+Tasks are created in Planning with a title, one immutable TODO parent, at least one FR and at least one AC for every mapped FR. TR links are optional constraints; each supplied TR must exist. Permitted transitions are Planning->Ready, Ready->Planning, Ready->Started, Started->Success, Started->Failure and Failure->Planning. Only atomic agent dispatch performs Ready->Started. Failure->Planning requires a remediation reason and preserves previous attempts. Planning and Ready permit definition edits; editing a Ready definition returns it to Planning. Started permits execution evidence and outcome recording, not changes to scope, requirement links, group membership or order. Failure permits remediation initiation, not silent result replacement. Success freezes all Task fields, mappings, evidence, parent, group and ordinal permanently; correction requires a new linked Task. The system accepts exact retries without changing the successful Task. Success requires nonempty evidence for each mapped AC and a completion summary; Failure requires a reason. Task evidence does not automatically mark the underlying requirement AC globally satisfied.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Creating a Task with no FR, an FR with no mapped AC, an AC belonging to another FR, or an unknown TR fails atomically, including in Planning.
+- [ ] **AC-002:** Only the six specified directed transitions are accepted; Failure is the canonical enum spelling and no Blocked Task state is introduced.
+- [ ] **AC-003:** Only dependency-validated dispatch can enter Started, and definition edits to a Ready Task return it to Planning.
+- [ ] **AC-004:** A Started Task cannot change its definition; outcome recording requires an owning execution attempt and preserves attempt history.
+- [ ] **AC-005:** Success requires a completion summary and evidence for every mapped AC; Failure requires a nonempty reason.
+- [ ] **AC-006:** Remediation returns Failure to Planning with a recorded reason and leaves all prior attempt outcomes and evidence intact.
+- [ ] **AC-007:** After Success, updates, deletion, movement, reordering and mapping changes are rejected; an identical idempotent retry is a no-op.
+- [ ] **AC-008:** A correction Task may reference the successful Task without altering it, and Task evidence does not implicitly change global AC satisfaction.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## FR-MCP-TODOPLAN-002 Plan composition, requirement coverage and bidirectional trace queries
+
+A Plan uses the existing TODO identity and an ItemKind value plan; ordinary TODOs remain standard. Plans retain explicitly selected FR/TR references and documentation plus the derived union of requirements covered by their Tasks. Explicit scope and derived coverage are distinguished in detail responses. Every Task has exactly one TODO parent and zero or one Task Group defined by that parent. A Task has a unique parent-level ordinal, and grouped Tasks also have a unique ordinal within that group. Plan-down FR/AC queries return matching Tasks and their groups; Task-up queries return the parent TODO/Plan and actual FR/AC/TR mappings. Filtering by AC always includes its owning FR identity. Coverage reports distinguish mapped ACs from ACs supported by successful Task evidence. Ungrouped Tasks are visible and traceable but must be grouped before agent sequencing. Plan specialization changes are permitted only while no Task has started and no assignment exists; TODO deletion is rejected while child Tasks or group definitions remain.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Creating or reading a Plan preserves its existing TODO identity and exposes ItemKind=plan without a separate Plan entity.
+- [ ] **AC-002:** Plan details expose explicit requirements/documentation and derived Task coverage without silently replacing either set.
+- [ ] **AC-003:** A Task cannot move to another parent; its optional group must belong to that same parent, and duplicate parent/group ordinals are rejected atomically.
+- [ ] **AC-004:** Plan-down and Task-up FR/AC queries agree on the same stored mappings and include ordinary TODO parents where applicable.
+- [ ] **AC-005:** Coverage distinguishes mapped work from successful evidence, and ungrouped Tasks remain visible but are not agent-dispatchable.
+- [ ] **AC-006:** Plan kind changes after execution/assignment and deletion of a TODO with child Tasks or groups are rejected.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## FR-MCP-TASKGROUP-002 Complete group-state calculation and ordered eligible Task sequencing
+
+Evaluate group status over all current members in this precedence: (1) any Failure => Failing; (2) otherwise any non-Success Task with an incomplete dependency => Blocked; (3) otherwise a nonempty group of all Success => Completed; (4) otherwise an empty group or all members in Planning/Ready => Unstarted; (5) otherwise => Incomplete. Blocked includes outstanding Started/Failure members when their prerequisites are incomplete, but Failing still wins and successful members never contribute blockers. Assignment does not set group status. Group membership and ordering may change only before the first group dispatch and only for never-started Tasks; the first group dispatch seals membership/order, permitting later remediation of member Tasks. Completed groups therefore remain closed to additional members. The sequencing tool returns an existing Started Task for that group/session, otherwise selects the lowest-ordinal Ready Task whose dependencies are complete, skipping Success, Failure, Planning and blocked Tasks. A skipped earlier Task does not implicitly block a later Task: explicit dependencies impose that ordering. No eligible candidate returns no-task with the group status and reasons. Failed Tasks remain unresolved while later eligible Tasks proceed.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** All combinations resolve using Failing > Blocked > Completed > Unstarted > Incomplete with the stated predicates, rather than by a cursor or cached client status.
+- [ ] **AC-002:** An empty group is Unstarted; Success mixed with Planning/Ready is Incomplete; all Planning/Ready is Unstarted unless blocked.
+- [ ] **AC-003:** Clients cannot set group status and assigning or retrieving a group does not change it.
+- [ ] **AC-004:** First group dispatch freezes membership and order; mutation of started/successful Task membership or order is always rejected.
+- [ ] **AC-005:** Sequencing preserves at most one Started Task in a group and otherwise selects the earliest eligible Ready member while allowing progression past Failure.
+- [ ] **AC-006:** No eligible member returns a structured no-task result with not-ready, blocked, failed or complete explanations and does not mutate Task state.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## FR-MCP-TASKDEP-002 Dependency graph validity and complete blocker inspection
+
+A Task may have zero or more blocking Task or Task Group dependencies in the same workspace, including dependencies across TODOs. Dependencies are an AND condition: every prerequisite Task must be Success and every prerequisite group must be Completed. Dependency edits are allowed only while the dependent Task is Planning; Ready must first return to Planning. Reject duplicates, missing targets, self-dependencies, dependency on a group containing the dependent Task, and direct or transitive cycles. Group dependency edges expand to their member Tasks for cycle validation; edits to group membership must also pass cycle validation. Empty prerequisite groups are incomplete and block. Inspecting a Task returns its incomplete direct prerequisites; inspecting a group returns incomplete direct prerequisites for all non-Success members, with each affected Task ID. An optional transitive mode returns the incomplete prerequisite closure with paths and deduplicated nodes. Reports include target kind, ID, current state and affected Task/path; completed prerequisites are omitted. Inspection is read-only and uses the same completion predicates as dispatch.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** A Task is dispatchable only when all of its zero-or-more prerequisite Tasks/groups meet their completion predicates.
+- [ ] **AC-002:** Missing, duplicate, cross-workspace, self and cyclic dependencies are rejected without changing existing dependencies.
+- [ ] **AC-003:** Adding or moving a group member cannot create an indirect dependency cycle, and an empty dependency group blocks.
+- [ ] **AC-004:** Task inspection reports every incomplete direct prerequisite; group inspection attributes each incomplete prerequisite to its affected non-Success member Tasks.
+- [ ] **AC-005:** Transitive inspection returns deduplicated incomplete prerequisite nodes and paths, while completed prerequisites are omitted.
+- [ ] **AC-006:** A dependency becoming incomplete after a Task starts is reported, but does not automatically abort that attempt or reopen a successful Task; every new start rechecks dependencies.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## FR-MCP-TASKASSIGN-002 FIFO assignment ownership, retries and work-request outcomes
+
+A Task Group has at most one active assignment at a time; a Session may hold many queued and dispatched groups. Assignment records retain assigning Session, receiving Session, receipt order and history. Assigning the same group to the same session while its assignment is active returns that assignment; assigning it to another session conflicts until explicit release. Assign only nonempty, non-Completed groups to open sessions in the same workspace. A new work request returns and marks Dispatched the oldest Queued assignment for that session; it may dispatch the next queued group even while earlier dispatched groups remain unfinished. It never silently skips a queued group because the group is Failing or Blocked; member Task dispatch still checks eligibility. If no queued assignment exists, return NoWork and a null Task Group ID, without automatically claiming unassigned groups. The plugin supplies an operation ID; replaying it returns the original response, including NoWork, and a distinct request asks for subsequent work. A dispatched assignment becomes Completed when its group becomes Completed. Explicit release is allowed only with no Started member, retains audit history and permits a fresh assignment at the destination queue tail. Closed sessions cannot request work; queued/dispatched assignments remain visible for explicit coordinator recovery, without automatic transfer or lease expiry.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** One session retains multiple assignments while a group has only one active owner; same-owner assignment retries do not move it in the queue.
+- [ ] **AC-002:** New work requests dispatch queued groups in server receipt order, independently of whether earlier dispatched groups are unfinished.
+- [ ] **AC-003:** Failing or Blocked does not cause group-queue reordering; member Task dependency gates still prevent prohibited execution.
+- [ ] **AC-004:** An empty queue returns NoWork with taskGroupId=null and does not claim an unassigned group.
+- [ ] **AC-005:** Replaying an operation ID returns the original response and does not dequeue a second group; a new operation ID requests new work.
+- [ ] **AC-006:** Assignments to missing/closed sessions, empty/Completed groups or conflicting owners are rejected atomically.
+- [ ] **AC-007:** Release with a Started member is rejected; valid release preserves history and reassignment receives a new receipt position.
+- [ ] **AC-008:** Completed groups close their assignments, and closed-session assignments remain available for explicit recovery rather than automatic transfer.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## FR-MCP-TASKTURN-001 Idempotent turn attribution and execution-session history
+
+Each Session Log Turn has zero or one Task FK. Linking an unassigned turn to a Task succeeds; repeating the same link is a no-op; linking an already attributed turn to a different Task conflicts without overwriting history. The turn and Task must belong to the same workspace, and the caller must operate in the owning Session context. Task dispatch uses an existing current turn of the receiving session and links it atomically with the Task start; the agent must open a new turn before starting a different Task. Later turns may link to the same Task, including a successful Task for late audit completion, because the Task row and frozen definition are unchanged. Tasks discover turns by querying that FK and associated Sessions through the turn Session FK, including multiple Sessions across attempts. Assignment records describe delegated ownership; turn links describe actual recorded work and are not inferred from assignment alone.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** A null Task FK can be assigned once, an identical assignment is idempotent, and a conflicting different Task assignment is rejected.
+- [ ] **AC-002:** Cross-workspace or wrong-session attribution fails, and dispatch cannot overwrite a turn already linked to another Task.
+- [ ] **AC-003:** Task start, execution attempt and current-turn association commit atomically or leave all three unchanged.
+- [ ] **AC-004:** Task queries return all attributed turns and distinct Sessions, with no duplicate Task-side turn list.
+- [ ] **AC-005:** Late audit turns may reference Success without changing Task fields, requirement evidence or execution outcomes.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## FR-MCP-TODOGRAPH-002 Typed GraphRAG references and bounded inline hydration
+
+Ordinary TODOs and Plans store an ordered set of typed GraphRAG references: Document, Chunk, Entity or Relationship. A reference identifies its workspace-local target and optional display label; Chunk also identifies its parent document. The TODO details endpoint hydrates references inline by default; hydrateGraphRag=false returns references without lookup. Details retain reference identity and expose per-reference status Resolved, Missing, Unavailable or Truncated with content, source identity and retrieval timestamp where available. Missing targets or GraphRAG failures do not make the TODO unreadable or fabricate content. Hydration preserves stored reference order and does not alter references, source documents or graph data. At most 100 references may be stored per TODO; response hydration is limited to 20,000 Unicode characters per reference and 100,000 total, with explicit truncation metadata. A five-second overall hydration budget yields Unavailable for unresolved entries. References use current content; historical Task attempt snapshots preserve the context used during execution.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Document, Chunk, Entity and Relationship references round-trip in order on both standard TODOs and Plans; duplicate target identities are rejected.
+- [ ] **AC-002:** Default TODO detail reads contain inline hydration results, while hydrateGraphRag=false performs no retrieval.
+- [ ] **AC-003:** Missing or unavailable targets retain their original references and return classified per-reference results without failing the TODO detail response.
+- [ ] **AC-004:** Reference count, per-reference content, aggregate content and hydration time limits are enforced with explicit status and truncation metadata.
+- [ ] **AC-005:** Hydration preserves Unicode characters and stored order and never mutates the source graph or TODO.
+- [ ] **AC-006:** Current hydrated content includes provenance while immutable execution snapshots continue describing the content used by a past attempt.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## FR-MCP-ACIDENTITY-002 Stable criterion matching, explicit removal and atomic reconciliation
+
+Each AC has an immutable persisted row identity and a criterion ID unique within its owning requirement. Existing criterion IDs identify rows during updates; reordering changes only ordinal and editing changes only mutable fields. Missing acceptanceCriteria in a requirement update means unchanged; an explicit list is reconciled against existing criterion IDs, and newly introduced IDs insert new rows. Duplicate or empty criterion IDs are rejected. Criterion-ID rename is not an update: reject a supplied persisted identity paired with a different criterion ID. Existing clients that omit criterion IDs on genuinely new criteria receive a generated stable criterion ID; an existing row must be addressed by its existing ID. Removing a criterion requires an explicit removal operation or explicit removal IDs; omission from a supplied list alone does not delete it. Referenced criterion removal and parent requirement deletion are rejected while Task links exist. Unreferenced criteria may be explicitly removed. Every failure leaves original rows, IDs, links and requirement metadata unchanged. This policy applies to single/batch updates, imports, copy-from-TODO and resurrect-existing paths; no path may use replacement rows to represent an edit.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Text, evidence, satisfaction, ordinal and requirement-metadata edits retain every existing criterion primary key and criterion ID.
+- [ ] **AC-002:** Omitted criteria fields and omitted existing list members do not delete ACs; deletion requires an explicit removal intent.
+- [ ] **AC-003:** Duplicate/empty IDs and attempts to rename an identified existing AC fail atomically; new criteria receive stable unique IDs.
+- [ ] **AC-004:** Adding new ACs inserts only those rows and leaves existing Task links on their original AC rows.
+- [ ] **AC-005:** Referenced AC or requirement deletion is rejected; explicit unreferenced removal succeeds without replacing remaining rows.
+- [ ] **AC-006:** Single, batch, import, copy and resurrect-existing operations apply the same matching/removal policy and roll back all changes on failure.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## FR-MCP-TASKAPI-001 Consistent workflow interfaces, compatibility and release gates
+
+Expose the Task workflow consistently through the server API, typed client and shared plugin core. Operations cover TODO Plan specialization and references; Task CRUD, requirement mappings, lifecycle/remediation and evidence; group definition/order/details; group assignment, FIFO work requests and release; next eligible Task; dependency inspection; turn association; and FR/AC traceability. Existing TODO implementationTasks remain legacy text/done checklist entries and are not silently promoted into Tasks, marked successful, assigned requirements or given fabricated session history. An explicit promotion operation creates a new Planning Task only when the caller supplies its required FR/AC mappings and optional TR/group data, returning an old-entry-to-new-Task mapping without deleting the old entry. Existing TODO details remain compatible through additive fields. User-facing Task/Group status labels retain the defined values exactly. The release must satisfy mapped contract, relational integration, client/plugin, migration and regression tests with zero failures and zero skips in each executed Byrd validation scope.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Each workflow capability is reachable through documented server, typed-client and shared-plugin operations with equivalent validation and errors.
+- [ ] **AC-002:** Legacy checklist entries retain their IDs, text and done values after upgrade and are not counted as new Tasks or group members.
+- [ ] **AC-003:** Explicit promotion requires valid FR/AC mappings, creates Planning regardless of legacy done, preserves the checklist entry and is idempotent.
+- [ ] **AC-004:** Old TODO clients continue working with additive detail fields; unsupported new workflow providers return a classified error without lossy fallback.
+- [ ] **AC-005:** Documented status enums and classified outcome/error codes are identical across transports.
+- [ ] **AC-006:** Every FR has TR, TEST and Realizes UC coverage, and release gates require zero failed and zero skipped tests in the defined current-plus-prior slice scope.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.

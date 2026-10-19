@@ -4108,3 +4108,258 @@ Scope: layer-1+
 - [ ] The slice shows a red test run before the green run.
 - [ ] Phase 1 is not marked done without the astra-6-xhigh receipt.
 
+
+## TR-MCP-TODOTASK-001 Relational Task mappings and turn-owned association
+
+Persist Task parent, FR/AC and TR relationships with referential integrity. The associated AC must belong to the mapped FR. Persist the Task foreign key on Session Log Turns and query it to retrieve Task-associated turns; use the existing turn-to-session relationship for session traversal. Same-value turn association updates are idempotent. Enforce the Task status domain, successful-Task immutability and failed-Task remediation behavior.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Invalid TODO, FR, AC, TR and Task references are rejected, including an AC that does not belong to its stated FR.
+- [ ] **AC-002:** Turn association persists as a Task foreign key and repeated same-value updates do not create duplicate associations.
+- [ ] **AC-003:** Persisted Task status values and mutations satisfy FR-MCP-TODOTASK-001.
+
+**Notes:** The existing AC writer deletes and recreates criterion rows; implementation must preserve valid Task-to-AC references when criteria are edited. No implementation strategy or migration has yet been approved.
+
+## TR-MCP-TODOPLAN-001 Shared TODO Plan specialization, Task ordering and traceability
+
+Represent Plan specialization in the existing TODO entity and persist child Task ordering. Provide Plan-down and Task-up traversal through actual FR/AC mappings, with linked requirements and documentation available to the Plan.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Plan identity remains a TODO identity, rather than requiring a separate Plan entity.
+- [ ] **AC-002:** Task ordering survives persistence and FR/AC traversal yields consistent associations in both directions.
+
+## TR-MCP-TODOGRAPH-001 Persisted GraphRAG references composed into TODO details
+
+Extend shared TODO persistence and detail contracts with GraphRAG references and inline hydrated content obtained through the existing GraphRAG retrieval services.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** TODO and Plan details can retain reference identity while returning resolved GraphRAG content inline.
+
+## TR-MCP-TASKGROUP-001 Shared group sequencing and server-calculated aggregate state
+
+Persist group definitions on the shared TODO aggregate, parent-scoped Task membership and within-group order. Use those records for shared plugin-core sequencing. Compute group status from all member Task statuses and outstanding dependency blockers, with Failing preceding Blocked. Do not accept an authoritative manually assigned group status or calculate only from the current sequence cursor. Sequencing can advance past failed Tasks while dependency checks still prevent dispatch of blocked Tasks.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Group references resolve against the owning TODO and per-group ordering round-trips.
+- [ ] **AC-002:** The plugin tool uses persisted group membership and ordering and permits advancing past failures.
+- [ ] **AC-003:** Calculated group status uses the complete membership and current blockers, with Failing precedence over Blocked.
+- [ ] **AC-004:** Clients cannot override group status independently of the underlying member Task and dependency states.
+
+## TR-MCP-TASKDEP-001 Authoritative Task dispatch gating and shared dependency queries
+
+Represent typed Task/Task-Group dependency references and use current prerequisite completion state to enforce Task dispatch eligibility. Share dependency resolution between agent dispatch, calculated Task Group state and the plugin-core dependency inspection tool. Task blocking is computed eligibility and does not add a sixth persisted Task status.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Dispatch refuses a Task while a referenced prerequisite Task is not Success or a referenced prerequisite group is not Completed.
+- [ ] **AC-002:** Group-status and inspection queries use the same unresolved-dependency rules as dispatch.
+- [ ] **AC-003:** The inspection tool can address a Task or Task Group without adding Blocked to the Task status enum.
+
+## TR-MCP-ACIDENTITY-001 In-place relational acceptance-criterion mutation
+
+Replace the blanket delete/reinsert behavior of SetCriteriaAsync with in-place reconciliation of existing acceptance-criterion rows. Match existing criteria within their owning requirement, update mutable fields and ordinals while retaining their primary keys, insert only newly added criteria, and reject removal of referenced criteria. All requirement update entry points must preserve existing AC rows, including updates that change only requirement metadata. A rejected change must not partially persist the criterion update set.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Existing criterion rows are not marked Deleted and re-added to represent an update.
+- [ ] **AC-002:** Unchanged criteria retain the same persisted keys when other criteria or requirement metadata change.
+- [ ] **AC-003:** Task-to-AC foreign keys continue referencing the original rows after successful updates.
+- [ ] **AC-004:** A rejected referenced-criterion removal preserves the pre-request criterion rows and links atomically.
+
+## TR-MCP-TASKASSIGN-001 Durable ordered session assignments and shared plugin dispatch
+
+Persist Task Group assignments as records relating a Task Group to the destination Session, permitting multiple groups per session. Record a durable server-defined receipt sequence per destination session; selection and recording of group dispatch must preserve that sequence atomically under concurrent requests and across reloads. Expose assignment and session-ID work retrieval through shared plugin core. Resolve public session IDs to the correct persisted session within the workspace and agent identity context; do not arbitrarily select among ambiguous sessions. Keep assignment/dispatch bookkeeping independent of Task lifecycle and computed Group status, and apply the existing dependency gate when selecting member Tasks.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Stored assignments reference existing destination Sessions and Task Groups in the correct workspace and support multiple groups per session.
+- [ ] **AC-002:** Receipt order survives reloads and has a deterministic ordering for concurrently received assignments.
+- [ ] **AC-003:** Concurrent new-work dispatches cannot lose an assignment or dispatch a later queued assignment ahead of an earlier queued assignment.
+- [ ] **AC-004:** Shared plugin operations expose assignment and work retrieval; missing, wrong-workspace or ambiguous session/group references are rejected without changing the queue.
+- [ ] **AC-005:** Group assignment and dispatch bookkeeping preserve existing Task statuses, calculated Group status and dependency-aware member Task dispatch.
+
+**Notes:** Technical design follows the confirmed FIFO requirement. SessionLogEntity currently has numeric Id and uniqueness on WorkspaceId/SourceType/SessionId; a sessionId-only public tool must resolve that identity without weakening workspace scope. Exact public tool names, response envelopes, request deduplication and assignment lifecycle are to be locked in the implementation plan.
+
+## TR-MCP-TODOTASK-002 Task lifecycle, remediation and immutable success
+
+Use a domain service shared by all transports to validate transitions and edits. Persist immutable attempt records with attempt number, owning Session FK, start/end times, outcome, failure/remediation reason and per-AC evidence. Capture the FR/AC/TR text and stable IDs used by each started attempt so later requirement edits do not rewrite historical proof. Complete an attempt and change Task status in one transaction. Protect Task and relationship writes using a monotonic version and expectedVersion; conflict returns the current version without partial effects. Reject deletion of every Task that has execution history or dependent references; unreferenced never-started Tasks may be deleted. No cascade may erase a successful Task or its records. AC identity remains governed by ACIDENTITY requirements.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** An exhaustive transition test matrix validates every allowed and prohibited status pair on every write surface.
+- [ ] **AC-002:** Attempt numbers increase only for new starts; retries cannot create duplicate attempts or evidence.
+- [ ] **AC-003:** Attempt requirement snapshots and outcomes remain unchanged after remediation and subsequent FR/AC/TR edits.
+- [ ] **AC-004:** A stale expectedVersion or failed outcome validation rolls back the entire mutation.
+- [ ] **AC-005:** Success immutability covers direct Task writes, relationship writes, reorder operations and parent/group deletion cascades.
+- [ ] **AC-006:** Task and attempt completion persist atomically, and only explicit requirement operations can update global AC satisfaction.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-TODOPLAN-002 Plan composition, requirement coverage and bidirectional trace queries
+
+Persist normalized Task, TaskRequirement, TaskAcceptanceCriterion and TaskTechnicalRequirement relations; TaskAcceptanceCriterion references the stable numeric AC PK and the owning FR relation, not criterion text or an ordinal. Use workspace-qualified parent and requirement keys and validate AC ownership transactionally. GroupId and TaskId are server-generated UUIDs returned as canonical lowercase UUID strings; IDs remain stable when editable display fields change. Parent TODO IDs retain existing canonical rules. GroupKey is required, 1-128 characters and unique case-insensitively within a TODO; it is immutable after creation, with a separate mutable display name before dispatch. Group definitions belong to the TODO aggregate, not a second Plan store. Persist reorder operations atomically as complete permutations of affected eligible IDs. Trace queries are workspace-scoped, deterministically ordered by parent ordinal then Task ID, and cursor-paginated with a default page of 50 and maximum 200.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Relational FKs prevent orphan Tasks, incorrect AC ownership and cross-workspace FR/TR/group links.
+- [ ] **AC-002:** Task and Group UUIDs and AC row identities survive title, display-name and criterion edits.
+- [ ] **AC-003:** Group-key uniqueness is enforced per parent with the documented case comparison; identical keys under different TODOs are allowed.
+- [ ] **AC-004:** An invalid reorder permutation or immutable Task aborts the complete reorder without partial ordinal changes.
+- [ ] **AC-005:** Trace query filters use stable requirement identities and return consistent results across parent-to-child and child-to-parent traversal.
+- [ ] **AC-006:** Pagination has deterministic ordering, bounded page size and workspace-scoped continuation validation.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-TASKGROUP-002 Complete group-state calculation and ordered eligible Task sequencing
+
+Compute aggregate state from a single consistent read of the complete membership, Task states and dependency evaluation. Do not store a manually authoritative GroupStatus column. Share the evaluator with detail, sequencing and dependency tools. The plugin next-Task operation accepts groupId and sessionId, uses the current session turn plus an operationId, verifies a dispatched assignment to that session, evaluates eligibility and atomically transitions the chosen Ready Task to Started with its attempt and turn association. Concurrency cannot start two members of the same group. Returning an already Started member is a resume result, not a second start. Standalone agents may assign and dispatch a group to their own session. Membership sealing is a separate durable flag set atomically with first group dispatch; changing that flag back is prohibited.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Shared evaluator tests cover the precedence truth table, including Failure plus blocked, empty, mixed success/not-started and all-success cases.
+- [ ] **AC-002:** A sequencing transaction checks assignment, session identity, current turn, Task version and dependencies before recording a start.
+- [ ] **AC-003:** Simultaneous next-Task calls cannot create two Started members or duplicate attempts in a group.
+- [ ] **AC-004:** Resume and no-task results preserve all Task and attempt fields, except separate append-only audit records.
+- [ ] **AC-005:** Membership sealing survives reloads and cannot be bypassed by Task editing, import, reorder or alternate transport.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-TASKDEP-002 Dependency graph validity and complete blocker inspection
+
+Persist typed dependency edges with exactly one Task target or Group target, qualified by workspace, and a unique dependent/target key. Use the same dependency resolver for cycle checks, aggregate state, inspection and dispatch. Validate graph mutations against the proposed full graph inside the write transaction. Serialize conflicting graph/membership mutations so concurrent individually valid edits cannot create a cycle together. Query responses use stable ID ordering and support bounded pagination (default 50/max 200) with an explicit continuation; never silently truncate. Dispatch must examine the full prerequisite set regardless of report pagination. Missing targets discovered in inconsistent legacy data are reported as Missing and block dispatch rather than being treated as completed. Recheck completion atomically with Ready->Started; a later legitimate prerequisite regression affects future starts only.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Database and service validation agree on target type, existence, workspace and duplicate rules.
+- [ ] **AC-002:** Direct, transitive, group-expanded and concurrent cycle cases are rejected atomically.
+- [ ] **AC-003:** Dependency pagination cannot cause dispatch to overlook a prerequisite or claim that a partial result is complete.
+- [ ] **AC-004:** Group status, inspection and dispatch share identical Task Success/Group Completed predicates.
+- [ ] **AC-005:** Missing prerequisite records block with a classified reason, and successful Task state remains immutable.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-TASKASSIGN-002 FIFO assignment ownership, retries and work-request outcomes
+
+Persist assignment ID, Group FK, assigning/receiving Session FKs, per-receiving-session monotonically increasing receiptSequence, receivedAtUtc, dispatchedAtUtc and assignment state Queued/Dispatched/Completed/Released. These are assignment states, not Task or Group statuses. Persist operation receipts keyed by workspace, session, operation kind and operationId with a normalized request fingerprint and response. The plugin generates an operationId for a new logical call and preserves it across transport retries; callers may supply one explicitly. A reused ID with different payload returns IdempotencyConflict. Allocate receipt sequence and select/update the oldest queued row within serialized transactional boundaries; timestamps are diagnostic and never decide FIFO ties. Resolve sessionId to a unique workspace Session using trusted agent context; return AmbiguousSession rather than guessing. Include assignmentId, taskGroupId, receiptSequence, outcome and replayed in work responses. Group membership sealing occurs in the same transaction as first dispatch. Preserve assignment/session history with restrict-delete FKs.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Unique active ownership and per-session receipt sequences are enforced under concurrent assignment requests.
+- [ ] **AC-002:** Dispatch and persisted operation receipt commit atomically, including NoWork results.
+- [ ] **AC-003:** Concurrent distinct work requests return different queued assignments in receipt order without loss; identical operation IDs replay one result.
+- [ ] **AC-004:** Different payloads under the same operation ID, ambiguous session IDs and wrong-workspace requests fail without queue changes.
+- [ ] **AC-005:** Release, completion and session recovery preserve assignment history and never mutate calculated Group status.
+- [ ] **AC-006:** Reloaded queues and retried operations produce the same ownership, ordering and responses.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-TASKTURN-001 Idempotent turn attribution and execution-session history
+
+Add a nullable workspace-qualified Task FK to SessionLogTurnEntity, retain its SessionLogId FK, and index WorkspaceId/TaskId/SessionLogId/Id. Existing turns remain null; never infer Task attribution from legacy TodoId or titles. Use compare-and-set null-or-same semantics for the attribution update. Read Task turn history with stable timestamp/turn ID ordering and cursor pagination (default 50/max 200); expose the associated Session identifiers and attempt IDs where an explicit attempt link exists. Restrict deletion of referenced Tasks and preserve attributed turn/session history using the existing retention policy without cascading deletion of Task records. Audit every accepted association and every execution outcome with the real agent identity; idempotent replays do not duplicate domain audit events.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Migration leaves legacy attribution null and creates the FK/index without fabricating relationships.
+- [ ] **AC-002:** Concurrent different Task attributions to the same turn yield one success and one conflict; same-Task retries do not duplicate history.
+- [ ] **AC-003:** Indexed FK queries, rather than embedded Task-side turn arrays, produce paged Task-to-turn-to-session history.
+- [ ] **AC-004:** Atomic dispatch rollback removes no preexisting turn data and creates no partial attempt.
+- [ ] **AC-005:** Late successful-Task attribution and session retention operations cannot mutate or cascade-delete frozen Task records.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-TODOGRAPH-002 Typed GraphRAG references and bounded inline hydration
+
+Persist normalized TodoGraphReference rows with stable ID, parent TODO composite FK, kind, targetId, optional documentId, ordinal and label; enforce unique reference target and ordinal per TODO. Resolve through existing GraphRAG service methods for document chunks, entities and relationships; select Chunk by its ID within the specified document. Scope the initial implementation to the owning workspace; reject host-global or arbitrary URL references. Validate target existence when adding a reference; an existing target may later become missing. Compose a non-persisted graphRagContext array into TodoFlatItem details, retaining graphRagReferences. Bound concurrent retrieval to four operations, propagate cancellation and apply the overall timeout. Count Unicode scalar values for truncation and include original/returned lengths when known. Cache only within a detail request so every load reflects current content. List endpoints return reference metadata only. Duplicate references and an invalid member of a reference update reject the entire update.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Foreign keys and unique constraints retain stable reference identities and parent scope across updates.
+- [ ] **AC-002:** All four reference kinds use supported retrieval services and reject cross-workspace or arbitrary remote targets.
+- [ ] **AC-003:** Details and list response contracts remain backward-compatible through additive fields and the explicit hydration flag.
+- [ ] **AC-004:** Timeout, cancellation, partial lookup failure and Unicode truncation have deterministic contract tests, with no source writes.
+- [ ] **AC-005:** Batch reference validation and reordering are atomic and hydrated content is never mistaken for persisted TODO data.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-ACIDENTITY-002 Stable criterion matching, explicit removal and atomic reconciliation
+
+Replace SetCriteriaAsync blanket RemoveRange/AddRange with a tracked reconciliation algorithm keyed by WorkspaceId/RequirementKind/RequirementId/CriterionId. Preserve the existing long PK; update tracked mutable fields only. Add a unique normalized criterion-ID constraint within the owning requirement after a non-destructive duplicate/missing-ID preflight. Preserve already unique IDs, generate missing IDs once, and report legacy duplicates for explicit repair without deleting/recreating rows or silently remapping Task links. A migration with unresolved duplicates refuses to enable dependent Task writes until repaired. Use an explicit removeAcceptanceCriterionIds contract for deletion and stable-ID copy matching; importing/copying criteria cannot implicitly clear existing rows. Make the entire single/batch operation transactional, including metadata and relationship validation. FK restrict-delete guards referenced criterion/requirement rows. Preserve compatibility for metadata-only updates and document the safer explicit-removal contract for clients.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Database command interception proves ordinary updates issue no DELETE for retained AC rows, in addition to before/after PK assertions.
+- [ ] **AC-002:** The same reconciliation service handles every requirement mutation entry point and explicit removal.
+- [ ] **AC-003:** ID migration preserves row PKs, resolves missing IDs once and reports duplicates without data loss.
+- [ ] **AC-004:** A failed member of a batch rolls back all AC and metadata changes across that batch.
+- [ ] **AC-005:** Restrict-delete constraints and application validation both protect Task-referenced ACs and owning requirements.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-TASKAPI-001 Consistent workflow interfaces, compatibility and release gates
+
+**Supersession notice:** TR-MCP-TASKAPI-002 replaces this record's SQLite-only and retained-YAML provider clauses, including AC-002. All other contracts below remain applicable; the saved original AC identities are retained.
+
+Use one shared application service and relational EF persistence for Task workflow invariants; provider adapters must supply the same atomicity/FK behavior. Enable Task mutations only with the SQLite TODO provider initially; legacy YAML TODO operations remain available, while Task workflow calls return UnsupportedTodoProvider. Add backward-compatible Task/Group/reference fields without repurposing legacy implementationTasks. Shared-plugin namespaces are workflow.tasks (create/get/update/delete/transition/promoteLegacy/trace), workflow.taskGroups (create/get/reorder/assign/release/requestWork/nextTask/dependencies), workflow.taskTurns (assign/query) and workflow.todo existing operations extended for Plan/references. Public HTTP routes use /qbrainai/tasks and /qbrainai/task-groups with existing /mcpserver aliases; TODO and turn extensions retain their current routes. Every mutating request carries an expectedVersion where an existing aggregate is edited and an operationId (plugin generated when omitted); all validation failures roll back and idempotency fingerprint conflicts are classified. Standard errors include ValidationFailed, NotFound, VersionConflict, InvalidTransition, ImmutableTask, DependencyBlocked, DependencyCycle, AssignmentConflict, SessionClosed, AmbiguousSession, TurnTaskConflict, IdempotencyConflict and UnsupportedTodoProvider. Read responses distinguish Task state, calculated Group state, assignment state and eligibility. Migrate additively with no synthetic Task/turn/requirement history; apply AC identity repair before Task-AC FKs. Validate contracts with independent fakes, then real relational services; run prior and current unit suites plus affected integration/client/plugin suites before advancing each slice. Document public DTOs with XMLDocs and requirement IDs.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Transport contract tests verify the documented namespaces/routes, equivalent outcomes, enum spellings and classified errors.
+- [ ] **AC-002:** Provider gating preserves legacy YAML behavior and refuses unsupported Task writes without partial persistence.
+- [ ] **AC-003:** Explicit legacy promotion is operation-idempotent and never infers FR/AC mappings or Success from a done checkbox.
+- [ ] **AC-004:** Migration order preserves existing data and installs stable AC identity before Task foreign keys; no legacy turn attribution is fabricated.
+- [ ] **AC-005:** Mutation versions and operation fingerprints prevent lost updates and duplicate effects on every public surface.
+- [ ] **AC-006:** The validation plan names contract, relational, transport, migration and previous-slice suites; all executed gates require zero failures and zero skips.
+
+**Notes:** Completes the PLAN-TODOTASK-001 specification at operator request on 2026-10-17. Explicit earlier operator constraints remain authoritative; additional policies in this record are authored specification decisions, not claims of separate operator confirmation. This record resolves earlier notes that left these details unspecified. Implementation is pending.
+
+## TR-MCP-TASKAPI-002 Authoritative database-provider compatibility correction
+
+The Task workflow uses the existing database-only TODO architecture through McpDatabaseProviderFactory and the configured Mcp:Database:Provider. Support the existing sqlite, sqlserver and postgresql backends with equivalent relational invariants, migrations, concurrency and transaction behavior. Mcp:TodoStorage:Provider=database is canonical; the legacy sqlite value aliases database and must not force a SQLite backend. The removed yaml value remains rejected at configuration validation; TODO.yaml remains a projection, not a mutable provider. This requirement supersedes the SQLite-only enablement and retained-YAML-provider clauses of TR-MCP-TASKAPI-001, including its AC-002 and corresponding provider-specific test expectations; all other TASKAPI-001 contracts remain in force. Do not introduce a new provider restriction or restore YAML storage.
+
+**Status:** pending
+Scope: layer-1+
+
+**Acceptance Criteria:**
+- [ ] **AC-001:** Task workflow reads/writes use the configured authoritative database backend for SQLite, SQL Server and PostgreSQL, without an independent Task store.
+- [ ] **AC-002:** The deprecated TodoStorage sqlite alias routes to the configured Database provider rather than forcing SQLite.
+- [ ] **AC-003:** The removed yaml provider stays rejected and TODO.yaml remains a read-only projection.
+- [ ] **AC-004:** All three supported backends receive additive migrations and equivalent FK, version, FIFO, idempotency and rollback behavior.
+- [ ] **AC-005:** The provider validation scope covers all three supported backends and supersedes contradictory SQLite-only or YAML-runtime assertions from TASKAPI-001.
+
+**Notes:** Correction based on src/QBrainAi.Services/Options/TodoStorageOptions.cs and McpInstanceResolver.ValidateTodoStorage. Earlier drafting relied on stale .github/copilot-instructions.md provider guidance. The original AC rows are retained; this explicit supersession corrects the contract without using the prohibited delete/recreate update path.

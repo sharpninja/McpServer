@@ -1365,3 +1365,53 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-QBRAIN-006 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
 | TEST-MCP-QBRAIN-007 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
 | TEST-MCP-QBRAIN-008 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
+| FR-MCP-TODOTASK-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| FR-MCP-TODOPLAN-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| FR-MCP-TODOGRAPH-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TR-MCP-TODOTASK-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TR-MCP-TODOPLAN-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TR-MCP-TODOGRAPH-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TEST-MCP-TODOTASK-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TEST-MCP-TODOPLAN-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TEST-MCP-TODOGRAPH-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| FR-MCP-TASKGROUP-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TR-MCP-TASKGROUP-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TEST-MCP-TASKGROUP-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| FR-MCP-TASKDEP-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TR-MCP-TASKDEP-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| TEST-MCP-TASKDEP-001 | Pending | PLAN-TODOTASK-001; confirmed requirements captured 2026-10-17; implementation pending |
+| FR-MCP-ACIDENTITY-001 | Pending | PLAN-TODOTASK-001; stable original AC identity required; implementation pending |
+| TR-MCP-ACIDENTITY-001 | Pending | PLAN-TODOTASK-001; stable original AC identity required; implementation pending |
+| TEST-MCP-ACIDENTITY-001 | Pending | PLAN-TODOTASK-001; stable original AC identity required; implementation pending |
+| FR-MCP-TASKASSIGN-001 | Pending | PLAN-TODOTASK-001; session-based FIFO Task Group assignment; implementation pending |
+| TR-MCP-TASKASSIGN-001 | Pending | PLAN-TODOTASK-001; session-based FIFO Task Group assignment; implementation pending |
+| TEST-MCP-TASKASSIGN-001 | Pending | PLAN-TODOTASK-001; session-based FIFO Task Group assignment; implementation pending |
+| FR-MCP-TODOTASK-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TODOTASK-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TODOTASK-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| FR-MCP-TODOPLAN-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TODOPLAN-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TODOPLAN-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| FR-MCP-TASKGROUP-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TASKGROUP-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TASKGROUP-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| FR-MCP-TASKDEP-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TASKDEP-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TASKDEP-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| FR-MCP-TASKASSIGN-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TASKASSIGN-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TASKASSIGN-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| FR-MCP-TASKTURN-001 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TASKTURN-001 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TASKTURN-001 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| FR-MCP-TODOGRAPH-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TODOGRAPH-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TODOGRAPH-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| FR-MCP-ACIDENTITY-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-ACIDENTITY-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-ACIDENTITY-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| FR-MCP-TASKAPI-001 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TASKAPI-001 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TASKAPI-001 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TR-MCP-TASKAPI-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
+| TEST-MCP-TASKAPI-002 | Pending | PLAN-TODOTASK-001; complete workflow specification; implementation pending |
