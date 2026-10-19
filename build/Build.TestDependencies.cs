@@ -100,6 +100,8 @@ partial class Build
     /// provisioning failure fails this target before any test runs. Integration tests run only through
     /// this target: the default <c>Test</c> target excludes the category. The dedicated
     /// <c>*.IntegrationTests</c> projects remain separate (their classes carry the same trait).
+    /// TR-MCP-NUKE-019: the selection is host-scoped through <see cref="IntegrationLaneFilter"/>; cases tagged
+    /// <c>Platform=Linux</c> run only on Linux hosts, <c>Platform=Windows</c> only on Windows hosts, untagged on both.
     /// </summary>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
@@ -113,6 +115,10 @@ partial class Build
                 TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
                 TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
             };
+
+            // TR-MCP-NUKE-019 AC-1 and AC-3: select this host's integration cases and name the filter in the log.
+            var laneFilter = new IntegrationLaneFilter().Compose(IntegrationLaneFilter.CurrentHost());
+            Log.Information("Integration lane filter: {Filter}", laneFilter);
 
             var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);
             if (runId is not null)
@@ -136,7 +142,7 @@ partial class Build
                     {
                         DotNetTest(_ => _
                             .SetProjectFile(project)
-                            .SetFilter("Category=Integration")
+                            .SetFilter(laneFilter)
                             .SetVerbosity(DotNetVerbosity.minimal));
                     }
                     else
@@ -145,7 +151,7 @@ partial class Build
                         Directory.CreateDirectory(directory);
                         DotNetTest(_ => _
                             .SetProjectFile(project)
-                            .SetFilter("Category=Integration")
+                            .SetFilter(laneFilter)
                             .SetVerbosity(DotNetVerbosity.minimal)
                             .SetResultsDirectory(directory)
                             .SetLoggers($"trx;LogFileName={projectName}.trx"));
