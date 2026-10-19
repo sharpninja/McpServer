@@ -28,7 +28,7 @@ internal static class ArchitectureDiagramsRunnerContract
     /// <summary>Compliant but outdated render of view A committed before the run.</summary>
     internal static readonly string OldSvgA = ArchitectureDiagramRulesContract.Svg(1990, 1500, [24, 33.6]);
 
-    /// <summary>Render that exceeds a letter page at 8 to 12 pt text.</summary>
+    /// <summary>Render that exceeds a letter page at 8 to 16 pt text.</summary>
     internal static readonly string OversizeSvg = ArchitectureDiagramRulesContract.Svg(4000, 3000, [24, 33.6]);
 
     /// <summary>Builds the exported workspace JSON the fake tooling returns.</summary>

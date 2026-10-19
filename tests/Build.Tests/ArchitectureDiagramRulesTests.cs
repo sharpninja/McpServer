@@ -16,7 +16,7 @@ public sealed class ArchitectureDiagramRulesTests
     [Fact]
     public void FindLinkProblems_MeetsContract() => ArchitectureDiagramRulesContract.AssertLinks(rules);
 
-    /// <summary>TR-MCP-NUKE-017 AC-5: the letter-page and 8 to 12 pt standard is enforced on rendered SVG.</summary>
+    /// <summary>TR-MCP-NUKE-017 AC-5: the letter-page and 8 to 16 pt standard is enforced on rendered SVG.</summary>
     [Fact]
     public void FindPageProblems_MeetsContract() => ArchitectureDiagramRulesContract.AssertPages(rules);
 

@@ -37,10 +37,13 @@ public sealed class WorkspaceResolutionMiddlewareTests
             .Returns(new WorkspaceListResult(workspaces, workspaces.Length));
         foreach (var ws in workspaces)
         {
+            // TR-MCP-FED-PATH-001 / TEST-MCP-PATHNORM-001: the middleware passes the canonical workspace identity
+            // (token keys are normalized), so the fake matches on the test-side identity oracle rather than on
+            // Path.GetFullPath, which re-roots a Windows path under the working directory on a POSIX host.
             svc.GetAsync(
                 Arg.Is<string>(p => p != null && string.Equals(
-                    Path.GetFullPath(p).TrimEnd(Path.DirectorySeparatorChar),
-                    Path.GetFullPath(ws.WorkspacePath ?? string.Empty).TrimEnd(Path.DirectorySeparatorChar),
+                    ExpectedWorkspaceKey.Of(p).TrimEnd('/'),
+                    ExpectedWorkspaceKey.Of(ws.WorkspacePath ?? string.Empty).TrimEnd('/'),
                     StringComparison.OrdinalIgnoreCase)),
                 Arg.Any<CancellationToken>())
                 .Returns(ws);
