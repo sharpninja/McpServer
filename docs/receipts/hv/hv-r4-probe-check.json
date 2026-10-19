@@ -1,0 +1,89 @@
+{
+  "TimestampUtc": "2026-10-18T08:18:51.8821793+00:00",
+  "ManifestEntries": 78,
+  "ManifestFailures": [],
+  "Facts": [
+    {
+      "File": "cli-effort-probe/grok-max.stdout.txt",
+      "Pattern": "unknown effort level",
+      "Found": true
+    },
+    {
+      "File": "cli-write-probe-2/copilot-available.stdout.txt",
+      "Pattern": "responsesReasoning",
+      "Found": true
+    },
+    {
+      "File": "cli-runs-3/copilot-run.txt",
+      "Pattern": "assistant.message_delta",
+      "Found": true
+    },
+    {
+      "File": "cli-write-probe/codex-readonly.stdout.txt",
+      "Pattern": "Read-only file system",
+      "Found": true
+    },
+    {
+      "File": "cli-write-probe/grok-plan.stdout.txt",
+      "Pattern": "cancelled",
+      "Found": true
+    },
+    {
+      "File": "cli-write-probe/grok-plan.stderr.txt",
+      "Pattern": "headless",
+      "Found": true
+    },
+    {
+      "File": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Pattern": "run_commands",
+      "Found": true
+    },
+    {
+      "File": "cli-write-probe-2/copilot-available.stdout.txt",
+      "Pattern": "tool_count",
+      "Found": true
+    },
+    {
+      "File": "out-claude-effort.txt",
+      "Pattern": "effort=max, model=claude-opus-5-5",
+      "Found": true
+    },
+    {
+      "File": "out-cline-effort-2.txt",
+      "Pattern": "snippets=0",
+      "Found": true
+    },
+    {
+      "File": "out-gzip.txt",
+      "Pattern": "originalBytes=305136",
+      "Found": true
+    },
+    {
+      "File": "out-turn-order.txt",
+      "Pattern": "OrderBy",
+      "Found": true
+    }
+  ],
+  "Versions": [
+    {
+      "Agent": "codex",
+      "Version": "WARNING: proceeding, even though we could not create PATH aliases: Read-only file system (os error 30)\ncodex-cli 0.162.1"
+    },
+    {
+      "Agent": "claude",
+      "Version": "2.1.300 (Claude Code)"
+    },
+    {
+      "Agent": "cline",
+      "Version": "3.0.71"
+    },
+    {
+      "Agent": "grok",
+      "Version": "grok 1.0.60 (01a8e1c591c0) [stable]"
+    },
+    {
+      "Agent": "copilot",
+      "Version": "GitHub Copilot CLI 1.0.98.\nRun 'copilot update' to check for updates."
+    }
+  ]
+}

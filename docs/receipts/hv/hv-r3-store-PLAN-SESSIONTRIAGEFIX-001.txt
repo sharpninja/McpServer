@@ -1,0 +1,210 @@
+type: result
+payload:
+  requestId: req-20261018T062348Z-e198
+  result:
+    id: PLAN-SESSIONTRIAGEFIX-001
+    title: Fix every triage report written in ClaudeCode session-20261009 (BDPv4)
+    section: Maintenance
+    priority: high
+    done: false
+    description:
+    - 'Operator, 2026-10-13, verbatim: "I want you to create a new worktree based on develop and fix every triage you have written in this session." Answers: "Merge PR #78 first", "Fix now, minimal (Recommended)", "Codex gpt-6-astra max", "Include, own worktrees (Recommended)".'
+    - 'Plan: docs/plans/PLAN-SESSIONTRIAGEFIX-001.md in worktree /home/sharpninja/github/McpServer/.claude/worktrees/triage-fixes-20261013, branch fix/session-triage-20261013, cut from develop c4fff186 (PR #78 merged).'
+    - 'Scope: 54 reports written in this conversation; about 20 already fixed by PR #78 (their own TODOs close after HV); the license report settled by operator ruling; 33 open reports in six slices A to F.'
+    - 'Process per item: existing FR/TR/AC found or strengthened, tests first against mocks with negative controls, implementation, full applicable suite through Nuke, Windows evidence where Windows-specific, slice hostile validation before any done.'
+    - "Operator, 2026-10-15, verbatim: \"Why has work split?  Should be same.\" Answer: \"fix/session-triage everywhere (Recommended)\". The plugin-repository work is one line per repository, branch fix/session-triage-20261013 checked out in its main checkout under ~/github, where the TR-MCP-NUKE-006 walk-up and Nuke SyncAgentPlugins find it; this replaces \"own worktrees\". The Claude plugin's branch carries a merge of bug-build-008-plugin-sync (7e5cdbc); nothing in the plugin repositories is pushed until the operator says so."
+    - 'Pre-HV review 2026-10-15: the tasks restated in plan order (A10 to A12, B7 to B14, C5 to C11, D7 to D10, E7, E8, the deploy and the post-deploy step added; the A1 to A5, A7 to A9, B2, B4, F1 and F2 texts follow the plan), and the FR and TR ids the plan items name recorded here (plan Process step 1); TEST ids stay in the plan item text. Operator decisions 2026-10-16: "Create FR-SUPPORT-016 now (Recommended)" (A7 to A9 trace to its ac-6 to ac-8), "Create TEST-MCP-REQ-003 (Recommended)" (B2), "Rerun at final HEAD (Recommended)" (slice E lane before HV-E), "Keep gpt-6-astra max (Recommended)". HV order: "A, B, E, F now; C, D after WMI (Recommended)"; the deploy follows all six AGREEs ("Finish all, then deploy").'
+    - "A7 follow-up 2026-10-16 (triage-report-905c3ac1b6af4d57b9c24c2383642379): operator decisions \"Fix it in this plan\" (writes to one turn committed at the same moment keep distinct ordinals or are refused retryably; the SQL Server deadlock EF Core wraps is classified retryable, TR-MCP-TRIAGEERR-001 AC-004) and, for UpsertTurnAsync's unique-race retry, \"Keep retry, revert ac-1 (Recommended)\", which replaced a first answer \"Remove retry, restate ac-1 (Recommended)\" given to a question that left out FR-MCP-SESSIONLIFE-005 ac-5, TR-MCP-SESSIONLIFE-005 and PLAN-SESSIONTURN-SESSIONREVIEW-001's planned replacement; FR-MCP-SESSIONLIFE-005 added to the FR ids. The REPL's retryable HTTP 500 defect is filed (triage-report-c4d8b8803164433d8bbf6e67d9404d59), outside this plan."
+    technicalDetails: &o0 []
+    implementationTasks:
+    - task: 'A1 triage-report-41d7d27c: retired (operator "Retire it (Recommended)"): the unreachable gated snapshot path is deleted after a characterization test; the report closes as removed code'
+      done: false
+    - task: 'A2 triage-report-953f44d7: retired with A1: the unreachable gated revive path is deleted; the report closes as removed code'
+      done: false
+    - task: 'A3 triage-report-d8c40d80: StampTurnChildren and RepairWorkspaceStampsAsync stamp commit file rows with the session WorkspaceId; the FR-SUPPORT-010A and TEST-SUPPORT-010A-1 criteria are written after the deploy'
+      done: false
+    - task: 'A4 triage-report-611ca1b4 (and the CloneSession sibling): retired with A1: the unreachable gated restore and clone path is deleted; the report closes as removed code'
+      done: false
+    - task: 'A5 triage-report-ab06ac3b: the federation session-log snapshot carries the full session graph, sanitized (TR-MCP-FED-SESSIONLOG-001, TEST-MCP-SESSIONLOG-FED-001)'
+      done: false
+    - task: 'A6 triage-report-04659db1: TodoExecutionService reads the files-modified list type the writers store'
+      done: false
+    - task: 'A7 triage-report-36d2da23 and follow-up triage-report-905c3ac1: dialog ordinals unique within a turn, also for writes committed at the same moment (the losing write refused retryably, storing nothing, a SQL Server deadlock included); delete by ordinal removes one item; the unique-race retry kept (FR-SUPPORT-016 ac-6, TR-SUPPORT-CORE-016 ac-4, TR-MCP-TRIAGEERR-001 AC-004, FR-MCP-SESSIONLIFE-005 ac-5)'
+      done: false
+    - task: 'A8 triage-report-ed3b0381: DeleteTurnItemAsync deletes string-list items containing a slash through the query route (FR-SUPPORT-016 ac-7)'
+      done: false
+    - task: 'A9 triage-report-17b0cad8 and -b14f30ba: a session-log write with a null string-list element is refused before any change, naming the field and index (FR-SUPPORT-016 ac-8)'
+      done: false
+    - task: "A10 triage-report-1af9a7de: a revive restores only the rows the session delete removed; a deleted turn's request id is refused with 409 (operator \"Refuse with clear conflict\")"
+      done: false
+    - task: 'A11 triage-report-fe344399: the AoT session-log dialog case asserts the FR-MCP-173 bypass (TEST-MCP-QBLIVEINT-001)'
+      done: false
+    - task: 'A12 triage-report-ff1be8ee: TransactionSecurity and Acid lifecycle tests drive brain-slot.invoke; todo.update is asserted bypassed (TEST-MCP-ACID-001, -002, -006, TEST-MCP-159, -160)'
+      done: false
+    - task: HV-A Slice A hostile validation (Codex gpt-6-astra max, no time bound) AGREE 98/98, every claim PASS
+      done: false
+    - task: 'B1 triage-report-3081edb1: migrations create the HostileReview tables in SQLite, PostgreSQL and SQL Server'
+      done: false
+    - task: 'B2 triage-report-b72cfaf4: workflow.requirements.getTr and getTest return the stored createdAt and updatedAt (TR-MCP-REQ-003 AC-001)'
+      done: false
+    - task: 'B3 triage-report-c03d190f: REPL generateDocument accepts every documented format and docType (TR-MCP-REQEXPORT-003 AC-001)'
+      done: false
+    - task: 'B4 triage-report-f4d47e1f: HostileReviewWorker invalid options fail startup naming HostileReviewWorker on Windows too (TR-MCP-HOSTILEREVIEW-003 AC-001)'
+      done: false
+    - task: 'B5 triage-report-43f0a95a: QBAgent tools end-to-end test makes exactly its scripted model calls'
+      done: false
+    - task: 'B6 triage-report-f68f13b8 (BUG-REQ-001): TR-MCP-QBRAIN-005 states the /mcpserver/* 1.x alias and has its title'
+      done: false
+    - task: 'B7 triage-report-3bd514bb: the requirements REPL gets, updates and deletes stored FR and TEST records with legacy ids; create keeps the canonical format (FR-MCP-TRIAGEREQ-001 ac-2)'
+      done: false
+    - task: 'B8 triage-report-71d801ad: SQL Server RequirementsRecoveryRuns.DeletedAtUtc is datetime2 with a UTC soft-delete round trip (TR-MCP-DB-DTO-001, TEST-MCP-102)'
+      done: false
+    - task: 'B9 operator rule 2026-10-15 (requirements name no agent model): the hostile-review worker pins no reviewer agent, model or effort (TR-MCP-HOSTILEREVIEW-003 AC-001, AC-002)'
+      done: false
+    - task: 'B10 triage-report-76cc478c: QBAgent_CreateHelloWorldCppPrompt uses the arbiter final envelope and accepts either tool-result prefix (operator "Accept either prefix")'
+      done: false
+    - task: 'B11 triage-report-ead2fdaa: SQL Server integration cases use LocalDB where installed, else a temporary SQL Server 2025 Developer instance (TEST-MCP-102)'
+      done: false
+    - task: 'B12 triage-report-61c2a2b2: the handoff migration test cycles only AddHandoffIngestionStorage; VersionedAuditPayloads stays forward-only (TEST-HANDOFF-007)'
+      done: false
+    - task: 'B13 triage-report-680916ed: the Ollama tests run on Linux (InstallOllama, TR-MCP-NUKE-016) and plain chats return the Arbiter answer (FR-MCP-QBOPENAI-001 ac-5, ac-6)'
+      done: false
+    - task: 'B14 triage-report-61ef731c: the website re-ingest test counts live documents (TR-MCP-INGEST-003)'
+      done: false
+    - task: HV-B Slice B hostile validation (Codex gpt-6-astra max, no time bound) AGREE 98/98, every claim PASS
+      done: false
+    - task: 'C1 triage-report-80d6f90c: memory-bench tests stop rewriting tracked benchmark results'
+      done: false
+    - task: 'C2 triage-report-cdf116ad: Build.Tests ServiceUpdateTests Linux-only cases behave per OS on Windows'
+      done: false
+    - task: "C3 triage-report-b1b83f89 (BUG-BUILD-008): official plugins' lib-ps equals the canonical core after sync"
+      done: false
+    - task: 'C4 triage-report-02e7a019: BDPv4 PM guide no longer cites the removed CODEX-HANDOFF.md'
+      done: false
+    - task: C5 ./build.ps1 Test accepts --test-projects and --test-filter (TR-MCP-NUKE-011; operator "Adopt NUKE-011 design (Recommended)")
+      done: false
+    - task: C6 ./build.ps1 TestPluginCore --pester-paths runs the plugin core Pester suites (TR-MCP-NUKE-012; operator "Build TestPluginCore first")
+      done: false
+    - task: C7 build.ps1 bootstraps a real pwsh under WSMan (TR-MCP-NUKE-001 AC-001; operator "Don't triage, fix it")
+      done: false
+    - task: C8 Directory.Packages.props pins System.Security.Cryptography.Pkcs and .Xml at 10.0.13, past NU1902 and NU1903 (TR-MCP-QUALITY-001)
+      done: false
+    - task: C9 20 plugin test files take their temporary roots from GetTempPath, so they run on Linux (operator "Fix them now")
+      done: false
+    - task: C10 plugin tests follow the current core contract (TR-MCP-PLUGIN-012, TEST-MCP-PLUGIN-011, -012) and FR-MCP-SESSIONLIFE-002 criterion 4 agrees with it (operator "Fix the stale tests now", "Fix them in this plan")
+      done: false
+    - task: C11 the UpdateService target is accountable through TR-MCP-NUKE-015 under FR-MCP-BUILD-001 (operator "Fix them in this plan")
+      done: false
+    - task: HV-C Slice C hostile validation (Codex gpt-6-astra max, no time bound) AGREE 98/98, every claim PASS
+      done: false
+    - task: 'D1 triage-report-124a374c: UserPromptSubmit hook attempts its call within budget; failsafe only on failure; drain never blocks'
+      done: false
+    - task: 'D2 triage-report-d9bd6fc3: one session-log session per SessionStart'
+      done: false
+    - task: 'D3 triage-report-061f30e9: background and hostile-agent prompts log their own turns'
+      done: false
+    - task: 'D4 triage-report-5c7278cd: hand-backs and task notifications open no turn and cancel no request turn'
+      done: false
+    - task: 'D5 triage-report-bd1f4386: hook validator recognizes the enabled plugin without CLAUDE_PLUGIN_ROOT'
+      done: false
+    - task: 'D6 triage-report-e1f01430: plugin memory verbs log a documented action type at the next free order'
+      done: false
+    - task: 'D7 triage-report-b9a8ab7e: the plugin-core suite passes in a fresh worktree (TR-MCP-NUKE-012 AC-006; operator "Fix the 27 first")'
+      done: false
+    - task: 'D8 triage-report-30a24728: Windows-only fixtures get per-OS behavior on Linux (TR-MCP-TEMPVOL-001 AC-001)'
+      done: false
+    - task: 'D9 triage-report-60ac3433: one PowerShell fake REPL serves SessionLogP2Contracts on both platforms'
+      done: false
+    - task: D10 TR-MCP-REPL-011 AC2 names the child and background session-state paths (operator "Fix them in this plan")
+      done: false
+    - task: HV-D Slice D hostile validation (Codex gpt-6-astra max, no time bound) AGREE 98/98, every claim PASS
+      done: false
+    - task: 'E1 triage-report-de98c84b and -f2684f90 (BUG-BASELINE-012): TypeScript plugin lockfiles match the vendored core after sync'
+      done: false
+    - task: 'E2 triage-report-96ea2f71 (BUG-BASELINE-013): the P20 harness receipt test finds its log'
+      done: false
+    - task: 'E3 triage-report-78b6efa1 (BUG-BASELINE-014): cline-v2 and opencode expose the export the harness loads'
+      done: false
+    - task: 'E4 triage-report-fbac91dc (BUG-BASELINE-015): Cline v1 MCP initialize completes in the harness'
+      done: false
+    - task: 'E5 triage-report-914a2812 (BUG-BASELINE-016): plugin session suffix and integration test agree'
+      done: false
+    - task: 'E6 triage-report-3546932e (BUG-BASELINE-017): AI-lane receipts carry the aiUnit response for every host'
+      done: false
+    - task: E7 each P19 receipt carries the logs its run wrote (TEST-MCP-PLUGININT-001 AC-005; operator "Fix issues correctly.")
+      done: false
+    - task: E8 the harness starts PowerShell plugin hosts as pwsh off Windows (TEST-MCP-PLUGININT-001 AC-006; operator "Fix them in this plan")
+      done: false
+    - task: HV-E Slice E hostile validation (Codex gpt-6-astra max, no time bound) AGREE 98/98, every claim PASS, after the lane reruns at the final HEAD (operator decision 2026-10-16 "Rerun at final HEAD (Recommended)")
+      done: false
+    - task: 'F1 triage-report-eb56d4eb: the REPL bridge answers a failure without output with an error envelope, never a bare False (TR-MCP-REPL-001 AC-001)'
+      done: false
+    - task: 'F2 triage-report-834cec2e: every plugin whose memory wrapper loads memory-context.ps1 carries it again, grok-bot included, and the user-prompt-submit hook renders REQUIRED MEMORIES (TR-MCP-MEMORY-008 AC-001, AC-002)'
+      done: false
+    - task: HV-F Slice F hostile validation (Codex gpt-6-astra max, no time bound) AGREE 98/98, every claim PASS
+      done: false
+    - task: 'Deploy after all six slices AGREE: UpdateService, InstallReplTool and SyncAgentPlugins through Nuke (operator "Finish all, then deploy")'
+      done: false
+    - task: "After the deploy: A3's FR-SUPPORT-010A and TEST-SUPPORT-010A-1 criteria written through the deployed REPL, docs/Project regenerated and committed, the deploy-gate check reads them back, and a post-deploy HV round reviews A3's written criteria with that check"
+      done: false
+    dependsOn: *o0
+    functionalRequirements:
+    - FR-MCP-173
+    - FR-SUPPORT-010A
+    - FR-MCP-103
+    - FR-MCP-082
+    - FR-SUPPORT-016
+    - FR-MCP-SESSIONLIFE-005
+    - FR-MCP-QBOPENAI-001
+    - FR-MCP-QBEXEC-003
+    - FR-MCP-120
+    - FR-MCP-040
+    - FR-MCP-112
+    - FR-MCP-TRIAGEREQ-001
+    - FR-MCP-105
+    - FR-HANDOFF-006
+    - FR-MCP-QBOLLAMA-002
+    - FR-MCP-BUILD-001
+    - FR-MCP-065
+    - FR-MCP-SESSIONLIFE-002
+    - FR-MCP-REPL-011
+    - FR-MCP-MEMORY-007
+    - FR-MCP-PLUGININT-001
+    technicalRequirements:
+    - TR-MCP-TXNKEY-001
+    - TR-MCP-TXN-001
+    - TR-MCP-MT-003A
+    - TR-MCP-FED-SESSIONLOG-001
+    - TR-MCP-BYRD-002
+    - TR-MCP-DB-003
+    - TR-SUPPORT-CORE-016
+    - TR-MCP-HOSTILEREVIEW-001
+    - TR-MCP-REQ-003
+    - TR-MCP-REQEXPORT-003
+    - TR-MCP-HOSTILEREVIEW-003
+    - TR-MCP-QBRAIN-005
+    - TR-MCP-TRIAGEREQ-001
+    - TR-MCP-DB-DTO-001
+    - TR-MCP-NUKE-016
+    - TR-MCP-QBOLLAMA-002
+    - TR-MCP-INGEST-003
+    - TR-MCP-NUKE-015
+    - TR-MCP-SYNC-001
+    - TR-MCP-NUKE-011
+    - TR-MCP-NUKE-012
+    - TR-MCP-NUKE-001
+    - TR-MCP-QUALITY-001
+    - TR-MCP-PLUGIN-012
+    - TR-MCP-REPL-019
+    - TR-MCP-REPL-016
+    - TR-MCP-REPL-012
+    - TR-MCP-PLUGIN-013
+    - TR-MCP-TEMPVOL-001
+    - TR-MCP-REPL-011
+    - TR-MCP-REPL-001
+    - TR-MCP-TRIAGEERR-001
+    - TR-MCP-MEMORY-008
+  deprecated: true
+
+---
+

@@ -1,0 +1,33 @@
+{
+  "TimestampUtc": "2026-10-18T03:32:28.3489699+00:00",
+  "Quotes": 37,
+  "QuoteMismatches": [],
+  "ProbeFiles": 78,
+  "ProbeMismatches": [],
+  "RelatedRecords": 10,
+  "Versions": [
+    {
+      "Cli": "codex",
+      "VersionOutput": "WARNING: proceeding, even though we could not create PATH aliases: Read-only file system (os error 30)\ncodex-cli 0.162.1"
+    },
+    {
+      "Cli": "claude",
+      "VersionOutput": "2.1.300 (Claude Code)"
+    },
+    {
+      "Cli": "cline",
+      "VersionOutput": "3.0.71"
+    },
+    {
+      "Cli": "grok",
+      "VersionOutput": "grok 1.0.60 (01a8e1c591c0) [stable]"
+    },
+    {
+      "Cli": "copilot",
+      "VersionOutput": "GitHub Copilot CLI 1.0.98.\nRun 'copilot update' to check for updates."
+    }
+  ],
+  "MermaidBlocks": 100,
+  "NonAsciiDashes": 0,
+  "TableRows": 0
+}

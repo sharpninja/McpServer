@@ -1,0 +1,358 @@
+{
+  "TimestampUtc": "2026-10-18T08:12:27.4867977+00:00",
+  "Settled": [
+    {
+      "Id": "S-01",
+      "Index": 24,
+      "Role": "user",
+      "Text": "We need to plan a Hostile Validation queue and execution mechanism.",
+      "Source": "Cline user message 24",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-02",
+      "Index": 51,
+      "Role": "user",
+      "Text": "HV queue needs configuration for available HV agents (cline, copilot, claude, codex, grok) and either the agent's default (highest effort) model, or a model/effort specified in configuration.  The HV agent configuration must have endpoints and REPL coverage so Director and other tools can manage in real time.",
+      "Source": "Cline user message 51",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-03",
+      "Index": 68,
+      "Role": "user",
+      "Text": "When a HV request is received, it must submit a range of session log turns to include in the review.  The reviewer must grade each turn individualy and apply their review score and update the turn record.  The result will include the score for each turn, and an overall score for the whole HV request.  HV request/results will be store in the database.",
+      "Source": "Cline user message 68",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-04",
+      "Index": 76,
+      "Role": "user",
+      "Text": "worktree session-20261009 should have updates to the session log schema for storing both agent self-review and hv review outcome on the turn.",
+      "Source": "Cline user message 76",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-05",
+      "Index": 96,
+      "Role": "user",
+      "Text": "That document is the base we are building on in this plan.",
+      "Source": "Cline user message 96",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-06",
+      "Index": 104,
+      "Role": "user",
+      "Text": "Review of a turn should be considered final as any subsequent changes should be reflected in a later turn.",
+      "Source": "Cline user message 104",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-07",
+      "Index": 112,
+      "Role": "user",
+      "Text": "Session log may not allow updates to a turn with an HV review.",
+      "Source": "Cline user message 112",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-08",
+      "Index": 114,
+      "Role": "user",
+      "Text": "A turn must have an agent review before it can be included in a HV.",
+      "Source": "Cline user message 114",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-09",
+      "Index": 118,
+      "Role": "user",
+      "Text": "Turns submitted, but marked Unnecessary, should still be included in the overall HV grade for the request.",
+      "Source": "Cline user message 118",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-10",
+      "Index": 120,
+      "Role": "user",
+      "Text": "No, overall HV is a holistic review of the whole set of turns submitted.",
+      "Source": "Cline user message 120",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-11",
+      "Index": 122,
+      "Role": "user",
+      "Text": "If the request recieves a session id (not a session turn id) in the set of turns, then the totality of session turns in that session are included by default.",
+      "Source": "Cline user message 122",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-12",
+      "Index": 124,
+      "Role": "user",
+      "Text": "plugin core should present all missing agent reviews as a list for the agent to perform review on.",
+      "Source": "Cline user message 124",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-13",
+      "Index": 128,
+      "Role": "user",
+      "Text": "HV reviews must use a standard json payload for responses that must include the complete request, the complete jsonl response log, and delineated list of specific failures with adequest description to remediate.",
+      "Source": "Cline user message 128",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-14",
+      "Index": 130,
+      "Role": "user",
+      "Text": "HV request must supply a free text field for agent to add specific context in markdown or yaml format.  The request should be parsed for MCP Server FR/TR/AC/UC in the workspace and provided to the reviewing agent in a delineated list.",
+      "Source": "Cline user message 130",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-15",
+      "Index": 132,
+      "Role": "user",
+      "Text": "execution failures are to be triaged (prevent duplicates) and mark the HV agent as offline until resolved.",
+      "Source": "Cline user message 132",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-16",
+      "Index": 134,
+      "Role": "user",
+      "Text": "If there are no HV agents available to perform a review, the endpoint must refuse the request and the plugin core add the necessary context.",
+      "Source": "Cline user message 134",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-17",
+      "Index": 136,
+      "Role": "user",
+      "Text": "HV agent resolution should round-robin HV review agents, excluding the agent submitting the review.",
+      "Source": "Cline user message 136",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-18",
+      "Index": 138,
+      "Role": "user",
+      "Text": "need endpoints for getting running hvs, their last reported output, and eta.  Need endpoints for cancelling any hv.  need endpoint to attach to sse strem of the output of any running hv",
+      "Source": "Cline user message 138",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-19",
+      "Index": 140,
+      "Role": "user",
+      "Text": "need an HV notification stream endpoint to receive notifications of hv completion in the plugins",
+      "Source": "Cline user message 140",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-20",
+      "Index": 144,
+      "Role": "user",
+      "Text": "NO",
+      "Source": "Cline user message 144",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-21",
+      "Index": 146,
+      "Role": "user",
+      "Text": "Per turn should be a list of the requested turns to review with their score.",
+      "Source": "Cline user message 146",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-22",
+      "Index": 148,
+      "Role": "user",
+      "Text": "Output should be captured live and streamed.",
+      "Source": "Cline user message 148",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-22",
+      "Index": 148,
+      "Role": "user",
+      "Text": "Explains a lot.  Gotta be fixed in the plan.",
+      "Source": "Operator confirmation in this review request, not Cline message 148",
+      "ExactMatch": false
+    },
+    {
+      "Id": "S-23",
+      "Index": 150,
+      "Role": "user",
+      "Text": "Single trx at end.",
+      "Source": "Cline user message 150",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-24",
+      "Index": 152,
+      "Role": "user",
+      "Text": "Auto-start",
+      "Source": "Cline user message 152",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-25",
+      "Index": 154,
+      "Role": "user",
+      "Text": "Verdict only",
+      "Source": "Cline user message 154",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-26",
+      "Index": 156,
+      "Role": "user",
+      "Text": "File through endpoint.",
+      "Source": "Cline user message 156",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-27",
+      "Index": 158,
+      "Role": "user",
+      "Text": "NONCE the agent.",
+      "Source": "Cline user message 158",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-27",
+      "Index": 229,
+      "Role": "user",
+      "Text": "This is just a check that the agent is available and can execute an HV.",
+      "Source": "Cline user message 229",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-28",
+      "Index": 214,
+      "Role": "user",
+      "Text": "Self-review of a turn is just a grade on the turn.  It is not relevant to the HV.",
+      "Source": "Cline user message 214",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-29",
+      "Index": 239,
+      "Role": "user",
+      "Text": "Must participate in the audit log of the database.",
+      "Source": "Cline user message 239",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-29",
+      "Index": 467,
+      "Role": "user",
+      "Text": "Retain until told to remove.  There are no access roles.  Audit-failure is a hard stop.",
+      "Source": "Cline user message 467",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-30",
+      "Index": 474,
+      "Role": "user",
+      "Text": "GZIP HV result logs to save space.",
+      "Source": "Cline user message 474",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-31",
+      "Index": 0,
+      "Role": "user",
+      "Text": "create worktree from develop",
+      "Source": "Cline user message 0",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-31",
+      "Index": 463,
+      "Role": "user",
+      "Text": "I've already specified both.",
+      "Source": "Cline user message 463",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-32",
+      "Index": 469,
+      "Role": "user",
+      "Text": "That's your job.",
+      "Source": "Cline user message 469",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-32",
+      "Index": 478,
+      "Role": "user",
+      "Text": "write plan to high todo",
+      "Source": "Cline user message 478",
+      "ExactMatch": true
+    },
+    {
+      "Id": "S-33",
+      "Index": 162,
+      "Role": "user",
+      "Text": "apply byrd dev proces v4",
+      "Source": "Cline user message 162",
+      "ExactMatch": true
+    }
+  ],
+  "Standing": [
+    {
+      "Id": "P-01",
+      "Quotes": [
+        {
+          "Text": "HV must not be executed by the same agent family as the requesting agent.  If not specified by operator, ask what agent and model to use for HV in a session.",
+          "InProfile": true
+        }
+      ]
+    },
+    {
+      "Id": "P-02",
+      "Quotes": [
+        {
+          "Text": "Do not bound review time",
+          "InProfile": true
+        }
+      ]
+    },
+    {
+      "Id": "P-03",
+      "Quotes": []
+    },
+    {
+      "Id": "P-04",
+      "Quotes": []
+    },
+    {
+      "Id": "P-05",
+      "Quotes": []
+    },
+    {
+      "Id": "P-06",
+      "Quotes": []
+    },
+    {
+      "Id": "P-07",
+      "Quotes": [
+        {
+          "Text": "Validate independently through a hostile reviewer wherever the plan calls for HV and before any done state. Self-check alone is not validation.",
+          "InProfile": false
+        }
+      ]
+    },
+    {
+      "Id": "P-01",
+      "Quotes": []
+    }
+  ]
+}
