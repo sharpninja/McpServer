@@ -32,7 +32,30 @@
 **Column 1 — Persistent Memory:** Session logs capture every decision, action, and design choice. Agents resume with full context.
 **Column 2 — Shared Workspace State:** All agents read from and write to the same TODO store, context index, and session log.
 **Column 3 — Grounded Context:** Semantic search over your actual code and docs — not training data guesses.
-**Feature Map:** ![Features Overview](diagrams/features.png)
+**Feature Map:** ![Features Overview (1 of 6): QBrainAi feature areas](../architecture/c4/rendered/MKT-FEATURES-01.svg)
+
+View: MKT-FEATURES-01
+
+![Features Overview (2 of 6): Context and Search](../architecture/c4/rendered/MKT-FEATURES-01-part2.svg)
+
+View: MKT-FEATURES-01-part2
+
+![Features Overview (3 of 6): Task Management](../architecture/c4/rendered/MKT-FEATURES-01-part3.svg)
+
+View: MKT-FEATURES-01-part3
+
+![Features Overview (4 of 6): Agent Coordination](../architecture/c4/rendered/MKT-FEATURES-01-part4.svg)
+
+View: MKT-FEATURES-01-part4
+
+![Features Overview (5 of 6): Requirements](../architecture/c4/rendered/MKT-FEATURES-01-part5.svg)
+
+View: MKT-FEATURES-01-part5
+
+![Features Overview (6 of 6): Infrastructure](../architecture/c4/rendered/MKT-FEATURES-01-part6.svg)
+
+View: MKT-FEATURES-01-part6
+
 **Speaker Notes:** QBrainAi is infrastructure, not an agent. It doesn't replace Copilot or Cursor — it makes them dramatically more effective. Think of it the same way you think of a database: your application doesn't work without it, but it's not the application itself.
 
 ---
@@ -40,7 +63,34 @@
 ## Slide 4 — Architecture
 **Layout:** Centered diagram on light background.
 **Title:** How It Works
-**Diagram:** ![Architecture](diagrams/architecture.png)
+**Diagram:** ![Architecture (1 of 7): AI agents and the transport layer](../architecture/c4/rendered/MKT-ARCHITECTURE-01.svg)
+
+View: MKT-ARCHITECTURE-01
+
+![Architecture (2 of 7): transports to tools and controllers](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part2.svg)
+
+View: MKT-ARCHITECTURE-01-part2
+
+![Architecture (3 of 7): multi-workspace routing](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part3.svg)
+
+View: MKT-ARCHITECTURE-01-part3
+
+![Architecture (4 of 7): context search and TODO management](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part4.svg)
+
+View: MKT-ARCHITECTURE-01-part4
+
+![Architecture (5 of 7): session logging and requirements tracking](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part5.svg)
+
+View: MKT-ARCHITECTURE-01-part5
+
+![Architecture (6 of 7): GitHub issue sync](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part6.svg)
+
+View: MKT-ARCHITECTURE-01-part6
+
+![Architecture (7 of 7): GraphRAG and prompt templates](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part7.svg)
+
+View: MKT-ARCHITECTURE-01-part7
+
 **Caption:** QBrainAi is protocol-native. Agents connect over the open Model Context Protocol — no custom integration code required.
 **Speaker Notes:** QBrainAi implements MCP — the Model Context Protocol, an open standard for AI agent tool-calling. Any MCP-compatible agent connects out of the box. It also exposes a full REST API for direct integration from scripts, CI pipelines, or .NET applications.
 
@@ -99,7 +149,14 @@
 ## Slide 9 — UI Tooling
 **Layout:** 2x3 grid of tool cards on dark background.
 **Title:** The Right Interface for Every Workflow
-**Diagram:** ![UI Tooling](diagrams/ui-tooling.png)
+**Diagram:** ![UI Tooling (1 of 2): web, terminal and command-line clients](../architecture/c4/rendered/MKT-UITOOLING-01.svg)
+
+View: MKT-UITOOLING-01
+
+![UI Tooling (2 of 2): client library and MCP agents](../architecture/c4/rendered/MKT-UITOOLING-01-part2.svg)
+
+View: MKT-UITOOLING-01-part2
+
 **Card 1 — Web UI:** Blazor dashboard. Todos, sessions, agents, templates, context search. GitHub Primer CSS.
 **Card 2 — Director CLI:** dotnet tool install --global SharpNinja.QBrainAi.Director · https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 **Card 3 — Director TUI:** director ui — full terminal UI, role-filtered tabs, auto-refresh.
@@ -130,7 +187,38 @@
 **Step 2 — Run:** .\scripts\Start-QBrainAi.ps1 -Configuration Staging
 **Step 3 — Connect:** http://localhost:7147/swagger
 **Step 4 — Add to agent:** { "mcpServers": { "mcpserver": { "url": "<your-mcpserver-base-url>/mcp-transport" } } }
-**Agent Workflow:** ![Agent Workflow Sequence](diagrams/agent-workflow.png)
+**Agent Workflow:** ![Agent Workflow Sequence (1 of 8): Session Start](../architecture/c4/rendered/MKT-AGENTWORKFLOW-01.svg)
+
+View: MKT-AGENTWORKFLOW-01
+
+![Agent Workflow Sequence (2 of 8): Context Retrieval, full-text half](../architecture/c4/rendered/MKT-AGENTWORKFLOW-01-part2.svg)
+
+View: MKT-AGENTWORKFLOW-01-part2
+
+![Agent Workflow Sequence (3 of 8): Context Retrieval, vector half and reply](../architecture/c4/rendered/MKT-AGENTWORKFLOW-01-part3.svg)
+
+View: MKT-AGENTWORKFLOW-01-part3
+
+![Agent Workflow Sequence (4 of 8): Task Management, backlog query](../architecture/c4/rendered/MKT-AGENTWORKFLOW-01-part4.svg)
+
+View: MKT-AGENTWORKFLOW-01-part4
+
+![Agent Workflow Sequence (5 of 8): Task Management, update](../architecture/c4/rendered/MKT-AGENTWORKFLOW-01-part5.svg)
+
+View: MKT-AGENTWORKFLOW-01-part5
+
+![Agent Workflow Sequence (6 of 8): Task Management, projection and reply](../architecture/c4/rendered/MKT-AGENTWORKFLOW-01-part6.svg)
+
+View: MKT-AGENTWORKFLOW-01-part6
+
+![Agent Workflow Sequence (7 of 8): Session Logging](../architecture/c4/rendered/MKT-AGENTWORKFLOW-01-part7.svg)
+
+View: MKT-AGENTWORKFLOW-01-part7
+
+![Agent Workflow Sequence (8 of 8): GitHub Sync](../architecture/c4/rendered/MKT-AGENTWORKFLOW-01-part8.svg)
+
+View: MKT-AGENTWORKFLOW-01-part8
+
 **CTA:** View Full Docs → https://github.com/sharpninja/McpServer
 **Speaker Notes:** Four steps from zero to a running context server that any MCP agent can connect to. AGENTS-README-FIRST.yaml is written to your workspace root automatically — agents read it to get the API key, base URL, and connection prompt.
 
