@@ -35,6 +35,7 @@ $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'resolve-cache-dir.ps1')
 . (Join-Path $script:ScriptDir 'marker-resolver.ps1')
 . (Join-Path $script:ScriptDir 'yaml-object-mutation.ps1')
+. (Join-Path $script:ScriptDir 'plan-todo-map.ps1')
 . (Join-Path $script:ScriptDir 'agent-runtime-header.ps1')
 Import-McpYamlSerializer
 
@@ -320,13 +321,7 @@ function Invoke-PluginRepl {
 
     $script:LastPluginReplExitCode = 0
     if ($env:MCP_PLUGIN_REPL_LOG) {
-        $entry = @(
-            "method: $Method"
-            'params: |'
-            (($ParamsYaml -replace "`r`n", "`n" -replace "`r", "`n") -split "`n" | ForEach-Object { "  $_" })
-            '---'
-        ) -join "`n"
-        Add-Content -LiteralPath $env:MCP_PLUGIN_REPL_LOG -Value $entry
+        Write-McpReplLogEntry -Path $env:MCP_PLUGIN_REPL_LOG -Method $Method -ParamsYaml $ParamsYaml
         if ($env:MCP_PLUGIN_REPL_RESPONSE) {
             Write-Output $env:MCP_PLUGIN_REPL_RESPONSE
         }
@@ -1561,25 +1556,7 @@ function Get-PlanTodoMapPath {
 }
 
 function Get-LastPlanTodoMapEntry {
-    $mapPath = Get-PlanTodoMapPath
-    if (-not (Test-Path -LiteralPath $mapPath)) { return $null }
-    $lines = [System.IO.File]::ReadAllLines($mapPath)
-    $planFile = $null
-    $todoId = $null
-    for ($i = 0; $i -lt $lines.Length; $i++) {
-        if ($lines[$i] -match '^\s*-\s*planFile:\s*(.+)$') {
-            $planFile = $Matches[1].Trim().Trim('"')
-            $todoId = $null
-            for ($j = $i + 1; $j -lt [Math]::Min($lines.Length, $i + 4); $j++) {
-                if ($lines[$j] -match '^\s*todoId:\s*(.+)$') {
-                    $todoId = $Matches[1].Trim().Trim('"')
-                    break
-                }
-            }
-        }
-    }
-    if ([string]::IsNullOrWhiteSpace($planFile)) { return $null }
-    return [ordered]@{ planFile = $planFile; todoId = $todoId }
+    return (Get-LastPlanTodoMapEntryFromFile -MapPath (Get-PlanTodoMapPath))
 }
 
 function Resolve-PluginTurnPlanContext {
@@ -1642,13 +1619,7 @@ function Invoke-PlanApprovedHook {
     $output = @(Invoke-PluginRepl -Method 'client.Todo.CreateAsync' -ParamsYaml $paramsYaml)
     $todoId = Get-TodoIdFromReplOutput -Output $output
     if ($todoId) {
-        $mapPath = Get-PlanTodoMapPath
-        $entry = @(
-            'entries:'
-            "  - planFile: $planFile"
-            "    todoId: $todoId"
-        ) -join "`n"
-        [System.IO.File]::WriteAllText($mapPath, $entry + "`n")
+        [void](Write-PlanTodoMapEntry -MapPath (Get-PlanTodoMapPath) -PlanFile $planFile -TodoId $todoId)
     }
 
     Write-PostToolUseOutput -Status 'created'
@@ -1657,20 +1628,7 @@ function Invoke-PlanApprovedHook {
 function Find-PlanTodoId {
     param([Parameter(Mandatory)][string]$PlanFile)
 
-    $mapPath = Get-PlanTodoMapPath
-    if (-not (Test-Path -LiteralPath $mapPath)) { return $null }
-    $lines = [System.IO.File]::ReadAllLines($mapPath)
-    for ($i = 0; $i -lt $lines.Length; $i++) {
-        if ($lines[$i] -match '^\s*-\s*planFile:\s*(.+)$' -and $Matches[1].Trim().Trim('"') -eq $PlanFile) {
-            for ($j = $i + 1; $j -lt [Math]::Min($lines.Length, $i + 4); $j++) {
-                if ($lines[$j] -match '^\s*todoId:\s*(.+)$') {
-                    return $Matches[1].Trim().Trim('"')
-                }
-            }
-        }
-    }
-
-    return $null
+    return (Find-PlanTodoIdInMap -MapPath (Get-PlanTodoMapPath) -PlanFile $PlanFile)
 }
 
 function Invoke-PlanModifiedHook {

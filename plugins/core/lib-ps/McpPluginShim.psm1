@@ -199,9 +199,23 @@ class McpPluginFailsafeRecord {
     }
 
     [string] ToYaml() {
-        $doc = "method: $($this.Method)`nlabel: $($this.Label)`ntimestamp: $($this.Timestamp)`nparams:`n"
-        $doc += (($this.ParamsYaml -split "`n" | ForEach-Object { "  $_" }) -join "`n") + "`n"
-        return $doc
+        # Build the record as an object and serialize it; ParamsYaml is deserialized so the
+        # params land as a nested mapping, never as re-indented text.
+        if (-not (Get-Command ConvertFrom-Yaml -ErrorAction SilentlyContinue)) {
+            Import-Module powershell-yaml -ErrorAction Stop
+        }
+        $params = $null
+        if (-not [string]::IsNullOrWhiteSpace($this.ParamsYaml)) {
+            $params = ConvertFrom-Yaml -Yaml $this.ParamsYaml -Ordered
+        }
+        if ($null -eq $params) { $params = [ordered]@{} }
+        $document = [ordered]@{
+            method = $this.Method
+            label = $this.Label
+            timestamp = $this.Timestamp
+            params = $params
+        }
+        return (ConvertTo-McpPluginYaml -InputObject $document)
     }
 }
 
@@ -685,7 +699,74 @@ function ConvertTo-McpPluginJson {
     }
 }
 
+function New-McpPluginTimeoutEnvelope {
+    <#
+    .SYNOPSIS
+        Builds the command_timeout error envelope as a native object.
+    .DESCRIPTION
+        TR-MCP-TRIAGEPLUGIN-004 / BUG-TRIAGE-120: a plugin command that exceeds its
+        bounded timeout must surface a retryable, degraded, queued command_timeout
+        envelope instead of an unclassified throw. The envelope is built here as an
+        ordered object and serialized by ConvertTo-McpPluginYaml; it is never
+        handwritten as YAML text.
+
+        Parameters:
+        TimeoutSeconds - Bounded timeout that elapsed, in whole seconds (positive).
+    .EXAMPLE
+        ConvertTo-McpPluginYaml -InputObject (New-McpPluginTimeoutEnvelope -TimeoutSeconds 90)
+    #>
+    [CmdletBinding()]
+    [OutputType([System.Collections.Specialized.OrderedDictionary])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Pure factory: returns an in-memory envelope object and changes no system state.')]
+    param(
+        [Parameter(Mandatory)][ValidateRange(1, [int]::MaxValue)][int]$TimeoutSeconds
+    )
+
+    return [ordered]@{
+        type = 'error'
+        payload = [ordered]@{
+            code = 'command_timeout'
+            message = "Plugin command timed out after ${TimeoutSeconds}s."
+            retryable = $true
+            details = [ordered]@{
+                degraded = $true
+                queued = $true
+            }
+        }
+    }
+}
+
+function ConvertTo-McpPluginYaml {
+    <#
+    .SYNOPSIS
+        Serializes a native object to YAML through the powershell-yaml serializer.
+    .DESCRIPTION
+        Loads powershell-yaml when ConvertTo-Yaml is not already available, then
+        serializes the object with indented sequences, matching the REPL envelope
+        style used elsewhere in the plugin. Callers must pass objects, never
+        preformatted YAML strings.
+
+        Parameters:
+        InputObject - Ordered dictionary, hashtable, or PSCustomObject to serialize.
+    .EXAMPLE
+        ConvertTo-McpPluginYaml -InputObject ([ordered]@{ type = 'error' })
+    #>
+    [CmdletBinding()]
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory)][object]$InputObject
+    )
+
+    if (-not (Get-Command ConvertTo-Yaml -ErrorAction SilentlyContinue)) {
+        Import-Module powershell-yaml -ErrorAction Stop
+    }
+
+    return (ConvertTo-Yaml -Data $InputObject -Options WithIndentedSequences)
+}
+
 Export-ModuleMember -Function @(
+    'New-McpPluginTimeoutEnvelope',
+    'ConvertTo-McpPluginYaml',
     'New-McpPluginInvocationOptions',
     'New-McpPluginReplRequest',
     'New-McpPluginReplResult',

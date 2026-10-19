@@ -51,13 +51,10 @@ function Invoke-HandoffSkillRepl {
     }
 
     if ($env:MCP_PLUGIN_REPL_LOG) {
-        $entry = @(
-            "method: $Method"
-            'params: |'
-            (($paramsYaml -replace "`r`n", "`n" -replace "`r", "`n") -split "`n" | ForEach-Object { "  $_" })
-            '---'
-        ) -join "`n"
-        Add-Content -LiteralPath $env:MCP_PLUGIN_REPL_LOG -Value $entry
+        if (-not (Get-Command Write-McpReplLogEntry -ErrorAction SilentlyContinue)) {
+            . (Join-Path $LibRoot 'yaml-object-mutation.ps1')
+        }
+        Write-McpReplLogEntry -Path $env:MCP_PLUGIN_REPL_LOG -Method $Method -ParamsYaml $paramsYaml
         if ($env:MCP_PLUGIN_REPL_RESPONSE) {
             Write-Output $env:MCP_PLUGIN_REPL_RESPONSE
         }

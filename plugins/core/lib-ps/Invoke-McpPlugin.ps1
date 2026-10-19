@@ -289,17 +289,9 @@ function Invoke-PluginPowerShellScript {
         try { [void]$process.WaitForExit(2000) } catch { }
         # TR-MCP-TRIAGEPLUGIN-004 / BUG-TRIAGE-120: never throw an unclassified
         # timeout. Session-log callers treat command_timeout as retryable
-        # degraded/queued and keep failsafe on disk.
-        $envelope = @(
-            'type: error'
-            'payload:'
-            '  code: command_timeout'
-            "  message: Plugin command timed out after ${boundedTimeout}s."
-            '  retryable: true'
-            '  details:'
-            '    degraded: true'
-            '    queued: true'
-        ) -join [Environment]::NewLine
+        # degraded/queued and keep failsafe on disk. The envelope is a native
+        # object serialized through the YAML serializer, never handwritten text.
+        $envelope = (ConvertTo-McpPluginYaml -InputObject (New-McpPluginTimeoutEnvelope -TimeoutSeconds $boundedTimeout)).TrimEnd("`r", "`n")
         Write-Output $envelope
         [Console]::Error.WriteLine($envelope)
         return

@@ -212,3 +212,60 @@ function Set-McpYamlObjectValue {
         $target[$KeyPath[-1]] = $Value
     }
 }
+
+function ConvertTo-McpYamlText {
+    <#
+    .SYNOPSIS
+        Serializes a native object to YAML text through the shared serializer.
+    .DESCRIPTION
+        The only sanctioned way for plugin scripts to produce YAML text. Callers pass
+        ordered maps, hashtables, arrays or PSCustomObjects; they never assemble YAML
+        from string literals, joins or here-strings.
+    .PARAMETER Document
+        Object to serialize.
+    .EXAMPLE
+        ConvertTo-McpYamlText -Document ([ordered]@{ method = 'workflow.todo.list'; params = [ordered]@{} })
+    #>
+    [CmdletBinding()]
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory)][AllowNull()]$Document
+    )
+
+    Import-McpYamlSerializer
+    $data = if ($null -eq $Document) { [ordered]@{} } else { $Document }
+    return (ConvertTo-Yaml -Data $data -Options WithIndentedSequences)
+}
+
+function Write-McpReplLogEntry {
+    <#
+    .SYNOPSIS
+        Appends one REPL diagnostic log entry (MCP_PLUGIN_REPL_LOG) as a serialized YAML document.
+    .DESCRIPTION
+        Each entry is a mapping with method and params (the params YAML text as a scalar),
+        serialized from an object and terminated by a document separator so the log reads
+        back with ConvertFrom-Yaml -AllDocuments.
+    .PARAMETER Path
+        Log file path (normally $env:MCP_PLUGIN_REPL_LOG).
+    .PARAMETER Method
+        Workflow or client method name.
+    .PARAMETER ParamsYaml
+        Params YAML text as sent to the REPL; may be empty.
+    .EXAMPLE
+        Write-McpReplLogEntry -Path $env:MCP_PLUGIN_REPL_LOG -Method workflow.todo.list -ParamsYaml (ConvertTo-McpYamlText -Document ([ordered]@{ done = $false }))
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$Method,
+        [AllowEmptyString()][string]$ParamsYaml = ''
+    )
+
+    $normalized = ($ParamsYaml -replace "`r`n", "`n") -replace "`r", "`n"
+    $entry = [ordered]@{
+        method = $Method
+        params = $normalized
+    }
+    $text = (ConvertTo-McpYamlText -Document $entry).TrimEnd("`r", "`n")
+    Add-Content -LiteralPath $Path -Value ($text + [Environment]::NewLine + '---')
+}

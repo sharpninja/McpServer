@@ -132,12 +132,7 @@ function Write-ReplStickySessionState {
         sessionId = $SessionId
         lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     }
-    $yaml = @(
-        "status: verified"
-        "sessionId: $SessionId"
-        "lastUpdated: $($state.lastUpdated)"
-    ) -join [Environment]::NewLine
-    Set-Content -LiteralPath $sessionFile -Value $yaml -Encoding utf8
+    Write-McpYamlObject -Path $sessionFile -Document $state
     return $sessionFile
 }
 
