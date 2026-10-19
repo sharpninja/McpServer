@@ -1,33 +1,32 @@
-# C4 model of QBrain.AI (McpServer) reverse engineered from origin/develop
+# C4 model of QBrain.AI (McpServer)
 
-Commit: 36783b79d061303bfb3e17abe685640a953491af (fetched 2026-10-17). Generated on LAB-OMARCHY by reverse engineering the code; this directory is documentation only and changes no code. Re-run the validate and export commands after editing workspace.dsl, from this directory.
+docs/architecture/c4/workspace.dsl is the one definition of every diagram in this repository's documentation (PLAN-C4MODEL-001, ADR 0001). It models the whole codebase: every project under src, the compatibility packages, the Nuke build, the test projects, the agent plugin core, the developer tools, the operations scripts and the FRP relay, plus the EF Core entity model. Documents show a diagram as an image link to docs/architecture/c4/rendered/<viewKey>.svg followed by the line "View: <viewKey>"; no document defines a diagram of its own.
 
 ## Files
-- workspace.dsl: Structurizr DSL (12 views: SystemContext, DataLayerComponents, Containers, ServerComponents, ReplComponents, QBAgentComponents, KeyServerComponents, plus five deployment views DockerCompose, WindowsService, LinuxSystemd, FrpRelay, FrpRelayLocal).
-- data/: EF Core entity model. ef-entity-model.md (per DbContext: entities, keys, relationships, evidence paths, providers, migrations), ef-er-*.mmd (Mermaid ER diagrams, one per DbContext, McpDbContext split into 6 areas), ef-er-diagram.mmd (index).
-- evidence.md: file-path evidence and confidence per element.
-- mermaid/: Mermaid export of each view (structurizr-*.mmd).
+- workspace.dsl: people, external systems, the QBrain.AI software system with its containers and components, relationships, deployment environments, view-set properties and styles. It includes the fragments below.
+- model/entities.dsl: the EF Core entity model, one Entity element per entity (88) with columns as element properties, 126 foreign-key relationships with cardinality, and a "Maps table" relationship from each DbContext component to its entities.
+- views/c4.dsl: static C4 views (levels 1 to 3). Each is a neighbourhood view of one hub element and at most three neighbours, so it fits a letter page at 8 to 16 pt (TR-MCP-NUKE-017 AC-5); together they show every element and every relationship at each level. Keys: CTX-<hub>-NN (system context), CTR-<hub>-NN (containers), CMP-<container>-<hub>-NN (components).
+- views/entities.dsl: custom views of the entity model, EF-<area>-NN, one DbContext area per group.
+- Deployment views (in workspace.dsl): DeploymentDocker, DeploymentDockerWorkspace, DeploymentWindowsService, DeploymentWindowsKeyServer, DeploymentWindowsDesktop, DeploymentLinuxSystemd, DeploymentFrpRailway, DeploymentFrpLocal.
+- documentation/ and decisions/: the architecture overview and the ADRs of PLAN-C4MODEL-001, attached to the software system with !docs and !adrs.
+- evidence.md: file-path evidence and confidence per element, including the full EF Core entity model.
+- rendered/: one SVG per view, written by the Nuke target. Do not edit by hand.
 
-## Validate and export
-Use the pinned CLI image, because structurizr/cli:latest is an end-of-life stub that prints a banner and validates nothing:
+## Render and check
+Run from the repository root:
 
-    docker run --rm -v "$PWD:/usr/local/structurizr" structurizr/cli:2025.11.09 validate -workspace workspace.dsl
-    docker run --rm --user 1000:1000 -v "$PWD:/usr/local/structurizr" structurizr/cli:2025.11.09 export -workspace workspace.dsl -format mermaid -output mermaid
+    ./build.ps1 ArchitectureDiagrams
 
-Result after the DI trace and deployment steps: validate exit 0, export wrote 12 .mmd files (with the DataLayerComponents view). Structurizr has moved to the consolidated structurizr/structurizr tooling; not tried.
+The target (TR-MCP-NUKE-017) validates the workspace with structurizr/cli 2025.11.09 pinned by digest, fails on any Structurizr inspection error, renders every view through the Structurizr static export in headless Chromium (light theme, cropped to the drawn content plus 50 units), writes only changed files, removes renders of deleted views, and fails on Mermaid fences or .mmd files outside docs/receipts, on image links to unknown views, on views without renders, and on renders outside the letter-page standard. Add --what-if to report without writing.
 
-## Resolved by the DI trace (evidence.md, Step A and Step B)
-1. Transport sharing: RESOLVED. /mcp-transport (HTTP) and McpStdio both call WithToolsFromAssembly(typeof(FwhMcpTools).Assembly), so the tool set is identical. STDIO is the same executable started with --transport stdio (Program.cs:50-52), not a separate container. Modeled as the MCP STDIO Host component.
-2. Key Server and Subscriber modes: RESOLVED for the default. The server and REPL both call AddInProcessTransactionSecurity, which embeds InMemoryKeyServerService and InMemorySubscriberCommitService in process. The standalone Key Server and Subscriber hosts are optional. The server reaches a standalone Subscriber only when TurnTransactionOptions.PubSubTransport is Http (default Direct; ExternalBroker also exists). Which mode any given installation uses is configuration and is still unknown.
-3. Key Server database: RESOLVED. It has none. It is in memory (InMemoryKeyServerService). SQLite is used only for the optional pub/sub broker store when PubSubDatabasePath is set.
-4. Desktop Launcher caller: PARTLY. DesktopProcessSpawner and DesktopLaunchService are in the server (H) but the exact command line to the launcher exe was not traced (M).
-7. Deployment views: RESOLVED. Five deployment views were added from repo files.
-9 and 10. Component links: RESOLVED to constructor-dependency level (about 120 traced relationships, mostly H). Endpoint-to-handler wiring inside controllers was not traced beyond constructor parameters.
+## Editing
+- Add an element once and reuse it in every view that shows it (ADR 0001, D4).
+- After adding elements or relationships, every element must appear in at least one view (Structurizr inspection) and each view must still pass the page check; split a view that overflows rather than shrinking text.
+- Diagram kinds that are not C4 (activity, entity, state) are custom views of custom elements (ADR 0002).
 
 ## Still open
-5. Plugin repos (mcpserver-*-plugin) live outside this repo; only plugins/core is modeled.
-6. LLM access: brain slots use CLIs; the OpenAI-compatible HTTPS path was not traced to concrete endpoints.
-8. Names: the repo is QBrainAi.* (renamed from McpServer); compatibility shims keep SharpNinja.McpServer.* names and are not modeled.
-11. Identity: McpIdentityDbContext uses a separate connection string (UseSqlServer in Identity/IdentityServerExtensions.cs). Whether it is the same database as McpDbContext in practice is configuration.
-12. The Windows database, any Kubernetes or cloud hosting of the server, and which plugin and tunnel combinations run in practice are not evidenced in the repo.
-13. Install scripts that mention McpServer.Support.Mcp may predate the QBrainAi rename.
+- Plugin repositories (mcpserver-*-plugin) live outside this repository and appear as one external system.
+- LLM access: brain slots use CLIs; the OpenAI-compatible HTTPS path was not traced to concrete endpoints.
+- Identity: McpIdentityDbContext uses a separate connection string (UseSqlServer in Identity/IdentityServerExtensions.cs); whether it is the same database as McpDbContext is configuration.
+- The Windows database, any Kubernetes or cloud hosting of the server, and which plugin and tunnel combinations run in practice are not evidenced in the repository.
+- Install scripts that mention McpServer.Support.Mcp may predate the QBrainAi rename; the Dockerfile still uses .NET 9 images (triage-report-1ce108ca70f34191a81a9927a5b3d512).

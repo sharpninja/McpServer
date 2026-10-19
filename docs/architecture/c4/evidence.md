@@ -220,11 +220,28 @@ Five deployment environments, each backed by a file in the repo. No environment 
 - FrpRelay on Railway (H): infra/frp/railway/Dockerfile (alpine 3.20, frps 0.61.1), entrypoint.sh, frps.toml.template, README.md and .env.example (variables FRP_TOKEN, FRPS_BIND_PORT, FRPS_VHOST_HTTP_PORT, FRPS_ALLOW_PORTS_START/END; TCP proxy ports), docs/Operations/Tunnel-FRP-Railway.md. This is Railway for the relay only. No Railway deployment of the MCP server itself exists in the repo.
 - FrpRelayLocal (H): infra/frp/local/docker-compose.frps.yml (ports 7000 and 8080).
 - Not modeled because no evidence: Kubernetes, Helm, Azure or other cloud hosting of the server, a Railway MCP server service. src/QBrainAi.ServiceDefaults/RailwayConnectionStringBuilder.cs is a generic PostgreSQL connection helper, not a deployment of this system; it is not used by this system's hosts.
-- Subscriber has no UseWindowsService call and no compose service in the repo, so it is not placed in any deployment view.
+- Subscriber has no UseWindowsService call and no compose service in the repo. It is placed in the WindowsService environment as the optional console process "Subscriber process (optional)" (the only caller of the standalone key server), shown in the views DeploymentWindowsService and DeploymentWindowsKeyServer.
+- Dockerfile versions (H, 2026-10-19): sdk:9.0 and aspnet:9.0 while global.json pins SDK 10.0.201 and every project targets net10.0; reported as triage-report-1ce108ca70f34191a81a9927a5b3d512. The model records the Dockerfile as written.
+
+## Step C: whole codebase (PLAN-C4MODEL-001 P3, 2026-10-19)
+
+Evidence read from the branch docs/c4-structurizr-model-20261017 on LAB-OMARCHY. Since 36783b79 the only change under src is GitHubCliService.ResolveWorkingDirectory (git log 36783b79..HEAD -- src), so Steps A and B still hold.
+
+- Projects (H): every .csproj under src, tests and build (55: 31 in src including 7 under src/Compatibility, 23 in tests, 1 in build), each with OutputType, TargetFramework (net10.0; net10.0-windows for QBrainAi.Launcher and its tests), PackageId, ToolCommandName, Description and ProjectReference items. Deployable units (Exe or Microsoft.NET.Sdk.Web) are containers; libraries are components.
+- Shared Libraries container (H, operator ruling 2026-10-19 "Shared Libraries container (Recommended)"): libraries referenced, directly or through another library, by two or more deployables: QBrainAi.Client, QBrainAi.McpAgent, QBrainAi.Repl.Core, QBrainAi.Common.AgentCli, QBrainAi.ServiceDefaults, QBrainAi.TransactionSecurity. QBrainAi.Cqrs and QBrainAi.Cqrs.Mvvm are referenced only by server libraries (QBrainAi.Services, QBrainAi.GraphRag), so they are server components.
+- Server libraries (H): QBrainAi.Services, QBrainAi.Storage, QBrainAi.Storage.SqliteMigrations, QBrainAi.Storage.SqlServerMigrations, QBrainAi.Storage.PostgreSqlMigrations (these three replace the earlier combined "Provider Migration Assemblies" component), QBrainAi.GraphRag (the GraphRAG component), QBrainAi.SessionLog.Transcripts, QBrainAi.Cqrs, QBrainAi.Cqrs.Mvvm. "Implemented in" relationships follow the technology each functional component already named.
+- Replaced components (H, D4 one element per real thing): the REPL component QBrainAi.Client and the QBAgent component McpAgent Hosting were the libraries themselves and now live in Shared Libraries; QBAgent tools and skills are the two libraries QBrainAi.QBAgent.Tools and QBrainAi.QBAgent.Skills.
+- Compatibility Packages (H): the 7 src/Compatibility projects; Description of each states the 1.x package id and the forwarding target; SharpNinja.McpServer.Repl keeps the command mcpserver-repl and SharpNinja.McpServer.QBAgent the command qbagent.
+- McpAgent Sample Host (H): src/QBrainAi.McpAgent.SampleHost (Exe; references QBrainAi.McpAgent; packages Microsoft.Agents.AI.OpenAI and OpenAI).
+- Test Suites (H, operator ruling "Components of Test Suites (Recommended)"): 23 test projects; "tests" relationships follow ProjectReference items; the 7 *.Validation projects call a running server over HTTP (tests/QBrainAi.Todo.Validation/TodoEndpointFixture.cs: BaseUrl http://localhost:7147 or MCPSERVER_BASEURL); QBrainAi.Review.Tests runs under the Nuke targets AiCodeReview, AiProjectReview and AiWarningSuppressionReview (build/Build.Ai*.cs); QBrainAi.PluginIntegration.Tests under PluginSessionLogIntegration (build/Build.PluginSessionLogIntegration.cs); the review and plugin projects reference SharpNinja.aiUnit.
+- Nuke Build (H): build/_build.csproj (Nuke.Common) and build.ps1; Build.Tests references it.
+- Developer Tools (H): headers of tools/powershell/McpContext.psm1, McpSession.psm1, McpTodo.psm1, tools/powershell/McpRepl/README.md (PowerShell Gallery), tools/typescript/mcp-repl-ts/README.md (npm, qbrain-ai-repl --agent-stdio), tools/bash/mcp-session.sh and mcp-todo.sh, tools/MemoryBenchLiveSubscription (references QBrainAi.Services), tools/validation/Invoke-SessionLifeUnitGate.ps1, tools/powershell/Invoke-HostileValidator.ps1 ("OPTIONAL evidence collector only").
+- Operations Scripts (H): the 26 files in scripts/, grouped by name into service, identity, packaging, data, validation and rebrand components; the two rebrand scripts are Python and are recorded as found.
+- Agent Plugin Core components (H): plugins/core/lib-ps, lib-node, lib-sh, hosts (8 hosts), hooks-templates and skills, sync; packages/mcpserver-agent-core/package.json (@qbrainai/qbrain-ai-agent-core, marker trust per PLAN-AGENTPARITY-001). The plugin repositories they sync into are the external system Agent Plugin Repositories (D2).
 
 
 ## Data layer (EF Core entity model), added in a follow-up commit
-Source commit unchanged: 36783b79. Full per-entity detail is in data/ef-entity-model.md; ER diagrams are in data/ef-er-*.mmd.
+Source commit unchanged: 36783b79. Full per-entity detail is in the section "EF Core entity model" below (copied from data/ef-entity-model.md); the entities and foreign keys are the Entity elements of model/entities.dsl, drawn by the EF-* views.
 - McpDbContext (H): src/QBrainAi.Storage/McpDbContext.cs (class line 19, 71 DbSet properties, OnModelCreating line 324, ConfigureConventions line 316); src/QBrainAi.Storage/McpDbContextFactory.cs (design-time factory). 71 entity classes in src/QBrainAi.Storage/Entities.
 - McpIdentityDbContext (H): src/QBrainAi.Support.Mcp/Identity/McpIdentityDbContext.cs, McpUser.cs; UseSqlServer in Identity/IdentityServerExtensions.cs line 25-26; EnsureCreatedAsync in Identity/IdentityServerSeeder.cs line 55. Seven entity types are the framework default (M, not read from a snapshot).
 - TransactionSecurityDbContext (H): src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs (class line 1396, UseSqlite line 609, EnsureCreated line 613); path options in Options/TransactionSecurityOptions.cs line 228 and Services/TransactionSecurityServiceCollectionExtensions.cs lines 127-129.
@@ -232,4 +249,627 @@ Source commit unchanged: 36783b79. Full per-entity detail is in data/ef-entity-m
 - Provider Migration Assemblies (H): src/QBrainAi.Storage/Migrations (28), src/QBrainAi.Storage.SqliteMigrations/Migrations (41), src/QBrainAi.Storage.SqlServerMigrations/Migrations (41), src/QBrainAi.Storage.PostgreSqlMigrations/Migrations (41); MigrationsAssembly set in src/QBrainAi.Storage/Database/*McpDatabaseProviderStrategy.cs; MigrateAsync in Database/McpDatabaseMigrationCoordinator.cs line 29.
 - Relationship storage -> McpDbContext, McpDbContext -> db, migrations -> db, identity -> McpIdentityDbContext, txsec -> TransactionSecurityDbContext (H): DbContext registration and constructor use in the files above.
 - Relationship McpIdentityDbContext -> db (M): the connection string is configuration; whether it is the same database as McpDbContext is unconfirmed. Its provider (SQL Server) is H.
-- Entity counts (H, cross-checked four ways in data/ef-entity-model.md): 71 + 10 + 7 = 88 entity types, 119 + 1 + 6 = 126 relationships. 8 McpDbContext entities are missing from the provider model snapshots (M for their table names and relationships).
+- Entity counts (H, cross-checked four ways in the entity model section below, and again by the 2026-10-19 migration tool, which produced 88 Entity elements and 126 foreign-key relationships): 71 + 10 + 7 = 88 entity types, 119 + 1 + 6 = 126 relationships. 8 McpDbContext entities are missing from the provider model snapshots (M for their table names and relationships).
+
+## EF Core entity model (copied from data/ef-entity-model.md)
+
+Copied verbatim on 2026-10-19 (PLAN-C4MODEL-001 D5) with headings one level lower. The Entity elements in model/entities.dsl and the EF-* views carry the same entities and foreign keys; the original file is kept until the operator clears its deletion.
+
+
+Source: origin/develop of github.com/sharpninja/McpServer at commit 36783b79d061303bfb3e17abe685640a953491af (fetched 2026-10-17). Reverse engineered read-only from a git archive copy of that commit. All paths are repo-relative. This directory is documentation only and changes no code.
+
+### Summary
+- DbContext classes in production code: 3 (McpDbContext, McpIdentityDbContext, TransactionSecurityDbContext). Test-only context factories are not counted.
+- DbSet properties: 81 (McpDbContext 71, TransactionSecurityDbContext 10) plus the 7 ASP.NET Identity entity types that McpIdentityDbContext inherits from IdentityDbContext<McpUser>.
+- Entity types: 88 (71 + 10 + 7). Every one of the 71 McpDbContext entity classes is a file in src/QBrainAi.Storage/Entities (71 files).
+- Relationships (foreign keys): 119 in McpDbContext (107 seen in the provider model snapshots, 12 derived from OnModelCreating code for entities missing from the snapshots), 1 in TransactionSecurityDbContext, 6 in McpIdentityDbContext (framework default).
+- Migrations: 4 migration folders, 151 migrations in total. See the Migrations section.
+- Owned types: 0 (no OwnsOne or OwnsMany anywhere). Value converter: one global DateTimeOffset to UTC DateTime converter.
+- Cross-cutting rules in McpDbContext: workspace foreign key convention, soft-delete columns and filters, per-workspace query filters.
+
+### DbContext 1: McpDbContext
+- File: src/QBrainAi.Storage/McpDbContext.cs (1722 lines); design-time factory src/QBrainAi.Storage/McpDbContextFactory.cs.
+- Providers: SQLite (default), SQL Server, PostgreSQL, chosen by strategy classes in src/QBrainAi.Storage/Database (Sqlite, SqlServer, PostgreSql McpDatabaseProviderStrategy). Each strategy sets MigrationsAssembly to its own project.
+- Applied by McpDatabaseMigrationCoordinator.ApplyMigrationsAsync (MigrateAsync) after AdoptLegacyHistoryAsync, which inserts the baseline history row for databases created under the old single-assembly migrations.
+- Entities: 71 (DbSet list below). Soft-delete columns IsDeleted, DeletedAtUtc, DeletedBy, DeleteReason are added by ApplySoftDeleteMetadata to every entity except DataAuditLog whose name ends with Entity and which has a table.
+- Workspace foreign key convention (ApplyWorkspaceForeignKeys): every entity with a WorkspaceId property gets a required FK to Workspace with DeleteBehavior.Restrict, except Workspace itself, Memory, MemoryIndex (both configured explicitly) and WorkspaceBannedItem (its WorkspaceId is its own parent FK).
+- Query filters: 40 named "Workspace" filters (WorkspaceId equals the context workspace; tool, agent and brain-slot definitions also admit the global empty workspace id) plus a "SoftDelete" filter (IsDeleted = false) on all durable entities.
+- Seed data: one HasData row, the global Workspace with WorkspaceId empty string.
+- Provider differences in code: filtered unique index predicates differ by provider (ProductKeyUniqueIndexFilter, BrainSlotEnabledUniqueIndexFilter, TriageNullableUniqueIndexFilter) because boolean and quoting syntax differ: PostgreSQL uses "IsDeleted" = FALSE, SQL Server uses [IsDeleted] = 0, SQLite uses "IsDeleted" = 0. SQLite also registers a session-log header DDL helper (SqliteSessionLogHeaderDdl).
+
+#### Entities by area
+
+
+##### Area: core
+
+- Workspace (DbSet Workspaces, table Workspaces [snapshot])
+  - Key: WorkspaceId
+  - References (FK to parent): none
+  - Referenced by: Actor; AgentDefinition; AgentDefinitionModel; AgentEventLog; AgentWorkspace; AgentWorkspaceListItem; BrainSlotDefinition; BrainSlotInvocation; ContextChunk; ContextDocument; DataAuditLog; FederationWorkspace; GraphEntity; GraphRelationship; HandoffDiagnostic; HandoffIngestionRun; HostileReviewArtifactLink; HostileReviewDiagnostic; HostileReviewExecution; HostileReviewFinding; HostileReviewRequest; Memory; MemoryIndex; Product; ProductWorkspaceMembership; Requirement; RequirementAcceptanceCriterion; RequirementScopeLayer; RequirementTraceabilityLink; RequirementsRecoveryRun; SessionLog; SessionLogAction; SessionLogCommit; SessionLogCommitFile; SessionLogProcessingDialog; SessionLogTag; SessionLogTurn; SessionLogTurnContext; SessionLogTurnStringList; SessionLogTurnTag; TodoAuditHistory; TodoCompletedGroup; TodoCompletedItem; TodoDocumentMetadata; TodoDocumentNote; TodoItem; TodoItemListItem; TodoItemTask; TodoRequirementLink; ToolBucket; ToolDefinition; ToolDefinitionTag; TriageGroup; TriageReport; TriageReportListItem; TriageResearchRun; UseCase; UseCaseActor; UseCaseExtensionPoint; UseCaseFlow; UseCaseFrLink; UseCaseSpecialRequirement; UseCaseStep; WorkspaceBannedItem
+  - Indexes: 4 (IsDeleted; IsEnabled; IsPrimary; unique WorkspacePath)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/WorkspaceEntity.cs
+- WorkspaceBannedItem (DbSet WorkspaceBannedItems, table WorkspaceBannedItems [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (WorkspaceId, Category, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/WorkspaceBannedItemEntity.cs
+- Product (DbSet Products, table Products [snapshot])
+  - Key: ProductId
+  - References (FK to parent): Workspace via OwnerWorkspaceId (Restrict)
+  - Referenced by: ProductWorkspaceMembership
+  - Indexes: 2 (unique Key; OwnerWorkspaceId)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/ProductEntity.cs
+- ProductWorkspaceMembership (DbSet ProductWorkspaceMemberships, table ProductWorkspaceMemberships [snapshot])
+  - Key: ProductId, WorkspaceId
+  - References (FK to parent): Product via ProductId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (WorkspaceId)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/ProductWorkspaceMembershipEntity.cs
+- DataAuditLog (DbSet DataAuditLogs, table DataAuditLogs [snapshot])
+  - Key: AuditId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 5 (Action; CorrelationId; FederationOperationId; OccurredAtUtc; WorkspaceId, EntityKind, EntityKey)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/DataAuditLogEntity.cs
+- ContextDocument (DbSet Documents, table Documents [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: ContextChunk
+  - Indexes: 5 (IngestedAt; SourceKey; SourceType; WorkspaceId; SourceType, SourceKey)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/ContextDocumentEntity.cs
+- ContextChunk (DbSet Chunks, table Chunks [snapshot])
+  - Key: Id
+  - References (FK to parent): ContextDocument via DocumentId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 3 (DocumentId; WorkspaceId; DocumentId, ChunkIndex)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/ContextChunkEntity.cs
+
+##### Area: sessionlog
+
+- SessionLog (DbSet SessionLogs, table SessionLogs [snapshot])
+  - Key: Id
+  - References (FK to parent): AgentDefinition via AgentDefinitionId (SetNull); Workspace via WorkspaceId (Restrict)
+  - Referenced by: SessionLogTag; SessionLogTurn
+  - Indexes: 6 (AgentDefinitionId; LastUpdated; SourceType; Started; WorkspaceId; unique WorkspaceId, SourceType, SessionId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogEntity.cs
+- SessionLogTurn (DbSet SessionLogTurns, table SessionLogTurns [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLog via SessionLogId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: SessionLogAction; SessionLogCommit; SessionLogProcessingDialog; SessionLogTurnContext; SessionLogTurnStringList; SessionLogTurnTag
+  - Indexes: 5 (PlanFile; Timestamp; TodoId; WorkspaceId; unique SessionLogId, RequestId)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogTurnEntity.cs
+- SessionLogAction (DbSet SessionLogActions, table SessionLogActions [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLogTurn via SessionLogTurnId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; SessionLogTurnId, Order)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogActionEntity.cs
+- SessionLogTurnTag (DbSet SessionLogTurnTags, table SessionLogTurnTags [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLogTurn via SessionLogTurnId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (SessionLogTurnId; WorkspaceId)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogTurnTagEntity.cs
+- SessionLogTag (DbSet SessionLogTags, table SessionLogTags [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLog via SessionLogId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; unique SessionLogId, Tag)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogTagEntity.cs
+- SessionLogTurnContext (DbSet SessionLogTurnContexts, table SessionLogTurnContexts [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLogTurn via SessionLogTurnId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (SessionLogTurnId; WorkspaceId)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogTurnContextEntity.cs
+- SessionLogProcessingDialog (DbSet SessionLogProcessingDialogs, table SessionLogProcessingDialogs [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLogTurn via SessionLogTurnId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (SessionLogTurnId; WorkspaceId)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogProcessingDialogEntity.cs
+- SessionLogCommit (DbSet SessionLogCommits, table SessionLogCommits [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLogTurn via SessionLogTurnId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: SessionLogCommitFile
+  - Indexes: 2 (SessionLogTurnId; WorkspaceId)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogCommitEntity.cs
+- SessionLogCommitFile (DbSet SessionLogCommitFiles, table SessionLogCommitFiles [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLogCommit via SessionLogCommitId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; SessionLogCommitId, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogCommitFileEntity.cs
+- SessionLogTurnStringList (DbSet SessionLogTurnStringLists, table SessionLogTurnStringLists [snapshot])
+  - Key: Id
+  - References (FK to parent): SessionLogTurn via SessionLogTurnId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; SessionLogTurnId, ListType)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/SessionLogTurnStringListEntity.cs
+
+##### Area: agents-tools
+
+- ToolDefinition (DbSet ToolDefinitions, table ToolDefinitions [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: ToolDefinitionTag
+  - Indexes: 4 (BucketName; WorkspaceId; WorkspacePath; unique Name, WorkspacePath)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/ToolDefinitionEntity.cs
+- ToolDefinitionTag (DbSet ToolDefinitionTags, table ToolDefinitionTags [snapshot])
+  - Key: Id
+  - References (FK to parent): ToolDefinition via ToolDefinitionId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 3 (Tag; WorkspaceId; unique ToolDefinitionId, Tag)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/ToolDefinitionTagEntity.cs
+- ToolBucket (DbSet ToolBuckets, table ToolBuckets [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (unique Name; WorkspaceId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/ToolBucketEntity.cs
+- AgentDefinition (DbSet AgentDefinitions, table AgentDefinitions [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: AgentDefinitionModel; AgentEventLog; AgentWorkspace; SessionLog
+  - Indexes: 3 (DisplayName; IsBuiltIn; WorkspaceId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/AgentDefinitionEntity.cs
+- AgentDefinitionModel (DbSet AgentDefinitionModels, table AgentDefinitionModels [snapshot])
+  - Key: Id
+  - References (FK to parent): AgentDefinition via AgentDefinitionId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; AgentDefinitionId, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/AgentDefinitionModelEntity.cs
+- AgentWorkspace (DbSet AgentWorkspaces, table AgentWorkspaces [snapshot])
+  - Key: Id
+  - References (FK to parent): AgentDefinition via AgentDefinitionId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: AgentWorkspaceListItem
+  - Indexes: 3 (WorkspaceId; WorkspacePath; unique AgentDefinitionId, WorkspacePath)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/AgentWorkspaceEntity.cs
+- AgentWorkspaceListItem (DbSet AgentWorkspaceListItems, table AgentWorkspaceListItems [snapshot])
+  - Key: Id
+  - References (FK to parent): AgentWorkspace via AgentWorkspaceId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; AgentWorkspaceId, ListType, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/AgentWorkspaceListItemEntity.cs
+- AgentEventLog (DbSet AgentEventLogs, table AgentEventLogs [snapshot])
+  - Key: Id
+  - References (FK to parent): AgentDefinition via AgentId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 6 (AgentId; EventType; Timestamp; WorkspaceId; WorkspacePath; WorkspacePath, AgentId, Timestamp)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/AgentEventLogEntity.cs
+- BrainSlotDefinition (DbSet BrainSlotDefinitions, table BrainSlotDefinitions [snapshot])
+  - Key: WorkspaceId, SlotId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: BrainSlotInvocation
+  - Indexes: 3 (WorkspaceId, PartyId; unique WorkspaceId, Role; WorkspaceId, Role, Enabled)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/BrainSlotDefinitionEntity.cs
+- BrainSlotInvocation (DbSet BrainSlotInvocations, table BrainSlotInvocations [snapshot])
+  - Key: InvocationId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict); BrainSlotDefinition via WorkspaceId, SlotId (Restrict)
+  - Referenced by: none
+  - Indexes: 3 (WorkspaceId; WorkspaceId, TransactionId; WorkspaceId, SlotId, StartedAtUtc)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/BrainSlotInvocationEntity.cs
+
+##### Area: todo-requirements
+
+- TodoItem (DbSet TodoItems, table TodoItems [snapshot])
+  - Key: WorkspaceId, Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: TodoItemListItem; TodoItemTask; TodoRequirementLink
+  - Indexes: 5 (Done; ItemOrder; Priority; Section; SectionOrder)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/TodoItemEntity.cs
+- TodoItemListItem (DbSet TodoItemListItems, table TodoItemListItems [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict); TodoItem via WorkspaceId, TodoId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (WorkspaceId, TodoId, ListType, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/TodoItemListItemEntity.cs
+- TodoItemTask (DbSet TodoItemTasks, table TodoItemTasks [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict); TodoItem via WorkspaceId, TodoId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (WorkspaceId, TodoId, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/TodoItemTaskEntity.cs
+- TodoRequirementLink (DbSet TodoRequirementLinks, table TodoRequirementLinks [snapshot])
+  - Key: WorkspaceId, TodoId, RequirementKind, RequirementId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict); TodoItem via WorkspaceId, TodoId (Restrict); Requirement via WorkspaceId, RequirementKind, RequirementId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (WorkspaceId, RequirementKind, RequirementId)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/TodoRequirementLinkEntity.cs
+- TodoAuditHistory (DbSet TodoAuditHistory, table TodoAuditHistory [snapshot])
+  - Key: AuditId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 4 (Action; WorkspaceId; WorkspaceId, TodoId, RecordedAtUtc; unique WorkspaceId, TodoId, Version)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/TodoAuditHistoryEntity.cs
+- TodoDocumentMetadata (DbSet TodoDocumentMetadata, table TodoDocumentMetadata [snapshot])
+  - Key: WorkspaceId, SingletonId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: TodoCompletedGroup; TodoDocumentNote
+  - Indexes: 0
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/TodoDocumentMetadataEntity.cs
+- TodoDocumentNote (DbSet TodoDocumentNotes, table TodoDocumentNotes [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict); TodoDocumentMetadata via WorkspaceId, SingletonId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (WorkspaceId, SingletonId, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/TodoDocumentNoteEntity.cs
+- TodoCompletedGroup (DbSet TodoCompletedGroups, table TodoCompletedGroups [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict); TodoDocumentMetadata via WorkspaceId, SingletonId (Restrict)
+  - Referenced by: TodoCompletedItem
+  - Indexes: 1 (WorkspaceId, SingletonId, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/TodoCompletedGroupEntity.cs
+- TodoCompletedItem (DbSet TodoCompletedItems, table TodoCompletedItems [snapshot])
+  - Key: Id
+  - References (FK to parent): TodoCompletedGroup via GroupId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; GroupId, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/TodoCompletedItemEntity.cs
+- Requirement (DbSet Requirements, table Requirements [snapshot])
+  - Key: WorkspaceId, Kind, Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: RequirementAcceptanceCriterion; RequirementTraceabilityLink; TodoRequirementLink; UseCaseFrLink
+  - Indexes: 5 (Kind; WorkspaceId; WorkspaceId, Id; WorkspaceId, ScopeEndLayerKey; WorkspaceId, ScopeStartLayerKey)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/RequirementEntity.cs
+- RequirementsRecoveryRun (DbSet RequirementsRecoveryRuns, table RequirementsRecoveryRuns [snapshot])
+  - Key: WorkspaceId, IdempotencyKey
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (WorkspaceId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/RequirementsRecoveryRunEntity.cs
+- RequirementAcceptanceCriterion (DbSet RequirementAcceptanceCriteria, table RequirementAcceptanceCriteria [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict); Requirement via WorkspaceId, RequirementKind, RequirementId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (WorkspaceId, RequirementKind, RequirementId, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/RequirementAcceptanceCriterionEntity.cs
+- RequirementScopeLayer (DbSet RequirementScopeLayers, table RequirementScopeLayers [snapshot])
+  - Key: WorkspaceId, Key
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 3 (WorkspaceId; unique WorkspaceId, Order; WorkspaceId, ScopeEndLayerKey)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/RequirementScopeLayerEntity.cs
+- RequirementTraceabilityLink (DbSet RequirementTraceabilityLinks, table RequirementTraceabilityLinks [snapshot])
+  - Key: WorkspaceId, FrId, TargetKind, TargetId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict); Requirement via WorkspaceId, SourceKind, FrId (Restrict); Requirement via WorkspaceId, TargetKind, TargetId (Restrict)
+  - Referenced by: none
+  - Indexes: 3 (WorkspaceId; WorkspaceId, SourceKind, FrId; WorkspaceId, TargetKind, TargetId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/RequirementTraceabilityLinkEntity.cs
+- UseCase (DbSet UseCases, table UseCases [snapshot])
+  - Key: UseCaseId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: UseCaseActor; UseCaseExtensionPoint; UseCaseFlow; UseCaseFrLink; UseCaseSpecialRequirement
+  - Indexes: 3 (WorkspaceId; WorkspaceId, ProductKey; WorkspaceId, Title)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/UseCaseEntity.cs
+- Actor (DbSet Actors, table Actors [snapshot])
+  - Key: ActorId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: UseCaseActor; UseCaseStep
+  - Indexes: 2 (WorkspaceId; WorkspaceId, Name)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/ActorEntity.cs
+- UseCaseActor (DbSet UseCaseActors, table UseCaseActors [snapshot])
+  - Key: WorkspaceId, UseCaseId, ActorId
+  - References (FK to parent): Actor via ActorId (Restrict); UseCase via UseCaseId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (ActorId; UseCaseId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/UseCaseActorEntity.cs
+- UseCaseFlow (DbSet UseCaseFlows, table UseCaseFlows [snapshot])
+  - Key: FlowId
+  - References (FK to parent): UseCase via UseCaseId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: UseCaseStep
+  - Indexes: 2 (UseCaseId; WorkspaceId, UseCaseId, SequenceNumber)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/UseCaseFlowEntity.cs
+- UseCaseStep (DbSet UseCaseSteps, table UseCaseSteps [snapshot])
+  - Key: StepId
+  - References (FK to parent): Actor via ActorId (Restrict); UseCaseFlow via FlowId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 3 (ActorId; FlowId; WorkspaceId, FlowId, StepNumber)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/UseCaseStepEntity.cs
+- UseCaseSpecialRequirement (DbSet UseCaseSpecialRequirements, table UseCaseSpecialRequirements [snapshot])
+  - Key: SpecialReqId
+  - References (FK to parent): UseCase via UseCaseId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (UseCaseId; WorkspaceId, UseCaseId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/UseCaseSpecialRequirementEntity.cs
+- UseCaseExtensionPoint (DbSet UseCaseExtensionPoints, table UseCaseExtensionPoints [snapshot])
+  - Key: ExtensionPointId
+  - References (FK to parent): UseCase via UseCaseId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (UseCaseId; WorkspaceId, UseCaseId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/UseCaseExtensionPointEntity.cs
+- UseCaseFrLink (DbSet UseCaseFrLinks, table UseCaseFrLinks [snapshot])
+  - Key: LinkId
+  - References (FK to parent): UseCase via UseCaseId (Restrict); Workspace via WorkspaceId (Restrict); Requirement via WorkspaceId, FrKind, FrId (Restrict)
+  - Referenced by: none
+  - Indexes: 3 (UseCaseId; WorkspaceId, FrKind, FrId; unique WorkspaceId, UseCaseId, FrId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/UseCaseFrLinkEntity.cs
+
+##### Area: memory-graph
+
+- Memory (DbSet Memories, table Memories [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: MemoryIndex; MemoryVersion
+  - Indexes: 4 (Category; UpdatedAtUtc; WorkspaceId; Scope, WorkspaceId, Category)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/MemoryEntity.cs
+- MemoryVersion (DbSet MemoryVersions, table MemoryVersions [DbSet-name convention])
+  - Key: VersionRowId
+  - References (FK to parent): Memory via MemoryId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (unique MemoryId, VersionNumber)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/MemoryVersionEntity.cs
+  - Note: not in any provider model snapshot (see Uncertainties).
+- MemoryEdge (DbSet MemoryEdges, table MemoryEdges [DbSet-name convention])
+  - Key: EdgeRowId
+  - References (FK to parent): none
+  - Referenced by: none
+  - Indexes: 1 (unique FromMemoryId, ToMemoryId, EdgeType)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/MemoryEdgeEntity.cs
+  - Note: not in any provider model snapshot (see Uncertainties).
+- MemoryIndex (DbSet MemoryIndexes, table MemoryIndexes [DbSet-name convention])
+  - Key: MemoryId
+  - References (FK to parent): Memory via MemoryId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; ContentHash)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/MemoryIndexEntity.cs
+  - Note: not in any provider model snapshot (see Uncertainties).
+- GraphEntity (DbSet GraphEntities, table GraphEntities [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: GraphRelationship
+  - Indexes: 4 (CreatedAtUtc; EntityType; Name; WorkspaceId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/GraphEntityEntity.cs
+- GraphRelationship (DbSet GraphRelationships, table GraphRelationships [snapshot])
+  - Key: Id
+  - References (FK to parent): GraphEntity via SourceEntityId (Restrict); GraphEntity via TargetEntityId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 5 (CreatedAtUtc; RelationshipType; SourceEntityId; TargetEntityId; WorkspaceId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/GraphRelationshipEntity.cs
+
+##### Area: triage-federation-handoff-hv
+
+- TriageReport (DbSet TriageReports, table TriageReports [snapshot])
+  - Key: ReportId
+  - References (FK to parent): TriageGroup via GroupId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: TriageReportListItem
+  - Indexes: 6 (CreatedUtc; GroupId; WorkspaceId; WorkspaceId, Fingerprint; WorkspaceId, GroupId; unique WorkspaceId, IdempotencyKey)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/TriageReportEntity.cs
+- TriageReportListItem (DbSet TriageReportListItems, table TriageReportListItems [snapshot])
+  - Key: Id
+  - References (FK to parent): TriageReport via ReportId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; ReportId, ListType, Ordinal)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/TriageReportListItemEntity.cs
+- TriageGroup (DbSet TriageGroups, table TriageGroups [snapshot])
+  - Key: GroupId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: TriageReport; TriageResearchRun
+  - Indexes: 4 (CreatedTodoId; WorkspaceId; unique WorkspaceId, GroupKey; WorkspaceId, Status, QuietDeadlineUtc)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/TriageGroupEntity.cs
+- TriageResearchRun (DbSet TriageResearchRuns, table TriageResearchRuns [snapshot])
+  - Key: RunId
+  - References (FK to parent): TriageGroup via GroupId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 4 (GroupId; Status; WorkspaceId; WorkspaceId, GroupId, StartedUtc)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/TriageResearchRunEntity.cs
+- FederationProxy (DbSet FederationProxies, table FederationProxies [snapshot])
+  - Key: ProxyId
+  - References (FK to parent): none
+  - Referenced by: FederationConflict; FederationOperation; FederationOutbox; FederationWorkspace
+  - Indexes: 2 (LastHeartbeatUtc; Status)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/FederationProxyEntity.cs
+- FederationWorkspace (DbSet FederationWorkspaces, table FederationWorkspaces [snapshot])
+  - Key: Id
+  - References (FK to parent): Workspace via CanonicalWorkspaceId (Restrict); FederationProxy via ProxyId (Restrict)
+  - Referenced by: none
+  - Indexes: 4 (CanonicalWorkspaceId; unique GlobalWorkspaceId; ProxyId; unique ProxyId, WorkspacePath)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/FederationWorkspaceEntity.cs
+- FederationOperation (DbSet FederationOperations, table FederationOperations [snapshot])
+  - Key: OperationId
+  - References (FK to parent): FederationProxy via ProxyId (Restrict)
+  - Referenced by: FederationConflict; FederationOutbox
+  - Indexes: 5 (CreatedAtUtc; SourceOperationId; Domain, ResourceId; ProxyId, Status; ProxyId, Status, AttemptCount, CreatedAtUtc)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/FederationOperationEntity.cs
+- FederationOutbox (DbSet FederationOutbox, table FederationOutbox [snapshot])
+  - Key: Sequence
+  - References (FK to parent): FederationOperation via OperationId (Restrict); FederationProxy via ProxyId (NoAction)
+  - Referenced by: none
+  - Indexes: 3 (OperationId; ProxyId, AcknowledgedAtUtc; ProxyId, Sequence)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/FederationOutboxEntity.cs
+- FederationConflict (DbSet FederationConflicts, table FederationConflicts [snapshot])
+  - Key: ConflictId
+  - References (FK to parent): FederationOperation via OperationId (Restrict); FederationProxy via ProxyId (NoAction)
+  - Referenced by: none
+  - Indexes: 3 (OperationId; Domain, ResourceId; ProxyId, ResolutionStatus)
+  - Workspace query filter: no
+  - Evidence: src/QBrainAi.Storage/Entities/FederationConflictEntity.cs
+- HandoffIngestionRun (DbSet HandoffIngestionRuns, table HandoffIngestionRuns [snapshot])
+  - Key: RunId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: HandoffDiagnostic
+  - Indexes: 3 (CreatedTodoId; unique ReplayIdentity; WorkspaceId, ContentSha256, PromptVersion)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/HandoffIngestionRunEntity.cs
+- HandoffDiagnostic (DbSet HandoffDiagnostics, table HandoffDiagnostics [snapshot])
+  - Key: DiagnosticId
+  - References (FK to parent): HandoffIngestionRun via RunId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 2 (WorkspaceId; RunId, Ordinal)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/HandoffDiagnosticEntity.cs
+- HostileReviewRequest (DbSet HostileReviewRequests, table HostileReviewRequests [DbSet-name convention])
+  - Key: RequestId
+  - References (FK to parent): Workspace via WorkspaceId (Restrict)
+  - Referenced by: HostileReviewArtifactLink; HostileReviewDiagnostic; HostileReviewExecution; HostileReviewFinding
+  - Indexes: 1 (WorkspaceId, CreatedUtc)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/HostileReviewRequestEntity.cs
+  - Note: not in any provider model snapshot (see Uncertainties).
+- HostileReviewArtifactLink (DbSet HostileReviewArtifactLinks, table HostileReviewArtifactLinks [DbSet-name convention])
+  - Key: LinkId
+  - References (FK to parent): HostileReviewRequest via RequestId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (RequestId, ArtifactType, ArtifactId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/HostileReviewArtifactLinkEntity.cs
+  - Note: not in any provider model snapshot (see Uncertainties).
+- HostileReviewExecution (DbSet HostileReviewExecutions, table HostileReviewExecutions [DbSet-name convention])
+  - Key: ExecutionId
+  - References (FK to parent): HostileReviewRequest via RequestId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (RequestId, Model, Effort)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs
+  - Note: not in any provider model snapshot (see Uncertainties).
+- HostileReviewFinding (DbSet HostileReviewFindings, table HostileReviewFindings [DbSet-name convention])
+  - Key: FindingId
+  - References (FK to parent): HostileReviewRequest via RequestId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (RequestId, Category, Severity)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/HostileReviewFindingEntity.cs
+  - Note: not in any provider model snapshot (see Uncertainties).
+- HostileReviewDiagnostic (DbSet HostileReviewDiagnostics, table HostileReviewDiagnostics [DbSet-name convention])
+  - Key: DiagnosticId
+  - References (FK to parent): HostileReviewRequest via RequestId (Restrict); Workspace via WorkspaceId (Restrict)
+  - Referenced by: none
+  - Indexes: 1 (RequestId)
+  - Workspace query filter: yes
+  - Evidence: src/QBrainAi.Storage/Entities/HostileReviewDiagnosticEntity.cs
+  - Note: not in any provider model snapshot (see Uncertainties).
+
+#### Provider model snapshots
+- src/QBrainAi.Storage.SqliteMigrations/Migrations/McpDbContextModelSnapshot.cs, src/QBrainAi.Storage.SqlServerMigrations/Migrations/McpDbContextModelSnapshot.cs, src/QBrainAi.Storage.PostgreSqlMigrations/Migrations/McpDbContextModelSnapshot.cs: each has 63 entity types, 107 foreign keys and 178 indexes. The property sets are identical across the three providers; only column types differ.
+- Legacy snapshot src/QBrainAi.Storage/Migrations/McpDbContextModelSnapshot.cs: 31 entity types, 49 foreign keys, 89 indexes (the pre-split single-assembly history, kept so legacy databases can be adopted).
+- Column type mapping seen across the three provider snapshots (SQLite, SQL Server, PostgreSQL): string TEXT, nvarchar(n), character varying(n) (unbounded string TEXT, nvarchar(max), text); bool INTEGER, bit, boolean; int INTEGER, int, integer; long INTEGER, bigint, bigint; DateTime (UTC converter) TEXT, datetime2, timestamp with time zone; double REAL, float, double precision; byte[] BLOB, varbinary(max), bytea. One DateTimeOffset column maps to TEXT, datetimeoffset, timestamp with time zone. Three columns that are unbounded in SQL Server have a character varying(4096 or 8192) limit in PostgreSQL.
+
+### DbContext 2: McpIdentityDbContext
+- File: src/QBrainAi.Support.Mcp/Identity/McpIdentityDbContext.cs; user type src/QBrainAi.Support.Mcp/Identity/McpUser.cs (IdentityUser plus DisplayName).
+- Entities (inherited framework model of IdentityDbContext<McpUser>, which uses IdentityRole): McpUser, IdentityRole, IdentityUserRole, IdentityUserClaim, IdentityUserLogin, IdentityUserToken, IdentityRoleClaim. Seven entity types, six foreign keys. No DbSet declared in code and no Fluent API overrides; the Identity tables are the framework defaults (AspNetUsers and so on), listed here from the framework conventions, not from a snapshot.
+- Provider: SQL Server only (services.AddDbContext<McpIdentityDbContext>(opts => opts.UseSqlServer(...)) in src/QBrainAi.Support.Mcp/Identity/IdentityServerExtensions.cs). The XML doc comment on the class says "separate SQLite database", which disagrees with the code.
+- Schema creation: Database.EnsureCreatedAsync in src/QBrainAi.Support.Mcp/Identity/IdentityServerSeeder.cs. No migrations exist for this context.
+
+### DbContext 3: TransactionSecurityDbContext
+- File: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs (class at line 1396, internal).
+- Provider: SQLite only (UseSqlite with Data Source from PubSubDatabasePath); schema created by Database.EnsureCreated (same file, line 613). No migrations. Used when a pub/sub state database path is configured: TransactionSecurityOptions.PubSubDatabasePath (src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServiceCollectionExtensions.cs line 127-129) or options.DatabasePath (src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs lines 607 and 1217); otherwise state is in memory.
+- Entities: 10.
+
+- KeyServerParty (DbSet KeyServerParties, table TransactionKeyServerParties)
+  - Key: PartyId
+  - Relationship: one-to-many to KeyServerPartyKey via PartyId, cascade delete
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- KeyServerPartyKey (DbSet KeyServerPartyKeys, table TransactionKeyServerPartyKeys)
+  - Key: PartyId, KeyId
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- KeyServerSequence (DbSet KeyServerSequences, table TransactionKeyServerSequences)
+  - Key: PairKey
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- KeyServerNonce (DbSet KeyServerNonces, table TransactionKeyServerNonces)
+  - Key: NonceKey
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- KeyServerManifest (DbSet KeyServerManifests, table TransactionKeyServerManifests)
+  - Key: TransactionId
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- SubscriberTransaction (DbSet SubscriberTransactions, table TransactionSubscriberTransactions)
+  - Key: TransactionId
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- SubscriberSequence (DbSet SubscriberSequences, table TransactionSubscriberSequences)
+  - Key: PairKey
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- SubscriberNonce (DbSet SubscriberNonces, table TransactionSubscriberNonces)
+  - Key: NonceKey
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- TransactionAudit (DbSet TransactionAuditEvents, table TransactionAuditEvents)
+  - Key: Id
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+- TransactionPubSubMessage (DbSet TransactionPubSubMessages, table TransactionPubSubMessages)
+  - Key: OperationId
+  - Evidence: src/QBrainAi.TransactionSecurity/Services/TransactionSecurityStateStores.cs
+
+### Migrations
+- src/QBrainAi.Storage/Migrations: 28 migrations, first 20260207203733_InitialCreate, latest 20260722214500_AddAgentSessionHeaderFields (legacy history).
+- src/QBrainAi.Storage.SqliteMigrations/Migrations: 41 migrations, first 20260328202522_SqliteProviderInitialCreate, latest 20261005170000_RenameTriageIsMcpServerRelatedColumn.
+- src/QBrainAi.Storage.SqlServerMigrations/Migrations: 41 migrations, first 20260328202557_SqlServerProviderInitialCreate, latest 20261005170000_RenameTriageIsMcpServerRelatedColumn.
+- src/QBrainAi.Storage.PostgreSqlMigrations/Migrations: 41 migrations, first 20260328202540_PostgreSqlProviderInitialCreate, latest 20261005170000_RenameTriageIsMcpServerRelatedColumn.
+- Total 151 (28 legacy plus 3 x 41). Counts exclude .Designer.cs and the model snapshot.
+- McpIdentityDbContext and TransactionSecurityDbContext have no migrations.
+
+### Verification: entity count by independent methods
+- Method 1, DbSet<> declarations in McpDbContext.cs: 71 DbSet properties, 71 distinct entity types.
+- Method 2, entity class files in src/QBrainAi.Storage/Entities: 71 files, and the 71 names match the 71 DbSet types exactly.
+- Method 3, modelBuilder.Entity<T>() configuration blocks in OnModelCreating: every one of the 71 DbSet types has a block; no block names a type without a DbSet.
+- Method 4, provider model snapshots (generated EF output, independent of the DbContext source): 63 entity types. The 8 missing from the snapshots are listed under Uncertainties; 63 + 8 = 71.
+- TransactionSecurityDbContext: 10 DbSet declarations, 10 ToTable calls, 10 HasKey entities.
+- Not done: a reflection run (building the project and calling Model.GetEntityTypes()) because no .NET SDK step was run; that would confirm the shadow and join entities (none were seen in the snapshots, which contain no implicit join entities).
+
+### Uncertainties
+- 8 McpDbContext entities are absent from all three provider model snapshots: HostileReviewRequest, HostileReviewArtifactLink, HostileReviewExecution, HostileReviewFinding, HostileReviewDiagnostic, MemoryVersion, MemoryEdge, MemoryIndex. Memory tables have hand-written migrations (20260918223000_AddMemoryVersionAndEdgeStorage and 20260919193000_AddMemoryVersionSoftDeleteColumns, in each provider project) but the snapshots were not regenerated. No migration creating the HostileReview tables was found in any migrations project (search for HostileReview in the migration folders returned nothing), so either those tables are created another way or the schema lags the model. Their table names above are the EF default (DbSet name) and their keys and indexes come from OnModelCreating, not from a snapshot.
+- The 12 relationships for those 8 entities are derived from OnModelCreating and the workspace convention, not from a snapshot.
+- Column lists in the ER diagrams come from the SQLite snapshot (CLR types) for 63 entities and from the entity class for the 8; the ER diagrams omit navigation properties and the HasData seed row.
+- Identity entity tables are framework defaults, not read from a snapshot or database.
+- Whether a real install points McpIdentityDbContext at the same SQL Server database as McpDbContext is configuration and was not determined.
