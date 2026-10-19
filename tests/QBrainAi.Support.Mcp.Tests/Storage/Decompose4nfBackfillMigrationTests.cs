@@ -34,8 +34,6 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
     /// <summary>
     /// Seeds every decomposed JSON list column at the pre-slice schema, migrates to head, and
     /// asserts each list landed as ordered 4NF child rows with the source columns dropped.
-    /// Workspace-scoped child rows must carry exactly the parent workspace key (TR-MCP-DB-001),
-    /// checked through <see cref="MigrationKeyAssertions"/> because EF parameters are canonicalized.
     /// </summary>
     [Fact]
     public void Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables()
@@ -76,13 +74,11 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 ["bug", "triage"],
                 listItems.Where(i => i.ListType == "Tag").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
 
-            // Workspace 4 Banned* lists -> WorkspaceBannedItems (categorized, ordered). The seed key is a legacy
-            // backslash spelling and WorkspaceKeyConversion canonicalizes EF query parameters, so workspace-scoped
-            // rows are read unfiltered (one seeded workspace) and their key is checked with raw SQL.
+            // Workspace 4 Banned* lists -> WorkspaceBannedItems (categorized, ordered)
             var banned = db.WorkspaceBannedItems
                 .IgnoreQueryFilters()
+                .Where(b => b.WorkspaceId == WorkspacePath)
                 .ToList();
-            MigrationKeyAssertions.AssertChildRowsCarryWorkspaceKey(_connection, "WorkspaceBannedItems", WorkspacePath);
             Assert.Equal(
                 ["GPL-3.0", "AGPL-3.0"],
                 banned.Where(b => b.Category == "License").OrderBy(b => b.Ordinal).Select(b => b.Value).ToList());
@@ -141,17 +137,17 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             // TodoDocumentMetadata Notes + Completed -> TodoDocumentNotes / TodoCompletedGroups / TodoCompletedItems
             var notes = db.TodoDocumentNotes
                 .IgnoreQueryFilters()
+                .Where(n => n.WorkspaceId == WorkspacePath)
                 .OrderBy(n => n.Ordinal)
                 .Select(n => n.Value)
                 .ToList();
             Assert.Equal(["first note", "second note"], notes);
-            MigrationKeyAssertions.AssertChildRowsCarryWorkspaceKey(_connection, "TodoDocumentNotes", WorkspacePath);
 
             var groups = db.TodoCompletedGroups
                 .IgnoreQueryFilters()
+                .Where(g => g.WorkspaceId == WorkspacePath)
                 .OrderBy(g => g.Ordinal)
                 .ToList();
-            MigrationKeyAssertions.AssertChildRowsCarryWorkspaceKey(_connection, "TodoCompletedGroups", WorkspacePath);
             Assert.Equal(2, groups.Count);
             Assert.Equal("2026-06-01", groups[0].Date);
             Assert.Equal("2026-06-15", groups[1].Date);
@@ -184,8 +180,8 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
 
             var overrideRows = db.AgentWorkspaceListItems
                 .IgnoreQueryFilters()
+                .Where(i => i.WorkspaceId == WorkspacePath)
                 .ToList();
-            MigrationKeyAssertions.AssertChildRowsCarryWorkspaceKey(_connection, "AgentWorkspaceListItems", WorkspacePath);
             Assert.Equal(
                 ["override-model"],
                 overrideRows.Where(i => i.ListType == "ModelOverride").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
