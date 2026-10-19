@@ -81,6 +81,14 @@ Chronological receipts for docs/plans/PLAN-C4MODEL-001.md (BDPv4). File names st
 - 20261019T165335-g2-build-tests-after-unit-handoff.log and .trx: full Build.Tests: 437 passed, 0 failed, 0 skipped (the 23 provisioning tests moved with TR-MCP-NUKE-018).
 - With the fixes reverted, the Linux unit failures that ff55292e and d248230e fixed are expected back on this branch until IMPL-UNITGREEN-001 reaches develop (inference; the unit suite was not re-run after the revert).
 
+## BoundedProcess guard fix split into PR 86
+
+- Operator answers "C4 splits the fix out (Recommended)" (relayed by IMPL-UNITGREEN-001) and "Split, validate, merge (Recommended)" (asked directly). Branch fix/boundedprocess-guard-20261019 from develop ace70daa held only tests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs at its PR 84 blob fb5ec4ef.
+- 20261019T170933-boundedprocess-fix-build-tests.log and .trx: first Build.Tests run on that branch: 375 total, 372 passed, 3 failed (MigrationAssemblies_CompileSuccessfully for SQLite, SQL Server and PostgreSQL, NETSDK1004: no project.assets.json in the never-restored worktree).
+- 20261019T171425-boundedprocess-fix-compile.log: ./build.ps1 Compile in that worktree: exit 0.
+- 20261019T171723-boundedprocess-fix-build-tests-r2.log and .trx: Build.Tests 375 passed, 0 failed, 0 skipped.
+- Commit 735ac03a signed; PR 86 (https://github.com/sharpninja/McpServer/pull/86) merged into develop with the head pinned, merge commit 3da2db93; develop merged back into this branch as 8c5af6e1 with 0 files changed. These receipts were copied here with SHA-256 verification before the fix worktree was deleted at the operator's instruction ("delete the fix worktree").
+
 ## Order note
 
 AC-5 was amended on 2026-10-19 (operator answer "Show it; widen AC-5 to 2:1"). The requirement and the contract fixtures were changed first, but the production constant was edited before the rules mock gate was rerun. The mock gate uses a scripted mock that does not read the constant, so its result is unaffected; the deviation from the step order is recorded here.

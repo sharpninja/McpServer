@@ -1,0 +1,71 @@
+LocalStart: 20261019T170933 Command: dotnet test /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/tests/Build.Tests/Build.Tests.csproj -c Debug --logger trx;LogFileName=20261019T170933-boundedprocess-fix-build-tests.trx --results-directory /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/docs/receipts/c4model ExitCode: 1 
+  Determining projects to restore...
+  Restored /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/build/_build.csproj (in 693 ms).
+  Restored /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/tests/Build.Tests/Build.Tests.csproj (in 693 ms).
+  _build -> /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/build/bin/Debug/_build.dll
+  Build.Tests -> /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.29]     NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: SQLite) [FAIL]
+  Failed NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: SQLite) [1 s]
+  Error Message:
+   SQLite migrations failed to build.
+STDOUT:
+/home/sharpninja/.dotnet/sdk/10.0.402/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file '/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.SqliteMigrations/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj]
+
+Build FAILED.
+
+/home/sharpninja/.dotnet/sdk/10.0.402/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file '/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.SqliteMigrations/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:00.89
+
+STDERR:
+
+  Stack Trace:
+     at NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(MigrationProject project) in /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs:line 53
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:04.51]     NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: SQL Server) [FAIL]
+  Failed NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: SQL Server) [1 s]
+  Error Message:
+   SQL Server migrations failed to build.
+STDOUT:
+/home/sharpninja/.dotnet/sdk/10.0.402/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file '/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.SqlServerMigrations/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj]
+
+Build FAILED.
+
+/home/sharpninja/.dotnet/sdk/10.0.402/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file '/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.SqlServerMigrations/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:00.77
+
+STDERR:
+
+  Stack Trace:
+     at NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(MigrationProject project) in /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs:line 53
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:05.51]     NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: PostgreSQL) [FAIL]
+  Failed NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(project: PostgreSQL) [999 ms]
+  Error Message:
+   PostgreSQL migrations failed to build.
+STDOUT:
+/home/sharpninja/.dotnet/sdk/10.0.402/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file '/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj]
+
+Build FAILED.
+
+/home/sharpninja/.dotnet/sdk/10.0.402/Sdks/Microsoft.NET.Sdk/targets/Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1004: Assets file '/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/obj/project.assets.json' not found. Run a NuGet package restore to generate this file. [/home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:00.60
+
+STDERR:
+
+  Stack Trace:
+     at NukeBuild.Tests.MigrationAssemblyObsoleteWarningTests.MigrationAssemblies_CompileSuccessfully(MigrationProject project) in /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs:line 53
+--- End of stack trace from previous location ---
+Results File: /home/sharpninja/github/McpServer/.claude/worktrees/boundedprocess-fix-20261019/docs/receipts/c4model/20261019T170933-boundedprocess-fix-build-tests.trx
+
+Failed!  - Failed:     3, Passed:   372, Skipped:     0, Total:   375, Duration: 4 m 29 s - Build.Tests.dll (net10.0)
