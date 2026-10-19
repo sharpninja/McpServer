@@ -1,0 +1,80 @@
+[
+  {
+    "Round": 1,
+    "Kind": "prose",
+    "SessionId": "ClaudeCode-20261016T183155Z-plugin-session",
+    "RequestId": "req-20261017T141158Z-prompt-3cb4",
+    "PartCount": 17,
+    "DeclaredPartCount": 17,
+    "Characters": 203676,
+    "ExactMatch": true,
+    "TrimEndMatch": true,
+    "Sha256": "CC9E2333743B076A3798F2884190A8AD17DAFEE3E4DB926B6D5CD228EE36C162",
+    "Receipt": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md"
+  },
+  {
+    "Round": 1,
+    "Kind": "json",
+    "SessionId": "ClaudeCode-20261016T183155Z-plugin-session",
+    "RequestId": "req-20261017T141158Z-prompt-3cb4",
+    "PartCount": 21,
+    "DeclaredPartCount": 21,
+    "Characters": 248194,
+    "ExactMatch": true,
+    "TrimEndMatch": true,
+    "Sha256": "1731A0A99F007E98DC8B5ACD1989C167A900D57C52A2C55B84663CCA97788926",
+    "Receipt": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.json"
+  },
+  {
+    "Round": 2,
+    "Kind": "prose",
+    "SessionId": "ClaudeCode-20261016T183155Z-plugin-session",
+    "RequestId": "req-20261018T031547Z-prompt-5560",
+    "PartCount": 10,
+    "DeclaredPartCount": 10,
+    "Characters": 119796,
+    "ExactMatch": true,
+    "TrimEndMatch": true,
+    "Sha256": "9D13B4ADBAA766FD1E3D55A820DCD6E37604B5C6B5AEC79B0DBFECBF23D7986A",
+    "Receipt": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.md"
+  },
+  {
+    "Round": 2,
+    "Kind": "json",
+    "SessionId": "ClaudeCode-20261016T183155Z-plugin-session",
+    "RequestId": "req-20261018T031547Z-prompt-5560",
+    "PartCount": 24,
+    "DeclaredPartCount": 24,
+    "Characters": 286957,
+    "ExactMatch": true,
+    "TrimEndMatch": true,
+    "Sha256": "859C61CBED46EB7566D5C98627DAA8831B0508791EDFC9D21ED10A167CC34100",
+    "Receipt": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.json"
+  },
+  {
+    "Round": 3,
+    "Kind": "prose",
+    "SessionId": "ClaudeCode-20261016T183155Z-plugin-session",
+    "RequestId": "req-20261018T061634Z-prompt-e81b",
+    "PartCount": 11,
+    "DeclaredPartCount": 11,
+    "Characters": 120979,
+    "ExactMatch": true,
+    "TrimEndMatch": true,
+    "Sha256": "43688E6E93A92DC0A56E5E1C053D3F810D51D95CD0C73B84FA3046C11A05332F",
+    "Receipt": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r3-20261018T011809.md"
+  },
+  {
+    "Round": 3,
+    "Kind": "json",
+    "SessionId": "ClaudeCode-20261016T183155Z-plugin-session",
+    "RequestId": "req-20261018T061634Z-prompt-e81b",
+    "PartCount": 22,
+    "DeclaredPartCount": 22,
+    "Characters": 261709,
+    "ExactMatch": true,
+    "TrimEndMatch": true,
+    "Sha256": "4A17E532651AD7070667571E2180EAD192E37D815B582763911B135ED9A7A9E7",
+    "Receipt": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r3-20261018T011809.json"
+  }
+]

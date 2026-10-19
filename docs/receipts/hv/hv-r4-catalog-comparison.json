@@ -1,0 +1,7073 @@
+{
+  "TimestampUtc": "2026-10-18T08:18:53.6965385+00:00",
+  "CatalogFrCount": 21,
+  "RecordCount": 63,
+  "FrAcceptanceCriteria": 141,
+  "TestNameOccurrences": 150,
+  "DistinctTests": 149,
+  "CheckCount": 1287,
+  "MismatchCount": 0,
+  "Mismatches": [],
+  "D09": [
+    {
+      "Kind": "fr",
+      "Count": 5,
+      "Unchanged": true,
+      "Exclusions": "Read-generated createdAt and updatedAt only; object property order is nonsemantic"
+    },
+    {
+      "Kind": "tr",
+      "Count": 0,
+      "Unchanged": true,
+      "Exclusions": "Read-generated createdAt and updatedAt only; object property order is nonsemantic"
+    },
+    {
+      "Kind": "test",
+      "Count": 3,
+      "Unchanged": true,
+      "Exclusions": "Read-generated createdAt and updatedAt only; object property order is nonsemantic"
+    },
+    {
+      "Kind": "mappings",
+      "Count": 12,
+      "Unchanged": true,
+      "Exclusions": "Read-generated createdAt and updatedAt only; object property order is nonsemantic"
+    }
+  ],
+  "PhaseBindingCount": 141,
+  "PhaseBindingDifferences": [],
+  "PhaseBindingDuplicates": [],
+  "PhaseCounts": [
+    {
+      "Name": "H1",
+      "Count": 13
+    },
+    {
+      "Name": "H2",
+      "Count": 19
+    },
+    {
+      "Name": "H3",
+      "Count": 37
+    },
+    {
+      "Name": "H5",
+      "Count": 17
+    },
+    {
+      "Name": "H6",
+      "Count": 19
+    },
+    {
+      "Name": "H7",
+      "Count": 35
+    },
+    {
+      "Name": "HvSharedComponents",
+      "Count": 1
+    }
+  ],
+  "Bindings": [
+    {
+      "Id": "FR-MCP-HVPIPE-001-AC001",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001-AC002",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001-AC003",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001-AC004",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001-AC005",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001-AC006",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002-AC001",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002-AC003",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002-AC004",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002-AC005",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002-AC006",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002-AC008",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003-AC004",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003-AC005",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003-AC006",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003-AC008",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004-AC001",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004-AC002",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004-AC003",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004-AC004",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004-AC005",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004-AC006",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005-AC001",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005-AC002",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005-AC003",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005-AC005",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005-AC006",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006-AC001",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006-AC002",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006-AC003",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC004",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC006",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC008",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC009",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC010",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC005",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007-AC011",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC003",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC004",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC005",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC007",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC008",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC009",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC010",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC011",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008-AC012",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009-AC004",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009-AC005",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009-AC007",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009-AC008",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC001",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC003",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC004",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC007",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC008",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC009",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC010",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC005",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010-AC006",
+      "Phase": "H1"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC001",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC005",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC009",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC007",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC004",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011-AC008",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC001",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC004",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC005",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC008",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC009",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC002",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC007",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013-AC001",
+      "Phase": "H2"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013-AC003",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014-AC001",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015-AC001",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015-AC002",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015-AC003",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016-AC001",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016-AC003",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016-AC004",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016-AC005",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016-AC002",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017-AC001",
+      "Phase": "HvSharedComponents"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017-AC002",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017-AC003",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017-AC005",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017-AC006",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017-AC007",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018-AC001",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018-AC002",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018-AC003",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018-AC005",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018-AC004",
+      "Phase": "H3"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019-AC001",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019-AC002",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019-AC003",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019-AC004",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019-AC005",
+      "Phase": "H6"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020-AC001",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020-AC002",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020-AC003",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020-AC004",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020-AC005",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020-AC006",
+      "Phase": "H5"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021-AC001",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021-AC002",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021-AC003",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021-AC005",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021-AC006",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021-AC007",
+      "Phase": "H7"
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021-AC004",
+      "Phase": "H5"
+    }
+  ],
+  "Checks": [
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-001",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-001",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-001",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-001",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-001",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-001",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-001",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-001",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-001",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-002",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-002",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-002",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-002",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-002",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-002",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-002",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-002",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-002",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-003",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-003",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-003",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-003",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-003",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-003",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-003",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-003",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-003",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-004",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-004",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-004",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-004",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-004",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-004",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-004",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-004",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-004",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-005",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-005",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-005",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-005",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-005",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-005",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-005",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-005",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-005",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-006",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-006",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-006",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-006",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-006",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-006",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-006",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-006",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-006",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-007",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-007",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-007",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-007",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-007",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-007",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC010.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC010.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC010.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC010.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC011.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC011.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC011.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC011.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC010.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "AC011.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-007",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-007",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC010.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-007",
+      "Field": "AC011.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-008",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-008",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-008",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-008",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-008",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-008",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC010.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC010.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC010.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC010.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC011.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC011.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC011.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC011.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC012.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC012.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC012.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC012.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC010.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC011.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "AC012.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-008",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-008",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC010.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC011.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-008",
+      "Field": "AC012.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-009",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-009",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-009",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-009",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-009",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-009",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-009",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-009",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-009",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-010",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-010",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-010",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-010",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-010",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-010",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC010.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC010.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC010.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC010.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "AC010.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-010",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-010",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-010",
+      "Field": "AC010.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-011",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-011",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-011",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-011",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-011",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-011",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-011",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-011",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-011",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-012",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-012",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-012",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-012",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-012",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-012",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC008.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC008.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC009.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC009.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-012",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-012",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC008.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-012",
+      "Field": "AC009.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-013",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-013",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-013",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-013",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-013",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-013",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-013",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-013",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-013",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-014",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-014",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-014",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-014",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-014",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-014",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-014",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-014",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-014",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-015",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-015",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-015",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-015",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-015",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-015",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-015",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-015",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-015",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-016",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-016",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-016",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-016",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-016",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-016",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-016",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-016",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-016",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-017",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-017",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-017",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-017",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-017",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-017",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-017",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-017",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-017",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-018",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-018",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-018",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-018",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-018",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-018",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-018",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-018",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-018",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-019",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-019",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-019",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-019",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-019",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-019",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-019",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-019",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-019",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-020",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-020",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-020",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-020",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-020",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-020",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-020",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-020",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-020",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "Field": "testMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-021",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "recordCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-021",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-021",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-021",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-021",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-021",
+      "Field": "AC001.id",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "title",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "criteriaCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC001.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC001.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC002.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC002.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC003.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC003.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC004.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC004.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC005.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC005.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC006.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC006.text",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC007.count",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC007.text",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "description",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-021",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TR-MCP-HVPIPE-021",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "status",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC001.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC002.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC003.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC004.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC005.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC006.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "TEST-MCP-HVPIPE-021",
+      "Field": "AC007.isSatisfied",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "mappingCount",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "trMapping",
+      "Equal": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "Field": "testMapping",
+      "Equal": true
+    }
+  ]
+}

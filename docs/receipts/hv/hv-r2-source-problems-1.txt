@@ -1,0 +1,250 @@
+FILE=src/QBrainAi.Services/Services/HostileReviewServiceCollectionExtensions.cs
+1: using Microsoft.Extensions.DependencyInjection;
+2: using Microsoft.Extensions.DependencyInjection.Extensions;
+3: using QBrainAi.Support.Mcp.Options;
+4: 
+5: namespace QBrainAi.Support.Mcp.Services;
+6: 
+7: /// <summary>TR-MCP-HOSTILEREVIEW-006: Registers the hostile-review queue-and-record pipeline.</summary>
+8: public static class HostileReviewServiceCollectionExtensions
+9: {
+10:     /// <summary>Adds hostile-review services.</summary>
+11:     public static IServiceCollection AddHostileReviewServices(this IServiceCollection services)
+12:     {
+13:         ArgumentNullException.ThrowIfNull(services);
+14:         services.AddOptions<HostileReviewWorkerOptions>()
+15:             .BindConfiguration(HostileReviewWorkerOptions.SectionName)
+16:             .Validate(
+17:                 options =>
+18:                 {
+19:                     try
+20:                     {
+21:                         options.Validate();
+22:                         return true;
+23:                     }
+24:                     catch (InvalidOperationException)
+25:                     {
+26:                         return false;
+27:                     }
+28:                 },
+29:                 "HostileReviewWorker options failed startup validation.")
+30:             .ValidateOnStart();
+31:         services.TryAddSingleton(TimeProvider.System);
+32:         services.AddScoped<HostileReviewService>(sp =>
+33:         {
+34:             var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<HostileReviewWorkerOptions>>().Value;
+35:             var db = sp.GetRequiredService<QBrainAi.Support.Mcp.Storage.McpDbContext>();
+36:             return new HostileReviewService(db, options, sp.GetService<TimeProvider>());
+37:         });
+38:         services.AddScoped<IHostileReviewService>(sp => sp.GetRequiredService<HostileReviewService>());
+39:         services.AddScoped<IHostileReviewWorker>(sp => sp.GetRequiredService<HostileReviewService>());
+40:         services.AddScoped<QBrainAi.Cqrs.Mvvm.IHostileReviewDirectorExecutor, HostileReviewDirectorExecutor>();
+41:         return services;
+42:     }
+43: }
+FILE=src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs
+1: namespace QBrainAi.Support.Mcp.Options;
+2: 
+3: /// <summary>TR-MCP-HOSTILEREVIEW-003: Hosted hostile-review worker options. Invalid relationships fail startup.</summary>
+4: public sealed class HostileReviewWorkerOptions
+5: {
+6:     /// <summary>Configuration section name.</summary>
+7:     public const string SectionName = "Mcp:HostileReviewWorker";
+8: 
+9:     /// <summary>When false the worker does not claim work.</summary>
+10:     public bool Enabled { get; set; } = true;
+11: 
+12:     /// <summary>Explicit pooled agent name. Must be Astra.</summary>
+13:     public string AgentName { get; set; } = "Astra";
+14: 
+15:     /// <summary>Required model id. Must be gpt-6-astra.</summary>
+16:     public string RequiredModel { get; set; } = "gpt-6-astra";
+17: 
+18:     /// <summary>Required effort. Must be xhigh.</summary>
+19:     public string RequiredEffort { get; set; } = "xhigh";
+20: 
+21:     /// <summary>Maximum active queued reviews.</summary>
+22:     public int MaximumActiveQueue { get; set; } = 200;
+23: 
+24:     /// <summary>Maximum concurrent reviews.</summary>
+25:     public int MaximumConcurrentReviews { get; set; } = 1;
+26: 
+27:     /// <summary>Poll interval.</summary>
+28:     public TimeSpan PollInterval { get; set; } = TimeSpan.FromSeconds(2);
+29: 
+30:     /// <summary>Lease duration.</summary>
+31:     public TimeSpan LeaseDuration { get; set; } = TimeSpan.FromMinutes(5);
+32: 
+33:     /// <summary>Lease renewal interval. Must be less than <see cref="LeaseDuration"/>.</summary>
+34:     public TimeSpan RenewalInterval { get; set; } = TimeSpan.FromSeconds(60);
+35: 
+36:     /// <summary>Maximum attempts per request.</summary>
+37:     public int MaximumAttempts { get; set; } = 3;
+38: 
+39:     /// <summary>Base retry delay.</summary>
+40:     public TimeSpan RetryDelay { get; set; } = TimeSpan.FromSeconds(5);
+41: 
+42:     /// <summary>Retry delay cap.</summary>
+43:     public TimeSpan RetryDelayCap { get; set; } = TimeSpan.FromSeconds(60);
+44: 
+45:     /// <summary>Execution timeout.</summary>
+46:     public TimeSpan ExecutionTimeout { get; set; } = TimeSpan.FromMinutes(30);
+47: 
+48:     /// <summary>Maximum artifact links.</summary>
+49:     public int MaximumLinks { get; set; } = 64;
+50: 
+51:     /// <summary>Per-artifact decoded limit in bytes.</summary>
+52:     public int MaximumArtifactBytes { get; set; } = 1 * 1024 * 1024;
+53: 
+54:     /// <summary>Aggregate resolved input limit in bytes.</summary>
+55:     public int MaximumAggregateBytes { get; set; } = 8 * 1024 * 1024;
+56: 
+57:     /// <summary>Reviewer output limit in bytes.</summary>
+58:     public int MaximumOutputBytes { get; set; } = 2 * 1024 * 1024;
+59: 
+60:     /// <summary>Maximum JSON depth.</summary>
+61:     public int MaximumJsonDepth { get; set; } = 32;
+62: 
+63:     /// <summary>Maximum serialized submit payload in bytes.</summary>
+64:     public int MaximumSubmitBytes { get; set; } = 1 * 1024 * 1024;
+65: 
+66:     /// <summary>Throws when option relationships are invalid.</summary>
+67:     public void Validate()
+68:     {
+69:         if (RenewalInterval >= LeaseDuration)
+70:             throw new InvalidOperationException("HostileReviewWorker RenewalInterval must be less than LeaseDuration.");
+71:         if (MaximumActiveQueue < 1)
+72:             throw new InvalidOperationException("HostileReviewWorker MaximumActiveQueue must be at least 1.");
+73:         if (MaximumConcurrentReviews < 1)
+74:             throw new InvalidOperationException("HostileReviewWorker MaximumConcurrentReviews must be at least 1.");
+75:         if (MaximumAttempts < 1)
+76:             throw new InvalidOperationException("HostileReviewWorker MaximumAttempts must be at least 1.");
+77:         if (!string.Equals(AgentName, "Astra", StringComparison.Ordinal))
+78:             throw new InvalidOperationException("HostileReviewWorker AgentName must be Astra.");
+79:         if (!string.Equals(RequiredModel, "gpt-6-astra", StringComparison.Ordinal))
+80:             throw new InvalidOperationException("HostileReviewWorker RequiredModel must be gpt-6-astra.");
+81:         if (!string.Equals(RequiredEffort, "xhigh", StringComparison.Ordinal))
+82:             throw new InvalidOperationException("HostileReviewWorker RequiredEffort must be xhigh.");
+83:     }
+84: }
+FILE=src/QBrainAi.Services/Services/HostileReviewService.cs
+196:     public async Task<HostileReviewResult> AcceptReviewerOutputAsync(string requestId, HostileReviewerOutput output, CancellationToken cancellationToken = default)
+197:     {
+198:         ArgumentNullException.ThrowIfNull(output);
+199:         var entity = await LoadAsync(requestId, cancellationToken).ConfigureAwait(false);
+200:         if (entity is null)
+201:             return NotFound(requestId);
+202: 
+203:         if (!string.Equals(output.Model, HostileReviewPromptDefaults.RequiredModel, StringComparison.Ordinal)
+204:             || !string.Equals(output.Effort, HostileReviewPromptDefaults.RequiredEffort, StringComparison.Ordinal))
+205:         {
+206:             entity.Status = "Failed";
+207:             entity.LastErrorCode = "ModelUnavailable";
+208:             entity.UpdatedUtc = _time.GetUtcNow();
+209:             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+210:             var failed = Map(entity);
+211:             failed.ErrorCode = "ModelUnavailable";
+212:             failed.Success = false;
+213:             return failed;
+214:         }
+215: 
+216:         if (!AllowedVerdicts.Contains(output.Verdict))
+217:         {
+218:             entity.Status = "Failed";
+219:             entity.LastErrorCode = "malformed_output";
+220:             entity.UpdatedUtc = _time.GetUtcNow();
+221:             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+222:             var failed = Map(entity);
+223:             failed.ErrorCode = "malformed_output";
+224:             failed.Success = false;
+225:             return failed;
+226:         }
+227: 
+228:         var now = _time.GetUtcNow();
+229:         entity.Executions.Add(new HostileReviewExecutionEntity
+230:         {
+231:             ExecutionId = $"hrex-{Guid.NewGuid():N}",
+232:             RequestId = entity.RequestId,
+233:             WorkspaceId = entity.WorkspaceId,
+234:             ReviewerAgent = output.ReviewerAgent,
+235:             Model = output.Model,
+236:             Effort = output.Effort,
+237:             SourceSurface = output.SourceSurface,
+238:             PromptTemplateId = output.PromptTemplateId,
+239:             PromptVersion = output.PromptVersion,
+240:             StartedUtc = now,
+241:             EndedUtc = now,
+242:             InputTokens = output.InputTokens,
+243:             OutputTokens = output.OutputTokens,
+244:         });
+245: 
+246:         foreach (var finding in output.Findings)
+247:         {
+248:             var category = AllowedCategories.Contains(finding.Category) ? finding.Category : "uncertainty";
+249:             entity.Findings.Add(new HostileReviewFindingEntity
+250:             {
+251:                 RequestId = entity.RequestId,
+252:                 WorkspaceId = entity.WorkspaceId,
+253:                 Category = category,
+254:                 Severity = string.IsNullOrWhiteSpace(finding.Severity) ? "medium" : finding.Severity,
+255:                 ArtifactId = finding.ArtifactId,
+256:                 Location = finding.Location,
+257:                 RequirementId = finding.RequirementId,
+258:                 EvidenceSummary = finding.EvidenceSummary,
+259:                 Recommendation = finding.Recommendation,
+260:             });
+261:         }
+262: 
+263:         entity.Verdict = output.Verdict.ToUpperInvariant();
+264:         entity.QualityDisclosure = output.RequestQuality.Disclosure;
+265:         entity.QualityScopeClarity = output.RequestQuality.ScopeClarity;
+266:         entity.QualityObjectiveClarity = output.RequestQuality.ObjectiveClarity;
+267:         entity.QualityConfidence = output.RequestQuality.Confidence;
+268:         entity.QualityEnoughContext = output.RequestQuality.EnoughContext;
+269:         entity.Status = "Succeeded";
+270:         entity.UpdatedUtc = now;
+271:         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+272:         return Map(entity);
+273:     }
+274: 
+275:     private async Task<HostileReviewRequestEntity?> LoadAsync(string requestId, CancellationToken cancellationToken)
+276:         => await _db.HostileReviewRequests
+277:             .Include(item => item.Links)
+278:             .Include(item => item.Executions)
+279:             .Include(item => item.Findings)
+280:             .Include(item => item.Diagnostics)
+281:             .FirstOrDefaultAsync(item => item.RequestId == requestId, cancellationToken)
+282:             .ConfigureAwait(false);
+283: 
+284:     private static HostileReviewResult NotFound(string requestId)
+285:         => new()
+286:         {
+287:             Success = false,
+288:             HttpStatus = 404,
+289:             ErrorCode = "not_found",
+290:             Error = "Hostile review request was not found.",
+291:             RequestId = requestId,
+292:         };
+293: 
+294:     private (bool Resolved, string? Hash, string? DiagnosticCode, string? DiagnosticMessage) ResolveLink(HostileReviewArtifactLink link)
+295:     {
+296:         var type = string.IsNullOrWhiteSpace(link.ArtifactType) ? "todo" : link.ArtifactType.Trim();
+297:         var id = link.ArtifactId ?? string.Empty;
+298:         if (!string.Equals(type, "todo", StringComparison.OrdinalIgnoreCase) || string.IsNullOrWhiteSpace(id))
+299:             return (false, null, "artifact_missing", "The artifact was not found through a supported MCP store.");
+300: 
+301:         var matches = _db.TodoItems.IgnoreQueryFilters()
+302:             .Where(item => item.Id == id || item.Title == id)
+303:             .ToList();
+304:         if (matches.Count == 0)
+305:             return (false, null, "artifact_missing", "The artifact was not found through the TODO store.");
+306:         if (matches.Count > 1)
+307:             return (false, null, "artifact_ambiguous", "The artifact locator matched more than one TODO.");
+308:         var todo = matches[0];
+309:         if (!string.Equals(todo.WorkspaceId, _workspaceId, StringComparison.OrdinalIgnoreCase))
+310:             return (false, null, "artifact_unauthorized", "The artifact is not authorized in this workspace.");
+311: 
+312:         var hash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(todo.Id))).ToLowerInvariant();
+313:         return (true, hash, null, null);
+314:     }
+315: 

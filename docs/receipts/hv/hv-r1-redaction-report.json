@@ -1,0 +1,9 @@
+{
+  "TimestampUtc": "2026-10-17T15:27:35.4632130Z",
+  "TimestampLocal": "2026-10-17T10:27:35",
+  "CandidateCredentialCount": 3,
+  "FilesChecked": 245,
+  "AffectedFiles": [],
+  "DryRun": false,
+  "ExitCode": 0
+}

@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-10-18T06:20:15.0617072Z",
+  "TimestampLocal": "2026-10-18T01:20:15",
+  "Agent": "Codex",
+  "ThreadId": "01a14da9-1b10-75e2-bfac-c13091d343b1",
+  "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/18/rollout-2026-10-18T01-18-11-01a14da9-1b10-75e2-bfac-c13091d343b1.jsonl",
+  "SessionMetaId": "01a14da9-1b10-75e2-bfac-c13091d343b1",
+  "TurnContextTimestamp": "2026-10-18T06:18:12.215Z",
+  "Model": "gpt-6-astra",
+  "Effort": "max",
+  "ContextModel": "gpt-6-astra",
+  "ContextEffort": "max",
+  "ProfileFileCount": 1,
+  "MarkerReadInFull": true
+}
