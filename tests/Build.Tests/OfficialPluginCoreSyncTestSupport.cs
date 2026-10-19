@@ -53,9 +53,6 @@ internal static class OfficialPluginCoreSyncTestSupport
             var startInfo = new ProcessStartInfo("pwsh")
             {
                 WorkingDirectory = repoRoot,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
                 CreateNoWindow = true,
             };
             startInfo.ArgumentList.Add("-NoLogo");
@@ -66,17 +63,12 @@ internal static class OfficialPluginCoreSyncTestSupport
             startInfo.ArgumentList.Add("-PluginRoot");
             startInfo.ArgumentList.Add(generatedPlugin);
 
-            using var process = Process.Start(startInfo)
-                ?? throw new InvalidOperationException("Could not start the plugin-core sync process.");
-            var standardOutput = process.StandardOutput.ReadToEndAsync(cancellationToken);
-            var standardError = process.StandardError.ReadToEndAsync(cancellationToken);
-            await process.WaitForExitAsync(cancellationToken).ConfigureAwait(true);
-            var output = await standardOutput.ConfigureAwait(true);
-            var error = await standardError.ConfigureAwait(true);
+            // TR-MCP-NUKE-009 AC-006: read child output and wait for the child only through BoundedProcess.
+            var result = await BoundedProcess.RunAsync(startInfo, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(true);
 
             Assert.True(
-                process.ExitCode == 0,
-                $"Plugin-core sync exited {process.ExitCode}.{Environment.NewLine}{output}{error}");
+                result.ExitCode == 0,
+                $"Plugin-core sync exited {result.ExitCode}.{Environment.NewLine}{result.Stdout}{result.Stderr}");
 
             var generatedLib = Path.Combine(generatedPlugin, "lib");
             var mismatches = new List<string>();
