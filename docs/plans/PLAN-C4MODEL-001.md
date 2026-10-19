@@ -64,7 +64,7 @@ D4 Identity. One element per real thing across all diagrams. A participant or no
 D5 Mapping by Mermaid kind.
 - Structure flowcharts and graphs: C4 static views (context, container, component) or custom views when the nodes are not C4 elements.
 - Activity flowcharts (unit-of-work diagrams): custom view of elements tagged Activity plus one of Start, Action, Decision (Diamond shape), Error, End; edges are relationships whose description is the branch condition. Every branch and error path of the source survives.
-- Sequence diagrams: dynamic views. Each alt, opt or par branch becomes its own dynamic view keyed <diagramKey>.<branch>; each loop body becomes a nested dynamic view keyed <diagramKey>.loop<N> placed directly after its parent in the doc (the 2026-10-12 loop rule).
+- Sequence diagrams: dynamic views. Each alt, opt or par branch becomes its own dynamic view keyed <diagramKey>-<branch>; each loop body becomes a nested dynamic view keyed <diagramKey>-loop<N> placed directly after its parent in the doc (the 2026-10-12 loop rule). Amended 2026-10-19 (operator answer "Hyphen (Recommended)"): Structurizr rejects dots in view keys ("View keys can only contain the following characters: a-zA-Z0-9_-", probe receipt in docs/receipts/c4model/README.md), so the separator is a hyphen.
 - Entity diagrams: custom view of elements tagged Entity, one element per entity, attributes and keys in element properties, cardinality in the relationship description; an entity drawn in two diagrams is one element.
 - State diagrams: custom view of elements tagged State; transitions are relationships named by their trigger.
 - Mindmap: custom view of elements tagged Topic.
@@ -92,7 +92,7 @@ P2 Implementation. build/Build.ArchitectureDiagrams.cs plus helpers; bind the sa
 
 P3 Model. Extend workspace.dsl per D2 to D5 for the as-built codebase and the EF entity model; delete mermaid/ and data/*.mmd. Gate G3: ./build.ps1 ArchitectureDiagrams validates and renders; AC-3 still red only for the docs not yet converted (recorded, not hidden).
 
-P4 Conversion, one doc per agent in parallel (Quad-Model plan, Marketing, Stateless, SessionTurn architecture, Amendment 1), each agent following the standing rules and logging its own session-log turns. Gate G4 per doc: no fence left, every view rendered, review record per view.
+P4 Conversion, one doc per agent in parallel (Quad-Model plan, Marketing, Stateless, SessionTurn architecture, Amendment 1), each agent following the standing rules and logging its own session-log turns. Gate G4 per doc: no fence left, every view rendered, review record per view. Amended 2026-10-19 (operator answer "Staged parallel (Recommended)"): each agent works in its own git worktree and owns model/<doc>.dsl, views/<doc>.dsl and its document; the SessionTurn architecture, Quad-Model and Marketing agents start first, and the Amendment 1 and Stateless agents start after the SessionTurn elements are merged and reuse them (D4); the implementer merges each branch and runs the gates.
 
 P5 Gates. ./build.ps1 ArchitectureDiagrams green (AC-1 to AC-6); Build.Tests green; ./build.ps1 Test green including TurnTransactionPlanArtifactTests, after develop carrying PR 82 and PR 83 is merged; ./build.ps1 MigrationIntegrationTests green on LAB-OMARCHY (TR-MCP-NUKE-018 AC-6); ./build.ps1 ValidateTraceability green; every render inspected as an image against the page standard.
 
