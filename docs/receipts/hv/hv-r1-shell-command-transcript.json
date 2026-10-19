@@ -1,0 +1,1406 @@
+[
+  {
+    "TimestampUtc": "2026-10-17T14:19:16.896Z",
+    "Command": "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:19:27.63Z",
+    "Command": "Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -Filter '*.md' -File | Select-Object Name,Length; Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Raw",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:19:44.283Z",
+    "Command": "(Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Raw).Substring(0,22000)",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:19:44.283Z",
+    "Command": "Get-Module -ListAvailable PSScriptAnalyzer,powershell-yaml | Select-Object Name,Version | ConvertTo-Json; Get-Content -LiteralPath '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/enforcement/SKILL.md' -Raw; Get-Content -LiteralPath '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/session/SKILL.md' -Raw",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:19:49.937Z",
+    "Command": "(Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Raw).Substring(22000,22000)",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:19:49.937Z",
+    "Command": "(Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Raw).Substring(44000); Get-Date -Format s; Get-Module -ListAvailable PSScriptAnalyzer,powershell-yaml | Select-Object Name,Version | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:20:19.862Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r1-bootstrap-read.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path '/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r1-bootstrap-read.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:20:24.246Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File '/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r1-bootstrap-read.ps1'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:21:00.383Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-inspect.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-inspect.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:21:10.501Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task MarkerInstructions -Count 400",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:21:10.501Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Identity",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:21:10.501Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/resolve-cache-dir.ps1' -Count 160",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:21:19.988Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/Invoke-CodexMcpPlugin.ps1' -Count 220",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:21:19.988Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/session-start.ps1' -Count 130",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:04.256Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-plugin.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-plugin.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:11.256Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-plugin.ps1' -Task Status -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:11.256Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-plugin.ps1' -Task Status -OutputName 'hv-r1-plugin-status.txt'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:27.833Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/resolve-cache-dir.ps1' -Start 230 -Count 210",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:37.613Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-plugin.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-plugin.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:37.613Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-plugin.ps1' -Task Start -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:37.613Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-plugin.ps1' -Task Start -OutputName 'hv-r1-plugin-start.txt'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:52.56Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-plugin.ps1' -Task Status -OutputName 'hv-r1-plugin-status-after-start.txt'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:22:52.56Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/session-start.ps1' -Start 128 -Count 70",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:02.886Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-plugin.ps1' -Task Begin -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:02.886Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-plugin.ps1' -Task Begin -OutputName 'hv-r1-plugin-begin.txt'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:20.168Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-inspect.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-inspect.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:20.168Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-plugin.ps1' -Task History -OutputName 'hv-r1-history-initial.txt'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:30.552Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './AGENTS.md' -Count 300",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:30.552Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './CLAUDE.md' -Count 350",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:30.552Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Count 230",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:43.86Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 38 -Count 137",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:43.86Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/requirements/SKILL.md' -Count 400",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:23:43.86Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName git -ArgumentText 'log:::36783b79..d3a0beb10b0879f20fb307f205a3bff25ac3a441:::--format=%H%n%B:::--:::docs/architecture'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:24:00.753Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 156 -Count 145",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:24:00.753Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/requirements/SKILL.md' -Count 170",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:24:00.753Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './.github/copilot-instructions.md' -Count 350",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:24:35.024Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-acquire.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-acquire.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:24:35.024Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-acquire.ps1' -Stage Primary -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:24:35.024Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-acquire.ps1' -Stage Primary",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:24:49.751Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 301 -Count 200",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:24:49.751Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/requirements/SKILL.md' -Start 171 -Count 400",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:25:03.812Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-acquire.ps1' -Stage Requirements -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:25:03.812Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-acquire.ps1' -Stage Requirements",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:25:03.812Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 501 -Count 170",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:25:15.379Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 671 -Count 260",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:25:15.379Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-store-PLAN-HVPIPELINE-001.txt' -Count 160",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:25:33.567Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 931 -Count 260",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:25:33.567Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-store-REMED-HVPIPELINE-001.txt' -Count 150",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:25:47.502Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1191 -Count 260",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:26:36.18Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-audit.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-audit.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:26:36.18Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-audit.ps1' -ContentPath './docs/receipts/hv/hv-r1-observations.md' -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:26:36.18Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-audit.ps1' -ContentPath './docs/receipts/hv/hv-r1-observations.md'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:26:43.813Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1451 -Count 400",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:26:55.843Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1851 -Count 300",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:27:03.16Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2151 -Count 170",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:27:24.573Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2321 -Count 143",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:27:48.938Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2464 -Count 120",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:28:34.426Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-source-checks.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-source-checks.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:28:34.426Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-source-checks.ps1' -Task Store -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:28:34.426Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-source-checks.ps1' -Task Store",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:28:59.789Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2584 -Count 230",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:28:59.789Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-source-checks.ps1' -Task Cline",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:28:59.789Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-source-checks.ps1' -Task ProbeInventory",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:29:39.247Z",
+    "Command": "$hvTokens = $null; $hvParseErrors = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-source-checks.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-source-checks.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:29:39.247Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-source-checks.ps1' -Task Cline",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:29:39.247Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-source-checks.ps1' -Task Git",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:34:05.288Z",
+    "Command": "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:34:05.288Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 1 -Count 220",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:34:14.41Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 221 -Count 200",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:34:14.41Z",
+    "Command": "Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -Filter '*.md' -File | Where-Object Name -NotLike 'add-profile*.md' | Select-Object Name; Get-Date -Format s",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:34:22.033Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-source-checks.ps1' -Start 1 -Count 240",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:34:54.166Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-redact.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-redact.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-source-checks.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-source-checks.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:14.724Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-cline-operator-source.json' -Start 1 -Count 500",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:14.724Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-git.json' -Start 1 -Count 28",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:14.724Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-inspect.ps1' -Start 1 -Count 180",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:32.762Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2290 -Count 58",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:32.762Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText '-n:::ModelGrader|HvRequestMax|ConvertHvReceipt|hostileReview|FR-MCP-SESSIONTURN-005|Astra|grade-response|POST.*grade|hv-request:::docs/architecture/SessionTurn-Review-AgentContext-Architecture.md'",
+    "ExitCode": 1,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:32.762Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/github/McpServer/docs/handoffs/hv-architecture-amendment-handoff-20261016T182551Z.md' -Start 1 -Count 230",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:49.368Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-requirements-selected.json' -Start 1 -Count 75",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:49.368Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'ModelGrader|HvRequestMax|ConvertHvReceipt|hostileReview|FR-MCP-SESSIONTURN-005|Astra|grade-response|hv-request:::docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:35:49.368Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-mappings-selected.json' -Start 1 -Count 60",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:36:53.634Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-verify.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-verify.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:37:19.224Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-requirement-comparison.json' -Start 1 -Count 100",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:37:19.224Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 179 -Count 15",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:37:52.602Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-verify.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-verify.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:38:10.625Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-pr81-review-comments.txt' -Start 1 -Count 3",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:38:10.625Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-pr81-reviews.txt' -Start 1 -Count 3",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:38:10.625Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/MANIFEST.md' -Start 1 -Count 180",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:38:10.625Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-push-reflog.txt' -Start 1 -Count 15",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:38:52.878Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-verify.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-verify.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:38:52.878Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-verify.ps1' -Task ProbeHashes",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:38:52.878Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-verify.ps1' -Task EvidenceSummary",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:14.336Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-git.json' -Start 30 -Count 115",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:14.336Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-effort-probe.txt' -Start 1 -Count 150",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:14.336Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-write-probe-2.txt' -Start 1 -Count 160",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:14.336Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-gzip.txt' -Start 1 -Count 30",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:36.438Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2492 -Count 34",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:36.438Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'src:::--files:::-g:::*HostileReview*:::-g:::*OneShot*:::-g:::*WorkspacePathNormalizer*:::-g:::*GenericClientPassthrough*:::-g:::*Copilot*'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:36.438Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'D5|D7|P1.5|rekey|dual-key|maintenance:::docs/plans:::-n:::-g:::*FED*:::-g:::*ederation*'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:57.958Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1370 -Count 125",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:39:57.958Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1274 -Count 76",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:40:29.038Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Services/Services/HostileReviewServiceCollectionExtensions.cs' -Start 1 -Count 100",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:40:29.038Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Services/Services/HostileReviewService.cs' -Start 180 -Count 145",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:40:29.038Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs' -Start 1 -Count 105",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:40:29.038Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'AcceptReviewerOutputAsync|LeaseDurationSeconds|LeaseRenewalSeconds:::src:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:40:52.595Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs' -Start 1 -Count 90",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:40:52.595Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs' -Start 232 -Count 120",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:40:52.595Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Storage/McpDbContext.cs' -Start 1495 -Count 148",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:40:52.595Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Services/Services/CopilotCliAgentExecutionStrategy.cs' -Start 1 -Count 50",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:19.717Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Client/WorkspacePathNormalizer.cs' -Start 115 -Count 55",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:19.717Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Storage/WorkspaceKeyConversion.cs' -Start 1 -Count 85",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:19.717Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs' -Start 35 -Count 125",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:19.717Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './plugins/core/lib-ps/plugin-hook.ps1' -Start 980 -Count 136",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:40.273Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 630 -Count 48",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:40.273Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 940 -Count 33",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:40.273Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1012 -Count 119",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:52.246Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 453 -Count 58",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:52.246Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 543 -Count 34",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:41:52.246Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1150 -Count 30",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:42:05.04Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'ReadableKeyAllocator|RequestId.*256|TR-MCP-SESSIONLIFE-005|FR-MCP-SESSIONTURN-005|Single|sha256:::docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:::-n:::-m:::12'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:42:05.04Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2440 -Count 51",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:42:29.527Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 143 -Count 32",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:42:29.527Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md' -Start 346 -Count 11",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:42:40.258Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 322 -Count 60",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:42:40.258Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'StartedUtc|ProcessId|LastProbeRunId|StateVersion|exactly.once:::docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:42:40.258Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './plugins/core/lib-ps/repl-invoke.ps1' -Start 721 -Count 62",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:43:06.033Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-acquire.ps1' -Start 1 -Count 150",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:43:06.033Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-turn-order.txt' -Start 1 -Count 90",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:43:06.033Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-cline-effort-2.txt' -Start 1 -Count 70",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:43:06.033Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-claude-effort.txt' -Start 1 -Count 70",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:43:59.941Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; foreach ($hvScript in @('./docs/receipts/hv/hv-r1-source-checks.ps1','./docs/receipts/hv/hv-r1-acquire.ps1')) { [void][System.Management.Automation.Language.Parser]::ParseFile($hvScript,[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path $hvScript -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json }",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:43:59.941Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-audit.ps1' -ContentPath './docs/receipts/hv/hv-r1-findings-in-progress.md' -Category decision",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:43:59.941Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-acquire.ps1' -Stage Foundation",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:44:24.161Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-source-checks.ps1' -Task Related",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:44:24.161Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'appendAction|appendActions|updateTurn|design_decision:::/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/session/SKILL.md:::-n'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:44:54.635Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/session/SKILL.md' -Start 198 -Count 69",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:44:54.635Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'FR-MCP-SESSIONTURN-005|Close-PluginTurnIfNeeded|NOT APPROVED|APPROVED|D5|D7:::docs/receipts/hv/hv-r1-store-PLAN-SESSIONTURNREVIEW-001.txt:::-n:::-m:::8'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:45:10.716Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-history-initial.txt' -Start 1 -Count 70",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:45:10.716Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-plugin.ps1' -Start 1 -Count 100",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:45:40.516Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/20261017T091907-amendment1-r1.selfreview.md' -Start 1 -Count 240",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:45:40.516Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'Task<UnifiedSessionLogDto>|UnifiedSessionLogDto|Unsupported task result type:::src/QBrainAi.Repl.Core/GenericClientPassthrough.cs:::src/QBrainAi.Client/SessionLogClient.cs:::src/QBrainAi.Client/Models/SessionLogModels.cs:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:45:40.516Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'OrderBy\\((e|t|turn) => (e|t|turn)\\.(Id|Timestamp)\\)|FR-MCP-045|xhigh|GrokHighest:::src/QBrainAi.Services/Services/SessionLogService.cs:::src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs:::src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs:::src/QBrainAi.Support.Mcp/Controllers/EventStreamController.cs:::src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:::src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:::src/QBrainAi.Common.AgentCli/AgentCliClient.cs:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:46:06.055Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'reviewer_independent|^###? 6\\.[123]|^###? 5\\.4|^###? 8\\.1|^- `ReadableKeyAllocator`:::docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:46:06.055Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md' -Start 2775 -Count 72",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:46:06.055Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Client/Models/SessionLogModels.cs' -Start 1 -Count 90",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:46:34.013Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2412 -Count 28",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:46:34.013Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md' -Start 2661 -Count 44",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:46:34.013Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'RequestTimeout|TimeSpan.*Minutes|Kill|Capture|IsDeleted|HostileReview'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:48:01.398Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; foreach ($hvScript in @('./docs/receipts/hv/hv-r1-inspect.ps1','./docs/receipts/hv/hv-r1-acquire.ps1')) { [void][System.Management.Automation.Language.Parser]::ParseFile($hvScript,[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path $hvScript -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json }",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:48:01.398Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-acquire.ps1' -Stage Actions",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:48:01.398Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-acquire.ps1' -Stage HostileReviewOwner",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:48:01.398Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-redact.ps1'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:27.502Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md' -Start 3360 -Count 88",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:27.502Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/handoffs/federation-fixes-handoff-20261016T121400.md' -Start 10 -Count 14",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:27.502Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'src:::--files:::-g:::*ProcessSpawner*:::-g:::*SpawnedProcess*'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:38.07Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Common.AgentCli/DefaultProcessSpawner.cs' -Start 1 -Count 160",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:38.07Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'B9|agent infrastructure|distinct|approved|APPROVED|pool-job|bounded':::docs/receipts/hv/hv-r1-store-PLAN-SESSIONTRIAGEFIX-001.txt:::-n",
+    "ExitCode": 1,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:38.07Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 781 -Count 14",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:38.07Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 295 -Count 13",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:54.869Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2344 -Count 22",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:54.869Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'B9|agent infrastructure|distinct|approved|APPROVED|pool-job|bounded:::docs/receipts/hv/hv-r1-store-PLAN-SESSIONTRIAGEFIX-001.txt:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:49:54.869Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1858 -Count 26",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:51:32.156Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-verify.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-verify.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:51:32.156Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-verify.ps1' -Task Hygiene -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:51:32.156Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-verify.ps1' -Task Hygiene",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:53:25.76Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Client/SessionLogClient.cs' -Start 65 -Count 45",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:53:25.76Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'public .*Task|QueryAsync|GetAsync|sessionId|SessionLogQueryRequest:::src/QBrainAi.Repl.Core/ISessionLogWorkflow.cs:::src/QBrainAi.Client/Models/SessionLogModels.cs:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:53:25.76Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-store-PLAN-SESSIONTRIAGEFIX-001.txt' -Start 55 -Count 16",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:53:25.76Z",
+    "Command": "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 850 -Count 62",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:57:24.343Z",
+    "Command": "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:57:30.677Z",
+    "Command": "Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile/' -File -Filter '*.md' | Where-Object Name -NotLike 'add-profile*.md' | Select-Object Name,Length; Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -First 220",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:57:37.332Z",
+    "Command": "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 220; Get-Date -Format s",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:57:53.754Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-audit.ps1' -Start 1 -Count 160",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:57:53.754Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/McpServer.Client/SessionLogClient.cs' -Start 65 -Count 55",
+    "ExitCode": 1,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:57:53.754Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-store-PLAN-SESSIONTRIAGEFIX-001.txt' -Start 50 -Count 25",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:57:53.754Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 850 -Count 68",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:03.29Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'class SessionLogClient|class SessionLogQueryRequest|record SessionLogQueryRequest|QueryHistoryAsync:::src:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:03.29Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2441 -Count 122",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:03.29Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-plugin.ps1' -Start 1 -Count 165",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:17.584Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 453 -Count 115",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:17.584Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1003 -Count 180",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:17.584Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Client/SessionLogClient.cs' -Start 65 -Count 48",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:17.584Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Client/Models/SessionLogModels.cs' -Start 312 -Count 65",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:28.881Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 542 -Count 27",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:28.881Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1008 -Count 40",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:28.881Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1273 -Count 27",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:58:28.881Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md' -Start 3372 -Count 80",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:59:32.406Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1370 -Count 123",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:59:32.406Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md' -Start 2828 -Count 22",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:59:32.406Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 164 -Count 31",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T14:59:32.406Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Services/Services/DefaultProcessSpawner.cs' -Start 1 -Count 70",
+    "ExitCode": 1,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:00.171Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'class DefaultProcessSpawner|workspace-path-rekey|HighestEffort:::src:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:00.171Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'SessionLogQueryResult|CompleteTurn|appendDialog|appendActions|UpdateTurn:::src/QBrainAi.Repl.Core/GenericClientPassthrough.cs:::src/QBrainAi.Repl.Core/ISessionLogWorkflow.cs:::src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:00.171Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-findings-in-progress.md' -Start 1 -Count 150",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:23.847Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Common.AgentCli/DefaultProcessSpawner.cs' -Start 1 -Count 80",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:23.847Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs' -Start 408 -Count 120",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:23.847Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-acquire.ps1' -Start 1 -Count 140",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:39.493Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'AgentPool|pool-job|model-execution|HostileReview-003|HOSTILEREVIEW-003|artifact|P1, P2':::docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:::-n",
+    "ExitCode": 1,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:39.493Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-related-requirements.json' -Start 1 -Count 190",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:00:49.597Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'AgentPool|pool-job|model-execution|HOSTILEREVIEW-003|artifact|P1, P2:::docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:01:59.185Z",
+    "Command": "& './docs/receipts/hv/hv-r1-audit.ps1' -ContentPath './docs/receipts/hv/hv-r1-findings-second-pass.md' -Category decision -WhatIf",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:01:59.185Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 290 -Count 61",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:01:59.185Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 935 -Count 52",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:01:59.185Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2328 -Count 31",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:02:19.803Z",
+    "Command": "& './docs/receipts/hv/hv-r1-audit.ps1' -ContentPath './docs/receipts/hv/hv-r1-findings-second-pass.md' -Category decision",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:02:49.682Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-requirement-comparison.json' -Start 1 -Count 180",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:02:49.682Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-identity.json' -Start 1 -Count 100",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:02:49.682Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path '/home/sharpninja/github/McpServer/docs/handoffs/hv-architecture-amendment-handoff-20261016T182551Z.md' -Start 231 -Count 90",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:02:49.682Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'FR-MCP-SESSIONTURN-005|Close-PluginTurnIfNeeded|APPROVED|A7:::docs/receipts/hv/hv-r1-store-PLAN-SESSIONTURNREVIEW-001.txt:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:09:11.829Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-finalize.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-finalize.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:09:26.232Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-finalize.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-finalize.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:09:26.232Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage QueryOwn -WhatIf",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:09:26.232Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage QueryOwn",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:09:53.026Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'docs/receipts/hv:::--files:::-g:::hv-r1*.json'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:09:53.026Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'FR-MCP-SESSIONTURN-005[^\\r\\n]{0,1800}:::docs/receipts/hv/hv-r1-store-PLAN-SESSIONTURNREVIEW-001.txt:::-n:::-o:::-m:::5'",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:09:53.026Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 263 -Count 24",
+    "ExitCode": null,
+    "ExitEvidence": "See corresponding tool completion and hv-r1-commands.jsonl; asynchronous/truncated wrapper output is not guessed."
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:10:59.507Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-finalize.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-finalize.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:10:59.507Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Verify -WhatIf",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:10:59.507Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Verify",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:11:40.258Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Native -CommandName rg -ArgumentText 'FR-MCP-HVPIPE-[0-9]{3} [A-Z]:::docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:::-n'",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:11:40.258Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Commands -WhatIf",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:11:40.258Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Commands",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:12:22.409Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2360 -Count 39",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:12:22.409Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-finalize.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-finalize.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:12:48.365Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Commands",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:12:48.365Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Verify",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:12:48.365Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage History -WhatIf",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:12:48.365Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage History",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:13:36.039Z",
+    "Command": "$hvTokens=$null; $hvParseErrors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('./docs/receipts/hv/hv-r1-finalize.ps1',[ref]$hvTokens,[ref]$hvParseErrors); $hvParseErrors | ConvertTo-Json; Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r1-finalize.ps1' -Severity Warning,Error | Select-Object RuleName,Message,Line | ConvertTo-Json",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:13:36.039Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Commands",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:13:36.039Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Build -WhatIf",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:13:36.039Z",
+    "Command": "& './docs/receipts/hv/hv-r1-finalize.ps1' -Stage Build",
+    "ExitCode": 1,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:13:58.763Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-commands.jsonl' -Start 1 -Count 14",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  },
+  {
+    "TimestampUtc": "2026-10-17T15:13:58.763Z",
+    "Command": "& './docs/receipts/hv/hv-r1-inspect.ps1' -Task Read -Path './docs/receipts/hv/hv-r1-inspect.ps1' -Start 1 -Count 125",
+    "ExitCode": 0,
+    "ExitEvidence": "Own rollout function_call_output"
+  }
+]

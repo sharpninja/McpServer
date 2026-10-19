@@ -1,0 +1,149 @@
+[
+  {
+    "File": "hv-r3-bootstrap.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-build-verdict.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-collect.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-command-audit.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-compare.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-final-check.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-followup.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-hygiene.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-identity.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-inspect.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-native-provenance.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-persist-verdict.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-phase-continuity.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-plugin.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-prepare-evidence.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-provenance.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-read.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-search.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-semantic-diff.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-source-read.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  },
+  {
+    "File": "hv-r3-store-read.ps1",
+    "ParserErrors": 0,
+    "AnalyzerWarningsOrErrors": 0,
+    "Diagnostics": [],
+    "ApacheHeader": true
+  }
+]

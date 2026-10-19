@@ -1,0 +1,12 @@
+{
+  "requestId": "req-20261017T142304Z-hv-amendment1-r1",
+  "dialogItems": [
+    {
+      "order": 9000,
+      "timestamp": "2026-10-17T15:25:46.4271516Z",
+      "role": "model",
+      "category": "tool_result",
+      "content": "Final persistence proof (added after storing the complete result):\n{\n  \"TimestampUtc\": \"2026-10-17T15:25:45.3473727Z\",\n  \"SessionId\": \"Codex-20261017T142241Z-hv-amendment1-r1\",\n  \"RequestId\": \"req-20261017T142304Z-hv-amendment1-r1\",\n  \"Status\": \"in_progress\",\n  \"DialogItems\": 80,\n  \"ExpectedParts\": 76,\n  \"MatchingParts\": 76,\n  \"MissingOrders\": [],\n  \"OrderedParts\": true,\n  \"OrderVerification\": \"Integer order values were submitted. The QueryAsync DTO omits order; exact content and explicit numbered headers are verified in the returned processingDialog sequence.\",\n  \"QueryReceipt\": \"/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r1-final-own-query.txt\",\n  \"HistoryReceipt\": \"/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r1-final-history.txt\",\n  \"OwnSessionKeys\": [\n    \"model\",\n    \"started\",\n    \"title\",\n    \"agentExecutablePath\",\n    \"sourceType\",\n    \"turnCount\",\n    \"lastUpdated\",\n    \"agentSessionId\",\n    \"status\",\n    \"sessionId\",\n    \"turns\",\n    \"agentExecutableVersion\"\n  ],\n  \"OwnTurnKeys\": [\n    \"processingDialog\",\n    \"response\",\n    \"model\",\n    \"contextList\",\n    \"interpretation\",\n    \"tags\",\n    \"actions\",\n    \"tokenCount\",\n    \"planFile\",\n    \"timestamp\",\n    \"requestId\",\n    \"status\",\n    \"queryTitle\",\n    \"queryText\",\n    \"todoId\"\n  ]\n}\nThe complete verdict prose and receipt JSON were read back from my own turn and every ordered part matched exactly. This supplement is also stored on that turn. Final close and subsequent history-query receipts are hv-r1-final-complete.txt and hv-r1-final-history.txt. Their status is not inferred from a local cache."
+    }
+  ]
+}

@@ -1,0 +1,1897 @@
+[
+  {
+    "TimestampUtc": "2026-10-18T03:17:27.459Z",
+    "CallId": "call_c8a40fa73db7472aa2047e8333c1ac7f",
+    "Commands": [
+      "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw; $profileFiles = @(Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -File -Filter '*.md' | Where-Object { $_.Name -ne 'SKILL.md' }); Write-Output ('PROFILE_FILE_COUNT=' + $profileFiles.Count); foreach ($profileFile in $profileFiles) { Write-Output ('PROFILE_FILE_PATH=' + $profileFile.FullName); Get-Content -LiteralPath $profileFile.FullName -Raw }"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:17:44.401Z",
+    "CallId": "call_0ff66b93c9e64834b89b55b038300a1d",
+    "Commands": [
+      "$profileLines = Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md'; $profileLines[0..179]"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:17:47.219Z",
+    "CallId": "call_c207ae7276da4946bf23e000f438a7b6",
+    "Commands": [
+      "$profileLines = Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md'; $profileLines[180..($profileLines.Count - 1)]"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:04.316Z",
+    "CallId": "call_0cdac4b652be425bb5fa4c1a19f01b6d",
+    "Commands": [
+      "$scriptPath = 'docs/receipts/hv/hv-r2-bootstrap-read.ps1'; $parseTokens = $null; $parseErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $scriptPath), [ref]$parseTokens, [ref]$parseErrors); $diagnostics = @(Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error); $parseErrors; $diagnostics; if ($parseErrors.Count -gt 0 -or $diagnostics.Count -gt 0) { exit 1 }; Write-Output 'ParserErrors=0; ScriptAnalyzerWarningsAndErrors=0'; & pwsh.exe -NoProfile -NonInteractive -File $scriptPath; exit $LASTEXITCODE"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:38.236Z",
+    "CallId": "call_49822f565f7444b7b91f1bc24622eb5a",
+    "Commands": [
+      "$scriptPaths = @('docs/receipts/hv/hv-r2-read.ps1','docs/receipts/hv/hv-r2-setup-inspect.ps1'); foreach ($scriptPath in $scriptPaths) { $parseTokens = $null; $parseErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $scriptPath), [ref]$parseTokens, [ref]$parseErrors); $diagnostics = @(Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error); $parseErrors; $diagnostics; if ($parseErrors.Count -gt 0 -or $diagnostics.Count -gt 0) { exit 1 } }; Write-Output 'ParserErrors=0; ScriptAnalyzerWarningsAndErrors=0'; & pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r2-setup-inspect.ps1'; exit $LASTEXITCODE"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:44.255Z",
+    "CallId": "call_c79c5a95b38c4df79dc4f0be8c68aedc",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/Invoke-CodexMcpPlugin.ps1 -Count 225",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1 -Start 1740 -Count 230"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:27.249Z",
+    "CallId": "call_af26de967388462aadada65489d4a925",
+    "Commands": [
+      "$scriptPath = 'docs/receipts/hv/hv-r2-session-open.ps1'; $parseTokens = $null; $parseErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $scriptPath), [ref]$parseTokens, [ref]$parseErrors); $diagnostics = @(Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error); $parseErrors; $diagnostics; if ($parseErrors.Count -gt 0 -or $diagnostics.Count -gt 0) { exit 1 }; Write-Output 'ParserErrors=0; ScriptAnalyzerWarningsAndErrors=0'; & pwsh.exe -NoProfile -NonInteractive -File $scriptPath -WhatIf; exit $LASTEXITCODE"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:30.735Z",
+    "CallId": "call_66b3eb0d1d6e4dc3b161934c3d5b409f",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-session-open.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "RgExitCodes": [],
+    "SessionIds": [
+      7113
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:40.914Z",
+    "CallId": "call_957a1c1395bc45e1bd53089125c11316",
+    "Commands": [],
+    "IsPoll": true,
+    "ExitCodes": [],
+    "RgExitCodes": [],
+    "SessionIds": [
+      7113
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:47.79Z",
+    "CallId": "call_edddcde88e2e4700bc5082107f73a2bf",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/requirements/SKILL.md -Count 450"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:12.36Z",
+    "CallId": "call_e8f8567318064f11968c14a0b521dd93",
+    "Commands": [
+      "$scriptPath = 'docs/receipts/hv/hv-r2-inventory.ps1'; $parseTokens = $null; $parseErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $scriptPath), [ref]$parseTokens, [ref]$parseErrors); $diagnostics = @(Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error); $parseErrors; $diagnostics; if ($parseErrors.Count -gt 0 -or $diagnostics.Count -gt 0) { exit 1 }; Write-Output 'ParserErrors=0; ScriptAnalyzerWarningsAndErrors=0'; & pwsh.exe -NoProfile -NonInteractive -File $scriptPath; exit $LASTEXITCODE"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:19.84Z",
+    "CallId": "call_8d19e0120c68404ba01f595713ab49a3",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path '${path}' -Start ${start} -Count ${count}"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:25.671Z",
+    "CallId": "call_1085c9763fe8492b99f355271763ef4d",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md -Start 55 -Count 123"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:07.967Z",
+    "CallId": "call_8d951fe0a5204a68a5ce9bf98be58216",
+    "Commands": [
+      "$scriptPath = 'docs/receipts/hv/hv-r2-store-read.ps1'; $parseTokens = $null; $parseErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $scriptPath), [ref]$parseTokens, [ref]$parseErrors); $diagnostics = @(Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error); $parseErrors; $diagnostics; if ($parseErrors.Count -gt 0 -or $diagnostics.Count -gt 0) { exit 1 }; Write-Output 'ParserErrors=0; ScriptAnalyzerWarningsAndErrors=0'; & pwsh.exe -NoProfile -NonInteractive -File $scriptPath -WhatIf; exit $LASTEXITCODE"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:13.324Z",
+    "CallId": "call_a8f04c5206e94e07a2f1f56c66e4b5ad",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-store-read.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1 -Count 210"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      52472
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:24.499Z",
+    "CallId": "call_089d02e9b1604d6e86113f8668db6c53",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 139 -Count 35"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      52472
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:32.231Z",
+    "CallId": "call_21aea57225c14c67b3310278fe9b7a85",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 211 -Count 220"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:36.488Z",
+    "CallId": "call_e5e0ddaa45494128a45aae7cf471a812",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 431 -Count 180"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:44.885Z",
+    "CallId": "call_6b69795133944f4696a18064f486c5a5",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 611 -Count 300"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:48.929Z",
+    "CallId": "call_041a35d178c54d20aeca4d7c4a006a2a",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 911 -Count 300"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:06.804Z",
+    "CallId": "call_f42b86e872fa4bafa313132a992dbce8",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1211 -Count 235"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:16.796Z",
+    "CallId": "call_c1978c303cae480ca62eb59cb44e4ff0",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1446 -Count 222"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:28.426Z",
+    "CallId": "call_3ea21bb7e67343d6b99eadd6cca0cc2c",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1664 -Count 420"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:34.356Z",
+    "CallId": "call_12a61f20f0574521b61c7263eb6b63b9",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2084 -Count 365"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:38.458Z",
+    "CallId": "call_37df171f87c344b6963a96fd3160a227",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2449 -Count 170"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:44.271Z",
+    "CallId": "call_0b2e3c4d0e4a438f96d55243687b514b",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2619 -Count 135"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:02.105Z",
+    "CallId": "call_5001bbd6adae4a978b388738c1e493a1",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2754 -Count 284"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:22.485Z",
+    "CallId": "call_eb774425334248f8b8074adf5d265b21",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-store-PLAN-HVPIPELINE-001.txt -Start 1 -Count 270",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path AGENTS.md -Start 1 -Count 400"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:59.342Z",
+    "CallId": "call_38e52116496b4e5d8cd8db4703279ca3",
+    "Commands": [
+      "$scriptPaths = @('docs/receipts/hv/hv-r2-search.ps1','docs/receipts/hv/hv-r2-checkpoint.ps1'); foreach ($scriptPath in $scriptPaths) { $parseTokens = $null; $parseErrors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $scriptPath), [ref]$parseTokens, [ref]$parseErrors); $diagnostics = @(Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error); $parseErrors; $diagnostics; if ($parseErrors.Count -gt 0 -or $diagnostics.Count -gt 0) { exit 1 } }; Write-Output 'ParserErrors=0; ScriptAnalyzerWarningsAndErrors=0'; & pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-checkpoint.ps1 -Note 'Initial architecture propagation check' -WhatIf; exit $LASTEXITCODE"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:24:09.213Z",
+    "CallId": "call_9dd2b80de61e49c5b7bbbecf686f9182",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-checkpoint.ps1 -Order 2 -Note 'Decision after full amendment and PLAN-HVPIPELINE-001 read: the timer flush, bounded submit key, removal fields, canceled close, run-start unit, and result-hash exclusion are present. Keep remediation untrusted: stale probe configuration is guarded only by CloseHvRunOutputCommand, not the nonzero-exit FailHvRunCommand; a server-corrupt Unverified probe can be automatically re-probed at restart despite the caller-only rule; the new artifact worker has no heartbeat or terminal lease cleanup contract; phase binding includes finalization-dependent criteria before H7. These are concrete traces to recheck against catalog and source, not findings accepted from round 1. Reject blanket closure based only on count lint. Next: mechanical store equality, source/probe/CLI evidence, and foundation propagation.'",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path CLAUDE.md -Count 400"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      34915
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:24:15.915Z",
+    "CallId": "call_c11f7a8b3b154df1936779142f185d63",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path .github/copilot-instructions.md -Count 500",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-store-REMED-HVPIPELINE-001.txt -Count 250"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:36.318Z",
+    "CallId": "call_3c2123aa5b5642a7a241f5ad7cd40544",
+    "Commands": [
+      "Get-Content -Raw /home/sharpninja/.claude/skills/add-profile/SKILL.md; Get-Content -Raw /home/sharpninja/.claude/profile/PROFILE-MERGED.md"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:41.485Z",
+    "CallId": "call_9bc8fbafa1ec4d1a99960c7f9f59c960",
+    "Commands": [
+      "Get-ChildItem -File /home/sharpninja/.claude/profile/*.md | Where-Object { $_.Name -notlike 'add-profile*.md' } | ForEach-Object { $_.FullName; Get-Content -Raw $_.FullName }; Get-Date -Format s"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:46.152Z",
+    "CallId": "call_a4f2e8aa070d487089656d131e0d3615",
+    "Commands": [
+      "Get-Content /home/sharpninja/.claude/profile/PROFILE-MERGED.md | Select-Object -Skip 120 -First 120"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:57.412Z",
+    "CallId": "call_47682dad78a64cd6a499e707fcf73cc9",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-store-read.ps1 -Start 1 -Count 160",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/20261017T221717-amendment1-r2.selfreview.md -Start 1 -Count 200",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-store-requirements-fr.json -Start 1 -Count 75"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:28:40.947Z",
+    "CallId": "call_5db562afd3214caf87028af2db0d29b7",
+    "Commands": [
+      "$t=$null; $e=$null; [void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path docs/receipts/hv/hv-r2-staticcheck.ps1),[ref]$t,[ref]$e); $f=@(Invoke-ScriptAnalyzer -Path docs/receipts/hv/hv-r2-staticcheck.ps1 -Severity Warning,Error); $e; $f; if (@($e).Count -or $f.Count) { exit 1 }; pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-collect.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:28:52.775Z",
+    "CallId": "call_83c54ea26f4b4c108b8325776013f7af",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-collect.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-collect.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2490 -Count 100"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      75517
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:15.416Z",
+    "CallId": "call_310cf0874dd64a19ac9ad26da6e94fc3",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-inspect.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-inspect.ps1 -Kind store"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:23.143Z",
+    "CallId": "call_db8f17a5e1f8419fad23ef34329a26a5",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-inspect.ps1 -Kind github",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-inspect.ps1 -Kind probes",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-inspect.ps1 -Kind cline",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2647 -Count 45"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:32.025Z",
+    "CallId": "call_b890c63840be4bc79d434943a5c795a7",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern '^- FR-MCP-HVPIPE-|TR-MCP-HVPIPE|^##|^#' -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-git-effort-log.txt -Start 1 -Count 180"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:30:31.244Z",
+    "CallId": "call_135c349789d94f798a33a05a906586e4",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-compare.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      1
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:30:43.225Z",
+    "CallId": "call_dee4c4c20e0a4d9095603dd609c57ae2",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-compare.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-compare.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-compare.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:05.587Z",
+    "CallId": "call_2f5bfc14afc049688d92b4b1d88852e6",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-compare.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-compare.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-compare.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-store-related.json -Start 1 -Count 330"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:17.512Z",
+    "CallId": "call_e2e2e2cb8cd74d3cbc349416c344e602",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 36 -Count 52",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-git-effort-log.txt -Start 181 -Count 300",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/Development-Process-draft-v4.md -Start 1 -Count 220",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/github/McpServer/docs/handoffs/hv-architecture-amendment-handoff-20261016T182551Z.md -Start 1 -Count 170"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:29.761Z",
+    "CallId": "call_ce4fc82ffcbe47588a40ce9a18218112",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-checkpoint.ps1 -Order 3 -Note 'Independent catalog comparison found all 63 pending records and 42 edges, but TEST-MCP-HVPIPE-003 AC003, TEST-MCP-HVPIPE-010 AC003, and TEST-MCP-HVPIPE-011 AC003 omit the first named case of their two-clause FR criteria; their descriptions omit it too. The claimed field equality is false. Reject the implemented last-parenthesis extraction as proof. The independent parser found 138 actual named-test occurrences, with a separately excluded ClaudeCowork alias token. GitHub proves 13 normal branch activities and the six post-merge review comments. Foundation base and current SHA256 match. These observations will be classified as implementer corrections, not new operator choices.'",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-git-effort-log.txt -Start 380 -Count 101",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/Development-Process-draft-v4.md -Start 1 -Count 80"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      44364
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:40.535Z",
+    "CallId": "call_f22228807baa47b490fe720cf62cc9aa",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2734 -Count 55",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-inspect.ps1 -Kind receipts"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:58.363Z",
+    "CallId": "call_7d7fb47ab1304b38982ed9dc0714369b",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-inspect.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-inspect.ps1 -Kind cline",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/MANIFEST.md -Start 1 -Count 40"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:28.438Z",
+    "CallId": "call_450ea9292dca4f39a8245cfb8d375f0a",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-provenance.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-provenance.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-provenance.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:39.838Z",
+    "CallId": "call_99d70f8691414932811e41cb624e0cc1",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-cli-claude-help.txt -Start 1 -Count 250",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-cli-copilot-help.txt -Start 1 -Count 400",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-cli-grok-help.txt -Start 1 -Count 250"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:49.245Z",
+    "CallId": "call_c3841e5979524cb09f1892d67c152e14",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-cli-codex-help.txt -Start 1 -Count 230",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-cli-codex-exec-help.txt -Start 1 -Count 230",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-cli-cline-help.txt -Start 1 -Count 230",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-cli-claude-help.txt -Start 251 -Count 62"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:33.04Z",
+    "CallId": "call_cc077ef71fe5453eba532aff2a634273",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-source-read.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-source-read.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-source-read.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      1
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:44.595Z",
+    "CallId": "call_657283065eec4adba731192758f15b3d",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-source-read.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-source-read.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-source-read.ps1"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:53.712Z",
+    "CallId": "call_ef9462ecfe444f0aba027f49ba01f3cb",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-source-problems-1.txt -Start 1 -Count 300",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-source-problems-2.txt -Start 1 -Count 400"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:01.331Z",
+    "CallId": "call_fb1c2c73ca354548b35ee856e0557938",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-source-problems-3.txt -Start 1 -Count 300",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-source-problems-4.txt -Start 1 -Count 500"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:13.243Z",
+    "CallId": "call_4641cfce7ad74180b6a4b4d599334c2a",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r1-related-requirements.json -Start 1 -Count 35",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/plans/2026-10-07-federation-fixes.md -Start 155 -Count 25",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 155 -Count 38"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:23.895Z",
+    "CallId": "call_eb28d4b649374f5ea130b71a3f3e84d3",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'ModelGrader|configured grader|Codex gpt-6-astra|reviewer_independent|verdict_match|ReceiptRoot' -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1576 -Count 82"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:48.586Z",
+    "CallId": "call_9fa6ee970ca545b7a21cae3e5c0b0175",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1043 -Count 159",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1232 -Count 24",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1348 -Count 155"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:57.886Z",
+    "CallId": "call_5a9b7590890a43af8725860de90f0224",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 325 -Count 58",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 561 -Count 45",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-store-REMED-HVPIPELINE-001.txt -Start 1 -Count 50"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:35:15.43Z",
+    "CallId": "call_0545e57deb1a402d99e29f84befce92e",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1524 -Count 11",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-effort-probe.txt -Start 1 -Count 140",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-claude-effort.txt -Start 1 -Count 50",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-cline-effort-2.txt -Start 1 -Count 70"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:36:04.536Z",
+    "CallId": "call_1d1c995a805f462ba4531ee3105e151c",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-phase-continuity.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-phase-continuity.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-phase-continuity.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      38783
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:36:30.609Z",
+    "CallId": "call_21eec9132f2047cb913d0ef3533c4225",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/github/McpServer/docs/handoffs/hv-architecture-amendment-handoff-20261016T182551Z.md -Start 171 -Count 126",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-write-probe.txt -Start 1 -Count 120",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-write-probe-2.txt -Start 1 -Count 100",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-gzip.txt -Start 1 -Count 50"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:43.515Z",
+    "CallId": "call_0987812557fb4fc7a1146a126a232056",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/skills/add-profile/SKILL.md"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": true
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:49.931Z",
+    "CallId": "call_763261b0b9eb4d49bbd5817c2a7663f2",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/profile/PROFILE-MERGED.md -Start 1 -Count 120",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/profile/PROFILE-MERGED.md -Start 121 -Count 120"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:55.798Z",
+    "CallId": "call_1243e35acd9b4d428edc18418995d215",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/profile/PROFILE-MERGED.md -Start 241 -Count 120",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-bootstrap-read.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:09.679Z",
+    "CallId": "call_3fca8a8de5634f40a5bc78a7c6d09ae1",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-profile-inventory.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-profile-inventory.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:16.517Z",
+    "CallId": "call_00da399173c74be5a069bb3de4fdfeef",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-phase-continuity.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-compare.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:40.293Z",
+    "CallId": "call_da65bd3b7a594614a8a63722bc7de70c",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-${p}.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-${p}.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-${p}.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:46.923Z",
+    "CallId": "call_add91c7c5ce6410894c384e39c2b2677",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1038 -Count 150",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1575 -Count 100"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:54.278Z",
+    "CallId": "call_99bb713754724c50916b7934c5c7c82d",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 315 -Count 85",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md -Start 1 -Count 190"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:04.484Z",
+    "CallId": "call_8dcccf22ce6b4e4e963823d5ceac9bb9",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md -Start 87 -Count 28",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-provenance.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-collect.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:15.368Z",
+    "CallId": "call_007b39f058154192a25ef318a287d370",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1 -Count 195",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-inspect.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:25.445Z",
+    "CallId": "call_89ceb5581e344641b8b5088668d23b66",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/MANIFEST.md -Start 1 -Count 90",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/20261017T110027-amendment1.push-audit.json -Start 1 -Count 90"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:15.24Z",
+    "CallId": "call_ad8367e34bc34731aa107f17a0a7a637",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-hygiene.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:21.182Z",
+    "CallId": "call_17df980e5ab44172ac52f99590bc7748",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-hygiene.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-hygiene.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      98259
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:32.814Z",
+    "CallId": "call_5c3d0690f2a04004a693837612780cc6",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 4360 -Count 110",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'FR-MCP-SESSIONTURN-005|D5|auto.close|explicit' -Path docs/receipts/hv/hv-r2-store-PLAN-SESSIONTURNREVIEW-001.txt",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2710 -Count 42"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:23.608Z",
+    "CallId": "call_04a81afbea8743498e6948716e699607",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-native-provenance.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:34.485Z",
+    "CallId": "call_2b5df17600f3418f996a272b8b2eced4",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-native-provenance.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-native-provenance.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/diagrams/amendment1-r2-20261017T111405/survey.txt -Start 1 -Count 25"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      85241
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:49.011Z",
+    "CallId": "call_87b116d26c3b41bba27e07a6818286c1",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1430 -Count 105",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2585 -Count 105"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:44:21.634Z",
+    "CallId": "call_cbccfa25f47f48dcbccda882b3c69d0a",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-checkpoint.ps1 -Order 4 -Note 'Concluded that the original late-failure state/version overwrite is fixed, but caller error propagation remains incomplete. Identified additional implementer edits: stale probe failure mutates reconfigured readiness; server-corrupt Unverified probes are restarted without a caller; the artifact worker lacks renew/release and safe sweep states; R-31 validates mutable commit-time response membership; closed response findings and Mode Off result disposition contradict their contract. Kept these as review findings, without changing the artifacts or stores. Rejected treating documentation labels or a green diagram render as proof of executable transitions.'",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-foundation-stop-clauses.txt -Start 1 -Count 10",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/diagrams/amendment1-r2-20261017T111405/survey.txt -Start 91 -Count 12"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      97765
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:44:43.651Z",
+    "CallId": "call_27bf36643e0e41f4b6c0d5d76d11b807",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2758 -Count 31",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1230 -Count 40",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 550 -Count 52"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:18.533Z",
+    "CallId": "call_fc1ca83780cd4183a714bd8421a68df2",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/session/SKILL.md -Start 1 -Count 160"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:26.004Z",
+    "CallId": "call_f8581116b5be451aba2bd2cd4d7f70e1",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/session/SKILL.md -Start 148 -Count 210",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-checkpoint.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:44.264Z",
+    "CallId": "call_d94bc4610d1643d89954d9da0fd8d605",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'P7|EventStreamController|157|133' -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-store-REMED-HVPIPELINE-001.txt -Start 29 -Count 22",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'designDecisions|filesModified|updateTurn' -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/session-log.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0,
+      2
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:46:04.94Z",
+    "CallId": "call_178c76adec684ffcb199504dfdbe3432",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 1346 -Count 17",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture.md -Start 2822 -Count 27",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-validator-identity.json -Start 1 -Count 60"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:46:42.677Z",
+    "CallId": "call_c0e6de1dfa6540f58ef822348adf33f2",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-command-audit.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-command-audit.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-command-audit.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:47:41.722Z",
+    "CallId": "call_c5f8ea28e38249258c3b368983d9875b",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-command-audit.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-command-audit.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-command-audit.ps1"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:48:18.999Z",
+    "CallId": "call_dd1af38c02c24ee1932037382d347d59",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-command-audit.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-command-audit.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-command-audit.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:48:56.723Z",
+    "CallId": "call_6ecee14f2cb04afc8e3d77d92107cd0a",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md -Start 2568 -Count 17",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/20261017T221717-amendment1-r2.selfreview.md"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:49:56.901Z",
+    "CallId": "call_20f29fd76ba641ed9c83a258062a3b0d",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'designDecisions|filesModified|Update-.*Turn|updateTurn' -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/session-log-runtime.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/context/session-log-schema.md -Start 1 -Count 95"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      2
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:04.588Z",
+    "CallId": "call_36a422eab2784e73909179d1f7c08c3f",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'designDecisions|workflow.sessionlog.updateTurn' -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:10.432Z",
+    "CallId": "call_7b3a3bd1a1a54f7f839929058097a014",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1 -Start 2603 -Count 112",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-session-open.ps1 -Start 1 -Count 100"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:18.762Z",
+    "CallId": "call_0c4db78a4fa441108a0c460973b9755d",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'UpdateSectionAsync|AppendSectionAsync|UpdateTurnAsync|UpdateSessionMetadataAsync' -Path src/QBrainAi.Client",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r1-finalize.ps1 -Start 1 -Count 130"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      1
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:26.184Z",
+    "CallId": "call_579803286e184929a4d1dddb9309487b",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'designDecisions|DesignDecisions' -Path src/QBrainAi.Client",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'Task<.*SessionLog|class SessionLogClient' -Path src/QBrainAi.Client"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0,
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:36.776Z",
+    "CallId": "call_1e9471b4efe14f31b7b669e20a2c2c74",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path src/QBrainAi.Client/SessionLogClient.cs -Start 285 -Count 22",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path src/QBrainAi.Client/Models/SessionLogModels.cs -Start 175 -Count 42",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'SessionLogMutationResult|JsonElement' -Path src/QBrainAi.Repl.Core/GenericClientPassthrough.cs"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:46.661Z",
+    "CallId": "call_e6c7cf8854d44fbbbe6a5d5dca0063af",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path src/QBrainAi.Client/SessionLogClient.cs -Start 235 -Count 19",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'MCP_SESSION_MODEL|model =|Model =' -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:53.641Z",
+    "CallId": "call_6b8a874b988e4ecfaf8d3092de5cb971",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'function Invoke-WorkflowOpenSession|function Invoke-WorkflowQueryHistory' -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1 -Start 1320 -Count 15"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:57.634Z",
+    "CallId": "call_ed9c0c30e63a4309b7f31198c0c7e444",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1 -Start 245 -Count 75"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:55:20.7Z",
+    "CallId": "call_e2ea869adc1042eabe97d26fbcbed497",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-build-verdict.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:56:06.442Z",
+    "CallId": "call_ee50eab0e071405292c8f0e855c3dc24",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-build-verdict.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-build-verdict.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path src/QBrainAi.Client/SessionLogClient.cs -Start 38 -Count 63"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:58:46.326Z",
+    "CallId": "call_d6e57262ec014a1fbe96327186fe4718",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-persist-verdict.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      1
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:06.873Z",
+    "CallId": "call_13b26691ef4949d2948f051b18101788",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-persist-verdict.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Check -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Check"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:15.281Z",
+    "CallId": "call_91f5065aa7244551b43571d1690f42be",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Prepare -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Prepare"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      26286
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:35.589Z",
+    "CallId": "call_14992aea817740e9bca3916db22213e7",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-search.ps1 -Pattern 'SPDX-License-Identifier: MIT' -Path docs/receipts/hv/hv-r2-read.ps1"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [
+      0
+    ],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:43.555Z",
+    "CallId": "call_c9975e3381534c619ccbd8bb477eead2",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Persist -FromPart 1 -PartCount 4 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Persist -FromPart 1 -PartCount 4"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      28259
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:58.757Z",
+    "CallId": "call_24cc5896daec451a9b114ccd12aec024",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Persist -FromPart 5 -PartCount 4"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      77841
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:00:57.725Z",
+    "CallId": "call_3cb68007237f43c7a5c23904d2f475f4",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Persist -FromPart 9 -PartCount 4",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-final-safety.ps1"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      87887
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:10.114Z",
+    "CallId": "call_8bbd37d9fb4446699701475cc2b229a6",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Persist -FromPart 13 -PartCount 4",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-final-safety.ps1 -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-final-safety.ps1"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      74222,
+      68305
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:33.212Z",
+    "CallId": "call_12706c6718b24458a126cb1a5c3917f5",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Verify -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Verify"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      81132
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:52.092Z",
+    "CallId": "call_0cee2df0a649475191e6c9f223d79891",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-${name}.ps1"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:02:51.508Z",
+    "CallId": "call_caf66372f8e64fc885118deb73c83660",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-persist-verdict.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Seal -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Seal"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      75070
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:13.863Z",
+    "CallId": "call_b1d50f4c12d8402bba42ecfb1e8e5984",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Verify",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-verdict.json -Start 1 -Count 110"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      46614
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:35.619Z",
+    "CallId": "call_c1404ac4c8554690b7d67fe55deef1b7",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Complete -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Complete"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      78686
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:57.675Z",
+    "CallId": "call_92b3f12bc2e74b978bd85f68ca517875",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Verify",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-read.ps1 -Path docs/receipts/hv/hv-r2-verdict.json -Start 108 -Count 194"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [
+      27054
+    ],
+    "OutputWasTrimmedToText": false
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:04:26.526Z",
+    "CallId": "call_6b6a520c3a38442b9eaf7ead052296a2",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-staticcheck.ps1 -Path docs/receipts/hv/hv-r2-persist-verdict.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Check -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-r2-persist-verdict.ps1 -Stage Check"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "RgExitCodes": [],
+    "SessionIds": [],
+    "OutputWasTrimmedToText": false
+  }
+]

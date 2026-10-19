@@ -1,0 +1,70 @@
+{
+  "Number": 81,
+  "Url": "https://github.com/sharpninja/McpServer/pull/81",
+  "MergedAt": "2026-10-16T22:41:48Z",
+  "MergeCommit": {
+    "oid": "a2cbd57897c588f178da3a191186726b8adab1b1"
+  },
+  "Findings": [
+    {
+      "Id": 4300020822,
+      "ReviewId": 5554472359,
+      "CreatedUtc": "2026-10-16T22:48:12Z",
+      "Path": "src/QBrainAi.Storage/WorkspaceKeyConversion.cs",
+      "Line": 26,
+      "Commit": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "Body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Migrate legacy workspace keys before canonical queries**\n\nOn an upgraded Windows installation, existing rows contain the previous `Q:\\workspace` spelling, while this converter canonicalizes new writes and query parameters to `Q:/workspace` but leaves values read from storage unchanged. Because this commit includes no data migration, SQLite/PostgreSQL comparisons against the canonical discriminator no longer match those legacy rows, so tenant-filtered data becomes invisible and workspace bootstrap can create parallel rows. Add a provider migration that rewrites every affected key and foreign key before enabling this converter.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->",
+      "Url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020822"
+    },
+    {
+      "Id": 4300020832,
+      "ReviewId": 5554472359,
+      "CreatedUtc": "2026-10-16T22:48:12Z",
+      "Path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "Line": 1065,
+      "Commit": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "Body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Return a proof shape that the stop hook can consume**\n\nWhen a cached session is stale, this production REPL call cannot produce the proof consumed below: the added client method returns `Task<UnifiedSessionLogDto>`, which is absent from `GenericClientPassthrough.AwaitTaskResultAsync` and therefore raises `Unsupported task result type`; even after adding that case, `UnifiedSessionLogDto` contains `status` and `turns`, not the expected `workspacePath`, `requestId`, `outcome`, or `serverStatus`. The catch consequently treats completed persisted turns as active, leaving the stop gate blocked indefinitely; expose a matching proof DTO or derive the requested turn outcome from the returned session DTO.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->",
+      "Url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020832"
+    },
+    {
+      "Id": 4300020839,
+      "ReviewId": 5554472359,
+      "CreatedUtc": "2026-10-16T22:48:12Z",
+      "Path": "src/QBrainAi.Client/WorkspacePathNormalizer.cs",
+      "Line": 130,
+      "Commit": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "Body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Treat root-relative Windows segments as rooted**\n\nOn a Windows host, a segment such as `\\repo` is rooted and must replace the path after retaining the current drive, but `IsWindowsRooted` recognizes only drive-qualified and UNC paths. `Combine(\"C:/content\", \"\\\\repo\")` therefore returns `C:/content/repo` instead of `C:/repo`; in particular, `ResolveRepoRootWorkspacePath` now resolves a root-relative `RepoRoot` under the content directory and selects the wrong workspace and tenant. Handle a leading backslash as Windows-root-relative using the root drive.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->",
+      "Url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020839"
+    },
+    {
+      "Id": 4300020846,
+      "ReviewId": 5554472359,
+      "CreatedUtc": "2026-10-16T22:48:12Z",
+      "Path": "src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs",
+      "Line": 326,
+      "Commit": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "Body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Preserve access to legacy GitHub token entries**\n\nAfter upgrading on Windows, this changes the persistent token-store lookup key from the prior `C:\\repo` form to `C:/repo`, but entries already stored in the JSON document are never canonicalized on read. The `OrdinalIgnoreCase` comparisons in `GetAsync`, `UpsertAsync`, and `DeleteAsync` do not equate different separators, so existing GitHub credentials become inaccessible, an upsert creates a duplicate entry, and deletion leaves the legacy secret behind. Normalize loaded entry paths or migrate the token document before using the new key format.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->",
+      "Url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020846"
+    },
+    {
+      "Id": 4300020851,
+      "ReviewId": 5554472359,
+      "CreatedUtc": "2026-10-16T22:48:12Z",
+      "Path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "Line": 738,
+      "Commit": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "Body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Keep descendants killable after the root process exits**\n\nWhen the REPL wrapper starts a background descendant and then exits before the deadline, `HasExited` is already true here, so `Kill(true)` is skipped even if the descendant still owns stdout/stderr or continues running detached. The subsequent loop can only time out—or can report success once the pipes close—while leaving that descendant alive, defeating the bounded-child guarantee. Start the child in an owned process group/job and terminate that group independently of the root process's exit state.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->",
+      "Url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020851"
+    },
+    {
+      "Id": 4300020859,
+      "ReviewId": 5554472359,
+      "CreatedUtc": "2026-10-16T22:48:12Z",
+      "Path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "Line": 1174,
+      "Commit": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "Body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Complete the turn after consuming a stop override**\n\nFor an `in_progress` code-edit turn with a failed build or incomplete audit, consuming the corresponding acceptance marker returns immediately here, before the later `workflow.sessionlog.completeTurn` branch runs. The stop is therefore allowed while both the cache and authoritative session remain in progress, unlike the previous ordering where completion happened before enforcement; this leaves an unaudited stale turn for the next session. Treat the override as bypassing only its specific gate, then continue through turn completion.\n\nAGENTS.md reference: [AGENTS.md:L17-L19](https://github.com/sharpninja/McpServer/blob/6dbc384323c036a57c37fd9eaf2259879c1d956f/AGENTS.md#L17-L19)\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->",
+      "Url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020859"
+    }
+  ]
+}

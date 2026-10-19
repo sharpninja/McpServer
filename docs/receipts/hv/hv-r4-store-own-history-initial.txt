@@ -1,0 +1,64 @@
+type: result
+payload:
+  requestId: req-20261018T075735Z-cb4b
+  result:
+  - agent: Codex
+    sessionId: Codex-20261018T075458Z-amendment1-r4
+    title: Hostile validation amendment1-r4 at 437695dc
+    model: gpt-6-astra
+    started:
+      dateTime: 2026-10-18T07:55:10.0000000
+      utcDateTime: 2026-10-18T07:55:10.0000000Z
+      localDateTime: 2026-10-18T02:55:10.0000000-05:00
+      date: 2026-10-18T00:00:00.0000000
+      day: 18
+      dayOfWeek: Sunday
+      dayOfYear: 291
+      hour: 7
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 55
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 10
+      ticks: 639279069100000000
+      utcTicks: 639279069100000000
+      timeOfDay: 07:55:10
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-10-18T07:56:25.0000000
+      utcDateTime: 2026-10-18T07:56:25.0000000Z
+      localDateTime: 2026-10-18T02:56:25.0000000-05:00
+      date: 2026-10-18T00:00:00.0000000
+      day: 18
+      dayOfWeek: Sunday
+      dayOfYear: 291
+      hour: 7
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 56
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 25
+      ticks: 639279069850000000
+      utcTicks: 639279069850000000
+      timeOfDay: 07:56:25
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validation
+    - amendment1-r4
+    - gpt-6-astra
+    - max
+    - PLAN-HVPIPELINE-001
+    - REMED-HVPIPELINE-001
+    filesModifiedCount: 1
+  deprecated: true
+
+---
+

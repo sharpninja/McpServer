@@ -1,0 +1,9 @@
+{
+  "request": {
+    "agent": "Codex",
+    "limit": 10,
+    "from": "2026-10-18T03:17:00Z",
+    "text": "amendment1-r2",
+    "offset": 0
+  }
+}

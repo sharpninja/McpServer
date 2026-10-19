@@ -1,0 +1,12 @@
+{
+  "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/17/rollout-2026-10-17T09-19-09-01a14a3b-15be-7e43-8518-010b5b4000ac.jsonl",
+  "Line": 8,
+  "Type": "turn_context",
+  "TimestampUtc": "2026-10-17T14:19:10.378Z",
+  "ThreadId": "01a14a3b-15be-7e43-8518-010b5b4000ac",
+  "Model": "gpt-6-astra",
+  "Effort": "max",
+  "SessionId": null,
+  "CliVersion": null,
+  "Cwd": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016"
+}

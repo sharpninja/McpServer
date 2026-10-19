@@ -1,0 +1,143 @@
+{
+  "TimestampUtc": "2026-10-17T14:51:38.0137099Z",
+  "TimestampLocal": "2026-10-17T09:51:38",
+  "Commits": [
+    {
+      "Sha": "d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Sha": "0a449314528c5bfc07e9b386c97034716e2ddbd4",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Sha": "31904493381cfef56c57790950e23e72f3ecc39b",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Sha": "f5fd5ab24ad00b09053daf07ed3c0d850f70498d",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Sha": "bd6e37b33f043b1ede3a1feeaf7073d357ea21cf",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Sha": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Sha": "9fd6b653b2522212ad8151091e3a8cdec25e75bd",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Sha": "99cb42b24a442377a776aebd58e9df6894c2ce40",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Sha": "31af8c597e3570a2469a48a238a4aa76107f30bb",
+      "Files": [
+        "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+      ],
+      "Signed": true,
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    }
+  ],
+  "RecordedPushTransitions": [
+    {
+      "Before": "31af8c59",
+      "After": "99cb42b2",
+      "AncestorExitCode": 0
+    },
+    {
+      "Before": "99cb42b2",
+      "After": "9fd6b653",
+      "AncestorExitCode": 0
+    },
+    {
+      "Before": "9fd6b653",
+      "After": "6dbc3843",
+      "AncestorExitCode": 0
+    },
+    {
+      "Before": "6dbc3843",
+      "After": "bd6e37b3",
+      "AncestorExitCode": 0
+    },
+    {
+      "Before": "bd6e37b3",
+      "After": "f5fd5ab2",
+      "AncestorExitCode": 0
+    },
+    {
+      "Before": "f5fd5ab2",
+      "After": "31904493",
+      "AncestorExitCode": 0
+    },
+    {
+      "Before": "31904493",
+      "After": "0a449314",
+      "AncestorExitCode": 0
+    },
+    {
+      "Before": "0a449314",
+      "After": "d3a0beb1",
+      "AncestorExitCode": 0
+    }
+  ],
+  "Todos": [
+    {
+      "Id": "PLAN-HVPIPELINE-001",
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    },
+    {
+      "Id": "REMED-HVPIPELINE-001",
+      "KnownApiKeyAbsent": true,
+      "ApiKeyLiteralAbsent": true
+    }
+  ],
+  "NoForceFlagProof": "Reflog proves fast-forward recorded ref transitions, but not the command-line flags used for every push.",
+  "ExitCode": 0
+}

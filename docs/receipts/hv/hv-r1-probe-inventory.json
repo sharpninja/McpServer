@@ -1,0 +1,397 @@
+[
+  {
+    "Path": "Find-InSource.ps1",
+    "Bytes": 1623,
+    "Sha256": "52840821E1A4D10DCC984C457526624CE2CD97D87B6221C4028132AD0A3B8632"
+  },
+  {
+    "Path": "Find-RecentField.ps1",
+    "Bytes": 2018,
+    "Sha256": "FF46C2557EC5B361602B95F0CB236127B521957DA0817070598BCE466DBB8548"
+  },
+  {
+    "Path": "Invoke-BoundedCli.ps1",
+    "Bytes": 1945,
+    "Sha256": "041B96655511270C0A55AE5966E1537AA2BDDF802C4CFAE67DABAF2F92977D65"
+  },
+  {
+    "Path": "Invoke-ClaudeEffortProbe.ps1",
+    "Bytes": 2708,
+    "Sha256": "548AE7CB79F8BAEEE0D268FB4AA3B8EB4B73D828328CD30E78ADE94682099AA9"
+  },
+  {
+    "Path": "Invoke-CliProbeRuns.ps1",
+    "Bytes": 7482,
+    "Sha256": "436F2F7FD2F3C16A5068547302251E5923A946040BA9AB1C0DDBC9FDD90CEFB0"
+  },
+  {
+    "Path": "Invoke-EffortProbe.ps1",
+    "Bytes": 5471,
+    "Sha256": "8B4B85971BA8E2EDB1332850214668326BF0538AAA7B080738CEC7CDD8F3C777"
+  },
+  {
+    "Path": "Invoke-WriteRefusalProbe.ps1",
+    "Bytes": 7147,
+    "Sha256": "079E8BE89DACE13C5688736ACB9A11A70BFBF50371CE00093E84411C64AAAA06"
+  },
+  {
+    "Path": "MANIFEST.md",
+    "Bytes": 9584,
+    "Sha256": "9D70E1D0DA178FF2C3D794A35285DA0163CE0536C01611959CBD6CD015CA4043"
+  },
+  {
+    "Path": "out-claude-effort.txt",
+    "Bytes": 388,
+    "Sha256": "3EC83C0D377772D91D626CE7E9455EE624B72BEF7FAEC325E48E1A104696E67C"
+  },
+  {
+    "Path": "out-cline-effort-2.txt",
+    "Bytes": 1208,
+    "Sha256": "9B0A8D47A97604654D8E41F06A2827641DE02A140A051AE79C40120E864477AC"
+  },
+  {
+    "Path": "out-cline-effort.txt",
+    "Bytes": 2066,
+    "Sha256": "FCFEE272DB2335CD34B67F0F23BE77356174E534B4ADC0AE3D0BFD9F872E3137"
+  },
+  {
+    "Path": "out-effort-const.txt",
+    "Bytes": 2696,
+    "Sha256": "52AFC343EFB1FBE9C51FF33685A7B0B82FCFB2C74F8D4E46AF4A82D316EA54D6"
+  },
+  {
+    "Path": "out-effort-probe.txt",
+    "Bytes": 4768,
+    "Sha256": "98CD284E7E0AAF6199757E2834E07A97474A814ABCD3FF4C27D2443EB22B1411"
+  },
+  {
+    "Path": "out-gzip.txt",
+    "Bytes": 317,
+    "Sha256": "77BDAE190C7724B6B2BDF944900508561C922D77344B999486B0D9AA0E15CCE5"
+  },
+  {
+    "Path": "out-lint.txt",
+    "Bytes": 2419,
+    "Sha256": "16B33CB70C86EA196872E235E026463A0CB58362B7336E4C0DDD29915EA42DA0"
+  },
+  {
+    "Path": "out-probe2-claude.txt",
+    "Bytes": 5510,
+    "Sha256": "637E883BE4514249CA9B99098BC6BC0CA029C7170AE5EB0309A60D6EE285ED2B"
+  },
+  {
+    "Path": "out-probe2-cline.txt",
+    "Bytes": 7390,
+    "Sha256": "69598BBDBF3611148B33C3D3E654A17C9BB0EF7611C7AB5A1411C6B54B4CF16E"
+  },
+  {
+    "Path": "out-probe2-copilot.txt",
+    "Bytes": 3485,
+    "Sha256": "6040D2F3E4B38938191575ECC58C43B54784DD5619115BEE617BC64C96CD810D"
+  },
+  {
+    "Path": "out-survey.txt",
+    "Bytes": 1636,
+    "Sha256": "EE24464A5646659D103AAFEF9F5DE449DAE6966BA0C66579A3F99D1A5C74D8FA"
+  },
+  {
+    "Path": "out-turn-order.txt",
+    "Bytes": 1320,
+    "Sha256": "DBA379B156765CA82A707CCF9B8345758BE7726B28692C729A9AC03C1E78311F"
+  },
+  {
+    "Path": "out-write-probe-2.txt",
+    "Bytes": 2274,
+    "Sha256": "B5FA5C316267C96D810B8F6206908312434220F0BA68C2DA5BE6E36995CA0FAF"
+  },
+  {
+    "Path": "out-write-probe.txt",
+    "Bytes": 4092,
+    "Sha256": "78C0C91BD42AFEBB776CBD2CFC52D0613EF23D282451D84E665DA4F4F2122A44"
+  },
+  {
+    "Path": "Test-Amendment.ps1",
+    "Bytes": 8987,
+    "Sha256": "EB9176E1BEC3902E7FD099D6D27BB26734298D2403E3EBB6502C909ECCE7B57C"
+  },
+  {
+    "Path": "Test-GzipMultiMember.ps1",
+    "Bytes": 3472,
+    "Sha256": "11C1C547F9ADE178B853CBDD46BCAA9329AFA431F92B92523C6B5D7F03D97097"
+  },
+  {
+    "Path": "cli-probe/help-claude.txt",
+    "Bytes": 22175,
+    "Sha256": "5E8834F8DE025C57811FDC82E31A80C3FEA5C9BBDC82BD6B1DF1D8AAC5BAC691"
+  },
+  {
+    "Path": "cli-probe/help-cline.txt",
+    "Bytes": 4041,
+    "Sha256": "4423E914CCD9B1588DEEE196E285C5A21B679D1294131773E49CCB39C31D08D6"
+  },
+  {
+    "Path": "cli-probe/help-codex.txt",
+    "Bytes": 4395,
+    "Sha256": "D2DCB0701C20A2CBB7E3B16A095B3CB56F267549FA43B8CB9143FEDD2DA6CCD0"
+  },
+  {
+    "Path": "cli-probe/help-copilot.txt",
+    "Bytes": 14139,
+    "Sha256": "3AD78E5F3D1DA58F387D1E5390FDADF8DD0714704D2B48AA4C3FCDDE9D4B9CB3"
+  },
+  {
+    "Path": "cli-probe/help-grok.txt",
+    "Bytes": 7728,
+    "Sha256": "6822DA8DFF2B5996D410F5BDCE6C0CB41CC21C9FC6A166161B497D7B4C79B5E2"
+  },
+  {
+    "Path": "cli-runs/copilot-usage.json",
+    "Bytes": 411,
+    "Sha256": "2F79560AC320DF8D4A54ACEFFB7C9A73B6FF047EA09236CDA45B30A1BD2FB9B2"
+  },
+  {
+    "Path": "cli-runs/probe-report.txt",
+    "Bytes": 1261,
+    "Sha256": "8F51DC20C500E0C55A18D722D3C41B90A0D3F4420AAB6D074B5A9D81572C6FF5"
+  },
+  {
+    "Path": "cli-runs/run-cline.stderr.txt",
+    "Bytes": 173,
+    "Sha256": "BDFB93D165E967BDEAA6D009FB82E41856E10650A53ABF0198EAA48C64F217EC"
+  },
+  {
+    "Path": "cli-runs/run-cline.stdout.txt",
+    "Bytes": 2472,
+    "Sha256": "FC99170E37422A9638725299FBE35617510BE706DF93FC45C0CC9BF2DA34A3AA"
+  },
+  {
+    "Path": "cli-runs/run-copilot.stderr.txt",
+    "Bytes": 89,
+    "Sha256": "89FE9ADD42E70D3222FA4DEFF604DD06BE65F8CFE6EF4F865280141FF5DB9EB4"
+  },
+  {
+    "Path": "cli-runs/run-copilot.stdout.txt",
+    "Bytes": 539,
+    "Sha256": "4C2A32AAF1977C0D60E452792604A60C4C7F0109E01CA099FB8AD5F478583AF6"
+  },
+  {
+    "Path": "cli-runs/run-grok.stderr.txt",
+    "Bytes": 19895,
+    "Sha256": "DB2DD9AE1AFA7E132CCBFBAC106F63AC15DBF399938A35270C386D21A7F3ED48"
+  },
+  {
+    "Path": "cli-runs/run-grok.stdout.txt",
+    "Bytes": 36393,
+    "Sha256": "8041DC40D15BC6FD21B9E5BA7D66C1385F8C6136C109C5894EA00199F914F7F3"
+  },
+  {
+    "Path": "cli-runs-2/copilot-usage.json",
+    "Bytes": 411,
+    "Sha256": "2CCD03248A7062D3AC443B6B46DC62F8175E2B06E7609EF9A8D1F72A46FFAA87"
+  },
+  {
+    "Path": "cli-runs-2/probe-report.txt",
+    "Bytes": 1209,
+    "Sha256": "4D2C1051A2A5AAAE2373ECA33D26C5283D9A7BE099EBE72D4369AE9D5041E6F1"
+  },
+  {
+    "Path": "cli-runs-2/run-cline.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-runs-2/run-cline.stdout.txt",
+    "Bytes": 2280,
+    "Sha256": "4140AA70FC534FC7F06EE03D9291823EDEBC71278D8E1D23517ABC78B1640B17"
+  },
+  {
+    "Path": "cli-runs-2/run-copilot.stderr.txt",
+    "Bytes": 59,
+    "Sha256": "6F247CF64F0733717F1FEFECF07AC764729699AFD4FB65BE8FE5FA36437DDD7A"
+  },
+  {
+    "Path": "cli-runs-2/run-copilot.stdout.txt",
+    "Bytes": 539,
+    "Sha256": "ED9CC94843B392B2E006D49104134ABB358E2629E0BBBC05657884570F351E8D"
+  },
+  {
+    "Path": "cli-runs-3/cline-verbose-run.txt",
+    "Bytes": 2750,
+    "Sha256": "234AC878FE43534703750F8B5E2AF3D46E6D7097075B7B0F350AEE509F7B019D"
+  },
+  {
+    "Path": "cli-runs-3/copilot-help-config.txt",
+    "Bytes": 17604,
+    "Sha256": "B6085076E673397C2220093ACF3741B0CF799CCD9548F54D4FC298633FB170A3"
+  },
+  {
+    "Path": "cli-runs-3/copilot-run.txt",
+    "Bytes": 14260,
+    "Sha256": "3F64278DEF298BF5260AF7A906F355576A465E9CEA5D79C9150051310517D199"
+  },
+  {
+    "Path": "cli-runs-3/copilot-usage.json",
+    "Bytes": 3093,
+    "Sha256": "FB7643F79E34F1C025AC455FACD350825F57AB07B3D43B521B8E3A6A700A60A0"
+  },
+  {
+    "Path": "cli-write-probe/claude-plan.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe/claude-plan.stdout.txt",
+    "Bytes": 9838,
+    "Sha256": "6AFDCE93F7079EC9D3AD58B021FDEBAEF0D348030940D1098CCC74B52E1C398E"
+  },
+  {
+    "Path": "cli-write-probe/cline-plan.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe/cline-plan.stdout.txt",
+    "Bytes": 2456,
+    "Sha256": "76456F68DC760E1947DF9846E7AC738D4AC2EBF7FE09FBEC9F7EDF7043B3B9B3"
+  },
+  {
+    "Path": "cli-write-probe/codex-readonly.stderr.txt",
+    "Bytes": 948,
+    "Sha256": "BB1883D529F7D4FEC323C5BA4576B566E13B9A46F116D2760C48D83AE4CE60A5"
+  },
+  {
+    "Path": "cli-write-probe/codex-readonly.stdout.txt",
+    "Bytes": 1431,
+    "Sha256": "DB74F81769D02285CFDB850C9F22AE60F685060FC6D75EB014FE9742DDE0B54F"
+  },
+  {
+    "Path": "cli-write-probe/copilot-available.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe/copilot-available.stdout.txt",
+    "Bytes": 29560,
+    "Sha256": "354341B5D60DD4E932D11329B375D1F65AE027CA55E21EF34FE72500A0F68187"
+  },
+  {
+    "Path": "cli-write-probe/copilot-deny.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe/copilot-deny.stdout.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe/copilot-planmode.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe/copilot-planmode.stdout.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe/grok-plan.stderr.txt",
+    "Bytes": 9865,
+    "Sha256": "B3BBB8966E8196617F6BCD41FD4C2E99ABA30811A626E38BF4B6DE689AD438F3"
+  },
+  {
+    "Path": "cli-write-probe/grok-plan.stdout.txt",
+    "Bytes": 10730,
+    "Sha256": "40D684D37BC32AD7931B197CB14E9986168E471D4640688CAED78FF4B2295C36"
+  },
+  {
+    "Path": "cli-write-probe/write-probe-report.txt",
+    "Bytes": 4059,
+    "Sha256": "4D1ED3FF7C9A784C6E953D1ADDCE498145591B4870254565E05D360DBE1BBF73"
+  },
+  {
+    "Path": "cli-write-probe-2/claude-plan.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe-2/claude-plan.stdout.txt",
+    "Bytes": 13651,
+    "Sha256": "0D69B05A629A7D948082B25AB777EF3BCC73A53A6ED40B48A5BC9FAF48B573F3"
+  },
+  {
+    "Path": "cli-write-probe-2/cline-plan.stderr.txt",
+    "Bytes": 404,
+    "Sha256": "BF8CF369661328AD1AFEDCFEA40CCC6C725B57E19AC941ABA2B838B7FE82BE1D"
+  },
+  {
+    "Path": "cli-write-probe-2/cline-plan.stdout.txt",
+    "Bytes": 26070,
+    "Sha256": "65C2E18820C8A347B19617610610639E46ACA91072416BA8100FD3A2C85B2396"
+  },
+  {
+    "Path": "cli-write-probe-2/copilot-available.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-write-probe-2/copilot-available.stdout.txt",
+    "Bytes": 82276,
+    "Sha256": "FC90C1F452EF8E0061E130D22297CD6E7A2ACA8BAA67233931CF634B66E1A3D0"
+  },
+  {
+    "Path": "cli-write-probe-2/write-probe-report.txt",
+    "Bytes": 2241,
+    "Sha256": "01207B009E3E3D7B927F17E9D9DAA8DE2A3D505F2D6791A7B852F3DDBA5FADCD"
+  },
+  {
+    "Path": "cli-effort-probe/codex-max.stderr.txt",
+    "Bytes": 485,
+    "Sha256": "57124FE1731E45B201430E486E0A6CB048C2508B708720B05001C25122CFB315"
+  },
+  {
+    "Path": "cli-effort-probe/codex-max.stdout.txt",
+    "Bytes": 350,
+    "Sha256": "03D41B8E760AD3D97C401568518D9C3689BEA07052C81427C0EA0964997318F5"
+  },
+  {
+    "Path": "cli-effort-probe/effort-probe-report.txt",
+    "Bytes": 4735,
+    "Sha256": "21D03EF5704AEE9D6BDBD39FB06AE00DE458661EFFFDD7539947B311550A4888"
+  },
+  {
+    "Path": "cli-effort-probe/grok-max.stderr.txt",
+    "Bytes": 9457,
+    "Sha256": "9E482C7E10682CCA7C86BEC0AD198664419B1538B5E47385E8F6F9EA54DE4267"
+  },
+  {
+    "Path": "cli-effort-probe/grok-max.stdout.txt",
+    "Bytes": 206,
+    "Sha256": "1F626ED38CF93C8180B275A19483370DA647101AA09B3F5455311CBC8A1FB612"
+  },
+  {
+    "Path": "cli-effort-probe/grok-models.stderr.txt",
+    "Bytes": 324,
+    "Sha256": "DE18DBDA63250A97A7C08495CDD1A0D603474FC0EBB8E0E7AEF8278873590425"
+  },
+  {
+    "Path": "cli-effort-probe/grok-models.stdout.txt",
+    "Bytes": 150,
+    "Sha256": "761B89325E8AD709B7B3DB273BA1B0427F82D046BDBC5BB26BE46AF8E4516995"
+  },
+  {
+    "Path": "cli-claude-effort/claude-max.stderr.txt",
+    "Bytes": 0,
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "Path": "cli-claude-effort/claude-max.stdout.txt",
+    "Bytes": 1813,
+    "Sha256": "B906F8894C8A69D075777A1DD79D6BCD2286CC13A32CF36A6AF3E839A919FB12"
+  },
+  {
+    "Path": "render2/survey.txt",
+    "Bytes": 4636,
+    "Sha256": "81F75DD2169FC2A034E6CC6D21E34CA8BC4F0F04F36516F37AFD82AC9C593EC1"
+  }
+]
