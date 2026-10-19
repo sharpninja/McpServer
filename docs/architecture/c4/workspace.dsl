@@ -644,6 +644,46 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
                 background #85bbf0
                 color #000000
             }
+            # PLAN-C4MODEL-001 D3 and D5 element kinds for the converted documentation diagrams (P4).
+            element "Planned" {
+                border dashed
+            }
+            element "Activity" {
+                height 220
+                background #f2f2f2
+                color #000000
+            }
+            element "Start" {
+                shape circle
+                background #c8e6c9
+            }
+            element "Action" {
+                shape roundedbox
+            }
+            element "Decision" {
+                shape diamond
+                background #fff3cd
+            }
+            element "Error" {
+                background #f8d7da
+                stroke #a94442
+            }
+            element "End" {
+                shape circle
+                background #d6d8db
+            }
+            element "State" {
+                shape roundedbox
+                height 220
+                background #e7f1ff
+                color #000000
+            }
+            element "Topic" {
+                shape ellipse
+                height 220
+                background #f2f2f2
+                color #000000
+            }
             element "Entity" {
                 # Entity text is short (keys and column count), so a lower box lets more entities fit the AC-5 page.
                 height 220
