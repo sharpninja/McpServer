@@ -119,6 +119,15 @@ partial class Build
                 TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
             };
 
+            // TR-MCP-NUKE-019 AC-5: on Windows the lane runs only from an interactive desktop session; refuse
+            // before any test runs, naming the missing session.
+            var readiness = new InteractiveSessionPrecondition().Evaluate(IntegrationLaneFilter.CurrentHost(), Environment.UserInteractive);
+            if (!readiness.CanRun)
+            {
+                Log.Error("Integration lane precondition: {Message}", readiness.FailureMessage);
+                throw new InvalidOperationException(readiness.FailureMessage);
+            }
+
             // TR-MCP-NUKE-019 AC-1 and AC-3: select this host's integration cases and name the filter in the log.
             var laneFilter = new IntegrationLaneFilter().Compose(IntegrationLaneFilter.CurrentHost());
             Log.Information("Integration lane filter: {Filter}", laneFilter);
