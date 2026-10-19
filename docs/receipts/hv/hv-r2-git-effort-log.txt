@@ -1,0 +1,480 @@
+commit 31af8c597e3570a2469a48a238a4aa76107f30bb
+2026-10-16T14:54:06-05:00
+docs(architecture): amendment 1, durable multi-agent HV
+
+Add docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md,
+the documentation-only architecture amendment that finishes the Cline handoff
+hv-architecture-amendment-handoff-20261016T182551Z. It builds on the foundation
+architecture (SessionTurn-Review-AgentContext-Architecture.md, unchanged) and adds the
+HostileValidation bounded context: reviewer pool of five with NONCE readiness,
+durable admission and round-robin assignment with submitter exclusion, leased and
+fenced execution with true live output, GZIP evidence in the relational store,
+atomic finalization with turn finality, notification outbox, incidents through
+triage, audit hard stop, and retention until removal.
+
+Contents: 33 verbatim settled operator requirements (S-01..S-33) and 6 standing HV
+rules, 31 design resolutions with alternatives, 12 amended foundation clauses,
+lifecycles, invariants, crash windows, configuration, 8 shared components, data
+model, wire contracts, 23 units of work with activity diagrams, 8 new policies
+plus the reused HvVerdictMapping, 4 processes plus the adapter contract and
+Director commands, 17 sequence diagrams, 12 use cases, 21 proposed FRs with 105
+acceptance criteria and named tests, delivery, problem register, open decisions,
+and grouped entity diagrams (94 Mermaid diagrams).
+
+Status: proposed, not approved, not hostile-validated; no code; proposed
+requirement ids are not created (all 63 absent in the store at 14:50:04 local).
+Problems found are tracked in REMED-HVPIPELINE-001; the plan TODO is
+PLAN-HVPIPELINE-001.
+
+Validation: amendment lint PASSED (no dashes, no tables, every cross reference,
+AC, error code, and index entry resolved); 94 diagrams rendered with Mermaid 12
+in headless chromium, 0 failures, 0 font-band conflicts, none over 2 pages.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 88%, accuracy 92%, completeness 88%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit 99cb42b24a442377a776aebd58e9df6894c2ce40
+2026-10-16T15:52:00-05:00
+docs(architecture): amendment 1, verified reviewer facts and what-if fixes
+
+Self-review pass on the durable multi-agent HV amendment before any hostile
+validation: the verification items the drafting session could settle on this
+machine are settled from probe runs and source, and the structured what-if pass
+fixed the design gaps listed below. Documentation only; no code.
+
+Verified (probe runs of 2026-10-16, receipts copied with SHA-256 checks to
+~/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/):
+- VI-01 runtime model and effort per CLI: Codex rollout, Claude transcript,
+  Grok session store, Copilot JSON stream record both; Cline records the model
+  but never the effort level (L-04, new decision D-06).
+- VI-02 Copilot runs unattended with -p and JSON output; effort needs an
+  explicit model, so a Copilot reviewer needs a configured model.
+- VI-03 write barriers: Codex read-only sandbox and Grok plan mode refused a
+  write; Copilot --available-tools offers no write or shell tool; Claude and
+  Cline plan modes not accepted as barriers.
+- VI-06 session turn order is ascending turn row Id in develop.
+- VI-07 one GZipStream reads a multi-member log back exactly.
+- VI-08 (new) highest accepted effort: Codex max, Claude max, Grok xhigh,
+  Cline xhigh, Copilot max.
+
+Fixed:
+- Lease expiry now ends a request like a failed run (turns released,
+  responses closed, notification): HvRetryDecision decides and writes the
+  outcome for FailHvRunCommand and ExpireHvRunLeasesCommand; A-11 lists both.
+- Evidence bytes no longer duplicated in the audit ledger, and removal leaves
+  no bytes anywhere (R-14, R-19, R-20; develop snapshots every property).
+- Reviewer records are extracted from assembled messages by one function used
+  by the worker and finalization (Grok streams per token).
+- Exit code 0 is never a review outcome (Grok cancelled runs and empty Copilot
+  runs exit 0).
+- Reviewer plugin isolation from a live session of the same agent; reviewer
+  closes its own turn so the Stop gate never holds a run with no time limit.
+- Highest efforts corrected (Grok refuses max; Codex accepts max).
+- Every crash window W-01 to W-12 now names the acceptance criterion that
+  proves it.
+- New problem P9 (develop one-shot Grok effort max is refused; constants
+  duplicated); P4 extended; new decisions D-05 (exclude turn authors) and D-06.
+
+Acceptance criteria: 105 to 111 (FR-008-AC008 to AC010, FR-010-AC006 and
+AC007, FR-018-AC005), several strengthened. Lint PASSED; 94 diagrams rendered
+headless, 0 failures, 0 font conflicts, none over 2 pages.
+
+Status: proposed, not approved, not hostile-validated.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit 9fd6b653b2522212ad8151091e3a8cdec25e75bd
+2026-10-16T16:07:18-05:00
+docs(architecture): amendment 1, the audit log is never purged
+
+Operator correction: "Purging stale data doesn't include removing it from
+the audit log. That's the opposite of an audit log."
+
+Commit 99cb42b2 made the audit ledger rows of the HV evidence entities hold
+payload hashes in place of bytes, partly so that an evidence removal would
+leave no bytes in the ledger, and wrote "no table holds the removed bytes,
+the audit ledger included" into R-20 and FR-MCP-HVPIPE-019-AC002. That
+treated the audit log as purgeable and contradicted R-14's own rationale
+(evidence belongs inside the audit ledger). Reverted:
+
+- R-14: the evidence tables hold each item once; the audit ledger keeps its
+  own GZIP-compressed history of every evidence write, as develop's ledger
+  does for every audited entity, and a removal never changes it.
+- R-19: the ledger is append-only for HV; no HV unit or process updates or
+  deletes a ledger row.
+- R-20 and RemoveHvEvidenceCommand: removal clears the evidence tables only;
+  the ledger keeps the write history and gains the removal record.
+- New invariant I-13 (append-only ledger); I-11 scoped to the evidence tables.
+- FR-MCP-HVPIPE-018-AC005 now proves every earlier ledger row is unchanged
+  after a removal and no HV code updates or deletes a ledger row
+  (EvidenceRemovalLeavesAuditLedgerUnchanged); FR-MCP-HVPIPE-019-AC002 states
+  the ledger is unchanged.
+- P4 and section 20.4 no longer carry the hash-only ledger rule; VI-05 counts
+  the ledger's own copy in the storage measurement.
+
+Lint PASSED (13 invariants, 111 acceptance criteria). No diagram changed.
+Status: proposed, not approved, not hostile-validated.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 95%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit 6dbc384323c036a57c37fd9eaf2259879c1d956f
+2026-10-16T16:40:02-05:00
+docs(architecture): amendment 1, decisions settled from operator instructions
+
+Operator: "The 10 questions, please look at the totality of the project, of
+all of my instructions, and see if you can solve them yourself." Settled from
+those instructions, with sources in section 22:
+
+- D-01: reviewer exclusion is by agent family, not model vendor (S-17, P-01,
+  and the operator's own configuration running Cline on gpt-6-astra beside
+  Codex as two reviewers).
+- D-02: the HostileReview subsystem stays separate (it reviews artifacts,
+  FR-MCP-HOSTILEREVIEW-002; this pipeline reviews turns, S-03); its missing
+  worker reuses HvWorkerHost and the reviewer adapters; P1 to P3 land in H3.
+- D-05: the author of the reviewed turns is excluded as well as the submitter
+  (S-28, new standing rule P-07 "Self-check alone is not validation."):
+  AuthorReviewerId on HvRequest, HvReviewerEligibility, RoundRobinAssignment,
+  V-5, I-07, R-08, R-09, L-01, A-09, UC-HV-03; new FR-MCP-HVPIPE-002-AC008;
+  AC004 and AC006 made precise under the new exclusion.
+- D-06: Cline stays unqualified until it records a run's effort (P-04 fails
+  closed).
+- Live logging probe: verified in H1 on a separate instance, never the live
+  server (operator rule for integration checks).
+
+Still the operator's: D-03 (approval of A-01 to A-12 and the plan) and D-04
+(the HV reviewer: "If not specified by operator, ask what agent and model to
+use for HV in a session.").
+
+Requirements captured as they emerge (requirements skill: "Capture
+requirements as they emerge; do not defer to end of session."): the 63
+records FR, TR, TEST -MCP-HVPIPE-001 to -021 and 21 mappings were created
+2026-10-16 16:32:30 to 16:37:30 local, status pending, read back with 0
+mismatches; sections 1, 19, 19.3, and 20.1 record it.
+
+Lint PASSED (112 acceptance criteria, 7 standing rules); 94 diagrams render
+headless, 0 failures, 0 font conflicts, none over 2 pages.
+Status: proposed, not approved, not hostile-validated.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 95%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit bd6e37b33f043b1ede3a1feeaf7073d357ea21cf
+2026-10-17T08:35:50-05:00
+docs(architecture): amendment 1, PR 81 findings P10 to P15 and D-04 settled
+
+Operator, 2026-10-17: "1. Yes, 2. A".
+
+1. Yes: the six findings of the Codex review of PR 81 (review 5554472359 on
+   6dbc384323, posted 2026-10-16T17:48:12 local, after the merge) are
+   registered as P10 to P15 in section 21, each checked against this
+   branch's source:
+   - P10 legacy workspace keys are not rewritten (WorkspaceKeyConversion
+     reads stored values unchanged; no migration or other code rewrites
+     them). This is the federation plan's undelivered P1.5 (rekey command,
+     startup guard, token-store rewrite; its D5 and D7). Codex's suggested
+     migration contradicts D5.
+   - P11 the stop hook's stale-cache proof cannot be read
+     (Task<UnifiedSessionLogDto> is not awaited by the REPL passthrough,
+     and the DTO lacks the proof fields).
+   - P12 a root-relative Windows segment is not treated as rooted.
+   - P13 legacy GitHub token entries are not normalized on read (the
+     federation plan's P1.5 includes this rewrite).
+   - P14 Stop-ReplChildTree kills the tree only while the root runs
+     (FR-MCP-SESSIONLIFE-004 acceptance criterion 1).
+   - P15 a consumed stop override returns before the turn is handled.
+     Codex's suggested fix (continue to completion) contradicts the
+     approved foundation (FR-MCP-SESSIONTURN-005: the stop gate never
+     closes a turn).
+   Section 20.4 adds two entry conditions: no HV entity before P10, P12,
+   and P13 are closed; FR-MCP-HVPIPE-008-AC010 bound to the real hosts only
+   after P11, P14, and P15 are closed. Who fixes them is the new open
+   decision D-07 (owning plans, or this plan).
+2. A: D-04 settled, the HV reviewer of this amendment and its plan is
+   Codex gpt-6-astra at effort max.
+
+Lint PASSED at 2026-10-17T08:35:07 local (15 problems, 7 decisions, 112
+acceptance criteria, each with a test name; no dashes, no tables).
+Status: proposed, not approved, not hostile-validated.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit f5fd5ab24ad00b09053daf07ed3c0d850f70498d
+2026-10-17T08:36:43-05:00
+docs(architecture): amendment 1, P15 names a plan-created requirement as such
+
+P15 cited FR-MCP-SESSIONTURN-005 as if it were a stored requirement. A
+requirement read at 2026-10-17T08:36:10 local answered not_found: it is
+created by PLAN-SESSIONTURNREVIEW-001 (slice A7) and the store does not
+hold it yet. P15 now says so, and quotes that plan's change to
+TR-MCP-SESSIONLIFE-005 ("Close-PluginTurnIfNeeded blocks instead of
+closing"), which is a stored record.
+
+Lint PASSED at 2026-10-17T08:36:32 local.
+Status: proposed, not approved, not hostile-validated.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit 31904493381cfef56c57790950e23e72f3ecc39b
+2026-10-17T08:51:24-05:00
+docs(architecture): amendment 1, pre-HV holistic review fixes and AC011
+
+Holistic read of the whole amendment before the hostile validation (profile
+7.5), with what-if and propagation checks. Implementer fixes:
+
+- A-02 cited section 20.4 for the rule that the pipeline does not validate
+  its own plan; the rule is in section 20.3.
+- Section 7.3 still read "not the submitter" after D-05; eligibility now
+  names the author too, as R-08, I-07, and HvReviewerEligibility do.
+- I-06 described the log hash as the SHA-256 of the concatenation, while
+  section 12 and V-1 use the chain hash over the chunks' SHA-256 values;
+  I-06 now states the chain hash, and section 12 no longer cites R-12 for
+  a definition R-12 does not hold.
+- GetHvEvidenceQuery listed a runId of another request as 400 while its
+  diagram and sequence 17.10 answer 404 not_found run; the list now says 404.
+- HvIncident.DedupeKey and R-17 named only the reviewer form; both now name
+  hv-server-<failureCode>, which FailHvRunCommand, the lease sweep, and
+  FR-MCP-HVPIPE-009-AC006 already use.
+- Section 13.3 called hv_probe the only record of a probe brief, while
+  ReadinessProbeVerdict also reads hv_reviewer_turn; the probe brief now
+  asks for both.
+- HvWorkerHost "dispatches only internal units" contradicted its startup
+  StartHvReviewerNonceCommand; it is now the only dispatcher of the
+  internal units.
+
+New acceptance criterion from the what-if pass (a sibling of P14 in the HV
+design, and a deadlock of P-02 with read-to-end output): killing a reviewer
+ends its whole process tree, also after the root exited, and a descendant
+holding the output pipes is ended so the run cannot be held open forever
+(section 16.2; FR-MCP-HVPIPE-008-AC011, ReviewerStopEndsWholeProcessTree,
+H3; 19.2 maps P-02 to it). FR, TR, and TEST-MCP-HVPIPE-008 were updated in
+the store in one atomic updateBatch; all 63 records equal section 19.1
+(Test-HvpipeStoreEquality, 2026-10-17T08:48:33 local, 63 of 63).
+
+Checks: lint PASSED at 2026-10-17T08:45:03 local (113 acceptance criteria,
+15 problems, 7 decisions); foundation SHA-256 at 36783b79 equals the
+claimed 6E5D4F41...295E; 0 of 94 Mermaid blocks changed since 6dbc3843.
+Status: proposed, not approved, not hostile-validated.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit 0a449314528c5bfc07e9b386c97034716e2ddbd4
+2026-10-17T08:57:13-05:00
+docs(architecture): amendment 1, turns already HV-reviewed migrate Final (AC007)
+
+What-if per requirement before the hostile validation (profile 7.5,
+legacy and upgrade): the freeze keys on HvState only, so a turn that
+already holds a Pass or Fail hostile review when A-11 adds the column
+would start None, stay writable, and could be admitted again, against
+S-07 ("Session log may not allow updates to a turn with an HV review")
+and S-20. Such turns exist if the foundation's Phase B ships its manual
+hostile reviews before A-06 retires them.
+
+- A-11: the migration that adds HvState and HvRequestId sets Final (with
+  no request id) on every turn whose hostile review is Pass or Fail.
+- Section 7.4 and section 12 state it; HvAdmissionEligibility names the
+  null request id of such a turn; HvStorageSchema owns the rule.
+- FR-MCP-HVPIPE-012-AC007 (MigrationMarksHvReviewedTurnsFinalThreeProviders,
+  three providers); 19.2 maps S-07 to it. FR, TR, and TEST-MCP-HVPIPE-012
+  updated in the store in one atomic updateBatch; all 63 records equal
+  section 19.1 (2026-10-17T08:55:01 local).
+
+Lint PASSED at 2026-10-17T08:54:21 local (114 acceptance criteria).
+Status: proposed, not approved, not hostile-validated.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit d3a0beb10b0879f20fb307f205a3bff25ac3a441
+2026-10-17T09:16:07-05:00
+docs(architecture): amendment 1, D-07 and D-08 settled by the operator
+
+Operator, 2026-10-17, verbatim: "1. D-07 B: this plan fixes all six (P10 to
+P15) itself. 2. HV ids keep the UTC yyyyMMddTHHmmssZ stamp: timestamps are
+UTC in the data and local only for display. 3. Yes, launch the HV round
+now."
+
+- D-07 settled (B): this plan fixes P10 to P15, each under the owning
+  plan's approved design. Section 20.4 assigns P10, P12, and P13 to
+  HvStorageSchema before any HV entity (P10 and P13 as the federation
+  plan's P1.5 decided them: rekey maintenance command, startup guard,
+  token-store rewrite, its D5 and D7; never an automatic migration or a
+  dual-key lookup), and P11, P14, and P15 to H1 in the PowerShell plugin
+  core, synced to every plugin, before FR-MCP-HVPIPE-008-AC010 is bound
+  (P11 and P15 to the foundation's stop gate, FR-MCP-SESSIONTURN-005,
+  never Codex's complete-in-hook suggestion). Where an owner already
+  delivered the same fix, the phase proves it with the named test and does
+  not change that code again (DRY). H0 imports FR, TR, and
+  TEST-MCP-PATHNORM-001 into this workspace's store (not held here today;
+  the federation handoff places them in the F:\GitHub\McpServer store) and
+  strengthens the acceptance criteria P10 to P15 are fixed through.
+- D-08 settled: hvr-, hvprobe-, and hvi- keep the UTC yyyyMMddTHHmmssZ
+  stamp; every stored timestamp is UTC with offset; local time is for
+  display only (section 12 cites it).
+
+Lint PASSED at 2026-10-17T09:15:49 local (114 acceptance criteria, 15
+problems, 8 decisions). Status: proposed, not approved, not
+hostile-validated.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d
+2026-10-17T10:36:12-05:00
+docs(receipts): amendment 1 HV round 1 receipts (DISAGREE 90/82)
+
+Hostile validation of Architecture Amendment 1 and PLAN-HVPIPELINE-001 at
+HEAD d3a0beb1, gate amendment1-r1, reviewer Codex CLI 0.162.1 gpt-6-astra
+at effort max (D-04), launched 2026-10-17T09:19:08 local behind the
+pre-HV gate, finished 10:30:46 local (exit 0, 661 stream lines), no time
+bound.
+
+- Request: docs/receipts/hv/20261017T091907-amendment1-r1.request.jsonl
+- Response: docs/receipts/hv/20261017T091907-amendment1-r1.response.jsonl
+- Rollout copy: docs/receipts/hv/20261017T091907-amendment1-r1.rollout.jsonl
+  (turn_context model=gpt-6-astra effort=max, verified 09:21:23)
+- Pre-HV record: docs/receipts/hv/20261017T091907-amendment1-r1.selfreview.md
+- Verdict: docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md
+  and .json, plus the reviewer's hv-r1-* evidence files
+- Reviewer session Codex-20261017T142241Z-hv-amendment1-r1, turn
+  req-20261017T142304Z-hv-amendment1-r1
+
+OverallVerdict DISAGREE, accuracy 90, completeness 82, confidence 95;
+claims 1 PASS, 10 FAIL, 1 UNKNOWN; findings F01 to F21 and unknowns U01
+and U02, every one classified an implementer fix, no operator decision.
+
+Redaction before commit: the marker's API key value appeared 4 times
+(1 in the response stream, 3 in the rollout copy) and is replaced with
+[REDACTED:api-key]; a re-scan of all 248 round files finds 0. The
+unredacted originals are kept outside the repository. The entire result
+is stored on session-log turn req-20261017T141158Z-prompt-3cb4 (38 parts,
+read back equal to both receipts).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit 3fba1b1336a92767904e344dbe9d531200049a0d
+2026-10-17T11:25:14-05:00
+docs(architecture): amendment 1, HV round 1 remediation (F01 to F21, U01, U02)
+
+Remediates every finding and unknown of hostile validation round 1
+(gate amendment1-r1, DISAGREE 90/82, receipts in caaa41b0), each checked
+against source before its edit, plus the propagation and holistic-read
+fixes found while preparing round 2. Documentation only; no code.
+
+Round 1 items:
+- F01 to F21 stated as observable outcomes: flush timer, notification
+  crash-consistency (one state file, submitter key on the notification),
+  configuration-change probe and ConfigurationVersion staleness, probe
+  failure branch, V-6 completed Chore holding every record, result digest
+  that excludes itself, incident write-ahead, P1 wording (projection versus
+  store), internal grade unit (14.5), response findings, accepted response
+  set, R-31 single overall predicate, RecordHvRunStartCommand and ClaimedUtc,
+  cancel found at close, removal outcomes, VI-05 workload, the
+  HostileReviewWorkerHost contract (16.7), worker-bound containment, the
+  bounded submit key, the conditional finalizer failure.
+- U01: server audit of every push to this branch from the GitHub activity
+  API, docs/receipts/hv/20261017T110027-amendment1.push-audit.json
+  (10 entries: branch_creation 1, push 9, force_push 0).
+- U02: section 19.4 binds each of the 133 criteria to the first phase in
+  which its dependencies exist and marks the live-check cases; delivery
+  order H6 before H5. Mechanical check: 133 bound once, 0 missing,
+  0 duplicate, 0 undefined.
+
+Found while preparing round 2 (self-review, holistic read):
+- P11 and P15 belong to FR-MCP-SESSIONLIFE-005 criteria 2 and 1 in the
+  store; the hook cites FR-MCP-SESSIONLIFE-004 (plugin-hook.ps1:972,1044),
+  a citation H1 corrects with the fix. Named tests for P10 to P15.
+- Section 19.3 lists the existing records the fixes update
+  (TEST-MCP-HOSTILEREVIEW-002 and -003 gain the 16.7 tests; PATHNORM-001
+  imported then strengthened; SESSIONLIFE-004 and -005).
+- Probe evidence_corrupt is a server fault (FailHvRunCommand's one
+  attribution list now covers probes): server incident, readiness
+  unchanged, no automatic re-probe (FR-MCP-HVPIPE-003-AC003).
+- An append that returns evidence_corrupt stops the reviewer and fails the
+  run as a server fault (FR-MCP-HVPIPE-011-AC003, 16.2, 17.7).
+- Propagation: R-29, 11.1, 11.2, 11.3, R-19, A-11, HvRetryDecision callers,
+  7.1 to 7.3, 16.2 close exits, 17.3, 17.5, 17.7, 17.8 write-ahead and
+  cancel branch, UC-HV-02 and UC-HV-08 alternates.
+
+Checks: lint PASSED (3036 lines, 100 mermaid blocks, 133 ACs, 157 test
+names); all 100 diagrams render (0 fail, 0 font conflict, 8 pt, sequences
+landscape), receipts docs/receipts/diagrams/amendment1-r2-20261017T111405;
+requirement store synced through one updateBatch of 38 records and read
+back 63 of 63 equal; secret scan 0 occurrences in the committed files.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit 168478c3c5d96b08e965ac9e63d78feb26e359e1
+2026-10-17T11:32:03-05:00
+docs(architecture): amendment 1, P11, P14, P15 tests belong on TEST-MCP-SESSIONLIFE-002
+
+Commit 3fba1b13 placed the named tests of P11 and P15 on
+TEST-MCP-SESSIONLIFE-005 and the test of P14 on TEST-MCP-SESSIONLIFE-004,
+chosen by number without reading the mappings. The store read of
+2026-10-17T11:30:39 local shows FR-MCP-SESSIONLIFE-005 maps to
+TEST-MCP-SESSIONLIFE-002 and -004, FR-MCP-SESSIONLIFE-004 to -002, -004,
+and -005, and TEST-MCP-SESSIONLIFE-005 belongs to the drain-timeout work of
+FR-MCP-REPL-011; TEST-MCP-SESSIONLIFE-002 (11:31:08) is the record that
+holds the child-deadline, cleanup, Stop-ordering, and stop-hook pin tests
+(its criterion 2). Sections 19.3 and 20.4 now name it for all three tests.
+
+Lint PASSED at 11:31:45 local (3036 lines, 100 mermaid blocks, 133 ACs,
+157 test names); no diagram changed; no requirement record of section 19.1
+changed.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+commit 6c848a4e56f8dee101672dcca1435d600c21eb41
+2026-10-17T17:59:09-05:00
+docs(architecture): amendment 1, D-09 settled by the operator (existing records change in H0)
+
+The operator answered "B" on 2026-10-17 to the question whether the
+existing requirement records the problem fixes touch should change now or
+in H0 after approval. D-09 records it in section 22: TEST-MCP-HOSTILEREVIEW-002
+and -003, FR-MCP-SESSIONLIFE-004 and -005, TEST-MCP-SESSIONLIFE-002, and the
+import of FR, TR, and TEST-MCP-PATHNORM-001 change in H0, after the
+operator approves the plan, because FR-MCP-HOSTILEREVIEW-003 criterion 4
+cites PLAN-SESSIONTRIAGEFIX-001, which the operator paused on 2026-10-16.
+Section 19.3 cites D-09; the section 22 introduction counts it.
+
+Lint PASSED at 2026-10-17T17:58:41 local (3037 lines, 100 mermaid blocks,
+133 ACs, 157 test names, 9 decisions); no diagram and no requirement record
+of section 19.1 changed.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QPEG9wEPfbfj4qgB3eeK2N
+
+

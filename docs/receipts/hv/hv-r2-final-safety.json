@@ -1,0 +1,125 @@
+{
+  "TimestampUtc": "2026-10-18T04:05:14.2349528+00:00",
+  "TimestampLocal": "2026-10-17T23:05:14",
+  "FilesScanned": 111,
+  "SecretProblems": [],
+  "StreamChecks": [
+    {
+      "Kind": "request",
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T221717-amendment1-r2.request.jsonl",
+      "ValidJsonLines": 2,
+      "InvalidJsonLines": 0,
+      "EventTypes": [
+        "hv_request_body",
+        "hv_request_meta"
+      ],
+      "ResponseStillBeingCaptured": false
+    },
+    {
+      "Kind": "response",
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T221717-amendment1-r2.response.jsonl",
+      "ValidJsonLines": 578,
+      "InvalidJsonLines": 0,
+      "EventTypes": [
+        "item.completed",
+        "item.started",
+        "thread.started",
+        "turn.started"
+      ],
+      "ResponseStillBeingCaptured": true
+    }
+  ],
+  "ScriptHeaders": [
+    {
+      "File": "hv-r2-bootstrap-read.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-build-verdict.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-checkpoint.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-collect.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-command-audit.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-compare.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-final-safety.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-hygiene.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-inspect.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-inventory.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-native-provenance.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-persist-verdict.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-phase-continuity.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-profile-inventory.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-provenance.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-read.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-search.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-session-open.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-setup-inspect.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-source-read.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-staticcheck.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    },
+    {
+      "File": "hv-r2-store-read.ps1",
+      "Header": "# SPDX-License-Identifier: Apache-2.0"
+    }
+  ],
+  "ReviewedSourceChanges": [],
+  "GitDiffExitCode": 0,
+  "Scope": "Only reviewer receipts and the two runner-owned streams, read-only; marker values never emitted."
+}

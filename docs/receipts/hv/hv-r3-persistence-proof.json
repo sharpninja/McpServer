@@ -1,0 +1,86 @@
+{
+  "TimestampUtc": "2026-10-18T07:03:36.8594606+00:00",
+  "TimestampLocal": "2026-10-18T02:03:36",
+  "SessionId": "Codex-20261018T062121Z-plugin-session",
+  "RequestId": "req-20261018T062156Z-amendment1-r3",
+  "ThreadId": "01a14da9-1b10-75e2-bfac-c13091d343b1",
+  "TurnStatus": "completed",
+  "StoredSessionModel": "gpt-6-astra",
+  "StoredTurnModel": "gpt-6-astra",
+  "LiveModel": "gpt-6-astra",
+  "LiveEffort": "max",
+  "PartCount": 16,
+  "MatchingParts": 16,
+  "PartChecks": [
+    {
+      "Number": 1,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 2,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 3,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 4,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 5,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 6,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 7,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 8,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 9,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 10,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 11,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 12,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 13,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 14,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 15,
+      "ExactMatches": 1
+    },
+    {
+      "Number": 16,
+      "ExactMatches": 1
+    }
+  ],
+  "CompleteProseReconstructs": true,
+  "CompleteProseSha256": "43688E6E93A92DC0A56E5E1C053D3F810D51D95CD0C73B84FA3046C11A05332F",
+  "CompleteProseCharacters": 120979,
+  "HistoryContainsOwnSession": true,
+  "QueryReceipt": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r3-log-result-query.txt",
+  "HistoryReceipt": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r3-log-history.txt"
+}

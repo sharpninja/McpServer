@@ -1,0 +1,391 @@
+FILE=src/QBrainAi.Storage/McpDbContext.cs
+1490:         var path = workspaceId;
+1491:         var name = string.IsNullOrWhiteSpace(path)
+1492:             ? "global"
+1493:             : Path.GetFileName(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+1494: 
+1495:         return new WorkspaceEntity
+1496:         {
+1497:             WorkspaceId = workspaceId,
+1498:             WorkspacePath = path,
+1499:             Name = string.IsNullOrWhiteSpace(name) ? "workspace" : name,
+1500:             TodoPath = "docs/todo.yaml",
+1501:             IsEnabled = true,
+1502:             DateTimeCreated = now,
+1503:             DateTimeModified = now,
+1504:         };
+1505:     }
+1506: 
+1507:     private void AppendAuditRows()
+1508:     {
+1509:         if (!IsAuditTableAvailable())
+1510:             return;
+1511: 
+1512:         var now = DateTimeOffset.UtcNow;
+1513:         var auditRows = ChangeTracker.Entries()
+1514:             .Where(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted)
+1515:             .Where(IsDurableAuditableEntry)
+1516:             .Select(e => CreateAuditRow(e, now))
+1517:             .Where(e => e is not null)
+1518:             .Select(e => e!)
+1519:             .ToArray();
+1520: 
+1521:         if (auditRows.Length == 0)
+1522:             return;
+1523: 
+1524:         DataAuditLogs.AddRange(auditRows);
+1525:     }
+1526: 
+1527:     private bool IsAuditTableAvailable()
+1528:     {
+1529:         try
+1530:         {
+1531:             _ = DataAuditLogs.IgnoreQueryFilters().Any();
+1532:             return true;
+1533:         }
+1534:         catch (DbException ex) when (IsWorkspaceBootstrapSchemaUnavailable(ex))
+1535:         {
+1536:             return false;
+1537:         }
+1538:     }
+1539: 
+1540:     private static DataAuditLogEntity? CreateAuditRow(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, DateTimeOffset now)
+1541:     {
+1542:         var action = entry.State switch
+1543:         {
+1544:             EntityState.Added => "create",
+1545:             EntityState.Deleted => "delete",
+1546:             EntityState.Modified when TryGetSoftDeleteValue(entry) => "delete",
+1547:             EntityState.Modified => "update",
+1548:             _ => null,
+1549:         };
+1550: 
+1551:         if (action is null)
+1552:             return null;
+1553: 
+1554:         return new DataAuditLogEntity
+1555:         {
+1556:             AuditId = Guid.NewGuid().ToString("N"),
+1557:             WorkspaceId = TryGetWorkspaceId(entry) ?? string.Empty,
+1558:             EntityKind = entry.Metadata.ClrType.Name,
+1559:             EntityKey = BuildEntityKey(entry),
+1560:             Action = action,
+1561:             Actor = "McpDbContext",
+1562:             SourceType = "McpDbContext",
+1563:             OccurredAtUtc = now,
+1564:             PreviousSnapshotJson = entry.State == EntityState.Added ? null : SnapshotJson(entry, originalValues: true),
+1565:             CurrentSnapshotJson = entry.State == EntityState.Deleted ? null : SnapshotJson(entry, originalValues: false),
+1566:         };
+1567:     }
+1568: 
+1569:     private static string BuildEntityKey(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+1570:     {
+1571:         var key = entry.Metadata.FindPrimaryKey();
+1572:         var properties = key?.Properties.Count > 0 ? key.Properties : entry.Properties.Select(p => p.Metadata).ToList();
+1573:         return string.Join("|", properties.Select(p =>
+1574:         {
+1575:             var value = entry.Property(p.Name).CurrentValue ?? entry.Property(p.Name).OriginalValue;
+1576:             return $"{p.Name}={value}";
+1577:         }));
+1578:     }
+1579: 
+1580:     private static string SnapshotJson(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, bool originalValues)
+1581:     {
+1582:         var snapshot = entry.Properties
+1583:             .OrderBy(p => p.Metadata.Name, StringComparer.Ordinal)
+1584:             .ToDictionary(
+1585:                 p => p.Metadata.Name,
+1586:                 p => SanitizeAuditValue(p.Metadata.Name, originalValues ? p.OriginalValue : p.CurrentValue));
+1587: 
+1588:         return JsonSerializer.Serialize(snapshot, StorageAuditJsonContext.Default.DictionaryStringObject);
+1589:     }
+1590: 
+1591:     private static object? SanitizeAuditValue(string name, object? value)
+1592:     {
+1593:         if (value is null)
+1594:             return null;
+1595: 
+1596:         if (name.Contains("Token", StringComparison.OrdinalIgnoreCase)
+1597:             || name.Contains("Secret", StringComparison.OrdinalIgnoreCase)
+1598:             || name.Contains("Password", StringComparison.OrdinalIgnoreCase)
+1599:             || name.Contains("ApiKey", StringComparison.OrdinalIgnoreCase)
+1600:             || name.Contains("Key", StringComparison.OrdinalIgnoreCase))
+1601:         {
+1602:             return "[redacted]";
+1603:         }
+1604: 
+1605:         return value;
+1606:     }
+1607: 
+1608:     private static string? TryGetWorkspaceId(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+1609:     {
+1610:         var property = entry.Properties.FirstOrDefault(p => p.Metadata.Name == nameof(WorkspaceEntity.WorkspaceId));
+1611:         return property?.CurrentValue as string ?? property?.OriginalValue as string;
+1612:     }
+1613: 
+1614:     private static bool TryGetSoftDeleteValue(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+1615:     {
+1616:         var property = entry.Properties.FirstOrDefault(p => p.Metadata.Name == "IsDeleted");
+1617:         return property?.CurrentValue is true;
+1618:     }
+1619: 
+1620:     private static bool IsDurableAuditableEntry(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+1621:     {
+1622:         return entry.Entity is not DataAuditLogEntity
+1623:             && entry.Entity is not WorkspaceEntity { WorkspaceId: "" }
+1624:             && entry.Metadata.GetTableName() is not null
+1625:             && entry.Metadata.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal)
+1626:             && entry.Properties.Any(p => p.Metadata.Name == "IsDeleted");
+1627:     }
+1628: 
+1629:     private static bool IsPersistentEntityEntry(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+1630:     {
+1631:         return entry.Metadata.GetTableName() is not null
+1632:             && entry.Metadata.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal);
+1633:     }
+1634: 
+1635:     private static void SetShadowValue(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, string propertyName, object? value)
+1636:     {
+FILE=src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs
+1: using System.Diagnostics;
+2: using System.Runtime.CompilerServices;
+3: using System.Runtime.Versioning;
+4: using System.Security.AccessControl;
+5: using System.Security.Principal;
+6: using System.Text;
+7: 
+8: using QBrainAi.Common.AgentCli;
+9: 
+10: using Microsoft.Extensions.Logging;
+11: 
+12: namespace QBrainAi.Support.Mcp.Services;
+13: 
+14: /// <summary>
+15: /// TR-MCP-TRIAGE-003: Runs a configured CLI agent in one-shot mode for
+16: /// non-interactive prompts where the selected agent is part of the request.
+17: /// </summary>
+18: internal sealed class OneShotCliAgentExecutionStrategy(
+19:     IProcessEnvironmentService processEnvironment,
+20:     IProcessSpawner processSpawner,
+21:     ILogger<OneShotCliAgentExecutionStrategy> logger) : IAgentExecutionStrategy
+22: {
+23:     private const string CodexHighestReasoningEffortConfig = "model_reasoning_effort=\"xhigh\"";
+24:     private const string ClaudeHighestEffort = "max";
+25:     private const string ClineHighestThinkingLevel = "xhigh";
+26:     private const string GrokHighestEffort = "max";
+27: 
+28:     /// <inheritdoc />
+29:     public string Name => AgentExecutionStrategyNames.OneShotCli;
+30: 
+31:     /// <inheritdoc />
+32:     public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+33:         AgentExecutionSessionRequest request,
+34:         CancellationToken cancellationToken = default)
+35:     {
+36:         ArgumentNullException.ThrowIfNull(request);
+37:         cancellationToken.ThrowIfCancellationRequested();
+38:         return ValueTask.FromResult<IAgentExecutionSession>(
+39:             new OneShotCliAgentExecutionSession(request, processEnvironment, processSpawner, logger));
+40:     }
+41: 
+42:     private sealed class OneShotCliAgentExecutionSession(
+43:         AgentExecutionSessionRequest request,
+44:         IProcessEnvironmentService processEnvironment,
+45:         IProcessSpawner processSpawner,
+46:         ILogger logger) : IAgentExecutionSession
+47:     {
+48:         private ISpawnedProcess? _process;
+49: 
+50:         public bool IsAlive => _process is { HasExited: false };
+51: 
+52:         public int? ProcessId => _process?.Id;
+53: 
+54:         public async Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+55:             await RunPromptAsync(request.InitialPrompt, cancellationToken).ConfigureAwait(false);
+56: 
+57:         public async IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(
+58:             [EnumeratorCancellation] CancellationToken cancellationToken = default)
+59:         {
+60:             var result = await ReadInitialResponseAsync(cancellationToken).ConfigureAwait(false);
+61:             if (!string.IsNullOrWhiteSpace(result.Body))
+62:                 yield return result.Body;
+63:         }
+64: 
+65:         public async Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+66:             await RunPromptAsync(prompt, cancellationToken).ConfigureAwait(false);
+67: 
+68:         public async IAsyncEnumerable<string> SendStreamingAsync(
+69:             string prompt,
+70:             [EnumeratorCancellation] CancellationToken cancellationToken = default)
+71:         {
+72:             var result = await SendAsync(prompt, cancellationToken).ConfigureAwait(false);
+73:             if (!string.IsNullOrWhiteSpace(result.Body))
+74:                 yield return result.Body;
+75:         }
+76: 
+77:         public Task SendEscapeAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+78: 
+79:         public Task EndAsync(TimeSpan timeout)
+80:         {
+FILE=src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs
+230:                 RedirectStandardInput = true,
+231:                 RedirectStandardOutput = true,
+232:                 RedirectStandardError = true,
+233:             };
+234: 
+235:             string? promptFilePath = null;
+236:             var writePromptToStandardInput = true;
+237: 
+238:             switch (agent)
+239:             {
+240:                 case "codex":
+241:                     AddCodexArguments(psi, options, workingDirectory, outputPath);
+242:                     break;
+243: 
+244:                 case "claude":
+245:                     AddClaudeArguments(psi, options, workingDirectory);
+246:                     break;
+247: 
+248:                 case "grok":
+249:                     promptFilePath = Path.Combine(tempDirectory, $"oneshot-prompt-{Guid.NewGuid():N}.txt");
+250:                     await File.WriteAllTextAsync(promptFilePath, prompt, cancellationToken).ConfigureAwait(false);
+251:                     AddGrokArguments(psi, workingDirectory, promptFilePath);
+252:                     writePromptToStandardInput = false;
+253:                     break;
+254: 
+255:                 case "cline":
+256:                     AddClineArguments(psi, workingDirectory, prompt);
+257:                     writePromptToStandardInput = false;
+258:                     break;
+259: 
+260:                 default:
+261:                     throw new NotSupportedException($"Unsupported one-shot CLI agent '{agent}'.");
+262:             }
+263: 
+264:             processEnvironment.ApplyAll(psi, options.RunAs, options.GitHubToken);
+265:             psi.FileName = processEnvironment.ResolveExecutable(psi, agentPath);
+266:             WrapWindowsCommandShim(psi);
+267: 
+268:             foreach (var (key, value) in options.EnvironmentVariables)
+269:             {
+270:                 psi.Environment[key] = value;
+271:             }
+272: 
+273:             return new OneShotLaunch(psi, writePromptToStandardInput, promptFilePath);
+274:         }
+275: 
+276:         private static void AddCodexArguments(
+277:             ProcessStartInfo psi,
+278:             AgentCliClientOptions options,
+279:             string workingDirectory,
+280:             string outputPath)
+281:         {
+282:             psi.ArgumentList.Add("exec");
+283:             if (!IsAutoModel(options.Model))
+284:             {
+285:                 psi.ArgumentList.Add("--model");
+286:                 psi.ArgumentList.Add(options.Model);
+287:             }
+288: 
+289:             psi.ArgumentList.Add("-c");
+290:             psi.ArgumentList.Add(CodexHighestReasoningEffortConfig);
+291:             psi.ArgumentList.Add("--sandbox");
+292:             psi.ArgumentList.Add("read-only");
+293:             psi.ArgumentList.Add("--color");
+294:             psi.ArgumentList.Add("never");
+295:             psi.ArgumentList.Add("--skip-git-repo-check");
+296:             psi.ArgumentList.Add("-C");
+297:             psi.ArgumentList.Add(workingDirectory);
+298:             psi.ArgumentList.Add("-o");
+299:             psi.ArgumentList.Add(outputPath);
+300:             psi.ArgumentList.Add("-");
+301:         }
+302: 
+303:         private static void AddClaudeArguments(
+304:             ProcessStartInfo psi,
+305:             AgentCliClientOptions options,
+306:             string workingDirectory)
+307:         {
+308:             psi.ArgumentList.Add("-p");
+309:             psi.ArgumentList.Add("--permission-mode");
+310:             psi.ArgumentList.Add("plan");
+311:             psi.ArgumentList.Add("--add-dir");
+312:             psi.ArgumentList.Add(workingDirectory);
+313:             psi.ArgumentList.Add("--model");
+314:             psi.ArgumentList.Add(IsAutoModel(options.Model) ? "opus" : options.Model);
+315:             psi.ArgumentList.Add("--effort");
+316:             psi.ArgumentList.Add(ClaudeHighestEffort);
+317:         }
+318: 
+319:         private static void AddGrokArguments(
+320:             ProcessStartInfo psi,
+321:             string workingDirectory,
+322:             string promptFilePath)
+323:         {
+324:             psi.ArgumentList.Add("--prompt-file");
+325:             psi.ArgumentList.Add(promptFilePath);
+326:             psi.ArgumentList.Add("--cwd");
+327:             psi.ArgumentList.Add(workingDirectory);
+328:             psi.ArgumentList.Add("--permission-mode");
+329:             psi.ArgumentList.Add("plan");
+330:             psi.ArgumentList.Add("--output-format");
+331:             psi.ArgumentList.Add("plain");
+332:             psi.ArgumentList.Add("--effort");
+333:             psi.ArgumentList.Add(GrokHighestEffort);
+334:             psi.ArgumentList.Add("--reasoning-effort");
+335:             psi.ArgumentList.Add(GrokHighestEffort);
+336:         }
+337: 
+338:         private static void AddClineArguments(
+339:             ProcessStartInfo psi,
+340:             string workingDirectory,
+341:             string prompt)
+342:         {
+343:             psi.ArgumentList.Add("-p");
+344:             psi.ArgumentList.Add("-c");
+FILE=src/QBrainAi.Services/Services/CopilotCliAgentExecutionStrategy.cs
+1: using QBrainAi.Common.AgentCli;
+2: 
+3: namespace QBrainAi.Support.Mcp.Services;
+4: 
+5: internal sealed class CopilotCliAgentExecutionStrategy(IAgentCliClient copilotClient) : IAgentExecutionStrategy
+6: {
+7:     public string Name => AgentExecutionStrategyNames.CopilotCli;
+8: 
+9:     public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+10:         AgentExecutionSessionRequest request,
+11:         CancellationToken cancellationToken = default)
+12:     {
+13:         ArgumentNullException.ThrowIfNull(request);
+14:         cancellationToken.ThrowIfCancellationRequested();
+15: 
+16:         var session = copilotClient.CreateInteractiveSession(request.InitialPrompt, request.Options);
+17:         return ValueTask.FromResult<IAgentExecutionSession>(new CopilotCliAgentExecutionSession(session));
+18:     }
+19: 
+20:     private sealed class CopilotCliAgentExecutionSession(AgentCliInteractiveSession session) : IAgentExecutionSession
+21:     {
+22:         public bool IsAlive => session.IsAlive;
+23: 
+24:         public int? ProcessId => session.ProcessId;
+25: 
+26:         public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+27:             session.ReadInitialResponseAsync(cancellationToken);
+28: 
+29:         public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default) =>
+30:             session.ReadInitialResponseStreamingAsync(cancellationToken);
+31: 
+32:         public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+33:             session.SendAsync(prompt, cancellationToken);
+34: 
+35:         public IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default) =>
+36:             session.SendStreamingAsync(prompt, cancellationToken);
+37: 
+38:         public Task SendEscapeAsync(CancellationToken cancellationToken = default) =>
+39:             session.SendEscapeAsync(cancellationToken);
+40: 
+41:         public Task EndAsync(TimeSpan timeout) => session.EndAsync(timeout);
+42: 
+43:         public ValueTask DisposeAsync() => session.DisposeAsync();
+44:     }
+45: }

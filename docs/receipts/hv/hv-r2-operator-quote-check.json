@@ -1,0 +1,261 @@
+[
+  {
+    "Requirement": "S-01",
+    "MessageIndex": 24,
+    "Role": "user",
+    "Quote": "We need to plan a Hostile Validation queue and execution mechanism.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-02",
+    "MessageIndex": 51,
+    "Role": "user",
+    "Quote": "HV queue needs configuration for available HV agents (cline, copilot, claude, codex, grok) and either the agent's default (highest effort) model, or a model/effort specified in configuration.  The HV agent configuration must have endpoints and REPL coverage so Director and other tools can manage in real time.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-03",
+    "MessageIndex": 68,
+    "Role": "user",
+    "Quote": "When a HV request is received, it must submit a range of session log turns to include in the review.  The reviewer must grade each turn individualy and apply their review score and update the turn record.  The result will include the score for each turn, and an overall score for the whole HV request.  HV request/results will be store in the database.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-04",
+    "MessageIndex": 76,
+    "Role": "user",
+    "Quote": "worktree session-20261009 should have updates to the session log schema for storing both agent self-review and hv review outcome on the turn.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-05",
+    "MessageIndex": 96,
+    "Role": "user",
+    "Quote": "That document is the base we are building on in this plan.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-06",
+    "MessageIndex": 104,
+    "Role": "user",
+    "Quote": "Review of a turn should be considered final as any subsequent changes should be reflected in a later turn.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-07",
+    "MessageIndex": 112,
+    "Role": "user",
+    "Quote": "Session log may not allow updates to a turn with an HV review.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-08",
+    "MessageIndex": 114,
+    "Role": "user",
+    "Quote": "A turn must have an agent review before it can be included in a HV.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-09",
+    "MessageIndex": 118,
+    "Role": "user",
+    "Quote": "Turns submitted, but marked Unnecessary, should still be included in the overall HV grade for the request.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-10",
+    "MessageIndex": 120,
+    "Role": "user",
+    "Quote": "No, overall HV is a holistic review of the whole set of turns submitted.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-11",
+    "MessageIndex": 122,
+    "Role": "user",
+    "Quote": "If the request recieves a session id (not a session turn id) in the set of turns, then the totality of session turns in that session are included by default.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-12",
+    "MessageIndex": 124,
+    "Role": "user",
+    "Quote": "plugin core should present all missing agent reviews as a list for the agent to perform review on.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-13",
+    "MessageIndex": 128,
+    "Role": "user",
+    "Quote": "HV reviews must use a standard json payload for responses that must include the complete request, the complete jsonl response log, and delineated list of specific failures with adequest description to remediate.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-14",
+    "MessageIndex": 130,
+    "Role": "user",
+    "Quote": "HV request must supply a free text field for agent to add specific context in markdown or yaml format.  The request should be parsed for MCP Server FR/TR/AC/UC in the workspace and provided to the reviewing agent in a delineated list.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-15",
+    "MessageIndex": 132,
+    "Role": "user",
+    "Quote": "execution failures are to be triaged (prevent duplicates) and mark the HV agent as offline until resolved.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-16",
+    "MessageIndex": 134,
+    "Role": "user",
+    "Quote": "If there are no HV agents available to perform a review, the endpoint must refuse the request and the plugin core add the necessary context.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-17",
+    "MessageIndex": 136,
+    "Role": "user",
+    "Quote": "HV agent resolution should round-robin HV review agents, excluding the agent submitting the review.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-18",
+    "MessageIndex": 138,
+    "Role": "user",
+    "Quote": "need endpoints for getting running hvs, their last reported output, and eta.  Need endpoints for cancelling any hv.  need endpoint to attach to sse strem of the output of any running hv",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-19",
+    "MessageIndex": 140,
+    "Role": "user",
+    "Quote": "need an HV notification stream endpoint to receive notifications of hv completion in the plugins",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-20",
+    "MessageIndex": 144,
+    "Role": "user",
+    "Quote": "NO",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-21",
+    "MessageIndex": 146,
+    "Role": "user",
+    "Quote": "Per turn should be a list of the requested turns to review with their score.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-22",
+    "MessageIndex": 148,
+    "Role": "user",
+    "Quote": "Output should be captured live and streamed.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-23",
+    "MessageIndex": 150,
+    "Role": "user",
+    "Quote": "Single trx at end.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-24",
+    "MessageIndex": 152,
+    "Role": "user",
+    "Quote": "Auto-start",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-25",
+    "MessageIndex": 154,
+    "Role": "user",
+    "Quote": "Verdict only",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-26",
+    "MessageIndex": 156,
+    "Role": "user",
+    "Quote": "File through endpoint.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-27",
+    "MessageIndex": 158,
+    "Role": "user",
+    "Quote": "NONCE the agent.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-27",
+    "MessageIndex": 229,
+    "Role": "user",
+    "Quote": "This is just a check that the agent is available and can execute an HV.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-28",
+    "MessageIndex": 214,
+    "Role": "user",
+    "Quote": "Self-review of a turn is just a grade on the turn.  It is not relevant to the HV.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-29",
+    "MessageIndex": 239,
+    "Role": "user",
+    "Quote": "Must participate in the audit log of the database.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-29",
+    "MessageIndex": 467,
+    "Role": "user",
+    "Quote": "Retain until told to remove.  There are no access roles.  Audit-failure is a hard stop.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-30",
+    "MessageIndex": 474,
+    "Role": "user",
+    "Quote": "GZIP HV result logs to save space.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-31",
+    "MessageIndex": 0,
+    "Role": "user",
+    "Quote": "create worktree from develop",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-31",
+    "MessageIndex": 463,
+    "Role": "user",
+    "Quote": "I've already specified both.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-32",
+    "MessageIndex": 469,
+    "Role": "user",
+    "Quote": "That's your job.",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-32",
+    "MessageIndex": 478,
+    "Role": "user",
+    "Quote": "write plan to high todo",
+    "VerbatimContained": true
+  },
+  {
+    "Requirement": "S-33",
+    "MessageIndex": 162,
+    "Role": "user",
+    "Quote": "apply byrd dev proces v4",
+    "VerbatimContained": true
+  }
+]

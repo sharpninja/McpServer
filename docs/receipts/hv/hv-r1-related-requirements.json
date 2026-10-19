@@ -1,0 +1,215 @@
+{
+  "Records": [
+    {
+      "priority": "medium",
+      "title": "Cross-Workspace TODO Move",
+      "status": "pending",
+      "area": "MCP",
+      "description": "The server shall support moving a TODO item from one workspace to another via REST (`POST /qbrainai/todo/{id}/move`) and STDIO (`todo_move` MCP tool), preserving all item fields including implementation tasks, requirements, and metadata. The move is implemented as create-in-target then delete-from-source.\n\n**Covered by:** `TodoController.MoveAsync`, `FwhMcpTools.TodoMove`, `TodoMoveRequest`, `TodoServiceResolver`",
+      "createdAt": "2026-10-17T14:25:08.7473992+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-10-17T14:25:08.7474386+00:00",
+      "id": "FR-MCP-045",
+      "acceptanceCriteria": []
+    },
+    {
+      "priority": "medium",
+      "title": "Artifact links resolve through MCP APIs",
+      "status": "pending",
+      "area": "MCP",
+      "description": "Artifact links resolve only through supported MCP APIs (TODO, FR/TR/TEST, session log, triage, plans, files, commits, generated docs). Missing, unauthorized, stale, or ambiguous links produce diagnostics, not silent omission.",
+      "createdAt": "2026-10-17T14:25:08.8469341+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-10-17T14:25:08.8469716+00:00",
+      "id": "FR-MCP-HOSTILEREVIEW-002",
+      "acceptanceCriteria": [
+        {
+          "text": "Missing link produces a diagnostic, not silent omit.",
+          "evidence": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1",
+          "isSatisfied": true,
+          "id": ""
+        },
+        {
+          "text": "Unauthorized or stale or ambiguous link produces a diagnostic, not silent omit.",
+          "evidence": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1",
+          "isSatisfied": true,
+          "id": ""
+        },
+        {
+          "text": "Successful resolve stores the resolved artifact identity and hash when available.",
+          "evidence": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1",
+          "isSatisfied": true,
+          "id": ""
+        },
+        {
+          "text": "Authorize each artifact at submit and reauthorize it at every dispatch. Resolve only through supported workspace-scoped services. Store only normalized identity, type, version/hash, and sanitized diagnostic metadata. Permit no raw artifact or assembled prompt in queue rows, notifications, logs, receipts, or result metadata. Reject more than 64 links, an artifact over 1 MiB decoded, aggregate resolved input over 8 MiB, or unsupported/binary content that cannot be inspected safely.",
+          "evidence": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1",
+          "isSatisfied": true,
+          "id": ""
+        }
+      ]
+    },
+    {
+      "priority": "medium",
+      "title": "Reviewer run records model effort identity",
+      "status": "pending",
+      "area": "MCP",
+      "description": "Each reviewer execution records model, effort, agent identity, plugin/source, prompt template/version, run id, timestamps, and token/runtime metadata when available. Missing metadata is omitted with a diagnostic, never fabricated.",
+      "createdAt": "2026-10-17T14:25:08.8486792+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-10-17T14:25:08.8487193+00:00",
+      "id": "FR-MCP-HOSTILEREVIEW-003",
+      "acceptanceCriteria": [
+        {
+          "text": "Execution row records model string, effort level, agent identity, plugin/source surface.",
+          "evidence": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1",
+          "isSatisfied": true,
+          "id": ""
+        },
+        {
+          "text": "Execution row records prompt template id and version, run id, start/end UTC.",
+          "evidence": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1",
+          "isSatisfied": true,
+          "id": ""
+        },
+        {
+          "text": "Token/runtime metadata stored when provided; omitted with diagnostic when not provided, not fabricated.",
+          "evidence": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs; overlay G4 rereview SHA-256 BFD7029944F1EAAC99F2808EA47146DBBD7C87EEB3E02AB4ADC31F95D3F0DFD1",
+          "isSatisfied": true,
+          "id": ""
+        },
+        {
+          "text": "A server-owned worker uses the existing agent infrastructure with the agent, model and effort configured for it when they are configured, and otherwise the pooled default agent with its default model and effort; no requirement names a specific model (operator rule 2026-10-15; PLAN-SESSIONTRIAGEFIX-001 B9). Queue state is durable. Request, attempt, pool-job, model-execution, and accepted-terminal-result identities are distinct. Model execution is bounded at-least-once across process loss. Lease loss, repeated model execution, or duplicate completion cannot produce more than one accepted terminal result. Cancellation is internal to host/workspace lifecycle handling and existing authorized AgentPool cancellation, never a public hostile-review mutation.",
+          "isSatisfied": false,
+          "id": ""
+        }
+      ]
+    },
+    {
+      "priority": "medium",
+      "title": "Failsafe replay, child deadline, and contention classification",
+      "status": "pending",
+      "area": "MCP",
+      "description": "One child deadline covers asynchronous stdin and stdout and process-tree cleanup. Hook default bound is 30 seconds. Codex failsafe identity stays Codex when PLUGIN_AGENT_NAME or MCP_AGENT_NAME is inherited as Grok. Quarantine files 3358, d5f9, and 9ad7 are repaired, replayed even when drainAttempts is exhausted, and deleted only after durable success. Import recovery scans pending importRecovery yaml, persists a mapped DTO, and deletes only that envelope after persisted true and degraded false. Busy, locked, budget expiry, and wrapped contention are retryable. Connection outage is backend_unavailable. Automatic and explicit drain do not latch completion on contention.",
+      "createdAt": "2026-10-17T14:25:08.9600638+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-10-17T14:25:08.9601024+00:00",
+      "id": "FR-MCP-SESSIONLIFE-004",
+      "acceptanceCriteria": [
+        {
+          "text": "One bounded child-process deadline, default 30 seconds for the hook operation, covers stdin writes, stdout and stderr reads, wait, cancellation, and process-tree cleanup without a stranded child or premature disposal race.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Codex child execution preserves Codex agent identity and workspace-scoped cache ownership even when inherited environment variables identify Grok or another agent.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Quarantine repair accepts historical supported shapes through object-first parsing, fills only missing values with None, preserves valid values, and never fabricates identity.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Contention and service outage remain distinct classified outcomes; both drain entry points retain retryable work without consuming attempts or latching completion and later replay exactly once. When storage is actually unavailable, health.storage reports unreachable; contention is not mislabeled as storage-down.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Import-recovery ingestion accepts a validated canonical session bundle or reconstructs the complete bundle from verified sources, never submits the importRecovery envelope as a session, and preserves all files on failure.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Path containment, reparse-point containment, size and count bounds, source identity, and canonical schema are verified before any source or recovery artifact is read or persisted.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Partial and canceled replay remains retryable and idempotent; concurrent replay cannot duplicate work; only the exact unchanged recovery artifact is deleted after verified durable persistence.",
+          "isSatisfied": false,
+          "id": ""
+        }
+      ]
+    },
+    {
+      "priority": "medium",
+      "title": "Stop hook stale pin and session-log uniqueness",
+      "status": "pending",
+      "area": "MCP",
+      "description": "Stop hook runs failed-build and incomplete-audit gates first. It allows a stale pin only when authoritative server completion shows the local request id is not the active turn. A genuinely active different request id is not cleared. Both timestamp and lastUpdated stale is the age case. A fresh lastUpdated alone must not pass a stale pin. BUG-TRIAGE-229 is predecessor-schema detection before save, classified provider text in details.inner, and one bounded uniqueness retry.",
+      "createdAt": "2026-10-17T14:25:08.9612756+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-10-17T14:25:08.9613041+00:00",
+      "id": "FR-MCP-SESSIONLIFE-005",
+      "acceptanceCriteria": [
+        {
+          "text": "Failed-build and incomplete-audit enforcement executes before any stale-pin allow, timestamp refresh, auto-close, or recovery that could bypass those gates.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "A stale local in_progress turn is reconciled only by authoritative Completed proof for the exact workspace, agent, session, and request; active, missing, ambiguous, or unavailable proof fails closed and retains state.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Old, fresh, missing, and invalid timestamp and lastUpdated combinations, completed or missing local files, and mismatched request IDs are covered; recency alone never proves completion.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Schema-predecessor failures are detected before mutation and provider errors retain a classified details.inner diagnostic without leaking credentials.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "One bounded retry applies only to the known unique same-session/request race; the winner is reread and merged without duplicate children or loss of unrelated state, while unrelated failures and cancellation propagate.",
+          "isSatisfied": false,
+          "id": ""
+        }
+      ]
+    },
+    {
+      "priority": "medium",
+      "title": "Stop-hook stale pin and upsert uniqueness",
+      "status": "pending",
+      "area": "MCP",
+      "description": "Close-PluginTurnIfNeeded runs build and audit gates first and allows a stale pin only with authoritative server completion. SessionLogSchemaGuard, SessionLogService.UpsertTurnAsync, and SessionLogController implement predecessor-schema detection, details.inner, and one uniqueness retry.\n**Covered by:** FR: FR-MCP-SESSIONLIFE-005; TEST: TEST-MCP-SESSIONLIFE-002, TEST-MCP-SESSIONLIFE-004",
+      "subarea": "SESSIONLIFE",
+      "createdAt": "2026-10-17T14:25:13.0769027+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-10-17T14:25:13.0769316+00:00",
+      "id": "TR-MCP-SESSIONLIFE-005",
+      "acceptanceCriteria": [
+        {
+          "text": "Stop enforcement obtains exact-turn server proof through the supported typed client after build and audit gates and before any state mutation.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "A shared cache-state lock snapshots identity and content hashes, releases for bounded network I/O, then conditionally mutates only if the same state remains current.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Schema predecessor detection and provider error classification occur before mutation and preserve useful credential-safe details.inner.",
+          "isSatisfied": false,
+          "id": ""
+        },
+        {
+          "text": "Upsert retries once only for the known same-session/request unique race and merges the winning row without duplicate child collections.",
+          "isSatisfied": false,
+          "id": ""
+        }
+      ]
+    }
+  ],
+  "Missing": [
+    "FR-MCP-SESSIONTURN-005",
+    "FR-MCP-PATHNORM-001",
+    "TR-MCP-PATHNORM-001",
+    "TEST-MCP-PATHNORM-001"
+  ]
+}

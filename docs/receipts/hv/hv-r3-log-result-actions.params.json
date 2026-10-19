@@ -1,0 +1,75 @@
+{
+  "requestId": "req-20261018T062156Z-amendment1-r3",
+  "actions": [
+    {
+      "description": "Read-only gh source https://github.com/sharpninja/McpServer/pull/81, used for six PR81 findings, post-merge timing or normal push activity. No comment or review posted.",
+      "order": 500,
+      "status": "completed",
+      "filePath": "https://github.com/sharpninja/McpServer/pull/81",
+      "type": "web_reference"
+    },
+    {
+      "description": "Read-only gh source https://github.com/sharpninja/McpServer/pull/81#pullrequestreview-5554472359, used for six PR81 findings, post-merge timing or normal push activity. No comment or review posted.",
+      "order": 501,
+      "status": "completed",
+      "filePath": "https://github.com/sharpninja/McpServer/pull/81#pullrequestreview-5554472359",
+      "type": "web_reference"
+    },
+    {
+      "description": "Read-only gh source https://api.github.com/repos/sharpninja/McpServer/activity?ref=refs%2Fheads%2Fdocs%2Fhv-architecture-amendment-20261016&per_page=100, used for six PR81 findings, post-merge timing or normal push activity. No comment or review posted.",
+      "order": 502,
+      "status": "completed",
+      "filePath": "https://api.github.com/repos/sharpninja/McpServer/activity?ref=refs%2Fheads%2Fdocs%2Fhv-architecture-amendment-20261016&per_page=100",
+      "type": "web_reference"
+    },
+    {
+      "description": "R3-F01: ExpireHvRunLeasesCommand selects active expired runs before its per-run transaction, but inside that transaction rechecks only expiry. It does not recheck active status or whether this is still the request current attempt, and abandonment does not release or clear the expired lease. HvRetryDecision then changes the request without a terminal-state guard. Required correction: Make expiry an idempotent, guarded transition in the transaction: re-read active run status, current ownership/attempt and request eligibility, and skip an already settled or superseded candidate. Ensure terminal requests cannot be revived. Cover two sweepers with an intervening claim and an intervening successful finalization, with named tests in FR/TR/TEST-MCP-HVPIPE-007 at H3 and the finalization case at H7; update the policy, unit, caller diagrams and phase bindings.",
+      "order": 513,
+      "status": "completed",
+      "filePath": "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "type": "design_decision"
+    },
+    {
+      "description": "R3-F02: RecordRead enlists its ledger row in the caller transaction when one exists. CloseHvRunOutputCommand then consumes and verifies the probe chunks inside that same transaction. The read audit is only committed after the consumption that it is required to precede. Required correction: Specify a durable audit boundary that succeeds before any evidence byte is consumed and survives a subsequent caller rollback. Preserve fencing and probe-state concurrency without claiming an uncommitted row is durable. Add named probe-read rollback/crash/commit-failure cases to the existing audit requirement, with the mock gate first and H3 binding, and propagate the boundary to every internal reader and its caller outcome.",
+      "order": 514,
+      "status": "completed",
+      "filePath": "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "type": "design_decision"
+    },
+    {
+      "description": "R3-F03: SubmitHvRequestCommand returns the stored request and its current state on the same-key replay. Its HvRequestResult includes the current run last 20 output lines; only page summaries are exempted. That path has EnsureAvailable but no RecordRead, and is absent from the canonical evidence-reader list. Required correction: Define one consistent replay projection: either use the canonical audited current-request projection, including corruption and audit-refusal outcomes, or explicitly define a distinct output-free submission response everywhere it is used. Add a named replay-after-output test, ledger-refusal test and corrupt-output case at a phase with stored run output and the relevant surface. Update DTOs, Submit activity/sequence, reader/component user lists, FR/TR/TEST and phase ownership.",
+      "order": 515,
+      "status": "completed",
+      "filePath": "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "type": "design_decision"
+    },
+    {
+      "description": "R3-F04: HostileReviewAttemptOutcome contains executionId but no actual model, effort, agent/source, template/version, start/end, or optional token/runtime metadata. CompleteHostileReviewAttemptCommand is nevertheless told to write the execution row with its metadata, without a source or parameter carrying it. Attempt.ExecutionId is written only on the first renewal, so a process that exits before RenewalInterval has no specified writer for that relationship. EndedUtc is set only on success, not on failure or cancellation. Required correction: Define a canonical normalized execution-metadata contract and its producer, carrying actual identity and the required timing/template fields plus optional metrics or explicit unavailability diagnostics. Define writers for ExecutionId and every terminal timestamp on fast success, failure, cancellation, expiry and no-launch outcomes, preserving the no-raw-artifact rule. Add named fast-exit and metadata/missing-metric cases through TEST-MCP-HOSTILEREVIEW-003 in H0 after approval and bind them in H3. Reconcile all units, DTOs and B.9.",
+      "order": 516,
+      "status": "completed",
+      "filePath": "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "type": "design_decision"
+    },
+    {
+      "description": "R3-F05: The repaired finalizer describes FailHvRunCommand refusals, but the worker/sweep activities still do not preserve those outcomes. HvWorkerHost continues from Finalize to FileIncident to Claim without branching on audit_unavailable. RunReviewerProcess routes Fail calls directly to Queued/Failed/Canceled or Canceled exits even when Fail refuses. The internal grade unit also declares a non-retryable conflicting existing grade without a corresponding finalizer continuation. Required correction: Use an explicit common result dispatch or complete branches for every internal call. On audit refusal preserve unchanged state and stop; on stale fence stop without a write; retry conflicts only through the specified guards; advertise Queued/Failed/Canceled only after the failure transition succeeds. Define the grade-conflict continuation. Propagate to host/process/activity/sequence contracts and named refusal/concurrency tests in their H3 or H7 owning phase.",
+      "order": 517,
+      "status": "completed",
+      "filePath": "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "type": "design_decision"
+    },
+    {
+      "description": "R3-F06: The error catalog defines evidence_corrupt as public HTTP 500 and immediately lists it among internal codes never returned by a public route. HvOutputEvent names errorCode and closedStatus while the stream wire events use code and status. The GetHvRequest sequence returns 200 after a recorded read without the newly specified decompression-failure response; the Submit sequence likewise omits admission corruption. GzipCodec users still omit the added brief and probe readers. Required correction: Choose one canonical wire shape for each output event and one public/internal error classification, then make DTOs, route responses, sequences, use-case alternates, client contracts and component user lists refer to it consistently. Explicitly draw the admission and last-output corruption responses. Extend the existing named corruption test to assert the exact event field and HTTP status on each affected surface, preserving audited access and server-fault attribution.",
+      "order": 518,
+      "status": "completed",
+      "filePath": "docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md",
+      "type": "design_decision"
+    },
+    {
+      "description": "Complete native-PowerShell verdict and read-only independent evidence created; six material findings, thirteen claims, eighteen required closures, twenty-one what-if passes and exact commands. No reviewed artifact or requirement was edited.",
+      "order": 550,
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r3-20261018T011809.md",
+      "type": "create"
+    }
+  ]
+}

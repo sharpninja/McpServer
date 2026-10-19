@@ -1,0 +1,293 @@
+FILE=src/QBrainAi.Storage/WorkspaceKeyConversion.cs
+1: using Microsoft.EntityFrameworkCore;
+2: using Microsoft.EntityFrameworkCore.ChangeTracking;
+3: using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+4: 
+5: namespace QBrainAi.Support.Mcp.Storage;
+6: 
+7: /// <summary>
+8: /// FR-MCP-PATHNORM-001 / TR-MCP-PATHNORM-001: persisted workspace keys (every <c>WorkspaceId</c>,
+9: /// <c>OwnerWorkspaceId</c> and entity <c>WorkspacePath</c> column) are stored in the lexical canonical
+10: /// form from <see cref="WorkspaceIdentity.CanonicalizeWorkspaceId"/>. The converter applies on writes
+11: /// and, on relational providers, to query parameters compared with these properties, so a predicate
+12: /// built from a caller's raw path (<c>Q:\ws</c>) matches the stored canonical row (<c>Q:/ws</c>). The
+13: /// comparer makes the change tracker treat both spellings as one key.
+14: /// </summary>
+15: internal static class WorkspaceKeyConversion
+16: {
+17:     private static readonly HashSet<string> PropertyNames = new(StringComparer.Ordinal)
+18:     {
+19:         "WorkspaceId",
+20:         "OwnerWorkspaceId",
+21:         "WorkspacePath",
+22:     };
+23: 
+24:     private static readonly ValueConverter<string, string> Converter = new(
+25:         value => WorkspaceIdentity.CanonicalizeWorkspaceId(value),
+26:         value => value);
+27: 
+28:     private static readonly ValueComparer<string> Comparer = new(
+29:         (left, right) => left == null
+30:             ? right == null
+31:             : right != null && WorkspaceIdentity.CanonicalizeWorkspaceId(left) == WorkspaceIdentity.CanonicalizeWorkspaceId(right),
+32:         value => value == null ? 0 : WorkspaceIdentity.CanonicalizeWorkspaceId(value).GetHashCode(StringComparison.Ordinal),
+33:         value => value);
+34: 
+35:     /// <summary>Applies the canonical converter and comparer to every workspace-key property in the model.</summary>
+36:     internal static void Apply(ModelBuilder modelBuilder)
+37:     {
+38:         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+39:         {
+40:             foreach (var property in entityType.GetDeclaredProperties())
+41:             {
+42:                 if (property.ClrType != typeof(string) || !PropertyNames.Contains(property.Name))
+43:                     continue;
+44: 
+45:                 property.SetValueConverter(Converter);
+46:                 property.SetValueComparer(Comparer);
+47:             }
+48:         }
+49:     }
+50: 
+51:     /// <summary>
+52:     /// Rewrites workspace-key values of added and modified entities to the canonical form in place, so
+53:     /// tracked instances returned by later queries carry the same value as the stored row. The comparer
+54:     /// treats raw and canonical spellings as equal, so an ordinary current-value assignment would be
+55:     /// ignored; the CLR member is written directly instead.
+56:     /// </summary>
+57:     internal static void CanonicalizeTrackedValues(IEnumerable<EntityEntry> entries)
+58:     {
+59:         foreach (var entry in entries)
+60:         {
+61:             if (entry.State is not (EntityState.Added or EntityState.Modified))
+62:                 continue;
+63: 
+64:             foreach (var property in entry.Properties)
+65:             {
+66:                 if (!PropertyNames.Contains(property.Metadata.Name) || property.CurrentValue is not string current)
+67:                     continue;
+68: 
+69:                 var canonical = WorkspaceIdentity.CanonicalizeWorkspaceId(current);
+70:                 if (string.Equals(current, canonical, StringComparison.Ordinal))
+71:                     continue;
+72: 
+73:                 if (property.Metadata.FieldInfo is { } field)
+74:                     field.SetValue(entry.Entity, canonical);
+75:                 else if (property.Metadata.PropertyInfo is { CanWrite: true } clrProperty)
+FILE=src/QBrainAi.Client/WorkspacePathNormalizer.cs
+105:     public string GetLeafName(string workspacePath)
+106:     {
+107:         var normalized = Normalize(workspacePath);
+108:         var separators = DetectTrimmed(normalized) == WorkspacePathPlatform.Windows
+109:             ? new[] { '\\', '/' }
+110:             : new[] { '/' };
+111:         var segments = normalized.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+112: 
+113:         // A bare root ("C:\", "/", "\\srv\share\") has no leaf; report the root itself.
+114:         return segments.Length == 0 || normalized.TrimEnd(separators).EndsWith(':')
+115:             ? normalized
+116:             : segments[^1];
+117:     }
+118: 
+119:     /// <inheritdoc />
+120:     public string Combine(string rootPath, params string[] segments)
+121:     {
+122:         ArgumentNullException.ThrowIfNull(segments);
+123:         var current = Normalize(rootPath);
+124:         foreach (var segment in segments)
+125:         {
+126:             if (string.IsNullOrWhiteSpace(segment))
+127:                 continue;
+128: 
+129:             var trimmed = segment.Trim();
+130:             if (IsWindowsRooted(trimmed) || trimmed.StartsWith('/'))
+131:             {
+132:                 current = Normalize(trimmed);
+133:                 continue;
+134:             }
+135: 
+136:             // '/' is a separator in both syntaxes; lexical normalization of the root's own
+137:             // platform collapses it (and any dot segments) into canonical form.
+138:             current = WorkspaceIdentityPath.NormalizeLexicalPath(
+139:                 current.TrimEnd('/', '\\') + "/" + trimmed,
+140:                 DetectTrimmed(current));
+141:         }
+142: 
+143:         return current;
+144:     }
+145: 
+146:     /// <inheritdoc />
+147:     public bool IsHostNative(string workspacePath) =>
+148:         DetectPlatform(workspacePath) == _host.Platform;
+149: 
+150:     private WorkspacePathPlatform DetectTrimmed(string path)
+151:     {
+152:         if (IsWindowsRooted(path))
+153:             return WorkspacePathPlatform.Windows;
+154: 
+155:         if (path.StartsWith('/'))
+156:             return WorkspacePathPlatform.CaseSensitive;
+157: 
+158:         return _host.Platform;
+159:     }
+160: 
+161:     private static bool IsWindowsRooted(string path) =>
+162:         (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2])) ||
+163:         path.StartsWith(@"\\", StringComparison.Ordinal) ||
+164:         path.StartsWith("//", StringComparison.Ordinal);
+165: 
+166:     private static bool IsSeparator(char value) => value is '/' or '\\';
+167: }
+168: 
+169: /// <summary>
+FILE=src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs
+30: 
+31:     /// <summary>Initializes a new instance of the <see cref="FileGitHubWorkspaceTokenStore"/> class.</summary>
+32:     public FileGitHubWorkspaceTokenStore(
+33:         IOptionsMonitor<GitHubIntegrationOptions> options,
+34:         IDataProtectionProvider dataProtectionProvider,
+35:         ILogger<FileGitHubWorkspaceTokenStore> logger)
+36:     {
+37:         _options = options ?? throw new ArgumentNullException(nameof(options));
+38:         _protector = (dataProtectionProvider ?? throw new ArgumentNullException(nameof(dataProtectionProvider)))
+39:             .CreateProtector("QBrainAi.Support.Mcp.GitHubTokenStore.v1");
+40:         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+41:     }
+42: 
+43:     /// <inheritdoc />
+44:     public async Task<GitHubWorkspaceTokenRecord?> GetAsync(string workspacePath, CancellationToken ct = default)
+45:     {
+46:         var normalized = NormalizeWorkspacePath(workspacePath);
+47: 
+48:         await _gate.WaitAsync(ct).ConfigureAwait(false);
+49:         try
+50:         {
+51:             using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
+52:             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
+53:             var match = doc.Entries.FirstOrDefault(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase));
+54:             if (match is null)
+55:                 return null;
+56: 
+57:             try
+58:             {
+59:                 var token = _protector.Unprotect(match.AccessTokenProtected);
+60:                 return new GitHubWorkspaceTokenRecord(match.WorkspacePath, token, match.UpdatedAtUtc, match.ExpiresAtUtc);
+61:             }
+62:             catch (CryptographicException ex)
+63:             {
+64:                 _logger.LogWarning(ex, "GitHub token decrypt failed for workspace {WorkspacePath}", normalized);
+65:                 return null;
+66:             }
+67:         }
+68:         finally
+69:         {
+70:             _gate.Release();
+71:         }
+72:     }
+73: 
+74:     /// <inheritdoc />
+75:     public async Task UpsertAsync(string workspacePath, string accessToken, DateTimeOffset? expiresAtUtc = null, CancellationToken ct = default)
+76:     {
+77:         if (string.IsNullOrWhiteSpace(accessToken))
+78:             throw new ArgumentException("Access token is required.", nameof(accessToken));
+79: 
+80:         var normalized = NormalizeWorkspacePath(workspacePath);
+81:         var now = DateTimeOffset.UtcNow;
+82:         var encrypted = _protector.Protect(accessToken.Trim());
+83: 
+84:         await _gate.WaitAsync(ct).ConfigureAwait(false);
+85:         try
+86:         {
+87:             using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
+88:             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
+89:             var existing = doc.Entries.FirstOrDefault(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase));
+90:             if (existing is null)
+91:             {
+92:                 doc.Entries.Add(new GitHubTokenStoreEntry
+93:                 {
+94:                     WorkspacePath = normalized,
+95:                     AccessTokenProtected = encrypted,
+96:                     UpdatedAtUtc = now,
+97:                     ExpiresAtUtc = expiresAtUtc,
+98:                 });
+99:             }
+100:             else
+101:             {
+102:                 existing.AccessTokenProtected = encrypted;
+103:                 existing.UpdatedAtUtc = now;
+104:                 existing.ExpiresAtUtc = expiresAtUtc;
+105:             }
+106: 
+107:             await WriteUnlockedAsync(doc, ct).ConfigureAwait(false);
+108:         }
+109:         finally
+110:         {
+111:             _gate.Release();
+112:         }
+113:     }
+114: 
+115:     /// <inheritdoc />
+116:     public async Task<bool> DeleteAsync(string workspacePath, CancellationToken ct = default)
+117:     {
+118:         var normalized = NormalizeWorkspacePath(workspacePath);
+119: 
+120:         await _gate.WaitAsync(ct).ConfigureAwait(false);
+121:         try
+122:         {
+123:             using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
+124:             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
+125:             var removed = doc.Entries.RemoveAll(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase)) > 0;
+126:             if (removed)
+127:                 await WriteUnlockedAsync(doc, ct).ConfigureAwait(false);
+128:             return removed;
+129:         }
+130:         finally
+131:         {
+132:             _gate.Release();
+133:         }
+134:     }
+135: 
+136:     /// <summary>Disposes synchronization resources.</summary>
+137:     public void Dispose()
+138:     {
+139:         _gate.Dispose();
+140:     }
+141: 
+142:     private async Task<GitHubTokenStoreDocument> ReadUnlockedAsync(CancellationToken ct)
+143:     {
+144:         var path = ResolveStorePath();
+145:         if (!File.Exists(path))
+146:             return new GitHubTokenStoreDocument();
+147: 
+148:         try
+149:         {
+150:             EnsureRestrictedFilePermissions(path);
+151:             var json = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
+152:             var doc = JsonSerializer.Deserialize(json, GitHubTokenStoreJsonContext.Default.GitHubTokenStoreDocument);
+153:             return doc ?? new GitHubTokenStoreDocument();
+154:         }
+155:         catch (JsonException ex)
+156:         {
+157:             _logger.LogWarning(ex, "GitHub token store is invalid JSON at {Path}. Using empty store.", path);
+158:             return new GitHubTokenStoreDocument();
+159:         }
+160:     }
+161: 
+162:     private async Task WriteUnlockedAsync(GitHubTokenStoreDocument doc, CancellationToken ct)
+163:     {
+164:         var path = ResolveStorePath();
+165:         var dir = Path.GetDirectoryName(path);
+166:         if (!string.IsNullOrWhiteSpace(dir))
+167:             Directory.CreateDirectory(dir);
+168: 
+169:         var json = JsonSerializer.Serialize(doc, GitHubTokenStoreJsonContext.Default.GitHubTokenStoreDocument);
+170:         var tmp = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
+171:         try
+172:         {
+173:             await File.WriteAllTextAsync(tmp, json, ct).ConfigureAwait(false);
+174:             EnsureRestrictedFilePermissions(tmp);
+175:             await ReplaceOrMoveWithRetryAsync(tmp, path, ct).ConfigureAwait(false);
+176:             EnsureRestrictedFilePermissions(path);
+177:         }
+178:         finally
+179:         {

@@ -1,0 +1,357 @@
+{
+  "TimestampUtc": "2026-10-17T14:37:56.1573009Z",
+  "CatalogCount": 21,
+  "RecordCount": 63,
+  "AcCount": 114.0,
+  "MappingEdges": 42,
+  "Differences": [],
+  "Counts": [
+    {
+      "Id": "FR-MCP-HVPIPE-001",
+      "DocumentAcCount": 6,
+      "StoreFrAcCount": 6,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 6,
+      "TestNames": [
+        "HostileValidationOptionsMissingUnknownOrDuplicateReviewerFailsStartup",
+        "ReviewerSeedingInsertsFiveOnceNeverOverwrites",
+        "ReviewerAdapterDefaultsToHighestEffortAndCliDefaultModel",
+        "UpdateReviewerStaleStateVersion409NothingChanged",
+        "UpdateReviewerLaunchChangeMakesUnverifiedAndNotifies",
+        "ReviewerSurfacesParityGoldenContract"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-002",
+      "DocumentAcCount": 8,
+      "StoreFrAcCount": 8,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 8,
+      "TestNames": [
+        "AgentIdentityGoldenContractTests",
+        "SubmitterAliasesNeverAssignedClaudeFamily",
+        "FinalVerificationSubmitterReviewerRefusedNotIndependent",
+        "SubmitterExclusionUsesTurnAgentNeverFreeText",
+        "RoundRobinAssignsInPoolOrderAfterCursor",
+        "RoundRobinCursorSurvivesRestart",
+        "RoundRobinConcurrentSubmissionsConsecutiveReviewersThreeProviders",
+        "ClaimReassignsWhenAssigneeNoLongerEligible",
+        "AuthorAgentNeverAssignedAndRefusedByVerification"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-003",
+      "DocumentAcCount": 6,
+      "StoreFrAcCount": 6,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 6,
+      "TestNames": [
+        "ReviewerBecomesOnlineOnlyByPassingProbe",
+        "ProbePassedReviewerOnlineResolvedModelAndEffort",
+        "ProbeFailuresOfflineWithCodeAndIncident",
+        "NonceRepeatNoSecondProbe",
+        "NonceDisabledReviewer409",
+        "WorkerStartupProbesUnverifiedEnabledReviewersOnly"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-004",
+      "DocumentAcCount": 6,
+      "StoreFrAcCount": 6,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 6,
+      "TestNames": [
+        "ScopeResolutionTurnRangeAndSessionMembers",
+        "ScopeResolutionSubmittingTurnExcludedOrRefused",
+        "ScopeResolutionOverMaxRefusedNeverTruncated",
+        "SessionScopeSnapshotAtAdmissionLaterTurnNotMember",
+        "UnnecessaryTurnIncludedAssessedAndReviewed",
+        "ScopeResolutionInvalidRangeOrSession400"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-005",
+      "DocumentAcCount": 6,
+      "StoreFrAcCount": 6,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 6,
+      "TestNames": [
+        "AdmissionRefusalListsEveryAffectedTurn",
+        "AdmissionConcurrentOverlapOneWinsThreeProviders",
+        "AdmissionNoEligibleReviewer409WithReviewerContext",
+        "HvSubmitVerbNoReviewerAddsContext",
+        "SubmitIdempotencyKeyReplayAndReuse",
+        "SubmitRequestShapeHasNoForceFlag"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-006",
+      "DocumentAcCount": 4,
+      "StoreFrAcCount": 4,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 4,
+      "TestNames": [
+        "RequirementReferenceExtractorFindsResolvesAndOrders",
+        "RequirementReferenceUnresolvedListedNeverRefused",
+        "SubmitContextTooLongOrUnknownFormat400",
+        "ContextSecretRedactedInBriefAndReads"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-007",
+      "DocumentAcCount": 7,
+      "StoreFrAcCount": 7,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 7,
+      "TestNames": [
+        "SubmitWakesWorkerAutoStart",
+        "ClaimConcurrentWorkersOneRunPerRequestThreeProviders",
+        "LeaseExpiryAbandonsFencesAndRequeues",
+        "LeaseExpiryEndsRequestLikeFailedRun",
+        "StaleFenceEveryWorkerWriteRefusedNothingChanged",
+        "SweepFinalizesFinalizingRequestOnce",
+        "GracefulShutdownNotCountedNoIncident",
+        "WorkerClaimsOnlyItsWorkspace"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-008",
+      "DocumentAcCount": 11,
+      "StoreFrAcCount": 11,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 11,
+      "TestNames": [
+        "OutputLinesAppendedWithinFlushIntervalInOrder",
+        "OutputFlushedAtByteThreshold",
+        "LiveOutputLineObservableBeforeReviewerExits",
+        "ReviewerRunHasNoTimeLimit",
+        "CancelQueuedImmediateRunningAtNextHeartbeat",
+        "CancelVersusFinalizeOneCommitsThreeProviders",
+        "CancelTerminalOrFinalizing409",
+        "ReviewerRunLeavesSameAgentLiveSessionUnchanged",
+        "ReviewerRunCannotChangeWorkspaceFilesPerAdapter",
+        "ReviewerClosesOwnTurnAndExitsUnderStopGate",
+        "ReviewerStopEndsWholeProcessTree"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-009",
+      "DocumentAcCount": 6,
+      "StoreFrAcCount": 6,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 6,
+      "TestNames": [
+        "ReviewerFailureOfflineWithIncident",
+        "IncidentFiledThroughTriageWithDedupeKey",
+        "RepeatedFailureSameTriageGroup",
+        "IncidentFilingRetriedUntilFiled",
+        "AttemptsExhaustedRequestFailedTurnsReleased",
+        "ServerFailureIncidentReviewerUnchanged"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-010",
+      "DocumentAcCount": 7,
+      "StoreFrAcCount": 7,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 7,
+      "TestNames": [
+        "FinalizeStoresPerTurnScoresAndSeparateHolistic",
+        "FinalizeIncompleteOutputRefusedNothingCommitted",
+        "VerdictAgreeWithFailFindingRefused",
+        "HolisticScoresNeverComputedFromTurnScores",
+        "ForgedWorkerRecordInMessageTextIgnored",
+        "ReviewerRecordsExtractedOnceFromAssembledMessagesPerCli",
+        "ExitZeroWithoutReviewerRecordsIsNotAReview"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-011",
+      "DocumentAcCount": 5,
+      "StoreFrAcCount": 5,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 5,
+      "TestNames": [
+        "EvidenceStoredGzipOnlyRoundTripExact",
+        "FinalizeCorruptOrTruncatedLogRefused",
+        "CompressionRoundTripFailureNothingSaved",
+        "ResponseLogDownloadMultiMemberGzipMatchesChain",
+        "OutputHasNoSizeLimitNeverTruncated"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-012",
+      "DocumentAcCount": 7,
+      "StoreFrAcCount": 7,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 7,
+      "TestNames": [
+        "FinalizeFaultAfterEachWriteNothingVisibleThreeProviders",
+        "FrozenTurnEveryWritePathRefused",
+        "EndedRequestReleasesTurns",
+        "FinalizeTwiceSecondReturnsStoredNothingWritten",
+        "FinalizeSnapshotChangedRefused",
+        "FinalizeReplacesOtherPendingHvReviewKeepsStatus",
+        "MigrationMarksHvReviewedTurnsFinalThreeProviders"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-013",
+      "DocumentAcCount": 3,
+      "StoreFrAcCount": 3,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 3,
+      "TestNames": [
+        "SelfReviewVariedAdmissionAssignmentAndBriefIdentical",
+        "SelfReviewVariedVerdictIdentical",
+        "HostileValidationNeverReadsAgentReview"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-014",
+      "DocumentAcCount": 2,
+      "StoreFrAcCount": 2,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 2,
+      "TestNames": [
+        "FinalizeNeverChangesTodos",
+        "HostileValidationHasNoTodoWriteDependency"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-015",
+      "DocumentAcCount": 4,
+      "StoreFrAcCount": 4,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 4,
+      "TestNames": [
+        "ResultDocumentCompleteAndDelineated",
+        "ResultBeforeCompletion409",
+        "RunningRequestsQueryAndLastOutput",
+        "HvSurfacesParityGoldenContract"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-016",
+      "DocumentAcCount": 4,
+      "StoreFrAcCount": 4,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 4,
+      "TestNames": [
+        "OutputStreamReconnectExactlyMissedEvents",
+        "EtaReportedOrUnknownNeverEstimated",
+        "OutputStreamContinuesAcrossAttempts",
+        "OutputStreamMalformedLastEventId400"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-017",
+      "DocumentAcCount": 4,
+      "StoreFrAcCount": 4,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 4,
+      "TestNames": [
+        "NotificationOutboxCommittedWithChangeGapFree",
+        "NotificationStreamReconnectNoLossNoDuplicate",
+        "HvWatcherDeliversOwnCompletionOnce",
+        "HvWatcherIgnoresOtherSessionsRequests"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-018",
+      "DocumentAcCount": 5,
+      "StoreFrAcCount": 5,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 5,
+      "TestNames": [
+        "EveryHvMutationHasLedgerRows",
+        "AuditUnavailableEveryHvCommandRefusedNothingWritten",
+        "EvidenceReadsAuditedOrRefused",
+        "AuditFailureDuringRunHardStop",
+        "EvidenceRemovalLeavesAuditLedgerUnchanged"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-019",
+      "DocumentAcCount": 4,
+      "StoreFrAcCount": 4,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 4,
+      "TestNames": [
+        "NoAutomaticEvidenceRemoval",
+        "RemoveEvidenceKeepsResultAndHashes",
+        "RemoveEvidenceActiveRequest409",
+        "RemovedEvidenceRead410WithHashes"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-020",
+      "DocumentAcCount": 5,
+      "StoreFrAcCount": 5,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 5,
+      "TestNames": [
+        "HvSurfacesParityGoldenContract",
+        "HvInternalUnitsHaveNoPublicSurface",
+        "HvSubmitVerbBindsTurnStableKey",
+        "HvSubmitVerbRetryableNotQueued",
+        "ReplPolicyHostileValidationClassification"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    },
+    {
+      "Id": "FR-MCP-HVPIPE-021",
+      "DocumentAcCount": 4,
+      "StoreFrAcCount": 4,
+      "StoreTrAcCount": 1,
+      "StoreTestAcCount": 4,
+      "TestNames": [
+        "FinalizeGradesLinkedResponsesInSameTransaction",
+        "FinalizeModeOffResponsesNotGraded",
+        "ResponseTransitionClosesHvItemOnly",
+        "ModelGradeHasNoPublicSurface"
+      ],
+      "Mappings": 2,
+      "Pending": true
+    }
+  ]
+}
