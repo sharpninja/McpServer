@@ -59,6 +59,12 @@ Chronological receipts for docs/plans/PLAN-C4MODEL-001.md (BDPv4). File names st
 
 - 2026-10-19T15:09:42, scratch probe workspace with dynamic views keyed SD-PROBE-001.alt1 and SD-PROBE-001-alt2, pinned structurizr/cli inspect: "View keys can only contain the following characters: a-zA-Z0-9_- at line 8 ... dynamic * "SD-PROBE-001.alt1"". D5 branch and loop keys use a hyphen (operator answer "Hyphen (Recommended)").
 
+## Develop base and Planned excludes
+
+- 20261019T152708-develop-merge-compile.log: operator correction "All work must be based on develop". origin/develop ace70daa (PR 82) was merged into the effort branch as e1d38ea9; ./build.ps1 Compile exit 0. The P4 worktrees were fast-forwarded to e1d38ea9 and each was verified to contain origin/develop.
+- 20261019T153147-planned-excludes-render.log: D3 excludes (`exclude "element.tag==Planned"` and `exclude "relationship.tag==Planned"`) after the include line of the 174 generated C4 views and the 31 entity views: validate passed, 0 inspection errors, 213 renders, 0 page, link or render findings; AC-3 red only for documents not yet converted (435 fences, 4 Marketing .mmd files).
+- Byte churn against the committed renders: 1 of 213 renders identical, 212 changed. With the JointJS generated ids (j_N, v-N, v_N) renumbered per file, all 213 equal the committed renders, so no view content changed. In 210 views the ids are shifted by a constant +12 (j_) and +151 (v-) starting with the first view rendered, so the offset arises once before any view is drawn and does not accumulate per view. Inference: the cause is the style additions of 1501f2b0, which were committed without a re-render, not the per-view excludes. AC-2 (byte-identical renders across runs of one workspace) is unaffected; any workspace change that shifts the page-load id counter rewrites every render.
+
 ## Order note
 
 AC-5 was amended on 2026-10-19 (operator answer "Show it; widen AC-5 to 2:1"). The requirement and the contract fixtures were changed first, but the production constant was edited before the rules mock gate was rerun. The mock gate uses a scripted mock that does not read the constant, so its result is unaffected; the deviation from the step order is recorded here.
