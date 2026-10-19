@@ -43,6 +43,18 @@ Chronological receipts for docs/plans/PLAN-C4MODEL-001.md (BDPv4). File names st
 - 20261019T143051-p3-fitted-render-r2.log: a second run; SHA-256 of all 12 renders identical to the first run (AC-2 byte-identical renders).
 - 20261019T143121-g2-build-tests-full-r4.log and .trx: full Build.Tests: 460 passed, 0 failed, 0 skipped.
 
+## P3 model of the whole codebase
+
+- 20261019T143906-p3-entities-r1.log: first entity render: 9 Structurizr inspection errors (entities without foreign keys were disconnected). Fixed with content (ADR 0006): every entity is mapped by its DbContext component ("Maps table").
+- 20261019T144107-p3-entities-r2.log: inspection clean; the mapping relationships implied edges up to the system, so the old include-star views pulled all 88 entities in (SystemContext 4350 x 35946); entity views 7 of 25 within the page.
+- 20261019T144339-p3-entities-r3.log: entity box height 220 and chunks fitted by an estimate of ranks and breadth: 26 of 27 entity views within the page.
+- 20261019T145208-p3-whole-model-r1.log: whole-codebase model (Shared Libraries, Compatibility Packages, McpAgent Sample Host, Test Suites, Nuke Build, Developer Tools, Operations Scripts, plugin core components) with the 12 hand views replaced by 147 generated neighbourhood views; 182 renders, 151 within the page.
+- 20261019T145648-p3-whole-model-r2.log: left to right for one-sided groups: worse (45 over), because edge labels widen the ranks.
+- 20261019T145758-p3-whole-model-r3.log: top to bottom with 50 between siblings: 24 over.
+- 20261019T145915-p3-whole-model-r4.log and 20261019T150006-p3-whole-model-r5.log: hubs that overflowed fed back with smaller groups (21 hubs at 2), Docker and Windows deployment views split: 213 renders, 0 over the page.
+- 20261019T150348-p3-gate-g3-r1.log and 20261019T150432-p3-gate-g3-r2.log: gate G3 after the operator cleared deleting the 22 retired originals ("Delete all 22 (Recommended)"): validate passed, 0 inspection errors, 213 renders, 0 page, link or render findings; AC-3 red only for documents not yet converted (435 fences, 4 Marketing .mmd files). SHA-256 of all 213 renders identical across the two runs.
+- Migration tools (D9, outside the repository): ~/.cache/c4-migration/Convert-EfErToDsl.ps1 (entities, run with -AreaChunkSizes AGENTS=3), New-C4Views.ps1 and Update-HubSizes.ps1 with hub-sizes.json (21 hubs at group size 2). Each was checked by PSScriptAnalyzer with 0 findings and dry-run first.
+
 ## Order note
 
 AC-5 was amended on 2026-10-19 (operator answer "Show it; widen AC-5 to 2:1"). The requirement and the contract fixtures were changed first, but the production constant was edited before the rules mock gate was rerun. The mock gate uses a scripted mock that does not read the constant, so its result is unaffected; the deviation from the step order is recorded here.
