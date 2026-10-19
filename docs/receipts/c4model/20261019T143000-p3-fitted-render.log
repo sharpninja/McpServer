@@ -1,0 +1,991 @@
+LocalStart: 2026-10-19T14:30:00
+Command: ./build.ps1 ArchitectureDiagrams
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬═════════════════════════
+║ ArchitectureDiagrams
+╬════════════════
+​
+14:30:18 [INF] validate docs/architecture/c4/workspace.dsl
+14:30:18 [INF] export workspace json
+14:30:18 [INF] render ServerComponents -> docs/architecture/c4/rendered/ServerComponents.svg
+14:30:18 [INF] render DataLayerComponents -> docs/architecture/c4/rendered/DataLayerComponents.svg
+14:30:18 [INF] render ReplComponents -> docs/architecture/c4/rendered/ReplComponents.svg
+14:30:18 [INF] render QBAgentComponents -> docs/architecture/c4/rendered/QBAgentComponents.svg
+14:30:18 [INF] render KeyServerComponents -> docs/architecture/c4/rendered/KeyServerComponents.svg
+14:30:18 [INF] render Containers -> docs/architecture/c4/rendered/Containers.svg
+14:30:18 [INF] render DeploymentDocker -> docs/architecture/c4/rendered/DeploymentDocker.svg
+14:30:18 [INF] render DeploymentWindowsService -> docs/architecture/c4/rendered/DeploymentWindowsService.svg
+14:30:18 [INF] render DeploymentLinuxSystemd -> docs/architecture/c4/rendered/DeploymentLinuxSystemd.svg
+14:30:18 [INF] render DeploymentFrpRailway -> docs/architecture/c4/rendered/DeploymentFrpRailway.svg
+14:30:18 [INF] render DeploymentFrpLocal -> docs/architecture/c4/rendered/DeploymentFrpLocal.svg
+14:30:18 [INF] render SystemContext -> docs/architecture/c4/rendered/SystemContext.svg
+14:30:18 [ERR] MermaidFile docs/Marketing/diagrams/agent-workflow.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/Marketing/diagrams/architecture.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/Marketing/diagrams/features.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/Marketing/diagrams/ui-tooling.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:62: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:94: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:126: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:158: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:182: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:209: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:47: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:63: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:79: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:98: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:118: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:133: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:172: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:188: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:203: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:220: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:237: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:247: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:257: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:279: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:491: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:503: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:512: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:522: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:532: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:541: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:550: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:577: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:691: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:714: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:738: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:757: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:786: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:807: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:825: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:841: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:869: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:899: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:919: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:936: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:962: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:990: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1019: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1043: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1059: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1078: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1105: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1124: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1151: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1182: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1195: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1218: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1242: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1259: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1282: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1324: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1337: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1360: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1383: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1407: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1432: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1452: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1467: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1494: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1516: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1538: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1551: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1588: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1622: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1651: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1687: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1720: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1755: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1778: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1802: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1840: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1885: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1916: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1941: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:1967: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2008: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2035: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2085: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2135: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2170: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2217: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2249: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2287: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2311: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2335: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2369: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2399: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2431: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2486: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2525: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2563: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2592: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2616: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2657: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2678: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2704: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2723: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2745: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2758: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2776: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2796: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2811: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2842: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2892: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2907: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2920: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2935: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2948: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2959: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/Stateless-Agent-Context-Management.md:2969: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:90: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:196: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:219: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:243: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:258: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:333: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:358: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:377: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:391: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:405: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:418: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:431: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:443: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:615: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:627: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:643: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:672: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:705: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:728: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:745: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:768: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:789: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:804: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:831: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:854: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:880: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:901: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:921: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:933: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:946: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:966: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:998: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1017: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1035: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1063: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1101: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1137: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1164: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1189: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1204: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1231: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1265: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1285: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1315: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1331: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1346: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1365: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1388: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1399: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1415: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1432: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1449: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1471: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1499: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1526: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1574: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1584: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1595: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1629: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1646: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1685: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1704: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1735: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1749: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1768: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1787: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1816: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1841: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1867: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1905: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1955: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2009: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2040: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2080: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2156: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2201: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2252: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2297: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2332: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2367: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2391: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2429: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2454: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2472: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2502: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2546: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2560: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2580: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2601: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2621: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2639: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2654: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2669: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2684: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2702: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2717: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2729: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2957: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3071: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3087: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3109: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3161: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3195: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3227: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3247: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3278: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3303: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:26: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:247: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:330: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:346: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:362: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:381: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:401: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:416: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:455: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:471: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:486: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:503: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:520: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:530: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:540: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:562: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:597: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:640: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:658: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:679: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:699: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:727: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:752: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:777: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:796: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:812: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:834: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:856: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:872: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:890: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:906: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:924: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:947: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:977: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:993: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1006: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1029: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1049: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1086: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1108: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1124: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1150: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1177: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1200: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1230: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1241: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1268: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1299: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1319: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1337: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1359: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1382: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1409: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1425: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1440: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1460: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1473: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1508: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1548: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1575: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1598: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1632: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1664: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1705: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1741: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1777: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1817: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1841: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1874: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1907: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1937: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1975: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2013: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2038: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2054: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2086: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2134: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2168: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2199: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2223: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2242: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2262: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2281: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2306: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2325: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2353: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2373: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2391: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2402: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2423: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2439: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2453: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2468: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2501: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2539: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2573: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2615: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2639: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2860: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2872: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2881: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2891: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2901: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2910: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2919: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2946: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3060: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3083: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3107: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3126: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3155: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3176: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3194: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3210: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3238: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3268: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3288: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3305: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3331: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3359: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3388: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3412: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3428: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3447: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3474: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3493: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3520: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3551: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3564: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3587: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3611: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3628: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3651: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3693: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3706: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3729: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3752: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3776: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3801: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3821: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3836: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3863: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3885: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3907: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3920: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3957: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3991: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4020: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4056: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4089: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4124: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4147: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4171: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4209: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4254: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4285: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4310: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4336: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4377: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4404: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4454: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4504: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4539: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4586: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4618: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4656: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4680: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4704: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4738: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4768: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4800: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4855: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4894: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4932: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4961: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4985: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5026: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5047: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5073: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5125: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5148: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5164: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5182: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5196: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5215: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5232: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5249: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5261: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5272: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5291: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5313: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5326: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5344: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5364: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5381: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5412: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5462: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5477: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5490: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5505: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5518: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5529: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5539: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5645: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5676: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5713: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5747: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5809: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5859: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5887: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5926: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5956: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5985: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-diagram.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-agents-tools.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-core.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-memory-graph.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-sessionlog.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-todo-requirements.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-triage-federation-handoff-hv.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-mcpidentitydbcontext.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/data/ef-er-transactionsecuritydbcontext.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-Containers.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-DataLayerComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentDocker.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentFrpLocal.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentFrpRailway.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentLinuxSystemd.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentWindowsService.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-KeyServerComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-QBAgentComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-ReplComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-ServerComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] MermaidFile docs/architecture/c4/mermaid/structurizr-SystemContext.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+14:30:18 [ERR] PageOverflow ServerComponents: Render 9361 x 6312 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.113; split the view per functional group.
+14:30:18 [ERR] PageOverflow DataLayerComponents: Render 2603 x 2176 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.375; split the view per functional group.
+14:30:18 [ERR] PageOverflow ReplComponents: Render 3999 x 1141 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.264; split the view per functional group.
+14:30:18 [ERR] PageOverflow QBAgentComponents: Render 2315 x 1038 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.456; split the view per functional group.
+14:30:18 [ERR] PageOverflow Containers: Render 3308 x 5967 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.177; split the view per functional group.
+14:30:18 [ERR] PageOverflow DeploymentDocker: Render 1330 x 1650 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.614; split the view per functional group.
+14:30:18 [ERR] PageOverflow DeploymentWindowsService: Render 2128 x 1863 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.438; split the view per functional group.
+14:30:18 [ERR] PageOverflow SystemContext: Render 1600 x 2800 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.377; split the view per functional group.
+14:30:18 [ERR] Target ArchitectureDiagrams has thrown an exception
+System.InvalidOperationException: ArchitectureDiagrams failed with 468 finding(s).
+   at Build.<get_ArchitectureDiagrams>b__9_1() in /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build/Build.ArchitectureDiagrams.cs:line 43
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] ArchitectureDiagrams: MermaidFile docs/Marketing/diagrams/agent-workflow.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/Marketing/diagrams/architecture.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/Marketing/diagrams/features.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/Marketing/diagrams/ui-tooling.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:62: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:94: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:126: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:158: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:182: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Project/Quad-Model-Transactional-Diffgram-Plan.md:209: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:47: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:63: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:79: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:98: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:118: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:133: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:172: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:188: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:203: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:220: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:237: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:247: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:257: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:279: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:491: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:503: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:512: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:522: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:532: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:541: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:550: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:577: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:691: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:714: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:738: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:757: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:786: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:807: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:825: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:841: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:869: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:899: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:919: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:936: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:962: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:990: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1019: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1043: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1059: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1078: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1105: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1124: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1151: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1182: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1195: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1218: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1242: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1259: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1282: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1324: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1337: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1360: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1383: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1407: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1432: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1452: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1467: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1494: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1516: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1538: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1551: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1588: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1622: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1651: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1687: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1720: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1755: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1778: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1802: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1840: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1885: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1916: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1941: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:1967: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2008: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2035: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2085: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2135: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2170: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2217: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2249: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2287: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2311: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2335: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2369: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2399: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2431: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2486: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2525: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2563: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2592: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2616: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2657: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2678: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2704: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2723: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2745: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2758: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2776: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2796: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2811: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2842: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2892: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2907: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2920: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2935: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2948: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2959: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/Stateless-Agent-Context-Management.md:2969: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:90: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:196: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:219: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:243: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:258: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:333: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:358: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:377: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:391: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:405: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:418: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:431: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:443: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:615: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:627: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:643: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:672: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:705: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:728: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:745: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:768: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:789: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:804: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:831: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:854: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:880: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:901: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:921: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:933: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:946: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:966: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:998: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1017: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1035: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1063: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1101: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1137: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1164: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1189: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1204: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1231: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1265: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1285: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1315: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1331: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1346: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1365: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1388: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1399: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1415: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1432: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1449: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1471: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1499: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1526: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1574: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1584: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1595: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1629: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1646: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1685: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1704: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1735: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1749: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1768: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1787: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1816: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1841: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1867: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1905: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:1955: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2009: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2040: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2080: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2156: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2201: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2252: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2297: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2332: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2367: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2391: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2429: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2454: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2472: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2502: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2546: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2560: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2580: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2601: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2621: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2639: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2654: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2669: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2684: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2702: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2717: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2729: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:2957: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3071: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3087: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3109: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3161: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3195: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3227: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3247: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3278: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md:3303: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:26: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:247: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:330: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:346: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:362: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:381: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:401: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:416: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:455: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:471: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:486: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:503: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:520: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:530: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:540: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:562: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:597: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:640: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:658: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:679: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:699: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:727: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:752: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:777: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:796: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:812: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:834: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:856: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:872: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:890: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:906: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:924: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:947: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:977: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:993: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1006: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1029: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1049: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1086: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1108: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1124: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1150: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1177: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1200: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1230: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1241: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1268: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1299: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1319: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1337: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1359: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1382: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1409: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1425: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1440: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1460: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1473: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1508: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1548: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1575: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1598: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1632: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1664: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1705: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1741: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1777: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1817: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1841: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1874: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1907: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1937: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:1975: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2013: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2038: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2054: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2086: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2134: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2168: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2199: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2223: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2242: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2262: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2281: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2306: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2325: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2353: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2373: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2391: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2402: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2423: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2439: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2453: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2468: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2501: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2539: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2573: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2615: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2639: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2860: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2872: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2881: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2891: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2901: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2910: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2919: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:2946: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3060: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3083: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3107: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3126: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3155: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3176: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3194: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3210: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3238: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3268: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3288: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3305: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3331: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3359: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3388: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3412: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3428: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3447: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3474: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3493: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3520: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3551: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3564: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3587: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3611: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3628: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3651: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3693: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3706: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3729: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3752: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3776: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3801: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3821: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3836: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3863: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3885: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3907: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3920: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3957: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:3991: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4020: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4056: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4089: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4124: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4147: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4171: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4209: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4254: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4285: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4310: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4336: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4377: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4404: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4454: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4504: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4539: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4586: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4618: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4656: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4680: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4704: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4738: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4768: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4800: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4855: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4894: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4932: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4961: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:4985: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5026: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5047: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5073: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5125: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5148: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5164: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5182: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5196: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5215: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5232: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5249: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5261: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5272: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5291: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5313: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5326: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5344: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5364: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5381: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5412: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5462: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5477: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5490: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5505: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5518: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5529: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5539: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5645: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5676: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5713: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5747: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5809: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5859: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5887: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5926: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5956: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFence docs/architecture/SessionTurn-Review-AgentContext-Architecture.md:5985: Mermaid fence '```mermaid'; replace it with a rendered view of the workspace.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-diagram.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-agents-tools.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-core.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-memory-graph.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-sessionlog.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-todo-requirements.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-mcpdbcontext-triage-federation-handoff-hv.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-mcpidentitydbcontext.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/data/ef-er-transactionsecuritydbcontext.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-Containers.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-DataLayerComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentDocker.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentFrpLocal.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentFrpRailway.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentLinuxSystemd.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-DeploymentWindowsService.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-KeyServerComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-QBAgentComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-ReplComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-ServerComponents.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: MermaidFile docs/architecture/c4/mermaid/structurizr-SystemContext.mmd: Mermaid source file; every diagram must be a view of docs/architecture/c4/workspace.dsl.
+[ERR] ArchitectureDiagrams: PageOverflow ServerComponents: Render 9361 x 6312 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.113; split the view per functional group.
+[ERR] ArchitectureDiagrams: PageOverflow DataLayerComponents: Render 2603 x 2176 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.375; split the view per functional group.
+[ERR] ArchitectureDiagrams: PageOverflow ReplComponents: Render 3999 x 1141 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.264; split the view per functional group.
+[ERR] ArchitectureDiagrams: PageOverflow QBAgentComponents: Render 2315 x 1038 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.456; split the view per functional group.
+[ERR] ArchitectureDiagrams: PageOverflow Containers: Render 3308 x 5967 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.177; split the view per functional group.
+[ERR] ArchitectureDiagrams: PageOverflow DeploymentDocker: Render 1330 x 1650 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.614; split the view per functional group.
+[ERR] ArchitectureDiagrams: PageOverflow DeploymentWindowsService: Render 2128 x 1863 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.438; split the view per functional group.
+[ERR] ArchitectureDiagrams: PageOverflow SystemContext: Render 1600 x 2800 needs scale 0.635 for 8 pt text but fits a letter page only at scale 0.377; split the view per functional group.
+[ERR] ArchitectureDiagrams: Target ArchitectureDiagrams has thrown an exception
+​
+════════════════════════════════════════════
+Target                  Status      Duration
+────────────────────────────────────────────
+ArchitectureDiagrams    Failed          0:13   // InvalidOperationException: ArchitectureDiagrams failed with 468 finding(s).
+────────────────────────────────────────────
+Total                                   0:13
+════════════════════════════════════════════
+​
+Build failed on 10/19/2026 2:30:18 PM. (╯°□°）╯︵ ┻━┻
+LocalEnd: 2026-10-19T14:30:18
+ExitCode: 255

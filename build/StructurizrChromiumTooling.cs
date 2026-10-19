@@ -8,7 +8,8 @@ using System.Text.Json;
 /// TR-MCP-NUKE-017: Real tooling boundary of the ArchitectureDiagrams target. Runs the pinned Structurizr CLI in
 /// Docker on a temporary copy of the workspace (nothing is written under docs) and renders views to SVG by driving
 /// headless Chromium over the DevTools protocol against the Structurizr static export: light mode, then per view
-/// structurizr.diagram.changeView(key) and structurizr.diagram.exportCurrentDiagramToSVG(false). The workspace sets
+/// structurizr.diagram.changeView(key) and structurizr.diagram.exportCurrentDiagramToSVG(false), then crops each SVG
+/// to its measured content with <see cref="SvgContentFitter"/> (AC-2 "the content fitted"). The workspace sets
 /// "structurizr.metadata" "false", which makes the export byte-identical across runs (PLAN-C4MODEL-001 D8).
 /// </summary>
 /// <param name="chromiumPath">Chromium-family browser executable.</param>
@@ -161,17 +162,48 @@ sealed class StructurizrChromiumTooling(string chromiumPath) : IArchitectureDiag
         }
 
         var svgs = new Dictionary<string, string>(StringComparer.Ordinal);
+        var fitter = new SvgContentFitter();
         foreach (var key in viewKeys.Distinct(StringComparer.Ordinal))
         {
+            // AC-2 "the content fitted": the export's viewBox is the whole paper, so the drawn content is measured in
+            // the page (union of the rendered shapes of the exported SVG at 1:1 scale) and SvgContentFitter crops to it.
             var expression = """
                 new Promise((resolve, reject) => {
                   const key = __KEY__;
                   const deadline = Date.now() + __TIMEOUT__;
+                  const measure = (svg) => {
+                    const holder = document.createElement('div');
+                    holder.style.cssText = 'position:absolute;left:0;top:0;';
+                    holder.innerHTML = svg;
+                    document.body.appendChild(holder);
+                    try {
+                      const root = holder.querySelector('svg');
+                      const paper = root.viewBox.baseVal;
+                      root.setAttribute('width', paper.width);
+                      root.setAttribute('height', paper.height);
+                      const origin = root.getBoundingClientRect();
+                      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                      root.querySelectorAll('rect,path,text,image,ellipse,circle,polygon,polyline,line').forEach(node => {
+                        const r = node.getBoundingClientRect();
+                        if (r.width <= 0 && r.height <= 0) { return; }
+                        minX = Math.min(minX, paper.x + r.left - origin.left);
+                        minY = Math.min(minY, paper.y + r.top - origin.top);
+                        maxX = Math.max(maxX, paper.x + r.right - origin.left);
+                        maxY = Math.max(maxY, paper.y + r.bottom - origin.top);
+                      });
+                      return [minX, minY, maxX, maxY];
+                    } finally {
+                      holder.remove();
+                    }
+                  };
                   const attempt = () => {
                     if (window.structurizr && structurizr.diagram && typeof structurizr.diagram.changeView === 'function') {
                       structurizr.diagram.setDarkMode(false);
                       structurizr.diagram.changeView(key, () => {
-                        try { resolve(structurizr.diagram.exportCurrentDiagramToSVG(false)); } catch (e) { reject(String(e)); }
+                        try {
+                          const svg = structurizr.diagram.exportCurrentDiagramToSVG(false);
+                          resolve(JSON.stringify({ svg: svg, content: measure(svg) }));
+                        } catch (e) { reject(String(e)); }
                       });
                     } else if (Date.now() > deadline) { reject('Structurizr viewer did not become ready'); } else { setTimeout(attempt, 100); }
                   };
@@ -188,10 +220,22 @@ sealed class StructurizrChromiumTooling(string chromiumPath) : IArchitectureDiag
             }).ConfigureAwait(false);
             if (reply.RootElement.TryGetProperty("result", out var result)
                 && result.TryGetProperty("result", out var value)
-                && value.TryGetProperty("value", out var svg)
-                && svg.ValueKind == JsonValueKind.String)
+                && value.TryGetProperty("value", out var payload)
+                && payload.ValueKind == JsonValueKind.String)
             {
-                svgs[key] = svg.GetString()!;
+                using var rendered = JsonDocument.Parse(payload.GetString()!);
+                var svg = rendered.RootElement.GetProperty("svg").GetString()!;
+                var edges = rendered.RootElement.GetProperty("content").EnumerateArray()
+                    .Select(edge => edge.ValueKind == JsonValueKind.Number ? edge.GetDouble() : double.NaN)
+                    .ToArray();
+                try
+                {
+                    svgs[key] = fitter.Fit(svg, new SvgContentBox(edges[0], edges[1], edges[2], edges[3]));
+                }
+                catch (ArgumentException)
+                {
+                    // Nothing drawn or no root viewBox: the key stays missing and the runner reports RenderFailed.
+                }
             }
         }
 

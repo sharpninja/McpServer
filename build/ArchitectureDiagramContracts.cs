@@ -122,6 +122,29 @@ interface IArchitectureDiagramTooling
 }
 
 /// <summary>
+/// TR-MCP-NUKE-017 AC-2: Drawn content of an exported view in the SVG user coordinates (union of the rendered shapes).
+/// </summary>
+/// <param name="MinX">Left edge.</param>
+/// <param name="MinY">Top edge.</param>
+/// <param name="MaxX">Right edge.</param>
+/// <param name="MaxY">Bottom edge.</param>
+sealed record SvgContentBox(double MinX, double MinY, double MaxX, double MaxY);
+
+/// <summary>
+/// TR-MCP-NUKE-017 AC-2 ("the content fitted"): crops an exported view, whose viewBox is the whole paper, to its
+/// drawn content.
+/// </summary>
+interface ISvgContentFitter
+{
+    /// <summary>
+    /// Returns the SVG with only the root viewBox value replaced: the content box grown by 50 units (the margin the
+    /// Structurizr viewer uses when it crops), rounded outward to whole units, and clamped to the original viewBox.
+    /// Throws <see cref="ArgumentException"/> when the document has no root viewBox or the content box is empty.
+    /// </summary>
+    string Fit(string svg, SvgContentBox content);
+}
+
+/// <summary>
 /// TR-MCP-NUKE-017: Input of one ArchitectureDiagrams run.
 /// </summary>
 /// <param name="RepositoryRoot">Absolute repository root.</param>
