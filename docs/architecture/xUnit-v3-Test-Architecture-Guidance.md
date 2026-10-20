@@ -13,6 +13,7 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - **MUST** / **MUST NOT**: mandatory. A violation blocks merge.
 - **SHOULD** / **SHOULD NOT**: the default. Any deviation needs a written reason in the PR description.
 - **MAY**: optional. Use your judgment.
+- Adoption: rules that require per-project files or configuration (XU-110, XU-131) bind new test projects immediately and existing ones from the first PR that brings them under this guide. Each of those rules says so.
 - Every rule has an ID (XU-NNN), a short rationale, and a source. If a rule's source says "Team policy", the rule is our own convention and not an xUnit.net requirement. Those rules still link the xUnit.net documentation that motivates them.
 - These rules use the API names from xUnit.net v3 4.0.x. Some names changed in 4.0, mostly around parallelization. Where that matters, the rule says which version it applies to.
 
@@ -56,8 +57,8 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 
 **XU-011 (MUST)** Test projects MUST set `<OutputType>Exe</OutputType>`.
 
-- Rationale: v3 test projects are stand-alone executables. For .NET (not .NET Framework) projects, the tests live in the `.dll` and the `.exe` is only a stub launcher. Multi-assembly runners must be given the `.dll` path.
-- Source: https://xunit.net/docs/getting-started/v3/migration
+- Rationale: v3 test projects are stand-alone executables. For .NET (not .NET Framework) projects, the tests live in the `.dll` and the `.exe` is only a stub launcher, so multi-assembly runners must be given the `.dll` path. The exception is a Native AOT project after `dotnet publish`: the produced executable is self-contained, and xUnit.net's first-party multi-assembly runners are given that executable as the test assembly.
+- Source: https://xunit.net/docs/getting-started/v3/migration ; https://xunit.net/docs/getting-started/v3/native-aot
 
 **XU-012 (MUST)** Each test project MUST reference exactly one core package. Choose one of:
 
@@ -65,7 +66,7 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - `xunit.v3.mtp-v2` (MTP v2, chosen explicitly)
 - `xunit.v3.mtp-off` (MTP support disabled)
 - For a project that opts into Native AOT (4.0 or later, C# only, .NET 9 or later): the AOT variant of the same choice, `xunit.v3.aot`, `xunit.v3.aot.mtp-v2`, or `xunit.v3.aot.mtp-off`
-- For a test project that references a shared test utility library built with `xunit.v3.assert.source` (XU-014): the matching core-only package (`xunit.v3.core`, `xunit.v3.core.mtp-v2`, or `xunit.v3.core.mtp-off`) plus an explicit `xunit.analyzers` reference, instead of `xunit.v3`
+- For a test project that references a shared test utility library built with `xunit.v3.assert.source` (XU-014): the matching core-only package (`xunit.v3.core`, `xunit.v3.core.mtp-v2`, or `xunit.v3.core.mtp-off`; for Native AOT, `xunit.v3.core.aot`, `xunit.v3.core.aot.mtp-v2`, or `xunit.v3.core.aot.mtp-off`) plus an explicit `xunit.analyzers` reference, instead of `xunit.v3` or `xunit.v3.aot`
 
 Do not reference v2 packages (`xunit`, `xunit.abstractions`, `xunit.core`, `xunit.assert`, `xunit.console`).
 
@@ -224,9 +225,9 @@ public class AluTests
 
 - Facts take no parameters (xUnit1001) and carry no data (xUnit1005).
 - Theories must have data (xUnit1003), must have parameters (xUnit1006), and should use every parameter (xUnit1026).
-- Theory parameters cannot be `params` arrays (xUnit1022) or have default values (xUnit1023).
+- Theories MAY use `params` arrays and default parameter values. xUnit1022 and xUnit1023 only flag those on xUnit.net versions before 2.2.0, so they do not restrict v3 projects.
 - Rationale: The analyzers enforce these rules. Most of them are errors by default.
-- Source: https://xunit.net/xunit.analyzers/rules/
+- Source: https://xunit.net/xunit.analyzers/rules/ ; https://xunit.net/xunit.analyzers/rules/xUnit1022 ; https://xunit.net/xunit.analyzers/rules/xUnit1023
 
 **XU-042 (SHOULD)** New data sources should be a public static member that returns `IEnumerable<TheoryDataRow<...>>`, referenced with `[MemberData(nameof(...))]`.
 
@@ -248,8 +249,8 @@ public void Add_ReturnsWrappedSum(byte a, byte b, byte expected) =>
 
 **XU-043 (MAY)** Existing code MAY keep using `TheoryData<T1, ...>`. Do not wrap types that implement `ITheoryDataRow` in `TheoryData<...>` (xUnit1052).
 
-- Rationale: It is still supported and still type checked (xUnit1037 to xUnit1040), but it cannot carry per-row metadata.
-- Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/xunit.analyzers/rules/
+- Rationale: It is still supported and still type checked (xUnit1037 to xUnit1040). It can also carry per-row metadata: `TheoryData<T>` and its multi-argument forms accept typed rows through `Add(TheoryDataRow<...>)`, `AddRange`, and the constructors. xUnit1052 is about a different case, a `TheoryData<...>` whose type argument is itself a row type, such as `TheoryData<TheoryDataRow<int>>`.
+- Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/xunit.analyzers/rules/ ; https://api.xunit.net/v3/3.2.2/Xunit.TheoryData-1.html ; https://xunit.net/xunit.analyzers/rules/xUnit1052
 
 ```csharp
 public static TheoryData<int, bool> OddCases = new() { { 3, true }, { 6, false } };
@@ -286,7 +287,7 @@ public sealed class OpcodeCases : IEnumerable<TheoryDataRow<byte, string>>
 }
 ```
 
-**XU-047 (SHOULD)** Theory data should be serializable, so each row can be listed and run on its own in Test Explorer. Serializable means any of:
+**XU-047 (SHOULD)** In reflection mode, theory data should be serializable, so each row can be listed and run on its own in Test Explorer. This rule does not apply to Native AOT projects, because xUnit.net lists serialization as not available in AOT mode (see section 17 for what is not verified about AOT discovery). Serializable means any of:
 
 - the built-in intrinsics and system types (for example `int`, `string`, `byte`, `DateTime`, `Guid`, `Uri`, `Version`, `Type`)
 - enums, single-dimensional arrays of serializable values, and tuples (v3 3.0.1 or later)
@@ -295,7 +296,7 @@ public sealed class OpcodeCases : IEnumerable<TheoryDataRow<byte, string>>
 - types covered by an `IXunitSerializer` that you register with `[assembly: RegisterXunitSerializer(typeof(MySerializer), typeof(MyType))]`
 
 - Rationale: If any row is not serializable, discovery falls back to a single test for the whole method. xUnit1044 to xUnit1047 warn about this.
-- Source: https://github.com/xunit/xunit.net/blob/main/site/docs/getting-started/v3/custom-serialization.md ; https://xunit.net/xunit.analyzers/rules/xUnit1044 ; https://xunit.net/docs/getting-started/v3/theory-data-attributes
+- Source: https://github.com/xunit/xunit.net/blob/main/site/docs/getting-started/v3/custom-serialization.md ; https://xunit.net/xunit.analyzers/rules/xUnit1044 ; https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/docs/getting-started/v3/native-aot
 
 **XU-048 (MAY)** Use `[Theory(DisableDiscoveryEnumeration = true)]` for data sets that are large or expensive to build.
 
@@ -765,8 +766,8 @@ Theory data correctness:
 - xUnit1014 (W) MemberData should use nameof operator for member name
 - xUnit1015 to xUnit1020 (E) MemberData must reference an existing, public, static member of a valid kind and data type, with a getter
 - xUnit1021 (W) MemberData should not have parameters if the referenced member is not a method
-- xUnit1022 (E) Theory methods cannot have a parameter array
-- xUnit1023 (E) Theory methods cannot have default parameter values
+- xUnit1022 (E) Theory methods cannot have a parameter array (applies only before xUnit.net 2.2.0)
+- xUnit1023 (E) Theory methods cannot have default parameter values (applies only before xUnit.net 2.2.0)
 - xUnit1025 (W) InlineData should be unique within the Theory it belongs to
 - xUnit1026 (W) Theory methods should use all of their parameters
 - xUnit1037, xUnit1038, xUnit1039 (E) Theory data type arguments must match the test method parameters
@@ -838,7 +839,7 @@ Sources: https://xunit.net/xunit.analyzers/rules/ ; https://github.com/xunit/xun
 - Rationale: The compiler then reports analyzer warnings as errors, so the xUnit warning rules block the build. Diagnostics at Info level (`suggestion`) do not fail the build. That is why section 13.3 raises selected Info rules to `warning` or `error`.
 - Source: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings ; https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-options
 
-**XU-131 (MUST)** Use the `.editorconfig` in 13.3. Set the severity of the critical correctness rules to `error` explicitly, so they fail even in a local build where `TreatWarningsAsErrors` is off.
+**XU-131 (MUST)** Use the `.editorconfig` in 13.3. Set the severity of the critical correctness rules to `error` explicitly, so they fail even in a local build where `TreatWarningsAsErrors` is off. New test projects comply from the start. Existing test projects adopt it in the first PR that brings them under this guide; until then they are not in violation. In McpServer, the root `.editorconfig` had no `dotnet_diagnostic.xUnit*` entries on Oct 20, 2026, so this rollout is still to do.
 
 - Rationale: An entry for a single rule ID takes precedence over category-level and global entries.
 - Source: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-options
@@ -1051,6 +1052,7 @@ Source: https://xunit.net/docs/getting-started/v3/migration
 - **xUnit1056.** Its title ("Type must have a single public non-static constructor") and scope (test classes, and types used as class or collection fixtures) are verified on its rule page. The page does not say whether it applies outside Native AOT mode, so this guide only lists it. xUnit1057 is documented as Native AOT only and is listed in that group.
 - **`dotnet test` default runner.** The MTP page (May 27, 2026) says `dotnet test` uses VSTest by default. The getting started page (May 2, 2026, template 4.0.0-pre.108) says the template defaults to MTP and writes `global.json`. In practice, a project's runner depends on its template version and settings. XU-020 sets the team default explicitly, so this does not matter for our projects.
 - **Avalonia and xUnit 4.0.** The status of AvaloniaUI/Avalonia#22072 is as of Oct 20, 2026. Check it again before lifting XU-161. Whether Avalonia needs the 3.2.x MTP v2 package or the default 3.2.x package was not tested. `xunit.v3.mtp-v2` 3.2.2 exists on NuGet, but I did not build it against Avalonia.
+- **Native AOT theory discovery.** The Native AOT page lists serialization as not available in AOT mode, so XU-047 is limited to reflection mode. How AOT mode discovers and lists individual theory rows without serialization was not verified, so this guide gives no AOT-specific rule for it.
 - **The v3 command line options page** (https://xunit.net/docs/getting-started/v3/cmdline) returned HTTP 500 during research. Command line switches here were taken from the MTP page and the release notes instead.
 - **Team conventions.** The naming scheme (XU-033), seeded randomness (XU-093), temp folders (XU-096), and the agent rules (XU-003) are team policy, not xUnit.net requirements, and are labeled that way.
 - **Version-specific CI runner commands** (for example GitHub Actions task syntax) are deliberately left out, because I did not verify them against a primary source.
@@ -1073,6 +1075,7 @@ xUnit.net documentation:
 - https://xunit.net/docs/getting-started/v3/native-aot (accessed Oct 20, 2026)
 - https://api.xunit.net/v3/4.0.0/Xunit.IClassFixture-1.html (accessed Oct 20, 2026)
 - https://api.xunit.net/v3/4.0.0/Xunit.ICollectionFixture-1.html (accessed Oct 20, 2026)
+- https://api.xunit.net/v3/3.2.2/Xunit.TheoryData-1.html (accessed Oct 20, 2026)
 - https://xunit.net/docs/getting-started/v3/cmdline (accessed Oct 20, 2026; returned HTTP 500, not used for facts)
 - https://github.com/xunit/xunit.net/blob/main/site/docs/getting-started/v3/custom-serialization.md (accessed Oct 20, 2026)
 - https://xunit.net/docs/shared-context (accessed Oct 20, 2026)
@@ -1092,7 +1095,10 @@ xUnit.net analyzer rules:
 - https://xunit.net/xunit.analyzers/rules/xUnit1004 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1030 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1031 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1022 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1023 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1044 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1052 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1054 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1056 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1057 (accessed Oct 20, 2026)
