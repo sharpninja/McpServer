@@ -19,6 +19,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class RequirementsDatabaseDocumentServiceTests
 {
     /// <summary>Overlapping requirement ids do not leak between workspaces.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ListsAndExports_AreScopedToActiveWorkspace()
     {
@@ -464,6 +465,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     }
 
     /// <summary>Bootstrap accepts bold legacy headings and does not treat notes columns as TEST links.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors()
     {
@@ -514,6 +516,7 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     }
 
     /// <summary>Bootstrap rebuilds traceability when orphan links were left by a failed import.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure()
     {

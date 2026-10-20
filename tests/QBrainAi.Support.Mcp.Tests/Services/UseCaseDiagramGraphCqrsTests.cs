@@ -13,7 +13,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>
 /// TEST-MCP-USECASE-013 / FR-MCP-USECASE-012: Graph get/put, validation, audit, soft-delete.
+/// Every case resolves the physical identity of a real temporary workspace, so the class is an
+/// integration test on every host (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class UseCaseDiagramGraphCqrsTests : IDisposable
 {
     private readonly SqliteConnection _connection;

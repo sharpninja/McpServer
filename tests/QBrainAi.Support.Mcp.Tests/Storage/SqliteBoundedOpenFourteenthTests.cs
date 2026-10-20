@@ -324,6 +324,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// Repeated pooled and non-pooled opens preserve the exact connection string, release the outer
     /// handle on close, and dispose cancellation registration before the connection is reused.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Theory]
     [InlineData(true)]
     [InlineData(false)]

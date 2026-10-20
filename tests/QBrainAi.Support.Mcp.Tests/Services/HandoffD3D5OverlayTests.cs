@@ -95,6 +95,7 @@ public sealed class HandoffD3D5OverlayTests : IDisposable
     /// D3: GenerateAllAsync and GenerateWikiAsync write Handoff family ids into temp markdown/wiki
     /// exports using the shipped export writers. Does not mutate docs/Project.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport()
     {

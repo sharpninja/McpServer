@@ -48,6 +48,7 @@ public sealed class MemoryBenchPluginTests
         => AssertPluginCompletesFullPack("opencode", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-09 / H7b: Stub -Plugin all writes per-cell tokens for all eight plugins.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AllEight_WritesStubArtifacts()
     {

@@ -67,6 +67,7 @@ public sealed class UseCaseComponentUpdateContractTests
     /// TEST-MCP-USECASE-021 AC2: the production CQRS handlers satisfy the same identity and field
     /// assertions used by the independent fake while preserving aggregate state and row counts.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task CorrectRealHandlers_SatisfyIdentityPreservingContract()
     {
@@ -86,6 +87,7 @@ public sealed class UseCaseComponentUpdateContractTests
     /// TEST-MCP-USECASE-021 AC3-AC5: invalid values, missing associations, parent mismatches,
     /// soft-deleted records, and cross-workspace lookups fail without mutating durable rows.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task RealHandlers_RejectInvalidAndOutOfScopeTargetsWithoutMutation()
     {

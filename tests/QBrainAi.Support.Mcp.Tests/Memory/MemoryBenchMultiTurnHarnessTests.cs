@@ -106,6 +106,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019 / H7b: Stub -Plugin all writes success-gated multiturn tokens for eight plugins.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AllEight_WritesMultiTurnStubArtifacts()
     {
