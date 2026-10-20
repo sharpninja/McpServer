@@ -14,6 +14,7 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - **SHOULD** / **SHOULD NOT**: the default. Any deviation needs a written reason in the PR description.
 - **MAY**: optional. Use your judgment.
 - Adoption: rules that require per-project or repository configuration (XU-020, XU-094, XU-110, XU-131) bind new test projects immediately and existing ones from the first PR that brings them under this guide. Until then an existing project is not in violation and needs no per-PR deviation reason. Each of those rules says so.
+- Adoption of code rules: every other rule applies to test code that a PR adds or changes. Existing test code that a PR does not touch is not in violation until it is migrated; for example, McpServer had existing tests on Oct 20, 2026 that read `DateTimeOffset.UtcNow` (XU-091) or wait with a real delay (XU-092). Bringing such code into compliance is tracked as separate migration work, not as a blocker for unrelated PRs.
 - Every rule has an ID (XU-NNN), a short rationale, and a source. If a rule's source says "Team policy", the rule is our own convention and not an xUnit.net requirement. Those rules still link the xUnit.net documentation that motivates them.
 - These rules use the API names from xUnit.net v3 4.0.x. Some names changed in 4.0, mostly around parallelization. Where that matters, the rule says which version it applies to.
 
@@ -156,10 +157,10 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 - Rationale: There is no adapter overhead, and `-?` lists every switch.
 - Source: https://xunit.net/docs/getting-started/v3/migration ; https://xunit.net/docs/getting-started/v3/getting-started
 
-**XU-024 (MAY)** Use the console runner .NET tool (`dotnet tool install xunit-console-tool --global`, which requires .NET 10 SDK, then run `xunit-console`) to run several test assemblies in parallel. On Windows only, it MAY also mix v1/v2 assemblies with v3 ones.
+**XU-024 (MAY)** Use the console runner .NET tool (`dotnet tool install xunit-console-tool --global`, which requires .NET 10 SDK, then run `xunit-console`) to run several test assemblies in parallel. Pass `-parallelAssemblies on` (4.0 or later), because assemblies only run in parallel with each other when every one opts in and `parallelizeAssembly` defaults to `false`. On Windows only, it MAY also mix v1/v2 assemblies with v3 ones.
 
 - Rationale: A single v3 project does not need it. Custom reporters do not work through it. On Linux and macOS the runner supports only v3 .NET test projects, because v1 and v2 assemblies need .NET Framework, which is not supported on those operating systems.
-- Source: https://xunit.net/docs/getting-started/v3/getting-started ; https://xunit.net/releases/v3/4.0.0
+- Source: https://xunit.net/docs/getting-started/v3/getting-started ; https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/docs/running-tests-in-parallel ; https://xunit.net/docs/config-xunit-runner-json ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.runner.console/CommandLine.cs
 
 ---
 
@@ -445,9 +446,9 @@ public async Task ListTools_ReturnsRegisteredTools()
 - Rationale: Tests run on a limited pool of threads, so blocking can cause deadlocks.
 - Source: https://xunit.net/xunit.analyzers/rules/xUnit1031
 
-**XU-073 (MUST NOT)** Do not call `ConfigureAwait(false)` in test methods (xUnit1030). Turn off CA2007 in test projects. The analyzers package includes a CA2007 suppressor for test methods.
+**XU-073 (MUST NOT)** Do not call `ConfigureAwait(false)` in test methods, and do not call the `ConfigureAwait(ConfigureAwaitOptions)` overload without including `ConfigureAwaitOptions.ContinueOnCapturedContext` (for example, `ConfigureAwaitOptions.SuppressThrowing` alone). xUnit1030 flags both. Turn off CA2007 in test projects. The analyzers package includes a CA2007 suppressor for test methods.
 
-- Rationale: `ConfigureAwait(false)` moves the rest of the test onto the general thread pool, so xUnit.net can no longer limit how many tests run at once.
+- Rationale: Both forms move the rest of the test onto the general thread pool, so xUnit.net can no longer limit how many tests run at once.
 - Source: https://xunit.net/xunit.analyzers/rules/xUnit1030 ; https://github.com/xunit/xunit.analyzers/blob/main/src/xunit.analyzers/Utility/Descriptors.Suppressors.cs
 
 **XU-074 (MUST)** Always await async assertions (xUnit2021). Use `Assert.ThrowsAsync` for exceptions thrown asynchronously (xUnit2014).
@@ -935,7 +936,7 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 - MTP in 4.0 or later: `--report-xunit-trx` (others are `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`, `--report-xunit-nunit`, `--report-xunit-html`, and `--report-xunit-markdown` in 4.0.1 or later).
 - MTP in 3.2.x (for example McpServer's current pin): `--report-xunit-trx` and `--report-xunit-html` are the same, but XML, JUnit, CTRF, and NUnit use the old names `--report-xunit`, `--report-junit`, `--report-ctrf`, and `--report-nunit`. Each `-filename` switch follows the same rename.
 - Reports go to the results directory, which you can change with `--results-directory`.
-- Native UX in 4.0 or later: `-result-trx <file>` (others are `-result-xml`, `-result-junit`, `-result-ctrf`, `-result-markdown`). The old `-trx` and `-xml` style switches are deprecated.
+- Native UX in 4.0 or later: `-result-trx <file>` (others are `-result-xml`, `-result-junit`, `-result-ctrf`, and `-result-markdown` in 4.0.1 or later). The old `-trx` and `-xml` style switches are deprecated.
 - Rationale: The 4.0 release renamed both sets of switches. The 4.0.0 release notes list the MTP renames, and the 4.0.2 source builds every report option as `report-xunit-<format>`.
 - Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/releases/v3/4.0.1 ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs ; https://github.com/xunit/xunit/blob/v3-3.2.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs
 
@@ -1065,6 +1066,7 @@ Source: https://xunit.net/docs/getting-started/v3/migration
 - **Avalonia and xUnit 4.0.** The status of AvaloniaUI/Avalonia#22072 is as of Oct 20, 2026. Check it again before lifting XU-161. Whether Avalonia needs the 3.2.x MTP v2 package or the default 3.2.x package was not tested. `xunit.v3.mtp-v2` 3.2.2 exists on NuGet, but I did not build it against Avalonia.
 - **Native AOT theory discovery.** The Native AOT page lists serialization as not available in AOT mode, so XU-047 is limited to reflection mode. How AOT mode discovers and lists individual theory rows without serialization was not verified, so this guide gives no AOT-specific rule for it.
 - **MTP report switch names.** The MTP page (May 27, 2026) still maps `-xml`, `-jUnit`, `-ctrf`, and `-nUnit` to `--report-xunit`, `--report-junit`, `--report-ctrf`, and `--report-nunit`. Those are the 3.2.x names. The 4.0.0 release notes and the 4.0.2 source use `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`, and `--report-xunit-nunit`. XU-141 lists both by version.
+- **Console runner assembly parallelism switch.** The 4.0.0 release notes' deprecation table names the replacement switch `-parallelizeAssemblies`. The "Running Tests in Parallel" page and the 4.0.2 source (`xunit.v3.runner.console/CommandLine.cs`) use `-parallelAssemblies`. XU-024 uses `-parallelAssemblies`, which matches the source.
 - **The v3 command line options page** (https://xunit.net/docs/getting-started/v3/cmdline) returned HTTP 500 during research. Command line switches here were taken from the MTP page and the release notes instead.
 - **Team conventions.** The naming scheme (XU-033), seeded randomness (XU-093), temp folders (XU-096), and the agent rules (XU-003) are team policy, not xUnit.net requirements, and are labeled that way.
 - **Version-specific CI runner commands** (for example GitHub Actions task syntax) are deliberately left out, because I did not verify them against a primary source.
@@ -1135,6 +1137,7 @@ GitHub repositories:
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/TestClassAttribute_reflection.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/CulturedFactAttribute_reflection.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.runner.console/CommandLine.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit/blob/v3-3.2.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs (accessed Oct 20, 2026)
 
 NuGet (version verification):
