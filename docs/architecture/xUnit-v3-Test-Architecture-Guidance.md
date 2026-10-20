@@ -907,11 +907,12 @@ dotnet_diagnostic.xUnit1052.severity = error
 dotnet_diagnostic.xUnit1053.severity = error
 dotnet_diagnostic.xUnit1059.severity = error
 
-# Typed data rows and serializability (Info by default, raised)
-dotnet_diagnostic.xUnit1042.severity = warning
-dotnet_diagnostic.xUnit1050.severity = warning
-dotnet_diagnostic.xUnit1044.severity = warning
-dotnet_diagnostic.xUnit1046.severity = warning
+# Typed data rows and serializability (XU-042, XU-046, XU-047 are SHOULD rules,
+# so these stay visible but non-blocking under TreatWarningsAsErrors)
+dotnet_diagnostic.xUnit1042.severity = suggestion
+dotnet_diagnostic.xUnit1050.severity = suggestion
+dotnet_diagnostic.xUnit1044.severity = suggestion
+dotnet_diagnostic.xUnit1046.severity = suggestion
 dotnet_diagnostic.xUnit1045.severity = suggestion
 dotnet_diagnostic.xUnit1047.severity = suggestion
 
@@ -954,9 +955,9 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 - Rationale: The PR pipeline stays fast and deterministic. The default value of `explicit` is `off`.
 - Source: https://xunit.net/docs/config-testconfig-json
 
-**XU-143 (SHOULD)** CI should detect hung tests by setting `longRunningTestSeconds` above 0 together with `diagnosticMessages: true`, or with the `--long-running <seconds>` / `-longRunning <seconds>` switch together with `--xunit-diagnostics on` (MTP) or `-diagnostics` (native UX).
+**XU-143 (SHOULD)** CI should detect hung tests by setting `longRunningTestSeconds` above 0 together with `diagnosticMessages: true`, or with the `--long-running <seconds>` / `-longRunning <seconds>` switch together with `--xunit-diagnostics on` (MTP) or `-diagnostics` (native UX). A job that still runs `dotnet test` through VSTest (XU-020 adoption path) also passes `--logger "console;verbosity=normal"`, so the warnings are shown.
 
-- Rationale: Long-running warnings are diagnostic messages, so they only appear when diagnostics are enabled. The threshold switch and the diagnostics switch are independent options, so the command line form needs both.
+- Rationale: Long-running warnings are diagnostic messages, so they only appear when diagnostics are enabled. The threshold switch and the diagnostics switch are independent options, so the command line form needs both. The runner configuration page notes that `dotnet test` may hide xUnit.net messages unless the console logger runs at normal verbosity.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
 **XU-144 (SHOULD)** For reflection-mode test projects, CI should keep the assembly unique ID that appears in the run output (the native execution summary ends with `ID: '<value>'`). In the MTP command line UX, pass `--xunit-info` so that the native xUnit.net output, including that summary, is shown alongside the MTP output. CI should keep that ID so a failure that depends on order can be reproduced locally (XU-087). This does not apply to Native AOT projects (XU-018), because the `.uniqueid` override is not available in AOT mode.
@@ -974,9 +975,9 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 - Rationale: The full list of failures is needed to diagnose a run. Even when enabled, tests already in flight still finish.
 - Source: https://xunit.net/docs/config-xunit-runner-json
 
-**XU-147 (SHOULD)** The gate job SHOULD enable `failSkips` (`--fail-skips on` in MTP, `-failSkips` in the native UX, or `"failSkips": true` in `xunit.runner.json`) so that any skip inside the required validation scope fails the run (XU-140). CI MAY set `TESTINGPLATFORM_TELEMETRY_OPTOUT=1` to opt out of MTP telemetry.
+**XU-147 (MUST)** Every gate job MUST enforce zero skips: either enable `failSkips` (`--fail-skips on` in MTP, `-failSkips` in the native UX, or `"failSkips": true` in `xunit.runner.json`), or validate the result files and reject any skipped or not-run test, as McpServer's `build/SessionLifeUnitGateValidator.cs` does for TRX (XU-140). CI MAY set `TESTINGPLATFORM_TELEMETRY_OPTOUT=1` to opt out of MTP telemetry.
 
-- Rationale: `failSkips` treats every skip as a failure, including `SkipUnless`/`SkipWhen` skips, which matches the zero-skip gate. The telemetry opt-out is documented by xUnit.net.
+- Rationale: `failSkips` defaults to `false`, so without it or an equivalent check a run with skipped tests can still succeed, and the zero-skip requirement in XU-140 would be advisory. `failSkips` treats every skip as a failure, including `SkipUnless`/`SkipWhen` skips. The telemetry opt-out is documented by xUnit.net.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
 ---
