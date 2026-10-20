@@ -53,7 +53,7 @@ All four models interact through the Shared Corpus Callosum Cache.
 
 ## Imported Diagrams
 
-The Mermaid source in this section is preserved from the imported document. Repo-specific branch IDs and implementation notes follow each imported block.
+The diagrams in this section are views of the C4 workspace (`docs/architecture/c4/workspace.dsl`, fragments `model/qmd.dsl` and `views/qmd.dsl`), converted from the Mermaid source of the imported document, which this file carried before commit 8b45490d. Each imported diagram keeps its ID as its view key. Repo-specific branch IDs and implementation notes follow each diagram as repo annotations.
 
 ### AD-TXN-001 Normal Turn Transaction
 

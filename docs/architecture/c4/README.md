@@ -7,6 +7,8 @@ docs/architecture/c4/workspace.dsl is the one definition of every diagram in thi
 - model/entities.dsl: the EF Core entity model, one Entity element per entity (88) with columns as element properties, 126 foreign-key relationships with cardinality, and a "Maps table" relationship from each DbContext component to its entities.
 - views/c4.dsl: static C4 views (levels 1 to 3). Each is a neighbourhood view of one hub element and at most three neighbours, so it fits a letter page at 8 to 16 pt (TR-MCP-NUKE-017 AC-5); together they show every element and every relationship at each level. Keys: CTX-<hub>-NN (system context), CTR-<hub>-NN (containers), CMP-<container>-<hub>-NN (components).
 - views/entities.dsl: custom views of the entity model, EF-<area>-NN, one DbContext area per group.
+- model/mkt.dsl and views/mkt.dsl: the four docs/Marketing diagrams (DocCode MKT), MKT-<diagram>-01 views with -partN tiles; docs/Marketing/diagrams/README.md lists them.
+- model/qmd.dsl and views/qmd.dsl: the six imported diagrams of docs/Project/Quad-Model-Transactional-Diffgram-Plan.md (DocCode QMD), keyed by their imported IDs with -partN tiles and -BR-<branch> views.
 - Deployment views (in workspace.dsl): DeploymentDocker, DeploymentDockerWorkspace, DeploymentWindowsService, DeploymentWindowsKeyServer, DeploymentWindowsDesktop, DeploymentLinuxSystemd, DeploymentFrpRailway, DeploymentFrpLocal.
 - documentation/ and decisions/: the architecture overview and the ADRs of PLAN-C4MODEL-001, attached to the software system with !docs and !adrs.
 - evidence.md: file-path evidence and confidence per element, including the full EF Core entity model.
