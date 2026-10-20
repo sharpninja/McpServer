@@ -1,0 +1,20 @@
+[
+  {
+    "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1",
+    "Sha256": "A98190407B9EDC286619CDA3371550CD630A8B5E5A9872D858DE16C8C8B015BC",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1",
+    "Sha256": "D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  },
+  {
+    "Path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1",
+    "Sha256": "D9E37CB563E486EB72C5BDFEBECF1F18835D605A15DF5E77AFFA74B0D3D14E66",
+    "ParserErrors": [],
+    "AnalyzerIssues": []
+  }
+]

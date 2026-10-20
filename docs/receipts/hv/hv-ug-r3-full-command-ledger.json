@@ -1,0 +1,1824 @@
+{
+  "TimestampLocal": "2026-10-20T17:52:36",
+  "Source": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261020T170824-unitgreen-r3.response.jsonl",
+  "Commands": [
+    {
+      "Id": "item_1",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_2",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$profileFiles = @(Get-ChildItem -LiteralPath '\"'/home/sharpninja/.claude/profile' -File -Filter '*.md' | Where-Object { \"'$_.Name -notlike '\"'add-profile*.md' }); Write-Output ('ProfileFileCount=' + \"'$profileFiles.Count); foreach ($profileFile in $profileFiles) { Write-Output ('\"'ProfileFile=' + \"'$profileFile.FullName); Get-Content -LiteralPath $profileFile.FullName -Raw }; Get-Date -Format '\"'yyyyMMddTHHmmsszzz'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_3",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$profileText = Get-Content -LiteralPath '\"'/home/sharpninja/.claude/profile/PROFILE-MERGED.md'; Write-Output ('LineCount=' + \"'$profileText.Count); $profileText | Select-Object -First 210'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_4",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 210\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_7",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$parseTokens = $null; $parseErrors = $null; [System.Management.Automation.Language.Parser]::ParseFile('\"'/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r3-bootstrap.ps1', [ref]\"'$parseTokens, [ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path '\"'/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r3-bootstrap.ps1' -Severity Warning,Error\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_8",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-bootstrap.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_10",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$scriptPaths = @('\"'./docs/receipts/hv/hv-ug-r3-bootstrap.ps1','./docs/receipts/hv/hv-ug-r3-read.ps1','./docs/receipts/hv/hv-ug-r3-identity.ps1'); foreach (\"'$scriptPath in $scriptPaths) { $parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $scriptPath),[ref]$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error }'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_11",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-bootstrap.ps1 -Skip 300 -First 400'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_12",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/Invoke-CodexMcpPlugin.ps1 -First 160'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_13",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-identity.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_15",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-session.ps1'),[ref]\"'$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r3-session.ps1 -Severity Warning,Error'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_17",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-bootstrap.ps1 -Skip 200 -First 100'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_16",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/enforcement/SKILL.md -First 250'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_18",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-session.ps1 -Action Status'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_20",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-session.ps1 -Action Start'",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_22",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-session.ps1'),[ref]\"'$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r3-session.ps1 -Severity Warning,Error'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_23",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-session.ps1 -Action Start'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_27",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path AGENTS.md -First 230'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_26",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md -First 230'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_25",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path CLAUDE.md -First 230'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_29",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$scriptPaths=@('\"'./docs/receipts/hv/hv-ug-r3-session.ps1','./docs/receipts/hv/hv-ug-r3-inspect.ps1'); foreach(\"'$scriptPath in $scriptPaths) { $parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $scriptPath),[ref]$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error }'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_31",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -First 200'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_30",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Baseline'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_32",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-session.ps1 -Action History'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_34",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -First 100'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_33",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/requirements/SKILL.md -Skip 230 -First 330'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_36",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$scriptPaths=@('\"'./docs/receipts/hv/hv-ug-r3-run-test.ps1','./docs/receipts/hv/hv-ug-r3-store-read.ps1','./docs/receipts/hv/hv-ug-r3-inspect.ps1'); foreach(\"'$scriptPath in $scriptPaths) { $parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $scriptPath),[ref]$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error }'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_41",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -Skip 200 -First 60'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_39",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Tools'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_43",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -Skip 260 -First 65'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_42",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md -First 100'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_44",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Pr -Paths /home/sharpninja/.local/share/mise/installs/gh/2.102.0/gh_2.102.0_linux_amd64/bin/gh'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_40",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-store-read.ps1'",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_45",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path .github/copilot-instructions.md -First 250'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_48",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path CLAUDE.md -Skip 230 -First 100'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_47",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/Development-Process-draft-v4.md -First 230'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_46",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -Skip 100 -First 25'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_50",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$scriptPaths=@('\"'./docs/receipts/hv/hv-ug-r3-transcript.ps1','./docs/receipts/hv/hv-ug-r3-inspect.ps1'); foreach(\"'$scriptPath in $scriptPaths) { $parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $scriptPath),[ref]$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error }'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_52",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-transcript.ps1'),[ref]\"'$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r3-transcript.ps1 -Severity Warning,Error'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_53",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Survey'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_55",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Diff'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_54",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-transcript.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_57",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$scriptPaths=@('\"'./docs/receipts/hv/hv-ug-r3-store-read.ps1','./docs/receipts/hv/hv-ug-r3-read.ps1'); foreach(\"'$scriptPath in $scriptPaths) { $parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $scriptPath),[ref]$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error }'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_60",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-sandbox-test.out.txt -Tail 25'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_58",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1 -First 160'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_62",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path src/QBrainAi.Services/Services/DirectoryTreeWalker.cs -First 250'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_65",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-pr87-body.txt -First 160'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_63",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs -First 260'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_64",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/Shared/TestRepositoryRoot.cs -First 160'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_68",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md -First 230'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_66",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Search -Pattern 'GetFolderPath|new SessionLogTurnContextExtractor|\\\\.ImportAsync\\\\(|\\\\.ImportJsonAsync\\\\(' -Paths tests/QBrainAi.Support.Mcp.Tests\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_67",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Search -Pattern 'AgentPluginUserProfileOverride|WithHermeticPluginVersionResolution|class HermeticUserProfileFixture|AppendHistory' -Paths src/QBrainAi.Services,tests/QBrainAi.Support.Mcp.Tests\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_59",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-store-read.ps1'",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_72",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-TR-MCP-WS-005.txt -First 90'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_69",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.meta.json -First 100'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_71",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.result.txt -First 90'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_73",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-TR-MCP-SESSIONLOG-006.txt -First 90'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_70",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs -First 210'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_75",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$scriptPaths=@('\"'./docs/receipts/hv/hv-ug-r3-store-read.ps1','./docs/receipts/hv/hv-ug-r3-inspect.ps1'); foreach(\"'$scriptPath in $scriptPaths) { $parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $scriptPath),[ref]$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error }'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_77",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Search -Pattern 'AgentPluginUserProfileOverride|WithHermeticPluginVersionResolution|class HermeticUserProfileFixture|AppendHistory|TryReadAgentPluginVersion|ResolveAgentPluginVersion' -Paths src/QBrainAi.Services,tests/QBrainAi.Support.Mcp.Tests\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_76",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-code.diff.txt -First 250'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_79",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -First 160'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_80",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -First 130'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_81",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path src/QBrainAi.Services/Services/MarkerFileService.cs -Skip 600 -First 235'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_78",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-store-read.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_83",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017.txt -First 110'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_84",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs -First 250'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_82",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-todo.txt -First 200'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_86",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$scriptPaths=@('\"'./docs/receipts/hv/hv-ug-r3-runs.ps1','./docs/receipts/hv/hv-ug-r3-review-data.ps1'); foreach(\"'$scriptPath in $scriptPaths) { $parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $scriptPath),[ref]$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning,Error }'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_90",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-review-data.ps1 -Mode Metadata'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_89",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-review-data.ps1 -Mode Store'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_92",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-TR-MCP-NUKE-019.txt -First 100'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_94",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-sandbox-test.out.txt -Tail 22'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_91",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-TR-MCP-USECASE-019.txt -First 125'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_93",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-effective.json -First 40'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_96",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-review-data.ps1'),[ref]\"'$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r3-review-data.ps1 -Severity Warning,Error'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_98",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-review-data.ps1 -Mode Choices -Pattern 'Structural fix|Fix scans|Fix the flake|Rerun for a complete set|Serialize SQL|Diagnose the loss|Fold R3-P3'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_99",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Search -Pattern 'MCP_SESSION_MODEL|p\\\\[''model''\\\\]|model =' -Paths /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_97",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-review-data.ps1 -Mode Effective -Pattern '\"'^FR-MCP-USECASE-01[67]$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_88",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-runs.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_101",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$parseTokens=$null; $parseErrors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-transcript.ps1'),[ref]\"'$parseTokens,[ref]$parseErrors) | Out-Null; $parseErrors; Invoke-ScriptAnalyzer -Path ./docs/receipts/hv/hv-ug-r3-transcript.ps1 -Severity Warning,Error'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_104",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Search -Pattern 'sessionlog.updateTurn|designDecisions|Set-Repl.*model|Model' -Paths /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_103",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1 -Skip 1320 -First 70'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_102",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-transcript.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_107",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs -Skip 260 -First 110'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_106",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r2-mcp.ps1 -First 180'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_108",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-review-data.ps1 -Mode Choices -Pattern 'Structural fix|Fix scans|Fix the flake|Rerun for a complete set|Serialize SQL|Diagnose the loss|Fold R3-P3'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_105",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-session.ps1 -Action Dialog -Text 'Progress at approximately 17:19 local: mandatory setup completed and own model/effort verified from rollout turn_context. Entire plan and self-review read; GitHub PR 87 is draft at requested HEAD. Independent XML accounting matches claimed final Linux and Windows unit totals (4479) and lanes (397 Linux, 373 Windows), with zero failed or other outcomes. By-name comparisons and provenance checks are continuing. Live getFr and effective queries both return FR-MCP-USECASE-017 despite deletion claims; FR-MCP-USECASE-016 is not_found, and both old mappings are absent. Treating the resurrected FR as a material store-state discrepancy to verify, not asserting a cause. Own sandboxed Nuke Test is still running. No implementation or store-record edits.'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_38",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File ./docs/receipts/hv/hv-ug-r3-run-test.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_110",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_111",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Skip 0 -First 180\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_112",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Skip 180 -First 200\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_113",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -Filter '*.md' -File | Where-Object Name -NotLike 'add-profile*.md' | Select-Object Name,Length; Get-Date -Format s\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_116",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-session.ps1' -First 240\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_115",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-run-comparisons.json' -First 250\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_118",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-review-data.ps1' -First 150\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_119",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-inspect.ps1' -First 220\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_117",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/Invoke-McpPlugin.ps1' -First 220\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_120",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'AgentPluginUserProfileOverride|SubmitForImportAsync|UserProfileScanBinding' -Paths tests/QBrainAi.Support.Mcp.Tests\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_125",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.meta.json' -First 100\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_123",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs' -First 200\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_121",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs' -First 170\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_122",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/Invoke-McpPlugin.ps1' -Skip 220 -First 140\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_124",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-review-data.ps1' -Mode Choices -Pattern 'Serialize|latest|Structural|Fold|Diagnosis|Diagnose|Uncheck|scans|flake|complete set' -First 100\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_127",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'SubmitAsync|ExtractAsync|Extract\\\\(|GetFolderPath|UserProfile|\\\\.claude|\\\\.codex' -Paths tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs,tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs,src/QBrainAi.Support.Mcp/Services/SessionLogService.cs\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_128",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'using .*Integration|Trait|SubmitAsync|Import' -Paths tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_129",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'ImportAsync|turnContextExtractor|\\\\.Extract\\\\(' -Paths src/McpServer.Support.Mcp/Services/SessionLogService.cs\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_130",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-inventory.txt' -First 50\"",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_131",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-transcript.ps1' -First 150\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_132",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'class SessionLogService|class MarkerFileService|class UnitSuitePlatformScanner' -Paths src,tests\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_133",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-diff-stat.txt' -First 210\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_135",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$tokens=$null; $errors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-audit.ps1'),[ref]\"'$tokens,[ref]$errors); $errors; Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r3-audit.ps1' -Severity Warning,Error\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_138",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Answers -Skip 12 -First 20\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_136",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Trx -Path './TestResults/hv-ug-r3-sandbox-test-20261020T1713' -Pattern sandbox\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_139",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r1-own-model-params.json' -First 80\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_137",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'Extract\\\\(|ExtractAsync|ImportAsync|Backfill' -Paths src/QBrainAi.Services/Services/SessionLogService.cs\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_141",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$tokens=$null; $errors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-audit.ps1'),[ref]\"'$tokens,[ref]$errors); $errors; Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r3-audit.ps1' -Severity Warning,Error\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_144",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'src/QBrainAi.Services/Services/SessionLogService.cs' -Skip 1370 -First 110\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_145",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Trx -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-build-tests-8' -Pattern build-tests-8\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_143",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Trx -Path './TestResults/hv-ug-r3-sandbox-test-20261020T1713' -Pattern sandbox\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_142",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Answers -Skip 12 -First 20\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_147",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$tokens=$null; $errors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-audit.ps1'),[ref]\"'$tokens,[ref]$errors); $errors; Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r3-audit.ps1' -Severity Warning,Error\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_148",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'isImport:\\\\s*true|isImport = true' -Paths tests/QBrainAi.Support.Mcp.Tests\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_150",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r1-session-client-shapes-20261019T203040-1ddb5f.json' -First 80\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_151",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'src/QBrainAi.Services/Services/SessionLogService.cs' -First 260\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_149",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action DiffReview -Pattern 'SqlServer|Postgres|Hermetic|DirectoryTree|PluginVersion' -First 30\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_154",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'OpenSessionAsync|model|designDecisions|queryHistory|appendAction' -Paths src/QBrainAi.Repl.Core/SessionLogWorkflow.cs\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_155",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'sourceFilePath:|SubmitAsync\\\\(.+\\\\.ya?ml|SubmitAsync\\\\(.+\\\\.json' -Paths tests/QBrainAi.Support.Mcp.Tests\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_153",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Files -Path 'docs/receipts/hv' -Pattern 'r2.*(persist|metadata|params|mcp)' -First 60\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_152",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Answers -Skip 21 -First 12\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_156",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-store-read.ps1' -First 140\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_159",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs' -First 260\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_157",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r2-persist-Metadata-params.json' -First 140\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_158",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1' -First 220\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_160",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r2-canonical-own-turn-metadata.txt' -First 80\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_161",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Files -Path 'src/QBrainAi.Client' -Pattern 'SessionLog|Session' -First 30\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_163",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'src/QBrainAi.Repl.Core/SessionLogWorkflow.cs' -Skip 1060 -First 160\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_162",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-review-data.ps1' -Mode Operations -Pattern 'own-model|OpenSession|queryHistory' -First 5\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_167",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r2-persist-VerifyContent-params.json' -First 100\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_166",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'workflow.sessionlog.updateTurn|workflow.sessionlog.appendAction|workflow.sessionlog.openSession' -Paths /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_165",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'PatchSession|UpdateSession|PatchTurn|QueryAsync|GetAsync' -Paths src/QBrainAi.Client/SessionLogClient.cs,src/QBrainAi.Client/Models/SessionLogRequestModels.cs\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_168",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-review-data.ps1' -Mode Operations -Pattern 'DirectoryTreeWalker|PluginVersionFileReadTests|SqlServerTestConnection|SqlServerLocalDbCollection|EphemeralPostgresFixture|UnitSuitePlatformScanner|TestRepositoryRoot' -First 80\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_170",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/plans/2026-10-19-unit-suite-green.md' -Skip 215 -First 105\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_169",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'src/QBrainAi.Client/SessionLogClient.cs' -Skip 180 -First 100\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_171",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1' -Skip 2620 -First 75\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_172",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r2-persist.ps1' -First 240\"",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_173",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r1-own-session-params.json' -First 80\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_174",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'client.invoke|OpenSessionAsync' -Paths docs/REPL-MIGRATION-GUIDE.md,src/QBrainAi.Repl.Core/ReplCommandRouter.cs\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_175",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r2-mcp.ps1' -First 100\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_176",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'OpenSessionAsync|own-model' -Paths docs/receipts/hv/hv-ug-r2-plugin-calls.jsonl\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_177",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'client.SessionLog.OpenSessionAsync|client.SessionLog.PatchTurnAsync|client.SessionLog.GetAsync' -Paths docs/receipts/hv/20261019T212828-unitgreen-r2.response.jsonl\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_179",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$tokens=$null; $errors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-log.ps1'),[ref]\"'$tokens,[ref]$errors); $errors; Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r3-log.ps1' -Severity Warning,Error\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_180",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-log.ps1' -Mode Record -Decision -Name decision-drift -FilePath 'docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017.json' -Text 'Decision: do not accept the claimed absence of FR-MCP-USECASE-017. Both the dedicated workflow.requirements.getFr read and the effective requirement view return an active pending eight-criterion record. FR-MCP-USECASE-016 is absent and the old mappings are empty. The store-drift root cause is outside scope, but its effect on the claimed conversion, TODO task 9 and post-AGREE completion is in scope. Alternative rejected: trust the earlier deletion receipt or treat out-of-scope cause as proof of current absence. No record has been changed. Independent sandbox Nuke Test completed with 4479 passing and zero failed/unexecuted; full raw Build.Tests artifact has 436 passing.'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_181",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md' -Skip 60 -First 90\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_184",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs' -First 200\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_182",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs' -First 240\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_183",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/Shared/TestRepositoryRoot.cs' -First 160\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_185",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs' -Skip 200 -First 220\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_187",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs' -Skip 420 -First 250\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_186",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs' -First 200\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_191",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md' -First 60\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_190",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-pr87-body.txt' -First 100\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_189",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Files -Path tests/QBrainAi.Support.Mcp.Tests/bin -Pattern 'net10.0/QBrainAi.Support.Mcp.Tests.dll\"'$'\"' -First 10\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_188",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'BuildTemplateContext|BuildAgentPluginContract|ResolveAgentPluginVersion|AgentPluginUserProfileOverride' -Paths src/QBrainAi.Services/Services/MarkerFileService.cs\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_192",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'src/QBrainAi.Services/Services/MarkerFileService.cs' -Skip 388 -First 165\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_193",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'src/QBrainAi.Services/Services/MarkerFileService.cs' -Skip 605 -First 155\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_194",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-run-test.ps1' -First 120\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_195",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Files -Path tests/QBrainAi.Support.Mcp.Tests/bin -Pattern 'QBrainAi.Support.Mcp.Tests.dll\"'$'\"' -First 10\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_198",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$tokens=$null; $errors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-env-probe.ps1'),[ref]\"'$tokens,[ref]$errors); $errors; Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r3-env-probe.ps1' -Severity Warning,Error\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_199",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-env-probe.ps1' -WhatIf\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_201",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-log.ps1' -Mode Record -Name boundary-probe -Text 'Source observation: HermeticUserProfileFixture changes AgentPluginUserProfileOverride only; MarkerFileService.BuildTemplateContext calls BuildDefaultAgentPlugins, which reads CODEX_PLUGIN_ROOT before the overridden profile. Many marker tests call MakeContext without WithClearedPluginVersionEnvironment. Hypothesis, not yet a finding: the remaining external plugin-root boundary can fail unit tests. Started a full sandbox Nuke Test probe with process-local CODEX_PLUGIN_ROOT set to an isolated reviewer fixture containing plugin.json as an empty array, native serialized. No code or tests changed, no filter or audit override. The normal independent run remains 4479/0/0.'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_203",
+      "Command": "/usr/bin/pwsh -NoProfile -Command '$tokens=$null; $errors=$null; $null=[System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD '\"'docs/receipts/hv/hv-ug-r3-audit.ps1'),[ref]\"'$tokens,[ref]$errors); $errors; Invoke-ScriptAnalyzer -Path '\"'./docs/receipts/hv/hv-ug-r3-audit.ps1' -Severity Warning,Error\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_205",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Files -Path '/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults' -Pattern 'diag-[23].*host|lane-8.*(proof|log|meta)' -First 30\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_206",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Files -Path 'tests/QBrainAi.Support.Mcp.Tests/bin' -Pattern 'QBrainAi.Support.Mcp.Tests.dll\"'$'\"' -First 10\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_204",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action ScriptChecks -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019/remote' -Pattern 'Invoke-WinLane.*Runner|Start-WinInteractiveLane'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_207",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action Files -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019' -Pattern '(diag-[23]|win-lane-8|runner|analyz)' -First 100\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_208",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-diag-2.txt' -First 140\"",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_209",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-review-data.ps1' -Mode Operations -Pattern 'Invoke-Analyzer.ps1.*Invoke-WinLaneRunner|Invoke-LegionSsh.ps1.*Start-WinInteractiveLane' -First 8\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_211",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-diag-2.vstest-diag.txt' -First 100\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_210",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.result.txt' -First 70\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_212",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneDiagRunner.ps1' -First 120\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_213",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Read-WinVstestDiag.ps1' -First 130\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_214",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path '/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1' -First 150\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_217",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action ScriptChecks -Path './docs/receipts/hv' -Pattern 'hv-ug-r3-(win-read|ssh-read).ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_218",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-ssh-read.ps1'\"",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_220",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action ScriptChecks -Path './docs/receipts/hv' -Pattern 'hv-ug-r3-ssh-read.ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_221",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-ssh-read.ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_223",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action ScriptChecks -Path './docs/receipts/hv' -Pattern 'hv-ug-r3-store-read.ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_224",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-store-read.ps1' -Filter '\"'^FR-MCP-USECASE-01[67]$'\"' -Suffix '-recheck'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_226",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action ScriptChecks -Path './docs/receipts/hv' -Pattern 'hv-ug-r3-scanner-probe.ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_227",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-scanner-probe.ps1'\"",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_229",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action ScriptChecks -Path './docs/receipts/hv' -Pattern 'hv-ug-r3-scanner-probe.ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_230",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-scanner-probe.ps1'\"",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_231",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-read.ps1' -Path 'docs/receipts/hv/hv-ug-r3-env-probe.out.txt' -Tail 15\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_200",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-env-probe.ps1'\"",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_233",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action ScriptChecks -Path './docs/receipts/hv' -Pattern 'hv-ug-r3-scanner-probe.ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_234",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-scanner-probe.ps1'\"",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_235",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-inspect.ps1' -Action Search -Pattern 'Failed |\\\\[FAIL\\\\]|Unhandled' -Paths docs/receipts/hv/hv-ug-r3-env-probe.out.txt\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_237",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-audit.ps1' -Action ScriptChecks -Path './docs/receipts/hv' -Pattern 'hv-ug-r3-scanner-probe.ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_238",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& './docs/receipts/hv/hv-ug-r3-scanner-probe.ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_239",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"& pwsh.exe -NoProfile -NonInteractive -Command '\"'$skillPath = \"/home/sharpninja/.claude/skills/add-profile/SKILL.md\"; Get-Content -LiteralPath $skillPath -Raw; $profileFiles = @(Get-ChildItem -LiteralPath \"/home/sharpninja/.claude/profile\" -Filter \"*.md\" -File | Where-Object { $_.Name -ne \"SKILL.md\" }); foreach ($profileFile in $profileFiles) { Write-Output (\"PROFILE_FILE \" + $profileFile.FullName); Get-Content -LiteralPath $profileFile.FullName -Raw }; Write-Output (\"PROFILE_FILE_COUNT=\" + $profileFiles.Count); Get-Date -Format \"yyyy-MM-ddTHH:mm:sszzz\"'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_240",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Raw\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_241",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 146 -First 125\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_243",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-log.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_245",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-audit.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_244",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action Trx -Path TestResults/hv-ug-r3-env-probe-20261020T1730 -Pattern env-probe'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_249",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_248",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-inspect.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_247",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action DiffReview -Pattern '\"'^(src|build)/|Directory.Packages.props'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_246",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-log.ps1 -Decision -Name confirmed-environment -FilePath docs/receipts/hv/hv-ug-r3-trx-env-probe.json -Text 'Confirmed material environment-isolation defect: the ordinary full sandbox Nuke Test passed 4479/0/0. With only a process-local CODEX_PLUGIN_ROOT pointing to a scripted plugin.json array, the same full target ran all 4479 cases and failed 19, with 4460 passed and 0 other outcomes. The assembly fixture isolates the profile but does not isolate environment plugin roots; MarkerFileServiceTests, TriagePromptTemplateTests and WorkspaceProcessManagerStartupTests reach that external root. This violates the day-one unit rule and prevents UG3 and the broad hermetic claims from passing. Correct the test boundary without swallowing unexpected product errors or weakening assertions. Alternative of treating the ordinary green run as sufficient is rejected because the controlled negative probe proves the dependency. No code or store state changed.'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_251",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md -Skip 148 -First 70'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_252",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path docs/receipts/hv -Pattern '\"'^hv-ug-r3-finalchecks.ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_253",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode EnvironmentFailures'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_254",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode Hygiene'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_258",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/unitgreen-r3-prelaunch.projected-problems.md'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_256",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode ReviewDiff -Pattern '\"'^src/'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_257",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Search -Pattern 'c212|116816|takeover|Takeover|FR-MCP-USECASE-017' -Paths docs/plans/2026-10-19-unit-suite-green.md,docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_255",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-log.ps1 -Decision -Name confirmed-alias -FilePath docs/receipts/hv/hv-ug-r3-scanner-probe.json -Text 'Confirmed scanner false negative with the compiled production scanner: two sibling namespaces declare OS aliases to System.OperatingSystem and System.String respectively; a Fact in the first calls OS.IsWindows, but Scan reports zero findings. Removing the second namespace alias reports one os-check. Nine other direct-syntax and exclusion controls pass. CollectAliases folds all namespace scopes into one dictionary, letting a later unrelated alias hide the first. This is within the claimed same-file direct alias coverage, not the declared other-file/helper/reflection limitation. Implementer fix: preserve C# alias scope with scripted positive and negative controls and the required mock/binding gates. Do not infer a need for whole-program analysis. No tracked source edited.'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_262",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_261",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action Files -Path /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern 'Protect-Hv|Get-Transcript|Invoke-Analyzer'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_260",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode Chronology -Pattern 'PluginVersionFileReadTests|Set-RequirementCriterion|versionread|Invoke-WinLaneRunner|DirectoryTreeWalkerTests' -First 14\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_265",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_263",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs -Skip 200 -First 100'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_264",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode Chronology -Pattern 'Set-RequirementCriterion|PluginVersionFileReadTests|versionread' -Skip 20 -First 30\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_266",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode ReviewDiff -Pattern '\"'^tests/'\"' -First 12\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_267",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-review-data.ps1 -Mode Store -Pattern 'TR-MCP-NUKE-019|TR-MCP-WS-005|TR-MCP-SESSIONLOG-006|TEST-MCP-PATHNORM|todo'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_268",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern '\"'^Protect-HvReceipts.ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_270",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path docs/receipts/hv -Pattern '\"'^hv-ug-r3-finalchecks.ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_274",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode ChronologyDigest -Pattern '.' -First 20\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_271",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode Takeover'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_273",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory docs/receipts/hv -NameRegex 'unitgreen|hv-ug-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /tmp/hv-ug-r3-redaction-unused -WhatIf\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_272",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode Github'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_275",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode ChangedAssertions'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_277",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path docs/receipts/hv -Pattern '\"'^hv-ug-r3-finalchecks.ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_280",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode GithubDigest'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_279",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode ChangedAssertions -Pattern 'CodexCli|Copilot|Desktop|CliAgent' -First 10\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_281",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 -Directory docs/receipts/hv -NameRegex 'unitgreen|hv-ug-' -MarkerPath /home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml -BackupDir /tmp/hv-ug-r3-redaction-unused -WhatIf\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_283",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/Shared/TestRepositoryRoot.cs'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_282",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode SliceChronology -Pattern '(UnitSuitePlatformScanner|TestRepositoryRoot|DirectoryTreeWalker|SqlServerTestConnection|SqlServerLocalDbCollection|EphemeralPostgresFixture|MarkerFileService.cs|scan-mockgate|dry-mockgate|mockgate-1)' -Skip 70 -First 30\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_284",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_285",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action Files -Path docs/receipts/unit-suite-green-20261019 -Pattern 'diag|32|failure|symlink|scan'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_286",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs -Skip 0 -First 225'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_288",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-diag-2.unparseable.txt -First 65'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_289",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-diag-2.lost-messages.txt -First 60'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_287",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode SliceChronology -Pattern '(UnitSuitePlatformScanner|TestRepositoryRoot|ug-r3-mockgate|ug-r3-dry-mockgate)' -First 45\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_291",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -Skip 225 -First 95'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_290",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode SliceChronology -Pattern '(SqlServerTestConnection|SqlServerLocalDbCollection|EphemeralPostgresFixture|localdb-mockgate|sqlcollection-mockgate|sqlserial-mockgate|pgctl-mockgate)' -Skip 10 -First 32\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_292",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-review-data.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_294",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.meta.json'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_295",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r3-win-test-ssh-6.result.txt -First 100'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_293",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/unit-suite-green-20261019/ug-r3-traceability-7.out.txt -Tail 35'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_296",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-win-read.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_299",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path docs/receipts/hv -Pattern '\"'^hv-ug-r3-win-read.ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_300",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-ssh-read.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_302",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path docs/receipts/hv -Pattern '\"'^hv-ug-r3-(win-unit-read|ssh-read).ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_303",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-todo.json -First 200'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_305",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action LogPoints -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Pattern '\"'^ug-r3-linux-test-8.out.log$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_304",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-ssh-read.ps1 -PayloadName hv-ug-r3-win-unit-read.ps1 -ReceiptName hv-ug-r3-windows-unit-live.txt'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_306",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-linux-test-8.out.log -First 45'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_307",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/plans/2026-10-19-unit-suite-green.md -Skip 291 -First 35'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_308",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action Files -Path docs/receipts/hv -Pattern 'r2.*(persist|final|mcp).*ps1'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_309",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-inspect.ps1 -Action Search -Pattern 'PatchTurnAsync|OpenSessionAsync|responseText|model =' -Paths /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib-ps/sessionlog.ps1,docs/context/session-log-schema.md\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_311",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017-recheck.json -First 110'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_312",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action Files -Path /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0 -Pattern 'session.*ps1\"'$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_310",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r2-persist-verdict.ps1 -First 220'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_314",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-session.ps1'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_313",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-log.ps1 -Mode Query -Name midpoint'",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_316",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-midpoint-history.txt -First 65'",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_319",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path docs/receipts/hv -Pattern '\"'^hv-ug-r3-log.ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_321",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode SliceChronology -Pattern '(SqlServerTestConnection.cs|SqlServerLocalDbCollection.cs|EphemeralPostgresFixture.cs|sqlserial-mockgate|pgctl-mockgate)' -Skip 6 -First 20\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_320",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-log.ps1 -Mode Query -Name midpoint-supported'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_322",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_323",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -File -Filter '*.md' | Where-Object Name -ne 'SKILL.md' | Select-Object FullName; Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -First 120\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_324",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 120 -First 120\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_325",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 240; Get-Date -Format s\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_326",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 240 -First 65; Get-Date -Format s\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_328",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-log.ps1 -First 250'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_330",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -First 240'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_329",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r2-persist-verdict.ps1 -First 200'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_333",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-scanner-probe.json -First 220'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_331",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/UnitSuitePlatformScanner.cs -First 210'",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_332",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode SliceChronology -Pattern 'SqlServerTestConnection.cs|localdb-mockgate-1|versionread-mockgate-1|MarkerFileService.cs' -Skip 20 -First 18\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_334",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action Files -Path tests -Pattern 'UnitSuitePlatformScanner.cs|SqlServerTestConnection.cs|HermeticUserProfileFixture' -First 20\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_338",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017-recheck.json -First 150'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_336",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs -First 205'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_337",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-finalchecks.ps1 -Mode SliceChronology -Pattern 'SqlServerTestConnection.cs|localdb-mockgate-1' -First 12\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_335",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-log.ps1 -Mode Record -Decision -Name confirmed-cadence -FilePath docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md -Text 'Decision: the self-review assertion Every gate reran at each new head is false. The prelaunch projected-problems record R3-P11 explicitly discloses Windows Test was not rerun at 6042dbb3 or 0210244d; the plan lists their five actual gates. The complete final e0b078c8 gates do pass. Classify this as an implementer correction to the self-review, not missing final evidence or an undisclosed scope departure. Alternative rejected: treating this exact run misstatement as harmless polish, because the operator explicitly makes misstated runs material.'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_341",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs -First 150'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_342",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-inspect.ps1 -First 180'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_340",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action Files -Path docs/receipts/hv -Pattern 'metadata|meta|commands|identity|midpoint' -First 50\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_343",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r2-session-metadata.ps1 -First 150'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_345",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-review-data.ps1 -Mode Store -Pattern 'TR-MCP-NUKE-019|TR-MCP-NUKE-018|TR-MCP-QUALITY-001' -First 10\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_344",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-identity.json -First 150'",
+      "ExitCode": 1,
+      "Status": "failed"
+    },
+    {
+      "Id": "item_346",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/hv-ug-r3-identity.ps1 -First 180'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_347",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-read.ps1 -Path docs/receipts/hv/20261020T170824-unitgreen-r3.response.jsonl -First 3'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_348",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action Files -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Pattern 'ug-r3-linux-test-8|ug-r3-traceability-7' -First 20\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_350",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path docs/receipts/hv -Pattern '\"'^hv-ug-r3-terminal-audit.ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_351",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-terminal-audit.ps1 -Mode Identity'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_352",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-terminal-audit.ps1 -Mode Logs'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_353",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-terminal-audit.ps1 -Mode SessionSnapshot'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_354",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-terminal-audit.ps1 -Mode StreamShape'",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_356",
+      "Command": "/usr/bin/pwsh -NoProfile -Command \"pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-audit.ps1 -Action ScriptChecks -Path docs/receipts/hv -Pattern '\"'^hv-ug-r3-persist-verdict.ps1$'\"'\"",
+      "ExitCode": 0,
+      "Status": "completed"
+    },
+    {
+      "Id": "item_358",
+      "Command": "/usr/bin/pwsh -NoProfile -Command 'pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r3-persist-verdict.ps1 -Mode Sources -WhatIf'",
+      "ExitCode": 0,
+      "Status": "completed"
+    }
+  ]
+}

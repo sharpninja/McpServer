@@ -1,0 +1,29 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "priority": "high",
+        "id": "FR-MCP-BUILD-001",
+        "area": "MCP",
+        "notes": "Operator, 2026-10-10T20:08:04Z, verbatim: \"FR: Project will provide tooling for repeatable builds.\" and \"Now, the TR are implementation detail of the FR.\" The Nuke build (build/, ./build.ps1) is that tooling; its behavior is specified only in TRs under this FR (TR-MCP-NUKE-*), consistent with \"NUKE is only accountable through TR.\" Build.Tests is the infrastructure suite that verifies those TRs, not application unit tests; no TEST record.",
+        "acceptanceCriteria": [
+          {
+            "isSatisfied": false,
+            "text": "The same sources build the same way on every supported host through the project's build tooling, with the behavior each TR-MCP-NUKE-* requirement specifies; verified by running ./build.ps1 -WhatIf (TR-MCP-NUKE-005), which exits zero on a conforming tree.",
+            "id": "ac-1"
+          }
+        ],
+        "updatedAt": "2026-10-20T22:15:18.5182578+00:00",
+        "createdAt": "2026-10-20T22:15:18.5181039+00:00",
+        "title": "Tooling for repeatable builds",
+        "scopeStartLayerKey": "layer-1",
+        "description": "The project SHALL provide tooling for repeatable builds.",
+        "status": "pending"
+      },
+      "requestId": "req-20261020T221517Z-d759"
+    }
+  },
+  null
+]

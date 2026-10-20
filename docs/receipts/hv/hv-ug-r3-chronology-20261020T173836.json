@@ -1,0 +1,866 @@
+[
+  {
+    "Line": 16038,
+    "Time": "2026-10-20T09:28:50",
+    "Type": "call",
+    "Tool": "Write",
+    "Id": "toolu_016yiiKzGYNMSegv3UPesZDq",
+    "Value": "/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1"
+  },
+  {
+    "Line": 16039,
+    "Time": "2026-10-20T09:28:53",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_016yiiKzGYNMSegv3UPesZDq",
+    "Value": "File created successfully at: /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 16096,
+    "Time": "2026-10-20T09:30:18",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_0198p2RAa1XJ45vbUZHGX8wx",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1"
+  },
+  {
+    "Line": 16098,
+    "Time": "2026-10-20T09:30:20",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_0198p2RAa1XJ45vbUZHGX8wx",
+    "Value": "CHECKED /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 parseErrors=0 findings=0\nNow: 2026-10-20T09:30:20 total=0"
+  },
+  {
+    "Line": 16559,
+    "Time": "2026-10-20T09:43:43",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_018HLzo2SfFoemKjCdVfrnnC",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 -RunId ug-r3-win-lane-1 -TaskName McpServer-UnitGreenInteractiveLane-r3' -WhatIf"
+  },
+  {
+    "Line": 16560,
+    "Time": "2026-10-20T09:43:43",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_018HLzo2SfFoemKjCdVfrnnC",
+    "Value": "What if: Performing the operation \"Run /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" on target \"PAYTON-LEGION2 (kingd over SSH)\".\nWHATIF support file /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nWHATIF remote arguments: -ExpectedSha 27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 -RunId ug-r3-win-lane-1 -TaskName McpServer-UnitGreenInteractiveLane-r3\nWHATIF remote script follows:\n#Requires -Version 7.0\n<#\n.SYNOPSIS\n    Runs on PAYTON-LEGION2 as kingd over SSH (MEMORY-INFRA-001). Amendment H1 (TR-MCP-NUKE-019 AC-5): the Windows\n    integration lane runs from a console in kingd's interactive desktop session. Prepares a worktree at the\n    expected commit, verifies the uploaded static runner by SHA-256, and starts it once through a one-shot task\n    that runs only in kingd's logged-on desktop session (Interactive logon type, limited rights). Changes no tracked\n    file and no setting; Get-WinInteractiveLane.ps1 reads the result and removes the task. Supports -WhatIf.\n.PARAMETER ExpectedSha\n    The commit the lane must run at; origin's branch head must equal it.\n.PARAMETER RunId\n    Nuke --test-run-id and the stem of the output files.\n.PARAMETER TaskName\n    The one-shot task name.\n.PARAMETER RunnerSha256\n    SHA-256 of the analyzed Invoke-WinLaneRunner.ps1 that was uploaded beside this script.\n#>\n[CmdletBinding(SupportsShouldProcess)]\nparam(\n    [Parameter(Mandatory)] [ValidatePattern('^[0-9a-f]{40}$')] [string] $ExpectedSha,\n    [Parameter(Mandatory)] [ValidatePattern('^[A-Za-z0-9.-]+$')] [string] $RunId,\n    [Parameter(Mandatory)] [ValidatePattern('^[A-Za-z0-9.-]+$')] [string] $TaskName,\n    [Parameter(Mandatory)] [ValidatePattern('^[0-9A-Fa-f]{64}$')] [string] $RunnerSha256\n)\n\n$ErrorActionPreference = 'Stop'\n$Repo = 'F:/GitHub/McpServer'\n$Worktree = \"$Repo/.worktrees/unit-green-interactive-20261019\"\n$Ref = 'origin/fix/unit-suite-green-20261019'\n$Work = Join-Path $env:TEMP 'unit-green-interactive'\n$Runner = Join-Path $env:TEMP 'Invoke-WinLaneRunner.ps1'\n$env:GIT_CONFIG_COUNT = '1'\n$env:GIT_CONFIG_KEY_0 = 'safe.directory'\n$env:GIT_CONFIG_VALUE_0 = '*'\n\n\"START $((Get-Date).ToString('s')) host=$env:COMPUTERNAME user=$env:USERNAME\"\nif (Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue) { \"STOP: task $TaskName already exists\"; exit 1 }\nif (-not (Test-Path -LiteralPath $Runner)) { \"STOP: runner missing at $Runner\"; exit 1 }\n$actualSha = (Get-FileHash -LiteralPath $Runner -Algorithm SHA256).Hash\n\"RUNNER $Runner sha256=$actualSha expected=$($RunnerSha256.ToUpperInvariant()) match=$($actualSha -eq $RunnerSha256.ToUpperInvariant())\"\nif ($actualSha -ne $RunnerSha256.ToUpperInvariant()) { 'STOP: runner hash mismatch'; exit 1 }\n\n& git -C $Repo fetch origin 2>&1 | ForEach-Object { \"  fetch: $_\" }\n$refSha = (& git -C $Repo rev-parse $Ref).Trim()\nif ($refSha -ne $ExpectedSha) { \"STOP: $Ref is $refSha, expected $ExpectedSha\"; exit 1 }\n\n$null = New-Item -ItemType Directory -Force -Path $Work -WhatIf:$false\n$log = Join-Path $Work \"MigrationIntegrationTests-$RunId.log\"\n$proof = Join-Path $Work \"proof-$RunId.txt\"\n$exitFile = Join-Path $Work \"exit-$RunId.txt\"\nforeach ($stale in @($log, $proof, $exitFile)) { if (Test-Path -LiteralPath $stale) { \"STOP: $stale already exists\"; exit 1 } }\n\nif ($PSCmdlet.ShouldProcess($Worktree, \"check out $ExpectedSha\")) {\n    if (-not (Test-Path -LiteralPath $Worktree)) {\n        & git -C $Repo worktree add --detach $Worktree $ExpectedSha 2>&1 | ForEach-Object { \"  worktree: $_\" }\n    }\n    else {\n        $changed = @(& git -C $Worktree status --porcelain=v1 --untracked-files=no)\n        $generated = @($changed | Where-Object { $_.Substring(3) -eq '.nuke/build.schema.json' -or $_.Substring(3) -like 'docs/benchmarks/results/*' })\n        if ($changed.Count -ne $generated.Count) { \"STOP: tracked changes in $Worktree outside the generated allowlist: $($changed -join '; ')\"; exit 1 }\n        foreach ($line in $generated) { & git -C $Worktree restore --worktree -- $line.Substring(3) }\n        & git -C $Worktree checkout --detach $ExpectedSha 2>&1 | ForEach-Object { \"  checkout: $_\" }\n    }\n    $head = (& git -C $Worktree rev-parse HEAD).Trim()\n    \"HEAD $head expected=$ExpectedSha match=$($head -eq $ExpectedSha)\"\n    if ($head -ne $ExpectedSha) { 'STOP: HEAD mismatch'; exit 1 }\n}\n\n# The pwsh on kingd's PATH is the Store app-execution alias, which the task scheduler may not resolve; a regular\n# installation under Program Files is used when present.\n$pwsh = @(Get-ChildItem -Path 'C:/Program Files/PowerShell/*/pwsh.exe' -ErrorAction SilentlyContinue | Sort-Object FullName | Select-Object -ExpandProperty FullName -First 1)\n$pwsh = if ($pwsh.Count -gt 0) { $pwsh[0] } else { (Get-Command pwsh -ErrorAction Stop).Source }\n$arguments = '-NoProfile -ExecutionPolicy Bypass -File \"{0}\" -Worktree \"{1}\" -RunId \"{2}\" -LogPath \"{3}\" -ProofPath \"{4}\" -ExitPath \"{5}\"' -f $Runner, $Worktree, $RunId, $log, $proof, $exitFile\n\"PWSH $pwsh\"\n\"ACTION $arguments\"\n# In an SSH session USERDOMAIN does not name the local machine; the token's own account name does.\n$account = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name\n\"ACCOUNT $account\"\nif ($PSCmdlet.ShouldProcess($TaskName, 'register and start the one-shot interactive task')) {\n    $action = New-ScheduledTaskAction -Execute $pwsh -Argument $arguments -WorkingDirectory $Worktree.Replace('/', '\\')\n    $principal = New-ScheduledTaskPrincipal -UserId $account -LogonType Interactive -RunLevel Limited\n    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit ([TimeSpan]::Zero)\n    $null = Register-ScheduledTask -TaskName $TaskName -Action $action -Principal $principal -Settings $settings -Description 'One-shot IMPL-UNITGREEN-001 interactive lane run (removed after it ends)'\n    Start-ScheduledTask -TaskName $TaskName\n    Start-Sleep -Seconds 5\n    $info = Get-ScheduledTaskInfo -TaskName $TaskName\n    \"TASK $TaskName state=$((Get-ScheduledTask -TaskName $TaskName).State) lastRun=$($info.LastRunTime) result=$($info.LastTaskResult)\"\n    \"PROOF so far: $(if (Test-Path -LiteralPath $proof) { (Get-Content -LiteralPath $proof -Raw).Trim() } else { '(not written yet)' })\"\n}\n\"END $((Get-Date).ToString('s'))\""
+  },
+  {
+    "Line": 16779,
+    "Time": "2026-10-20T09:55:27",
+    "Type": "call",
+    "Tool": "Read",
+    "Id": "toolu_011vzZc4qyQDoBh8pY34t3G4",
+    "Value": "/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1"
+  },
+  {
+    "Line": 16780,
+    "Time": "2026-10-20T09:55:27",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_011vzZc4qyQDoBh8pY34t3G4",
+    "Value": "1\t#Requires -Version 7.0\n2\t<#\n3\t.SYNOPSIS\n4\t    Replaces or adds exactly one acceptance criterion on a TR or TEST record through the plugin\n5\t    (getTr/getTest, then updateTr/updateTest with the full list), then reads the record back and\n6\t    proves that only the named criterion changed. Supports -WhatIf.\n7\t.PARAMETER DataFile\n8\t    PowerShell data file with keys Kind (tr or test), Id, Mode (Replace or Add), and Criterion\n9\t    (id, text, isSatisfied, optional evidence).\n10\t#>\n11\t[CmdletBinding(SupportsShouldProcess)]\n12\tparam(\n13\t    [Parameter(Mandatory)] [string] $DataFile\n14\t)\n15\t\n16\tSet-StrictMode -Version Latest\n17\t$ErrorActionPreference = 'Stop'\n18\t. (Join-Path $PSScriptRoot 'CcPlugin.ps1')\n19\t\n20\tfunction Test-Ok {\n21\t    param([Parameter(Mandatory)] $Result)\n22\t    return ($Result.ExitCode -eq 0 -and $Result.Raw -notmatch '(?im)^\\s*type:\\s*error')\n23\t}\n24\t\n25\tfunction Get-Signature {\n26\t    param($Criterion)\n27\t    return ('{0}|{1}|{2}|{3}' -f (Get-CcValue $Criterion 'id'), (Get-CcValue $Criterion 'text'), [bool](Get-CcValue $Criterion 'isSatisfied'), (Get-CcValue $Criterion 'evidence'))\n28\t}\n29\t\n30\tfunction Read-CriterionList {\n31\t    param([string]$GetMethod, [string]$Id)\n32\t    $g = Invoke-CcPlugin -Method $GetMethod -Params ([ordered]@{ id = $Id })\n33\t    if (-not (Test-Ok $g)) { Write-Output $g.Raw; throw \"Read of $Id failed\" }\n34\t    $result = Get-CcValue (Get-CcValue $g.Parsed 'payload') 'result'\n35\t    return @(Get-CcValue $result 'acceptanceCriteria' | Where-Object { $null -ne $_ })\n36\t}\n37\t\n38\t$data = Import-PowerShellDataFile -LiteralPath $DataFile\n39\t$kind = [string]$data.Kind\n40\t$id = [string]$data.Id\n41\t$mode = [string]$data.Mode\n42\t$new = $data.Criterion\n43\tif ($kind -notin 'tr', 'test') { throw \"Kind must be tr or test, got '$kind'\" }\n44\tif ($mode -notin 'Replace', 'Add') { throw \"Mode must be Replace or Add, got '$mode'\" }\n45\t$getMethod = if ($kind -eq 'tr') { 'workflow.requirements.getTr' } else { 'workflow.requirements.getTest' }\n46\t$updateMethod = if ($kind -eq 'tr') { 'workflow.requirements.updateTr' } else { 'workflow.requirements.updateTest' }\n47\t\n48\tWrite-Output \"Now: $((Get-Date).ToString('s')) $id $mode criterion $($new.id)\"\n49\t$before = @(Read-CriterionList -GetMethod $getMethod -Id $id)\n50\t$ids = @($before | ForEach-Object { [string](Get-CcValue $_ 'id') })\n51\tif ($mode -eq 'Replace' -and $ids -notcontains $new.id) { throw \"Criterion $($new.id) not found on $id\" }\n52\tif ($mode -eq 'Add' -and $ids -contains $new.id) { throw \"Criterion $($new.id) already exists on $id\" }\n53\t\n54\t$newItem = [ordered]@{ id = [string]$new.id; text = [string]$new.text; isSatisfied = [bool]$new.isSatisfied }\n55\tif ($new.ContainsKey('evidence') -and $new.evidence) { $newItem.evidence = [string]$new.evidence }\n56\t$list = @(foreach ($c in $before) {\n57\t    if ($mode -eq 'Replace' -and [string](Get-CcValue $c 'id') -eq $new.id) { $newItem; continue }\n58\t    $item = [ordered]@{ id = [string](Get-CcValue $c 'id'); text = [string](Get-CcValue $c 'text'); isSatisfied = [bool](Get-CcValue $c 'isSatisfied') }\n59\t    $evidence = Get-CcValue $c 'evidence'\n60\t    if ($evidence) { $item.evidence = [string]$evidence }\n61\t    $item\n62\t})\n63\tif ($mode -eq 'Add') { $list += $newItem }\n64\tWrite-Output ('Criteria before={0} after={1}' -f $before.Count, $list.Count)\n65\t\n66\tif (-not $PSCmdlet.ShouldProcess(\"$id criterion $($new.id)\", \"$updateMethod ($mode)\")) { return }\n67\t$u = Invoke-CcPlugin -Method $updateMethod -Params ([ordered]@{ id = $id; acceptanceCriteria = $list })\n68\tWrite-Output \"$updateMethod exit=$($u.ExitCode) ok=$(Test-Ok $u)\"\n69\tif (-not (Test-Ok $u)) { Write-Output $u.Raw; exit 1 }\n70\t\n71\t$after = @(Read-CriterionList -GetMethod $getMethod -Id $id)\n72\t$beforeById = @{}\n73\tforeach ($c in $before) { $beforeById[[string](Get-CcValue $c 'id')] = Get-Signature $c }\n74\t$changed = @()\n75\tforeach ($c in $after) {\n76\t    $cid = [string](Get-CcValue $c 'id')\n77\t    if (-not $beforeById.ContainsKey($cid) -or $beforeById[$cid] -ne (Get-Signature $c)) { $changed += $cid }\n78\t}\n79\t$expectedNew = Get-Signature $newItem\n80\t$target = @($after | Where-Object { [string](Get-CcValue $_ 'id') -eq $new.id })\n81\t$ok = ($changed.Count -eq 1 -and $changed[0] -eq $new.id -and $target.Count -eq 1 -and (Get-Signature $target[0]) -eq $expectedNew -and $after.Count -eq $list.Count)\n82\tWrite-Output ('READBACK {0}: criteria={1} changed=[{2}] targetMatches={3} ok={4}' -f $id, $after.Count, ($changed -join ','), ($target.Count -eq 1 -and (Get-Signature $target[0]) -eq $expectedNew), $ok)\n83\tif (-not $ok) { exit 1 }\n84\t"
+  },
+  {
+    "Line": 16801,
+    "Time": "2026-10-20T09:55:49",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_017MeEdaP22cdU9qaQJNbgpD",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001.psd1 -WhatIf"
+  },
+  {
+    "Line": 16804,
+    "Time": "2026-10-20T09:55:50",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01826RmJxnY7Y1tWFNj4E3Qe",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-sessionlog-006-009.psd1 -WhatIf"
+  },
+  {
+    "Line": 16810,
+    "Time": "2026-10-20T09:55:53",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_017MeEdaP22cdU9qaQJNbgpD",
+    "Value": "What if: Performing the operation \"New Alias\" on target \"Name: cfy Value: ConvertFrom-Yaml\".\nWhat if: Performing the operation \"New Alias\" on target \"Name: cty Value: ConvertTo-Yaml\".\nNow: 2026-10-20T09:55:50 TR-MCP-WS-005 Add criterion AC-TR-MCP-WS-005-001\nCriteria before=0 after=1\nWhat if: Performing the operation \"workflow.requirements.updateTr (Add)\" on target \"TR-MCP-WS-005 criterion AC-TR-MCP-WS-005-001\"."
+  },
+  {
+    "Line": 16811,
+    "Time": "2026-10-20T09:55:58",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01826RmJxnY7Y1tWFNj4E3Qe",
+    "Value": "What if: Performing the operation \"New Alias\" on target \"Name: cfy Value: ConvertFrom-Yaml\".\nWhat if: Performing the operation \"New Alias\" on target \"Name: cty Value: ConvertTo-Yaml\".\nNow: 2026-10-20T09:55:54 TR-MCP-SESSIONLOG-006 Add criterion AC-TR-MCP-SESSIONLOG-006-009\nCriteria before=0 after=1\nWhat if: Performing the operation \"workflow.requirements.updateTr (Add)\" on target \"TR-MCP-SESSIONLOG-006 criterion AC-TR-MCP-SESSIONLOG-006-009\"."
+  },
+  {
+    "Line": 17033,
+    "Time": "2026-10-20T10:03:07",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01SLTNYr2oJtnYHTXsGB4ewe",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001.psd1"
+  },
+  {
+    "Line": 17034,
+    "Time": "2026-10-20T10:03:08",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01RKmibsWETQRXpL45aA23n1",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-sessionlog-006-009.psd1"
+  },
+  {
+    "Line": 17035,
+    "Time": "2026-10-20T10:03:17",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01SLTNYr2oJtnYHTXsGB4ewe",
+    "Value": "Now: 2026-10-20T10:03:07 TR-MCP-WS-005 Add criterion AC-TR-MCP-WS-005-001\nCriteria before=0 after=1\nworkflow.requirements.updateTr exit=0 ok=True\nREADBACK TR-MCP-WS-005: criteria=1 changed=[AC-TR-MCP-WS-005-001] targetMatches=True ok=True"
+  },
+  {
+    "Line": 17036,
+    "Time": "2026-10-20T10:03:28",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01RKmibsWETQRXpL45aA23n1",
+    "Value": "Now: 2026-10-20T10:03:18 TR-MCP-SESSIONLOG-006 Add criterion AC-TR-MCP-SESSIONLOG-006-009\nCriteria before=0 after=1\nworkflow.requirements.updateTr exit=0 ok=True\nREADBACK TR-MCP-SESSIONLOG-006: criteria=1 changed=[AC-TR-MCP-SESSIONLOG-006-009] targetMatches=True ok=True"
+  },
+  {
+    "Line": 17180,
+    "Time": "2026-10-20T10:10:36",
+    "Type": "call",
+    "Tool": "Write",
+    "Id": "toolu_01J3x4HUi8oWp8oXdvJcMdSU",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs"
+  },
+  {
+    "Line": 17187,
+    "Time": "2026-10-20T10:11:07",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01J3x4HUi8oWp8oXdvJcMdSU",
+    "Value": "File created successfully at: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 17192,
+    "Time": "2026-10-20T10:11:34",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01VaQCTRSzMAvvnV4VuCW5x4",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1 -Root /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs -Pattern '\\b(Dir|DirLink|File|FileLink)\\(' -MaxChars 160"
+  },
+  {
+    "Line": 17198,
+    "Time": "2026-10-20T10:11:35",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01VaQCTRSzMAvvnV4VuCW5x4",
+    "Value": "Now: 2026-10-20T10:11:35 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs pattern=\\b(Dir|DirLink|File|FileLink)\\(\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:28: private static DirectoryListingEntry Dir(string path) => new(path, IsDirectory: true, IsLink: false);\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:30: private static DirectoryListingEntry DirLink(string path) => new(path, IsDirectory: true, IsLink: true);\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:32: private static DirectoryListingEntry File(string path) => new(path, IsDirectory: false, IsLink: false);\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:34: private static DirectoryListingEntry FileLink(string path) => new(path, IsDirectory: false, IsLink: true);\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:45: .Lists(\"/p\", Dir(\"/p/a\"), File(\"/p/f1\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:46: .Lists(\"/p/a\", Dir(\"/p/a/b\"), File(\"/p/a/f2\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:47: .Lists(\"/p/a/b\", File(\"/p/a/b/f3\")),\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:54: .Lists(\"/p\", Dir(\"/p/bad\"), Dir(\"/p/good\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:56: .Lists(\"/p/good\", Dir(\"/p/good/inner\"), File(\"/p/good/g.md\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:57: .Lists(\"/p/good/inner\", File(\"/p/good/inner/i.md\")),\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:64: .Lists(\"/p\", Dir(\"/p/locked\"), Dir(\"/p/open\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:66: .Lists(\"/p/open\", File(\"/p/open/o.md\")),\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:73: .Lists(\"/p\", Dir(\"/p/gone\"), Dir(\"/p/here\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:75: .Lists(\"/p/here\", File(\"/p/here/h.md\")),\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:82: .Lists(\"/p\", Dir(\"/p/real\"), DirLink(\"/p/link\"), File(\"/p/f\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:83: .Lists(\"/p/real\", File(\"/p/real/x.md\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:84: .Lists(\"/p/link\", File(\"/p/link/y.md\")),\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:91: .Lists(\"/p\", FileLink(\"/p/linked.md\"), File(\"/p/plain.md\")),\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:158: .Lists(\"/p\", Dir(\"/p/a\"))\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:161: Assert.Equal(new[] { Dir(\"/p/a\") }, tree.List(\"/p\"));\n/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:200: .Lists(\"/p\", Dir(\"/p/a\"))\nMatches: 21"
+  },
+  {
+    "Line": 17203,
+    "Time": "2026-10-20T10:12:17",
+    "Type": "call",
+    "Tool": "Write",
+    "Id": "toolu_01SxvJnwX9oAhGnc1faoEnRK",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs"
+  },
+  {
+    "Line": 17209,
+    "Time": "2026-10-20T10:12:30",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01SxvJnwX9oAhGnc1faoEnRK",
+    "Value": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs has been updated successfully. (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 17383,
+    "Time": "2026-10-20T10:19:35",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_015RMqAG7Xeo42BZrKHoNqUq",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log -Pattern 'Passed QBrainAi\\.Support\\.Mcp\\.Tests\\.(Services\\.DirectoryTreeWalkerTests|HermeticUserProfileFixtureTests)' -Include '*.log' -MaxChars 200"
+  },
+  {
+    "Line": 17389,
+    "Time": "2026-10-20T10:19:35",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_015RMqAG7Xeo42BZrKHoNqUq",
+    "Value": "Now: 2026-10-20T10:19:35 root=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log pattern=Passed QBrainAi\\.Support\\.Mcp\\.Tests\\.(Services\\.DirectoryTreeWalkerTests|HermeticUserProfileFixtureTests)\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2069: 10:18:12 [DBG]   Passed QBrainAi.Support.Mcp.Tests.HermeticUserProfileFixtureTests.AgentPluginUserProfileOverride_IsAnEmptyTemporaryProfile [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2070: 10:18:12 [DBG]   Passed QBrainAi.Support.Mcp.Tests.HermeticUserProfileFixtureTests.HermeticityNegativeControls_AreRejectedInsidePassingHarness [11 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2570: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"root-unlistable\") [13 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2571: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"file-link\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2572: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"directory-link\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2573: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"untrusted-mount-point\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2574: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"vanished-directory\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2575: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"nested-tree\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2576: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_RequiredOutput_PassesTheWalkAssertion(name: \"access-denied\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2577: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedTheory_CoversEveryCase [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2583: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.UnexpectedListingError_EscapesTheScriptedTree [21 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2585: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.WrongWalkNegativeControls_AreRejectedInsidePassingHarness [15 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-mockgate-1.out.log:2591: 10:18:22 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedTree_RecordsListingsAndRefusesUnscriptedDirectories [19 ms]\nMatches: 13"
+  },
+  {
+    "Line": 17459,
+    "Time": "2026-10-20T10:22:49",
+    "Type": "call",
+    "Tool": "Edit",
+    "Id": "toolu_01Lhk35j2JpRvHzMrjm11Ta7",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs"
+  },
+  {
+    "Line": 17460,
+    "Time": "2026-10-20T10:23:09",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01Lhk35j2JpRvHzMrjm11Ta7",
+    "Value": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs has been updated successfully. (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 17537,
+    "Time": "2026-10-20T10:28:16",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01RvFjKdRw6bR3qgS4q1WpsU",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log -Pattern '(Passed|Failed) QBrainAi\\.Support\\.Mcp\\.Tests\\.Services\\.(DirectoryTreeWalkerTests\\.(ScriptedCase_ProductionWalk|ProductionWalk|FileSystemWalk)|UserProfileScanBindingTests)' -Include '*.log' -MaxChars 220"
+  },
+  {
+    "Line": 17538,
+    "Time": "2026-10-20T10:28:16",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01RvFjKdRw6bR3qgS4q1WpsU",
+    "Value": "Now: 2026-10-20T10:28:16 root=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log pattern=(Passed|Failed) QBrainAi\\.Support\\.Mcp\\.Tests\\.Services\\.(DirectoryTreeWalkerTests\\.(ScriptedCase_ProductionWalk|ProductionWalk|FileSystemWalk)|UserProfileScanBindingTests)\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1148: 10:26:12 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.Extract_UnlistableAndLinkedHistoryDirectories_ReadTheReachableHistory [90 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1149: 10:26:12 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_UnlistableAndLinkedCacheDirectories_ResolveTheReachableVersion [6 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1151: 10:26:12 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.Extract_HistoryRootUnlistable_KeepsNone [6 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1152: 10:26:12 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_CacheRootUnlistable_FallsBackToTheSyncedVersion [1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1700: 10:26:20 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ProductionWalk_UnexpectedListingError_Propagates [1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1701: 10:26:20 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"directory-link\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1702: 10:26:20 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"file-link\") [13 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1703: 10:26:20 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"vanished-directory\") [1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1704: 10:26:20 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"root-unlistable\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1706: 10:26:20 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"nested-tree\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1707: 10:26:20 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"untrusted-mount-point\") [< 1 ms]\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-scan-binding-1.out.log:1708: 10:26:20 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.DirectoryTreeWalkerTests.ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(name: \"access-denied\") [< 1 ms]\nMatches: 12"
+  },
+  {
+    "Line": 17576,
+    "Time": "2026-10-20T10:28:52",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01HfoeeAhA5mKQgjf4YV3JLR",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/DirectoryListingEntry.cs;src/QBrainAi.Services/Services/DirectoryTreeWalker.cs;src/QBrainAi.Services/Services/MarkerFileService.cs;src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-scanfix.txt -Push -WhatIf"
+  },
+  {
+    "Line": 17577,
+    "Time": "2026-10-20T10:28:54",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01HfoeeAhA5mKQgjf4YV3JLR",
+    "Value": "Now: 2026-10-20T10:28:53\nBranch: fix/unit-suite-green-20261019\n--- status before ---\n115 changed paths (first 5 shown)\n M docs/benchmarks/results/memory-bench-20260919T091800Z.json\n M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json\n M src/QBrainAi.Services/Services/MarkerFileService.cs\n M src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs\n M tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs\nWhat if: Performing the operation \"git add and commit\" on target \"src/QBrainAi.Services/Services/DirectoryListingEntry.cs, src/QBrainAi.Services/Services/DirectoryTreeWalker.cs, src/QBrainAi.Services/Services/MarkerFileService.cs, src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs, tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs, tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs, tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs\".\nRemote refs/heads/fix/unit-suite-green-20261019 before push: 27c43bccd19a591e4ca30560b52d4c5a9e8b81c9\trefs/heads/fix/unit-suite-green-20261019\nWhat if: Performing the operation \"git push (no force)\" on target \"origin refs/heads/fix/unit-suite-green-20261019\".\n--- status after ---\n115 changed paths\n## fix/unit-suite-green-20261019...origin/fix/unit-suite-green-20261019"
+  },
+  {
+    "Line": 17583,
+    "Time": "2026-10-20T10:29:03",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01Q7GbF2awT99VUGw7C9R6FC",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/DirectoryListingEntry.cs;src/QBrainAi.Services/Services/DirectoryTreeWalker.cs;src/QBrainAi.Services/Services/MarkerFileService.cs;src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs;tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-scanfix.txt -Push"
+  },
+  {
+    "Line": 17589,
+    "Time": "2026-10-20T10:29:07",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01Q7GbF2awT99VUGw7C9R6FC",
+    "Value": "Now: 2026-10-20T10:29:03\nBranch: fix/unit-suite-green-20261019\n--- status before ---\n115 changed paths (first 5 shown)\n M docs/benchmarks/results/memory-bench-20260919T091800Z.json\n M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json\n M src/QBrainAi.Services/Services/MarkerFileService.cs\n M src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs\n M tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs\n--- staged ---\n 15 files changed, 875 insertions(+), 31 deletions(-)\n[fix/unit-suite-green-20261019 538d0ccf] fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)\n 15 files changed, 875 insertions(+), 31 deletions(-)\n create mode 100644 src/QBrainAi.Services/Services/DirectoryListingEntry.cs\n create mode 100644 src/QBrainAi.Services/Services/DirectoryTreeWalker.cs\n create mode 100644 tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs\n create mode 100644 tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs\n create mode 100644 tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs\n create mode 100644 tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\nCommit: 538d0ccf957c041f1e3886864bdf5e4ca693e9ec fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)\nRemote refs/heads/fix/unit-suite-green-20261019 before push: 27c43bccd19a591e4ca30560b52d4c5a9e8b81c9\trefs/heads/fix/unit-suite-green-20261019\nTo https://github.com/sharpninja/McpServer.git\n   27c43bcc..538d0ccf  HEAD -> fix/unit-suite-green-20261019\nbranch 'fix/unit-suite-green-20261019' set up to track 'origin/fix/unit-suite-green-20261019'.\nRemote refs/heads/fix/unit-suite-green-20261019 after push: 538d0ccf957c041f1e3886864bdf5e4ca693e9ec\trefs/heads/fix/unit-suite-green-20261019\nLocal HEAD: 538d0ccf957c041f1e3886864bdf5e4ca693e9ec\n--- status after ---\n100 changed paths\n## fix/unit-suite-green-20261019...origin/fix/unit-suite-green-20261019"
+  },
+  {
+    "Line": 17623,
+    "Time": "2026-10-20T10:29:41",
+    "Type": "call",
+    "Tool": "Read",
+    "Id": "toolu_01CpAtG2UFd54GMxochA1EFU",
+    "Value": "/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1"
+  },
+  {
+    "Line": 17624,
+    "Time": "2026-10-20T10:29:41",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01CpAtG2UFd54GMxochA1EFU",
+    "Value": "1\t#Requires -Version 7.0\n2\t<#\n3\t.SYNOPSIS\n4\t    Runs on PAYTON-LEGION2 inside kingd's interactive desktop session, started by the one-shot task that\n5\t    Start-WinInteractiveLane.ps1 registers (TR-MCP-NUKE-019 AC-5, amendment H1). Records proof of the session\n6\t    (user, session id, UserInteractive, HEAD), runs the Nuke MigrationIntegrationTests target in the worktree with\n7\t    all output in the log, then records the exit code. A static script, analyzed before upload and verified by\n8\t    SHA-256 before the task runs it (hostile validation round 2, finding R2-F3).\n9\t.PARAMETER Worktree\n10\t    The worktree at the expected commit.\n11\t.PARAMETER RunId\n12\t    Nuke --test-run-id.\n13\t.PARAMETER LogPath\n14\t    File that receives all Nuke output.\n15\t.PARAMETER ProofPath\n16\t    File that receives the session proof line.\n17\t.PARAMETER ExitPath\n18\t    File that receives the exit code and end stamp.\n19\t#>\n20\t[CmdletBinding()]\n21\tparam(\n22\t    [Parameter(Mandatory)] [string] $Worktree,\n23\t    [Parameter(Mandatory)] [string] $RunId,\n24\t    [Parameter(Mandatory)] [string] $LogPath,\n25\t    [Parameter(Mandatory)] [string] $ProofPath,\n26\t    [Parameter(Mandatory)] [string] $ExitPath\n27\t)\n28\t\n29\t$ErrorActionPreference = 'Continue'\n30\t$env:GIT_CONFIG_COUNT = '1'\n31\t$env:GIT_CONFIG_KEY_0 = 'safe.directory'\n32\t$env:GIT_CONFIG_VALUE_0 = '*'\n33\tSet-Location -LiteralPath $Worktree\n34\t$head = (& git rev-parse HEAD).Trim()\n35\t$session = (Get-Process -Id $PID).SessionId\n36\t$proof = 'START {0} user={1} session={2} interactive={3} head={4}' -f (Get-Date).ToString('s'), $env:USERNAME, $session, [Environment]::UserInteractive, $head\n37\tSet-Content -LiteralPath $ProofPath -Value $proof\n38\t& ./build.ps1 MigrationIntegrationTests --test-run-id $RunId *> $LogPath\n39\t$nukeExit = $LASTEXITCODE\n40\tSet-Content -LiteralPath $ExitPath -Value ('{0} {1}' -f $nukeExit, (Get-Date).ToString('s'))\n41\t"
+  },
+  {
+    "Line": 17724,
+    "Time": "2026-10-20T10:37:12",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01Nct6KiKdhe86sjjZ1pXmXn",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -RunId ug-r3-win-lane-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf' -WhatIf"
+  },
+  {
+    "Line": 17730,
+    "Time": "2026-10-20T10:37:13",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01Nct6KiKdhe86sjjZ1pXmXn",
+    "Value": "What if: Performing the operation \"Run /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" on target \"PAYTON-LEGION2 (kingd over SSH)\".\nWHATIF support file /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nWHATIF remote arguments: -ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -RunId ug-r3-win-lane-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf\nWHATIF remote script follows:\n#Requires -Version 7.0\n<#\n.SYNOPSIS\n    Runs on PAYTON-LEGION2 as kingd over SSH (MEMORY-INFRA-001). Amendment H1 (TR-MCP-NUKE-019 AC-5): the Windows\n    integration lane runs from a console in kingd's interactive desktop session. Prepares a worktree at the\n    expected commit, verifies the uploaded static runner by SHA-256, and starts it once through a one-shot task\n    that runs only in kingd's logged-on desktop session (Interactive logon type, limited rights). Changes no tracked\n    file and no setting; Get-WinInteractiveLane.ps1 reads the result and removes the task. Supports -WhatIf.\n.PARAMETER ExpectedSha\n    The commit the lane must run at; origin's branch head must equal it.\n.PARAMETER RunId\n    Nuke --test-run-id and the stem of the output files.\n.PARAMETER TaskName\n    The one-shot task name.\n.PARAMETER RunnerSha256\n    SHA-256 of the analyzed Invoke-WinLaneRunner.ps1 that was uploaded beside this script.\n#>\n[CmdletBinding(SupportsShouldProcess)]\nparam(\n    [Parameter(Mandatory)] [ValidatePattern('^[0-9a-f]{40}$')] [string] $ExpectedSha,\n    [Parameter(Mandatory)] [ValidatePattern('^[A-Za-z0-9.-]+$')] [string] $RunId,\n    [Parameter(Mandatory)] [ValidatePattern('^[A-Za-z0-9.-]+$')] [string] $TaskName,\n    [Parameter(Mandatory)] [ValidatePattern('^[0-9A-Fa-f]{64}$')] [string] $RunnerSha256\n)\n\n$ErrorActionPreference = 'Stop'\n$Repo = 'F:/GitHub/McpServer'\n$Worktree = \"$Repo/.worktrees/unit-green-interactive-20261019\"\n$Ref = 'origin/fix/unit-suite-green-20261019'\n$Work = Join-Path $env:TEMP 'unit-green-interactive'\n$Runner = Join-Path $env:TEMP 'Invoke-WinLaneRunner.ps1'\n$env:GIT_CONFIG_COUNT = '1'\n$env:GIT_CONFIG_KEY_0 = 'safe.directory'\n$env:GIT_CONFIG_VALUE_0 = '*'\n\n\"START $((Get-Date).ToString('s')) host=$env:COMPUTERNAME user=$env:USERNAME\"\nif (Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue) { \"STOP: task $TaskName already exists\"; exit 1 }\nif (-not (Test-Path -LiteralPath $Runner)) { \"STOP: runner missing at $Runner\"; exit 1 }\n$actualSha = (Get-FileHash -LiteralPath $Runner -Algorithm SHA256).Hash\n\"RUNNER $Runner sha256=$actualSha expected=$($RunnerSha256.ToUpperInvariant()) match=$($actualSha -eq $RunnerSha256.ToUpperInvariant())\"\nif ($actualSha -ne $RunnerSha256.ToUpperInvariant()) { 'STOP: runner hash mismatch'; exit 1 }\n\n& git -C $Repo fetch origin 2>&1 | ForEach-Object { \"  fetch: $_\" }\n$refSha = (& git -C $Repo rev-parse $Ref).Trim()\nif ($refSha -ne $ExpectedSha) { \"STOP: $Ref is $refSha, expected $ExpectedSha\"; exit 1 }\n\n$null = New-Item -ItemType Directory -Force -Path $Work -WhatIf:$false\n$log = Join-Path $Work \"MigrationIntegrationTests-$RunId.log\"\n$proof = Join-Path $Work \"proof-$RunId.txt\"\n$exitFile = Join-Path $Work \"exit-$RunId.txt\"\nforeach ($stale in @($log, $proof, $exitFile)) { if (Test-Path -LiteralPath $stale) { \"STOP: $stale already exists\"; exit 1 } }\n\nif ($PSCmdlet.ShouldProcess($Worktree, \"check out $ExpectedSha\")) {\n    if (-not (Test-Path -LiteralPath $Worktree)) {\n        & git -C $Repo worktree add --detach $Worktree $ExpectedSha 2>&1 | ForEach-Object { \"  worktree: $_\" }\n    }\n    else {\n        $changed = @(& git -C $Worktree status --porcelain=v1 --untracked-files=no)\n        $generated = @($changed | Where-Object { $_.Substring(3) -eq '.nuke/build.schema.json' -or $_.Substring(3) -like 'docs/benchmarks/results/*' })\n        if ($changed.Count -ne $generated.Count) { \"STOP: tracked changes in $Worktree outside the generated allowlist: $($changed -join '; ')\"; exit 1 }\n        foreach ($line in $generated) { & git -C $Worktree restore --worktree -- $line.Substring(3) }\n        & git -C $Worktree checkout --detach $ExpectedSha 2>&1 | ForEach-Object { \"  checkout: $_\" }\n    }\n    $head = (& git -C $Worktree rev-parse HEAD).Trim()\n    \"HEAD $head expected=$ExpectedSha match=$($head -eq $ExpectedSha)\"\n    if ($head -ne $ExpectedSha) { 'STOP: HEAD mismatch'; exit 1 }\n}\n\n# The pwsh on kingd's PATH is the Store app-execution alias, which the task scheduler may not resolve; a regular\n# installation under Program Files is used when present.\n$pwsh = @(Get-ChildItem -Path 'C:/Program Files/PowerShell/*/pwsh.exe' -ErrorAction SilentlyContinue | Sort-Object FullName | Select-Object -ExpandProperty FullName -First 1)\n$pwsh = if ($pwsh.Count -gt 0) { $pwsh[0] } else { (Get-Command pwsh -ErrorAction Stop).Source }\n$arguments = '-NoProfile -ExecutionPolicy Bypass -File \"{0}\" -Worktree \"{1}\" -RunId \"{2}\" -LogPath \"{3}\" -ProofPath \"{4}\" -ExitPath \"{5}\"' -f $Runner, $Worktree, $RunId, $log, $proof, $exitFile\n\"PWSH $pwsh\"\n\"ACTION $arguments\"\n# In an SSH session USERDOMAIN does not name the local machine; the token's own account name does.\n$account = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name\n\"ACCOUNT $account\"\nif ($PSCmdlet.ShouldProcess($TaskName, 'register and start the one-shot interactive task')) {\n    $action = New-ScheduledTaskAction -Execute $pwsh -Argument $arguments -WorkingDirectory $Worktree.Replace('/', '\\')\n    $principal = New-ScheduledTaskPrincipal -UserId $account -LogonType Interactive -RunLevel Limited\n    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit ([TimeSpan]::Zero)\n    $null = Register-ScheduledTask -TaskName $TaskName -Action $action -Principal $principal -Settings $settings -Description 'One-shot IMPL-UNITGREEN-001 interactive lane run (removed after it ends)'\n    Start-ScheduledTask -TaskName $TaskName\n    Start-Sleep -Seconds 5\n    $info = Get-ScheduledTaskInfo -TaskName $TaskName\n    \"TASK $TaskName state=$((Get-ScheduledTask -TaskName $TaskName).State) lastRun=$($info.LastRunTime) result=$($info.LastTaskResult)\"\n    \"PROOF so far: $(if (Test-Path -LiteralPath $proof) { (Get-Content -LiteralPath $proof -Raw).Trim() } else { '(not written yet)' })\"\n}\n\"END $((Get-Date).ToString('s'))\""
+  },
+  {
+    "Line": 17734,
+    "Time": "2026-10-20T10:37:18",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01VJV7299LE71rYf4v84cWEf",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -RunId ug-r3-win-lane-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 17735,
+    "Time": "2026-10-20T10:37:23",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01VJV7299LE71rYf4v84cWEf",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T10:37:19 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-96389fe5b86a43118376c2cf064f0fbc.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T10:37:23 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\nWhat if: Performing the operation \"check out 538d0ccf957c041f1e3886864bdf5e4ca693e9ec\" on target \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\".\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-1\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-1.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-1.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-1.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nWhat if: Performing the operation \"register and start the one-shot interactive task\" on target \"McpUnitGreenLane-ug-r3-win-lane-1\".\nEND 2026-10-20T10:37:25\nLOCAL END 2026-10-20T10:37:23 ssh exit=0"
+  },
+  {
+    "Line": 17740,
+    "Time": "2026-10-20T10:37:33",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01E8PZWUy5s1oRWXvJp1AP5t",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 538d0ccf957c041f1e3886864bdf5e4ca693e9ec -RunId ug-r3-win-lane-1 -TaskName McpUnitGreenLane-ug-r3-win-lane-1 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-1.start.txt"
+  },
+  {
+    "Line": 17746,
+    "Time": "2026-10-20T10:37:45",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01E8PZWUy5s1oRWXvJp1AP5t",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T10:37:34 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-de32c4f9c4f54888b14127dbec365b99.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T10:37:37 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  checkout: Previous HEAD position was b4ad42aa test: unit tests that reach native file-system boundaries or write tracked files move to Integration (IMPL-UNITGREEN-001)\n  checkout: HEAD is now at 538d0ccf fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)\nHEAD 538d0ccf957c041f1e3886864bdf5e4ca693e9ec expected=538d0ccf957c041f1e3886864bdf5e4ca693e9ec match=True\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-1\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-1.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-1.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-1.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nTASK McpUnitGreenLane-ug-r3-win-lane-1 state=Running lastRun=10/20/2026 10:37:40 result=267009\nPROOF so far: START 2026-10-20T10:37:41 user=kingd session=1 interactive=True head=538d0ccf957c041f1e3886864bdf5e4ca693e9ec\nEND 2026-10-20T10:37:46\nLOCAL END 2026-10-20T10:37:45 ssh exit=0\nLOCAL SAVED /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-1.start.txt lines=14"
+  },
+  {
+    "Line": 18226,
+    "Time": "2026-10-20T11:02:08",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_015KnKVTzseng827nQQtn4Dp",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 -RunId ug-r3-win-lane-2 -TaskName McpUnitGreenLane-ug-r3-win-lane-2 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 18227,
+    "Time": "2026-10-20T11:02:13",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_015KnKVTzseng827nQQtn4Dp",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T11:02:08 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-71385dcd2d7e48968d821f0a72a0da9b.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T11:02:12 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  fetch: From https://github.com/sharpninja/McpServer\n  fetch:    7ba3ddd1..0df0dc4b  docs/xunit-v3-architecture-guidance -> origin/docs/xunit-v3-architecture-guidance\nWhat if: Performing the operation \"check out 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249\" on target \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\".\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-2\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-2.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-2.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-2.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nWhat if: Performing the operation \"register and start the one-shot interactive task\" on target \"McpUnitGreenLane-ug-r3-win-lane-2\".\nEND 2026-10-20T11:02:15\nLOCAL END 2026-10-20T11:02:13 ssh exit=0"
+  },
+  {
+    "Line": 18230,
+    "Time": "2026-10-20T11:02:19",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_014XzAxTRC11Fwek48vvgXN1",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 -RunId ug-r3-win-lane-2 -TaskName McpUnitGreenLane-ug-r3-win-lane-2 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-2.start.txt"
+  },
+  {
+    "Line": 18232,
+    "Time": "2026-10-20T11:02:30",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_014XzAxTRC11Fwek48vvgXN1",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T11:02:20 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-f6ef4717ed3947c183377e6bd3ddfc59.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T11:02:23 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  checkout: Previous HEAD position was 538d0ccf fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)\n  checkout: HEAD is now at 56d14d7c test(services): the hermetic-profile check reads the injected fixture, not a parallel test's folder (IMPL-UNITGREEN-001)\nHEAD 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 expected=56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 match=True\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-2\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-2.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-2.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-2.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nTASK McpUnitGreenLane-ug-r3-win-lane-2 state=Running lastRun=10/20/2026 11:02:26 result=267009\nPROOF so far: START 2026-10-20T11:02:27 user=kingd session=1 interactive=True head=56d14d7cd7e72975b1cbf0ddcd2cc17c16763249\nEND 2026-10-20T11:02:32\nLOCAL END 2026-10-20T11:02:30 ssh exit=0\nLOCAL SAVED /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-2.start.txt lines=14"
+  },
+  {
+    "Line": 18764,
+    "Time": "2026-10-20T12:20:18",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01CpT8ebShf5rLaZNuxttdKg",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a -RunId ug-r3-win-lane-3 -TaskName McpUnitGreenLane-ug-r3-win-lane-3 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 18765,
+    "Time": "2026-10-20T12:20:24",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01CpT8ebShf5rLaZNuxttdKg",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T12:20:19 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-c8be7496ed5642f08acf9c48edd1cf82.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T12:20:23 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  fetch: From https://github.com/sharpninja/McpServer\n  fetch:    0df0dc4b..be92c662  docs/xunit-v3-architecture-guidance -> origin/docs/xunit-v3-architecture-guidance\n  fetch:    56d14d7c..6042dbb3  fix/unit-suite-green-20261019 -> origin/fix/unit-suite-green-20261019\nWhat if: Performing the operation \"check out 6042dbb3551c38a740e13de28f44fe9a814e6f0a\" on target \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\".\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-3\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-3.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-3.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-3.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nWhat if: Performing the operation \"register and start the one-shot interactive task\" on target \"McpUnitGreenLane-ug-r3-win-lane-3\".\nEND 2026-10-20T12:20:26\nLOCAL END 2026-10-20T12:20:24 ssh exit=0"
+  },
+  {
+    "Line": 18768,
+    "Time": "2026-10-20T12:20:36",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_015fqhaQ5VCf7t5wqfuPK51N",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a -RunId ug-r3-win-lane-3 -TaskName McpUnitGreenLane-ug-r3-win-lane-3 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-3.start.txt"
+  },
+  {
+    "Line": 18774,
+    "Time": "2026-10-20T12:20:49",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_015fqhaQ5VCf7t5wqfuPK51N",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T12:20:38 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-2ced13b0bd8446ee8d320fa588a43090.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T12:20:42 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  checkout: Previous HEAD position was 56d14d7c test(services): the hermetic-profile check reads the injected fixture, not a parallel test's folder (IMPL-UNITGREEN-001)\n  checkout: HEAD is now at 6042dbb3 test(storage): SQL Server integration tests wait 120 s for LocalDB to accept a connection (IMPL-UNITGREEN-001)\nHEAD 6042dbb3551c38a740e13de28f44fe9a814e6f0a expected=6042dbb3551c38a740e13de28f44fe9a814e6f0a match=True\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-3\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-3.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-3.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-3.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nTASK McpUnitGreenLane-ug-r3-win-lane-3 state=Running lastRun=10/20/2026 12:20:45 result=267009\nPROOF so far: START 2026-10-20T12:20:46 user=kingd session=1 interactive=True head=6042dbb3551c38a740e13de28f44fe9a814e6f0a\nEND 2026-10-20T12:20:51\nLOCAL END 2026-10-20T12:20:49 ssh exit=0\nLOCAL SAVED /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-3.start.txt lines=14"
+  },
+  {
+    "Line": 19049,
+    "Time": "2026-10-20T13:11:34",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01DFSgngfJzigqDj1tPjP2aq",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a -RunId ug-r3-win-lane-4 -TaskName McpUnitGreenLane-ug-r3-win-lane-4 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 19051,
+    "Time": "2026-10-20T13:11:52",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01DFSgngfJzigqDj1tPjP2aq",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T13:11:48 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-754dd279e5194e68912b62d6165ab6a6.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T13:11:52 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  fetch: From https://github.com/sharpninja/McpServer\n  fetch:    be92c662..ddc44aea  docs/xunit-v3-architecture-guidance -> origin/docs/xunit-v3-architecture-guidance\nWhat if: Performing the operation \"check out 6042dbb3551c38a740e13de28f44fe9a814e6f0a\" on target \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\".\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-4\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-4.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-4.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-4.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nWhat if: Performing the operation \"register and start the one-shot interactive task\" on target \"McpUnitGreenLane-ug-r3-win-lane-4\".\nEND 2026-10-20T13:11:54\nLOCAL END 2026-10-20T13:11:52 ssh exit=0"
+  },
+  {
+    "Line": 19059,
+    "Time": "2026-10-20T13:11:59",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01VggtB4qDdFWXLUu9eiQh97",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a -RunId ug-r3-win-lane-4 -TaskName McpUnitGreenLane-ug-r3-win-lane-4 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-4.start.txt"
+  },
+  {
+    "Line": 19060,
+    "Time": "2026-10-20T13:12:11",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01VggtB4qDdFWXLUu9eiQh97",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T13:12:00 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-e9ed2265b4144017aa7b28ba77006108.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T13:12:04 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  checkout: HEAD is now at 6042dbb3 test(storage): SQL Server integration tests wait 120 s for LocalDB to accept a connection (IMPL-UNITGREEN-001)\nHEAD 6042dbb3551c38a740e13de28f44fe9a814e6f0a expected=6042dbb3551c38a740e13de28f44fe9a814e6f0a match=True\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-4\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-4.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-4.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-4.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nTASK McpUnitGreenLane-ug-r3-win-lane-4 state=Running lastRun=10/20/2026 13:12:07 result=267009\nPROOF so far: START 2026-10-20T13:12:08 user=kingd session=1 interactive=True head=6042dbb3551c38a740e13de28f44fe9a814e6f0a\nEND 2026-10-20T13:12:13\nLOCAL END 2026-10-20T13:12:11 ssh exit=0\nLOCAL SAVED /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-4.start.txt lines=13"
+  },
+  {
+    "Line": 19368,
+    "Time": "2026-10-20T13:48:54",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01A8NjrqqaLW8QEVUsw4gAwX",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-5 -TaskName McpUnitGreenLane-ug-r3-win-lane-5 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 19374,
+    "Time": "2026-10-20T13:48:59",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01A8NjrqqaLW8QEVUsw4gAwX",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T13:48:54 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-c56e84ed89644430a71c4e889580ef21.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T13:48:55 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  fetch: From https://github.com/sharpninja/McpServer\n  fetch:    3da2db93..bd0268f4  develop    -> origin/develop\n  fetch:    6042dbb3..0210244d  fix/unit-suite-green-20261019 -> origin/fix/unit-suite-green-20261019\nWhat if: Performing the operation \"check out 0210244d27bf2b5e731e4ee40350504934e812a4\" on target \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\".\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-5\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-5.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-5.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-5.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nWhat if: Performing the operation \"register and start the one-shot interactive task\" on target \"McpUnitGreenLane-ug-r3-win-lane-5\".\nEND 2026-10-20T13:48:58\nLOCAL END 2026-10-20T13:48:58 ssh exit=0"
+  },
+  {
+    "Line": 19380,
+    "Time": "2026-10-20T13:49:08",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01VeWmLvzvDZoUR4vjyoCr3b",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4 -RunId ug-r3-win-lane-5 -TaskName McpUnitGreenLane-ug-r3-win-lane-5 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-5.start.txt"
+  },
+  {
+    "Line": 19382,
+    "Time": "2026-10-20T13:49:19",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01VeWmLvzvDZoUR4vjyoCr3b",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T13:49:09 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-d2778a82ff89481eb233797e2a37252b.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T13:49:10 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  checkout: Previous HEAD position was 6042dbb3 test(storage): SQL Server integration tests wait 120 s for LocalDB to accept a connection (IMPL-UNITGREEN-001)\n  checkout: HEAD is now at 0210244d test(storage): the SQL Server test classes on LocalDB run one after another (IMPL-UNITGREEN-001)\nHEAD 0210244d27bf2b5e731e4ee40350504934e812a4 expected=0210244d27bf2b5e731e4ee40350504934e812a4 match=True\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-5\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-5.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-5.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-5.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nTASK McpUnitGreenLane-ug-r3-win-lane-5 state=Running lastRun=10/20/2026 13:49:12 result=267009\nPROOF so far: START 2026-10-20T13:49:13 user=kingd session=1 interactive=True head=0210244d27bf2b5e731e4ee40350504934e812a4\nEND 2026-10-20T13:49:18\nLOCAL END 2026-10-20T13:49:19 ssh exit=0\nLOCAL SAVED /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-5.start.txt lines=14"
+  },
+  {
+    "Line": 20029,
+    "Time": "2026-10-20T14:39:57",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_012u9PdWNZQ3BhANH91DzMoi",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8 -RunId ug-r3-win-lane-6 -TaskName McpUnitGreenLane-ug-r3-win-lane-6 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -WhatIf'"
+  },
+  {
+    "Line": 20036,
+    "Time": "2026-10-20T14:40:02",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_012u9PdWNZQ3BhANH91DzMoi",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T14:39:59 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-03f56f5b81aa49e49bd67772976fb5c9.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T14:40:00 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  fetch: From https://github.com/sharpninja/McpServer\n  fetch:    0210244d..6ea425ab  fix/unit-suite-green-20261019 -> origin/fix/unit-suite-green-20261019\nWhat if: Performing the operation \"check out 6ea425ab943ebdd8aad1de1c84896de92d0270d8\" on target \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\".\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-6\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-6.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-6.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-6.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nWhat if: Performing the operation \"register and start the one-shot interactive task\" on target \"McpUnitGreenLane-ug-r3-win-lane-6\".\nEND 2026-10-20T14:40:02\nLOCAL END 2026-10-20T14:40:02 ssh exit=0"
+  },
+  {
+    "Line": 20039,
+    "Time": "2026-10-20T14:40:09",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01LGobX8mGEmPmkGPZupWbCT",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8 -RunId ug-r3-win-lane-6 -TaskName McpUnitGreenLane-ug-r3-win-lane-6 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-6.start.txt"
+  },
+  {
+    "Line": 20041,
+    "Time": "2026-10-20T14:40:19",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01LGobX8mGEmPmkGPZupWbCT",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T14:40:10 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-b08c9e1cb9e743f4b4da28c63e81cb44.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T14:40:11 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  checkout: Previous HEAD position was 0210244d test(storage): the SQL Server test classes on LocalDB run one after another (IMPL-UNITGREEN-001)\n  checkout: HEAD is now at 6ea425ab test(storage): the ephemeral PostgreSQL fixture runs pg_ctl silent so it cannot garble xUnit messages (IMPL-UNITGREEN-001)\nHEAD 6ea425ab943ebdd8aad1de1c84896de92d0270d8 expected=6ea425ab943ebdd8aad1de1c84896de92d0270d8 match=True\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-6\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-6.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-6.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-6.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nTASK McpUnitGreenLane-ug-r3-win-lane-6 state=Running lastRun=10/20/2026 14:40:13 result=267009\nPROOF so far: START 2026-10-20T14:40:14 user=kingd session=1 interactive=True head=6ea425ab943ebdd8aad1de1c84896de92d0270d8\nEND 2026-10-20T14:40:19\nLOCAL END 2026-10-20T14:40:19 ssh exit=0\nLOCAL SAVED /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-6.start.txt lines=14"
+  },
+  {
+    "Line": 21168,
+    "Time": "2026-10-20T15:21:17",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01ANhRU9gvohAFdHV66cvtWs",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2 -RunId ug-r3-win-lane-7 -TaskName McpUnitGreenLane-ug-r3-win-lane-7 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -RunnerName Invoke-WinLaneRunner.ps1 -WhatIf'"
+  },
+  {
+    "Line": 21169,
+    "Time": "2026-10-20T15:21:21",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01ANhRU9gvohAFdHV66cvtWs",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T15:21:18 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-4731bdc1b473427eb65da5ccdf3f1c7d.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T15:21:19 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  fetch: From https://github.com/sharpninja/McpServer\n  fetch:    6ea425ab..68fa7b39  fix/unit-suite-green-20261019 -> origin/fix/unit-suite-green-20261019\nWhat if: Performing the operation \"check out 68fa7b393d007c0d0c466c29ae4da5738bf54af2\" on target \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\".\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-7\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-7.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-7.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-7.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nWhat if: Performing the operation \"register and start the one-shot interactive task\" on target \"McpUnitGreenLane-ug-r3-win-lane-7\".\nEND 2026-10-20T15:21:21\nLOCAL END 2026-10-20T15:21:21 ssh exit=0"
+  },
+  {
+    "Line": 21172,
+    "Time": "2026-10-20T15:21:27",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01Wm3upf43kP9PjiBooyQ96d",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2 -RunId ug-r3-win-lane-7 -TaskName McpUnitGreenLane-ug-r3-win-lane-7 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -RunnerName Invoke-WinLaneRunner.ps1' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-7.start.txt"
+  },
+  {
+    "Line": 21174,
+    "Time": "2026-10-20T15:21:38",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01Wm3upf43kP9PjiBooyQ96d",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T15:21:28 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-fa727dd199ee4a2aba78b10b7d41f864.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T15:21:29 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  checkout: Previous HEAD position was 6ea425ab test(storage): the ephemeral PostgreSQL fixture runs pg_ctl silent so it cannot garble xUnit messages (IMPL-UNITGREEN-001)\n  checkout: HEAD is now at 68fa7b39 test(storage): the SQL Server LocalDB collection runs with parallelization disabled, as the chosen option states (IMPL-UNITGREEN-001)\nHEAD 68fa7b393d007c0d0c466c29ae4da5738bf54af2 expected=68fa7b393d007c0d0c466c29ae4da5738bf54af2 match=True\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-7\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-7.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-7.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-7.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nTASK McpUnitGreenLane-ug-r3-win-lane-7 state=Running lastRun=10/20/2026 15:21:31 result=267009\nPROOF so far: START 2026-10-20T15:21:32 user=kingd session=1 interactive=True head=68fa7b393d007c0d0c466c29ae4da5738bf54af2\nEND 2026-10-20T15:21:37\nLOCAL END 2026-10-20T15:21:37 ssh exit=0\nLOCAL SAVED /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-7.start.txt lines=14"
+  },
+  {
+    "Line": 21912,
+    "Time": "2026-10-20T16:30:20",
+    "Type": "call",
+    "Tool": "Read",
+    "Id": "toolu_01LykKEdJFBXVNURqBJf3nd2",
+    "Value": "/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1"
+  },
+  {
+    "Line": 21913,
+    "Time": "2026-10-20T16:30:20",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01LykKEdJFBXVNURqBJf3nd2",
+    "Value": "1\t#Requires -Version 7.0\n2\t<#\n3\t.SYNOPSIS\n4\t    Replaces or adds exactly one acceptance criterion on a TR or TEST record through the plugin\n5\t    (getTr/getTest, then updateTr/updateTest with the full list), then reads the record back and\n6\t    proves that only the named criterion changed. Supports -WhatIf.\n7\t.PARAMETER DataFile\n8\t    PowerShell data file with keys Kind (tr or test), Id, Mode (Replace or Add), and Criterion\n9\t    (id, text, isSatisfied, optional evidence).\n10\t#>\n11\t[CmdletBinding(SupportsShouldProcess)]\n12\tparam(\n13\t    [Parameter(Mandatory)] [string] $DataFile\n14\t)\n15\t\n16\tSet-StrictMode -Version Latest\n17\t$ErrorActionPreference = 'Stop'\n18\t. (Join-Path $PSScriptRoot 'CcPlugin.ps1')\n19\t\n20\tfunction Test-Ok {\n21\t    param([Parameter(Mandatory)] $Result)\n22\t    return ($Result.ExitCode -eq 0 -and $Result.Raw -notmatch '(?im)^\\s*type:\\s*error')\n23\t}\n24\t\n25\tfunction Get-Signature {\n26\t    param($Criterion)\n27\t    return ('{0}|{1}|{2}|{3}' -f (Get-CcValue $Criterion 'id'), (Get-CcValue $Criterion 'text'), [bool](Get-CcValue $Criterion 'isSatisfied'), (Get-CcValue $Criterion 'evidence'))\n28\t}\n29\t\n30\tfunction Read-CriterionList {\n31\t    param([string]$GetMethod, [string]$Id)\n32\t    $g = Invoke-CcPlugin -Method $GetMethod -Params ([ordered]@{ id = $Id })\n33\t    if (-not (Test-Ok $g)) { Write-Output $g.Raw; throw \"Read of $Id failed\" }\n34\t    $result = Get-CcValue (Get-CcValue $g.Parsed 'payload') 'result'\n35\t    return @(Get-CcValue $result 'acceptanceCriteria' | Where-Object { $null -ne $_ })\n36\t}\n37\t\n38\t$data = Import-PowerShellDataFile -LiteralPath $DataFile\n39\t$kind = [string]$data.Kind\n40\t$id = [string]$data.Id\n41\t$mode = [string]$data.Mode\n42\t$new = $data.Criterion\n43\tif ($kind -notin 'tr', 'test') { throw \"Kind must be tr or test, got '$kind'\" }\n44\tif ($mode -notin 'Replace', 'Add') { throw \"Mode must be Replace or Add, got '$mode'\" }\n45\t$getMethod = if ($kind -eq 'tr') { 'workflow.requirements.getTr' } else { 'workflow.requirements.getTest' }\n46\t$updateMethod = if ($kind -eq 'tr') { 'workflow.requirements.updateTr' } else { 'workflow.requirements.updateTest' }\n47\t\n48\tWrite-Output \"Now: $((Get-Date).ToString('s')) $id $mode criterion $($new.id)\"\n49\t$before = @(Read-CriterionList -GetMethod $getMethod -Id $id)\n50\t$ids = @($before | ForEach-Object { [string](Get-CcValue $_ 'id') })\n51\tif ($mode -eq 'Replace' -and $ids -notcontains $new.id) { throw \"Criterion $($new.id) not found on $id\" }\n52\tif ($mode -eq 'Add' -and $ids -contains $new.id) { throw \"Criterion $($new.id) already exists on $id\" }\n53\t\n54\t$newItem = [ordered]@{ id = [string]$new.id; text = [string]$new.text; isSatisfied = [bool]$new.isSatisfied }\n55\tif ($new.ContainsKey('evidence') -and $new.evidence) { $newItem.evidence = [string]$new.evidence }\n56\t$list = @(foreach ($c in $before) {\n57\t    if ($mode -eq 'Replace' -and [string](Get-CcValue $c 'id') -eq $new.id) { $newItem; continue }\n58\t    $item = [ordered]@{ id = [string](Get-CcValue $c 'id'); text = [string](Get-CcValue $c 'text'); isSatisfied = [bool](Get-CcValue $c 'isSatisfied') }\n59\t    $evidence = Get-CcValue $c 'evidence'\n60\t    if ($evidence) { $item.evidence = [string]$evidence }\n61\t    $item\n62\t})\n63\tif ($mode -eq 'Add') { $list += $newItem }\n64\tWrite-Output ('Criteria before={0} after={1}' -f $before.Count, $list.Count)\n65\t\n66\tif (-not $PSCmdlet.ShouldProcess(\"$id criterion $($new.id)\", \"$updateMethod ($mode)\")) { return }\n67\t$u = Invoke-CcPlugin -Method $updateMethod -Params ([ordered]@{ id = $id; acceptanceCriteria = $list })\n68\tWrite-Output \"$updateMethod exit=$($u.ExitCode) ok=$(Test-Ok $u)\"\n69\tif (-not (Test-Ok $u)) { Write-Output $u.Raw; exit 1 }\n70\t\n71\t$after = @(Read-CriterionList -GetMethod $getMethod -Id $id)\n72\t$beforeById = @{}\n73\tforeach ($c in $before) { $beforeById[[string](Get-CcValue $c 'id')] = Get-Signature $c }\n74\t$changed = @()\n75\tforeach ($c in $after) {\n76\t    $cid = [string](Get-CcValue $c 'id')\n77\t    if (-not $beforeById.ContainsKey($cid) -or $beforeById[$cid] -ne (Get-Signature $c)) { $changed += $cid }\n78\t}\n79\t$expectedNew = Get-Signature $newItem\n80\t$target = @($after | Where-Object { [string](Get-CcValue $_ 'id') -eq $new.id })\n81\t$ok = ($changed.Count -eq 1 -and $changed[0] -eq $new.id -and $target.Count -eq 1 -and (Get-Signature $target[0]) -eq $expectedNew -and $after.Count -eq $list.Count)\n82\tWrite-Output ('READBACK {0}: criteria={1} changed=[{2}] targetMatches={3} ok={4}' -f $id, $after.Count, ($changed -join ','), ($target.Count -eq 1 -and (Get-Signature $target[0]) -eq $expectedNew), $ok)\n83\tif (-not $ok) { exit 1 }\n84\t"
+  },
+  {
+    "Line": 21956,
+    "Time": "2026-10-20T16:31:36",
+    "Type": "call",
+    "Tool": "Read",
+    "Id": "toolu_017nDW68Fbr4x3bFivxHiKPi",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs"
+  },
+  {
+    "Line": 21957,
+    "Time": "2026-10-20T16:31:36",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_017nDW68Fbr4x3bFivxHiKPi",
+    "Value": "1\tusing QBrainAi.Support.Mcp.Services;\n2\tusing Xunit;\n3\t\n4\tnamespace QBrainAi.Support.Mcp.Tests.Services;\n5\t\n6\t/// <summary>\n7\t/// Tests the directory walk that both user-profile scans use (marker agent-plugin version resolution and the\n8\t/// session-log agent-history scan): a walk never follows a directory link or other reparse point, skips the\n9\t/// contents of any directory whose listing fails with an IO or access error, and keeps walking the rest.\n10\t/// </summary>\n11\t/// <remarks>\n12\t/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /\n13\t/// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; triage\n14\t/// report b0e41c36). Test data: scripted in-memory directory trees (<see cref=\"ScriptedDirectoryTree\"/>) whose\n15\t/// listings return fixed entries or throw the exceptions observed on PAYTON-LEGION2 as kingd (an untrusted mount\n16\t/// point), an access-denied folder, and a vanished folder; no file system is read. Expected outputs are derived\n17\t/// from the acceptance criteria: a directory is yielded when its parent lists it unless it is a link, its contents\n18\t/// are walked only when its own listing succeeds, and file links are yielded as files. Negative controls run\n19\t/// deliberately wrong walks (one that follows links, one that propagates listing errors as the legacy recursive\n20\t/// enumeration did, one that stops at the first error, one that drops an unlistable directory) over the same trees\n21\t/// and prove the walk assertion rejects each.\n22\t/// </remarks>\n23\tpublic sealed class DirectoryTreeWalkerTests\n24\t{\n25\t    private const string UntrustedMountPointMessage =\n26\t        \"The path cannot be traversed because it contains an untrusted mount point.\";\n27\t\n28\t    /// <summary>A walk under test: lists through <c>list</c> from <c>root</c> and returns what it yielded.</summary>\n29\t    private delegate (List<string> Directories, List<string> Files) WalkFunction(\n30\t        Func<string, IReadOnlyList<DirectoryListingEntry>> list,\n31\t        string root);\n32\t\n33\t    private static DirectoryListingEntry DirEntry(string path) => new(path, IsDirectory: true, IsLink: false);\n34\t\n35\t    private static DirectoryListingEntry DirLinkEntry(string path) => new(path, IsDirectory: true, IsLink: true);\n36\t\n37\t    private static DirectoryListingEntry FileEntry(string path) => new(path, IsDirectory: false, IsLink: false);\n38\t\n39\t    private static DirectoryListingEntry FileLinkEntry(string path) => new(path, IsDirectory: false, IsLink: true);\n40\t\n41\t    /// <summary>\n42\t    /// Scripted cases: the tree, the walk root, and the directories, files and listed directories the acceptance\n43\t    /// criteria require. Each case builds a fresh tree so the listing record starts empty.\n44\t    /// </summary>\n45\t    private static readonly Dictionary<string, (Func<ScriptedDirectoryTree> Tree, string Root, string[] Directories, string[] Files, string[] Listed)> Cases =\n46\t        new(StringComparer.Ordinal)\n47\t        {\n48\t            [\"nested-tree\"] = (\n49\t                () => new ScriptedDirectoryTree()\n50\t                    .Lists(\"/p\", DirEntry(\"/p/a\"), FileEntry(\"/p/f1\"))\n51\t                    .Lists(\"/p/a\", DirEntry(\"/p/a/b\"), FileEntry(\"/p/a/f2\"))\n52\t                    .Lists(\"/p/a/b\", FileEntry(\"/p/a/b/f3\")),\n53\t                \"/p\",\n54\t                [\"/p/a\", \"/p/a/b\"],\n55\t                [\"/p/f1\", \"/p/a/f2\", \"/p/a/b/f3\"],\n56\t                [\"/p\", \"/p/a\", \"/p/a/b\"]),\n57\t            [\"untrusted-mount-point\"] = (\n58\t                () => new ScriptedDirectoryTree()\n59\t                    .Lists(\"/p\", DirEntry(\"/p/bad\"), DirEntry(\"/p/good\"))\n60\t                    .Throws(\"/p/bad\", () => new IOException(UntrustedMountPointMessage))\n61\t                    .Lists(\"/p/good\", DirEntry(\"/p/good/inner\"), FileEntry(\"/p/good/g.md\"))\n62\t                    .Lists(\"/p/good/inner\", FileEntry(\"/p/good/inner/i.md\")),\n63\t                \"/p\",\n64\t                [\"/p/bad\", \"/p/good\", \"/p/good/inner\"],\n65\t                [\"/p/good/g.md\", \"/p/good/inner/i.md\"],\n66\t                [\"/p\", \"/p/bad\", \"/p/good\", \"/p/good/inner\"]),\n67\t            [\"access-denied\"] = (\n68\t                () => new ScriptedDirectoryTree()\n69\t                    .Lists(\"/p\", DirEntry(\"/p/locked\"), DirEntry(\"/p/open\"))\n70\t                    .Throws(\"/p/locked\", () => new UnauthorizedAccessException(\"Access to the path is denied.\"))\n71\t                    .Lists(\"/p/open\", FileEntry(\"/p/open/o.md\")),\n72\t                \"/p\",\n73\t                [\"/p/locked\", \"/p/open\"],\n74\t                [\"/p/open/o.md\"],\n75\t                [\"/p\", \"/p/locked\", \"/p/open\"]),\n76\t            [\"vanished-directory\"] = (\n77\t                () => new ScriptedDirectoryTree()\n78\t                    .Lists(\"/p\", DirEntry(\"/p/gone\"), DirEntry(\"/p/here\"))\n79\t                    .Throws(\"/p/gone\", () => new DirectoryNotFoundException(\"Could not find a part of the path.\"))\n80\t                    .Lists(\"/p/here\", FileEntry(\"/p/here/h.md\")),\n81\t                \"/p\",\n82\t                [\"/p/gone\", \"/p/here\"],\n83\t                [\"/p/here/h.md\"],\n84\t                [\"/p\", \"/p/gone\", \"/p/here\"]),\n85\t            [\"directory-link\"] = (\n86\t                () => new ScriptedDirectoryTree()\n87\t                    .Lists(\"/p\", DirEntry(\"/p/real\"), DirLinkEntry(\"/p/link\"), FileEntry(\"/p/f\"))\n88\t                    .Lists(\"/p/real\", FileEntry(\"/p/real/x.md\"))\n89\t                    .Lists(\"/p/link\", FileEntry(\"/p/link/y.md\")),\n90\t                \"/p\",\n91\t                [\"/p/real\"],\n92\t                [\"/p/f\", \"/p/real/x.md\"],\n93\t                [\"/p\", \"/p/real\"]),\n94\t            [\"file-link\"] = (\n95\t                () => new ScriptedDirectoryTree()\n96\t                    .Lists(\"/p\", FileLinkEntry(\"/p/linked.md\"), FileEntry(\"/p/plain.md\")),\n97\t                \"/p\",\n98\t                [],\n99\t                [\"/p/linked.md\", \"/p/plain.md\"],\n100\t                [\"/p\"]),\n101\t            [\"root-unlistable\"] = (\n102\t                () => new ScriptedDirectoryTree()\n103\t                    .Throws(\"/p\", () => new IOException(UntrustedMountPointMessage)),\n104\t                \"/p\",\n105\t                [],\n106\t                [],\n107\t                [\"/p\"]),\n108\t        };\n109\t\n110\t    /// <summary>The scripted case names, for the theories.</summary>\n111\t    public static TheoryData<string> CaseNames => new(Cases.Keys.Order(StringComparer.Ordinal));\n112\t\n113\t    /// <summary>\n114\t    /// Asserts one walk result against a case: the yielded directories, the yielded files, and the directories\n115\t    /// the walk listed, each compared as an ordinal set (the acceptance criteria fix membership, not order).\n116\t    /// </summary>\n117\t    private static void AssertWalk(\n118\t        (string[] Directories, string[] Files, string[] Listed) expected,\n119\t        IEnumerable<string> directories,\n120\t        IEnumerable<string> files,\n121\t        IEnumerable<string> listed)\n122\t    {\n123\t        Assert.Equal(expected.Directories.Order(StringComparer.Ordinal), directories.Order(StringComparer.Ordinal));\n124\t        Assert.Equal(expected.Files.Order(StringComparer.Ordinal), files.Order(StringComparer.Ordinal));\n125\t        Assert.Equal(\n126\t            expected.Listed.Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal),\n127\t            listed.Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal));\n128\t    }\n129\t\n130\t    /// <summary>Runs one walk over a fresh copy of a case's tree and asserts its result.</summary>\n131\t    private static void RunAndAssert(string name, WalkFunction walk)\n132\t    {\n133\t        var (treeFactory, root, directories, files, listed) = Cases[name];\n134\t        var tree = treeFactory();\n135\t        var result = walk(tree.List, root);\n136\t        AssertWalk((directories, files, listed), result.Directories, result.Files, tree.Listed);\n137\t    }\n138\t\n139\t    /// <summary>\n140\t    /// Mock gate positive control: each case's required output passes the walk assertion.\n141\t    /// </summary>\n142\t    /// <param name=\"name\">Scripted case name.</param>\n143\t    [Theory]\n144\t    [MemberData(nameof(CaseNames))]\n145\t    public void ScriptedCase_RequiredOutput_PassesTheWalkAssertion(string name)\n146\t    {\n147\t        var (_, _, directories, files, listed) = Cases[name];\n148\t        AssertWalk((directories, files, listed), directories, files, listed);\n149\t    }\n150\t\n151\t    /// <summary>The theories cover every scripted case.</summary>\n152\t    [Fact]\n153\t    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(7, Cases.Count);\n154\t\n155\t    /// <summary>\n156\t    /// The scripted tree is itself correct: it records every listing in order, returns the scripted entries,\n157\t    /// throws the scripted exception, and refuses a directory it was not given, so a walk that lists a link\n158\t    /// it should have skipped fails loudly.\n159\t    /// </summary>\n160\t    [Fact]\n161\t    public void ScriptedTree_RecordsListingsAndRefusesUnscriptedDirectories()\n162\t    {\n163\t        var tree = new ScriptedDirectoryTree()\n164\t            .Lists(\"/p\", DirEntry(\"/p/a\"))\n165\t            .Throws(\"/p/a\", () => new IOException(UntrustedMountPointMessage));\n166\t\n167\t        Assert.Equal(new[] { DirEntry(\"/p/a\") }, tree.List(\"/p\"));\n168\t        Assert.Equal(UntrustedMountPointMessage, Assert.Throws<IOException>(() => tree.List(\"/p/a\")).Message);\n169\t        Assert.Throws<InvalidOperationException>(() => tree.List(\"/p/unscripted\"));\n170\t        Assert.Equal(new[] { \"/p\", \"/p/a\", \"/p/unscripted\" }, tree.Listed);\n171\t    }\n172\t\n173\t    /// <summary>\n174\t    /// Mock gate negative controls: each wrong walk is rejected by the walk assertion on the case that exposes it,\n175\t    /// inside a passing harness. The legacy recursive enumeration (follows links, propagates listing errors) fails\n176\t    /// on the untrusted mount point, the access-denied folder, the vanished folder, the unlistable root and the\n177\t    /// directory link; a walk that follows links fails on the directory link; a walk that stops at the first\n178\t    /// listing error loses the healthy sibling; a walk that drops an unlistable directory loses its entry.\n179\t    /// </summary>\n180\t    [Fact]\n181\t    public void WrongWalkNegativeControls_AreRejectedInsidePassingHarness()\n182\t    {\n183\t        foreach (var name in new[] { \"untrusted-mount-point\", \"access-denied\", \"vanished-directory\", \"root-unlistable\", \"directory-link\" })\n184\t            Assert.NotNull(Record.Exception(() => RunAndAssert(name, LegacyRecursiveWalk)));\n185\t\n186\t        Assert.NotNull(Record.Exception(() => RunAndAssert(\"directory-link\", FollowsLinksWalk)));\n187\t        Assert.NotNull(Record.Exception(() => RunAndAssert(\"untrusted-mount-point\", StopsAtFirstErrorWalk)));\n188\t        Assert.NotNull(Record.Exception(() => RunAndAssert(\"untrusted-mount-point\", DropsUnlistableDirectoryWalk)));\n189\t\n190\t        // Each wrong walk is wrong only where a case exposes it: on the nested tree, which has no link and no\n191\t        // listing error, every one of them yields the required output, so the rejections above come from the\n192\t        // behavior under test and not from an assertion that rejects everything.\n193\t        foreach (var walk in new WalkFunction[] { LegacyRecursiveWalk, FollowsLinksWalk, StopsAtFirstErrorWalk, DropsUnlistableDirectoryWalk })\n194\t            Assert.Null(Record.Exception(() => RunAndAssert(\"nested-tree\", walk)));\n195\t    }\n196\t\n197\t    /// <summary>\n198\t    /// Mock gate negative control for the error filter: a scripted listing error that is neither an IO nor an\n199\t    /// access error escapes the scripted tree, and a walk with a catch-all filter hides it; the production\n200\t    /// binding requires the walk to let it propagate.\n201\t    /// </summary>\n202\t    [Fact]\n203\t    public void UnexpectedListingError_EscapesTheScriptedTree()\n204\t    {\n205\t        var tree = new ScriptedDirectoryTree()\n206\t            .Lists(\"/p\", DirEntry(\"/p/a\"))\n207\t            .Throws(\"/p/a\", () => new InvalidOperationException(\"not an IO error\"));\n208\t\n209\t        Assert.Throws<InvalidOperationException>(() => LegacyRecursiveWalk(tree.List, \"/p\"));\n210\t        Assert.Null(Record.Exception(() => SwallowsEverythingWalk(tree.List, \"/p\")));\n211\t    }\n212\t\n213\t    /// <summary>\n214\t    /// Production binding of the scripted cases: <see cref=\"DirectoryTreeWalker\"/> over each scripted tree yields\n215\t    /// the required directories and files, and both its directory walk and its file walk list exactly the required\n216\t    /// directories (never a link, never the contents of an unlistable directory).\n217\t    /// </summary>\n218\t    /// <param name=\"name\">Scripted case name.</param>\n219\t    [Theory]\n220\t    [MemberData(nameof(CaseNames))]\n221\t    public void ScriptedCase_ProductionWalk_YieldsTheRequiredOutput(string name)\n222\t    {\n223\t        var (treeFactory, root, directories, files, listed) = Cases[name];\n224\t        var directoryTree = treeFactory();\n225\t        var fileTree = treeFactory();\n226\t\n227\t        var yieldedDirectories = new DirectoryTreeWalker(directoryTree.List).EnumerateDirectories(root).ToList();\n228\t        var yieldedFiles = new DirectoryTreeWalker(fileTree.List).EnumerateFiles(root).ToList();\n229\t\n230\t        AssertWalk((directories, files, listed), yieldedDirectories, yieldedFiles, directoryTree.Listed);\n231\t        AssertWalk((directories, files, listed), yieldedDirectories, yieldedFiles, fileTree.Listed);\n232\t    }\n233\t\n234\t    /// <summary>\n235\t    /// Production binding of the error filter: a listing error that is neither an IO nor an access error\n236\t    /// propagates out of <see cref=\"DirectoryTreeWalker\"/> instead of being skipped.\n237\t    /// </summary>\n238\t    [Fact]\n239\t    public void ProductionWalk_UnexpectedListingError_Propagates()\n240\t    {\n241\t        var tree = new ScriptedDirectoryTree()\n242\t            .Lists(\"/p\", DirEntry(\"/p/a\"))\n243\t            .Throws(\"/p/a\", () => new InvalidOperationException(\"not an IO error\"));\n244\t\n245\t        Assert.Throws<InvalidOperationException>(() => new DirectoryTreeWalker(tree.List).EnumerateDirectories(\"/p\").ToList());\n246\t        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(null!));\n247\t    }\n248\t\n249\t    /// <summary>\n250\t    /// Integration: on the real file system, <see cref=\"DirectoryTreeWalker.ListFileSystem\"/> flags a directory\n251\t    /// symbolic link and a file symbolic link as links, and <see cref=\"DirectoryTreeWalker.FileSystem\"/> neither\n252\t    /// yields nor descends the directory link (whose target lies outside the walked tree) while it yields the file\n253\t    /// link as a file. Creating symbolic links depends on the host (on Windows, Developer Mode or the\n254\t    /// create-symbolic-link privilege), so this is an integration test.\n255\t    /// </summary>\n256\t    [Fact]\n257\t    [Trait(\"Category\", \"Integration\")]\n258\t    public void FileSystemWalk_RealLinks_AreFlaggedAndNotDescended()\n259\t    {\n260\t        var root = Path.Combine(Path.GetTempPath(), $\"mcp-walk-links-{Guid.NewGuid():N}\");\n261\t        var outside = root + \"-outside\";\n262\t        var real = Path.Combine(root, \"real\");\n263\t        var realFile = Path.Combine(real, \"x.md\");\n264\t        var directoryLink = Path.Combine(root, \"dir-link\");\n265\t        var fileLink = Path.Combine(root, \"file-link.md\");\n266\t        Directory.CreateDirectory(real);\n267\t        Directory.CreateDirectory(outside);\n268\t        System.IO.File.WriteAllText(realFile, \"x\");\n269\t        System.IO.File.WriteAllText(Path.Combine(outside, \"y.md\"), \"y\");\n270\t        try\n271\t        {\n272\t            Directory.CreateSymbolicLink(directoryLink, outside);\n273\t            System.IO.File.CreateSymbolicLink(fileLink, realFile);\n274\t\n275\t            var entries = DirectoryTreeWalker.ListFileSystem(root);\n276\t            Assert.Contains(new DirectoryListingEntry(directoryLink, IsDirectory: true, IsLink: true), entries);\n277\t            Assert.Contains(new DirectoryListingEntry(fileLink, IsDirectory: false, IsLink: true), entries);\n278\t            Assert.Contains(new DirectoryListingEntry(real, IsDirectory: true, IsLink: false), entries);\n279\t\n280\t            Assert.Equal(new[] { real }, DirectoryTreeWalker.FileSystem.EnumerateDirectories(root));\n281\t            Assert.Equal(\n282\t                new[] { fileLink, realFile }.Order(StringComparer.Ordinal),\n283\t                DirectoryTreeWalker.FileSystem.EnumerateFiles(root).Order(StringComparer.Ordinal));\n284\t        }\n285\t        finally\n286\t        {\n287\t            if (System.IO.File.Exists(fileLink))\n288\t                System.IO.File.Delete(fileLink);\n289\t            if (Directory.Exists(directoryLink))\n290\t                Directory.Delete(directoryLink);\n291\t            Directory.Delete(root, recursive: true);\n292\t            Directory.Delete(outside, recursive: true);\n293\t        }\n294\t    }\n295\t\n296\t    // Wrong walks used only as negative controls.\n297\t\n298\t    private static (List<string> Directories, List<string> Files) LegacyRecursiveWalk(\n299\t        Func<string, IReadOnlyList<DirectoryListingEntry>> list, string root)\n300\t    {\n301\t        var directories = new List<string>();\n302\t        var files = new List<string>();\n303\t        var pending = new Queue<string>([root]);\n304\t        while (pending.Count > 0)\n305\t        {\n306\t            foreach (var entry in list(pending.Dequeue()))\n307\t            {\n308\t                if (entry.IsDirectory)\n309\t                {\n310\t                    directories.Add(entry.Path);\n311\t                    pending.Enqueue(entry.Path);\n312\t                }\n313\t                else\n314\t                {\n315\t                    files.Add(entry.Path);\n316\t                }\n317\t            }\n318\t        }\n319\t\n320\t        return (directories, files);\n321\t    }\n322\t\n323\t    private static (List<string> Directories, List<string> Files) FollowsLinksWalk(\n324\t        Func<string, IReadOnlyList<DirectoryListingEntry>> list, string root) =>\n325\t        ConfigurableWalk(list, root, skipLinks: false, stopAtFirstError: false, yieldUnlistable: true, catchAll: false);\n326\t\n327\t    private static (List<string> Directories, List<string> Files) StopsAtFirstErrorWalk(\n328\t        Func<string, IReadOnlyList<DirectoryListingEntry>> list, string root) =>\n329\t        ConfigurableWalk(list, root, skipLinks: true, stopAtFirstError: true, yieldUnlistable: true, catchAll: false);\n330\t\n331\t    private static (List<string> Directories, List<string> Files) DropsUnlistableDirectoryWalk(\n332\t        Func<string, IReadOnlyList<DirectoryListingEntry>> list, string root) =>\n333\t        ConfigurableWalk(list, root, skipLinks: true, stopAtFirstError: false, yieldUnlistable: false, catchAll: false);\n334\t\n335\t    private static (List<string> Directories, List<string> Files) SwallowsEverythingWalk(\n336\t        Func<string, IReadOnlyList<DirectoryListingEntry>> list, string root) =>\n337\t        ConfigurableWalk(list, root, skipLinks: true, stopAtFirstError: false, yieldUnlistable: true, catchAll: true);\n338\t\n339\t    private static (List<string> Directories, List<string> Files) ConfigurableWalk(\n340\t        Func<string, IReadOnlyList<DirectoryListingEntry>> list,\n341\t        string root,\n342\t        bool skipLinks,\n343\t        bool stopAtFirstError,\n344\t        bool yieldUnlistable,\n345\t        bool catchAll)\n346\t    {\n347\t        var directories = new List<string>();\n348\t        var files = new List<string>();\n349\t        var pending = new Queue<string>([root]);\n350\t        while (pending.Count > 0)\n351\t        {\n352\t            var directory = pending.Dequeue();\n353\t            IReadOnlyList<DirectoryListingEntry> entries;\n354\t            try\n355\t            {\n356\t                entries = list(directory);\n357\t            }\n358\t            catch (Exception ex) when (catchAll || ex is IOException or UnauthorizedAccessException)\n359\t            {\n360\t                if (!yieldUnlistable)\n361\t                    directories.Remove(directory);\n362\t                if (stopAtFirstError)\n363\t                    break;\n364\t                continue;\n365\t            }\n366\t\n367\t            foreach (var entry in entries)\n368\t            {\n369\t                if (entry.IsDirectory && entry.IsLink && skipLinks)\n370\t                    continue;\n371\t                if (entry.IsDirectory)\n372\t                {\n373\t                    directories.Add(entry.Path);\n374\t                    pending.Enqueue(entry.Path);\n375\t                }\n376\t                else\n377\t                {\n378\t                    files.Add(entry.Path);\n379\t                }\n380\t            }\n381\t        }\n382\t\n383\t        return (directories, files);\n384\t    }\n385\t\n386\t    /// <summary>\n387\t    /// Scripted in-memory directory tree: each directory lists fixed entries or throws a fixed exception, every\n388\t    /// listing is recorded in order, and an unscripted directory throws <see cref=\"InvalidOperationException\"/>.\n389\t    /// </summary>\n390\t    private sealed class ScriptedDirectoryTree\n391\t    {\n392\t        private readonly Dictionary<string, Func<IReadOnlyList<DirectoryListingEntry>>> _listings = new(StringComparer.Ordinal);\n393\t\n394\t        /// <summary>Directories listed so far, in order.</summary>\n395\t        public List<string> Listed { get; } = [];\n396\t\n397\t        /// <summary>Scripts <paramref name=\"directory\"/> to list <paramref name=\"entries\"/>.</summary>\n398\t        public ScriptedDirectoryTree Lists(string directory, params DirectoryListingEntry[] entries)\n399\t        {\n400\t            _listings[directory] = () => entries;\n401\t            return this;\n402\t        }\n403\t\n404\t        /// <summary>Scripts <paramref name=\"directory\"/> to throw the exception <paramref name=\"error\"/> creates.</summary>\n405\t        public ScriptedDirectoryTree Throws(string directory, Func<Exception> error)\n406\t        {\n407\t            _listings[directory] = () => throw error();\n408\t            return this;\n409\t        }\n410\t\n411\t        /// <summary>Lists one directory as scripted.</summary>\n412\t        public IReadOnlyList<DirectoryListingEntry> List(string directory)\n413\t        {\n414\t            Listed.Add(directory);\n415\t            if (!_listings.TryGetValue(directory, out var listing))\n416\t                throw new InvalidOperationException($\"Unscripted directory listed: {directory}\");\n417\t            return listing();\n418\t        }\n419\t    }\n420\t}\n421\t"
+  },
+  {
+    "Line": 21969,
+    "Time": "2026-10-20T16:32:03",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_012vjHUvq7fnPQxsy82cM8vm",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r3p3.psd1 -WhatIf"
+  },
+  {
+    "Line": 21972,
+    "Time": "2026-10-20T16:32:08",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_012vjHUvq7fnPQxsy82cM8vm",
+    "Value": "What if: Performing the operation \"New Alias\" on target \"Name: cfy Value: ConvertFrom-Yaml\".\nWhat if: Performing the operation \"New Alias\" on target \"Name: cty Value: ConvertTo-Yaml\".\nNow: 2026-10-20T16:32:04 TR-MCP-WS-005 Replace criterion AC-TR-MCP-WS-005-001\nCriteria before=1 after=1\nWhat if: Performing the operation \"workflow.requirements.updateTr (Replace)\" on target \"TR-MCP-WS-005 criterion AC-TR-MCP-WS-005-001\"."
+  },
+  {
+    "Line": 21975,
+    "Time": "2026-10-20T16:32:18",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_019Wdq3JZvmAJa2B24sLE2qK",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r3p3.psd1"
+  },
+  {
+    "Line": 21976,
+    "Time": "2026-10-20T16:32:29",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_019Wdq3JZvmAJa2B24sLE2qK",
+    "Value": "Now: 2026-10-20T16:32:19 TR-MCP-WS-005 Replace criterion AC-TR-MCP-WS-005-001\nCriteria before=1 after=1\nworkflow.requirements.updateTr exit=0 ok=True\nREADBACK TR-MCP-WS-005: criteria=1 changed=[AC-TR-MCP-WS-005-001] targetMatches=True ok=True"
+  },
+  {
+    "Line": 21981,
+    "Time": "2026-10-20T16:33:02",
+    "Type": "call",
+    "Tool": "Write",
+    "Id": "toolu_01SYTgoFdYcNVkf5upppmVEW",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  },
+  {
+    "Line": 21988,
+    "Time": "2026-10-20T16:34:03",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01SYTgoFdYcNVkf5upppmVEW",
+    "Value": "File created successfully at: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 21993,
+    "Time": "2026-10-20T16:34:17",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01XJFEFasUTP5xQJk1sqJJ5V",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target Test -ExtraArgs '--test-run-id;ug-r3-versionread-mockgate-1' -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-mockgate-1 -WhatIf"
+  },
+  {
+    "Line": 21995,
+    "Time": "2026-10-20T16:34:18",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01XJFEFasUTP5xQJk1sqJJ5V",
+    "Value": "What if: Performing the operation \"Create Directory\" on target \"Destination: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs\".\nWhat if: Performing the operation \"Start detached Nuke run\" on target \"Test in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\".\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.exit.txt"
+  },
+  {
+    "Line": 22000,
+    "Time": "2026-10-20T16:34:24",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01LR4SVQJL5dMw7V6dWcfPzk",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target Test -ExtraArgs '--test-run-id;ug-r3-versionread-mockgate-1' -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-mockgate-1"
+  },
+  {
+    "Line": 22006,
+    "Time": "2026-10-20T16:34:24",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01LR4SVQJL5dMw7V6dWcfPzk",
+    "Value": "Started ug-r3-versionread-mockgate-1 pid=417528 at 2026-10-20T16:34:24\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.exit.txt"
+  },
+  {
+    "Line": 22018,
+    "Time": "2026-10-20T16:35:03",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01CG1X3EbS3yNjnUhM7ARNnM",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Wait-NukeRun.ps1 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-mockgate-1 -TrxRoot /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-mockgate-1"
+  },
+  {
+    "Line": 22019,
+    "Time": "2026-10-20T16:38:49",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01CG1X3EbS3yNjnUhM7ARNnM",
+    "Value": "Watching ug-r3-versionread-mockgate-1 from 2026-10-20T16:35:03\nExit: 0 2026-10-20T16:38:37 seen 2026-10-20T16:38:48\nNow: 2026-10-20T16:38:48 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-mockgate-1\nQBrainAi.Client.Tests: outcome=Completed total=306 executed=306 passed=306 failed=0 notExecuted=0\nQBrainAi.Cqrs.Tests: outcome=Completed total=33 executed=33 passed=33 failed=0 notExecuted=0\nQBrainAi.Launcher.Tests: outcome=Completed total=20 executed=20 passed=20 failed=0 notExecuted=0\nQBrainAi.McpAgent.Tests: outcome=Completed total=64 executed=64 passed=64 failed=0 notExecuted=0\nQBrainAi.QBAgent.Tests: outcome=Completed total=94 executed=94 passed=94 failed=0 notExecuted=0\nQBrainAi.Repl.Core.Tests: outcome=Completed total=865 executed=865 passed=865 failed=0 notExecuted=0\nQBrainAi.Support.Mcp.Tests: outcome=Completed total=3086 executed=3086 passed=3086 failed=0 notExecuted=0\nTOTAL total=4468 executed=4468 passed=4468 failed=0 notExecuted=0"
+  },
+  {
+    "Line": 22024,
+    "Time": "2026-10-20T16:38:54",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01YTwxztLkMLqHvu8qfqyYX7",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TrxTests.ps1 -Root /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-mockgate-1 -Pattern 'PluginVersionFileReadTests'"
+  },
+  {
+    "Line": 22031,
+    "Time": "2026-10-20T16:38:55",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01YTwxztLkMLqHvu8qfqyYX7",
+    "Value": "Now: 2026-10-20T16:38:54 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-mockgate-1 pattern=PluginVersionFileReadTests\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"no-version-files\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedTheory_CoversEveryCase\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.WrongReadNegativeControls_AreRejectedInsidePassingHarness\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"manifest-locked-next-manifest\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedFiles_RecordReadsAndReportUnscriptedFilesAbsent\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.UnexpectedReadError_EscapesTheScriptedFiles\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"empty-and-malformed-fall-through\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-vanished\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-locked-manifest-next\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"every-file-unreadable\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-denied-nothing-else\")\nCOUNT Passed=12\nMATCHED 12"
+  },
+  {
+    "Line": 22061,
+    "Time": "2026-10-20T16:40:36",
+    "Type": "call",
+    "Tool": "Edit",
+    "Id": "toolu_01DepunvFcJCDShQ8eHJbBE8",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  },
+  {
+    "Line": 22062,
+    "Time": "2026-10-20T16:40:40",
+    "Type": "call",
+    "Tool": "Edit",
+    "Id": "toolu_01FwrLpubV9dKVZPuncC164V",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  },
+  {
+    "Line": 22064,
+    "Time": "2026-10-20T16:40:53",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01DepunvFcJCDShQ8eHJbBE8",
+    "Value": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs has been updated successfully. (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 22066,
+    "Time": "2026-10-20T16:41:03",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01FwrLpubV9dKVZPuncC164V",
+    "Value": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs has been updated successfully. (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 22080,
+    "Time": "2026-10-20T16:41:25",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_017mYPUfihqbWuna42fp64T2",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target Test -ExtraArgs '--test-run-id;ug-r3-versionread-binding-1' -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-binding-1 -WhatIf"
+  },
+  {
+    "Line": 22083,
+    "Time": "2026-10-20T16:41:34",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_017mYPUfihqbWuna42fp64T2",
+    "Value": "What if: Performing the operation \"Create Directory\" on target \"Destination: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs\".\nWhat if: Performing the operation \"Start detached Nuke run\" on target \"Test in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\".\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.exit.txt"
+  },
+  {
+    "Line": 22088,
+    "Time": "2026-10-20T16:41:45",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01PMxpRmwZa3o3D9fAC9tzSM",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target Test -ExtraArgs '--test-run-id;ug-r3-versionread-binding-1' -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-binding-1"
+  },
+  {
+    "Line": 22089,
+    "Time": "2026-10-20T16:41:45",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01PMxpRmwZa3o3D9fAC9tzSM",
+    "Value": "Started ug-r3-versionread-binding-1 pid=439491 at 2026-10-20T16:41:45\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.exit.txt"
+  },
+  {
+    "Line": 22095,
+    "Time": "2026-10-20T16:41:55",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01NfZZhsY7ZmfwDFhFkiXq8J",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Wait-NukeRun.ps1 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-binding-1 -TrxRoot /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-binding-1"
+  },
+  {
+    "Line": 22101,
+    "Time": "2026-10-20T16:45:56",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01NfZZhsY7ZmfwDFhFkiXq8J",
+    "Value": "Watching ug-r3-versionread-binding-1 from 2026-10-20T16:41:56\nExit: 0 2026-10-20T16:45:43 seen 2026-10-20T16:45:56\nNow: 2026-10-20T16:45:56 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-binding-1\nQBrainAi.Client.Tests: outcome=Completed total=306 executed=306 passed=306 failed=0 notExecuted=0\nQBrainAi.Cqrs.Tests: outcome=Completed total=33 executed=33 passed=33 failed=0 notExecuted=0\nQBrainAi.Launcher.Tests: outcome=Completed total=20 executed=20 passed=20 failed=0 notExecuted=0\nQBrainAi.McpAgent.Tests: outcome=Completed total=64 executed=64 passed=64 failed=0 notExecuted=0\nQBrainAi.QBAgent.Tests: outcome=Completed total=94 executed=94 passed=94 failed=0 notExecuted=0\nQBrainAi.Repl.Core.Tests: outcome=Completed total=865 executed=865 passed=865 failed=0 notExecuted=0\nQBrainAi.Support.Mcp.Tests: outcome=Completed total=3097 executed=3097 passed=3097 failed=0 notExecuted=0\nTOTAL total=4479 executed=4479 passed=4479 failed=0 notExecuted=0"
+  },
+  {
+    "Line": 22105,
+    "Time": "2026-10-20T16:46:02",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_012iCvKKn9iBXjCG32WZQro9",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TrxTests.ps1 -Root /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-binding-1 -Pattern 'ProductionRead|UnreadableVersionFile|EveryVersionFileUnreadable'"
+  },
+  {
+    "Line": 22106,
+    "Time": "2026-10-20T16:46:03",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_012iCvKKn9iBXjCG32WZQro9",
+    "Value": "Now: 2026-10-20T16:46:03 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-binding-1 pattern=ProductionRead|UnreadableVersionFile|EveryVersionFileUnreadable\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-vanished\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-locked-manifest-next\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"empty-and-malformed-fall-through\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_EveryVersionFileUnreadable_FallsBackToTheSyncedVersion\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"manifest-locked-next-manifest\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-denied-nothing-else\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"no-version-files\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ProductionRead_UnexpectedReadError_Propagates\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_UnreadableVersionFile_ResolvesTheNextReadableVersion\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"every-file-unreadable\")\nCOUNT Passed=11\nMATCHED 11"
+  },
+  {
+    "Line": 22111,
+    "Time": "2026-10-20T16:46:16",
+    "Type": "call",
+    "Tool": "Write",
+    "Id": "toolu_014QwpMNhTjFDGm4nYtor4uR",
+    "Value": "/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt"
+  },
+  {
+    "Line": 22112,
+    "Time": "2026-10-20T16:46:17",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_014QwpMNhTjFDGm4nYtor4uR",
+    "Value": "File created successfully at: /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 22114,
+    "Time": "2026-10-20T16:46:18",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_015VHyKR8b9QP8YU9D1DRVwP",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/MarkerFileService.cs;tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt -WhatIf"
+  },
+  {
+    "Line": 22115,
+    "Time": "2026-10-20T16:46:18",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_015VHyKR8b9QP8YU9D1DRVwP",
+    "Value": "Now: 2026-10-20T16:46:18\nBranch: fix/unit-suite-green-20261019\n--- status before ---\n M src/QBrainAi.Services/Services/MarkerFileService.cs\n M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\n?? tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs\nWhat if: Performing the operation \"git add and commit\" on target \"src/QBrainAi.Services/Services/MarkerFileService.cs, tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\".\n--- status after ---\n## fix/unit-suite-green-20261019...origin/fix/unit-suite-green-20261019\n M src/QBrainAi.Services/Services/MarkerFileService.cs\n M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\n?? tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  },
+  {
+    "Line": 22124,
+    "Time": "2026-10-20T16:46:24",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01MsCZJKFPT1VbprtgCDiv2a",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/MarkerFileService.cs;tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt"
+  },
+  {
+    "Line": 22125,
+    "Time": "2026-10-20T16:46:25",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01MsCZJKFPT1VbprtgCDiv2a",
+    "Value": "Now: 2026-10-20T16:46:24\nBranch: fix/unit-suite-green-20261019\n--- status before ---\n M src/QBrainAi.Services/Services/MarkerFileService.cs\n M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\n?? tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs\n--- staged ---\n 3 files changed, 420 insertions(+), 28 deletions(-)\n[fix/unit-suite-green-20261019 e0b078c8] fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)\n 3 files changed, 420 insertions(+), 28 deletions(-)\n create mode 100644 tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs\nCommit: e0b078c802d6456d106e6ec681d1aa93d6c4d055 fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)\n--- status after ---\n## fix/unit-suite-green-20261019...origin/fix/unit-suite-green-20261019 [ahead 1]"
+  },
+  {
+    "Line": 22218,
+    "Time": "2026-10-20T16:51:08",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_016NZ9JufUSDHRSF8q6FH73t",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055 -RunId ug-r3-win-lane-8 -TaskName McpUnitGreenLane-ug-r3-win-lane-8 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -RunnerName Invoke-WinLaneRunner.ps1 -WhatIf'"
+  },
+  {
+    "Line": 22220,
+    "Time": "2026-10-20T16:51:13",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_016NZ9JufUSDHRSF8q6FH73t",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T16:51:08 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-168dcafc949d4fd0999f18a66c78d706.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T16:51:10 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  fetch: From https://github.com/sharpninja/McpServer\n  fetch:    68fa7b39..e0b078c8  fix/unit-suite-green-20261019 -> origin/fix/unit-suite-green-20261019\nWhat if: Performing the operation \"check out e0b078c802d6456d106e6ec681d1aa93d6c4d055\" on target \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\".\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-8\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-8.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-8.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-8.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nWhat if: Performing the operation \"register and start the one-shot interactive task\" on target \"McpUnitGreenLane-ug-r3-win-lane-8\".\nEND 2026-10-20T16:51:13\nLOCAL END 2026-10-20T16:51:13 ssh exit=0"
+  },
+  {
+    "Line": 22224,
+    "Time": "2026-10-20T16:51:21",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01YCTT9SAt854GiDZHj12VLa",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 -ScriptPath /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 -SupportFiles /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 -RemoteArgumentLine '-ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055 -RunId ug-r3-win-lane-8 -TaskName McpUnitGreenLane-ug-r3-win-lane-8 -RunnerSha256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE -RunnerName Invoke-WinLaneRunner.ps1' -OutFile /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-8.start.txt"
+  },
+  {
+    "Line": 22231,
+    "Time": "2026-10-20T16:51:31",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01YCTT9SAt854GiDZHj12VLa",
+    "Value": "LOCAL SUPPORT /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE\nLOCAL START 2026-10-20T16:51:22 script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 remote=C:\\Users\\kingd\\AppData\\Local\\Temp\\mcp-ssh-7f65976fe78047dc9b11b342fb9c4fff.ps1\n** WARNING: connection is not using a post-quantum key exchange algorithm.\n** This session may be vulnerable to \"store now, decrypt later\" attacks.\n** The server may need to be upgraded. See https://openssh.com/pq.html\nSTART 2026-10-20T16:51:23 host=PAYTON-LEGION2 user=kingd\nRUNNER C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True\n  checkout: Previous HEAD position was 68fa7b39 test(storage): the SQL Server LocalDB collection runs with parallelization disabled, as the chosen option states (IMPL-UNITGREEN-001)\n  checkout: HEAD is now at e0b078c8 fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)\nHEAD e0b078c802d6456d106e6ec681d1aa93d6c4d055 expected=e0b078c802d6456d106e6ec681d1aa93d6c4d055 match=True\nPWSH C:\\Program Files\\PowerShell\\7-LabWsman\\pwsh.exe\nACTION -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1\" -Worktree \"F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019\" -RunId \"ug-r3-win-lane-8\" -LogPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r3-win-lane-8.log\" -ProofPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r3-win-lane-8.txt\" -ExitPath \"C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r3-win-lane-8.txt\"\nACCOUNT PAYTON-LEGION2\\kingd\nTASK McpUnitGreenLane-ug-r3-win-lane-8 state=Running lastRun=10/20/2026 16:51:25 result=267009\nPROOF so far: START 2026-10-20T16:51:26 user=kingd session=1 interactive=True head=e0b078c802d6456d106e6ec681d1aa93d6c4d055\nEND 2026-10-20T16:51:31\nLOCAL END 2026-10-20T16:51:31 ssh exit=0\nLOCAL SAVED /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-win-lane-8.start.txt lines=14"
+  },
+  {
+    "Line": 22598,
+    "Time": "2026-10-20T17:02:00",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01CgpvLhCzuoQiqNpyviCd1W",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-RunReceipts.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunsDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -LinuxRuns 'ug-r3-versionread-mockgate-1;ug-r3-versionread-binding-1;ug-r3-linux-test-8;ug-r3-linux-lane-8;ug-r3-build-tests-8' -WindowsReceipts 'ug-r3-win-lane-8.start.txt;ug-r3-win-lane-8.result.txt;ug-r3-win-lane-compare-7-8.txt;ug-r3-win-test-ssh-6.result.txt;ug-r3-linux-test-compare-7-8.txt;ug-r3-linux-lane-compare-7-8.txt;ug-r3-traceability-7.out.log' -WhatIf"
+  },
+  {
+    "Line": 22599,
+    "Time": "2026-10-20T17:02:02",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01CgpvLhCzuoQiqNpyviCd1W",
+    "Value": "Now: 2026-10-20T17:02:01 destination=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019\nWhat if: Performing the operation \"create receipt directory\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-versionread-mockgate-1\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-mockgate-1.trx-summary.txt\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-versionread-binding-1\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-binding-1.trx-summary.txt\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-linux-test-8\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.trx-summary.txt\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-linux-lane-8\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-8.trx-summary.txt\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-build-tests-8\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.trx-summary.txt\".\nWhat if: Performing the operation \"copy ug-r3-win-lane-8.start.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.start.txt\".\nWhat if: Performing the operation \"copy ug-r3-win-lane-8.result.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.result.txt\".\nWhat if: Performing the operation \"copy ug-r3-win-lane-compare-7-8.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-compare-7-8.txt\".\nWhat if: Performing the operation \"copy ug-r3-win-test-ssh-6.result.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-test-ssh-6.result.txt\".\nWhat if: Performing the operation \"copy ug-r3-linux-test-compare-7-8.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-compare-7-8.txt\".\nWhat if: Performing the operation \"copy ug-r3-linux-lane-compare-7-8.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-compare-7-8.txt\".\nWhat if: Performing the operation \"copy ug-r3-traceability-7.out.log\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-traceability-7.out.log\"."
+  },
+  {
+    "Line": 22602,
+    "Time": "2026-10-20T17:02:07",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_017apzcWPRQTyNVF7PJreetN",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-RunReceipts.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunsDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -LinuxRuns 'ug-r3-versionread-mockgate-1;ug-r3-versionread-binding-1;ug-r3-linux-test-8;ug-r3-linux-lane-8;ug-r3-build-tests-8' -WindowsReceipts 'ug-r3-win-lane-8.start.txt;ug-r3-win-lane-8.result.txt;ug-r3-win-lane-compare-7-8.txt;ug-r3-win-test-ssh-6.result.txt;ug-r3-linux-test-compare-7-8.txt;ug-r3-linux-lane-compare-7-8.txt;ug-r3-traceability-7.out.log'"
+  },
+  {
+    "Line": 22609,
+    "Time": "2026-10-20T17:02:09",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_017apzcWPRQTyNVF7PJreetN",
+    "Value": "Now: 2026-10-20T17:02:08 destination=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-mockgate-1.trx-summary.txt lines=8\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-mockgate-1.meta.json match=True\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-binding-1.trx-summary.txt lines=8\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-binding-1.meta.json match=True\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.trx-summary.txt lines=8\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.meta.json match=True\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-8.trx-summary.txt lines=6\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-8.meta.json match=True\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.trx-summary.txt lines=2\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.meta.json match=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.start.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.result.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-compare-7-8.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-test-ssh-6.result.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-compare-7-8.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-compare-7-8.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-traceability-7.out.log match=True original-kept=True"
+  }
+]

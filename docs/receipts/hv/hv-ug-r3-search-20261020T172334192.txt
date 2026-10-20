@@ -1,0 +1,96 @@
+35:        // WorkspaceContext so SubmitAsync stamps WorkspaceId on every row; the
+51:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+71:        await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+75:        var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+94:    public async Task SubmitAsync_ExistingRelationalSession_UpsertsTurnsByRequestIdWithoutDuplicateInsert()
+108:            await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+117:            await sut.SubmitAsync(restored, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+144:    public async Task SubmitAsync_ExistingRelationalSession_PreservesAbsentDurableTurnsAndChildren()
+158:            await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+166:            await sut.SubmitAsync(restored, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+188:    public async Task SubmitAsync_WithAgentRuntimeHeaderFields_PersistsAndReturnsThem()
+197:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+233:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+255:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+271:        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+286:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "q1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+287:        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "q2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+304:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+317:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+318:        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "agent-2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+333:        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "mixed-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+334:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "mixed-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+335:        await _sut.SubmitAsync(CreateTestDto("Cline", BuildSessionId("Cline", "mixed-cline")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+336:        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "mixed-mcpagent")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+354:        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "agent-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+355:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+356:        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "agent-mcpagent")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+372:        await primary.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "primary-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+376:        await other.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "other-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+396:        await _sut.SubmitAsync(olderStartedRecent, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+401:        await _sut.SubmitAsync(newerStartedStale, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+415:        await _sut.SubmitAsync(early, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+420:        await _sut.SubmitAsync(late, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+438:            await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+452:        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "clamp")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+465:        await _sut.SubmitAsync(match, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+470:        await _sut.SubmitAsync(miss, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+499:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+524:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+541:        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", claudeSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+553:        await _sut.SubmitAsync(CreateTestDto("QBAgent", qbSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+570:        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+578:        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+586:        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+594:        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+604:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+624:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+631:        var ex = await Record.ExceptionAsync(() => _sut.SubmitAsync(session, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
+647:        await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+660:        var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+670:        var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+678:        await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+699:        var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+706:        await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+718:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+750:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+783:        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+795:    /// TR-MCP-MT-004: SubmitAsync must stamp the resolved workspace context onto the
+800:    public async Task SubmitAsync_StampsWorkspaceIdOnSessionEntity()
+805:        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+820:    public async Task SubmitAsync_StampsWorkspaceIdOnEveryChildEntity()
+841:        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+873:    public async Task SubmitAsync_WithNullWorkspaceContext_KeepsWorkspaceIdEmpty()
+884:        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+911:        await sut.SubmitAsync(CreateTestDto("Codex", sessionId), contentHash: "hash-stale-query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+951:        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1009:        await sut.SubmitAsync(CreateTestDto("Codex", primarySessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1014:        await sut.SubmitAsync(CreateTestDto("Cursor", otherSessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1042:        await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1086:        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1141:        await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1175:        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1235:        await sut.SubmitAsync(CreateTestDto(qbAgentSourceType, sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1265:        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1311:        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1354:            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1400:            await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1443:    public async Task SubmitAsync_BareStatusUpdate_PreservesTurnsAndCommits(bool driftChildStamps)
+1452:            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Before close"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1481:            await sut2.SubmitAsync(bareClose, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1513:            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1547:            await sutW1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1553:            await sutW2.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1597:            await sut1.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1633:    public async Task SubmitAsync_PartialSessionPayload_PreservesOmittedSessionScalars()
+1644:            await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1650:            await sut2.SubmitAsync(new UnifiedSessionLogDto
+1671:    public async Task SubmitAsync_SparseTurnInSessionPayload_PreservesOmittedTurnFields()
+1685:            await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1691:            await sut2.SubmitAsync(new UnifiedSessionLogDto
+1722:    /// SubmitAsync with an original title, then explicitly retitled.
+1728:        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Original session title"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1747:        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1775:        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+1853:                    await seed.SubmitAsync(
+

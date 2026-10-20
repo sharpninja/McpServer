@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20261020T221454Z-d011
+  result:
+    id: TR-MCP-NUKE-019
+    title: MigrationIntegrationTests selects host-specific integration cases by the Platform trait
+    description: "MigrationIntegrationTests runs the Category=Integration cases that belong to the host it runs on: tests tagged Platform=Linux run only on Linux hosts, tests tagged Platform=Windows only on Windows hosts, and untagged integration tests on both. Unit tests contain no platform-specific cases (operator 2026-10-19: \"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\"). Provisioning stays as TR-MCP-NUKE-018 and the Windows LocalDB and PostgreSQL binaries define it."
+    status: pending
+    priority: high
+    area: MCP
+    subarea: NUKE
+    notes: IMPL-UNITGREEN-001 plan amendment G, approved by the operator 2026-10-19 ("Yes, I approve the change"). Implementation detail of FR-MCP-BUILD-001; no TEST record. Built tests first in Build.Tests (pure filter function, scripted cases, negative controls), then bound in build/Build.TestDependencies.cs. Build.Tests runs directly with dotnet test as the infrastructure check (operator 2026-10-11 and 2026-10-19).
+    acceptanceCriteria:
+    - id: AC-1
+      text: On a Windows host the target runs Category=Integration cases except those tagged Platform=Linux; on a Linux host it runs them except those tagged Platform=Windows; untagged integration cases run on both.
+      isSatisfied: false
+    - id: AC-2
+      text: Every case tagged Platform=Linux or Platform=Windows runs and passes in its own host's MigrationIntegrationTests, so the two lab hosts together execute every integration case, each host at 0 failed and 0 not executed.
+      isSatisfied: false
+    - id: AC-3
+      text: The run log names the selection filter (filter text only).
+      isSatisfied: false
+    - id: AC-4
+      text: 'Provisioning is unchanged: TR-MCP-NUKE-018 on Linux, LocalDB and PostgreSQL binaries on Windows.'
+      isSatisfied: false
+    - id: AC-5
+      text: On a Windows host, MigrationIntegrationTests runs its test processes in an interactive desktop session of the logged-on user, so a Windows case that needs an interactive session (Environment.UserInteractive is true) executes and passes; a run that cannot reach an interactive session fails before any test runs and names the missing session, and never reports such a case as passed, skipped, or not executed.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-20T22:14:55.8469156+00:00
+    updatedAt: 2026-10-20T22:14:55.8470662+00:00
+  deprecated: true
+
+---

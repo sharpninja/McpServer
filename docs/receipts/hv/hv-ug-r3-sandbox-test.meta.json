@@ -1,0 +1,28 @@
+{
+  "TimestampLocal": "2026-10-20T17:12:56",
+  "TimestampUtc": "2026-10-20T22:12:56.2379923Z",
+  "Head": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+  "Status": [
+    "?? docs/receipts/hv/20261020T170824-unitgreen-r3.request.jsonl",
+    "?? docs/receipts/hv/20261020T170824-unitgreen-r3.response.jsonl",
+    "?? docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md",
+    "?? docs/receipts/hv/hv-ug-r3-commands.jsonl",
+    "?? docs/receipts/hv/hv-ug-r3-commits.txt",
+    "?? docs/receipts/hv/hv-ug-r3-diff-stat.txt",
+    "?? docs/receipts/hv/hv-ug-r3-docs-after-code.txt",
+    "?? docs/receipts/hv/hv-ug-r3-head.txt",
+    "?? docs/receipts/hv/hv-ug-r3-initial-status.txt",
+    "?? docs/receipts/hv/hv-ug-r3-pr87.txt"
+  ],
+  "Command": [
+    "pwsh.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-File",
+    "./build.ps1",
+    "Test",
+    "--test-run-id",
+    "hv-ug-r3-sandbox-test-20261020T1713"
+  ],
+  "RunId": "hv-ug-r3-sandbox-test-20261020T1713"
+}

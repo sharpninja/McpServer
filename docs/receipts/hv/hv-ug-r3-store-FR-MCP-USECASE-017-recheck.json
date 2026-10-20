@@ -1,0 +1,63 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "requestId": "req-20261020T223153Z-877f",
+      "result": {
+        "title": "BUG-TRIAGE-139 sixteenth-review race-safe bounded remediation",
+        "acceptanceCriteria": [
+          {
+            "isSatisfied": false,
+            "id": "",
+            "text": "Physical workspace identity rejects safe lexical paths whose physical target is on an unsafe mount, remains safe across symlink or mount replacement timing, completes publicly within its deadline, and reports any unstoppable worker as active until it actually exits."
+          },
+          {
+            "isSatisfied": false,
+            "id": "",
+            "text": "SQLite data-source validation and pre-handle opening resist safe-link and check-to-open replacement, use no ineffective Thread.Interrupt dependency for native Linux I/O, finish cleanup within a finite deadline, and preserve exact lifecycle, handle, worker, and exception state."
+          },
+          {
+            "isSatisfied": false,
+            "id": "",
+            "text": "PostgreSQL SQLSTATE 57014 is translated to caller cancellation only with causal evidence produced by the caller-triggered cancellation mechanism; statement timeout and administrative cancellation remain PostgresException even during concurrent token cancellation."
+          },
+          {
+            "isSatisfied": false,
+            "id": "",
+            "text": "Platform-specific tests are discovered or composed only where applicable, prove real execution and inventory counts, and never pass through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count."
+          },
+          {
+            "isSatisfied": false,
+            "id": "",
+            "text": "Containment race coverage requires at least one successful contained read and write while proving no escape or corruption, and deterministic total-rejection tests prove that rejecting every attempt cannot satisfy the success gate."
+          },
+          {
+            "isSatisfied": false,
+            "id": "",
+            "text": "Windows descendant cleanup establishes containment at process creation or proves an equivalent race-free boundary before descendants can escape, and timeout or cancellation terminates immediate descendants finitely without regressing non-Windows process-group cleanup."
+          },
+          {
+            "isSatisfied": false,
+            "id": "",
+            "text": "Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary."
+          },
+          {
+            "isSatisfied": false,
+            "id": "",
+            "text": "All current and prior requirements pass focused and cumulative Windows, native Linux/FUSE/non-root, SQLite, LocalDB, fresh PostgreSQL, deterministic external, BDPv4, build, traceability, Release, repository, history, harness, and EOL gates from C:-physical outputs with exact zero failures and zero skips."
+          }
+        ],
+        "updatedAt": "2026-10-20T22:31:54.6780448+00:00",
+        "priority": "medium",
+        "scopeStartLayerKey": "layer-1",
+        "id": "FR-MCP-USECASE-017",
+        "area": "MCP",
+        "description": "Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control.",
+        "status": "pending",
+        "createdAt": "2026-10-20T22:31:54.6779082+00:00"
+      }
+    }
+  },
+  null
+]

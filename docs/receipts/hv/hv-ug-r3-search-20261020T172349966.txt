@@ -1,0 +1,11 @@
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:18:public sealed class MarkerFileServiceTests
+src/QBrainAi.Services/Services/MarkerFileService.cs:20:public static class MarkerFileService
+src/QBrainAi.Services/Services/SessionLogService.cs:24:public sealed class SessionLogService : ISessionLogService
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs:16:public sealed class SessionLogServiceTurnContextTests : IDisposable
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTests.cs:17:public sealed class SessionLogServiceTests : IDisposable
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceReplaceDeleteTests.cs:19:public sealed class SessionLogServiceReplaceDeleteTests
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceAgentLinkTests.cs:14:public sealed class SessionLogServiceAgentLinkTests : IDisposable
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:15:public sealed class UnitSuitePlatformScannerMockGateTests
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:16:public sealed class UnitSuitePlatformScannerTests
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:29:internal static class UnitSuitePlatformScanner
+

@@ -1,0 +1,847 @@
+64fc4b1400ac5bc7526c472f8efeacb91980f2a6
+2026-10-20T17:08:04-05:00
+docs: hostile validation round 3 pre-launch records (IMPL-UNITGREEN-001)
+
+Docs only; no code, test or build change after e0b078c8.
+
+The operator confirmed the updated pre-HV projected problems on 2026-10-20 ("Confirm, launch HV r3 (Recommended)",
+whose option text says the self-review and the brief are committed as docs-only before round 3 is launched through
+Invoke-HvRound.ps1). This commit carries, in docs/receipts/hv/:
+
+- unitgreen-r3-prelaunch.selfreview.md: the round 3 self-review record with PROJECTED-PROBLEMS-CONFIRMED (the first
+  presentation was answered "Fold R3-P3 in first", which moved the code head to e0b078c8; the second was confirmed).
+- unitgreen-r3-prelaunch.brief.md: the round 3 brief template before the launcher substitutes the gate, stamp, head
+  and receipt paths.
+- unitgreen-r3-prelaunch.projected-problems.md: the confirmed list of projected problems.
+
+Copies of the scratch originals, SHA-256 verified, originals kept.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+6b89998f4f0257b967bba12e2434135964cf135b
+2026-10-20T17:04:16-05:00
+docs: the R3-P3 record, its gate receipts and the round 3 traceability receipts (IMPL-UNITGREEN-001)
+
+Docs only; no code, test or build change after e0b078c8.
+
+- docs/receipts/unit-suite-green-20261019/: TRX summaries with meta copies of the version-read mock gate and binding
+  and of every gate at e0b078c8 (Linux Test, Linux lane, Build.Tests), byte copies of the Windows receipts over SSH
+  as kingd (the interactive lane ug-r3-win-lane-8 and Windows Test ug-r3-win-test-ssh-6), the by-name comparisons of
+  lanes 7 and 8 and Linux Tests 7 and 8, and the seven round 3 ValidateTraceability receipts: the repository ignores
+  *.log (.gitignore:108), so the docs commit 395b4cd8 did not carry the ug-r3-traceability-*.out.log files its
+  message names; they are added here as .out.txt copies with their meta and exit files, as rounds 1 and 2 did.
+  SHA-256 verified, originals kept. Redaction scan: 0 matches in 167 files.
+- docs/plans/2026-10-19-unit-suite-green.md: section 16 records R3-P3 (folded in by the operator, "Fold R3-P3 in
+  first") and every gate at e0b078c8; section 6 blast radius, section 13 D-A (last code head e0b078c8) and D-B (the
+  version-read evidence for AC-TR-MCP-WS-005-001) brought in line, and the open item on version files removed.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+e0b078c802d6456d106e6ec681d1aa93d6c4d055
+2026-10-20T16:46:24-05:00
+fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)
+
+Pre-HV problem R3-P3: an agent-plugin version file (.version or a plugin manifest) that exists but cannot be read
+(locked, access denied, or gone between the existence check and the read) threw out of marker generation, because
+TryReadAgentPluginVersion read .version with File.ReadAllText and TryReadVersionFromJson caught only JsonException;
+the same read serves the candidate sort key and the resolve loop. Operator, 2026-10-20: "Fold R3-P3 in first" (add
+the case to AC-TR-MCP-WS-005-001 with a scripted test and negative controls, a mock gate, then the fix in
+MarkerFileService).
+
+- Requirement first: AC-TR-MCP-WS-005-001 replaced through the plugin and read back: an unreadable version file
+  yields no version, resolution goes on to the next file and candidate and falls back to the synced version, and
+  any other error propagates.
+- BDPv4: PluginVersionFileReadTests (8 scripted cases: locked, denied and vanished files, every file unreadable,
+  empty and malformed fall-through, no files; the scripted-files self check; negative controls for the previous
+  propagating read, a read that stops at the first unreadable file and a read that hides every error; the
+  unexpected-error control) ran green before any production change: mock gate ug-r3-versionread-mockgate-1, 4468
+  total, 4468 passed, 0 failed, 0 not executed.
+- Production: TryReadAgentPluginVersion(root, readText) reads each version file through a read delegate and treats
+  IOException and UnauthorizedAccessException as a file without a version; ReadExistingFileText is the file-system
+  read (null when the file does not exist); a ResolveAgentPluginVersion overload takes the read, and the existing
+  overloads pass ReadExistingFileText, so the reading order and every other result are unchanged.
+- Bindings: the same 8 cases and the propagation control bound to TryReadAgentPluginVersion, and two resolve-level
+  cases on a temporary profile in UserProfileScanBindingTests (an unreadable higher .version resolves the next
+  readable version, with the plain read as seam control; every version file unreadable falls back to the synced
+  version). Binding run ug-r3-versionread-binding-1: 4479 total, 4479 passed, 0 failed, 0 not executed.
+
+Requirements: TR-MCP-WS-005 (AC-TR-MCP-WS-005-001).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+395b4cd89726e921af481d4c8c056bf8fa535ae6
+2026-10-20T15:36:39-05:00
+docs: hostile validation round 2 receipts, the round 3 record and its gate receipts (IMPL-UNITGREEN-001)
+
+Docs only; no code, test or build change after 68fa7b39.
+
+- docs/receipts/hv/: the round 2 receipts (gate unitgreen-r2, HEAD a94579db, DISAGREE 96/94): request and response
+  JSONL, the reviewer's verdict .md and .json, its self-review copy and its hv-ug-r2-* evidence. Redaction scan before
+  commit: 0 matches in 122 files.
+- docs/receipts/unit-suite-green-20261019/ug-r3-*: TRX summaries with meta copies of every round 3 Linux run (the mock
+  gates, the bindings, the gate runs at 27c43bcc, 538d0ccf, 56d14d7c, 6042dbb3, 0210244d, 6ea425ab and 68fa7b39),
+  byte copies of the Windows receipts over SSH as kingd (Test, the interactive lanes 1 to 7, the diagnostic lanes 1
+  to 3 with their VSTest host-log summaries and unparseable-output counts, the pg_ctl probes, the symbolic-link
+  probe, the failure stacks), the by-name comparisons of the lanes and Linux runs, and the traceability logs; SHA-256
+  verified, originals kept. Redaction scan: 0 matches in 129 files.
+- docs/plans/2026-10-19-unit-suite-green.md: sections 15 and 16 (round 2, the structural fix, the user-profile scan
+  fix, the race fix, the LocalDB fixes, the diagnosis and fix of the lost Windows lane results, the collection flag
+  and every gate through 68fa7b39), with the status line, section 6 blast radius and section 13 D-A, D-B and D-C
+  (the stale sentence on the source-reading guards marked superseded) brought in line.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+68fa7b393d007c0d0c466c29ae4da5738bf54af2
+2026-10-20T15:16:30-05:00
+test(storage): the SQL Server LocalDB collection runs with parallelization disabled, as the chosen option states (IMPL-UNITGREEN-001)
+
+The option the operator chose on 2026-10-20, "Serialize SQL Server tests (Recommended)", says the four classes that
+open LocalDB "join one xUnit collection with parallelization disabled, so they run one at a time against LocalDB".
+0210244d defined SqlServerLocalDbCollection without DisableParallelization (classes in the collection ran one after
+another, but other collections still ran beside it), a departure from the approved text that was disclosed in its
+commit message but never put to the operator. This commit makes the definition match the approved option.
+
+- SqlServerLocalDbCollection: [CollectionDefinition(Name, DisableParallelization = true)]; the four member classes,
+  the 120 s connect timeout and the integration tags are unchanged.
+- BDPv4: SqlServerLocalDbCollectionTests gained the definition assertion (exactly one collection definition, the
+  required name, DisableParallelization set to true), a positive control on a scripted definition with the flag and
+  negative controls for a definition without the flag (the shape of 0210244d), one with the flag false, a wrong name
+  and a missing definition. The scripted definitions carry their own names, so none duplicates the real one, and are
+  public as xUnit requires (xUnit1027). Mock gate ug-r3-sqlserial-mockgate-1 before the flag was set: 4456 total,
+  4456 passed, 0 failed, 0 not executed. Then the flag, and the binding of the same assertion to the real definition.
+
+Requirements: TR-MCP-NUKE-019 (AC-2).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+6ea425ab943ebdd8aad1de1c84896de92d0270d8
+2026-10-20T14:35:29-05:00
+test(storage): the ephemeral PostgreSQL fixture runs pg_ctl silent so it cannot garble xUnit messages (IMPL-UNITGREEN-001)
+
+Root cause of the Windows integration lane losing test results with no outcome (triage 9be3ac08 and 5c6063f5;
+lane runs ug-r3-win-lane-1, -3 and -5 lost 1, 2 and 1 of 361 Support.Mcp results). Operator, 2026-10-20: "Diagnose
+the loss in PR 87".
+
+- Diagnosis run ug-r3-win-lane-diag-2 (VSTest --diag through the VSTestDiag property; no tracked change) reproduced
+  the loss: the testhost log has 361 RecordStart, 360 RecordResult and 361 RecordEnd; the lost test has a start and
+  an end but no result. Next to it xUnit logged "Received unparseable output from test process: waiting for server to
+  start....{"$type":"test-passed",...}". All 50 unparseable lines of that run are pg_ctl output ("waiting for server
+  to start/shut down", "done", "server started", "server stopped"); one of the messages they garbled was the lost
+  test-passed.
+- Cause: xUnit v3 runs the test project as its own process and sends its messages as JSON lines on that process's
+  standard output. EphemeralPostgresFixture runs pg_ctl without output redirection (redirecting to a pipe hangs the
+  caller, because the postgres child inherits the handle), so pg_ctl's informational lines land in that stream.
+  Linux never ran pg_ctl in the lane (provisioned PostgreSQL, TR-MCP-NUKE-018), and the unit run has no PostgreSQL
+  case, which is why only the Windows lane lost results.
+- Fix: pg_ctl start and stop run with -s (only errors are printed). A probe on PAYTON-LEGION2 (PostgreSQL 17,
+  ug-r3-win-pgctl-silent-probe-2) printed 54 and 58 characters to stdout without -s and 0 with -s, exit 0 both ways.
+  The no-redirection hang workaround and the -l server log stay.
+- BDPv4: EphemeralPostgresFixtureArgumentsTests (the silent-and-waiting assertion, a positive control and five
+  negative controls, the fixture's previous start and stop strings among them) ran green before the fixture changed
+  (mock gate ug-r3-pgctl-mockgate-1: 4453 total, 4453 passed, 0 failed, 0 not executed); then the PgCtlStartArguments
+  and PgCtlStopArguments builders and the binding of the same assertion to them.
+
+Requirements: TR-MCP-NUKE-019 (AC-2).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+0210244d27bf2b5e731e4ee40350504934e812a4
+2026-10-20T13:43:33-05:00
+test(storage): the SQL Server test classes on LocalDB run one after another (IMPL-UNITGREEN-001)
+
+The Windows interactive lane ug-r3-win-lane-4 (head 6042dbb3, every result present) failed
+SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation with "Execution
+Timeout Expired" inside Database.MigrateAsync: a migration command waited past its 120 s command timeout while the
+SQL Server test classes created and migrated fresh databases on one LocalDB instance at the same time (in
+ug-r3-win-lane-3 their durations reached 1.5 to 2.2 minutes). The 120 s connect timeout of 6042dbb3 covered only the
+connect phase. Operator, 2026-10-20: "Serialize SQL Server tests (Recommended)".
+
+- SqlServerLocalDbCollection ("SQL Server LocalDB") holds the four classes that open LocalDB connections:
+  SqlServerAuditPayloadMigrationTests, SqlServerDecompose4nfBackfillMigrationTests,
+  SqlServerRenameQuadBrainRolesMigrationTests and SessionLogAgentSessionHeaderMigrationTests. Classes in one
+  collection run one after another; other collections keep running in parallel (no DisableParallelization). The
+  120 s connect timeout stays; the classes keep their integration tags.
+- BDPv4: SqlServerLocalDbCollectionTests (the membership assertion through CustomAttributeData, a positive control
+  and two negative controls on scripted types) ran green before the collection existed (mock gate
+  ug-r3-sqlcollection-mockgate-1: 4450 total, 4450 passed, 0 failed, 0 not executed); then the definition, the four
+  attributes, and the binding of the same assertion to the four classes.
+
+Requirements: TR-MCP-NUKE-019 (AC-2).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+6042dbb3551c38a740e13de28f44fe9a814e6f0a
+2026-10-20T12:15:48-05:00
+test(storage): SQL Server integration tests wait 120 s for LocalDB to accept a connection (IMPL-UNITGREEN-001)
+
+The Windows interactive lane ug-r3-win-lane-2 failed
+SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation after 15.04 s
+("Timeout expired. The timeout period elapsed prior to obtaining a connection from the pool"): six SQL Server test
+classes opened a cold LocalDB within 40 s, and the default connection string had no Connect Timeout (SqlClient's
+default is 15 s). The test is unchanged since develop 6de989f3 and passed an hour earlier in 60.6 s. Fix chosen by
+the operator on 2026-10-20 ("Fix the flake in PR 87 (Recommended)").
+
+- SqlServerTestConnection holds the one default for the three classes that duplicated it
+  (SqlServerAuditPayloadMigrationTests, SqlServerDecompose4nfBackfillMigrationTests,
+  SqlServerRenameQuadBrainRolesMigrationTests): LocalDB, integrated security, a trusted certificate, no database,
+  and a 120 s connect timeout matching their 120 s command timeout. MCP_TEST_SQLSERVER_CONNECTION is used unchanged.
+  The three classes stay integration tests.
+- BDPv4: SqlServerTestConnectionTests (the default assertion with five negative controls: the old literal, an 8 s
+  timeout, another server, no trusted certificate, a named database) ran green before the helper existed (mock gate
+  ug-r3-localdb-mockgate-1: 4446 total, 4446 passed, 0 failed, 0 not executed); then the helper, the binding of the
+  same assertion to its default, the override check, and the three classes switched to it.
+
+Requirements: TR-MCP-NUKE-019 (AC-2).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+56d14d7cd7e72975b1cbf0ddcd2cc17c16763249
+2026-10-20T10:49:58-05:00
+test(services): the hermetic-profile check reads the injected fixture, not a parallel test's folder (IMPL-UNITGREEN-001)
+
+Found by the pre-HV what-if pass (concurrency): HermeticUserProfileFixtureTests read the live
+MarkerFileService.AgentPluginUserProfileOverride and then checked that the folder exists and is empty, while
+MarkerFileServiceTests can run in parallel, point the override at its own temporary profile and delete that folder
+when it finishes. The check could fail in that window.
+
+- The test receives HermeticUserProfileFixture (xUnit v3 assembly fixture injection) and asserts hermeticity on the
+  fixture's own profile: set, under the temp folder, existing and empty.
+- The live override is read once and only checked to be set and under the temp folder, which every value any test
+  sets satisfies.
+- The negative controls are unchanged.
+
+Requirements: TR-MCP-WS-005 (AC-TR-MCP-WS-005-001).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+538d0ccf957c041f1e3886864bdf5e4ca693e9ec
+2026-10-20T10:29:03-05:00
+fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)
+
+Windows Test over SSH as kingd (ug-r3-win-test-ssh-1) failed 32 Support.Mcp tests: the caveman plugin's
+compress/scripts is a relative symlink, and Windows refuses to traverse it ("The path cannot be traversed because
+it contains an untrusted mount point"). MarkerFileService.EnumerateUserPluginCacheRoots and
+SessionLogTurnContextExtractor.AppendHistory walked the profile with SearchOption.AllDirectories, so the
+IOException failed marker generation and every import submit. Fix chosen by the operator on 2026-10-20
+("Fix scans in PR 87 (Recommended)").
+
+- Requirements first: AC-TR-MCP-WS-005-001 and AC-TR-MCP-SESSIONLOG-006-009 added through the plugin route.
+- DirectoryTreeWalker (QBrainAi.Services) is the one walk both scans use: breadth first, never yields or
+  descends a directory link or other reparse point, skips the contents of a directory whose listing throws
+  IOException or UnauthorizedAccessException, yields file links as files, and lets other errors propagate.
+  MarkerFileService gains an internal ResolveAgentPluginVersion overload taking the profile and the walker;
+  SessionLogTurnContextExtractor gains an internal constructor taking the walker.
+- BDPv4: DirectoryTreeWalkerTests (7 scripted trees, a scripted-tree self check, and negative controls: the
+  legacy recursive walk, a link-following walk, a stop-at-first-error walk, a drop-unlistable walk and a
+  catch-all walk) and HermeticUserProfileFixtureTests ran green before any production change
+  (ug-r3-scan-mockgate-1: 4432 total, 4432 passed, 0 failed, 0 not executed).
+- Production binding: the same 7 cases bound to DirectoryTreeWalker, error propagation, and
+  UserProfileScanBindingTests for both scans with seam controls (the link flag removed changes the result);
+  FileSystemWalk_RealLinks_AreFlaggedAndNotDescended is an integration test with real symbolic links.
+  ug-r3-scan-binding-1: 4444 total, 4444 passed, 0 failed, 0 not executed.
+- Hermetic marker tests: HermeticUserProfileFixture ([assembly: AssemblyFixture]) points plugin-version
+  resolution at an empty temp profile for the whole assembly; WithHermeticPluginVersionResolution restores the
+  previous value instead of clearing it.
+- The 12 unit tests that submit an import read the real home through the agent-history scan, so they are tagged
+  Category=Integration (census: each failed as kingd).
+
+Requirements: TR-MCP-WS-005 (AC-TR-MCP-WS-005-001), TR-MCP-SESSIONLOG-006 (AC-TR-MCP-SESSIONLOG-006-009).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+27c43bccd19a591e4ca30560b52d4c5a9e8b81c9
+2026-10-20T09:33:13-05:00
+test(guards): one repository-root locator, refused outside Integration; classify by dependency (IMPL-UNITGREEN-001, R2-F1)
+
+Hostile validation round 2 finding R2-F1 (environment-dependent unit tests survived a sandbox-driven sweep),
+structural fix chosen by the operator on 2026-10-20 ("Structural fix, round 3"); DRY of the repository-root
+walk-ups at the operator's direction ("Looks like an opportunity to DRY").
+
+- tests/Shared/TestRepositoryRoot.cs is the one repository-root locator (MCP_REPOSITORY_ROOT, then the
+  McpRepositoryRoot build metadata, then the marker walk-up), linked into Support.Mcp.Tests, Repl.Core.Tests and
+  QBAgent.Tests. It resolves only when the running xUnit test case or class carries Category=Integration
+  (TestContext traits), so a unit test that reads the checkout through any helper fails the unit run.
+- 34 local walk-up and build-metadata locators delegate to it (RepositoryEvidenceTestSupport, MemoryS5Catalog,
+  IngestionAllowlist, Triage, the migration-source, UI-asset and plan tests, and the rest); AgentHelpTestPaths
+  reads only the fixtures copied to the test output; the hard-coded F:/GitHub/QBrainAi fallback is gone.
+- DRY guard: UnitSuitePlatformScanner.FindRepositoryLocators flags any other walk-up from AppContext.BaseDirectory
+  or a CallerFilePath, a relative walk-up, or a build-metadata read; the production binding
+  UnitProjects_HoldNoRepositoryLocatorBesideTheSharedOne is an integration test.
+- BDPv4: TestRepositoryRootPolicyTests (9 scripted trait sets, negative controls, ambient refusal, integration
+  binding) and 6 scripted locator cases with negative controls ran green first (ug-r3-dry-mockgate-1 and -2,
+  Support.Mcp 3235 passed) before any locator was bound.
+- Classification by dependency: 163 tests the locator refused in the unit run (ug-r3-dry-binding-1, 172 refused
+  results, 0 other failures), 5 that create filesystem links, and 5 that read host state (current directory,
+  home folder, filesystem root) are tagged Category=Integration; AgentPool, Voice and GitHubCli placeholders that
+  used the current directory now use the test output folder. Repl.Core.Tests and QBAgent.Tests join the
+  integration lane (build/Build.TestDependencies.cs).
+- Unit run ug-r3-dry-binding-2: Nuke Test, 4431 total, 4431 passed, 0 failed, 0 not executed.
+
+Requirements: TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), TR-MCP-NUKE-019 (AC-2).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 90%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+45a3197c9afda2f7c7d87e7d986908f885c20b02
+2026-10-20T08:46:39-05:00
+test(guards): Roslyn syntax-tree platform scanner, Roslyn pins to 5.9.0 (IMPL-UNITGREEN-001, R2-F2)
+
+Hostile validation round 2 finding R2-F2 (scanner misses valid platform syntax), structural fix
+chosen by the operator on 2026-10-20 ("Structural fix, round 3").
+
+- UnitSuitePlatformScanner reads the C# syntax tree (Microsoft.CodeAnalysis.CSharp) instead of
+  matching regexes per line; the hand-written lexer (StripCommentsAndStrings) is removed. It finds
+  member calls split across lines, qualified, global-qualified and aliased names, using static
+  imports, method groups, OS attributes anywhere in an attribute list and at assembly level,
+  data-row and SkipExceptions skips, Skip.If, and code in every conditional-compilation branch
+  (fails closed above 8 symbols). A method-level Integration trait is honored; nameof is not a use.
+- BDPv4 mock gate first: 24 scripted cases with round 1, 2 and 3 negative controls and the
+  conditional-symbol limit; the skip-definition theory inputs are C# files.
+- The two source-reading guards (UnitSuitePlatformScannerTests, the skip guard) are tagged
+  Category=Integration (R2-F1).
+- Central Roslyn pins 5.3.0 to 5.9.0, the newest stable on nuget.org (operator 2026-10-20: "Use the
+  latest Roslyn tools!").
+- Mock gates: ug-r3-mockgate-1 (Roslyn 5.3.0) and ug-r3-mockgate-2 (Roslyn 5.9.0), Nuke Test,
+  4602 total, 4602 passed, 0 failed, 0 not executed.
+
+Requirements: TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+a94579db927f25a0cbddd07d639f3054f2ee72e8
+2026-10-19T21:27:09-05:00
+docs: hostile validation round 1 receipts, its remediation record and the round 2 gate receipts (IMPL-UNITGREEN-001)
+
+Docs only. b4ad42aa remains the last code, test or build change (decision D-A).
+
+- docs/plans/2026-10-19-unit-suite-green.md:
+  - Section 10 corrects the round 1 finding F1: the guard run
+    unit-green-guard-mock-20261019T1720 was red (4692 results, 1 failed, 16 not executed),
+    not a 17/17 mock gate.
+  - Section 13 revises D-B (F7: USECASE AC-006 and AC-008 only with complete
+    platform-rule evidence), D-C (the bench writers are covered by the day-one rule) and
+    D-D (superseded).
+  - New section 14 records round 1 (DISAGREE 95/93, F1 to F7) and its remediation:
+    49cfec92, b4ad42aa, and the Windows interactive lane run at 21:13 through the
+    operator's SSH route as kingd (164 passed, 0 failed, 0 not executed).
+- docs/receipts/hv/: the round 1 request and response JSONL, the reviewer's verdict
+  receipts and its hv-ug-r1-* evidence (217 files scanned with Protect-HvReceipts.ps1,
+  0 redactions).
+- docs/receipts/unit-suite-green-20261019/: TRX summaries, meta and exit files of the round
+  2 runs at b4ad42aa (guard mock gate, Linux Test, Linux lane, full Build.Tests), the
+  ValidateTraceability log, the two failed codex sandbox attempts, and the Windows
+  receipts (WSMan Test with the lane refusal, the interactive lane start and read-back).
+  SHA-256 verified copies; the originals are kept.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+b4ad42aaa601ed0df7e03b34203dee4f93d316a9
+2026-10-19T21:09:20-05:00
+test: unit tests that reach native file-system boundaries or write tracked files move to Integration (IMPL-UNITGREEN-001)
+
+Hostile validation round 1 (gate unitgreen-r1), finding F2: the unit suite still ran real
+native file-system contracts. Under the reviewer's sandboxed /tmp, its Nuke Test run
+hv-ug-r1-test-20261019T195839 at 6b4295b7 failed 34 of 4611 cases, all at one of three
+native boundaries (Linux physical identity resolution, atomic export-root capture, atomic
+data-file opening), while both lab hosts pass them. They depend on the environment, so under
+the day-one rule (operator 2026-10-19: "If it depends on the environment, it's an
+integration test.") they are integration tests on both hosts. Round 1 also ruled that the
+two memory-bench tests that write tracked files under docs/benchmarks/results are covered
+by the same rule (triage-report-32e6bc07a7df458094b1d874761b7853).
+
+Moved with assertions unchanged (36 cases):
+- class level, where every case failed: UseCaseDiagramGraphCqrsTests (6) and
+  Support.Mcp DocsSyncG8OverlayTests (1);
+- method level (Add-IntegrationTraits.ps1, one trait line above each attribute block): 2 in
+  UseCaseComponentUpdateContractTests, 3 in RequirementsWikiExportConfigTests, 3 in
+  WikiDumpG6OverlayTests, 6 in RequirementsDocumentServiceTests, 1 in
+  UseCaseExpandedScopeTests, 3 in RequirementsDatabaseDocumentServiceTests, 4 in
+  RequirementsWikiExportOrchestratorTests, 1 theory (2 cases) in
+  SqliteBoundedOpenFourteenthTests, 2 in UseCaseCqrsTests, 1 in HandoffD3D5OverlayTests,
+  and the memory-bench AllEight_WritesStubArtifacts and AllEight_WritesMultiTurnStubArtifacts.
+
+The siblings in these classes that do not reach a native boundary stay unit tests. They
+passed under the same sandbox. The sandboxed Nuke Test run at this head is the
+operational check, and its result goes in the PR body and the round 2 brief.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+49cfec920349f17ace1b287b18d1b0fe2d956b03
+2026-10-19T21:08:53-05:00
+test: one skip definition for both guards; multiline, qualified and listed skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)
+
+Hostile validation round 1 (gate unitgreen-r1), findings F3 and F5:
+
+- F3: both guards missed a Fact/Theory skip attribute whose arguments span lines and a
+  qualified one (Xunit.Fact, global::Xunit.TheoryAttribute, or later in an attribute list),
+  and the platform scanner's string stripping erased code inside interpolation holes.
+  UnitSuitePlatformScanner.FindSkipLines is now the one skip definition both guards use
+  (IngestionAllowlistContractTests.SkipPattern is removed). It parses a test attribute's
+  argument list with balanced parentheses across lines, accepts qualified and listed
+  attributes and the xUnit v3 skip properties, and still ignores strings and comments. The
+  lexer keeps interpolation holes as code, blanks the text around them, escaped braces,
+  strings nested in a hole and a hole's format clause, and no longer treats a verbatim
+  string that opens with an escaped quote as a raw string.
+- F5: GuardProjectSelection_MatchesTheUnitTestTarget now states its limit: it pins the
+  project list and does not read build/Build.Test.cs.
+
+BDPv4 order: the scripted cases and negative controls were written first (scanner:
+multiline-skip-attribute, qualified-skip-attribute, interpolation-holes, the round 1
+counterexample controls, the hole-stripping test; skip guard: 19 scripted sources and the
+controls proving the earlier single-line patterns miss them), then the lexer and pattern
+change. Mock gate unit-green-r2-guard-mockgate-20261019T2103 was a full Nuke Test with only
+these four files changed over 6b4295b7: 4624 total, 4624 passed, 0 failed, 0 not executed
+(4611 plus the 13 new cases). The Test target has no focused filter, so the corrected
+scanner also ran in that run's two repository scans, which passed. Compile first:
+unit-green-r2-guard-compile-20261019T2100, 0 warnings, 0 errors.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+6b4295b790e0e2cde7113f3be4bb83bc66343016
+2026-10-19T19:50:06-05:00
+docs: record the 19:41 decisions and the handoff-correction commit in the unit-suite-green plan (IMPL-UNITGREEN-001)
+
+Docs only (one file); no code, test, build or receipt change. The gates ran at 83417029
+and this commit adds only docs/ paths (decision D-A).
+
+- Section 10 lists 4f668b76 (the plan and the PR 82 handoff correction, step 7), which
+  the execution record had left out.
+- New section 13 records the decisions taken within the guidelines after the operator's
+  19:41 answer ("You have guidelines to make decisions within."):
+  - D-A: final-head rule with a docs-only diff check.
+  - D-B: which criteria are set satisfied after hostile AGREE, and that the other 17
+    USECASE criteria stay unsatisfied.
+  - D-C: residual risks 8 and 9 stay declared.
+  - D-D: the Windows interactive lane was requested from the Claude session LEG-VICE#
+    under amendment H1, and no run was observed by 19:49.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38
+2026-10-19T19:26:49-05:00
+docs: unit-suite-green plan as built and the code-head gate receipts (IMPL-UNITGREEN-001)
+
+Docs only; no code, test or build change.
+
+- docs/plans/2026-10-19-unit-suite-green.md: recopied from the working plan (SHA-256 checked).
+  Section 9 lists what was built where it differs from the inventory, section 10 records
+  59249260 and the earlier runs, section 11 records amendment H, and the new section 12
+  records the runs at code head 12746834. It also corrects one claim: Linux Test
+  unit-green-handoff-20261019T1909 ran at 69d8f3f5 with the 12746834 change uncommitted,
+  so it is not a clean code-head run.
+- docs/receipts/unit-suite-green-20261019/: TRX summaries, meta and exit files of the Linux
+  runs (Test 4611/0/0, MigrationIntegrationTests 152/0/0, full Build.Tests 436/0/0), the
+  ValidateTraceability log (saved as .out.txt because .gitignore:108 ignores *.log), and the
+  two Windows receipts (Test 4611/0/0 at HEAD 12746834
+  verified; the WSMan lane refusing before any test with the AC-5 message). Copies with
+  SHA-256 verified; the originals are kept.
+
+All gates rerun at the head that carries this commit. Their run ids go in the PR body and
+the hostile-validation brief.
+
+Open: the Windows integration lane from an interactive desktop session (operator "skip"
+19:03), the requirements wiki export (triage-report-a6927fca10364155ab9992506e1abc9c), and
+hostile validation.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 93%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+127468345afcc7a24e6a254f712d6b75a54713e8
+2026-10-19T19:15:33-05:00
+test: the invalid-handle final-path case runs only on Windows, without a silent return (IMPL-UNITGREEN-001)
+
+HandoffContainedFileReaderTests.TryGetFinalPath_InvalidHandle_FailsClosedOnWindows sat in
+an integration class that runs on both hosts and returned without asserting anything off
+Windows, which TR-MCP-USECASE-018 AC-006 forbids ("neither skip nor silently return").
+Found by the pre-HV review (Find-SilentPlatformReturns.ps1 over tests/: one real silent
+return; the other two hits are scripted text inside the guard's mock data). The case
+moves to HandoffContainedFileReaderWindowsTests (Category=Integration, Platform=Windows)
+with no return; the class it left stays Integration on both hosts. This applies the
+approved plan section 9 rule that tagged tests lose their silent returns.
+
+Linux Test on this tree: unit-green-handoff-20261019T1909, 4611 total, 0 failed.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+69d8f3f5b19b070f9059a096f344c44bbd359d47
+2026-10-19T18:55:59-05:00
+build: the Windows integration lane runs only from an interactive desktop session (TR-MCP-NUKE-019 AC-5, amendment H1)
+
+Operator 2026-10-19: "Lane runs interactively by design", then "Approve H1
+(Recommended)". On Windows, MigrationIntegrationTests checks its own process before any
+test runs and fails with a message naming the missing interactive desktop session when
+it is not interactive (a WSMan, SSH or service session); no session requirement applies
+on Linux. The Windows lane is run from a console in the logged-on user's desktop session.
+
+BDPv4, raw dotnet test on Build.Tests (infrastructure):
+- seam build/IntegrationLanePreconditionContracts.cs, contract
+  IntegrationLanePreconditionContract (outcomes from AC-5);
+- mock gate IntegrationLanePreconditionMockGateTests: scripted precondition plus
+  negative controls (runs a non-interactive Windows session, stops silently, message
+  omits the session, blocks Linux); 9 passed, 0 failed, run
+  unit-green-h-mockgate-20261019T1849, before production code;
+- production build/InteractiveSessionPrecondition.cs bound to the same cases
+  (IntegrationLanePreconditionTests) and to the target: 14 passed (9 mock gate + 5
+  production), 0 failed, run unit-green-h-real-20261019T1856.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+5924926051f84720c110ab1421430499fadf918a
+2026-10-19T18:29:50-05:00
+test: the interactive desktop-spawner case fails loudly instead of returning silently (IMPL-UNITGREEN-001)
+
+Operator decision 2026-10-19T18:01: "Platform=Windows, fail loudly (Recommended)".
+DesktopProcessSpawnerTests.Spawn_WhenHostIsInteractive_CanRunCmdThroughDefaultSpawner
+returned without asserting anything unless the host was Windows and interactive, which
+TR-MCP-USECASE-018 AC-006 forbids ("neither skip nor silently return"). It moves to
+DesktopProcessSpawnerWindowsInteractiveTests (Category=Integration, Platform=Windows)
+and asserts Environment.UserInteractive first, so a non-interactive Windows runner
+fails the case instead of passing it empty. The environment-delta case stays in
+DesktopProcessSpawnerTests (Category=Integration, both hosts).
+
+Expected consequence, stated before the run: the PAYTON-LEGION2 lane over WSMan is not
+interactive, so this one case fails there until the Windows lane runs in an interactive
+session.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+4f668b76d26b26e7162d8654fb946c484fd42539
+2026-10-19T17:59:50-05:00
+docs: unit-suite-green plan and the PR 82 handoff correction (IMPL-UNITGREEN-001)
+
+- docs/plans/2026-10-19-unit-suite-green.md: the approved plan (operator "Yes, I approve
+  the change", 14:50) with amendments 7 to 9 and the execution record in section 10:
+  every commit, mock gate and gate run on both hosts, and what is not done (the wiki
+  export blocked by triage-report-a6927fca10364155ab9992506e1abc9c; hostile validation).
+- docs/handoffs/pr82-review-handoff-20261019T104723.md: correction under step 2. A
+  baseline-equal gate is not acceptable (operator: "BDPv4 requires all unit tests be
+  green."); I recommended it and PR 82 was merged on it as ace70daa; this effort makes
+  the suite green.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6
+2026-10-19T17:50:34-05:00
+test: classify platform-dependent tests as integration tests and guard the unit suite (IMPL-UNITGREEN-001)
+
+Operator rule, verbatim: "There should be ZERO platform specific UNIT tests.  If it
+depends on the environment, it's an integration test." (a clarification of the rules
+since day one); decisions "Integration + Platform (Recommended)" for tests whose
+production code branches on the OS, and "Host-neutral fixture (Recommended)" for
+UnitTestPaths. Requirements: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008
+(converted from FR-MCP-USECASE-016/017 today), TR-MCP-NUKE-019.
+
+Guards, tests first (BDPv4):
+- UnitSuitePlatformScanner flags an OS check, OS-platform attribute, xUnit skip or a
+  real process-host binding in a test class without [Trait("Category", "Integration")],
+  ignoring strings and comments. Mock gate UnitSuitePlatformScannerMockGateTests: 14
+  scripted sources plus negative controls, 17 passed before any reclassification
+  (run unit-green-guard-mock-20261019T1720). Real binding UnitSuitePlatformScannerTests
+  scans the 7 projects the Test target runs and pins that project list.
+- The skip guard (IngestionAllowlistContractTests) now matches Assert.SkipWhen and
+  Assert.SkipUnless and reads code with literals removed, with scripted cases and
+  negative controls (the old pattern missed both forms).
+
+Reclassification:
+- Category=Integration, Platform=Linux: BugTriage139EighteenthLinuxTests,
+  BugTriage139SixteenthLinuxTests, BugTriage139FifteenthLinuxNativeTests,
+  RequirementsFourteenthLinuxNativeTests.
+- Category=Integration, Platform=Windows: BugTriage139SixteenthIdentityWindowsTests,
+  BugTriage139SixteenthWindowsProcessTests, BugTriage139FifteenthWindowsNativeTests,
+  ProcessEnvironmentServiceTests (silent returns removed), WorkspaceRemotePathRealTests.
+- Category=Integration on both hosts: the BUG-TRIAGE-139 harness, shared, traversal and
+  native-identity classes, HandoffContainedFileReaderTests,
+  RequirementsTwelfthAdversarialReviewTests, FileGitHubWorkspaceTokenStoreTests,
+  TranscriptMcpStdioHostTests, the WorkspaceHostEnvironment contract,
+  WorkspacePathNormalizerProcessTests, McpAgentOptionsLegacySectionHostTests.
+- OS branches split into Windows and Linux integration classes with fixed expectations:
+  Codex launcher, CliBrainSlot Windows temp directory, federation enrollment, opaque
+  workspace identity keys, GitHub CLI foreign workspace.
+- Host-neutral unit tests: the Windows-host native-path cases moved onto the simulated
+  host (WorkspaceNativePathHostContractTests, new negative controls); the remote-path
+  MockData stays unit without its skip; the token-service and Grok tests use fixed data.
+- MigrationIntegrationTests also runs QBrainAi.McpAgent.Tests (TR-MCP-NUKE-019 AC-2).
+
+Linux Test on this tree: 4611 total, 4611 passed, 0 failed, 0 not executed
+(run unit-green-reclass-20261019T1745).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+8a6173342dcd7683b9d9549005a5af819b8abc90
+2026-10-19T17:26:28-05:00
+Merge origin/develop (PR 86, 3da2db93) into fix/unit-suite-green-20261019
+
+Brings in the BoundedProcess fix to tests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs
+(TR-MCP-NUKE-009 AC-006) that PLAN-C4MODEL-001 split out of PR 84 by operator decision
+("C4 splits the fix out (Recommended)", 2026-10-19T17:05), so the full Build.Tests
+infrastructure check can reach 0 failed on this branch. The file stays with PLAN-C4MODEL-001.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2
+2026-10-19T16:45:58-05:00
+build: host-scoped integration lane filter for MigrationIntegrationTests (TR-MCP-NUKE-019, IMPL-UNITGREEN-001 G)
+
+Plan amendment G, approved by the operator 2026-10-19 ("Yes, I approve the
+change"). MigrationIntegrationTests now selects the Category=Integration cases
+of the host it runs on: Category=Integration&Platform!=Linux on Windows and
+Category=Integration&Platform!=Windows on Linux, so untagged integration
+cases run on both hosts and each Platform-tagged case runs on its own host.
+The target logs the filter text (AC-3). Provisioning is unchanged (AC-4).
+
+BDPv4 order, all through raw dotnet test on Build.Tests (infrastructure,
+never a Nuke target; operator "Raw dotnet test, infra only"):
+- seam build/IntegrationLaneFilterContracts.cs and contract
+  tests/Build.Tests/IntegrationLaneFilterContract.cs (expected filters from
+  AC-1 plus an evaluator of the trait grammar that checks what each filter
+  selects);
+- mock gate IntegrationLaneFilterMockGateTests: scripted filter and fault
+  negative controls (other host admitted, untagged dropped, hosts swapped,
+  Category dropped), each rejected both by the exact-text check and by the
+  selection checks alone; 21 passed, 0 failed, 0 not executed, run
+  unit-green-g-mockgate-20261019T1633, before any production code;
+- production build/IntegrationLaneFilter.cs bound to the same cases in
+  IntegrationLaneFilterTests: 24 passed (21 mock gate + 3 production), 0
+  failed, 0 not executed, run unit-green-g-real-20261019T1635.
+
+Full Build.Tests on this tree: 422 total, 421 passed, 1 failed, 0 not
+executed (run unit-green-g-buildtests-20261019T1635). The failure is
+BoundedProcessTests.BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess
+flagging tests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs:71-73, a file
+identical to develop ace70daa; C4's 252b4946 on PR 84 (TR-MCP-NUKE-017 work,
+which stays with C4 by operator decision) already routes it through
+BoundedProcess. Not changed here.
+
+Requirement: TR-MCP-NUKE-019 (under FR-MCP-BUILD-001).
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+11681680d316bee7c8c184e45b699af7c1bd2188
+2026-10-19T16:43:25-05:00
+test: take over the unit-suite fixes and Linux provider provisioning from PLAN-C4MODEL-001 (IMPL-UNITGREEN-001)
+
+Operator ownership decision 2026-10-19 ("I don't want you and the C4 agent
+working on the same thing.  C4 should not be changing code, only docs."; I
+named IMPL-UNITGREEN-001; at 16:38 "Handover stands (Recommended)"): the
+unit-suite code of C4 commits ff55292e and d248230e moves to this effort.
+C4 reverts the same files on PR 84 only on the operator's direct word.
+
+The 15 files below are byte-identical to C4's c2125c42 (git blob hashes
+compared file by file at 2026-10-19T16:42:56, 0 mismatches), so C4 can check
+each one against this commit:
+- build/Build.TestDependencies.cs, build/LinuxProviderTestProvisioner.cs,
+  build/ProviderTestProvisioningContracts.cs (TR-MCP-NUKE-018)
+- tests/Build.Tests/ProviderTestProvisioningContract.cs,
+  ProviderTestProvisioningMockGateTests.cs, ProviderTestProvisioningTests.cs
+- src/QBrainAi.Services/Services/GitHubCliService.cs
+- tests/QBrainAi.Support.Mcp.Tests: Middleware/WorkspaceResolutionMiddlewareTests.cs,
+  Services/GitHubCliServiceTests.cs, Services/WorkspaceServiceAccessorTests.cs,
+  Storage/EphemeralPostgresFixtureTests.cs,
+  Storage/SessionLogAgentSessionHeaderMigrationTests.cs,
+  Storage/Decompose4nfBackfillMigrationTests.cs, Storage/MigrationKeyAssertions.cs,
+  Storage/MigrationKeyAssertionsMockGateTests.cs
+.nuke/build.schema.json gains only C4's TestDbEnvFile parameter entry.
+
+Linux gates on this tree before commit: Test 0 failed, 16 not executed (the
+Windows-only cases the next steps move to the integration lane), run
+unit-green-takeover-20261019T1611; MigrationIntegrationTests 68 passed,
+0 failed, 0 not executed, run unit-green-takeover-int-20261019T1616.
+
+Requirements: TR-MCP-NUKE-018, TR-MCP-QUALITY-001, FR/TR/TEST-MCP-PATHNORM-001.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+b2319488039bbcd1e2014d8f3a1b7a26627b3ba8
+2026-10-19T15:52:42-05:00
+test: HostileReviewWorker startup test no longer depends on Event Log write access (IMPL-UNITGREEN-001 F)
+
+Plan item F. With the full exception text (28bf0b22), the Windows failure of
+HostileReviewWorker_InvalidOptions_FailStartup reads: "System.AggregateException:
+An error occurred while writing to logger(s). (Cannot open log for source
+'.NET Runtime'. You may not have write access.) ---> Win32Exception (5): Access
+is denied" (PAYTON-LEGION2 as lab-wsman, run unit-green-win-narrow-20261019T1541).
+Host.CreateApplicationBuilder adds the Event Log provider on Windows, and an
+account without Event Log write access failed startup in the logger before
+options validation could report. The test now clears the default logging
+providers; the assertion is unchanged, so the test still requires host
+startup to fail naming HostileReviewWorker. Test-only; no production change.
+
+Requirement: TR-MCP-HOSTILEREVIEW-003.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 97%, completeness 93%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+a4c358efd91131e7fb714370726997b5c2d076cb
+2026-10-19T15:40:46-05:00
+test: leave the PLAN-C4MODEL-001 unit fixes to that effort (IMPL-UNITGREEN-001 scope)
+
+Operator decision 2026-10-19 ("Narrow mine (Recommended)"): PLAN-C4MODEL-001
+(branch docs/c4-structurizr-model-20261017) already fixed 10 of the 14 Linux
+unit failures in ff55292e, the Decompose4nf SQLite test in d248230e, and the
+Linux provider lane (TR-MCP-NUKE-018). This restores the six files that
+duplicated that work to their develop (ace70daa) content, so the two branches
+do not conflict and C4's GitHubCliService production fix is not contradicted
+by a test-only one:
+
+- tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs (B4)
+- tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs (B5)
+- tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs (B6)
+- tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs (C)
+- tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs (C)
+- tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs
+
+This effort keeps step A (advisory-patched packages), the four tests C4 left
+for PR 82/83 (ProductionGate, RemoveTodoRecords x2, ProcessNormalizer), D
+(host-aware native path, no Windows skips), F, the Windows evidence route, and
+the Windows side of the integration lane (plan amendment pending). Exit gates
+run after C4 lands on develop and develop is merged here; until then the ten
+C4-owned failures are expected on this branch alone.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+de5813532adb51b964b222644ae0519bd814f8ef
+2026-10-19T15:40:01-05:00
+feat(client): host-aware WorkspaceIdentityPath.ToNativePath overload (IMPL-UNITGREEN-001 step 4)
+
+BDPv4 step 5 for plan item D. ToNativePath(path, platform, host) decides by
+the injected IWorkspaceHostEnvironment.Platform; the existing two-argument
+method delegates with SystemWorkspaceHostEnvironment.Instance, whose Platform
+is Windows exactly when OperatingSystem.IsWindows(), so its behavior is
+unchanged (its two callers at WorkspaceIdentityPath.cs:621 and :694 keep it).
+Public API addition in the QBrainAI.Client package; additive, not breaking.
+
+WorkspaceNativePathHostRealTests binds the same host contract
+(WorkspaceNativePathHostContractTests, mock gate green in 28bf0b22) to the
+production overload, so the non-Windows-host case runs on every host and the
+two Windows skips of NonWindowsHost_IsUnchanged are gone.
+
+Requirements: TR-MCP-PATHNORM-001, TEST-MCP-PATHNORM-001 criterion
+unitgreen-native-host.
+Production-bound Linux run (Nuke Test, unit-green-real-20261019T1535): 4669
+total, 4653 passed, 0 failed, not executed exactly the 16 named Windows-only
+cases.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 93%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+28bf0b222464c5bdbfb8b6ec0a357e15284e486f
+2026-10-19T15:33:38-05:00
+test: canonical workspace keys, provider traits and a host-aware native-path contract (IMPL-UNITGREEN-001 step 2)
+
+BDPv4 step 2 of the approved unit-suite-green plan: tests and scripted data
+only, before any production change.
+
+- B1 UseCaseGetWorkspaceResolutionContractTests: the raw caller path and the
+  canonical expected key (ExpectedWorkspaceKey.Of) are separate; negative
+  control MockGate_BackslashWorkspaceId_IsRejected.
+- B2 RemoveTodoRecordsMigrationTests and Decompose4nfBackfillMigrationTests:
+  raw-SQL seeds use the canonical stored key form; negative control
+  Migrate_RemoveTodoRecords_NegativeControl_StaleAnchorBackfillIsRejected.
+- B3 WorkspacePathNormalizerRealTests: a foreign Windows path comes back in
+  its canonical '/' spelling and is still not re-rooted.
+- B4 WorkspaceServiceAccessorTests: expectations no longer re-root a foreign
+  path through Path.GetFullPath; negative control for the raw or re-rooted
+  spelling.
+- B5 GitHubCliServiceTests: host-native temporary workspace directories and a
+  negative control rejecting gh calls from any other directory.
+- B6 WorkspaceResolutionMiddlewareTests: the workspace-service double matches
+  by canonical key like WorkspaceService.GetAsync; negative control
+  WorkspaceServiceDouble_MatchesCanonicalKeyOnly.
+- C: SqlServerUpSql and PostgreSqlUpSql (method level) and
+  EphemeralPostgresFixtureTests (class level) are Category=Integration.
+- D: the non-Windows-host native-path case moves to
+  WorkspaceNativePathHostContractTests with a MockData fixture over a
+  simulated host and negative controls; its Real binding follows with the
+  production overload.
+- F: HostileReviewWorker_InvalidOptions_FailStartup reports the whole
+  exception text on failure (same condition).
+
+Requirements: FR, TR, TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host),
+TEST-MCP-USECASE-002, TEST-MCP-TRIAGE-004, TEST-MCP-FED-PATH-001,
+TEST-HANDOFF-006, TEST-MCP-083, TR-MCP-MT-002, TR-MCP-TRIAGESCHEMA-001,
+TR-MCP-HOSTILEREVIEW-003.
+
+Mock gate (Linux, Nuke Test, run unit-green-mock-20261019T1528): 4666 total,
+4650 passed, 0 failed, not executed exactly the 16 named Windows-only cases.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 92%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+cbc74e823e7af96f8df1a1320498998e5de2b328
+2026-10-19T15:18:07-05:00
+fix(deps): pin System.Security.Cryptography.Xml and Pkcs to the advisory-patched 10.0.13 (IMPL-UNITGREEN-001 step A)
+
+develop pins System.Security.Cryptography.Xml 10.0.10, which brings
+System.Security.Cryptography.Pkcs 10.0.10. On PAYTON-LEGION2 the restore of
+build/_build.csproj fails NU1902 (GHSA-2fmv-rv2c-59x7) and NU1903
+(GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj,
+GHSA-r955-8q5j-3h83), so no Windows build or test can run. All five
+advisories name 10.0.13 as the first patched 10.x version.
+
+Operator 2026-10-19: "Gotta use the recommended packages." This moves Xml to
+10.0.13 and adds a central Pkcs 10.0.13 pin (transitive pinning is enabled, so
+every project takes it). No suppression, audit setting, or override.
+
+Requirement: TR-MCP-QUALITY-001 ac-21 (reopened and strengthened 2026-10-19).
+Linux gate: Nuke Restore and Compile succeeded, zero NU-code lines, build and
+SqlServerMigrations assets resolve Pkcs and Xml 10.0.13 (run
+unit-green-linux-a-compile-20261019T1514). Windows gate follows on the pushed branch.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 90%
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+

@@ -1,0 +1,17 @@
+type: result
+payload:
+  requestId: req-20261020T221519Z-5168
+  result:
+    id: FR-MCP-USECASE-001
+    title: CRUD workspace-scoped use cases
+    description: 'The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required.'
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-20T22:15:21.1769198+00:00
+    updatedAt: 2026-10-20T22:15:21.1770734+00:00
+  deprecated: true
+
+---
