@@ -1,0 +1,10 @@
+RECEIPT 2026-10-20T14:53:51 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T14:53:50 project=QBrainAi.Support.Mcp.Tests
+A ug-r3-win-lane-6 results=361 start=2026-10-20T14:41:10.4706769-05:00 finish=2026-10-20T14:43:51.1927036-05:00
+B ug-r3-win-lane-diag-3 results=361 start=2026-10-20T14:48:40.3160862-05:00 finish=2026-10-20T14:53:04.0933183-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitProjects_HoldNoRepositoryLocatorBesideTheSharedOne outcome=Passed duration=00:00:02.6263361 start=2026-10-20T14:41:27.6201058-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Configuration.UnitSuitePlatformScannerTests.UnitProjects_HoldNoRepositoryLocatorBesideTheSharedOne outcome=Passed duration=00:00:05.8805390 start=2026-10-20T14:48:52.4134575-05:00
+END 2026-10-20T14:53:50

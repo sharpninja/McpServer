@@ -1,0 +1,1763 @@
+type: result
+payload:
+  requestId: req-20261020T032431Z-2e61
+  result:
+    totalCount: 1
+    limit: 5
+    offset: 0
+    items:
+    - sourceType: Codex
+      sessionId: Codex-20261020T023103Z-unitgreen-r2
+      agentSessionId: 01a15723-8ca8-7853-bd41-0ccc5d8cb16a
+      agentExecutablePath: /home/sharpninja/.local/bin/codex
+      agentExecutableVersion: codex-cli 0.160.1
+      title: Independent hostile review of IMPL-UNITGREEN-001 round 2 at a94579db
+      model: gpt-6-astra
+      started: 2026-10-20T02:31:48.0000000+00:00
+      lastUpdated: 2026-10-20T03:24:03.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20261020T023148Z-unitgreen-r2
+        timestamp: 2026-10-20T02:31:48.0000000+00:00
+        queryText: Review only. Attack UG1 through UG13, all four mandatory surfaces and F1 through F7 closure at a94579db927f25a0cbddd07d639f3054f2ee72e8. Live rollout model gpt-6-astra effort max. Full operator request is the durable 20261019T212828-unitgreen-r2.request.jsonl. No implementation or store mutations other than this reviewer session.
+        queryTitle: Independent hostile review of IMPL-UNITGREEN-001 round 2 at a94579db
+        response: >
+          2026-10-19T22:19:32 - Independent hostile validation unitgreen-r2: DISAGREE.
+
+
+          Accuracy 96, completeness 94, confidence 99. Claims: 7 PASS, 6 FAIL, 0 UNKNOWN. Scores assess the merge-readiness claim, not the fraction of passing tests. All final gates and the five prior PASS claims are verified, but existing native unit contracts, direct scanner blind spots and an inaccurate audit statement prevent the functional98/98 threshold. No threshold is lowered.
+
+
+          Validator Codex, gpt-6-astra, effort max. Live proof: /home/sharpninja/.codex/sessions/2026/10/19/rollout-2026-10-19T21-28-30-01a15723-8ca8-7853-bd41-0ccc5d8cb16a.jsonl:8, turn_context at2026-10-20T02:28:32.19Z. All observed turn contexts agree. Thread 01a15723-8ca8-7853-bd41-0ccc5d8cb16a; session Codex-20261020T023103Z-unitgreen-r2; request req-20261020T023148Z-unitgreen-r2.
+
+          Mandatory first actions completed before validation: read the requested add-profile skill and every non-skill profile Markdown in full, count1; read the root marker in full without printing its key values; opened an independent session and turn through the installed Codex mcpserver1.121.0 wrapper, with cache outside this worktree. Profile reloaded after every compaction. No Claude wrapper or raw REST used.
+
+          TimestampUtc: 2026-10-20T03:19:32.2888305Z; TimestampLocal: 2026-10-19T22:19:32. Class1; head a94579db927f25a0cbddd07d639f3054f2ee72e8; base 3da2db93b3912b6301509f11aedcd59cb004274b; last code head b4ad42aaa601ed0df7e03b34203dee4f93d316a9. PR: https://github.com/sharpninja/McpServer/pull/87
+
+
+          Observed: the final unit and integration runs really pass with the stated totals, including the previously missing Windows interactive lane. The reviewer sandbox also passes every one of4588unit tests. The three concrete findings below prevent merge readiness. No done-state update is supported by this verdict.
+
+
+          R2-F1 - Native filesystem contracts remain unit tests; the claimed exception inventory is incomplete [Implementer edit].
+
+          Location: tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:261; tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:97; tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:24; tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:12; plan:180-181,196-199; round 2 self-review:6.
+
+          The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence.
+
+          Evidence: RequirementsWikiExportConfigTests.Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation has [Fact] without Integration, creates a real link at line 269, and asserts a reparse error at line 274.
+
+          Evidence: RequirementsDocFxWorkflowRunnerTests.RunAsync_WhenOutputContainsReparsePointEscape_Throws has [Fact] without Integration, creates a real link at line 107, and asserts reparse rejection plus cleanup at lines 115-116. Production RequirementsDocFxWorkflowRunner.cs:169,227 reads native reparse attributes.
+
+          Evidence: HandoffSkillDelegationTests.cs:27-29 reads plugins/core/skills/handoff/SKILL.md from FindRepoRoot; MemorySchemaContractTests.cs:15-16,52-65 reads docs/context/repl-yaml-message.schema.json by walking to the checkout. Neither is one of the two declared guards.
+
+          Evidence: hv-ug-r2-confirm-cases.json records all four cases as Passed in both actual unit TRX inventories and absent from the Windows integration inventory. The independent sandbox Nuke Test also passes 4588/4588/0/0. That confirms execution, not independence.
+
+          Evidence: All 34 round-one failures are now present and Passed in both integration lanes and absent from units (hv-ug-r2-reconcile-results.json). The two benchmark writers also moved. This finding concerns omitted siblings, not a denial of that completed remediation.
+
+          Change required: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.
+
+
+          R2-F2 - The scanner remediation still misses valid direct platform syntax [Implementer edit].
+
+          Location: tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:27-29,98-118; docs/plans/2026-10-19-unit-suite-green.md:127,136,193; round 2 self-review:6-7.
+
+          The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract.
+
+          Evidence: hv-ug-r2-scanner-probe.json invokes Scan, StripCommentsAndStrings and FindSkipLines from the actual freshly built QBrainAi.Support.Mcp.Tests.dll; assembly and source SHA-256 values are recorded.
+
+          Evidence: multilineOs and multilineInterpolationOs each retain OperatingSystem followed by a dot and newline then IsWindows(), yet yield zero findings.
+
+          Evidence: qualifiedOsAttribute uses [global::System.Runtime.Versioning.SupportedOSPlatform("windows")]; listedOsAttribute uses [Fact, System.Runtime.Versioning.SupportedOSPlatform("windows")]. Both yield zero findings.
+
+          Evidence: Controls pass: ordinary, multiline, qualified and listed xUnit skip attributes are detected; ordinary and nested interpolation OS checks are detected; comments and ordinary string literals remain excluded; multiline Assert.SkipWhen is detected. Original round-one examples are repaired, but the sibling sweep is incomplete.
+
+          Change required: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.
+
+
+          R2-F3 - The self-review overstates pre-execution analysis of the generated Windows runner [Implementer audit edit].
+
+          Location: docs/receipts/hv/20261019T212828-unitgreen-r2.selfreview.md:14; /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1:45-68; implementer transcript:12908,12922,12974.
+
+          The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap.
+
+          Evidence: The parent script creates runnerText at lines 45-52, writes it at line 53, then registers and starts the task at lines 61-68. There is no parser or analyzer step for runnerText or the emitted runner.
+
+          Evidence: hv-ug-r2-final-auditrunner.json records the source and the round-two analyzer invocations. The final parent analysis is at 21:13:09; the task is started at 21:13:20. The live read-only Windows receipt retains the six-line generated runner and its execution proof.
+
+          Evidence: Invoke-LegionSsh.ps1:22-26 parses the uploaded parent script only. It does not analyze the runner that the parent later creates. The successful 164-case Windows run remains valid evidence; this is an audit-accuracy defect, not a claimed test failure.
+
+          Change required: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence.
+
+
+          Operator-decision failures: none. The recommended corrections implement settled rules. This is the second DISAGREE in the native-classification/scanner design area. The operator goal at transcript10716 requires stopping and asking the operator at that point. All technical corrections are implementer edits; this procedural stop does not create an operator-decision failure or authorize a third round. One review only was performed.
+
+
+          UG1: PASS. Final gate results and docs-only equivalence verified, with the explicitly separate pre-reclassification guard mock gate.
+
+
+          - hv-ug-r2-evidence-git.json: b4ad42aa..a94579db contains 224 paths, all under docs/. The pinned head and 18 first-parent commits match GitHub.
+
+          - hv-ug-r2-evidence-runs.json and hv-ug-r2-reconcile-results.json independently reconcile copied metadata with scratch originals and actual TRX. Final Linux and Windows units: 4588/4588/0/0; Linux lane:188/188/0/0; Windows interactive lane:164/164/0/0; Build.Tests:436/436/0/0; traceability exit0.
+
+          - The guard compile and mock runs intentionally precede b4ad42aa: HEAD6b4295b7 plus four guard files, compile exit0, full mock4624/4624/0/0. They are not falsely described here as clean b4ad42aa runs. Final Linux run metadata lists only the two test-generated benchmark JSON paths as dirty tracked files.
+
+          - Windows metadata starts from the verified code head. Read-back after execution additionally shows generated .nuke/build.schema.json formatting (JSON semantically equal), and the interactive worktree has benchmark JSON/Markdown outputs. The final Linux metadata claim is not generalized to an entirely clean post-run Windows tree.
+
+          - No audit override, warning suppression or extra narrowing was found. Test uses its existing Category!=AiReview&Category!=Integration filter; lanes use the declared host exclusion. The two failed sandbox attempts never reached tests and are not counted green.
+
+
+          UG2: PASS. The corrective slice has the requested tests-first and full-green-before-reclassification chronology; the historical red gate is now accurately denominated.
+
+
+          - hv-ug-r2-reconcile-chronology.json and the original transcript place scripted guard cases/negative controls before the lexer edits, the full mock gate ending21:06:34 before traits written21:07:35, followed by guard commit49cfec92 and classification commitb4ad42aa. Same sources/cases bind the real scanner.
+
+          - Plan:141,195 and current TODO task10 preserve the historical 4692 total,4675 passed,1 failed,16 NotExecuted,exit255. The 17 passing scanner cases are no longer represented as a wholly green Nuke run. A later run does not erase the old breach.
+
+          - The original A/B/D/F/G/H slices, takeover tests and negative controls retain round-one support: additive native-path seam, unchanged-case binding,21-case G mock gate and9-case H mock gate before their production bindings. The new valid-syntax omissions are R2-F2, not fabricated chronology.
+
+
+          UG3: FAIL. The no-environment-dependent-unit claim and direct-platform guard contract are false.
+
+
+          - R2-F1 and R2-F2 give reproducible native unit dependencies and scanner bypasses.
+
+          - The complete changed-test diff was inspected:69 changed test files, including29 trait-only changes. Moved native cases preserve assertions; the removed platform returns and host-specific splits remain correct. The independent full unit run passes4588, with no skips.
+
+          - The two benchmark writers and34 prior failing cases are now Integration; source helper limits and the approved UnitTestPaths host-shaped fixture are not misclassified as new defects.
+
+
+          Required change: Apply R2-F1 and R2-F2 and reconcile the resulting unit/integration inventories and full host gates. Locations and evidence: R2-F1, R2-F2. Classification: implementer edit.
+
+
+          UG4: PASS. TR-MCP-NUKE-019 AC-1 through AC-5 implementation and host execution are evidenced; AC-4 provisioning remains unchanged.
+
+
+          - build/IntegrationLaneFilter.cs:8-12 returns the exact two filters and rejects unknown enum values. Build.TestDependencies binds and logs the filter before tests and includes Support.Mcp, McpAgent and Build.Tests.
+
+          - build/InteractiveSessionPrecondition.cs:9-16 rejects non-interactive Windows with the named missing-session message. The final WSMan invocation refuses before tests and has no lane TRX.
+
+          - The interactive runner records kingd,session1,interactive=True,headb4ad42aa. Log filter Category=Integration&Platform!=Linux; actual TRX157+1+6=164allPassed, including the desktop-spawner and transcript cases. Linux lane171+1+16=188allPassed.
+
+          - H1 is satisfied by an operational task that launches the existing target in the logged-on desktop. H2 was build-owned automatic relaunch; no such code was added. The reviewer independently read the Windows evidence over WSMan.
+
+          - The filter and precondition contract/mock/negative-control/real tests remain in the436passing Build.Tests. Linux provisioning takeover remains blob-identical; Windows LocalDB/PostgreSQL provisioning is unchanged. Broader unit classification is separately failed under UG3 and D-B.
+
+
+          UG5: PASS. The patched package and unsuppressed audit evidence remain valid.
+
+
+          - Directory.Packages.props centrally pins System.Security.Cryptography.Xml and Pkcs10.0.13. No new audit settings,NoWarn,WarningsNotAsErrors or command override. Both host final restores and the independent Linux restore are clean.
+
+          - hv-ug-r2-confirm-advisories.json: primary GitHub advisory API records for GHSA-2fmv-rv2c-59x7,GHSA-846f-f764-76mx,GHSA-7hqp-7c5m-4vq6,GHSA-c399-9853-6jmj,GHSA-r955-8q5j-3h83 name10.0.13 as the patched10.0line version. Live TR-MCP-QUALITY-001 ac-21 remains false pending AGREE.
+
+
+          UG6: PASS. FR/TR/TEST-MCP-PATHNORM-001 scope and additive host seam remain supported.
+
+
+          - src/QBrainAi.Client/WorkspaceIdentityPath.cs preserves the two-argument method by delegation and adds the injectable host overload. Windows slash conversion and foreign-path preservation retain independently expected outputs.
+
+          - The same seven WorkspaceNativePathHostRealTests cases pass in both actual host unit TRX; the scripted contract and rejection controls remain unchanged. hv-ug-r2-confirm-cases.json.
+
+          - The live TEST criterion unitgreen-native-host is the claimed criterion. The five broader TR P1.5 criteria are pending and are not claimed satisfied or reviewed as this PR scope.
+
+
+          UG7: PASS. Live requirement mappings, pending criteria and reworded TODO metadata match the declared scope.
+
+
+          - All current records were read through workflow.requirements.* and the TODO through workflow.todo.get, never TODO files or raw REST. hv-ug-r2-store-*.txt and hv-ug-r2-reconcile-store.json retain results.
+
+          - TR-USECASE018 has7criteria;TR-USECASE019 has12;both map to FR-USECASE001 and TEST019/020. Deleted FR-USECASE016/017 returnnot_found and have zero mapping rows. BUILD001 maps NUKE018/019;PATHNORM001 maps its TR and TEST. Criteria and descriptions match the round-one live records.
+
+          - IMPL-UNITGREEN-001 has13tasks,zero checked,donefalse. Task9 now permits the goal-item4 declared wiki-export blocker;task10 states the complete historical red denominator and corrected gate. No premature satisfied state observed.
+
+          - The current generated docs/Project exports are stale; the goal expressly allows declared blocking. A passing ValidateTraceability against those exports is not a current-store synchronization claim.
+
+
+          UG8: FAIL. The plan is substantially reconciled, but its remaining classification and guard claims exceed the implementation.
+
+
+          - All14sections read end to end. Approvals, amendments, takeover ownership, superseded historical runs, full red denominator, new H1 run and blocked wiki export are recorded.
+
+          - Plan:180-181,196-199 and self-review:6 treat sandbox success as the sibling classification rule and understate source-reading exceptions. Plan:127 promises direct OS detection defeated by R2-F2.
+
+          - D-A docs-only equivalence and D-D H1 interpretation are supported. D-C residual dual/unknown Platform risk is declared and no existing instance was found. D-B remains contingent but its claimed prerequisite is not met.
+
+
+          Required change: Correct the classification/guard implementation and propagate exact inventory, limits, counts and remaining open items throughout the plan and PR. Locations and evidence: R2-F1, R2-F2. Classification: implementer edit.
+
+
+          UG9: PASS. The C4 code takeover and ownership boundary remain supported.
+
+
+          - All15taken-overfile blobs at11681680matchc2125c42. Later in-scope guard and classification changes are separately recorded.
+
+          - The operator directed C4 to docs only,then explicitly split the BoundedProcess fix into its own PR and merged develop. This review does not score PLAN-C4MODEL-001 docs or TR-MCP-NUKE-017 tooling.
+
+          - No regression in Linux provider provisioning contracts, scripted fakes or required assertions was found in the complete product/test diff.
+
+
+          UG10: FAIL. Commit, push, secret and formatting checks pass, but the self-review script-analysis audit is overstated.
+
+
+          - All18first-parent commits carry the required actual ClaudeCode model/effort signature convention. GitHub activity reports16normalpushes and1branchcreation,no force push.
+
+          - hv-ug-r2-secret-scan.json scans18commitpatches,2125trackedreceiptfiles and the PR body with exact current marker-secret and credential-pattern checks:zero findings. The R1receipt set is217files; the original protection operation reportszero redactions. This is a bounded scan,not a claim to identify every possible secret ever issued.
+
+          - Plan and PR have zero table syntax and zero en/em dash characters. The scoped transcript has803command invocations:802pwshlaunchers and the disclosed historical Bashls. No Python or Node invocation found.
+
+          - R2-F3: the generated Windows runner was not itself analyzed before execution,contrary to self-review:14. The original R1 Bash exception is now accurately disclosed.
+
+
+          Required change: Correct the blanket audit statement and analyze generated scripts before future execution. Retain the valid signing/push/secret evidence. Locations and evidence: R2-F3. Classification: implementer edit.
+
+
+          UG11: FAIL. The self-review and open-item disclosures still omit material classification, scanner and analyzer gaps.
+
+
+          - Self-review:6 explicitly justifies leaving siblings as unit tests because they passed the sandbox; that cannot establish the day-one rule. R2-F1 proves omitted native and source-reading dependencies.
+
+          - Self-review:6-7 reports the guard fixes without the direct-syntax sibling gaps demonstrated by R2-F2. Self-review:14 makes the unsupported analyzer claim in R2-F3.
+
+          - The wiki block,two failed pre-test sandbox attempts,WSMan refusal,SSH task route,failed first task registration and manual project-selection limit are otherwise disclosed accurately.
+
+
+          Required change: Remediate or accurately disclose all three findings and regenerate the self-review and PR open-items from the resulting evidence. Locations and evidence: R2-F1, R2-F2, R2-F3. Classification: implementer edit.
+
+
+          UG12: FAIL. The proposed post-AGREE completion state is not supported by the current whole-platform evidence.
+
+
+          - D-B now correctly makes NUKE019AC-2/3/5 and USECASE018AC-006/019AC-008 contingent on complete platform-rule evidence. The Windows half exists; the zero-environment-dependent-unit half does not (R2-F1).
+
+          - NUKE019AC-1/4,QUALITYac-21 and TESTPATHNORMunitgreen-native-host have direct evidence. NUKE019AC-2/3/5 also have individual lane evidence,but D-B imposes the broader prerequisite before setting them. The other17USECASEcriteria remain outside this evidence and must stayfalse.
+
+          - Task9 as reworded is supported by the explicit goal-item4 declared-block allowance. Task10 still lacks complete classification/guard evidence;task12 lacks AGREE. Therefore all13tasks and the TODO cannot be marked done from this review.
+
+
+          Required change: Retain pending state. Complete R2-F1/R2-F2 and a new authorized independent AGREE before conditional criteria or TODO completion. Do not set the other17criteria. Respect the goal stop condition after this second disagreement. Locations and evidence: R2-F1, R2-F2. Classification: implementer edit.
+
+
+          UG13: FAIL. Four original findings close; three remain open in substance, and the remediation introduces an audit overclaim.
+
+
+          - F1PASS,F2FAIL,F3FAIL,F4PASS,F5PASS,F6PASS,F7FAIL. The closure list below provides each decision.
+
+          - All five claims that passed round one,UG4/5/6/7/9,remainPASS. The corrected original guard examples do not establish a complete sibling sweep.
+
+          - R2-F3 is a new audit-accuracy finding; it does not erase the narrow closure of historical F6.
+
+
+          Required change: Close R2-F1/R2-F2/R2-F3 and their propagation points before claiming all round-one remediation complete. Locations and evidence: R2-F1, R2-F2, R2-F3. Classification: implementer edit.
+
+
+          Round-one closure:
+
+
+          - F1: PASS. The 4692-result historical red run is preserved and corrected in the current plan, PR and TODO; the new full 4624-case green mock gate precedes reclassification. The old breach is acknowledged, not made retroactively green.
+
+          - F2: FAIL. The 34 named failures and two benchmark writers moved correctly, but the required sibling sweep omitted native link contracts and additional repository dependencies. R2-F1.
+
+          - F3: FAIL. Original multiline/qualified skip and ordinary interpolation examples now pass, but direct multiline OS calls and qualified/listed OS attributes still evade the actual scanner. R2-F2.
+
+          - F4: PASS. The b4ad42aa Windows H1 run actually executed 164 passing tests in kingd desktop session 1 with interactive=True and the exact filter. Independent WSMan read-back confirms TRX, proof and log. Non-interactive refusal remains intact.
+
+          - F5: PASS. UnitSuitePlatformScannerTests now explicitly documents manual synchronization and does not claim to read Build.Test. The current seven-project lists agree. Plan section14 records that limit.
+
+          - F6: PASS. Self-review line14 now discloses the exact historical Bash ls at19:22:47. The new generated-runner analyzer overclaim is separately R2-F3, not a denial of this narrow correction.
+
+          - F7: FAIL. Conditional wording and task9 are corrected, and current pending state is accurate; however the asserted present completeness of platform evidence is still false because R2-F1 survives. USECASE AC-006/AC-008 and D-B conditional completion remain unsupported.
+
+
+          Mandatory surfaces, scored separately:
+
+
+          - Surface 1, Requested validation and implementer evidence claims: FAIL, accuracy 96, completeness 94. Gate, SHA, count and receipt evidence is strong. R2-F1/R2-F2 invalidate broad classification/guard completion, and R2-F3 invalidates the blanket analyzer claim.
+
+          - Surface 2, Workspace rules and audit: FAIL, accuracy 96, completeness 95. Signatures, normal pushes, plugin storage, secret scans and formatting pass. The settled day-one classification rule is not fully implemented and the script-analysis audit overclaims its evidence.
+
+          - Surface 3, Requirements, ACs, mappings and BDPv4: FAIL, accuracy 97, completeness 95. Requirement mapping and corrective order pass; no criterion is prematurely satisfied. The two USECASE platform criteria and D-B group still lack the no-native-unit prerequisite. No new requirement is needed for the recommended fixes.
+
+          - Surface 4, Plan as a whole: FAIL, accuracy 95, completeness 94. All14sections, amendments and supersessions were reviewed. D-A and D-D pass; D-C inventory and D-B completion inference remain inaccurate. The goal stop condition now applies to the repeated classification/scanner area.
+
+
+          Requirement what-if and test mapping:
+
+
+          - TR-MCP-NUKE-019 AC-1. Tests: IntegrationLaneFilterContract, IntegrationLaneFilterMockGateTests, IntegrationLaneFilterTests. Attack: Linux, Windows, opposite tags, untagged and invalid enum; exact filter strings and rejection controls. PASS. CurrentHost treats non-Windows as Linux; scope is the two supported lab hosts. Dual/unknown Platform tags remain the explicitly declared residual9, not an invented new AC.
+
+          - TR-MCP-NUKE-019 AC-2. Tests: Both actual host integration TRX inventories. Attack: Missing or aborted test, opposite-host execution, zero/not-executed result, current vs stale worktree. PASS for present tagged inventory. Windows157+1+6;Linux171+1+16. All34previous sandbox failures now execute in each lane. Does not prove the unit inventory is correctly classified.
+
+          - TR-MCP-NUKE-019 AC-3. Tests: Both Nuke lane logs. Attack: Filter omitted, wrong host exclusion, secrets in filter output. PASS. Exact filter line is present on each host; only selection text is logged.
+
+          - TR-MCP-NUKE-019 AC-4 and TR-MCP-NUKE-018. Tests: LinuxProviderTestProvisioner scripted contracts and existing negative controls; takeover blob comparison; full Build.Tests. Attack: Missing binary, provider readiness failure, timeout/cancellation, provisioning reuse and cleanup. PASS for no regression in this PR. Provisioning code remains the taken-over implementation and full infrastructure suite passes. Broader NUKE018 pending acceptance is not converted to completed.
+
+          - TR-MCP-NUKE-019 AC-5. Tests: IntegrationLanePreconditionContract/mock/real plus actual Windows WSMan and interactive runs. Attack: Linux non-interactive, Windows non-interactive, Windows interactive, disconnected logged-on desktop, session mismatch. PASS. Non-interactive Windows fails before tests; interactive kingd session1 runs the target and desktop assertion. No build relaunch mechanism or requirement waiver.
+
+          - TR-MCP-QUALITY-001 ac-21. Tests: Central package pins, original advisories, both host final restores. Attack: Transitive Pkcs pin, vulnerable version retained, audit disable or warning suppression. PASS. Xml/Pkcs10.0.13 and clean unsuppressed restore. The5broader advisory records were checked at review time.
+
+          - FR/TR/TEST-MCP-PATHNORM-001 unitgreen-native-host. Tests: WorkspaceNativePathHostContract, scripted mock/rejection controls, WorkspaceNativePathHostRealTests. Attack: Windows drive/UNC/root, already-native separators, foreign Windows path on non-Windows, backward compatibility of old entry. PASS. Same7cases passed on both hosts. P1.5 federation/rekey criteria remain outside scope and pending.
+
+          - TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008, TEST-MCP-USECASE-019/020. Tests: Classification inventory, actual scanner probes, native tests and full host gates. Attack: Sibling native contract passes on one sandbox, direct syntax split/qualification, helper/source dependency, silent returns. FAIL. Native symlink unit tests and undisclosed repository inputs survive; scanner misses direct syntax. No assertions were removed from moved cases; no skipped outcomes are accepted.
+
+          - Requirement/TODO/session continuity and goal item4. Tests: Live plugin reads and historical transcript. Attack: Stale exports mistaken for store, absent deleted FR still mapped, terminal or satisfied state asserted early. PASS for current pending metadata and declared export block. This verdict forbids any completed-state inference; own session persistence is verified separately.
+
+
+          Gate ledger (total/passed/failed/not-executed; exit):
+
+
+          - unit-green-r2-guard-compile-20261019T2100, Compile, head 6b4295b7 plus the four guard files: //0/0; exit 0.
+
+          - unit-green-r2-guard-mockgate-20261019T2103, Test, head 6b4295b7 plus the four guard files: 4624/4624/0/0; exit 0.
+
+          - unit-green-r2-test-20261019T2110, Test Linux, head b4ad42aa: 4588/4588/0/0; exit 0.
+
+          - unit-green-win-r2-20261019T2110, Test Windows, head b4ad42aa: 4588/4588/0/0; exit 0.
+
+          - unit-green-win-interactive-20261019T2112, MigrationIntegrationTests Windows, head b4ad42aa: 164/164/0/0; exit 0.
+
+          - unit-green-r2-int-20261019T2118, MigrationIntegrationTests Linux, head b4ad42aa: 188/188/0/0; exit 0.
+
+          - unit-green-r2-traceability-20261019T2120, ValidateTraceability, head b4ad42aa: //0/0; exit 0.
+
+          - unit-green-r2-buildtests-20261019T2120, Build.Tests raw dotnet test, head b4ad42aa: 436/436/0/0; exit 0.
+
+          - hv-ug-r2-test-20261019T213351, Reviewer sandbox Nuke Test, head a94579db927f25a0cbddd07d639f3054f2ee72e8: 4588/4588/0/0; exit 0.
+
+          - hv-ug-r2-validatetraceability-20261019T214329, Reviewer Nuke ValidateTraceability, head a94579db927f25a0cbddd07d639f3054f2ee72e8: //0/0; exit 0.
+
+
+          Commands and exit evidence:
+
+
+          - pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-run-gate.ps1 -Gate Test. Exit 0. hv-ug-r2-test-20261019T213351 metadata, stdout, stderr and exit receipt; invokes ./build.ps1 Test --test-run-id hv-ug-r2-test-20261019T213351
+
+          - pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-run-gate.ps1 -Gate ValidateTraceability. Exit 0. hv-ug-r2-validatetraceability-20261019T214329 metadata/log/exit; invokes ./build.ps1 ValidateTraceability
+
+          - git log --first-parent 3da2db93..a94579db927f25a0cbddd07d639f3054f2ee72e8; git diff 3da2db93...a94579db927f25a0cbddd07d639f3054f2ee72e8; git diff --name-only b4ad42aa..a94579db927f25a0cbddd07d639f3054f2ee72e8 (separate commands through PowerShell evidence scripts). Exit 0. hv-ug-r2-evidence-git.json, product.diff.txt and testdiff.json
+
+          - gh pr view 87 --repo sharpninja/McpServer --json title,body,headRefName,headRefOid,baseRefName,isDraft,state,url,commits,mergeStateStatus; gh api repository activity (separate read-only calls). Exit 0. hv-ug-r2-evidence-github.json; explicit installed gh2.102.0 binary used after default shim failure
+
+          - gh api advisories/<each of the five GHSA ids> through hv-ug-r2-confirm.ps1 -Mode Advisories. Exit 0. hv-ug-r2-confirm-advisories.json records each command exit
+
+          - pwsh.exe -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1 with hv-ug-r2-windows-read.ps1 and hv-ug-r2-windows-diff.ps1. Exit 0. hv-ug-r2-windows-live-retry.txt and hv-ug-r2-windows-diff.txt; read-only remote scripts; no reviewer Windows writes
+
+          - pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-scanner-probe.ps1. Exit 0. hv-ug-r2-scanner-probe.json; actual compiled scanner, no tracked source modification
+
+          - PowerShell parser and Invoke-ScriptAnalyzer -Severity Warning,Error for each authored .ps1 before execution. Exit 0. Response JSONL records successful checks after fixing initial findings; final script checks revalidate all authored scripts
+
+          - Live plugin workflow.requirements.*, workflow.todo.get, own workflow.sessionlog.*, client.SessionLog.QueryAsync through hv-ug-r2-mcp.ps1. Exit 0. Each retained envelope proves success or explicitly not_found for deleted FRs; no raw REST or Claude wrapper
+
+          - Initial workflow.sessionlog.openSession without sessionId; default gh shim; malformed -File array/read paths; unsupported installed client.SessionLog.GetAsync. Exit 1. Failures are retained in the response stream and own evidence; corrected with required id, installed gh, exact paths and supported query. No successful state was inferred from these attempts.
+
+          Full command/tool-call ledger: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-final-ledger.json. Entries distinguish captured exit codes from unforwarded shell status. The response JSONL is the exact evolving command stream.
+
+
+          Review boundaries and own protocol disclosures:
+
+
+          - Review only: no tracked-file edit, commit, push, deletion, requirement/TODO/memory/triage/settings mutation or Windows write by the reviewer. Own session and isolated cache plus review receipts are the only authored state. Final git tracked status was clean.
+
+          - The Windows task-removal historical receipt says absent; current WSMan identity cannot enumerate that task without access denied. Task absence is not used to prove test execution. The actual runner proof, log, SHA and TRX were independently read.
+
+          - I used inline PowerShell for bootstrap reads, parser/analyzer invocations and some selectors. Those inline selectors were not separately analyzed .ps1 files. Every authored .ps1 used for data work was parsed and analyzed before execution. This is a reviewer operating-rule deviation, disclosed rather than attributed to the implementer.
+
+          - Some orchestration calls forwarded stdout without the shell exit-code field. The complete rollout-derived command ledger marks those codes as not retained; no missing code is invented. The actual gate exit files, TRX, gh statuses and plugin persistence envelopes independently support the scored claims.
+
+          - One overbroad receipt search produced truncated output; later targeted reads supplied the relevant source. Some guessed read paths and a plugin GetAsync probe failed and were corrected. The installed plugin, not current source alone, determines method availability.
+
+          - The unit rerun does not prove universal environmental independence. Native link contracts prove dependence by their actual boundary even though both hosts and this sandbox passed. Ordinary portable temp fixtures were not indiscriminately treated as defects.
+
+          - No out-of-scope federationP1.5, PR82/86 review, C4modeldocs/tooling or wiki-export defect is scored. The effect of stale exports and declared blocking on this PR is scored.
+
+
+          Primary advisory sources for UG5: [GHSA-2fmv-rv2c-59x7](https://github.com/advisories/GHSA-2fmv-rv2c-59x7), [GHSA-846f-f764-76mx](https://github.com/advisories/GHSA-846f-f764-76mx), [GHSA-7hqp-7c5m-4vq6](https://github.com/advisories/GHSA-7hqp-7c5m-4vq6), [GHSA-c399-9853-6jmj](https://github.com/advisories/GHSA-c399-9853-6jmj), [GHSA-r955-8q5j-3h83](https://github.com/advisories/GHSA-r955-8q5j-3h83).
+
+
+          Persistence: the entire prose, full receipt JSON and final VERDICT JSON are stored as ordered dialog parts in Codex-20261020T023103Z-unitgreen-r2 / req-20261020T023148Z-unitgreen-r2. The final read-back verifies exact text/hash equality, whole response, completed status and model through supported plugin history/query methods. Verification artifact: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-persistence-proof.json. The receipt asserts persistence only together with that successfully generated proof.
+
+          Request JSONL: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261019T212828-unitgreen-r2.request.jsonl
+
+          Response JSONL: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261019T212828-unitgreen-r2.response.jsonl
+
+          Prose receipt: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md
+
+          JSON receipt: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json
+
+
+          === VERDICT JSON ===
+
+          {"overallVerdict":"DISAGREE","accuracy":96,"completeness":94,"confidence":99,"passCount":7,"failCount":6,"unknownCount":0,"failList":[{"id":"R2-F1","claims":["UG3","UG8","UG11","UG12","UG13"],"location":"tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:261; tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:97; tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:24; tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:12; plan:180-181,196-199; round 2 self-review:6","defect":"The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence.","fix":"Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.","classification":"Implementer edit"},{"id":"R2-F2","claims":["UG3","UG8","UG11","UG13"],"location":"tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:27-29,98-118; docs/plans/2026-10-19-unit-suite-green.md:127,136,193; round 2 self-review:6-7","defect":"The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract.","fix":"Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.","classification":"Implementer edit"},{"id":"R2-F3","claims":["UG10","UG11","UG13"],"location":"docs/receipts/hv/20261019T212828-unitgreen-r2.selfreview.md:14; /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1:45-68; implementer transcript:12908,12922,12974","defect":"The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap.","fix":"Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence.","classification":"Implementer audit edit"}],"unknownList":[],"implementerFixes":["R2-F1: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.","R2-F2: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.","R2-F3: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence."],"operatorDecisionFails":[],"closure":[{"id":"F1","verdict":"PASS"},{"id":"F2","verdict":"FAIL"},{"id":"F3","verdict":"FAIL"},{"id":"F4","verdict":"PASS"},{"id":"F5","verdict":"PASS"},{"id":"F6","verdict":"PASS"},{"id":"F7","verdict":"FAIL"}],"headSha":"a94579db927f25a0cbddd07d639f3054f2ee72e8","receiptPaths":["/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md","/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json"],"reviewerSessionId":"Codex-20261020T023103Z-unitgreen-r2","reviewerRequestId":"req-20261020T023148Z-unitgreen-r2"}
+        interpretation: Independent class1 hostile review at pinned a94579db, one round, DISAGREE96/94; no implementation or reviewed-state mutation.
+        status: completed
+        planFile: docs/plans/2026-10-19-unit-suite-green.md
+        todoId: IMPL-UNITGREEN-001
+        actions:
+        - order: 1
+          description: Preserve reviewer independence with Codex identity and isolated cache; verified one profile file, full root marker read, rollout model and effort before validation.
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hv/hv-ug-r2-bootstrap.ps1
+        - order: 2
+          description: Verified live gpt-6-astra/max identity and code head; read full plan and starting findings, launched independent sandboxed unit gate, captured live plugin requirement and TODO records.
+          type: review
+          status: in_progress
+          filePath: docs/receipts/hv/hv-ug-r2-store.ps1
+        - order: 3
+          description: Remaining real symlink/reparse unit tests contradict the existing day-one rule; classify as implementer edits, not a new requirement or operator decision. Scanner direct syntax bypasses require sibling coverage, not a waiver.
+          type: design_decision
+          status: completed
+          filePath: tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs
+        - order: 4
+          description: Read primary GitHub advisory APIs for GHSA-2fmv-rv2c-59x7, GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj, GHSA-r955-8q5j-3h83 at https://github.com/advisories/<id>. Each names 10.0.13 as first patched 10.x version for the respective Xml/Pkcs package; receipt hv-ug-r2-confirm-advisories.json.
+          type: web_reference
+          status: completed
+        - order: 5
+          description: 'Review conclusion: classify the surviving real-symlink unit tests and additional source-reading fixtures as a material day-one classification gap, not a requirement change. Passing the reviewer sandbox proves this run, not independence from native filesystem capabilities. The scanner also misses direct multiline OperatingSystem checks and globally qualified or listed SupportedOSPlatform attributes, confirmed against the built scanner. A separate self-review accuracy defect is the generated Windows runner: the parent script writes it then starts the task without analyzing the emitted script. Reject treating parent-script analysis as analysis of generated code. These are implementer edits; no new operator decision is required. Windows task execution itself is accepted as operational H1 because it ran in the logged-on user desktop session and did not alter the build refusal. Profile reloaded in full after each compaction, still one profile file.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hv/hv-ug-r2-scanner-probe.json
+        - order: 100
+          description: 'R2-F1: The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence. Change required: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.'
+          type: design_decision
+          status: completed
+          filePath: tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:261; tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:97; tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:24; tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:12; plan:180-181,196-199; round 2 self-review:6
+        - order: 101
+          description: 'R2-F2: The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract. Change required: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.'
+          type: design_decision
+          status: completed
+          filePath: tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:27-29,98-118; docs/plans/2026-10-19-unit-suite-green.md:127,136,193; round 2 self-review:6-7
+        - order: 102
+          description: 'R2-F3: The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap. Change required: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence.'
+          type: design_decision
+          status: completed
+          filePath: docs/receipts/hv/20261019T212828-unitgreen-r2.selfreview.md:14; /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1:45-68; implementer transcript:12908,12922,12974
+        - order: 103
+          description: 'GitHub advisory GHSA-2fmv-rv2c-59x7; URL=https://github.com/advisories/GHSA-2fmv-rv2c-59x7; use: independently confirm patched package version10.0.13 for UG5.'
+          type: web_reference
+          status: completed
+        - order: 104
+          description: 'GitHub advisory GHSA-846f-f764-76mx; URL=https://github.com/advisories/GHSA-846f-f764-76mx; use: independently confirm patched package version10.0.13 for UG5.'
+          type: web_reference
+          status: completed
+        - order: 105
+          description: 'GitHub advisory GHSA-7hqp-7c5m-4vq6; URL=https://github.com/advisories/GHSA-7hqp-7c5m-4vq6; use: independently confirm patched package version10.0.13 for UG5.'
+          type: web_reference
+          status: completed
+        - order: 106
+          description: 'GitHub advisory GHSA-c399-9853-6jmj; URL=https://github.com/advisories/GHSA-c399-9853-6jmj; use: independently confirm patched package version10.0.13 for UG5.'
+          type: web_reference
+          status: completed
+        - order: 107
+          description: 'GitHub advisory GHSA-r955-8q5j-3h83; URL=https://github.com/advisories/GHSA-r955-8q5j-3h83; use: independently confirm patched package version10.0.13 for UG5.'
+          type: web_reference
+          status: completed
+        - order: 108
+          description: Complete native-PowerShell-built hostile-review receipt. No implementation edit.
+          type: file_created
+          status: completed
+          filePath: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md
+        - order: 109
+          description: Complete native-PowerShell-built hostile-review receipt. No implementation edit.
+          type: file_created
+          status: completed
+          filePath: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json
+        - order: 110
+          description: Independent sandbox Nuke Test4588passed/0failed/0not-executed and ValidateTraceability exit0; actual original Linux/Windows TRX and all final gates reconciled. Scanner probes reproduce four direct-syntax misses. Full verdict retained in ordered dialog parts.
+          type: validation
+          status: completed
+        model: gpt-6-astra
+        tokenCount: 0
+        tags:
+        - unitgreen-r2
+        - IMPL-UNITGREEN-001
+        - hostile-validation
+        - gpt-6-astra
+        - max
+        - DISAGREE
+        - effort-max
+        - TR-MCP-NUKE-019
+        - TR-MCP-USECASE-018
+        - TR-MCP-USECASE-019
+        contextList:
+        - /home/sharpninja/.claude/profile/PROFILE-MERGED.md
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261019T212828-unitgreen-r2.request.jsonl
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261019T212828-unitgreen-r2.response.jsonl
+        - docs/receipts/hv/20261019T212828-unitgreen-r2.request.jsonl
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-persistence-proof.json
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-final-ledger.json
+        - docs/plans/2026-10-19-unit-suite-green.md
+        - https://github.com/advisories/GHSA-2fmv-rv2c-59x7
+        - https://github.com/advisories/GHSA-846f-f764-76mx
+        - https://github.com/advisories/GHSA-7hqp-7c5m-4vq6
+        - https://github.com/advisories/GHSA-c399-9853-6jmj
+        - https://github.com/advisories/GHSA-r955-8q5j-3h83
+        processingDialog:
+        - timestamp: 2026-10-20T02:31:57.1375923+00:00
+          role: model
+          content: 'Mandatory first actions: add-profile skill executed, one non-skill profile Markdown read in full; root marker read in full without emitting its secret; live rollout line 8 proves gpt-6-astra/max. Choose isolated Codex wrapper cache outside worktree; reject raw REST and inherited implementer sessions. User requires review only. Request timestamp is local 20261019T212828.'
+          category: decision
+        - timestamp: 2026-10-20T02:37:57.8014015+00:00
+          role: model
+          content: Full plan sections 1 to 14, round 1 findings, round 2 self-review, workspace rules and branch head read. Dedicated turn creation now has durable-write confirmation. Initial openSession call omitted required sessionId and was rejected; corrected using the plugin-generated isolated-cache session id. Independent Nuke Test started under workspace-write sandbox as hv-ug-r2-test-20261019T213351 without overrides. Live requirement/TODO/mapping/effective/history payloads captured through installed Codex wrapper only. No state changes to reviewed records.
+          category: observation
+        - timestamp: 2026-10-20T02:43:25.3536588+00:00
+          role: model
+          content: Independent sandboxed Nuke Test hv-ug-r2-test-20261019T213351 completed successfully at 21:40:22, with no gate overrides. Original b4ad42aa native Linux receipts and Windows TRX independently read. Windows interactive runner proof and its real interactive test pass are present. Actual compiled scanner probes reproduce the round 1 exact cases successfully but miss multiline OperatingSystem calls, multiline interpolated calls and global-qualified/listed OS platform attributes. Evidence hv-ug-r2-scanner-probe.json. These are direct source constructs, not helper/BCL limits; investigating claim impact. Initial WSMan read stopped at denied task inventory; retry caught that read-only access error and obtained actual TRX and runner files.
+          category: observation
+        - timestamp: 2026-10-20T02:51:06.0002178+00:00
+          role: model
+          content: Context recovery reread the full add-profile skill and the one current profile Markdown. Independent sandbox Nuke Test hv-ug-r2-test-20261019T213351 passed 4588/4588/0/0; independent ValidateTraceability exited 0. Actual Windows TRX reads confirm 4588 unit and 164 interactive integration passes at b4ad42aa; all 34 round 1 failed tests are now in both native integration lanes and absent from unit results. Current scanner still misses direct multiline OperatingSystem calls and qualified/listed OS attributes in adversarial reflection probes. No conclusion yet on complete remaining environment audit.
+          category: observation
+        - timestamp: 2026-10-20T02:54:55.0548674+00:00
+          role: model
+          content: 'Classify remaining native symlink/reparse-point unit cases as a material failure of UG3 and F2 closure: RequirementsWikiExportConfigTests.Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation (lines 260-282) and RequirementsDocFxWorkflowRunnerTests.RunAsync_WhenOutputContainsReparsePointEscape_Throws (96-116) create real symbolic links and assert native reparse behavior while untagged. A passing sandbox is insufficient to infer environment independence. Rejected treating this as a new requirement: the existing operator day-one directive already governs. Separate scanner direct-syntax bypasses also remain material; no production fix is made during review.'
+          category: decision
+        - timestamp: 2026-10-20T03:08:57.3644133+00:00
+          role: model
+          content: 'Review conclusion: classify the surviving real-symlink unit tests and additional source-reading fixtures as a material day-one classification gap, not a requirement change. Passing the reviewer sandbox proves this run, not independence from native filesystem capabilities. The scanner also misses direct multiline OperatingSystem checks and globally qualified or listed SupportedOSPlatform attributes, confirmed against the built scanner. A separate self-review accuracy defect is the generated Windows runner: the parent script writes it then starts the task without analyzing the emitted script. Reject treating parent-script analysis as analysis of generated code. These are implementer edits; no new operator decision is required. Windows task execution itself is accepted as operational H1 because it ran in the logged-on user desktop session and did not alter the build refusal. Profile reloaded in full after each compaction, still one profile file.'
+          category: decision
+        - timestamp: 2026-10-20T03:19:46.1532272+00:00
+          role: model
+          content: Independent Codex gpt-6-astra/max review only with isolated cache, not an inherited implementer session; no product or requirement mutations.
+          category: decision
+        - timestamp: 2026-10-20T03:19:46.1560602+00:00
+          role: model
+          content: 'Accept D-A docs-only equivalence: final code/test/build gates are b4ad42aa, while the full guard mock gate correctly precedes classification at6b4295b7 plus four guard edits.'
+          category: decision
+        - timestamp: 2026-10-20T03:19:46.1560860+00:00
+          role: model
+          content: Accept operational desktop task as H1 because the target ran in kingd interactive session1 and still refuses non-interactive callers; reject conflating it with build-owned H2 relaunch.
+          category: decision
+        - timestamp: 2026-10-20T03:19:46.1561102+00:00
+          role: model
+          content: Do not treat passing native/sandbox tests as proof of environment independence; the direct native contract defines classification.
+          category: decision
+        - timestamp: 2026-10-20T03:19:46.1561303+00:00
+          role: model
+          content: Keep current pending criteria and TODO state; the second disagreement triggers the existing goal stop condition, not an automatic next round.
+          category: decision
+        - timestamp: 2026-10-20T03:19:46.1561527+00:00
+          role: model
+          content: 'R2-F1: The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence. Consequence: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced. Alternatives: accept the current broad claim, rejected because the recorded source and probes contradict it. Classification: Implementer edit'
+          category: decision
+        - timestamp: 2026-10-20T03:19:46.1561734+00:00
+          role: model
+          content: 'R2-F2: The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract. Consequence: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates. Alternatives: accept the current broad claim, rejected because the recorded source and probes contradict it. Classification: Implementer edit'
+          category: decision
+        - timestamp: 2026-10-20T03:19:46.1561949+00:00
+          role: model
+          content: 'R2-F3: The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap. Consequence: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence. Alternatives: accept the current broad claim, rejected because the recorded source and probes contradict it. Classification: Implementer audit edit'
+          category: decision
+        - timestamp: 2026-10-20T03:19:34.3104352+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 001/009
+
+            COMPLETE VERDICT PROSE
+
+            2026-10-19T22:19:32 - Independent hostile validation unitgreen-r2: DISAGREE.
+
+
+            Accuracy 96, completeness 94, confidence 99. Claims: 7 PASS, 6 FAIL, 0 UNKNOWN. Scores assess the merge-readiness claim, not the fraction of passing tests. All final gates and the five prior PASS claims are verified, but existing native unit contracts, direct scanner blind spots and an inaccurate audit statement prevent the functional98/98 threshold. No threshold is lowered.
+
+
+            Validator Codex, gpt-6-astra, effort max. Live proof: /home/sharpninja/.codex/sessions/2026/10/19/rollout-2026-10-19T21-28-30-01a15723-8ca8-7853-bd41-0ccc5d8cb16a.jsonl:8, turn_context at2026-10-20T02:28:32.19Z. All observed turn contexts agree. Thread 01a15723-8ca8-7853-bd41-0ccc5d8cb16a; session Codex-20261020T023103Z-unitgreen-r2; request req-20261020T023148Z-unitgreen-r2.
+
+            Mandatory first actions completed before validation: read the requested add-profile skill and every non-skill profile Markdown in full, count1; read the root marker in full without printing its key values; opened an independent session and turn through the installed Codex mcpserver1.121.0 wrapper, with cache outside this worktree. Profile reloaded after every compaction. No Claude wrapper or raw REST used.
+
+            TimestampUtc: 2026-10-20T03:19:32.2888305Z; TimestampLocal: 2026-10-19T22:19:32. Class1; head a94579db927f25a0cbddd07d639f3054f2ee72e8; base 3da2db93b3912b6301509f11aedcd59cb004274b; last code head b4ad42aaa601ed0df7e03b34203dee4f93d316a9. PR: https://github.com/sharpninja/McpServer/pull/87
+
+
+            Observed: the final unit and integration runs really pass with the stated totals, including the previously missing Windows interactive lane. The reviewer sandbox also passes every one of4588unit tests. The three concrete findings below prevent merge readiness. No done-state update is supported by this verdict.
+
+
+            R2-F1 - Native filesystem contracts remain unit tests; the claimed exception inventory is incomplete [Implementer edit].
+
+            Location: tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:261; tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:97; tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:24; tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:12; plan:180-181,196-199; round 2 self-review:6.
+
+            The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence.
+
+            Evidence: RequirementsWikiExportConfigTests.Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation has [Fact] without Integration, creates a real link at line 269, and asserts a reparse error at line 274.
+
+            Evidence: RequirementsDocFxWorkflowRunnerTests.RunAsync_WhenOutputContainsReparsePointEscape_Throws has [Fact] without Integration, creates a real link at line 107, and asserts reparse rejection plus cleanup at lines 115-116. Production RequirementsDocFxWorkflowRunner.cs:169,227 reads native reparse attributes.
+
+            Evidence: HandoffSkillDelegationTests.cs:27-29 reads plugins/core/skills/handoff/SKILL.md from FindRepoRoot; MemorySchemaContractTests.cs:15-16,52-65 reads docs/context/repl-yaml-message.schema.json by walking to the checkout. Neither is one of the two declared guards.
+
+            Evidence: hv-ug-r2-confirm-cases.json records all four cases as Passed in both actual unit TRX inventories and absent from the Windows integration inventory. The independent sandbox Nuke Test also passes 4588/4588/0/0. That confirms execution, not independence.
+
+            Evidence: All 34 round-one failures are now present and Passed in both integration lanes and absent from units (hv-ug-r2-reconcile-results.json). The two benchmark writers also moved. This finding concerns omitted siblings, not a denial of that completed remediation.
+
+            Change required: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.
+
+
+            R2-F2 - The scanner remediation still misses valid direct platform syntax [Implementer edit].
+
+            Location: tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:27-29,98-118; docs/plans/2026-10-19-unit-suite-green.md:127,136,193; round 2 self-review:6-7.
+
+            The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract.
+
+            Evidence: hv-ug-r2-scanner-probe.json invokes Scan, StripCommentsAndStrings and FindSkipLines from the actual freshly built QBrainAi.Support.Mcp.Tests.dll; assembly and source SHA-256 values are recorded.
+
+            Evidence: multilineOs and multilineInterpolationOs each retain OperatingSystem followed by a dot and newline then IsWindows(), yet yield zero findings.
+
+            Evidence: qualifiedOsAttribute uses [global::System.Runtime.Versioning.SupportedOSPlatform("windows")]; listedOsAttribute uses [Fact, System.Runtime.Versioning.SupportedOSPlatform("windows")]. Both yield zero findings.
+
+            Evidence: Controls pass: ordinary, multiline, qualified and listed xUnit skip attributes are detected; ordinary and nested interpolation OS checks are detected; comments and ordinary string literals remain excluded; multiline Assert.SkipWhen is detected. Original round-one examples are repaired, but the sibling sweep is incomplete.
+
+            Change required: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.
+
+
+            R2-F3 - The self-review overstates pre-execution analysis of the generated Windows runner [Implementer audit edit].
+
+            Location: docs/receipts/hv/20261019T212828-unitgreen-r2.selfreview.md:14; /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1:45-68; implementer transcript:12908,12922,12974.
+
+            The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap.
+
+            Evidence: The parent script creates runnerText at lines 45-52, writes it at line 53, then registers and starts the task at lines 61-68. There is no parser or analyzer step for runnerText or the emitted runner.
+
+            Evidence: hv-ug-r2-final-auditrunner.json records the source and the round-two analyzer invocations. The final parent analysis is at 21:13:09; the task is started at 21:13:20. The live read-only Windows receipt retains the six-line generated runner and its execution proof.
+
+            Evidence: Invoke-LegionSsh.ps1:22-26 parses the uploaded parent script only. It does not analyze the runner that the parent later creates. The successful 164-case Windows run remains valid evidence; this is an audit-accuracy defect, not a claimed test failure.
+
+            Change required: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence.
+
+
+            Operator-decision failures: none. The recommended corrections implement settled rules. This is the second DISAGREE in the native-classification/scanner design area. The operator goal at transcript10716 requires stopping and asking the operator at that point. All technical corrections are implementer edits; this procedural stop does not create an operator-decision failure or authorize a third round. One review only was performed.
+
+
+            UG1: PASS. Final gate results and docs-only equivalence verified, with the explicitly separate pre-reclassification guard mock gate.
+
+
+            - hv-ug-r2-evidence-git.json: b4ad42aa..a94579db contains 224 paths, all under docs/. The pinned head and 18 first-parent commits match GitHub.
+
+            - hv-ug-r2-evidence-runs.json and hv-ug-r2-reconcile-results.json independently reconcile copied metadata with scratch originals and actual TRX. Final Linux and Windows units: 4588/4588/0/0; Linux lane:188/188/0/0; Windows interactive lane:164/164/0/0; Build.Tests:436/436/0/0; traceability exit0.
+
+            - The guard compile and mock runs intentionally precede b4ad42aa: HEAD6b4295b7 plus four guard files, compile exit0, full mock4624/4624/0/0. They are not falsely described here as clean b4ad42aa runs. Final Linux run metadata lists only the two test-generated benchmark JSON paths as dirty tracked files.
+
+            - Windows metadata starts from the verified code head. Read-back after execution additionally shows generated .nuke/build.schema.json formatting (JSON semantically equal), and the interactive worktree has benchmark JSON/Markdown outputs. The final Linux metadata claim is not generalized to an entirely clean post-run Windows tree.
+
+            - No audit override, warning suppression or extra narrowing was found. Test uses its existing Category!=AiReview&Category!=Integration filter; lanes use the declared host exclusion. The two failed sandbox attempts never reached tests and are not counted green.
+
+
+            UG2: PASS. The corrective slice has the requested tests-first and full-green-before-reclassification chronology; the historical red gate is now accurately denominated.
+
+
+            - hv-ug-r2-reconcile-chronology.json and the original transcript place scripted guard cases/negative controls before the lexer edits, the full mock gate ending21:06:34 before traits written21:07:35, followed by guard commit49cfec92 and classification commitb4ad42aa. Same sources/cases bind the real scanner.
+
+            - Plan:141,195 and current TODO task10 preserve the historical 4692 total,4675 passed,1 failed,16 NotExecuted,exit255. The 17 passing scanner cases are no longer represented as a wholly green Nuke run. A later run does not erase the old breach.
+
+            - The original A/B/D/F/G/H slices, takeover tests and negative controls retain round-one support: additive native-path seam, unchanged-case binding,21-case G mock gate and9-case H mock gate before their production bindings. The new valid-syntax omissions are R2-F2, not fabricated chronology.
+
+
+            UG3: FAIL. The no-environment-dependent-unit claim and direct-platform guard contract are false.
+
+
+            - R2-
+          category: observation
+        - timestamp: 2026-10-20T03:19:34.3140123+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 002/009
+
+            F1 and R2-F2 give reproducible native unit dependencies and scanner bypasses.
+
+            - The complete changed-test diff was inspected:69 changed test files, including29 trait-only changes. Moved native cases preserve assertions; the removed platform returns and host-specific splits remain correct. The independent full unit run passes4588, with no skips.
+
+            - The two benchmark writers and34 prior failing cases are now Integration; source helper limits and the approved UnitTestPaths host-shaped fixture are not misclassified as new defects.
+
+
+            Required change: Apply R2-F1 and R2-F2 and reconcile the resulting unit/integration inventories and full host gates. Locations and evidence: R2-F1, R2-F2. Classification: implementer edit.
+
+
+            UG4: PASS. TR-MCP-NUKE-019 AC-1 through AC-5 implementation and host execution are evidenced; AC-4 provisioning remains unchanged.
+
+
+            - build/IntegrationLaneFilter.cs:8-12 returns the exact two filters and rejects unknown enum values. Build.TestDependencies binds and logs the filter before tests and includes Support.Mcp, McpAgent and Build.Tests.
+
+            - build/InteractiveSessionPrecondition.cs:9-16 rejects non-interactive Windows with the named missing-session message. The final WSMan invocation refuses before tests and has no lane TRX.
+
+            - The interactive runner records kingd,session1,interactive=True,headb4ad42aa. Log filter Category=Integration&Platform!=Linux; actual TRX157+1+6=164allPassed, including the desktop-spawner and transcript cases. Linux lane171+1+16=188allPassed.
+
+            - H1 is satisfied by an operational task that launches the existing target in the logged-on desktop. H2 was build-owned automatic relaunch; no such code was added. The reviewer independently read the Windows evidence over WSMan.
+
+            - The filter and precondition contract/mock/negative-control/real tests remain in the436passing Build.Tests. Linux provisioning takeover remains blob-identical; Windows LocalDB/PostgreSQL provisioning is unchanged. Broader unit classification is separately failed under UG3 and D-B.
+
+
+            UG5: PASS. The patched package and unsuppressed audit evidence remain valid.
+
+
+            - Directory.Packages.props centrally pins System.Security.Cryptography.Xml and Pkcs10.0.13. No new audit settings,NoWarn,WarningsNotAsErrors or command override. Both host final restores and the independent Linux restore are clean.
+
+            - hv-ug-r2-confirm-advisories.json: primary GitHub advisory API records for GHSA-2fmv-rv2c-59x7,GHSA-846f-f764-76mx,GHSA-7hqp-7c5m-4vq6,GHSA-c399-9853-6jmj,GHSA-r955-8q5j-3h83 name10.0.13 as the patched10.0line version. Live TR-MCP-QUALITY-001 ac-21 remains false pending AGREE.
+
+
+            UG6: PASS. FR/TR/TEST-MCP-PATHNORM-001 scope and additive host seam remain supported.
+
+
+            - src/QBrainAi.Client/WorkspaceIdentityPath.cs preserves the two-argument method by delegation and adds the injectable host overload. Windows slash conversion and foreign-path preservation retain independently expected outputs.
+
+            - The same seven WorkspaceNativePathHostRealTests cases pass in both actual host unit TRX; the scripted contract and rejection controls remain unchanged. hv-ug-r2-confirm-cases.json.
+
+            - The live TEST criterion unitgreen-native-host is the claimed criterion. The five broader TR P1.5 criteria are pending and are not claimed satisfied or reviewed as this PR scope.
+
+
+            UG7: PASS. Live requirement mappings, pending criteria and reworded TODO metadata match the declared scope.
+
+
+            - All current records were read through workflow.requirements.* and the TODO through workflow.todo.get, never TODO files or raw REST. hv-ug-r2-store-*.txt and hv-ug-r2-reconcile-store.json retain results.
+
+            - TR-USECASE018 has7criteria;TR-USECASE019 has12;both map to FR-USECASE001 and TEST019/020. Deleted FR-USECASE016/017 returnnot_found and have zero mapping rows. BUILD001 maps NUKE018/019;PATHNORM001 maps its TR and TEST. Criteria and descriptions match the round-one live records.
+
+            - IMPL-UNITGREEN-001 has13tasks,zero checked,donefalse. Task9 now permits the goal-item4 declared wiki-export blocker;task10 states the complete historical red denominator and corrected gate. No premature satisfied state observed.
+
+            - The current generated docs/Project exports are stale; the goal expressly allows declared blocking. A passing ValidateTraceability against those exports is not a current-store synchronization claim.
+
+
+            UG8: FAIL. The plan is substantially reconciled, but its remaining classification and guard claims exceed the implementation.
+
+
+            - All14sections read end to end. Approvals, amendments, takeover ownership, superseded historical runs, full red denominator, new H1 run and blocked wiki export are recorded.
+
+            - Plan:180-181,196-199 and self-review:6 treat sandbox success as the sibling classification rule and understate source-reading exceptions. Plan:127 promises direct OS detection defeated by R2-F2.
+
+            - D-A docs-only equivalence and D-D H1 interpretation are supported. D-C residual dual/unknown Platform risk is declared and no existing instance was found. D-B remains contingent but its claimed prerequisite is not met.
+
+
+            Required change: Correct the classification/guard implementation and propagate exact inventory, limits, counts and remaining open items throughout the plan and PR. Locations and evidence: R2-F1, R2-F2. Classification: implementer edit.
+
+
+            UG9: PASS. The C4 code takeover and ownership boundary remain supported.
+
+
+            - All15taken-overfile blobs at11681680matchc2125c42. Later in-scope guard and classification changes are separately recorded.
+
+            - The operator directed C4 to docs only,then explicitly split the BoundedProcess fix into its own PR and merged develop. This review does not score PLAN-C4MODEL-001 docs or TR-MCP-NUKE-017 tooling.
+
+            - No regression in Linux provider provisioning contracts, scripted fakes or required assertions was found in the complete product/test diff.
+
+
+            UG10: FAIL. Commit, push, secret and formatting checks pass, but the self-review script-analysis audit is overstated.
+
+
+            - All18first-parent commits carry the required actual ClaudeCode model/effort signature convention. GitHub activity reports16normalpushes and1branchcreation,no force push.
+
+            - hv-ug-r2-secret-scan.json scans18commitpatches,2125trackedreceiptfiles and the PR body with exact current marker-secret and credential-pattern checks:zero findings. The R1receipt set is217files; the original protection operation reportszero redactions. This is a bounded scan,not a claim to identify every possible secret ever issued.
+
+            - Plan and PR have zero table syntax and zero en/em dash characters. The scoped transcript has803command invocations:802pwshlaunchers and the disclosed historical Bashls. No Python or Node invocation found.
+
+            - R2-F3: the generated Windows runner was not itself analyzed before execution,contrary to self-review:14. The original R1 Bash exception is now accurately disclosed.
+
+
+            Required change: Correct the blanket audit statement and analyze generated scripts before future execution. Retain the valid signing/push/secret evidence. Locations and evidence: R2-F3. Classification: implementer edit.
+
+
+            UG11: FAIL. The self-review and open-item disclosures still omit material classification, scanner and analyzer gaps.
+
+
+            - Self-review:6 explicitly justifies leaving siblings as unit tests because they passed the sandbox; that cannot establish the day-one rule. R2-F1 proves omitted native and source-reading dependencies.
+
+            - Self-review:6-7 reports the guard fixes without the direct-syntax sibling gaps demonstrated by R2-F2. Self-review:14 makes the unsupported analyzer claim in R2-F3.
+
+            - The wiki block,two failed pre-test sandbox attempts,WSMan refusal,SSH task route,failed first task registration and manual project-selection limit are otherwise disclosed accurately.
+
+
+            Required change: Remediate or accurately disclose all three findings and regenerate the self-review and PR open-items from the resulting evidence. Locations and evidence: R2-F1, R2-F2, R2-F3. Classification: implementer edit.
+
+
+            UG12: FAIL. The proposed post-AGREE completion state is not supported by the current whole-platform evidence.
+
+
+            - D-B now correctly makes NUKE019AC-2/3/5 and USECASE018AC-006/019AC-008 contingent on complete platform-rule evidence. The Windows half exists; the zero-environment-dependent-unit half does not (R2-F1).
+
+            - NUKE019AC-1/4,QUALITYac-21 and TESTPATHNORMunitgreen-native-host have direct evidence. NUKE019AC-2/3/5 also have individual lane evidence,but D-B imposes the broader prerequisite before setting them. The other17USECASEcriteria remain outside this evidence and must stayfalse.
+
+            - Task9 as reworded is supported by the explicit goal-item4 declared-block allowance. Task10 still lacks complete classification/guard evidence;task12 lacks AGREE. Therefore all13tasks and the TODO cannot be marked done from this review.
+
+
+            Required change: Retain pending state. Complete R2-F1/R2-F2 and a new authorized independent AGREE before conditional criteria or TODO completion. Do not set the other17criteria. Respect the goal stop condition after this second disagreement. Locations and evidence: R2-F1, R2-F2. Classification: implementer edit.
+
+
+            UG13: FAIL. Four original findings close; three remain open in substance, and the remediation introduces an audit overclaim.
+
+
+            - F1PASS,F2FAIL,F3FAIL,F4PASS,F5PASS,F6PASS,F7FAIL. The closure list below provides each decision.
+
+            - All five claims that passed round one,UG4/5/6/7/9,remainPASS. The corrected original guard examples do not establish a complete sibling sweep.
+
+            - R2-F3 is a new audit-accuracy finding; it does not erase the narrow closure of historical F6.
+
+
+            Required change: Close R2-F1/R2-F2/R2-F3 and their propagation points before claiming all round-one remediation complete. Locations and evidence: R2-F1, R2-F2, R2-F3. Classification: implementer edit.
+
+
+            Round-one closure:
+
+
+            - F1: PASS. The 4692-result historical red run is preserved and corrected in the current plan, PR and TODO; the new full 4624-case green mock gate precedes reclassification. The old breach is acknowledged, not made retroactively green.
+
+            - F2: FAIL. The 34 named failures and two benchmark writers moved correctly, but the required sibling sweep omitted native link contracts and additional repository dependencies. R2-F1.
+
+            - F3: FAIL. Original multiline/qualified skip and ordinary interpolation examples now pass, but direct multiline OS calls and qualified/listed OS attributes still evade the actual scanner. R2-F2.
+
+            - F4: PASS. The b4ad42aa Windows H1 run actually executed 164 passing tests in kingd desktop session 1 with interactive=True and the exact filter. Independent WSMan read-back confirms TRX, proof and log. Non-interactive refusal remains intact.
+
+            - F5: PASS. UnitSuitePlatformScannerTests now explicitly documents manual synchronization and does not claim to read Build.Test. The current seven-project lists agree. Plan section14 records that limit.
+
+            - F6: PASS. Self-review line14 now discloses the exact historical Bash ls at19:22:47. The new generated-runner analyzer overclaim is separately R2-F3, not a denial of this narrow correction.
+
+            - F7: FAIL. Conditional wording and task9 are corrected, and current pending state is accurate; however the asserted present completeness of platform evidence is still false because R2-F1 survives. USECASE AC-006/AC-008 and D-B conditional completion remain unsupported.
+
+
+            Mandatory surfaces, scored separately:
+
+
+            - Surface 1, Requested validation and implementer evidence claims: FAIL, accuracy 96, completeness 94. Gate, SHA, count and receipt evidence is strong. R2-F1/R2-F2 invalidate broad classification/guard completion, and R2-F3 invalidates the blanket analyzer claim.
+
+            - Surface 2, Workspace rules and audit: FAIL, accuracy 96, completeness 95. Signatures, normal pushes, plugin storage, secret scans and formatting pass. The settled day-one classification rule is not fully implemented and the script-analysis audit overclaims its evidence.
+
+            - Surface 3, Requirements, ACs, mappings and BDPv4: FAIL, accuracy 97, completeness 95. Requirement mapping and corrective or
+          category: observation
+        - timestamp: 2026-10-20T03:19:34.3140477+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 003/009
+
+            der pass; no criterion is prematurely satisfied. The two USECASE platform criteria and D-B group still lack the no-native-unit prerequisite. No new requirement is needed for the recommended fixes.
+
+            - Surface 4, Plan as a whole: FAIL, accuracy 95, completeness 94. All14sections, amendments and supersessions were reviewed. D-A and D-D pass; D-C inventory and D-B completion inference remain inaccurate. The goal stop condition now applies to the repeated classification/scanner area.
+
+
+            Requirement what-if and test mapping:
+
+
+            - TR-MCP-NUKE-019 AC-1. Tests: IntegrationLaneFilterContract, IntegrationLaneFilterMockGateTests, IntegrationLaneFilterTests. Attack: Linux, Windows, opposite tags, untagged and invalid enum; exact filter strings and rejection controls. PASS. CurrentHost treats non-Windows as Linux; scope is the two supported lab hosts. Dual/unknown Platform tags remain the explicitly declared residual9, not an invented new AC.
+
+            - TR-MCP-NUKE-019 AC-2. Tests: Both actual host integration TRX inventories. Attack: Missing or aborted test, opposite-host execution, zero/not-executed result, current vs stale worktree. PASS for present tagged inventory. Windows157+1+6;Linux171+1+16. All34previous sandbox failures now execute in each lane. Does not prove the unit inventory is correctly classified.
+
+            - TR-MCP-NUKE-019 AC-3. Tests: Both Nuke lane logs. Attack: Filter omitted, wrong host exclusion, secrets in filter output. PASS. Exact filter line is present on each host; only selection text is logged.
+
+            - TR-MCP-NUKE-019 AC-4 and TR-MCP-NUKE-018. Tests: LinuxProviderTestProvisioner scripted contracts and existing negative controls; takeover blob comparison; full Build.Tests. Attack: Missing binary, provider readiness failure, timeout/cancellation, provisioning reuse and cleanup. PASS for no regression in this PR. Provisioning code remains the taken-over implementation and full infrastructure suite passes. Broader NUKE018 pending acceptance is not converted to completed.
+
+            - TR-MCP-NUKE-019 AC-5. Tests: IntegrationLanePreconditionContract/mock/real plus actual Windows WSMan and interactive runs. Attack: Linux non-interactive, Windows non-interactive, Windows interactive, disconnected logged-on desktop, session mismatch. PASS. Non-interactive Windows fails before tests; interactive kingd session1 runs the target and desktop assertion. No build relaunch mechanism or requirement waiver.
+
+            - TR-MCP-QUALITY-001 ac-21. Tests: Central package pins, original advisories, both host final restores. Attack: Transitive Pkcs pin, vulnerable version retained, audit disable or warning suppression. PASS. Xml/Pkcs10.0.13 and clean unsuppressed restore. The5broader advisory records were checked at review time.
+
+            - FR/TR/TEST-MCP-PATHNORM-001 unitgreen-native-host. Tests: WorkspaceNativePathHostContract, scripted mock/rejection controls, WorkspaceNativePathHostRealTests. Attack: Windows drive/UNC/root, already-native separators, foreign Windows path on non-Windows, backward compatibility of old entry. PASS. Same7cases passed on both hosts. P1.5 federation/rekey criteria remain outside scope and pending.
+
+            - TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008, TEST-MCP-USECASE-019/020. Tests: Classification inventory, actual scanner probes, native tests and full host gates. Attack: Sibling native contract passes on one sandbox, direct syntax split/qualification, helper/source dependency, silent returns. FAIL. Native symlink unit tests and undisclosed repository inputs survive; scanner misses direct syntax. No assertions were removed from moved cases; no skipped outcomes are accepted.
+
+            - Requirement/TODO/session continuity and goal item4. Tests: Live plugin reads and historical transcript. Attack: Stale exports mistaken for store, absent deleted FR still mapped, terminal or satisfied state asserted early. PASS for current pending metadata and declared export block. This verdict forbids any completed-state inference; own session persistence is verified separately.
+
+
+            Gate ledger (total/passed/failed/not-executed; exit):
+
+
+            - unit-green-r2-guard-compile-20261019T2100, Compile, head 6b4295b7 plus the four guard files: //0/0; exit 0.
+
+            - unit-green-r2-guard-mockgate-20261019T2103, Test, head 6b4295b7 plus the four guard files: 4624/4624/0/0; exit 0.
+
+            - unit-green-r2-test-20261019T2110, Test Linux, head b4ad42aa: 4588/4588/0/0; exit 0.
+
+            - unit-green-win-r2-20261019T2110, Test Windows, head b4ad42aa: 4588/4588/0/0; exit 0.
+
+            - unit-green-win-interactive-20261019T2112, MigrationIntegrationTests Windows, head b4ad42aa: 164/164/0/0; exit 0.
+
+            - unit-green-r2-int-20261019T2118, MigrationIntegrationTests Linux, head b4ad42aa: 188/188/0/0; exit 0.
+
+            - unit-green-r2-traceability-20261019T2120, ValidateTraceability, head b4ad42aa: //0/0; exit 0.
+
+            - unit-green-r2-buildtests-20261019T2120, Build.Tests raw dotnet test, head b4ad42aa: 436/436/0/0; exit 0.
+
+            - hv-ug-r2-test-20261019T213351, Reviewer sandbox Nuke Test, head a94579db927f25a0cbddd07d639f3054f2ee72e8: 4588/4588/0/0; exit 0.
+
+            - hv-ug-r2-validatetraceability-20261019T214329, Reviewer Nuke ValidateTraceability, head a94579db927f25a0cbddd07d639f3054f2ee72e8: //0/0; exit 0.
+
+
+            Commands and exit evidence:
+
+
+            - pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-run-gate.ps1 -Gate Test. Exit 0. hv-ug-r2-test-20261019T213351 metadata, stdout, stderr and exit receipt; invokes ./build.ps1 Test --test-run-id hv-ug-r2-test-20261019T213351
+
+            - pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-run-gate.ps1 -Gate ValidateTraceability. Exit 0. hv-ug-r2-validatetraceability-20261019T214329 metadata/log/exit; invokes ./build.ps1 ValidateTraceability
+
+            - git log --first-parent 3da2db93..a94579db927f25a0cbddd07d639f3054f2ee72e8; git diff 3da2db93...a94579db927f25a0cbddd07d639f3054f2ee72e8; git diff --name-only b4ad42aa..a94579db927f25a0cbddd07d639f3054f2ee72e8 (separate commands through PowerShell evidence scripts). Exit 0. hv-ug-r2-evidence-git.json, product.diff.txt and testdiff.json
+
+            - gh pr view 87 --repo sharpninja/McpServer --json title,body,headRefName,headRefOid,baseRefName,isDraft,state,url,commits,mergeStateStatus; gh api repository activity (separate read-only calls). Exit 0. hv-ug-r2-evidence-github.json; explicit installed gh2.102.0 binary used after default shim failure
+
+            - gh api advisories/<each of the five GHSA ids> through hv-ug-r2-confirm.ps1 -Mode Advisories. Exit 0. hv-ug-r2-confirm-advisories.json records each command exit
+
+            - pwsh.exe -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1 with hv-ug-r2-windows-read.ps1 and hv-ug-r2-windows-diff.ps1. Exit 0. hv-ug-r2-windows-live-retry.txt and hv-ug-r2-windows-diff.txt; read-only remote scripts; no reviewer Windows writes
+
+            - pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-scanner-probe.ps1. Exit 0. hv-ug-r2-scanner-probe.json; actual compiled scanner, no tracked source modification
+
+            - PowerShell parser and Invoke-ScriptAnalyzer -Severity Warning,Error for each authored .ps1 before execution. Exit 0. Response JSONL records successful checks after fixing initial findings; final script checks revalidate all authored scripts
+
+            - Live plugin workflow.requirements.*, workflow.todo.get, own workflow.sessionlog.*, client.SessionLog.QueryAsync through hv-ug-r2-mcp.ps1. Exit 0. Each retained envelope proves success or explicitly not_found for deleted FRs; no raw REST or Claude wrapper
+
+            - Initial workflow.sessionlog.openSession without sessionId; default gh shim; malformed -File array/read paths; unsupported installed client.SessionLog.GetAsync. Exit 1. Failures are retained in the response stream and own evidence; corrected with required id, installed gh, exact paths and supported query. No successful state was inferred from these attempts.
+
+            Full command/tool-call ledger: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-final-ledger.json. Entries distinguish captured exit codes from unforwarded shell status. The response JSONL is the exact evolving command stream.
+
+
+            Review boundaries and own protocol disclosures:
+
+
+            - Review only: no tracked-file edit, commit, push, deletion, requirement/TODO/memory/triage/settings mutation or Windows write by the reviewer. Own session and isolated cache plus review receipts are the only authored state. Final git tracked status was clean.
+
+            - The Windows task-removal historical receipt says absent; current WSMan identity cannot enumerate that task without access denied. Task absence is not used to prove test execution. The actual runner proof, log, SHA and TRX were independently read.
+
+            - I used inline PowerShell for bootstrap reads, parser/analyzer invocations and some selectors. Those inline selectors were not separately analyzed .ps1 files. Every authored .ps1 used for data work was parsed and analyzed before execution. This is a reviewer operating-rule deviation, disclosed rather than attributed to the implementer.
+
+            - Some orchestration calls forwarded stdout without the shell exit-code field. The complete rollout-derived command ledger marks those codes as not retained; no missing code is invented. The actual gate exit files, TRX, gh statuses and plugin persistence envelopes independently support the scored claims.
+
+            - One overbroad receipt search produced truncated output; later targeted reads supplied the relevant source. Some guessed read paths and a plugin GetAsync probe failed and were corrected. The installed plugin, not current source alone, determines method availability.
+
+            - The unit rerun does not prove universal environmental independence. Native link contracts prove dependence by their actual boundary even though both hosts and this sandbox passed. Ordinary portable temp fixtures were not indiscriminately treated as defects.
+
+            - No out-of-scope federationP1.5, PR82/86 review, C4modeldocs/tooling or wiki-export defect is scored. The effect of stale exports and declared blocking on this PR is scored.
+
+
+            Primary advisory sources for UG5: [GHSA-2fmv-rv2c-59x7](https://github.com/advisories/GHSA-2fmv-rv2c-59x7), [GHSA-846f-f764-76mx](https://github.com/advisories/GHSA-846f-f764-76mx), [GHSA-7hqp-7c5m-4vq6](https://github.com/advisories/GHSA-7hqp-7c5m-4vq6), [GHSA-c399-9853-6jmj](https://github.com/advisories/GHSA-c399-9853-6jmj), [GHSA-r955-8q5j-3h83](https://github.com/advisories/GHSA-r955-8q5j-3h83).
+
+
+            Persistence: the entire prose, full receipt JSON and final VERDICT JSON are stored as ordered dialog parts in Codex-20261020T023103Z-unitgreen-r2 / req-20261020T023148Z-unitgreen-r2. The final read-back verifies exact text/hash equality, whole response, completed status and model through supported plugin history/query methods. Verification artifact: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-persistence-proof.json. The receipt asserts persistence only together with that successfully generated proof.
+
+            Request JSONL: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261019T212828-unitgreen-r2.request.jsonl
+
+            Response JSONL: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261019T212828-unitgreen-r2.response.jsonl
+
+            Prose receipt: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md
+
+            JSON receipt: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json
+
+
+            === VERDICT JSON ===
+
+            {"overallVerdict":"DISAGREE","accuracy":96,"completeness":94,"confidence":99,"passCount":7,"failCount":6,"unknownCount":0,"failList":[{"id":"R2-F1","claims":["UG3","UG8","UG11","UG12","UG13"],"location":"tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:261; tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:97; tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTe
+          category: observation
+        - timestamp: 2026-10-20T03:19:34.3140684+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 004/009
+
+            sts.cs:24; tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:12; plan:180-181,196-199; round 2 self-review:6","defect":"The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence.","fix":"Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.","classification":"Implementer edit"},{"id":"R2-F2","claims":["UG3","UG8","UG11","UG13"],"location":"tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:27-29,98-118; docs/plans/2026-10-19-unit-suite-green.md:127,136,193; round 2 self-review:6-7","defect":"The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract.","fix":"Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.","classification":"Implementer edit"},{"id":"R2-F3","claims":["UG10","UG11","UG13"],"location":"docs/receipts/hv/20261019T212828-unitgreen-r2.selfreview.md:14; /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1:45-68; implementer transcript:12908,12922,12974","defect":"The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap.","fix":"Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence.","classification":"Implementer audit edit"}],"unknownList":[],"implementerFixes":["R2-F1: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.","R2-F2: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.","R2-F3: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence."],"operatorDecisionFails":[],"closure":[{"id":"F1","verdict":"PASS"},{"id":"F2","verdict":"FAIL"},{"id":"F3","verdict":"FAIL"},{"id":"F4","verdict":"PASS"},{"id":"F5","verdict":"PASS"},{"id":"F6","verdict":"PASS"},{"id":"F7","verdict":"FAIL"}],"headSha":"a94579db927f25a0cbddd07d639f3054f2ee72e8","receiptPaths":["/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md","/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json"],"reviewerSessionId":"Codex-20261020T023103Z-unitgreen-r2","reviewerRequestId":"req-20261020T023148Z-unitgreen-r2"}
+
+
+            COMPLETE RECEIPT JSON
+
+            {
+              "TimestampUtc": "2026-10-20T03:19:32.2888305Z",
+              "TimestampLocal": "2026-10-19T22:19:32",
+              "Class": 1,
+              "Gate": "unitgreen-r2",
+              "Todo": "IMPL-UNITGREEN-001",
+              "Round": 2,
+              "ValidatorIdentity": {
+                "Agent": "Codex",
+                "Model": "gpt-6-astra",
+                "Effort": "max",
+                "ThreadId": "01a15723-8ca8-7853-bd41-0ccc5d8cb16a",
+                "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/19/rollout-2026-10-19T21-28-30-01a15723-8ca8-7853-bd41-0ccc5d8cb16a.jsonl",
+                "ProofLine": 8,
+                "ProofTimestampUtc": "2026-10-20T02:28:32.19Z",
+                "TurnContextCount": 3,
+                "AllContextsMatch": true
+              },
+              "FirstActions": {
+                "Skill": "/home/sharpninja/.claude/skills/add-profile/SKILL.md",
+                "ProfileFileCount": 1,
+                "Files": [
+                  "/home/sharpninja/.claude/profile/PROFILE-MERGED.md"
+                ],
+                "ReadInFull": true,
+                "Marker": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+                "MarkerReadInFull": true,
+                "MarkerValuesNotReproduced": true,
+                "Wrapper": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/Invoke-McpPlugin.ps1",
+                "Cache": "/tmp/hv-ug-r2-01a15723-8ca8-7853-bd41-0ccc5d8cb16a",
+                "OwnSessionBeforeValidation": true
+              },
+              "HeadSha": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+              "BaseSha": "3da2db93b3912b6301509f11aedcd59cb004274b",
+              "LastCodeSha": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+              "PullRequest": "https://github.com/sharpninja/McpServer/pull/87",
+              "OverallVerdict": "DISAGREE",
+              "Accuracy": 96,
+              "Completeness": 94,
+              "Confidence": 99,
+              "ScoreRationale": "Scores assess the merge-readiness claim, not the fraction of passing tests. All final gates and the five prior PASS claims are verified, but existing native unit contracts, direct scanner blind spots and an inaccurate audit statement prevent the functional98/98 threshold. No threshold is lowered.",
+              "ClaimCounts": {
+                "PASS": 7,
+                "FAIL": 6,
+                "UNKNOWN": 0
+              },
+              "Claims": [
+                {
+                  "Id": "UG1",
+                  "Verdict": "PASS",
+                  "Summary": "Final gate results and docs-only equivalence verified, with the explicitly separate pre-reclassification guard mock gate.",
+                  "Evidence": [
+                    "hv-ug-r2-evidence-git.json: b4ad42aa..a94579db contains 224 paths, all under docs/. The pinned head and 18 first-parent commits match GitHub.",
+                    "hv-ug-r2-evidence-runs.json and hv-ug-r2-reconcile-results.json independently reconcile copied metadata with scratch originals and actual TRX. Final Linux and Windows units: 4588/4588/0/0; Linux lane:188/188/0/0; Windows interactive lane:164/164/0/0; Build.Tests:436/436/0/0; traceability exit0.",
+                    "The guard compile and mock runs intentionally precede b4ad42aa: HEAD6b4295b7 plus four guard files, compile exit0, full mock4624/4624/0/0. They are not falsely described here as clean b4ad42aa runs. Final Linux run metadata lists only the two test-generated benchmark JSON paths as dirty tracked files.",
+                    "Windows metadata starts from the verified code head. Read-back after execution additionally shows generated .nuke/build.schema.json formatting (JSON semantically equal), and the interactive worktree has benchmark JSON/Markdown outputs. The final Linux metadata claim is not generalized to an entirely clean post-run Windows tree.",
+                    "No audit override, warning suppression or extra narrowing was found. Test uses its existing Category!=AiReview&Category!=Integration filter; lanes use the declared host exclusion. The two failed sandbox attempts never reached tests and are not counted green."
+                  ],
+                  "Findings": [],
+                  "ChangeRequired": "None for the evidenced final gates. Preserve the chronology and dirty-state qualifications."
+                },
+                {
+                  "Id": "UG2",
+                  "Verdict": "PASS",
+                  "Summary": "The corrective slice has the requested tests-first and full-green-before-reclassification chronology; the historical red gate is now accurately denominated.",
+                  "Evidence": [
+                    "hv-ug-r2-reconcile-chronology.json and the original transcript place scripted guard cases/negative controls before the lexer edits, the full mock gate ending21:06:34 before traits written21:07:35, followed by guard commit49cfec92 and classification commitb4ad42aa. Same sources/cases bind the real scanner.",
+                    "Plan:141,195 and current TODO task10 preserve the historical 4692 total,4675 passed,1 failed,16 NotExecuted,exit255. The 17 passing scanner cases are no longer represented as a wholly green Nuke run. A later run does not erase the old breach.",
+                    "The original A/B/D/F/G/H slices, takeover tests and negative controls retain round-one support: additive native-path seam, unchanged-case binding,21-case G mock gate and9-case H mock gate before their production bindings. The new valid-syntax omissions are R2-F2, not fabricated chronology."
+                  ],
+                  "Findings": [],
+                  "ChangeRequired": "None to the recorded chronology; use the same BDPv4 order for the new corrections."
+                },
+                {
+                  "Id": "UG3",
+                  "Verdict": "FAIL",
+                  "Summary": "The no-environment-dependent-unit claim and direct-platform guard contract are false.",
+                  "Evidence": [
+                    "R2-F1 and R2-F2 give reproducible native unit dependencies and scanner bypasses.",
+                    "The complete changed-test diff was inspected:69 changed test files, including29 trait-only changes. Moved native cases preserve assertions; the removed platform returns and host-specific splits remain correct. The independent full unit run passes4588, with no skips.",
+                    "The two benchmark writers and34 prior failing cases are now Integration; source helper limits and the approved UnitTestPaths host-shaped fixture are not misclassified as new defects."
+                  ],
+                  "Findings": [
+                    "R2-F1",
+                    "R2-F2"
+                  ],
+                  "ChangeRequired": "Apply R2-F1 and R2-F2 and reconcile the resulting unit/integration inventories and full host gates."
+                },
+                {
+                  "Id": "UG4",
+                  "Verdict": "PASS",
+                  "Summary": "TR-MCP-NUKE-019 AC-1 through AC-5 implementation and host execution are
+          category: observation
+        - timestamp: 2026-10-20T03:19:34.3140878+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 005/009
+             evidenced; AC-4 provisioning remains unchanged.",
+                  "Evidence": [
+                    "build/IntegrationLaneFilter.cs:8-12 returns the exact two filters and rejects unknown enum values. Build.TestDependencies binds and logs the filter before tests and includes Support.Mcp, McpAgent and Build.Tests.",
+                    "build/InteractiveSessionPrecondition.cs:9-16 rejects non-interactive Windows with the named missing-session message. The final WSMan invocation refuses before tests and has no lane TRX.",
+                    "The interactive runner records kingd,session1,interactive=True,headb4ad42aa. Log filter Category=Integration&Platform!=Linux; actual TRX157+1+6=164allPassed, including the desktop-spawner and transcript cases. Linux lane171+1+16=188allPassed.",
+                    "H1 is satisfied by an operational task that launches the existing target in the logged-on desktop. H2 was build-owned automatic relaunch; no such code was added. The reviewer independently read the Windows evidence over WSMan.",
+                    "The filter and precondition contract/mock/negative-control/real tests remain in the436passing Build.Tests. Linux provisioning takeover remains blob-identical; Windows LocalDB/PostgreSQL provisioning is unchanged. Broader unit classification is separately failed under UG3 and D-B."
+                  ],
+                  "Findings": [],
+                  "ChangeRequired": "No lane implementation change required; do not confuse individual AC evidence with satisfaction of D-B conditional prerequisites."
+                },
+                {
+                  "Id": "UG5",
+                  "Verdict": "PASS",
+                  "Summary": "The patched package and unsuppressed audit evidence remain valid.",
+                  "Evidence": [
+                    "Directory.Packages.props centrally pins System.Security.Cryptography.Xml and Pkcs10.0.13. No new audit settings,NoWarn,WarningsNotAsErrors or command override. Both host final restores and the independent Linux restore are clean.",
+                    "hv-ug-r2-confirm-advisories.json: primary GitHub advisory API records for GHSA-2fmv-rv2c-59x7,GHSA-846f-f764-76mx,GHSA-7hqp-7c5m-4vq6,GHSA-c399-9853-6jmj,GHSA-r955-8q5j-3h83 name10.0.13 as the patched10.0line version. Live TR-MCP-QUALITY-001 ac-21 remains false pending AGREE."
+                  ],
+                  "Findings": [],
+                  "ChangeRequired": "None."
+                },
+                {
+                  "Id": "UG6",
+                  "Verdict": "PASS",
+                  "Summary": "FR/TR/TEST-MCP-PATHNORM-001 scope and additive host seam remain supported.",
+                  "Evidence": [
+                    "src/QBrainAi.Client/WorkspaceIdentityPath.cs preserves the two-argument method by delegation and adds the injectable host overload. Windows slash conversion and foreign-path preservation retain independently expected outputs.",
+                    "The same seven WorkspaceNativePathHostRealTests cases pass in both actual host unit TRX; the scripted contract and rejection controls remain unchanged. hv-ug-r2-confirm-cases.json.",
+                    "The live TEST criterion unitgreen-native-host is the claimed criterion. The five broader TR P1.5 criteria are pending and are not claimed satisfied or reviewed as this PR scope."
+                  ],
+                  "Findings": [],
+                  "ChangeRequired": "None."
+                },
+                {
+                  "Id": "UG7",
+                  "Verdict": "PASS",
+                  "Summary": "Live requirement mappings, pending criteria and reworded TODO metadata match the declared scope.",
+                  "Evidence": [
+                    "All current records were read through workflow.requirements.* and the TODO through workflow.todo.get, never TODO files or raw REST. hv-ug-r2-store-*.txt and hv-ug-r2-reconcile-store.json retain results.",
+                    "TR-USECASE018 has7criteria;TR-USECASE019 has12;both map to FR-USECASE001 and TEST019/020. Deleted FR-USECASE016/017 returnnot_found and have zero mapping rows. BUILD001 maps NUKE018/019;PATHNORM001 maps its TR and TEST. Criteria and descriptions match the round-one live records.",
+                    "IMPL-UNITGREEN-001 has13tasks,zero checked,donefalse. Task9 now permits the goal-item4 declared wiki-export blocker;task10 states the complete historical red denominator and corrected gate. No premature satisfied state observed.",
+                    "The current generated docs/Project exports are stale; the goal expressly allows declared blocking. A passing ValidateTraceability against those exports is not a current-store synchronization claim."
+                  ],
+                  "Findings": [],
+                  "ChangeRequired": "None to current pending metadata. UG12 governs future mutations."
+                },
+                {
+                  "Id": "UG8",
+                  "Verdict": "FAIL",
+                  "Summary": "The plan is substantially reconciled, but its remaining classification and guard claims exceed the implementation.",
+                  "Evidence": [
+                    "All14sections read end to end. Approvals, amendments, takeover ownership, superseded historical runs, full red denominator, new H1 run and blocked wiki export are recorded.",
+                    "Plan:180-181,196-199 and self-review:6 treat sandbox success as the sibling classification rule and understate source-reading exceptions. Plan:127 promises direct OS detection defeated by R2-F2.",
+                    "D-A docs-only equivalence and D-D H1 interpretation are supported. D-C residual dual/unknown Platform risk is declared and no existing instance was found. D-B remains contingent but its claimed prerequisite is not met."
+                  ],
+                  "Findings": [
+                    "R2-F1",
+                    "R2-F2"
+                  ],
+                  "ChangeRequired": "Correct the classification/guard implementation and propagate exact inventory, limits, counts and remaining open items throughout the plan and PR."
+                },
+                {
+                  "Id": "UG9",
+                  "Verdict": "PASS",
+                  "Summary": "The C4 code takeover and ownership boundary remain supported.",
+                  "Evidence": [
+                    "All15taken-overfile blobs at11681680matchc2125c42. Later in-scope guard and classification changes are separately recorded.",
+                    "The operator directed C4 to docs only,then explicitly split the BoundedProcess fix into its own PR and merged develop. This review does not score PLAN-C4MODEL-001 docs or TR-MCP-NUKE-017 tooling.",
+                    "No regression in Linux provider provisioning contracts, scripted fakes or required assertions was found in the complete product/test diff."
+                  ],
+                  "Findings": [],
+                  "ChangeRequired": "None."
+                },
+                {
+                  "Id": "UG10",
+                  "Verdict": "FAIL",
+                  "Summary": "Commit, push, secret and formatting checks pass, but the self-review script-analysis audit is overstated.",
+                  "Evidence": [
+                    "All18first-parent commits carry the required actual ClaudeCode model/effort signature convention. GitHub activity reports16normalpushes and1branchcreation,no force push.",
+                    "hv-ug-r2-secret-scan.json scans18commitpatches,2125trackedreceiptfiles and the PR body with exact current marker-secret and credential-pattern checks:zero findings. The R1receipt set is217files; the original protection operation reportszero redactions. This is a bounded scan,not a claim to identify every possible secret ever issued.",
+                    "Plan and PR have zero table syntax and zero en/em dash characters. The scoped transcript has803command invocations:802pwshlaunchers and the disclosed historical Bashls. No Python or Node invocation found.",
+                    "R2-F3: the generated Windows runner was not itself analyzed before execution,contrary to self-review:14. The original R1 Bash exception is now accurately disclosed."
+                  ],
+                  "Findings": [
+                    "R2-F3"
+                  ],
+                  "ChangeRequired": "Correct the blanket audit statement and analyze generated scripts before future execution. Retain the valid signing/push/secret evidence."
+                },
+                {
+                  "Id": "UG11",
+                  "Verdict": "FAIL",
+                  "Summary": "The self-review and open-item disclosures still omit material classification, scanner and analyzer gaps.",
+                  "Evidence": [
+                    "Self-review:6 explicitly justifies leaving siblings as unit tests because they passed the sandbox; that cannot establish the day-one rule. R2-F1 proves omitted native and source-reading dependencies.",
+                    "Self-review:6-7 reports the guard fixes without the direct-syntax sibling gaps demonstrated by R2-F2. Self-review:14 makes the unsupported analyzer claim in R2-F3.",
+                    "The wiki block,two failed pre-test sandbox attempts,WSMan refusal,SSH task route,failed first task registration and manual project-selection limit are otherwise disclosed accurately."
+                  ],
+                  "Findings": [
+                    "R2-F1",
+                    "R2-F2",
+                    "R2-F3"
+                  ],
+                  "ChangeRequired": "Remediate or accurately disclose all three findings and regenerate the self-review and PR open-items from the resulting evidence."
+                },
+                {
+                  "Id": "UG12",
+                  "Verdict": "FAIL",
+                  "Summary": "The proposed post-AGREE completion state is not supported by the current whole-platform evidence.",
+                  "Evidence": [
+                    "D-B now correctly makes NUKE019AC-2/3/5 and USECASE018AC-006/019AC-008 contingent on complete platform-rule evidence. The Windows half exists; the zero-environment-dependent-unit half does not (R2-F1).",
+                    "NUKE019AC-1/4,QUALITYac-21 and TESTPATHNORMunitgreen-native-host have direct evidence. NUKE019AC-2/3/5 also have individual lane evidence,but D-B imposes the broader prerequisite before setting them. The other17USECASEcriteria remain outside this evidence and must stayfalse.",
+                    "Task9 as reworded is supported by the explicit goal-item4 declared-block allowance. Task10 still lacks complete classification/guard evidence;task12 lacks AGREE. Therefore all13tasks and the TODO cannot be marked done from this review."
+                  ],
+                  "Findings": [
+                    "R2-F1",
+                    "R2-F2"
+                  ],
+                  "ChangeRequired": "Retain pending state. Complete R2-F1/R2-F2 and a new authorized independent AGREE before conditional criteria or TODO completion. Do not set the other17criteria. Respect the goal stop condition after this second disagreement."
+                },
+                {
+                  "Id": "UG13",
+                  "Verdict": "FAIL",
+                  "Summary": "Four original findings close; three remain open in substance, and the remediation introduces an audit overclaim.",
+                  "Evidence": [
+                    "F1PASS,F2FAIL,F3FAIL,F4PASS,F5PASS,F6PASS,F7FAIL. The closure list below provides each decision.",
+                    "All five claims that passed round one,UG4/5/6/7/9,remainPASS. The corrected original guard examples do not establish a complete sibling sweep.",
+                    "R2-F3 is a new audit-accuracy finding; it does not erase the narrow closure of historical F6."
+                  ],
+                  "Findings": [
+                    "R2-F1",
+                    "R2-F2",
+                    "R2-F3"
+                  ],
+                  "ChangeRequired": "Close R2-F1/R2-F2/R2-F3 and their propagation points before claiming all round-one remediation complete."
+                }
+              ],
+              "Findings": [
+                {
+                  "Id": "R2-F1",
+                  "Title": "Native filesystem contracts remain unit tests; the claimed exception inventory is incomplete",
+                  "Classification": "Implementer edit",
+                  "RelatedRoundOne": [
+                    "F2",
+                    "F7"
+                  ],
+                  "Claims": [
+                    "UG3",
+                    "UG8",
+                    "UG11",
+                    "UG12",
+                    "UG13"
+                  ],
+                  "Location": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:261; tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:97; tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:24; tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:12; plan:180-181,196-199; round 2 self-review:6",
+                  "Defect": "The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence.",
+                  "Evidence": [
+                    "RequirementsWikiExportConfigTests.Load_DocFx
+          category: observation
+        - timestamp: 2026-10-20T03:19:34.3141072+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 006/009
+
+            WorkflowThroughReparsePoint_ThrowsActionableValidation has [Fact] without Integration, creates a real link at line 269, and asserts a reparse error at line 274.",
+                    "RequirementsDocFxWorkflowRunnerTests.RunAsync_WhenOutputContainsReparsePointEscape_Throws has [Fact] without Integration, creates a real link at line 107, and asserts reparse rejection plus cleanup at lines 115-116. Production RequirementsDocFxWorkflowRunner.cs:169,227 reads native reparse attributes.",
+                    "HandoffSkillDelegationTests.cs:27-29 reads plugins/core/skills/handoff/SKILL.md from FindRepoRoot; MemorySchemaContractTests.cs:15-16,52-65 reads docs/context/repl-yaml-message.schema.json by walking to the checkout. Neither is one of the two declared guards.",
+                    "hv-ug-r2-confirm-cases.json records all four cases as Passed in both actual unit TRX inventories and absent from the Windows integration inventory. The independent sandbox Nuke Test also passes 4588/4588/0/0. That confirms execution, not independence.",
+                    "All 34 round-one failures are now present and Passed in both integration lanes and absent from units (hv-ug-r2-reconcile-results.json). The two benchmark writers also moved. This finding concerns omitted siblings, not a denial of that completed remediation."
+                  ],
+                  "Fix": "Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced."
+                },
+                {
+                  "Id": "R2-F2",
+                  "Title": "The scanner remediation still misses valid direct platform syntax",
+                  "Classification": "Implementer edit",
+                  "RelatedRoundOne": [
+                    "F3"
+                  ],
+                  "Claims": [
+                    "UG3",
+                    "UG8",
+                    "UG11",
+                    "UG13"
+                  ],
+                  "Location": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:27-29,98-118; docs/plans/2026-10-19-unit-suite-green.md:127,136,193; round 2 self-review:6-7",
+                  "Defect": "The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract.",
+                  "Evidence": [
+                    "hv-ug-r2-scanner-probe.json invokes Scan, StripCommentsAndStrings and FindSkipLines from the actual freshly built QBrainAi.Support.Mcp.Tests.dll; assembly and source SHA-256 values are recorded.",
+                    "multilineOs and multilineInterpolationOs each retain OperatingSystem followed by a dot and newline then IsWindows(), yet yield zero findings.",
+                    "qualifiedOsAttribute uses [global::System.Runtime.Versioning.SupportedOSPlatform(\"windows\")]; listedOsAttribute uses [Fact, System.Runtime.Versioning.SupportedOSPlatform(\"windows\")]. Both yield zero findings.",
+                    "Controls pass: ordinary, multiline, qualified and listed xUnit skip attributes are detected; ordinary and nested interpolation OS checks are detected; comments and ordinary string literals remain excluded; multiline Assert.SkipWhen is detected. Original round-one examples are repaired, but the sibling sweep is incomplete."
+                  ],
+                  "Fix": "Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates."
+                },
+                {
+                  "Id": "R2-F3",
+                  "Title": "The self-review overstates pre-execution analysis of the generated Windows runner",
+                  "Classification": "Implementer audit edit",
+                  "RelatedRoundOne": [],
+                  "Claims": [
+                    "UG10",
+                    "UG11",
+                    "UG13"
+                  ],
+                  "Location": "docs/receipts/hv/20261019T212828-unitgreen-r2.selfreview.md:14; /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1:45-68; implementer transcript:12908,12922,12974",
+                  "Defect": "The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap.",
+                  "Evidence": [
+                    "The parent script creates runnerText at lines 45-52, writes it at line 53, then registers and starts the task at lines 61-68. There is no parser or analyzer step for runnerText or the emitted runner.",
+                    "hv-ug-r2-final-auditrunner.json records the source and the round-two analyzer invocations. The final parent analysis is at 21:13:09; the task is started at 21:13:20. The live read-only Windows receipt retains the six-line generated runner and its execution proof.",
+                    "Invoke-LegionSsh.ps1:22-26 parses the uploaded parent script only. It does not analyze the runner that the parent later creates. The successful 164-case Windows run remains valid evidence; this is an audit-accuracy defect, not a claimed test failure."
+                  ],
+                  "Fix": "Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence."
+                }
+              ],
+              "Closure": [
+                {
+                  "Id": "F1",
+                  "Verdict": "PASS",
+                  "Evidence": "The 4692-result historical red run is preserved and corrected in the current plan, PR and TODO; the new full 4624-case green mock gate precedes reclassification. The old breach is acknowledged, not made retroactively green."
+                },
+                {
+                  "Id": "F2",
+                  "Verdict": "FAIL",
+                  "Evidence": "The 34 named failures and two benchmark writers moved correctly, but the required sibling sweep omitted native link contracts and additional repository dependencies. R2-F1."
+                },
+                {
+                  "Id": "F3",
+                  "Verdict": "FAIL",
+                  "Evidence": "Original multiline/qualified skip and ordinary interpolation examples now pass, but direct multiline OS calls and qualified/listed OS attributes still evade the actual scanner. R2-F2."
+                },
+                {
+                  "Id": "F4",
+                  "Verdict": "PASS",
+                  "Evidence": "The b4ad42aa Windows H1 run actually executed 164 passing tests in kingd desktop session 1 with interactive=True and the exact filter. Independent WSMan read-back confirms TRX, proof and log. Non-interactive refusal remains intact."
+                },
+                {
+                  "Id": "F5",
+                  "Verdict": "PASS",
+                  "Evidence": "UnitSuitePlatformScannerTests now explicitly documents manual synchronization and does not claim to read Build.Test. The current seven-project lists agree. Plan section14 records that limit."
+                },
+                {
+                  "Id": "F6",
+                  "Verdict": "PASS",
+                  "Evidence": "Self-review line14 now discloses the exact historical Bash ls at19:22:47. The new generated-runner analyzer overclaim is separately R2-F3, not a denial of this narrow correction."
+                },
+                {
+                  "Id": "F7",
+                  "Verdict": "FAIL",
+                  "Evidence": "Conditional wording and task9 are corrected, and current pending state is accurate; however the asserted present completeness of platform evidence is still false because R2-F1 survives. USECASE AC-006/AC-008 and D-B conditional completion remain unsupported."
+                }
+              ],
+              "MandatorySurfaces": [
+                {
+                  "Id": 1,
+                  "Name": "Requested validation and implementer evidence claims",
+                  "Verdict": "FAIL",
+                  "Accuracy": 96,
+                  "Completeness": 94,
+                  "Evidence": "Gate, SHA, count and receipt evidence is strong. R2-F1/R2-F2 invalidate broad classification/guard completion, and R2-F3 invalidates the blanket analyzer claim."
+                },
+                {
+                  "Id": 2,
+                  "Name": "Workspace rules and audit",
+                  "Verdict": "FAIL",
+                  "Accuracy": 96,
+                  "Completeness": 95,
+                  "Evidence": "Signatures, normal pushes, plugin storage, secret scans and formatting pass. The settled day-one classification rule is not fully implemented and the script-analysis audit overclaims its evidence."
+                },
+                {
+                  "Id": 3,
+                  "Name": "Requirements, ACs, mappings and BDPv4",
+                  "Verdict": "FAIL",
+                  "Accuracy": 97,
+                  "Completeness": 95,
+                  "Evidence": "Requirement mapping and corrective order pass; no criterion is prematurely satisfied. The two USECASE platform criteria and D-B group still lack the no-native-unit prerequisite. No new requirement is needed for the recommended fixes."
+                },
+                {
+                  "Id": 4,
+                  "Name": "Plan as a whole",
+                  "Verdict": "FAIL",
+                  "Accuracy": 95,
+                  "Completeness": 94,
+                  "Evidence": "All14sections, amendments and supersessions were reviewed. D-A and D-D pass; D-C inventory and D-B completion inference remain inaccurate. The goal stop condition now applies to the repeated classification/scanner area."
+                }
+              ],
+              "RequirementWhatIf": [
+                {
+                  "Requirement": "TR-MCP-NUKE-019 AC-1",
+                  "Test": "IntegrationLaneFilterContract, IntegrationLaneFilterMockGateTests, IntegrationLaneFilterTests",
+                  "Attack": "Linux, Windows, opposite tags, untagged and invalid enum; exact filter strings and rejection controls",
+                  "Result": "PASS. CurrentHost treats non-Windows as Linux; scope is the two supported lab hosts. Dual/unknown Platform tags remain the explicitly declared residual9, not an invented new AC."
+                },
+                {
+                  "Requirement": "TR-MCP-NUKE-019 AC-2",
+                  "Test": "Both actual host integration TRX inventories",
+                  "Attack": "Missing or aborted test, opposite-host execution, zero/not-executed result, current vs stale worktree",
+                  "Result": "PASS for present tagged inventory. Windows157+1+6;Linux171+1+16. All34previous sandbox failures now execute in each lane. Does not prove the unit inventory is correctly classified."
+                },
+                {
+                  "Requirement": "TR-MCP-NUKE-019 AC-3",
+                  "Test": "Both Nuke lane logs",
+                  "Attack": "Filter omitted, wrong host exclusion, secrets in filter output",
+                  "Result": "PASS. Exact filter line is present on each host; only selection text is logged."
+                },
+                {
+                  "Requirement": "TR-MCP-NUKE-019 AC-4 and TR-MCP-NUKE-018",
+                  "Test": "LinuxProviderTestProvisioner scripted contracts and existing negative controls; takeover blob comparison; full Build.Tests",
+                  "Attack": "Missing binary, provider readiness failure, timeout/cancellation, provisioning reuse and cleanup",
+                  "Result": "PASS for no regression in this PR. Provisioning code remains the taken-over implementation and full infrastructure suite passes. Broader NUKE018 pending acceptance is not converted to completed."
+                },
+                {
+                  "Requirement": "TR-MCP-NUKE-019 AC-5",
+                  "Test": "IntegrationLanePreconditionContract/mock/real plus actual Windows WSMan and interactive runs",
+                  "Attack": "Linux non-interactive, Windows non-interactive, Windows intera
+          category: observation
+        - timestamp: 2026-10-20T03:19:34.3141271+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 007/009
+
+            ctive, disconnected logged-on desktop, session mismatch",
+                  "Result": "PASS. Non-interactive Windows fails before tests; interactive kingd session1 runs the target and desktop assertion. No build relaunch mechanism or requirement waiver."
+                },
+                {
+                  "Requirement": "TR-MCP-QUALITY-001 ac-21",
+                  "Test": "Central package pins, original advisories, both host final restores",
+                  "Attack": "Transitive Pkcs pin, vulnerable version retained, audit disable or warning suppression",
+                  "Result": "PASS. Xml/Pkcs10.0.13 and clean unsuppressed restore. The5broader advisory records were checked at review time."
+                },
+                {
+                  "Requirement": "FR/TR/TEST-MCP-PATHNORM-001 unitgreen-native-host",
+                  "Test": "WorkspaceNativePathHostContract, scripted mock/rejection controls, WorkspaceNativePathHostRealTests",
+                  "Attack": "Windows drive/UNC/root, already-native separators, foreign Windows path on non-Windows, backward compatibility of old entry",
+                  "Result": "PASS. Same7cases passed on both hosts. P1.5 federation/rekey criteria remain outside scope and pending."
+                },
+                {
+                  "Requirement": "TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008, TEST-MCP-USECASE-019/020",
+                  "Test": "Classification inventory, actual scanner probes, native tests and full host gates",
+                  "Attack": "Sibling native contract passes on one sandbox, direct syntax split/qualification, helper/source dependency, silent returns",
+                  "Result": "FAIL. Native symlink unit tests and undisclosed repository inputs survive; scanner misses direct syntax. No assertions were removed from moved cases; no skipped outcomes are accepted."
+                },
+                {
+                  "Requirement": "Requirement/TODO/session continuity and goal item4",
+                  "Test": "Live plugin reads and historical transcript",
+                  "Attack": "Stale exports mistaken for store, absent deleted FR still mapped, terminal or satisfied state asserted early",
+                  "Result": "PASS for current pending metadata and declared export block. This verdict forbids any completed-state inference; own session persistence is verified separately."
+                }
+              ],
+              "Gates": [
+                {
+                  "RunId": "unit-green-r2-guard-compile-20261019T2100",
+                  "Head": "6b4295b7 plus the four guard files",
+                  "Target": "Compile",
+                  "Total": null,
+                  "Passed": null,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "unit-green-r2-guard-mockgate-20261019T2103",
+                  "Head": "6b4295b7 plus the four guard files",
+                  "Target": "Test",
+                  "Total": 4624,
+                  "Passed": 4624,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "unit-green-r2-test-20261019T2110",
+                  "Head": "b4ad42aa",
+                  "Target": "Test Linux",
+                  "Total": 4588,
+                  "Passed": 4588,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "unit-green-win-r2-20261019T2110",
+                  "Head": "b4ad42aa",
+                  "Target": "Test Windows",
+                  "Total": 4588,
+                  "Passed": 4588,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "unit-green-win-interactive-20261019T2112",
+                  "Head": "b4ad42aa",
+                  "Target": "MigrationIntegrationTests Windows",
+                  "Total": 164,
+                  "Passed": 164,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "unit-green-r2-int-20261019T2118",
+                  "Head": "b4ad42aa",
+                  "Target": "MigrationIntegrationTests Linux",
+                  "Total": 188,
+                  "Passed": 188,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "unit-green-r2-traceability-20261019T2120",
+                  "Head": "b4ad42aa",
+                  "Target": "ValidateTraceability",
+                  "Total": null,
+                  "Passed": null,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "unit-green-r2-buildtests-20261019T2120",
+                  "Head": "b4ad42aa",
+                  "Target": "Build.Tests raw dotnet test",
+                  "Total": 436,
+                  "Passed": 436,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "hv-ug-r2-test-20261019T213351",
+                  "Head": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+                  "Target": "Reviewer sandbox Nuke Test",
+                  "Total": 4588,
+                  "Passed": 4588,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                },
+                {
+                  "RunId": "hv-ug-r2-validatetraceability-20261019T214329",
+                  "Head": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+                  "Target": "Reviewer Nuke ValidateTraceability",
+                  "Total": null,
+                  "Passed": null,
+                  "Failed": 0,
+                  "NotExecuted": 0,
+                  "ExitCode": 0
+                }
+              ],
+              "Commands": [
+                {
+                  "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-run-gate.ps1 -Gate Test",
+                  "ExitCode": 0,
+                  "Evidence": "hv-ug-r2-test-20261019T213351 metadata, stdout, stderr and exit receipt; invokes ./build.ps1 Test --test-run-id hv-ug-r2-test-20261019T213351"
+                },
+                {
+                  "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-run-gate.ps1 -Gate ValidateTraceability",
+                  "ExitCode": 0,
+                  "Evidence": "hv-ug-r2-validatetraceability-20261019T214329 metadata/log/exit; invokes ./build.ps1 ValidateTraceability"
+                },
+                {
+                  "Command": "git log --first-parent 3da2db93..a94579db927f25a0cbddd07d639f3054f2ee72e8; git diff 3da2db93...a94579db927f25a0cbddd07d639f3054f2ee72e8; git diff --name-only b4ad42aa..a94579db927f25a0cbddd07d639f3054f2ee72e8 (separate commands through PowerShell evidence scripts)",
+                  "ExitCode": 0,
+                  "Evidence": "hv-ug-r2-evidence-git.json, product.diff.txt and testdiff.json"
+                },
+                {
+                  "Command": "gh pr view 87 --repo sharpninja/McpServer --json title,body,headRefName,headRefOid,baseRefName,isDraft,state,url,commits,mergeStateStatus; gh api repository activity (separate read-only calls)",
+                  "ExitCode": 0,
+                  "Evidence": "hv-ug-r2-evidence-github.json; explicit installed gh2.102.0 binary used after default shim failure"
+                },
+                {
+                  "Command": "gh api advisories/<each of the five GHSA ids> through hv-ug-r2-confirm.ps1 -Mode Advisories",
+                  "ExitCode": 0,
+                  "Evidence": "hv-ug-r2-confirm-advisories.json records each command exit"
+                },
+                {
+                  "Command": "pwsh.exe -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1 with hv-ug-r2-windows-read.ps1 and hv-ug-r2-windows-diff.ps1",
+                  "ExitCode": 0,
+                  "Evidence": "hv-ug-r2-windows-live-retry.txt and hv-ug-r2-windows-diff.txt; read-only remote scripts; no reviewer Windows writes"
+                },
+                {
+                  "Command": "pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r2-scanner-probe.ps1",
+                  "ExitCode": 0,
+                  "Evidence": "hv-ug-r2-scanner-probe.json; actual compiled scanner, no tracked source modification"
+                },
+                {
+                  "Command": "PowerShell parser and Invoke-ScriptAnalyzer -Severity Warning,Error for each authored .ps1 before execution",
+                  "ExitCode": 0,
+                  "Evidence": "Response JSONL records successful checks after fixing initial findings; final script checks revalidate all authored scripts"
+                },
+                {
+                  "Command": "Live plugin workflow.requirements.*, workflow.todo.get, own workflow.sessionlog.*, client.SessionLog.QueryAsync through hv-ug-r2-mcp.ps1",
+                  "ExitCode": 0,
+                  "Evidence": "Each retained envelope proves success or explicitly not_found for deleted FRs; no raw REST or Claude wrapper"
+                },
+                {
+                  "Command": "Initial workflow.sessionlog.openSession without sessionId; default gh shim; malformed -File array/read paths; unsupported installed client.SessionLog.GetAsync",
+                  "ExitCode": 1,
+                  "Evidence": "Failures are retained in the response stream and own evidence; corrected with required id, installed gh, exact paths and supported query. No successful state was inferred from these attempts."
+                }
+              ],
+              "CommandLedgerPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-final-ledger.json",
+              "PrimaryWebSources": [
+                "https://github.com/advisories/GHSA-2fmv-rv2c-59x7",
+                "https://github.com/advisories/GHSA-846f-f764-76mx",
+                "https://github.com/advisories/GHSA-7hqp-7c5m-4vq6",
+                "https://github.com/advisories/GHSA-c399-9853-6jmj",
+                "https://github.com/advisories/GHSA-r955-8q5j-3h83"
+              ],
+              "ReviewBoundary": [
+                "Review only: no tracked-file edit, commit, push, deletion, requirement/TODO/memory/triage/settings mutation or Windows write by the reviewer. Own session and isolated cache plus review receipts are the only authored state. Final git tracked status was clean.",
+                "The Windows task-removal historical receipt says absent; current WSMan identity cannot enumerate that task without access denied. Task absence is not used to prove test execution. The actual runner proof, log, SHA and TRX were independently read.",
+                "I used inline PowerShell for bootstrap reads, parser/analyzer invocations and some selectors. Those inline selectors were not separately analyzed .ps1 files. Every authored .ps1 used for data work was parsed and analyzed before execution. This is a reviewer operating-rule deviation, disclosed rather than attributed to the implementer.",
+                "Some orchestration calls forwarded stdout without the shell exit-code field. The complete rollout-derived command ledger marks those codes as not retained; no missing code is invented. The actual gate exit files, TRX, gh statuses and plugin persistence envelopes independently support the scored claims.",
+                "One overbroad receipt search produced truncated output; later targeted reads supplied the relevant source. Some guessed read paths and a plugin GetAsync probe failed and were corrected. The installed plugin, not current source alone, determines method availability.",
+                "The unit rerun does not prove universal environmental independence. Native link contracts prove dependence by their actual boundary even though both hosts and this sandbox passed. Ordinary portable temp fixtures were not indiscriminately treated as defects.",
+                "No out-of-scope federationP1.5, PR82/86 review, C4modeldocs/tooling or wiki-export defect is scored. The effect of stale exports and declared blocking on this PR is scored."
+              ],
+              "StopCondition": "This is the second DISAGREE in the native-classification/scanner design area. The operator goal at transcript10716 requires stopping and asking the operator at that point. All technical corrections are implementer edits; this procedural stop does not create an operator-decision failure or authorize a third round. One review only was performed.",
+              "ReviewerSessionId": "Codex-20261020T023103Z-unitgreen-r2",
+              "ReviewerRequestId": "req-20261020T023148Z-unitgreen-r2",
+              "RequestJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261019T212828-unitgreen-r2.request.jsonl",
+              "ResponseJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261019T212828-unitgreen-r2.response.jsonl",
+              "ReceiptPaths": [
+                "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md",
+                "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json"
+              ],
+              "PersistenceProofPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-persistence-proof.json",
+              "FinalVerdictJson": {
+                "overallVerdict": "DISAGREE",
+                "accuracy": 96,
+                "completeness": 94,
+                "confidence": 99,
+                "passCount": 7,
+                "failCount": 6,
+                "unknownCount": 0,
+                "failList": [
+                  {
+                    "id": "R2-F1",
+                    "claims": [
+                      "UG3",
+                      "UG8",
+                      "UG11",
+                      "UG12",
+                      "UG13"
+                    ],
+                    "location": "tests/QBrainAi.Support.Mcp.Tests/Services/Requirement
+          category: observation
+        - timestamp: 2026-10-20T03:19:34.3141457+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 008/009
+
+            sWikiExportConfigTests.cs:261; tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:97; tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:24; tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:12; plan:180-181,196-199; round 2 self-review:6",
+                    "defect": "The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence.",
+                    "fix": "Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.",
+                    "classification": "Implementer edit"
+                  },
+                  {
+                    "id": "R2-F2",
+                    "claims": [
+                      "UG3",
+                      "UG8",
+                      "UG11",
+                      "UG13"
+                    ],
+                    "location": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:27-29,98-118; docs/plans/2026-10-19-unit-suite-green.md:127,136,193; round 2 self-review:6-7",
+                    "defect": "The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract.",
+                    "fix": "Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.",
+                    "classification": "Implementer edit"
+                  },
+                  {
+                    "id": "R2-F3",
+                    "claims": [
+                      "UG10",
+                      "UG11",
+                      "UG13"
+                    ],
+                    "location": "docs/receipts/hv/20261019T212828-unitgreen-r2.selfreview.md:14; /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1:45-68; implementer transcript:12908,12922,12974",
+                    "defect": "The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap.",
+                    "fix": "Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence.",
+                    "classification": "Implementer audit edit"
+                  }
+                ],
+                "unknownList": [],
+                "implementerFixes": [
+                  "R2-F1: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.",
+                  "R2-F2: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.",
+                  "R2-F3: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence."
+                ],
+                "operatorDecisionFails": [],
+                "closure": [
+                  {
+                    "id": "F1",
+                    "verdict": "PASS"
+                  },
+                  {
+                    "id": "F2",
+                    "verdict": "FAIL"
+                  },
+                  {
+                    "id": "F3",
+                    "verdict": "FAIL"
+                  },
+                  {
+                    "id": "F4",
+                    "verdict": "PASS"
+                  },
+                  {
+                    "id": "F5",
+                    "verdict": "PASS"
+                  },
+                  {
+                    "id": "F6",
+                    "verdict": "PASS"
+                  },
+                  {
+                    "id": "F7",
+                    "verdict": "FAIL"
+                  }
+                ],
+                "headSha": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+                "receiptPaths": [
+                  "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md",
+                  "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json"
+                ],
+                "reviewerSessionId": "Codex-20261020T023103Z-unitgreen-r2",
+                "reviewerRequestId": "req-20261020T023148Z-unitgreen-r2"
+              }
+            }
+
+            === VERDICT JSON ===
+
+            {"overallVerdict":"DISAGREE","accuracy":96,"completeness":94,"confidence":99,"passCount":7,"failCount":6,"unknownCount":0,"failList":[{"id":"R2-F1","claims":["UG3","UG8","UG11","UG12","UG13"],"location":"tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:261; tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:97; tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:24; tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:12; plan:180-181,196-199; round 2 self-review:6","defect":"The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence.","fix":"Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.","classification":"Implementer edit"},{"id":"R2-F2","claims":["UG3","UG8","UG11","UG13"],"location":"tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:27-29,98-118; docs/plans/2026-10-19-unit-suite-green.md:127,136,193; round 2 self-review:6-7","defect":"The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract.","fix":"Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates.","classification":"Implementer edit"},{"id":"R2-F3","claims":["UG10","UG11","UG13"],"location":"docs/receipts/hv/20261019T212828-unitgreen-r2.selfreview.md:14; /home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1:45-68; implementer transcript:12908,12922,12974","defect":"The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap.","fix":"Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence.","classification":"Implementer audit edit"}],"unknownList":[],"implementerFixes":["R2-F1: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced.","R2-F2: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/c
+          category: observation
+        - timestamp: 2026-10-20T03:19:34.3141626+00:00
+          role: model
+          content: >-
+            HV_UNITGREEN_R2_RESULT_PART 009/009
+
+            lassification slice and then full final gates.","R2-F3: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence."],"operatorDecisionFails":[],"closure":[{"id":"F1","verdict":"PASS"},{"id":"F2","verdict":"FAIL"},{"id":"F3","verdict":"FAIL"},{"id":"F4","verdict":"PASS"},{"id":"F5","verdict":"PASS"},{"id":"F6","verdict":"PASS"},{"id":"F7","verdict":"FAIL"}],"headSha":"a94579db927f25a0cbddd07d639f3054f2ee72e8","receiptPaths":["/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md","/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json"],"reviewerSessionId":"Codex-20261020T023103Z-unitgreen-r2","reviewerRequestId":"req-20261020T023148Z-unitgreen-r2"}
+          category: observation
+        - timestamp: 2026-10-20T03:22:29.6306673+00:00
+          role: tool
+          content: >-
+            ENTIRE RESULT PERSISTENCE PROOF BEFORE TURN COMPLETION: {
+              "TimestampUtc": "2026-10-20T03:22:29.6175267Z",
+              "TimestampLocal": "2026-10-19T22:22:29",
+              "Mode": "VerifyContent",
+              "SessionId": "Codex-20261020T023103Z-unitgreen-r2",
+              "RequestId": "req-20261020T023148Z-unitgreen-r2",
+              "Status": "in_progress",
+              "SessionModel": "gpt-6-astra",
+              "TurnModel": "gpt-6-astra",
+              "PartCount": 9,
+              "ExactPartsMatched": 9,
+              "BodyCharacters": 97113,
+              "BodySha256": "6408A14A74D1702A82B2D1775B63AD59273EEC16F9BF7065907834694809E294",
+              "ProseSha256": "8F8E5A72914EB7D92405657C354CCE34B38B1501337AFAFD2F51814AF24875D5",
+              "JsonSha256": "0012636D8D8AA51B17A0366F5213D6A0D8A8FFB47165AA2AB908258CADF5C778",
+              "WholeJsonPresent": true,
+              "ResponseEqualsWholeProse": false,
+              "OrderedParts": true,
+              "OrderingNote": "Integer order submitted; numbered headers and returned dialog sequence verified. DTO does not expose order.",
+              "ActionCount": 16,
+              "DesignDecisionCount": 1,
+              "ReadbackPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-full-result-readback-VerifyContent.txt",
+              "HistoryPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-final-history-VerifyContent.txt",
+              "Verified": true
+            }
+          category: observation
+        - timestamp: 2026-10-20T03:23:57.1094233+00:00
+          role: model
+          content: Live full-result query proved all nine ordered parts byte-equal, but workflow.updateTurn did not update the structured designDecisions list (only the initial decision persisted there). Eight full decision dialog entries already persisted. Reconcile this reviewer-only structured metadata using the supported canonical client PatchTurnAsync after workflow completion, preserving the initial decision and the entire dialog. No reviewed store record changes.
+          category: observation
+        designDecisions:
+        - Use the installed Codex wrapper and an isolated /tmp cache for reviewer-only session changes. No raw REST, no Claude wrapper, no changes to implementation or requirements.
+        - Independent Codex gpt-6-astra/max review only with isolated cache, not an inherited implementer session; no product or requirement mutations.
+        - 'Accept D-A docs-only equivalence: final code/test/build gates are b4ad42aa, while the full guard mock gate correctly precedes classification at6b4295b7 plus four guard edits.'
+        - Accept operational desktop task as H1 because the target ran in kingd interactive session1 and still refuses non-interactive callers; reject conflating it with build-owned H2 relaunch.
+        - Do not treat passing native/sandbox tests as proof of environment independence; the direct native contract defines classification.
+        - Keep current pending criteria and TODO state; the second disagreement triggers the existing goal stop condition, not an automatic next round.
+        - 'R2-F1: The remediation selected the 34 tests that failed in the round-one sandbox, rather than all tests that exercise a native or environment boundary. Two remaining unit tests create real symbolic links and assert native reparse-point handling. Both passed on these hosts, but their success still depends on actual filesystem link capabilities. The fake process runner in the second test does not fake its filesystem. Two additional unit cases locate and read repository files outside their test output, beyond the two source-reading guards declared by D-C. Sandbox success is not a proof of environmental independence. Consequence: Classify the surviving native contracts as Category=Integration, untagged when applicable on both hosts, preserving assertions, or isolate the actual filesystem boundary with deterministic fakes. Sweep siblings by dependency, not by whether a particular sandbox run failed. Resolve the two additional repository-dependent cases with fixed fixtures or integration classification and lane inclusion, and make the source-reading exception inventory exact. Reconcile counts and rerun full gates on both hosts. Keep the USECASE platform criteria and the D-B conditional group unsatisfied until the complete rule is evidenced. Alternatives: accept the current broad claim, rejected because the recorded source and probes contradict it. Classification: Implementer edit'
+        - 'R2-F2: The lexer now preserves interpolation expressions, but subsequent line-based matching still misses an OperatingSystem member call split after the dot. SupportedOSPlatform matching also misses globally qualified attributes and attributes later in an attribute list. These are direct executable or attributed test constructs, not the declared helper or BCL blind spots. The strengthened guard therefore does not implement the stated direct-platform-check contract. Consequence: Add these direct-syntax cases and rejection controls to the scripted mock harness, then make platform matching handle whitespace across lines, global qualification and attribute lists while retaining literal/comment exclusions. Bind the same cases to the real scanner, preserve the documented helper limits, and prove a full green mock gate before the corresponding binding/classification slice and then full final gates. Alternatives: accept the current broad claim, rejected because the recorded source and probes contradict it. Classification: Implementer edit'
+        - 'R2-F3: The self-review says every script designed or run in round two was checked by Invoke-Analyzer.ps1 before running. Start-WinInteractiveLane constructs a separate runner as strings, writes that .ps1, and starts its scheduled task without parsing or analyzing the emitted file. The recorded analyzer commands check the parent launcher and read-back scripts, not the generated runner. Analyzing string literals in the parent is not analysis of the generated program. The disclosed exceptions do not include this gap. Consequence: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence. Alternatives: accept the current broad claim, rejected because the recorded source and probes contradict it. Classification: Implementer audit edit'
+        filesModified:
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-audit.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-bootstrap.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-confirm.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-evidence.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-final-audit.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-inspect.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-mcp.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-persist-verdict.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-query.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-receipt-checks.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-reconcile.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-run-gate.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-scanner-probe.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-session-checks.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-session-metadata.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-store.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-testdiff.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-windows-diff.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-windows-read.ps1
+        - /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-write-verdict.ps1
+        blockers:
+        - 'R2-F1: Native filesystem contracts remain unit tests; the claimed exception inventory is incomplete'
+        - 'R2-F2: The scanner remediation still misses valid direct platform syntax'
+        - 'R2-F3: The self-review overstates pre-execution analysis of the generated Windows runner'
+
+---
+

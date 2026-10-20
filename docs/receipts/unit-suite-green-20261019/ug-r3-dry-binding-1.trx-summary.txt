@@ -1,0 +1,180 @@
+RECEIPT ug-r3-dry-binding-1 (TRX summary of /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-dry-binding-1, written 2026-10-20T11:06:48)
+unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx: total=306 executed=306 passed=306 failed=0 notExecuted=0
+unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx: total=33 executed=33 passed=33 failed=0 notExecuted=0
+unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx: total=20 executed=20 passed=20 failed=0 notExecuted=0
+unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=64 executed=64 passed=64 failed=0 notExecuted=0
+unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=94 executed=94 passed=94 failed=0 notExecuted=0
+unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=865 executed=865 passed=865 failed=0 notExecuted=0
+unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=3223 executed=3223 passed=3051 failed=172 notExecuted=0
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.WithoutMemory_NoEffectiveInjectionOrTools
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.StubMode_NoCloudRequired
+  Failed QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests.Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts
+  Failed QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReview_SurfaceParity_RestReplDirectorPlugin
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchToolUseTests.RecallUsedWhenNoInjection
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.AppSettingsYaml_ContainsRequiredRepoAllowlistPatterns
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.Assets_InPublishOutput
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryIntegrationTests.UseGrokLane_AsPilot
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnScoringTests.NegativeRefuse_FailsOnInvention
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.CoversEightPromptClasses
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.PairedConditionsAndTokenFields
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.DeepLink_DetailOrFailClosed
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Grok_CompletesFullPack_Required
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Cline_CompletesFullPack_AfterGrokValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.JobSuccess_RequiresAllRequiredQueryTurns
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests.ImportedPlan_PreservesAllSixMermaidDiagramIds
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.ClineV2_CompletesFullPack_AfterGrokValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.SignaturePayloadFields_MatchesDocumentedCanonicalKeyOrder
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryApiIdempotencyTests.DocumentedBehavior
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.QuadBrainSlotConfigurationTests.QuadBrainSlotAssignments_ContainRequestedRuntimeAndModelMappings
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.JobsHaveEstablishThenRequiredQuery
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.Results_GitignorePolicy
+  Failed QBrainAi.Support.Mcp.Tests.Services.TransactionGatedSessionLogServiceTests.TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.Defines_InOutTotal
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.MissingVerb_FailsValidation
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.NoPythonProductPath
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Opencode_CompletesFullPack_AfterGrokValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryOnboardingDocsTests.MarkerTemplate_DocumentsNewAndOld
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Filters_Respected
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.WithMemory_SeededAndToolsAvailable
+  Failed QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryMigrationTests.Discovers_AddRequirementsRecoveryRuns_OnAllProviders
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.IndependentSuppressionFlags
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.Seeds_WorkspaceScopedCleanup
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_EditorScript_ExposesInteractionApis
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.PackFile_ExistsAndVersioned
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryMigrationTests.Applies_OnAllProviders
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.NoHits_EmptyNotError
+  Failed QBrainAi.Support.Mcp.Tests.McpStdio.MemoryContractArtifactTests.MemoryContextDocumentation_IncludesImportAndAttributionRules
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemorySurfaceParityTests.McpAndRest_EquivalentStore
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.ServedAtMemoryPath
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests.AppSettings_PrimaryTriageAgentUsesGrokCli(segments: ["appsettings.yaml"])
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.SafetyPrompts_TokensAndPassFail
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Codex_CompletesFullPack_AfterGrokValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Revert_WithinThreeActions
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryMcpSchemaTests.UnknownFields_Policy
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryIntegrationTests.Grok_RememberRecall_EndToEnd
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_Palette_OffersRequiredTools
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchConflictTests.PrefersNewerSeeded
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: "BUG-TRIAGE-139-sixteenth-remediation.md", expectedSha256: "CB3D04D459ED657F7DB579F712C72552638233C9695888E2FC"···)
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests.AppSettings_PrimaryTriageAgentUsesGrokCli(segments: ["src", "QBrainAi.Support.Mcp", "appsettings.Staging.yaml"])
+  Failed QBrainAi.Support.Mcp.Tests.Storage.SessionLogTurnPlanFileTodoIdMigrationApplyTests.ProviderMigrations_AddBothColumnsWithNoneDefault
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests.Readme_TokensArePrimaryMetric
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.NoSecretsInDom
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsByrdV4HundredPercentTestGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.Csp_MatchesSiblingUis
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchCiTests.NonGrok_OptionalUntilH7a
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchCiTests.GateMode_Configurable
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.DefaultPlugin_IsGrok
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.GrokFirst_ThenOthersAfterValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.CiSummary_TokensFirst
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.WithMemory_InjectsCompactRecall_DoesNotReplayEstablishTranscript
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchReportTests.Headline_MacroMeanTokens
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests.UseCaseUi_AppJs_CallsLiveRestEndpoints
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.EntrySchema_Complete
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests.UseCaseUi_HasBuiltInDiagramViewAndEditSurface
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.GrokFirst_OthersOptInUntilValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnDocsTests.Readme_DocumentsV2AsRealEfficiencyBench
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests.AppSettings_PrimaryTriageAgentUsesGrokCli(segments: ["appsettings.Staging.yaml"])
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogSanitizerRegistrationTests.Program_RegistersSessionLogSanitizerAsOutermostHttpDecorator
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: "BUG-TRIAGE-139-ninth-remediation.md", expectedSha256: "CC453A428796AE4BFB97C395502F7D082145A2DA2FEE0E9CA2"···)
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.RecordsPerCellMetrics_IncludingTokens
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.LiveMode_Tagged
+  Failed QBrainAi.Support.Mcp.Tests.Storage.ProductMigrationApplyTests.AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.CurrentEvidenceIndex_RecordsSupersessionOwnershipAndExactLedgerPath
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.AppSettingsTemplate_ContainsHubSpokeFederationShape
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsAvailableCapabilitiesSection
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: "BUG-TRIAGE-139-eleventh-remediation.md", expectedSha256: "5B9F17C95CBD6EF471F8DC8B9D3F59CD587DE481E452A0647C"···)
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchSafetyTests.NegativePrompts_NoHallucinatedMemory
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.TriageConfigurationContractTests.AppSettings_PrimaryTriageAgentUsesGrokCli(segments: ["src", "QBrainAi.Support.Mcp", "appsettings.yaml"])
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.GrokFirst_OthersOptInUntilValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchReportTests.SummaryTable_TokenColumns
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.WithoutMemory_ReplaysHistory_NoInjectionOrTools
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Edit_UsesSameCqrsPath
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.WritesResultArtifacts_WithTokenSummary
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchValueGateTests.GrokH7a_RequiresAgreeBeforeOtherPlugins
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.Injection_CountedOnlyWithMemory
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsFederationTopologyDiagnostics
+  Failed QBrainAi.Support.Mcp.Tests.McpStdio.BrainSlotToolAbsenceTests.StdioToolContract_ContainsNoBrainSlotTools
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.QuadBrainSlotConfigurationTests.QuadBrainSlotGenerator_UsesConvertToYaml
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.Latency_OptionalBudget
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogSanitizerRegistrationTests.McpStdioHost_RegistersSessionLogSanitizerAsOutermostStdioDecorator
+  Failed QBrainAi.Support.Mcp.Tests.Services.HandoffD3D5OverlayTests.D3_GenerateDocument_ShippedFileBackedService_RendersLiveHandoffFamily
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.PluginAdapterInterface
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests.Rerun_DeterministicStub
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsAgentHelpSection
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.EmptyState_Message
+  Failed QBrainAi.Support.Mcp.Tests.McpStdio.MemoryContractArtifactTests.StdioToolContract_IncludesMemoryToolsAndScopes
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.NoRealSecretsInFixtures
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.CiTarget_BenchMemory
+  Failed QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetRealTests.IdentityFiles_HaveNoDirectGetFullPath
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_AppJs_WiresDiagramGraphRest
+  Failed QBrainAi.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests.PluginSync_HandoffSkill_MatchesCoreArtifact
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.Rerun_DeterministicStub
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnScoringTests.QueryScoring_SameGoldForBothConditions
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.EfficiencyRatio_SecondaryOnly
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.CorrectnessGate_TokensStillRecorded
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchReportTests.SummaryComparesConditions
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.NonGrok_BlockedUntilH7a
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.ClaudeCode_CompletesFullPack_AfterGrokValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests.UseCaseUi_ExposesStructurePanelsForActorsFlowsStepsLinks
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.CoversRequiredJobClasses
+  Failed QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetRealTests.AllOtherFiles_StayWithinReviewedAllowlist
+  Failed QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.PostgreSqlMigration_UpAddsColumns_DownDropsThem
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.ResultSchema_RequiresTokenFields
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.RecordsPerTurnAndPerJobTokens
+  Failed QBrainAi.Support.Mcp.Tests.McpStdio.HandoffMcpToolTests.PublicSurfaces_ExposeIngestGetAndApprove
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.PairedConditions
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.ReportsMeanMedianTokens_ByPluginAndCondition
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.WritesMultiturnArtifacts
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnHarnessTests.MultiFact_WithoutMemoryQuery_CostsMoreThanWithMemoryQuery
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.MissingAsset_NotFalse200
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.PerPrompt_TokenDelta
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.CreateEmpty_Blocked
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.SoftDeleted_NotListed
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiHostingTests.Auth_SameAsMcpserver
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_Editor_SerializesGraphWithCoordinates
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.Copilot_CompletesFullPack_AfterGrokValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryOnboardingDocsTests.GiveYourselfMemory_SampleExists
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.ImplementGrokPlugin_BeforeOthers
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.ResultSchema_Validated
+  Failed QBrainAi.Support.Mcp.Tests.Storage.UseCaseMigrationApplyTests.AddUseCaseSupportMigration_Source_HasNoSessionLogsTableOps
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.ToolPayloads_CountedConsistently
+  Failed QBrainAi.Support.Mcp.Tests.McpStdio.MemoryContractArtifactTests.DefaultMarkerPrompt_IncludesMcpMemoryGuidance
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests.ImportedPlan_ReferencesImplementedTransactionComponentsAndTests
+  Failed QBrainAi.Support.Mcp.Tests.Configuration.IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsDecisionCompletePlanHandoffGuidance
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.CallsOnlyPublicRest
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Search_OnlyActiveWorkspace
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_HasUmlCanvasElement
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchInjectionTests.InjectionPresentOnlyWithMemory
+  Failed QBrainAi.Support.Mcp.Tests.Services.BrainSlotLlmStrategyTests.Factory_CreateStrategy_ExistsWithoutNewAgentSdk
+  Failed QBrainAi.Support.Mcp.Tests.Services.WorkspaceHygieneG5OverlayTests.ValidationService_UsesLiveTriageDomainAndBatchedQueries
+  Failed QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.SqlServerMigration_UpAddsColumns_DownDropsThem
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryToolsDiscoveryTests.StdioAndHttp_SameVerbSet
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchScoringTests.DeterministicOrDocumentedRubric
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPluginTests.ClaudeCowork_CompletesFullPack_AfterGrokValueGate
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.StubMode_RequiresTokenFields
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: "BUG-TRIAGE-139-twelfth-remediation.md", expectedSha256: "3F40F3195168574A52A27030902B22F62917683ED6BB8E8041"···)
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiDeployDocsTests.NamesUpdateService
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: "BUG-TRIAGE-139-tenth-remediation.md", expectedSha256: "5AB2C2A2600A85DE6F7DB8A8F50E38226A0693EA89698F26FA"···)
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTechTests.PackSchema_Validated
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests.Readme_GrokIsPilot
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryOnboardingDocsTests.Examples_ListNewVerbs
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryMigrationTests.SchemaRecreate_Works
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchValueGateTests.HDone_DefaultRequiresH7a_H7bFollowOn
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseUiAssetTests.UseCaseUi_IndexHtml_ExistsAndReferencesRestApi
+  Failed QBrainAi.Support.Mcp.Tests.Web.UseCaseCanvasUiAssetTests.Canvas_Index_ReferencesCanvasEditorScript
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchIsolationTests.NoPrimaryWorkspaceBleed
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests.UserGuide_LinksPack
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: "BUG-TRIAGE-139-fourteenth-remediation.md", expectedSha256: "3B09DF63D5860DEC2A96E7589CB528586CBB6726130E1BFB5C"···)
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchMultiTurnPackTests.QueryTurns_DoNotRestateFacts
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.BugTriage139EighteenthEvidenceTests.HistoricalReceipt_MatchesImmutablePublishedHash(fileName: "BUG-TRIAGE-139-fifteenth-remediation.md", expectedSha256: "04BA22D37B5F29042A45B6D9A55FCE11EE23F4C33148B19BCD"···)
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchTokenTests.Source_HostReportedOrDocumentedEstimator
+  Failed QBrainAi.Support.Mcp.Tests.Documentation.TurnTransactionPlanArtifactTests.TransactionPlanRequirements_AreConcreteAndMapped
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogSubmitBudgetTests.ShippedAppSettings_AndHosts_RegisterThirtySecondSubmitBudget
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchDocsTests.Readme_RunInstructions
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchPackTests.PackFile_ExistsAndVersioned
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.ForeignMemory_FailClosed
+  Failed QBrainAi.Support.Mcp.Tests.Ingestion.ImportRecoveryEnvelopeTests.IngestPath_ReplaysPendingEnvelopeThroughPersister_DeletesOnlyEnvelope
+  Failed QBrainAi.Support.Mcp.Tests.Services.HandoffDeadContractInventoryTests.SourceAndSchema_DoNotReintroduceReplayOfRunIdOrApproved
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryUiTests.Escape_ClosesPanel
+  Failed QBrainAi.Support.Mcp.Tests.Memory.MemoryPluginSyncTests.ChecklistReceipt_GrokBeforeOthers

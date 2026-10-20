@@ -1,0 +1,22 @@
+RECEIPT 2026-10-20T15:26:33 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T15:26:32 project=QBrainAi.Support.Mcp.Tests
+A ug-r3-win-lane-6 results=361 start=2026-10-20T14:41:10.4706769-05:00 finish=2026-10-20T14:43:51.1927036-05:00
+B ug-r3-win-lane-7 results=361 start=2026-10-20T15:22:28.8972815-05:00 finish=2026-10-20T15:25:54.2502653-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.SqlServerMigration_UpAddsColumns_DownDropsThem outcome=Passed duration=00:00:00.0008962 start=2026-10-20T14:41:24.4443423-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows outcome=Passed duration=00:00:07.3144413 start=2026-10-20T14:41:48.9582655-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation outcome=Passed duration=00:00:06.7266013 start=2026-10-20T14:41:56.2742715-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows outcome=Passed duration=00:00:06.6583256 start=2026-10-20T14:42:03.0027688-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows outcome=Passed duration=00:00:05.6534124 start=2026-10-20T14:42:09.6624896-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently outcome=Passed duration=00:00:08.0250606 start=2026-10-20T14:41:32.0013785-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables outcome=Passed duration=00:00:08.9278757 start=2026-10-20T14:41:40.0289093-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently outcome=Passed duration=00:00:06.1148309 start=2026-10-20T15:25:03.4513475-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.SqlServerMigration_UpAddsColumns_DownDropsThem outcome=Passed duration=00:00:00.0010558 start=2026-10-20T15:22:36.6943111-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows outcome=Passed duration=00:00:07.0354048 start=2026-10-20T15:25:16.9353391-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows outcome=Passed duration=00:00:05.3340310 start=2026-10-20T15:25:36.1710305-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables outcome=Passed duration=00:00:07.3674024 start=2026-10-20T15:25:09.5667546-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation outcome=Passed duration=00:00:06.7166821 start=2026-10-20T15:25:23.9722358-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows outcome=Passed duration=00:00:05.4792270 start=2026-10-20T15:25:30.6905794-05:00
+END 2026-10-20T15:26:33

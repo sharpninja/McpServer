@@ -1,0 +1,2 @@
+RECEIPT 2026-10-19T21:38:50 host=PAYTON-LEGION2 script=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-windows-read.ps1
+Cannot connect to CIM server. Access denied 

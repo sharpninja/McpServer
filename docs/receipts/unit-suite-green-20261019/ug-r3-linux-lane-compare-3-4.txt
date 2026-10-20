@@ -1,0 +1,4 @@
+Now: 2026-10-20T12:22:46 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-lane-3 (397) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-lane-4 (397)
+onlyBefore=0 onlyAfter=0 common=397
+--- only in before ---
+--- only in after ---

@@ -1,0 +1,26 @@
+RECEIPT 2026-10-20T11:11:30 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T11:11:31 project=QBrainAi.Support.Mcp.Tests
+A ug-r3-win-lane-1 results=360 start=2026-10-20T10:38:46.7300194-05:00 finish=2026-10-20T10:42:24.8329214-05:00
+B ug-r3-win-lane-2 results=361 start=2026-10-20T11:03:39.8782835-05:00 finish=2026-10-20T11:09:55.2464613-05:00
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.RequirementsDatabaseDocumentServiceTests.Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors outcome=Passed
+OUTCOME QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation A=Passed B=Failed
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation outcome=Passed duration=00:01:00.5631510 start=2026-10-20T10:38:57.1482082-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation outcome=Failed duration=00:00:15.0396738 start=2026-10-20T11:03:59.7804283-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently outcome=Passed duration=00:00:03.8081305 start=2026-10-20T10:39:24.8668083-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.SqlServerMigration_UpAddsColumns_DownDropsThem outcome=Passed duration=00:00:00.0013640 start=2026-10-20T10:38:58.0495162-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows outcome=Passed duration=00:01:06.2005413 start=2026-10-20T10:38:50.1558527-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation outcome=Passed duration=00:01:00.5631510 start=2026-10-20T10:38:57.1482082-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables outcome=Passed duration=00:00:07.8669829 start=2026-10-20T10:39:58.2943748-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows outcome=Passed duration=00:00:07.2559673 start=2026-10-20T10:39:56.3581069-05:00
+NAMED A QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows outcome=Passed duration=00:01:08.4972537 start=2026-10-20T10:38:49.7752196-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.SqlServerMigration_UpAddsColumns_DownDropsThem outcome=Passed duration=00:00:00.0016567 start=2026-10-20T11:04:10.9300240-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation outcome=Failed duration=00:00:15.0396738 start=2026-10-20T11:03:59.7804283-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows outcome=Passed duration=00:00:27.8753308 start=2026-10-20T11:04:05.6060113-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables outcome=Passed duration=00:00:10.8281093 start=2026-10-20T11:04:35.4864583-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows outcome=Passed duration=00:00:11.3918353 start=2026-10-20T11:04:33.4828986-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently outcome=Passed duration=00:00:06.8580718 start=2026-10-20T11:04:15.1362948-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows outcome=Passed duration=00:00:40.1700011 start=2026-10-20T11:03:55.3141919-05:00
+END 2026-10-20T11:11:32

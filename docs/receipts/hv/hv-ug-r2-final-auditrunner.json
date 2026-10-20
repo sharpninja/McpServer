@@ -1,0 +1,250 @@
+{
+  "TimestampLocal": "2026-10-19T22:08:12",
+  "Mode": "AuditRunner",
+  "WindowsPropertyNames": [
+    "TimestampLocal",
+    "HostName",
+    "User",
+    "SessionId",
+    "Interactive",
+    "Sessions",
+    "ScheduledTaskReadError",
+    "Runs",
+    "RunnerFiles"
+  ],
+  "AnalyzerCommands": [
+    {
+      "Line": 12297,
+      "TimestampLocal": "2026-10-19T20:51:12",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TestClassFixtures.ps1\""
+    },
+    {
+      "Line": 12316,
+      "TimestampLocal": "2026-10-19T20:51:54",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-CodexSandboxHelp.ps1\""
+    },
+    {
+      "Line": 12603,
+      "TimestampLocal": "2026-10-19T21:04:20",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Add-IntegrationTraits.ps1\""
+    },
+    {
+      "Line": 12634,
+      "TimestampLocal": "2026-10-19T21:04:53",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Test-DeclarationRegex.ps1\""
+    },
+    {
+      "Line": 12653,
+      "TimestampLocal": "2026-10-19T21:05:14",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Add-IntegrationTraits.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/Test-DeclarationRegex.ps1\""
+    },
+    {
+      "Line": 12707,
+      "TimestampLocal": "2026-10-19T21:06:19",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Wait-NukeRun.ps1\""
+    },
+    {
+      "Line": 12872,
+      "TimestampLocal": "2026-10-19T21:10:18",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-KingdSessionState.ps1\""
+    },
+    {
+      "Line": 12908,
+      "TimestampLocal": "2026-10-19T21:11:36",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1\""
+    },
+    {
+      "Line": 12922,
+      "TimestampLocal": "2026-10-19T21:11:54",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\""
+    },
+    {
+      "Line": 12945,
+      "TimestampLocal": "2026-10-19T21:12:29",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\""
+    },
+    {
+      "Line": 12974,
+      "TimestampLocal": "2026-10-19T21:13:09",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\""
+    },
+    {
+      "Line": 13035,
+      "TimestampLocal": "2026-10-19T21:14:41",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-SandboxedNukeRun.ps1\""
+    },
+    {
+      "Line": 13083,
+      "TimestampLocal": "2026-10-19T21:15:36",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Test-CodexPermissionProfiles.ps1\""
+    },
+    {
+      "Line": 13111,
+      "TimestampLocal": "2026-10-19T21:16:03",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-SandboxedNukeRun.ps1\""
+    },
+    {
+      "Line": 13155,
+      "TimestampLocal": "2026-10-19T21:17:03",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-SandboxedNukeRun.ps1\""
+    },
+    {
+      "Line": 13228,
+      "TimestampLocal": "2026-10-19T21:18:39",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-WikiExport.ps1\""
+    },
+    {
+      "Line": 13250,
+      "TimestampLocal": "2026-10-19T21:19:24",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-5.ps1\""
+    },
+    {
+      "Line": 13303,
+      "TimestampLocal": "2026-10-19T21:20:48",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ReceiptSizes.ps1\""
+    }
+  ],
+  "RunnerLaunches": [
+    {
+      "Line": 12908,
+      "TimestampLocal": "2026-10-19T21:11:36",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1;/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1\""
+    },
+    {
+      "Line": 12922,
+      "TimestampLocal": "2026-10-19T21:11:54",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\""
+    },
+    {
+      "Line": 12923,
+      "TimestampLocal": "2026-10-19T21:11:55",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -WhatIf"
+    },
+    {
+      "Line": 12938,
+      "TimestampLocal": "2026-10-19T21:12:12",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -OutFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-win-interactive-20261019T2112-start.txt\""
+    },
+    {
+      "Line": 12961,
+      "TimestampLocal": "2026-10-19T21:12:45",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -OutFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-win-interactive-20261019T2112-start.txt\""
+    },
+    {
+      "Line": 12974,
+      "TimestampLocal": "2026-10-19T21:13:09",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1\" -Paths \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\""
+    },
+    {
+      "Line": 12975,
+      "TimestampLocal": "2026-10-19T21:13:10",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -WhatIf"
+    },
+    {
+      "Line": 12988,
+      "TimestampLocal": "2026-10-19T21:13:19",
+      "Tool": "Bash",
+      "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1\" -ScriptPath \"/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1\" -OutFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-win-interactive-20261019T2112-start2.txt\""
+    }
+  ],
+  "Source": [
+    "#Requires -Version 7.0",
+    "# Runs on PAYTON-LEGION2 as kingd over SSH (MEMORY-INFRA-001). Amendment H1 (TR-MCP-NUKE-019 AC-5): the",
+    "# Windows integration lane runs from a console in kingd's interactive desktop session. This script prepares",
+    "# a fresh worktree at the expected commit, writes a runner that records proof of the interactive session and",
+    "# runs the Nuke target, and starts that runner once through a one-shot task that runs only in kingd's",
+    "# logged-on desktop session (Interactive logon type, limited rights). It changes no tracked file and no",
+    "# setting; Get-WinInteractiveLane.ps1 reads the result and removes the task.",
+    "$ErrorActionPreference = 'Stop'",
+    "$ExpectedSha = 'b4ad42aaa601ed0df7e03b34203dee4f93d316a9'",
+    "$RunId = 'unit-green-win-interactive-20261019T2112'",
+    "$TaskName = 'McpServer-UnitGreenInteractiveLane-20261019T2112'",
+    "$Repo = 'F:/GitHub/McpServer'",
+    "$Worktree = \"$Repo/.worktrees/unit-green-interactive-20261019\"",
+    "$Ref = 'origin/fix/unit-suite-green-20261019'",
+    "$Work = Join-Path $env:TEMP 'unit-green-interactive'",
+    "$env:GIT_CONFIG_COUNT = '1'",
+    "$env:GIT_CONFIG_KEY_0 = 'safe.directory'",
+    "$env:GIT_CONFIG_VALUE_0 = '*'",
+    "",
+    "\"START $((Get-Date).ToString('s')) host=$env:COMPUTERNAME user=$env:USERNAME\"",
+    "if (Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue) { \"STOP: task $TaskName already exists\"; return }",
+    "$null = New-Item -ItemType Directory -Force -Path $Work",
+    "git -C $Repo fetch origin 2>&1 | ForEach-Object { \"  fetch: $_\" }",
+    "$refSha = (git -C $Repo rev-parse $Ref).Trim()",
+    "if ($refSha -ne $ExpectedSha) { \"STOP: $Ref is $refSha, expected $ExpectedSha\"; return }",
+    "if (-not (Test-Path -LiteralPath $Worktree)) {",
+    "    git -C $Repo worktree add --detach $Worktree $ExpectedSha 2>&1 | ForEach-Object { \"  worktree: $_\" }",
+    "}",
+    "else {",
+    "    $changed = @(git -C $Worktree status --porcelain=v1 --untracked-files=no)",
+    "    $generated = @($changed | Where-Object { $_.Substring(3) -eq '.nuke/build.schema.json' -or $_.Substring(3) -like 'docs/benchmarks/results/*' })",
+    "    if ($changed.Count -ne $generated.Count) { \"STOP: tracked changes in $Worktree outside the generated allowlist: $($changed -join '; ')\"; return }",
+    "    foreach ($line in $generated) { git -C $Worktree restore --worktree -- $line.Substring(3) }",
+    "    git -C $Worktree checkout --detach $ExpectedSha 2>&1 | ForEach-Object { \"  checkout: $_\" }",
+    "}",
+    "$head = (git -C $Worktree rev-parse HEAD).Trim()",
+    "\"HEAD $head expected=$ExpectedSha match=$($head -eq $ExpectedSha)\"",
+    "if ($head -ne $ExpectedSha) { 'STOP: HEAD mismatch'; return }",
+    "",
+    "$runner = Join-Path $Work \"run-$RunId.ps1\"",
+    "$log = Join-Path $Work \"MigrationIntegrationTests-$RunId.log\"",
+    "$proof = Join-Path $Work \"proof-$RunId.txt\"",
+    "$exitFile = Join-Path $Work \"exit-$RunId.txt\"",
+    "foreach ($stale in @($log, $proof, $exitFile)) { if (Test-Path -LiteralPath $stale) { \"STOP: $stale already exists\"; return } }",
+    "$runnerText = @(",
+    "    '$ErrorActionPreference = ''Continue'''",
+    "    ('$env:GIT_CONFIG_COUNT = ''1''; $env:GIT_CONFIG_KEY_0 = ''safe.directory''; $env:GIT_CONFIG_VALUE_0 = ''*''')",
+    "    ('Set-Location -LiteralPath ''{0}''' -f $Worktree)",
+    "    ('\"START $((Get-Date).ToString(''s'')) user=$env:USERNAME session=$((Get-Process -Id $PID).SessionId) interactive=$([Environment]::UserInteractive) head=$((git rev-parse HEAD).Trim())\" | Set-Content -LiteralPath ''{0}''' -f $proof)",
+    "    ('& ./build.ps1 MigrationIntegrationTests --test-run-id ''{0}'' *> ''{1}''' -f $RunId, $log)",
+    "    ('Set-Content -LiteralPath ''{0}'' -Value ([string]$LASTEXITCODE + '' '' + (Get-Date).ToString(''s''))' -f $exitFile)",
+    ") -join [Environment]::NewLine",
+    "Set-Content -LiteralPath $runner -Value $runnerText -Encoding utf8",
+    "\"RUNNER $runner\"",
+    "",
+    "# The pwsh on kingd's PATH is the Store app-execution alias, which the task scheduler may not resolve;",
+    "# a regular installation under Program Files is used when present.",
+    "$pwsh = @(Get-ChildItem -Path 'C:/Program Files/PowerShell/*/pwsh.exe' -ErrorAction SilentlyContinue | Sort-Object FullName | Select-Object -ExpandProperty FullName -First 1)",
+    "$pwsh = if ($pwsh.Count -gt 0) { $pwsh[0] } else { (Get-Command pwsh -ErrorAction Stop).Source }",
+    "\"PWSH $pwsh\"",
+    "$action = New-ScheduledTaskAction -Execute $pwsh -Argument ('-NoProfile -ExecutionPolicy Bypass -File \"{0}\"' -f $runner) -WorkingDirectory $Worktree.Replace('/', '\\')",
+    "# In an SSH session USERDOMAIN does not name the local machine; the token's own account name does.",
+    "$account = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name",
+    "\"ACCOUNT $account\"",
+    "$principal = New-ScheduledTaskPrincipal -UserId $account -LogonType Interactive -RunLevel Limited",
+    "$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit ([TimeSpan]::Zero)",
+    "$null = Register-ScheduledTask -TaskName $TaskName -Action $action -Principal $principal -Settings $settings -Description 'One-shot IMPL-UNITGREEN-001 interactive lane run (removed after it ends)'",
+    "Start-ScheduledTask -TaskName $TaskName",
+    "Start-Sleep -Seconds 5",
+    "$info = Get-ScheduledTaskInfo -TaskName $TaskName",
+    "\"TASK $TaskName state=$((Get-ScheduledTask -TaskName $TaskName).State) lastRun=$($info.LastRunTime) result=$($info.LastTaskResult)\"",
+    "\"PROOF so far: $(if (Test-Path -LiteralPath $proof) { (Get-Content -LiteralPath $proof -Raw).Trim() } else { '(not written yet)' })\"",
+    "\"END $((Get-Date).ToString('s'))\""
+  ]
+}

@@ -1,0 +1,8 @@
+Now: 2026-10-20T14:39:45 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-test-5 (4449) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-test-6 (4452)
+onlyBefore=0 onlyAfter=3 common=4449
+onlyAfter QBrainAi.Support.Mcp.Tests=3
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureArgumentsTests.FixtureCalls_AreSilentAndWait
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureArgumentsTests.LoudOrNonWaitingCalls_AreRejectedInsidePassingHarness
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureArgumentsTests.ScriptedSilentCalls_PassTheAssertion

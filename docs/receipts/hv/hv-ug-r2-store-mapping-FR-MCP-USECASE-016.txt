@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20261020T023747Z-bbc4
+  result:
+    items: []
+    totalCount: 0
+  deprecated: true
+
+---
+
